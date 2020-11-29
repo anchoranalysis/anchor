@@ -30,14 +30,15 @@ import org.anchoranalysis.image.voxel.ExtentMatchHelper;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
+import org.anchoranalysis.image.voxel.buffer.ProjectableBuffer;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.extracter.predicate.PredicateImplementation;
 import org.anchoranalysis.image.voxel.extracter.predicate.VoxelsPredicate;
 import org.anchoranalysis.image.voxel.interpolator.InterpolateUtilities;
 import org.anchoranalysis.image.voxel.interpolator.Interpolator;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.spatial.extent.Extent;
-import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.point.ReadableTuple3i;
 
@@ -123,6 +124,16 @@ public abstract class Base<T> implements VoxelsExtracter<T> {
     }
 
     @Override
+    public final Voxels<T> projectMax() {
+        return project(createMaxIntensityBuffer(voxels.extent()));
+    }
+
+    @Override
+    public final Voxels<T> projectMean() {
+        return project(createMeanIntensityBuffer(voxels.extent()));
+    }
+
+    @Override
     public VoxelsPredicate voxelsEqualTo(int equalToValue) {
         return new PredicateImplementation<>(
                 voxels, buffer -> bufferValueEqualTo(buffer, equalToValue));
@@ -133,7 +144,7 @@ public abstract class Base<T> implements VoxelsExtracter<T> {
         return new PredicateImplementation<>(
                 voxels, buffer -> bufferValueGreaterThan(buffer, threshold));
     }
-   
+
     @Override
     public void objectCopyTo(
             ObjectMask object, Voxels<T> voxelsDestination, BoundingBox destinationBox) {
@@ -145,7 +156,7 @@ public abstract class Base<T> implements VoxelsExtracter<T> {
 
         Point3i relativePosition = destinationBox.relativePositionTo(object.boundingBox());
 
-        BinaryValuesByte bvb = object.binaryValuesByte();
+        BinaryValuesByte binaryValues = object.binaryValuesByte();
 
         Extent extent = voxels.extent();
 
@@ -165,18 +176,21 @@ public abstract class Base<T> implements VoxelsExtracter<T> {
                                     .extent()
                                     .offset(x + relativePosition.x(), y + relativePosition.y());
 
-                    if (maskBuffer.getRaw() == bvb.getOnByte()) {
+                    if (maskBuffer.getRaw() == binaryValues.getOnByte()) {
                         copyBufferIndexTo(srcArr, srcIndex, destArr, destIndex);
                     }
                 }
             }
         }
     }
-    
+
+    protected abstract ProjectableBuffer<T> createMaxIntensityBuffer(Extent extent);
+
+    protected abstract ProjectableBuffer<T> createMeanIntensityBuffer(Extent extent);
+
     protected abstract void copyBufferIndexTo(
             T sourceBuffer, int sourceIndex, T destinationBuffer, int destinationIndex);
 
-    
     protected abstract int voxelAtBufferIndex(T buffer, int index);
 
     /**
@@ -200,7 +214,7 @@ public abstract class Base<T> implements VoxelsExtracter<T> {
      * @return true iff the current value from the buffer is equal to the constant
      */
     protected abstract boolean bufferValueEqualTo(T buffer, int value);
-    
+
     private Voxels<T> regionAvoidNewIfPossible(BoundingBox box) {
 
         if (box.equals(new BoundingBox(voxels.extent()))
@@ -218,5 +232,10 @@ public abstract class Base<T> implements VoxelsExtracter<T> {
         Voxels<T> voxelsOut = voxels.factory().createInitialized(box.extent());
         boxCopyTo(box, voxelsOut, box.shiftToOrigin());
         return voxelsOut;
+    }
+
+    private Voxels<T> project(ProjectableBuffer<T> projection) {
+        voxels.extent().iterateOverZ(z -> projection.addSlice(voxels.slice(z)));
+        return projection.completeProjection();
     }
 }

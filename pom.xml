@@ -44,7 +44,6 @@
         <module>anchor-image-io</module>
         <module>anchor-mpp-io</module>
         <module>anchor-mpp-segment</module>
-        <module>anchor-image-experiment</module>
         <module>anchor-plot</module>
 	<module>anchor-annotation-io</module>
 

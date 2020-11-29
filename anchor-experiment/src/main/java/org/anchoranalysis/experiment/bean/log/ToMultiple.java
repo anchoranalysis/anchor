@@ -32,8 +32,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.experiment.ExperimentExecutionArguments;
+import org.anchoranalysis.core.log.error.ErrorReporter;
+import org.anchoranalysis.experiment.arguments.ExecutionArguments;
 import org.anchoranalysis.experiment.log.MessageLoggerList;
 import org.anchoranalysis.experiment.log.StatefulMessageLogger;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
@@ -67,7 +67,7 @@ public class ToMultiple extends LoggingDestination {
     public StatefulMessageLogger create(
             OutputterChecked outputter,
             ErrorReporter errorReporter,
-            ExperimentExecutionArguments arguments,
+            ExecutionArguments arguments,
             boolean detailedLogging) {
         return new MessageLoggerList(
                 list.stream()

@@ -30,10 +30,10 @@ import java.util.Optional;
 import java.util.function.Supplier;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.functional.function.CheckedBiFunction;
-import org.anchoranalysis.core.functional.function.CheckedConsumer;
-import org.anchoranalysis.core.functional.function.CheckedFunction;
-import org.anchoranalysis.core.functional.function.CheckedSupplier;
+import org.anchoranalysis.core.functional.checked.CheckedBiFunction;
+import org.anchoranalysis.core.functional.checked.CheckedConsumer;
+import org.anchoranalysis.core.functional.checked.CheckedFunction;
+import org.anchoranalysis.core.functional.checked.CheckedSupplier;
 
 /**
  * Additional utility functions for {@link Optional} and exceptions.
@@ -97,6 +97,25 @@ public class OptionalUtilities {
             Optional<T> optional, CheckedSupplier<T, E> supplier) throws E {
         if (optional.isPresent()) {
             return optional.get();
+        } else {
+            return supplier.get();
+        }
+    }
+
+    /**
+     * Like {@link #orElseGet} but returns a {@link Optional}.
+     *
+     * @param <T> optional-type
+     * @param <E> exception that may be thrown during mapping
+     * @param optional incoming optional
+     * @param supplier supplies a {@link Optional} value if the optional is empty
+     * @return the outgoing optional
+     * @throws E an exception if the supplier throws it
+     */
+    public static <T, E extends Exception> Optional<T> orElseGetFlat(
+            Optional<T> optional, CheckedSupplier<Optional<T>, E> supplier) throws E {
+        if (optional.isPresent()) {
+            return optional;
         } else {
             return supplier.get();
         }

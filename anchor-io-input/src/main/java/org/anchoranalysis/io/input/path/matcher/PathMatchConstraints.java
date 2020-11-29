@@ -30,7 +30,8 @@ import lombok.AllArgsConstructor;
 import lombok.Value;
 
 /** Some constraints on which paths to match */
-@AllArgsConstructor @Value
+@AllArgsConstructor
+@Value
 public class PathMatchConstraints {
 
     /** Predicates for both a file and a directory. */

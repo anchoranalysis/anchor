@@ -27,11 +27,11 @@
 package org.anchoranalysis.io.manifest.sequencetype;
 
 import java.io.Serializable;
-import org.anchoranalysis.core.index.container.OrderProvider;
+import org.anchoranalysis.core.index.bounded.OrderProvider;
 
 /**
  * A sequence of elements (of type {@code T}), which are mapped to a range of integer indices.
- * 
+ *
  * @author Owen Feehan
  * @param <T> index-type
  */
@@ -47,14 +47,16 @@ public abstract class SequenceType<T> implements Serializable {
     public abstract int getNumberElements();
 
     public abstract OrderProvider createOrderProvider();
-    
+
     public abstract IncompleteElementRange elementRange();
-    
+
     /**
-     * If the sequence-type supports a different maximum-index to that derived from the elements {@link #update}, this assigns it.
-     * 
-     * <p>Many types will ignore this operation, relying on calls to {@link #update} for the maximum index.
-     * 
+     * If the sequence-type supports a different maximum-index to that derived from the elements
+     * {@link #update}, this assigns it.
+     *
+     * <p>Many types will ignore this operation, relying on calls to {@link #update} for the maximum
+     * index.
+     *
      * @param index the maximum-index
      */
     public abstract void assignMaximumIndex(int index);

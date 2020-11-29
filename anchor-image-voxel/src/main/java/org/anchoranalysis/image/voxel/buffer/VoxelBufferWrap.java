@@ -28,11 +28,11 @@ package org.anchoranalysis.image.voxel.buffer;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedIntBuffer;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedShortBuffer;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 
 /**
  * Wraps arrays and buffers of primitive-types into {@link VoxelBuffer}.

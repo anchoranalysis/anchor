@@ -30,12 +30,12 @@ import static org.junit.Assert.assertEquals;
 import java.io.File;
 import java.nio.file.Path;
 import lombok.AllArgsConstructor;
-import org.anchoranalysis.core.progress.ProgressReporterNull;
+import org.anchoranalysis.core.progress.ProgressIgnore;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.core.stack.TimeSequence;
 import org.anchoranalysis.image.io.ImageIOException;
-import org.anchoranalysis.image.io.bean.stack.StackReader;
-import org.anchoranalysis.image.io.stack.OpenedRaster;
+import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
+import org.anchoranalysis.image.io.stack.input.OpenedRaster;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.test.TestLoader;
 
@@ -81,8 +81,7 @@ class ExpectedImage {
     /** Which intensity value to count */
     private int intensityValueToCount;
 
-    public void openAndAssert(StackReader stackReader, TestLoader loader)
-            throws ImageIOException {
+    public void openAndAssert(StackReader stackReader, TestLoader loader) throws ImageIOException {
         Stack stack = openStackFromReader(stackReader, loader);
         assertEqualsPrefix(
                 "voxel data type", expectedDataType, stack.getChannel(0).getVoxelDataType());
@@ -99,7 +98,7 @@ class ExpectedImage {
         Path path = loader.resolveTestPath(relativePath());
 
         OpenedRaster openedRaster = reader.openFile(path);
-        TimeSequence timeSequence = openedRaster.open(0, ProgressReporterNull.get());
+        TimeSequence timeSequence = openedRaster.open(0, ProgressIgnore.get());
         return timeSequence.get(0);
     }
 

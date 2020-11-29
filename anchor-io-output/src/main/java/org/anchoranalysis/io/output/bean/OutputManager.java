@@ -32,14 +32,16 @@ import lombok.Setter;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
+import org.anchoranalysis.core.format.ImageFileFormat;
 import org.anchoranalysis.io.manifest.Manifest;
+import org.anchoranalysis.io.output.bean.path.prefixer.PathPrefixer;
 import org.anchoranalysis.io.output.bean.rules.OutputEnabledRules;
 import org.anchoranalysis.io.output.outputter.BindFailedException;
+import org.anchoranalysis.io.output.outputter.OutputWriteContext;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
-import org.anchoranalysis.io.output.path.PathPrefixerException;
-import org.anchoranalysis.io.output.path.DirectoryWithPrefix;
-import org.anchoranalysis.io.output.path.FilePathPrefixerContext;
-import org.anchoranalysis.io.output.path.PathPrefixer;
+import org.anchoranalysis.io.output.path.prefixer.DirectoryWithPrefix;
+import org.anchoranalysis.io.output.path.prefixer.FilePathPrefixerContext;
+import org.anchoranalysis.io.output.path.prefixer.PathPrefixerException;
 import org.anchoranalysis.io.output.recorded.RecordedOutputsWithRules;
 
 /**
@@ -56,8 +58,8 @@ public class OutputManager extends AnchorBean<OutputManager> {
     /**
      * Determines a prefix to use when outputting a file based upon an input-path.
      *
-     * <p>This method is called with a binding path from the input to determine a
-     * output prefix for each input to an experiment.
+     * <p>This method is called with a binding path from the input to determine a output prefix for
+     * each input to an experiment.
      */
     @BeanField @Getter @Setter private PathPrefixer filePathPrefixer;
 
@@ -86,6 +88,7 @@ public class OutputManager extends AnchorBean<OutputManager> {
      * @param experimentIdentifier an identifier for the experiment
      * @param manifest where output files are store
      * @param recordedOutputs where output-names are recorded as used/tested
+     * @param suggestedFormatToWrite a suggestion on what file-format to write
      * @param prefixerContext parameters for the file-path prefixer
      * @return a newly created outputter
      * @throws BindFailedException
@@ -94,19 +97,20 @@ public class OutputManager extends AnchorBean<OutputManager> {
             String experimentIdentifier,
             Manifest manifest,
             RecordedOutputsWithRules recordedOutputs,
+            Optional<ImageFileFormat> suggestedFormatToWrite,
             FilePathPrefixerContext prefixerContext)
             throws BindFailedException {
 
         try {
             DirectoryWithPrefix prefix =
-                    filePathPrefixer.rootFolderPrefix(experimentIdentifier, prefixerContext);
+                    filePathPrefixer.rootDirectoryPrefix(experimentIdentifier, prefixerContext);
             manifest.init(prefix.getDirectory());
 
             return OutputterChecked.createWithPrefix(
                     prefix,
                     recordedOutputs.selectOutputEnabled(Optional.ofNullable(outputsEnabled)),
-                    getOutputWriteSettings(),
-                    Optional.of(manifest.getRootFolder()),
+                    new OutputWriteContext(getOutputWriteSettings(), suggestedFormatToWrite),
+                    Optional.of(manifest.getRootDirectory()),
                     recordedOutputs.getRecordedOutputs(),
                     silentlyDeleteExisting);
 

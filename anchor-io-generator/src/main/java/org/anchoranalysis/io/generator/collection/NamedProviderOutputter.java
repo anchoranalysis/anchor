@@ -26,14 +26,14 @@
 
 package org.anchoranalysis.io.generator.collection;
 
-import lombok.AllArgsConstructor;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
-import org.anchoranalysis.core.error.combinable.AnchorCombinableException;
-import org.anchoranalysis.core.error.friendly.HasFriendlyErrorMessage;
-import org.anchoranalysis.core.name.provider.NamedProvider;
-import org.anchoranalysis.core.name.provider.NamedProviderGetException;
+import lombok.AllArgsConstructor;
+import org.anchoranalysis.core.exception.combinable.AnchorCombinableException;
+import org.anchoranalysis.core.exception.friendly.HasFriendlyErrorMessage;
+import org.anchoranalysis.core.identifier.provider.NamedProvider;
+import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.sequence.OutputSequenceFactory;
 import org.anchoranalysis.io.generator.sequence.OutputSequenceIndexed;
@@ -43,29 +43,37 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
 
 /**
- * Outputs entities from a {@link NamedProvider} into a directory using the names of each entity for a corresponding generated file.
- * 
- * @author Owen Feehan
+ * Outputs entities from a {@link NamedProvider} into a directory using the names of each entity for
+ * a corresponding generated file.
  *
+ * @author Owen Feehan
  * @param <T> element-type in {@link Generator} and in {@link NamedProvider}.
  */
 @AllArgsConstructor
 public class NamedProviderOutputter<T> {
 
-    /** The {@link NamedProvider} whose entities (or a subselection thereof) will be written to the file-system. */
+    /**
+     * The {@link NamedProvider} whose entities (or a subselection thereof) will be written to the
+     * file-system.
+     */
     private NamedProvider<T> provider;
-    
+
     /** The generator to be repeatedly called for writing each element in the sequence. */
     private Generator<T> generator;
-    
-    /** The root directory where writing occurs to, and in which the sub-directories are created, if enabled. */
+
+    /**
+     * The root directory where writing occurs to, and in which the sub-directories are created, if
+     * enabled.
+     */
     private OutputterChecked outputter;
-    
+
     /**
      * Outputs the entities using a particular output-name.
-     *  
-     * @param outputName the output-name to use, which also determines the subdirectory name if it is not suppressed.
-     * @param suppressSubdirectory if true, a separate subdirectory is not created, and rather the outputs occur in the parent directory.
+     *
+     * @param outputName the output-name to use, which also determines the subdirectory name if it
+     *     is not suppressed.
+     * @param suppressSubdirectory if true, a separate subdirectory is not created, and rather the
+     *     outputs occur in the parent directory.
      * @throws OutputWriteFailedException if any output cannot be written.
      */
     public void output(String outputName, boolean suppressSubdirectory)
@@ -75,22 +83,22 @@ public class NamedProviderOutputter<T> {
             return;
         }
 
-        Set<String> allowedKeys = subset(provider.keys(), outputter.getOutputsEnabled().second(outputName));
-        
+        Set<String> allowedKeys =
+                subset(provider.keys(), outputter.getOutputsEnabled().second(outputName));
+
         // If no outputs are allowed, exit early
-        if (allowedKeys.isEmpty()) {
-            return;
+        if (!allowedKeys.isEmpty()) {
+            outputAllowed(
+                    allowedKeys, new OutputPatternStringSuffix(outputName, suppressSubdirectory));
         }
-        
-        outputAllowed(allowedKeys,
-                new OutputPatternStringSuffix(outputName,suppressSubdirectory) );
     }
-    
-    private void outputAllowed(Set<String> allowedKeys, OutputPatternStringSuffix sequenceDirectory) throws OutputWriteFailedException {
+
+    private void outputAllowed(Set<String> allowedKeys, OutputPatternStringSuffix sequenceDirectory)
+            throws OutputWriteFailedException {
 
         OutputSequenceFactory<T> factory = new OutputSequenceFactory<>(generator, outputter);
 
-        OutputSequenceIndexed<T,String> writer = factory.withoutOrder(sequenceDirectory);
+        OutputSequenceIndexed<T, String> writer = factory.withoutOrder(sequenceDirectory);
         for (String key : allowedKeys) {
             try {
                 writer.add(provider.getException(key), key);
@@ -99,12 +107,13 @@ public class NamedProviderOutputter<T> {
             }
         }
     }
-    
-    private static Set<String> subset(
-            Set<String> keys, SingleLevelOutputEnabled outputEnabled) {
-        return keys.stream().filter(outputEnabled::isOutputEnabled).collect(Collectors.toCollection(TreeSet::new));
+
+    private static Set<String> subset(Set<String> keys, SingleLevelOutputEnabled outputEnabled) {
+        return keys.stream()
+                .filter(outputEnabled::isOutputEnabled)
+                .collect(Collectors.toCollection(TreeSet::new));
     }
-        
+
     private static void throwExceptionInWriter(Exception e, String name)
             throws OutputWriteFailedException {
 

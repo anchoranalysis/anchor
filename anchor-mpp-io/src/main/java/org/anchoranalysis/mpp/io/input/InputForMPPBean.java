@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.mpp.io.input;
 
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.mpp.bean.init.MPPInitParams;
 

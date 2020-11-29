@@ -35,9 +35,9 @@ import lombok.Getter;
 import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.color.ColorList;
 import org.anchoranalysis.core.color.RGBColor;
-import org.anchoranalysis.core.idgetter.IDGetter;
+import org.anchoranalysis.core.identifier.getter.IdentifierGetter;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
-import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.box.BoundingBox;
 
 @AllArgsConstructor
 public class ColoredMarks implements Iterable<Mark> {
@@ -50,14 +50,15 @@ public class ColoredMarks implements Iterable<Mark> {
     }
 
     // NB, this changes the IDs of the marks
-    public ColoredMarks(MarkCollection marks, ColorIndex colorIndex, IDGetter<Mark> colorIDGetter) {
+    public ColoredMarks(
+            MarkCollection marks, ColorIndex colorIndex, IdentifierGetter<Mark> colorIDGetter) {
         super();
         this.marks = marks;
 
         this.colorList = new ColorList();
 
         for (int index = 0; index < marks.size(); index++) {
-            int colorID = colorIDGetter.getID(marks.get(index), index);
+            int colorID = colorIDGetter.getIdentifier(marks.get(index), index);
             this.colorList.add(colorIndex.get(colorID));
         }
     }

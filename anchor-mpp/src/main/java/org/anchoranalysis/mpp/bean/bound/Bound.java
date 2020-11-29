@@ -40,7 +40,8 @@ public abstract class Bound extends MarkBounds {
     public abstract Bound duplicate();
 
     public ResolvedBound resolve(Optional<Resolution> resolution, boolean do3D) {
-        return new ResolvedBound(getMinResolved(resolution, do3D), getMaxResolved(resolution, do3D));
+        return new ResolvedBound(
+                getMinResolved(resolution, do3D), getMaxResolved(resolution, do3D));
     }
 
     public abstract void scale(double multFactor);

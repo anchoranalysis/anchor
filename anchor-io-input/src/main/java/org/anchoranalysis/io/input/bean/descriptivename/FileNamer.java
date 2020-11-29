@@ -40,11 +40,10 @@ import org.anchoranalysis.io.input.files.NamedFile;
 
 /**
  * Associates a name (a compact unique identifier) with a file.
- * 
- * <p>The operation can be procesed on a single file or a collection of files.
- * 
- * @author Owen Feehan
  *
+ * <p>The operation can be procesed on a single file or a collection of files.
+ *
+ * @author Owen Feehan
  */
 public abstract class FileNamer extends AnchorBean<FileNamer> {
 
@@ -60,18 +59,19 @@ public abstract class FileNamer extends AnchorBean<FileNamer> {
     public NamedFile deriveName(File file, String elseName, Logger logger) {
         return deriveName(Arrays.asList(file), elseName, logger).get(0);
     }
-    
-    
-    /** 
-     * Like {@link #deriveNameUnique(Collection, String, Logger)} but with a default for {@code elseName}.
+
+    /**
+     * Like {@link #deriveNameUnique(Collection, String, Logger)} but with a default for {@code
+     * elseName}.
      *
      * @param files the files to describe
      * @param logger the logger
-     * @return a list of identical size and order to files, corresponding to the file the extracted name
+     * @return a list of identical size and order to files, corresponding to the file the extracted
+     *     name
      * @throws InputReadFailedException if more than one {@link NamedFile} have the same name
      */
-    public List<NamedFile> deriveNameUnique(
-            Collection<File> files, Logger logger) throws InputReadFailedException {
+    public List<NamedFile> deriveNameUnique(Collection<File> files, Logger logger)
+            throws InputReadFailedException {
         return deriveNameUnique(files, DEFAULT_ELSE_NAME, logger);
     }
 
@@ -82,24 +82,26 @@ public abstract class FileNamer extends AnchorBean<FileNamer> {
      * @param elseName a string to use if an error occurs extracting a particular name (used as a
      *     prefix with an index)
      * @param logger the logger
-     * @return a list of identical size and order to files, corresponding to the file the extracted name
+     * @return a list of identical size and order to files, corresponding to the file the extracted
+     *     name
      */
     public abstract List<NamedFile> deriveName(
             Collection<File> files, String elseName, Logger logger);
-    
+
     /**
-     * Like {@link #deriveName(Collection, String, Logger)} but checks that the final list of named-files all have unique
-     * names
-     * 
+     * Like {@link #deriveName(Collection, String, Logger)} but checks that the final list of
+     * named-files all have unique names
+     *
      * @param files the files to describe
      * @param elseName a string to use if an error occurs extracting a particular name (used as a
      *     prefix with an index)
      * @param logger the logger
-     * @return a list of identical size and order to files, corresponding to the file the extracted name
+     * @return a list of identical size and order to files, corresponding to the file the extracted
+     *     name
      * @throws InputReadFailedException if more than one {@link NamedFile} have the same name
      */
-    public List<NamedFile> deriveNameUnique(
-            Collection<File> files, String elseName, Logger logger) throws InputReadFailedException {
+    public List<NamedFile> deriveNameUnique(Collection<File> files, String elseName, Logger logger)
+            throws InputReadFailedException {
         List<NamedFile> list = deriveName(files, elseName, logger);
         checkUniqueness(list);
         checkNoPredicate(list, FileNamer::containsBackslash, "contain backslashes");
@@ -110,10 +112,7 @@ public abstract class FileNamer extends AnchorBean<FileNamer> {
     private static void checkUniqueness(List<NamedFile> list) throws InputReadFailedException {
         Map<String, Long> countDescriptiveNames =
                 list.stream()
-                        .collect(
-                                Collectors.groupingBy(
-                                        NamedFile::getName,
-                                        Collectors.counting()));
+                        .collect(Collectors.groupingBy(NamedFile::getName, Collectors.counting()));
 
         for (Map.Entry<String, Long> entry : countDescriptiveNames.entrySet()) {
             if (entry.getValue() > 1) {
@@ -140,13 +139,11 @@ public abstract class FileNamer extends AnchorBean<FileNamer> {
     }
 
     /** For debugging if there is a non-uniqueness clash between two {@link NamedFile}s. */
-    private static String keysWithName(
-            String name, List<NamedFile> list) {
+    private static String keysWithName(String name, List<NamedFile> list) {
         return keysWithNamePredicate(file -> file.equals(name), list);
     }
 
-    private static String keysWithNamePredicate(
-            Predicate<String> predicate, List<NamedFile> list) {
+    private static String keysWithNamePredicate(Predicate<String> predicate, List<NamedFile> list) {
         List<String> matches =
                 list.stream()
                         .filter(file -> predicate.test(file.getName()))

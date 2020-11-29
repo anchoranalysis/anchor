@@ -34,7 +34,7 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.annotation.SkipInit;
-import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.core.exception.InitException;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class FindChildrenForInit {

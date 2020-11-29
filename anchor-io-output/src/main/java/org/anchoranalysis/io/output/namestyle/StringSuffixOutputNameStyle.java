@@ -52,9 +52,9 @@ public class StringSuffixOutputNameStyle extends IndexableOutputNameStyle {
     public IndexableOutputNameStyle duplicate() {
         return new StringSuffixOutputNameStyle(this);
     }
-    
+
     @Override
-    protected String nameFromOutputFormatString(String outputFormatString, String index) {
+    protected String filenameFromOutputFormatString(String outputFormatString, String index) {
         return String.format(outputFormatString, index);
     }
 
@@ -62,7 +62,7 @@ public class StringSuffixOutputNameStyle extends IndexableOutputNameStyle {
     protected String outputFormatString() {
         return outputFormatString;
     }
-    
+
     private StringSuffixOutputNameStyle(StringSuffixOutputNameStyle src) {
         super(src);
     }

@@ -27,13 +27,13 @@
 package org.anchoranalysis.mpp.feature.energy.scheme;
 
 import lombok.Getter;
-import org.anchoranalysis.bean.error.BeanDuplicateException;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.functional.function.CheckedFunction;
+import org.anchoranalysis.bean.exception.BeanDuplicateException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.functional.checked.CheckedFunction;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.core.params.KeyValueParams;
+import org.anchoranalysis.core.value.KeyValueParams;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.FeatureInitParams;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
@@ -41,7 +41,7 @@ import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
 import org.anchoranalysis.feature.energy.EnergyTotal;
 import org.anchoranalysis.feature.session.FeatureSession;
-import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
+import org.anchoranalysis.feature.session.calculator.multi.FeatureCalculatorMulti;
 import org.anchoranalysis.feature.shared.SharedFeatureMulti;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.mpp.feature.addcriteria.AddCriteriaEnergyPair;

@@ -27,6 +27,7 @@
 package org.anchoranalysis.io.manifest.operationrecorder;
 
 import java.nio.file.Path;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.ManifestDirectoryDescription;
 import org.anchoranalysis.io.manifest.directory.SubdirectoryBase;
@@ -38,17 +39,11 @@ import org.anchoranalysis.io.manifest.directory.SubdirectoryBase;
  *
  * @author Owen Feehan
  */
+@AllArgsConstructor
 public class DualWriterOperationRecorder implements WriteOperationRecorder {
 
     private WriteOperationRecorder recorder1;
     private WriteOperationRecorder recorder2;
-
-    public DualWriterOperationRecorder(
-            WriteOperationRecorder recorder1, WriteOperationRecorder recorder2) {
-        super();
-        this.recorder1 = recorder1;
-        this.recorder2 = recorder2;
-    }
 
     @Override
     public void recordWrittenFile(
@@ -62,13 +57,15 @@ public class DualWriterOperationRecorder implements WriteOperationRecorder {
 
     @Override
     public WriteOperationRecorder recordSubdirectoryCreated(
-            Path relativeFolderPath,
+            Path relativeDirectoryPath,
             ManifestDirectoryDescription manifestDescription,
             SubdirectoryBase folderWrite) {
         WriteOperationRecorder folder1 =
-                recorder1.recordSubdirectoryCreated(relativeFolderPath, manifestDescription, folderWrite);
+                recorder1.recordSubdirectoryCreated(
+                        relativeDirectoryPath, manifestDescription, folderWrite);
         WriteOperationRecorder folder2 =
-                recorder2.recordSubdirectoryCreated(relativeFolderPath, manifestDescription, folderWrite);
+                recorder2.recordSubdirectoryCreated(
+                        relativeDirectoryPath, manifestDescription, folderWrite);
         return new DualWriterOperationRecorder(folder1, folder2);
     }
 }

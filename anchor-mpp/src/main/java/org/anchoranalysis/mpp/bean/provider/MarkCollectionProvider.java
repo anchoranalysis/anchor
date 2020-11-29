@@ -27,7 +27,7 @@
 package org.anchoranalysis.mpp.bean.provider;
 
 import org.anchoranalysis.bean.annotation.GroupingRoot;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.mpp.mark.MarkCollection;
 
 /**

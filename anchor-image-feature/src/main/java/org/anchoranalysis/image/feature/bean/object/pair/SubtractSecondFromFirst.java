@@ -28,7 +28,7 @@ package org.anchoranalysis.image.feature.bean.object.pair;
 
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.cache.SessionInput;
-import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
+import org.anchoranalysis.image.feature.input.FeatureInputPairObjects;
 
 /**
  * Subtract second-object from first-object in a pair

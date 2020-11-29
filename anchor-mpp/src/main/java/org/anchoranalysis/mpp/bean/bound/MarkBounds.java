@@ -43,6 +43,7 @@ public abstract class MarkBounds extends AnchorBean<MarkBounds> implements Seria
     public abstract double getMaxResolved(Optional<Resolution> resolution, boolean do3D);
 
     public ResolvedBound calculateMinMax(Optional<Resolution> resolution, boolean do3D) {
-        return new ResolvedBound(getMinResolved(resolution, do3D), getMaxResolved(resolution, do3D));
+        return new ResolvedBound(
+                getMinResolved(resolution, do3D), getMaxResolved(resolution, do3D));
     }
 }

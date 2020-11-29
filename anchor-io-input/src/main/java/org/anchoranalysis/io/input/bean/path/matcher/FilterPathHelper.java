@@ -35,7 +35,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class FilterPathHelper {
 
-    public static Predicate<Path> createPredicate(Path directory, String fileType, String fileFilter) {
+    public static Predicate<Path> createPredicate(
+            Path directory, String fileType, String fileFilter) {
         PathMatcher matcher = FilterPathHelper.matcherForFilter(directory, fileType, fileFilter);
         return path -> FilterPathHelper.acceptPathViaMatcher(path, matcher);
     }
@@ -44,7 +45,8 @@ class FilterPathHelper {
         return matcher.matches(path.getFileName());
     }
 
-    private static PathMatcher matcherForFilter(Path directory, String filterType, String fileFilter) {
+    private static PathMatcher matcherForFilter(
+            Path directory, String filterType, String fileFilter) {
         return directory.getFileSystem().getPathMatcher(filterType + ":" + fileFilter);
     }
 }

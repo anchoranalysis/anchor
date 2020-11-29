@@ -30,23 +30,23 @@ import java.io.Serializable;
 import java.util.Optional;
 import java.util.function.DoubleUnaryOperator;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.error.OptionalOperationUnsupportedException;
+import org.anchoranalysis.core.exception.OptionalOperationUnsupportedException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.Resolution;
-import org.anchoranalysis.image.core.dimensions.UnitConverter;
 import org.anchoranalysis.image.core.dimensions.SpatialUnits.UnitSuffix;
+import org.anchoranalysis.image.core.dimensions.UnitConverter;
 import org.anchoranalysis.image.core.object.properties.ObjectWithProperties;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.overlay.OverlayProperties;
-import org.anchoranalysis.overlay.id.Identifiable;
-import org.anchoranalysis.spatial.extent.box.BoundingBox;
-import org.anchoranalysis.spatial.extent.scale.ScaleFactor;
+import org.anchoranalysis.overlay.identifier.Identifiable;
+import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.Point3d;
 import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.point.PointConverter;
 import org.anchoranalysis.spatial.point.ReadableTuple3i;
+import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 @NoArgsConstructor
 public abstract class Mark implements Serializable, Identifiable {
@@ -218,7 +218,7 @@ public abstract class Mark implements Serializable, Identifiable {
     }
 
     @Override
-    public int getId() {
+    public int getIdentifier() {
         return id;
     }
 
@@ -230,9 +230,9 @@ public abstract class Mark implements Serializable, Identifiable {
 
         OverlayProperties nvc = new OverlayProperties();
         nvc.add("Type", getName());
-        nvc.add("ID", Integer.toString(getId()));
+        nvc.add("ID", Integer.toString(getIdentifier()));
         if (resolution.isPresent()) {
-             addPropertiesForRegions(nvc, resolution.get().unitConvert() );
+            addPropertiesForRegions(nvc, resolution.get().unitConvert());
         }
         return nvc;
     }

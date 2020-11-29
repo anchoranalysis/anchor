@@ -34,5 +34,6 @@ import org.anchoranalysis.io.input.files.FilesProviderException;
 
 public abstract class FilesProvider extends AnchorBean<FilesProvider> {
 
-    public abstract Collection<File> create(InputManagerParams params) throws FilesProviderException;
+    public abstract Collection<File> create(InputManagerParams params)
+            throws FilesProviderException;
 }

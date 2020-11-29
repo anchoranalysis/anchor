@@ -29,7 +29,7 @@ package org.anchoranalysis.bean.shared.color.scheme;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.color.ColorList;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 
 /**
  * Creates a set of related colors.
@@ -46,23 +46,23 @@ public abstract class ColorScheme extends AnchorBean<ColorScheme> {
      * @throws OperationFailedException
      */
     public abstract ColorList createList(int size) throws OperationFailedException;
-    
+
     /**
      * Assigns a color to each index value from a list of size {@code numberColors}.
-     * 
+     *
      * <p>This allows non-contigous indices to each use a unique-ish color.
-     * 
-     * <p>Indices will be assigned a unique color until the list has no more
-     * unique colors, at which point they will be reused.
-     * 
-     * <p><b>Beware</b> that as each index is remembered in a hash-map, this can become
-     * inefficient for a large number of indices.
-     * 
+     *
+     * <p>Indices will be assigned a unique color until the list has no more unique colors, at which
+     * point they will be reused.
+     *
+     * <p><b>Beware</b> that as each index is remembered in a hash-map, this can become inefficient
+     * for a large number of indices.
+     *
      * @param numberColors the size of the list from which colors are selected
      * @return a newly created index
      * @throws OperationFailedException
      */
     public ColorIndex colorForEachIndex(int numberColors) throws OperationFailedException {
-        return new AssignColorToEachIndex( createList(numberColors) );
+        return new AssignColorToEachIndex(createList(numberColors));
     }
 }

@@ -28,9 +28,9 @@ package org.anchoranalysis.overlay;
 
 import java.util.Iterator;
 import java.util.function.DoubleUnaryOperator;
-import org.anchoranalysis.core.name.provider.NameValueSet;
-import org.anchoranalysis.core.name.value.NameValue;
-import org.anchoranalysis.core.name.value.SimpleNameValue;
+import org.anchoranalysis.core.identifier.name.NameValue;
+import org.anchoranalysis.core.identifier.name.SimpleNameValue;
+import org.anchoranalysis.core.identifier.provider.NameValueSet;
 import org.anchoranalysis.image.core.dimensions.SpatialUnits;
 import org.anchoranalysis.image.core.dimensions.SpatialUnits.UnitSuffix;
 

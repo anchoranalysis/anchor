@@ -27,10 +27,11 @@
 package org.anchoranalysis.io.generator.serialized;
 
 import java.util.Optional;
+import lombok.AllArgsConstructor;
+import org.anchoranalysis.core.format.NonImageFileFormat;
 import org.anchoranalysis.io.generator.OneStageGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
-import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public abstract class SerializedGenerator<T> extends OneStageGenerator<T> {
@@ -38,8 +39,8 @@ public abstract class SerializedGenerator<T> extends OneStageGenerator<T> {
     private Optional<String> manifestFunction;
 
     @Override
-    public String getFileExtension(OutputWriteSettings outputWriteSettings) {
-        return outputWriteSettings.getExtensionSerialized() + extensionSuffix(outputWriteSettings);
+    public String selectFileExtension(OutputWriteSettings outputWriteSettings) {
+        return NonImageFileFormat.SERIALIZED_BINARY.getDefaultExtension() + extensionSuffix(outputWriteSettings);
     }
 
     @Override

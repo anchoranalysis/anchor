@@ -28,18 +28,18 @@ package org.anchoranalysis.feature.energy;
 
 import com.google.common.base.Functions;
 import io.vavr.control.Either;
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.error.OperationFailedRuntimeException;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedRuntimeException;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.stack.Stack;
-import org.anchoranalysis.spatial.extent.Extent;
+import org.anchoranalysis.spatial.Extent;
 
 /**
  * A stack of channels used as context to calculate features (or calculating <i>energy</i> more
  * broadly).
  *
- * <p>The stack can have 0 channels, in which case, explict dimensions must be set.
+ * <p>The stack can have 0 channels, in which case, explicit dimensions must be set.
  *
  * @author Owen Feehan
  */

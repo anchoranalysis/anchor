@@ -27,9 +27,9 @@
 package org.anchoranalysis.image.core.mask;
 
 import com.google.common.base.Preconditions;
+import java.util.Optional;
 import lombok.Getter;
 import lombok.experimental.Accessors;
-import java.util.Optional;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.core.channel.factory.ChannelFactorySingleType;
@@ -50,10 +50,10 @@ import org.anchoranalysis.image.voxel.interpolator.Interpolator;
 import org.anchoranalysis.image.voxel.interpolator.InterpolatorFactory;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.image.voxel.thresholder.VoxelsThresholder;
-import org.anchoranalysis.spatial.extent.Extent;
-import org.anchoranalysis.spatial.extent.box.BoundingBox;
-import org.anchoranalysis.spatial.extent.scale.ScaleFactor;
+import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.Point3i;
+import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 /**
  * A channel that is restricted to two values (ON and OFF) so as to act like a mask.
@@ -252,17 +252,6 @@ public class Mask {
         return channel.voxels().asByte().sliceBuffer(z);
     }
 
-    private void applyThreshold(Mask mask) {
-        int thresholdVal = (binaryValues.getOnInt() + binaryValues.getOffInt()) / 2;
-
-        VoxelsThresholder.thresholdForLevel(
-                mask.voxels(), thresholdVal, mask.binaryValues().createByte());
-    }
-
-    private Interpolator createInterpolator(BinaryValues binaryValues) {
-        return InterpolatorFactory.getInstance().binaryResizing(binaryValues.getOffInt());
-    }
-
     public int getOffInt() {
         return binaryValues.getOffInt();
     }
@@ -301,5 +290,16 @@ public class Mask {
 
     public Extent extent() {
         return channel.extent();
+    }
+
+    private void applyThreshold(Mask mask) {
+        int thresholdVal = (binaryValues.getOnInt() + binaryValues.getOffInt()) / 2;
+
+        VoxelsThresholder.thresholdForLevel(
+                mask.voxels(), thresholdVal, mask.binaryValues().createByte());
+    }
+
+    private Interpolator createInterpolator(BinaryValues binaryValues) {
+        return InterpolatorFactory.getInstance().binaryResizing(binaryValues.getOffInt());
     }
 }

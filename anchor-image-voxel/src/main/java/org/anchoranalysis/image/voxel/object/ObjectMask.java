@@ -33,17 +33,16 @@ import java.util.Optional;
 import java.util.function.UnaryOperator;
 import lombok.Getter;
 import lombok.experimental.Accessors;
-import org.anchoranalysis.core.axis.AxisType;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.image.voxel.BoundedVoxels;
-import org.anchoranalysis.image.voxel.BoundedVoxelsFactory;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.assigner.VoxelsAssigner;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxelsFactory;
+import org.anchoranalysis.image.voxel.binary.connected.ObjectsFromConnectedComponentsFactory;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValues;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
@@ -55,14 +54,14 @@ import org.anchoranalysis.image.voxel.interpolator.Interpolator;
 import org.anchoranalysis.image.voxel.interpolator.InterpolatorFactory;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxelsEqualTo;
 import org.anchoranalysis.image.voxel.iterator.intersecting.CountVoxelsIntersectingObjects;
-import org.anchoranalysis.image.voxel.object.factory.ObjectsFromConnectedComponentsFactory;
 import org.anchoranalysis.image.voxel.thresholder.VoxelsThresholder;
-import org.anchoranalysis.spatial.extent.Extent;
-import org.anchoranalysis.spatial.extent.box.BoundingBox;
-import org.anchoranalysis.spatial.extent.scale.ScaleFactor;
+import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.spatial.axis.AxisType;
+import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.Point3d;
 import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.point.ReadableTuple3i;
+import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 /**
  * An object expressed in voxels, bounded within overall space.
@@ -115,7 +114,7 @@ public class ObjectMask {
      * @param box bounding-box
      */
     public ObjectMask(BoundingBox box) {
-        this(BoundedVoxelsFactory.createByte(box));
+        this(VoxelsFactory.getUnsignedByte().createBounded(box));
     }
 
     /**
@@ -318,7 +317,7 @@ public class ObjectMask {
             // nothing to do
             return this;
         } else {
-            BoundingBox clippedBox = boundingBox().clipTo(extent);
+            BoundingBox clippedBox = boundingBox().clampTo(extent);
             return mapBoundingBoxChangeExtent(clippedBox);
         }
     }
@@ -386,20 +385,20 @@ public class ObjectMask {
 
         // We calculate a bounding box, which we write into in the omDest
 
-        BinaryValues bvOut = BinaryValues.getDefault();
+        BinaryValues binaryValuesOut = BinaryValues.getDefault();
 
         // We initially set all pixels to ON
         BoundedVoxels<UnsignedByteBuffer> voxelsMaskOut =
-                BoundedVoxelsFactory.createByte(boxIntersect.get());
-        voxelsMaskOut.assignValue(bvOut.getOnInt()).toAll();
+                VoxelsFactory.getUnsignedByte().createBounded(boxIntersect.get());
+        voxelsMaskOut.assignValue(binaryValuesOut.getOnInt()).toAll();
 
         // Then we set any pixels NOT on either object to OFF..... leaving only the intersecting
         // pixels as ON in the output buffer
         voxelsMaskOut
-                .assignValue(bvOut.getOffInt())
+                .assignValue(binaryValuesOut.getOffInt())
                 .toEitherTwoObjects(invert(), other.invert(), boxIntersect.get());
 
-        ObjectMask object = new ObjectMask(voxelsMaskOut, bvOut);
+        ObjectMask object = new ObjectMask(voxelsMaskOut, binaryValuesOut);
 
         // If there no pixels left that haven't been set, then the intersection object-mask is zero
         return OptionalUtilities.createFromFlag(object.voxelsOn().anyExists(), object);

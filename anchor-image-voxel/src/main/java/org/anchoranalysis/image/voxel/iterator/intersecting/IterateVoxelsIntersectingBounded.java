@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -32,9 +32,9 @@ import org.anchoranalysis.image.voxel.BoundedVoxels;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxelsBoundingBox;
-import org.anchoranalysis.image.voxel.iterator.predicate.buffer.PredicateBufferBinary;
+import org.anchoranalysis.image.voxel.iterator.predicate.PredicateBufferBinary;
 import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferBinary;
-import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.Point3i;
 
 /**
@@ -56,7 +56,7 @@ public class IterateVoxelsIntersectingBounded {
      *     and offsets for {@code first} and {@code second}.
      */
     public static <T> void withTwoBuffers(
-            BoundedVoxels<T> voxels1, BoundedVoxels<T> voxels2, ProcessBufferBinary<T,T> process) {
+            BoundedVoxels<T> voxels1, BoundedVoxels<T> voxels2, ProcessBufferBinary<T, T> process) {
         // Find the common bounding box
         Optional<Intersection> intersection = findIntersection(voxels1, voxels2);
 
@@ -88,7 +88,7 @@ public class IterateVoxelsIntersectingBounded {
             byte onMaskGlobal,
             BoundedVoxels<UnsignedByteBuffer> voxels1,
             BoundedVoxels<UnsignedByteBuffer> voxels2,
-            ProcessBufferBinary<UnsignedByteBuffer,UnsignedByteBuffer> process) {
+            ProcessBufferBinary<UnsignedByteBuffer, UnsignedByteBuffer> process) {
         // Find the common bounding box
         Optional<Intersection> intersection = findIntersection(voxels1, voxels2);
 

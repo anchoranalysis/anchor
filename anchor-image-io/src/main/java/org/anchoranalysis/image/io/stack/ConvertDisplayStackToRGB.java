@@ -28,12 +28,12 @@ package org.anchoranalysis.image.io.stack;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
+import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
 import org.anchoranalysis.image.core.stack.DisplayStack;
-import org.anchoranalysis.image.core.stack.rgb.RGBStack;
-import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.image.core.stack.RGBStack;
+import org.anchoranalysis.spatial.box.BoundingBox;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ConvertDisplayStackToRGB {

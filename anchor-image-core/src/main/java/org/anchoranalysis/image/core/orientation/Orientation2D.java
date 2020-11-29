@@ -26,39 +26,29 @@
 
 package org.anchoranalysis.image.core.orientation;
 
-import org.anchoranalysis.core.name.provider.NameValueSet;
-import org.anchoranalysis.core.name.value.SimpleNameValue;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.anchoranalysis.core.identifier.name.SimpleNameValue;
+import org.anchoranalysis.core.identifier.provider.NameValueSet;
 import org.anchoranalysis.image.core.object.properties.ObjectWithProperties;
 import org.anchoranalysis.spatial.rotation.RotationMatrix;
-import org.anchoranalysis.spatial.rotation.RotationMatrix2DFromRadianCreator;
-import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.anchoranalysis.spatial.rotation.factory.RotateAngle2D;
 
+@AllArgsConstructor
+@NoArgsConstructor
+@EqualsAndHashCode(callSuper = false)
 public class Orientation2D extends Orientation {
 
     /** */
     private static final long serialVersionUID = 1528190376087281572L;
 
-    private double angleRadians = 0;
-
-    public Orientation2D() {
-        super();
-    }
-
-    public Orientation2D(double angleRadians) {
-        super();
-        this.angleRadians = angleRadians;
-    }
-
-    public double getAngleRadians() {
-        return angleRadians;
-    }
+    @Getter @Setter private double angleRadians = 0;
 
     public double getAngleDegrees() {
         return angleRadians * 180 / Math.PI;
-    }
-
-    public void setAngleRadians(double angleRadians) {
-        this.angleRadians = angleRadians;
     }
 
     public void rotate(double rotateRadians) {
@@ -72,14 +62,12 @@ public class Orientation2D extends Orientation {
 
     @Override
     public Orientation2D duplicate() {
-        Orientation2D copy = new Orientation2D();
-        copy.angleRadians = this.angleRadians;
-        return copy;
+        return new Orientation2D(angleRadians);
     }
 
     @Override
     public RotationMatrix createRotationMatrix() {
-        return new RotationMatrix2DFromRadianCreator(angleRadians).createRotationMatrix();
+        return new RotateAngle2D(angleRadians).create();
     }
 
     @Override
@@ -88,13 +76,9 @@ public class Orientation2D extends Orientation {
     }
 
     @Override
-    public void addProperties(NameValueSet<String> nvc) {
-        nvc.add(
-                new SimpleNameValue<>(
-                        "Orientation Angle (radians)", String.format("%1.2f", getAngleRadians())));
-        nvc.add(
-                new SimpleNameValue<>(
-                        "Orientation Angle (degrees)", String.format("%1.2f", getAngleDegrees())));
+    public void addProperties(NameValueSet<String> namedValues) {
+        addAngleProperty(namedValues, "radians", getAngleRadians());
+        addAngleProperty(namedValues, "degrees", getAngleDegrees());
     }
 
     @Override
@@ -103,31 +87,15 @@ public class Orientation2D extends Orientation {
     }
 
     @Override
-    public int getNumDims() {
+    public int numberDimensions() {
         return 2;
     }
 
-    @Override
-    public boolean equals(Object other) {
-
-        if (other == null) {
-            return false;
-        }
-        if (other == this) {
-            return true;
-        }
-
-        if (!(other instanceof Orientation2D)) {
-            return false;
-        }
-
-        Orientation2D otherCast = (Orientation2D) other;
-
-        return angleRadians == otherCast.angleRadians;
-    }
-
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder().append(angleRadians).toHashCode();
+    private static void addAngleProperty(
+            NameValueSet<String> namedValues, String unitType, double angleValue) {
+        namedValues.add(
+                new SimpleNameValue<>(
+                        String.format("Orientation Angle (%s)", unitType),
+                        String.format("%1.2f", angleValue)));
     }
 }

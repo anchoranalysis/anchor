@@ -44,20 +44,21 @@ public abstract class FinderSingleDirectory implements Finder {
 
         return exists();
     }
-    
+
     @Override
     public final boolean exists() {
         return foundDirectory.isPresent();
     }
-    
+
     protected abstract Predicate<MutableDirectory> matchDirectories();
 
     protected MutableDirectory getFoundDirectory() {
-        return foundDirectory.get();    // NOSONAR
+        return foundDirectory.get(); // NOSONAR
     }
-        
+
     private final Optional<MutableDirectory> findDirectory(Manifest manifestRecorder) {
-        List<MutableDirectory> list = FinderUtilities.findListFolder(manifestRecorder, matchDirectories() );
+        List<MutableDirectory> list =
+                FinderUtilities.findListDirectory(manifestRecorder, matchDirectories());
         return OptionalUtilities.createFromFlag(!list.isEmpty(), () -> list.get(0));
     }
 }

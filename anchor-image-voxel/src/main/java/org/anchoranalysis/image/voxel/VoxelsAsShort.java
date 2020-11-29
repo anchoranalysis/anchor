@@ -31,10 +31,10 @@ import org.anchoranalysis.image.voxel.arithmetic.VoxelsArithmeticFactory;
 import org.anchoranalysis.image.voxel.assigner.VoxelsAssigner;
 import org.anchoranalysis.image.voxel.assigner.VoxelsAssignerFactory;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedShortBuffer;
+import org.anchoranalysis.image.voxel.buffer.slice.SliceBufferIndex;
 import org.anchoranalysis.image.voxel.extracter.VoxelsExtracter;
 import org.anchoranalysis.image.voxel.extracter.VoxelsExtracterFactory;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
-import org.anchoranalysis.image.voxel.factory.sliceindex.SliceBufferIndex;
 
 public final class VoxelsAsShort extends Voxels<UnsignedShortBuffer> {
 
@@ -53,6 +53,6 @@ public final class VoxelsAsShort extends Voxels<UnsignedShortBuffer> {
 
     @Override
     public VoxelsExtracter<UnsignedShortBuffer> extract() {
-        return VoxelsExtracterFactory.createShort(this);
+        return VoxelsExtracterFactory.createUnsignedShort(this);
     }
 }

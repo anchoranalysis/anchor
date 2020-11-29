@@ -159,28 +159,28 @@ public class TestLoader {
     /**
      * Does a resource exist with a particular folderPath + fileName
      *
-     * @param testFolderPath path to a folder in the test-data (can be empty)
-     * @param fileName a filename in the testFolderPath
+     * @param testDirectoryPath path to a folder in the test-data (can be empty)
+     * @param fileName a filename in the {@code testDirectoryPath}
      * @return true if a file is found at the location, false otherwise
      */
-    public boolean doesPathExist(String testFolderPath, String fileName) {
-        Path folder = resolveTestPath(testFolderPath);
+    public boolean doesPathExist(String testDirectoryPath, String fileName) {
+        Path folder = resolveTestPath(testDirectoryPath);
         return folder.resolve(fileName).toFile().exists();
     }
 
-    private void listDirectory(String dirPath, int level) {
-        File dir = new File(dirPath);
-        File[] firstLevelFiles = dir.listFiles();
+    private void listDirectory(String directoryPath, int level) {
+        File directory = new File(directoryPath);
+        File[] firstLevelFiles = directory.listFiles();
         if (firstLevelFiles != null && firstLevelFiles.length > 0) {
-            for (File aFile : firstLevelFiles) {
+            for (File file : firstLevelFiles) {
                 for (int i = 0; i < level; i++) {
                     System.out.print("\t"); // NOSONAR
                 }
-                if (aFile.isDirectory()) {
-                    System.out.println("[" + aFile.getName() + "]"); // NOSONAR
-                    listDirectory(aFile.getAbsolutePath(), level + 1);
+                if (file.isDirectory()) {
+                    System.out.println("[" + file.getName() + "]"); // NOSONAR
+                    listDirectory(file.getAbsolutePath(), level + 1);
                 } else {
-                    System.out.println(aFile.getName()); // NOSONAR
+                    System.out.println(file.getName()); // NOSONAR
                 }
             }
         }
@@ -189,10 +189,10 @@ public class TestLoader {
     /**
      * Prints the names of all files (recursively) in a test-folder to stdout
      *
-     * @param testFolderPath path to a folder in the test-data (can be empty)
+     * @param testDirectoryPath path to a folder in the test-data (can be empty)
      */
-    public void printAllFilesFromTestFolderPath(String testFolderPath) {
-        Path folderPathResolved = resolveTestPath(testFolderPath);
+    public void printAllFilesFromTestDirectoryPath(String testDirectoryPath) {
+        Path folderPathResolved = resolveTestPath(testDirectoryPath);
         listDirectory(folderPathResolved.toString(), 0);
     }
 

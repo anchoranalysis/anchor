@@ -45,7 +45,7 @@ import org.anchoranalysis.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.QuickOverlapCalculation;
 import org.anchoranalysis.overlay.OverlayProperties;
-import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.Point3d;
 
 //
@@ -388,7 +388,7 @@ public class Ellipsoid extends ConicBase implements Serializable {
         op.addDoubleAsString("Normalized Radius 0 (pixels)", arr[0]);
         op.addDoubleAsString("Normalized Radius 1 (pixels)", arr[1]);
         op.addDoubleAsString("Normalized Radius 2 (pixels)", arr[2]);
-        
+
         orientation.addProperties(op.getNameValueSet());
         op.addDoubleAsString("Shell Radius Ratio", shellRad);
         op.addDoubleAsString("Inner Core Radius Ratio ", innerCoreDistance);

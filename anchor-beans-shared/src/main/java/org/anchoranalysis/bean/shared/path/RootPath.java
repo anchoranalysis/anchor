@@ -33,9 +33,9 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.path.PathDifference;
-import org.anchoranalysis.core.path.PathDifferenceException;
-import org.anchoranalysis.core.path.SplitPath;
+import org.anchoranalysis.core.system.path.PathDifference;
+import org.anchoranalysis.core.system.path.PathDifferenceException;
+import org.anchoranalysis.core.system.path.SplitPath;
 
 /**
  * Defines a *root path* i.e. a directory in which files are read/written during analysis

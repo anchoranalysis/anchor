@@ -29,20 +29,25 @@ package org.anchoranalysis.image.feature.bean.evaluator;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
+import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.annotation.SkipInit;
+import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
+import org.anchoranalysis.bean.initializable.CheckMisconfigured;
 import org.anchoranalysis.bean.provider.Provider;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
-import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.FeatureRelatedBean;
+import org.anchoranalysis.feature.bean.provider.FeatureProvider;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.session.FeatureSession;
-import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
-import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingleChangeInput;
+import org.anchoranalysis.feature.session.calculator.single.FeatureCalculatorSingle;
+import org.anchoranalysis.feature.session.calculator.single.FeatureCalculatorSingleChangeInput;
 import org.anchoranalysis.image.core.stack.Stack;
 
 /**
@@ -57,8 +62,19 @@ public class FeatureEvaluator<T extends FeatureInput>
         extends FeatureRelatedBean<FeatureEvaluator<T>> {
 
     // START BEAN PROPERTIES
-    /** The single feature that will be calculated (possibly repeatedly) in the session */
-    @BeanField @Getter @Setter @SkipInit private Feature<T> feature;
+    /**
+     * The single feature that will be calculated (possibly repeatedly) in the session.
+     *
+     * <p>Either this field must be set or {@code featureProvider}, but not both.
+     */
+    @BeanField @OptionalBean @Getter @Setter @SkipInit private Feature<T> feature;
+
+    /**
+     * The single feature that will be calculated (possibly repeatedly) in the session
+     *
+     * <p>Either this field must be set or {@code feature}, but not both.
+     */
+    @BeanField @OptionalBean @Getter @Setter private FeatureProvider<T> featureProvider;
 
     /** Optionally specifies an energy-stack to be associated with every calculation input. */
     @BeanField @OptionalBean @Getter @Setter private Provider<Stack> stackEnergy;
@@ -69,6 +85,14 @@ public class FeatureEvaluator<T extends FeatureInput>
      */
     @BeanField @OptionalBean @Getter @Setter private KeyValueParamsProvider params;
     // END BEAN PROPERTIES
+
+    @Override
+    public void checkMisconfigured(BeanInstanceMap defaultInstances)
+            throws BeanMisconfiguredException {
+        super.checkMisconfigured(defaultInstances);
+        CheckMisconfigured.oneOnly(
+                "feature", "featureProvider", feature != null, featureProvider != null);
+    }
 
     /**
      * Creates session for evaluating {@code feature} optionally adding an energy-stack.
@@ -94,10 +118,20 @@ public class FeatureEvaluator<T extends FeatureInput>
 
         try {
             return FeatureSession.with(
-                    feature, getInitializationParameters().getSharedFeatureSet(), getLogger());
+                    determineFeature(),
+                    getInitializationParameters().getSharedFeatureSet(),
+                    getLogger());
 
-        } catch (InitException e) {
+        } catch (InitException | CreateException e) {
             throw new OperationFailedException(e);
+        }
+    }
+
+    private Feature<T> determineFeature() throws CreateException {
+        if (featureProvider != null) {
+            return featureProvider.create();
+        } else {
+            return feature;
         }
     }
 

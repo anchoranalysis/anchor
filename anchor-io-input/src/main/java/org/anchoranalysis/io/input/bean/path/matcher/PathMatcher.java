@@ -31,7 +31,7 @@ import java.nio.file.Path;
 import java.util.Collection;
 import java.util.function.Predicate;
 import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.core.progress.ProgressReporter;
+import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.io.input.InputContextParams;
 import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.input.bean.InputManagerParams;
@@ -78,12 +78,14 @@ public abstract class PathMatcher extends AnchorBean<PathMatcher> {
         if (!directory.toFile().exists() || !directory.toFile().isDirectory()) {
             throw new InputReadFailedException(
                     String.format(
-                            "Directory '%s' does not exist", directory.toAbsolutePath().normalize()));
+                            "Directory '%s' does not exist",
+                            directory.toAbsolutePath().normalize()));
         }
 
-        DualPathPredicates predicates = createPredicates(directory, ignoreHidden, params.getInputContext());
+        DualPathPredicates predicates =
+                createPredicates(directory, ignoreHidden, params.getInputContext());
         try {
-            return createMatchingFiles(params.getProgressReporter(), recursive)
+            return createMatchingFiles(params.getProgress(), recursive)
                     .findMatchingFiles(
                             directory,
                             new PathMatchConstraints(predicates, maxDirectoryDepth),
@@ -94,22 +96,23 @@ public abstract class PathMatcher extends AnchorBean<PathMatcher> {
         }
     }
 
-    protected abstract Predicate<Path> createMatcherFile(Path directory, InputContextParams inputContext)
-            throws InputReadFailedException;
-    
-    private DualPathPredicates createPredicates(Path directory, boolean ignoreHidden, InputContextParams params) throws InputReadFailedException {
+    protected abstract Predicate<Path> createMatcherFile(
+            Path directory, InputContextParams inputContext) throws InputReadFailedException;
+
+    private DualPathPredicates createPredicates(
+            Path directory, boolean ignoreHidden, InputContextParams params)
+            throws InputReadFailedException {
 
         // Many checks are possible on a file, including whether it is hidden or not
         Predicate<Path> fileMatcher =
-                maybeAddIgnoreHidden(
-                        ignoreHidden, createMatcherFile(directory, params));
+                maybeAddIgnoreHidden(ignoreHidden, createMatcherFile(directory, params));
 
         // The only check on a directory is (maybe) whether it is hidden or not
         Predicate<Path> directoryMatcher = maybeAddIgnoreHidden(ignoreHidden, p -> true);
-        
+
         return new DualPathPredicates(fileMatcher, directoryMatcher);
     }
-    
+
     private Predicate<Path> maybeAddIgnoreHidden(boolean ignoreHidden, Predicate<Path> pred) {
         if (ignoreHidden) {
             return p -> pred.test(p) && HiddenPathChecker.includePath(p);
@@ -118,8 +121,7 @@ public abstract class PathMatcher extends AnchorBean<PathMatcher> {
         }
     }
 
-    private FindMatchingFiles createMatchingFiles(
-            ProgressReporter progressReporter, boolean recursive) {
-        return new FindMatchingFiles(recursive, progressReporter);
+    private FindMatchingFiles createMatchingFiles(Progress progress, boolean recursive) {
+        return new FindMatchingFiles(recursive, progress);
     }
 }

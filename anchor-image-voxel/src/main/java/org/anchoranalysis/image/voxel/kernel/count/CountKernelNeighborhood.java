@@ -27,7 +27,7 @@
 package org.anchoranalysis.image.voxel.kernel.count;
 
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
-import org.anchoranalysis.spatial.extent.Extent;
+import org.anchoranalysis.spatial.Extent;
 import org.anchoranalysis.spatial.point.Point3i;
 
 /**

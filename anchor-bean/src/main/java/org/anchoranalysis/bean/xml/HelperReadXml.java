@@ -35,7 +35,7 @@ import java.nio.file.Path;
 import javax.xml.parsers.ParserConfigurationException;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.bean.xml.error.BeanXmlException;
+import org.anchoranalysis.bean.xml.exception.BeanXmlException;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.XMLConfiguration;
 import org.xml.sax.SAXParseException;

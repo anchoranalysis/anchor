@@ -35,7 +35,7 @@ import java.util.Set;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.GroupingRoot;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.FunctionalList;
 
 /**
@@ -47,7 +47,7 @@ import org.anchoranalysis.core.functional.FunctionalList;
  */
 public class Define extends AnchorBean<Define> {
 
-    /** A map from GroupingRoot to a list of NamedBeans that must subclass from this root */
+    /** A map from {#link GroupingRoot} to a list of {@link NamedBean}s that must subclass from this root */
     private Map<Class<?>, List<NamedBean<?>>> map = new HashMap<>();
 
     /**

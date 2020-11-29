@@ -40,7 +40,7 @@ import org.junit.Test;
 
 public class ChannelSetVoxelsTest {
 
-    double delta = 1e-3;
+    private static final double DELTA = 1e-3;
 
     @Test
     public void testSetPixelsForPlane() {
@@ -61,6 +61,6 @@ public class ChannelSetVoxelsTest {
 
     private void assertVoxelEquals(
             double value, int x, int y, VoxelsExtracter<FloatBuffer> extracter) {
-        assertEquals(value, extracter.voxel(new Point3i(x, y, 0)), delta);
+        assertEquals(value, extracter.voxel(new Point3i(x, y, 0)), DELTA);
     }
 }

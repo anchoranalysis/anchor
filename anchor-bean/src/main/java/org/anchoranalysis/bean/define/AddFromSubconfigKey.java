@@ -30,7 +30,7 @@ import java.util.List;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.define.adder.DefineAdder;
 import org.anchoranalysis.bean.define.adder.DefineAdderUtilities;
-import org.anchoranalysis.bean.xml.error.BeanXmlException;
+import org.anchoranalysis.bean.xml.exception.BeanXmlException;
 import org.anchoranalysis.bean.xml.factory.HelperListUtilities;
 import org.apache.commons.configuration.ConfigurationRuntimeException;
 import org.apache.commons.configuration.SubnodeConfiguration;

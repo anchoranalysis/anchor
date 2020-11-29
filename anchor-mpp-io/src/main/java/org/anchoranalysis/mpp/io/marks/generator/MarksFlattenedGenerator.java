@@ -26,8 +26,8 @@
 
 package org.anchoranalysis.mpp.io.marks.generator;
 
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.idgetter.IDGetter;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.identifier.getter.IdentifierGetter;
 import org.anchoranalysis.image.core.stack.DisplayStack;
 import org.anchoranalysis.image.io.bean.object.draw.Flatten;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipWithFlags;
@@ -43,7 +43,7 @@ public class MarksFlattenedGenerator extends MarksGeneratorBase {
 
     public MarksFlattenedGenerator(
             DrawObject drawObject,
-            IDGetter<Overlay> idGetter,
+            IdentifierGetter<Overlay> idGetter,
             RegionMembershipWithFlags regionMembership) {
         super(createWriter(drawObject), idGetter, regionMembership);
     }
@@ -53,7 +53,7 @@ public class MarksFlattenedGenerator extends MarksGeneratorBase {
         // We avoid repeating the same calculation using a cache
         if (stack != cachedBackground) {
             cachedBackground = stack;
-            cachedBackgroundMIP = stack.maximumIntensityProjection();
+            cachedBackgroundMIP = stack.projectMax();
         }
 
         return cachedBackgroundMIP;

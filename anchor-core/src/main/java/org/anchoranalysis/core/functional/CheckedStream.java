@@ -31,12 +31,12 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
-import org.anchoranalysis.core.functional.function.CheckedConsumer;
-import org.anchoranalysis.core.functional.function.CheckedFunction;
-import org.anchoranalysis.core.functional.function.CheckedIntFunction;
-import org.anchoranalysis.core.functional.function.CheckedPredicate;
-import org.anchoranalysis.core.functional.function.CheckedToIntFunction;
+import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
+import org.anchoranalysis.core.functional.checked.CheckedConsumer;
+import org.anchoranalysis.core.functional.checked.CheckedFunction;
+import org.anchoranalysis.core.functional.checked.CheckedIntFunction;
+import org.anchoranalysis.core.functional.checked.CheckedPredicate;
+import org.anchoranalysis.core.functional.checked.CheckedToIntFunction;
 
 /** Map operations for streams that can throw checked-exceptions */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -88,7 +88,7 @@ public class CheckedStream {
             throwException(e, throwableClass);
         }
     }
-    
+
     /**
      * Performs a {@link Stream#filter} but accepts a predicate that can throw a checked-exception
      *
@@ -150,8 +150,7 @@ public class CheckedStream {
     }
 
     /**
-     * Performs a {@link Stream#mapToInt} but accepts a function that can throw a
-     * checked-exception.
+     * Performs a {@link Stream#mapToInt} but accepts a function that can throw a checked-exception.
      *
      * <p>This uses some internal reflection trickery to suppress the checked exception, and then
      * rethrow it.
@@ -350,7 +349,7 @@ public class CheckedStream {
             throw new ConvertedToRuntimeException(exc);
         }
     }
-    
+
     /**
      * Like @link(#suppressCheckedException) but instead accepts {@link CheckedPredicate} functions
      */

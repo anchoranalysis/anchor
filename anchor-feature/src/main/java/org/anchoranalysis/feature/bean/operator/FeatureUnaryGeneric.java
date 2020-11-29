@@ -31,7 +31,7 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
- * A {@link FeatureUnary} that accepts any {#link {@link FeatureInput}} irrespective of type.
+ * A {@link FeatureUnary} that accepts any {@link FeatureInput} irrespective of type.
  *
  * @author Owen Feehan
  * @param <T> input-type

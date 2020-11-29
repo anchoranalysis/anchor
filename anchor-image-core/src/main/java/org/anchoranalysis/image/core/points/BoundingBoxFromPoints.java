@@ -29,9 +29,9 @@ package org.anchoranalysis.image.core.points;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.spatial.extent.box.BoundingBox;
-import org.anchoranalysis.spatial.extent.box.PointRange;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.spatial.box.BoundingBox;
+import org.anchoranalysis.spatial.box.PointRange;
 import org.anchoranalysis.spatial.point.Point3d;
 import org.anchoranalysis.spatial.point.Point3i;
 

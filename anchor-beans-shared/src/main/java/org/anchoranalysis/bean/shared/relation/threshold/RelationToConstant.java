@@ -34,7 +34,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.NonNegative;
 import org.anchoranalysis.bean.shared.relation.RelationBean;
-import org.anchoranalysis.core.relation.RelationToValue;
+import org.anchoranalysis.math.relation.RelationToValue;
 
 @NoArgsConstructor
 @AllArgsConstructor

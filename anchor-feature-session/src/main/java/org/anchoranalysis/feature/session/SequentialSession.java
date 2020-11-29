@@ -26,12 +26,12 @@
 
 package org.anchoranalysis.feature.session;
 
-import org.anchoranalysis.bean.error.BeanMisconfiguredException;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.error.reporter.ErrorReporter;
+import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
+import org.anchoranalysis.core.log.error.ErrorReporter;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListFactory;
@@ -41,10 +41,10 @@ import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
 import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.results.ResultsVector;
-import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
-import org.anchoranalysis.feature.session.strategy.replace.ReplaceStrategy;
-import org.anchoranalysis.feature.session.strategy.replace.ReuseSingletonStrategy;
-import org.anchoranalysis.feature.session.strategy.replace.bind.BoundReplaceStrategy;
+import org.anchoranalysis.feature.session.calculator.multi.FeatureCalculatorMulti;
+import org.anchoranalysis.feature.session.replace.BoundReplaceStrategy;
+import org.anchoranalysis.feature.session.replace.ReplaceStrategy;
+import org.anchoranalysis.feature.session.replace.ReuseSingletonStrategy;
 import org.anchoranalysis.feature.shared.SharedFeatureMulti;
 
 /**

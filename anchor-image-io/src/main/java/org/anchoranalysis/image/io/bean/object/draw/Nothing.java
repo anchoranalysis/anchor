@@ -26,15 +26,15 @@
 
 package org.anchoranalysis.image.io.bean.object.draw;
 
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.object.properties.ObjectWithProperties;
-import org.anchoranalysis.image.core.stack.rgb.RGBStack;
+import org.anchoranalysis.image.core.stack.RGBStack;
 import org.anchoranalysis.overlay.bean.DrawObject;
 import org.anchoranalysis.overlay.writer.ObjectDrawAttributes;
 import org.anchoranalysis.overlay.writer.PrecalculationOverlay;
-import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.box.BoundingBox;
 
 /**
  * Writes nothing for a particular object.

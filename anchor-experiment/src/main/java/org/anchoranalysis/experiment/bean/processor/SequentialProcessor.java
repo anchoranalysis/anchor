@@ -29,8 +29,8 @@ package org.anchoranalysis.experiment.bean.processor;
 import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
-import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.log.MessageLogger;
+import org.anchoranalysis.core.log.error.ErrorReporter;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.log.StatefulMessageLogger;
@@ -56,10 +56,14 @@ public class SequentialProcessor<T extends InputFromManager, S> extends JobProce
             Outputter rootOutputter, List<T> inputs, ParametersExperiment paramsExperiment)
             throws ExperimentExecutionException {
 
-        ConcurrencyPlan concurrencyPlan = ConcurrencyPlan.singleProcessor(1);
+        ProcessorChecker.checkAtLeastOneInput(inputs);
+        
+        ConcurrencyPlan concurrencyPlan = ConcurrencyPlan.singleProcessor();
 
         S sharedState =
-                getTask().beforeAnyJobIsExecuted(rootOutputter, concurrencyPlan, paramsExperiment);
+                getTask()
+                        .beforeAnyJobIsExecuted(
+                                rootOutputter, concurrencyPlan, inputs, paramsExperiment);
 
         TaskStatistics stats =
                 executeAllJobs(

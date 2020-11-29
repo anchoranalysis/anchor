@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.mpp.pair;
 
-import org.anchoranalysis.overlay.id.Identifiable;
+import org.anchoranalysis.overlay.identifier.Identifiable;
 
 /**
  * Pair of marks
@@ -41,7 +41,7 @@ public class IdentifiablePair<T extends Identifiable> {
     public IdentifiablePair(T source, T destination) {
         super();
 
-        if (source.getId() < destination.getId()) {
+        if (source.getIdentifier() < destination.getIdentifier()) {
             this.source = source;
             this.destination = destination;
         } else {
@@ -74,7 +74,7 @@ public class IdentifiablePair<T extends Identifiable> {
             return 0;
         }
 
-        return (source.getId() * 3) + destination.getId();
+        return (source.getIdentifier() * 3) + destination.getIdentifier();
     }
 
     public T getSource() {
@@ -87,6 +87,6 @@ public class IdentifiablePair<T extends Identifiable> {
 
     @Override
     public String toString() {
-        return String.format("%d--%d", source.getId(), destination.getId());
+        return String.format("%d--%d", source.getIdentifier(), destination.getIdentifier());
     }
 }

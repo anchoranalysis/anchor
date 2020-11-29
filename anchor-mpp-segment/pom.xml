@@ -76,11 +76,6 @@
 	</dependency>
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
-	  <artifactId>anchor-image-experiment</artifactId>
-	  <version>0.0.8-SNAPSHOT</version>
-	</dependency>
-	<dependency>
-	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-mpp-io</artifactId>
 	  <version>0.0.8-SNAPSHOT</version>
 	</dependency>

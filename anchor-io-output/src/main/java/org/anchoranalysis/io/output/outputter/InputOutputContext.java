@@ -28,10 +28,10 @@ package org.anchoranalysis.io.output.outputter;
 
 import java.nio.file.Path;
 import java.util.Optional;
-import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.log.CommonContext;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.log.MessageLogger;
+import org.anchoranalysis.core.log.error.ErrorReporter;
 import org.anchoranalysis.io.manifest.ManifestDirectoryDescription;
 
 /**
@@ -99,22 +99,22 @@ public interface InputOutputContext {
     /**
      * Creates a new context that writes instead to a subdirectory.
      *
-     * @param subDirectoryName subdirectory name
+     * @param subdirectoryName subdirectory name
      * @param inheritOutputRulesAndRecording if true, the output rules and recording are inherited
      *     from the parent directory. if false, they are not, and all outputs are allowed and are
      *     unrecorded.
      * @return newly created context
      */
     default InputOutputContext subdirectory(
-            String subDirectoryName,
-            ManifestDirectoryDescription manifestFolderDescription,
+            String subdirectoryName,
+            ManifestDirectoryDescription manifestDirectoryDescription,
             boolean inheritOutputRulesAndRecording) {
         return new ChangeOutputter(
                 this,
                 getOutputter()
                         .deriveSubdirectory(
-                                subDirectoryName,
-                                manifestFolderDescription,
+                                subdirectoryName,
+                                manifestDirectoryDescription,
                                 inheritOutputRulesAndRecording));
     }
 
@@ -131,14 +131,14 @@ public interface InputOutputContext {
      */
     default InputOutputContext maybeSubdirectory(
             Optional<String> subdirectoryName,
-            ManifestDirectoryDescription manifestFolderDescription,
+            ManifestDirectoryDescription manifestDirectoryDescription,
             boolean inheritOutputRulesAndRecording) {
         return subdirectoryName
                 .map(
                         name ->
                                 subdirectory(
                                         name,
-                                        manifestFolderDescription,
+                                        manifestDirectoryDescription,
                                         inheritOutputRulesAndRecording))
                 .orElse(this);
     }

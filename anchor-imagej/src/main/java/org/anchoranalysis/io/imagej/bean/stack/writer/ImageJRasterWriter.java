@@ -32,8 +32,8 @@ import java.nio.file.Path;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.ImageIOException;
-import org.anchoranalysis.image.io.bean.stack.StackWriter;
-import org.anchoranalysis.image.io.stack.StackWriteOptions;
+import org.anchoranalysis.image.io.bean.stack.writer.StackWriter;
+import org.anchoranalysis.image.io.stack.output.StackWriteOptions;
 import org.anchoranalysis.io.imagej.convert.ConvertToImagePlus;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -48,8 +48,7 @@ public abstract class ImageJRasterWriter extends StackWriter {
     private static Log log = LogFactory.getLog(ImageJRasterWriter.class);
 
     @Override
-    public void writeStack(
-            Stack stack, Path filePath, boolean makeRGB, StackWriteOptions writeOptions)
+    public void writeStack(Stack stack, Path filePath, StackWriteOptions options)
             throws ImageIOException {
         if (!(stack.getNumberChannels() == 1 || stack.getNumberChannels() == 3)) {
             throw new ImageIOException("Stack must have 1 or 3 channels");
@@ -59,12 +58,12 @@ public abstract class ImageJRasterWriter extends StackWriter {
             throw new ImageIOException("Stack must have identically-typed channels");
         }
 
-        if (makeRGB && (stack.getNumberChannels() != 3)) {
+        if (stack.getNumberChannels() == 3 && !stack.isRGB()) {
             throw new ImageIOException(
-                    "To make an RGB image, the stack must have exactly 3 channels.");
+                    "A three-channeled stack must have the RGB flag set to true.");
         }
 
-        writeStackTime(stack, filePath, makeRGB);
+        writeStackTime(stack, filePath, options.getAttributes().writeAsRGB(stack));
     }
 
     /**
@@ -87,8 +86,7 @@ public abstract class ImageJRasterWriter extends StackWriter {
      * @param makeRGB if true, the image is saved as a RGB image rather than independent channels.
      * @throws ImageIOException if anything goes wrong writing.
      */
-    protected void writeStackTime(Stack stack, Path path, boolean makeRGB)
-            throws ImageIOException {
+    protected void writeStackTime(Stack stack, Path path, boolean makeRGB) throws ImageIOException {
 
         log.debug(String.format("Writing image %s", path));
 

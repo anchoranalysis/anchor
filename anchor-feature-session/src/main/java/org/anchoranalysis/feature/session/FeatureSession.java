@@ -29,19 +29,19 @@ package org.anchoranalysis.feature.session;
 import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.FeatureInitParams;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
-import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
-import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingleFromMulti;
-import org.anchoranalysis.feature.session.strategy.replace.ReplaceStrategy;
-import org.anchoranalysis.feature.session.strategy.replace.ReuseSingletonStrategy;
-import org.anchoranalysis.feature.session.strategy.replace.bind.BoundReplaceStrategy;
+import org.anchoranalysis.feature.session.calculator.multi.FeatureCalculatorMulti;
+import org.anchoranalysis.feature.session.calculator.single.FeatureCalculatorSingle;
+import org.anchoranalysis.feature.session.calculator.single.FeatureCalculatorSingleFromMulti;
+import org.anchoranalysis.feature.session.replace.BoundReplaceStrategy;
+import org.anchoranalysis.feature.session.replace.ReplaceStrategy;
+import org.anchoranalysis.feature.session.replace.ReuseSingletonStrategy;
 import org.anchoranalysis.feature.shared.SharedFeatureMulti;
 
 /**

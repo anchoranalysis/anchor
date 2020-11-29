@@ -30,11 +30,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import lombok.Getter;
-import org.anchoranalysis.image.core.outline.traverser.visited.LoopablePoints;
 import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.point.ReadableTuple3i;
 
-/** A list of visited pixels which forms one contiguous path (each voxel neighbors each other) */
+/**
+ * A list of visited pixels which forms one contiguous path where each voxel neighbors each other.
+ */
 public class ContiguousVoxelPath {
 
     private List<Point3i> list;
@@ -44,8 +45,8 @@ public class ContiguousVoxelPath {
     @Getter private Optional<Point3i> connPoint;
 
     /** With a single initial-point, and maybe a connection point */
-    public ContiguousVoxelPath(Point3i initialPoint, Point3i connPoint) {
-        this(Optional.of(connPoint));
+    public ContiguousVoxelPath(Point3i initialPoint, Point3i connectionPoint) {
+        this(Optional.of(connectionPoint));
         this.initialPoint = Optional.of(initialPoint);
         maybeAddPointToClosestEnd(initialPoint);
     }

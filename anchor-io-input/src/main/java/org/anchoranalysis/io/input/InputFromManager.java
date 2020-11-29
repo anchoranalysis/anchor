@@ -28,7 +28,7 @@ package org.anchoranalysis.io.input;
 
 import java.nio.file.Path;
 import java.util.Optional;
-import org.anchoranalysis.core.error.reporter.ErrorReporter;
+import org.anchoranalysis.core.log.error.ErrorReporter;
 
 public interface InputFromManager {
 

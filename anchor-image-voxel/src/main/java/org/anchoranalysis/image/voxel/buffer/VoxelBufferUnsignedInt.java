@@ -26,12 +26,12 @@
 
 package org.anchoranalysis.image.voxel.buffer;
 
+import com.google.common.base.Preconditions;
 import java.nio.ByteBuffer;
 import org.anchoranalysis.image.voxel.buffer.primitive.PrimitiveConverter;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedIntBuffer;
 import org.anchoranalysis.image.voxel.datatype.UnsignedIntVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import com.google.common.base.Preconditions;
 
 final class VoxelBufferUnsignedInt extends VoxelBuffer<UnsignedIntBuffer> {
 
@@ -39,14 +39,14 @@ final class VoxelBufferUnsignedInt extends VoxelBuffer<UnsignedIntBuffer> {
 
     /**
      * Create from a {@link UnsignedIntBuffer} without any underlying bytes.
-     * 
+     *
      * @param buffer the buffer
      */
     public VoxelBufferUnsignedInt(UnsignedIntBuffer buffer) {
         Preconditions.checkArgument(buffer.hasArray());
         this.delegate = buffer;
     }
-    
+
     @Override
     public UnsignedIntBuffer buffer() {
         return delegate;

@@ -32,6 +32,7 @@ import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.ManifestDirectoryDescription;
 import org.anchoranalysis.io.manifest.directory.SubdirectoryBase;
+import org.anchoranalysis.io.manifest.file.FileType;
 import org.anchoranalysis.io.output.enabled.single.SingleLevelOutputEnabled;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
@@ -62,7 +63,7 @@ public class CheckIfAllowed implements Writer {
     public Optional<OutputterChecked> createSubdirectory(
             String outputName,
             ManifestDirectoryDescription manifestDescription,
-            Optional<SubdirectoryBase> manifestFolder,
+            Optional<SubdirectoryBase> manifestDirectory,
             boolean inheritOutputRulesAndRecording)
             throws OutputWriteFailedException {
 
@@ -73,11 +74,12 @@ public class CheckIfAllowed implements Writer {
         maybeExecutePreop();
 
         return writer.createSubdirectory(
-                outputName, manifestDescription, manifestFolder, inheritOutputRulesAndRecording);
+                outputName, manifestDescription, manifestDirectory, inheritOutputRulesAndRecording);
     }
-    
+
     @Override
-    public <T> boolean write(String outputName, ElementWriterSupplier<T> elementWriter, ElementSupplier<T> element)
+    public <T> boolean write(
+            String outputName, ElementWriterSupplier<T> elementWriter, ElementSupplier<T> element)
             throws OutputWriteFailedException {
 
         if (!outputEnabled.isOutputEnabled(outputName)) {
@@ -90,9 +92,9 @@ public class CheckIfAllowed implements Writer {
 
         return true;
     }
-    
+
     @Override
-    public <T> int writeWithIndex(
+    public <T> Optional<FileType[]> writeWithIndex(
             IndexableOutputNameStyle outputNameStyle,
             ElementWriterSupplier<T> elementWriter,
             ElementSupplier<T> element,
@@ -100,12 +102,26 @@ public class CheckIfAllowed implements Writer {
             throws OutputWriteFailedException {
 
         if (!outputEnabled.isOutputEnabled(outputNameStyle.getOutputName())) {
-            return NUMBER_ELEMENTS_WRITTEN_NOT_ALLOWED;
+            return Optional.empty();
         }
 
         maybeExecutePreop();
 
         return writer.writeWithIndex(outputNameStyle, elementWriter, element, index);
+    }
+
+    @Override
+    public <T> boolean writeWithoutName(
+            String outputName, ElementWriterSupplier<T> elementWriter, ElementSupplier<T> element)
+            throws OutputWriteFailedException {
+
+        if (!outputEnabled.isOutputEnabled(outputName)) {
+            return false;
+        }
+
+        maybeExecutePreop();
+
+        return writer.writeWithoutName(outputName, elementWriter, element);
     }
 
     @Override

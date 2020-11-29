@@ -28,7 +28,7 @@ package org.anchoranalysis.mpp.segment.optimization;
 
 import java.util.Optional;
 import lombok.Getter;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.mpp.segment.transformer.StateTransformer;
 import org.anchoranalysis.mpp.segment.transformer.TransformationContext;

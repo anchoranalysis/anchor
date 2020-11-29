@@ -28,7 +28,7 @@ package org.anchoranalysis.mpp.bean.proposer;
 
 import java.util.Optional;
 import org.anchoranalysis.bean.NullParamsBean;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 

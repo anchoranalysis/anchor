@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.io.input;
 
-import org.anchoranalysis.core.error.AnchorCheckedException;
+import org.anchoranalysis.core.exception.AnchorCheckedException;
 
 public class InputReadFailedException extends AnchorCheckedException {
 
@@ -36,7 +36,7 @@ public class InputReadFailedException extends AnchorCheckedException {
     public InputReadFailedException(String message) {
         super(message);
     }
-    
+
     public InputReadFailedException(Throwable cause) {
         super(cause);
     }

@@ -38,7 +38,7 @@ import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
  * Converts voxel buffers to a {@link UnsignedByteBuffer} scaling against the maximum value in each
  * buffer.
  *
- * <p>There is no clipping of values, but some might become very small.
+ * <p>There is no clamping of values, but some might become very small.
  *
  * @author Owen Feehan
  */

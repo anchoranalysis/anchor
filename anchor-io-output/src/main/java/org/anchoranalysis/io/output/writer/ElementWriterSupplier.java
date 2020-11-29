@@ -29,9 +29,9 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /**
  * Creates or gets a element-writer to output files.
- * 
- * <p>This exists primarily facilitate lazy creation of an element-writer
- * (only if an output is enabled by the rules).
+ *
+ * <p>This exists primarily facilitate lazy creation of an element-writer (only if an output is
+ * enabled by the rules).
  *
  * @author Owen Feehan
  * @param <T> the type of element to be written

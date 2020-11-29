@@ -30,7 +30,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.io.input.files.NamedFile;
 
@@ -42,8 +42,7 @@ import org.anchoranalysis.io.input.files.NamedFile;
 public abstract class FileNamerIndependent extends FileNamer {
 
     @Override
-    public List<NamedFile> deriveName(
-            Collection<File> files, String elseName, Logger logger) {
+    public List<NamedFile> deriveName(Collection<File> files, String elseName, Logger logger) {
 
         List<NamedFile> out = new ArrayList<>();
 
@@ -58,8 +57,7 @@ public abstract class FileNamerIndependent extends FileNamer {
 
     protected abstract String deriveName(File file, int index) throws CreateException;
 
-    private String deriveNameOrElse(
-            File file, int index, String elseName, Logger logger) {
+    private String deriveNameOrElse(File file, int index, String elseName, Logger logger) {
         try {
             return deriveName(file, index);
         } catch (CreateException e) {

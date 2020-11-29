@@ -33,11 +33,11 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 
 /**
  * The type of data one voxel represents in an image-channel.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
-@AllArgsConstructor @Accessors(fluent=true)
+@AllArgsConstructor
+@Accessors(fluent = true)
 public abstract class VoxelDataType {
 
     /** The number of bits required to represent a voxel. */
@@ -45,10 +45,10 @@ public abstract class VoxelDataType {
 
     /** A string to uniquely and compactly describe this type. */
     private String typeIdentifier;
-    
+
     /** The maximum value this type can represent. */
     @Getter private long maxValue;
-    
+
     /** The minimum value this type can represent. */
     @Getter private long minValue;
 

@@ -57,18 +57,18 @@ public class MaskAnd {
      *
      * @param voxelsFirst the first voxels for the operation (and in which the result is written)
      * @param voxelsSecond the second voxels for the operation
-     * @param bvbFirst binary-values to mask first voxels
-     * @param bvbSecond binary-values to mask second voxels
+     * @param binaryValuesFirst binary-values to mask first voxels
+     * @param binaryValuesSecond binary-values to mask second voxels
      */
     public static void apply(
             Voxels<UnsignedByteBuffer> voxelsFirst,
             Voxels<UnsignedByteBuffer> voxelsSecond,
-            BinaryValuesByte bvbFirst,
-            BinaryValuesByte bvbSecond) {
+            BinaryValuesByte binaryValuesFirst,
+            BinaryValuesByte binaryValuesSecond) {
 
-        byte sourceOn = bvbFirst.getOnByte();
-        byte sourceOff = bvbFirst.getOffByte();
-        byte receiveOff = bvbSecond.getOffByte();
+        byte sourceOn = binaryValuesFirst.getOnByte();
+        byte sourceOff = binaryValuesFirst.getOffByte();
+        byte receiveOff = binaryValuesSecond.getOffByte();
 
         IterateVoxelsAll.withTwoBuffersAndPoint(
                 voxelsFirst,

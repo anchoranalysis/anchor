@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.experiment;
 
-import org.anchoranalysis.core.error.friendly.AnchorFriendlyCheckedException;
+import org.anchoranalysis.core.exception.friendly.AnchorFriendlyCheckedException;
 
 /**
  * An exception that occurs when an experiment is executed. This should always contain a friendly

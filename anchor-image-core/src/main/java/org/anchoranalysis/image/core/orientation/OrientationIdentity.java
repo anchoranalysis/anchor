@@ -26,11 +26,12 @@
 
 package org.anchoranalysis.image.core.orientation;
 
-import org.anchoranalysis.core.name.provider.NameValueSet;
+import lombok.EqualsAndHashCode;
+import org.anchoranalysis.core.identifier.provider.NameValueSet;
 import org.anchoranalysis.image.core.object.properties.ObjectWithProperties;
 import org.anchoranalysis.spatial.rotation.RotationMatrix;
-import org.apache.commons.lang.builder.HashCodeBuilder;
 
+@EqualsAndHashCode(callSuper = false)
 public class OrientationIdentity extends Orientation {
 
     /** */
@@ -38,11 +39,11 @@ public class OrientationIdentity extends Orientation {
 
     private OrientationRotationMatrix delegate;
 
-    public OrientationIdentity(int numDim) {
-        RotationMatrix rotMat = new RotationMatrix(numDim);
+    public OrientationIdentity(int numberDimensions) {
+        RotationMatrix rotMat = new RotationMatrix(numberDimensions);
 
         // Create identity matrix
-        for (int i = 0; i < numDim; i++) {
+        for (int i = 0; i < numberDimensions; i++) {
             rotMat.getMatrix().set(i, i, 1);
         }
         delegate = new OrientationRotationMatrix(rotMat);
@@ -50,7 +51,7 @@ public class OrientationIdentity extends Orientation {
 
     @Override
     public Orientation duplicate() {
-        return new OrientationIdentity(delegate.getNumDims());
+        return new OrientationIdentity(delegate.numberDimensions());
     }
 
     @Override
@@ -59,32 +60,8 @@ public class OrientationIdentity extends Orientation {
     }
 
     @Override
-    public int getNumDims() {
-        return delegate.getNumDims();
-    }
-
-    @Override
-    public boolean equals(Object other) {
-
-        if (other == null) {
-            return false;
-        }
-        if (other == this) {
-            return true;
-        }
-
-        if (!(other instanceof OrientationIdentity)) {
-            return false;
-        }
-
-        OrientationIdentity otherC = (OrientationIdentity) other;
-
-        return delegate.equals(otherC.delegate);
-    }
-
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder().append(delegate).toHashCode();
+    public int numberDimensions() {
+        return delegate.numberDimensions();
     }
 
     @Override
@@ -93,8 +70,8 @@ public class OrientationIdentity extends Orientation {
     }
 
     @Override
-    public void addProperties(NameValueSet<String> nvc) {
-        delegate.addProperties(nvc);
+    public void addProperties(NameValueSet<String> namedValues) {
+        delegate.addProperties(namedValues);
     }
 
     @Override

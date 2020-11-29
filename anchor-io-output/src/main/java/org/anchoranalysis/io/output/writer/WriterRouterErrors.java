@@ -29,7 +29,7 @@ package org.anchoranalysis.io.output.writer;
 import java.nio.file.Path;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
-import org.anchoranalysis.core.error.reporter.ErrorReporter;
+import org.anchoranalysis.core.log.error.ErrorReporter;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.ManifestDirectoryDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
@@ -37,7 +37,8 @@ import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.output.outputter.Outputter;
 
 /**
- * Write data via {@link ElementWriter}s to the file system, or creates new sub-directories for writng data to.
+ * Write data via {@link ElementWriter}s to the file system, or creates new sub-directories for
+ * writng data to.
  *
  * <p>This class is similar to {@link Writer} but:
  *
@@ -50,7 +51,7 @@ import org.anchoranalysis.io.output.outputter.Outputter;
  *
  * <p>The {@link ElementWriterSupplier} interface is used so as to avoid object-creation if an
  * operation isn't actually written.
- * 
+ *
  * <p>Note that a {@link ElementWriter} may write more than one file for a given element.
  *
  * @author Owen Feehan
@@ -91,16 +92,17 @@ public class WriterRouterErrors {
             return Optional.empty();
         }
     }
-    
+
     /**
      * Writes an element using an {@link ElementWriter} to the current directory.
      *
-     * @param outputName the name of the subdirectory. This may determine if an output is allowed
-     *     or not.
+     * @param outputName the name of the subdirectory. This may determine if an output is allowed or
+     *     not.
      * @param elementWriter writes the element to the filesystem
      * @param element the element to write
      */
-    public <T> void write(String outputName, ElementWriterSupplier<T> elementWriter, ElementSupplier<T> element) {
+    public <T> void write(
+            String outputName, ElementWriterSupplier<T> elementWriter, ElementSupplier<T> element) {
         try {
             delegate.write(outputName, elementWriter, element);
         } catch (OutputWriteFailedException e) {
@@ -115,26 +117,25 @@ public class WriterRouterErrors {
      * @param elementWriter writes the element to the filesystem
      * @param element the element to write
      * @param index the index
-     * @return the number of elements written by the {@link ElementWriter}, including 0 elements, or -2 if the
-     *     output is not allowed.
      */
-    public <T> int writeWithIndex(
+    public <T> void writeWithIndex(
             IndexableOutputNameStyle outputNameStyle,
             ElementWriterSupplier<T> elementWriter,
             ElementSupplier<T> element,
             String index) {
         try {
-            return delegate.writeWithIndex(outputNameStyle, elementWriter, element, index);
+            delegate.writeWithIndex(outputNameStyle, elementWriter, element, index);
         } catch (OutputWriteFailedException e) {
             errorReporter.recordError(Outputter.class, e);
-            return NUMBER_ELEMENTS_WRITTEN_ERRORED;
         }
     }
-    
+
     /**
      * The path to write a particular output to.
      *
-     * <p>This is an alternative method to write to the file system rather than using an {@link ElementWriter} and {@link #write(String, ElementWriterSupplier, ElementSupplier)} and {@link #writeWithIndex(IndexableOutputNameStyle, ElementWriterSupplier, ElementSupplier, String)}.
+     * <p>This is an alternative method to write to the file system rather than using an {@link
+     * ElementWriter} and {@link #write(String, ElementWriterSupplier, ElementSupplier)} and {@link
+     * #writeWithIndex(IndexableOutputNameStyle, ElementWriterSupplier, ElementSupplier, String)}.
      *
      * @param outputName the output-name. This is the filename without an extension, and may
      *     determine if an output is allowed or not.

@@ -31,10 +31,12 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Optional;
 import java.util.Set;
-import org.anchoranalysis.core.name.provider.NameValueSet;
-import org.anchoranalysis.core.name.provider.NamedProvider;
-import org.anchoranalysis.core.name.value.NameValue;
-import org.anchoranalysis.core.name.value.SimpleNameValue;
+import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
+import org.anchoranalysis.core.identifier.name.NameValue;
+import org.anchoranalysis.core.identifier.name.SimpleNameValue;
+import org.anchoranalysis.core.identifier.provider.NameValueSet;
+import org.anchoranalysis.core.identifier.provider.NamedProvider;
+import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.input.FeatureInput;
@@ -109,6 +111,16 @@ public class SharedFeatureMulti
         return out;
     }
 
+    public void addFromProviders(NamedProvider<FeatureList<FeatureInput>> featureListProvider) {
+        for (String key : featureListProvider.keys()) {
+            try {
+                addNoDuplicate(featureListProvider.getException(key));
+            } catch (NamedProviderGetException e) {
+                throw new AnchorImpossibleSituationException();
+            }
+        }
+    }
+
     public void addNoDuplicate(FeatureList<FeatureInput> features) {
 
         // We loop over all features in the ni, and call them all the same thing with a number
@@ -116,12 +128,6 @@ public class SharedFeatureMulti
 
             addNoDuplicate(new SimpleNameValue<>(f.getFriendlyName(), f));
         }
-    }
-
-    private void addNoDuplicate(NameValue<Feature<FeatureInput>> nv) {
-        mapByKey.add(nv);
-        mapByDescriptor.put(nv.getValue().inputType(), nv);
-        setFeatures.add(nv.getValue());
     }
 
     public void removeIfExists(FeatureList<FeatureInput> features) {
@@ -144,6 +150,12 @@ public class SharedFeatureMulti
     @Override
     public Set<String> keys() {
         return mapByKey.keys();
+    }
+
+    private void addNoDuplicate(NameValue<Feature<FeatureInput>> namedFeature) {
+        mapByKey.add(namedFeature);
+        mapByDescriptor.put(namedFeature.getValue().inputType(), namedFeature);
+        setFeatures.add(namedFeature.getValue());
     }
 
     /** Transfers from a collection of name-values into a {@link NameValueSet} */

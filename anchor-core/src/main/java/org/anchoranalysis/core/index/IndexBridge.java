@@ -1,10 +1,8 @@
-package org.anchoranalysis.core.index;
-
 /*-
  * #%L
  * anchor-core
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,25 +23,18 @@ package org.anchoranalysis.core.index;
  * THE SOFTWARE.
  * #L%
  */
+package org.anchoranalysis.core.index;
 
-import org.anchoranalysis.core.functional.function.CheckedFunction;
+import lombok.AllArgsConstructor;
+import org.anchoranalysis.core.functional.checked.CheckedFunction;
 
+@AllArgsConstructor
 public class IndexBridge<T> implements CheckedFunction<Integer, T, GetOperationFailedException> {
 
-    private GetterFromIndex<T> cntr;
-
-    public IndexBridge(GetterFromIndex<T> cntr) {
-        super();
-        this.cntr = cntr;
-    }
+    private GetterFromIndex<T> getter;
 
     @Override
     public T apply(Integer sourceObject) throws GetOperationFailedException {
-        return cntr.get(sourceObject);
-    }
-
-    // Updates the cntr associated with the bridge
-    public void setCntr(GetterFromIndex<T> cntr) {
-        this.cntr = cntr;
+        return getter.get(sourceObject);
     }
 }

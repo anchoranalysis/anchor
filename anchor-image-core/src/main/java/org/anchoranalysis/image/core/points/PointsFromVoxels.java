@@ -33,7 +33,7 @@ import java.util.TreeSet;
 import java.util.function.Consumer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
@@ -158,11 +158,11 @@ class PointsFromVoxels {
             ReadableTuple3i shift,
             Consumer<Point2i> consumer) {
 
-        BinaryValuesByte bvb = voxels.binaryValues().createByte();
+        BinaryValuesByte binaryValues = voxels.binaryValues().createByte();
         IterateVoxelsEqualTo.equalToPrimitiveSlice(
                 voxels.voxels(),
                 0,
-                bvb.getOnByte(),
+                binaryValues.getOnByte(),
                 (x, y, z) -> consumer.accept(new Point2i(shift.x() + x, shift.y() + y)));
     }
 
@@ -177,10 +177,10 @@ class PointsFromVoxels {
             BinaryVoxels<UnsignedByteBuffer> voxels,
             ReadableTuple3i shift,
             Consumer<Point3i> consumer) {
-        BinaryValuesByte bvb = voxels.binaryValues().createByte();
+        BinaryValuesByte binaryValues = voxels.binaryValues().createByte();
         IterateVoxelsEqualTo.equalToPrimitive(
                 voxels.voxels(),
-                bvb.getOnByte(),
+                binaryValues.getOnByte(),
                 (x, y, z) -> consumer.accept(Point3i.immutableAdd(shift, x, y, z)));
     }
 
@@ -193,10 +193,10 @@ class PointsFromVoxels {
      */
     private static void consumePoints3d(
             BinaryVoxels<UnsignedByteBuffer> voxels, Point3d add, Consumer<Point3d> consumer) {
-        BinaryValuesByte bvb = voxels.binaryValues().createByte();
+        BinaryValuesByte binaryValues = voxels.binaryValues().createByte();
         IterateVoxelsEqualTo.equalToPrimitive(
                 voxels.voxels(),
-                bvb.getOnByte(),
+                binaryValues.getOnByte(),
                 (x, y, z) -> consumer.accept(Point3d.immutableAdd(add, x, y, z)));
     }
 }

@@ -30,6 +30,7 @@ import java.io.Serializable;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.function.Predicate;
+import lombok.Setter;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.file.OutputtedFile;
 import org.anchoranalysis.io.manifest.finder.FindFailedException;
@@ -43,11 +44,15 @@ public class RootDirectory extends MutableDirectory implements Serializable {
 
     // We don't want to serialize this, as its temporary state (and an error will be thrown as
     // WindowsPath is not serializable)
-    private final transient Path rootPath;
+    @Setter private transient Path rootPath;
+
+    public RootDirectory() {
+        delegate = new FileList(this);
+    }
 
     public RootDirectory(Path rootPath) {
+        this();
         this.rootPath = rootPath;
-        delegate = new FileList(this);
     }
 
     @Override
@@ -65,7 +70,9 @@ public class RootDirectory extends MutableDirectory implements Serializable {
     }
 
     @Override
-    public void findFile(List<OutputtedFile> foundList, Predicate<OutputtedFile> predicate, boolean recursive) throws FindFailedException {
+    public void findFile(
+            List<OutputtedFile> foundList, Predicate<OutputtedFile> predicate, boolean recursive)
+            throws FindFailedException {
         delegate.findFile(foundList, predicate, recursive);
     }
 

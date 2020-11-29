@@ -26,55 +26,59 @@
 
 package org.anchoranalysis.io.bioformats;
 
+import com.google.common.base.Preconditions;
 import java.util.Optional;
 import java.util.function.DoubleConsumer;
 import java.util.function.Function;
 import loci.formats.IFormatReader;
 import loci.formats.meta.IMetadata;
+import lombok.AllArgsConstructor;
 import ome.units.UNITS;
 import ome.units.quantity.Length;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.io.bioformats.bean.options.ReadOptions;
-import org.anchoranalysis.spatial.extent.Extent;
+import org.anchoranalysis.spatial.Extent;
 import org.anchoranalysis.spatial.point.Point3d;
-import com.google.common.base.Preconditions;
 
+@AllArgsConstructor
 public class DimensionsCreator {
 
-    private IMetadata lociMetadata;
+    private final IMetadata lociMetadata;
 
-    public DimensionsCreator(IMetadata lociMetadata) {
-        super();
-        this.lociMetadata = lociMetadata;
-    }
-
-    public Dimensions apply(IFormatReader reader, ReadOptions readOptions, int seriesIndex) throws CreateException {
+    public Dimensions apply(IFormatReader reader, ReadOptions readOptions, int seriesIndex)
+            throws CreateException {
         Preconditions.checkArgument(lociMetadata != null);
 
         Extent extent = new Extent(reader.getSizeX(), reader.getSizeY(), readOptions.sizeZ(reader));
-        
-        return new Dimensions(
-                extent,
-                maybeConstructResolution(reader, seriesIndex) );
+
+        return new Dimensions(extent, maybeConstructResolution(seriesIndex));
     }
-    
-    /** Reads a resolution of the metadata but only if at least X and Y dimensions are defined. If z is undefined its Double.NaN. 
-     * @throws CreateException */
-    private Optional<Resolution> maybeConstructResolution(IFormatReader reader, int seriesIndex) throws CreateException {
+
+    /**
+     * Reads a resolution of the metadata but only if at least X and Y dimensions are defined. If z
+     * is undefined its Double.NaN.
+     *
+     * @throws CreateException
+     */
+    private Optional<Resolution> maybeConstructResolution(int seriesIndex) throws CreateException {
 
         // By default the resolution is 1 in all dimensions
         Point3d res = new Point3d(Double.NaN, Double.NaN, Double.NaN);
 
-        boolean xUpdated = maybeUpdateDimension(metadata -> metadata.getPixelsPhysicalSizeX(seriesIndex), res::setX);
+        boolean xUpdated =
+                maybeUpdateDimension(
+                        metadata -> metadata.getPixelsPhysicalSizeX(seriesIndex), res::setX);
 
-        boolean yUpdated = maybeUpdateDimension(metadata -> metadata.getPixelsPhysicalSizeY(seriesIndex), res::setY);
+        boolean yUpdated =
+                maybeUpdateDimension(
+                        metadata -> metadata.getPixelsPhysicalSizeY(seriesIndex), res::setY);
 
         maybeUpdateDimension(metadata -> metadata.getPixelsPhysicalSizeZ(seriesIndex), res::setZ);
 
         if (xUpdated && yUpdated) {
-            return Optional.of( new Resolution(res) );
+            return Optional.of(new Resolution(res));
         } else {
             return Optional.empty();
         }
@@ -82,12 +86,13 @@ public class DimensionsCreator {
 
     /**
      * Maybe update a particular dimension with resolution-information from metadata
-     * 
+     *
      * @param dimensionFromMetadata gets metadata for a particular dimension
      * @param assigner assigns this dimension's metadata to the {@link Point3d}.
      * @return true if the dimension was assigned, otherwise false.
      */
-    private boolean maybeUpdateDimension(Function<IMetadata, Length> dimensionFromMetadata, DoubleConsumer assigner) {
+    private boolean maybeUpdateDimension(
+            Function<IMetadata, Length> dimensionFromMetadata, DoubleConsumer assigner) {
         Length length = dimensionFromMetadata.apply(lociMetadata);
         if (length != null) {
             Number converted = length.value(UNITS.METER);
@@ -97,7 +102,6 @@ public class DimensionsCreator {
                 assigner.accept(converted.doubleValue());
                 return true;
             }
-            
         }
         return false;
     }

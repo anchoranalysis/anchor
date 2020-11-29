@@ -29,9 +29,9 @@ package org.anchoranalysis.io.manifest.finder;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.core.params.KeyValueParams;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.log.error.ErrorReporter;
+import org.anchoranalysis.core.value.KeyValueParams;
 import org.anchoranalysis.io.manifest.Manifest;
 import org.anchoranalysis.io.manifest.file.OutputtedFile;
 import org.anchoranalysis.io.manifest.finder.match.FileMatch;
@@ -59,9 +59,7 @@ public class FinderKeyValueParams extends FinderSingleFile {
             throws FindFailedException {
         List<OutputtedFile> files =
                 FinderUtilities.findListFile(
-                        manifestRecorder,
-                        FileMatch.description(manifestFunction)
-                );
+                        manifestRecorder, FileMatch.description(manifestFunction));
 
         if (files.isEmpty()) {
             return Optional.empty();

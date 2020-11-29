@@ -39,6 +39,19 @@
 	      <version>${mockito.version}</version>
 	      <scope>test</scope>
 	    </dependency>
+	    
+	   	<dependency>
+	  		<groupId>${project.groupId}</groupId>
+	  		<artifactId>anchor-test-io-output</artifactId>
+	  		<version>0.0.1-SNAPSHOT</version>
+	  		<scope>test</scope>
+	  	</dependency>
+	  	
+	  	<dependency>
+	        <groupId>io.vavr</groupId>
+	        <artifactId>vavr</artifactId>
+	        <version>${vavr.version}</version>
+    	</dependency>
 		
 	</dependencies>		
 

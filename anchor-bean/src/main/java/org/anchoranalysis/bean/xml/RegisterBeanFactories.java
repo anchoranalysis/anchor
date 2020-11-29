@@ -39,7 +39,7 @@ import org.anchoranalysis.bean.xml.factory.ListBeanFactory;
 import org.anchoranalysis.bean.xml.factory.ReplacePropertyBeanFactory;
 import org.anchoranalysis.bean.xml.factory.StringListFactory;
 import org.anchoranalysis.bean.xml.factory.StringSetFactory;
-import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
+import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
 import org.apache.commons.configuration.beanutils.BeanHelper;
 
 /**

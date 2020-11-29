@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -25,17 +25,15 @@
  */
 package org.anchoranalysis.test.image.rasterwriter;
 
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.anchoranalysis.core.functional.OptionalUtilities;
-import org.anchoranalysis.image.io.bean.stack.StackWriter;
+import org.anchoranalysis.core.format.ImageFileFormat;
+import org.anchoranalysis.image.io.bean.stack.writer.StackWriter;
 import org.anchoranalysis.image.voxel.datatype.FloatVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedIntVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import org.anchoranalysis.test.image.DualComparer;
-import org.anchoranalysis.test.image.DualComparerFactory;
+import org.anchoranalysis.test.image.rasterwriter.comparison.ComparisonPlan;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.TemporaryFolder;
@@ -68,23 +66,17 @@ public abstract class RasterWriterTestBase {
         FloatVoxelType.INSTANCE
     };
 
-    @Rule public TemporaryFolder folder = new TemporaryFolder();
+    @Rule public TemporaryFolder directory = new TemporaryFolder();
 
     // START REQUIRED ARGUMENTS
-    /** the extension (without a preceding period) to be tested and written. */
-    private final String extension;
+    /** The format to be tested and written. */
+    private final ImageFileFormat format;
 
     /** If true, then 3D stacks are also tested and saved, not just 2D stacks. */
     private final boolean include3D;
 
-    /** Iff true, a bytewise comparison occurs between the saved-file and the newly created file. */
-    private final boolean bytewiseCompare;
-
-    /**
-     * Iff defined, a voxel-wise comparison occurs with the saved-rasters from a different
-     * extension.
-     */
-    private final Optional<String> extensionVoxelwiseCompare;
+    /** A plan on which comparisons to execute for a test. */
+    private final ComparisonPlan comparisonPlan;
     // END REQUIRED ARGUMENTS
 
     /** Performs the tests. */
@@ -92,32 +84,15 @@ public abstract class RasterWriterTestBase {
 
     @Before
     public void setup() {
-        tester = new FourChannelStackTester(
-            new StackTester(createWriter(), folder.getRoot().toPath(), createComparer(), include3D)
-        );
+        String extension = format.getDefaultExtension();
+        tester =
+                new FourChannelStackTester(
+                        new StackTester(
+                                createWriter(), directory.getRoot().toPath(), extension, include3D),
+                        comparisonPlan.createComparer(directory, extension),
+                        comparisonPlan.isSkipComparisonForRGB());
     }
 
     /** Creates the {@link StackWriter} to be tested. */
     protected abstract StackWriter createWriter();
-
-    private DualStackComparer createComparer() {
-        return new DualStackComparer(
-                maybeCreateBytewiseComparer(), maybeCreateVoxelwiseComparer(), extension);
-    }
-
-    private Optional<DualComparer> maybeCreateBytewiseComparer() {
-        return OptionalUtilities.createFromFlag(bytewiseCompare, () -> createComparer(extension));
-    }
-
-    private Optional<DualComparerWithExtension> maybeCreateVoxelwiseComparer() {
-        return extensionVoxelwiseCompare.map(
-                extensionForComparer ->
-                        new DualComparerWithExtension(
-                                createComparer(extensionForComparer), extensionForComparer));
-    }
-
-    private DualComparer createComparer(String extensionForComparer) {
-        return DualComparerFactory.compareTemporaryFolderToTest(
-                folder, Optional.empty(), "stackWriter/formats/" + extensionForComparer);
-    }
 }

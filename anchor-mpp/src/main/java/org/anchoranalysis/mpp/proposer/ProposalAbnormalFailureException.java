@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.mpp.proposer;
 
-import org.anchoranalysis.core.error.friendly.AnchorFriendlyCheckedException;
+import org.anchoranalysis.core.exception.friendly.AnchorFriendlyCheckedException;
 
 /**
  * An exception when a proposal could not be made for an abnormal reason

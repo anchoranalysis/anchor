@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.mpp.mark.set;
 
-import org.anchoranalysis.core.error.AnchorCheckedException;
+import org.anchoranalysis.core.exception.AnchorCheckedException;
 
 public class UpdateMarkSetException extends AnchorCheckedException {
 

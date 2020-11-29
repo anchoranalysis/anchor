@@ -28,8 +28,8 @@ package org.anchoranalysis.io.manifest.directory;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import org.anchoranalysis.core.path.FilePathToUnixStyleConverter;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.core.system.path.FilePathToUnixStyleConverter;
 
 @NoArgsConstructor
 public abstract class SubdirectoryBase extends MutableDirectory {
@@ -39,7 +39,7 @@ public abstract class SubdirectoryBase extends MutableDirectory {
 
     // Relative path to parent. As this becomes serialized, we store is a string
     private String path;
-    
+
     public SubdirectoryBase(Path path) {
         this.path = FilePathToUnixStyleConverter.toStringUnixStyle(path);
     }

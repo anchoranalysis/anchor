@@ -31,9 +31,9 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.experiment.ExperimentExecutionArguments;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
+import org.anchoranalysis.experiment.arguments.ExecutionArguments;
 import org.anchoranalysis.experiment.bean.Experiment;
 import org.anchoranalysis.experiment.bean.identifier.ExperimentIdentifier;
 import org.anchoranalysis.experiment.bean.log.LoggingDestination;
@@ -46,7 +46,7 @@ import org.anchoranalysis.io.output.bean.OutputManager;
 import org.anchoranalysis.io.output.enabled.multi.MultiLevelOutputEnabled;
 import org.anchoranalysis.io.output.outputter.BindFailedException;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
-import org.anchoranalysis.io.output.path.PathPrefixerException;
+import org.anchoranalysis.io.output.path.prefixer.PathPrefixerException;
 import org.anchoranalysis.io.output.recorded.MultiLevelRecordedOutputs;
 import org.anchoranalysis.io.output.recorded.RecordedOutputsWithRules;
 import org.apache.commons.lang.time.StopWatch;
@@ -58,8 +58,8 @@ import org.apache.commons.lang.time.StopWatch;
  */
 public abstract class OutputExperiment extends Experiment {
 
-    public static final String OUTPUT_NAME_MANIFEST = "experiment_manifest";
-    
+    public static final String OUTPUT_MANIFEST = "experiment_manifest";
+
     // START BEAN PROPERTIES
     /** The output-manager that specifies how/where/which elements occur duing outputting. */
     @BeanField @Getter @Setter private OutputManager output;
@@ -97,7 +97,7 @@ public abstract class OutputExperiment extends Experiment {
      *
      * @param arguments additional run-time configuration/parameters that influences the experiment.
      */
-    public void executeExperiment(ExperimentExecutionArguments arguments)
+    public final void executeExperiment(ExecutionArguments arguments)
             throws ExperimentExecutionException {
 
         try {
@@ -146,12 +146,11 @@ public abstract class OutputExperiment extends Experiment {
         }
     }
 
-    private ParametersExperiment createParams(ExperimentExecutionArguments arguments)
-            throws CreateException {
+    private ParametersExperiment createParams(ExecutionArguments arguments) throws CreateException {
 
         Manifest experimentalManifest = new Manifest();
 
-        String experimentId = experimentIdentifier.identifier(arguments.getTaskName());
+        String experimentId = experimentIdentifier.identifier(arguments.taskName());
 
         try {
             OutputterChecked rootOutputter =
@@ -162,15 +161,12 @@ public abstract class OutputExperiment extends Experiment {
                                     new RecordedOutputsWithRules(
                                             recordedOutputs,
                                             defaultOutputs(),
-                                            arguments.getOutputEnabledDelta()),
+                                            arguments.output().getOutputEnabledDelta()),
+                                    arguments.output().getSuggestedImageOutputFormat(),
                                     arguments.createPrefixerContext());
 
             Preconditions.checkArgument(rootOutputter.getSettings().hasBeenInitialized());
 
-            // Important we bind to a root folder before any log messages go out, as
-            // certain log appenders require the OutputManager to be set before outputting
-            // to the correct location and this only occurs after the call to
-            // bindRootFolder()
             return new ParametersExperiment(
                     arguments,
                     experimentId,
@@ -187,7 +183,7 @@ public abstract class OutputExperiment extends Experiment {
     }
 
     private StatefulMessageLogger createLogger(
-            OutputterChecked rootOutputter, ExperimentExecutionArguments expArgs) {
+            OutputterChecked rootOutputter, ExecutionArguments expArgs) {
         return logExperiment.createWithConsoleFallback(
                 rootOutputter, expArgs, useDetailedLogging());
     }
@@ -203,11 +199,17 @@ public abstract class OutputExperiment extends Experiment {
     }
 
     private void tidyUpAfterExecution(ParametersExperiment params, StopWatch stopWatchExperiment) {
-        
-        params.getExperimentalManifest().ifPresent( manifest ->
-            params.getOutputter().writerSelective().write(OUTPUT_NAME_MANIFEST, ManifestGenerator::new, () -> manifest)
-        );
-        
+
+        params.getExperimentalManifest()
+                .ifPresent(
+                        manifest ->
+                                params.getOutputter()
+                                        .writerSelective()
+                                        .write(
+                                                OUTPUT_MANIFEST,
+                                                ManifestGenerator::new,
+                                                () -> manifest));
+
         stopWatchExperiment.stop();
 
         OutputExperimentLogHelper.maybeLogCompleted(recordedOutputs, params, stopWatchExperiment);

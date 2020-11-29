@@ -26,17 +26,12 @@
 
 package org.anchoranalysis.io.generator;
 
-import java.util.Optional;
 import java.util.stream.Stream;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
-import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.CheckedStream;
-import org.anchoranalysis.core.functional.function.CheckedConsumer;
-import org.anchoranalysis.core.functional.function.CheckedFunction;
-import org.anchoranalysis.core.functional.function.CheckedToIntFunction;
+import org.anchoranalysis.core.functional.checked.CheckedFunction;
 import org.anchoranalysis.io.manifest.file.FileType;
-import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.output.namestyle.OutputNameStyle;
@@ -93,47 +88,42 @@ public class GeneratorBridge<S, T> implements Generator<S> {
     }
 
     @Override
-    public void write(S element, OutputNameStyle outputNameStyle, OutputterChecked outputter)
+    public FileType[] write(S element, OutputNameStyle outputNameStyle, OutputterChecked outputter)
             throws OutputWriteFailedException {
-       convertAndExecute(element, convertedElement ->
-           generator.write(convertedElement, outputNameStyle, outputter));
+        return convertAndExecute(
+                element,
+                convertedElement -> generator.write(convertedElement, outputNameStyle, outputter));
     }
 
     @Override
-    public int writeWithIndex(
+    public FileType[] writeWithIndex(
             S element,
-            String index, 
-            IndexableOutputNameStyle outputNameStyle, OutputterChecked outputter)
+            String index,
+            IndexableOutputNameStyle outputNameStyle,
+            OutputterChecked outputter)
             throws OutputWriteFailedException {
-        return convertAndSum(element, convertedElement ->
-            generator.writeWithIndex(convertedElement, index, outputNameStyle, outputter));
-    }
-
-    @Override
-    public Optional<FileType[]> getFileTypes(OutputWriteSettings outputWriteSettings)
-            throws OperationFailedException {
-        return generator.getFileTypes(outputWriteSettings);
+        return convertAndExecute(
+                element,
+                convertedElement ->
+                        generator.writeWithIndex(
+                                convertedElement, index, outputNameStyle, outputter));
     }
 
     /** Converts an element to <b>one or more target elements</b>, and runs a consumer on each. */
-    private void convertAndExecute(S element, CheckedConsumer<T, OutputWriteFailedException> consumer) throws OutputWriteFailedException {
+    private FileType[] convertAndExecute(
+            S element, CheckedFunction<T, FileType[], OutputWriteFailedException> function)
+            throws OutputWriteFailedException {
         try {
+            Stream<T> bridgedElement = bridge.apply(element);
+
+            ConcatenateFileTypes concatenate = new ConcatenateFileTypes();
+
             CheckedStream.forEach(
-                    bridge.apply(element),
+                    bridgedElement,
                     OutputWriteFailedException.class,
-                    consumer);
-        } catch (Exception e) {
-            throw new OutputWriteFailedException(e);
-        }
-    }
-    
-    /** Converts an element to <b>one or more target elements</b>, and sums the results of applying a {@link CheckedToIntFunction}. */
-    private int convertAndSum(S element, CheckedToIntFunction<T, OutputWriteFailedException> consumer) throws OutputWriteFailedException {
-        try {
-            return CheckedStream.mapToInt(
-                    bridge.apply(element),
-                    OutputWriteFailedException.class,
-                    consumer).sum();
+                    item -> concatenate.add(function.apply(item)));
+
+            return concatenate.allFileTypes();
         } catch (Exception e) {
             throw new OutputWriteFailedException(e);
         }

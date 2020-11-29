@@ -28,7 +28,7 @@ package org.anchoranalysis.mpp.segment.optimization.step;
 
 import java.util.Optional;
 import java.util.function.ToDoubleFunction;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.mpp.proposer.error.ProposerFailureDescription;
 import org.anchoranalysis.mpp.segment.bean.optimization.StateReporter;

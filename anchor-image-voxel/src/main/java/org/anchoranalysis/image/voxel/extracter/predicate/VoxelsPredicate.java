@@ -26,7 +26,7 @@
 package org.anchoranalysis.image.voxel.extracter.predicate;
 
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.box.BoundingBox;
 
 /**
  * Methods to find or count voxels that satisfy a predicate.
@@ -48,7 +48,7 @@ public interface VoxelsPredicate {
      * @return the total count
      */
     int count();
-    
+
     /**
      * Counts the number of values satisfying the predicate - but restricted to voxels corresponding
      * to <i>on</i> in an object-mask.

@@ -31,7 +31,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.name.value.NameValue;
+import org.anchoranalysis.core.identifier.name.NameValue;
 
 /**
  * A bean with an associated textual name.

@@ -34,13 +34,13 @@ import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
-import org.anchoranalysis.bean.error.BeanMisconfiguredException;
+import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 import org.anchoranalysis.bean.shared.color.scheme.ColorScheme;
 import org.anchoranalysis.bean.shared.color.scheme.HSB;
 import org.anchoranalysis.bean.shared.color.scheme.Shuffle;
 import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.color.ColorIndexModulo;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 
 /**
  * Settings for how to write output, including default writers.
@@ -55,8 +55,7 @@ public class OutputWriteSettings extends AnchorBean<OutputWriteSettings> {
 
     // START BEAN PROPERTIES
     /** The default color-scheme used for outputs, if no other scheme is specified. */
-    @BeanField @Getter @Setter
-    private ColorScheme defaultColors = new Shuffle(new HSB());
+    @BeanField @Getter @Setter private ColorScheme defaultColors = new Shuffle(new HSB());
 
     /**
      * Specifies a writer bean instance for a particular type of writer (identified by the writer
@@ -64,11 +63,6 @@ public class OutputWriteSettings extends AnchorBean<OutputWriteSettings> {
      */
     @BeanField @OptionalBean @Getter @Setter private List<NamedBean<?>> writers;
     // END BEAN PROPERTIES
-
-    private static final String HTML_EXTENSION = "html";
-    private static final String XML_EXTENSION = "xml";
-    private static final String TEXT_EXTENSION = "txt";
-    private static final String SERIALIZED_EXTENSION = "ser";
 
     // Contains instances for each writer
     private BeanInstanceMap writerInstances;
@@ -121,21 +115,5 @@ public class OutputWriteSettings extends AnchorBean<OutputWriteSettings> {
 
     public ColorIndex defaultColorIndexFor(int numberColors) throws OperationFailedException {
         return new ColorIndexModulo(getDefaultColors().createList(numberColors));
-    }
-
-    public String getExtensionHTML() {
-        return HTML_EXTENSION;
-    }
-
-    public String getExtensionSerialized() {
-        return SERIALIZED_EXTENSION;
-    }
-
-    public String getExtensionXML() {
-        return XML_EXTENSION;
-    }
-
-    public String getExtensionText() {
-        return TEXT_EXTENSION;
     }
 }

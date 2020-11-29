@@ -35,10 +35,10 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.cache.ChildCacheName;
 import org.anchoranalysis.feature.calculate.cache.SessionInput;
-import org.anchoranalysis.image.feature.object.calculation.CalculateInputFromPair;
-import org.anchoranalysis.image.feature.object.calculation.CalculateInputFromPair.Extract;
-import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
-import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
+import org.anchoranalysis.image.feature.calculation.CalculateInputFromPair;
+import org.anchoranalysis.image.feature.calculation.CalculateInputFromPair.Extract;
+import org.anchoranalysis.image.feature.input.FeatureInputPairObjects;
+import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 
 /**
  * Base class for evaluating {@link FeaturePairObjects} in terms of another feature that operations

@@ -27,7 +27,7 @@
 package org.anchoranalysis.bean.provider;
 
 import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 
 /**
  * A class (usually an {@link AnchorBean}} that creates or provides another obhect

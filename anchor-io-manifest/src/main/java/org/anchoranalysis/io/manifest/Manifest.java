@@ -32,14 +32,12 @@ import org.anchoranalysis.io.manifest.directory.MutableDirectory;
 import org.anchoranalysis.io.manifest.directory.RootDirectory;
 
 /**
- * A manifest for a particular experiment, that may refer to the
- * outputs from particular jobs, each with their own manifest.
- * 
- * <p>A manifest records outputs that occur on the filesystem (like a log, 
- * but in a structured way, that can be opened and processed at a later point).
- * 
- * @author Owen Feehan
+ * A manifest that records what outputs occur and where they occur.
  *
+ * <p>This is stored on the file-system like a log, but in a structured way, so that it can be
+ * opened and processed at a later point).
+ *
+ * @author Owen Feehan
  */
 public class Manifest implements Serializable {
 
@@ -48,16 +46,16 @@ public class Manifest implements Serializable {
 
     /**
      * An entry for the root-directory in the manifest.
-     * 
+     *
      * <p>All paths that occur in other elements are relative to this directory.
      */
-    private RootDirectory rootFolder;
+    private RootDirectory rootDirectory = new RootDirectory();
 
-    public void init(Path rootFolderPath) {
-        rootFolder = new RootDirectory(rootFolderPath);
+    public void init(Path rootPath) {
+        rootDirectory.setRootPath(rootPath);
     }
 
-    public MutableDirectory getRootFolder() {
-        return rootFolder;
+    public MutableDirectory getRootDirectory() {
+        return rootDirectory;
     }
 }

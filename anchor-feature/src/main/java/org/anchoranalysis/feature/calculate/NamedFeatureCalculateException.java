@@ -25,7 +25,7 @@
  */
 package org.anchoranalysis.feature.calculate;
 
-import org.anchoranalysis.core.error.friendly.AnchorFriendlyCheckedException;
+import org.anchoranalysis.core.exception.friendly.AnchorFriendlyCheckedException;
 
 /**
  * A feature-calculation exception that occurs in a particular named feature, or else a general

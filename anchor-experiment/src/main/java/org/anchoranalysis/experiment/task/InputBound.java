@@ -31,7 +31,6 @@ import lombok.Getter;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.experiment.log.StatefulMessageLogger;
 import org.anchoranalysis.io.manifest.Manifest;
-import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 
 /**
@@ -52,26 +51,44 @@ public class InputBound<T, S> {
 
     @Getter private final boolean detailedLogging;
 
-    private final InputOutputContextStateful context;
+    /** The input-output context associated with the current experiment. */
+    @Getter private final InputOutputContextStateful contextExperiment;
+
+    /** The input-output context associated with the current job. */
+    @Getter private final InputOutputContextStateful contextJob;
 
     /** Immutably changes the input-object */
     public <U> InputBound<U, S> changeInput(U inputToAssign) {
-        return new InputBound<>(inputToAssign, sharedState, manifest, detailedLogging, context);
+        return new InputBound<>(
+                inputToAssign,
+                sharedState,
+                manifest,
+                detailedLogging,
+                contextExperiment,
+                contextJob);
     }
 
-    public InputOutputContext context() {
-        return context;
+    /** Immutably changes the input-object and shared-state */
+    public <U, V> InputBound<U, V> changeInputAndSharedState(
+            U inputToAssign, V sharedStateToAssign) {
+        return new InputBound<>(
+                inputToAssign,
+                sharedStateToAssign,
+                manifest,
+                detailedLogging,
+                contextExperiment,
+                contextJob);
     }
 
     public Outputter getOutputter() {
-        return context.getOutputter();
+        return contextJob.getOutputter();
     }
 
     public Logger getLogger() {
-        return context.getLogger();
+        return contextJob.getLogger();
     }
 
     public StatefulMessageLogger getLogReporterJob() {
-        return context.getMessageLogger();
+        return contextJob.getMessageLogger();
     }
 }

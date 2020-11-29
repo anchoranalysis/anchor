@@ -27,8 +27,10 @@ package org.anchoranalysis.image.voxel.extracter;
 
 import java.nio.FloatBuffer;
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.buffer.max.MaxIntensityBufferFloat;
-import org.anchoranalysis.spatial.extent.Extent;
+import org.anchoranalysis.image.voxel.buffer.ProjectableBuffer;
+import org.anchoranalysis.image.voxel.buffer.max.MaxIntensityProjection;
+import org.anchoranalysis.image.voxel.buffer.mean.MeanIntensityProjection;
+import org.anchoranalysis.spatial.Extent;
 
 class FloatImplementation extends Base<FloatBuffer> {
 
@@ -43,25 +45,6 @@ class FloatImplementation extends Base<FloatBuffer> {
             FloatBuffer destinationBuffer,
             int destinationIndex) {
         destinationBuffer.put(destinationIndex, sourceBuffer.get(sourceIndex));
-    }
-
-    @Override
-    public Voxels<FloatBuffer> projectMax() {
-
-        Extent extent = voxels.extent();
-
-        MaxIntensityBufferFloat mi = new MaxIntensityBufferFloat(extent);
-
-        for (int z = 0; z < extent.z(); z++) {
-            mi.projectSlice(voxels.sliceBuffer(z));
-        }
-
-        return mi.asVoxels();
-    }
-
-    @Override
-    public Voxels<FloatBuffer> projectMean() {
-        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -101,5 +84,15 @@ class FloatImplementation extends Base<FloatBuffer> {
     @Override
     protected boolean bufferValueEqualTo(FloatBuffer buffer, int value) {
         return buffer.get() == value;
+    }
+
+    @Override
+    protected ProjectableBuffer<FloatBuffer> createMaxIntensityBuffer(Extent extent) {
+        return MaxIntensityProjection.createFloat(extent);
+    }
+
+    @Override
+    protected ProjectableBuffer<FloatBuffer> createMeanIntensityBuffer(Extent extent) {
+        return MeanIntensityProjection.createFloat(extent);
     }
 }

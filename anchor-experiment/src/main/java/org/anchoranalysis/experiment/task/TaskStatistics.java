@@ -29,7 +29,7 @@ package org.anchoranalysis.experiment.task;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
-import org.anchoranalysis.core.arithmetic.RunningSum;
+import org.anchoranalysis.math.arithmetic.RunningSum;
 
 /**
  * Maintains statistics on the execution of a task (considering jobs in aggregate)

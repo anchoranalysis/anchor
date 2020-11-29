@@ -28,21 +28,20 @@ package org.anchoranalysis.bean.shared.color.scheme;
 
 import java.util.HashMap;
 import java.util.Map;
+import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.color.ColorList;
 import org.anchoranalysis.core.color.RGBColor;
-import lombok.RequiredArgsConstructor;
 
 /**
  * Associates an index with a color from an existing list, and remembers the association.
- * 
- * <p>This allows non-contigous indices to each use a unique-ish color.
- * 
- * <p>Indices will be assigned a unique color until the list has no more
- * unique colors, at which point they will be reused.
- * 
- * @author Owen Feehan
  *
+ * <p>This allows non-contigous indices to each use a unique-ish color.
+ *
+ * <p>Indices will be assigned a unique color until the list has no more unique colors, at which
+ * point they will be reused.
+ *
+ * @author Owen Feehan
  */
 @RequiredArgsConstructor
 class AssignColorToEachIndex implements ColorIndex {

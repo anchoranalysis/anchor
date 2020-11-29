@@ -32,16 +32,15 @@ import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.bean.initializable.params.BeanInitParams;
 import org.anchoranalysis.bean.initializable.property.PropertyInitializer;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsInitParams;
-import org.anchoranalysis.bean.store.BeanStoreAdder;
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.functional.function.CheckedFunction;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.functional.checked.CheckedFunction;
+import org.anchoranalysis.core.identifier.provider.NamedProvider;
+import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
+import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
+import org.anchoranalysis.core.identifier.provider.store.SharedObjects;
+import org.anchoranalysis.core.identifier.provider.store.StoreSupplier;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.core.name.provider.NamedProvider;
-import org.anchoranalysis.core.name.provider.NamedProviderGetException;
-import org.anchoranalysis.core.name.store.NamedProviderStore;
-import org.anchoranalysis.core.name.store.SharedObjects;
-import org.anchoranalysis.core.name.store.StoreSupplier;
-import org.anchoranalysis.core.params.KeyValueParams;
+import org.anchoranalysis.core.value.KeyValueParams;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
 import org.anchoranalysis.image.bean.provider.ChannelProvider;
@@ -140,22 +139,20 @@ public class ImageInitParams implements BeanInitParams {
         stackProviderBridge = populate.copyProvider(StackProvider.class, stacks());
     }
 
-    public void addToStackCollection(String identifier, Stack inputImage)
-            throws OperationFailedException {
+    public void addToStacks(String identifier, Stack inputImage) throws OperationFailedException {
         stacks().add(identifier, () -> inputImage);
     }
 
-    public void addToStackCollection(String identifier, StackProvider stack)
+    public void addToStacks(String identifier, StackProvider stack)
             throws OperationFailedException {
-        BeanStoreAdder.add(identifier, stack, storeStack, stackProviderBridge);
+        StoreAdderHelper.add(identifier, stack, storeStack, stackProviderBridge);
     }
 
-    public void copyStackCollectionFrom(NamedProvider<Stack> source)
-            throws OperationFailedException {
+    public void copyStacksFrom(NamedProvider<Stack> source) throws OperationFailedException {
 
         try {
             for (String id : source.keys()) {
-                addToStackCollection(id, source.getException(id));
+                addToStacks(id, source.getException(id));
             }
         } catch (NamedProviderGetException e) {
             throw new OperationFailedException(e.summarize());

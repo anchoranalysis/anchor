@@ -32,12 +32,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.name.value.NameValue;
+import lombok.NoArgsConstructor;
+import org.anchoranalysis.core.identifier.name.NameValue;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.MultipleFileTypeGenerator;
 import org.anchoranalysis.io.manifest.file.FileType;
-import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.output.namestyle.OutputNameStyle;
@@ -51,6 +50,7 @@ import org.anchoranalysis.io.output.outputter.OutputterChecked;
  * @author Owen Feehan
  * @param <T> element-type
  */
+@NoArgsConstructor
 public class CombinedListGenerator<T> implements MultipleFileTypeGenerator<T> {
 
     private final CombinedList<T> delegate = new CombinedList<>();
@@ -73,30 +73,25 @@ public class CombinedListGenerator<T> implements MultipleFileTypeGenerator<T> {
     }
 
     @Override
-    public void write(T element, OutputNameStyle outputNameStyle, OutputterChecked outputter)
+    public FileType[] write(T element, OutputNameStyle outputNameStyle, OutputterChecked outputter)
             throws OutputWriteFailedException {
-        delegate.write(element, outputNameStyle, outputter);
+        return delegate.write(element, outputNameStyle, outputter);
     }
 
     @Override
-    public int writeWithIndex(
+    public FileType[] writeWithIndex(
             T element,
-            String index, 
-            IndexableOutputNameStyle outputNameStyle, OutputterChecked outputter)
+            String index,
+            IndexableOutputNameStyle outputNameStyle,
+            OutputterChecked outputter)
             throws OutputWriteFailedException {
         return delegate.writeWithIndex(element, index, outputNameStyle, outputter);
-    }
-
-    @Override
-    public Optional<FileType[]> getFileTypes(OutputWriteSettings outputWriteSettings)
-            throws OperationFailedException {
-        return delegate.getFileTypes(outputWriteSettings);
     }
 
     public void add(String name, Generator<T> element) {
         add(element, Optional.of(name));
     }
-    
+
     private void add(Generator<T> element, Optional<String> name) {
         list.add(element);
         delegate.add(element, name);

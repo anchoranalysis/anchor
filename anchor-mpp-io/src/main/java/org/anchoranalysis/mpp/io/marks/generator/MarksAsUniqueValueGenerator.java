@@ -30,15 +30,15 @@ import java.util.Optional;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.object.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.image.core.stack.Stack;
-import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
-import org.anchoranalysis.image.io.generator.raster.object.collection.ObjectsAsUniqueValueGenerator;
-import org.anchoranalysis.image.io.stack.StackWriteOptions;
+import org.anchoranalysis.image.io.object.output.grayscale.ObjectsAsUniqueValueGenerator;
+import org.anchoranalysis.image.io.stack.output.StackWriteAttributes;
+import org.anchoranalysis.image.io.stack.output.generator.RasterGeneratorSelectFormat;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.mpp.mark.MarkCollection;
 
-public class MarksAsUniqueValueGenerator extends RasterGenerator<MarkCollection> {
+public class MarksAsUniqueValueGenerator extends RasterGeneratorSelectFormat<MarkCollection> {
 
     private ObjectsAsUniqueValueGenerator delegate;
     private RegionMembershipWithFlags regionMembership;
@@ -47,11 +47,6 @@ public class MarksAsUniqueValueGenerator extends RasterGenerator<MarkCollection>
             Dimensions dimensions, RegionMembershipWithFlags regionMembership) {
         delegate = new ObjectsAsUniqueValueGenerator(dimensions);
         this.regionMembership = regionMembership;
-    }
-
-    @Override
-    public boolean isRGB() {
-        return delegate.isRGB();
     }
 
     @Override
@@ -68,7 +63,7 @@ public class MarksAsUniqueValueGenerator extends RasterGenerator<MarkCollection>
     }
 
     @Override
-    public StackWriteOptions writeOptions() {
-        return delegate.writeOptions();
+    public StackWriteAttributes guaranteedImageAttributes() {
+        return delegate.guaranteedImageAttributes();
     }
 }

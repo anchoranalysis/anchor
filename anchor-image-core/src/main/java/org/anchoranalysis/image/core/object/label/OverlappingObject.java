@@ -25,8 +25,8 @@
  */
 package org.anchoranalysis.image.core.object.label;
 
-import org.anchoranalysis.image.voxel.object.ObjectMask;
 import lombok.Value;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 
 /**
  * An object-mask that is founded to overlap with another during labelling.

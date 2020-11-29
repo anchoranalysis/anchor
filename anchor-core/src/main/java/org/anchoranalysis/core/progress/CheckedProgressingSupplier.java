@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.core.progress;
 
-import org.anchoranalysis.core.functional.function.CheckedSupplier;
+import org.anchoranalysis.core.functional.checked.CheckedSupplier;
 
 /**
  * Like {@link CheckedSupplier} but can update a progress-reporter as the operation progresses.
@@ -38,9 +38,9 @@ import org.anchoranalysis.core.functional.function.CheckedSupplier;
 @FunctionalInterface
 public interface CheckedProgressingSupplier<R, E extends Exception> {
 
-    R get(ProgressReporter progressReporter) throws E;
+    R get(Progress progress) throws E;
 
     default CheckedSupplier<R, E> withoutProgressReporter() {
-        return () -> this.get(ProgressReporterNull.get());
+        return () -> this.get(ProgressIgnore.get());
     }
 }

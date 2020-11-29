@@ -40,8 +40,14 @@ import org.apache.commons.configuration.ConfigurationRuntimeException;
 import org.apache.commons.configuration.beanutils.BeanDeclaration;
 import org.apache.commons.configuration.beanutils.BeanHelper;
 
-// We change the behaviour of BeanHelper so that it will keep passing the current 'param' onto new
-// beans which are created
+// We
+
+/**
+ * This is a factory that is similar to {@link BeanHelper} but changes behavior so that it will keep
+ * passing the current <i>param</i> onto new beans which are created.
+ *
+ * @author Owen Feehan
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class DefaultBeanFactoryHelperInit {
 

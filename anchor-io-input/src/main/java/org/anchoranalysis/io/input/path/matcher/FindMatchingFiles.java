@@ -36,10 +36,10 @@ import java.util.function.Predicate;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.core.progress.ProgressReporter;
-import org.anchoranalysis.core.progress.ProgressReporterIncrement;
-import org.anchoranalysis.core.progress.TraverseDirectoryForProgressReporter;
-import org.anchoranalysis.core.progress.TraverseDirectoryForProgressReporter.TraversalResult;
+import org.anchoranalysis.core.progress.Progress;
+import org.anchoranalysis.core.progress.ProgressIncrement;
+import org.anchoranalysis.core.progress.TraversalResult;
+import org.anchoranalysis.core.progress.TraverseDirectoryForProgress;
 
 @AllArgsConstructor
 public class FindMatchingFiles {
@@ -48,7 +48,7 @@ public class FindMatchingFiles {
     private final boolean recursive;
 
     /** The progress reporter */
-    private final ProgressReporter progressReporter;
+    private final Progress progress;
 
     public Collection<File> findMatchingFiles(
             Path directory,
@@ -61,11 +61,14 @@ public class FindMatchingFiles {
             TraversalResult traversal;
             if (recursive) {
                 traversal =
-                        TraverseDirectoryForProgressReporter.traverseRecursive(
-                                directory, 20, constraints.getPredicates().getDirectory(), constraints.getMaxDirectoryDepth());
+                        TraverseDirectoryForProgress.traverseRecursive(
+                                directory,
+                                20,
+                                constraints.getPredicates().getDirectory(),
+                                constraints.getMaxDirectoryDepth());
             } else {
                 traversal =
-                        TraverseDirectoryForProgressReporter.traverseNotRecursive(
+                        TraverseDirectoryForProgress.traverseNotRecursive(
                                 directory, constraints.getPredicates().getDirectory());
             }
             return convertToList(traversal, constraints, acceptDirectoryErrors, logger);
@@ -85,70 +88,71 @@ public class FindMatchingFiles {
         List<File> listOut = new ArrayList<>();
 
         List<Path> leafDirectories =
-                filterLeafDirectories(traversal.getLeafDirectories(), constraints.getPredicates().getDirectory());
+                filterLeafDirectories(
+                        traversal.getLeafDirectories(), constraints.getPredicates().getDirectory());
 
-        ProgressReporterIncrement pri = new ProgressReporterIncrement(progressReporter);
-        pri.open();
-        pri.setMin(0);
-        pri.setMax(leafDirectories.size() + 1);
+        ProgressIncrement progressIncrement = new ProgressIncrement(progress);
+        progressIncrement.open();
+        progressIncrement.setMin(0);
+        progressIncrement.setMax(leafDirectories.size() + 1);
 
         // We first check the files that we remembered from our folder search
-        filesFromFolderSearch(traversal.getFiles(), constraints.getPredicates().getFile(), listOut);
+        filesFromDirectorySearch(
+                traversal.getFiles(), constraints.getPredicates().getFile(), listOut);
 
-        pri.update();
+        progressIncrement.update();
 
-        int remainingDirDepth = constraints.getMaxDirectoryDepth() - traversal.getDepth() + 1;
-        assert remainingDirDepth >= 1;
+        int remainingDirectoryDepth = constraints.getMaxDirectoryDepth() - traversal.getDepth() + 1;
+        assert remainingDirectoryDepth >= 1;
         otherFiles(
-                pri,
+                progressIncrement,
                 leafDirectories,
-                constraints.replaceMaxDirDepth(remainingDirDepth),
+                constraints.replaceMaxDirDepth(remainingDirectoryDepth),
                 listOut,
                 acceptDirectoryErrors,
                 logger);
 
-        pri.close();
+        progressIncrement.close();
 
         return listOut;
     }
 
     private static List<Path> filterLeafDirectories(
-            List<Path> leafDirectories, Predicate<Path> dirMatcher) {
-        return FunctionalList.filterToList(leafDirectories, dirMatcher);
+            List<Path> leafDirectories, Predicate<Path> directoryMatcher) {
+        return FunctionalList.filterToList(leafDirectories, directoryMatcher);
     }
 
-    private static void filesFromFolderSearch(
+    private static void filesFromDirectorySearch(
             List<Path> filesOut, Predicate<Path> matcher, List<File> listOut) {
-        for (Path p : filesOut) {
-            if (matcher.test(p)) {
-                listOut.add(p.normalize().toFile());
+        for (Path path : filesOut) {
+            if (matcher.test(path)) {
+                listOut.add(path.normalize().toFile());
             }
         }
     }
 
     private void otherFiles(
-            ProgressReporterIncrement pri,
-            List<Path> progressFolders,
+            ProgressIncrement progressIncrement,
+            List<Path> progressDirectories,
             PathMatchConstraints pathMatchConstraints,
             List<File> listOut,
             boolean acceptDirectoryErrors,
             Logger logger)
             throws FindFilesException {
         // Then every other folder is treated as a bucket
-        for (Path dirProgress : progressFolders) {
+        for (Path directoryProgress : progressDirectories) {
 
             try {
-                WalkSingleDirectory.apply(dirProgress, pathMatchConstraints, listOut);
+                WalkSingleDirectory.apply(directoryProgress, pathMatchConstraints, listOut);
             } catch (FindFilesException e) {
                 if (acceptDirectoryErrors) {
-                    logger.errorReporter()
-                            .recordError(FindMatchingFiles.class, e);
+                    logger.errorReporter().recordError(FindMatchingFiles.class, e);
                 } else {
                     // Rethrow the exception
                     throw e;
                 }
             } finally {
-                pri.update();
+                progressIncrement.update();
             }
         }
     }

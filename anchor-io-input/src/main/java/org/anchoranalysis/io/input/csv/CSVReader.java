@@ -32,13 +32,19 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
-// Reads a CSV File
+/**
+ * Reads a CSV File from the file-system.
+ * 
+ * @author Owen Feehan
+ *
+ */
 @RequiredArgsConstructor
 public class CSVReader {
 
     // START REQUIRED ARGUMENTS
-    private final String regExSeperator;
+    private final String regularExpressionSeperator;
     private final boolean firstLineHeaders;
     private final boolean quotedStrings;
     // END REQUIRED ARGUMENTS
@@ -50,15 +56,8 @@ public class CSVReader {
 
     public class OpenedCSVFile implements AutoCloseable {
 
-        private int numCols = -1;
-
-        public boolean hasHeaders() {
-            return firstLineHeaders;
-        }
-
-        public String[] getHeaders() {
-            return headers;
-        }
+        @Setter
+        private int numberColumns = -1;
 
         // Returns null when finished
         public Optional<String[]> readLine() throws IOException {
@@ -69,23 +68,19 @@ public class CSVReader {
                 return Optional.empty();
             }
 
-            String[] tokenized = line.split(regExSeperator);
+            String[] tokenized = line.split(regularExpressionSeperator);
 
-            if (numCols == -1) {
-                numCols = tokenized.length;
+            if (numberColumns == -1) {
+                numberColumns = tokenized.length;
             }
 
-            if (tokenized.length != numCols) {
+            if (tokenized.length != numberColumns) {
                 throw new IOException("Incorrect number of columns for line");
             }
 
             maybeRemoveQuotes(tokenized);
 
             return Optional.of(tokenized);
-        }
-
-        public void setNumCols(int numCols) {
-            this.numCols = numCols;
         }
 
         @Override
@@ -100,6 +95,14 @@ public class CSVReader {
             }
         }
 
+        public boolean hasHeaders() {
+            return firstLineHeaders;
+        }
+
+        public String[] getHeaders() {
+            return headers;
+        }
+        
         private void maybeRemoveQuotes(String[] arr) {
 
             if (!quotedStrings) {
@@ -136,7 +139,7 @@ public class CSVReader {
 
             this.bufferedReader = new BufferedReader(fileReader);
 
-            OpenedCSVFile fileOut = new OpenedCSVFile();
+            OpenedCSVFile out = new OpenedCSVFile();    // NOSONAR
 
             if (firstLineHeaders) {
                 String line = bufferedReader.readLine();
@@ -145,26 +148,26 @@ public class CSVReader {
                     throw new CSVReaderException("No header line found");
                 }
 
-                headers = line.split(regExSeperator);
-                fileOut.setNumCols(headers.length);
+                headers = line.split(regularExpressionSeperator);
+                out.setNumberColumns(headers.length);
             }
 
-            return fileOut;
+            return out;
 
         } catch (IOException e) {
             throw new CSVReaderException(e);
         }
     }
 
-    private static String maybeRemoveQuotes(String s) { // NOSONAR
-        if (s.length() <= 2) {
-            return s;
+    private static String maybeRemoveQuotes(String string) { // NOSONAR
+        if (string.length() <= 2) {
+            return string;
         }
 
-        if (s.startsWith("\"") && s.endsWith("\"")) {
-            return s.substring(1, s.length() - 1);
+        if (string.startsWith("\"") && string.endsWith("\"")) {
+            return string.substring(1, string.length() - 1);
         } else {
-            return s;
+            return string;
         }
     }
 }

@@ -81,7 +81,7 @@ public class MaxIntensityProjectionPair {
         Voxels<UnsignedByteBuffer> voxelsOut =
                 VoxelsFactory.getUnsignedByte().createInitialized(voxels.extent());
 
-        BinaryValuesByte bvb = BinaryValuesByte.getDefault();
+        BinaryValuesByte binaryValues = BinaryValuesByte.getDefault();
 
         for (int z = 0; z < voxels.extent().z(); z++) {
 
@@ -91,26 +91,26 @@ public class MaxIntensityProjectionPair {
             int offset = 0;
             for (int y = 0; y < voxels.extent().y(); y++) {
                 for (int x = 0; x < voxels.extent().x(); x++) {
-                    maybeOutputByte(offset++, buffer, bufferOut, bvb, rmFlags);
+                    maybeOutputByte(offset++, buffer, bufferOut, binaryValues, rmFlags);
                 }
             }
         }
 
-        return BinaryVoxelsFactory.reuseByte(voxelsOut, bvb.createInt());
+        return BinaryVoxelsFactory.reuseByte(voxelsOut, binaryValues.createInt());
     }
 
     private static void maybeOutputByte(
             int offset,
             UnsignedByteBuffer buffer,
             UnsignedByteBuffer bufferOut,
-            BinaryValuesByte bvb,
+            BinaryValuesByte binaryValues,
             RegionMembershipWithFlags rmFlags) {
         byte b = buffer.getRaw(offset);
         if (rmFlags.isMemberFlag(b)) {
-            bufferOut.putRaw(offset, bvb.getOnByte());
+            bufferOut.putRaw(offset, binaryValues.getOnByte());
         } else {
-            if (bvb.getOffByte() != 0) {
-                bufferOut.putRaw(offset, bvb.getOffByte());
+            if (binaryValues.getOffByte() != 0) {
+                bufferOut.putRaw(offset, binaryValues.getOffByte());
             }
         }
     }

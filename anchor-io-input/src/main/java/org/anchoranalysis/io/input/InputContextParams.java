@@ -29,23 +29,24 @@ package org.anchoranalysis.io.input;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.Getter;
 import lombok.Setter;
+import org.anchoranalysis.core.format.FormatExtensions;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.io.input.bean.DebugModeParams;
 
 /**
- * Additional paramaters that provide context for many beans that provide input-functions
+ * Additional paramaters that offer context for many beans that provide input-functions.
  *
  * @author Owen Feehan
  */
 public class InputContextParams {
 
-    /** A list of paths referring to specific inputs; */
+    /** A list of paths referring to specific inputs */
     @Getter @Setter private Optional<List<Path>> inputPaths;
 
     /** If defined, a directory which can be used by beans to find input */
@@ -60,7 +61,14 @@ public class InputContextParams {
     /** Parameters for debug-mode (only defined if we are in debug mode) */
     @Getter @Setter private Optional<DebugModeParams> debugModeParams = Optional.empty();
 
-    // This should always be ab absolute path, never a relative one
+    /**
+     * If defined, a directory which can be used by beans to find input.
+     *
+     * <p>This should always be an absolute path, never a relative one.
+     *
+     * @param inputDirectory the absolute path of the input-directory.
+     * @throws IOException
+     */
     public void setInputDirectory(Optional<Path> inputDirectory) throws IOException {
         OptionalUtilities.ifPresent(inputDirectory, InputContextParams::checkAbsolutePath);
         this.inputDirectory = inputDirectory;
@@ -75,8 +83,11 @@ public class InputContextParams {
         }
     }
 
-    // If no filter extensions are provided from anywhere else, this is a convenient set of defaults
+    /**
+     * If no filter extensions are provided from anywhere else, this is a convenient set of
+     * defaults.
+     */
     private Set<String> fallBackFilterExtensions() {
-        return new HashSet<>(Arrays.asList("jpg", "png", "tif", "tiff", "gif", "bmp"));
+        return Arrays.stream(FormatExtensions.allImageExtensions()).collect(Collectors.toSet());
     }
 }

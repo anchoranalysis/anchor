@@ -28,16 +28,15 @@ package org.anchoranalysis.io.manifest.finder.match;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Optional;
 import java.util.function.Predicate;
-import org.anchoranalysis.io.manifest.ManifestDescription;
-import org.anchoranalysis.io.manifest.ManifestDirectoryDescription;
-import org.anchoranalysis.io.manifest.directory.MutableDirectory;
-import org.anchoranalysis.io.manifest.directory.JobRootDirectory;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.io.manifest.ManifestDescription;
+import org.anchoranalysis.io.manifest.ManifestDirectoryDescription;
+import org.anchoranalysis.io.manifest.directory.JobRootDirectory;
+import org.anchoranalysis.io.manifest.directory.MutableDirectory;
 
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class DirectoryMatch {
 
     public static Predicate<MutableDirectory> jobDirectory() {
@@ -45,18 +44,21 @@ public class DirectoryMatch {
     }
 
     public static Predicate<MutableDirectory> path(String path) {
-        Path pathAsPath = Paths.get(path); 
+        Path pathAsPath = Paths.get(path);
         return directory -> directory.relativePath().equals(pathAsPath);
     }
-    
+
     // If match is null, we match everything
     public static Predicate<MutableDirectory> description(String function, String type) {
-        return directory -> DirectoryMatch.presentAnd(directory.description(), DescriptionMatch.functionAndType(function, type));
+        return directory ->
+                DirectoryMatch.presentAnd(
+                        directory.description(), DescriptionMatch.functionAndType(function, type));
     }
-    
-    private static boolean presentAnd(Optional<ManifestDirectoryDescription> optional, Predicate<ManifestDescription> descriptionMatch) {
-        return optional.isPresent() && descriptionMatch.test(
-             optional.get().getDescription()
-        );                
+
+    private static boolean presentAnd(
+            ManifestDirectoryDescription descriptionToTest,
+            Predicate<ManifestDescription> descriptionMatch) {
+        return descriptionToTest.getDescription().isPresent()
+                && descriptionMatch.test(descriptionToTest.getDescription().get()); // NOSONAR
     }
 }

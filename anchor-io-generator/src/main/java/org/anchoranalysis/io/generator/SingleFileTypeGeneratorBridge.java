@@ -29,8 +29,8 @@ package org.anchoranalysis.io.generator;
 import java.nio.file.Path;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.functional.function.CheckedFunction;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.functional.checked.CheckedFunction;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
@@ -45,8 +45,7 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
  * @param <V> hidden-iterator-type
  */
 @RequiredArgsConstructor
-public class SingleFileTypeGeneratorBridge<S, T, V>
-        extends SingleFileTypeGenerator<T, S> {
+public class SingleFileTypeGeneratorBridge<S, T, V> extends SingleFileTypeGenerator<T, S> {
 
     // START REQUIRED ARGUMENTS
     private final SingleFileTypeGenerator<V, S> delegate;
@@ -54,9 +53,9 @@ public class SingleFileTypeGeneratorBridge<S, T, V>
     // END REQUIRED ARGUMENTS
 
     @Override
-    public String getFileExtension(OutputWriteSettings outputWriteSettings)
+    public String selectFileExtension(OutputWriteSettings outputWriteSettings)
             throws OperationFailedException {
-        return delegate.getFileExtension(outputWriteSettings);
+        return delegate.selectFileExtension(outputWriteSettings);
     }
 
     @Override
@@ -66,13 +65,13 @@ public class SingleFileTypeGeneratorBridge<S, T, V>
 
     @Override
     public S transform(T element) throws OutputWriteFailedException {
-        return delegate.transform( applyBridge(element) );
+        return delegate.transform(applyBridge(element));
     }
 
     @Override
     public void writeToFile(T element, OutputWriteSettings outputWriteSettings, Path filePath)
             throws OutputWriteFailedException {
-        delegate.writeToFile( applyBridge(element), outputWriteSettings, filePath);
+        delegate.writeToFile(applyBridge(element), outputWriteSettings, filePath);
     }
 
     private V applyBridge(T element) throws OutputWriteFailedException {

@@ -32,7 +32,7 @@ import lombok.Value;
 import org.anchoranalysis.core.log.Logger;
 
 /**
- * A negative-result when an object is NOT found at a particular location
+ * A negative-result when an object is NOT found at a particular location.
  *
  * @author Owen Feehan
  * @param <T>

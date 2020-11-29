@@ -30,12 +30,12 @@ import com.google.common.base.Preconditions;
 import ij.gui.PolygonRoi;
 import ij.gui.Roi;
 import java.util.List;
-import org.anchoranalysis.core.error.OptionalOperationUnsupportedException;
+import org.anchoranalysis.core.exception.OptionalOperationUnsupportedException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipUtilities;
 import org.anchoranalysis.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.mpp.mark.Mark;
-import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.Point3d;
 
 public class Polygon extends PointListBase {

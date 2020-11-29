@@ -29,10 +29,10 @@ package org.anchoranalysis.image.bean.nonbean.init;
 import java.util.Optional;
 import java.util.Set;
 import lombok.Getter;
-import org.anchoranalysis.core.name.provider.NamedProvider;
-import org.anchoranalysis.core.name.provider.NamedProviderBridge;
-import org.anchoranalysis.core.name.provider.NamedProviderCombine;
-import org.anchoranalysis.core.name.provider.NamedProviderGetException;
+import org.anchoranalysis.core.identifier.provider.NamedProvider;
+import org.anchoranalysis.core.identifier.provider.NamedProviderBridge;
+import org.anchoranalysis.core.identifier.provider.NamedProviderCombine;
+import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.channel.factory.ChannelFactoryByte;
 import org.anchoranalysis.image.core.channel.factory.ChannelFactorySingleType;
@@ -42,7 +42,7 @@ import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.box.BoundingBox;
 
 class CombineDiverseProvidersAsStacks implements NamedProvider<Stack> {
 
@@ -96,14 +96,14 @@ class CombineDiverseProvidersAsStacks implements NamedProvider<Stack> {
 
         Channel channelNew = FACTORY.createEmptyInitialised(sourceObject.dimensions());
 
-        BinaryVoxels<UnsignedByteBuffer> bvb = sourceObject.binaryVoxels();
+        BinaryVoxels<UnsignedByteBuffer> voxels = sourceObject.binaryVoxels();
 
         // For each region we get a mask for what equals the binary mask
         ObjectMask object =
-                bvb.voxels()
+                voxels.voxels()
                         .extract()
-                        .voxelsEqualTo(bvb.binaryValues().getOnInt())
-                        .deriveObject(new BoundingBox(bvb.voxels()));
+                        .voxelsEqualTo(voxels.binaryValues().getOnInt())
+                        .deriveObject(new BoundingBox(voxels.extent()));
         try {
             channelNew.replaceVoxels(object.voxels());
         } catch (IncorrectImageSizeException e) {

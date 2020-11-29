@@ -31,9 +31,9 @@ import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.core.progress.ProgressReporterNull;
+import org.anchoranalysis.core.progress.ProgressIgnore;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.bean.log.LoggingDestination;
 import org.anchoranalysis.experiment.bean.log.ToConsole;
@@ -97,6 +97,11 @@ public class InputOutputExperiment<T extends InputFromManager, S> extends Output
      * <p>This is in contrast to {@code logExperiment} where non-job specific log messages appear.
      */
     @BeanField @Getter @Setter private LoggingDestination logTask = new ToConsole();
+
+    /**
+     * A message written to the logger if no inputs exist for the experiment, and it thus ends early.
+     */
+    @BeanField @Getter @Setter private String messageNoInputs = "No inputs exist. Nothing to do.";
     // END BEAN PROPERTIES
 
     @Override
@@ -133,15 +138,19 @@ public class InputOutputExperiment<T extends InputFromManager, S> extends Output
             InputManagerParams paramsInput =
                     new InputManagerParams(
                             params.getExperimentArguments().createInputContext(),
-                            ProgressReporterNull.get(),
+                            ProgressIgnore.get(),
                             new Logger(params.getLoggerExperiment()));
 
             List<T> inputs = getInput().inputs(paramsInput);
             checkCompabilityInputs(inputs);
 
-            params.setLoggerTaskCreator(logTask);
-
-            taskProcessor.executeLogStats(params.getOutputter(), inputs, params);
+            if (!inputs.isEmpty()) {
+                params.setLoggerTaskCreator(logTask);
+                taskProcessor.executeLogStats(params.getOutputter(), inputs, params);
+            } else {
+                params.getLoggerExperiment().log("");
+                params.getLoggerExperiment().log(messageNoInputs);
+            }
 
         } catch (InputReadFailedException | IOException e) {
             throw new ExperimentExecutionException(

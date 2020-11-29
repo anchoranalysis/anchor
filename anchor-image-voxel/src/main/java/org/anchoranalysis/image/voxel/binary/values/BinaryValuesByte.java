@@ -27,10 +27,10 @@
 package org.anchoranalysis.image.voxel.binary.values;
 
 import java.io.Serializable;
-import org.anchoranalysis.image.voxel.buffer.primitive.PrimitiveConverter;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import org.anchoranalysis.image.voxel.buffer.primitive.PrimitiveConverter;
 
 /**
  * Two values representing {@code byte} binary states in an unsigned-byte buffer e.g. {@code 0} for

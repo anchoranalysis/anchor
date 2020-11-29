@@ -29,7 +29,7 @@ package org.anchoranalysis.experiment.bean.processor;
 import java.util.function.DoubleSupplier;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.log.MessageLogger;
-import org.anchoranalysis.core.text.LanguageUtilities;
+import org.anchoranalysis.core.value.LanguageUtilities;
 import org.anchoranalysis.experiment.task.TaskStatistics;
 
 @AllArgsConstructor

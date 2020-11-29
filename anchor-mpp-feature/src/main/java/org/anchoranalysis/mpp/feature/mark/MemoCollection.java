@@ -29,7 +29,7 @@ package org.anchoranalysis.mpp.feature.mark;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
+import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
 import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
 import org.anchoranalysis.feature.energy.EnergyTotal;

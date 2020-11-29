@@ -30,7 +30,7 @@ import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import org.anchoranalysis.core.params.KeyValueParams;
+import org.anchoranalysis.core.value.KeyValueParams;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInputParams;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
@@ -46,7 +46,7 @@ public class FeatureInputMark implements FeatureInputParams {
     private final Optional<KeyValueParams> params;
 
     public FeatureInputMark(Mark mark, Optional<Dimensions> dimensions) {
-        this(mark, dimensions, Optional.empty() );
+        this(mark, dimensions, Optional.empty());
     }
 
     public FeatureInputMark(Mark mark, Dimensions dimensions, KeyValueParams params) {

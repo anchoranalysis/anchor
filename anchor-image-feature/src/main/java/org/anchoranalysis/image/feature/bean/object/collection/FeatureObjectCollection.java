@@ -30,8 +30,12 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.image.feature.object.input.FeatureInputObjectCollection;
+import org.anchoranalysis.image.feature.input.FeatureInputObjectCollection;
 
+/**
+ * A base class for a feature that accepts a {@link
+ * org.anchoranalysis.image.voxel.object.ObjectCollection} as input.
+ */
 public abstract class FeatureObjectCollection extends Feature<FeatureInputObjectCollection> {
 
     @Override

@@ -103,7 +103,7 @@ class ConsiderNeighbors {
     public static boolean considerVisitMarkRaster(
             ConsiderVisit considerVisit, Point3i point, int distance, ObjectMask outline) {
 
-        BinaryValuesByte bvb = outline.binaryValuesByte();
+        BinaryValuesByte binaryValues = outline.binaryValuesByte();
 
         if (!outline.extent().contains(point)) {
             return false;
@@ -113,7 +113,7 @@ class ConsiderNeighbors {
         int offset = outline.extent().offsetSlice(point);
 
         // Check if the buffer allows us to read the pixel
-        if (buffer.getRaw(offset) == bvb.getOffByte()) {
+        if (buffer.getRaw(offset) == binaryValues.getOffByte()) {
             return false;
         }
 
@@ -122,7 +122,7 @@ class ConsiderNeighbors {
             return false;
         }
 
-        buffer.putRaw(offset, bvb.getOffByte());
+        buffer.putRaw(offset, binaryValues.getOffByte());
 
         return true;
     }

@@ -38,7 +38,7 @@ import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
  * Converts voxel buffers to a unsigned 16-bit buffer, scaling against the maximum value in each
  * data-type.
  *
- * <p>There is no clipping of values, but some values might become very small.
+ * <p>There is no clamping of values, but some values might become very small.
  *
  * @author Owen Feehan
  */
@@ -62,7 +62,7 @@ public final class ToShortScaleByType extends VoxelsConverter<UnsignedShortBuffe
 
     @Override
     protected void convertUnsignedInt(UnsignedIntBuffer in, UnsignedShortBuffer out) {
-        out.putLongClipped(in.getUnsigned() / DIVIDE_BY_UNSIGNED_INT);
+        out.putLongClamped(in.getUnsigned() / DIVIDE_BY_UNSIGNED_INT);
     }
 
     /**

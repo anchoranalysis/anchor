@@ -38,13 +38,13 @@ final class VoxelBufferFloat extends VoxelBuffer<FloatBuffer> {
 
     /**
      * Create from a {@link FloatBuffer} without any underlying bytes.
-     * 
+     *
      * @param buffer the buffer
      */
     public VoxelBufferFloat(FloatBuffer buffer) {
         this.delegate = buffer;
     }
-        
+
     @Override
     public FloatBuffer buffer() {
         return delegate;

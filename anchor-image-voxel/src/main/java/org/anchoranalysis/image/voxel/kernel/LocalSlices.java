@@ -26,21 +26,23 @@
 
 package org.anchoranalysis.image.voxel.kernel;
 
+import java.util.Optional;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 
-// Caches a small number of slices around which we wish to work, so the memory
-//  we are interested in is nearby
+/**
+ * Caches a small number of slices around which we wish to work, so the memory is efficiently
+ * accessed.
+ *
+ * @author Owen Feehan
+ */
 public class LocalSlices {
 
-    private final byte[][] arr;
+    private final byte[][] array;
     private final int shift;
 
-    // Loads the local slices
     public LocalSlices(int z, int kernelSize, Voxels<UnsignedByteBuffer> voxels) {
-        super();
-
-        arr = new byte[kernelSize][];
+        array = new byte[kernelSize][];
 
         shift = ((kernelSize - 1) / 2);
 
@@ -49,15 +51,21 @@ public class LocalSlices {
             int rel = z + i - shift;
 
             if (rel >= 0 && rel < voxels.extent().z()) {
-                arr[i] = voxels.sliceBuffer(rel).array();
+                array[i] = voxels.sliceBuffer(rel).array();
             }
         }
     }
 
-    // All local access is done relative (e.g. -1, -2, +1, +2 etc.)
-    // If an invalid index is requested null is returned
-    public UnsignedByteBuffer getLocal(int rel) {
-        byte[] slice = arr[rel + shift];
-        return slice != null ? UnsignedByteBuffer.wrapRaw(slice) : null;
+    /**
+     * All local access is indexed relative (e.g. -1, -2, +1, +2 etc.)
+     *
+     * <p>If an invalid index is requested, then {@link Optional#empty} is returned.
+     *
+     * @param relativeZIndex the shift in the z index relative to the current z-slice's index
+     * @return the buffer corresponding to the z-index, if it exists.
+     */
+    public Optional<UnsignedByteBuffer> getLocal(int relativeZIndex) {
+        byte[] slice = array[relativeZIndex + shift];
+        return Optional.ofNullable(slice).map(UnsignedByteBuffer::wrapRaw);
     }
 }

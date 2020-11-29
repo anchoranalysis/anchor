@@ -29,17 +29,18 @@ package org.anchoranalysis.image.voxel.object.morphological;
 import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxelsFactory;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.kernel.ApplyKernel;
 import org.anchoranalysis.image.voxel.kernel.BinaryKernel;
+import org.anchoranalysis.image.voxel.kernel.morphological.DilationKernelFactory;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.image.voxel.object.morphological.accept.AcceptIterationConditon;
-import org.anchoranalysis.spatial.extent.Extent;
+import org.anchoranalysis.image.voxel.object.morphological.predicate.AcceptIterationPredicate;
+import org.anchoranalysis.spatial.Extent;
 import org.anchoranalysis.spatial.point.Point3i;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -93,8 +94,8 @@ public class MorphologicalDilation {
                 backgroundVb,
                 minIntensityValue,
                 Optional.empty(),
-                new DilationKernelFactory(SelectDimensionsFactory.of(do3D),false,bigNeighborhood)
-                );
+                new DilationKernelFactory(
+                        SelectDimensionsFactory.of(do3D), false, bigNeighborhood));
     }
 
     /**
@@ -115,26 +116,26 @@ public class MorphologicalDilation {
             int iterations,
             Optional<Voxels<UnsignedByteBuffer>> background,
             int minIntensityValue,
-            Optional<AcceptIterationConditon> acceptConditions,
+            Optional<AcceptIterationPredicate> acceptConditions,
             DilationKernelFactory dilationKernelFactory)
             throws CreateException {
 
         BinaryKernel kernelDilation =
                 dilationKernelFactory.createDilationKernel(
-                        voxelsBinary.binaryValues().createByte(),
-                        background,
-                        minIntensityValue
-                        );
+                        voxelsBinary.binaryValues().createByte(), background, minIntensityValue);
 
         Voxels<UnsignedByteBuffer> voxels = voxelsBinary.voxels();
-        
+
         for (int i = 0; i < iterations; i++) {
             Voxels<UnsignedByteBuffer> next =
-                    ApplyKernel.apply(kernelDilation, voxels, voxelsBinary.binaryValues().createByte());
+                    ApplyKernel.apply(
+                            kernelDilation, voxels, voxelsBinary.binaryValues().createByte());
 
             try {
                 if (acceptConditions.isPresent()
-                        && !acceptConditions.get().acceptIteration(next, voxelsBinary.binaryValues())) {
+                        && !acceptConditions
+                                .get()
+                                .acceptIteration(next, voxelsBinary.binaryValues())) {
                     break;
                 }
             } catch (OperationFailedException e) {

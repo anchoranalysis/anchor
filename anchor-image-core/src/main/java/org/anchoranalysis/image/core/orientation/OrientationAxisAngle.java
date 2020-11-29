@@ -30,7 +30,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Value;
 import org.anchoranalysis.spatial.point.Vector3d;
 import org.anchoranalysis.spatial.rotation.RotationMatrix;
-import org.anchoranalysis.spatial.rotation.RotationMatrixFromAxisAngleCreator;
+import org.anchoranalysis.spatial.rotation.factory.RotateAxisAngle;
 
 /**
  * An orientation in axis-angle representation.
@@ -63,7 +63,7 @@ public class OrientationAxisAngle extends Orientation {
 
     @Override
     public RotationMatrix createRotationMatrix() {
-        return new RotationMatrixFromAxisAngleCreator(axis, angle).createRotationMatrix();
+        return new RotateAxisAngle(axis, angle).create();
     }
 
     @Override
@@ -121,7 +121,7 @@ public class OrientationAxisAngle extends Orientation {
     }
 
     @Override
-    public int getNumDims() {
+    public int numberDimensions() {
         return 3;
     }
 }

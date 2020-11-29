@@ -27,11 +27,13 @@
 package org.anchoranalysis.experiment.bean.task;
 
 import com.google.common.base.Preconditions;
+import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
-import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.core.memory.MemoryUtilities;
+import org.anchoranalysis.core.exception.friendly.AnchorFriendlyCheckedException;
+import org.anchoranalysis.core.log.error.ErrorReporter;
+import org.anchoranalysis.core.system.MemoryUtilities;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.bean.io.InputOutputExperiment;
@@ -81,7 +83,7 @@ import org.apache.commons.lang.time.StopWatch;
  */
 public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Task<T, S>> {
 
-    public static final String OUTPUT_NAME_MANIFEST = "job_manifest";
+    public static final String OUTPUT_MANIFEST = "job_manifest";
 
     /** Is the execution-time of the task per-input expected to be very quick to execute? */
     public abstract boolean hasVeryQuickPerInputExecution();
@@ -91,13 +93,18 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
      *
      * @param outputter the output-manager for the experiment (not for an individual job)
      * @param concurrencyPlan available numbers of processors that can call {@link #executeJob}
+     * @param inputs a list of inputs, each will result in at least one call to {@link
+     *     #executeJob(ParametersUnbound)}.
      * @param params the experiment-parameters
      * @return the shared-state that is passed to each call to {@link #executeJob} and to {@link
      *     #afterAllJobsAreExecuted}.
      * @throws ExperimentExecutionException
      */
     public abstract S beforeAnyJobIsExecuted(
-            Outputter outputter, ConcurrencyPlan concurrencyPlan, ParametersExperiment params)
+            Outputter outputter,
+            ConcurrencyPlan concurrencyPlan,
+            List<T> inputs,
+            ParametersExperiment params)
             throws ExperimentExecutionException;
 
     /**
@@ -192,6 +199,7 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
                 paramsUnbound.getSharedState(),
                 manifestTask,
                 paramsUnbound.getParametersExperiment().isDetailedLogging(),
+                paramsUnbound.getParametersExperiment().getContext(),
                 new InputOutputContextStateful(
                         paramsUnbound.getParametersExperiment().getExperimentArguments(),
                         outputterTask,
@@ -223,24 +231,22 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
 
             if (params.isDetailedLogging()) {
 
-                loggerJob.logFormatted(
-                        "File processing started: %s", params.getInput().name());
+                loggerJob.logFormatted("File processing started: %s", params.getInput().name());
             }
 
             executeJobAdditionalOutputs(params);
 
             successfullyFinished = true;
-
+        } catch (AnchorFriendlyCheckedException e) {
+            params.getLogger()
+                    .errorReporter()
+                    .recordError(Task.class, e.friendlyMessageHierarchy());
+            processExceptionAfterRecordingError(loggerJob, suppressExceptions, e);
         } catch (Throwable e) { // NOSONAR
             // We need to catch both exceptions and errors in order to recover from failure in
             // the specific task. Other tasks will continue executing.
             params.getLogger().errorReporter().recordError(Task.class, e);
-            loggerJob.log(
-                    "This error was fatal. The specific job will end early, but the experiment will otherwise continue.");
-            if (!suppressExceptions) {
-                throw new JobExecutionException("Job encountered a fatal error", e);
-            }
-
+            processExceptionAfterRecordingError(loggerJob, suppressExceptions, e);
         } finally {
 
             stopWatchFile.stop();
@@ -255,6 +261,16 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
             loggerJob.close(successfullyFinished);
         }
         return successfullyFinished;
+    }
+
+    private static void processExceptionAfterRecordingError(
+            StatefulMessageLogger loggerJob, boolean suppressExceptions, Throwable e)
+            throws JobExecutionException {
+        loggerJob.log(
+                "This error was fatal. The specific job will end early, but the experiment will otherwise continue.");
+        if (!suppressExceptions) {
+            throw new JobExecutionException("Job encountered a fatal error", e);
+        }
     }
 
     private void executeJobAdditionalOutputs(InputBound<T, S> params) throws JobExecutionException {
@@ -273,6 +289,8 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
             params.getInput().close(params.getLogger().errorReporter());
         }
 
-        params.getOutputter().writerSelective().write(OUTPUT_NAME_MANIFEST, ManifestGenerator::new, params::getManifest);
+        params.getOutputter()
+                .writerSelective()
+                .write(OUTPUT_MANIFEST, ManifestGenerator::new, params::getManifest);
     }
 }

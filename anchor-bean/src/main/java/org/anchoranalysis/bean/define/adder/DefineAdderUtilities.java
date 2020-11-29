@@ -31,8 +31,8 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.define.Define;
-import org.anchoranalysis.bean.xml.error.BeanXmlException;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.bean.xml.exception.BeanXmlException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class DefineAdderUtilities {

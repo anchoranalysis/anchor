@@ -29,10 +29,9 @@ package org.anchoranalysis.io.generator.combined;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.io.generator.ConcatenateFileTypes;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.manifest.file.FileType;
-import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.output.namestyle.OutputNameStyle;
@@ -41,54 +40,36 @@ import org.anchoranalysis.io.output.writer.ElementWriter;
 
 /**
  * A helper list of {@link ElementWriter}s used in {@link CombinedListGenerator}.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  * @param <T> element-type
  */
 class CombinedList<T> {
 
     private List<OptionalNameValue<Generator<T>>> list = new ArrayList<>();
 
-    public Optional<FileType[]> getFileTypes(OutputWriteSettings outputWriteSettings)
-            throws OperationFailedException {
-
-        List<FileType> all = new ArrayList<>();
-
-        for (OptionalNameValue<Generator<T>> namedGenerator : list) {
-            Optional<FileType[]> fileTypeArray =
-                    namedGenerator.getValue().getFileTypes(outputWriteSettings);
-            fileTypeArray.ifPresent(
-                    fileTypes -> {
-                        for (int i = 0; i < fileTypes.length; i++) {
-                            all.add(fileTypes[i]);
-                        }
-                    });
-        }
-
-        if (!all.isEmpty()) {
-            return Optional.of(all.toArray(new FileType[] {}));
-        } else {
-            return Optional.empty();
-        }
-    }
-
-    public void write(T element, OutputNameStyle outputNameStyle, OutputterChecked outputter)
+    public FileType[] write(T element, OutputNameStyle outputNameStyle, OutputterChecked outputter)
             throws OutputWriteFailedException {
+
+        ConcatenateFileTypes collect = new ConcatenateFileTypes(list.size() > 1);
 
         for (OptionalNameValue<Generator<T>> namedGenerator : list) {
             namedGenerator.getName().ifPresent(outputNameStyle::setOutputName);
-            namedGenerator.getValue().write(element, outputNameStyle, outputter);
+            collect.add(namedGenerator.getValue().write(element, outputNameStyle, outputter));
         }
+
+        return collect.allFileTypes();
     }
 
-    public int writeWithIndex(
+    public FileType[] writeWithIndex(
             T element,
-            String index, 
-            IndexableOutputNameStyle outputNameStyle, OutputterChecked outputter)
+            String index,
+            IndexableOutputNameStyle outputNameStyle,
+            OutputterChecked outputter)
             throws OutputWriteFailedException {
 
-        int maxWritten = -1;
+        ConcatenateFileTypes collect = new ConcatenateFileTypes(list.size() > 1);
+
         for (OptionalNameValue<Generator<T>> namedGenerator : list) {
 
             if (namedGenerator.getName().isPresent()) {
@@ -96,11 +77,13 @@ class CombinedList<T> {
                 outputNameStyle.setOutputName(namedGenerator.getName().get()); // NOSONAR
             }
 
-            int numberWritten = namedGenerator.getValue().writeWithIndex(element, index, outputNameStyle, outputter);
-            maxWritten = Math.max(maxWritten, numberWritten);
+            collect.add(
+                    namedGenerator
+                            .getValue()
+                            .writeWithIndex(element, index, outputNameStyle, outputter));
         }
 
-        return maxWritten;
+        return collect.allFileTypes();
     }
 
     /**

@@ -38,7 +38,7 @@ public interface VoxelsArithmetic {
     void addTo(ObjectMask object, int valueToBeAdded);
 
     /**
-     * Multiplies the value of all voxels by a factor
+     * Multiplies the value of all voxels by a factor.
      *
      * @param factor what to multiply-by
      */
@@ -51,6 +51,13 @@ public interface VoxelsArithmetic {
      * @param factor constant-value to multiply by
      */
     void multiplyBy(ObjectMask object, double factor);
+
+    /**
+     * Divides the value of all voxels by a scalar constant.
+     *
+     * @param divisor what to divide-by
+     */
+    void divideBy(int divisor);
 
     /**
      * Subtracts all current voxel-values from a constant-value

@@ -29,15 +29,15 @@ package org.anchoranalysis.overlay.collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.function.IntPredicate;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.anchoranalysis.core.color.ColorList;
 import org.anchoranalysis.core.color.RGBColor;
-import org.anchoranalysis.core.index.IndicesSelection;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.overlay.Overlay;
 import org.anchoranalysis.overlay.writer.DrawOverlay;
-import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.box.BoundingBox;
 
 @AllArgsConstructor
 public class ColoredOverlayCollection implements Iterable<Overlay> {
@@ -94,7 +94,7 @@ public class ColoredOverlayCollection implements Iterable<Overlay> {
         return colors;
     }
 
-    public ColoredOverlayCollection createSubsetFromIDs(IndicesSelection indices) {
+    public ColoredOverlayCollection createSubsetFromIDs(IntPredicate predicateOnIndex) {
 
         ColoredOverlayCollection out = new ColoredOverlayCollection();
 
@@ -102,7 +102,7 @@ public class ColoredOverlayCollection implements Iterable<Overlay> {
         for (int i = 0; i < size(); i++) {
             Overlay overlay = get(i);
 
-            if (indices.contains(overlay.getId())) {
+            if (predicateOnIndex.test(overlay.getIdentifier())) {
                 out.add(overlay, getColorList().get(i));
             }
         }

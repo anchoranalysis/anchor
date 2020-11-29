@@ -31,7 +31,7 @@ import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.bean.initializable.InitializableBean;
 import org.anchoranalysis.bean.initializable.params.NullInitParams;
-import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.log.Logger;
 
 /**

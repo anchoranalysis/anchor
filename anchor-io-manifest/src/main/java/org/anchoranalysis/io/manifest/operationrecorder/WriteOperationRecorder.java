@@ -33,9 +33,8 @@ import org.anchoranalysis.io.manifest.directory.SubdirectoryBase;
 
 /**
  * Makes a record of an output written to the filesystem.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public interface WriteOperationRecorder {
 
@@ -56,13 +55,13 @@ public interface WriteOperationRecorder {
     /**
      * Records a subdirectory that has been recated.
      *
-     * @param relativeFolderPath the path of the subdirectory relative to the parent
+     * @param relativeDirectoryPath the path of the subdirectory relative to the parent
      * @param manifestDescription a description of the directory
      * @param folderWrite the folder object to write
      * @return
      */
     WriteOperationRecorder recordSubdirectoryCreated(
-            Path relativeFolderPath,
+            Path relativeDirectoryPath,
             ManifestDirectoryDescription manifestDescription,
             SubdirectoryBase folderWrite);
 }

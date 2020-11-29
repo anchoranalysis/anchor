@@ -34,7 +34,7 @@ import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedShortBuffer;
 /**
  * Converts voxel buffers to a unsigned 16-bit buffer without scaling any values.
  *
- * <p>Values greater than 65535 are clipped to 65535 .
+ * <p>Values greater than 65535 are clamping to 65535 .
  *
  * @author Owen Feehan
  */
@@ -52,11 +52,11 @@ public final class ToShortNoScaling extends VoxelsConverter<UnsignedShortBuffer>
 
     @Override
     protected void convertUnsignedInt(UnsignedIntBuffer in, UnsignedShortBuffer out) {
-        out.putLongClipped(in.getUnsigned());
+        out.putLongClamped(in.getUnsigned());
     }
 
     @Override
     protected void convertFloat(FloatBuffer in, UnsignedShortBuffer out) {
-        out.putFloatClipped(in.get());
+        out.putFloatClamped(in.get());
     }
 }

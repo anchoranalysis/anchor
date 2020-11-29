@@ -27,10 +27,12 @@
 package org.anchoranalysis.io.generator.sequence;
 
 import java.nio.file.Path;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Predicate;
+import lombok.Getter;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.directory.Subdirectory;
 import org.anchoranalysis.io.manifest.directory.SubdirectoryBase;
@@ -42,34 +44,31 @@ import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
 
 /**
  * A {@link SubdirectoryBase} entry in the manifest that is indexable.
- * 
- * <p>This means it follows a predictable pattern, and entries can be
- * predicated from the manifest.
- * 
- * <p>See {@link Subdirectory} for subdirectories that
- * have no indexable pattern.
- * 
- * @author Owen Feehan
  *
+ * <p>This means it follows a predictable pattern, and entries can be predicated from the manifest.
+ *
+ * <p>See {@link Subdirectory} for subdirectories that have no indexable pattern.
+ *
+ * @author Owen Feehan
  */
 class IndexableSubdirectory extends SubdirectoryBase {
 
     /** */
     private static final long serialVersionUID = -8404795823155555672L;
 
-    private IndexableOutputNameStyle outputName;
+    @Getter private IndexableOutputNameStyle outputName;
 
-    private List<FileType> template;
+    @Getter private Set<FileType> fileTypes;
 
     // Constructor
     public IndexableSubdirectory(IndexableOutputNameStyle outputName) {
         super();
         this.outputName = outputName;
-        this.template = new ArrayList<>();
+        this.fileTypes = new HashSet<>();
     }
 
     public void addFileType(FileType fileType) {
-        this.template.add(fileType);
+        this.fileTypes.add(fileType);
     }
 
     // Every time a file is written, we do a check to ensure the outputName
@@ -91,19 +90,18 @@ class IndexableSubdirectory extends SubdirectoryBase {
      * then something is wrong and we throw an exception.
      */
     @Override
-    public void findFile(List<OutputtedFile> foundList, Predicate<OutputtedFile> predicate, boolean recursive) throws FindFailedException {
-        
-        if(!description().isPresent()) {
-            throw new FindFailedException("No description has been assigned, which is a prerequisite for this operation");
-        }
-        
-        IncompleteElementRange elements = description().get().getSequenceType().elementRange(); // NOSONAR
+    public void findFile(
+            List<OutputtedFile> foundList, Predicate<OutputtedFile> predicate, boolean recursive)
+            throws FindFailedException {
+
+        IncompleteElementRange elements = description().getSequenceType().elementRange(); // NOSONAR
 
         int i = elements.getMinimumIndex();
         do {
             // We loop through each file type
-            for (FileType fileType : template) {
-                OutputtedFile virtualFile = createOutputtedFile(elements.stringRepresentationForElement(i), fileType);
+            for (FileType fileType : fileTypes) {
+                OutputtedFile virtualFile =
+                        createOutputtedFile(elements.stringRepresentationForElement(i), fileType);
                 if (predicate.test(virtualFile)) {
                     foundList.add(virtualFile);
                 }
@@ -117,7 +115,7 @@ class IndexableSubdirectory extends SubdirectoryBase {
     private OutputtedFile createOutputtedFile(String index, FileType fileType) {
         return new OutputtedFile(
                 this,
-                outputName.getFilenameWithoutExtension(index) + "." + fileType.getFileExtension(),
+                outputName.filenameWithoutExtension(index) + "." + fileType.getFileExtension(),
                 outputName.getOutputName(),
                 index,
                 Optional.of(fileType.getManifestDescription()));

@@ -29,7 +29,7 @@ package org.anchoranalysis.io.input.bean.path.provider;
 import java.nio.file.Path;
 import org.anchoranalysis.bean.provider.Provider;
 import org.anchoranalysis.bean.shared.params.ParamsBean;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 
 public abstract class FilePathProvider extends ParamsBean<FilePathProvider>
         implements Provider<Path> {

@@ -26,6 +26,7 @@
 package org.anchoranalysis.image.voxel.buffer.primitive;
 
 import java.nio.IntBuffer;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 /**
@@ -40,10 +41,11 @@ import lombok.Getter;
  *
  * @author Owen Feehan
  */
+@EqualsAndHashCode(callSuper = true)
 public final class UnsignedIntBuffer extends UnsignedBuffer {
 
     /** The underlying storage buffer, to which calls are delegated with our without conversion. */
-    @Getter private final IntBuffer delegate;
+    @Getter @EqualsAndHashCode.Exclude private final IntBuffer delegate;
 
     /**
      * Allocates a new (direct) buffer of unsigned-ints.

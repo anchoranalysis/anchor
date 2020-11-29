@@ -37,8 +37,8 @@ import loci.formats.IFormatReader;
 import loci.formats.meta.IMetadata;
 import lombok.Getter;
 import lombok.experimental.Accessors;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.progress.ProgressReporter;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.channel.factory.ChannelFactorySingleType;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
@@ -46,7 +46,7 @@ import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.core.stack.TimeSequence;
 import org.anchoranalysis.image.io.ImageIOException;
-import org.anchoranalysis.image.io.stack.OpenedRaster;
+import org.anchoranalysis.image.io.stack.input.OpenedRaster;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.io.bioformats.bean.options.ReadOptions;
 import org.anchoranalysis.io.bioformats.copyconvert.ConvertTo;
@@ -96,14 +96,13 @@ public class BioformatsOpenedRaster implements OpenedRaster {
     }
 
     @Override
-    public TimeSequence open(int seriesIndex, ProgressReporter progressReporter)
-            throws ImageIOException {
+    public TimeSequence open(int seriesIndex, Progress progress) throws ImageIOException {
 
         int pixelType = reader.getPixelType();
 
         VoxelDataType dataType = multiplexFormat(pixelType);
 
-        return openAsType(seriesIndex, progressReporter, dataType);
+        return openAsType(seriesIndex, progress, dataType);
     }
 
     @Override
@@ -117,12 +116,12 @@ public class BioformatsOpenedRaster implements OpenedRaster {
     }
 
     @Override
-    public int bitDepth() throws ImageIOException {
+    public int bitDepth() {
         return bitsPerPixel;
     }
 
     @Override
-    public boolean isRGB() throws ImageIOException {
+    public boolean isRGB() {
         return rgb;
     }
 
@@ -145,8 +144,7 @@ public class BioformatsOpenedRaster implements OpenedRaster {
     }
 
     /** Opens as a specific data-type */
-    private TimeSequence openAsType(
-            int seriesIndex, ProgressReporter progressReporter, VoxelDataType dataType)
+    private TimeSequence openAsType(int seriesIndex, Progress progress, VoxelDataType dataType)
             throws ImageIOException {
 
         try {
@@ -156,23 +154,23 @@ public class BioformatsOpenedRaster implements OpenedRaster {
 
             reader.setSeries(seriesIndex);
 
-            TimeSequence ts = new TimeSequence();
+            TimeSequence timeSequence = new TimeSequence();
 
             Dimensions dimensions = dimensionsForSeries(seriesIndex);
 
             // Assumes order of time first, and then channels
             List<Channel> listAllChannels =
-                    createUninitialisedChannels(dimensions, ts, multiplexVoxelDataType(dataType));
+                    createUninitialisedChannels(
+                            dimensions, timeSequence, multiplexVoxelDataType(dataType));
 
-            copyBytesIntoChannels(
-                    listAllChannels, dimensions, progressReporter, dataType, readOptions);
+            copyBytesIntoChannels(listAllChannels, dimensions, progress, dataType, readOptions);
 
             LOG.debug(
                     String.format(
                             "Finished opening series %d as %s with z=%d, t=%d",
                             seriesIndex, dataType, reader.getSizeZ(), reader.getSizeT()));
 
-            return ts;
+            return timeSequence;
 
         } catch (FormatException | IOException | IncorrectImageSizeException | CreateException e) {
             throw new ImageIOException(e);
@@ -187,7 +185,7 @@ public class BioformatsOpenedRaster implements OpenedRaster {
         List<Channel> listAllChannels = new ArrayList<>();
 
         for (int t = 0; t < sizeT; t++) {
-            Stack stack = new Stack();
+            Stack stack = new Stack(isRGB());
             for (int c = 0; c < numberChannels; c++) {
 
                 Channel channel = factory.createEmptyUninitialised(dimensions);
@@ -204,7 +202,7 @@ public class BioformatsOpenedRaster implements OpenedRaster {
     private void copyBytesIntoChannels(
             List<Channel> listChannels,
             Dimensions dimensions,
-            ProgressReporter progressReporter,
+            Progress progress,
             VoxelDataType dataType,
             ReadOptions readOptions)
             throws FormatException, IOException, CreateException {
@@ -217,7 +215,7 @@ public class BioformatsOpenedRaster implements OpenedRaster {
         CopyConvert.copyAllFrames(
                 reader,
                 listChannels,
-                progressReporter,
+                progress,
                 new ImageFileShape(dimensions, numberChannels, sizeT),
                 convertTo,
                 readOptions);

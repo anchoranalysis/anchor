@@ -29,14 +29,15 @@ package org.anchoranalysis.mpp.io.marks.generator;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.idgetter.IDGetter;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.identifier.getter.IdentifierGetter;
 import org.anchoranalysis.image.core.stack.DisplayStack;
+import org.anchoranalysis.image.core.stack.RGBStack;
 import org.anchoranalysis.image.core.stack.Stack;
-import org.anchoranalysis.image.core.stack.rgb.RGBStack;
-import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
 import org.anchoranalysis.image.io.stack.ConvertDisplayStackToRGB;
-import org.anchoranalysis.image.io.stack.StackWriteOptions;
+import org.anchoranalysis.image.io.stack.output.StackWriteAttributes;
+import org.anchoranalysis.image.io.stack.output.StackWriteAttributesFactory;
+import org.anchoranalysis.image.io.stack.output.generator.RasterGeneratorSelectFormat;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipWithFlags;
@@ -47,17 +48,17 @@ import org.anchoranalysis.overlay.collection.ColoredOverlayCollection;
 import org.anchoranalysis.overlay.writer.DrawOverlay;
 
 public abstract class MarksGeneratorBase
-        extends RasterGenerator<ColoredMarksWithDisplayStack> {
+        extends RasterGeneratorSelectFormat<ColoredMarksWithDisplayStack> {
 
     @Getter @Setter private String manifestDescriptionFunction = "marks";
 
     private DrawOverlay writer;
-    private IDGetter<Overlay> idGetter;
+    private IdentifierGetter<Overlay> idGetter;
     private RegionMembershipWithFlags regionMembership;
 
     public MarksGeneratorBase(
             DrawOverlay writer,
-            IDGetter<Overlay> idGetter,
+            IdentifierGetter<Overlay> idGetter,
             RegionMembershipWithFlags regionMembership) {
         super();
         this.writer = writer;
@@ -83,20 +84,15 @@ public abstract class MarksGeneratorBase
         }
     }
 
-    protected abstract DisplayStack background(DisplayStack stack) throws OperationFailedException;
-
-    @Override
-    public boolean isRGB() {
-        return true;
-    }
-
     @Override
     public Optional<ManifestDescription> createManifestDescription() {
         return Optional.of(new ManifestDescription("raster", manifestDescriptionFunction));
     }
 
     @Override
-    public StackWriteOptions writeOptions() {
-        return StackWriteOptions.rgbMaybe3D();
+    public StackWriteAttributes guaranteedImageAttributes() {
+        return StackWriteAttributesFactory.rgbMaybe3D();
     }
+
+    protected abstract DisplayStack background(DisplayStack stack) throws OperationFailedException;
 }

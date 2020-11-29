@@ -30,8 +30,8 @@ import java.io.PrintStream;
 import java.nio.file.Path;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.io.input.csv.CSVReader;
-import org.anchoranalysis.io.input.csv.CSVReaderException;
 import org.anchoranalysis.io.input.csv.CSVReader.OpenedCSVFile;
+import org.anchoranalysis.io.input.csv.CSVReaderException;
 import org.apache.commons.lang.ArrayUtils;
 
 @AllArgsConstructor

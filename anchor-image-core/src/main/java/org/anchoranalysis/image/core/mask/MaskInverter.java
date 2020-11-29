@@ -64,12 +64,12 @@ public class MaskInverter {
      */
     public static void invert(Mask mask) {
 
-        BinaryValues bv = mask.binaryValues();
-        BinaryValuesByte bvb = bv.createByte();
-        invertVoxels(mask.voxels(), bvb);
+        BinaryValues binaryValues = mask.binaryValues();
+        BinaryValuesByte binaryValuesByte = binaryValues.createByte();
+        invertVoxels(mask.voxels(), binaryValuesByte);
     }
 
-    private static void invertVoxels(Voxels<UnsignedByteBuffer> voxels, BinaryValuesByte bvb) {
+    private static void invertVoxels(Voxels<UnsignedByteBuffer> voxels, BinaryValuesByte binaryValues) {
         for (int z = 0; z < voxels.extent().z(); z++) {
 
             UnsignedByteBuffer buffer = voxels.sliceBuffer(z);
@@ -80,10 +80,10 @@ public class MaskInverter {
 
                     byte val = buffer.getRaw(offset);
 
-                    if (val == bvb.getOnByte()) {
-                        buffer.putRaw(offset, bvb.getOffByte());
+                    if (val == binaryValues.getOnByte()) {
+                        buffer.putRaw(offset, binaryValues.getOffByte());
                     } else {
-                        buffer.putRaw(offset, bvb.getOnByte());
+                        buffer.putRaw(offset, binaryValues.getOnByte());
                     }
 
                     offset++;

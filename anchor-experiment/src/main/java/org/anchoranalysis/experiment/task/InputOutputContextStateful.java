@@ -27,10 +27,10 @@
 package org.anchoranalysis.experiment.task;
 
 import java.nio.file.Path;
-import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.log.MessageLogger;
-import org.anchoranalysis.experiment.ExperimentExecutionArguments;
+import org.anchoranalysis.core.log.error.ErrorReporter;
+import org.anchoranalysis.experiment.arguments.ExecutionArguments;
 import org.anchoranalysis.experiment.log.StatefulMessageLogger;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
@@ -46,14 +46,14 @@ import org.anchoranalysis.io.output.outputter.Outputter;
  */
 public class InputOutputContextStateful implements InputOutputContext {
 
-    private ExperimentExecutionArguments experimentArguments;
+    private ExecutionArguments experimentArguments;
     private Outputter outputter;
 
     private StatefulMessageLogger messageLogger;
     private Logger logger; // Always related to the above two fields
 
     public InputOutputContextStateful(
-            ExperimentExecutionArguments experimentArguments,
+            ExecutionArguments experimentArguments,
             Outputter outputter,
             StatefulMessageLogger logger,
             ErrorReporter errorReporter) {
@@ -67,7 +67,7 @@ public class InputOutputContextStateful implements InputOutputContext {
 
     @Override
     public Path getModelDirectory() {
-        return experimentArguments.getModelDirectory();
+        return experimentArguments.input().getModelDirectory();
     }
 
     @Override
@@ -93,7 +93,7 @@ public class InputOutputContextStateful implements InputOutputContext {
         return messageLogger;
     }
 
-    public ExperimentExecutionArguments getExperimentArguments() {
+    public ExecutionArguments getExperimentArguments() {
         return experimentArguments;
     }
 }

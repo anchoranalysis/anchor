@@ -30,7 +30,7 @@ import java.util.Optional;
 import org.anchoranalysis.core.log.Logger;
 
 /**
- * An object that can be Found or Not-Found
+ * An object that can be {@link Found} or {@link NotFound}.
  *
  * @author Owen Feehan
  * @param <T> object-type

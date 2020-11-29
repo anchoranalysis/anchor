@@ -23,4 +23,5 @@
  * THE SOFTWARE.
  * #L%
  */
+/** The outcome of searching for annotations or images on the file-system. */
 package org.anchoranalysis.annotation.io.image.findable;

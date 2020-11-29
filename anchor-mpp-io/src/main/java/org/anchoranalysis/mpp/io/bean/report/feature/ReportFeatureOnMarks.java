@@ -30,12 +30,12 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
+import org.anchoranalysis.feature.session.calculator.single.FeatureCalculatorSingle;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.mpp.bean.provider.MarkCollectionProvider;
@@ -54,13 +54,13 @@ public class ReportFeatureOnMarks extends ReportFeatureForMPP<FeatureInputMarkCo
     }
 
     @Override
-    public String featureDescription(MPPInitParams so, Logger logger)
+    public String featureDescription(MPPInitParams param, Logger logger)
             throws OperationFailedException {
 
         // Maybe we should duplicate the providers?
         try {
-            init(so, logger);
-            marks.initRecursive(so, logger);
+            init(param, logger);
+            marks.initRecursive(param, logger);
         } catch (InitException e) {
             throw new OperationFailedException(e);
         }

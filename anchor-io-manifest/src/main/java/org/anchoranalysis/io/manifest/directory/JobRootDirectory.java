@@ -34,11 +34,10 @@ import org.anchoranalysis.io.manifest.file.OutputtedFile;
 
 /**
  * The root directory for where outputs for a particular experiment occur.
- * 
- * <p>Subdirectories are recorded in this, but individual files are ignored.
- * 
- * @author Owen Feehan
  *
+ * <p>Subdirectories are recorded in this, but individual files are ignored.
+ *
+ * @author Owen Feehan
  */
 public class JobRootDirectory extends SubdirectoryBase {
 
@@ -55,7 +54,8 @@ public class JobRootDirectory extends SubdirectoryBase {
     }
 
     @Override
-    public void findFile(List<OutputtedFile> foundList, Predicate<OutputtedFile> predicate, boolean recursive) {
+    public void findFile(
+            List<OutputtedFile> foundList, Predicate<OutputtedFile> predicate, boolean recursive) {
         // NOTHING TO DO
     }
 }

@@ -27,7 +27,7 @@ package org.anchoranalysis.image.voxel.arithmetic;
 
 import java.nio.FloatBuffer;
 import java.util.function.IntFunction;
-import org.anchoranalysis.spatial.extent.Extent;
+import org.anchoranalysis.spatial.Extent;
 
 class FloatImplementation extends Base<FloatBuffer> {
 
@@ -37,29 +37,28 @@ class FloatImplementation extends Base<FloatBuffer> {
 
     @Override
     protected void multiplyBuffer(FloatBuffer buffer, double factor) {
-        while (buffer.hasRemaining()) {
-            float mult = (float) (buffer.get() * factor);
-            buffer.put(buffer.position() - 1, mult);
-        }
+        FloatHelper.calculateForEveryVoxel(
+                buffer, value -> BinaryOperationHelper.multiplyByFloat(value, factor));
     }
 
     @Override
     protected void subtractFromBuffer(FloatBuffer buffer, int valueToSubtractFrom) {
-        while (buffer.hasRemaining()) {
-            float newVal = valueToSubtractFrom - buffer.get();
-            buffer.put(buffer.position() - 1, newVal);
-        }
+        FloatHelper.calculateForEveryVoxel(buffer, value -> valueToSubtractFrom - value);
     }
 
     @Override
     protected void addToBufferIndex(FloatBuffer buffer, int index, int valueToBeAdded) {
-        float sum = buffer.get(index) + valueToBeAdded;
-        buffer.put(index, sum);
+        FloatHelper.calculateForEveryVoxel(buffer, value -> value + valueToBeAdded);
     }
 
     @Override
     protected void multiplyByBufferIndex(FloatBuffer buffer, int index, double factor) {
-        float mult = (float) (buffer.get(index) * factor);
-        buffer.put(index, mult);
+        FloatHelper.calculateForIndex(
+                buffer, index, value -> BinaryOperationHelper.multiplyByFloat(value, factor));
+    }
+
+    @Override
+    protected void divideByBuffer(FloatBuffer buffer, int divisor) {
+        FloatHelper.calculateForEveryVoxel(buffer, value -> value / divisor);
     }
 }

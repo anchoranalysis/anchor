@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.mpp.feature.bean.energy.scheme;
 
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.feature.bean.FeatureRelatedBean;
 import org.anchoranalysis.mpp.feature.energy.scheme.EnergyScheme;
 

@@ -28,17 +28,17 @@ package org.anchoranalysis.mpp.io.marks.generator;
 
 import java.util.List;
 import lombok.AllArgsConstructor;
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.idgetter.IDGetter;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.identifier.getter.IdentifierGetter;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
-import org.anchoranalysis.image.core.stack.rgb.RGBStack;
+import org.anchoranalysis.image.core.stack.RGBStack;
 import org.anchoranalysis.overlay.Overlay;
 import org.anchoranalysis.overlay.bean.DrawObject;
 import org.anchoranalysis.overlay.collection.ColoredOverlayCollection;
 import org.anchoranalysis.overlay.writer.DrawOverlay;
 import org.anchoranalysis.overlay.writer.ObjectDrawAttributes;
 import org.anchoranalysis.overlay.writer.PrecalculationOverlay;
-import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.box.BoundingBox;
 
 /**
  * Converts a configuration to a set of object-masks, using a simple {@link DrawObject} for all
@@ -69,7 +69,7 @@ public class SimpleOverlayWriter extends DrawOverlay {
     public void writeOverlaysIfIntersects(
             ColoredOverlayCollection overlays,
             RGBStack stack,
-            IDGetter<Overlay> idGetter,
+            IdentifierGetter<Overlay> idGetter,
             List<BoundingBox> intersectList)
             throws OperationFailedException {
 

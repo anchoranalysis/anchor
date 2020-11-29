@@ -26,8 +26,8 @@
 
 package org.anchoranalysis.experiment.bean.log;
 
-import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.experiment.ExperimentExecutionArguments;
+import org.anchoranalysis.core.log.error.ErrorReporter;
+import org.anchoranalysis.experiment.arguments.ExecutionArguments;
 import org.anchoranalysis.experiment.log.ConsoleMessageLogger;
 import org.anchoranalysis.experiment.log.StatefulMessageLogger;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
@@ -43,7 +43,7 @@ public class ToConsole extends LoggingDestination {
     public StatefulMessageLogger create(
             OutputterChecked outputter,
             ErrorReporter errorReporter,
-            ExperimentExecutionArguments arguments,
+            ExecutionArguments arguments,
             boolean detailedLogging) {
         return new ConsoleMessageLogger();
     }

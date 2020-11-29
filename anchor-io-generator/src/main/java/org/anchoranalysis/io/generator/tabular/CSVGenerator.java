@@ -29,6 +29,7 @@ package org.anchoranalysis.io.generator.tabular;
 import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import org.anchoranalysis.core.format.NonImageFileFormat;
 import org.anchoranalysis.io.generator.OneStageGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
@@ -39,8 +40,8 @@ public abstract class CSVGenerator<T> extends OneStageGenerator<T> {
     private final String manifestFunction;
 
     @Override
-    public String getFileExtension(OutputWriteSettings outputWriteSettings) {
-        return "csv";
+    public String selectFileExtension(OutputWriteSettings outputWriteSettings) {
+        return NonImageFileFormat.CSV.extensionWithoutPeriod();
     }
 
     @Override

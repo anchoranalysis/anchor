@@ -1,3 +1,7 @@
+/**
+ * Features that operate on a <i>pair</i> of {@link
+ * org.anchoranalysis.image.voxel.object.ObjectMask}s.
+ */
 package org.anchoranalysis.image.feature.bean.object.pair;
 /*-
  * #%L

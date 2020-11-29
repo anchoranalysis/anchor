@@ -40,9 +40,9 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.functional.function.CheckedBiFunction;
-import org.anchoranalysis.core.functional.function.CheckedFunction;
-import org.anchoranalysis.core.functional.function.CheckedPredicate;
+import org.anchoranalysis.core.functional.checked.CheckedBiFunction;
+import org.anchoranalysis.core.functional.checked.CheckedFunction;
+import org.anchoranalysis.core.functional.checked.CheckedPredicate;
 
 /** Utilities functions for manipulating or creating {@link java.util.List} in a functional way */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -241,7 +241,7 @@ public class FunctionalList {
     public static <T> List<T> filterToList(Collection<T> collection, Predicate<T> predicate) {
         return collection.stream().filter(predicate).collect(Collectors.toList());
     }
-    
+
     /**
      * Filters a collection and maps the result to a list
      *
@@ -255,8 +255,13 @@ public class FunctionalList {
      * @return a list with only the elements that pass the filter
      * @throws E if an exception is thrown during evaluating the predicate
      */
-    public static <T,E extends Exception> List<T> filterToList(Collection<T> collection, Class<? extends Exception> throwableClass, CheckedPredicate<T,E> predicate) throws E {
-        return CheckedStream.filter( collection.stream(), throwableClass, predicate).collect(Collectors.toList());
+    public static <T, E extends Exception> List<T> filterToList(
+            Collection<T> collection,
+            Class<? extends Exception> throwableClass,
+            CheckedPredicate<T, E> predicate)
+            throws E {
+        return CheckedStream.filter(collection.stream(), throwableClass, predicate)
+                .collect(Collectors.toList());
     }
 
     /**

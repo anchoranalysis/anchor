@@ -29,7 +29,7 @@ package org.anchoranalysis.annotation.io.assignment;
 import lombok.AllArgsConstructor;
 import lombok.Value;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.spatial.extent.Extent;
+import org.anchoranalysis.spatial.Extent;
 
 @Value
 @AllArgsConstructor
@@ -40,8 +40,7 @@ class ObjectMaskPair {
     private final double overlapRatio;
 
     public boolean atBorderXY(Extent extent) {
-        return left.boundingBox().atBorderXY(extent)
-                || right.boundingBox().atBorderXY(extent);
+        return left.boundingBox().atBorderXY(extent) || right.boundingBox().atBorderXY(extent);
     }
 
     public ObjectMask getMultiplex(boolean leftFlag) {

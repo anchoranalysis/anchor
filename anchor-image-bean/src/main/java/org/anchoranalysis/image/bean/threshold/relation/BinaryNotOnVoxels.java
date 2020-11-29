@@ -27,9 +27,9 @@
 package org.anchoranalysis.image.bean.threshold.relation;
 
 import lombok.EqualsAndHashCode;
-import org.anchoranalysis.core.relation.LessThan;
-import org.anchoranalysis.core.relation.RelationToValue;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValues;
+import org.anchoranalysis.math.relation.LessThan;
+import org.anchoranalysis.math.relation.RelationToValue;
 
 /**
  * Selects anything that is <b>not</b> <i>on</i> voxels from a binary mask.

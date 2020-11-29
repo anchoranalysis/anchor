@@ -24,7 +24,7 @@
  * #L%
  */
 /**
- * Factory classes for creating {@link org.anchoranalysis.image.core.channel.Channel} for various voxel
- * data-types.
+ * Factory classes for creating {@link org.anchoranalysis.image.core.channel.Channel} for various
+ * voxel data-types.
  */
 package org.anchoranalysis.image.core.channel.factory;

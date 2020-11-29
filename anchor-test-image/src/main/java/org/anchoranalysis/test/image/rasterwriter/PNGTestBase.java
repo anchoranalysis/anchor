@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -27,12 +27,14 @@ package org.anchoranalysis.test.image.rasterwriter;
 
 import java.io.IOException;
 import java.util.Optional;
+import org.anchoranalysis.core.format.ImageFileFormat;
 import org.anchoranalysis.image.io.ImageIOException;
-import org.anchoranalysis.image.io.bean.stack.StackWriter;
+import org.anchoranalysis.image.io.bean.stack.writer.StackWriter;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedIntVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
+import org.anchoranalysis.test.image.rasterwriter.comparison.ComparisonPlan;
 import org.junit.Test;
 
 /**
@@ -47,9 +49,15 @@ import org.junit.Test;
  *
  * And no other formats are supported.
  *
+ * <p>Note that {@link ComparisonPlan#ComparisonPlan(boolean, Optional, boolean, String)} can be
+ * used to quickly created the saved copies in the resources.
+ *
  * @author Owen Feehan
  */
 public abstract class PNGTestBase extends RasterWriterTestBase {
+
+    private static final ComparisonPlan COMPARISON_PLAN =
+            new ComparisonPlan(true, Optional.of(ImageFileFormat.OME_TIFF), false);
 
     /** All possible voxel types that can be supported. */
     protected static final VoxelDataType[] ALL_SUPPORTED_VOXEL_TYPES = {
@@ -57,7 +65,7 @@ public abstract class PNGTestBase extends RasterWriterTestBase {
     };
 
     public PNGTestBase() {
-        super("png", false, true, Optional.of("ome.xml"));
+        super(ImageFileFormat.PNG, false, COMPARISON_PLAN);
     }
 
     @Test
@@ -70,7 +78,6 @@ public abstract class PNGTestBase extends RasterWriterTestBase {
         tester.testSingleChannel(UnsignedIntVoxelType.INSTANCE);
     }
 
-    @Test(expected = ImageIOException.class)
     public void testSingleChannelRGB() throws ImageIOException, IOException {
         tester.testSingleChannelRGB();
     }
@@ -93,5 +100,10 @@ public abstract class PNGTestBase extends RasterWriterTestBase {
     @Test(expected = ImageIOException.class)
     public void testFourChannels() throws ImageIOException, IOException {
         tester.testFourChannels();
+    }
+
+    @Test(expected = ImageIOException.class)
+    public void testThreeChannelsRGBUnsignedShort() throws ImageIOException, IOException {
+        tester.testThreeChannelsRGB(UnsignedShortVoxelType.INSTANCE);
     }
 }

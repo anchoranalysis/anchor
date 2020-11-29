@@ -26,7 +26,7 @@
 package org.anchoranalysis.io.output.outputter.directory;
 
 import lombok.Getter;
-import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
+import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.io.output.writer.WriterExecuteBeforeEveryOperation;
 
 /**

@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.mpp.bean.points.fitter;
 
-import org.anchoranalysis.core.error.AnchorCheckedException;
+import org.anchoranalysis.core.exception.AnchorCheckedException;
 
 public class InsufficientPointsException extends AnchorCheckedException {
 

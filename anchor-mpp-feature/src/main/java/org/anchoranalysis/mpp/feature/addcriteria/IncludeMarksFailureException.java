@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.mpp.feature.addcriteria;
 
-import org.anchoranalysis.core.error.AnchorCheckedException;
+import org.anchoranalysis.core.exception.AnchorCheckedException;
 
 public class IncludeMarksFailureException extends AnchorCheckedException {
 

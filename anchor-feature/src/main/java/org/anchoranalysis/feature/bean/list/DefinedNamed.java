@@ -27,13 +27,15 @@
 package org.anchoranalysis.feature.bean.list;
 
 import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.SkipInit;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
+import org.anchoranalysis.feature.store.NamedFeatureStoreFactory;
 
 public class DefinedNamed<T extends FeatureInput> extends ReferencedFeatures<T> {
 
@@ -41,23 +43,14 @@ public class DefinedNamed<T extends FeatureInput> extends ReferencedFeatures<T> 
             NamedFeatureStoreFactory.bothNameAndParams();
 
     // START BEAN PROPERTIES
-    @BeanField @SkipInit private List<NamedBean<FeatureListProvider<T>>> list;
+    @BeanField @SkipInit @Getter @Setter private List<NamedBean<FeatureListProvider<T>>> list;
     // END BEAN PROPERTIES
 
     @Override
     public FeatureList<T> create() throws CreateException {
-
         return FeatureListFactory.mapFrom(
                 STORE_FACTORY.createNamedFeatureList(list),
-                ni -> renameFeature(ni.getName(), ni.getValue()));
-    }
-
-    public List<NamedBean<FeatureListProvider<T>>> getList() {
-        return list;
-    }
-
-    public void setList(List<NamedBean<FeatureListProvider<T>>> list) {
-        this.list = list;
+                item -> renameFeature(item.getName(), item.getValue()));
     }
 
     private static <T extends FeatureInput> Feature<T> renameFeature(

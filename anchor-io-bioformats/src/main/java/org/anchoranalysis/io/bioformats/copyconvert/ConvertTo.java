@@ -38,7 +38,7 @@ import org.anchoranalysis.io.bioformats.DestinationChannelForIndex;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-/** 
+/**
  * Converts a subset of raw voxel bytes in a {@code ByteBuffer} to one or more destination channels.
  */
 @RequiredArgsConstructor

@@ -27,7 +27,7 @@ package org.anchoranalysis.core.concurrency;
 
 import java.util.concurrent.PriorityBlockingQueue;
 import java.util.stream.IntStream;
-import org.anchoranalysis.core.functional.function.CheckedFunction;
+import org.anchoranalysis.core.functional.checked.CheckedFunction;
 
 /**
  * Keeps concurrent copies of a model to be used by different threads.

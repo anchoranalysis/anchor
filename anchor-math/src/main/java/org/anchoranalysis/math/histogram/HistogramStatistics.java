@@ -28,7 +28,7 @@ package org.anchoranalysis.math.histogram;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 
 /**
  * Further statistics that can be derived from a histogram in addition to those callable directly

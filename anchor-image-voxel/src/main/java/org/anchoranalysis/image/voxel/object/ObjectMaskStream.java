@@ -41,9 +41,9 @@ import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.functional.CheckedStream;
-import org.anchoranalysis.core.functional.function.CheckedFunction;
-import org.anchoranalysis.core.functional.function.CheckedPredicate;
-import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.core.functional.checked.CheckedFunction;
+import org.anchoranalysis.core.functional.checked.CheckedPredicate;
+import org.anchoranalysis.spatial.box.BoundingBox;
 
 /**
  * A custom "stream" like class for various functional-programming operations on {@link

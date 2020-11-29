@@ -50,10 +50,10 @@ class HelperUtilities {
 
     /*** Creates a bean from a HierarchicalConfiguration */
     public static <T> T createBeanFromConfig(HierarchicalConfiguration config, Object param) {
-        BeanDeclaration subDecl = new XMLBeanDeclaration(config, ".");
+        BeanDeclaration subDeclaration = new XMLBeanDeclaration(config, ".");
 
         @SuppressWarnings("unchecked")
-        T bean = (T) BeanHelper.createBean(subDecl, null, param);
+        T bean = (T) BeanHelper.createBean(subDeclaration, null, param);
 
         return bean;
     }

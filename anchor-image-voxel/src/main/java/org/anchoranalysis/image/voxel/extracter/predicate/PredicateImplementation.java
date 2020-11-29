@@ -28,14 +28,14 @@ package org.anchoranalysis.image.voxel.extracter.predicate;
 import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 import lombok.RequiredArgsConstructor;
-import org.anchoranalysis.core.arithmetic.Counter;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxelsAll;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxelsBoundingBox;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxelsObjectMask;
 import org.anchoranalysis.image.voxel.iterator.process.voxelbuffer.ProcessVoxelBufferUnary;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.math.arithmetic.Counter;
+import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.point.ReadableTuple3i;
 
@@ -70,13 +70,15 @@ public class PredicateImplementation<T> implements VoxelsPredicate {
 
     @Override
     public int countForObject(ObjectMask object) {
-        return countPredicate( (voxelsToProcess,processor) ->
-            IterateVoxelsObjectMask.withVoxelBuffer(object,voxelsToProcess,processor) );
+        return countPredicate(
+                (voxelsToProcess, processor) ->
+                        IterateVoxelsObjectMask.withVoxelBuffer(
+                                object, voxelsToProcess, processor));
     }
 
     @Override
     public boolean higherCountExistsThan(int threshold) {
-        return predicateMatchWithCounter(threshold+1);
+        return predicateMatchWithCounter(threshold + 1);
     }
 
     @Override
@@ -87,50 +89,59 @@ public class PredicateImplementation<T> implements VoxelsPredicate {
 
     @Override
     public ObjectMask deriveObject(BoundingBox box) {
-        
+
         ObjectMask object = new ObjectMask(box);
 
         byte outOn = object.binaryValuesByte().getOnByte();
 
         ReadableTuple3i shiftForMask = Point3i.immutableScale(object.boundingBox().cornerMin(), -1);
-        IterateVoxelsBoundingBox.withTwoMixedBuffers(box, shiftForMask, voxels, object.voxels(), (point, buffer1, buffer2, offset1, offset2) -> {
-            buffer1.position(offset1);
+        IterateVoxelsBoundingBox.withTwoMixedBuffers(
+                box,
+                shiftForMask,
+                voxels,
+                object.voxels(),
+                (point, buffer1, buffer2, offset1, offset2) -> {
+                    buffer1.position(offset1);
 
-            if (predicate.test(buffer1.buffer())) {
-                buffer2.putRaw(offset2, outOn);
-            }
-        });
-        
+                    if (predicate.test(buffer1.buffer())) {
+                        buffer2.putRaw(offset2, outOn);
+                    }
+                });
+
         return object;
     }
-    
+
     private boolean predicateMatchWithCounter(int threshold) {
-        
+
         Counter counter = new Counter();
-        
-        return IterateVoxelsAll.anyPredicateMatch(voxels, buffer -> {
-            if (predicate.test(buffer)) {
-                counter.increment();
-                // We've reached the threshold, positive outcome
-                return counter.getCount()==threshold;
-            } else {
-                return false;
-            }
-        });
+
+        return IterateVoxelsAll.anyPredicateMatch(
+                voxels,
+                buffer -> {
+                    if (predicate.test(buffer)) {
+                        counter.increment();
+                        // We've reached the threshold, positive outcome
+                        return counter.getCount() == threshold;
+                    } else {
+                        return false;
+                    }
+                });
     }
-    
+
     private int countPredicate(BiConsumer<Voxels<T>, ProcessVoxelBufferUnary<T>> consumer) {
 
         // We use an object on the heap, as the lambda cannot reference a variable on the stack.
         Counter counter = new Counter();
-        
-        consumer.accept(voxels, (buffer, offset) -> {
-            buffer.position(offset);
-            if (predicate.test(buffer.buffer())) {
-                counter.increment();
-            }            
-        });
-        
+
+        consumer.accept(
+                voxels,
+                (buffer, offset) -> {
+                    buffer.position(offset);
+                    if (predicate.test(buffer.buffer())) {
+                        counter.increment();
+                    }
+                });
+
         return counter.getCount();
     }
 }

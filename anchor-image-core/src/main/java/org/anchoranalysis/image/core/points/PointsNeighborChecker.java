@@ -27,9 +27,9 @@
 package org.anchoranalysis.image.core.points;
 
 import java.util.List;
-import org.anchoranalysis.spatial.point.Point3i;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.spatial.point.Point3i;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PointsNeighborChecker {

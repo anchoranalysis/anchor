@@ -30,18 +30,18 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.error.BeanDuplicateException;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.bean.exception.BeanDuplicateException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
-import org.anchoranalysis.core.progress.ProgressReporter;
+import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.stack.Stack;
-import org.anchoranalysis.image.io.channel.ChannelGetter;
-import org.anchoranalysis.image.io.input.ImageInitParamsFactory;
+import org.anchoranalysis.image.io.ImageInitParamsFactory;
+import org.anchoranalysis.image.io.channel.input.ChannelGetter;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 
 /**
@@ -69,17 +69,17 @@ public class ChannelFilter extends AnchorBean<ChannelFilter> implements ChannelG
     }
 
     @Override
-    public Channel getChannel(String name, int timeIndex, ProgressReporter progressReporter)
+    public Channel getChannel(String name, int timeIndex, Progress progress)
             throws GetOperationFailedException {
 
         try {
             if (!name.equals(channelName)) {
-                return channels.getChannel(name, timeIndex, progressReporter);
+                return channels.getChannel(name, timeIndex, progress);
             }
 
             ChannelProvider providerDuplicated = channel.duplicateBean();
 
-            Channel channelSelected = channels.getChannel(name, timeIndex, progressReporter);
+            Channel channelSelected = channels.getChannel(name, timeIndex, progress);
             initProvider(providerDuplicated, channelSelected);
 
             return providerDuplicated.create();
@@ -97,7 +97,7 @@ public class ChannelFilter extends AnchorBean<ChannelFilter> implements ChannelG
     private void initProvider(ChannelProvider provider, Channel channel) throws InitException {
         ImageInitParams soImage = ImageInitParamsFactory.create(context);
         try {
-            soImage.addToStackCollection("input_channel", new Stack(channel));
+            soImage.addToStacks("input_channel", new Stack(channel));
         } catch (OperationFailedException e) {
             throw new InitException(e);
         }

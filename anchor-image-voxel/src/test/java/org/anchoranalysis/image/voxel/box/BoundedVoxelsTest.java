@@ -27,13 +27,12 @@
 package org.anchoranalysis.image.voxel.box;
 
 import java.util.Optional;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.voxel.BoundedVoxels;
-import org.anchoranalysis.image.voxel.BoundedVoxelsFactory;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
-import org.anchoranalysis.spatial.extent.Extent;
-import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.Point3i;
 import org.junit.Test;
 
@@ -45,13 +44,14 @@ public class BoundedVoxelsTest {
      * @throws OperationFailedException
      */
     @Test(expected = OperationFailedException.class)
-    public void testGrowObjectOutsideClipRegion() throws OperationFailedException {
+    public void testGrowObjectOutsideClampRegion() throws OperationFailedException {
 
         // A bounding box that overlaps with the extent
         Extent extent = extent(20);
 
         BoundedVoxels<UnsignedByteBuffer> box =
-                BoundedVoxelsFactory.createByte(new BoundingBox(point(10), extent(15)));
+                VoxelsFactory.getUnsignedByte()
+                        .createBounded(new BoundingBox(point(10), extent(15)));
 
         Point3i grow = point(1);
         box.growBuffer(grow, grow, Optional.of(extent), VoxelsFactory.getUnsignedByte());

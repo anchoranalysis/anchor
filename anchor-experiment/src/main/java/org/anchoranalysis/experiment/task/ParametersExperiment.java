@@ -29,16 +29,16 @@ package org.anchoranalysis.experiment.task;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.core.error.reporter.ErrorReporterIntoLog;
 import org.anchoranalysis.core.log.MessageLogger;
-import org.anchoranalysis.experiment.ExperimentExecutionArguments;
+import org.anchoranalysis.core.log.error.ErrorReporterIntoLog;
+import org.anchoranalysis.experiment.arguments.ExecutionArguments;
 import org.anchoranalysis.experiment.bean.log.LoggingDestination;
 import org.anchoranalysis.experiment.log.StatefulMessageLogger;
 import org.anchoranalysis.io.manifest.Manifest;
 import org.anchoranalysis.io.output.bean.OutputManager;
+import org.anchoranalysis.io.output.bean.path.prefixer.PathPrefixer;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
-import org.anchoranalysis.io.output.path.PathPrefixer;
 
 /**
  * Parameters for executing a task, when the manifest, log etc. are still bound to the experiment
@@ -67,7 +67,7 @@ public class ParametersExperiment {
     @Getter @Setter private LoggingDestination loggerTaskCreator;
 
     public ParametersExperiment(
-            ExperimentExecutionArguments experimentArguments,
+            ExecutionArguments experimentArguments,
             String experimentIdentifier,
             Optional<Manifest> experimentalManifest,
             OutputterChecked outputter,
@@ -95,7 +95,7 @@ public class ParametersExperiment {
         return context.getMessageLogger();
     }
 
-    public ExperimentExecutionArguments getExperimentArguments() {
+    public ExecutionArguments getExperimentArguments() {
         return context.getExperimentArguments();
     }
 

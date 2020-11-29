@@ -25,10 +25,10 @@
  */
 package org.anchoranalysis.image.voxel;
 
-import org.anchoranalysis.spatial.extent.Extent;
-import org.anchoranalysis.spatial.extent.box.BoundingBox;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.spatial.box.BoundingBox;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ExtentMatchHelper {

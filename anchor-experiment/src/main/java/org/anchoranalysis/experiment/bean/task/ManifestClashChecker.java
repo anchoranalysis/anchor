@@ -32,7 +32,7 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.io.manifest.Manifest;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
-import org.anchoranalysis.io.output.path.DirectoryWithPrefix;
+import org.anchoranalysis.io.output.path.prefixer.DirectoryWithPrefix;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class ManifestClashChecker {
@@ -44,7 +44,7 @@ class ManifestClashChecker {
         // write files
         //  to the same folder (without at least having some kind of prefix, to prevent files
         // overwriting each other)
-        Path experimentalRoot = manifestExperiment.getRootFolder().relativePath();
+        Path experimentalRoot = manifestExperiment.getRootDirectory().relativePath();
         if (wouldClashWithExperimentRoot(experimentalRoot, boundOutput.getPrefix())) {
             throw new JobExecutionException(
                     String.format(
@@ -67,7 +67,7 @@ class ManifestClashChecker {
      */
     private static boolean wouldClashWithExperimentRoot(
             Path experimentalDirectory, DirectoryWithPrefix prefix) {
-        if (!prefix.getFilenamePrefix().isEmpty()) {
+        if (!prefix.prefixWithDelimeter().isEmpty()) {
             // We're safe if there's a non-empty filename prefix
             return false;
         }

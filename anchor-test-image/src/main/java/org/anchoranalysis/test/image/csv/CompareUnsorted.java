@@ -27,10 +27,11 @@
 package org.anchoranalysis.test.image.csv;
 
 import static org.anchoranalysis.test.image.csv.CompareUtilities.*;
+
 import java.io.IOException;
 import java.util.Optional;
-import org.anchoranalysis.io.input.csv.CSVReaderException;
 import org.anchoranalysis.io.input.csv.CSVReader.OpenedCSVFile;
+import org.anchoranalysis.io.input.csv.CSVReaderException;
 
 class CompareUnsorted {
 

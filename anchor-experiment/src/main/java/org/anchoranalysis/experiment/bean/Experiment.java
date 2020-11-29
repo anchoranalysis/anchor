@@ -28,8 +28,8 @@ package org.anchoranalysis.experiment.bean;
 
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.xml.AssociateXmlUponLoad;
-import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
+import org.anchoranalysis.experiment.arguments.ExecutionArguments;
 import org.apache.commons.configuration.XMLConfiguration;
 
 public abstract class Experiment extends AnchorBean<Experiment> implements AssociateXmlUponLoad {
@@ -37,7 +37,7 @@ public abstract class Experiment extends AnchorBean<Experiment> implements Assoc
     // Allows to reference the xml configuration from where the experiment was defined
     private XMLConfiguration xmlConfiguration = null;
 
-    public abstract void executeExperiment(ExperimentExecutionArguments arguments)
+    public abstract void executeExperiment(ExecutionArguments arguments)
             throws ExperimentExecutionException;
 
     public XMLConfiguration getXMLConfiguration() {

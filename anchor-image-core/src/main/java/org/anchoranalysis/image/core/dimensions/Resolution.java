@@ -26,18 +26,18 @@
 
 package org.anchoranalysis.image.core.dimensions;
 
+import com.google.common.base.Preconditions;
 import java.io.Serializable;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
-import org.anchoranalysis.core.axis.AxisType;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
-import org.anchoranalysis.spatial.extent.scale.ScaleFactor;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
+import org.anchoranalysis.spatial.axis.AxisType;
 import org.anchoranalysis.spatial.point.Point3d;
 import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.point.Tuple3d;
-import com.google.common.base.Preconditions;
+import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 /**
  * The resolution of an image.
@@ -48,7 +48,8 @@ import com.google.common.base.Preconditions;
  *
  * @author Owen Feehan
  */
-@EqualsAndHashCode @AllArgsConstructor(access=AccessLevel.PRIVATE)
+@EqualsAndHashCode
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Resolution implements Serializable {
 
     /** */
@@ -67,29 +68,29 @@ public final class Resolution implements Serializable {
 
     /**
      * Constructs a resolution from a tuple.
-     * 
+     *
      * <p>Note all dimensions must have positive (i.e. non-zero) resolution.
-     * 
+     *
      * <p>X and Y are not allowed have NaN but this is acceptable for the Z-value.
-     * 
+     *
      * @param tuple the resolution for X, Y and Z
-     * @throws CreateException 
+     * @throws CreateException
      */
     public Resolution(Tuple3d tuple) throws CreateException {
         checkPositive(tuple.x(), "x");
         checkPositive(tuple.y(), "y");
         checkPositive(tuple.z(), "z");
-        
+
         checkNaN(tuple.x(), "x");
         checkNaN(tuple.y(), "y");
-        
+
         // Copy to ensure it is independent of any changes outside
         this.res = new Point3d(tuple);
     }
 
     public Resolution duplicateFlattenZ(int prevZSize) {
         Preconditions.checkArgument(prevZSize > 0);
-        return new Resolution( new Point3d(res.x(), res.y(), res.z() * prevZSize) );
+        return new Resolution(new Point3d(res.x(), res.y(), res.z() * prevZSize));
     }
 
     public double x() {
@@ -144,9 +145,9 @@ public final class Resolution implements Serializable {
             return min2D();
         }
     }
-        
+
     public boolean hasEqualXAndY() {
-        return res.x()==res.y();
+        return res.x() == res.y();
     }
 
     /**
@@ -249,18 +250,18 @@ public final class Resolution implements Serializable {
         distanceZ *= zRelative();
         return Math.pow(distanceX, 2) + Math.pow(distanceY, 2) + Math.pow(distanceZ, 2);
     }
-        
+
     private static void checkPositive(double value, String dimension) throws CreateException {
         if (value <= 0) {
             throw new CreateException(
-               String.format("Dimension %s has a non-positive value: %d", dimension, value));
+                    String.format("Dimension %s has a non-positive value: %d", dimension, value));
         }
     }
-    
+
     private static void checkNaN(double value, String dimension) throws CreateException {
         if (Double.isNaN(value)) {
             throw new CreateException(
-               String.format("Dimension %s has NaN which is not allowed.", dimension));
+                    String.format("Dimension %s has NaN which is not allowed.", dimension));
         }
     }
 }

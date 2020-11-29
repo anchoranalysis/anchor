@@ -29,11 +29,11 @@ package org.anchoranalysis.image.voxel.factory;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.VoxelsAsShort;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedShortBuffer;
+import org.anchoranalysis.image.voxel.buffer.slice.FromShort;
+import org.anchoranalysis.image.voxel.buffer.slice.SliceBufferIndex;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import org.anchoranalysis.image.voxel.factory.sliceindex.FromShort;
-import org.anchoranalysis.image.voxel.factory.sliceindex.SliceBufferIndex;
-import org.anchoranalysis.spatial.extent.Extent;
+import org.anchoranalysis.spatial.Extent;
 
 final class FactoryUnsignedShort implements VoxelsFactoryTypeBound<UnsignedShortBuffer> {
 

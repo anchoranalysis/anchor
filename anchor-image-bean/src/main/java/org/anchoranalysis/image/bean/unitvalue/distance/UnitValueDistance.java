@@ -29,10 +29,10 @@ package org.anchoranalysis.image.bean.unitvalue.distance;
 import java.io.Serializable;
 import java.util.Optional;
 import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.core.axis.AxisType;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.dimensions.UnitConverter;
 import org.anchoranalysis.image.core.orientation.DirectionVector;
+import org.anchoranalysis.spatial.axis.AxisType;
 import org.anchoranalysis.spatial.point.Point3d;
 import org.anchoranalysis.spatial.point.Point3i;
 

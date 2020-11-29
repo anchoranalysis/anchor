@@ -32,10 +32,10 @@ import ij.ImagePlus;
 import ij.ImageStack;
 import ij.measure.Calibration;
 import ij.process.ImageProcessor;
+import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import java.util.Optional;
-import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
+import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.Resolution;
@@ -130,9 +130,9 @@ public class ConvertToImagePlus {
 
         // If we're making an RGB then we need to convert our stack
         ImagePlus image = composite.create(numberChannels, makeComposite);
-        dimensions.resolution().ifPresent( resolution->
-            configureCalibration(image.getCalibration(), resolution)
-        );
+        dimensions
+                .resolution()
+                .ifPresent(resolution -> configureCalibration(image.getCalibration(), resolution));
 
         checkNumberSlices(image, dimensions);
 

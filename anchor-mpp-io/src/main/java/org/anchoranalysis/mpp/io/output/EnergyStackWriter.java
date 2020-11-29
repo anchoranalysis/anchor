@@ -26,11 +26,11 @@
 
 package org.anchoranalysis.mpp.io.output;
 
-import lombok.AllArgsConstructor;
 import java.util.Optional;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.image.core.channel.Channel;
-import org.anchoranalysis.image.io.generator.raster.ChannelGenerator;
+import org.anchoranalysis.image.io.channel.output.ChannelGenerator;
 import org.anchoranalysis.io.generator.sequence.OutputSequenceFactory;
 import org.anchoranalysis.io.generator.sequence.pattern.OutputPatternIntegerSuffix;
 import org.anchoranalysis.io.generator.serialized.KeyValueParamsGenerator;
@@ -67,33 +67,35 @@ public class EnergyStackWriter {
 
     private final EnergyStack energyStack;
     private final Outputter outputter;
-    
+
     public void writeEnergyStack() throws OutputWriteFailedException {
-        
-        OutputPatternIntegerSuffix directory = new OutputPatternIntegerSuffix(
-            OUTPUT_ENERGY_STACK_DIRECTORY,
-            OUTPUT_ENERGY_STACK_DIRECTORY,
-            2,
-            true,
-            Optional.of(new ManifestDescription("raster", OUTPUT_ENERGY_STACK_DIRECTORY))
-        );
-        
-        createSequenceFactory().incrementingByOneStream(
-                directory,
-                energyStack.withoutParams().asStack().asListChannels().stream()
-        );
+
+        OutputPatternIntegerSuffix directory =
+                new OutputPatternIntegerSuffix(
+                        OUTPUT_ENERGY_STACK_DIRECTORY,
+                        OUTPUT_ENERGY_STACK_DIRECTORY,
+                        2,
+                        true,
+                        Optional.of(
+                                new ManifestDescription("raster", OUTPUT_ENERGY_STACK_DIRECTORY)));
+
+        createSequenceFactory()
+                .incrementingByOneStream(
+                        directory, energyStack.withoutParams().asStack().asListChannels().stream());
 
         if (energyStack.getParams() != null) {
-            outputter.writerSelective()
+            outputter
+                    .writerSelective()
                     .write(
                             OUTPUT_PARAMS,
-                            () -> new KeyValueParamsGenerator(MANIFEST_FUNCTION_PARAMS), energyStack::getParams);
+                            () -> new KeyValueParamsGenerator(MANIFEST_FUNCTION_PARAMS),
+                            energyStack::getParams);
         }
     }
-    
+
     private OutputSequenceFactory<Channel> createSequenceFactory() {
         ChannelGenerator generator = new ChannelGenerator(MANIFEST_FUNCTION_CHANNEL);
-        
+
         // We write the energy-stack separately as individual channels
         return new OutputSequenceFactory<>(generator, outputter.getChecked());
     }

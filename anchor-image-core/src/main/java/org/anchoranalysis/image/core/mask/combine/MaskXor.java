@@ -58,19 +58,19 @@ public class MaskXor {
      *
      * @param voxelsFirst the first voxels for operation
      * @param voxelsSecond the second voxels for operation (and in which the result is written)
-     * @param bvbFirst binary-values to mask the first voxels
-     * @param bvbSecond binary-values to mask the second voxels
+     * @param binaryValuesFirst binary-values to mask the first voxels
+     * @param binaryValuesSecond binary-values to mask the second voxels
      */
     public static void apply(
             Voxels<UnsignedByteBuffer> voxelsFirst,
             Voxels<UnsignedByteBuffer> voxelsSecond,
-            BinaryValuesByte bvbFirst,
-            BinaryValuesByte bvbSecond) {
+            BinaryValuesByte binaryValuesFirst,
+            BinaryValuesByte binaryValuesSecond) {
 
-        byte sourceOn = bvbFirst.getOnByte();
-        byte sourceOff = bvbFirst.getOffByte();
+        byte sourceOn = binaryValuesFirst.getOnByte();
+        byte sourceOff = binaryValuesFirst.getOffByte();
 
-        byte receiveOn = bvbSecond.getOnByte();
+        byte receiveOn = binaryValuesSecond.getOnByte();
 
         IterateVoxelsAll.withTwoBuffersAndPoint(
                 voxelsFirst,

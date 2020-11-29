@@ -38,39 +38,40 @@ import org.anchoranalysis.io.manifest.directory.MutableDirectory;
 
 /**
  * An entry in a {@link Manifest} for an outputted file from an experiment.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 @RequiredArgsConstructor
 public class OutputtedFile implements Serializable {
-
 
     /** */
     private static final long serialVersionUID = 5796355859093885433L;
 
     // START REQUIRED ARGUMENTS
-    @Getter private final MutableDirectory parentFolder;
-    
+    @Getter private final MutableDirectory parentDirectory;
+
     @Getter private final String fileName;
-    
+
     @Getter private final String outputName;
-    
+
     @Getter private final String index;
-    
+
     /**
      * A description associated with the file.
-     * 
-     * <p>Note that this can be null, but we avoid {@link Optional} as
-     * cannot be serialized.
+     *
+     * <p>Note that this can be null, but we avoid {@link Optional} as cannot be serialized.
      */
     @Nullable private final ManifestDescription description;
     // END REQUIRED ARGUMENTS
-    
-    public OutputtedFile(MutableDirectory parentFolder, String fileName, String outputName,
-            String index, Optional<ManifestDescription> description) {
+
+    public OutputtedFile(
+            MutableDirectory parentDirectory,
+            String fileName,
+            String outputName,
+            String index,
+            Optional<ManifestDescription> description) {
         super();
-        this.parentFolder = parentFolder;
+        this.parentDirectory = parentDirectory;
         this.fileName = fileName;
         this.outputName = outputName;
         this.index = index;
@@ -78,7 +79,7 @@ public class OutputtedFile implements Serializable {
     }
 
     public Path calculatePath() {
-        return parentFolder.calculatePath().resolve(fileName);
+        return parentDirectory.calculatePath().resolve(fileName);
     }
 
     public Optional<ManifestDescription> getDescription() {

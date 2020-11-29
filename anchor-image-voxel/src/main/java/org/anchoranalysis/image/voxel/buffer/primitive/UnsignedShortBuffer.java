@@ -25,10 +25,11 @@
  */
 package org.anchoranalysis.image.voxel.buffer.primitive;
 
+import com.google.common.base.Preconditions;
 import java.nio.ShortBuffer;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
-import com.google.common.base.Preconditions;
 
 /**
  * Wraps a {@code ShortBuffer} but automatically performs conversion to {@code int}.
@@ -42,10 +43,11 @@ import com.google.common.base.Preconditions;
  *
  * @author Owen Feehan
  */
+@EqualsAndHashCode(callSuper = true)
 public final class UnsignedShortBuffer extends UnsignedBufferAsInt {
 
     /** The underlying storage buffer, to which calls are delegated with our without conversion. */
-    @Getter private final ShortBuffer delegate;
+    @Getter @EqualsAndHashCode.Exclude private final ShortBuffer delegate;
 
     /**
      * Allocates a new (direct) buffer of unsigned-shorts.
@@ -154,12 +156,12 @@ public final class UnsignedShortBuffer extends UnsignedBufferAsInt {
     }
 
     /**
-     * Puts a long at the current buffer position, clipping to ensure the value is within the range
+     * Puts a long at the current buffer position, clamping to ensure the value is within the range
      * {@code (0,255)}.
      *
      * @param value the float
      */
-    public void putUnsignedClipped(int value) {
+    public void putUnsignedClamped(int value) {
         if (value > UnsignedShortVoxelType.MAX_VALUE_INT) {
             putUnsigned(UnsignedShortVoxelType.MAX_VALUE_INT);
         } else if (value < 0) {
@@ -180,12 +182,12 @@ public final class UnsignedShortBuffer extends UnsignedBufferAsInt {
     }
 
     /**
-     * Puts a long at the current buffer position, clipping to ensure the value is within the range
+     * Puts a long at the current buffer position, clamping to ensure the value is within the range
      * {@code (0,255)}.
      *
      * @param value the float
      */
-    public void putLongClipped(long value) {
+    public void putLongClamped(long value) {
         if (value > UnsignedShortVoxelType.MAX_VALUE_INT) {
             putUnsigned(UnsignedShortVoxelType.MAX_VALUE_INT);
         } else if (value < 0) {
@@ -201,12 +203,12 @@ public final class UnsignedShortBuffer extends UnsignedBufferAsInt {
     }
 
     /**
-     * Puts a float at the current buffer position, clipping to ensure the value is within the range
+     * Puts a float at the current buffer position, clamping to ensure the value is within the range
      * {@code (0,255)}.
      *
      * @param value the float
      */
-    public void putFloatClipped(float value) {
+    public void putFloatClamped(float value) {
         if (value > UnsignedShortVoxelType.MAX_VALUE_INT) {
             putUnsigned(UnsignedShortVoxelType.MAX_VALUE_INT);
         } else if (value < 0) {
@@ -257,8 +259,8 @@ public final class UnsignedShortBuffer extends UnsignedBufferAsInt {
     /**
      * The array of the buffer ala {@link ShortBuffer#array}.
      *
-     * <p>Unlike {@link ShortBuffer#array} an array will always be returned,
-     * copying it into a newly created array, if it cannot be directly accessed.
+     * <p>Unlike {@link ShortBuffer#array} an array will always be returned, copying it into a newly
+     * created array, if it cannot be directly accessed.
      *
      * @return the array
      */

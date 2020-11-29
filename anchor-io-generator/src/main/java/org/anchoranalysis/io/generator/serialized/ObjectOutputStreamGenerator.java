@@ -40,7 +40,7 @@ public class ObjectOutputStreamGenerator<T extends Serializable> extends Seriali
     public ObjectOutputStreamGenerator() {
         this(Optional.empty());
     }
-    
+
     public ObjectOutputStreamGenerator(Optional<String> manifestFunction) {
         super(manifestFunction);
     }
@@ -49,11 +49,11 @@ public class ObjectOutputStreamGenerator<T extends Serializable> extends Seriali
     public void writeToFile(T element, OutputWriteSettings outputWriteSettings, Path filePath)
             throws OutputWriteFailedException {
 
-        try (FileOutputStream fos = new FileOutputStream(filePath.toFile())) {
+        try (FileOutputStream fileOutput = new FileOutputStream(filePath.toFile())) {
 
-            ObjectOutputStream out = new ObjectOutputStream(fos);
-            out.writeObject(element);
-            out.close();
+            ObjectOutputStream objectOutput = new ObjectOutputStream(fileOutput);
+            objectOutput.writeObject(element);
+            objectOutput.close();
 
         } catch (IOException e) {
             throw new OutputWriteFailedException(e);

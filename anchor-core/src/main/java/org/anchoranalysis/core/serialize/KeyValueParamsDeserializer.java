@@ -28,7 +28,7 @@ package org.anchoranalysis.core.serialize;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import org.anchoranalysis.core.params.KeyValueParams;
+import org.anchoranalysis.core.value.KeyValueParams;
 
 /**
  * @author Owen Feehan

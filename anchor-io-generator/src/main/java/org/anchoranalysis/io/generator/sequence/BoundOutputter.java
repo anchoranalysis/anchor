@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -25,27 +25,27 @@
  */
 package org.anchoranalysis.io.generator.sequence;
 
+import lombok.AllArgsConstructor;
+import lombok.Value;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.sequence.pattern.OutputPattern;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
-import lombok.AllArgsConstructor;
-import lombok.Value;
 
 /**
  * An outputter bound together with {@link OutputPattern} and a generator.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  * @param <T> element-type for generator
  */
-@AllArgsConstructor @Value
+@AllArgsConstructor
+@Value
 public class BoundOutputter<T> {
 
     /** The outputter to be used for the sequence. */
     private OutputterChecked outputter;
-    
+
     private OutputPattern outputPattern;
-    
+
     /** The generator to be (repeatedly) used to write elements in the sequence. */
     private Generator<T> generator;
 }

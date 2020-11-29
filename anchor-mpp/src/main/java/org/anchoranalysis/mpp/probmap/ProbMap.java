@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.mpp.probmap;
 
-import org.anchoranalysis.core.error.OptionalOperationUnsupportedException;
+import org.anchoranalysis.core.exception.OptionalOperationUnsupportedException;
 import org.anchoranalysis.image.core.mask.Mask;
 
 public interface ProbMap extends PointSampler {

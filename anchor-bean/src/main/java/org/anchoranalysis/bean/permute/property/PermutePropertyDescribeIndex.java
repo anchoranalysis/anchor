@@ -34,7 +34,7 @@ import org.anchoranalysis.bean.StringList;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.permute.setter.PermutationSetter;
 import org.anchoranalysis.bean.permute.setter.PermutationSetterException;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 
 /**
  * Proxies an existing PermuteProperty but replaces the existing naming behaviour

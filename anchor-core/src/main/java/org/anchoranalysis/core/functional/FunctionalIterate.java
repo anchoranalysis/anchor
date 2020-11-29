@@ -29,11 +29,11 @@ import java.util.Map;
 import java.util.Map.Entry;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.functional.function.CheckedBiConsumer;
-import org.anchoranalysis.core.functional.function.CheckedBooleanSupplier;
-import org.anchoranalysis.core.functional.function.CheckedConsumer;
-import org.anchoranalysis.core.functional.function.CheckedIntConsumer;
-import org.anchoranalysis.core.functional.function.CheckedRunnable;
+import org.anchoranalysis.core.functional.checked.CheckedBiConsumer;
+import org.anchoranalysis.core.functional.checked.CheckedBooleanSupplier;
+import org.anchoranalysis.core.functional.checked.CheckedConsumer;
+import org.anchoranalysis.core.functional.checked.CheckedIntConsumer;
+import org.anchoranalysis.core.functional.checked.CheckedRunnable;
 
 /**
  * Utilities for repeating operations a certain number of times.
@@ -51,23 +51,26 @@ public class FunctionalIterate {
      * @param operation the operation
      * @throws E if {@code operation} throws it.
      */
-    public static <E extends Exception> void repeat(int numberTimes, CheckedRunnable<E> operation) throws E {
+    public static <E extends Exception> void repeat(int numberTimes, CheckedRunnable<E> operation)
+            throws E {
         for (int i = 0; i < numberTimes; i++) {
             operation.run();
         }
     }
-    
+
     /**
-     * Repeats an operation a number of times, passing an increment index to {@code operation} each time.
+     * Repeats an operation a number of times, passing an increment index to {@code operation} each
+     * time.
      *
      * <p>The index begins at 0 and will increment to {@code numberTimes -1 } (inclusive).
-     * 
+     *
      * @param <E> an exception that may be thrown by {@code operation}.
      * @param numberTimes how many times to repeat the operation
      * @param operation the operation to execute given an index
      * @throws E if {@code operation} throws it.
      */
-    public static <E extends Exception> void repeatWithIndex(int numberTimes, CheckedIntConsumer<E> operation) throws E {
+    public static <E extends Exception> void repeatWithIndex(
+            int numberTimes, CheckedIntConsumer<E> operation) throws E {
         for (int i = 0; i < numberTimes; i++) {
             operation.accept(i);
         }

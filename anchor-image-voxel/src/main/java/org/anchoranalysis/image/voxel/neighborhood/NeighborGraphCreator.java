@@ -28,14 +28,14 @@ package org.anchoranalysis.image.voxel.neighborhood;
 
 import java.util.List;
 import java.util.function.Function;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.graph.GraphWithPayload;
 import org.anchoranalysis.image.voxel.neighborhood.EdgeAdder.AddEdge;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
+import org.anchoranalysis.image.voxel.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.voxel.object.ObjectCollectionRTree;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.image.voxel.object.factory.ObjectCollectionFactory;
-import org.anchoranalysis.spatial.extent.Extent;
+import org.anchoranalysis.spatial.Extent;
 
 /**
  * Creates an undirected graph where each vertex is an object, and edge exists if the objects

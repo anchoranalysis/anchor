@@ -32,9 +32,11 @@ import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.ManifestDirectoryDescription;
 import org.anchoranalysis.io.manifest.directory.SubdirectoryBase;
+import org.anchoranalysis.io.manifest.file.FileType;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.output.namestyle.SimpleOutputNameStyle;
+import org.anchoranalysis.io.output.namestyle.WithoutOutputNameStyle;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
 
 /**
@@ -57,7 +59,7 @@ public class AlwaysAllowed implements Writer {
     public Optional<OutputterChecked> createSubdirectory(
             String outputName,
             ManifestDirectoryDescription manifestDescription,
-            Optional<SubdirectoryBase> manifestFolder,
+            Optional<SubdirectoryBase> manifestDirectory,
             boolean inheritOutputRulesAndRecording)
             throws OutputWriteFailedException {
 
@@ -66,21 +68,22 @@ public class AlwaysAllowed implements Writer {
                 outputter.deriveSubdirectory(
                         outputName,
                         manifestDescription,
-                        manifestFolder,
+                        manifestDirectory,
                         inheritOutputRulesAndRecording));
     }
-    
+
     // Write a file without checking if the outputName is allowed
     @Override
-    public <T> boolean write(String outputName, ElementWriterSupplier<T> elementWriter, ElementSupplier<T> element)
+    public <T> boolean write(
+            String outputName, ElementWriterSupplier<T> elementWriter, ElementSupplier<T> element)
             throws OutputWriteFailedException {
         maybeExecutePreop();
         elementWriter.get().write(element.get(), new SimpleOutputNameStyle(outputName), outputter);
         return true;
     }
-    
+
     @Override
-    public <T> int writeWithIndex(
+    public <T> Optional<FileType[]> writeWithIndex(
             IndexableOutputNameStyle outputNameStyle,
             ElementWriterSupplier<T> elementWriter,
             ElementSupplier<T> element,
@@ -88,7 +91,19 @@ public class AlwaysAllowed implements Writer {
             throws OutputWriteFailedException {
 
         maybeExecutePreop();
-        return elementWriter.get().writeWithIndex(element.get(), index, outputNameStyle, outputter);
+        return Optional.of(
+                elementWriter
+                        .get()
+                        .writeWithIndex(element.get(), index, outputNameStyle, outputter));
+    }
+
+    @Override
+    public <T> boolean writeWithoutName(
+            String outputName, ElementWriterSupplier<T> elementWriter, ElementSupplier<T> element)
+            throws OutputWriteFailedException {
+        maybeExecutePreop();
+        elementWriter.get().write(element.get(), new WithoutOutputNameStyle(outputName), outputter);
+        return true;
     }
 
     // A non-generator way of creating outputs, that are still included in the manifest
@@ -101,7 +116,7 @@ public class AlwaysAllowed implements Writer {
 
         maybeExecutePreop();
 
-        Path outPath = outputter.makeOutputPath(outputName, extension);
+        Path outPath = outputter.makeOutputPath(Optional.of(outputName), extension);
 
         manifestDescription.ifPresent(
                 md -> outputter.writeFileToOperationRecorder(outputName, outPath, md, ""));

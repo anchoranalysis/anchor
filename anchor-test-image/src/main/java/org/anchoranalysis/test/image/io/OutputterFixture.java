@@ -30,44 +30,29 @@ import java.nio.file.Path;
 import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.io.manifest.Manifest;
+import org.anchoranalysis.core.log.error.ErrorReporter;
 import org.anchoranalysis.io.output.bean.OutputManager;
 import org.anchoranalysis.io.output.outputter.BindFailedException;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
-import org.anchoranalysis.io.output.path.PathPrefixerException;
-import org.anchoranalysis.io.output.path.FilePathPrefixerContext;
-import org.anchoranalysis.io.output.recorded.RecordedOutputsWithRules;
 import org.anchoranalysis.test.LoggingFixture;
+import org.anchoranalysis.test.io.output.OutputterCheckedFixture;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class OutputterFixture {
 
-    public static Outputter outputter(Path pathTempFolder) throws BindFailedException {
-        return outputter(outputterChecked(pathTempFolder));
+    public static Outputter outputter(Optional<Path> pathTempDirectory) throws BindFailedException {
+        return outputter(outputterChecked(pathTempDirectory));
     }
 
     public static Outputter outputter(OutputManager outputManager) throws BindFailedException {
-        return outputter(outputterChecked(outputManager));
+        return outputter(OutputterCheckedFixture.createFrom(outputManager));
     }
 
-    public static OutputterChecked outputterChecked(Path pathTempFolder)
+    public static OutputterChecked outputterChecked(Optional<Path> pathTempDirectory)
             throws BindFailedException {
-        return outputterChecked(OutputManagerFixture.createOutputManager(pathTempFolder));
-    }
-
-    public static OutputterChecked outputterChecked(OutputManager outputManager)
-            throws BindFailedException {
-        try {
-            return outputManager.createExperimentOutputter(
-                    "debug",
-                    new Manifest(),
-                    new RecordedOutputsWithRules(),
-                    new FilePathPrefixerContext(false, Optional.empty()));
-        } catch (PathPrefixerException e) {
-            throw new BindFailedException(e);
-        }
+        return OutputterCheckedFixture.createFrom(
+                OutputManagerForImagesFixture.createOutputManager(pathTempDirectory));
     }
 
     private static Outputter outputter(OutputterChecked outputter) {

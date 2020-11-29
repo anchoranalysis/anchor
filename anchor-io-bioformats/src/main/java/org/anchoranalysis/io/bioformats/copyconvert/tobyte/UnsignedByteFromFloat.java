@@ -28,9 +28,9 @@ package org.anchoranalysis.io.bioformats.copyconvert.tobyte;
 
 import com.google.common.base.Preconditions;
 import java.nio.ByteBuffer;
-import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import loci.common.DataTools;
 import lombok.RequiredArgsConstructor;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 
 @RequiredArgsConstructor
 public class UnsignedByteFromFloat extends ToUnsignedByte {

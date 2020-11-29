@@ -31,7 +31,7 @@ import lombok.Value;
 import org.anchoranalysis.core.log.Logger;
 
 /**
- * A positive-result when an object is found
+ * A positive-result when an object is found.
  *
  * @author Owen Feehan
  * @param <T>

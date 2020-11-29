@@ -30,8 +30,11 @@ import java.io.PrintWriter;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Supplier;
+import org.anchoranalysis.core.format.NonImageFileFormat;
 import org.anchoranalysis.core.functional.OptionalUtilities;
-import org.anchoranalysis.core.text.TypedValue;
+import org.anchoranalysis.core.log.error.ErrorReporter;
+import org.anchoranalysis.core.value.TypedValue;
 import org.anchoranalysis.io.generator.text.TextFileOutput;
 import org.anchoranalysis.io.generator.text.TextFileOutputter;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
@@ -49,6 +52,33 @@ public class CSVWriter implements AutoCloseable {
     private boolean writtenHeaders = false;
 
     /**
+     * Like {@link #createFromOutputter(String, OutputterChecked)} but suppresses any exceptions
+     * into an error log - and writes headers.
+     *
+     * @param outputName output-name
+     * @param outputter output-manager
+     * @param headerNames header-names for the CSV file
+     * @param errorReporter used to reporter an error if the output cannot be created.
+     * @return the csv-writer if it's allowed, or empty if it's not, or if an error occurs.
+     */
+    public static Optional<CSVWriter> createFromOutputterWithHeaders(
+            String outputName,
+            OutputterChecked outputter,
+            Supplier<List<String>> headerNames,
+            ErrorReporter errorReporter) {
+        try {
+            Optional<CSVWriter> writer = createFromOutputter(outputName, outputter);
+            if (writer.isPresent()) {
+                writer.get().writeHeaders(headerNames.get());
+            }
+            return writer;
+        } catch (OutputWriteFailedException e) {
+            errorReporter.recordError(CSVWriter.class, e);
+            return Optional.empty();
+        }
+    }
+
+    /**
      * Creates and starts a CSVWriter if it's allowed, otherwise returns {@link Optional#empty}.
      *
      * @param outputName output-name
@@ -64,7 +94,11 @@ public class CSVWriter implements AutoCloseable {
         }
 
         Optional<TextFileOutput> output =
-                TextFileOutputter.create("csv", Optional.empty(), outputter, outputName);
+                TextFileOutputter.create(
+                        NonImageFileFormat.CSV.extensionWithoutPeriod(),
+                        Optional.empty(),
+                        outputter,
+                        outputName);
 
         OptionalUtilities.ifPresent(output, TextFileOutput::start);
         return output.map(CSVWriter::new);

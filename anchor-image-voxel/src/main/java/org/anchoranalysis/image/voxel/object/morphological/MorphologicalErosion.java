@@ -29,14 +29,15 @@ package org.anchoranalysis.image.voxel.object.morphological;
 import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
+import org.anchoranalysis.image.voxel.kernel.morphological.DilationKernelFactory;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.image.voxel.object.morphological.accept.AcceptIterationConditon;
-import org.anchoranalysis.spatial.extent.Extent;
-import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.image.voxel.object.morphological.predicate.AcceptIterationPredicate;
+import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.spatial.box.BoundingBox;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MorphologicalErosion {
@@ -47,7 +48,7 @@ public class MorphologicalErosion {
             boolean do3D,
             int iterations,
             boolean outsideAtThreshold,
-            Optional<AcceptIterationConditon>
+            Optional<AcceptIterationPredicate>
                     acceptConditionsDilation // NB applied on an inverted-version of the binary
             // buffer!!!
             ) throws CreateException {
@@ -83,7 +84,7 @@ public class MorphologicalErosion {
     /**
      * Performs a morphological erosion by dilating an inverted version of the object
      *
-     * @param bvb
+     * @param binaryValues
      * @param do3D
      * @param iterations
      * @param backgroundVb
@@ -95,26 +96,27 @@ public class MorphologicalErosion {
      * @throws CreateException
      */
     public static BinaryVoxels<UnsignedByteBuffer> erode(
-            BinaryVoxels<UnsignedByteBuffer> bvb,
+            BinaryVoxels<UnsignedByteBuffer> binaryValues,
             boolean do3D,
             int iterations,
             Optional<Voxels<UnsignedByteBuffer>> backgroundVb,
             int minIntensityValue,
             boolean outsideAtThreshold,
-            Optional<AcceptIterationConditon>
+            Optional<AcceptIterationPredicate>
                     acceptConditionsDilation // NB applied on an inverted-version of the binary
             // buffer!!!
             ) throws CreateException {
 
-        bvb.invert();
+        binaryValues.invert();
         BinaryVoxels<UnsignedByteBuffer> dilated =
                 MorphologicalDilation.dilate(
-                        bvb,
+                        binaryValues,
                         iterations,
                         backgroundVb,
                         minIntensityValue,
                         acceptConditionsDilation,
-                        new DilationKernelFactory(SelectDimensionsFactory.of(do3D), outsideAtThreshold, false));
+                        new DilationKernelFactory(
+                                SelectDimensionsFactory.of(do3D), outsideAtThreshold, false));
         dilated.invert();
         return dilated;
     }

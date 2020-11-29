@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -36,6 +36,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.StringSet;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.io.output.bean.enabled.OutputEnabled;
 import org.anchoranalysis.io.output.enabled.single.SingleLevelOutputEnabled;
 
@@ -50,7 +51,7 @@ public abstract class OutputEnableRulesSpecify extends OutputEnabledRules {
 
     // START BEAN PROPERTIES
     /** Output-names in the first-level. */
-    @BeanField @Getter @Setter private StringSet first;
+    @BeanField @OptionalBean @Getter @Setter private StringSet first;
 
     /** Output-names in the second-level (for all first level output-names) */
     @BeanField @Getter @Setter private List<NamedBean<StringSet>> second = new ArrayList<>();
@@ -69,7 +70,7 @@ public abstract class OutputEnableRulesSpecify extends OutputEnabledRules {
     }
 
     protected boolean firstLevelContains(String outputName) {
-        return first.contains(outputName);
+        return first != null && first.contains(outputName);
     }
 
     /**
@@ -86,6 +87,10 @@ public abstract class OutputEnableRulesSpecify extends OutputEnabledRules {
             String outputName, OutputEnabled defaultValue) {
         createSecondLevelMapIfNecessary();
         return mapSecondLevel.getOrDefault(outputName, defaultValue);
+    }
+
+    protected boolean isFirstDefined() {
+        return first != null;
     }
 
     private void createSecondLevelMapIfNecessary() {

@@ -60,13 +60,15 @@ public class UnsignedIntFromUnsignedInt extends ToInt {
                 channelIndexRelative == 0, "interleaving not supported for int data");
 
         byte[] sourceArray = source.array();
-        
+
         VoxelBuffer<UnsignedIntBuffer> voxels = VoxelBufferFactory.allocateUnsignedInt(sizeXY);
         UnsignedIntBuffer out = voxels.buffer();
 
         int indexOut = 0;
         for (int indexIn = 0; indexIn < sizeBytes; indexIn += BYTES_PER_PIXEL) {
-            out.put(indexOut++, DataTools.bytesToInt(sourceArray, indexIn, BYTES_PER_PIXEL, littleEndian));
+            out.put(
+                    indexOut++,
+                    DataTools.bytesToInt(sourceArray, indexIn, BYTES_PER_PIXEL, littleEndian));
         }
 
         return voxels;

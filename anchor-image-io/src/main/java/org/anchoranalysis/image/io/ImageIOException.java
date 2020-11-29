@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.image.io;
 
-import org.anchoranalysis.core.error.friendly.AnchorFriendlyCheckedException;
+import org.anchoranalysis.core.exception.friendly.AnchorFriendlyCheckedException;
 
 public class ImageIOException extends AnchorFriendlyCheckedException {
 

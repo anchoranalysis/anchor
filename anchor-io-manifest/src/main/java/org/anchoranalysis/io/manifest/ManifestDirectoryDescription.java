@@ -27,37 +27,52 @@
 package org.anchoranalysis.io.manifest;
 
 import java.io.Serializable;
+import java.util.Optional;
+import javax.annotation.Nullable;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.io.manifest.sequencetype.SequenceType;
 
 /**
  * A description of an directory in the manifest.
- * 
- * <p>This is an <i>immutable</i> type.
- * 
- * <p>It combines a {@link ManifestDescription} as used for a file, together
- * with a {@link SequenceType} to describe any sequence that might exist.
- * 
- * @author Owen Feehan
  *
+ * <p>This is an <i>immutable</i> type.
+ *
+ * <p>It combines a {@link ManifestDescription} as used for a file, together with a {@link
+ * SequenceType} to describe any sequence that might exist.
+ *
+ * @author Owen Feehan
  */
-@RequiredArgsConstructor
 public class ManifestDirectoryDescription implements Serializable {
 
     /** */
     private static final long serialVersionUID = -9161070529853431830L;
 
     // START REQUIRED ARGUMENTS
-    /** The description of the contents of the directory. */
-    @Getter private final ManifestDescription description;
+    /**
+     * The description of the contents of the directory.
+     *
+     * <p>This is stored as a {@link Nullable} rather than a {@link Optional} to allow
+     * serialization.
+     */
+    @Nullable private final ManifestDescription description;
 
     /** A sequence-type to describe the different filenames outputted in the directory. */
     @Getter private final SequenceType<?> sequenceType;
     // END REQUIRED ARGUMENTS
 
-    public ManifestDirectoryDescription(String type, String function, SequenceType<?> sequenceType) {
+    public ManifestDirectoryDescription(
+            Optional<ManifestDescription> description, SequenceType<?> sequenceType) {
+        this.description = description.orElse(null);
+        this.sequenceType = sequenceType;
+    }
+
+    public ManifestDirectoryDescription(
+            String type, String function, SequenceType<?> sequenceType) {
         this.description = new ManifestDescription(type, function);
         this.sequenceType = sequenceType;
+    }
+
+    public Optional<ManifestDescription> getDescription() {
+        return Optional.ofNullable(description);
     }
 }

@@ -29,8 +29,9 @@ package org.anchoranalysis.bean.xml;
 import static org.junit.Assert.*;
 
 import java.nio.file.Path;
-import org.anchoranalysis.bean.xml.error.BeanXmlException;
+import org.anchoranalysis.bean.xml.exception.BeanXmlException;
 import org.anchoranalysis.bean.xml.mock.MockBeanNested;
+import org.anchoranalysis.core.format.NonImageFileFormat;
 import org.anchoranalysis.test.TestLoader;
 import org.junit.Test;
 
@@ -94,7 +95,8 @@ public class BeanXmlLoaderTest {
         RegisterBeanFactories.registerAllPackageBeanFactories();
 
         Path path =
-                loader.resolveTestPath(String.format("org.anchoranalysis.bean.xml/%s.xml", fileId));
+                NonImageFileFormat.XML.buildPath(
+                        loader.resolveTestPath("org.anchoranalysis.bean.xml"), fileId);
         T bean = BeanXmlLoader.loadBean(path);
         return bean;
     }

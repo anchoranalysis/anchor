@@ -30,9 +30,9 @@ import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.Value;
 import org.anchoranalysis.bean.initializable.params.BeanInitParams;
-import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.name.store.SharedObjects;
-import org.anchoranalysis.core.params.KeyValueParams;
+import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.identifier.provider.store.SharedObjects;
+import org.anchoranalysis.core.value.KeyValueParams;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
 

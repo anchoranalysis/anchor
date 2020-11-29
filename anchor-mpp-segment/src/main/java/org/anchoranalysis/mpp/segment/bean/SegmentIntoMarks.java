@@ -31,11 +31,11 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.name.provider.NamedProvider;
-import org.anchoranalysis.core.params.KeyValueParams;
+import org.anchoranalysis.core.identifier.provider.NamedProvider;
+import org.anchoranalysis.core.value.KeyValueParams;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
-import org.anchoranalysis.image.core.stack.NamedStacks;
-import org.anchoranalysis.image.experiment.identifiers.StackIdentifiers;
+import org.anchoranalysis.image.core.stack.StackIdentifiers;
+import org.anchoranalysis.image.core.stack.named.NamedStacks;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.io.output.bean.enabled.IgnoreUnderscorePrefix;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
@@ -57,7 +57,7 @@ public abstract class SegmentIntoMarks extends AnchorBean<SegmentIntoMarks> {
             Optional<KeyValueParams> keyValueParams,
             InputOutputContext context)
             throws SegmentationFailedException;
-    
+
     /**
      * If specified, default rules for determine which outputs are enabled or not.
      *
@@ -65,5 +65,5 @@ public abstract class SegmentIntoMarks extends AnchorBean<SegmentIntoMarks> {
      */
     public OutputEnabledMutable defaultOutputs() {
         return new OutputEnabledMutable(IgnoreUnderscorePrefix.INSTANCE);
-    }    
+    }
 }

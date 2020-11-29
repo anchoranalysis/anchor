@@ -43,14 +43,22 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.io.ImageIOException;
-import org.anchoranalysis.image.io.bean.stack.StackReader;
-import org.anchoranalysis.image.io.stack.OpenedRaster;
+import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
+import org.anchoranalysis.image.io.stack.input.OpenedRaster;
 import org.anchoranalysis.io.bioformats.BioformatsOpenedRaster;
 import org.anchoranalysis.io.bioformats.bean.options.Default;
 import org.anchoranalysis.io.bioformats.bean.options.ReadOptions;
 
+/**
+ * Reads a stack using the <a href="https://www.openmicroscopy.org/bio-formats/">Bioformats</a>
+ * library.
+ *
+ * <p>Note that EXIF orientation information is not processed when reading JPEGs or PNGs.
+ *
+ * @author Owen Feehan
+ */
 @NoArgsConstructor
 public class BioformatsReader extends StackReader {
 
@@ -69,13 +77,13 @@ public class BioformatsReader extends StackReader {
     public OpenedRaster openFile(Path filePath) throws ImageIOException {
 
         try {
-            IFormatReader r = selectAndInitReader();
+            IFormatReader reader = selectAndInitReader();
 
             OMEXMLMetadata metadata = createMetadata();
-            r.setMetadataStore(metadata);
-            r.setId(filePath.toString());
+            reader.setMetadataStore(metadata);
+            reader.setId(filePath.toString());
 
-            return new BioformatsOpenedRaster(r, metadata, options);
+            return new BioformatsOpenedRaster(reader, metadata, options);
         } catch (UnknownFormatException e) {
             throw new ImageIOException("An unknown file format was used");
         } catch (FormatException
@@ -105,9 +113,9 @@ public class BioformatsReader extends StackReader {
 
     /* The standard multiplexing image-reader for bioformats */
     private static IFormatReader imageReader() {
-        ImageReader r = new ImageReader();
-        r.setGroupFiles(false);
-        return r;
+        ImageReader reader = new ImageReader();
+        reader.setGroupFiles(false);
+        return reader;
     }
 
     private static OMEXMLMetadata createMetadata() throws CreateException {

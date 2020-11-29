@@ -28,7 +28,7 @@ package org.anchoranalysis.feature.io.csv;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.anchoranalysis.core.text.TypedValue;
+import org.anchoranalysis.core.value.TypedValue;
 import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.feature.results.ResultsVector;
 import org.anchoranalysis.feature.results.ResultsVectorList;

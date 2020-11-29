@@ -31,12 +31,14 @@ import java.util.Optional;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.ManifestDirectoryDescription;
 import org.anchoranalysis.io.manifest.directory.SubdirectoryBase;
+import org.anchoranalysis.io.manifest.file.FileType;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
 
 /**
- * Write data via {@link ElementWriter}s to the file system, or creates new sub-directories for writing data to.
+ * Write data via {@link ElementWriter}s to the file system, or creates new sub-directories for
+ * writing data to.
  *
  * <p>This class is similar to {@link WriterRouterErrors} but exceptions are thrown rather than
  * reporting errors.
@@ -45,7 +47,7 @@ import org.anchoranalysis.io.output.outputter.OutputterChecked;
  *
  * <p>The {@link ElementWriterSupplier} interface is used so as to avoid object-creation if an
  * operation isn't actually written.
- * 
+ *
  * <p>Note that a {@link ElementWriter} may write more than one file for a given element.
  *
  * @author Owen Feehan
@@ -55,11 +57,11 @@ public interface Writer {
     /**
      * Maybe creates a subdirectory for writing to.
      *
-     * @param outputName the name of the subdirectory. This may determine if an output is allowed
-     *     or not.
+     * @param outputName the name of the subdirectory. This may determine if an output is allowed or
+     *     not.
      * @param manifestDescription a manifest-description associated with the subdirectory as a
-     *     whole.
-     * @param manifestFolder a manifest-folder if it exists
+     *     whole, if it exists.
+     * @param manifestDirectory a manifest-folder if it exists
      * @param inheritOutputRulesAndRecording if true, the output rules and recording are inherited
      *     from the parent directory. if false, they are not, and all outputs are allowed and are
      *     unrecorded.
@@ -70,22 +72,24 @@ public interface Writer {
     Optional<OutputterChecked> createSubdirectory(
             String outputName,
             ManifestDirectoryDescription manifestDescription,
-            Optional<SubdirectoryBase> manifestFolder,
+            Optional<SubdirectoryBase> manifestDirectory,
             boolean inheritOutputRulesAndRecording)
             throws OutputWriteFailedException;
-    
+
     /**
      * Writes an element using an {@link ElementWriter} to the current directory.
      *
-     * @param outputName the name of the subdirectory. This may determine if an output is allowed
-     *     or not.
+     * @param outputName the name of the subdirectory. This may determine if an output is allowed or
+     *     not.
      * @param elementWriter writes the element to the filesystem
      * @param element the element to write
      * @return true if the output was allowed, false otherwise
      * @throws OutputWriteFailedException
      */
-    <T> boolean write(String outputName, ElementWriterSupplier<T> elementWriter, ElementSupplier<T> element) throws OutputWriteFailedException;
-    
+    <T> boolean write(
+            String outputName, ElementWriterSupplier<T> elementWriter, ElementSupplier<T> element)
+            throws OutputWriteFailedException;
+
     /**
      * Writes an indexed-element using an {@link ElementWriter} in the current directory.
      *
@@ -93,11 +97,10 @@ public interface Writer {
      * @param elementWriter writes the element to the filesystem
      * @param element the element to write
      * @param index the index
-     * @return the number of elements written by the {@link ElementWriter}, including 0 elements, or -2 if the
-     *     output is not allowed.
+     * @return any file-types written if the output was allowed, otherwise {@link Optional#empty}.
      * @throws OutputWriteFailedException
      */
-    <T> int writeWithIndex(
+    <T> Optional<FileType[]> writeWithIndex(
             IndexableOutputNameStyle outputNameStyle,
             ElementWriterSupplier<T> elementWriter,
             ElementSupplier<T> element,
@@ -105,9 +108,26 @@ public interface Writer {
             throws OutputWriteFailedException;
 
     /**
+     * Writes an element using an {@link ElementWriter} to the current directory, <b>without
+     * including an output name</b> in the path.
+     *
+     * @param outputName the name of the subdirectory. This may determine if an output is allowed or
+     *     not, but will not be included in the outputted filename.
+     * @param elementWriter writes the element to the filesystem
+     * @param element the element to write
+     * @return true if the output was allowed, false otherwise
+     * @throws OutputWriteFailedException
+     */
+    <T> boolean writeWithoutName(
+            String outputName, ElementWriterSupplier<T> elementWriter, ElementSupplier<T> element)
+            throws OutputWriteFailedException;
+
+    /**
      * The path to write a particular output to.
      *
-     * <p>This is an alternative method to write to the file system rather than using an {@link ElementWriter} and {@link #write(String, ElementWriterSupplier, ElementSupplier)} and {@link #writeWithIndex(IndexableOutputNameStyle, ElementWriterSupplier, ElementSupplier, String)}.
+     * <p>This is an alternative method to write to the file system rather than using an {@link
+     * ElementWriter} and {@link #write(String, ElementWriterSupplier, ElementSupplier)} and {@link
+     * #writeWithIndex(IndexableOutputNameStyle, ElementWriterSupplier, ElementSupplier, String)}.
      *
      * @param outputName the output-name. This is the filename without an extension, and may
      *     determine if an output is allowed or not.

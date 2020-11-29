@@ -30,15 +30,15 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.function.Function;
 import org.anchoranalysis.bean.NamedBean;
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.params.KeyValueParams;
-import org.anchoranalysis.core.progress.ProgressReporterNull;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.progress.ProgressIgnore;
+import org.anchoranalysis.core.value.KeyValueParams;
 import org.anchoranalysis.image.core.stack.TimeSequence;
 import org.anchoranalysis.image.io.ImageIOException;
-import org.anchoranalysis.image.io.bean.stack.StackReader;
-import org.anchoranalysis.image.io.histogram.HistogramCSVReader;
-import org.anchoranalysis.image.io.objects.ObjectCollectionReader;
-import org.anchoranalysis.image.io.stack.OpenedRaster;
+import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
+import org.anchoranalysis.image.io.histogram.input.HistogramCSVReader;
+import org.anchoranalysis.image.io.object.input.ObjectCollectionReader;
+import org.anchoranalysis.image.io.stack.input.OpenedRaster;
 import org.anchoranalysis.io.input.bean.path.DerivePath;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.mpp.io.input.MultiInputSubMap;
@@ -167,9 +167,7 @@ class AppendHelper {
             boolean debugMode)
             throws OperationFailedException {
         try {
-            return reader.apply(
-                    namedBean.getValue().deriveFrom(
-                            input::pathForBinding, debugMode));
+            return reader.apply(namedBean.getValue().deriveFrom(input::pathForBinding, debugMode));
         } catch (Exception e) {
             throw new OperationFailedException("An error occured appending to the multi-input", e);
         }
@@ -178,7 +176,7 @@ class AppendHelper {
     private static TimeSequence openRaster(Path path, StackReader stackReader)
             throws ImageIOException {
         try (OpenedRaster openedRaster = stackReader.openFile(path)) {
-            return openedRaster.open(0, ProgressReporterNull.get());
+            return openedRaster.open(0, ProgressIgnore.get());
         }
     }
 }

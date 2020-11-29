@@ -27,14 +27,14 @@
 package org.anchoranalysis.mpp.feature.addcriteria;
 
 import java.util.Optional;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.energy.EnergyTotal;
 import org.anchoranalysis.feature.results.ResultsVector;
-import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
+import org.anchoranalysis.feature.session.calculator.multi.FeatureCalculatorMulti;
 import org.anchoranalysis.mpp.feature.energy.EnergyPair;
 import org.anchoranalysis.mpp.feature.input.memo.FeatureInputPairMemo;
 import org.anchoranalysis.mpp.mark.Mark;

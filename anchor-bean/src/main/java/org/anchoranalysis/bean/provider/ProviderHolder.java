@@ -28,7 +28,7 @@ package org.anchoranalysis.bean.provider;
 
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 
 /**
  * A convenient way of providing an object without using a {@link AnchorBean}.

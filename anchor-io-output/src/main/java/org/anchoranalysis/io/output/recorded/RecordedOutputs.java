@@ -27,6 +27,7 @@ package org.anchoranalysis.io.output.recorded;
 
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 /**
  * Outputs recorded from {@link RecordOutputNamesForWriter}.
@@ -37,6 +38,8 @@ import java.util.TreeSet;
  *   <li>outputs that are written as they were enabled.
  *   <li>outputs that not written as they are <b>not</b> enabled.
  * </ul>
+ *
+ * <p>Adding outputs to this class is a <i>thread-safe</i> operation.
  *
  * @author Owen Feehan
  */
@@ -50,14 +53,17 @@ public class RecordedOutputs {
     /** Names of outputs that were not allowed and therefore not written. */
     private Set<String> namesDisabled = new TreeSet<>();
 
+    /** The maximum number of outputs to list before using a "and others" message. */
+    private static final int MAX_OUTPUTS_LISTED = 8;
+
     /**
      * Adds a new output-name to the set of recorded names.
      *
      * @param outputName the output-name
-     * @param enabled where the output was allowed or not
+     * @param allowed where the output was allowed or not
      */
-    public void add(String outputName, boolean enabled) {
-        if (enabled) {
+    public synchronized void add(String outputName, boolean allowed) {
+        if (allowed) {
             namesEnabled.add(outputName);
         } else {
             namesDisabled.add(outputName);
@@ -132,7 +138,7 @@ public class RecordedOutputs {
      * @return the output-names as a string
      */
     public String summarizeEnabled() {
-        return summarizeNames(namesEnabled);
+        return summarizeNames(namesEnabled, MAX_OUTPUTS_LISTED);
     }
 
     /**
@@ -143,7 +149,7 @@ public class RecordedOutputs {
      * @return the output-names as a string
      */
     public String summarizeDisabled() {
-        return summarizeNames(namesDisabled);
+        return summarizeNames(namesDisabled, MAX_OUTPUTS_LISTED);
     }
 
     /**
@@ -172,7 +178,28 @@ public class RecordedOutputs {
         return namesEnabled.contains(outputName);
     }
 
-    private static String summarizeNames(Set<String> names) {
+    /**
+     * Builds a one-line string summary of a set of strings.
+     *
+     * <p>If the number of names {@code <= maxNumber} then all elements are listed. Otherwise, some
+     * are listed with a {@code plus X others.} string at the end.
+     */
+    private static String summarizeNames(Set<String> names, int maxNumber) {
+        if (names.size() > maxNumber) {
+            return collapseToString(extractElements(names, maxNumber))
+                    + String.format(" plus %d others.", names.size() - maxNumber);
+        } else {
+            return collapseToString(names);
+        }
+    }
+
+    /** Extracts the first (by the default iterator) number of elements from a set. */
+    private static <T> Set<T> extractElements(Set<T> set, int numberElements) {
+        return set.stream().limit(numberElements).collect(Collectors.toCollection(TreeSet::new));
+    }
+
+    /** Describes a set of strings as a (comma plus whitespace) separated string. */
+    private static String collapseToString(Set<String> names) {
         return String.join(", ", names);
     }
 }

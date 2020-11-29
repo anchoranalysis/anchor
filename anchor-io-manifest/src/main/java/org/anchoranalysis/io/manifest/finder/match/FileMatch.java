@@ -28,40 +28,42 @@ package org.anchoranalysis.io.manifest.finder.match;
 
 import java.util.Optional;
 import java.util.function.Predicate;
-import org.anchoranalysis.io.manifest.ManifestDescription;
-import org.anchoranalysis.io.manifest.file.OutputtedFile;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.io.manifest.ManifestDescription;
+import org.anchoranalysis.io.manifest.file.OutputtedFile;
 
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class FileMatch {
-    
+
     /**
-     * Match a file whose manifest-description has <b>either of two specific function and a specific type <u>and</u> whose output-name matches a specific value</b>.
-     * 
+     * Match a file whose manifest-description has <b>either of two specific function and a specific
+     * type <u>and</u> whose output-name matches a specific value</b>.
+     *
      * @param function1 a possible matching function-value
      * @param function2 another possible matching function-value
      * @param type the matching type-value
      * @param outputName the output-name
      * @return a predicate that matches files that fulfills the condition.
      */
-    public static Predicate<OutputtedFile> descriptionAndOutputName(String function1, String function2, String type, String outputName) {
-        return description(function1, function2, type).and( outputName(outputName) );
+    public static Predicate<OutputtedFile> descriptionAndOutputName(
+            String function1, String function2, String type, String outputName) {
+        return description(function1, function2, type).and(outputName(outputName));
     }
-    
+
     /**
      * Match a file whose <b>output-name matches a specific value</b>.
-     * 
+     *
      * @param outputName the output-name
      * @return a predicate that matches files that fulfills the condition.
      */
     public static Predicate<OutputtedFile> outputName(String outputName) {
         return directory -> directory.getOutputName().equals(outputName);
     }
-    
+
     /**
      * Match a file whose manifest-description has a specific <b>function and type</b>.
-     * 
+     *
      * @param function the matching function-value
      * @param type the matching type-value
      * @return a predicate that matches files that fulfills the condition.
@@ -69,34 +71,38 @@ public class FileMatch {
     public static Predicate<OutputtedFile> description(String function, String type) {
         return description(DescriptionMatch.functionAndType(function, type));
     }
-    
+
     /**
      * Match a file whose manifest-description has a specific <b>function</b>.
-     * 
+     *
      * @param function the matching function-value
      * @return a predicate that matches files that fulfills the condition.
      */
     public static Predicate<OutputtedFile> description(String function) {
         return description(DescriptionMatch.function(function));
     }
-    
+
     /**
-     * Match a file whose manifest-description has <b>either of two specific function and a specific type</b>.
-     * 
+     * Match a file whose manifest-description has <b>either of two specific function and a specific
+     * type</b>.
+     *
      * @param function1 a possible matching function-value
      * @param function2 another possible matching function-value
      * @param type the matching type-value
      * @return a predicate that matches files that fulfills the condition.
      */
-    public static Predicate<OutputtedFile> description(String function1, String function2, String type) {
+    public static Predicate<OutputtedFile> description(
+            String function1, String function2, String type) {
         return description(DescriptionMatch.eitherFunctionAndType(function1, function2, type));
     }
-    
-    private static Predicate<OutputtedFile> description(Predicate<ManifestDescription> manifestDescription) {
+
+    private static Predicate<OutputtedFile> description(
+            Predicate<ManifestDescription> manifestDescription) {
         return file -> nonNullAnd(file, manifestDescription);
     }
 
-    private static boolean nonNullAnd(OutputtedFile file, Predicate<ManifestDescription> predicateManifestDescription) {
+    private static boolean nonNullAnd(
+            OutputtedFile file, Predicate<ManifestDescription> predicateManifestDescription) {
         Optional<ManifestDescription> description = file.getDescription();
         return description.isPresent() && predicateManifestDescription.test(description.get());
     }

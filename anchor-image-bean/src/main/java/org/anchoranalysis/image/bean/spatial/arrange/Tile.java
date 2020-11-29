@@ -40,9 +40,9 @@ import org.anchoranalysis.image.bean.nonbean.spatial.arrange.ArrangeStackExcepti
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.BoundingBoxesOnPlane;
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.TableItemArrangement;
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.TableItemException;
-import org.anchoranalysis.image.core.stack.rgb.RGBStack;
-import org.anchoranalysis.spatial.extent.Extent;
-import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.image.core.stack.RGBStack;
+import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.Point3i;
 
 public class Tile extends ArrangeStackBean {

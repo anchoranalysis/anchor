@@ -28,7 +28,7 @@ package org.anchoranalysis.image.feature.bean;
 
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.image.feature.histogram.FeatureInputHistogram;
+import org.anchoranalysis.image.feature.input.FeatureInputHistogram;
 
 public abstract class FeatureHistogram extends Feature<FeatureInputHistogram> {
 

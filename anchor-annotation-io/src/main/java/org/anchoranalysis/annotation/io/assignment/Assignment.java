@@ -27,7 +27,7 @@
 package org.anchoranalysis.annotation.io.assignment;
 
 import java.util.List;
-import org.anchoranalysis.core.text.TypedValue;
+import org.anchoranalysis.core.value.TypedValue;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 
 public interface Assignment {

@@ -41,7 +41,8 @@ public class FloatFromUnsignedByte extends ToFloat {
         int indexOut = 0;
         for (int y = 0; y < dimensions.y(); y++) {
             for (int x = 0; x < dimensions.x(); x++) {
-                out[indexOut++] = PrimitiveConverter.unsignedByteToInt(source.get(offsetInSource++));
+                out[indexOut++] =
+                        PrimitiveConverter.unsignedByteToInt(source.get(offsetInSource++));
             }
         }
         return out;

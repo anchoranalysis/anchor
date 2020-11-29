@@ -33,13 +33,14 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
-import org.anchoranalysis.image.voxel.iterator.predicate.buffer.PredicateBufferBinary;
+import org.anchoranalysis.image.voxel.iterator.predicate.PredicateBufferBinary;
 import org.anchoranalysis.image.voxel.iterator.process.ProcessPoint;
+import org.anchoranalysis.image.voxel.iterator.process.ProcessPointAndIndex;
 import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferBinary;
 import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferBinaryMixed;
 import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferTernary;
 import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferUnary;
-import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.point.ReadableTuple3i;
 
@@ -79,6 +80,38 @@ public class IterateVoxelsBoundingBox {
 
                 for (point.setX(cornerMin.x()); point.x() <= cornerMax.x(); point.incrementX()) {
                     process.process(point);
+                }
+            }
+        }
+    }
+
+    /**
+     * Iterate over each voxel in a bounding-box
+     *
+     * @param box the box that is used as a condition on what voxels to iterate i.e. only voxels
+     *     within these bounds
+     * @param process is called for each voxel within the bounding-box using <i>global</i>
+     *     coordinates.
+     */
+    public static void withPointAndIndex(BoundingBox box, ProcessPointAndIndex process) {
+
+        ReadableTuple3i cornerMin = box.cornerMin();
+        ReadableTuple3i cornerMax = box.calculateCornerMax();
+
+        Point3i point = new Point3i();
+
+        for (point.setZ(cornerMin.z()); point.z() <= cornerMax.z(); point.incrementZ()) {
+
+            process.notifyChangeSlice(point.z());
+
+            int index = 0;
+
+            for (point.setY(cornerMin.y()); point.y() <= cornerMax.y(); point.incrementY()) {
+
+                process.notifyChangeY(point.y());
+
+                for (point.setX(cornerMin.x()); point.x() <= cornerMax.x(); point.incrementX()) {
+                    process.process(point, index++);
                 }
             }
         }
@@ -131,7 +164,7 @@ public class IterateVoxelsBoundingBox {
             BoundingBox box, Voxels<T> voxels, ProcessBufferUnary<T> process) {
         withPoint(box, new RetrieveBufferForSlice<>(voxels, process));
     }
-    
+
     /**
      * Iterate over each voxel in a bounding-box - with <b>two</b> associated buffers for each
      * slice, one {@link VoxelBuffer} and one {@link Buffer}
@@ -152,7 +185,7 @@ public class IterateVoxelsBoundingBox {
             ReadableTuple3i shiftForSecond,
             Voxels<T> voxels1,
             Voxels<T> voxels2,
-            ProcessBufferBinary<T,T> process) {
+            ProcessBufferBinary<T, T> process) {
         ReadableTuple3i max = box.calculateCornerMaxExclusive();
 
         Point3i point = new Point3i();
@@ -194,12 +227,12 @@ public class IterateVoxelsBoundingBox {
      * @param <S> buffer-type for the <i>voxel-buffer</i> for {@code voxels1}).
      * @param <T> buffer-type for the <i>buffer</i> (for {@code voxels2}).
      */
-    public static <S,T> void withTwoMixedBuffers(
+    public static <S, T> void withTwoMixedBuffers(
             BoundingBox box,
             ReadableTuple3i shiftForSecond,
             Voxels<S> voxels1,
             Voxels<T> voxels2,
-            ProcessBufferBinaryMixed<S,T> process) {
+            ProcessBufferBinaryMixed<S, T> process) {
         ReadableTuple3i max = box.calculateCornerMaxExclusive();
 
         Point3i point = new Point3i();
@@ -224,7 +257,7 @@ public class IterateVoxelsBoundingBox {
             }
         }
     }
-    
+
     /**
      * Iterate over each voxel in a bounding-box - with <b>two</b> associated buffers for each slice
      * - until a predicate evaluates to true.

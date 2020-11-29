@@ -31,20 +31,22 @@ import java.util.function.IntUnaryOperator;
 import java.util.function.Predicate;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.functional.function.IntBinaryOperation;
+import org.anchoranalysis.core.functional.checked.IntBinaryOperation;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedBufferAsInt;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.iterator.process.ProcessPoint;
+import org.anchoranalysis.image.voxel.iterator.process.ProcessPointAndIndex;
 import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferBinary;
 import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferTernary;
 import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferUnary;
 import org.anchoranalysis.image.voxel.iterator.process.voxelbuffer.ProcessVoxelBufferBinary;
+import org.anchoranalysis.image.voxel.iterator.process.voxelbuffer.ProcessVoxelBufferBinaryMixed;
 import org.anchoranalysis.image.voxel.iterator.process.voxelbuffer.ProcessVoxelBufferUnary;
 import org.anchoranalysis.image.voxel.iterator.process.voxelbuffer.ProcessVoxelBufferUnaryWithPoint;
-import org.anchoranalysis.spatial.extent.Extent;
-import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.Point3i;
 
 /**
@@ -69,6 +71,17 @@ public class IterateVoxelsAll {
     }
 
     /**
+     * Iterate over each voxel in an {@link Extent}
+     *
+     * @param extent the extent to be iterated over
+     * @param process process is called for each voxel inside the extent using the same coordinates
+     *     as the extent.
+     */
+    public static void withPointAndIndex(Extent extent, ProcessPointAndIndex process) {
+        IterateVoxelsBoundingBox.withPointAndIndex(new BoundingBox(extent), process);
+    }
+
+    /**
      * Iterate over each voxel - with <b>one</b> associated <b>buffer</b> for each slice.
      *
      * @param voxels voxels to be iterated over (in their entirety)
@@ -85,16 +98,13 @@ public class IterateVoxelsAll {
      *
      * <p>The extent's of both {@code voxels1} and {@code voxels2} must be equal.
      *
-     * @param voxels1 voxels in which which {@link BoundingBox} refers to a subregion, and which
-     *     provides the <b>first</b> buffer
-     * @param voxels2 voxels in which which {@link BoundingBox} refers to a subregion, and which
-     *     provides the <b>second</b> buffer
-     * @param process is called for each voxel within the bounding-box using <i>global</i>
-     *     coordinates.
+     * @param voxels1 first voxels provides the <b>first</b> buffer
+     * @param voxels2 second voxels
+     * @param process is called for each voxel using <i>global</i> coordinates.
      * @param <T> buffer-type for voxels
      */
     public static <T> void withTwoBuffersAndPoint(
-            Voxels<T> voxels1, Voxels<T> voxels2, ProcessBufferBinary<T,T> process) {
+            Voxels<T> voxels1, Voxels<T> voxels2, ProcessBufferBinary<T, T> process) {
         Preconditions.checkArgument(voxels1.extent().equals(voxels2.extent()));
         withPoint(voxels1.extent(), new RetrieveBuffersForTwoSlices<>(voxels1, voxels2, process));
     }
@@ -190,12 +200,9 @@ public class IterateVoxelsAll {
      *
      * <p>The extent's of both {@code voxels1} and {@code voxels2} must be equal.
      *
-     * @param voxels1 voxels in which which {@link BoundingBox} refers to a subregion, and which
-     *     provides the <b>first</b> buffer
-     * @param voxels2 voxels in which which {@link BoundingBox} refers to a subregion, and which
-     *     provides the <b>second</b> buffer
-     * @param process is called for each voxel within the bounding-box using <i>global</i>
-     *     coordinates.
+     * @param voxels1 voxels that provide the <b>first</b> voxel-buffer
+     * @param voxels2 voxels that provide the <b>first</b> buffer
+     * @param process is called for each voxel using <i>global</i> coordinates.
      * @param <T> buffer-type for voxels
      */
     public static <S, T> void withTwoVoxelBuffers(
@@ -215,16 +222,51 @@ public class IterateVoxelsAll {
                             }
                         });
     }
-    
-    
-
 
     /**
-     * Tries to apply a predicate to all the remaining buffer locations, returning true if the predicate matches.
-     * 
-     * <p>The predicate should test only the <i>current element</i> of the buffer, although the whole buffer (of type {@code T}
-     * is passed as an argument. It should also advance the position in the buffer (as automatically occurs if {@code get()} is called.
-     * 
+     * Iterate over each voxel in a bounding-box - with <b>one associated voxel-buffer</b> and
+     * <b>one associated buffer</b> for each slice.
+     *
+     * <p>The extent's of both {@code voxels1} and {@code voxels2} must be equal.
+     *
+     * <p>Note that a new {@link Point3i} is created for each call to {@code process}.
+     *
+     * @param voxels1 voxels that provide the <b>first</b> element, the voxel-buffer.
+     * @param voxels2 voxels that provide the <b>second</b> element, the buffer.
+     * @param process is called for each voxel using <i>global</i> coordinates.
+     * @param <T> buffer-type for voxels
+     */
+    public static <S, T> void withTwoMixedBuffers(
+            Voxels<S> voxels1, Voxels<T> voxels2, ProcessVoxelBufferBinaryMixed<S, T> process) {
+        Preconditions.checkArgument(voxels1.extent().equals(voxels2.extent()));
+
+        int sizeX = voxels1.extent().x();
+        int sizeY = voxels1.extent().y();
+
+        voxels1.extent()
+                .iterateOverZ(
+                        z -> {
+                            VoxelBuffer<S> buffer1 = voxels1.slice(z);
+                            T buffer2 = voxels2.slice(z).buffer();
+
+                            int offset = 0;
+                            for (int y = 0; y < sizeY; y++) {
+                                for (int x = 0; x < sizeX; x++) {
+                                    process.process(
+                                            new Point3i(x, y, z), buffer1, buffer2, offset++);
+                                }
+                            }
+                        });
+    }
+
+    /**
+     * Tries to apply a predicate to all the remaining buffer locations, returning true if the
+     * predicate matches.
+     *
+     * <p>The predicate should test only the <i>current element</i> of the buffer, although the
+     * whole buffer (of type {@code T} is passed as an argument. It should also advance the position
+     * in the buffer (as automatically occurs if {@code get()} is called.
+     *
      * @param <T> buffer-type
      * @param voxels the voxels to iterate through
      * @param predicate the predicate on the current element of the buffer

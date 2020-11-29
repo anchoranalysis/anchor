@@ -28,11 +28,11 @@ package org.anchoranalysis.image.core.orientation;
 
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
-import org.anchoranalysis.core.name.provider.NameValueSet;
-import org.anchoranalysis.core.name.value.SimpleNameValue;
+import org.anchoranalysis.core.identifier.name.SimpleNameValue;
+import org.anchoranalysis.core.identifier.provider.NameValueSet;
 import org.anchoranalysis.image.core.object.properties.ObjectWithProperties;
 import org.anchoranalysis.spatial.rotation.RotationMatrix;
-import org.anchoranalysis.spatial.rotation.RotationMatrix3DFromRadianCreator;
+import org.anchoranalysis.spatial.rotation.factory.RotateAngle3D;
 
 // Conventions taken from http://mathworld.wolfram.com/EulerAngles.html
 @RequiredArgsConstructor
@@ -67,8 +67,7 @@ public class Orientation3DEulerAngles extends Orientation {
 
     @Override
     public RotationMatrix createRotationMatrix() {
-        return new RotationMatrix3DFromRadianCreator(rotationX, rotationY, rotationZ)
-                .createRotationMatrix();
+        return new RotateAngle3D(rotationX, rotationY, rotationZ).create();
     }
 
     @Override
@@ -78,10 +77,10 @@ public class Orientation3DEulerAngles extends Orientation {
     }
 
     @Override
-    public void addProperties(NameValueSet<String> nvc) {
-        addProperty(nvc, "X", rotationX);
-        addProperty(nvc, "Y", rotationY);
-        addProperty(nvc, "Z", rotationZ);
+    public void addProperties(NameValueSet<String> namedValues) {
+        addProperty(namedValues, "X", rotationX);
+        addProperty(namedValues, "Y", rotationY);
+        addProperty(namedValues, "Z", rotationZ);
     }
 
     private void addProperty(NameValueSet<String> nvc, String dimension, double radians) {
@@ -97,7 +96,7 @@ public class Orientation3DEulerAngles extends Orientation {
     }
 
     @Override
-    public int getNumDims() {
+    public int numberDimensions() {
         return 3;
     }
 }

@@ -31,7 +31,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import org.anchoranalysis.bean.define.adder.DefineAdder;
 import org.anchoranalysis.bean.define.adder.DefineAdderBean;
-import org.anchoranalysis.bean.xml.error.BeanXmlException;
+import org.anchoranalysis.bean.xml.exception.BeanXmlException;
 import org.anchoranalysis.bean.xml.factory.AnchorBeanFactory;
 import org.anchoranalysis.bean.xml.factory.HelperListUtilities;
 import org.apache.commons.configuration.SubnodeConfiguration;

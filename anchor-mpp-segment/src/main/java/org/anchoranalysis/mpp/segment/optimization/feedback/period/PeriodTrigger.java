@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.mpp.segment.optimization.feedback.period;
 
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.mpp.segment.optimization.step.Reporting;
 
 class PeriodTrigger<S, T extends PeriodReceiver<S>> {

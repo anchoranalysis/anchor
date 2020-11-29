@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -27,38 +27,39 @@ package org.anchoranalysis.io.input.bean.files;
 
 import java.io.File;
 import java.util.Collection;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.input.bean.InputManagerParams;
 import org.anchoranalysis.io.input.files.FilesProviderException;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
- * Like {@link FilesProvider} but employs a unary operator on a call to an existing {@link FilesProvider}.
- *  
- * @author Owen Feehan
+ * Like {@link FilesProvider} but employs a unary operator on a call to an existing {@link
+ * FilesProvider}.
  *
+ * @author Owen Feehan
  */
 public abstract class FilesProviderUnary extends FilesProvider {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private FilesProvider filesProvider;
+    @BeanField @Getter @Setter private FilesProvider files;
     // END BEAN PROPERTIES
-    
+
     @Override
     public Collection<File> create(InputManagerParams params) throws FilesProviderException {
-        return transform(filesProvider.create(params), params.isDebugModeActivated());
+        return transform(files.create(params), params.isDebugModeActivated());
     }
-    
+
     /**
      * Transform an existing collection of files.
-     * 
-     * <p>Note that the incoming collection of files may be modified, and can no
-     * longer be used in its original form after this method call.
-     * 
+     *
+     * <p>Note that the incoming collection of files may be modified, and can no longer be used in
+     * its original form after this method call.
+     *
      * @param source the incoming files (which may be consumed and modified).
      * @param debugMode whether we are executing in debug-mode or not
      * @return the transformed (outgoing) files.
      */
-    protected abstract Collection<File> transform(Collection<File> source, boolean debugMode) throws FilesProviderException;
+    protected abstract Collection<File> transform(Collection<File> source, boolean debugMode)
+            throws FilesProviderException;
 }

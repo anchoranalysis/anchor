@@ -27,15 +27,13 @@
 package org.anchoranalysis.image.voxel.interpolator;
 
 import net.imglib2.interpolation.randomaccess.NearestNeighborInterpolatorFactory;
-import net.imglib2.type.numeric.integer.UnsignedByteType;
-import net.imglib2.type.numeric.integer.UnsignedShortType;
 
 public class InterpolatorImgLib2NearestNeighbor extends InterpolatorImgLib2 {
 
     public InterpolatorImgLib2NearestNeighbor() {
         super(
-                new NearestNeighborInterpolatorFactory<UnsignedByteType>(),
-                new NearestNeighborInterpolatorFactory<UnsignedShortType>());
+                new NearestNeighborInterpolatorFactory<>(),
+                new NearestNeighborInterpolatorFactory<>());
     }
 
     @Override

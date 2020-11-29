@@ -32,7 +32,7 @@ import javax.annotation.Nullable;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.provider.Provider;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 
 /**
  * Utility functions to create {@link Optional} from nullable providers or boolean flags.

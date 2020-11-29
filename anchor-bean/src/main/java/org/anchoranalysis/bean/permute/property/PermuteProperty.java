@@ -30,7 +30,7 @@ import java.util.Iterator;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.permute.setter.PermutationSetter;
 import org.anchoranalysis.bean.permute.setter.PermutationSetterException;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 
 /** @param <T> Type of permutations */
 public abstract class PermuteProperty<T> extends AnchorBean<PermuteProperty<T>> {

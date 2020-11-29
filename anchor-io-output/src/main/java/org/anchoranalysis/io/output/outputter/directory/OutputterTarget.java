@@ -32,8 +32,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Value;
 import org.anchoranalysis.io.output.outputter.BindFailedException;
-import org.anchoranalysis.io.output.path.DirectoryWithPrefix;
-import org.anchoranalysis.io.output.path.PathCreator;
+import org.anchoranalysis.io.output.path.prefixer.DirectoryWithPrefix;
+import org.anchoranalysis.io.output.path.prefixer.PathCreator;
 import org.anchoranalysis.io.output.writer.WriterExecuteBeforeEveryOperation;
 
 /**
@@ -67,7 +67,8 @@ public class OutputterTarget {
      * @return a new shallow-copied {@link OutputterTarget} but instead with {@code prefixToAssign}.
      * @throws BindFailedException if the subdirectory cannot be outputted to
      */
-    public OutputterTarget changePrefix(DirectoryWithPrefix prefixToAssign) throws BindFailedException {
+    public OutputterTarget changePrefix(DirectoryWithPrefix prefixToAssign)
+            throws BindFailedException {
         return new OutputterTarget(
                 directory.bindToSubdirectory(prefixToAssign.getDirectory()), prefixToAssign);
     }
@@ -76,10 +77,10 @@ public class OutputterTarget {
         return directory.getParentDirectoryCreator();
     }
 
-    public Path getFolderPath() {
+    public Path getDirectory() {
         return prefix.getDirectory();
     }
-    
+
     public PathCreator pathCreator() {
         return prefix;
     }

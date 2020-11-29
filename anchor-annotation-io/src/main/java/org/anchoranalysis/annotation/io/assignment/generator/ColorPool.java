@@ -26,11 +26,11 @@
 
 package org.anchoranalysis.annotation.io.assignment.generator;
 
-import org.anchoranalysis.bean.shared.color.scheme.ColorScheme;
-import org.anchoranalysis.core.color.ColorList;
-import org.anchoranalysis.core.error.OperationFailedException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.anchoranalysis.bean.shared.color.scheme.ColorScheme;
+import org.anchoranalysis.core.color.ColorList;
+import org.anchoranalysis.core.exception.OperationFailedException;
 
 @AllArgsConstructor
 public class ColorPool {

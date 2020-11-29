@@ -1,5 +1,9 @@
 package org.anchoranalysis.core.index;
 
+import lombok.Getter;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.exception.friendly.AnchorFriendlyCheckedException;
+
 /*
  * #%L
  * anchor-core
@@ -25,10 +29,6 @@ package org.anchoranalysis.core.index;
  * THE SOFTWARE.
  * #L%
  */
-
-import lombok.Getter;
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.error.friendly.AnchorFriendlyCheckedException;
 
 /**
  * When a get operation fails for a particular key
@@ -59,16 +59,22 @@ public class GetOperationFailedException extends AnchorFriendlyCheckedException 
     }
 
     public GetOperationFailedException(String key, String message) {
-        super(String.format("An exception occurred getting '%s':%n%s", key, message));
+        super(messageFor(key, message));
         this.key = key;
         this.message = message;
     }
 
     public GetOperationFailedException(String key, Throwable exc) {
-        this(key, exc.toString());
+        super(messageFor(key, exc.toString()), exc);
+        this.key = key;
+        this.message = exc.toString();
     }
 
     public OperationFailedException asOperationFailedException() {
         return new OperationFailedException(getMessage());
+    }
+
+    private static String messageFor(String key, String message) {
+        return String.format("An exception occurred getting '%s':%n%s", key, message);
     }
 }

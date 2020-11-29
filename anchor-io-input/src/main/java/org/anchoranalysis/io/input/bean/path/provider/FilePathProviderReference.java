@@ -30,8 +30,8 @@ import java.nio.file.Path;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.name.provider.NamedProviderGetException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 
 public class FilePathProviderReference extends FilePathProvider {
 

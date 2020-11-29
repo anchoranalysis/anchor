@@ -27,7 +27,7 @@
 package org.anchoranalysis.mpp.overlay;
 
 import lombok.AllArgsConstructor;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.object.properties.ObjectWithProperties;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;

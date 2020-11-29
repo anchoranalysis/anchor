@@ -27,13 +27,26 @@
 package org.anchoranalysis.image.bean.spatial;
 
 import java.util.Optional;
-import org.anchoranalysis.bean.NullParamsBean;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.image.bean.ImageBean;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
-import org.anchoranalysis.spatial.extent.scale.ScaleFactor;
+import org.anchoranalysis.spatial.scale.ScaleFactor;
 
-public abstract class ScaleCalculator extends NullParamsBean<ScaleCalculator> {
+/**
+ * Calculating a scaling-factor from dimensions.
+ *
+ * @author Owen Feehan
+ */
+public abstract class ScaleCalculator extends ImageBean<ScaleCalculator> {
 
-    public abstract ScaleFactor calculate(Optional<Dimensions> sourceDimensions)
+    /**
+     * Calculates a scaling-factor for a source image/entity of particular dimensions.
+     *
+     * @param dimensionsToBeScaled dimensions of the source image/entity that will be scaled, if
+     *     they are known.
+     * @return the scaling-factor to use
+     * @throws OperationFailedException
+     */
+    public abstract ScaleFactor calculate(Optional<Dimensions> dimensionsToBeScaled)
             throws OperationFailedException;
 }

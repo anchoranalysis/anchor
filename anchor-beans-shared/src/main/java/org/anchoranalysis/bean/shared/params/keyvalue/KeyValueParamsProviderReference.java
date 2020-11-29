@@ -29,9 +29,9 @@ package org.anchoranalysis.bean.shared.params.keyvalue;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.name.provider.NamedProviderGetException;
-import org.anchoranalysis.core.params.KeyValueParams;
+import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
+import org.anchoranalysis.core.value.KeyValueParams;
 
 public class KeyValueParamsProviderReference extends KeyValueParamsProvider {
 

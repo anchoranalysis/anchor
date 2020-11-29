@@ -31,7 +31,7 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
-import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.io.generator.sequence.pattern.OutputPattern;
 import org.anchoranalysis.io.manifest.ManifestDirectoryDescription;
 import org.anchoranalysis.io.manifest.file.FileType;
@@ -47,50 +47,49 @@ import org.anchoranalysis.io.output.writer.ElementWriterSupplier;
  *
  * @author Owen Feehan
  */
-@RequiredArgsConstructor @Accessors(fluent=true)
+@RequiredArgsConstructor
+@Accessors(fluent = true)
 class SequenceWriters {
 
     // START: REQUIRED ARGUMENTS
     private final RecordingWriters parentWriters;
-    
+
     private final OutputPattern pattern;
     // END: REQUIRED ARGUMENTS
 
     @Getter private Optional<RecordingWriters> writers = Optional.empty();
 
     private IndexableSubdirectory directoryManifest;
-    
-    public void init(FileType[] fileTypes, SequenceType<?> sequenceType) throws InitException {
 
-        if (fileTypes.length == 0) {
-            throw new InitException("The generator has no associated FileTypes");
-        }
+    public void init(SequenceType<?> sequenceType) throws InitException {
 
         this.directoryManifest = new IndexableSubdirectory(pattern.getOutputNameStyle());
-        
-        Arrays.stream(fileTypes).forEach(directoryManifest::addFileType);
 
         try {
-            this.writers = selectWritersMaybeCreateSubdirectory(
-                createDirectoryDescription(fileTypes, sequenceType),
-                directoryManifest
-            );
+            this.writers =
+                    selectWritersMaybeCreateSubdirectory(
+                            createDirectoryDescription(sequenceType), directoryManifest);
         } catch (OutputWriteFailedException e) {
             throw new InitException(e);
         }
     }
-  
-    public <T> void write(ElementWriterSupplier<T> generator, ElementSupplier<T> element, String index)
+
+    public void addFileTypes(FileType[] fileTypes) {
+        Arrays.stream(fileTypes).forEach(directoryManifest::addFileType);
+    }
+
+    public <T> Optional<FileType[]> write(
+            ElementWriterSupplier<T> generator, ElementSupplier<T> element, String index)
             throws OutputWriteFailedException {
 
-        if (!isOn()) {
-            return;
+        if (isOn()) {
+            return this.writers // NOSONAR
+                    .get()
+                    .multiplex(pattern.isSelective())
+                    .writeWithIndex(pattern.getOutputNameStyle(), generator, element, index);
+        } else {
+            return Optional.empty();
         }
-
-        this.writers // NOSONAR
-                .get()
-                .multiplex(pattern.isSelective())
-                .writeWithIndex(pattern.getOutputNameStyle(), generator, element, index);
     }
 
     public boolean isOn() {
@@ -98,24 +97,23 @@ class SequenceWriters {
     }
 
     private Optional<RecordingWriters> selectWritersMaybeCreateSubdirectory(
-            ManifestDirectoryDescription folderDescription,
-            IndexableSubdirectory subFolderWrite)
+            ManifestDirectoryDescription directoryDescription, IndexableSubdirectory subdirectory)
             throws OutputWriteFailedException {
         if (pattern.getSubdirectoryName().isPresent()) {
             return parentWriters
                     .multiplex(pattern.isSelective())
                     .createSubdirectory(
-                            pattern.getSubdirectoryName().get(),  // NOSONAR
-                            folderDescription,
-                            Optional.of(subFolderWrite),
+                            pattern.getSubdirectoryName().get(), // NOSONAR
+                            directoryDescription,
+                            Optional.of(subdirectory),
                             false)
                     .map(OutputterChecked::getWriters);
         } else {
             return Optional.of(parentWriters);
         }
     }
-        
-    private ManifestDirectoryDescription createDirectoryDescription(FileType[] fileTypes, SequenceType<?> sequenceType) {
-        return new ManifestDirectoryDescription(pattern.createDirectoryDescription(fileTypes), sequenceType);
+
+    private ManifestDirectoryDescription createDirectoryDescription(SequenceType<?> sequenceType) {
+        return new ManifestDirectoryDescription(pattern.getManifestDescription(), sequenceType);
     }
 }

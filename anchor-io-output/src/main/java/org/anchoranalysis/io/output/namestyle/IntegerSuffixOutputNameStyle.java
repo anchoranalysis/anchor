@@ -26,35 +26,37 @@
 
 package org.anchoranalysis.io.output.namestyle;
 
+import com.google.common.base.Preconditions;
+
 /**
  * Outputs a file-name involving an integer of length {@code numberDigits} with leading zeros.
- * 
- * <p>Optionally, a prefix will be placed before this number (with an underscore to separate).
- * 
- * <p>If no prefix is defined, no underscore will be present.
- * 
- * @author Owen Feehan
  *
+ * <p>Optionally, a prefix will be placed before this number (with an underscore to separate).
+ *
+ * <p>If no prefix is defined, no underscore will be present.
+ *
+ * @author Owen Feehan
  */
 public class IntegerSuffixOutputNameStyle extends IndexableOutputNameStyle {
 
     /** */
     private static final long serialVersionUID = -3128734431534880903L;
-    
+
     // A string placed before the numberic part of the naming-style
     private String prefix;
-    
+
     private int numberDigits;
-    
+
     public IntegerSuffixOutputNameStyle() {
         // Here as the empty constructor is needed for deserialization
     }
 
     public IntegerSuffixOutputNameStyle(String outputName, int numberDigits) {
         super(outputName);
+        Preconditions.checkArgument(numberDigits > 1);
         this.numberDigits = numberDigits;
     }
-    
+
     public IntegerSuffixOutputNameStyle(String outputName, String prefix, int numberDigits) {
         this(outputName, numberDigits);
         this.prefix = prefix;
@@ -63,32 +65,33 @@ public class IntegerSuffixOutputNameStyle extends IndexableOutputNameStyle {
     private IntegerSuffixOutputNameStyle(IntegerSuffixOutputNameStyle src) {
         super(src);
         this.prefix = src.prefix;
+        this.numberDigits = src.numberDigits;
     }
-    
+
     @Override
     public IndexableOutputNameStyle duplicate() {
         return new IntegerSuffixOutputNameStyle(this);
     }
 
     @Override
-    protected String nameFromOutputFormatString(String outputFormatString, String index) {
+    protected String filenameFromOutputFormatString(String outputFormatString, String index) {
         int indexInt = Integer.parseInt(index);
         return String.format(outputFormatString, indexInt);
     }
 
     @Override
     protected String outputFormatString() {
-        return combineIntegerAndOutputName(getOutputName(), integerFormatSpecifier(numberDigits));
+        return combineIntegerAndOutputName(integerFormatSpecifier(numberDigits));
     }
 
-    private String combineIntegerAndOutputName(String outputName, String integerFormatString) {
+    private String combineIntegerAndOutputName(String integerFormatString) {
         if (!prefix.isEmpty()) {
-            return prefix + "_" + integerFormatString;    
+            return prefix + "_" + integerFormatString;
         } else {
             return integerFormatString;
         }
     }
-    
+
     private static String integerFormatSpecifier(int numDigits) {
         return "%0" + Integer.toString(numDigits) + "d";
     }

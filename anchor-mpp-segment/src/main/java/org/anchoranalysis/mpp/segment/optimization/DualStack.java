@@ -28,7 +28,7 @@ package org.anchoranalysis.mpp.segment.optimization;
 
 import lombok.AllArgsConstructor;
 import lombok.Value;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.image.core.stack.DisplayStack;
 

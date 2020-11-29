@@ -26,18 +26,15 @@
 
 package org.anchoranalysis.io.manifest.sequencetype;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.util.HashSet;
-import org.anchoranalysis.core.index.container.OrderProvider;
+import org.anchoranalysis.core.index.bounded.OrderProvider;
 
 /**
  * A sequence of strings that has no order.
- * 
- * <p>The only requirement is that each index is unique.
- * 
- * @author Owen Feehan
  *
+ * <p>The only requirement is that each index is unique.
+ *
+ * @author Owen Feehan
  */
 public class StringsWithoutOrder extends SequenceType<String> {
 
@@ -45,14 +42,13 @@ public class StringsWithoutOrder extends SequenceType<String> {
     private static final long serialVersionUID = 8292809183713424555L;
 
     private final HashSet<String> set;
-    
+
     private transient CollectionAsRange range;
 
     public StringsWithoutOrder() {
         set = new HashSet<>();
-        range = new CollectionAsRange(set);
     }
-    
+
     @Override
     public void assignMaximumIndex(int index) {
         // NOTHING TO DO, the maximum is not changed for this sequence-type
@@ -82,12 +78,10 @@ public class StringsWithoutOrder extends SequenceType<String> {
 
     @Override
     public IncompleteElementRange elementRange() {
+        if (range == null) {
+            // Lazy creation due to serialization
+            range = new CollectionAsRange(set);
+        }
         return range;
-    }
-    
-    /** For restoring {@code range} after deserialization. */
-    private void readObject(ObjectInputStream stream) throws IOException, ClassNotFoundException {
-        stream.defaultReadObject();
-        this.range = new CollectionAsRange(set);
     }
 }

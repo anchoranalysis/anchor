@@ -28,8 +28,8 @@ package org.anchoranalysis.mpp.mark.voxelized;
 
 import java.util.List;
 import lombok.Getter;
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.voxel.BoundedVoxels;
@@ -44,8 +44,8 @@ import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.voxel.partition.IndexByChannel;
 import org.anchoranalysis.mpp.voxel.partition.factory.VoxelPartitionFactory;
 import org.anchoranalysis.mpp.voxel.partition.factory.VoxelPartitonFactoryHistogram;
-import org.anchoranalysis.spatial.extent.Extent;
-import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.Point3d;
 import org.anchoranalysis.spatial.point.ReadableTuple3i;
 

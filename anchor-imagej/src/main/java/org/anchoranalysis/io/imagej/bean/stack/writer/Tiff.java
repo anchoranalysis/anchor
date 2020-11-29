@@ -26,8 +26,9 @@
 
 package org.anchoranalysis.io.imagej.bean.stack.writer;
 
-import org.anchoranalysis.image.io.stack.StackWriteOptions;
 import ij.io.FileSaver;
+import org.anchoranalysis.core.format.ImageFileFormat;
+import org.anchoranalysis.image.io.stack.output.StackWriteOptions;
 
 /**
  * Writes a TIFF image using ImageJ.
@@ -48,7 +49,7 @@ public class Tiff extends SupportsTimeSeries {
     }
 
     @Override
-    public String fileExtension(StackWriteOptions writeOptions) {
-        return "tif";
+    public ImageFileFormat fileFormat(StackWriteOptions writeOptions) {
+        return ImageFileFormat.TIFF;
     }
 }

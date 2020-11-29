@@ -28,14 +28,14 @@ package org.anchoranalysis.annotation.io.assignment;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.energy.EnergyStack;
-import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
+import org.anchoranalysis.feature.session.calculator.single.FeatureCalculatorSingle;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
-import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
+import org.anchoranalysis.image.feature.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.math.optimization.HungarianAlgorithm;
@@ -101,18 +101,24 @@ public class AssignmentObjectFactory {
             throws FeatureCalculationException {
 
         try {
-            FeatureCalculatorSingle<FeatureInputPairObjects> calculator = featureEvaluator.createFeatureSession();
-            
+            FeatureCalculatorSingle<FeatureInputPairObjects> calculator =
+                    featureEvaluator.createFeatureSession();
+
             EnergyStack energyStack = new EnergyStack(dimensions);
-            
-            return CostMatrix.create(annotation.asList(), result.asList(), false, (first, second) -> {
-                try {
-                    FeatureInputPairObjects input = new FeatureInputPairObjects(first, second, energyStack);
-                    return calculator.calculate(input);
-                } catch (FeatureCalculationException e) {
-                    throw new CreateException(e);
-                }
-            });
+
+            return CostMatrix.create(
+                    annotation.asList(),
+                    result.asList(),
+                    false,
+                    (first, second) -> {
+                        try {
+                            FeatureInputPairObjects input =
+                                    new FeatureInputPairObjects(first, second, energyStack);
+                            return calculator.calculate(input);
+                        } catch (FeatureCalculationException e) {
+                            throw new CreateException(e);
+                        }
+                    });
         } catch (CreateException | OperationFailedException e) {
             throw new FeatureCalculationException(e);
         }

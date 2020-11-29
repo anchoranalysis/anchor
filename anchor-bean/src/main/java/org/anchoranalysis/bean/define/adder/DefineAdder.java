@@ -27,7 +27,7 @@
 package org.anchoranalysis.bean.define.adder;
 
 import org.anchoranalysis.bean.define.Define;
-import org.anchoranalysis.bean.xml.error.BeanXmlException;
+import org.anchoranalysis.bean.xml.exception.BeanXmlException;
 
 /**
  * Adds bean-definitions to a Define class

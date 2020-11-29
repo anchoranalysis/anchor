@@ -33,10 +33,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.IntFunction;
 import lombok.Getter;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.core.index.SetOperationFailedException;
+import org.anchoranalysis.image.core.bufferedimage.BufferedImageFactory;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.channel.convert.ConversionPolicy;
 import org.anchoranalysis.image.core.channel.convert.attached.ChannelConverterAttached;
@@ -44,16 +45,15 @@ import org.anchoranalysis.image.core.channel.convert.attached.channel.UpperLower
 import org.anchoranalysis.image.core.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
-import org.anchoranalysis.image.core.stack.bufferedimage.BufferedImageFactory;
-import org.anchoranalysis.image.core.stack.rgb.RGBStack;
+import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
-import org.anchoranalysis.spatial.extent.Extent;
-import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.Point3i;
 
 /**
@@ -143,6 +143,10 @@ public class DisplayStack {
 
     public long numberNonNullConverters() {
         return converters.stream().filter(Optional::isPresent).count();
+    }
+
+    public boolean isRGB() {
+        return stack.getNumberChannels() == 3;
     }
 
     public Dimensions dimensions() {
@@ -256,9 +260,14 @@ public class DisplayStack {
         return stack.getChannel(channelIndex).extract().voxel(point);
     }
 
-    public DisplayStack maximumIntensityProjection() {
+    /**
+     * Maximum-intensity projection.
+     *
+     * @return
+     */
+    public DisplayStack projectMax() {
         try {
-            return new DisplayStack(stack.maximumIntensityProjection(), converters);
+            return new DisplayStack(stack.projectMax(), converters);
         } catch (CreateException e) {
             throw new AnchorImpossibleSituationException();
         }
@@ -319,7 +328,7 @@ public class DisplayStack {
     }
 
     private Stack deriveStack(IntFunction<Channel> indexToChannel) {
-        Stack out = new Stack();
+        Stack out = new Stack(stack.getNumberChannels() == 3);
         for (int index = 0; index < stack.getNumberChannels(); index++) {
             try {
                 out.addChannel(indexToChannel.apply(index));
@@ -383,5 +392,9 @@ public class DisplayStack {
 
     private ChannelMapper createChannelMapper() {
         return new ChannelMapper(stack::getChannel, converters::get);
+    }
+
+    public Optional<Resolution> resolution() {
+        return stack.resolution();
     }
 }

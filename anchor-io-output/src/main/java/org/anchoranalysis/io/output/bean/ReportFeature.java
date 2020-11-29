@@ -27,15 +27,15 @@
 package org.anchoranalysis.io.output.bean;
 
 import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
 
 public abstract class ReportFeature<T> extends AnchorBean<ReportFeature<T>> {
 
     public abstract boolean isNumeric();
 
-    public abstract String title() throws OperationFailedException;
+    public abstract String title();
 
-    public abstract String featureDescription(T object, Logger logger)
+    public abstract String featureDescription(T param, Logger logger)
             throws OperationFailedException;
 }

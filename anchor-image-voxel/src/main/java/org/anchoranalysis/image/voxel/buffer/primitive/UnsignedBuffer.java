@@ -27,6 +27,7 @@ package org.anchoranalysis.image.voxel.buffer.primitive;
 
 import java.nio.Buffer;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 
 /**
  * Base class for buffers that represent an unsigned-type in the signed-equivalent-type NIO {@link
@@ -37,9 +38,13 @@ import lombok.AllArgsConstructor;
  * arithmetic operations (e.g. unsigned bytes need to be converted to short or higher, unsigned
  * shorts to int or higher, unsigned int to long or higher).
  *
+ * <p>Subclasses must define a sensible {@link Object#equals} and {@link Object#hashCode} that takes
+ * account the delegate buffer.
+ *
  * @author Owen Feehan
  */
 @AllArgsConstructor
+@EqualsAndHashCode
 public abstract class UnsignedBuffer {
 
     /** The delegate buffer */

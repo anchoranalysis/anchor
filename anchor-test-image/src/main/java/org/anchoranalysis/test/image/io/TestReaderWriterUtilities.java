@@ -31,16 +31,20 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.bean.xml.factory.AnchorDefaultBeanFactory;
-import org.anchoranalysis.image.io.bean.stack.StackReader;
-import org.anchoranalysis.image.io.bean.stack.StackWriter;
+import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
+import org.anchoranalysis.image.io.bean.stack.writer.StackWriter;
 import org.anchoranalysis.io.bioformats.ConfigureBioformatsLogging;
 import org.anchoranalysis.io.bioformats.bean.BioformatsReader;
 import org.anchoranalysis.io.bioformats.bean.options.ForceTimeSeriesToStack;
-import org.anchoranalysis.io.imagej.bean.stack.writer.Tiff;
+import org.anchoranalysis.io.bioformats.bean.writer.Tiff;
 import org.apache.commons.configuration.beanutils.BeanHelper;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class TestReaderWriterUtilities {
+
+    static {
+        ConfigureBioformatsLogging.instance().makeSureConfigured();
+    }
 
     public static void ensureStackReader() {
         ConfigureBioformatsLogging.instance().makeSureConfigured();
@@ -48,7 +52,7 @@ public class TestReaderWriterUtilities {
     }
 
     public static void ensureStackWriter() {
-        addIfMissing(StackWriter.class, new Tiff());
+        addIfMissing(StackWriter.class, defaultStackWriterForTests());
     }
 
     private static StackReader createReader() {
@@ -75,5 +79,10 @@ public class TestReaderWriterUtilities {
         instanceMap.put(cls, obj);
 
         defaultFactory.getDefaultInstances().addFrom(instanceMap);
+    }
+
+    /** This is the default stack-writer used in tests. */
+    private static StackWriter defaultStackWriterForTests() {
+        return new Tiff();
     }
 }

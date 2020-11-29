@@ -33,7 +33,7 @@ import java.util.stream.Stream;
 import lombok.Getter;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.mpp.mark.Mark;
-import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.Point3d;
 import org.apache.commons.collections.ListUtils;
 
@@ -60,7 +60,7 @@ public abstract class PointListBase extends Mark {
     protected void doDuplicate(PointListBase markNew) {
         markNew.points = new ArrayList<>();
         getPoints().forEach(markNew.points::add);
-        markNew.setId(getId());
+        markNew.setId(getIdentifier());
         markNew.updateAfterPointsChange();
     }
 

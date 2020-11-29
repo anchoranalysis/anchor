@@ -29,11 +29,11 @@ package org.anchoranalysis.image.bean.nonbean.spatial.arrange;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import org.anchoranalysis.spatial.extent.Extent;
-import org.anchoranalysis.spatial.extent.box.BoundingBox;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import lombok.experimental.Accessors;
+import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.spatial.box.BoundingBox;
 
 /**
  * Describes a set of bounding boxes on top of a plane

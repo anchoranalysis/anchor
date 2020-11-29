@@ -36,16 +36,14 @@ import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.manifest.Manifest;
 import org.anchoranalysis.io.output.outputter.BindFailedException;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
-import org.anchoranalysis.io.output.path.NamedPath;
+import org.anchoranalysis.io.output.path.prefixer.NamedPath;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class TaskOutputterFactory {
 
     // If pathForBinding is null, we bind to the root folder instead
     public static OutputterChecked createOutputterForTask(
-            InputFromManager input,
-            Optional<Manifest> manifestTask,
-            ParametersExperiment params)
+            InputFromManager input, Optional<Manifest> manifestTask, ParametersExperiment params)
             throws JobExecutionException {
         try {
             Optional<Path> pathForBinding = input.pathForBinding();

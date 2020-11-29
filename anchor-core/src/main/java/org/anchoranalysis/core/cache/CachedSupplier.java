@@ -2,7 +2,7 @@ package org.anchoranalysis.core.cache;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
-import org.anchoranalysis.core.functional.function.CheckedSupplier;
+import org.anchoranalysis.core.functional.checked.CheckedSupplier;
 
 /*
  * #%L

@@ -30,8 +30,9 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import lombok.Getter;
-import org.anchoranalysis.core.error.reporter.ErrorReporter;
+import org.anchoranalysis.core.format.NonImageFileFormat;
 import org.anchoranalysis.core.functional.OptionalUtilities;
+import org.anchoranalysis.core.log.error.ErrorReporter;
 import org.anchoranalysis.core.serialize.DeserializationFailedException;
 import org.anchoranalysis.core.serialize.Deserializer;
 import org.anchoranalysis.core.serialize.KeyValueParamsDeserializer;
@@ -48,7 +49,7 @@ import org.anchoranalysis.io.manifest.finder.match.FileMatch;
 public class FinderSerializedObject<T> extends FinderSingleFile {
 
     private final String function;
-    
+
     private Optional<T> deserializedObject = Optional.empty();
 
     /** Provides a memoized (cached) means of access the results of the finder */
@@ -90,9 +91,9 @@ public class FinderSerializedObject<T> extends FinderSingleFile {
         }
 
         // We prioritise .ser ahead of anything else
-        for (OutputtedFile f : files) {
-            if (f.getFileName().endsWith(".ser")) {
-                return Optional.of(f);
+        for (OutputtedFile fileToOutput : files) {
+            if (NonImageFileFormat.SERIALIZED_BINARY.matchesEnd(fileToOutput.getFileName())) {
+                return Optional.of(fileToOutput);
             }
         }
 
@@ -100,16 +101,16 @@ public class FinderSerializedObject<T> extends FinderSingleFile {
     }
 
     private T deserialize(OutputtedFile fileWrite) throws DeserializationFailedException {
+        return createDeserializer(fileWrite).deserialize(fileWrite.calculatePath());
+    }
 
-        Deserializer<T> deserializer;
-        if (fileWrite.getFileName().toLowerCase().endsWith(".properties.xml")) {
-            deserializer = new KeyValueParamsDeserializer<>();
-        } else if (fileWrite.getFileName().toLowerCase().endsWith(".xml")) {
-            deserializer = new XStreamDeserializer<>();
+    private Deserializer<T> createDeserializer(OutputtedFile fileWrite) {
+        if (NonImageFileFormat.PROPERTIES_XML.matchesEnd(fileWrite.getFileName())) {
+            return new KeyValueParamsDeserializer<>();
+        } else if (NonImageFileFormat.XML.matchesEnd(fileWrite.getFileName())) {
+            return new XStreamDeserializer<>();
         } else {
-            deserializer = new ObjectInputStreamDeserializer<>();
+            return new ObjectInputStreamDeserializer<>();
         }
-
-        return deserializer.deserialize(fileWrite.calculatePath());
     }
 }

@@ -28,12 +28,12 @@ package org.anchoranalysis.mpp.feature.addcriteria;
 
 import java.util.Optional;
 import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
+import org.anchoranalysis.feature.session.calculator.multi.FeatureCalculatorMulti;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.mpp.feature.input.memo.FeatureInputPairMemo;
 import org.anchoranalysis.mpp.mark.points.PointList;
 import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
-import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.box.BoundingBox;
 
 /**
  * If one arbitrarily point overlaps between two MarkPointList then true, otherwise false

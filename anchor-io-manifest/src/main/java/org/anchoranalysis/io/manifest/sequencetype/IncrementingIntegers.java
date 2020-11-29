@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.io.manifest.sequencetype;
 
-import org.anchoranalysis.core.index.container.OrderProvider;
+import org.anchoranalysis.core.index.bounded.OrderProvider;
 
 public class IncrementingIntegers extends SequenceType<Integer> {
 
@@ -34,7 +34,7 @@ public class IncrementingIntegers extends SequenceType<Integer> {
     private static final long serialVersionUID = -3896806957547954271L;
 
     private IncrementingIntegersRange range;
-    
+
     public IncrementingIntegers() {
         this(0);
     }
@@ -42,7 +42,7 @@ public class IncrementingIntegers extends SequenceType<Integer> {
     public IncrementingIntegers(int start) {
         this(start, 1);
     }
-    
+
     public IncrementingIntegers(int start, int incrementSize) {
         this.range = new IncrementingIntegersRange(start, incrementSize);
     }
@@ -54,11 +54,19 @@ public class IncrementingIntegers extends SequenceType<Integer> {
 
     @Override
     public void update(Integer element) throws SequenceTypeException {
-        range.increment();
 
-        // If the passed index is not what we expect
-        // This is where we temporarily disabled when we create large video
-        if (element != range.getEnd()) {
+        // if the element exists at the end of the current range, we assume its a repeat of the
+        // existing
+        // index and no update occurs.
+        if (element == range.getEnd()) {
+            return;
+        }
+
+        if (range.getEnd() == -1 || (element == (range.getEnd() + range.getIncrementSize()))) {
+            // Otherwise if the element is one more than the end of the range, we update the range
+            range.increment();
+        } else {
+            // If it's anything more than one an error must have occurred
             throw new SequenceTypeException("Incorrectly ordered index in update");
         }
     }
@@ -76,7 +84,7 @@ public class IncrementingIntegers extends SequenceType<Integer> {
     public int getNumberElements() {
         return range.getNumberElements();
     }
-    
+
     @Override
     public void assignMaximumIndex(int index) {
         // NOTHING TO DO, the maximum is not changed for this sequence-type

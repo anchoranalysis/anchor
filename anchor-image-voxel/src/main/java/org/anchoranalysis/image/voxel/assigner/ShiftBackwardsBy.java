@@ -28,7 +28,7 @@ package org.anchoranalysis.image.voxel.assigner;
 import java.util.function.IntPredicate;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.ReadableTuple3i;
 
 /**

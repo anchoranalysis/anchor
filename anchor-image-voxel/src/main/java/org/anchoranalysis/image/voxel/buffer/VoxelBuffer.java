@@ -27,10 +27,10 @@
 package org.anchoranalysis.image.voxel.buffer;
 
 import java.nio.Buffer;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.statistics.HistogramFactory;
-import lombok.AllArgsConstructor;
 
 /**
  * A buffer of voxel-values, usually corresponding to a single z-slice in {@link Voxels}.
@@ -44,24 +44,24 @@ import lombok.AllArgsConstructor;
  */
 @AllArgsConstructor
 public abstract class VoxelBuffer<T> {
-    
+
     /**
      * Data-type of each voxel in the buffer.
-     * 
+     *
      * @return the data-type
      */
     public abstract VoxelDataType dataType();
 
     /**
      * The associated buffer for storing the voxels.
-     * 
+     *
      * @return the buffer
      */
     public abstract T buffer();
 
     /**
      * Creates a deep copy of the current object, including deep-copying the associated buffer.
-     * 
+     *
      * @return a newly created deep copy.
      */
     public abstract VoxelBuffer<T> duplicate();

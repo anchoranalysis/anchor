@@ -34,9 +34,9 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.params.KeyValueParams;
-import org.anchoranalysis.core.progress.ProgressReporterNull;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.progress.ProgressIgnore;
+import org.anchoranalysis.core.value.KeyValueParams;
 import org.anchoranalysis.io.input.InputContextParams;
 import org.anchoranalysis.io.input.bean.InputManagerParams;
 import org.anchoranalysis.io.input.bean.files.FilesProvider;
@@ -45,28 +45,26 @@ import org.anchoranalysis.io.input.files.FilesProviderException;
 public class KeyValueParamsProviderFromFile extends KeyValueParamsProvider {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private FilesProvider filesProvider;
+    @BeanField @Getter @Setter private FilesProvider files;
     // END BEAN PROPERTIES
 
     @Override
     public KeyValueParams create() throws CreateException {
         try {
-            Collection<File> files =
-                    filesProvider.create(
+            Collection<File> providedFiles =
+                    files.create(
                             new InputManagerParams(
-                                    new InputContextParams(),
-                                    ProgressReporterNull.get(),
-                                    getLogger()));
+                                    new InputContextParams(), ProgressIgnore.get(), getLogger()));
 
-            if (files.isEmpty()) {
+            if (providedFiles.isEmpty()) {
                 throw new CreateException("No files are provided");
             }
 
-            if (files.size() > 1) {
+            if (providedFiles.size() > 1) {
                 throw new CreateException("More than one file is provided");
             }
 
-            Path filePath = files.iterator().next().toPath();
+            Path filePath = providedFiles.iterator().next().toPath();
             return KeyValueParams.readFromFile(filePath);
 
         } catch (IOException e) {

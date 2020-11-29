@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.image.bean.channel.converter;
 
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.bean.ImageBean;
 import org.anchoranalysis.image.core.channel.convert.ChannelConverter;
 

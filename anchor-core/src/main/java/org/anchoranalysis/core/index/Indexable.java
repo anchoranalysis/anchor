@@ -30,7 +30,7 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 
 /**
- * Holds a single-index which is hashable and comparable
+ * Holds a single-index which is hashable and comparable.
  *
  * @author Owen Feehan
  */

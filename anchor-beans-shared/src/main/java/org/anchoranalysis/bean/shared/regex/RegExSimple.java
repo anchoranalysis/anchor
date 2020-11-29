@@ -44,29 +44,28 @@ public class RegExSimple extends RegEx {
 
     /** Lazy creation of a pattern from the regular-expression string. */
     private Pattern pattern = null;
-    
+
     public RegExSimple(String matchString) {
         this.matchString = matchString;
     }
-    
+
     @Override
     public Optional<String[]> match(String str) {
         createPatternIfNeeded();
-        
+
         Matcher matcher = pattern.matcher(str);
-        return OptionalUtilities.createFromFlag(matcher.matches(),
-                () -> arrayFromMatcher(matcher) );
+        return OptionalUtilities.createFromFlag(matcher.matches(), () -> arrayFromMatcher(matcher));
     }
 
     @Override
     public String toString() {
         return String.format("regEx(%s)", matchString);
     }
-    
+
     private void createPatternIfNeeded() {
-        if (pattern==null) {
+        if (pattern == null) {
             pattern = Pattern.compile(matchString);
-        }        
+        }
     }
 
     private String[] arrayFromMatcher(Matcher matcher) {

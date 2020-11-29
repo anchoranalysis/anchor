@@ -32,8 +32,8 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
-import org.anchoranalysis.core.arithmetic.RunningSum;
 import org.anchoranalysis.experiment.task.TaskStatistics;
+import org.anchoranalysis.math.arithmetic.RunningSum;
 
 @RequiredArgsConstructor
 public class ConcurrentJobMonitor implements Iterable<SubmittedJob> {

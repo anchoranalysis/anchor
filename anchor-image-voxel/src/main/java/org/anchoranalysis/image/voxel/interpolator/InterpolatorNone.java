@@ -29,7 +29,7 @@ package org.anchoranalysis.image.voxel.interpolator;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedShortBuffer;
-import org.anchoranalysis.spatial.extent.Extent;
+import org.anchoranalysis.spatial.Extent;
 
 /** Doesn't do any interpolation, just copies values */
 public class InterpolatorNone implements Interpolator {

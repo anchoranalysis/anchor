@@ -28,7 +28,7 @@ package org.anchoranalysis.feature.results;
 
 import java.util.Collection;
 import java.util.Optional;
-import org.anchoranalysis.core.text.TypedValue;
+import org.anchoranalysis.core.value.TypedValue;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 /**

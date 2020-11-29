@@ -28,7 +28,7 @@ package org.anchoranalysis.image.voxel.datatype;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CombineTypes {

@@ -32,6 +32,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
+import lombok.Getter;
+import lombok.experimental.Accessors;
 import org.anchoranalysis.io.manifest.ManifestDirectoryDescription;
 import org.anchoranalysis.io.manifest.directory.sequenced.SequencedDirectory;
 import org.anchoranalysis.io.manifest.file.OutputtedFile;
@@ -41,47 +43,43 @@ import org.anchoranalysis.io.manifest.sequencetype.IncompleteElementRange;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import com.google.common.base.Preconditions;
 
 /**
- * An entry for a directory in the manifest, to which outputs and sub-directories can be later added.
+ * An entry for a directory in the manifest, to which outputs and sub-directories can be later
+ * added.
  *
- * <p>By implementing the {@link WriteOperationRecorder} interface, it accepts
- * write operations for files and subdirectories, which are handled differently
- * by the various sub-classes of {@link MutableDirectory}.
- *  
+ * <p>By implementing the {@link WriteOperationRecorder} interface, it accepts write operations for
+ * files and subdirectories, which are handled differently by the various sub-classes of {@link
+ * MutableDirectory}.
+ *
  * @author Owen Feehan
- *
  */
-public abstract class MutableDirectory implements SequencedDirectory, WriteOperationRecorder, Serializable {
+@Accessors(fluent = true)
+public abstract class MutableDirectory
+        implements SequencedDirectory, WriteOperationRecorder, Serializable {
 
     /** */
     private static final long serialVersionUID = 1L;
 
     /**
      * The {@link MutableDirectory} in the manifest for the parent directory.
-     * 
+     *
      * <p>This is not {@link Optional} as it needs to be serialized.
      */
     @Nullable private MutableDirectory parent;
 
-    /**
-     * The {@link MutableDirectory} in the manifest for any subdirectories.
-     */
-    private ArrayList<MutableDirectory> subdirectories = new ArrayList<>();
+    /** The {@link MutableDirectory} in the manifest for any subdirectories. */
+    @Getter private List<MutableDirectory> subdirectories;
 
     private static Log log = LogFactory.getLog(MutableDirectory.class);
 
-    /**
-     * A description of this directory for the manifest.
-     * 
-     * <p>Note that is not {@link Optional} as {@link Optional} cannot be serialized. 
-     */
-    @Nullable private ManifestDirectoryDescription description;
+    /** A description of this directory for the manifest. */
+    @Getter private ManifestDirectoryDescription description;
 
     public MutableDirectory() {
         log.debug("New Directory Write: empty");
-        parent = null;
+        this.parent = null;
+        this.subdirectories = new ArrayList<>();
     }
 
     // Parent folder
@@ -89,6 +87,7 @@ public abstract class MutableDirectory implements SequencedDirectory, WriteOpera
         super();
         log.debug("New Directory Write: " + parent.relativePath());
         this.parent = parent;
+        this.subdirectories = new ArrayList<>();
     }
 
     public abstract Path relativePath();
@@ -102,16 +101,19 @@ public abstract class MutableDirectory implements SequencedDirectory, WriteOpera
     }
 
     @Override
-    public void findFileFromIndex(List<OutputtedFile> foundList, String index, boolean recursive) throws FindFailedException {
-        findFile(foundList, file -> file !=null && file.getIndex().equals(index), true);
+    public void findFileFromIndex(List<OutputtedFile> foundList, String index, boolean recursive)
+            throws FindFailedException {
+        findFile(foundList, file -> file != null && file.getIndex().equals(index), true);
     }
 
     // Finds a directory a comparator matches
     public abstract void findFile(
-            List<OutputtedFile> foundList, Predicate<OutputtedFile> predicate, boolean recursive) throws FindFailedException;
+            List<OutputtedFile> foundList, Predicate<OutputtedFile> predicate, boolean recursive)
+            throws FindFailedException;
 
     // Finds a folder a comparator matches
-    public synchronized void findDirectory(List<MutableDirectory> foundList, Predicate<MutableDirectory> predicate) {
+    public synchronized void findDirectory(
+            List<MutableDirectory> foundList, Predicate<MutableDirectory> predicate) {
 
         for (MutableDirectory directory : subdirectories) {
 
@@ -130,26 +132,20 @@ public abstract class MutableDirectory implements SequencedDirectory, WriteOpera
             Path relativeDirectoryPath,
             ManifestDirectoryDescription directoryDescription,
             SubdirectoryBase subdirectory) {
-        subdirectory.assignParentFolder(Optional.of(this));
+        subdirectory.assignParentDirectory(Optional.of(this));
         subdirectory.assignPath(relativeDirectoryPath);
         subdirectory.assignDescription(directoryDescription);
         subdirectories.add(subdirectory);
         return subdirectory;
     }
 
-    protected Optional<MutableDirectory> getParentFolder() {
+    protected Optional<MutableDirectory> getParentDirectory() {
         return Optional.ofNullable(parent);
     }
 
-    public void assignParentFolder(Optional<MutableDirectory> parentFolder) {
-        this.parent = parentFolder.orElse(null);
+    public void assignParentDirectory(Optional<MutableDirectory> parentDirectory) {
+        this.parent = parentDirectory.orElse(null);
     }
-
-    protected List<MutableDirectory> subdirectories() {
-        return subdirectories;
-    }
-
-    
 
     @Override
     public IncompleteElementRange getAssociatedElementRange() {
@@ -158,16 +154,10 @@ public abstract class MutableDirectory implements SequencedDirectory, WriteOpera
 
     /**
      * Assigns a description, which may not already exist.
-     * 
+     *
      * @param description
      */
     public void assignDescription(ManifestDirectoryDescription description) {
-        Preconditions.checkArgument(description!=null);
-        Preconditions.checkArgument(this.description==null);
         this.description = description;
-    }
-    
-    public Optional<ManifestDirectoryDescription> description() {
-        return Optional.ofNullable(description);
     }
 }

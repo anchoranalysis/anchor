@@ -29,7 +29,7 @@ package org.anchoranalysis.bean.xml.factory;
 import java.util.ArrayList;
 import java.util.List;
 import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.core.functional.function.CheckedFunction;
+import org.anchoranalysis.core.functional.checked.CheckedFunction;
 import org.apache.commons.configuration.SubnodeConfiguration;
 import org.apache.commons.configuration.beanutils.BeanDeclaration;
 import org.apache.commons.configuration.beanutils.XMLBeanDeclaration;

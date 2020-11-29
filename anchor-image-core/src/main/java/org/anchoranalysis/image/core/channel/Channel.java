@@ -30,7 +30,7 @@ import java.util.Optional;
 import java.util.function.Function;
 import lombok.Getter;
 import lombok.experimental.Accessors;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.core.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
@@ -47,10 +47,10 @@ import org.anchoranalysis.image.voxel.extracter.predicate.VoxelsPredicate;
 import org.anchoranalysis.image.voxel.interpolator.Interpolator;
 import org.anchoranalysis.image.voxel.interpolator.InterpolatorImgLib2Lanczos;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.spatial.extent.Extent;
-import org.anchoranalysis.spatial.extent.box.BoundingBox;
-import org.anchoranalysis.spatial.extent.scale.ScaleFactor;
-import org.anchoranalysis.spatial.extent.scale.ScaleFactorUtilities;
+import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.spatial.box.BoundingBox;
+import org.anchoranalysis.spatial.scale.ScaleFactor;
+import org.anchoranalysis.spatial.scale.ScaleFactorUtilities;
 
 /**
  * A channel from an image.
@@ -231,7 +231,7 @@ public class Channel {
         if (prevZSize > 1) {
             return FACTORY.create(
                     flattener.apply(voxels.extract()),
-                    dimensions.resolution().map( res->res.duplicateFlattenZ(prevZSize)) );
+                    dimensions.resolution().map(res -> res.duplicateFlattenZ(prevZSize)));
         } else {
             return this;
         }

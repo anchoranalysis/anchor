@@ -56,16 +56,16 @@ public final class ToByteScaleByMinMaxValue extends ToByte {
 
     @Override
     protected void convertUnsignedShort(UnsignedShortBuffer in, UnsignedByteBuffer out) {
-        out.putFloatClipped(scale * (in.getUnsigned() - subtract));
+        out.putFloatClamped(scale * (in.getUnsigned() - subtract));
     }
 
     @Override
     protected void convertUnsignedInt(UnsignedIntBuffer in, UnsignedByteBuffer out) {
-        out.putFloatClipped(scale * (in.getUnsigned() - subtract));
+        out.putFloatClamped(scale * (in.getUnsigned() - subtract));
     }
 
     @Override
     protected void convertFloat(FloatBuffer in, UnsignedByteBuffer out) {
-        out.putFloatClipped(scale * (in.get() - subtract));
+        out.putFloatClamped(scale * (in.get() - subtract));
     }
 }

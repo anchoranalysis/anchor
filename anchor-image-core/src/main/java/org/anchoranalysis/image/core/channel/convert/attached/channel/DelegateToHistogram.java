@@ -27,8 +27,8 @@
 package org.anchoranalysis.image.core.channel.convert.attached.channel;
 
 import lombok.RequiredArgsConstructor;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.channel.convert.ConversionPolicy;
 import org.anchoranalysis.image.core.channel.convert.attached.ChannelConverterAttached;

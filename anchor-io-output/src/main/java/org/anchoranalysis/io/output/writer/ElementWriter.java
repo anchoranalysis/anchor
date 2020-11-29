@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.io.output.writer;
 
+import org.anchoranalysis.io.manifest.file.FileType;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.output.namestyle.OutputNameStyle;
@@ -45,9 +46,10 @@ public interface ElementWriter<T> {
      * @param element the element to write
      * @param outputNameStyle
      * @param outputter
+     * @return all file-types written
      * @throws OutputWriteFailedException
      */
-    void write(T element, OutputNameStyle outputNameStyle, OutputterChecked outputter)
+    FileType[] write(T element, OutputNameStyle outputNameStyle, OutputterChecked outputter)
             throws OutputWriteFailedException;
 
     /**
@@ -57,12 +59,13 @@ public interface ElementWriter<T> {
      * @param index
      * @param outputNameStyle
      * @param outputter
-     * @return
+     * @return all file-types written
      * @throws OutputWriteFailedException
      */
-    int writeWithIndex(
+    FileType[] writeWithIndex(
             T element,
             String index,
-            IndexableOutputNameStyle outputNameStyle, OutputterChecked outputter)
+            IndexableOutputNameStyle outputNameStyle,
+            OutputterChecked outputter)
             throws OutputWriteFailedException;
 }

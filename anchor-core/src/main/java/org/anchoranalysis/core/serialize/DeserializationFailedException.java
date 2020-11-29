@@ -1,8 +1,6 @@
-package org.anchoranalysis.core.serialize;
-
 /*-
  * #%L
- * anchor-io
+ * anchor-core
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -25,8 +23,9 @@ package org.anchoranalysis.core.serialize;
  * THE SOFTWARE.
  * #L%
  */
+package org.anchoranalysis.core.serialize;
 
-import org.anchoranalysis.core.error.AnchorCheckedException;
+import org.anchoranalysis.core.exception.AnchorCheckedException;
 
 public class DeserializationFailedException extends AnchorCheckedException {
 

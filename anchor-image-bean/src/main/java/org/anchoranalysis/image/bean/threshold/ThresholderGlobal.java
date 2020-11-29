@@ -32,7 +32,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.object.HistogramFromObjectsFactory;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
@@ -93,6 +93,7 @@ public class ThresholderGlobal extends Thresholder {
             VoxelsWrapper inputBuffer,
             Optional<Histogram> histogram,
             Optional<ObjectMask> objectMask) {
-        return histogram.orElseGet(() -> HistogramFromObjectsFactory.create(inputBuffer, objectMask));
+        return histogram.orElseGet(
+                () -> HistogramFromObjectsFactory.create(inputBuffer, objectMask));
     }
 }

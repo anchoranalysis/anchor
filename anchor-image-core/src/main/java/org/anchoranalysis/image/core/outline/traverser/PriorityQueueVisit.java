@@ -28,7 +28,6 @@ package org.anchoranalysis.image.core.outline.traverser;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.anchoranalysis.image.core.outline.traverser.visited.VisitedVoxels;
 import org.anchoranalysis.spatial.point.Point3i;
 
 /** A priority-queue of what pixels to visit next */

@@ -27,7 +27,7 @@ package org.anchoranalysis.spatial.point;
  */
 
 import java.io.Serializable;
-import org.anchoranalysis.core.axis.AxisType;
+import org.anchoranalysis.spatial.axis.AxisType;
 
 /**
  * Read-only access to a tuple

@@ -26,8 +26,8 @@
 
 package org.anchoranalysis.experiment.bean.log;
 
-import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.experiment.ExperimentExecutionArguments;
+import org.anchoranalysis.core.log.error.ErrorReporter;
+import org.anchoranalysis.experiment.arguments.ExecutionArguments;
 import org.anchoranalysis.experiment.log.StatefulMessageLogger;
 import org.anchoranalysis.experiment.log.TextFileMessageLogger;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
@@ -43,7 +43,7 @@ public class ToTextFile extends ToTextFileBase {
     public StatefulMessageLogger create(
             OutputterChecked bom,
             ErrorReporter errorReporter,
-            ExperimentExecutionArguments arguments,
+            ExecutionArguments arguments,
             boolean detailedLogging) {
         return new TextFileMessageLogger(getOutputName(), bom, errorReporter);
     }

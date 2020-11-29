@@ -31,34 +31,31 @@ import java.util.List;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.initializable.params.BeanInitParams;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsInitParams;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
+import org.anchoranalysis.core.identifier.provider.store.SharedObjects;
 import org.anchoranalysis.core.log.CommonContext;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.core.name.store.NamedProviderStore;
-import org.anchoranalysis.core.name.store.SharedObjects;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.feature.list.FeatureListStoreUtilities;
 
 public class SharedFeaturesInitParams implements BeanInitParams {
 
-    private KeyValueParamsInitParams soParams;
+    private KeyValueParamsInitParams params;
     private NamedProviderStore<FeatureList<FeatureInput>> storeFeatureList;
     private SharedFeatureMulti sharedFeatureSet;
 
-    private SharedFeaturesInitParams(SharedObjects so) {
-        super();
-        this.soParams = KeyValueParamsInitParams.create(so);
+    private SharedFeaturesInitParams(SharedObjects sharedObjects) {
+        this.params = KeyValueParamsInitParams.create(sharedObjects);
 
-        storeFeatureList = so.getOrCreate(FeatureList.class);
+        storeFeatureList = sharedObjects.getOrCreate(FeatureList.class);
 
         // We populate our shared features from our storeFeatureList
         sharedFeatureSet = new SharedFeatureMulti();
-        FeatureListStoreUtilities.addFeatureListToStoreNoDuplicateDirectly(
-                storeFeatureList, sharedFeatureSet);
+        sharedFeatureSet.addFromProviders(storeFeatureList);
     }
 
     public static SharedFeaturesInitParams create(SharedObjects sharedObjects) {
@@ -117,7 +114,7 @@ public class SharedFeaturesInitParams implements BeanInitParams {
     }
 
     public KeyValueParamsInitParams getParams() {
-        return soParams;
+        return params;
     }
 
     public SharedFeatureMulti getSharedFeatureSet() {

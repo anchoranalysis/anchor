@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.mpp.mark;
 
-import org.anchoranalysis.core.error.AnchorCheckedException;
+import org.anchoranalysis.core.exception.AnchorCheckedException;
 
 public class UnsupportedMarkTypeException extends AnchorCheckedException {
 

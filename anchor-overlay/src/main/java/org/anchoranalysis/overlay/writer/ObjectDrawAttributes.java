@@ -30,8 +30,8 @@ import lombok.AllArgsConstructor;
 import lombok.Value;
 import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.color.RGBColor;
-import org.anchoranalysis.core.idgetter.IDGetter;
-import org.anchoranalysis.core.idgetter.IDGetterIter;
+import org.anchoranalysis.core.identifier.getter.IdentifierGetter;
+import org.anchoranalysis.core.identifier.getter.IdentifyByIteration;
 import org.anchoranalysis.image.core.object.properties.ObjectWithProperties;
 
 /**
@@ -46,10 +46,10 @@ public class ObjectDrawAttributes {
     private final ColorIndex colorIndex;
 
     /** Gets a unique ID associated with the object */
-    private final IDGetter<ObjectWithProperties> idGetter;
+    private final IdentifierGetter<ObjectWithProperties> idGetter;
 
     /** Gets a color ID associated with the object */
-    private final IDGetter<ObjectWithProperties> colorIDGetter;
+    private final IdentifierGetter<ObjectWithProperties> colorIDGetter;
 
     /**
      * Creates with a specific color-index and uses the iteration-index as both the ID and color-ID
@@ -58,8 +58,8 @@ public class ObjectDrawAttributes {
      */
     public ObjectDrawAttributes(ColorIndex colorIndex) {
         this.colorIndex = colorIndex;
-        this.idGetter = new IDGetterIter<>();
-        this.colorIDGetter = new IDGetterIter<>();
+        this.idGetter = new IdentifyByIteration<>();
+        this.colorIDGetter = new IdentifyByIteration<>();
     }
 
     /**
@@ -70,7 +70,7 @@ public class ObjectDrawAttributes {
      * @return the color
      */
     public RGBColor colorFor(ObjectWithProperties object, int index) {
-        return colorIndex.get(colorIDGetter.getID(object, index));
+        return colorIndex.get(colorIDGetter.getIdentifier(object, index));
     }
 
     /**
@@ -81,6 +81,6 @@ public class ObjectDrawAttributes {
      * @return the id
      */
     public int idFor(ObjectWithProperties object, int index) {
-        return idGetter.getID(object, index);
+        return idGetter.getIdentifier(object, index);
     }
 }

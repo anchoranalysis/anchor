@@ -29,7 +29,7 @@ package org.anchoranalysis.plot.bean;
 import java.util.Iterator;
 import java.util.Optional;
 import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.plot.AxisLimits;
 import org.anchoranalysis.plot.PlotInstance;
 

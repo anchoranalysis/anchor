@@ -32,8 +32,8 @@ import java.util.Collection;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.progress.ProgressReporterNull;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.progress.ProgressIgnore;
 import org.anchoranalysis.io.input.InputContextParams;
 import org.anchoranalysis.io.input.bean.InputManagerParams;
 import org.anchoranalysis.io.input.bean.files.FilesProvider;
@@ -41,43 +41,38 @@ import org.anchoranalysis.io.input.files.FilesProviderException;
 
 /**
  * Extracts a path from a {@link FilesProvider}.
- * 
- * <p>The {@link FilesProvider} must return exactly one file, otherwise an exception is thrown.
- * 
- * @author Owen Feehan
  *
+ * <p>The {@link FilesProvider} must return exactly one file, otherwise an exception is thrown.
+ *
+ * @author Owen Feehan
  */
 public class FromFiles extends FilePathProvider {
 
     // START BEAN PROPERTIES
-    /**
-     * A provider that should return exactly one {@link File} whose path is employed.
-     */
-    @BeanField @Getter @Setter private FilesProvider filesProvider;
+    /** A provider that should return exactly one {@link File} whose path is employed. */
+    @BeanField @Getter @Setter private FilesProvider files;
     // END BEAN PROPERTIES
 
     @Override
     public Path create() throws CreateException {
 
-        Collection<File> files;
+        Collection<File> filesCreated;
         try {
-            files =
-                    filesProvider.create(
+            filesCreated =
+                    files.create(
                             new InputManagerParams(
-                                    new InputContextParams(),
-                                    ProgressReporterNull.get(),
-                                    getLogger()));
+                                    new InputContextParams(), ProgressIgnore.get(), getLogger()));
         } catch (FilesProviderException e) {
             throw new CreateException("Cannot find files", e);
         }
 
-        if (files.size() != 1) {
+        if (filesCreated.size() != 1) {
             throw new CreateException(
                     String.format(
-                            "filesProvider must return one file. Instead, it returned %d files.",
-                            files.size()));
+                            "files must return one file. Instead, it returned %d files.",
+                            filesCreated.size()));
         }
 
-        return files.iterator().next().toPath();
+        return filesCreated.iterator().next().toPath();
     }
 }

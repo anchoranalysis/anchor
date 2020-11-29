@@ -31,14 +31,14 @@ import java.nio.file.Path;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
-import org.anchoranalysis.core.progress.ProgressReporterNull;
+import org.anchoranalysis.core.progress.ProgressIgnore;
 import org.anchoranalysis.core.serialize.DeserializationFailedException;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.ImageIOException;
-import org.anchoranalysis.image.io.bean.stack.StackReader;
-import org.anchoranalysis.image.io.objects.ObjectCollectionReader;
-import org.anchoranalysis.image.io.stack.OpenedRaster;
+import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
+import org.anchoranalysis.image.io.object.input.ObjectCollectionReader;
+import org.anchoranalysis.image.io.stack.input.OpenedRaster;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.io.bioformats.ConfigureBioformatsLogging;
 import org.anchoranalysis.test.TestDataLoadException;
@@ -48,16 +48,15 @@ import org.anchoranalysis.test.TestLoader;
 public class TestLoaderImage {
 
     /** Delegate loader (for non image-related loading) */
-    @Getter private TestLoader loader;
+    @Getter private final TestLoader loader;
 
     /** Reads rasters from filesystem */
-    private StackReader stackReader;
+    private final StackReader stackReader;
 
     public TestLoaderImage(TestLoader loader) {
-        this.loader = loader;
-
         TestReaderWriterUtilities.ensureStackReader();
-        stackReader = RegisterBeanFactories.getDefaultInstances().get(StackReader.class);
+        this.loader = loader;
+        this.stackReader = RegisterBeanFactories.getDefaultInstances().get(StackReader.class);
     }
 
     public Channel openChannelFromTestPath(String testPath) {
@@ -80,7 +79,7 @@ public class TestLoaderImage {
         ConfigureBioformatsLogging.instance().makeSureConfigured();
 
         try (OpenedRaster openedRaster = stackReader.openFile(filePath)) {
-            return openedRaster.open(0, ProgressReporterNull.get()).get(0);
+            return openedRaster.open(0, ProgressIgnore.get()).get(0);
         } catch (ImageIOException e) {
             throw new TestDataLoadException(e);
         }
@@ -133,8 +132,8 @@ public class TestLoaderImage {
         return stackWritten.equalsDeep(stackSaved, !ignoreResolutionDifferences);
     }
 
-    public ObjectCollection openObjectsFromTestPath(String testFolderPath) {
-        Path filePath = loader.resolveTestPath(testFolderPath);
+    public ObjectCollection openObjectsFromTestPath(String testDirectoryPath) {
+        Path filePath = loader.resolveTestPath(testDirectoryPath);
         return openObjectsFromFilePath(filePath);
     }
 

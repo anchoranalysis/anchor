@@ -46,23 +46,23 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.NonEmpty;
 import org.anchoranalysis.bean.shared.color.scheme.ColorScheme;
 import org.anchoranalysis.bean.shared.color.scheme.VeryBright;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.identifier.name.NameValue;
+import org.anchoranalysis.core.identifier.name.SimpleNameValue;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.core.name.value.NameValue;
-import org.anchoranalysis.core.name.value.SimpleNameValue;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
 import org.anchoranalysis.image.core.stack.DisplayStack;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
-import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
+import org.anchoranalysis.image.feature.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /**
- * Allows comparison of an annotation with multiple other entities
+ * Allows comparison of an annotation with multiple other entities.
  *
  * @author Owen Feehan
  */
@@ -160,10 +160,9 @@ public class MultipleComparer extends AnchorBean<MultipleComparer> {
             throw new CreateException(e1);
         }
     }
-    
+
     private ColorPool createColorPool(int numberPaired, ColorScheme colorScheme) {
-        return new ColorPool(
-                numberPaired, colorScheme, new VeryBright(), true);
+        return new ColorPool(numberPaired, colorScheme, new VeryBright(), true);
     }
 
     private static void removeObjectsWithNoPixels(ObjectCollection objects) {

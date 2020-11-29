@@ -77,9 +77,21 @@ public final class Point2i implements Serializable {
         this.y += val;
     }
 
-    public final void add(Point2i point) {
+    public void add(Point2i point) {
         this.x = this.x + point.x();
         this.y = this.y + point.y();
+    }
+
+    /**
+     * Converts the point to an array.
+     *
+     * @return a newly created array with two elements, respectively for x and y components.
+     */
+    public double[] toArray() {
+        double[] out = new double[2];
+        out[0] = x;
+        out[1] = y;
+        return out;
     }
 
     /** Performs an addition without changing any values in an existing point */

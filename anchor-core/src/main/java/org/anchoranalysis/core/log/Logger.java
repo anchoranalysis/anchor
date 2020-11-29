@@ -1,5 +1,11 @@
 package org.anchoranalysis.core.log;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.Accessors;
+import org.anchoranalysis.core.log.error.ErrorReporter;
+import org.anchoranalysis.core.log.error.ErrorReporterIntoLog;
+
 /*
  * #%L
  * anchor-core
@@ -25,12 +31,6 @@ package org.anchoranalysis.core.log;
  * THE SOFTWARE.
  * #L%
  */
-
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.Accessors;
-import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.core.error.reporter.ErrorReporterIntoLog;
 
 /**
  * A logging-mechanism for both messages and errors.

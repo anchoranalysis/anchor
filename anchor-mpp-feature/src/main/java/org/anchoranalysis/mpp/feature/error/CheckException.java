@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.mpp.feature.error;
 
-import org.anchoranalysis.core.error.friendly.AnchorFriendlyCheckedException;
+import org.anchoranalysis.core.exception.friendly.AnchorFriendlyCheckedException;
 
 public class CheckException extends AnchorFriendlyCheckedException {
 

@@ -51,7 +51,7 @@ import org.anchoranalysis.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.QuickOverlapCalculation;
 import org.anchoranalysis.overlay.OverlayProperties;
-import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.Point2d;
 import org.anchoranalysis.spatial.point.Point3d;
 import org.anchoranalysis.spatial.rotation.RotationMatrix;
@@ -403,8 +403,8 @@ public class Ellipse extends ConicBase implements Serializable {
         double radiusProjectedX = radii.x() * radiiFactor;
 
         RotationMatrix rotMat = orientation.createRotationMatrix();
-        double[] endPoint1 = rotMat.rotatedPoint(twoElementArray(-1 * radiusProjectedX));
-        double[] endPoint2 = rotMat.rotatedPoint(twoElementArray(radiusProjectedX));
+        double[] endPoint1 = rotMat.rotatePoint(twoElementArray(-1 * radiusProjectedX));
+        double[] endPoint2 = rotMat.rotatePoint(twoElementArray(radiusProjectedX));
 
         double[] xMinMax = minMaxEndPoint(endPoint1, endPoint2, 0, getPos().x());
         double[] yMinMax = minMaxEndPoint(endPoint1, endPoint2, 1, getPos().y());

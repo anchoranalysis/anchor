@@ -23,5 +23,5 @@
  * THE SOFTWARE.
  * #L%
  */
-/** User-specified options that can modify an opened-raster (e.g. metadata or channel). */
+/** User-specified options that can modify metadata or other attributes of a loaded Bioformats image. */
 package org.anchoranalysis.io.bioformats.bean.options;

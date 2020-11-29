@@ -33,7 +33,8 @@ import org.anchoranalysis.io.manifest.sequencetype.IncompleteElementRange;
 
 public interface SequencedDirectory {
 
-    void findFileFromIndex(List<OutputtedFile> foundList, String index, boolean recursive) throws FindFailedException;
+    void findFileFromIndex(List<OutputtedFile> foundList, String index, boolean recursive)
+            throws FindFailedException;
 
     /** The associated element-range with ths folder. */
     IncompleteElementRange getAssociatedElementRange();

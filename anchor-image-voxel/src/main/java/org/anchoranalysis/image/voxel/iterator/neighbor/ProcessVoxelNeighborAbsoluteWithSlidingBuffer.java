@@ -28,7 +28,7 @@ package org.anchoranalysis.image.voxel.iterator.neighbor;
 
 import org.anchoranalysis.image.voxel.buffer.SlidingBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
-import org.anchoranalysis.spatial.extent.Extent;
+import org.anchoranalysis.spatial.Extent;
 
 /**
  * @author Owen Feehan
@@ -37,7 +37,7 @@ import org.anchoranalysis.spatial.extent.Extent;
 public abstract class ProcessVoxelNeighborAbsoluteWithSlidingBuffer<T>
         implements ProcessVoxelNeighborAbsolute<T> {
 
-    private final SlidingBuffer<?> rbb;
+    private final SlidingBuffer<?> slidingBuffer;
     private final Extent extent;
 
     private VoxelBuffer<?> buffer;
@@ -45,9 +45,9 @@ public abstract class ProcessVoxelNeighborAbsoluteWithSlidingBuffer<T>
     protected int sourceVal;
     private int sourceOffsetXY;
 
-    protected ProcessVoxelNeighborAbsoluteWithSlidingBuffer(SlidingBuffer<?> rbb) {
-        this.rbb = rbb;
-        this.extent = rbb.extent();
+    protected ProcessVoxelNeighborAbsoluteWithSlidingBuffer(SlidingBuffer<?> slidingBuffer) {
+        this.slidingBuffer = slidingBuffer;
+        this.extent = slidingBuffer.extent();
     }
 
     @Override
@@ -58,7 +58,7 @@ public abstract class ProcessVoxelNeighborAbsoluteWithSlidingBuffer<T>
 
     @Override
     public void notifyChangeZ(int zChange, int z) {
-        buffer = rbb.bufferRel(zChange);
+        buffer = slidingBuffer.bufferRelative(zChange);
         this.zChange = zChange;
     }
 

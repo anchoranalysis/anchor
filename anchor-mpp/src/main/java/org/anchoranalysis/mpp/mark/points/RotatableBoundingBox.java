@@ -31,15 +31,15 @@ import static org.anchoranalysis.mpp.bean.regionmap.RegionMembershipUtilities.fl
 import static org.anchoranalysis.mpp.mark.GlobalRegionIdentifiers.SUBMARK_INSIDE;
 
 import java.util.List;
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.orientation.Orientation2D;
 import org.anchoranalysis.image.core.points.BoundingBoxFromPoints;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.MarkWithPosition;
-import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.Point2d;
 import org.anchoranalysis.spatial.point.Point3d;
 import org.anchoranalysis.spatial.point.Point3i;
@@ -133,7 +133,7 @@ public class RotatableBoundingBox extends MarkWithPosition {
 
         try {
             BoundingBox box = BoundingBoxFromPoints.forList(rotateAddPos(points));
-            return box.clipTo(dimensions.extent());
+            return box.clampTo(dimensions.extent());
         } catch (OperationFailedException e) {
             throw new AnchorImpossibleSituationException();
         }

@@ -27,7 +27,7 @@
 package org.anchoranalysis.image.core.orientation;
 
 import java.io.Serializable;
-import org.anchoranalysis.core.name.provider.NameValueSet;
+import org.anchoranalysis.core.identifier.provider.NameValueSet;
 import org.anchoranalysis.image.core.object.properties.ObjectWithProperties;
 import org.anchoranalysis.spatial.rotation.RotationMatrix;
 
@@ -40,7 +40,7 @@ public abstract class Orientation implements Serializable {
 
     public abstract RotationMatrix createRotationMatrix();
 
-    public abstract int getNumDims();
+    public abstract int numberDimensions();
 
     public abstract boolean equals(Object other);
 
@@ -48,7 +48,7 @@ public abstract class Orientation implements Serializable {
 
     public abstract Orientation negative();
 
-    public void addProperties(NameValueSet<String> nvc) {}
+    public void addProperties(NameValueSet<String> namedValues) {}
 
     public void addPropertiesToMask(ObjectWithProperties object) {}
 }

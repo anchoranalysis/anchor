@@ -29,11 +29,11 @@ import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.extracter.predicate.VoxelsPredicate;
 import org.anchoranalysis.image.voxel.interpolator.Interpolator;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.ReadableTuple3i;
 
 /**
- * Provides method to read/copy/duplicate portions of voxels
+ * Provides method to read/copy/duplicate portions of voxels.
  *
  * @author Owen Feehan
  * @param <T> buffer-type
@@ -91,8 +91,7 @@ public interface VoxelsExtracter<T> {
      * @param destinationBox box to copy into (relative to {@code voxelsDestination})
      */
     void boxCopyTo(BoundingBox from, Voxels<T> voxelsDestination, BoundingBox destinationBox);
-    
-    
+
     /**
      * Copies an area corresponding to an object-mask to another {@link Voxels}
      *

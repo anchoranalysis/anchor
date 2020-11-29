@@ -27,9 +27,9 @@
 package org.anchoranalysis.bean.shared.relation;
 
 import lombok.EqualsAndHashCode;
-import org.anchoranalysis.core.relation.GreaterThan;
-import org.anchoranalysis.core.relation.GreaterThanEqualTo;
-import org.anchoranalysis.core.relation.RelationToValue;
+import org.anchoranalysis.math.relation.GreaterThan;
+import org.anchoranalysis.math.relation.GreaterThanEqualTo;
+import org.anchoranalysis.math.relation.RelationToValue;
 
 @EqualsAndHashCode(callSuper = true)
 public class GreaterThanEqualToBean extends RelationBean {

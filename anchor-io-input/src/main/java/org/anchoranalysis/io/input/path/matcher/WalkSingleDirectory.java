@@ -49,8 +49,7 @@ class WalkSingleDirectory {
                     dir,
                     EnumSet.of(FileVisitOption.FOLLOW_LINKS),
                     constraints.getMaxDirectoryDepth(),
-                    new AddFilesToList(
-                            listOut, constraints.getPredicates()));
+                    new AddFilesToList(listOut, constraints.getPredicates()));
         } catch (AccessDeniedException e) {
             throw new FindFilesException(String.format("Cannot access directory: %s", e.getFile()));
         } catch (FileSystemException e) {

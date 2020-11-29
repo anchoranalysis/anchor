@@ -25,10 +25,11 @@
  */
 package org.anchoranalysis.image.voxel.buffer.primitive;
 
+import com.google.common.base.Preconditions;
 import java.nio.ByteBuffer;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
-import com.google.common.base.Preconditions;
 
 /**
  * Wraps a {@code ByteBuffer} but automatically performs conversion to {@code int}.
@@ -42,10 +43,11 @@ import com.google.common.base.Preconditions;
  *
  * @author Owen Feehan
  */
+@EqualsAndHashCode(callSuper = true)
 public final class UnsignedByteBuffer extends UnsignedBufferAsInt {
 
     /** The underlying storage buffer, to which calls are delegated with our without conversion. */
-    @Getter private final ByteBuffer delegate;
+    @Getter @EqualsAndHashCode.Exclude private final ByteBuffer delegate;
 
     /**
      * Allocates a new buffer of unsigned-bytes.
@@ -185,12 +187,12 @@ public final class UnsignedByteBuffer extends UnsignedBufferAsInt {
     }
 
     /**
-     * Puts a float at the current buffer position, clipping to ensure the value is within the range
+     * Puts a float at the current buffer position, clamping to ensure the value is within the range
      * {@code (0,255)}.
      *
      * @param value the float
      */
-    public void putFloatClipped(float value) {
+    public void putFloatClamped(float value) {
         if (value > UnsignedByteVoxelType.MAX_VALUE_INT) {
             value = UnsignedByteVoxelType.MAX_VALUE_INT;
         }
@@ -206,12 +208,12 @@ public final class UnsignedByteBuffer extends UnsignedBufferAsInt {
     }
 
     /**
-     * Puts a double at the current buffer position, clipping to ensure the value is within the
+     * Puts a double at the current buffer position, clamping to ensure the value is within the
      * range {@code (0,255)}.
      *
      * @param value the double
      */
-    public void putDoubleClipped(double value) {
+    public void putDoubleClamped(double value) {
         if (value > 255) {
             value = 255;
         }
@@ -252,9 +254,9 @@ public final class UnsignedByteBuffer extends UnsignedBufferAsInt {
     /**
      * The array of the buffer ala {@link ByteBuffer#array}.
      *
-     * <p>Unlike {@link ByteBuffer#array} an array will always be returned,
-     * copying it into a newly created array, if it cannot be directly accessed.
-     * 
+     * <p>Unlike {@link ByteBuffer#array} an array will always be returned, copying it into a newly
+     * created array, if it cannot be directly accessed.
+     *
      * @return the array
      */
     public final byte[] array() {
@@ -262,9 +264,7 @@ public final class UnsignedByteBuffer extends UnsignedBufferAsInt {
         return delegate.array();
     }
 
-    /**
-     * Rewinds the buffer ala {@link ByteBuffer#rewind}.
-     */
+    /** Rewinds the buffer ala {@link ByteBuffer#rewind}. */
     public final void rewind() {
         delegate.rewind();
     }

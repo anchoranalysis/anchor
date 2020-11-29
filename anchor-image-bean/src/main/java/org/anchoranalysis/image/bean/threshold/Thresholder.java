@@ -28,7 +28,7 @@ package org.anchoranalysis.image.bean.threshold;
 
 import java.util.Optional;
 import org.anchoranalysis.bean.NullParamsBean;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;

@@ -45,8 +45,8 @@ import org.anchoranalysis.feature.calculate.cache.ResolvedCalculation;
 import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.results.ResultsVector;
-import org.anchoranalysis.feature.session.strategy.child.DefaultFindChildStrategy;
-import org.anchoranalysis.feature.session.strategy.child.FindChildStrategy;
+import org.anchoranalysis.feature.session.cache.finder.ChildCacheFinder;
+import org.anchoranalysis.feature.session.cache.finder.DefaultChildCacheFinder;
 
 /**
  * A feature-input that will be used in a {@link SequentialSession}
@@ -60,7 +60,7 @@ public class SessionInputSequential<T extends FeatureInput> implements SessionIn
     @AllArgsConstructor
     private class ChildCalculator implements CalculateForChild<T> {
 
-        private FindChildStrategy findChild;
+        private ChildCacheFinder findChild;
 
         @Override
         public <S extends FeatureInput> double calculate(
@@ -82,7 +82,7 @@ public class SessionInputSequential<T extends FeatureInput> implements SessionIn
                     .calculate(
                             feature,
                             new SessionInputSequential<S>(
-                                    input, child, cacheFactory, findChild.strategyForGrandchild()));
+                                    input, child, cacheFactory, findChild.finderForGrandchild()));
         }
 
         @Override
@@ -114,7 +114,7 @@ public class SessionInputSequential<T extends FeatureInput> implements SessionIn
     private T input;
     private CacheCreator cacheFactory;
     private ChildCalculator childCalc;
-    private FindChildStrategy findChild;
+    private ChildCacheFinder findChild;
 
     /**
      * Constructor
@@ -129,10 +129,10 @@ public class SessionInputSequential<T extends FeatureInput> implements SessionIn
         // Deliberately two lines, as it needs an explicitly declared type for the template type
         // inference to work
         this.cache = cacheFactory.create(input.getClass());
-        this.childCalc = new ChildCalculator(DefaultFindChildStrategy.instance());
+        this.childCalc = new ChildCalculator(DefaultChildCacheFinder.instance());
     }
 
-    public SessionInputSequential(T input, CacheCreator cacheFactory, FindChildStrategy findChild) {
+    public SessionInputSequential(T input, CacheCreator cacheFactory, ChildCacheFinder findChild) {
         this.input = input;
         this.cacheFactory = cacheFactory;
 
@@ -155,7 +155,7 @@ public class SessionInputSequential<T extends FeatureInput> implements SessionIn
             T input,
             FeatureSessionCache<T> cache,
             CacheCreator cacheFactory,
-            FindChildStrategy findChild) {
+            ChildCacheFinder findChild) {
         this.input = input;
         this.cacheFactory = cacheFactory;
         this.cache = cache;

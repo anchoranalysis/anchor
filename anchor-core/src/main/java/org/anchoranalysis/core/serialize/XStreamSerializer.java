@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -25,27 +25,26 @@
  */
 package org.anchoranalysis.core.serialize;
 
+import com.thoughtworks.xstream.XStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Path;
-import com.thoughtworks.xstream.XStream;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 /**
  * Serializes an object using the <a href="https://x-stream.github.io/">XStream library</a>.
- * 
+ *
  * @see XStreamDeserializer for the counterpart.
- * 
  * @author Owen Feehan
-  */
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+ */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class XStreamSerializer {
-    
+
     /**
      * Writes a file with a serialized representation of an object.
-     * 
+     *
      * @param <T> object-type
      * @param object the object to serialize
      * @param path path to write the object to

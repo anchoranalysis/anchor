@@ -29,7 +29,7 @@ package org.anchoranalysis.image.core.outline;
 import com.google.common.base.Preconditions;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
+import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
 import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.image.core.mask.combine.MaskXor;
@@ -40,10 +40,10 @@ import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.kernel.ApplyKernel;
 import org.anchoranalysis.image.voxel.kernel.BinaryKernel;
-import org.anchoranalysis.image.voxel.kernel.dilateerode.ErosionKernel3;
-import org.anchoranalysis.image.voxel.kernel.outline.OutlineKernel3;
+import org.anchoranalysis.image.voxel.kernel.morphological.ErosionKernel;
+import org.anchoranalysis.image.voxel.kernel.outline.OutlineKernel;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.spatial.extent.Extent;
+import org.anchoranalysis.spatial.Extent;
 
 /**
  * Finds outline voxels i.e. pixels on the contour/edge of the object.
@@ -173,11 +173,11 @@ public class FindOutline {
             return voxels.duplicate();
         }
 
-        BinaryValuesByte bvb = voxels.binaryValues().createByte();
+        BinaryValuesByte binaryValues = voxels.binaryValues().createByte();
 
-        BinaryKernel kernel = new OutlineKernel3(bvb, !outlineAtBoundary, do3D);
+        BinaryKernel kernel = new OutlineKernel(binaryValues, !outlineAtBoundary, do3D);
 
-        Voxels<UnsignedByteBuffer> out = ApplyKernel.apply(kernel, voxels.voxels(), bvb);
+        Voxels<UnsignedByteBuffer> out = ApplyKernel.apply(kernel, voxels.voxels(), binaryValues);
         return BinaryVoxelsFactory.reuseByte(out, voxels.binaryValues());
     }
 
@@ -196,9 +196,8 @@ public class FindOutline {
                 multipleErode(voxels, numberErosions, outlineAtBoundary, do3D);
 
         // Binary and between the original version and the eroded version
-        assert (eroded != null);
-        BinaryValuesByte bvb = voxels.binaryValues().createByte();
-        MaskXor.apply(voxels.voxels(), eroded, bvb, bvb);
+        BinaryValuesByte binaryValues = voxels.binaryValues().createByte();
+        MaskXor.apply(voxels.voxels(), eroded, binaryValues, binaryValues);
         return voxels;
     }
 
@@ -208,12 +207,13 @@ public class FindOutline {
             boolean erodeAtBoundary,
             boolean do3D) {
 
-        BinaryValuesByte bvb = voxels.binaryValues().createByte();
-        BinaryKernel kernelErosion = new ErosionKernel3(bvb, erodeAtBoundary, do3D);
+        BinaryValuesByte binaryValues = voxels.binaryValues().createByte();
+        BinaryKernel kernelErosion = new ErosionKernel(binaryValues, erodeAtBoundary, do3D);
 
-        Voxels<UnsignedByteBuffer> eroded = ApplyKernel.apply(kernelErosion, voxels.voxels(), bvb);
+        Voxels<UnsignedByteBuffer> eroded =
+                ApplyKernel.apply(kernelErosion, voxels.voxels(), binaryValues);
         for (int i = 1; i < numberErosions; i++) {
-            eroded = ApplyKernel.apply(kernelErosion, eroded, bvb);
+            eroded = ApplyKernel.apply(kernelErosion, eroded, binaryValues);
         }
         return eroded;
     }

@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.bean.permute.setter;
 
-import org.anchoranalysis.core.error.friendly.AnchorFriendlyCheckedException;
+import org.anchoranalysis.core.exception.friendly.AnchorFriendlyCheckedException;
 
 public class PermutationSetterException extends AnchorFriendlyCheckedException {
 

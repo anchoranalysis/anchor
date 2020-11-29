@@ -24,7 +24,7 @@
  * #L%
  */
 /**
- * Beans related to reading and writing annotations to the filesystem.
+ * Beans related to reading / writing / specifying annotations.
  *
  * @author Owen Feehan
  */

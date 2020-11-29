@@ -27,7 +27,7 @@
 package org.anchoranalysis.feature.calculate;
 
 import org.anchoranalysis.core.cache.CachedSupplier;
-import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
+import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.feature.calculate.cache.ResettableCalculation;
 import org.anchoranalysis.feature.input.FeatureInput;
 

@@ -33,8 +33,8 @@ import org.anchoranalysis.bean.initializable.params.BeanInitParams;
 import org.anchoranalysis.bean.initializable.params.ParamsInitializer;
 import org.anchoranalysis.bean.initializable.property.PropertyDefiner;
 import org.anchoranalysis.bean.initializable.property.PropertyInitializer;
-import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
+import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.core.log.Logger;
 
 /**

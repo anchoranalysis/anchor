@@ -31,10 +31,11 @@ import java.nio.file.Path;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.bean.NamedBean;
-import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.format.NonImageFileFormat;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.core.params.KeyValueParams;
+import org.anchoranalysis.core.value.KeyValueParams;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.input.FeatureInputResults;
@@ -43,12 +44,12 @@ import org.anchoranalysis.feature.io.csv.RowLabels;
 import org.anchoranalysis.feature.io.name.MultiName;
 import org.anchoranalysis.feature.io.results.ResultsWriter;
 import org.anchoranalysis.feature.io.results.ResultsWriterMetadata;
-import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.feature.results.ResultsVector;
 import org.anchoranalysis.feature.results.ResultsVectorList;
 import org.anchoranalysis.feature.session.FeatureSession;
-import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
+import org.anchoranalysis.feature.session.calculator.multi.FeatureCalculatorMulti;
+import org.anchoranalysis.feature.store.NamedFeatureStore;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
@@ -159,7 +160,9 @@ class WriteXMLForGroup {
                     context.getOutputter()
                             .writerSelective()
                             .createFilenameForWriting(
-                                    outputName, "xml", Optional.of(MANIFEST_DESCRIPTION));
+                                    outputName,
+                                    NonImageFileFormat.XML.extensionWithoutPeriod(),
+                                    Optional.of(MANIFEST_DESCRIPTION));
             if (fileOutPath.isPresent()) {
                 paramsOut.writeToFile(fileOutPath.get());
             }

@@ -46,8 +46,8 @@ public class InputOutputContextSubdirectoryCache {
     /** the context of the directory in which subdirectories may be created */
     private final InputOutputContext parentContext;
 
-    /** A description to use for every created folder */
-    private final ManifestDirectoryDescription manifestFolderDescription;
+    /** A description to use for every created subdirectory */
+    private final ManifestDirectoryDescription manifestDirectoryDescription;
 
     /**
      * If true, the output rules and recording are inherited from the parent directory. if false,
@@ -60,8 +60,8 @@ public class InputOutputContextSubdirectoryCache {
     /**
      * Gets (from the cache if it's already there) a context for a subdirectory of given-name
      *
-     * @param subdirectoryName the subdirectory name. if not set, then the parentContext is
-     *     returned instead.
+     * @param subdirectoryName the subdirectory name. if not set, then the parentContext is returned
+     *     instead.
      * @return either an existing context for the subdirectory or a newly created one
      */
     public InputOutputContext get(Optional<String> subdirectoryName) {
@@ -69,6 +69,6 @@ public class InputOutputContextSubdirectoryCache {
                 subdirectoryName,
                 key ->
                         parentContext.maybeSubdirectory(
-                                key, manifestFolderDescription, inheritOutputRulesAndRecording));
+                                key, manifestDirectoryDescription, inheritOutputRulesAndRecording));
     }
 }

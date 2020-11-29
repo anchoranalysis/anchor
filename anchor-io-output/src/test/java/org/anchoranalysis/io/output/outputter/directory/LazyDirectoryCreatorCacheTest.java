@@ -44,7 +44,7 @@ import org.junit.rules.TemporaryFolder;
  */
 public class LazyDirectoryCreatorCacheTest {
 
-    @Rule public TemporaryFolder folder = new TemporaryFolder();
+    @Rule public TemporaryFolder directory = new TemporaryFolder();
 
     private static final String RELATIVE_PATH_DIRECT = "path1";
     private static final String RELATIVE_PATH_NESTED = "path1/nested1";
@@ -53,7 +53,7 @@ public class LazyDirectoryCreatorCacheTest {
 
     @Before
     public void setup() {
-        directoryCreator = new LazyDirectoryCreatorPool(folder.getRoot().toPath(), false);
+        directoryCreator = new LazyDirectoryCreatorPool(directory.getRoot().toPath(), false);
     }
 
     @Test
@@ -105,6 +105,6 @@ public class LazyDirectoryCreatorCacheTest {
 
     /** Constructs a path in the temporary-folder */
     private Path pathFor(String relativePath) {
-        return folder.getRoot().toPath().resolve(relativePath);
+        return directory.getRoot().toPath().resolve(relativePath);
     }
 }

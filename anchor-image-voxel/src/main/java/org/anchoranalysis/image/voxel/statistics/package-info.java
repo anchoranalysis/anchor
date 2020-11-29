@@ -23,5 +23,5 @@
  * THE SOFTWARE.
  * #L%
  */
-/** Statistics about voxel intensities. */
+/** Statistics about aggregated voxel intensities. */
 package org.anchoranalysis.image.voxel.statistics;

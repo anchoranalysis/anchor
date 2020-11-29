@@ -27,7 +27,7 @@
 package org.anchoranalysis.image.bean.provider.stack;
 
 import org.anchoranalysis.bean.annotation.GroupingRoot;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.bean.provider.BeanProviderAsStackBase;
 import org.anchoranalysis.image.core.stack.Stack;
 

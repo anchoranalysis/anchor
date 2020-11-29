@@ -29,15 +29,15 @@ package org.anchoranalysis.mpp.io.input;
 import java.nio.file.Path;
 import java.util.Optional;
 import lombok.experimental.Accessors;
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.core.name.store.NamedProviderStore;
-import org.anchoranalysis.core.params.KeyValueParams;
-import org.anchoranalysis.core.progress.ProgressReporter;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
+import org.anchoranalysis.core.log.error.ErrorReporter;
+import org.anchoranalysis.core.progress.Progress;
+import org.anchoranalysis.core.value.KeyValueParams;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.core.stack.TimeSequence;
-import org.anchoranalysis.image.core.stack.wrap.WrapStackAsTimeSequenceStore;
-import org.anchoranalysis.image.io.input.ProvidesStackInput;
+import org.anchoranalysis.image.core.stack.time.WrapStackAsTimeSequenceStore;
+import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.math.histogram.Histogram;
 import org.anchoranalysis.mpp.bean.init.MPPInitParams;
@@ -66,11 +66,9 @@ public class MultiInput implements ProvidesStackInput, InputForMPPBean {
 
     @Override
     public void addToStoreInferNames(
-            NamedProviderStore<TimeSequence> stacks,
-            int seriesIndex,
-            ProgressReporter progressReporter)
+            NamedProviderStore<TimeSequence> stacks, int seriesIndex, Progress progress)
             throws OperationFailedException {
-        stack.addToStore(stacks, seriesIndex, progressReporter);
+        stack.addToStore(stacks, seriesIndex, progress);
     }
 
     @Override
@@ -78,7 +76,7 @@ public class MultiInput implements ProvidesStackInput, InputForMPPBean {
             String name,
             NamedProviderStore<TimeSequence> stacks,
             int seriesIndex,
-            ProgressReporter progressReporter)
+            Progress progress)
             throws OperationFailedException {
         throw new OperationFailedException("Not supported");
     }
