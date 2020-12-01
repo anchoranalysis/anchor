@@ -36,12 +36,12 @@ import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 
 /**
- * A raster-image that has been opened for reading containing one or more series of image-{@link
+ * An image file that has been opened for reading containing one or more series of image-{@link
  * Stack}s.
  *
  * @author Owen Feehan
  */
-public interface OpenedRaster extends AutoCloseable {
+public interface OpenedImageFile extends AutoCloseable {
 
     // Opens a time-series as a particular type. If it's not the correct type, an error is thrown
     default TimeSequence openCheckType(

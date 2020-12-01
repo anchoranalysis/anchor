@@ -30,22 +30,75 @@ import java.util.List;
 import java.util.Optional;
 import loci.formats.IFormatReader;
 import org.anchoranalysis.bean.AnchorBean;
+import org.anchoranalysis.io.bioformats.bean.BioformatsReader;
 
+/**
+ * Options that influence how stack is read in {@link BioformatsReader}.
+ * 
+ * @author Owen Feehan
+ *
+ */
 public abstract class ReadOptions extends AnchorBean<ReadOptions> {
 
+    /** 
+     * Number of channels.
+     *
+     * @param reader the bioformats reader
+     * @return the number of channels
+     */
     public abstract int sizeC(IFormatReader reader);
 
+    /** 
+     * Number of time-points (frames in a time series).
+     *
+     * @param reader the bioformats reader
+     * @return the number of channels
+     */
     public abstract int sizeT(IFormatReader reader);
 
+    /** 
+     * Number of z-slices (slices in a 3D image).
+     *
+     * @param reader the bioformats reader
+     * @return the number of slices
+     */
     public abstract int sizeZ(IFormatReader reader);
 
+    /**
+     * The number of bits used per pixel.
+     * 
+     * <p>This may be a smaller number than the size of the voxel's data-type
+     * e.g. a 16-bit format may be used to store only 12-bits of image data.
+     * 
+     * @param reader the bioformats reader
+     * @return the number of bits used per pixel.
+     */
     public abstract int effectiveBitsPerPixel(IFormatReader reader);
 
+    /**
+     * The number of channels returned with each call to {@link IFormatReader#openBytes(int)}.
+     * 
+     * @param reader the bioformats reader
+     * @return the number of channels returned with each call to openBytes.
+     */
     public abstract int channelsPerByteArray(IFormatReader reader);
 
-    /** Is it an image with three channels (red, green and blue)? */
+    /** 
+     * Is it an image with three channels (red, green and blue)?
+     * 
+     * @param reader the bioformats reader
+     * @return true iff its a RGB image
+     */
     public abstract boolean isRGB(IFormatReader reader);
 
-    /** Returns a list of channel-names or null if they are unavailable */
+    /** 
+     * A list of channel-names, if available.
+     * 
+     * <p>The order matches the channel indexing e.g. the first name in the list
+     * corresponds to the channel with {@code index=0}.
+     * 
+     * @param reader the bioformats reader
+     * @return the channel-names, if available. 
+     */
     public abstract Optional<List<String>> determineChannelNames(IFormatReader reader);
 }

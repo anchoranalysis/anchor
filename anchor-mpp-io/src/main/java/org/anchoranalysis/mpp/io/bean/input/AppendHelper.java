@@ -38,7 +38,7 @@ import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
 import org.anchoranalysis.image.io.histogram.input.HistogramCSVReader;
 import org.anchoranalysis.image.io.object.input.ObjectCollectionReader;
-import org.anchoranalysis.image.io.stack.input.OpenedRaster;
+import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
 import org.anchoranalysis.io.input.bean.path.DerivePath;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.mpp.io.input.MultiInputSubMap;
@@ -175,8 +175,8 @@ class AppendHelper {
 
     private static TimeSequence openRaster(Path path, StackReader stackReader)
             throws ImageIOException {
-        try (OpenedRaster openedRaster = stackReader.openFile(path)) {
-            return openedRaster.open(0, ProgressIgnore.get());
+        try (OpenedImageFile openedFile = stackReader.openFile(path)) {
+            return openedFile.open(0, ProgressIgnore.get());
         }
     }
 }

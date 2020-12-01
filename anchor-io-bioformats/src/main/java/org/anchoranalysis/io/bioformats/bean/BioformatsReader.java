@@ -46,7 +46,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
-import org.anchoranalysis.image.io.stack.input.OpenedRaster;
+import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
 import org.anchoranalysis.io.bioformats.BioformatsOpenedRaster;
 import org.anchoranalysis.io.bioformats.bean.options.Default;
 import org.anchoranalysis.io.bioformats.bean.options.ReadOptions;
@@ -63,18 +63,24 @@ import org.anchoranalysis.io.bioformats.bean.options.ReadOptions;
 public class BioformatsReader extends StackReader {
 
     // START BEAN PROPERTIES
+    /** Options that influence how stack is read. */
     @BeanField @Getter @Setter private ReadOptions options = new Default();
 
     /** If non-empty forces usage of a particular bioformats plugin */
     @BeanField @AllowEmpty @Getter @Setter private String forceReader = "";
     // END BEAN PROPERTIES
 
+    /**
+     * Create with particular options.
+     * 
+     * @param options options that influence how stack is read.
+     */
     public BioformatsReader(ReadOptions options) {
         this.options = options;
     }
 
     @Override
-    public OpenedRaster openFile(Path filePath) throws ImageIOException {
+    public OpenedImageFile openFile(Path filePath) throws ImageIOException {
 
         try {
             IFormatReader reader = selectAndInitReader();
@@ -111,7 +117,7 @@ public class BioformatsReader extends StackReader {
         }
     }
 
-    /* The standard multiplexing image-reader for bioformats */
+    /** The standard multiplexing image-reader from Bioformats. */
     private static IFormatReader imageReader() {
         ImageReader reader = new ImageReader();
         reader.setGroupFiles(false);
