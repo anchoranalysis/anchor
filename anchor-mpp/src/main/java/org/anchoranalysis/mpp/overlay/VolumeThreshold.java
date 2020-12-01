@@ -32,18 +32,18 @@ import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.object.properties.ObjectWithProperties;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.mpp.mark.Mark;
-import org.anchoranalysis.overlay.object.scaled.ScaledMaskCreator;
+import org.anchoranalysis.overlay.object.scaled.ScaledOverlayCreator;
 import org.anchoranalysis.overlay.writer.DrawOverlay;
 
 @AllArgsConstructor
-class VolumeThreshold implements ScaledMaskCreator {
+class VolumeThreshold implements ScaledOverlayCreator {
 
-    private ScaledMaskCreator greaterThanEqualThreshold;
-    private ScaledMaskCreator lessThreshold;
+    private ScaledOverlayCreator greaterThanEqualThreshold;
+    private ScaledOverlayCreator lessThreshold;
     private int threshold;
 
     @Override
-    public ObjectWithProperties createScaledMask(
+    public ObjectWithProperties createScaledObject(
             DrawOverlay overlayWriter,
             ObjectWithProperties unscaled,
             double scaleFactor,
@@ -58,10 +58,10 @@ class VolumeThreshold implements ScaledMaskCreator {
         double zoomVolume = originalMark.volume(0) * Math.pow(scaleFactor, 2);
 
         if (zoomVolume > threshold) {
-            return greaterThanEqualThreshold.createScaledMask(
+            return greaterThanEqualThreshold.createScaledObject(
                     overlayWriter, unscaled, scaleFactor, originalObject, dimensionsScaled, bvOut);
         } else {
-            return lessThreshold.createScaledMask(
+            return lessThreshold.createScaledObject(
                     overlayWriter, unscaled, scaleFactor, originalObject, dimensionsScaled, bvOut);
         }
     }

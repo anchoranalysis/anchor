@@ -33,16 +33,16 @@ import org.anchoranalysis.image.core.object.properties.ObjectWithProperties;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.mpp.mark.Mark;
-import org.anchoranalysis.overlay.object.scaled.ScaledMaskCreator;
+import org.anchoranalysis.overlay.object.scaled.ScaledOverlayCreator;
 import org.anchoranalysis.overlay.writer.DrawOverlay;
 
 @AllArgsConstructor
-class FromMark implements ScaledMaskCreator {
+class FromMark implements ScaledOverlayCreator {
 
     private RegionMembershipWithFlags regionMembership;
 
     @Override
-    public ObjectWithProperties createScaledMask(
+    public ObjectWithProperties createScaledObject(
             DrawOverlay overlayWriter,
             ObjectWithProperties unscaled,
             double scaleFactor,

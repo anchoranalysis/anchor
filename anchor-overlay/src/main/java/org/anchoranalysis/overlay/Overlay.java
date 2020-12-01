@@ -37,7 +37,12 @@ import org.anchoranalysis.overlay.writer.DrawOverlay;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.Point3i;
 
-// What can be projected on top of a raster through the GUI
+/**
+ * An entity that will eventually be drawn on top of an image.
+ *
+ * @author Owen Feehan
+ *
+ */
 public abstract class Overlay implements Identifiable {
 
     /**

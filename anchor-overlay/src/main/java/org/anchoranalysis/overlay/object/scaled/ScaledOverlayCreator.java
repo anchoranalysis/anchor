@@ -30,17 +30,18 @@ import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.object.properties.ObjectWithProperties;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.overlay.writer.DrawOverlay;
 
 /**
- * Creates a scaled version of a mask from a mark/object that is not scaled
+ * Creates a scaled version of {@link ObjectMask} to use as an overlay.
  *
  * @author Owen Feehan
  */
-public interface ScaledMaskCreator {
+public interface ScaledOverlayCreator {
 
     /**
-     * Creates a scaled-version of the mask
+     * Creates a scaled-version of the object to use as an overlay..
      *
      * @param overlayWriter what writes an overlay onto a raster
      * @param unscaled unscaled object-mask
@@ -51,7 +52,7 @@ public interface ScaledMaskCreator {
      * @return the scaled object-mask
      * @throws CreateException
      */
-    ObjectWithProperties createScaledMask(
+    ObjectWithProperties createScaledObject(
             DrawOverlay overlayWriter,
             ObjectWithProperties unscaled,
             double scaleFactor,

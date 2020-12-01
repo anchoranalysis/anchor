@@ -37,14 +37,14 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.overlay.Overlay;
 import org.anchoranalysis.overlay.OverlayProperties;
 import org.anchoranalysis.overlay.object.scaled.FromMask;
-import org.anchoranalysis.overlay.object.scaled.ScaledMaskCreator;
+import org.anchoranalysis.overlay.object.scaled.ScaledOverlayCreator;
 import org.anchoranalysis.overlay.writer.DrawOverlay;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.Point3i;
 
 public class OverlayObjectMask extends Overlay {
 
-    private static final ScaledMaskCreator SCALED_MASK_CREATOR = new FromMask();
+    private static final ScaledOverlayCreator SCALED_MASK_CREATOR = new FromMask();
 
     @Getter private final ObjectWithProperties object;
 
@@ -75,7 +75,7 @@ public class OverlayObjectMask extends Overlay {
             BinaryValuesByte bvOut)
             throws CreateException {
 
-        return SCALED_MASK_CREATOR.createScaledMask(
+        return SCALED_MASK_CREATOR.createScaledObject(
                 overlayWriter, om, zoomFactorNew, om, dimensionsScaled, bvOut);
     }
 

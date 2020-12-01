@@ -39,7 +39,7 @@ import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.overlay.Overlay;
 import org.anchoranalysis.overlay.OverlayProperties;
 import org.anchoranalysis.overlay.object.scaled.FromMask;
-import org.anchoranalysis.overlay.object.scaled.ScaledMaskCreator;
+import org.anchoranalysis.overlay.object.scaled.ScaledOverlayCreator;
 import org.anchoranalysis.overlay.writer.DrawOverlay;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.Point3d;
@@ -52,7 +52,7 @@ public class OverlayMark extends Overlay {
     @Getter private final Mark mark;
     private final RegionMembershipWithFlags regionMembership;
 
-    @EqualsAndHashCode.Exclude private final ScaledMaskCreator scaledMaskCreator;
+    @EqualsAndHashCode.Exclude private final ScaledOverlayCreator scaledMaskCreator;
 
     public OverlayMark(Mark mark, RegionMembershipWithFlags regionMembership) {
         super();
@@ -87,7 +87,7 @@ public class OverlayMark extends Overlay {
             BinaryValuesByte bvOut)
             throws CreateException {
 
-        return scaledMaskCreator.createScaledMask(
+        return scaledMaskCreator.createScaledObject(
                 overlayWriter, om, zoomFactorNew, mark, dimensionsUnscaled, bvOut);
     }
 
