@@ -27,6 +27,7 @@
 package org.anchoranalysis.io.input.bean.path.matcher;
 
 import java.nio.file.Path;
+import java.util.Optional;
 import java.util.function.Predicate;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -35,6 +36,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.input.InputContextParams;
+import org.anchoranalysis.io.input.InputReadFailedException;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -49,15 +51,17 @@ public class MatchGlob extends PathMatcher {
     // END BEAN FIELDS
 
     @Override
-    protected Predicate<Path> createMatcherFile(Path directory, InputContextParams inputContext) {
+    protected Predicate<Path> createMatcherFile(Path directory, Optional<InputContextParams> inputContext) throws InputReadFailedException {
         return FilterPathHelper.createPredicate(directory, "glob", globString(inputContext));
     }
 
-    private String globString(InputContextParams inputContext) {
+    private String globString(Optional<InputContextParams> inputContext) throws InputReadFailedException {
         if (!glob.isEmpty()) {
             return glob;
+        } else if (inputContext.isPresent()) {
+            return inputContext.get().getInputFilterGlob();
         } else {
-            return inputContext.getInputFilterGlob();
+            throw new InputReadFailedException("Neither a glob is defined as a bean-field, nor as part of the input-context params. At least one must be defined.");
         }
     }
 }
