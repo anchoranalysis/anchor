@@ -40,12 +40,13 @@ import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 public class OutputWriteContext {
 
     /** User-define settings for outputting in output-manager. */
-    @Getter private OutputWriteSettings settings;
+    @Getter private final OutputWriteSettings settings;
 
     /** A suggestion on what file-format to write. */
-    @Getter private Optional<ImageFileFormat> suggestedFormatToWrite;
+    @Getter private final Optional<ImageFileFormat> suggestedFormatToWrite;
 
     public OutputWriteContext() {
         settings = new OutputWriteSettings();
+        suggestedFormatToWrite = Optional.empty();
     }
 }

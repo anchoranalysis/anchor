@@ -40,8 +40,8 @@ import org.anchoranalysis.core.format.ImageFileFormat;
 public class StackWriteOptions {
 
     /** The attributes of the particular stack to write. */
-    @Getter private StackWriteAttributes attributes;
+    @Getter private final StackWriteAttributes attributes;
 
     /** A suggestion on what file-format to write. */
-    @Getter private Optional<ImageFileFormat> suggestedFormatToWrite;
+    @Getter private final Optional<ImageFileFormat> suggestedFormatToWrite;
 }

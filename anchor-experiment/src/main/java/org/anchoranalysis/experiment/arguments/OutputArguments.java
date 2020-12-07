@@ -54,7 +54,7 @@ public class OutputArguments {
     @Getter private OutputEnabledDelta outputEnabledDelta = new OutputEnabledDelta();
 
     /** A file format suggested for writing images to the file system. */
-    @Getter private Optional<ImageFileFormat> suggestedImageOutputFormat;
+    @Getter private Optional<ImageFileFormat> suggestedImageOutputFormat = Optional.empty();
 
     public void assignOutputDirectory(Path outputDirectory) {
         this.outputDirectory = Optional.of(outputDirectory);
