@@ -65,15 +65,34 @@ public class DirectoryWithPrefix implements PathCreator {
     }
 
     @Override
-    public Path makePathAbsolute(Optional<String> suffix, Optional<String> extension) {
-        return directory.resolve(prefix + concatenate(suffix, extension).orElse(""));
+    public Path makePathAbsolute(Optional<String> suffix, Optional<String> extension, String fallbackSuffix) {
+        return directory.resolve(buildFilename(suffix, extension, fallbackSuffix));
     }
 
     @Override
     public Path makePathRelative(Path fullPath) {
         return directory.relativize(fullPath);
     }
-
+    
+    /**
+     * Builds a filename to be used together with the directory.
+     * 
+     * @param suffix a suffix to insert after the {@code prefix} and before the {@code extension}
+     * @param extension an {@code extension} to include as the final part of the filename
+     * @param fallbackSuffix if neither a {@code prefix} is defined nor a {@code suffix}, then this provides a suffix to use so a file isn't only an extension.
+     * @return a string describing the filename, ending with a period and  {@code extension} if an extension is defined.
+     */
+    private String buildFilename(Optional<String> suffix, Optional<String> extension, String fallbackSuffix) {
+        if (!prefix.isEmpty()) {
+            return prefix + concatenate(suffix, extension).orElse("");
+        } else {
+            // If the prefix is empty, we don't ever want to try only an extension, so we use
+            //  a fallbackSuffix
+            Optional<String> nonEmptySuffix = Optional.of( suffix.orElse(fallbackSuffix) ); 
+            return concatenate(nonEmptySuffix, extension).get();
+        }
+    }
+    
     private Optional<String> concatenate(Optional<String> suffix, Optional<String> extension) {
         if (suffix.isPresent() || extension.isPresent()) {
             String contributionFromSuffix = contributionFrom(suffix, delimiter);

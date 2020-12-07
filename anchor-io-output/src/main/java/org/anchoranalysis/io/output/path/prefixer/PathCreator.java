@@ -44,10 +44,11 @@ public interface PathCreator {
      *
      * @param suffix the final part of the path, to be added to the prefix
      * @param extension a file extension (without a leading string)
+     * @param fallbackSuffix if neither a {@code prefix} is defined nor a {@code suffix}, then this provides a suffix to use so a file isn't only an extension.
      * @return a complete absolute path with all components (prefix, suffix) etc., including the
      *     leading directory.
      */
-    Path makePathAbsolute(Optional<String> suffix, Optional<String> extension);
+    Path makePathAbsolute(Optional<String> suffix, Optional<String> extension, String fallbackSuffix);
 
     /**
      * Extracts a relative-file path, given the final part (suffix) of a path.

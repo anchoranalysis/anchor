@@ -100,7 +100,7 @@ public abstract class SingleFileTypeGenerator<T, S> implements TransformingGener
         try {
             String fileExtension = selectFileExtension(outputter.getSettings());
 
-            Path pathToWriteTo = outputter.makeOutputPath(filenameWithoutExtension, fileExtension);
+            Path pathToWriteTo = outputter.makeOutputPath(filenameWithoutExtension, fileExtension, outputName);
 
             // First write to the file system, and then write to the operation-recorder.
             writeToFile(element, outputter.getSettings(), pathToWriteTo);
