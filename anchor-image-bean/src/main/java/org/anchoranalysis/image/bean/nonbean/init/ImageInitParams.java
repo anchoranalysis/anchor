@@ -27,6 +27,7 @@
 package org.anchoranalysis.image.bean.nonbean.init;
 
 import java.nio.file.Path;
+import java.util.Optional;
 import lombok.Getter;
 import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.bean.initializable.params.BeanInitParams;
@@ -50,6 +51,7 @@ import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.bean.segment.binary.BinarySegmentation;
 import org.anchoranalysis.image.core.channel.Channel;
+import org.anchoranalysis.image.core.dimensions.resize.suggestion.ImageResizeSuggestion;
 import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
@@ -60,6 +62,8 @@ public class ImageInitParams implements BeanInitParams {
 
     @Getter private final SharedObjects sharedObjects;
 
+    @Getter private final Optional<ImageResizeSuggestion> suggestedResize;
+    
     // START: InitParams
     private final KeyValueParamsInitParams soParams;
     private final SharedFeaturesInitParams soFeature;
@@ -77,8 +81,12 @@ public class ImageInitParams implements BeanInitParams {
     private CheckedFunction<StackProvider, Stack, OperationFailedException> stackProviderBridge;
 
     public ImageInitParams(SharedObjects sharedObjects) {
-        super();
+        this(sharedObjects, Optional.empty());
+    }
+    
+    public ImageInitParams(SharedObjects sharedObjects, Optional<ImageResizeSuggestion> suggestedResize) {
         this.sharedObjects = sharedObjects;
+        this.suggestedResize = suggestedResize;
         this.soParams = KeyValueParamsInitParams.create(sharedObjects);
         this.soFeature = SharedFeaturesInitParams.create(sharedObjects);
 

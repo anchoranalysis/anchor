@@ -150,7 +150,7 @@ public abstract class OutputExperiment extends Experiment {
 
         Manifest experimentalManifest = new Manifest();
 
-        String experimentId = experimentIdentifier.identifier(arguments.taskName());
+        String experimentId = experimentIdentifier.identifier(arguments.task().getTaskName());
 
         try {
             OutputterChecked rootOutputter =

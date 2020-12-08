@@ -46,18 +46,17 @@ import org.anchoranalysis.io.output.outputter.Outputter;
  */
 public class InputOutputContextStateful implements InputOutputContext {
 
-    private ExecutionArguments experimentArguments;
-    private Outputter outputter;
+    private final ExecutionArguments experimentArguments;
+    private final Outputter outputter;
 
-    private StatefulMessageLogger messageLogger;
-    private Logger logger; // Always related to the above two fields
+    private final StatefulMessageLogger messageLogger;
+    private final Logger logger; // Always related to the above two fields
 
     public InputOutputContextStateful(
             ExecutionArguments experimentArguments,
             Outputter outputter,
             StatefulMessageLogger logger,
             ErrorReporter errorReporter) {
-        super();
         this.experimentArguments = experimentArguments;
         this.outputter = outputter;
 

@@ -29,6 +29,8 @@ package org.anchoranalysis.experiment.task;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.anchoranalysis.core.log.Logger;
+import org.anchoranalysis.experiment.arguments.TaskArguments;
+import org.anchoranalysis.experiment.io.InitParamsContext;
 import org.anchoranalysis.experiment.log.StatefulMessageLogger;
 import org.anchoranalysis.io.manifest.Manifest;
 import org.anchoranalysis.io.output.outputter.Outputter;
@@ -65,7 +67,8 @@ public class InputBound<T, S> {
                 manifest,
                 detailedLogging,
                 contextExperiment,
-                contextJob);
+                contextJob
+        );
     }
 
     /** Immutably changes the input-object and shared-state */
@@ -77,7 +80,12 @@ public class InputBound<T, S> {
                 manifest,
                 detailedLogging,
                 contextExperiment,
-                contextJob);
+                contextJob
+                );
+    }
+    
+    public InitParamsContext createInitParamsContext() {
+        return new InitParamsContext(contextJob, contextExperiment.getExperimentArguments().task().getResize());
     }
 
     public Outputter getOutputter() {
@@ -90,5 +98,9 @@ public class InputBound<T, S> {
 
     public StatefulMessageLogger getLogReporterJob() {
         return contextJob.getMessageLogger();
+    }
+
+    public TaskArguments getTaskArguments() {
+        return contextExperiment.getExperimentArguments().task();
     }
 }

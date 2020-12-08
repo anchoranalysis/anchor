@@ -28,15 +28,21 @@ package org.anchoranalysis.image.io;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import java.util.Optional;
 import org.anchoranalysis.core.identifier.provider.store.SharedObjects;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
+import org.anchoranalysis.image.core.dimensions.resize.suggestion.ImageResizeSuggestion;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ImageInitParamsFactory {
 
     public static ImageInitParams create(InputOutputContext context) {
-        SharedObjects so = new SharedObjects(context.common());
-        return new ImageInitParams(so);
+        return create(context, Optional.empty());
+    }
+    
+    public static ImageInitParams create(InputOutputContext context, Optional<ImageResizeSuggestion> suggestedResize) {
+        SharedObjects sharedObjects = new SharedObjects(context.common());
+        return new ImageInitParams(sharedObjects, suggestedResize);
     }
 }

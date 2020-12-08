@@ -56,12 +56,12 @@ public class ExecutionArguments {
 
     /** Arguments to help specify the outputs from the experiment. */
     @Getter private final OutputArguments output = new OutputArguments();
+    
+    /** Arguments to help specify the outputs from the experiment. */
+    @Getter private final TaskArguments task = new TaskArguments();
 
     /** If defined, parameters for debug-mode. */
     private Optional<DebugModeParams> debugModeParams = Optional.empty();
-
-    /** A name to describe the ongoing task */
-    @Getter private Optional<String> taskName = Optional.empty();
 
     public ExecutionArguments(Path modelDirectory) {
         input.assignModelDirectory(modelDirectory);
@@ -100,9 +100,5 @@ public class ExecutionArguments {
 
     public boolean isDebugModeEnabled() {
         return debugModeParams.isPresent();
-    }
-
-    public void assignTaskName(Optional<String> taskName) {
-        this.taskName = taskName;
     }
 }

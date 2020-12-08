@@ -36,10 +36,10 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.identifier.provider.NamedProvider;
 import org.anchoranalysis.core.identifier.provider.store.SharedObjects;
 import org.anchoranalysis.core.value.KeyValueParams;
+import org.anchoranalysis.experiment.io.InitParamsContext;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
-import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.mpp.bean.MPPBean;
 import org.anchoranalysis.mpp.bean.init.MPPInitParams;
 
@@ -49,13 +49,13 @@ public class MPPInitParamsFactory {
     private static final String KEY_VALUE_PARAMS_IDENTIFIER = "input_params";
 
     public static MPPInitParams create(
-            InputOutputContext context,
+            InitParamsContext context,
             Optional<Define> define,
             Optional<? extends InputForMPPBean> input)
             throws CreateException {
 
         SharedObjects sharedObjects = new SharedObjects(context.common());
-        ImageInitParams imageInit = new ImageInitParams(sharedObjects);
+        ImageInitParams imageInit = new ImageInitParams(sharedObjects, context.getSuggestedResize());
         MPPInitParams mppInit = new MPPInitParams(imageInit, sharedObjects);
 
         if (input.isPresent()) {
@@ -70,9 +70,9 @@ public class MPPInitParamsFactory {
             try {
                 // Tries to initialize any properties (of type MPPInitParams) found in the
                 // NamedDefinitions
-                PropertyInitializer<MPPInitParams> pi = MPPBean.initializerForMPPBeans();
-                pi.setParam(mppInit);
-                mppInit.populate(pi, define.get(), context.getLogger());
+                PropertyInitializer<MPPInitParams> initializer = MPPBean.initializerForMPPBeans();
+                initializer.setParam(mppInit);
+                mppInit.populate(initializer, define.get(), context.getLogger());
 
             } catch (OperationFailedException e) {
                 throw new CreateException(e);
@@ -83,12 +83,12 @@ public class MPPInitParamsFactory {
     }
 
     public static MPPInitParams createFromExistingCollections(
-            InputOutputContext context,
+            InitParamsContext context,
             Optional<Define> define,
             Optional<NamedProvider<Stack>> stacks,
             Optional<NamedProvider<ObjectCollection>> objects,
-            Optional<KeyValueParams> keyValueParams)
-            throws CreateException {
+            Optional<KeyValueParams> keyValueParams
+            ) throws CreateException {
 
         try {
             MPPInitParams soMPP = create(context, define, Optional.empty());
