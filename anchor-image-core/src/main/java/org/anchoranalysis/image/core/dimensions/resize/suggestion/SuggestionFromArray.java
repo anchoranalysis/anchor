@@ -1,6 +1,7 @@
 package org.anchoranalysis.image.core.dimensions.resize.suggestion;
 
 import java.util.Optional;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import lombok.AllArgsConstructor;
 
@@ -44,7 +45,11 @@ class SuggestionFromArray {
     
     /** Creates a {@link ScaleToSuggestion} by extracting particular positions for width and height (or not at all). */
     private ScaleToSuggestion extract(Optional<Integer> widthPosition, Optional<Integer> heightPosition, boolean preserveAspectRatio) throws SuggestionFormatException {
-        return new ScaleToSuggestion( extractIntegerOptional(widthPosition), extractIntegerOptional(heightPosition), preserveAspectRatio);
+        try {
+            return new ScaleToSuggestion( extractIntegerOptional(widthPosition), extractIntegerOptional(heightPosition), preserveAspectRatio);
+        } catch (CreateException e) {
+            throw new SuggestionFormatException("Neither a width nor a height is specified");
+        }
     }
     
     /** Like {@link #extractInteger(int)} but takes an {@link Optional} as an parameter. */
