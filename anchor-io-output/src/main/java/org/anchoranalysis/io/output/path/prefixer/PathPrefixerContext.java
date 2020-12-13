@@ -28,20 +28,39 @@ package org.anchoranalysis.io.output.path.prefixer;
 
 import java.nio.file.Path;
 import java.util.Optional;
+import org.anchoranalysis.io.output.bean.path.prefixer.PathPrefixer;
 import lombok.Getter;
 
-public class FilePathPrefixerContext {
+/**
+ * Context parameters provided to a link {@link PathPrefixer}.
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class PathPrefixerContext {
 
-    @Getter private boolean debugMode;
+    /** Whether debug-mode is activated. */
+    @Getter private final boolean debugMode;
 
-    /** A directory indicating where inputs can be located */
+    /** A directory indicating where inputs can be located. */
     @Getter private final Optional<Path> outputDirectory;
+    
+    /** Requests outputting with an incrementing number sequence, rather than the usual outputter (normally based upon input filenames). */
+    @Getter private final boolean outputIncrementingNumberSequence;
 
-    public FilePathPrefixerContext(boolean debugMode, Optional<Path> outputDirectory)
+    /**
+     * Create with specific parameters.
+     * 
+     * @param debugMode whether debug-mode is activated
+     * @param outputDirectory a directory indicating where inputs can be located.
+     * @param outputIncrementingNumberSequence requests outputting with an incrementing number sequence, rather than the usual outputter (normally based upon input filenames).
+     * @throws PathPrefixerException if the the path in {@code outputDirectory} is relative instead of absolute
+     */
+    public PathPrefixerContext(boolean debugMode, Optional<Path> outputDirectory, boolean outputIncrementingNumberSequence)
             throws PathPrefixerException {
-        super();
         this.debugMode = debugMode;
         this.outputDirectory = outputDirectory;
+        this.outputIncrementingNumberSequence = outputIncrementingNumberSequence;
         checkAbsolutePath();
     }
 
@@ -49,7 +68,8 @@ public class FilePathPrefixerContext {
         if (outputDirectory.isPresent() && !outputDirectory.get().isAbsolute()) {
             throw new PathPrefixerException(
                     String.format(
-                            "An non-absolute path was passed to FilePathPrefixerParams of %s",
+                            "An non-absolute path was passed to %s of %s",
+                            this.getClass().getSimpleName(),
                             outputDirectory.get()));
         }
     }

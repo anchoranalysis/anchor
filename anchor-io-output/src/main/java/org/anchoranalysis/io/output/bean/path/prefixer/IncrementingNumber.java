@@ -34,17 +34,29 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.output.path.prefixer.DirectoryWithPrefix;
 import org.anchoranalysis.io.output.path.prefixer.NamedPath;
 
+/**
+ * Outputs an incrementing number for each output that occurs.
+ * 
+ * <p>The sequence begins with 0 and increments always by 1.
+ * 
+ * <p>This number is independent of the input file-name and occurs only by whatever sequential order
+ * occurs with calls to {@link #outFilePrefixFromPath}.
+ * 
+ * @author Owen Feehan
+ *
+ */
 @NoArgsConstructor
-public class FilePathCounter extends PathPrefixerAvoidResolve {
+public class IncrementingNumber extends PathPrefixerAvoidResolve {
 
     // TODO this counter should be initialized in a proper way, and not using a bean-wide variable
     private int count = 0;
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private int numLeadingZeros = 4;
+    /** Number of digits in the number, with leading zeros as necessary. */
+    @BeanField @Getter @Setter private int numberDigits = 4;
     // END BEAN PROPERTIES
 
-    public FilePathCounter(String outPathPrefix) {
+    public IncrementingNumber(String outPathPrefix) {
         super(outPathPrefix);
     }
 
@@ -54,8 +66,9 @@ public class FilePathCounter extends PathPrefixerAvoidResolve {
         return new DirectoryWithPrefix(combinedDir);
     }
 
+    /** Creates a string identifier with leading zeros for a given integer index. */
     private String identifier(int index) {
-        String formatSpecifier = "%0" + numLeadingZeros + "d";
+        String formatSpecifier = "%0" + numberDigits + "d";
         return String.format(formatSpecifier, index);
     }
 }

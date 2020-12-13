@@ -40,7 +40,7 @@ import org.anchoranalysis.io.output.outputter.BindFailedException;
 import org.anchoranalysis.io.output.outputter.OutputWriteContext;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
 import org.anchoranalysis.io.output.path.prefixer.DirectoryWithPrefix;
-import org.anchoranalysis.io.output.path.prefixer.FilePathPrefixerContext;
+import org.anchoranalysis.io.output.path.prefixer.PathPrefixerContext;
 import org.anchoranalysis.io.output.path.prefixer.PathPrefixerException;
 import org.anchoranalysis.io.output.recorded.RecordedOutputsWithRules;
 
@@ -61,7 +61,7 @@ public class OutputManager extends AnchorBean<OutputManager> {
      * <p>This method is called with a binding path from the input to determine a output prefix for
      * each input to an experiment.
      */
-    @BeanField @Getter @Setter private PathPrefixer filePathPrefixer;
+    @BeanField @Getter @Setter private PathPrefixer prefixer;
 
     /**
      * Whether to silently first delete any existing output at the intended path, or rather throw an
@@ -98,12 +98,12 @@ public class OutputManager extends AnchorBean<OutputManager> {
             Manifest manifest,
             RecordedOutputsWithRules recordedOutputs,
             Optional<ImageFileFormat> suggestedFormatToWrite,
-            FilePathPrefixerContext prefixerContext)
+            PathPrefixerContext prefixerContext)
             throws BindFailedException {
 
         try {
             DirectoryWithPrefix prefix =
-                    filePathPrefixer.rootDirectoryPrefix(experimentIdentifier, prefixerContext);
+                    prefixer.rootDirectoryPrefix(experimentIdentifier, prefixerContext);
             manifest.init(prefix.getDirectory());
             return OutputterChecked.createWithPrefix(
                     prefix,

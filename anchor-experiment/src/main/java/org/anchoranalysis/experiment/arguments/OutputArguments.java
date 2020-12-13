@@ -55,6 +55,9 @@ public class OutputArguments {
 
     /** A file format suggested for writing images to the file system. */
     @Getter private Optional<ImageFileFormat> suggestedImageOutputFormat = Optional.empty();
+    
+    /** Requests outputting with an incrementing number sequence, rather than the usual outputter (normally based upon input filenames). */
+    @Getter private boolean outputIncrementingNumberSequence = false;
 
     public void assignOutputDirectory(Path outputDirectory) {
         this.outputDirectory = Optional.of(outputDirectory);
@@ -62,5 +65,9 @@ public class OutputArguments {
 
     public void assignSuggestedImageOutputFormat(ImageFileFormat format) {
         this.suggestedImageOutputFormat = Optional.of(format);
+    }
+    
+    public void requestOutputIncrementingNumberSequence() {
+        this.outputIncrementingNumberSequence = true;
     }
 }

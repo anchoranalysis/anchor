@@ -31,7 +31,7 @@ import java.nio.file.Paths;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.exception.BeanStrangeException;
 import org.anchoranalysis.io.output.path.prefixer.DirectoryWithPrefix;
-import org.anchoranalysis.io.output.path.prefixer.FilePathPrefixerContext;
+import org.anchoranalysis.io.output.path.prefixer.PathPrefixerContext;
 import org.anchoranalysis.io.output.path.prefixer.NamedPath;
 import org.anchoranalysis.io.output.path.prefixer.PathPrefixerException;
 
@@ -48,7 +48,7 @@ public abstract class PathPrefixer extends AnchorBean<PathPrefixer> {
      * @throws PathPrefixerException
      */
     public abstract DirectoryWithPrefix outFilePrefix(
-            NamedPath path, String experimentIdentifier, FilePathPrefixerContext context)
+            NamedPath path, String experimentIdentifier, PathPrefixerContext context)
             throws PathPrefixerException;
 
     /**
@@ -60,7 +60,7 @@ public abstract class PathPrefixer extends AnchorBean<PathPrefixer> {
      * @throws PathPrefixerException
      */
     public abstract DirectoryWithPrefix rootDirectoryPrefix(
-            String experimentIdentifier, FilePathPrefixerContext context)
+            String experimentIdentifier, PathPrefixerContext context)
             throws PathPrefixerException;
 
     /**

@@ -172,7 +172,7 @@ public abstract class OutputExperiment extends Experiment {
                     experimentId,
                     Optional.of(experimentalManifest),
                     rootOutputter,
-                    getOutput().getFilePathPrefixer(),
+                    getOutput().getPrefixer(),
                     createLogger(rootOutputter, arguments),
                     useDetailedLogging());
         } catch (PathPrefixerException e) {

@@ -28,7 +28,7 @@ package org.anchoranalysis.test.io.output;
 import java.nio.file.Path;
 import org.anchoranalysis.io.output.bean.path.prefixer.PathPrefixer;
 import org.anchoranalysis.io.output.path.prefixer.DirectoryWithPrefix;
-import org.anchoranalysis.io.output.path.prefixer.FilePathPrefixerContext;
+import org.anchoranalysis.io.output.path.prefixer.PathPrefixerContext;
 import org.anchoranalysis.io.output.path.prefixer.NamedPath;
 
 class ConstantPathPrefixer extends PathPrefixer {
@@ -41,13 +41,13 @@ class ConstantPathPrefixer extends PathPrefixer {
 
     @Override
     public DirectoryWithPrefix outFilePrefix(
-            NamedPath path, String experimentIdentifier, FilePathPrefixerContext context) {
+            NamedPath path, String experimentIdentifier, PathPrefixerContext context) {
         return prefix;
     }
 
     @Override
     public DirectoryWithPrefix rootDirectoryPrefix(
-            String experimentIdentifier, FilePathPrefixerContext context) {
+            String experimentIdentifier, PathPrefixerContext context) {
         return prefix;
     }
 }

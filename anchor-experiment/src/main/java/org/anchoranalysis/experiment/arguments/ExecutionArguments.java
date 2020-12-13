@@ -35,7 +35,7 @@ import lombok.experimental.Accessors;
 import org.anchoranalysis.bean.OptionalFactory;
 import org.anchoranalysis.io.input.InputContextParams;
 import org.anchoranalysis.io.input.bean.DebugModeParams;
-import org.anchoranalysis.io.output.path.prefixer.FilePathPrefixerContext;
+import org.anchoranalysis.io.output.path.prefixer.PathPrefixerContext;
 import org.anchoranalysis.io.output.path.prefixer.PathPrefixerException;
 
 /**
@@ -82,8 +82,8 @@ public class ExecutionArguments {
         return out;
     }
 
-    public FilePathPrefixerContext createPrefixerContext() throws PathPrefixerException {
-        return new FilePathPrefixerContext(isDebugModeEnabled(), output.getOutputDirectory());
+    public PathPrefixerContext createPrefixerContext() throws PathPrefixerException {
+        return new PathPrefixerContext(isDebugModeEnabled(), output.getOutputDirectory(), output.isOutputIncrementingNumberSequence());
     }
 
     /**

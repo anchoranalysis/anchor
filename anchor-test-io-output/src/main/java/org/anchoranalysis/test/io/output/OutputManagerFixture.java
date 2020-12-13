@@ -34,7 +34,7 @@ import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.io.output.bean.OutputManager;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
-import org.anchoranalysis.io.output.bean.path.prefixer.FilePathCounter;
+import org.anchoranalysis.io.output.bean.path.prefixer.IncrementingNumber;
 import org.anchoranalysis.io.output.bean.path.prefixer.PathPrefixer;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -44,13 +44,13 @@ public class OutputManagerFixture {
         OutputManager outputManager = new OutputManager();
         outputManager.setSilentlyDeleteExisting(true);
         outputManager.setOutputWriteSettings(settings());
-        outputManager.setFilePathPrefixer(prefixer(pathForPrefixer));
+        outputManager.setPrefixer(prefixer(pathForPrefixer));
         return outputManager;
     }
 
     private static PathPrefixer prefixer(Optional<Path> pathForPrefixer) {
-        Optional<PathPrefixer> pathPrefixer = pathForPrefixer.map(ConstantPathPrefixer::new);
-        return pathPrefixer.orElseGet(FilePathCounter::new);
+        Optional<PathPrefixer> prefixer = pathForPrefixer.map(ConstantPathPrefixer::new);
+        return prefixer.orElseGet(IncrementingNumber::new);
     }
 
     private static OutputWriteSettings settings() {

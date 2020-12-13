@@ -36,7 +36,7 @@ import org.anchoranalysis.io.manifest.directory.JobRootDirectory;
 import org.anchoranalysis.io.manifest.sequencetype.StringsWithoutOrder;
 import org.anchoranalysis.io.output.bean.path.prefixer.PathPrefixer;
 import org.anchoranalysis.io.output.path.prefixer.DirectoryWithPrefix;
-import org.anchoranalysis.io.output.path.prefixer.FilePathPrefixerContext;
+import org.anchoranalysis.io.output.path.prefixer.PathPrefixerContext;
 import org.anchoranalysis.io.output.path.prefixer.NamedPath;
 import org.anchoranalysis.io.output.path.prefixer.PathPrefixerException;
 
@@ -48,7 +48,7 @@ class PrefixForInput {
 
     private final PathPrefixer prefixer;
 
-    private final FilePathPrefixerContext context;
+    private final PathPrefixerContext context;
 
     /**
      * The prefix to use for outputs pertaining to a particular file.
