@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-image-io
+ * anchor-overlay
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -23,23 +23,10 @@
  * THE SOFTWARE.
  * #L%
  */
-
-package org.anchoranalysis.image.io.stack.input;
-
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
-import org.anchoranalysis.image.io.ImageInitParamsFactory;
-import org.anchoranalysis.io.output.outputter.InputOutputContext;
-
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class StackInputInitParamsCreator {
-
-    public static ImageInitParams createInitParams(
-            ProvidesStackInput input, InputOutputContext context) throws OperationFailedException {
-        ImageInitParams soImage = ImageInitParamsFactory.create(context);
-        input.addToStoreInferNames(soImage.stacks());
-        return soImage;
-    }
-}
+/**
+ * Creates a scaled version of {@link org.anchoranalysis.image.voxel.object.ObjectMask} to use as an
+ * overlay.
+ *
+ * @author Owen Feehan
+ */
+package org.anchoranalysis.overlay.object.scaled;

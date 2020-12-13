@@ -41,6 +41,7 @@ import org.anchoranalysis.io.output.outputter.OutputterChecked;
 import org.anchoranalysis.io.output.recorded.RecordingWriters;
 import org.anchoranalysis.io.output.writer.ElementSupplier;
 import org.anchoranalysis.io.output.writer.ElementWriterSupplier;
+import org.anchoranalysis.io.output.writer.Writer;
 
 /**
  * Like {@link RecordingWriters} but for a sequence of items, maybe in a subfolder.
@@ -83,17 +84,42 @@ class SequenceWriters {
             throws OutputWriteFailedException {
 
         if (isOn()) {
-            return this.writers // NOSONAR
-                    .get()
-                    .multiplex(pattern.isSelective())
+            return multiplexSelective()
                     .writeWithIndex(pattern.getOutputNameStyle(), generator, element, index);
         } else {
             return Optional.empty();
         }
     }
 
+    /**
+     * Writes an element to the sequence, with neither an name nor an index.
+     *
+     * <p>This should only be called once for a sequence, as otherwise an existing element will be
+     * overwritten.
+     *
+     * @param <T>
+     * @param generator
+     * @param element
+     * @throws OutputWriteFailedException
+     */
+    public <T> void writeWithoutName(ElementWriterSupplier<T> generator, ElementSupplier<T> element)
+            throws OutputWriteFailedException {
+
+        if (isOn()) {
+            multiplexSelective()
+                    .writeWithoutName(
+                            pattern.getOutputNameStyle().getOutputName(), generator, element);
+        }
+    }
+
     public boolean isOn() {
         return writers.isPresent();
+    }
+
+    private Writer multiplexSelective() {
+        return this.writers // NOSONAR
+                .get()
+                .multiplex(pattern.isSelective());
     }
 
     private Optional<RecordingWriters> selectWritersMaybeCreateSubdirectory(

@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -54,7 +54,13 @@ public class OutputArguments {
     @Getter private OutputEnabledDelta outputEnabledDelta = new OutputEnabledDelta();
 
     /** A file format suggested for writing images to the file system. */
-    @Getter private Optional<ImageFileFormat> suggestedImageOutputFormat;
+    @Getter private Optional<ImageFileFormat> suggestedImageOutputFormat = Optional.empty();
+
+    /**
+     * Requests outputting with an incrementing number sequence, rather than the usual outputter
+     * (normally based upon input filenames).
+     */
+    @Getter private boolean outputIncrementingNumberSequence = false;
 
     public void assignOutputDirectory(Path outputDirectory) {
         this.outputDirectory = Optional.of(outputDirectory);
@@ -62,5 +68,9 @@ public class OutputArguments {
 
     public void assignSuggestedImageOutputFormat(ImageFileFormat format) {
         this.suggestedImageOutputFormat = Optional.of(format);
+    }
+
+    public void requestOutputIncrementingNumberSequence() {
+        this.outputIncrementingNumberSequence = true;
     }
 }

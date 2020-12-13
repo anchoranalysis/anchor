@@ -110,7 +110,8 @@ public abstract class RasterGenerator<T> implements TransformingGenerator<T, Sta
             String extension =
                     selectFileExtension(transformedElement, options, outputter.getSettings());
 
-            Path pathToWriteTo = outputter.makeOutputPath(filenameWithoutExtension, extension);
+            Path pathToWriteTo =
+                    outputter.makeOutputPath(filenameWithoutExtension, extension, outputName);
 
             // First write to the file system, and then write to the operation-recorder.
             writeToFile(

@@ -41,7 +41,7 @@ import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
-import org.anchoranalysis.image.io.stack.input.OpenedRaster;
+import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.spatial.box.BoundingBox;
@@ -82,9 +82,9 @@ class ObjectDualDeserializer implements Deserializer<ObjectMask> {
             throws DeserializationFailedException {
         BoundingBox box = BOUNDING_BOX_DESERIALIZER.deserialize(pathSerializedBox);
 
-        try (OpenedRaster openedRaster = stackReader.openFile(pathTiff)) {
+        try (OpenedImageFile openedFile = stackReader.openFile(pathTiff)) {
             Stack stack =
-                    openedRaster
+                    openedFile
                             .openCheckType(0, ProgressIgnore.get(), UnsignedByteVoxelType.INSTANCE)
                             .get(0);
 

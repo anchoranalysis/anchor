@@ -38,7 +38,7 @@ import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
 import org.anchoranalysis.image.io.object.input.ObjectCollectionReader;
-import org.anchoranalysis.image.io.stack.input.OpenedRaster;
+import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.io.bioformats.ConfigureBioformatsLogging;
 import org.anchoranalysis.test.TestDataLoadException;
@@ -78,8 +78,8 @@ public class TestLoaderImage {
 
         ConfigureBioformatsLogging.instance().makeSureConfigured();
 
-        try (OpenedRaster openedRaster = stackReader.openFile(filePath)) {
-            return openedRaster.open(0, ProgressIgnore.get()).get(0);
+        try (OpenedImageFile openedFile = stackReader.openFile(filePath)) {
+            return openedFile.open(0, ProgressIgnore.get()).get(0);
         } catch (ImageIOException e) {
             throw new TestDataLoadException(e);
         }

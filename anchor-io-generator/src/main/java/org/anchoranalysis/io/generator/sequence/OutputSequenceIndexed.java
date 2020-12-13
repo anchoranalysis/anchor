@@ -118,6 +118,20 @@ public class OutputSequenceIndexed<T, S> implements OutputSequence {
      * @throws OutputWriteFailedException if the output cannot be successfully written.
      */
     public void add(T element, S index) throws OutputWriteFailedException {
+        add(element, Optional.of(index));
+    }
+
+    /**
+     * Outputs an additional element in the sequence.
+     *
+     * <p>This method is <i>thread-safe</i>.
+     *
+     * @param element the element
+     * @param index index of the element to output, if it exists. if it doesn't exist, the element
+     *     will be written without any name.
+     * @throws OutputWriteFailedException if the output cannot be successfully written.
+     */
+    public void add(T element, Optional<S> index) throws OutputWriteFailedException {
 
         try {
             // Then output isn't allowed and we should just exit
@@ -125,11 +139,15 @@ public class OutputSequenceIndexed<T, S> implements OutputSequence {
                 return;
             }
 
-            Optional<FileType[]> fileTypes =
-                    this.sequenceWriter.write(
-                            () -> generator, () -> element, String.valueOf(index));
-            if (fileTypes.isPresent()) {
-                updateSequence(fileTypes.get(), index);
+            if (index.isPresent()) {
+                Optional<FileType[]> fileTypes =
+                        this.sequenceWriter.write(
+                                () -> generator, () -> element, String.valueOf(index.get()));
+                if (fileTypes.isPresent()) {
+                    updateSequence(fileTypes.get(), index.get());
+                }
+            } else {
+                this.sequenceWriter.writeWithoutName(() -> generator, () -> element);
             }
 
         } catch (SequenceTypeException e) {

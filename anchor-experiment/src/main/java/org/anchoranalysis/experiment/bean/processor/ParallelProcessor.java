@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.experiment.bean.processor;
 
-import com.google.common.base.Preconditions;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.concurrent.ExecutorService;
@@ -91,7 +90,7 @@ public class ParallelProcessor<T extends InputFromManager, S> extends JobProcess
             Outputter rootOutputter, List<T> inputs, ParametersExperiment paramsExperiment)
             throws ExperimentExecutionException {
         int numberInputs = inputs.size();
-        
+
         ProcessorChecker.checkAtLeastOneInput(inputs);
 
         ConcurrencyPlan concurrencyPlan = createConcurrencyPlan(paramsExperiment);
@@ -127,9 +126,9 @@ public class ParallelProcessor<T extends InputFromManager, S> extends JobProcess
         while (!executorService.isTerminated())
             ;
 
-        Preconditions.checkArgument(monitor.numberExecutingJobs() == 0);
-        Preconditions.checkArgument(monitor.numberOngoingJobs() == 0);
-        Preconditions.checkArgument(monitor.numberCompletedJobs() == numberInputs);
+        if(monitor.numberExecutingJobs() != 0 || monitor.numberOngoingJobs() != 0 || monitor.numberCompletedJobs() != numberInputs) {
+            paramsExperiment.getLoggerExperiment().log("At least one experiment ended irregularly!");
+        }
 
         getTask().afterAllJobsAreExecuted(sharedState, paramsExperiment.getContext());
         return monitor.createStatistics();

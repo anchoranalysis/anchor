@@ -46,7 +46,7 @@ import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.core.stack.TimeSequence;
 import org.anchoranalysis.image.io.ImageIOException;
-import org.anchoranalysis.image.io.stack.input.OpenedRaster;
+import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.io.bioformats.bean.options.ReadOptions;
 import org.anchoranalysis.io.bioformats.copyconvert.ConvertTo;
@@ -57,7 +57,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 @Accessors(fluent = true)
-public class BioformatsOpenedRaster implements OpenedRaster {
+public class BioformatsOpenedRaster implements OpenedImageFile {
 
     private final IFormatReader reader;
     private final ReadOptions readOptions;

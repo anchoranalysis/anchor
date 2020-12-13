@@ -132,7 +132,8 @@ public class SetUpdatable extends UpdatablePointsContainer {
             for (position.setY(0); position.y() < dimensions.y(); position.incrementY()) {
                 for (position.setX(0); position.x() < dimensions.x(); position.incrementX()) {
 
-                    if (bufferMask.getRaw(extent.offsetSlice(position)) == binaryValues.getOnByte()) {
+                    if (bufferMask.getRaw(extent.offsetSlice(position))
+                            == binaryValues.getOnByte()) {
                         setPoints.add(PointConverter.doubleFromInt(position));
                     }
                 }

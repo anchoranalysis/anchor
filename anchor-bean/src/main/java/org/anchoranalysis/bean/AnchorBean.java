@@ -84,9 +84,9 @@ public abstract class AnchorBean<F> {
         return getBeanName();
     }
 
-    /** 
+    /**
      * By default, we use {@link #describeBean} as the string representation of the bean.
-     * 
+     *
      * @return the string representation
      */
     @Override

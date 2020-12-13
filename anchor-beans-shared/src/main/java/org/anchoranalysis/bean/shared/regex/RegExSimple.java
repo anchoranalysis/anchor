@@ -29,6 +29,7 @@ package org.anchoranalysis.bean.shared.regex;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -36,6 +37,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 
 @NoArgsConstructor
+@AllArgsConstructor
 public class RegExSimple extends RegEx {
 
     // START BEAN PROPERTIES

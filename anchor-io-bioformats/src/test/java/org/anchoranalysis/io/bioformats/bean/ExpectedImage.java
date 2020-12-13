@@ -35,7 +35,7 @@ import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.core.stack.TimeSequence;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
-import org.anchoranalysis.image.io.stack.input.OpenedRaster;
+import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.test.TestLoader;
 
@@ -97,8 +97,8 @@ class ExpectedImage {
 
         Path path = loader.resolveTestPath(relativePath());
 
-        OpenedRaster openedRaster = reader.openFile(path);
-        TimeSequence timeSequence = openedRaster.open(0, ProgressIgnore.get());
+        OpenedImageFile openedFile = reader.openFile(path);
+        TimeSequence timeSequence = openedFile.open(0, ProgressIgnore.get());
         return timeSequence.get(0);
     }
 

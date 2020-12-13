@@ -36,12 +36,12 @@ import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.identifier.provider.NamedProvider;
 import org.anchoranalysis.core.value.KeyValueParams;
+import org.anchoranalysis.experiment.io.InitParamsContext;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
-import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
 import org.anchoranalysis.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.mpp.io.input.InputForMPPBean;
@@ -84,18 +84,18 @@ public abstract class DefineOutputter extends AnchorBean<DefineOutputter> {
         ParamsOutputter.addAllOutputNamesTo(outputEnabled);
     }
 
-    protected MPPInitParams createInitParams(InputForMPPBean input, InputOutputContext context)
+    protected MPPInitParams createInitParams(InputForMPPBean input, InitParamsContext context)
             throws CreateException {
         return MPPInitParamsFactory.create(
                 context, Optional.ofNullable(define), Optional.of(input));
     }
 
-    protected MPPInitParams createInitParams(InputOutputContext context) throws CreateException {
+    protected MPPInitParams createInitParams(InitParamsContext context) throws CreateException {
         return MPPInitParamsFactory.create(context, Optional.ofNullable(define), Optional.empty());
     }
 
     protected MPPInitParams createInitParams(
-            InputOutputContext context,
+            InitParamsContext context,
             Optional<NamedProvider<Stack>> stacks,
             Optional<NamedProvider<ObjectCollection>> objects,
             Optional<KeyValueParams> keyValueParams)

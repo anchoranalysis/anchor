@@ -29,9 +29,11 @@ package org.anchoranalysis.io.input.bean.files;
 import java.io.File;
 import java.nio.file.Path;
 import java.util.Collection;
+import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.input.bean.InputManagerParams;
 import org.anchoranalysis.io.input.bean.path.matcher.MatchGlob;
@@ -40,11 +42,20 @@ import org.anchoranalysis.io.input.files.FilesProviderException;
 import org.anchoranalysis.io.input.path.GlobExtractor;
 import org.anchoranalysis.io.input.path.GlobExtractor.GlobWithDirectory;
 
+/**
+ * Searches a directory for files whose paths match a particular predicate.
+ *
+ * <p>By default, the search does <b>not</b> occur recursively, but the bean-property {@code
+ * recursive} enables this.
+ *
+ * @author Owen Feehan
+ */
 public class SearchDirectory extends FilesProviderWithDirectoryString {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private PathMatcher matcher;
 
+    /** If true the search is applied recursively over sub-directories. */
     @BeanField @Getter @Setter private boolean recursive = false;
 
     /** If non-negative the max depth of directories. If -1, then there is no maximum depth. */
@@ -68,13 +79,16 @@ public class SearchDirectory extends FilesProviderWithDirectoryString {
     public Collection<File> matchingFilesForDirectory(Path directory, InputManagerParams params)
             throws FilesProviderException {
 
-        int maxDirDepth =
-                maxDirectoryDepth >= 0
-                        ? maxDirectoryDepth
-                        : Integer.MAX_VALUE; // maxDepth of directories searches
+        Optional<Integer> maxDirectoryDepthOptional =
+                OptionalUtilities.createFromFlag(maxDirectoryDepth >= 0, maxDirectoryDepth);
         try {
             return matcher.matchingFiles(
-                    directory, recursive, ignoreHidden, acceptDirectoryErrors, maxDirDepth, params);
+                    directory,
+                    recursive,
+                    ignoreHidden,
+                    acceptDirectoryErrors,
+                    maxDirectoryDepthOptional,
+                    Optional.of(params));
         } catch (InputReadFailedException e) {
             throw new FilesProviderException(e);
         }
@@ -89,12 +103,12 @@ public class SearchDirectory extends FilesProviderWithDirectoryString {
      */
     public void setFileFilterAndDirectory(Path combinedFileFilter) {
 
-        GlobWithDirectory gwd = GlobExtractor.extract(combinedFileFilter.toString());
+        GlobWithDirectory glob = GlobExtractor.extract(combinedFileFilter.toString());
 
         MatchGlob matcherGlob = new MatchGlob();
-        matcherGlob.setGlob(gwd.getGlob());
+        matcherGlob.setGlob(glob.getGlob());
 
-        setDirectory(gwd.getDirectory().orElse(""));
+        setDirectory(glob.getDirectory().orElse(""));
 
         this.matcher = matcherGlob;
     }

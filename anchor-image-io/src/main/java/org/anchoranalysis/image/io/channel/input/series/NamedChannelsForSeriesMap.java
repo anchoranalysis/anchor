@@ -46,14 +46,14 @@ import org.anchoranalysis.image.core.stack.named.NamedStacks;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.channel.ChannelEntry;
 import org.anchoranalysis.image.io.channel.input.NamedEntries;
-import org.anchoranalysis.image.io.stack.input.OpenedRaster;
+import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
 
 @RequiredArgsConstructor
 public class NamedChannelsForSeriesMap implements NamedChannelsForSeries {
 
     // END REQUIRED ARGUMENTS
     // Null until the first time we request a channel
-    private final OpenedRaster openedRaster;
+    private final OpenedImageFile openedFile;
     private final NamedEntries channelMap;
     private final int seriesIndex;
     // END REQUIRED ARGUMENTS
@@ -62,7 +62,7 @@ public class NamedChannelsForSeriesMap implements NamedChannelsForSeries {
 
     @Override
     public Dimensions dimensions() throws ImageIOException {
-        return openedRaster.dimensionsForSeries(seriesIndex);
+        return openedFile.dimensionsForSeries(seriesIndex);
     }
 
     @Override
@@ -182,7 +182,7 @@ public class NamedChannelsForSeriesMap implements NamedChannelsForSeries {
 
     @Override
     public boolean isRGB() throws ImageIOException {
-        return openedRaster.isRGB();
+        return openedFile.isRGB();
     }
 
     @Override
@@ -193,7 +193,7 @@ public class NamedChannelsForSeriesMap implements NamedChannelsForSeries {
     private TimeSequence createTimeSeries(Progress progress) throws OperationFailedException {
         if (sequence == null) {
             try {
-                sequence = openedRaster.open(seriesIndex, progress);
+                sequence = openedFile.open(seriesIndex, progress);
             } catch (ImageIOException e) {
                 throw new OperationFailedException(e);
             }

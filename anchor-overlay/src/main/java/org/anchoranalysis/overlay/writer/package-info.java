@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-io
+ * anchor-overlay
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -23,34 +23,5 @@
  * THE SOFTWARE.
  * #L%
  */
-
-package org.anchoranalysis.io.output.path.prefixer;
-
-import java.nio.file.Path;
-import java.util.Optional;
-import lombok.Getter;
-
-public class FilePathPrefixerContext {
-
-    @Getter private boolean debugMode;
-
-    /** A directory indicating where inputs can be located */
-    @Getter private final Optional<Path> outputDirectory;
-
-    public FilePathPrefixerContext(boolean debugMode, Optional<Path> outputDirectory)
-            throws PathPrefixerException {
-        super();
-        this.debugMode = debugMode;
-        this.outputDirectory = outputDirectory;
-        checkAbsolutePath();
-    }
-
-    private void checkAbsolutePath() throws PathPrefixerException {
-        if (outputDirectory.isPresent() && !outputDirectory.get().isAbsolute()) {
-            throw new PathPrefixerException(
-                    String.format(
-                            "An non-absolute path was passed to FilePathPrefixerParams of %s",
-                            outputDirectory.get()));
-        }
-    }
-}
+/** Drawing an overlay on an image. */
+package org.anchoranalysis.overlay.writer;

@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.image.bean.nonbean.init;
 
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import java.util.List;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.define.Define;
@@ -38,15 +38,15 @@ import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
 
 /**
  * Routines to add beans to a {@link NamedProviderStore}.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class StoreAdderHelper {
 
     /**
-     * Adds a single item to a {@link NamedProviderStore} (using a bridge) and explicitly specifying a new name.
+     * Adds a single item to a {@link NamedProviderStore} (using a bridge) and explicitly specifying
+     * a new name.
      *
      * @param <S> item-type as input
      * @param <T> item-type in the store
@@ -64,12 +64,13 @@ class StoreAdderHelper {
             throws OperationFailedException {
         store.add(name, () -> bridge.apply(item));
     }
-    
+
     /**
-     * Adds named-items to a {@link NamedProviderStore} (using a bridge) using identical names in the store.
+     * Adds named-items to a {@link NamedProviderStore} (using a bridge) using identical names in
+     * the store.
      *
      * <p>Note that the item is duplicated before being added.
-     * 
+     *
      * <p>Only the item is added to the store (not the named-item).
      *
      * @param <S> item-type as input
@@ -88,9 +89,10 @@ class StoreAdderHelper {
             throws OperationFailedException {
         addFromListPreserveName(define.getList(defineClass), store, bridge);
     }
-    
+
     /**
-     * Like {@link #addPreserveName(Define, Class, NamedProviderStore, CheckedFunction)} but uses a {@link List} as the source of beans.
+     * Like {@link #addPreserveName(Define, Class, NamedProviderStore, CheckedFunction)} but uses a
+     * {@link List} as the source of beans.
      */
     private static <S extends AnchorBean<?>, T> void addFromListPreserveName(
             List<NamedBean<S>> beans,
@@ -99,7 +101,8 @@ class StoreAdderHelper {
             throws OperationFailedException {
 
         for (NamedBean<S> namedBean : beans) {
-            StoreAdderHelper.add(namedBean.getName(), namedBean.duplicateBean().getValue(), store, bridge);
+            StoreAdderHelper.add(
+                    namedBean.getName(), namedBean.duplicateBean().getValue(), store, bridge);
         }
     }
 }

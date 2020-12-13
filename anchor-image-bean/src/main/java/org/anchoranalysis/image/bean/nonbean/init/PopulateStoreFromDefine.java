@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.image.bean.nonbean.init;
 
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.bean.initializable.InitializableBean;
@@ -36,7 +37,6 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.checked.CheckedFunction;
 import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
 import org.anchoranalysis.core.log.Logger;
-import lombok.AllArgsConstructor;
 
 /**
  * Helps populates a {@link NamedProviderStore} from the contents of a {@link Define}.
@@ -48,13 +48,13 @@ import lombok.AllArgsConstructor;
  */
 @AllArgsConstructor
 public class PopulateStoreFromDefine<V extends BeanInitParams> {
-    
+
     /** Define source for objects. */
     private Define define;
-    
+
     /** Used to intitialize the properties of objects added with initialization. */
     private PropertyInitializer<?> propertyInitializer;
-    
+
     /** Passed to objects added with initialization. */
     private Logger logger;
 
@@ -85,10 +85,9 @@ public class PopulateStoreFromDefine<V extends BeanInitParams> {
             throws OperationFailedException {
 
         // Initializes and returns the input
-        CheckedFunction<S, S, OperationFailedException> bridge = new InitBridge<>(
-            propertyInitializer, logger, nameUnchangedBridge()
-        );
-        
+        CheckedFunction<S, S, OperationFailedException> bridge =
+                new InitBridge<>(propertyInitializer, logger, nameUnchangedBridge());
+
         StoreAdderHelper.addPreserveName(define, defineClass, destination, bridge);
     }
 
@@ -121,7 +120,7 @@ public class PopulateStoreFromDefine<V extends BeanInitParams> {
 
         return bridge;
     }
-           
+
     private static <S, E extends Exception> CheckedFunction<S, S, E> nameUnchangedBridge() {
         return name -> name;
     }

@@ -99,7 +99,8 @@ public class InputOutputExperiment<T extends InputFromManager, S> extends Output
     @BeanField @Getter @Setter private LoggingDestination logTask = new ToConsole();
 
     /**
-     * A message written to the logger if no inputs exist for the experiment, and it thus ends early.
+     * A message written to the logger if no inputs exist for the experiment, and it thus ends
+     * early.
      */
     @BeanField @Getter @Setter private String messageNoInputs = "No inputs exist. Nothing to do.";
     // END BEAN PROPERTIES
@@ -148,8 +149,8 @@ public class InputOutputExperiment<T extends InputFromManager, S> extends Output
                 params.setLoggerTaskCreator(logTask);
                 taskProcessor.executeLogStats(params.getOutputter(), inputs, params);
             } else {
-                params.getLoggerExperiment().log("");
                 params.getLoggerExperiment().log(messageNoInputs);
+                params.getLoggerExperiment().log("");
             }
 
         } catch (InputReadFailedException | IOException e) {

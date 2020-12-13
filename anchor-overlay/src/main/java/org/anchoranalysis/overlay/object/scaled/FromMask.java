@@ -35,10 +35,10 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.overlay.writer.DrawOverlay;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 
-public class FromMask implements ScaledMaskCreator {
+public class FromMask implements ScaledOverlayCreator {
 
     @Override
-    public ObjectWithProperties createScaledMask(
+    public ObjectWithProperties createScaledObject(
             DrawOverlay overlayWriter,
             ObjectWithProperties unscaled,
             double scaleFactor,

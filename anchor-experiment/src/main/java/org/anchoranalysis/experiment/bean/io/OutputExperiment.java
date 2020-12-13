@@ -150,7 +150,7 @@ public abstract class OutputExperiment extends Experiment {
 
         Manifest experimentalManifest = new Manifest();
 
-        String experimentId = experimentIdentifier.identifier(arguments.taskName());
+        String experimentId = experimentIdentifier.identifier(arguments.task().getTaskName());
 
         try {
             OutputterChecked rootOutputter =
@@ -172,7 +172,7 @@ public abstract class OutputExperiment extends Experiment {
                     experimentId,
                     Optional.of(experimentalManifest),
                     rootOutputter,
-                    getOutput().getFilePathPrefixer(),
+                    getOutput().getPrefixer(),
                     createLogger(rootOutputter, arguments),
                     useDetailedLogging());
         } catch (PathPrefixerException e) {

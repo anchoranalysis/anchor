@@ -35,8 +35,8 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.output.path.prefixer.DirectoryWithPrefix;
-import org.anchoranalysis.io.output.path.prefixer.FilePathPrefixerContext;
 import org.anchoranalysis.io.output.path.prefixer.NamedPath;
+import org.anchoranalysis.io.output.path.prefixer.PathPrefixerContext;
 import org.anchoranalysis.io.output.path.prefixer.PathPrefixerException;
 
 /**
@@ -69,18 +69,18 @@ public abstract class PathPrefixerAvoidResolve extends PathPrefixer {
     }
 
     @Override
-    public DirectoryWithPrefix rootDirectoryPrefix(String expName, FilePathPrefixerContext context)
+    public DirectoryWithPrefix rootDirectoryPrefix(String expName, PathPrefixerContext context)
             throws PathPrefixerException {
         return new DirectoryWithPrefix(resolveExperimentAbsoluteRootOut(expName, context));
     }
 
     @Override
     public DirectoryWithPrefix outFilePrefix(
-            NamedPath path, String expName, FilePathPrefixerContext context)
+            NamedPath path, String expName, PathPrefixerContext context)
             throws PathPrefixerException {
 
         Path root = resolveExperimentAbsoluteRootOut(expName, context);
-        return outFilePrefixFromPath(path, root);
+        return outFilePrefixFromPath(path, root, context);
     }
 
     /**
@@ -107,9 +107,12 @@ public abstract class PathPrefixerAvoidResolve extends PathPrefixer {
      * @throws PathPrefixerException
      */
     public DirectoryWithPrefix outFilePrefixAvoidResolve(
-            NamedPath path, String experimentIdentifier) throws PathPrefixerException {
+            NamedPath path, String experimentIdentifier, PathPrefixerContext context)
+            throws PathPrefixerException {
         return outFilePrefixFromPath(
-                path, rootDirectoryPrefixAvoidResolve(experimentIdentifier).getDirectory());
+                path,
+                rootDirectoryPrefixAvoidResolve(experimentIdentifier).getDirectory(),
+                context);
     }
 
     /**
@@ -117,13 +120,14 @@ public abstract class PathPrefixerAvoidResolve extends PathPrefixer {
      *
      * @param path path to calculate prefix from with associated descriptive-name
      * @param root root of prefix
+     * @param context TODO
      * @return folder/filename for prefixing
      */
-    public abstract DirectoryWithPrefix outFilePrefixFromPath(NamedPath path, Path root)
-            throws PathPrefixerException;
+    public abstract DirectoryWithPrefix outFilePrefixFromPath(
+            NamedPath path, Path root, PathPrefixerContext context) throws PathPrefixerException;
 
     /** The root of the experiment for outputting files */
-    private Path resolveExperimentAbsoluteRootOut(String expName, FilePathPrefixerContext context) {
+    private Path resolveExperimentAbsoluteRootOut(String expName, PathPrefixerContext context) {
 
         if (resolvedRoot == null) {
             resolvedRoot = selectResolvedPath(context).resolve(expName);
@@ -131,18 +135,18 @@ public abstract class PathPrefixerAvoidResolve extends PathPrefixer {
         return resolvedRoot;
     }
 
-    private Path selectResolvedPath(FilePathPrefixerContext context) {
+    private Path selectResolvedPath(PathPrefixerContext context) {
 
         if (outPathPrefix.isEmpty()) {
             // If there's an outPathPrefix specified, then use it, otherwise a temporary directory
-            return context.getOutputDirectory().orElseGet(PathPrefixerAvoidResolve::tempDir);
+            return context.getOutputDirectory()
+                    .orElseGet(PathPrefixerAvoidResolve::temporaryDirectory);
         }
 
         return resolvePath(outPathPrefix);
     }
 
-    private static Path tempDir() {
-        String tempDir = System.getProperty("java.io.tmpdir");
-        return Paths.get(tempDir);
+    private static Path temporaryDirectory() {
+        return Paths.get(System.getProperty("java.io.tmpdir"));
     }
 }

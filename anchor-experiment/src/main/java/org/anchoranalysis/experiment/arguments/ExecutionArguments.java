@@ -35,7 +35,7 @@ import lombok.experimental.Accessors;
 import org.anchoranalysis.bean.OptionalFactory;
 import org.anchoranalysis.io.input.InputContextParams;
 import org.anchoranalysis.io.input.bean.DebugModeParams;
-import org.anchoranalysis.io.output.path.prefixer.FilePathPrefixerContext;
+import org.anchoranalysis.io.output.path.prefixer.PathPrefixerContext;
 import org.anchoranalysis.io.output.path.prefixer.PathPrefixerException;
 
 /**
@@ -57,11 +57,11 @@ public class ExecutionArguments {
     /** Arguments to help specify the outputs from the experiment. */
     @Getter private final OutputArguments output = new OutputArguments();
 
+    /** Arguments to help specify the outputs from the experiment. */
+    @Getter private final TaskArguments task = new TaskArguments();
+
     /** If defined, parameters for debug-mode. */
     private Optional<DebugModeParams> debugModeParams = Optional.empty();
-
-    /** A name to describe the ongoing task */
-    @Getter private Optional<String> taskName = Optional.empty();
 
     public ExecutionArguments(Path modelDirectory) {
         input.assignModelDirectory(modelDirectory);
@@ -82,8 +82,11 @@ public class ExecutionArguments {
         return out;
     }
 
-    public FilePathPrefixerContext createPrefixerContext() throws PathPrefixerException {
-        return new FilePathPrefixerContext(isDebugModeEnabled(), output.getOutputDirectory());
+    public PathPrefixerContext createPrefixerContext() throws PathPrefixerException {
+        return new PathPrefixerContext(
+                isDebugModeEnabled(),
+                output.getOutputDirectory(),
+                output.isOutputIncrementingNumberSequence());
     }
 
     /**
@@ -100,9 +103,5 @@ public class ExecutionArguments {
 
     public boolean isDebugModeEnabled() {
         return debugModeParams.isPresent();
-    }
-
-    public void assignTaskName(Optional<String> taskName) {
-        this.taskName = taskName;
     }
 }

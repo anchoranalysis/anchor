@@ -27,6 +27,7 @@
 package org.anchoranalysis.io.input.bean.path.matcher;
 
 import java.nio.file.Path;
+import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import lombok.Getter;
@@ -53,7 +54,8 @@ public class MatchRegularExpression extends PathMatcher {
     // END BEAN FIELDS
 
     @Override
-    protected Predicate<Path> createMatcherFile(Path directory, InputContextParams inputContext) {
+    protected Predicate<Path> createMatcherFile(
+            Path directory, Optional<InputContextParams> inputContext) {
         if (applyToPath) {
             Pattern pattern = Pattern.compile(expression);
             return path -> acceptPathViaRegEx(path, pattern);

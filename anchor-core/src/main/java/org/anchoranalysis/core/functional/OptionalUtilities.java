@@ -103,22 +103,29 @@ public class OptionalUtilities {
     }
 
     /**
-     * Like {@link #orElseGet} but returns a {@link Optional}.
+     * Like {@link #orElseGet} but returns a {@link Optional} and can chain many alternatives.
      *
      * @param <T> optional-type
      * @param <E> exception that may be thrown during mapping
      * @param optional incoming optional
-     * @param supplier supplies a {@link Optional} value if the optional is empty
+     * @param suppliers tries each alternative {@link Optional} value successively (if optional is
+     *     empty) until one is not-empty
      * @return the outgoing optional
      * @throws E an exception if the supplier throws it
      */
+    @SafeVarargs
     public static <T, E extends Exception> Optional<T> orElseGetFlat(
-            Optional<T> optional, CheckedSupplier<Optional<T>, E> supplier) throws E {
-        if (optional.isPresent()) {
-            return optional;
-        } else {
-            return supplier.get();
+            Optional<T> optional, CheckedSupplier<Optional<T>, E>... suppliers) throws E {
+
+        Optional<T> running = optional;
+        for (CheckedSupplier<Optional<T>, E> nextSupplier : suppliers) {
+            if (running.isPresent()) {
+                return running;
+            } else {
+                running = nextSupplier.get();
+            }
         }
+        return running;
     }
 
     /**

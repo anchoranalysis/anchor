@@ -28,43 +28,10 @@ package org.anchoranalysis.spatial.scale;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.spatial.Extent;
 import org.anchoranalysis.spatial.point.Point3i;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ScaleFactorUtilities {
-
-    /**
-     * Calculates a scaling factor so as to maximally scale {@code source} to {@code target} -
-     * <b>while preserving the aspect ratio</b>.
-     *
-     * <p>Either the X or Y dimension is guaranteed to have a scale-factor {@code target / source},
-     * and the other will scale so as not to exceed the size of {@code target}.
-     *
-     * @param source source extent (only X and Y dimensions are considered)
-     * @param target target extent (only X and Y dimensions are considered)
-     * @return the scaling-factor to scale the source to be the same size as the target
-     */
-    public static ScaleFactor relativeScalePreserveAspectRatio(Extent source, Extent target) {
-        ScaleFactor withoutPreserving = relativeScale(source, target);
-        double minDimension = withoutPreserving.minimumDimension();
-        return new ScaleFactor(minDimension, minDimension);
-    }
-
-    /**
-     * Calculates a scaling factor so as to scale {@code source} to {@code target}.
-     *
-     * <p>i.e. the scale-factor is {@code target / source} for each XY dimension.
-     *
-     * @param source source extent (only X and Y dimensions are considered)
-     * @param target target extent (only X and Y dimensions are considered)
-     * @return the scaling-factor to scale the source to be the same size as the target
-     */
-    public static ScaleFactor relativeScale(Extent source, Extent target) {
-        return new ScaleFactor(
-                deriveScalingFactor(target.x(), source.x()),
-                deriveScalingFactor(target.y(), source.y()));
-    }
 
     /** Scales a point in XY (immutably) */
     public static Point3i scale(ScaleFactor scalingFactor, Point3i point) {
@@ -96,7 +63,7 @@ public class ScaleFactorUtilities {
      * @param denominator divider
      * @return floating-point result of division
      */
-    private static double deriveScalingFactor(int numerator, int denominator) {
+    public static double deriveScalingFactor(int numerator, int denominator) {
         return ((double) numerator) / denominator;
     }
 }

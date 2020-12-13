@@ -32,7 +32,7 @@ import org.anchoranalysis.io.manifest.Manifest;
 import org.anchoranalysis.io.output.bean.OutputManager;
 import org.anchoranalysis.io.output.outputter.BindFailedException;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
-import org.anchoranalysis.io.output.path.prefixer.FilePathPrefixerContext;
+import org.anchoranalysis.io.output.path.prefixer.PathPrefixerContext;
 import org.anchoranalysis.io.output.path.prefixer.PathPrefixerException;
 import org.anchoranalysis.io.output.recorded.RecordedOutputsWithRules;
 
@@ -56,7 +56,7 @@ public class OutputterCheckedFixture {
                     manifest,
                     new RecordedOutputsWithRules(),
                     Optional.empty(),
-                    new FilePathPrefixerContext(false, Optional.empty()));
+                    new PathPrefixerContext(false, Optional.empty(), false));
         } catch (PathPrefixerException e) {
             throw new BindFailedException(e);
         }

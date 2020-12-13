@@ -28,11 +28,11 @@ package org.anchoranalysis.mpp.segment.bean.define;
 
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.experiment.io.InitParamsContext;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.core.stack.time.WrapStackAsTimeSequenceStore;
 import org.anchoranalysis.image.io.channel.input.series.NamedChannelsForSeries;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
-import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 
@@ -43,11 +43,11 @@ public class DefineOutputterMPP extends DefineOutputter {
         void process(T initParams) throws OperationFailedException;
     }
 
-    public void processInput(NamedChannelsForSeries channels, InputOutputContext context)
+    public void processInput(NamedChannelsForSeries input, InitParamsContext context)
             throws OperationFailedException {
         try {
             MPPInitParams initParams = super.createInitParams(context);
-            channels.addAsSeparateChannels(
+            input.addAsSeparateChannels(
                     new WrapStackAsTimeSequenceStore(initParams.getImage().stacks()), 0);
 
             super.outputSharedObjects(initParams, context.getOutputter().getChecked());
@@ -59,7 +59,7 @@ public class DefineOutputterMPP extends DefineOutputter {
 
     public void processInputImage(
             MultiInput input,
-            InputOutputContext context,
+            InitParamsContext context,
             OperationWithInitParams<ImageInitParams> operation)
             throws OperationFailedException {
         try {
@@ -76,7 +76,7 @@ public class DefineOutputterMPP extends DefineOutputter {
 
     public void processInputMPP(
             MultiInput input,
-            InputOutputContext context,
+            InitParamsContext context,
             OperationWithInitParams<MPPInitParams> operation)
             throws OperationFailedException {
         try {

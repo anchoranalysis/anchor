@@ -33,6 +33,7 @@ import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.core.log.error.ErrorReporterIntoLog;
 import org.anchoranalysis.experiment.arguments.ExecutionArguments;
 import org.anchoranalysis.experiment.bean.log.LoggingDestination;
+import org.anchoranalysis.experiment.io.InitParamsContext;
 import org.anchoranalysis.experiment.log.StatefulMessageLogger;
 import org.anchoranalysis.io.manifest.Manifest;
 import org.anchoranalysis.io.output.bean.OutputManager;
@@ -63,7 +64,7 @@ public class ParametersExperiment {
     /** The {@link OutputManager} associated with the experiment which {@link Outputter} uses. */
     @Getter private final PathPrefixer prefixer;
 
-    // This is a means to create new log-reporters for each task
+    /** This is a means to create new log-reporters for each task. */
     @Getter @Setter private LoggingDestination loggerTaskCreator;
 
     public ParametersExperiment(
@@ -97,6 +98,10 @@ public class ParametersExperiment {
 
     public ExecutionArguments getExperimentArguments() {
         return context.getExperimentArguments();
+    }
+
+    public InitParamsContext createInitParamsContext() {
+        return new InitParamsContext(context, context.getExperimentArguments().task().getSize());
     }
 
     /** Redirects any output-exceptions into the log */

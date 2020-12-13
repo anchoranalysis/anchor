@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-plugin-io
+ * anchor-overlay
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -23,39 +23,8 @@
  * THE SOFTWARE.
  * #L%
  */
-
-package org.anchoranalysis.io.output.bean.path.prefixer;
-
-import java.nio.file.Path;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.io.output.path.prefixer.DirectoryWithPrefix;
-import org.anchoranalysis.io.output.path.prefixer.NamedPath;
-
-@NoArgsConstructor
-public class FilePathCounter extends PathPrefixerAvoidResolve {
-
-    // TODO this counter should be initialized in a proper way, and not using a bean-wide variable
-    private int count = 0;
-
-    // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private int numLeadingZeros = 4;
-    // END BEAN PROPERTIES
-
-    public FilePathCounter(String outPathPrefix) {
-        super(outPathPrefix);
-    }
-
-    @Override
-    public DirectoryWithPrefix outFilePrefixFromPath(NamedPath path, Path root) {
-        Path combinedDir = root.resolve(identifier(count++));
-        return new DirectoryWithPrefix(combinedDir);
-    }
-
-    private String identifier(int index) {
-        String formatSpecifier = "%0" + numLeadingZeros + "d";
-        return String.format(formatSpecifier, index);
-    }
-}
+/**
+ * An implementation of an {@link org.anchoranalysis.overlay.Overlay} that draws an {@link
+ * org.anchoranalysis.image.voxel.object.ObjectMask} on an image.
+ */
+package org.anchoranalysis.overlay.object;
