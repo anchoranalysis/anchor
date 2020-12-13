@@ -49,6 +49,15 @@ public class PathPrefixerContext {
     @Getter private final boolean outputIncrementingNumberSequence;
 
     /**
+     * Create with default parameters.
+     * 
+     * @throws PathPrefixerException
+     */
+    public PathPrefixerContext() throws PathPrefixerException {
+        this(false, Optional.empty(), false);
+    }
+    
+    /**
      * Create with specific parameters.
      * 
      * @param debugMode whether debug-mode is activated

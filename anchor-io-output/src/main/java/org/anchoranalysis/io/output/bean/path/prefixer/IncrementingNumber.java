@@ -33,6 +33,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.output.path.prefixer.DirectoryWithPrefix;
 import org.anchoranalysis.io.output.path.prefixer.NamedPath;
+import org.anchoranalysis.io.output.path.prefixer.PathPrefixerContext;
 
 /**
  * Outputs an incrementing number for each output that occurs.
@@ -61,9 +62,9 @@ public class IncrementingNumber extends PathPrefixerAvoidResolve {
     }
 
     @Override
-    public DirectoryWithPrefix outFilePrefixFromPath(NamedPath path, Path root) {
-        Path combinedDir = root.resolve(identifier(count++));
-        return new DirectoryWithPrefix(combinedDir);
+    public DirectoryWithPrefix outFilePrefixFromPath(NamedPath path, Path root, PathPrefixerContext context) {
+        Path combinedDirectory = root.resolve(identifier(count++));
+        return new DirectoryWithPrefix(combinedDirectory);
     }
 
     /** Creates a string identifier with leading zeros for a given integer index. */

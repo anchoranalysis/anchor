@@ -80,7 +80,7 @@ public abstract class PathPrefixerAvoidResolve extends PathPrefixer {
             throws PathPrefixerException {
 
         Path root = resolveExperimentAbsoluteRootOut(expName, context);
-        return outFilePrefixFromPath(path, root);
+        return outFilePrefixFromPath(path, root, context);
     }
 
     /**
@@ -107,9 +107,9 @@ public abstract class PathPrefixerAvoidResolve extends PathPrefixer {
      * @throws PathPrefixerException
      */
     public DirectoryWithPrefix outFilePrefixAvoidResolve(
-            NamedPath path, String experimentIdentifier) throws PathPrefixerException {
+            NamedPath path, String experimentIdentifier, PathPrefixerContext context) throws PathPrefixerException {
         return outFilePrefixFromPath(
-                path, rootDirectoryPrefixAvoidResolve(experimentIdentifier).getDirectory());
+                path, rootDirectoryPrefixAvoidResolve(experimentIdentifier).getDirectory(), context);
     }
 
     /**
@@ -117,9 +117,10 @@ public abstract class PathPrefixerAvoidResolve extends PathPrefixer {
      *
      * @param path path to calculate prefix from with associated descriptive-name
      * @param root root of prefix
+     * @param context TODO
      * @return folder/filename for prefixing
      */
-    public abstract DirectoryWithPrefix outFilePrefixFromPath(NamedPath path, Path root)
+    public abstract DirectoryWithPrefix outFilePrefixFromPath(NamedPath path, Path root, PathPrefixerContext context)
             throws PathPrefixerException;
 
     /** The root of the experiment for outputting files */
