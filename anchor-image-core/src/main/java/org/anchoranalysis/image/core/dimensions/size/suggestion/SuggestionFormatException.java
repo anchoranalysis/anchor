@@ -23,27 +23,22 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.image.core.dimensions.resize.suggestion;
+package org.anchoranalysis.image.core.dimensions.size.suggestion;
 
-import java.util.Optional;
-import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.image.core.dimensions.Dimensions;
-import org.anchoranalysis.spatial.scale.ScaleFactor;
+import org.anchoranalysis.core.exception.friendly.AnchorFriendlyCheckedException;
 
 /**
- * A suggestion on how to resize an image.
+ * An exception thrown by {@link ImageSizeSuggestionFactory} to indicate a format is invalid or
+ * unknown.
  *
  * @author Owen Feehan
  */
-public interface ImageResizeSuggestion {
+public class SuggestionFormatException extends AnchorFriendlyCheckedException {
 
-    /**
-     * Calculates the scaling factor.
-     *
-     * @param dimensionsToBeScaled dimensions of the source image/entity that will be scaled, if
-     *     they are known.
-     * @return the scaling-factor to use
-     */
-    ScaleFactor calculateScaleFactor(Optional<Dimensions> dimensionsToBeScaled)
-            throws OperationFailedException;
+    /** */
+    private static final long serialVersionUID = 1L;
+
+    public SuggestionFormatException(String message) {
+        super(message);
+    }
 }

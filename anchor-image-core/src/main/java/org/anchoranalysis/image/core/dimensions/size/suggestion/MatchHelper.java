@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.image.core.dimensions.resize.suggestion;
+package org.anchoranalysis.image.core.dimensions.size.suggestion;
 
 import java.util.Optional;
 import lombok.AccessLevel;
@@ -67,7 +67,7 @@ class MatchHelper {
     private static final RegEx REG_EX_SCALE_FACTOR = new RegExSimple("^([\\d.]+)$");
 
     /** Tries matching patterns that do not contain both and a width and a height */
-    public static Optional<ImageResizeSuggestion> matchPreserveNotBoth(String suggestion)
+    public static Optional<ImageSizeSuggestion> matchPreserveNotBoth(String suggestion)
             throws SuggestionFormatException {
         return OptionalUtilities.orElseGetFlat(
                 matchRegEx(suggestion, REG_EX_WIDTH_ONLY, groups -> groups.extractOne(true)),
@@ -79,14 +79,14 @@ class MatchHelper {
     }
 
     /** Tries matching patterns that contain <b>both</b> a width and a height */
-    public static Optional<ImageResizeSuggestion> matchBothWidthAndHeight(
+    public static Optional<ImageSizeSuggestion> matchBothWidthAndHeight(
             String suggestion, boolean preserveAspectRatio) throws SuggestionFormatException {
         RegEx regEx = preserveAspectRatio ? REG_EX_BOTH_PRESERVE : REG_EX_BOTH_DO_NOT_PRESERVE;
         return matchRegEx(suggestion, regEx, groups -> groups.extractBoth(preserveAspectRatio));
     }
 
     /** Tries matching a pattern for a constant scale-factor. */
-    public static Optional<ImageResizeSuggestion> matchScaleFactor(String suggestion)
+    public static Optional<ImageSizeSuggestion> matchScaleFactor(String suggestion)
             throws SuggestionFormatException {
         return matchRegEx(suggestion, REG_EX_SCALE_FACTOR, SuggestionFromArray::extractScaleFactor);
     }
@@ -95,10 +95,10 @@ class MatchHelper {
      * Tries matching a particular regular-expression against the string, and if successful applies
      * a function to extract a suggestion.
      */
-    private static Optional<ImageResizeSuggestion> matchRegEx(
+    private static Optional<ImageSizeSuggestion> matchRegEx(
             String suggestion,
             RegEx regEx,
-            CheckedFunction<SuggestionFromArray, ImageResizeSuggestion, SuggestionFormatException>
+            CheckedFunction<SuggestionFromArray, ImageSizeSuggestion, SuggestionFormatException>
                     extractSuggestion)
             throws SuggestionFormatException {
         return OptionalUtilities.map(

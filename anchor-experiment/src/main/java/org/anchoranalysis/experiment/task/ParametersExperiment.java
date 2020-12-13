@@ -101,7 +101,7 @@ public class ParametersExperiment {
     }
 
     public InitParamsContext createInitParamsContext() {
-        return new InitParamsContext(context, context.getExperimentArguments().task().getResize());
+        return new InitParamsContext(context, context.getExperimentArguments().task().getSize());
     }
 
     /** Redirects any output-exceptions into the log */

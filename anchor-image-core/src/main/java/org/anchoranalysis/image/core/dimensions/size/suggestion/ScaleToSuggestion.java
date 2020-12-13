@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.image.core.dimensions.resize.suggestion;
+package org.anchoranalysis.image.core.dimensions.size.suggestion;
 
 import java.util.Optional;
 import lombok.Value;
@@ -31,14 +31,14 @@ import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
-import org.anchoranalysis.image.core.dimensions.resize.ResizeExtentUtilities;
+import org.anchoranalysis.image.core.dimensions.size.ResizeExtentUtilities;
 import org.anchoranalysis.spatial.Extent;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 import org.anchoranalysis.spatial.scale.ScaleFactorUtilities;
 
 /** A series of suggestions to resize images. */
 @Value
-class ScaleToSuggestion implements ImageResizeSuggestion {
+class ScaleToSuggestion implements ImageSizeSuggestion {
 
     /** The suggested width to resize to. */
     private final Optional<Integer> width;

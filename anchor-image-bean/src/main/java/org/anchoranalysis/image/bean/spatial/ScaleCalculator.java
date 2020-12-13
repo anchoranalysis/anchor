@@ -30,7 +30,7 @@ import java.util.Optional;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.ImageBean;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
-import org.anchoranalysis.image.core.dimensions.resize.suggestion.ImageResizeSuggestion;
+import org.anchoranalysis.image.core.dimensions.size.suggestion.ImageSizeSuggestion;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 /**
@@ -51,6 +51,6 @@ public abstract class ScaleCalculator extends ImageBean<ScaleCalculator> {
      */
     public abstract ScaleFactor calculate(
             Optional<Dimensions> dimensionsToBeScaled,
-            Optional<ImageResizeSuggestion> suggestedResize)
+            Optional<ImageSizeSuggestion> suggestedResize)
             throws OperationFailedException;
 }

@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.image.core.dimensions.resize.suggestion;
+package org.anchoranalysis.image.core.dimensions.size.suggestion;
 
 import java.util.Optional;
 import lombok.AccessLevel;
@@ -31,12 +31,12 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 
 /**
- * Creates a {@link ImageResizeSuggestion}.
+ * Creates a {@link ImageSizeSuggestion}.
  *
  * @author Owen Feehan
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class ImageResizeSuggestionFactory {
+public class ImageSizeSuggestionFactory {
 
     /**
      * Creates a suggestion for how to resize an image.
@@ -67,7 +67,7 @@ public class ImageResizeSuggestionFactory {
      * @throws SuggestionFormatException if the suggestion string does not correspond to a
      *     recognized format
      */
-    public static ImageResizeSuggestion create(String suggestion) throws SuggestionFormatException {
+    public static ImageSizeSuggestion create(String suggestion) throws SuggestionFormatException {
 
         // First try matching against the "do not preserve" and then try the "preserve".
         return matchAll(suggestion)
@@ -83,7 +83,7 @@ public class ImageResizeSuggestionFactory {
      * Tries to match against all patterns, first those with both width and height, and then
      * anything else (where the plus is irrelevant).
      */
-    private static Optional<ImageResizeSuggestion> matchAll(String suggestion)
+    private static Optional<ImageSizeSuggestion> matchAll(String suggestion)
             throws SuggestionFormatException {
         return OptionalUtilities.orElseGetFlat(
                 MatchHelper.matchBothWidthAndHeight(
@@ -97,7 +97,7 @@ public class ImageResizeSuggestionFactory {
                 );
     }
 
-    private static Optional<ImageResizeSuggestion> matchWithoutTrailingPlus(String suggestion)
+    private static Optional<ImageSizeSuggestion> matchWithoutTrailingPlus(String suggestion)
             throws SuggestionFormatException {
         return OptionalUtilities.orElseGetFlat(
                 MatchHelper.matchPreserveNotBoth(

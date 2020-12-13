@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.image.core.dimensions.resize.suggestion;
+package org.anchoranalysis.image.core.dimensions.size.suggestion;
 
 import static org.junit.Assert.assertEquals;
 
@@ -32,6 +32,8 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
+import org.anchoranalysis.image.core.dimensions.size.suggestion.ImageSizeSuggestion;
+import org.anchoranalysis.image.core.dimensions.size.suggestion.SuggestionFormatException;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class ImageResizeSuggestionHelper {
@@ -58,13 +60,13 @@ class ImageResizeSuggestionHelper {
         assertScaleFactor(test(suggestionAsString), expectedScaleFactor);
     }
 
-    public static ImageResizeSuggestion test(String suggestionAsString)
+    public static ImageSizeSuggestion test(String suggestionAsString)
             throws SuggestionFormatException {
-        return ImageResizeSuggestionFactory.create(suggestionAsString);
+        return ImageSizeSuggestionFactory.create(suggestionAsString);
     }
 
     private static void assertScaleTo(
-            ImageResizeSuggestion suggestion,
+            ImageSizeSuggestion suggestion,
             Optional<Integer> expectedWidth,
             Optional<Integer> expectedHeight,
             boolean expectPreserveAspectRatio)
@@ -75,7 +77,7 @@ class ImageResizeSuggestionHelper {
     }
 
     private static void assertScaleFactor(
-            ImageResizeSuggestion suggestion, float expectedScaleFactor) {
+            ImageSizeSuggestion suggestion, float expectedScaleFactor) {
         assertEquals(new ScaleFactorSuggestion(expectedScaleFactor), suggestion);
     }
 }

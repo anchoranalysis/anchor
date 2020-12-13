@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.image.core.dimensions.resize.suggestion;
+package org.anchoranalysis.image.core.dimensions.size.suggestion;
 
 import java.util.Optional;
 import lombok.AllArgsConstructor;
@@ -38,7 +38,7 @@ import org.anchoranalysis.spatial.scale.ScaleFactor;
  */
 @AllArgsConstructor
 @Value
-class ScaleFactorSuggestion implements ImageResizeSuggestion {
+class ScaleFactorSuggestion implements ImageSizeSuggestion {
 
     private final double scaleFactor;
 

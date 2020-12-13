@@ -23,5 +23,27 @@
  * THE SOFTWARE.
  * #L%
  */
-/** Suggestions on how to resize an image. */
-package org.anchoranalysis.image.core.dimensions.resize.suggestion;
+package org.anchoranalysis.image.core.dimensions.size.suggestion;
+
+import java.util.Optional;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.spatial.scale.ScaleFactor;
+
+/**
+ * A suggestion on a size for an image.
+ *
+ * @author Owen Feehan
+ */
+public interface ImageSizeSuggestion {
+
+    /**
+     * Calculates the scaling factor.
+     *
+     * @param dimensionsToBeScaled dimensions of the source image/entity that will be scaled, if
+     *     they are known.
+     * @return the scaling-factor to use
+     */
+    ScaleFactor calculateScaleFactor(Optional<Dimensions> dimensionsToBeScaled)
+            throws OperationFailedException;
+}

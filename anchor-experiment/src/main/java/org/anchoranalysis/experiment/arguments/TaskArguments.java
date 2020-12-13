@@ -29,9 +29,9 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
-import org.anchoranalysis.image.core.dimensions.resize.suggestion.ImageResizeSuggestion;
-import org.anchoranalysis.image.core.dimensions.resize.suggestion.ImageResizeSuggestionFactory;
-import org.anchoranalysis.image.core.dimensions.resize.suggestion.SuggestionFormatException;
+import org.anchoranalysis.image.core.dimensions.size.suggestion.ImageSizeSuggestion;
+import org.anchoranalysis.image.core.dimensions.size.suggestion.ImageSizeSuggestionFactory;
+import org.anchoranalysis.image.core.dimensions.size.suggestion.SuggestionFormatException;
 
 /**
  * Arguments that can further specify an experiment's <b>task</b> in addition to its bean
@@ -46,15 +46,15 @@ public class TaskArguments {
     @Getter private Optional<String> taskName = Optional.empty();
 
     /** Suggests dimensions or a scaling-factor to resize an image to. */
-    @Getter private Optional<ImageResizeSuggestion> resize = Optional.empty();
+    @Getter private Optional<ImageSizeSuggestion> size = Optional.empty();
 
     public void assignTaskName(Optional<String> taskName) {
         this.taskName = taskName;
     }
 
-    public void assignResize(String resize) throws ExperimentExecutionException {
+    public void assignSize(String size) throws ExperimentExecutionException {
         try {
-            this.resize = Optional.of(ImageResizeSuggestionFactory.create(resize));
+            this.size = Optional.of(ImageSizeSuggestionFactory.create(size));
         } catch (SuggestionFormatException e) {
             throw new ExperimentExecutionException(e);
         }

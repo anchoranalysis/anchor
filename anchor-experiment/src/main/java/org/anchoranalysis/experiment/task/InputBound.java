@@ -84,7 +84,7 @@ public class InputBound<T, S> {
 
     public InitParamsContext createInitParamsContext() {
         return new InitParamsContext(
-                contextJob, contextExperiment.getExperimentArguments().task().getResize());
+                contextJob, contextExperiment.getExperimentArguments().task().getSize());
     }
 
     public Outputter getOutputter() {

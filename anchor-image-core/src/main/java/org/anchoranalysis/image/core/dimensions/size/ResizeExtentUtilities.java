@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.image.core.dimensions.resize;
+package org.anchoranalysis.image.core.dimensions.size;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

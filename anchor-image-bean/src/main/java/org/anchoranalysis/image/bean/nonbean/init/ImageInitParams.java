@@ -51,7 +51,7 @@ import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.bean.segment.binary.BinarySegmentation;
 import org.anchoranalysis.image.core.channel.Channel;
-import org.anchoranalysis.image.core.dimensions.resize.suggestion.ImageResizeSuggestion;
+import org.anchoranalysis.image.core.dimensions.size.suggestion.ImageSizeSuggestion;
 import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
@@ -62,7 +62,7 @@ public class ImageInitParams implements BeanInitParams {
 
     @Getter private final SharedObjects sharedObjects;
 
-    @Getter private final Optional<ImageResizeSuggestion> suggestedResize;
+    @Getter private final Optional<ImageSizeSuggestion> suggestedResize;
 
     // START: InitParams
     private final KeyValueParamsInitParams soParams;
@@ -85,7 +85,7 @@ public class ImageInitParams implements BeanInitParams {
     }
 
     public ImageInitParams(
-            SharedObjects sharedObjects, Optional<ImageResizeSuggestion> suggestedResize) {
+            SharedObjects sharedObjects, Optional<ImageSizeSuggestion> suggestedResize) {
         this.sharedObjects = sharedObjects;
         this.suggestedResize = suggestedResize;
         this.soParams = KeyValueParamsInitParams.create(sharedObjects);

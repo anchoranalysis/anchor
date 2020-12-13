@@ -31,7 +31,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.identifier.provider.store.SharedObjects;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
-import org.anchoranalysis.image.core.dimensions.resize.suggestion.ImageResizeSuggestion;
+import org.anchoranalysis.image.core.dimensions.size.suggestion.ImageSizeSuggestion;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -42,7 +42,7 @@ public class ImageInitParamsFactory {
     }
 
     public static ImageInitParams create(
-            InputOutputContext context, Optional<ImageResizeSuggestion> suggestedResize) {
+            InputOutputContext context, Optional<ImageSizeSuggestion> suggestedResize) {
         SharedObjects sharedObjects = new SharedObjects(context.common());
         return new ImageInitParams(sharedObjects, suggestedResize);
     }

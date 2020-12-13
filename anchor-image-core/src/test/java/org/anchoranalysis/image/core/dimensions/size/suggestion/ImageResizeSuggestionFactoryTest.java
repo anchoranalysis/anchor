@@ -23,15 +23,14 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.image.core.dimensions.resize.suggestion;
+package org.anchoranalysis.image.core.dimensions.size.suggestion;
 
-import static org.anchoranalysis.image.core.dimensions.resize.suggestion.ImageResizeSuggestionHelper.*;
-
+import static org.anchoranalysis.image.core.dimensions.size.suggestion.ImageResizeSuggestionHelper.*;
 import java.util.Optional;
 import org.junit.Test;
 
 /**
- * Tests {@link ImageResizeSuggestionFactory}.
+ * Tests {@link ImageSizeSuggestionFactory}.
  *
  * @author Owen Feehan
  */

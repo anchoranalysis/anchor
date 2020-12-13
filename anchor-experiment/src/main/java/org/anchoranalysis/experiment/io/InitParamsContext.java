@@ -30,7 +30,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.anchoranalysis.core.log.CommonContext;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.image.core.dimensions.resize.suggestion.ImageResizeSuggestion;
+import org.anchoranalysis.image.core.dimensions.size.suggestion.ImageSizeSuggestion;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 
@@ -46,7 +46,7 @@ public class InitParamsContext {
     @Getter private final InputOutputContext inputOutput;
 
     /** A suggested input on how to resize an image, if one is provided. */
-    @Getter private final Optional<ImageResizeSuggestion> suggestedResize;
+    @Getter private final Optional<ImageSizeSuggestion> suggestedResize;
 
     public InitParamsContext(InputOutputContext inputOutput) {
         this(inputOutput, Optional.empty());
