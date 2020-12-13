@@ -61,7 +61,8 @@ public class MatchExtensions extends PathMatcher {
     // END BEAN PROPERTIES
 
     @Override
-    protected Predicate<Path> createMatcherFile(Path directory, Optional<InputContextParams> inputContext)
+    protected Predicate<Path> createMatcherFile(
+            Path directory, Optional<InputContextParams> inputContext)
             throws InputReadFailedException {
 
         Set<String> fileExtensions = fileExtensions(inputContext);
@@ -86,13 +87,15 @@ public class MatchExtensions extends PathMatcher {
         return fileExtensions.contains(FilenameUtils.getExtension(path.toString()).toLowerCase());
     }
 
-    private Set<String> fileExtensions(Optional<InputContextParams> inputContext) throws InputReadFailedException {
+    private Set<String> fileExtensions(Optional<InputContextParams> inputContext)
+            throws InputReadFailedException {
         if (extensions != null) {
             return extensions;
         } else if (inputContext.isPresent()) {
             return inputContext.get().getInputFilterExtensions();
         } else {
-            throw new InputReadFailedException("Either a set of extensions must be specified in the bean, or via an input-context, but neither has been specified.");
+            throw new InputReadFailedException(
+                    "Either a set of extensions must be specified in the bean, or via an input-context, but neither has been specified.");
         }
     }
 }

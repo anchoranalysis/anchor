@@ -37,14 +37,13 @@ import org.anchoranalysis.io.output.path.prefixer.PathPrefixerContext;
 
 /**
  * Outputs an incrementing number for each output that occurs.
- * 
+ *
  * <p>The sequence begins with 0 and increments always by 1.
- * 
+ *
  * <p>This number is independent of the input file-name and occurs only by whatever sequential order
  * occurs with calls to {@link #outFilePrefixFromPath}.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 @NoArgsConstructor
 public class IncrementingNumber extends PathPrefixerAvoidResolve {
@@ -62,7 +61,8 @@ public class IncrementingNumber extends PathPrefixerAvoidResolve {
     }
 
     @Override
-    public DirectoryWithPrefix outFilePrefixFromPath(NamedPath path, Path root, PathPrefixerContext context) {
+    public DirectoryWithPrefix outFilePrefixFromPath(
+            NamedPath path, Path root, PathPrefixerContext context) {
         Path combinedDirectory = root.resolve(identifier(count++));
         return new DirectoryWithPrefix(combinedDirectory);
     }

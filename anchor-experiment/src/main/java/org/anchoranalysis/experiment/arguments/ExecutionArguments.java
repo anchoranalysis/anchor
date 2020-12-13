@@ -56,7 +56,7 @@ public class ExecutionArguments {
 
     /** Arguments to help specify the outputs from the experiment. */
     @Getter private final OutputArguments output = new OutputArguments();
-    
+
     /** Arguments to help specify the outputs from the experiment. */
     @Getter private final TaskArguments task = new TaskArguments();
 
@@ -83,7 +83,10 @@ public class ExecutionArguments {
     }
 
     public PathPrefixerContext createPrefixerContext() throws PathPrefixerException {
-        return new PathPrefixerContext(isDebugModeEnabled(), output.getOutputDirectory(), output.isOutputIncrementingNumberSequence());
+        return new PathPrefixerContext(
+                isDebugModeEnabled(),
+                output.getOutputDirectory(),
+                output.isOutputIncrementingNumberSequence());
     }
 
     /**

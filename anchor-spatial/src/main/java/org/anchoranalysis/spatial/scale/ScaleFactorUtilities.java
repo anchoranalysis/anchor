@@ -32,7 +32,7 @@ import org.anchoranalysis.spatial.point.Point3i;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ScaleFactorUtilities {
-    
+
     /** Scales a point in XY (immutably) */
     public static Point3i scale(ScaleFactor scalingFactor, Point3i point) {
         return new Point3i(

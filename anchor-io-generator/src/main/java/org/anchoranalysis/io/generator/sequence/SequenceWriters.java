@@ -90,36 +90,38 @@ class SequenceWriters {
             return Optional.empty();
         }
     }
-    
+
     /**
      * Writes an element to the sequence, with neither an name nor an index.
-     * 
-     * This should only be called once for a sequence, as otherwise an existing element will be overwritten.
-     * 
+     *
+     * <p>This should only be called once for a sequence, as otherwise an existing element will be
+     * overwritten.
+     *
      * @param <T>
      * @param generator
      * @param element
      * @throws OutputWriteFailedException
      */
-    public <T> void writeWithoutName(
-            ElementWriterSupplier<T> generator, ElementSupplier<T> element)
+    public <T> void writeWithoutName(ElementWriterSupplier<T> generator, ElementSupplier<T> element)
             throws OutputWriteFailedException {
 
         if (isOn()) {
-            multiplexSelective().writeWithoutName(pattern.getOutputNameStyle().getOutputName(), generator, element);
+            multiplexSelective()
+                    .writeWithoutName(
+                            pattern.getOutputNameStyle().getOutputName(), generator, element);
         }
     }
-    
+
     public boolean isOn() {
         return writers.isPresent();
     }
-    
+
     private Writer multiplexSelective() {
         return this.writers // NOSONAR
-            .get()
-            .multiplex(pattern.isSelective());
+                .get()
+                .multiplex(pattern.isSelective());
     }
-    
+
     private Optional<RecordingWriters> selectWritersMaybeCreateSubdirectory(
             ManifestDirectoryDescription directoryDescription, IndexableSubdirectory subdirectory)
             throws OutputWriteFailedException {

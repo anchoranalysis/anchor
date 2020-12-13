@@ -35,7 +35,7 @@ import org.anchoranalysis.core.exception.AnchorCheckedException;
 /**
  * A base class for particular checked-exceptions which are guaranteed to provide a user-friendly
  * error description.
- * 
+ *
  * <p>See the counterpart {@link AnchorFriendlyRuntimeException}.
  *
  * @author Owen Feehan

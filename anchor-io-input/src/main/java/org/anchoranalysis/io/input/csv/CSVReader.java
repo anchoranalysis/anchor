@@ -36,9 +36,8 @@ import lombok.Setter;
 
 /**
  * Reads a CSV File from the file-system.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 @RequiredArgsConstructor
 public class CSVReader {
@@ -56,8 +55,7 @@ public class CSVReader {
 
     public class OpenedCSVFile implements AutoCloseable {
 
-        @Setter
-        private int numberColumns = -1;
+        @Setter private int numberColumns = -1;
 
         // Returns null when finished
         public Optional<String[]> readLine() throws IOException {
@@ -102,7 +100,7 @@ public class CSVReader {
         public String[] getHeaders() {
             return headers;
         }
-        
+
         private void maybeRemoveQuotes(String[] arr) {
 
             if (!quotedStrings) {
@@ -139,7 +137,7 @@ public class CSVReader {
 
             this.bufferedReader = new BufferedReader(fileReader);
 
-            OpenedCSVFile out = new OpenedCSVFile();    // NOSONAR
+            OpenedCSVFile out = new OpenedCSVFile(); // NOSONAR
 
             if (firstLineHeaders) {
                 String line = bufferedReader.readLine();

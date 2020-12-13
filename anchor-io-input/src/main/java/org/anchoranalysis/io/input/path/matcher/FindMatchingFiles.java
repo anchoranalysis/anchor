@@ -43,7 +43,8 @@ import org.anchoranalysis.core.progress.ProgressIncrement;
 import org.anchoranalysis.core.progress.TraversalResult;
 import org.anchoranalysis.core.progress.TraverseDirectoryForProgress;
 
-@AllArgsConstructor @RequiredArgsConstructor
+@AllArgsConstructor
+@RequiredArgsConstructor
 public class FindMatchingFiles {
 
     /** Recursive whether to recursively iterate through directories */
@@ -53,9 +54,7 @@ public class FindMatchingFiles {
     private Optional<Progress> progress = Optional.empty();
 
     public Collection<File> findMatchingFiles(
-            Path directory,
-            PathMatchConstraints constraints,
-            Optional<Logger> logger)
+            Path directory, PathMatchConstraints constraints, Optional<Logger> logger)
             throws FindFilesException {
 
         try {
@@ -80,9 +79,7 @@ public class FindMatchingFiles {
     }
 
     private List<File> convertToList(
-            TraversalResult traversal,
-            PathMatchConstraints constraints,
-            Optional<Logger> logger)
+            TraversalResult traversal, PathMatchConstraints constraints, Optional<Logger> logger)
             throws FindFilesException {
 
         List<File> listOut = new ArrayList<>();
@@ -91,7 +88,11 @@ public class FindMatchingFiles {
                 filterLeafDirectories(
                         traversal.getLeafDirectories(), constraints.getPredicates().getDirectory());
 
-        Optional<ProgressIncrement> progressIncrement = progress.map( progressReporter -> createAndOpenProgress(progressReporter, leafDirectories.size() + 1) );
+        Optional<ProgressIncrement> progressIncrement =
+                progress.map(
+                        progressReporter ->
+                                createAndOpenProgress(
+                                        progressReporter, leafDirectories.size() + 1));
 
         // We first check the files that we remembered from our folder search
         filesFromDirectorySearch(
@@ -106,14 +107,13 @@ public class FindMatchingFiles {
                 constraints.replaceMaxDirDepth(remainingDirectoryDepth),
                 listOut,
                 progressIncrement,
-                logger
-        );
+                logger);
 
         progressIncrement.ifPresent(ProgressIncrement::close);
 
         return listOut;
     }
-    
+
     private static ProgressIncrement createAndOpenProgress(Progress progress, int numberElements) {
         ProgressIncrement progressIncrement = new ProgressIncrement(progress);
         progressIncrement.open();
@@ -137,12 +137,12 @@ public class FindMatchingFiles {
     }
 
     /**
-     * 
      * @param progressDirectories
      * @param pathMatchConstraints
      * @param listOut
      * @param progressIncrement
-     * @param logger if defined, any directory errors are written to this, instead of throwing an exception
+     * @param logger if defined, any directory errors are written to this, instead of throwing an
+     *     exception
      * @throws FindFilesException if logger is not defined, and a directory error occurs
      */
     private void otherFiles(

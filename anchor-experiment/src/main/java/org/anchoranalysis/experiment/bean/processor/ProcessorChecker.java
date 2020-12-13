@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,22 +26,23 @@
 package org.anchoranalysis.experiment.bean.processor;
 
 import java.util.List;
-import org.anchoranalysis.experiment.ExperimentExecutionException;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.experiment.ExperimentExecutionException;
 
 /** Common checks for classes that inherit from {@link JobProcessor}. */
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 class ProcessorChecker {
 
     /**
      * Checks that at least one input exists for a task, otherwise throwing an exception.
-     * 
+     *
      * @param <T> type in {@code inputs}
      * @param inputs the inputs for the task
      * @throws ExperimentExecutionException if {@code inputs} has no items
      */
-    public static <T> void checkAtLeastOneInput(List<T> inputs) throws ExperimentExecutionException {
+    public static <T> void checkAtLeastOneInput(List<T> inputs)
+            throws ExperimentExecutionException {
         if (inputs.isEmpty()) {
             throw new ExperimentExecutionException("This task has no inputs. Nothing to do.");
         }

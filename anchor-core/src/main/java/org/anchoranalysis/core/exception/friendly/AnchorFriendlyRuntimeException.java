@@ -33,7 +33,7 @@ import org.anchoranalysis.core.exception.AnchorRuntimeException;
 /**
  * A base class for particular runtime-exceptions which are guaranteed to provide a user-friendly
  * error description.
- * 
+ *
  * <p>See the counterpart {@link AnchorFriendlyCheckedException}.
  *
  * @author Owen Feehan

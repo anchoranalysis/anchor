@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.image.io;
 
+import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import java.util.Optional;
 import org.anchoranalysis.core.identifier.provider.store.SharedObjects;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.core.dimensions.resize.suggestion.ImageResizeSuggestion;
@@ -40,8 +40,9 @@ public class ImageInitParamsFactory {
     public static ImageInitParams create(InputOutputContext context) {
         return create(context, Optional.empty());
     }
-    
-    public static ImageInitParams create(InputOutputContext context, Optional<ImageResizeSuggestion> suggestedResize) {
+
+    public static ImageInitParams create(
+            InputOutputContext context, Optional<ImageResizeSuggestion> suggestedResize) {
         SharedObjects sharedObjects = new SharedObjects(context.common());
         return new ImageInitParams(sharedObjects, suggestedResize);
     }

@@ -28,14 +28,13 @@ package org.anchoranalysis.io.output.path.prefixer;
 
 import java.nio.file.Path;
 import java.util.Optional;
-import org.anchoranalysis.io.output.bean.path.prefixer.PathPrefixer;
 import lombok.Getter;
+import org.anchoranalysis.io.output.bean.path.prefixer.PathPrefixer;
 
 /**
  * Context parameters provided to a link {@link PathPrefixer}.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class PathPrefixerContext {
 
@@ -44,28 +43,36 @@ public class PathPrefixerContext {
 
     /** A directory indicating where inputs can be located. */
     @Getter private final Optional<Path> outputDirectory;
-    
-    /** Requests outputting with an incrementing number sequence, rather than the usual outputter (normally based upon input filenames). */
+
+    /**
+     * Requests outputting with an incrementing number sequence, rather than the usual outputter
+     * (normally based upon input filenames).
+     */
     @Getter private final boolean outputIncrementingNumberSequence;
 
     /**
      * Create with default parameters.
-     * 
+     *
      * @throws PathPrefixerException
      */
     public PathPrefixerContext() throws PathPrefixerException {
         this(false, Optional.empty(), false);
     }
-    
+
     /**
      * Create with specific parameters.
-     * 
+     *
      * @param debugMode whether debug-mode is activated
      * @param outputDirectory a directory indicating where inputs can be located.
-     * @param outputIncrementingNumberSequence requests outputting with an incrementing number sequence, rather than the usual outputter (normally based upon input filenames).
-     * @throws PathPrefixerException if the the path in {@code outputDirectory} is relative instead of absolute
+     * @param outputIncrementingNumberSequence requests outputting with an incrementing number
+     *     sequence, rather than the usual outputter (normally based upon input filenames).
+     * @throws PathPrefixerException if the the path in {@code outputDirectory} is relative instead
+     *     of absolute
      */
-    public PathPrefixerContext(boolean debugMode, Optional<Path> outputDirectory, boolean outputIncrementingNumberSequence)
+    public PathPrefixerContext(
+            boolean debugMode,
+            Optional<Path> outputDirectory,
+            boolean outputIncrementingNumberSequence)
             throws PathPrefixerException {
         this.debugMode = debugMode;
         this.outputDirectory = outputDirectory;
@@ -78,8 +85,7 @@ public class PathPrefixerContext {
             throw new PathPrefixerException(
                     String.format(
                             "An non-absolute path was passed to %s of %s",
-                            this.getClass().getSimpleName(),
-                            outputDirectory.get()));
+                            this.getClass().getSimpleName(), outputDirectory.get()));
         }
     }
 }

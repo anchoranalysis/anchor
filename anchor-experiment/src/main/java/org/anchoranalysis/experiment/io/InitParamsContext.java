@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,17 +26,17 @@
 package org.anchoranalysis.experiment.io;
 
 import java.util.Optional;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.anchoranalysis.core.log.CommonContext;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.core.dimensions.resize.suggestion.ImageResizeSuggestion;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 
 /**
  * Context for creating initialization-params.
- * 
+ *
  * @author Owen Feehan
  */
 @AllArgsConstructor
@@ -44,14 +44,14 @@ public class InitParamsContext {
 
     /** The input-output context. */
     @Getter private final InputOutputContext inputOutput;
-    
+
     /** A suggested input on how to resize an image, if one is provided. */
     @Getter private final Optional<ImageResizeSuggestion> suggestedResize;
 
     public InitParamsContext(InputOutputContext inputOutput) {
         this(inputOutput, Optional.empty());
     }
-    
+
     public Outputter getOutputter() {
         return inputOutput.getOutputter();
     }

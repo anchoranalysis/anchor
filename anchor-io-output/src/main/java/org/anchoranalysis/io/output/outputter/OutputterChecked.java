@@ -272,11 +272,13 @@ public class OutputterChecked {
      * Like {@link #makeOutputPath(String)} but additionally adds an extension.
      *
      * @param suffixWithoutExtension the suffix for the path (without any extension).
-     * @param fallbackSuffix if neither a {@code prefix} is defined nor a {@code suffix}, then this provides a suffix to use so a file isn't only an extension.
+     * @param fallbackSuffix if neither a {@code prefix} is defined nor a {@code suffix}, then this
+     *     provides a suffix to use so a file isn't only an extension.
      * @return a newly created absolute path, combining directory, prefix (if it exists), suffix and
      *     extension.
      */
-    public Path makeOutputPath(Optional<String> suffixWithoutExtension, String extension, String fallbackSuffix) {
+    public Path makeOutputPath(
+            Optional<String> suffixWithoutExtension, String extension, String fallbackSuffix) {
         return target.pathCreator()
                 .makePathAbsolute(suffixWithoutExtension, Optional.of(extension), fallbackSuffix);
     }

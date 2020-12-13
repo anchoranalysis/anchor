@@ -108,16 +108,17 @@ public class OptionalUtilities {
      * @param <T> optional-type
      * @param <E> exception that may be thrown during mapping
      * @param optional incoming optional
-     * @param suppliers tries each alternative {@link Optional} value successively (if optional is empty) until one is not-empty
+     * @param suppliers tries each alternative {@link Optional} value successively (if optional is
+     *     empty) until one is not-empty
      * @return the outgoing optional
      * @throws E an exception if the supplier throws it
      */
     @SafeVarargs
     public static <T, E extends Exception> Optional<T> orElseGetFlat(
-            Optional<T> optional, CheckedSupplier<Optional<T>, E> ... suppliers) throws E {
-        
+            Optional<T> optional, CheckedSupplier<Optional<T>, E>... suppliers) throws E {
+
         Optional<T> running = optional;
-        for( CheckedSupplier<Optional<T>, E> nextSupplier : suppliers ) {
+        for (CheckedSupplier<Optional<T>, E> nextSupplier : suppliers) {
             if (running.isPresent()) {
                 return running;
             } else {

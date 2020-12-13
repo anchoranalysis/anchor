@@ -35,9 +35,8 @@ import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
 
 /**
  * Reads an image-{@link Stack} from the file-system.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public abstract class StackReader extends AnchorBean<StackReader> {
 
@@ -65,7 +64,7 @@ public abstract class StackReader extends AnchorBean<StackReader> {
 
     /**
      * Opens a file containing one or more images but does not read an image.
-     * 
+     *
      * @param path where the file is located
      * @return an interface to the opened file that should be closed when no longer in use.
      * @throws ImageIOException if the file cannot be read.

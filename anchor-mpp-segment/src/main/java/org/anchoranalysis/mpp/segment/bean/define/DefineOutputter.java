@@ -98,8 +98,7 @@ public abstract class DefineOutputter extends AnchorBean<DefineOutputter> {
             InitParamsContext context,
             Optional<NamedProvider<Stack>> stacks,
             Optional<NamedProvider<ObjectCollection>> objects,
-            Optional<KeyValueParams> keyValueParams
-            )
+            Optional<KeyValueParams> keyValueParams)
             throws CreateException {
         return MPPInitParamsFactory.createFromExistingCollections(
                 context, Optional.ofNullable(define), stacks, objects, keyValueParams);

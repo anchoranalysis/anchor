@@ -49,6 +49,8 @@ public abstract class ScaleCalculator extends ImageBean<ScaleCalculator> {
      * @return the scaling-factor to use
      * @throws OperationFailedException
      */
-    public abstract ScaleFactor calculate(Optional<Dimensions> dimensionsToBeScaled, Optional<ImageResizeSuggestion> suggestedResize)
+    public abstract ScaleFactor calculate(
+            Optional<Dimensions> dimensionsToBeScaled,
+            Optional<ImageResizeSuggestion> suggestedResize)
             throws OperationFailedException;
 }

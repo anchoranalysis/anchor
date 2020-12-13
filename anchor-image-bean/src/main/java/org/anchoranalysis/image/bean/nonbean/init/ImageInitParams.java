@@ -63,7 +63,7 @@ public class ImageInitParams implements BeanInitParams {
     @Getter private final SharedObjects sharedObjects;
 
     @Getter private final Optional<ImageResizeSuggestion> suggestedResize;
-    
+
     // START: InitParams
     private final KeyValueParamsInitParams soParams;
     private final SharedFeaturesInitParams soFeature;
@@ -83,8 +83,9 @@ public class ImageInitParams implements BeanInitParams {
     public ImageInitParams(SharedObjects sharedObjects) {
         this(sharedObjects, Optional.empty());
     }
-    
-    public ImageInitParams(SharedObjects sharedObjects, Optional<ImageResizeSuggestion> suggestedResize) {
+
+    public ImageInitParams(
+            SharedObjects sharedObjects, Optional<ImageResizeSuggestion> suggestedResize) {
         this.sharedObjects = sharedObjects;
         this.suggestedResize = suggestedResize;
         this.soParams = KeyValueParamsInitParams.create(sharedObjects);

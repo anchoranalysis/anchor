@@ -55,7 +55,8 @@ public class MPPInitParamsFactory {
             throws CreateException {
 
         SharedObjects sharedObjects = new SharedObjects(context.common());
-        ImageInitParams imageInit = new ImageInitParams(sharedObjects, context.getSuggestedResize());
+        ImageInitParams imageInit =
+                new ImageInitParams(sharedObjects, context.getSuggestedResize());
         MPPInitParams mppInit = new MPPInitParams(imageInit, sharedObjects);
 
         if (input.isPresent()) {
@@ -87,8 +88,8 @@ public class MPPInitParamsFactory {
             Optional<Define> define,
             Optional<NamedProvider<Stack>> stacks,
             Optional<NamedProvider<ObjectCollection>> objects,
-            Optional<KeyValueParams> keyValueParams
-            ) throws CreateException {
+            Optional<KeyValueParams> keyValueParams)
+            throws CreateException {
 
         try {
             MPPInitParams soMPP = create(context, define, Optional.empty());

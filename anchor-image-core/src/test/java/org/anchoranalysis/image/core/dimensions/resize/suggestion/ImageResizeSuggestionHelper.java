@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,36 +26,56 @@
 package org.anchoranalysis.image.core.dimensions.resize.suggestion;
 
 import static org.junit.Assert.assertEquals;
+
 import java.util.Optional;
-import org.anchoranalysis.core.exception.CreateException;
-import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
 
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 class ImageResizeSuggestionHelper {
-    
-    public static void testScaleTo(String suggestionAsString, Optional<Integer> expectedWidth, Optional<Integer> expectedHeight, boolean expectedPreserveAspectRatio) throws SuggestionFormatException {
+
+    public static void testScaleTo(
+            String suggestionAsString,
+            Optional<Integer> expectedWidth,
+            Optional<Integer> expectedHeight,
+            boolean expectedPreserveAspectRatio)
+            throws SuggestionFormatException {
         try {
-            assertScaleTo(test(suggestionAsString), expectedWidth, expectedHeight, expectedPreserveAspectRatio);
+            assertScaleTo(
+                    test(suggestionAsString),
+                    expectedWidth,
+                    expectedHeight,
+                    expectedPreserveAspectRatio);
         } catch (CreateException e) {
             throw new AnchorFriendlyRuntimeException(e);
         }
     }
-    
-    public static void testScaleFactor(String suggestionAsString, float expectedScaleFactor) throws SuggestionFormatException {
+
+    public static void testScaleFactor(String suggestionAsString, float expectedScaleFactor)
+            throws SuggestionFormatException {
         assertScaleFactor(test(suggestionAsString), expectedScaleFactor);
     }
-    
-    public static ImageResizeSuggestion test(String suggestionAsString) throws SuggestionFormatException {
+
+    public static ImageResizeSuggestion test(String suggestionAsString)
+            throws SuggestionFormatException {
         return ImageResizeSuggestionFactory.create(suggestionAsString);
     }
-   
-    private static void assertScaleTo(ImageResizeSuggestion suggestion, Optional<Integer> expectedWidth, Optional<Integer> expectedHeight, boolean expectPreserveAspectRatio) throws CreateException {
-        assertEquals( new ScaleToSuggestion(expectedWidth, expectedHeight, expectPreserveAspectRatio), suggestion );
+
+    private static void assertScaleTo(
+            ImageResizeSuggestion suggestion,
+            Optional<Integer> expectedWidth,
+            Optional<Integer> expectedHeight,
+            boolean expectPreserveAspectRatio)
+            throws CreateException {
+        assertEquals(
+                new ScaleToSuggestion(expectedWidth, expectedHeight, expectPreserveAspectRatio),
+                suggestion);
     }
-    
-    private static void assertScaleFactor(ImageResizeSuggestion suggestion, float expectedScaleFactor) {
-        assertEquals( new ScaleFactorSuggestion(expectedScaleFactor), suggestion );
+
+    private static void assertScaleFactor(
+            ImageResizeSuggestion suggestion, float expectedScaleFactor) {
+        assertEquals(new ScaleFactorSuggestion(expectedScaleFactor), suggestion);
     }
 }

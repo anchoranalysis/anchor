@@ -35,8 +35,8 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.output.path.prefixer.DirectoryWithPrefix;
-import org.anchoranalysis.io.output.path.prefixer.PathPrefixerContext;
 import org.anchoranalysis.io.output.path.prefixer.NamedPath;
+import org.anchoranalysis.io.output.path.prefixer.PathPrefixerContext;
 import org.anchoranalysis.io.output.path.prefixer.PathPrefixerException;
 
 /**
@@ -107,9 +107,12 @@ public abstract class PathPrefixerAvoidResolve extends PathPrefixer {
      * @throws PathPrefixerException
      */
     public DirectoryWithPrefix outFilePrefixAvoidResolve(
-            NamedPath path, String experimentIdentifier, PathPrefixerContext context) throws PathPrefixerException {
+            NamedPath path, String experimentIdentifier, PathPrefixerContext context)
+            throws PathPrefixerException {
         return outFilePrefixFromPath(
-                path, rootDirectoryPrefixAvoidResolve(experimentIdentifier).getDirectory(), context);
+                path,
+                rootDirectoryPrefixAvoidResolve(experimentIdentifier).getDirectory(),
+                context);
     }
 
     /**
@@ -120,8 +123,8 @@ public abstract class PathPrefixerAvoidResolve extends PathPrefixer {
      * @param context TODO
      * @return folder/filename for prefixing
      */
-    public abstract DirectoryWithPrefix outFilePrefixFromPath(NamedPath path, Path root, PathPrefixerContext context)
-            throws PathPrefixerException;
+    public abstract DirectoryWithPrefix outFilePrefixFromPath(
+            NamedPath path, Path root, PathPrefixerContext context) throws PathPrefixerException;
 
     /** The root of the experiment for outputting files */
     private Path resolveExperimentAbsoluteRootOut(String expName, PathPrefixerContext context) {
@@ -136,7 +139,8 @@ public abstract class PathPrefixerAvoidResolve extends PathPrefixer {
 
         if (outPathPrefix.isEmpty()) {
             // If there's an outPathPrefix specified, then use it, otherwise a temporary directory
-            return context.getOutputDirectory().orElseGet(PathPrefixerAvoidResolve::temporaryDirectory);
+            return context.getOutputDirectory()
+                    .orElseGet(PathPrefixerAvoidResolve::temporaryDirectory);
         }
 
         return resolvePath(outPathPrefix);

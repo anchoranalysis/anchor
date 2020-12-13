@@ -41,7 +41,6 @@ import org.anchoranalysis.spatial.point.Point3i;
  * An entity that will eventually be drawn on top of an image.
  *
  * @author Owen Feehan
- *
  */
 public abstract class Overlay implements Identifiable {
 

@@ -67,8 +67,7 @@ public class InputBound<T, S> {
                 manifest,
                 detailedLogging,
                 contextExperiment,
-                contextJob
-        );
+                contextJob);
     }
 
     /** Immutably changes the input-object and shared-state */
@@ -80,12 +79,12 @@ public class InputBound<T, S> {
                 manifest,
                 detailedLogging,
                 contextExperiment,
-                contextJob
-                );
+                contextJob);
     }
-    
+
     public InitParamsContext createInitParamsContext() {
-        return new InitParamsContext(contextJob, contextExperiment.getExperimentArguments().task().getResize());
+        return new InitParamsContext(
+                contextJob, contextExperiment.getExperimentArguments().task().getResize());
     }
 
     public Outputter getOutputter() {

@@ -28,8 +28,8 @@ package org.anchoranalysis.test.io.output;
 import java.nio.file.Path;
 import org.anchoranalysis.io.output.bean.path.prefixer.PathPrefixer;
 import org.anchoranalysis.io.output.path.prefixer.DirectoryWithPrefix;
-import org.anchoranalysis.io.output.path.prefixer.PathPrefixerContext;
 import org.anchoranalysis.io.output.path.prefixer.NamedPath;
+import org.anchoranalysis.io.output.path.prefixer.PathPrefixerContext;
 
 class ConstantPathPrefixer extends PathPrefixer {
 

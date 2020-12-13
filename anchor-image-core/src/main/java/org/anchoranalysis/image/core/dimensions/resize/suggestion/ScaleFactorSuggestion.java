@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,24 +26,24 @@
 package org.anchoranalysis.image.core.dimensions.resize.suggestion;
 
 import java.util.Optional;
-import org.anchoranalysis.image.core.dimensions.Dimensions;
-import org.anchoranalysis.spatial.scale.ScaleFactor;
 import lombok.AllArgsConstructor;
 import lombok.Value;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 /**
  * How much to scale an image by in both X and Y directions.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
-@AllArgsConstructor @Value
+@AllArgsConstructor
+@Value
 class ScaleFactorSuggestion implements ImageResizeSuggestion {
 
     private final double scaleFactor;
 
     @Override
     public ScaleFactor calculateScaleFactor(Optional<Dimensions> dimensionsToBeScaled) {
-        return new ScaleFactor(scaleFactor,scaleFactor);
+        return new ScaleFactor(scaleFactor, scaleFactor);
     }
 }

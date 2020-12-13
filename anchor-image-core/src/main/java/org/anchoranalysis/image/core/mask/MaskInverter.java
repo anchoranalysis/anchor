@@ -69,7 +69,8 @@ public class MaskInverter {
         invertVoxels(mask.voxels(), binaryValuesByte);
     }
 
-    private static void invertVoxels(Voxels<UnsignedByteBuffer> voxels, BinaryValuesByte binaryValues) {
+    private static void invertVoxels(
+            Voxels<UnsignedByteBuffer> voxels, BinaryValuesByte binaryValues) {
         for (int z = 0; z < voxels.extent().z(); z++) {
 
             UnsignedByteBuffer buffer = voxels.sliceBuffer(z);

@@ -54,7 +54,8 @@ public class MatchRegularExpression extends PathMatcher {
     // END BEAN FIELDS
 
     @Override
-    protected Predicate<Path> createMatcherFile(Path directory, Optional<InputContextParams> inputContext) {
+    protected Predicate<Path> createMatcherFile(
+            Path directory, Optional<InputContextParams> inputContext) {
         if (applyToPath) {
             Pattern pattern = Pattern.compile(expression);
             return path -> acceptPathViaRegEx(path, pattern);

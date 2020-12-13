@@ -72,7 +72,7 @@ public class BioformatsReader extends StackReader {
 
     /**
      * Create with particular options.
-     * 
+     *
      * @param options options that influence how stack is read.
      */
     public BioformatsReader(ReadOptions options) {

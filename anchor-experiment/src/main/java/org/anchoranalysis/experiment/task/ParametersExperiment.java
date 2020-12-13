@@ -99,7 +99,7 @@ public class ParametersExperiment {
     public ExecutionArguments getExperimentArguments() {
         return context.getExperimentArguments();
     }
-    
+
     public InitParamsContext createInitParamsContext() {
         return new InitParamsContext(context, context.getExperimentArguments().task().getResize());
     }

@@ -91,7 +91,7 @@ public class ParallelProcessor<T extends InputFromManager, S> extends JobProcess
             Outputter rootOutputter, List<T> inputs, ParametersExperiment paramsExperiment)
             throws ExperimentExecutionException {
         int numberInputs = inputs.size();
-        
+
         ProcessorChecker.checkAtLeastOneInput(inputs);
 
         ConcurrencyPlan concurrencyPlan = createConcurrencyPlan(paramsExperiment);

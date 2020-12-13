@@ -23,5 +23,7 @@
  * THE SOFTWARE.
  * #L%
  */
-/** User-specified options that can modify metadata or other attributes of a loaded Bioformats image. */
+/**
+ * User-specified options that can modify metadata or other attributes of a loaded Bioformats image.
+ */
 package org.anchoranalysis.io.bioformats.bean.options;
