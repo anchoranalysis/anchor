@@ -40,7 +40,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}    
       run: mvn --batch-mode --update-snapshots verify
     - name: Copy to staging directory
-      run: mkdir staging && find -type f -name "*.jar" -exec cp {} ../staging \;
+      run: mkdir staging && find -type f -name "*.jar" -exec cp {} ./staging \;
     - name: Upload artifacts  
       uses: actions/upload-artifact@v2
       with:
