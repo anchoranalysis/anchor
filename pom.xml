@@ -71,9 +71,9 @@
 			<updatePolicy>always</updatePolicy>
 			<checksumPolicy>warn</checksumPolicy>
 		  </snapshots>
-		  <id>anchor</id>
-		   <name>anchor</name>
-		   <url>http://maven.anchoranalysis.org:8081/repository/anchor</url>
+		  <id>github</id>
+		   <name>GitHub anchor Apache Maven Packages</name>
+		   <url>https://maven.pkg.github.com/anchoranalysis/anchor</url>
 		  <layout>default</layout>
 		</repository>
 		
