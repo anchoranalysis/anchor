@@ -32,8 +32,6 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
-import org.anchoranalysis.image.core.dimensions.size.suggestion.ImageSizeSuggestion;
-import org.anchoranalysis.image.core.dimensions.size.suggestion.SuggestionFormatException;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class ImageResizeSuggestionHelper {
