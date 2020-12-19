@@ -26,6 +26,15 @@ jobs:
         path: ~/.m2
         key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
         restore-keys: ${{ runner.os }}-m2
+    - name: Create settings.xml for Maven
+      uses: s4u/maven-settings-action@v2.2.0
+      with:
+        servers: |
+            [{
+                "id": "github_path_path_finder",
+                "username": "${{ GITHUB_ACTOR }}",
+                "password": "${{ secrets.GITHUB_TOKEN }}"
+            }]    
     - name: Build with Maven
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}    
