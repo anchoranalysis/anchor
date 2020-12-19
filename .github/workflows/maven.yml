@@ -27,6 +27,8 @@ jobs:
         key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
         restore-keys: ${{ runner.os }}-m2
     - name: Build with Maven
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}    
       run: mvn --batch-mode --update-snapshots verify
     - name: Copy to staging directory
       run: mkdir staging && cp target/*.jar staging
