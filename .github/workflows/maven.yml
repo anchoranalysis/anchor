@@ -28,3 +28,10 @@ jobs:
         restore-keys: ${{ runner.os }}-m2
     - name: Build with Maven
       run: mvn --batch-mode --update-snapshots verify
+    - name: Copy to staging directory
+      run: mkdir staging && cp target/*.jar staging
+    - name: Upload artefacts  
+      uses: actions/upload-artifact@v2
+      with:
+          name: Package
+          path: staging
