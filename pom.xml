@@ -11,8 +11,23 @@
     <version>0.0.11-SNAPSHOT</version>
     <name>anchor-parent</name>
     <url>http://www.anchoranalysis.org/</url>
-    
-	<!-- For tagging releases -->
+	
+	<!-- Where to depoy (upload) artifacts to, making sure to associate with the corresponding
+	repository in GitHub Packages. Overrides settings that already are inherited from anchor-pom. -->
+	<distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>GitHub</name>
+            <url>https://maven.pkg.github.com/anchoranalysis/anchor/</url>
+        </repository>
+	  <snapshotRepository>
+            <id>github</id>
+            <name>GitHub</name>
+            <url>https://maven.pkg.github.com/anchoranalysis/anchor/</url>
+        </snapshotRepository>
+	</distributionManagement>
+	
+	<!-- For tagging releases. -->
   	<scm>
 		<connection>scm:git:git@github.com:anchoranalysis/anchor.git</connection>
 		<developerConnection>scm:git:git@github.com:anchoranalysis/anchor.git</developerConnection>
@@ -20,7 +35,7 @@
 		<tag>HEAD</tag>
 	</scm>
 	
-	<!-- For connecting to sonarcloud -->
+	<!-- For connecting to SonarCloud. -->
 	<properties>
 	  <sonar.projectKey>anchoranalysis_anchor</sonar.projectKey>
 	</properties>
@@ -90,21 +105,7 @@
 		</repository>
 		
    	</repositories>
-	
-	<distributionManagement>
-        <repository>
-            <id>github</id>
-            <name>GitHub</name>
-            <url>https://maven.pkg.github.com/anchoranalysis/anchor/</url>
-        </repository>
-	  <snapshotRepository>
-            <id>github</id>
-            <name>GitHub</name>
-            <url>https://maven.pkg.github.com/anchoranalysis/anchor/</url>
-        </snapshotRepository>
-
-	</distributionManagement>
-	
+		
     <build>
 					
 		<!-- Adds license information in each jar -->
