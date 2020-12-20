@@ -43,12 +43,13 @@ jobs:
     - name: Build with Maven
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: mvn --batch-mode --update-snapshots verify -Dmaven.test.failure.ignore=true
+      run: mvn -Dmaven.test.failure.ignore=true --batch-mode --update-snapshots verify
     - name: Publish Test Report
       uses: scacap/action-surefire-report@v1
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         fail_on_test_failures: true
+        check_name: Test Report - Linux JDK 8
  
   test-windows-8:
 
@@ -78,12 +79,13 @@ jobs:
     - name: Build with Maven
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: mvn --batch-mode --update-snapshots verify -Dmaven.test.failure.ignore=true
+      run: mvn -DtestFailureIgnore --batch-mode --update-snapshots verify
     - name: Publish Test Report
       uses: scacap/action-surefire-report@v1
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         fail_on_test_failures: true
+        check_name: Test Report - Windows JDK 8
    
   test-macos-8:
 
@@ -113,9 +115,10 @@ jobs:
     - name: Build with Maven
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: mvn --batch-mode --update-snapshots verify -Dmaven.test.failure.ignore=true
+      run: mvn -Dmaven.test.failure.ignore=true --batch-mode --update-snapshots verify
     - name: Publish Test Report
       uses: scacap/action-surefire-report@v1
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        fail_on_test_failures: true        
+        fail_on_test_failures: true 
+        check_name: Test Report - MacOS JDK 8        
