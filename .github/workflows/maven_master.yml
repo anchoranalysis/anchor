@@ -17,8 +17,6 @@ name: Java CI with Maven for Master
 on:
   push:
     branches: [ master ]
-  pull_request:
-    branches: [ master ]
 
 jobs:
   build:
