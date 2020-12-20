@@ -57,7 +57,7 @@ import org.junit.Test;
 public abstract class PNGTestBase extends RasterWriterTestBase {
 
     private static final ComparisonPlan COMPARISON_PLAN =
-            new ComparisonPlan(true, Optional.of(ImageFileFormat.OME_TIFF), false);
+            new ComparisonPlan(false, Optional.of(ImageFileFormat.OME_TIFF), false);
 
     /** All possible voxel types that can be supported. */
     protected static final VoxelDataType[] ALL_SUPPORTED_VOXEL_TYPES = {
