@@ -1,9 +1,10 @@
 # 
-# This workflow will build a Java project with Maven
+# This workflow will build and test a Java project with Maven.
+#
+# It is only triggered on master branch.
 #
 # It also:
 #   - updates the corresponding project on SonarCloud
-#   - runs tests
 #  -  uploads the built artifacts to GitHub Packages
 #
 # The Maven and SonarCloud working directories are cached for future reuse, as downloading all packages from scratch takes significant time.
@@ -15,9 +16,9 @@ name: Java CI with Maven
 
 on:
   push:
-    branches: [ master, dev ]
+    branches: [ master ]
   pull_request:
-    branches: [ master, dev ]
+    branches: [ master ]
 
 jobs:
   build:
