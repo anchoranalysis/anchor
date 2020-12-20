@@ -12,12 +12,18 @@
     <name>anchor-parent</name>
     <url>http://www.anchoranalysis.org/</url>
     
-	<scm>
-		<connection>scm:git:ssh://git@bitbucket.org/anchorimageanalysis/anchor.git</connection>
-		<developerConnection>scm:git:ssh://git@bitbucket.org/anchorimageanalysis/anchor.git</developerConnection>
-		<url>https://git@bitbucket.org/anchorimageanalysis/anchor.git</url>
-	  <tag>HEAD</tag>
-  </scm>
+	<!-- For tagging releases -->
+  	<scm>
+		<connection>scm:git:git@github.com:anchoranalysis/anchor.git</connection>
+		<developerConnection>scm:git:git@github.com:anchoranalysis/anchor.git</developerConnection>
+		<url>https://github.com/anchoranalysis/anchor</url>
+		<tag>HEAD</tag>
+	</scm>
+	
+	<!-- For connecting to sonarcloud -->
+	<properties>
+	  <sonar.projectKey>anchoranalysis_anchor</sonar.projectKey>
+	</properties>
 	
     <modules>
         <module>anchor-core</module>
@@ -140,13 +146,5 @@
 			<artifactId>lombok</artifactId>
 		</dependency>
 	</dependencies>
-
-	<!-- For connecting to sonarcloud -->
-	<properties>
-	  <sonar.projectKey>anchoranalysis_anchor</sonar.projectKey>
-	  <sonar.organization>anchoranalysis</sonar.organization>
-	  <sonar.host.url>https://sonarcloud.io</sonar.host.url>
-	  <sonar.moduleKey>${project.groupId}:${project.artifactId}</sonar.moduleKey>
-	</properties>
 
 </project>
