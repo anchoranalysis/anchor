@@ -33,6 +33,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.PropertyUtils;
@@ -54,11 +55,10 @@ class DefaultBeanFactoryHelperInit {
     /// Initializing a collection
     private static class InitCollection {
 
-        private Collection<Object> beanCollection;
-        private Optional<Class<?>> defaultClass;
+        private final Collection<Object> beanCollection;
+        private final Optional<Class<?>> defaultClass;
 
         public InitCollection(Collection<Object> beanCollection, String propName) {
-            super();
             this.beanCollection = beanCollection;
             this.defaultClass = getDefaultClass(beanCollection, propName);
         }
@@ -86,16 +86,11 @@ class DefaultBeanFactoryHelperInit {
         }
     }
 
+    @AllArgsConstructor
     private static class InitNested {
 
-        private Map<String, Object> nestedBeans;
-        private Object parameter;
-
-        public InitNested(Map<String, Object> nestedBeans, Object parameter) {
-            super();
-            this.nestedBeans = nestedBeans;
-            this.parameter = parameter;
-        }
+        private final Map<String, Object> nestedBeans;
+        private final Object parameter;
 
         @SuppressWarnings("unchecked")
         public void initBean(Object bean) {
@@ -155,7 +150,7 @@ class DefaultBeanFactoryHelperInit {
             }
 
             try {
-                BeanUtils.setProperty(bean, propName, value);
+                BeanUtils.setProperty(bean, propName, value);   // NOSONAR
             } catch (IllegalAccessException | InvocationTargetException iaex) {
                 throw new ConfigurationRuntimeException(iaex);
             }

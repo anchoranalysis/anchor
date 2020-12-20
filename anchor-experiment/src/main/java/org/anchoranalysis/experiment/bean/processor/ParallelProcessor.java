@@ -126,8 +126,12 @@ public class ParallelProcessor<T extends InputFromManager, S> extends JobProcess
         while (!executorService.isTerminated())
             ;
 
-        if(monitor.numberExecutingJobs() != 0 || monitor.numberOngoingJobs() != 0 || monitor.numberCompletedJobs() != numberInputs) {
-            paramsExperiment.getLoggerExperiment().log("At least one experiment ended irregularly!");
+        if (monitor.numberExecutingJobs() != 0
+                || monitor.numberOngoingJobs() != 0
+                || monitor.numberCompletedJobs() != numberInputs) {
+            paramsExperiment
+                    .getLoggerExperiment()
+                    .log("At least one experiment ended irregularly!");
         }
 
         getTask().afterAllJobsAreExecuted(sharedState, paramsExperiment.getContext());

@@ -11,13 +11,34 @@
     <version>0.0.11-SNAPSHOT</version>
     <name>anchor-parent</name>
     <url>http://www.anchoranalysis.org/</url>
-    
-	<scm>
-		<connection>scm:git:ssh://git@bitbucket.org/anchorimageanalysis/anchor.git</connection>
-		<developerConnection>scm:git:ssh://git@bitbucket.org/anchorimageanalysis/anchor.git</developerConnection>
-		<url>https://git@bitbucket.org/anchorimageanalysis/anchor.git</url>
-	  <tag>HEAD</tag>
-  </scm>
+	
+	<!-- Where to depoy (upload) artifacts to, making sure to associate with the corresponding
+	repository in GitHub Packages. Overrides settings that already are inherited from anchor-pom. -->
+	<distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>GitHub</name>
+            <url>https://maven.pkg.github.com/anchoranalysis/anchor/</url>
+        </repository>
+	  <snapshotRepository>
+            <id>github</id>
+            <name>GitHub</name>
+            <url>https://maven.pkg.github.com/anchoranalysis/anchor/</url>
+        </snapshotRepository>
+	</distributionManagement>
+	
+	<!-- For tagging releases. -->
+  	<scm>
+		<connection>scm:git:git@github.com:anchoranalysis/anchor.git</connection>
+		<developerConnection>scm:git:git@github.com:anchoranalysis/anchor.git</developerConnection>
+		<url>https://github.com/anchoranalysis/anchor</url>
+		<tag>HEAD</tag>
+	</scm>
+	
+	<!-- For connecting to SonarCloud. -->
+	<properties>
+	  <sonar.projectKey>anchoranalysis_anchor</sonar.projectKey>
+	</properties>
 	
     <modules>
         <module>anchor-core</module>
@@ -71,9 +92,9 @@
 			<updatePolicy>always</updatePolicy>
 			<checksumPolicy>warn</checksumPolicy>
 		  </snapshots>
-		  <id>anchor</id>
-		   <name>anchor</name>
-		   <url>http://maven.anchoranalysis.org:8081/repository/anchor</url>
+		  <id>github</id>
+		   <name>GitHub anchor Apache Maven Packages</name>
+		   <url>https://maven.pkg.github.com/anchoranalysis/anchor</url>
 		  <layout>default</layout>
 		</repository>
 		
@@ -84,8 +105,7 @@
 		</repository>
 		
    	</repositories>
-	
-	
+		
     <build>
 					
 		<!-- Adds license information in each jar -->
@@ -127,5 +147,5 @@
 			<artifactId>lombok</artifactId>
 		</dependency>
 	</dependencies>
-	
+
 </project>

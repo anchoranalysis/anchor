@@ -26,6 +26,7 @@
 package org.anchoranalysis.image.core.dimensions.size.suggestion;
 
 import static org.anchoranalysis.image.core.dimensions.size.suggestion.ImageResizeSuggestionHelper.*;
+
 import java.util.Optional;
 import org.junit.Test;
 
