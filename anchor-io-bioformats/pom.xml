@@ -15,6 +15,29 @@
       <distribution>repo</distribution>
     </license>
   </licenses>
+  
+  <!-- The repositories needed for accessing ome (Bioformats-related) dependencies. -->
+  <repositories>
+    <repository>
+      <id>ome.releases</id>
+      <url>http://artifacts.openmicroscopy.org/artifactory/ome.releases</url>
+    </repository>
+    <repository>
+      <id>ome.external</id>
+      <url>http://artifacts.openmicroscopy.org/artifactory/ome.external</url>
+    </repository>
+  </repositories>	
+  <pluginRepositories>
+    <pluginRepository>
+      <id>ome.releases</id>
+      <url>http://artifacts.openmicroscopy.org/artifactory/ome.releases</url>
+    </pluginRepository>
+    <pluginRepository>
+      <id>ome.external</id>
+      <url>http://artifacts.openmicroscopy.org/artifactory/ome.external</url>
+    </pluginRepository>
+  </pluginRepositories>    
+  
    <dependencies>
 	    <dependency>
 		  <groupId>${project.groupId}</groupId>
