@@ -49,7 +49,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: mvn --batch-mode --update-snapshots deploy
       
-   sonarcloud:
+  sonarcloud:
 
     runs-on: ubuntu-latest
 
