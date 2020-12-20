@@ -146,6 +146,7 @@
 	  <sonar.projectKey>anchoranalysis_anchor</sonar.projectKey>
 	  <sonar.organization>anchoranalysis</sonar.organization>
 	  <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+	  <sonar.moduleKey>${project.groupId}:${project.artifactId}</sonar.moduleKey>
 	</properties>
 
 </project>
