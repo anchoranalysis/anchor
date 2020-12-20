@@ -12,7 +12,8 @@ name: Java CI with Maven for Development
 
 on:
   push:
-    branches: [ dev ]
+    branches-ignore:
+      - master
 
 jobs:
   test-linux-8:
