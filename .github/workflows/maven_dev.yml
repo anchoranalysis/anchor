@@ -12,11 +12,11 @@ name: Java CI with Maven for Development
 
 on:
   push:
-    branches-ignore:
-      - master
+    branches:
+      - dev
 
 jobs:
-  test-linux-8:
+  test_Linux_JDK_8:
 
     runs-on: ubuntu-latest
 
@@ -50,9 +50,10 @@ jobs:
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         fail_on_test_failures: true
+        fail_if_no_tests: false
         check_name: Test Report - Linux JDK 8
  
-  test-windows-8:
+  test_Windows_JDK_8:
 
     runs-on: windows-latest
 
@@ -86,9 +87,10 @@ jobs:
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         fail_on_test_failures: true
+        fail_if_no_tests: false
         check_name: Test Report - Windows JDK 8
    
-  test-macos-8:
+  test_MacOS_JDK_8:
 
     runs-on: macos-latest
 
@@ -122,4 +124,5 @@ jobs:
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         fail_on_test_failures: true 
+        fail_if_no_tests: false
         check_name: Test Report - MacOS JDK 8        
