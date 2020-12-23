@@ -29,16 +29,15 @@ package org.anchoranalysis.io.output.xml;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
-import javax.xml.XMLConstants;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.core.serialize.XMLUtilities;
 import org.w3c.dom.Document;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -66,15 +65,9 @@ public class XMLWriter {
     }
 
     private static Transformer createTransformer() throws TransformerConfigurationException {
-        Transformer transformer = createFactory().newTransformer();
+        Transformer transformer = XMLUtilities.createTransformerFactory().newTransformer();
         transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
         transformer.setOutputProperty(OutputKeys.INDENT, "yes");
         return transformer;
-    }
-
-    private static TransformerFactory createFactory() throws TransformerConfigurationException {
-        TransformerFactory factory = TransformerFactory.newInstance();
-        factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
-        return factory;
     }
 }

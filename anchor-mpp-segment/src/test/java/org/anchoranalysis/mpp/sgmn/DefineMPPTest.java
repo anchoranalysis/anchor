@@ -33,7 +33,7 @@ import java.util.List;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.define.Define;
-import org.anchoranalysis.bean.xml.BeanXmlLoader;
+import org.anchoranalysis.bean.xml.BeanXMLLoader;
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.bean.xml.exception.BeanXmlException;
 import org.anchoranalysis.image.bean.provider.ChannelProvider;
@@ -63,7 +63,7 @@ public class DefineMPPTest {
 
     private void checkPath(String fileName) throws BeanXmlException {
         Path path = loader.resolveTestPath(fileName);
-        Define define = BeanXmlLoader.loadBean(path);
+        Define define = BeanXMLLoader.loadBean(path);
         checkDefine(define);
     }
 

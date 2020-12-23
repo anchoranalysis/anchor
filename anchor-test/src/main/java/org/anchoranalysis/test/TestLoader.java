@@ -32,10 +32,8 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import javax.xml.XMLConstants;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import org.anchoranalysis.core.serialize.XMLUtilities;
 import org.apache.commons.io.FileUtils;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
@@ -224,10 +222,7 @@ public class TestLoader {
      */
     public static Document openXmlAbsoluteFilePath(Path filePath) {
         try {
-            DocumentBuilderFactory dbf = createDocumentBuilderFactory();
-
-            DocumentBuilder db = dbf.newDocumentBuilder();
-            return db.parse(filePath.toFile());
+            return XMLUtilities.parse(filePath.toFile());
         } catch (ParserConfigurationException | SAXException | IOException e) {
             throw new TestDataLoadException(e);
         }
@@ -285,13 +280,6 @@ public class TestLoader {
 
     public Path getRoot() {
         return pathTestDataRoot;
-    }
-
-    private static DocumentBuilderFactory createDocumentBuilderFactory()
-            throws ParserConfigurationException {
-        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        dbf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
-        return dbf;
     }
 
     private static boolean areXmlEqual(Input.Builder expectedXML, Input.Builder actualXML) {

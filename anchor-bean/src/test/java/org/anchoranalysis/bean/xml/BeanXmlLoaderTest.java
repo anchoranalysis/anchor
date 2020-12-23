@@ -97,7 +97,7 @@ public class BeanXmlLoaderTest {
         Path path =
                 NonImageFileFormat.XML.buildPath(
                         loader.resolveTestPath("org.anchoranalysis.bean.xml"), fileId);
-        T bean = BeanXmlLoader.loadBean(path);
+        T bean = BeanXMLLoader.loadBean(path);
         return bean;
     }
 

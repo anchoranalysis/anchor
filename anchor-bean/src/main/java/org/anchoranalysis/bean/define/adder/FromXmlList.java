@@ -33,7 +33,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.define.Define;
-import org.anchoranalysis.bean.xml.BeanXmlLoader;
+import org.anchoranalysis.bean.xml.BeanXMLLoader;
 import org.anchoranalysis.bean.xml.exception.BeanXmlException;
 import org.anchoranalysis.bean.xml.exception.LocalisedBeanException;
 import org.anchoranalysis.bean.xml.factory.BeanPathUtilities;
@@ -84,7 +84,7 @@ public class FromXmlList extends DefineAdderBean {
     }
 
     private List<NamedBean<?>> loadList() throws BeanXmlException {
-        return BeanXmlLoader.loadBean(resolvedPath());
+        return BeanXMLLoader.loadBean(resolvedPath());
     }
 
     private String nameWithExtension() {

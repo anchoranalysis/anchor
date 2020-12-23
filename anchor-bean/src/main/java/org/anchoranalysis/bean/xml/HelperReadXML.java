@@ -36,12 +36,13 @@ import javax.xml.parsers.ParserConfigurationException;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.xml.exception.BeanXmlException;
+import org.anchoranalysis.core.serialize.XMLUtilities;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.XMLConfiguration;
 import org.xml.sax.SAXParseException;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-class HelperReadXml {
+class HelperReadXML {
 
     /**
      * Reads an XML file from the filesystem, and wraps it as BeanXML
@@ -67,20 +68,19 @@ class HelperReadXml {
     /**
      * Reads an XML file from a path (either on the filesystem, or a resource-file)
      *
-     * @param src the stream to read the BeanXML from
+     * @param source the stream to read the BeanXML from
      * @return the wrapped XML file
      * @throws BeanXmlException if something goes wrong, and either the file cannot be read, or the
      *     XML does not conform to Bean standards
      */
-    private static XMLConfiguration readBeanXMLFromStream(InputStream src) throws BeanXmlException {
+    private static XMLConfiguration readBeanXMLFromStream(InputStream source) throws BeanXmlException {
 
         try {
             // We initialize a DocumentBuilder specifically, so that we can switch off
             //  the errorHandler as otherwise it prints ugly error messages to the screen
             XMLConfiguration config = new XMLConfiguration();
-            config.setDocumentBuilder(DocumentBuilderHelper.createFactory());
-            config.load(src);
-
+            config.setDocumentBuilder(XMLUtilities.createBuilderWithDefaultErrorHandler());
+            config.load(source);
             return config;
 
         } catch (ConfigurationException e) {

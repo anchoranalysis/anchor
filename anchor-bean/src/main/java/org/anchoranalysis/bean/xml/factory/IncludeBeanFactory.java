@@ -29,7 +29,7 @@ package org.anchoranalysis.bean.xml.factory;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import org.anchoranalysis.bean.xml.BeanXmlLoader;
+import org.anchoranalysis.bean.xml.BeanXMLLoader;
 import org.anchoranalysis.bean.xml.exception.BeanXmlException;
 import org.apache.commons.configuration.beanutils.BeanDeclaration;
 import org.apache.commons.configuration.beanutils.XMLBeanDeclaration;
@@ -63,6 +63,6 @@ public class IncludeBeanFactory extends AnchorBeanFactory {
                     String.format("Including file would cause overflow: %s", exstPath));
         }
 
-        return BeanXmlLoader.loadBeanLocalized(totalPath, xmlPath);
+        return BeanXMLLoader.loadBeanLocalized(totalPath, xmlPath);
     }
 }
