@@ -29,7 +29,10 @@ package org.anchoranalysis.bean.initializable;
 import java.util.ArrayList;
 import java.util.List;
 import org.anchoranalysis.bean.AnchorBean;
+import lombok.AllArgsConstructor;
+import lombok.Value;
 
+@AllArgsConstructor @Value
 class BeanAndParent {
 
     /** The bean */
@@ -37,20 +40,6 @@ class BeanAndParent {
 
     /** Parent bean, or null if the bean doesn't have a parent */
     private BeanAndParent parent;
-
-    public BeanAndParent(AnchorBean<?> bean, BeanAndParent parent) {
-        super();
-        this.bean = bean;
-        this.parent = parent;
-    }
-
-    public AnchorBean<?> getBean() {
-        return bean;
-    }
-
-    public BeanAndParent getParent() {
-        return parent;
-    }
 
     public AnchorBean<?> parentBean() {
         return parent != null ? parent.getBean() : null;
