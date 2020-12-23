@@ -96,7 +96,7 @@ public class Define extends AnchorBean<Define> {
         }
 
         // We always create a new list, as a workaround for our inability to cast
-        return FunctionalList.mapToList(listIn, bean -> (NamedBean<T>) bean);
+        return FunctionalList.mapToList(listIn, NamedBean.class::cast);
     }
 
     @Override

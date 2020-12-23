@@ -30,6 +30,7 @@ import java.util.Collection;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.core.functional.checked.CheckedConsumer;
@@ -42,21 +43,17 @@ import org.anchoranalysis.core.functional.checked.CheckedToIntFunction;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CheckedStream {
 
-    /** An exception that wraps another exception, but exposes itself as a RuntimeException */
+    /** An exception that wraps another exception, but exposes itself as a {@link RuntimeException} */
     public static class ConvertedToRuntimeException extends AnchorFriendlyRuntimeException {
 
         /** */
         private static final long serialVersionUID = 1L;
 
-        private final Throwable exception;
+        @Getter private final Throwable exception;
 
         public ConvertedToRuntimeException(Throwable exception) {
             super(exception);
             this.exception = exception;
-        }
-
-        public Throwable getException() {
-            return exception;
         }
     }
 
@@ -80,7 +77,7 @@ public class CheckedStream {
             Stream<T> stream,
             Class<? extends Exception> throwableClass,
             CheckedConsumer<T, E> consumer)
-            throws E {
+            throws E {  // NOSONAR
         try {
             stream.forEach(item -> suppressCheckedException(item, consumer));
 
@@ -109,7 +106,7 @@ public class CheckedStream {
             Stream<T> stream,
             Class<? extends Exception> throwableClass,
             CheckedPredicate<T, E> predicate)
-            throws E {
+            throws E {   // NOSONAR
         try {
             return stream.filter(item -> suppressCheckedException(item, predicate));
 
@@ -140,7 +137,7 @@ public class CheckedStream {
             Stream<S> stream,
             Class<? extends Exception> throwableClass,
             CheckedFunction<S, T, E> mapFunction)
-            throws E {
+            throws E {   // NOSONAR
         try {
             return stream.map(item -> suppressCheckedException(item, mapFunction));
 
@@ -170,7 +167,7 @@ public class CheckedStream {
             Stream<S> stream,
             Class<? extends Exception> throwableClass,
             CheckedToIntFunction<S, E> mapFunction)
-            throws E {
+            throws E {   // NOSONAR
         try {
             return stream.mapToInt(item -> suppressCheckedException(item, mapFunction));
 
@@ -197,7 +194,7 @@ public class CheckedStream {
             IntStream stream,
             Class<? extends Exception> throwableClass,
             CheckedIntFunction<T, E> mapFunc)
-            throws E {
+            throws E {   // NOSONAR
         try {
             return stream.mapToObj(index -> suppressCheckedException(index, mapFunc));
         } catch (ConvertedToRuntimeException e) {
@@ -227,7 +224,7 @@ public class CheckedStream {
             IntStream stream,
             Class<? extends Exception> throwableClass,
             CheckedIntFunction<T, E> mapFunction)
-            throws E {
+            throws E {   // NOSONAR
         try {
             return stream.mapToObj(item -> suppressCheckedException(item, mapFunction));
 
@@ -258,7 +255,7 @@ public class CheckedStream {
             Stream<S> stream,
             Class<? extends Exception> throwableClass,
             CheckedFunction<S, Collection<? extends T>, E> flatMapFunction)
-            throws E {
+            throws E {   // NOSONAR
         try {
             return stream.flatMap(item -> suppressCheckedException(item, flatMapFunction).stream());
 
