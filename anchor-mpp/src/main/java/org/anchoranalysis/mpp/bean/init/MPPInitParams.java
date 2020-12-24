@@ -48,7 +48,6 @@ import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.MarkCollection;
 import org.anchoranalysis.mpp.pair.IdentifiablePair;
 import org.anchoranalysis.mpp.pair.RandomCollection;
-import org.anchoranalysis.mpp.probmap.ProbMap;
 
 // A wrapper around SharedObjects which types certain MPP entities
 public class MPPInitParams implements BeanInitParams {
@@ -65,7 +64,6 @@ public class MPPInitParams implements BeanInitParams {
     private NamedProviderStore<MarkProposer> storeMarkProposer;
     private NamedProviderStore<MarkMergeProposer> storeMarkMergeProposer;
     private NamedProviderStore<MarkSplitProposer> storeMarkSplitProposer;
-    private NamedProviderStore<ProbMap> storeProbMap;
     private NamedProviderStore<RandomCollection<IdentifiablePair<Mark>>> storePairCollection;
     // END: Stores
 
@@ -80,7 +78,6 @@ public class MPPInitParams implements BeanInitParams {
         storeMarkProposer = so.getOrCreate(MarkProposer.class);
         storeMarkMergeProposer = so.getOrCreate(MarkMergeProposer.class);
         storeMarkSplitProposer = so.getOrCreate(MarkSplitProposer.class);
-        storeProbMap = so.getOrCreate(ProbMap.class);
         storePairCollection = so.getOrCreate(RandomCollection.class);
     }
 
@@ -123,11 +120,7 @@ public class MPPInitParams implements BeanInitParams {
     public NamedProviderStore<MarkSplitProposer> getMarkSplitProposerSet() {
         return storeMarkSplitProposer;
     }
-
-    public NamedProviderStore<ProbMap> getProbMapSet() {
-        return storeProbMap;
-    }
-
+    
     public NamedProviderStore<RandomCollection<IdentifiablePair<Mark>>> getSimplePairCollection() {
         return storePairCollection;
     }

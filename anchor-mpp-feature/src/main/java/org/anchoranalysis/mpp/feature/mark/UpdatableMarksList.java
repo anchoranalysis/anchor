@@ -39,9 +39,8 @@ import org.anchoranalysis.mpp.mark.set.UpdatableMarks;
 import org.anchoranalysis.mpp.mark.set.UpdateMarkSetException;
 import org.anchoranalysis.mpp.mark.voxelized.memo.MemoForIndex;
 import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
-import org.anchoranalysis.mpp.probmap.ProbMap;
 
-// The pxlMarkMemoList must always match the current state of the underlzing updatable items
+// The pxlMarkMemoList must always match the current state of the underlying updatable items
 public class UpdatableMarksList implements UpdatableMarks, List<UpdatableMarks> {
 
     private List<UpdatableMarks> delegate = new ArrayList<>();
@@ -80,32 +79,6 @@ public class UpdatableMarksList implements UpdatableMarks, List<UpdatableMarks> 
     // Assumes no existing marks
     public void add(MemoForIndex listToAdd) throws UpdateMarkSetException {
         add(new MemoList(), listToAdd);
-    }
-
-    public int numProbMap() {
-
-        int cnt = 0;
-
-        for (UpdatableMarks item : delegate) {
-
-            if (item instanceof ProbMap) {
-                cnt++;
-            }
-        }
-        return cnt;
-    }
-
-    public List<ProbMap> listProbMap() {
-        ArrayList<ProbMap> list = new ArrayList<>();
-
-        for (UpdatableMarks item : delegate) {
-
-            if (item instanceof ProbMap) {
-                list.add((ProbMap) item);
-            }
-        }
-
-        return list;
     }
 
     @Override

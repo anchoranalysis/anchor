@@ -54,7 +54,7 @@ class VolumeThreshold implements ScaledOverlayCreator {
 
         Mark originalMark = (Mark) originalObject;
 
-        // TODO using region 0, fix
+        // Note hardcoded to use region 0
         double zoomVolume = originalMark.volume(0) * Math.pow(scaleFactor, 2);
 
         if (zoomVolume > threshold) {
