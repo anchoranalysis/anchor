@@ -84,6 +84,6 @@ public class DefineMPPTest {
 
     private void assertElement(
             List<NamedBean<AnchorBean<?>>> list, int index, String expectedName) {
-        assertTrue(list.get(index).getName().equals(expectedName));
+        assertEquals(expectedName, list.get(index).getName());
     }
 }

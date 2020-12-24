@@ -26,15 +26,12 @@
 
 package org.anchoranalysis.image.io.stack.input;
 
-import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.bean.provider.Provider;
 import org.anchoranalysis.image.bean.provider.stack.ArrangeRaster;
 import org.anchoranalysis.image.bean.spatial.arrange.Overlay;
 import org.anchoranalysis.image.bean.spatial.arrange.Tile;
-import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.bean.stack.combine.GenerateString;
 import org.anchoranalysis.image.io.bean.stack.combine.StackProviderWithLabel;
 import org.anchoranalysis.image.io.bean.stack.combine.TextStyle;
@@ -44,36 +41,30 @@ public class TileRasters {
 
     public static ArrangeRaster createStackProvider(
             List<StackProviderWithLabel> list,
-            int numCols,
+            int numberColumns,
             boolean createShort,
             boolean scaleLabel,
             boolean expandLabelZ) {
 
-        ArrangeRaster spar = new ArrangeRaster();
-        spar.setCreateShort(createShort);
-        spar.setForceRGB(true); // Makes everything an RGB output
-        spar.setList(new ArrayList<Provider<Stack>>());
+        // Makes everything an unsigned-short and using RGB output
+        ArrangeRaster arrange = new ArrangeRaster(createShort, true);
 
         // Add stack providers
         for (StackProviderWithLabel provider : list) {
-            spar.getList().add(provider.getStack());
-            spar.getList().add(addGenerateString(provider, createShort, scaleLabel, expandLabelZ));
+            arrange.addStack(provider.getStack());
+            arrange.addStack(addGenerateString(provider, createShort, scaleLabel, expandLabelZ));
         }
-
-        Tile art = new Tile();
-        art.setNumCols(numCols);
-        art.setNumRows((int) Math.ceil(((double) list.size()) / numCols));
-
-        Overlay arOverlay = new Overlay();
-        arOverlay.setHorizontalAlign("left");
-        arOverlay.setVerticalAlign("top");
-        arOverlay.setZAlign("repeat");
-
-        art.setCellDefault(arOverlay);
-
-        spar.setArrange(art);
-
-        return spar;
+        arrange.setArrange( createTile(numberColumns, list.size()) );
+        
+        return arrange;
+    }
+    
+    private static Tile createTile(int numberColumns, int numberProviders) {
+        Tile tile = new Tile();
+        tile.setNumberColumns(numberColumns);
+        tile.setNumberRows( integerDivisionRoundUp(numberProviders,numberColumns) );
+        tile.setCellDefault(new Overlay("left", "top", "repeat"));
+        return tile;
     }
 
     private static GenerateString addGenerateString(
@@ -92,5 +83,9 @@ public class TileRasters {
             out.setRepeatZProvider(providerWithLabel.getStack());
         }
         return out;
+    }
+        
+    private static int integerDivisionRoundUp(int dividend, int divisor) {
+        return (int) Math.ceil(((double) dividend) / divisor);
     }
 }

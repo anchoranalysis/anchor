@@ -27,7 +27,6 @@
 package org.anchoranalysis.mpp.bean.provider;
 
 import org.anchoranalysis.bean.annotation.GroupingRoot;
-import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.mpp.mark.MarkCollection;
 
 /**
@@ -38,7 +37,4 @@ import org.anchoranalysis.mpp.mark.MarkCollection;
 @GroupingRoot
 public abstract class MarkCollectionProvider
         extends MPPProvider<MarkCollectionProvider, MarkCollection> {
-
-    @Override
-    public abstract MarkCollection create() throws CreateException;
 }

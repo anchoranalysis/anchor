@@ -34,15 +34,19 @@ public class BinaryValuesTest {
 
     @Test
     public void testEquals() {
-        BinaryValues binaryValues1 = new BinaryValues(0, 255);
-        BinaryValues binaryValues2 = new BinaryValues(0, 255);
-        assertTrue(binaryValues1.equals(binaryValues2));
+        assertEquals(createLowHigh(), createLowHigh());
     }
 
     @Test
     public void testInvert() {
-        BinaryValues binaryValues1 = new BinaryValues(0, 255);
-        BinaryValues binaryValues2 = new BinaryValues(255, 0);
-        assertTrue(binaryValues1.createInverted().equals(binaryValues2));
+        assertEquals(createHighLow(), createLowHigh().createInverted());
+    }
+    
+    private static BinaryValues createLowHigh() {
+        return new BinaryValues(0, 255);
+    }
+    
+    private static BinaryValues createHighLow() {
+        return new BinaryValues(255, 0);
     }
 }

@@ -53,7 +53,7 @@ public class CacheTransferSource<T extends FeatureInput> {
 
     public Optional<SessionInput<T>> getInputIfPresent(T input) throws OperationFailedException {
         Optional<LRUCache<T, SessionInput<T>>> cache = cacheToSearch.get();
-        return cache.flatMap(a -> a.getIfPresent((T) input));
+        return cache.flatMap(cacheInternal -> cacheInternal.getIfPresent(input));
     }
 
     public Set<ChildCacheName> getCacheNames() {

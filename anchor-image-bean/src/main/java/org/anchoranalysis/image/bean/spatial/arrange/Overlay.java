@@ -27,7 +27,9 @@
 package org.anchoranalysis.image.bean.spatial.arrange;
 
 import java.util.Iterator;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.ArrangeStackException;
@@ -38,10 +40,20 @@ import org.anchoranalysis.spatial.Extent;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.Point3i;
 
-// Overlays one image on the other
-// FIRST image passed is assumed to be the source
-// SECOND image passed is assumed to be the overlay
-// We have no Z implemented yet, so we always overlay at z position 0
+/**
+ * Overlays one image on the other.
+ * 
+ * <p><ul>
+ * <li><b>first</b> image passed is assumed to be the source.</li>
+ * <li><b>second</b> image passed is assumed to be the overlay.</li>
+ * </ul></p>
+ * 
+ * <p>We have no Z implemented yet, so we always overlay at z position 0.
+ * 
+ * @author Owen Feehan
+ *
+ */
+@NoArgsConstructor @AllArgsConstructor
 public class Overlay extends ArrangeStackBean {
 
     // START BEAN PROPERTIES

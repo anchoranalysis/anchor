@@ -27,7 +27,6 @@
 package org.anchoranalysis.mpp.bean.provider;
 
 import java.util.Optional;
-import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.mpp.mark.Mark;
 
 /**
@@ -36,6 +35,4 @@ import org.anchoranalysis.mpp.mark.Mark;
  * @author Owen Feehan
  */
 public abstract class SingleMarkProvider extends MPPProvider<SingleMarkProvider, Optional<Mark>> {
-
-    public abstract Optional<Mark> create() throws CreateException;
 }
