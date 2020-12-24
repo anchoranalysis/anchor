@@ -34,7 +34,7 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 
 final class VoxelBufferFloat extends VoxelBuffer<FloatBuffer> {
 
-    private final FloatBuffer delegate;
+    private final FloatBuffer buffer;
 
     /**
      * Create from a {@link FloatBuffer} without any underlying bytes.
@@ -42,17 +42,17 @@ final class VoxelBufferFloat extends VoxelBuffer<FloatBuffer> {
      * @param buffer the buffer
      */
     public VoxelBufferFloat(FloatBuffer buffer) {
-        this.delegate = buffer;
+        this.buffer = buffer;
     }
 
     @Override
     public FloatBuffer buffer() {
-        return delegate;
+        return buffer;
     }
 
     @Override
     public VoxelBuffer<FloatBuffer> duplicate() {
-        return new VoxelBufferFloat(DuplicateBuffer.copy(delegate));
+        return new VoxelBufferFloat(DuplicateBuffer.copy(buffer));
     }
 
     @Override
@@ -62,48 +62,48 @@ final class VoxelBufferFloat extends VoxelBuffer<FloatBuffer> {
 
     @Override
     public int getInt(int index) {
-        return (int) delegate.get(index);
+        return (int) buffer.get(index);
     }
 
     @Override
     public void putInt(int index, int value) {
-        delegate.put(index, (float) value);
+        buffer.put(index, (float) value);
     }
 
     @Override
     public void putByte(int index, byte value) {
-        delegate.put(index, (float) PrimitiveConverter.unsignedByteToInt(value));
+        buffer.put(index, (float) PrimitiveConverter.unsignedByteToInt(value));
     }
 
     @Override
     public void transferFrom(int destinationIndex, VoxelBuffer<FloatBuffer> src, int sourceIndex) {
-        delegate.put(destinationIndex, src.buffer().get(sourceIndex));
+        buffer.put(destinationIndex, src.buffer().get(sourceIndex));
     }
 
     @Override
     public int capacity() {
-        return delegate.capacity();
+        return buffer.capacity();
     }
 
     @Override
     public boolean hasRemaining() {
-        return delegate.hasRemaining();
+        return buffer.hasRemaining();
     }
 
     @Override
     public void position(int newPosition) {
-        delegate.position(newPosition);
+        buffer.position(newPosition);
     }
 
     @Override
     public boolean isDirect() {
-        return delegate.isDirect();
+        return buffer.isDirect();
     }
 
     @Override
     public byte[] underlyingBytes() {
-        ByteBuffer buffer = ByteBuffer.allocate(delegate.capacity() * 4);
-        buffer.asFloatBuffer().put(delegate);
-        return buffer.array();
+        ByteBuffer bufferByte = ByteBuffer.allocate(buffer.capacity() * 4);
+        bufferByte.asFloatBuffer().put(buffer);
+        return bufferByte.array();
     }
 }

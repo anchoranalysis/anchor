@@ -77,7 +77,7 @@ public class DefineMPPTest {
 
     private void assertTwoElements(Define define, Class<?> provider, String prefix) {
         List<NamedBean<AnchorBean<?>>> list = define.getList(provider);
-        assertTrue(list.size() == 2);
+        assertEquals(2, list.size());
         assertElement(list, 0, prefix + "1");
         assertElement(list, 1, prefix + "2");
     }

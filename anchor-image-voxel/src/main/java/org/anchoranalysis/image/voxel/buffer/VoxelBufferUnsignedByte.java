@@ -26,14 +26,11 @@
 
 package org.anchoranalysis.image.voxel.buffer;
 
-import com.google.common.base.Preconditions;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 
-final class VoxelBufferUnsignedByte extends VoxelBuffer<UnsignedByteBuffer> {
-
-    private final UnsignedByteBuffer delegate;
+final class VoxelBufferUnsignedByte extends VoxelBufferUnsigned<UnsignedByteBuffer> {
 
     /**
      * Create from a {@link VoxelBufferUnsignedByte} without any underlying bytes.
@@ -41,27 +38,21 @@ final class VoxelBufferUnsignedByte extends VoxelBuffer<UnsignedByteBuffer> {
      * @param buffer the buffer
      */
     public VoxelBufferUnsignedByte(UnsignedByteBuffer buffer) {
-        Preconditions.checkArgument(buffer.hasArray());
-        this.delegate = buffer;
-    }
-
-    @Override
-    public UnsignedByteBuffer buffer() {
-        return delegate;
+        super(buffer);
     }
 
     public byte get(int index) {
-        return delegate.getRaw(index);
+        return buffer().getRaw(index);
     }
 
     public UnsignedByteBuffer put(int index, byte b) {
-        delegate.putRaw(index, b);
-        return delegate;
+        buffer().putRaw(index, b);
+        return buffer();
     }
 
     @Override
     public VoxelBuffer<UnsignedByteBuffer> duplicate() {
-        return new VoxelBufferUnsignedByte(DuplicateBuffer.copy(delegate));
+        return new VoxelBufferUnsignedByte(DuplicateBuffer.copy(buffer()));
     }
 
     @Override
@@ -71,47 +62,27 @@ final class VoxelBufferUnsignedByte extends VoxelBuffer<UnsignedByteBuffer> {
 
     @Override
     public int getInt(int index) {
-        return delegate.getUnsigned(index);
+        return buffer().getUnsigned(index);
     }
 
     @Override
     public void putInt(int index, int value) {
-        delegate.putUnsigned(index, value);
+        buffer().putUnsigned(index, value);
     }
 
     @Override
     public void putByte(int index, byte value) {
-        delegate.putRaw(index, value);
+        buffer().putRaw(index, value);
     }
 
     @Override
     public void transferFrom(
             int destinationIndex, VoxelBuffer<UnsignedByteBuffer> src, int sourceIndex) {
-        delegate.putRaw(destinationIndex, src.buffer().getRaw(sourceIndex));
-    }
-
-    @Override
-    public int capacity() {
-        return delegate.capacity();
-    }
-
-    @Override
-    public boolean hasRemaining() {
-        return delegate.hasRemaining();
-    }
-
-    @Override
-    public void position(int newPosition) {
-        delegate.position(newPosition);
-    }
-
-    @Override
-    public boolean isDirect() {
-        return delegate.isDirect();
+        buffer().putRaw(destinationIndex, src.buffer().getRaw(sourceIndex));
     }
 
     @Override
     public byte[] underlyingBytes() {
-        return delegate.array();
+        return buffer().array();
     }
 }
