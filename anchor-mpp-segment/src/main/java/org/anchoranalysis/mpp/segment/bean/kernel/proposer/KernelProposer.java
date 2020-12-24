@@ -157,7 +157,7 @@ public class KernelProposer<T> extends AnchorBean<KernelProposer<T>> {
         // ordinarily be chosen
         // THIS MUST BE THE FIRST ITEM OF THE LIST, so we can pick from it later
         //   see proposeKernel
-        kernels.add(new WeightedKernel<T>(initialKernel, 0.0));
+        kernels.add(new WeightedKernel<>(initialKernel, 0.0));
 
         // First we get a sum of all prob for normalization
         // and we population the lst kernel factories

@@ -35,9 +35,6 @@ import org.anchoranalysis.image.core.stack.Stack;
 public abstract class StackProvider extends BeanProviderAsStackBase<StackProvider, Stack> {
 
     @Override
-    public abstract Stack create() throws CreateException;
-
-    @Override
     public Stack createAsStack() throws CreateException {
         return create();
     }

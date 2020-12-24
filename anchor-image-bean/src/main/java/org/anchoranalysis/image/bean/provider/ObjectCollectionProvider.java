@@ -28,14 +28,10 @@ package org.anchoranalysis.image.bean.provider;
 
 import org.anchoranalysis.bean.annotation.GroupingRoot;
 import org.anchoranalysis.bean.provider.Provider;
-import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.bean.ImageBean;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 
 @GroupingRoot
 public abstract class ObjectCollectionProvider extends ImageBean<ObjectCollectionProvider>
         implements Provider<ObjectCollection> {
-
-    @Override
-    public abstract ObjectCollection create() throws CreateException;
 }

@@ -54,7 +54,7 @@ public class NamedFeatureStore<T extends FeatureInput> implements Iterable<Named
     public void add(String name, Feature<T> feature) {
         mapIndex.put(name, list.size());
         feature.setCustomName(name);
-        list.add(new NamedBean<Feature<T>>(name, feature));
+        list.add(new NamedBean<>(name, feature));
     }
 
     public int getIndex(String name) throws GetOperationFailedException {

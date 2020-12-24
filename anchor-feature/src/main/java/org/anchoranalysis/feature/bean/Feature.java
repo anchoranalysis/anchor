@@ -63,7 +63,7 @@ public abstract class Feature<T extends FeatureInput>
 
     protected Feature() {
         super(
-                new PropertyInitializer<FeatureInitParams>(FeatureInitParams.class),
+                new PropertyInitializer<>(FeatureInitParams.class),
                 new FeatureDefiner<>());
     }
 
