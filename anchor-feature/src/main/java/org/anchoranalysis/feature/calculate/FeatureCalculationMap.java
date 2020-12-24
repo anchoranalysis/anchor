@@ -51,7 +51,7 @@ public abstract class FeatureCalculationMap<S, T extends FeatureInput, U, E exte
      *
      * @param cacheSize cache-size to use for the keys
      */
-    public FeatureCalculationMap(int cacheSize) {
+    protected FeatureCalculationMap(int cacheSize) {
         cache = new HashMap<>();
     }
 

@@ -34,33 +34,34 @@ public class IncreasingIntegersTest {
 
     @Test
     public void testNextIndex() throws SequenceTypeException {
-
-        IncreasingIntegers sequence = new IncreasingIntegers();
-
-        sequence.update(0);
-        sequence.update(5);
-        sequence.update(9);
-        sequence.update(13);
-
-        IncompleteElementRange range = sequence.elementRange();
-        assertTrue(range.nextIndex(5) == 9);
-        assertTrue(range.nextIndex(0) == 5);
-        assertTrue(range.nextIndex(13) == -1);
+        IncompleteElementRange range = createRange();
+        assertNextIndex(range, 9, 5);
+        assertNextIndex(range, 5, 0);
+        assertNextIndex(range, 13, -1);
     }
 
     @Test
     public void testPreviousIndex() throws SequenceTypeException {
-
+        IncompleteElementRange range = createRange();
+        assertPreviousIndex(range, 5, 0);
+        assertPreviousIndex(range, 0, -1);
+        assertPreviousIndex(range, 13, 9);
+    }
+    
+    private static IncompleteElementRange createRange() throws SequenceTypeException {
         IncreasingIntegers sequence = new IncreasingIntegers();
-
         sequence.update(0);
         sequence.update(5);
         sequence.update(9);
         sequence.update(13);
-
-        IncompleteElementRange range = sequence.elementRange();
-        assertTrue(range.previousIndex(5) == 0);
-        assertTrue(range.previousIndex(0) == -1);
-        assertTrue(range.previousIndex(13) == 9);
+        return sequence.elementRange();
+    }
+        
+    private static void assertNextIndex(IncompleteElementRange range, int expectedIndex, int indexToSeek) {
+        assertEquals(expectedIndex, range.nextIndex(indexToSeek));
+    }
+    
+    private static void assertPreviousIndex(IncompleteElementRange range, int expectedIndex, int indexToSeek) {
+        assertEquals(expectedIndex, range.previousIndex(indexToSeek));
     }
 }

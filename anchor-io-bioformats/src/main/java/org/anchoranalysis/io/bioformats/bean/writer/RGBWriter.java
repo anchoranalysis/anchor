@@ -32,12 +32,12 @@ import org.anchoranalysis.image.io.ImageIOException;
 
 abstract class RGBWriter {
 
-    protected IFormatWriter writer;
-    protected Channel channelRed;
-    protected Channel channelBlue;
-    protected Channel channelGreen;
+    protected final IFormatWriter writer;
+    protected final Channel channelRed;
+    protected final Channel channelBlue;
+    protected final Channel channelGreen;
 
-    public RGBWriter(IFormatWriter writer, Stack stack) {
+    protected RGBWriter(IFormatWriter writer, Stack stack) {
         this.writer = writer;
         this.channelRed = stack.getChannel(0);
         this.channelGreen = stack.getChannel(1);

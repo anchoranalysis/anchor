@@ -30,32 +30,55 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+/**
+ * Tests different types of {@code Point} classes, and particularly their interaction.
+ * 
+ * @author Owen Feehan
+ *
+ */
 public class PointTest {
 
     @Test
-    public void testEquals() {
-
-        Point2d point2d = new Point2d(-3.1, 4.2);
-        assertTrue(point2d.equals(new Point2d(-3.1, 4.2)));
-
-        Point2f point2f = new Point2f(-3.1f, 4.2f);
-        assertTrue(point2f.equals(new Point2f(-3.1f, 4.2f)));
-
+    public void testEqualsSameType() {
+        assertEquals(create2d(), create2d());
+        assertEquals(create2f(), create2f());
+        assertEquals(create3d(), create3d());
+        assertEquals(create3f(), create3f());
+        assertEquals( create3i(), create3i() );
+        assertEquals(create2i(), create2i());
+    }
+    
+    @Test
+    public void testEqualsDifferentType() {
         // At present, different types are not allowed be equal
-        assertTrue(point2f.equals(point2d.toFloat()));
+        assertNotEquals(create2d(), create2f());
+        assertNotEquals(create3d(), create3f());
+        
+        assertEquals(create2d().toFloat(), create2f());
+        assertEquals(PointConverter.floatFromDouble(create3d()), create3f());        
+    }
 
-        Point2i point2i = new Point2i(-3, 4);
-        assertTrue(point2i.equals(new Point2i(-3, 4)));
-
-        Point3d point3d = new Point3d(-3.1, 4.2, 6.3);
-        assertTrue(point3d.equals(new Point3d(-3.1, 4.2, 6.3)));
-
-        Point3f point3f = new Point3f(-3.1f, 4.2f, 6.3f);
-        assertTrue(point3f.equals(new Point3f(-3.1f, 4.2f, 6.3f)));
-
-        assertTrue(point3f.equals(PointConverter.floatFromDouble(point3d)));
-
-        Point3i point3i = new Point3i(-3, 4, 6);
-        assertTrue(point3i.equals(new Point3i(-3, 4, 6)));
+    private static Point2f create2f() {
+        return new Point2f(-3.1f, 4.2f);
+    }
+    
+    private static Point2d create2d() {
+        return new Point2d(-3.1, 4.2);
+    }
+    
+    private static Point2i create2i() {
+        return new Point2i(-3, 4);
+    }
+    
+    private static Point3d create3d() {
+        return new Point3d(-3.1, 4.2, 6.3);
+    }
+    
+    private static Point3i create3i() {
+        return new Point3i(-3, 4, 6);
+    }
+    
+    private static Point3f create3f() {
+        return new Point3f(-3.1f, 4.2f, 6.3f);
     }
 }

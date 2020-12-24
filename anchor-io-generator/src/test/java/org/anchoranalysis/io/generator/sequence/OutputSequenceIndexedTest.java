@@ -116,14 +116,14 @@ public class OutputSequenceIndexedTest {
         int numberExpectedFileTypes = (mixedFileTypes ? 2 : 1) * numberFileTypes;
 
         assertEquals(numberExpectedFileTypes, subdirectory.getFileTypes().size());
-        assertTrue(
+        assertEquals(
+                GeneratorFixture.MANIFEST_DESCRIPTION,
                 subdirectory
                         .getFileTypes()
                         .iterator()
                         .next()
-                        .getManifestDescription()
-                        .equals(GeneratorFixture.MANIFEST_DESCRIPTION));
-        assertTrue(subdirectory.getOutputName().getOutputName().equals(OUTPUT_NAME));
+                        .getManifestDescription());
+        assertEquals(OUTPUT_NAME, subdirectory.getOutputName().getOutputName());
     }
 
     private static Generator<Integer> createGenerator(int numberFileTypes, boolean mixedFileTypes)

@@ -45,7 +45,7 @@ abstract class MaxIntensityBufferBase<T> implements ProjectableBuffer<T> {
     /** Target buffer, where the maximum-intensity pixels are stored */
     private Voxels<T> projection;
 
-    public MaxIntensityBufferBase(Extent extent, VoxelsFactoryTypeBound<T> factory) {
+    protected MaxIntensityBufferBase(Extent extent, VoxelsFactoryTypeBound<T> factory) {
         projection = factory.createInitialized(extent.flattenZ());
     }
 

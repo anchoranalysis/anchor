@@ -48,8 +48,7 @@ public abstract class EllipseBoundsWithoutRotation extends OrientableBounds {
     // END BEAN PROPERTIES
 
     // Copy Constructor
-    public EllipseBoundsWithoutRotation(EllipseBoundsWithoutRotation src) {
-        super();
+    protected EllipseBoundsWithoutRotation(EllipseBoundsWithoutRotation src) {
         radius = src.radius.duplicate();
     }
 

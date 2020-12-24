@@ -34,7 +34,7 @@ public abstract class OutlineKernelBase extends BinaryKernelMorphologicalExtent 
     /** Disconsiders anything outside the threshold. Takes priority ahead of outsideAtThreshold */
     protected final boolean ignoreAtThreshold;
 
-    public OutlineKernelBase(BinaryValuesByte bv, OutlineKernelParameters params) {
+    protected OutlineKernelBase(BinaryValuesByte bv, OutlineKernelParameters params) {
         super(bv, params.isOutsideAtThreshold(), params.isUseZ());
         this.ignoreAtThreshold = params.isIgnoreAtThreshold();
     }
