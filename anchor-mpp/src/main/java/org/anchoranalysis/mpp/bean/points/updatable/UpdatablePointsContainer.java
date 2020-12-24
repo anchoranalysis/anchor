@@ -29,11 +29,11 @@ package org.anchoranalysis.mpp.bean.points.updatable;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.image.core.mask.Mask;
-import org.anchoranalysis.mpp.mark.set.UpdatableMarkSet;
+import org.anchoranalysis.mpp.mark.set.UpdatableMarks;
 import org.anchoranalysis.mpp.probmap.PointSampler;
 
 public abstract class UpdatablePointsContainer extends AnchorBean<UpdatablePointsContainer>
-        implements UpdatableMarkSet, PointSampler {
+        implements UpdatableMarks, PointSampler {
 
     public abstract void init(Mask mask) throws InitException;
 

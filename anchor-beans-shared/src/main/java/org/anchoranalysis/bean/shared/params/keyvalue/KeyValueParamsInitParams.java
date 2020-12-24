@@ -31,32 +31,16 @@ import org.anchoranalysis.bean.initializable.params.BeanInitParams;
 import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
 import org.anchoranalysis.core.identifier.provider.store.SharedObjects;
 import org.anchoranalysis.core.value.KeyValueParams;
+import lombok.Getter;
 
 public class KeyValueParamsInitParams implements BeanInitParams {
 
-    // START: Stores
-    private NamedProviderStore<KeyValueParams> storeKeyValueParams;
+    @Getter private final NamedProviderStore<KeyValueParams> namedKeyValueParams;
 
-    private NamedProviderStore<Path> storeNamedFilePathCollection;
-    // END: Stores
+    @Getter private final NamedProviderStore<Path> namedFilePaths;
 
-    private KeyValueParamsInitParams(SharedObjects so) {
-        super();
-        storeKeyValueParams = so.getOrCreate(KeyValueParams.class);
-
-        // TODO We are using Strings in general as the key. Might be an idea to be more specific
-        storeNamedFilePathCollection = so.getOrCreate(String.class);
-    }
-
-    public static KeyValueParamsInitParams create(SharedObjects so) {
-        return new KeyValueParamsInitParams(so);
-    }
-
-    public NamedProviderStore<KeyValueParams> getNamedKeyValueParamsCollection() {
-        return storeKeyValueParams;
-    }
-
-    public NamedProviderStore<Path> getNamedFilePathCollection() {
-        return storeNamedFilePathCollection;
+    public KeyValueParamsInitParams(SharedObjects sharedObjects) {
+        namedKeyValueParams = sharedObjects.getOrCreate(KeyValueParams.class);
+        namedFilePaths = sharedObjects.getOrCreate(String.class);
     }
 }

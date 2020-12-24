@@ -46,7 +46,10 @@ public class FloatFromUnsignedInt extends ToFloat {
     protected float[] convertIntegerBytesToFloatArray(
             Dimensions dimensions, ByteBuffer source, int offsetInSource) throws IOException {
 
-        // TODO should offsetInSource be ignored here?
+        if (offsetInSource!=0) {
+            throw new IOException(
+                String.format("Currently this method only supported offsetInSource==0 but it is %d", offsetInSource));
+        }
 
         byte[] sourceArray = source.array();
 

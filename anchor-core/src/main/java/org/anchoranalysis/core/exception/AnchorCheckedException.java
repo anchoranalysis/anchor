@@ -36,20 +36,20 @@ public abstract class AnchorCheckedException extends Exception {
     /** */
     private static final long serialVersionUID = 1L;
 
-    public AnchorCheckedException() {
+    protected AnchorCheckedException() {
         super();
     }
 
-    public AnchorCheckedException(String message, Throwable cause) {
+    protected AnchorCheckedException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public AnchorCheckedException(String message) {
+    protected AnchorCheckedException(String message) {
         super(message);
         super.initCause(null);
     }
 
-    public AnchorCheckedException(Throwable cause) {
+    protected AnchorCheckedException(Throwable cause) {
         super(cause);
     }
 }

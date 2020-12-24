@@ -147,9 +147,9 @@ public class Ellipsoid extends ConicBase implements Serializable {
     public final byte isPointInside(Point3d point) {
 
         // It is permissible to mutate the point during calculation
-        double x = point.x() - getPos().x();
-        double y = point.y() - getPos().y();
-        double z = point.z() - getPos().z();
+        double x = point.x() - getPosition().x();
+        double y = point.y() - getPosition().y();
+        double z = point.z() - getPosition().z();
 
         if (l2norm(x, y, z) > radiiShellMaxSq) {
             return FLAG_SUBMARK_NONE;
@@ -266,7 +266,7 @@ public class Ellipsoid extends ConicBase implements Serializable {
             s.assign(Functions.mult(shellInnerCore));
         }
 
-        return BoundingBoxCalculator.boxFromBounds(getPos(), s, true, dimensions);
+        return BoundingBoxCalculator.boxFromBounds(getPosition(), s, true, dimensions);
     }
 
     private String strMarks() {
@@ -291,9 +291,9 @@ public class Ellipsoid extends ConicBase implements Serializable {
 
                 DoubleMatrix1D relativePosition =
                         TensorUtilities.threeElementMatrix(
-                                target.getPos().x() - getPos().x(),
-                                target.getPos().y() - getPos().y(),
-                                target.getPos().z() - getPos().z());
+                                target.getPosition().x() - getPosition().x(),
+                                target.getPosition().y() - getPosition().y(),
+                                target.getPosition().z() - getPosition().z());
 
                 DoubleMatrix1D relativePositionSquared = relativePosition.copy();
                 relativePositionSquared.assign(Functions.functions.square); // NOSONAR
@@ -313,7 +313,7 @@ public class Ellipsoid extends ConicBase implements Serializable {
 
     @Override
     public void setMarksExplicit(Point3d pos, Orientation orientation, Point3d radii) {
-        super.setPos(pos);
+        super.setPosition(pos);
         this.orientation = orientation;
         this.radii = radii;
         updateAfterMarkChange();

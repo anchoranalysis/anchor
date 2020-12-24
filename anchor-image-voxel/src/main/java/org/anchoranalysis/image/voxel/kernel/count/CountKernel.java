@@ -31,7 +31,7 @@ import org.anchoranalysis.spatial.point.Point3i;
 
 public abstract class CountKernel extends Kernel {
 
-    public CountKernel(int size) {
+    protected CountKernel(int size) {
         super(size);
     }
 

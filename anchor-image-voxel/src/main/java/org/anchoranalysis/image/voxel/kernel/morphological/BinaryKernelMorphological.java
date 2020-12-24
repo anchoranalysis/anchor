@@ -37,7 +37,7 @@ public abstract class BinaryKernelMorphological extends BinaryKernel {
 
     protected LocalSlices inSlices;
 
-    public BinaryKernelMorphological(BinaryValuesByte binaryValues, boolean outsideAtThreshold) {
+    protected BinaryKernelMorphological(BinaryValuesByte binaryValues, boolean outsideAtThreshold) {
         super(3);
         this.binaryValues = binaryValues;
         this.outsideAtThreshold = outsideAtThreshold;

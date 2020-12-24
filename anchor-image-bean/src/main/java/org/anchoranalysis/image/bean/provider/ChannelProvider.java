@@ -34,8 +34,6 @@ import org.anchoranalysis.image.core.stack.Stack;
 @GroupingRoot
 public abstract class ChannelProvider extends BeanProviderAsStackBase<ChannelProvider, Channel> {
 
-    public abstract Channel create() throws CreateException;
-
     public Stack createAsStack() throws CreateException {
         return new Stack(create());
     }

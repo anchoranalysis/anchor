@@ -27,38 +27,36 @@
 package org.anchoranalysis.mpp.segment.bean.optimization;
 
 import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.mpp.feature.mark.ListUpdatableMarkSetCollection;
 import org.anchoranalysis.mpp.segment.bean.kernel.proposer.KernelProposer;
 import org.anchoranalysis.mpp.segment.optimization.OptimizationContext;
 import org.anchoranalysis.mpp.segment.optimization.OptimizationTerminatedEarlyException;
 import org.anchoranalysis.mpp.segment.optimization.feedback.FeedbackReceiver;
 
 /**
- * An optimization-scheme that uses kernels to make changes to state
- *
- * <p>TODO replace updatableMarkSetCollection with a more generic type.
+ * An optimization-scheme that uses kernels to make changes to state.
  *
  * @author Owen Feehan
  * @param <S> state returned from algorithm, and reported to the outside world
  * @param <U> type of kernel proposer
+ * @param <V> updatable-state
  */
-public abstract class OptimizationScheme<S, U> extends AnchorBean<OptimizationScheme<S, U>> {
+public abstract class OptimizationScheme<S, U, V> extends AnchorBean<OptimizationScheme<S, U, V>> {
 
     /**
-     * Finds an optimal state
+     * Finds an optimal state using kernel proposals.
      *
-     * @param kernelProposer proposes kernels to change current state
-     * @param updatableMarkSetCollection
-     * @param feedbackReceiver gives feedback on ongoing state and changed as the optimziation
+     * @param proposer proposes kernels to change current state
+     * @param marks
+     * @param feedback gives feedback on ongoing state and changed as the optimziation
      *     occurs
      * @param context the context in which the scheme runs
      * @return
      * @throws OptimizationTerminatedEarlyException
      */
     public abstract S findOptimum(
-            KernelProposer<U> kernelProposer,
-            ListUpdatableMarkSetCollection updatableMarkSetCollection,
-            FeedbackReceiver<S> feedbackReceiver,
+            KernelProposer<U,V> proposer,
+            V marks,
+            FeedbackReceiver<S> feedback,
             OptimizationContext context)
             throws OptimizationTerminatedEarlyException;
 }

@@ -107,7 +107,7 @@ public class SetUpdatable extends UpdatablePointsContainer {
     }
 
     @Override
-    public void initUpdatableMarkSet(
+    public void initUpdatableMarks(
             MemoForIndex marks,
             EnergyStack energyStack,
             Logger logger,
@@ -199,12 +199,12 @@ public class SetUpdatable extends UpdatablePointsContainer {
 
     @Override
     public void exchange(
-            MemoForIndex pxlMarkMemoList,
+            MemoForIndex memo,
             VoxelizedMarkMemo oldMark,
             int indexOldMark,
             VoxelizedMarkMemo newMark) {
 
-        addPointsInMark(pxlMarkMemoList, oldMark);
+        addPointsInMark(memo, oldMark);
         removePointsInMark(newMark);
     }
 

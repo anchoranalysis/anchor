@@ -35,13 +35,12 @@ import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.bean.xml.exception.BeanXmlException;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.configuration.ConfigurationRuntimeException;
 import org.apache.commons.configuration.beanutils.BeanDeclaration;
 import org.apache.commons.configuration.beanutils.BeanHelper;
-
-// We
 
 /**
  * This is a factory that is similar to {@link BeanHelper} but changes behavior so that it will keep
@@ -93,7 +92,7 @@ class DefaultBeanFactoryHelperInit {
         private final Object parameter;
 
         @SuppressWarnings("unchecked")
-        public void initBean(Object bean) {
+        public void initBean(Object bean) throws BeanXmlException {
 
             if (bean instanceof Collection) {
                 initCollection((Collection<Object>) bean);
@@ -114,7 +113,7 @@ class DefaultBeanFactoryHelperInit {
             new InitCollection(beanCollection, e.getKey()).init(e.getValue(), parameter);
         }
 
-        private void initNonCollection(Object bean) {
+        private void initNonCollection(Object bean) throws BeanXmlException {
             for (Map.Entry<String, Object> e : nestedBeans.entrySet()) {
                 String propName = e.getKey();
                 Optional<Class<?>> defaultClass = getDefaultClass(bean, propName);
@@ -128,8 +127,7 @@ class DefaultBeanFactoryHelperInit {
                                     defaultClass.orElse(null),
                                     parameter));
                 } else {
-                    // TODO what kind of error should be thrown here if there's a non-bean
-                    // parameter?
+                    throw new BeanXmlException("The value of a Bean-Property field is neither a scalar primitive nor a bean.");
                 }
             }
         }
@@ -157,7 +155,7 @@ class DefaultBeanFactoryHelperInit {
         }
     }
 
-    public static void initBean(Object bean, BeanDeclaration data, Object parameter) {
+    public static void initBean(Object bean, BeanDeclaration data, Object parameter) throws BeanXmlException {
         BeanHelper.initBeanProperties(bean, data);
 
         Map<String, Object> nestedBeans = data.getNestedBeanDeclarations();

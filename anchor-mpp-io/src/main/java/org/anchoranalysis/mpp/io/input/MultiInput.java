@@ -88,8 +88,8 @@ public class MultiInput implements ProvidesStackInput, InputForMPPBean {
         marks().addToStore(soMPP.getMarksCollection());
         stack().addToStore(new WrapStackAsTimeSequenceStore(soImage.stacks()));
         objects().addToStore(soImage.objects());
-        keyValueParams().addToStore(soImage.params().getNamedKeyValueParamsCollection());
-        filePath().addToStore(soImage.params().getNamedFilePathCollection());
+        keyValueParams().addToStore(soImage.params().getNamedKeyValueParams());
+        filePath().addToStore(soImage.params().getNamedFilePaths());
         histogram().addToStore(soImage.histograms());
     }
 

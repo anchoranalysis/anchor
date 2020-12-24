@@ -40,7 +40,7 @@ public abstract class SubdirectoryBase extends MutableDirectory {
     // Relative path to parent. As this becomes serialized, we store is a string
     private String path;
 
-    public SubdirectoryBase(Path path) {
+    protected SubdirectoryBase(Path path) {
         this.path = FilePathToUnixStyleConverter.toStringUnixStyle(path);
     }
 

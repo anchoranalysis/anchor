@@ -29,6 +29,7 @@ package org.anchoranalysis.core.index.bounded.bridge;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.index.bounded.BoundChangeListener;
 import org.anchoranalysis.core.index.bounded.BoundedIndexContainer;
+import lombok.AllArgsConstructor;
 
 /**
  * Bridges calls from hidden-type to external-type.
@@ -39,20 +40,19 @@ import org.anchoranalysis.core.index.bounded.BoundedIndexContainer;
  * @param <H> hidden-type (type passed to the delegate)
  * @param <S> external-type (type exposed in an interface from this class)
  */
+@AllArgsConstructor
 public abstract class BoundedIndexContainerBridge<H, S, E extends Exception>
         implements BoundedIndexContainer<S> {
 
-    private BoundedIndexContainer<H> delegate;
-
-    public BoundedIndexContainerBridge(BoundedIndexContainer<H> source) {
-        super();
-        this.delegate = source;
-    }
+    /**
+     * The source container that is <i>bridged</i>.
+     */
+    private BoundedIndexContainer<H> source;
 
     @Override
     public S get(int index) throws GetOperationFailedException {
 
-        H internalState = delegate.get(index);
+        H internalState = source.get(index);
         try {
             return bridge(index, internalState);
         } catch (Exception e) {
@@ -64,31 +64,31 @@ public abstract class BoundedIndexContainerBridge<H, S, E extends Exception>
 
     @Override
     public void addBoundChangeListener(BoundChangeListener cl) {
-        this.delegate.addBoundChangeListener(cl);
+        this.source.addBoundChangeListener(cl);
     }
 
     @Override
     public int nextIndex(int index) {
-        return this.delegate.nextIndex(index);
+        return this.source.nextIndex(index);
     }
 
     @Override
     public int previousIndex(int index) {
-        return this.delegate.previousIndex(index);
+        return this.source.previousIndex(index);
     }
 
     @Override
     public int getMinimumIndex() {
-        return this.delegate.getMinimumIndex();
+        return this.source.getMinimumIndex();
     }
 
     @Override
     public int getMaximumIndex() {
-        return this.delegate.getMaximumIndex();
+        return this.source.getMaximumIndex();
     }
 
     @Override
     public int previousEqualIndex(int index) {
-        return this.delegate.previousEqualIndex(index);
+        return this.source.previousEqualIndex(index);
     }
 }

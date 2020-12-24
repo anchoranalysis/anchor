@@ -63,7 +63,7 @@ public abstract class Mark implements Serializable, Identifiable {
      *
      * @param source source to copy from
      */
-    public Mark(Mark source) {
+    protected Mark(Mark source) {
         // We do not deep copy
         this.id = source.id;
     }

@@ -52,6 +52,8 @@ import org.anchoranalysis.spatial.box.BoundingBox;
  */
 public abstract class DrawOverlay {
 
+    private static final String PROPERTY_COLOR_ID = "colorID";
+    
     public abstract DrawObject getDrawObject();
 
     /**
@@ -89,20 +91,28 @@ public abstract class DrawOverlay {
                     precalculate(
                             overlays, this, dimensions, BinaryValues.getDefault().createByte());
 
-            // TODO, can't we read the color directly from the marks in some way?
             writePrecalculatedOverlays(
                     overlaysPreprocessed,
                     dimensions,
                     background,
                     ObjectDrawAttributesFactory.createFromOverlays(
-                            overlays, idGetter, new IdentifierByProperty("colorID")),
+                            overlays, idGetter, new IdentifierByProperty(PROPERTY_COLOR_ID)),
                     boxContainer);
         } catch (CreateException e) {
             throw new OperationFailedException(e);
         }
     }
 
-    // dim should be for the ENTIRE marks, not just the bit in boxContainer
+    /**
+     * Write precalculated overlays onto the {@link RGBStack}.
+     * 
+     * @param precalculatedMasks
+     * @param dimensions dimensions for the <i>entire</i> masks, not just those in the container.
+     * @param background
+     * @param attributes
+     * @param restrictTo
+     * @throws OperationFailedException
+     */
     public abstract void writePrecalculatedOverlays(
             List<PrecalculationOverlay> precalculatedMasks,
             Dimensions dimensions,
@@ -140,7 +150,7 @@ public abstract class DrawOverlay {
                             ObjectWithProperties object =
                                     overlay.createObject(drawOverlay, dimensions, bvOut);
                             object.setProperty(
-                                    "colorID", colorIDGetter.getIdentifier(overlay, index));
+                                    PROPERTY_COLOR_ID, colorIDGetter.getIdentifier(overlay, index));
 
                             return createPrecalc(drawOverlay, object, dimensions);
                         })

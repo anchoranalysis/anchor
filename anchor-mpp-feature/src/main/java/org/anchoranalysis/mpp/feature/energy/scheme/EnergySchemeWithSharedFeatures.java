@@ -48,7 +48,7 @@ import org.anchoranalysis.mpp.feature.addcriteria.AddCriteriaEnergyPair;
 import org.anchoranalysis.mpp.feature.addcriteria.AddCriteriaPair;
 import org.anchoranalysis.mpp.feature.input.memo.FeatureInputAllMemo;
 import org.anchoranalysis.mpp.feature.input.memo.FeatureInputSingleMemo;
-import org.anchoranalysis.mpp.feature.mark.MemoCollection;
+import org.anchoranalysis.mpp.feature.mark.EnergyMemoList;
 import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 
 public class EnergySchemeWithSharedFeatures {
@@ -115,7 +115,7 @@ public class EnergySchemeWithSharedFeatures {
         calculateTotalIndividual = new CalculateIndividualTotalOperation();
     }
 
-    public EnergyTotal totalAll(MemoCollection pxlMarkMemoList, EnergyStackWithoutParams raster)
+    public EnergyTotal totalAll(EnergyMemoList pxlMarkMemoList, EnergyStackWithoutParams raster)
             throws NamedFeatureCalculateException {
 
         try {

@@ -29,7 +29,6 @@ package org.anchoranalysis.image.bean.provider;
 import org.anchoranalysis.bean.NullParamsBean;
 import org.anchoranalysis.bean.provider.Provider;
 import org.anchoranalysis.core.color.ColorList;
-import org.anchoranalysis.core.exception.CreateException;
 
 /**
  * Provides a list of one or more colors
@@ -39,5 +38,4 @@ import org.anchoranalysis.core.exception.CreateException;
 public abstract class ColorProvider extends NullParamsBean<ColorProvider>
         implements Provider<ColorList> {
 
-    public abstract ColorList create() throws CreateException;
 }

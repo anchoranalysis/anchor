@@ -36,12 +36,12 @@ package org.anchoranalysis.core.index.bounded;
  */
 public interface BoundedRangeIncomplete extends BoundedRange {
 
-    // Return -1 if there is no next index
+    /** Return -1 if there is no next index. */
     int nextIndex(int index);
 
-    // Return -1 if there is no previous index
+    /** Return -1 if there is no previous index. */
     int previousIndex(int index);
 
-    // Return -1 if there is no previous index
+    /** Return -1 if there is no previous index. */
     int previousEqualIndex(int index);
 }

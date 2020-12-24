@@ -32,7 +32,7 @@ import java.util.List;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.bean.annotation.OptionalBean;
+import org.anchoranalysis.bean.FieldAccessor;
 import org.anchoranalysis.bean.annotation.SkipInit;
 import org.anchoranalysis.core.exception.InitException;
 
@@ -55,9 +55,9 @@ class FindChildrenForInit {
 
             if (!field.isAnnotationPresent(SkipInit.class)) {
 
-                // Create a FIFO queue of items to be initialised
+                // Create a FIFO queue of items to be initialized
                 addChildrenMany(
-                        listOut, bean, field, field.isAnnotationPresent(OptionalBean.class));
+                        listOut, bean, field, FieldAccessor.isFieldAnnotatedAsOptional(field));
             }
         }
     }

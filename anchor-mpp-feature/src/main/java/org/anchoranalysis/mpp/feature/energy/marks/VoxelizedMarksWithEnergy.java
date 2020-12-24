@@ -37,8 +37,8 @@ import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
 import org.anchoranalysis.feature.shared.SharedFeatureMulti;
 import org.anchoranalysis.mpp.feature.energy.scheme.EnergyScheme;
 import org.anchoranalysis.mpp.feature.energy.scheme.EnergySchemeWithSharedFeatures;
-import org.anchoranalysis.mpp.feature.mark.ListUpdatableMarkSetCollection;
-import org.anchoranalysis.mpp.feature.mark.MemoCollection;
+import org.anchoranalysis.mpp.feature.mark.UpdatableMarksList;
+import org.anchoranalysis.mpp.feature.mark.EnergyMemoList;
 import org.anchoranalysis.mpp.feature.mark.MemoList;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.set.UpdateMarkSetException;
@@ -60,7 +60,7 @@ public final class VoxelizedMarksWithEnergy {
      * A cached version of the calculations for each energy component in the associated {@link
      * EnergyScheme}
      */
-    private MemoCollection memoMarks;
+    private EnergyMemoList memoMarks;
 
     private Logger logger;
 
@@ -76,13 +76,13 @@ public final class VoxelizedMarksWithEnergy {
     /** Creates a shallow-copy of the marks */
     public VoxelizedMarksWithEnergy shallowCopy() {
         return new VoxelizedMarksWithEnergy(
-                marks.shallowCopy(), new MemoCollection(memoMarks), logger);
+                marks.shallowCopy(), new EnergyMemoList(memoMarks), logger);
     }
 
     /** Creates a deep-copy of the marks */
     public VoxelizedMarksWithEnergy deepCopy() {
         return new VoxelizedMarksWithEnergy(
-                marks.deepCopy(), new MemoCollection(memoMarks), logger);
+                marks.deepCopy(), new EnergyMemoList(memoMarks), logger);
     }
 
     public int indexOf(Mark mark) {
@@ -135,21 +135,21 @@ public final class VoxelizedMarksWithEnergy {
     }
 
     // Adds all current marks to the updatable-pair list
-    public void addAllToUpdatablePairList(ListUpdatableMarkSetCollection updatablePairList)
+    public void addAllToUpdatablePairList(UpdatableMarksList updatablePairList)
             throws UpdateMarkSetException {
         updatablePairList.add(memoMarks);
     }
 
     // Adds the particular memo to the updatable pair-list
     public void addToUpdatablePairList(
-            ListUpdatableMarkSetCollection updatablePairList, VoxelizedMarkMemo memo)
+            UpdatableMarksList updatablePairList, VoxelizedMarkMemo memo)
             throws UpdateMarkSetException {
         updatablePairList.add(memoMarks, memo);
     }
 
     // Removes a memo from the updatable pair-list
     public void rmvFromUpdatablePairList(
-            ListUpdatableMarkSetCollection updatablePairList, Mark mark)
+            UpdatableMarksList updatablePairList, Mark mark)
             throws UpdateMarkSetException {
         VoxelizedMarkMemo memo = getMemoForMark(mark);
         updatablePairList.remove(memoMarks, memo);
@@ -157,7 +157,7 @@ public final class VoxelizedMarksWithEnergy {
 
     // Exchanges one mark with another on the updatable pair list
     public void exchangeOnUpdatablePairList(
-            ListUpdatableMarkSetCollection updatablePairList,
+            UpdatableMarksList updatablePairList,
             Mark markExst,
             VoxelizedMarkMemo memoNew)
             throws UpdateMarkSetException {
@@ -204,7 +204,7 @@ public final class VoxelizedMarksWithEnergy {
     }
 
     // The initial calculation of the Energy, thereafter it can be updated
-    private static MemoCollection createMemoCollection(
+    private static EnergyMemoList createMemoCollection(
             MarksWithEnergyBreakdown marks,
             EnergyStack energyStack,
             SharedFeatureMulti sharedFeatures,
@@ -213,14 +213,14 @@ public final class VoxelizedMarksWithEnergy {
         try {
             marks.init();
 
-            MemoCollection memo =
-                    new MemoCollection(
+            EnergyMemoList memo =
+                    new EnergyMemoList(
                             marks.getIndividual(),
                             energyStack.withoutParams(),
                             marks.getMarks(),
                             marks.getEnergyScheme());
 
-            marks.getPair().initUpdatableMarkSet(memo, energyStack, logger, sharedFeatures);
+            marks.getPair().initUpdatableMarks(memo, energyStack, logger, sharedFeatures);
 
             // Some energy components need to be calculated in terms of interactions
             //  this we need to track in an intelligent way

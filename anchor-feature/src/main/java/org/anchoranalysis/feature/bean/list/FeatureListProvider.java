@@ -27,7 +27,6 @@
 package org.anchoranalysis.feature.bean.list;
 
 import org.anchoranalysis.bean.annotation.GroupingRoot;
-import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.feature.bean.provider.FeatureProviderBean;
 import org.anchoranalysis.feature.input.FeatureInput;
 
@@ -38,6 +37,4 @@ import org.anchoranalysis.feature.input.FeatureInput;
 @GroupingRoot
 public abstract class FeatureListProvider<T extends FeatureInput>
         extends FeatureProviderBean<FeatureListProvider<T>, FeatureList<T>> {
-
-    public abstract FeatureList<T> create() throws CreateException;
 }

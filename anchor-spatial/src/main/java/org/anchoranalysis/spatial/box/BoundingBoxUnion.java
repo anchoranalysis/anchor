@@ -27,6 +27,7 @@
 package org.anchoranalysis.spatial.box;
 
 import lombok.AllArgsConstructor;
+import java.util.function.ToIntFunction;
 import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.point.ReadableTuple3i;
 
@@ -52,20 +53,24 @@ public class BoundingBoxUnion {
         ReadableTuple3i cornerMinOther = other.cornerMin();
 
         ReadableTuple3i cornerMax = box.calculateCornerMax();
-        ReadableTuple3i cornerMaxOthr = other.calculateCornerMax();
+        ReadableTuple3i cornerMaxOther = other.calculateCornerMax();
 
-        ExtentBoundsComparer meiX =
+        ExtentBoundsComparer comparerX =
                 ExtentBoundsComparer.createMax(
-                        cornerMin, cornerMinOther, cornerMax, cornerMaxOthr, ReadableTuple3i::x);
-        ExtentBoundsComparer meiY =
+                        cornerMin, cornerMinOther, cornerMax, cornerMaxOther, ReadableTuple3i::x);
+        ExtentBoundsComparer comparerY =
                 ExtentBoundsComparer.createMax(
-                        cornerMin, cornerMinOther, cornerMax, cornerMaxOthr, ReadableTuple3i::y);
-        ExtentBoundsComparer meiZ =
+                        cornerMin, cornerMinOther, cornerMax, cornerMaxOther, ReadableTuple3i::y);
+        ExtentBoundsComparer comparerZ =
                 ExtentBoundsComparer.createMax(
-                        cornerMin, cornerMinOther, cornerMax, cornerMaxOthr, ReadableTuple3i::z);
+                        cornerMin, cornerMinOther, cornerMax, cornerMaxOther, ReadableTuple3i::z);
 
         return new BoundingBox(
-                new Point3i(meiX.min(), meiY.min(), meiZ.min()),
-                new Point3i(meiX.max(), meiY.max(), meiZ.max()));
+                extractPoint(comparerX, comparerY, comparerZ, ExtentBoundsComparer::min),
+                extractPoint(comparerX, comparerY, comparerZ, ExtentBoundsComparer::max));
+    }
+    
+    private static Point3i extractPoint(ExtentBoundsComparer comparerX, ExtentBoundsComparer comparerY, ExtentBoundsComparer comparerZ, ToIntFunction<ExtentBoundsComparer> extract) {
+        return new Point3i( extract.applyAsInt(comparerX), extract.applyAsInt(comparerY), extract.applyAsInt(comparerZ));
     }
 }

@@ -41,18 +41,12 @@ public class BeanXmlLoaderTest {
 
     @Test
     public void testLoadBean() throws BeanXmlException {
-        MockBeanNested bean = registerLoad("nestedBean");
-
-        assertTrue(bean.getFieldSimpleNecessary().equals("hello"));
-        assertTrue(bean.getFieldBeanNecessary().getMessage().equals("world"));
+        testSimpleAndBean("nestedBean");
     }
 
     @Test
     public void testLoadBeanInclude() throws BeanXmlException {
-        MockBeanNested bean = registerLoad("nestedBeanInclude");
-
-        assertTrue(bean.getFieldSimpleNecessary().equals("hello"));
-        assertTrue(bean.getFieldBeanNecessary().getMessage().equals("world"));
+        testSimpleAndBean("nestedBeanInclude");
     }
 
     /**
@@ -63,8 +57,7 @@ public class BeanXmlLoaderTest {
     @Test
     public void testLoadBeanReplaceAttribute() throws BeanXmlException {
         MockBeanNested bean = registerLoad("replaceBeanAttribute");
-
-        assertTrue(bean.getFieldSimpleNecessary().equals("helloChanged"));
+        assertEquals("helloChanged", bean.getFieldSimpleNecessary());
     }
 
     /**
@@ -74,9 +67,7 @@ public class BeanXmlLoaderTest {
      */
     @Test
     public void testLoadBeanReplaceElement() throws BeanXmlException {
-        MockBeanNested bean = registerLoad("replaceBeanElement");
-
-        assertTrue(bean.getFieldBeanNecessary().getMessage().equals("world2"));
+        testBean("replaceBeanElement", "world2");
     }
 
     /**
@@ -86,19 +77,7 @@ public class BeanXmlLoaderTest {
      */
     @Test
     public void testLoadBeanReplaceInclude() throws BeanXmlException {
-        MockBeanNested bean = registerLoad("replaceBeanInclude");
-
-        assertTrue(bean.getFieldBeanNecessary().getMessage().equals("worldAlternative"));
-    }
-
-    private <T> T registerLoad(String fileId) throws BeanXmlException {
-        RegisterBeanFactories.registerAllPackageBeanFactories();
-
-        Path path =
-                NonImageFileFormat.XML.buildPath(
-                        loader.resolveTestPath("org.anchoranalysis.bean.xml"), fileId);
-        T bean = BeanXmlLoader.loadBean(path);
-        return bean;
+        testBean("replaceBeanInclude", "worldAlternative");
     }
 
     /**
@@ -108,9 +87,7 @@ public class BeanXmlLoaderTest {
      */
     @Test(expected = Exception.class)
     public void testLoadBeanReplaceAttributeMissing() throws BeanXmlException {
-        MockBeanNested bean = registerLoad("replaceBeanAttributeMissing");
-
-        assertTrue(bean.getFieldSimpleNecessary().equals("helloChanged"));
+        testSimple("replaceBeanAttributeMissing", "helloChanged");
     }
 
     /**
@@ -120,8 +97,33 @@ public class BeanXmlLoaderTest {
      */
     @Test(expected = Exception.class)
     public void testLoadBeanReplaceElementMissing() throws BeanXmlException {
-        MockBeanNested bean = registerLoad("replaceBeanElementMissing");
-
-        assertTrue(bean.getFieldBeanNecessary().getMessage().equals("world2"));
+        testBean("replaceBeanElementMissing", "world2");
     }
+    
+    private void testSimple(String fileIdentifier, String expectedFieldValue) throws BeanXmlException {
+        MockBeanNested bean = registerLoad(fileIdentifier);
+        assertEquals(expectedFieldValue, bean.getFieldSimpleNecessary() );
+    }
+    
+    private void testBean(String fileIdentifier, String expectedMessage) throws BeanXmlException {
+        MockBeanNested bean = registerLoad(fileIdentifier);
+        assertEquals(expectedMessage, bean.getFieldBeanNecessary().getMessage());
+    }
+    
+    private void testSimpleAndBean(String fileIdentifier) throws BeanXmlException {
+        MockBeanNested bean = registerLoad(fileIdentifier);
+        assertEquals("hello", bean.getFieldSimpleNecessary());
+        assertEquals("world", bean.getFieldBeanNecessary().getMessage());
+    }
+    
+    private <T> T registerLoad(String fileIdentifier) throws BeanXmlException {
+        RegisterBeanFactories.registerAllPackageBeanFactories();
+
+        Path path =
+                NonImageFileFormat.XML.buildPath(
+                        loader.resolveTestPath("org.anchoranalysis.bean.xml"), fileIdentifier);
+        T bean = BeanXMLLoader.loadBean(path);
+        return bean;
+    }
+
 }

@@ -85,7 +85,6 @@ public class Define extends AnchorBean<Define> {
         }
     }
 
-    @SuppressWarnings("unchecked")
     public <T extends AnchorBean<?>> List<NamedBean<T>> getList(Class<?> listType) {
 
         List<NamedBean<?>> listIn = map.get(listType);
@@ -96,7 +95,7 @@ public class Define extends AnchorBean<Define> {
         }
 
         // We always create a new list, as a workaround for our inability to cast
-        return FunctionalList.mapToList(listIn, bean -> (NamedBean<T>) bean);
+        return FunctionalList.mapToList(listIn, NamedBean.class::cast);
     }
 
     @Override

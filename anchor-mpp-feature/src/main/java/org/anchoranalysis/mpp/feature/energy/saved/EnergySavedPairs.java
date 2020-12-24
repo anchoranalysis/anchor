@@ -38,12 +38,12 @@ import org.anchoranalysis.mpp.feature.addcriteria.RandomCollectionWithAddCriteri
 import org.anchoranalysis.mpp.feature.energy.EnergyPair;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.MarkCollection;
-import org.anchoranalysis.mpp.mark.set.UpdatableMarkSet;
+import org.anchoranalysis.mpp.mark.set.UpdatableMarks;
 import org.anchoranalysis.mpp.mark.set.UpdateMarkSetException;
 import org.anchoranalysis.mpp.mark.voxelized.memo.MemoForIndex;
 import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 
-public class EnergySavedPairs implements UpdatableMarkSet {
+public class EnergySavedPairs implements UpdatableMarks {
 
     /** Pairwise energy total */
     @Getter private double energyTotal;
@@ -70,14 +70,14 @@ public class EnergySavedPairs implements UpdatableMarkSet {
     }
 
     @Override
-    public void initUpdatableMarkSet(
+    public void initUpdatableMarks(
             MemoForIndex pxlMarkMemoList,
             EnergyStack stack,
             Logger logger,
             SharedFeatureMulti sharedFeatures)
             throws InitException {
 
-        this.pairCollection.initUpdatableMarkSet(pxlMarkMemoList, stack, logger, sharedFeatures);
+        this.pairCollection.initUpdatableMarks(pxlMarkMemoList, stack, logger, sharedFeatures);
         calculateTotalFresh();
     }
 
@@ -123,7 +123,7 @@ public class EnergySavedPairs implements UpdatableMarkSet {
     // exchanges one mark with another
     @Override
     public void exchange(
-            MemoForIndex pxlMarkMemoList,
+            MemoForIndex memo,
             VoxelizedMarkMemo oldMark,
             int indexOldMark,
             VoxelizedMarkMemo newMark)
@@ -132,7 +132,7 @@ public class EnergySavedPairs implements UpdatableMarkSet {
         // We get a total for how the old mark interacts with the other marks
         double oldPairTotal = totalEnergyForMark(oldMark.getMark());
 
-        this.pairCollection.exchange(pxlMarkMemoList, oldMark, indexOldMark, newMark);
+        this.pairCollection.exchange(memo, oldMark, indexOldMark, newMark);
 
         double newPairTotal = totalEnergyForMark(newMark.getMark());
         this.energyTotal = this.energyTotal - oldPairTotal + newPairTotal;

@@ -59,7 +59,7 @@ public class KernelDescision implements Serializable, IndexGetter {
     private int iter;
 
     public KernelDescision(
-            KernelWithIdentifier<?> kernelWithID,
+            KernelWithIdentifier<?,?> kernelWithID,
             boolean accepted,
             boolean proposed,
             int[] changedMarkIDArr,

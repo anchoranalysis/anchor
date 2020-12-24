@@ -43,7 +43,7 @@ public abstract class NullParamsBean<T> extends InitializableBean<T, NullInitPar
 
     protected NullParamsBean() {
         super(
-                new PropertyInitializer<NullInitParams>(NullInitParams.class),
+                new PropertyInitializer<>(NullInitParams.class),
                 new SimplePropertyDefiner<NullInitParams>(NullInitParams.class));
     }
 

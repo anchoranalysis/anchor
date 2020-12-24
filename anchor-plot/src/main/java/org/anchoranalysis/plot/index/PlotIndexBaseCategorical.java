@@ -53,7 +53,7 @@ public abstract class PlotIndexBaseCategorical<T, S extends CategoryDataset>
      * @param labelGetter
      * @param colorGetter color-getter or null to use default colors
      */
-    public PlotIndexBaseCategorical(
+    protected PlotIndexBaseCategorical(
             String graphName,
             String[] seriesNames,
             GetForSeries<T, String> labelGetter,

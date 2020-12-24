@@ -50,7 +50,6 @@ public class PermutationSetterSingle implements PermutationSetter {
     }
 
     public PermutationSetterSingle(Field field) {
-        super();
         addField(field);
     }
 
@@ -62,21 +61,21 @@ public class PermutationSetterSingle implements PermutationSetter {
     public void setPermutation(AnchorBean<?> bean, Object val) throws PermutationSetterException {
 
         try {
-            int numIntermediate = listFields.size() - 1;
+            int numberIntermediate = listFields.size() - 1;
 
             // We iterate through all the intermediate fields
             AnchorBean<?> currentBean = bean;
-            for (int i = 0; i < numIntermediate; i++) {
+            for (int i = 0; i < numberIntermediate; i++) {
                 Field p = listFields.get(i);
 
                 currentBean = PermutationSetterUtilities.beanFor(p, currentBean);
             }
 
             // Now do the final field, where we actually set the value
-            Field finalField = listFields.get(numIntermediate);
+            Field finalField = listFields.get(numberIntermediate);
 
             Object valMaybeConverted = maybeConvert(val, finalField.getType());
-            finalField.set(currentBean, valMaybeConverted);
+            finalField.set(currentBean, valMaybeConverted); // NOSONAR
 
         } catch (IllegalArgumentException | IllegalAccessException e) {
             throw new PermutationSetterException(

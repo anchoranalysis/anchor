@@ -51,9 +51,9 @@ import org.apache.commons.configuration.beanutils.XMLBeanDeclaration;
  * @author Owen Feehan
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class BeanXmlLoader {
+public class BeanXMLLoader {
 
-    private static Logger logger = Logger.getLogger(BeanXmlLoader.class.getName());
+    private static Logger logger = Logger.getLogger(BeanXMLLoader.class.getName());
 
     /**
      * Creates a bean by loading an XML description from the filesystem
@@ -110,7 +110,7 @@ public class BeanXmlLoader {
 
         XMLConfiguration includeXML;
         try {
-            includeXML = HelperReadXml.readBeanXMLFromFilesystem(path);
+            includeXML = HelperReadXML.readBeanXMLFromFilesystem(path);
         } catch (BeanXmlException e) {
             throw new LocalisedBeanException(path.toString(), e);
         }
@@ -162,7 +162,7 @@ public class BeanXmlLoader {
             Path path, String xmlPath) throws BeanXmlException, LocalisedBeanException {
         checkBeansRegistered();
         try {
-            XMLConfiguration configXML = HelperReadXml.readBeanXMLFromFilesystem(path);
+            XMLConfiguration configXML = HelperReadXML.readBeanXMLFromFilesystem(path);
 
             T loadedBean = createFromXMLConfigurationLocalised(configXML, xmlPath, path);
             loadedBean.associateXml(configXML);

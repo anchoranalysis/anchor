@@ -48,11 +48,11 @@ public abstract class PointListBase extends Mark {
 
     @Getter private Point3d max; // Contains the maximum x, y of all the points in the polygon
 
-    public PointListBase() {
+    protected PointListBase() {
         points = new ArrayList<>();
     }
 
-    public PointListBase(Stream<Point3d> stream) {
+    protected PointListBase(Stream<Point3d> stream) {
         points = stream.collect(Collectors.toList());
         updateAfterPointsChange();
     }
@@ -66,7 +66,6 @@ public abstract class PointListBase extends Mark {
 
     public void updateAfterPointsChange() {
         assert (!points.isEmpty());
-
         this.min = calculateMin(getPoints());
         this.max = calculateMax(getPoints());
     }

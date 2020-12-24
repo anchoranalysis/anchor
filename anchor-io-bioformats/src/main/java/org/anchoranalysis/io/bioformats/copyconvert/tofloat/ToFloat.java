@@ -41,7 +41,7 @@ public abstract class ToFloat extends ConvertTo<FloatBuffer> {
     private int sizeBytesChannel;
     private Dimensions dimensions;
 
-    public ToFloat() {
+    protected ToFloat() {
         super(VoxelsWrapper::asFloat);
     }
 

@@ -57,7 +57,7 @@ public abstract class RegionMembership extends AnchorBean<RegionMembership> {
     @BeanField @Getter @Setter private boolean bit7 = false;
     // END BEAN PROPERTIES
 
-    public RegionMembership(int index) {
+    protected RegionMembership(int index) {
         switch (index) {
             case 0:
                 bit0 = true;

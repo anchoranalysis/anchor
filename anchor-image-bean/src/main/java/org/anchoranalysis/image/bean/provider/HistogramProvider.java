@@ -28,13 +28,10 @@ package org.anchoranalysis.image.bean.provider;
 
 import org.anchoranalysis.bean.annotation.GroupingRoot;
 import org.anchoranalysis.bean.provider.Provider;
-import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.bean.ImageBean;
 import org.anchoranalysis.math.histogram.Histogram;
 
 @GroupingRoot
 public abstract class HistogramProvider extends ImageBean<HistogramProvider>
         implements Provider<Histogram> {
-
-    public abstract Histogram create() throws CreateException;
 }

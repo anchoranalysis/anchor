@@ -60,12 +60,10 @@ public abstract class PlotIndexBase<T, S extends Dataset> {
      * @param graphName
      * @param seriesNames
      */
-    public PlotIndexBase(String graphName, String[] seriesNames) {
-
+    protected PlotIndexBase(String graphName, String[] seriesNames) {
         this.graphName = graphName;
         this.seriesNames = seriesNames;
-
-        numberSeries = seriesNames.length;
+        this.numberSeries = seriesNames.length;
     }
 
     public PlotInstance createWithRangeLimits(

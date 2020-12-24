@@ -33,7 +33,6 @@ import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.annotation.NonEmpty;
 import org.anchoranalysis.bean.annotation.NonNegative;
-import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 
@@ -72,11 +71,11 @@ class HelperCheckMisconfigured {
                     // for
                     //  a defaultInstance and throw an error if it doesn't exist
                     value = findDefaultInstance(field.getType());
-                    field.set(obj, value);
+                    field.set(obj, value);    // NOSONAR
                 }
 
                 // If it's non-optional, then we insist it's non-null
-                if (value == null && !field.isAnnotationPresent(OptionalBean.class)) {
+                if (value == null && !FieldAccessor.isFieldAnnotatedAsOptional(field)) {
                     throw new BeanMisconfiguredException(
                             String.format(
                                     "Property '%s' of object '%s' must be non-null",

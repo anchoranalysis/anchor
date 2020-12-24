@@ -30,7 +30,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 
-public abstract class KernelPosNeg<T> extends KernelIndependent<T> {
+public abstract class KernelPosNeg<T,S> extends KernelIndependent<T,S> {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private double probPos = 0.5;
@@ -38,7 +38,7 @@ public abstract class KernelPosNeg<T> extends KernelIndependent<T> {
     @BeanField @Getter @Setter private double probNeg = 0.5;
     // END BEAN PROPERTIES
 
-    protected void duplicateHelper(KernelPosNeg<T> out) {
+    protected void duplicateHelper(KernelPosNeg<T,S> out) {
         out.probPos = probPos;
         out.probNeg = probNeg;
     }

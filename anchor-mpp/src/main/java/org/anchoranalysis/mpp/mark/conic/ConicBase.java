@@ -38,12 +38,12 @@ public abstract class ConicBase extends MarkWithPosition {
     /** */
     private static final long serialVersionUID = 1680124471263339009L;
 
-    public ConicBase() {
+    protected ConicBase() {
         super();
     }
 
-    public ConicBase(MarkWithPosition src) {
-        super(src);
+    protected ConicBase(MarkWithPosition source) {
+        super(source);
     }
 
     public abstract double[] createRadiiArrayResolved(Optional<Resolution> resolution);

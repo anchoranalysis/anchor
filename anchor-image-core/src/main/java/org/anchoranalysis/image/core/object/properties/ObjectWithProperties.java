@@ -29,6 +29,7 @@ package org.anchoranalysis.image.core.object.properties;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.function.BiConsumer;
 import java.util.function.UnaryOperator;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -66,6 +67,15 @@ public class ObjectWithProperties {
 
     public boolean hasProperty(String name) {
         return properties.containsKey(name);
+    }
+    
+    /**
+     * Executes a consumer on each property.
+     * 
+     * @param consumer a consumer accepting the name and the value of the property.
+     */
+    public void forEachProperty( BiConsumer<String,Object> consumer ) {
+        properties.forEach(consumer);
     }
 
     /**

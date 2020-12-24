@@ -33,7 +33,7 @@ import java.util.List;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.define.Define;
-import org.anchoranalysis.bean.xml.BeanXmlLoader;
+import org.anchoranalysis.bean.xml.BeanXMLLoader;
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.bean.xml.exception.BeanXmlException;
 import org.anchoranalysis.image.bean.provider.ChannelProvider;
@@ -63,7 +63,7 @@ public class DefineMPPTest {
 
     private void checkPath(String fileName) throws BeanXmlException {
         Path path = loader.resolveTestPath(fileName);
-        Define define = BeanXmlLoader.loadBean(path);
+        Define define = BeanXMLLoader.loadBean(path);
         checkDefine(define);
     }
 
@@ -77,13 +77,13 @@ public class DefineMPPTest {
 
     private void assertTwoElements(Define define, Class<?> provider, String prefix) {
         List<NamedBean<AnchorBean<?>>> list = define.getList(provider);
-        assertTrue(list.size() == 2);
+        assertEquals(2, list.size());
         assertElement(list, 0, prefix + "1");
         assertElement(list, 1, prefix + "2");
     }
 
     private void assertElement(
             List<NamedBean<AnchorBean<?>>> list, int index, String expectedName) {
-        assertTrue(list.get(index).getName().equals(expectedName));
+        assertEquals(expectedName, list.get(index).getName());
     }
 }

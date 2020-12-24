@@ -33,7 +33,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/.m2
-        key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+        key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}-jdk8
         restore-keys: ${{ runner.os }}-m2
     - name: Create settings.xml for Maven
       uses: s4u/maven-settings-action@v2.2.0
@@ -69,7 +69,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/.m2
-        key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+        key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}-jdk11
         restore-keys: ${{ runner.os }}-m2
     - name: Create settings.xml for Maven
       uses: s4u/maven-settings-action@v2.2.0

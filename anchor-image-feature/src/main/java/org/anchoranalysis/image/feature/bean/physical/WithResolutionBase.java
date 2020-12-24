@@ -38,7 +38,7 @@ import org.anchoranalysis.image.core.dimensions.Resolution;
 public abstract class WithResolutionBase<T extends FeatureInputWithResolution>
         extends FeatureUnaryGeneric<T> {
 
-    public WithResolutionBase(Feature<T> feature) {
+    protected WithResolutionBase(Feature<T> feature) {
         super(feature);
     }
 

@@ -38,7 +38,7 @@ public abstract class ReporterAggregate<T> extends ReporterInterval<T> {
 
     private Logger logger;
 
-    public ReporterAggregate(double aggIntervalLog10) {
+    protected ReporterAggregate(double aggIntervalLog10) {
         super(aggIntervalLog10);
     }
 

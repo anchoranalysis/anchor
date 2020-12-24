@@ -39,7 +39,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
 @NoArgsConstructor
 public abstract class FeatureUnaryGeneric<T extends FeatureInput> extends FeatureUnary<T, T> {
 
-    public FeatureUnaryGeneric(Feature<T> feature) {
+    protected FeatureUnaryGeneric(Feature<T> feature) {
         super(feature);
     }
 }

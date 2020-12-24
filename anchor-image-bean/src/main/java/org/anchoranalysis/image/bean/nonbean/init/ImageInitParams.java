@@ -88,7 +88,7 @@ public class ImageInitParams implements BeanInitParams {
             SharedObjects sharedObjects, Optional<ImageSizeSuggestion> suggestedResize) {
         this.sharedObjects = sharedObjects;
         this.suggestedResize = suggestedResize;
-        this.soParams = KeyValueParamsInitParams.create(sharedObjects);
+        this.soParams = new KeyValueParamsInitParams(sharedObjects);
         this.soFeature = SharedFeaturesInitParams.create(sharedObjects);
 
         storeStack = sharedObjects.getOrCreate(Stack.class);
@@ -186,7 +186,7 @@ public class ImageInitParams implements BeanInitParams {
 
     public void addToKeyValueParamsCollection(String identifier, KeyValueParams params)
             throws OperationFailedException {
-        params().getNamedKeyValueParamsCollection().add(identifier, () -> params);
+        params().getNamedKeyValueParams().add(identifier, () -> params);
     }
 
     public Path getModelDirectory() {

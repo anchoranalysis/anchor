@@ -49,7 +49,7 @@ public class SharedFeaturesInitParams implements BeanInitParams {
     private SharedFeatureMulti sharedFeatureSet;
 
     private SharedFeaturesInitParams(SharedObjects sharedObjects) {
-        this.params = KeyValueParamsInitParams.create(sharedObjects);
+        this.params = new KeyValueParamsInitParams(sharedObjects);
 
         storeFeatureList = sharedObjects.getOrCreate(FeatureList.class);
 

@@ -81,7 +81,7 @@ public class SessionInputSequential<T extends FeatureInput> implements SessionIn
             return child.calculator()
                     .calculate(
                             feature,
-                            new SessionInputSequential<S>(
+                            new SessionInputSequential<>(
                                     input, child, cacheFactory, findChild.finderForGrandchild()));
         }
 

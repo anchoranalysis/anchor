@@ -27,6 +27,8 @@
 package org.anchoranalysis.mpp.segment.kernel.proposer;
 
 import org.anchoranalysis.mpp.segment.bean.kernel.Kernel;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * A kernel with an associated weight.
@@ -34,13 +36,13 @@ import org.anchoranalysis.mpp.segment.bean.kernel.Kernel;
  * @author Owen Feehan
  * @param <T> type being modified by the kernel.
  */
-public class WeightedKernel<T> {
+public class WeightedKernel<T,S> {
 
-    private Kernel<T> kernel = null;
+    @Getter @Setter private Kernel<T,S> kernel;
 
-    private double weight = 0;
+    @Getter private double weight = 0;
 
-    private String name;
+    @Getter @Setter private String name;
 
     /**
      * Constructor for single kernel factory
@@ -48,34 +50,14 @@ public class WeightedKernel<T> {
      * @param kernel the kernel
      * @param weight an associated weight (a positive floating-point number)
      */
-    public WeightedKernel(Kernel<T> kernel, double weight) {
+    public WeightedKernel(Kernel<T,S> kernel, double weight) {
         this.setKernel(kernel);
         this.weight = weight;
         this.name = kernel.getBeanName();
     }
 
-    public double getWeight() {
-        return this.weight;
-    }
-
     @Override
     public String toString() {
         return String.format("weight=%f, factory=%s", this.weight, this.kernel.toString());
-    }
-
-    public Kernel<T> getKernel() {
-        return kernel;
-    }
-
-    public void setKernel(Kernel<T> kernel) {
-        this.kernel = kernel;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 }

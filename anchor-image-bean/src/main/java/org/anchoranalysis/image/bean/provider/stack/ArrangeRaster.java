@@ -29,6 +29,7 @@ package org.anchoranalysis.image.bean.provider.stack;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.provider.Provider;
@@ -48,6 +49,7 @@ import org.anchoranalysis.image.core.stack.Stack;
  *
  * @author Owen Feehan
  */
+@NoArgsConstructor
 public class ArrangeRaster extends StackProvider {
 
     // START BEAN
@@ -60,6 +62,20 @@ public class ArrangeRaster extends StackProvider {
 
     @BeanField @Getter @Setter private boolean createShort = false;
     // END BEAN
+    
+    public ArrangeRaster(boolean createShort, boolean forceRGB) {
+        this.createShort = createShort;
+        this.forceRGB = forceRGB;
+    }
+    
+    /**
+     * Adds a stack to the existing list of stack-providers.
+     * 
+     * @param provider the provider of the stack to add.
+     */
+    public void addStack( Provider<Stack> provider ) {
+        list.add(provider);
+    }
 
     @Override
     public Stack create() throws CreateException {

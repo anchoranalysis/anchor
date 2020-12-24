@@ -45,7 +45,7 @@ public class KeyValueParamsProviderReference extends KeyValueParamsProvider {
     public void onInit(KeyValueParamsInitParams so) throws InitException {
         super.onInit(so);
         try {
-            params = so.getNamedKeyValueParamsCollection().getException(id);
+            params = so.getNamedKeyValueParams().getException(id);
         } catch (NamedProviderGetException e) {
             throw new InitException(e.summarize());
         }

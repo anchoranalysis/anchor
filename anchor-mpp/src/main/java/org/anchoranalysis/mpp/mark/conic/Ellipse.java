@@ -136,13 +136,13 @@ public class Ellipse extends ConicBase implements Serializable {
     @Override
     public final byte isPointInside(Point3d point) {
 
-        if (point.distanceSquared(this.getPos()) > radiiShellMaxSq) {
+        if (point.distanceSquared(this.getPosition()) > radiiShellMaxSq) {
             return FLAG_SUBMARK_NONE;
         }
 
         // It is permissible to mutate the point during calculation
-        double x = point.x() - getPos().x();
-        double y = point.y() - getPos().y();
+        double x = point.x() - getPosition().x();
+        double y = point.y() - getPosition().y();
 
         // We exit early if it's inside the internal shell
         double sum = getEllipseSum(x, y, ellipsoidCalculator.getEllipsoidMatrix());
@@ -242,7 +242,7 @@ public class Ellipse extends ConicBase implements Serializable {
 
     public void setMarksExplicit(Point3d pos, Orientation orientation, Point2d radii) {
         Preconditions.checkArgument(pos.z() == 0, "non-zero z-value");
-        super.setPos(pos);
+        super.setPosition(pos);
         this.orientation = orientation;
         this.radii = radii;
         updateAfterMarkChange();
@@ -271,7 +271,7 @@ public class Ellipse extends ConicBase implements Serializable {
             boxMatrix.assign(Functions.mult(shellExtOut));
         }
 
-        return BoundingBoxCalculator.boxFromBounds(getPos(), boxMatrix, false, dimensions);
+        return BoundingBoxCalculator.boxFromBounds(getPosition(), boxMatrix, false, dimensions);
     }
 
     private transient QuickOverlapCalculation quickOverlap =
@@ -285,8 +285,8 @@ public class Ellipse extends ConicBase implements Serializable {
 
                 DoubleMatrix1D relativePosition =
                         twoElementMatrix(
-                                trgtMark.getPos().x() - getPos().x(),
-                                trgtMark.getPos().y() - getPos().y());
+                                trgtMark.getPosition().x() - getPosition().x(),
+                                trgtMark.getPosition().y() - getPosition().y());
 
                 DoubleMatrix1D relativePositionSquared = relativePosition.copy();
                 relativePositionSquared.assign(Functions.square); // NOSONAR
@@ -406,8 +406,8 @@ public class Ellipse extends ConicBase implements Serializable {
         double[] endPoint1 = rotMat.rotatePoint(twoElementArray(-1 * radiusProjectedX));
         double[] endPoint2 = rotMat.rotatePoint(twoElementArray(radiusProjectedX));
 
-        double[] xMinMax = minMaxEndPoint(endPoint1, endPoint2, 0, getPos().x());
-        double[] yMinMax = minMaxEndPoint(endPoint1, endPoint2, 1, getPos().y());
+        double[] xMinMax = minMaxEndPoint(endPoint1, endPoint2, 0, getPosition().x());
+        double[] yMinMax = minMaxEndPoint(endPoint1, endPoint2, 1, getPosition().y());
 
         addPoint2dProperty(object, "xAxisMin", xMinMax[0], yMinMax[0]);
         addPoint2dProperty(object, "xAxisMax", xMinMax[1], yMinMax[1]);

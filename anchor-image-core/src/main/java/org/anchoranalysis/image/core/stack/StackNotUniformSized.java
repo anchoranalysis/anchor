@@ -29,6 +29,7 @@ package org.anchoranalysis.image.core.stack;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.anchoranalysis.image.core.channel.Channel;
@@ -37,47 +38,50 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 
 public class StackNotUniformSized implements Iterable<Channel> {
 
-    // We store our values in an arraylist of channels
+    /** The channels in the stack. */
     private final List<Channel> channels;
 
-    // Image stack
+    /**
+     * Creates an empty with no channels.
+     */
     public StackNotUniformSized() {
         channels = new ArrayList<>();
     }
-
-    // Image stack
+    
+    /**
+     * Creates from a stream of {@link Channel}s.
+     * 
+     * @param channelStream the stream of channels
+     */
     public StackNotUniformSized(Stream<Channel> channelStream) {
         channels = channelStream.collect(Collectors.toList());
     }
 
-    // Create a stack from a channel
+    /** 
+     * Creates from a single {@link Channel}.
+     * 
+     * @param channel the channel
+     */
     public StackNotUniformSized(Channel channel) {
         this();
         addChannel(channel);
     }
 
     public StackNotUniformSized extractSlice(int z) {
-
-        StackNotUniformSized stackOut = new StackNotUniformSized();
-        for (int c = 0; c < channels.size(); c++) {
-            stackOut.addChannel(channels.get(c).extractSlice(z));
-        }
-        return stackOut;
+        return deriveMapped( channel -> channel.extractSlice(z) );
     }
 
     /**
-     * Maximum intensity projection.
+     * Creates a <a href="https://en.wikipedia.org/wiki/Maximum_intensity_projection">Maximum Intensity Projection</a> of each channel.
      *
-     * @return
+     * <p>Note that if the channels do not need projections, the existing {@link Channel} is reused
+     * in the newly created {@link Stack}. But if a projection is needed, it is always freshly created
+     * as a new channel.
+     * 
+     * @return a newly created {@link Stack}, with maximum intensity projections of each {@link Channel}.
      */
     public StackNotUniformSized projectMax() {
-
-        StackNotUniformSized stackOut = new StackNotUniformSized();
-        for (int c = 0; c < channels.size(); c++) {
-            // TODO make more efficient than duplicate()
-            stackOut.addChannel(channels.get(c).duplicate().projectMax());
-        }
-        return stackOut;
+        return deriveMapped(Channel::projectMax);
     }
 
     public void clear() {
@@ -142,11 +146,21 @@ public class StackNotUniformSized implements Iterable<Channel> {
         return channels.iterator();
     }
 
+    /**
+     * A deep-copy.
+     * 
+     * @return newly created deep-copy.
+     */
     public StackNotUniformSized duplicate() {
+        return deriveMapped(Channel::duplicate);
+    }
+    
+    /** Derives a new {@link StackNotUniformSized} with an operator applies to the existing {@link Channel}s. */
+    private StackNotUniformSized deriveMapped( UnaryOperator<Channel> operator ) {
         StackNotUniformSized out = new StackNotUniformSized();
         for (Channel channel : this) {
-            out.addChannel(channel.duplicate());
+            out.addChannel( operator.apply(channel) );
         }
-        return out;
+        return out; 
     }
 }

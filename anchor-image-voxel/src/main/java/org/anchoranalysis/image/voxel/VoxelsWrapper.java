@@ -202,8 +202,9 @@ public class VoxelsWrapper {
         }
     }
 
-    public VoxelBuffer<?> slice(int z) { // NOSONAR
-        return voxels.slice(z);
+    @SuppressWarnings("unchecked")
+    public <T> VoxelBuffer<T> slice(int z) {
+        return (VoxelBuffer<T>) voxels.slice(z);
     }
 
     public Extent extent() {

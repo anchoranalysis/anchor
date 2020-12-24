@@ -30,8 +30,15 @@ import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.image.core.channel.convert.attached.ChannelConverterAttached;
 import org.anchoranalysis.math.histogram.Histogram;
 
-public abstract class ConvertChannelToWithHistogram
-        extends AnchorBean<ConvertChannelToWithHistogram> {
+/**
+ * Creates a {@code ChannelConverterAttached<Histogram, T>} for converting a channel to a particular type, making use of a {@link Histogram}.
+ * 
+ * @author Owen Feehan
+ *
+ * @param <T> the buffer-type to convert the channel to
+ */
+public abstract class ConvertChannelToWithHistogram<T>
+        extends AnchorBean<ConvertChannelToWithHistogram<T>> {
 
-    public abstract ChannelConverterAttached<Histogram, ?> createConverter();
+    public abstract ChannelConverterAttached<Histogram, T> createConverter();
 }

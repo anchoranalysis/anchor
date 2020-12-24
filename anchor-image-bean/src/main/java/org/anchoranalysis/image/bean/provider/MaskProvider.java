@@ -34,9 +34,6 @@ import org.anchoranalysis.image.core.stack.Stack;
 @GroupingRoot
 public abstract class MaskProvider extends BeanProviderAsStackBase<MaskProvider, Mask> {
 
-    @Override
-    public abstract Mask create() throws CreateException;
-
     public Stack createAsStack() throws CreateException {
         return new Stack(create().channel());
     }

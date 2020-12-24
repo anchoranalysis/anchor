@@ -28,12 +28,9 @@ package org.anchoranalysis.bean.shared.params.keyvalue;
 
 import org.anchoranalysis.bean.provider.Provider;
 import org.anchoranalysis.bean.shared.params.ParamsBean;
-import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.value.KeyValueParams;
 
 public abstract class KeyValueParamsProvider extends ParamsBean<KeyValueParamsProvider>
         implements Provider<KeyValueParams> {
 
-    @Override
-    public abstract KeyValueParams create() throws CreateException;
 }

@@ -92,7 +92,7 @@ public class CollectionGenerator<T> implements Generator<Collection<T>> {
                         outputNameDirectory, prefix, 3, false, Optional.empty());
         factory.incrementingByOneStream(pattern, element.stream());
 
-        // Do not report any file-types for the collection written. TODO is this okay?
+        // Do not report any file-types for the collection written, breaking the usual expectation.
         return new FileType[] {};
     }
 

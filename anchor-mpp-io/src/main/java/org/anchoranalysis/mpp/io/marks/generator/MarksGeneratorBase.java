@@ -28,6 +28,7 @@ package org.anchoranalysis.mpp.io.marks.generator;
 
 import java.util.Optional;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.identifier.getter.IdentifierGetter;
@@ -47,24 +48,17 @@ import org.anchoranalysis.overlay.Overlay;
 import org.anchoranalysis.overlay.collection.ColoredOverlayCollection;
 import org.anchoranalysis.overlay.writer.DrawOverlay;
 
+@RequiredArgsConstructor
 public abstract class MarksGeneratorBase
         extends RasterGeneratorSelectFormat<ColoredMarksWithDisplayStack> {
 
+    // START REQUIRED FIELDS
+    private final DrawOverlay writer;
+    private final IdentifierGetter<Overlay> idGetter;
+    private final RegionMembershipWithFlags regionMembership;
+    // START REQUIRED FIELDS    
+
     @Getter @Setter private String manifestDescriptionFunction = "marks";
-
-    private DrawOverlay writer;
-    private IdentifierGetter<Overlay> idGetter;
-    private RegionMembershipWithFlags regionMembership;
-
-    public MarksGeneratorBase(
-            DrawOverlay writer,
-            IdentifierGetter<Overlay> idGetter,
-            RegionMembershipWithFlags regionMembership) {
-        super();
-        this.writer = writer;
-        this.idGetter = idGetter;
-        this.regionMembership = regionMembership;
-    }
 
     @Override
     public Stack transform(ColoredMarksWithDisplayStack element) throws OutputWriteFailedException {

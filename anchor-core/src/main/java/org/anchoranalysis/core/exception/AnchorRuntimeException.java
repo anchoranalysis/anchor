@@ -36,20 +36,20 @@ public abstract class AnchorRuntimeException extends RuntimeException {
     /** */
     private static final long serialVersionUID = 1L;
 
-    public AnchorRuntimeException() {
+    protected AnchorRuntimeException() {
         super();
     }
 
-    public AnchorRuntimeException(String message, Throwable cause) {
+    protected AnchorRuntimeException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public AnchorRuntimeException(String message) {
+    protected AnchorRuntimeException(String message) {
         super(message);
         super.initCause(null);
     }
 
-    public AnchorRuntimeException(Throwable cause) {
+    protected AnchorRuntimeException(Throwable cause) {
         super(cause);
     }
 

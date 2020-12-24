@@ -31,7 +31,6 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.session.replace.BoundReplaceStrategy;
 import org.anchoranalysis.feature.session.replace.CacheAndReuseStrategy;
-import org.anchoranalysis.feature.session.replace.ReplaceStrategy;
 import org.anchoranalysis.feature.session.replace.ReuseSingletonStrategy;
 import org.anchoranalysis.image.feature.input.FeatureInputStack;
 
@@ -50,9 +49,7 @@ class CachingStrategies {
     }
 
     /* Don't cache inputs */
-    public static BoundReplaceStrategy<
-                    FeatureInputStack, ? extends ReplaceStrategy<FeatureInputStack>>
-            noCache() {
+    public static BoundReplaceStrategy<FeatureInputStack, ReuseSingletonStrategy<FeatureInputStack>> noCache() {
         return new BoundReplaceStrategy<>(ReuseSingletonStrategy::new);
     }
 }

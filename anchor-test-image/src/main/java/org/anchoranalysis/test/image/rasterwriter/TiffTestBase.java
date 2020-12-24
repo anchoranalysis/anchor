@@ -51,7 +51,7 @@ public abstract class TiffTestBase extends RasterWriterTestBase {
     private static final VoxelDataType[] SUPPORTED_VOXEL_TYPES =
             RasterWriterTestBase.ALL_SUPPORTED_VOXEL_TYPES;
 
-    public TiffTestBase() {
+    protected TiffTestBase() {
         super(ImageFileFormat.TIFF, true, COMPARISON_PLAN);
     }
 

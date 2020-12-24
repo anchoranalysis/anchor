@@ -54,7 +54,7 @@ public class ParametersAsFeatures<T extends FeatureInput> extends FeatureListPro
             KeyValueParams kpv =
                     getInitializationParameters()
                             .getParams()
-                            .getNamedKeyValueParamsCollection()
+                            .getNamedKeyValueParams()
                             .getException(collectionID);
 
             return FeatureListFactory.mapFrom(kpv.keySet(), key -> featureForKey(key, kpv));

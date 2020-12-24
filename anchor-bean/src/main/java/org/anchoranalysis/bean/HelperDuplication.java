@@ -34,7 +34,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.exception.BeanDuplicateException;
 import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 import org.apache.commons.lang3.ClassUtils;
@@ -54,10 +53,10 @@ class HelperDuplication {
                         duplicatePropertyValue(
                                 Optional.ofNullable(field.get(bean)),
                                 field.getName(),
-                                field.isAnnotationPresent(OptionalBean.class),
+                                FieldAccessor.isFieldAnnotatedAsOptional(field),
                                 beanOut);
                 if (propertyNew.isPresent()) {
-                    field.set(beanOut, propertyNew.get());
+                    field.set(beanOut, propertyNew.get());    // NOSONAR
                 }
             }
 

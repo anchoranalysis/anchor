@@ -42,7 +42,7 @@ public abstract class FeatureInputEnergy implements FeatureInputParams {
 
     private Optional<EnergyStack> energyStack;
 
-    public FeatureInputEnergy() {
+    protected FeatureInputEnergy() {
         this(Optional.empty());
     }
 

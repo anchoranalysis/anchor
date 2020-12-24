@@ -39,15 +39,15 @@ public abstract class BoundMinMax extends Bound {
     @BeanField @Getter @Setter private ResolvedBound delegate;
     // END BEAN PROPERTIES
 
-    public BoundMinMax() {
+    protected BoundMinMax() {
         delegate = new ResolvedBound();
     }
 
-    public BoundMinMax(double min, double max) {
+    protected BoundMinMax(double min, double max) {
         delegate = new ResolvedBound(min, max);
     }
 
-    public BoundMinMax(BoundMinMax source) {
+    protected BoundMinMax(BoundMinMax source) {
         delegate = new ResolvedBound(source.delegate);
     }
 

@@ -33,7 +33,7 @@ import org.anchoranalysis.image.core.outline.traverser.path.ContiguousVoxelPath;
 import org.anchoranalysis.spatial.point.Point3i;
 
 /**
- * TODO naming is too complicated in functions with lots of min/max
+ * Finds the minimum distance of a point among any {@link ContiguousVoxelPath}'s head and tail points.
  *
  * @author Owen Feehan
  */
@@ -61,17 +61,15 @@ public class FindMinimumDistance {
         // Finds the minimum distance to any of the paths
         for (int i = 0; i < paths.size(); i++) {
 
-            if (i == avoidIndex) {
-                continue;
-            }
+            if (i != avoidIndex) {
+                ContiguousVoxelPath path = paths.get(i);
 
-            ContiguousVoxelPath path = paths.get(i);
-
-            DistanceIndex distance =
-                    DistanceToContiguousPath.maxDistanceToClosestPoint(path, point);
-            if (distance.getDistance() < minDistance.getDistance()) {
-                minDistance = distance;
-                indexWithMin = i;
+                DistanceIndex distance =
+                        DistanceToContiguousPath.maxDistanceToClosestPoint(path, point);
+                if (distance.getDistance() < minDistance.getDistance()) {
+                    minDistance = distance;
+                    indexWithMin = i;
+                }
             }
         }
 

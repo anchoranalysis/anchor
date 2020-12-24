@@ -44,16 +44,16 @@ import org.anchoranalysis.mpp.segment.kernel.proposer.KernelWithIdentifier;
 import org.anchoranalysis.mpp.segment.kernel.proposer.WeightedKernel;
 import org.anchoranalysis.mpp.segment.kernel.proposer.WeightedKernelList;
 
-public class KernelProposer<T> extends AnchorBean<KernelProposer<T>> {
+public class KernelProposer<T,S> extends AnchorBean<KernelProposer<T,S>> {
 
     // START BEAN
-    @BeanField @Getter @Setter private List<KernelProposerOption<T>> optionList = new ArrayList<>();
+    @BeanField @Getter @Setter private List<KernelProposerOption<T,S>> optionList = new ArrayList<>();
 
-    @BeanField @Getter @Setter private Kernel<T> initialKernel;
+    @BeanField @Getter @Setter private Kernel<T,S> initialKernel;
     // END BEAN
 
     private double[] cumalativeProbability;
-    private ArrayList<WeightedKernel<T>> kernels = null;
+    private ArrayList<WeightedKernel<T,S>> kernels = null;
 
     public void init() throws InitException {
         calculateCumulativeProbability(optionList);
@@ -62,26 +62,26 @@ public class KernelProposer<T> extends AnchorBean<KernelProposer<T>> {
         EnsureUniqueNames.apply(kernels);
     }
 
-    public void initWithProposerSharedObjects(MPPInitParams so, Logger logger)
+    public void initWithProposerSharedObjects(MPPInitParams paramsInit, Logger logger)
             throws InitException {
 
-        for (WeightedKernel<T> weightedKernel : kernels) {
-            weightedKernel.getKernel().initRecursive(so, logger);
+        for (WeightedKernel<T,S> weightedKernel : kernels) {
+            weightedKernel.getKernel().initRecursive(paramsInit, logger);
         }
     }
 
     public void initBeforeCalc(KernelCalculationContext context) throws InitException {
-        for (WeightedKernel<T> weightedKernel : kernels) {
+        for (WeightedKernel<T,S> weightedKernel : kernels) {
             weightedKernel.getKernel().initBeforeCalc(context);
         }
     }
 
-    public KernelWithIdentifier<T> initialKernel() {
+    public KernelWithIdentifier<T,S> initialKernel() {
         return new KernelWithIdentifier<>(kernels.get(0).getKernel(), 0);
     }
 
     // Proposes a kernel
-    public KernelWithIdentifier<T> proposeKernel(RandomNumberGenerator randomNumberGenerator) {
+    public KernelWithIdentifier<T,S> proposeKernel(RandomNumberGenerator randomNumberGenerator) {
         return proposeKernel(randomNumberGenerator.sampleDoubleZeroAndOne());
     }
 
@@ -90,12 +90,11 @@ public class KernelProposer<T> extends AnchorBean<KernelProposer<T>> {
         return kernels.size();
     }
 
-    public WeightedKernelList<T> getAllKernelFactories() {
+    public WeightedKernelList<T,S> getAllKernelFactories() {
 
-        WeightedKernelList<T> listOut = new WeightedKernelList<>();
+        WeightedKernelList<T,S> listOut = new WeightedKernelList<>();
         for (int i = 0; i < getNumberKernels(); i++) {
-            WeightedKernel<T> wkf = kernels.get(i);
-            listOut.add(wkf);
+            listOut.add(kernels.get(i));
         }
         return listOut;
     }
@@ -109,7 +108,7 @@ public class KernelProposer<T> extends AnchorBean<KernelProposer<T>> {
         return namesOut;
     }
 
-    public WeightedKernel<T> getWeightedKernelFactory(int i) {
+    public WeightedKernel<T,S> getWeightedKernelFactory(int i) {
         return this.kernels.get(i);
     }
 
@@ -134,7 +133,7 @@ public class KernelProposer<T> extends AnchorBean<KernelProposer<T>> {
 
     public void checkCompatibleWith(Mark testMark) {
 
-        for (WeightedKernel<T> weightedKernel : kernels) {
+        for (WeightedKernel<T,S> weightedKernel : kernels) {
             if (!weightedKernel.getKernel().isCompatibleWith(testMark)) {
                 throw new UnsupportedOperationException(
                         String.format(
@@ -144,7 +143,7 @@ public class KernelProposer<T> extends AnchorBean<KernelProposer<T>> {
         }
     }
 
-    private void calculateCumulativeProbability(List<KernelProposerOption<T>> options)
+    private void calculateCumulativeProbability(List<KernelProposerOption<T,S>> options)
             throws InitException {
 
         if (options.isEmpty()) {
@@ -157,12 +156,12 @@ public class KernelProposer<T> extends AnchorBean<KernelProposer<T>> {
         // ordinarily be chosen
         // THIS MUST BE THE FIRST ITEM OF THE LIST, so we can pick from it later
         //   see proposeKernel
-        kernels.add(new WeightedKernel<T>(initialKernel, 0.0));
+        kernels.add(new WeightedKernel<>(initialKernel, 0.0));
 
         // First we get a sum of all prob for normalization
         // and we population the lst kernel factories
         double total = 0;
-        for (KernelProposerOption<T> opt : options) {
+        for (KernelProposerOption<T,S> opt : options) {
             total += opt.addWeightedKernelFactories(kernels);
         }
 
@@ -180,11 +179,11 @@ public class KernelProposer<T> extends AnchorBean<KernelProposer<T>> {
     }
 
     // Proposes a kernel
-    private KernelWithIdentifier<T> proposeKernel(double randomValueBetweenZeroAndOne) {
+    private KernelWithIdentifier<T,S> proposeKernel(double randomValueBetweenZeroAndOne) {
 
         for (int i = 0; i < getNumberKernels(); i++) {
 
-            WeightedKernel<T> wkf = getWeightedKernelFactory(i);
+            WeightedKernel<T,S> wkf = getWeightedKernelFactory(i);
 
             if (randomValueBetweenZeroAndOne < cumalativeProbability[i]) {
                 return new KernelWithIdentifier<>(wkf.getKernel(), i);

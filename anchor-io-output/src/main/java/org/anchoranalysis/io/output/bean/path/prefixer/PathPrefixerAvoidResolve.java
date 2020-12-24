@@ -55,8 +55,8 @@ public abstract class PathPrefixerAvoidResolve extends PathPrefixer {
     /**
      * A directory in which to output the experiment-directory and files
      *
-     * <p>If empty, first the bean will try to use any output-dir set in the input context if it
-     * exists, or otherwise use the system temp dir
+     * <p>If empty, first the bean will try to use any output-directory set in the input context if it
+     * exists, or otherwise use the system temp directory.
      */
     @BeanField @AllowEmpty @Getter @Setter private String outPathPrefix = "";
     // END BEAN PROPERTIES
@@ -64,7 +64,7 @@ public abstract class PathPrefixerAvoidResolve extends PathPrefixer {
     // Caches the calculation
     private Path resolvedRoot = null;
 
-    public PathPrefixerAvoidResolve(String outPathPrefix) {
+    protected PathPrefixerAvoidResolve(String outPathPrefix) {
         this.outPathPrefix = outPathPrefix;
     }
 
@@ -120,7 +120,7 @@ public abstract class PathPrefixerAvoidResolve extends PathPrefixer {
      *
      * @param path path to calculate prefix from with associated descriptive-name
      * @param root root of prefix
-     * @param context TODO
+     * @param context the path-prefixer context.
      * @return folder/filename for prefixing
      */
     public abstract DirectoryWithPrefix outFilePrefixFromPath(

@@ -64,7 +64,7 @@ public abstract class PNGTestBase extends RasterWriterTestBase {
         UnsignedByteVoxelType.INSTANCE, UnsignedShortVoxelType.INSTANCE
     };
 
-    public PNGTestBase() {
+    protected PNGTestBase() {
         super(ImageFileFormat.PNG, false, COMPARISON_PLAN);
     }
 

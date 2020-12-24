@@ -39,11 +39,11 @@ public abstract class IndexableOutputNameStyle extends OutputNameStyle {
 
     private static final long serialVersionUID = -2393013576294162543L;
 
-    public IndexableOutputNameStyle() {
+    protected IndexableOutputNameStyle() {
         // Here as the empty constructor is needed for deserialization
     }
 
-    public IndexableOutputNameStyle(String outputName) {
+    protected IndexableOutputNameStyle(String outputName) {
         super(outputName);
     }
 
