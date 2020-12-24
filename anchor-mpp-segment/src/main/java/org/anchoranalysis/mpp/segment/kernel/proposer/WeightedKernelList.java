@@ -29,16 +29,16 @@ package org.anchoranalysis.mpp.segment.kernel.proposer;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class WeightedKernelList<T> implements Iterable<WeightedKernel<T>> {
+public class WeightedKernelList<T,S> implements Iterable<WeightedKernel<T,S>> {
 
-    private ArrayList<WeightedKernel<T>> delegate = new ArrayList<>();
+    private ArrayList<WeightedKernel<T,S>> delegate = new ArrayList<>();
 
-    public boolean add(WeightedKernel<T> e) {
+    public boolean add(WeightedKernel<T,S> e) {
         return delegate.add(e);
     }
 
     @Override
-    public Iterator<WeightedKernel<T>> iterator() {
+    public Iterator<WeightedKernel<T,S>> iterator() {
         return delegate.iterator();
     }
 
@@ -46,7 +46,7 @@ public class WeightedKernelList<T> implements Iterable<WeightedKernel<T>> {
         return delegate.size();
     }
 
-    public WeightedKernel<T> get(int index) {
+    public WeightedKernel<T,S> get(int index) {
         return delegate.get(index);
     }
 }

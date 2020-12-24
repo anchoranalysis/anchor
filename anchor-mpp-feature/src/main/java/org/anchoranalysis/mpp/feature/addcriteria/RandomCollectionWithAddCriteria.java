@@ -115,7 +115,7 @@ public class RandomCollectionWithAddCriteria<T> extends RandomCollection<T> {
     }
 
     @Override
-    public void initUpdatableMarkSet(
+    public void initUpdatableMarks(
             MemoForIndex marks, EnergyStack stack, Logger logger, SharedFeatureMulti sharedFeatures)
             throws InitException {
         this.logger = logger;
@@ -166,7 +166,7 @@ public class RandomCollectionWithAddCriteria<T> extends RandomCollection<T> {
 
     @Override
     public void exchange(
-            MemoForIndex pxlMarkMemoList,
+            MemoForIndex memo,
             VoxelizedMarkMemo oldMark,
             int indexOldMark,
             VoxelizedMarkMemo newMark)
@@ -175,9 +175,9 @@ public class RandomCollectionWithAddCriteria<T> extends RandomCollection<T> {
 
         // We need to make a copy of the list, so we can perform the removal operation after the add
         MemoList memoList = new MemoList();
-        memoList.addAll(pxlMarkMemoList);
+        memoList.addAll(memo);
 
-        remove(pxlMarkMemoList, oldMark);
+        remove(memo, oldMark);
 
         memoList.remove(indexOldMark);
 

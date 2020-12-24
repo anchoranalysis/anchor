@@ -29,13 +29,13 @@ package org.anchoranalysis.mpp.segment.bean.kernel;
 import org.anchoranalysis.mpp.segment.kernel.KernelCalculationContext;
 
 /**
- * A kernel that makes proposals independently of the current state
+ * A kernel that makes proposals independently of the current state.
  *
- * <p>It receives no feedback on whether proposals are accepted/rejected
+ * <p>It receives no feedback on whether proposals are accepted/rejected.
  *
  * @author feehano
  */
-public abstract class KernelIndependent<T> extends Kernel<T> {
+public abstract class KernelIndependent<T,S> extends Kernel<T,S> {
 
     // Call ONCE before calculating anything
     @Override

@@ -35,35 +35,35 @@ import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.shared.SharedFeatureMulti;
-import org.anchoranalysis.mpp.mark.set.UpdatableMarkSet;
+import org.anchoranalysis.mpp.mark.set.UpdatableMarks;
 import org.anchoranalysis.mpp.mark.set.UpdateMarkSetException;
 import org.anchoranalysis.mpp.mark.voxelized.memo.MemoForIndex;
 import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.mpp.probmap.ProbMap;
 
 // The pxlMarkMemoList must always match the current state of the underlzing updatable items
-public class ListUpdatableMarkSetCollection implements UpdatableMarkSet, List<UpdatableMarkSet> {
+public class UpdatableMarksList implements UpdatableMarks, List<UpdatableMarks> {
 
-    private ArrayList<UpdatableMarkSet> delegate = new ArrayList<>();
+    private List<UpdatableMarks> delegate = new ArrayList<>();
 
     @Override
-    public boolean add(UpdatableMarkSet e) {
+    public boolean add(UpdatableMarks e) {
         return delegate.add(e);
     }
 
     @Override
-    public void initUpdatableMarkSet(
+    public void initUpdatableMarks(
             MemoForIndex marks, EnergyStack stack, Logger logger, SharedFeatureMulti sharedFeatures)
             throws InitException {
-        for (UpdatableMarkSet item : delegate) {
-            item.initUpdatableMarkSet(marks, stack, logger, sharedFeatures);
+        for (UpdatableMarks item : delegate) {
+            item.initUpdatableMarks(marks, stack, logger, sharedFeatures);
         }
     }
 
     @Override
     public void add(MemoForIndex marksExisting, VoxelizedMarkMemo newMark)
             throws UpdateMarkSetException {
-        for (UpdatableMarkSet item : delegate) {
+        for (UpdatableMarks item : delegate) {
             item.add(marksExisting, newMark);
         }
     }
@@ -86,7 +86,7 @@ public class ListUpdatableMarkSetCollection implements UpdatableMarkSet, List<Up
 
         int cnt = 0;
 
-        for (UpdatableMarkSet item : delegate) {
+        for (UpdatableMarks item : delegate) {
 
             if (item instanceof ProbMap) {
                 cnt++;
@@ -98,7 +98,7 @@ public class ListUpdatableMarkSetCollection implements UpdatableMarkSet, List<Up
     public List<ProbMap> listProbMap() {
         ArrayList<ProbMap> list = new ArrayList<>();
 
-        for (UpdatableMarkSet item : delegate) {
+        for (UpdatableMarks item : delegate) {
 
             if (item instanceof ProbMap) {
                 list.add((ProbMap) item);
@@ -110,36 +110,36 @@ public class ListUpdatableMarkSetCollection implements UpdatableMarkSet, List<Up
 
     @Override
     public void exchange(
-            MemoForIndex pxlMarkMemoList,
+            MemoForIndex memo,
             VoxelizedMarkMemo oldMark,
             int indexOldMark,
             VoxelizedMarkMemo newMark)
             throws UpdateMarkSetException {
-        for (UpdatableMarkSet item : delegate) {
-            item.exchange(pxlMarkMemoList, oldMark, indexOldMark, newMark);
+        for (UpdatableMarks item : delegate) {
+            item.exchange(memo, oldMark, indexOldMark, newMark);
         }
     }
 
     @Override
     public void remove(MemoForIndex marksExisting, VoxelizedMarkMemo mark)
             throws UpdateMarkSetException {
-        for (UpdatableMarkSet item : delegate) {
+        for (UpdatableMarks item : delegate) {
             item.remove(marksExisting, mark);
         }
     }
 
     @Override
-    public void add(int index, UpdatableMarkSet element) {
+    public void add(int index, UpdatableMarks element) {
         delegate.add(index, element);
     }
 
     @Override
-    public boolean addAll(Collection<? extends UpdatableMarkSet> c) {
+    public boolean addAll(Collection<? extends UpdatableMarks> c) {
         return delegate.addAll(c);
     }
 
     @Override
-    public boolean addAll(int index, Collection<? extends UpdatableMarkSet> c) {
+    public boolean addAll(int index, Collection<? extends UpdatableMarks> c) {
         return delegate.addAll(index, c);
     }
 
@@ -159,7 +159,7 @@ public class ListUpdatableMarkSetCollection implements UpdatableMarkSet, List<Up
     }
 
     @Override
-    public UpdatableMarkSet get(int index) {
+    public UpdatableMarks get(int index) {
         return delegate.get(index);
     }
 
@@ -174,7 +174,7 @@ public class ListUpdatableMarkSetCollection implements UpdatableMarkSet, List<Up
     }
 
     @Override
-    public Iterator<UpdatableMarkSet> iterator() {
+    public Iterator<UpdatableMarks> iterator() {
         return delegate.iterator();
     }
 
@@ -184,12 +184,12 @@ public class ListUpdatableMarkSetCollection implements UpdatableMarkSet, List<Up
     }
 
     @Override
-    public ListIterator<UpdatableMarkSet> listIterator() {
+    public ListIterator<UpdatableMarks> listIterator() {
         return delegate.listIterator();
     }
 
     @Override
-    public ListIterator<UpdatableMarkSet> listIterator(int index) {
+    public ListIterator<UpdatableMarks> listIterator(int index) {
         return delegate.listIterator(index);
     }
 
@@ -199,7 +199,7 @@ public class ListUpdatableMarkSetCollection implements UpdatableMarkSet, List<Up
     }
 
     @Override
-    public UpdatableMarkSet remove(int index) {
+    public UpdatableMarks remove(int index) {
         return delegate.remove(index);
     }
 
@@ -214,7 +214,7 @@ public class ListUpdatableMarkSetCollection implements UpdatableMarkSet, List<Up
     }
 
     @Override
-    public UpdatableMarkSet set(int index, UpdatableMarkSet element) {
+    public UpdatableMarks set(int index, UpdatableMarks element) {
         return delegate.set(index, element);
     }
 
@@ -224,7 +224,7 @@ public class ListUpdatableMarkSetCollection implements UpdatableMarkSet, List<Up
     }
 
     @Override
-    public List<UpdatableMarkSet> subList(int fromIndex, int toIndex) {
+    public List<UpdatableMarks> subList(int fromIndex, int toIndex) {
         return delegate.subList(fromIndex, toIndex);
     }
 

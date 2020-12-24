@@ -29,7 +29,7 @@ package org.anchoranalysis.mpp.pair;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.GroupingRoot;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.mpp.mark.set.UpdatableMarkSet;
+import org.anchoranalysis.mpp.mark.set.UpdatableMarks;
 
 /**
  * A collection of items from which one can randomly sample
@@ -39,7 +39,7 @@ import org.anchoranalysis.mpp.mark.set.UpdatableMarkSet;
  */
 @GroupingRoot
 public abstract class RandomCollection<T> extends AnchorBean<RandomCollection<T>>
-        implements UpdatableMarkSet {
+        implements UpdatableMarks {
 
     public abstract T sampleRandomPairNonUniform(RandomNumberGenerator randomNumberGenerator);
 }

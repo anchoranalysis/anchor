@@ -41,7 +41,7 @@ import org.anchoranalysis.mpp.segment.transformer.TransformationContext;
  * @param <S> kernel-type
  * @param <T> optimization-state type
  */
-public class OptimizationStep<S, T> {
+public class OptimizationStep<S, T, V> {
 
     // The important state needed for the current algorithm step
     private DualState<T> state;
@@ -51,7 +51,7 @@ public class OptimizationStep<S, T> {
 
     private Optional<T> proposalOptional = Optional.empty();
 
-    private DescribeData<S> describeData = new DescribeData<>();
+    private DescribeData<S,V> describeData = new DescribeData<>();
 
     public OptimizationStep() {
         state = new DualState<>();
@@ -62,7 +62,7 @@ public class OptimizationStep<S, T> {
         describeData.setTemperature(temperature);
     }
 
-    public void assignProposal(Optional<T> proposalToAssign, KernelWithIdentifier<S> kid) {
+    public void assignProposal(Optional<T> proposalToAssign, KernelWithIdentifier<S,V> kid) {
 
         describeData.setKernel(kid);
 
@@ -122,7 +122,7 @@ public class OptimizationStep<S, T> {
     }
 
     private void maybeAssignAsBest(ToDoubleFunction<T> funcScore) {
-        // Is the score from crnt, greater than the score from best?
+        // Is the score from current, greater than the score from best?
         if (!state.getBest().isPresent() || scoreCurrentBetterThanBest(funcScore)) {
             state.assignBestFromCurrent();
             best = true;
@@ -137,7 +137,7 @@ public class OptimizationStep<S, T> {
                 > funcScore.applyAsDouble(state.getBest().get()); // NOSONAR
     }
 
-    private void markChanged(KernelWithIdentifier<S> kid) {
+    private void markChanged(KernelWithIdentifier<S,V> kid) {
         setChangedMarkIDs(kid.getKernel().changedMarkIDArray());
     }
 
@@ -150,7 +150,7 @@ public class OptimizationStep<S, T> {
         best = false;
     }
 
-    public KernelWithIdentifier<S> getKernel() {
+    public KernelWithIdentifier<S,V> getKernel() {
         return describeData.getKernel();
     }
 

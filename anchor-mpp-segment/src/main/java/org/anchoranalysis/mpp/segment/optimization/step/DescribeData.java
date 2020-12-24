@@ -35,11 +35,11 @@ import org.anchoranalysis.mpp.segment.kernel.proposer.KernelWithIdentifier;
  * @param <T> kernel-type
  */
 @Data
-class DescribeData<T> {
+class DescribeData<T,S> {
 
     private double temperature;
     private int[] changedMarkIDs;
     private long executionTime;
-    private KernelWithIdentifier<T> kernel;
+    private KernelWithIdentifier<T,S> kernel;
     private ProposerFailureDescription kernelNoProposalDescription;
 }

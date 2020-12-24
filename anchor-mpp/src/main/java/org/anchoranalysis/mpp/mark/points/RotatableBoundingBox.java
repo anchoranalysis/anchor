@@ -88,7 +88,7 @@ public class RotatableBoundingBox extends MarkWithPosition {
     public byte isPointInside(Point3d point) {
 
         // See if after rotating a point back, it lies with on our box
-        Point3d pointRelative = Point3d.immutableSubtract(point, getPos());
+        Point3d pointRelative = Point3d.immutableSubtract(point, getPosition());
 
         Point3d pointRot = rotMatrixInv.rotatedPoint(pointRelative);
 
@@ -198,7 +198,7 @@ public class RotatableBoundingBox extends MarkWithPosition {
     /** Rotates a position and adds the current position afterwards */
     private Point3d rotateAddPos(Point3d point) {
         Point3d out = rotMatrix.rotatedPoint(point);
-        out.add(getPos());
+        out.add(getPosition());
         return out;
     }
 }

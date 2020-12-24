@@ -44,7 +44,7 @@ public class MarkSphereTest {
 
         Sphere ms_in = new Sphere();
         ms_in.setId(3);
-        ms_in.setPos(new Point3d(4, 5, 6));
+        ms_in.setPosition(new Point3d(4, 5, 6));
         ms_in.setRadius(7);
 
         ByteArrayOutputStream memoryOutputStream = new ByteArrayOutputStream();

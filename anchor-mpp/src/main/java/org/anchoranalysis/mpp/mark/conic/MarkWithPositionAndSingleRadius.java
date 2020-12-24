@@ -114,7 +114,7 @@ public abstract class MarkWithPositionAndSingleRadius extends MarkWithPosition
     @Override
     public BoundingBox box(Dimensions dimensions, int regionID) {
         return BoundingBoxCalculator.boxFromBounds(
-                getPos(),
+                getPosition(),
                 radiusForRegion(regionID) + ADDED_TO_RADIUS,
                 numberDimensions() == 3,
                 dimensions);
@@ -129,7 +129,7 @@ public abstract class MarkWithPositionAndSingleRadius extends MarkWithPosition
     @Override
     public final byte isPointInside(Point3d point) {
 
-        double distance = getPos().distanceSquared(point);
+        double distance = getPosition().distanceSquared(point);
 
         if (distance <= radiusSq) {
             return FLAG_SUBMARK_INSIDE;
@@ -149,8 +149,8 @@ public abstract class MarkWithPositionAndSingleRadius extends MarkWithPosition
                             MarkWithPositionAndSingleRadius.this.radius + markCast.radius;
                     double distanceBetweenCenters =
                             MarkWithPositionAndSingleRadius.this
-                                    .getPos()
-                                    .distance(markCast.getPos());
+                                    .getPosition()
+                                    .distance(markCast.getPosition());
                     return radiusSum > distanceBetweenCenters;
                 } else {
                     throw new UnsupportedOperationException();

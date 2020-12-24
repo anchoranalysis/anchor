@@ -46,29 +46,28 @@ public abstract class MarkWithPosition extends Mark implements Serializable {
     /** */
     private static final long serialVersionUID = -6976277985708631268L;
 
-    // TODO rename pos to position, but this will likely break annotations, so be careful
     // START mark state
-    @Getter @Setter private Point3d pos;
+    @Getter @Setter private Point3d position;
     // END mark state
 
     // Constructor
     protected MarkWithPosition() {
-        this.pos = new Point3d();
+        this.position = new Point3d();
     }
 
     // Copy constructor
     protected MarkWithPosition(MarkWithPosition src) {
         super(src);
-        this.pos = new Point3d(src.pos);
+        this.position = new Point3d(src.position);
     }
 
     public String strPos() {
-        return String.format("[%6.1f,%6.1f,%6.1f]", this.pos.x(), this.pos.y(), this.pos.z());
+        return String.format("[%6.1f,%6.1f,%6.1f]", this.position.x(), this.position.y(), this.position.z());
     }
 
     @Override
     public void scale(double scaleFactor) {
-        scaleXYPoint(this.pos, scaleFactor);
+        scaleXYPoint(this.position, scaleFactor);
     }
 
     public static void scaleXYPoint(Point3d point, double multFactor) {
@@ -78,7 +77,7 @@ public abstract class MarkWithPosition extends Mark implements Serializable {
 
     @Override
     public Point3d centerPoint() {
-        return getPos();
+        return getPosition();
     }
 
     // Checks if two marks are equal by comparing all attributes
@@ -94,7 +93,7 @@ public abstract class MarkWithPosition extends Mark implements Serializable {
         }
 
         MarkWithPosition trgt = (MarkWithPosition) m;
-        return pos.equals(trgt.pos);
+        return position.equals(trgt.position);
     }
 
     @Override
@@ -103,7 +102,7 @@ public abstract class MarkWithPosition extends Mark implements Serializable {
 
         ObjectWithProperties object = super.deriveObject(bndScene, rm, bvOut);
         object.setProperty(
-                "midpointInt", calculateRelativePoint(pos, object.boundingBox().cornerMin()));
+                "midpointInt", calculateRelativePoint(position, object.boundingBox().cornerMin()));
         return object;
     }
 
@@ -114,13 +113,13 @@ public abstract class MarkWithPosition extends Mark implements Serializable {
         int dimensions = numberDimensions();
 
         if (dimensions >= 1) {
-            op.addDoubleAsString("Pos X", pos.x());
+            op.addDoubleAsString("Pos X", position.x());
         }
         if (dimensions >= 2) {
-            op.addDoubleAsString("Pos Y", pos.y());
+            op.addDoubleAsString("Pos Y", position.y());
         }
         if (dimensions >= 3) {
-            op.addDoubleAsString("Pos Z", pos.z());
+            op.addDoubleAsString("Pos Z", position.z());
         }
         return op;
     }

@@ -34,19 +34,19 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.mpp.bean.MPPBean;
-import org.anchoranalysis.mpp.feature.mark.ListUpdatableMarkSetCollection;
 import org.anchoranalysis.mpp.mark.CompatibleWithMark;
 import org.anchoranalysis.mpp.mark.set.UpdateMarkSetException;
 import org.anchoranalysis.mpp.segment.kernel.KernelCalculateEnergyException;
 import org.anchoranalysis.mpp.segment.kernel.KernelCalculationContext;
 
 /**
- * Modifies an Object by applying a kernel
+ * Modifies an entity by applying a kernel.
  *
  * @author Owen Feehan
- * @param <T> the type of object that is modified
+ * @param <T> the type of entity that is modified
+ * @param <S> updatable-state
  */
-public abstract class Kernel<T> extends MPPBean<Kernel<T>> implements CompatibleWithMark {
+public abstract class Kernel<T,S> extends MPPBean<Kernel<T,S>> implements CompatibleWithMark {
 
     // START BEAN PROPERTIES
     @BeanField @AllowEmpty @Getter @Setter
@@ -80,13 +80,13 @@ public abstract class Kernel<T> extends MPPBean<Kernel<T>> implements Compatible
     /**
      * If the kernel is accepted, makes the necessary changes to a ListUpdatableMarkSetCollection
      *
-     * @param updatableMarkSetCollection where to make the changes
+     * @param updatableState where to make the changes
      * @param energyExisting existing energy
      * @param energyNew accepted energy
      * @throws UpdateMarkSetException
      */
     public abstract void updateAfterAcceptance(
-            ListUpdatableMarkSetCollection updatableMarkSetCollection,
+            S updatableState,
             T energyExisting,
             T energyNew)
             throws UpdateMarkSetException;

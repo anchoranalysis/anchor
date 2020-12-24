@@ -33,10 +33,10 @@ import org.anchoranalysis.feature.shared.SharedFeatureMulti;
 import org.anchoranalysis.mpp.mark.voxelized.memo.MemoForIndex;
 import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 
-public interface UpdatableMarkSet {
+public interface UpdatableMarks {
 
-    void initUpdatableMarkSet(
-            MemoForIndex marks,
+    void initUpdatableMarks(
+            MemoForIndex memo,
             EnergyStack energyStack,
             Logger logger,
             SharedFeatureMulti sharedFeatures)
@@ -45,7 +45,7 @@ public interface UpdatableMarkSet {
     void add(MemoForIndex marksExisting, VoxelizedMarkMemo newMark) throws UpdateMarkSetException;
 
     void exchange(
-            MemoForIndex pxlMarkMemoList,
+            MemoForIndex memo,
             VoxelizedMarkMemo oldMark,
             int indexOldMark,
             VoxelizedMarkMemo newMark)
