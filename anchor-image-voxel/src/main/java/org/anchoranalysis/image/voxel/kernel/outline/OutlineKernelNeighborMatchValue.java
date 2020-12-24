@@ -153,21 +153,21 @@ public class OutlineKernelNeighborMatchValue extends OutlineKernelBase {
 
             if (inArrZLess1.isPresent()) {
                 if (binaryValues.isOff(inArrZLess1.get().getRaw(ind))) {
-                    return checkIfRequireHighIsTrue(inArrRLess1.get(), point, 0, 0);
+                    return checkIfRequireHighIsTrue(inArrRLess1.get(), point, 0, 0);    // NOSONAR
                 }
             } else {
                 if (!ignoreAtThreshold && !outsideAtThreshold) {
-                    return checkIfRequireHighIsTrue(inArrRLess1.get(), point, 0, 0);
+                    return checkIfRequireHighIsTrue(inArrRLess1.get(), point, 0, 0);    // NOSONAR
                 }
             }
 
             if (inArrZPlus1.isPresent()) {
                 if (binaryValues.isOff(inArrZPlus1.get().getRaw(ind))) {
-                    return checkIfRequireHighIsTrue(inArrRPlus1.get(), point, 0, 0);
+                    return checkIfRequireHighIsTrue(inArrRPlus1.get(), point, 0, 0);    // NOSONAR
                 }
             } else {
                 if (!ignoreAtThreshold && !outsideAtThreshold) {
-                    return checkIfRequireHighIsTrue(inArrRPlus1.get(), point, 0, 0);
+                    return checkIfRequireHighIsTrue(inArrRPlus1.get(), point, 0, 0);    // NOSONAR
                 }
             }
         }

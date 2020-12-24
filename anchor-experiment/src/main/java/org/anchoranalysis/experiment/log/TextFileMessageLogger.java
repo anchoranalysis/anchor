@@ -53,6 +53,9 @@ public class TextFileMessageLogger implements StatefulMessageLogger {
     private Optional<TextFileOutput> fileOutput = Optional.empty();
     private Optional<PrintWriter> printWriter = Optional.empty();
 
+    /** For synchronizing against the writer. */
+    private final Object lockWriter = new Object();
+    
     /**
      * Constructs a logger that (always) writes messages to a text-file with a specific path.
      *
@@ -107,7 +110,7 @@ public class TextFileMessageLogger implements StatefulMessageLogger {
     public void log(String message) {
         printWriter.ifPresent(
                 writer -> {
-                    synchronized (writer) {
+                    synchronized (lockWriter) {
                         writer.print(message);
                         writer.println();
                         writer.flush();

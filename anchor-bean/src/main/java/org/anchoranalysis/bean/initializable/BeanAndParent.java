@@ -36,12 +36,12 @@ import lombok.Value;
 class BeanAndParent {
 
     /** The bean */
-    private AnchorBean<?> bean;
+    private AnchorBean<?> bean; // NOSONAR
 
     /** Parent bean, or null if the bean doesn't have a parent */
     private BeanAndParent parent;
 
-    public AnchorBean<?> parentBean() {
+    public AnchorBean<?> parentBean() { // NOSONAR
         return parent != null ? parent.getBean() : null;
     }
 

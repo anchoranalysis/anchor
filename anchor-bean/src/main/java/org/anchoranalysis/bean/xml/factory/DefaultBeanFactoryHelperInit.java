@@ -41,8 +41,6 @@ import org.apache.commons.configuration.ConfigurationRuntimeException;
 import org.apache.commons.configuration.beanutils.BeanDeclaration;
 import org.apache.commons.configuration.beanutils.BeanHelper;
 
-// We
-
 /**
  * This is a factory that is similar to {@link BeanHelper} but changes behavior so that it will keep
  * passing the current <i>param</i> onto new beans which are created.
