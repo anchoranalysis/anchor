@@ -107,9 +107,6 @@ public class XMLUtilities {
      * @return a newly created {@link DocumentBuilderFactory}
      */
     private static DocumentBuilderFactory createDocumentBuilderFactory() {
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();  // NOSONAR
-        factory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
-        factory.setAttribute(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "");
-        return factory;
+        return DocumentBuilderFactory.newInstance();  // NOSONAR
     }
 }
