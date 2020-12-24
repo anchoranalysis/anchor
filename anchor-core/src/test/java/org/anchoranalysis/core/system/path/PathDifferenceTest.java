@@ -97,9 +97,9 @@ public class PathDifferenceTest {
             String expectedDirectory,
             String expectedFilename)
             throws PathDifferenceException {
-        PathDifference fdd = test(baseDirectoryPath, filePath);
-        assertTrue(fdd.getDirectory().equals(Optional.of(resolve(expectedDirectory))));
-        assertTrue(fdd.getFilename().equals(expectedFilename));
+        PathDifference difference = test(baseDirectoryPath, filePath);
+        assertEquals(Optional.of(resolve(expectedDirectory)), difference.getDirectory());
+        assertEquals(expectedFilename, difference.getFilename());
     }
 
     private PathDifference test(String baseDirectoryPath, String filePath)

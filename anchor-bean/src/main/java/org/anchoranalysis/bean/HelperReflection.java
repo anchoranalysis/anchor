@@ -32,6 +32,7 @@ import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -52,16 +53,17 @@ class HelperReflection {
      * @return all fields in the class
      */
     public static List<Field> findAllFields(Class<?> classWithFields) {
-
         List<Field> out = new ArrayList<>();
 
         Class<?> current = classWithFields;
         do {
-            for (Field f : current.getDeclaredFields()) {
-                out.add(f);
-            }
+            addFieldsToList(current, out);
         } while ((current = current.getSuperclass()) != null);
 
         return out;
+    }
+    
+    private static void addFieldsToList(Class<?> beanClass, List<Field> out) {
+        Arrays.stream(beanClass.getDeclaredFields()).forEach(out::add);
     }
 }

@@ -71,7 +71,7 @@ class HelperBeanFields {
         List<Field> allFields = HelperReflection.findAllFields(clss);
         
         return FunctionalList.filterAndMapToList(allFields, field -> field.isAnnotationPresent(BeanField.class), field -> {
-            field.setAccessible(true);
+            field.setAccessible(true);  // NOSONAR
             return field;
         });
     }
