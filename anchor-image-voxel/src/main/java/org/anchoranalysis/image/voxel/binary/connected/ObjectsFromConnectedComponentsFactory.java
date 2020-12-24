@@ -57,12 +57,12 @@ public class ObjectsFromConnectedComponentsFactory {
     }
 
     // This consumes the voxel buffer 'vb'
-    public ObjectCollection createConnectedComponents(BinaryVoxels<UnsignedByteBuffer> voxels) {
+    public ObjectCollection createUnsignedByte(BinaryVoxels<UnsignedByteBuffer> voxels) {
         return unionFind.deriveConnectedByte(voxels);
     }
 
     // This consumes the voxel buffer 'vb'
-    public ObjectCollection create(BinaryVoxels<UnsignedIntBuffer> voxels) {
+    public ObjectCollection createUnsignedInt(BinaryVoxels<UnsignedIntBuffer> voxels) {
         return unionFind.deriveConnectedInt(voxels);
     }
 }

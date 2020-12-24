@@ -30,23 +30,23 @@ import java.util.Optional;
 import lombok.EqualsAndHashCode;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.input.FeatureInputEnergy;
-import org.anchoranalysis.mpp.feature.mark.MemoCollection;
+import org.anchoranalysis.mpp.feature.mark.EnergyMemoList;
 
 @EqualsAndHashCode(callSuper = true)
 public class FeatureInputAllMemo extends FeatureInputEnergy {
 
-    private MemoCollection pxlMarkMemoList;
+    private EnergyMemoList pxlMarkMemoList;
 
-    public FeatureInputAllMemo(MemoCollection pxlMarkMemoList, EnergyStack raster) {
+    public FeatureInputAllMemo(EnergyMemoList pxlMarkMemoList, EnergyStack raster) {
         super(Optional.of(raster));
         this.pxlMarkMemoList = pxlMarkMemoList;
     }
 
-    public MemoCollection getPxlPartMemo() {
+    public EnergyMemoList getPxlPartMemo() {
         return pxlMarkMemoList;
     }
 
-    public void setPxlPartMemo(MemoCollection pxlPartMemoList) {
+    public void setPxlPartMemo(EnergyMemoList pxlPartMemoList) {
         this.pxlMarkMemoList = pxlPartMemoList;
     }
 }

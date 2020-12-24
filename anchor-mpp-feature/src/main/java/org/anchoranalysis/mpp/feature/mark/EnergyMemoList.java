@@ -27,8 +27,6 @@
 package org.anchoranalysis.mpp.feature.mark;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
 import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
@@ -45,26 +43,24 @@ import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 /**
  * A collection of memoized marks on which energies can be derived.
  *
- * <p>TODO, can it be united with {@link MemoList}?
- *
  * @author Owen Feehan
  */
-public class MemoCollection implements Serializable, MemoForIndex {
+public class EnergyMemoList implements Serializable, MemoForIndex {
 
     /** */
     private static final long serialVersionUID = 9067220044867268357L;
 
     // We keep the pixelized version of the marks
-    private transient List<VoxelizedMarkMemo> pxlMarkMemo;
+    private transient MemoList list;
 
     private transient RegionMap regionMap;
 
     // START CONSTRUCTORS
-    public MemoCollection() {
-        pxlMarkMemo = new ArrayList<>();
+    public EnergyMemoList() {
+        list = new MemoList();
     }
 
-    public MemoCollection(
+    public EnergyMemoList(
             EnergySavedInd savedInd,
             EnergyStackWithoutParams energyStack,
             MarkCollection marks,
@@ -74,22 +70,22 @@ public class MemoCollection implements Serializable, MemoForIndex {
         calculateFreshInd(savedInd, energyStack, marks, energySchemeTotal);
     }
 
-    public MemoCollection(MemoCollection src) {
-        this.pxlMarkMemo = new ArrayList<>();
-        this.regionMap = src.getRegionMap();
-        for (VoxelizedMarkMemo pmm : src.pxlMarkMemo) {
-            this.pxlMarkMemo.add(pmm);
+    public EnergyMemoList(EnergyMemoList source) {
+        this.list = new MemoList();
+        this.regionMap = source.getRegionMap();
+        for (VoxelizedMarkMemo pmm : source.list) {
+            this.list.add(pmm);
         }
     }
     // END CONSTRUCTORS
 
     public void clean() {
-        pxlMarkMemo = null;
+        list = null;
     }
 
     @Override
     public int size() {
-        return pxlMarkMemo.size();
+        return list.size();
     }
 
     public RegionMap getRegionMap() {
@@ -101,17 +97,17 @@ public class MemoCollection implements Serializable, MemoForIndex {
         if (index == -1) {
             throw new AnchorFriendlyRuntimeException("Mark doesn't exist in marks");
         }
-        return pxlMarkMemo.get(index);
+        return list.get(index);
     }
 
     public VoxelizedMarkMemo getMemoForIndex(int index) {
-        return pxlMarkMemo.get(index);
+        return list.get(index);
     }
 
     public int getIndexForMemo(VoxelizedMarkMemo memo) {
-        for (int i = 0; i < pxlMarkMemo.size(); i++) {
+        for (int i = 0; i < list.size(); i++) {
 
-            VoxelizedMarkMemo pmm = pxlMarkMemo.get(i);
+            VoxelizedMarkMemo pmm = list.get(i);
 
             if (pmm.equals(memo)) {
                 return i;
@@ -130,7 +126,7 @@ public class MemoCollection implements Serializable, MemoForIndex {
 
         energySavedInd.setEnergyTotal(0);
 
-        this.pxlMarkMemo = new ArrayList<>();
+        this.list = new MemoList();
 
         energySavedInd.resetInd();
 
@@ -139,7 +135,7 @@ public class MemoCollection implements Serializable, MemoForIndex {
 
             VoxelizedMarkMemo pmm =
                     PxlMarkMemoFactory.create(mrk, energyStack, energySchemeTotal.getRegionMap());
-            this.pxlMarkMemo.add(pmm);
+            this.list.add(pmm);
 
             EnergyTotal ind = energySchemeTotal.totalIndividual(pmm, energyStack);
             energySavedInd.add(ind);
@@ -159,7 +155,7 @@ public class MemoCollection implements Serializable, MemoForIndex {
         EnergyTotal ind = energySchemeTotal.totalIndividual(newMark, stack);
         energySavedInd.exchange(index, ind);
 
-        this.pxlMarkMemo.set(index, newMark);
+        this.list.set(index, newMark);
 
         return newMark;
     }
@@ -173,7 +169,7 @@ public class MemoCollection implements Serializable, MemoForIndex {
         EnergyTotal energy = energyScheme.totalIndividual(memo, stack);
 
         // We calculate energy for individual components
-        this.pxlMarkMemo.add(memo);
+        this.list.add(memo);
 
         energySavedInd.add(energy);
 
@@ -184,7 +180,7 @@ public class MemoCollection implements Serializable, MemoForIndex {
 
         energySavedInd.rmv(index);
 
-        this.pxlMarkMemo.remove(index);
+        this.list.remove(index);
     }
 
     public void removeTwo(EnergySavedInd energySavedInd, int index1, int index2) {
@@ -193,14 +189,6 @@ public class MemoCollection implements Serializable, MemoForIndex {
 
         remove(energySavedInd, indexMax);
         remove(energySavedInd, indexMin);
-    }
-
-    public void assertValid() {
-        for (VoxelizedMarkMemo pmm : pxlMarkMemo) {
-            if (pmm == null) {
-                assert false;
-            }
-        }
     }
 
     public MarkCollection asMarks() {

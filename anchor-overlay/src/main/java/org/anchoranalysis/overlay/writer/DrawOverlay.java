@@ -96,7 +96,7 @@ public abstract class DrawOverlay {
                     dimensions,
                     background,
                     ObjectDrawAttributesFactory.createFromOverlays(
-                            overlays, idGetter, new IdentifierByProperty("colorID")),
+                            overlays, idGetter, new IdentifierByProperty(PROPERTY_COLOR_ID)),
                     boxContainer);
         } catch (CreateException e) {
             throw new OperationFailedException(e);

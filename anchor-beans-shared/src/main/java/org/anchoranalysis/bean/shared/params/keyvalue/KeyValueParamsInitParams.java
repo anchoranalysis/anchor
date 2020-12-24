@@ -39,12 +39,8 @@ public class KeyValueParamsInitParams implements BeanInitParams {
 
     @Getter private final NamedProviderStore<Path> namedFilePaths;
 
-    private KeyValueParamsInitParams(SharedObjects sharedObjects) {
+    public KeyValueParamsInitParams(SharedObjects sharedObjects) {
         namedKeyValueParams = sharedObjects.getOrCreate(KeyValueParams.class);
         namedFilePaths = sharedObjects.getOrCreate(String.class);
-    }
-
-    public static KeyValueParamsInitParams create(SharedObjects so) {
-        return new KeyValueParamsInitParams(so);
     }
 }

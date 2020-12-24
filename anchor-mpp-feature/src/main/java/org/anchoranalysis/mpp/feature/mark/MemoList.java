@@ -27,13 +27,14 @@
 package org.anchoranalysis.mpp.feature.mark;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import lombok.EqualsAndHashCode;
 import org.anchoranalysis.mpp.mark.voxelized.memo.MemoForIndex;
 import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 
 @EqualsAndHashCode(callSuper = false)
-public class MemoList implements MemoForIndex {
+public class MemoList implements MemoForIndex, Iterable<VoxelizedMarkMemo> {
 
     private List<VoxelizedMarkMemo> delegate = new ArrayList<>();
 
@@ -67,5 +68,14 @@ public class MemoList implements MemoForIndex {
 
     public boolean remove(VoxelizedMarkMemo o) {
         return delegate.remove(o);
+    }
+
+    @Override
+    public Iterator<VoxelizedMarkMemo> iterator() {
+        return delegate.iterator();
+    }
+
+    public VoxelizedMarkMemo set(int index, VoxelizedMarkMemo element) {
+        return delegate.set(index, element);
     }
 }

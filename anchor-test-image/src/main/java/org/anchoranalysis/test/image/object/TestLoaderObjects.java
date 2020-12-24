@@ -55,7 +55,7 @@ public class TestLoaderObjects {
     /** Gets largest connected component from treating a stack as a single-channeled binary-mask. */
     private static ObjectMask largestObjectFromStack(Stack stack) {
         Mask mask = new Mask(stack.getChannel(0));
-        return findLargestObject(FACTORY.createConnectedComponents(mask.binaryVoxels()));
+        return findLargestObject(FACTORY.createUnsignedByte(mask.binaryVoxels()));
     }
 
     private static ObjectMask findLargestObject(ObjectCollection objects) {

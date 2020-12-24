@@ -88,7 +88,7 @@ public class ImageInitParams implements BeanInitParams {
             SharedObjects sharedObjects, Optional<ImageSizeSuggestion> suggestedResize) {
         this.sharedObjects = sharedObjects;
         this.suggestedResize = suggestedResize;
-        this.soParams = KeyValueParamsInitParams.create(sharedObjects);
+        this.soParams = new KeyValueParamsInitParams(sharedObjects);
         this.soFeature = SharedFeaturesInitParams.create(sharedObjects);
 
         storeStack = sharedObjects.getOrCreate(Stack.class);

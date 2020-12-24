@@ -38,7 +38,7 @@ import org.anchoranalysis.feature.shared.SharedFeatureMulti;
 import org.anchoranalysis.mpp.feature.energy.scheme.EnergyScheme;
 import org.anchoranalysis.mpp.feature.energy.scheme.EnergySchemeWithSharedFeatures;
 import org.anchoranalysis.mpp.feature.mark.ListUpdatableMarkSetCollection;
-import org.anchoranalysis.mpp.feature.mark.MemoCollection;
+import org.anchoranalysis.mpp.feature.mark.EnergyMemoList;
 import org.anchoranalysis.mpp.feature.mark.MemoList;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.set.UpdateMarkSetException;
@@ -60,7 +60,7 @@ public final class VoxelizedMarksWithEnergy {
      * A cached version of the calculations for each energy component in the associated {@link
      * EnergyScheme}
      */
-    private MemoCollection memoMarks;
+    private EnergyMemoList memoMarks;
 
     private Logger logger;
 
@@ -76,13 +76,13 @@ public final class VoxelizedMarksWithEnergy {
     /** Creates a shallow-copy of the marks */
     public VoxelizedMarksWithEnergy shallowCopy() {
         return new VoxelizedMarksWithEnergy(
-                marks.shallowCopy(), new MemoCollection(memoMarks), logger);
+                marks.shallowCopy(), new EnergyMemoList(memoMarks), logger);
     }
 
     /** Creates a deep-copy of the marks */
     public VoxelizedMarksWithEnergy deepCopy() {
         return new VoxelizedMarksWithEnergy(
-                marks.deepCopy(), new MemoCollection(memoMarks), logger);
+                marks.deepCopy(), new EnergyMemoList(memoMarks), logger);
     }
 
     public int indexOf(Mark mark) {
@@ -204,7 +204,7 @@ public final class VoxelizedMarksWithEnergy {
     }
 
     // The initial calculation of the Energy, thereafter it can be updated
-    private static MemoCollection createMemoCollection(
+    private static EnergyMemoList createMemoCollection(
             MarksWithEnergyBreakdown marks,
             EnergyStack energyStack,
             SharedFeatureMulti sharedFeatures,
@@ -213,8 +213,8 @@ public final class VoxelizedMarksWithEnergy {
         try {
             marks.init();
 
-            MemoCollection memo =
-                    new MemoCollection(
+            EnergyMemoList memo =
+                    new EnergyMemoList(
                             marks.getIndividual(),
                             energyStack.withoutParams(),
                             marks.getMarks(),

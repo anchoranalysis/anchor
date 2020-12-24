@@ -51,7 +51,7 @@ import org.jgrapht.alg.util.UnionFind;
 class ConnectedComponentUnionFind {
 
     /**
-     * a minimum number of voxels necessary in the connected-component, otherwise it omitted from
+     * A minimum number of voxels necessary in the connected-component, otherwise it omitted from
      * the output.
      */
     private final int minNumberVoxels;
@@ -64,7 +64,7 @@ class ConnectedComponentUnionFind {
      *
      * @param voxels binary-voxels to be searched for connected components. It is consumed
      *     (modified) during processing.
-     * @return the connected-components derived from the voxels
+     * @return the connected-components derived from the voxels.
      */
     public ObjectCollection deriveConnectedByte(BinaryVoxels<UnsignedByteBuffer> voxels) {
         return deriveConnected(voxels, new ReadWriteByte());
@@ -99,7 +99,7 @@ class ConnectedComponentUnionFind {
     private <T> void visitRegion(
             BinaryVoxels<T> visited,
             ObjectCollection objects,
-            int minNumberVoxels,
+            int minimumNumberVoxels,
             BufferReadWrite<T> bufferReaderWriter) {
 
         UnionFind<Integer> unionIndex = new UnionFind<>(new HashSet<>());
@@ -115,7 +115,7 @@ class ConnectedComponentUnionFind {
                                 createMergeWithNeighbors(indexBuffer, unionIndex),
                                 bufferReaderWriter));
 
-        processIndexBuffer(maxBigIDAdded, unionIndex, indexBuffer, objects, minNumberVoxels);
+        processIndexBuffer(maxBigIDAdded, unionIndex, indexBuffer, objects, minimumNumberVoxels);
     }
 
     private MergeWithNeighbors createMergeWithNeighbors(
