@@ -66,8 +66,7 @@ public class LineSegment extends Mark {
     @Override
     public byte isPointInside(Point3d point) {
 
-        // TODO
-        // This should be half the distance from one corner of a pixel/voxel to another
+        // TODO This should be half the distance from one corner of a pixel/voxel to another
         // And it thus depends on the number of dimensions
         // In future we calculate this in a better way
 

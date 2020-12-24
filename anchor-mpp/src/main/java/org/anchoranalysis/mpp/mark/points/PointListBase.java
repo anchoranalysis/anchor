@@ -72,7 +72,7 @@ public abstract class PointListBase extends Mark {
 
     @Override
     public BoundingBox box(Dimensions dimensions, int regionID) {
-        // TODO FOR NOW WE IGNORE THE SHELL RADIUS
+        // Note that the shell radius is ignored.
         return new BoundingBox(min, max);
     }
 
