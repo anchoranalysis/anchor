@@ -23,5 +23,5 @@
  * THE SOFTWARE.
  * #L%
  */
-/** Reading and writing annotations basedupon marks to the file-system. */
+/** Reading and writing {@link org.anchoranalysis.mpp.mark.Mark}-related annotations from/to the file-system. */
 package org.anchoranalysis.annotation.io.mark;

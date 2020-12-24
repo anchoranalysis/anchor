@@ -59,7 +59,7 @@ public class OptionalFactory {
     }
 
     /**
-     * Creates only if a boolean flag is true, otherwise returns empty.
+     * Creates only if a boolean flag is true, otherwise returns {@code Optional.empty()}.
      *
      * @param <T> type of optional
      * @param flag boolean flag
@@ -75,7 +75,7 @@ public class OptionalFactory {
     }
 
     /**
-     * Creates {@code Optional.empty()} for an empty string, or otherwise Optional.of
+     * Creates {@code Optional.empty()} for an empty string, or otherwise {@code Optional.of()}.
      *
      * @param string the string (possibly empty)
      * @return the optional
