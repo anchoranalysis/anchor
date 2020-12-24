@@ -112,9 +112,15 @@ public class Channel {
         this.voxels = voxelsToAssign;
     }
 
-    /** Creates a new channel contain only of a particular slice (reusing the voxel buffers) */
-    public Channel extractSlice(int z) {
-        return ChannelFactory.instance().create(voxels.extract().slice(z), dimensions.resolution());
+    /** 
+     * Creates a new channel containing only one particular slice.
+     * 
+     * <p>The existing {@link Voxels} are reused, without creating new buffers.
+     *
+     * @param sliceIndex the index of the slice to extract (index in z-dimension)
+     */
+    public Channel extractSlice(int sliceIndex) {
+        return ChannelFactory.instance().create(voxels.extract().slice(sliceIndex), dimensions.resolution());
     }
 
     public Channel scaleXY(ScaleFactor scaleFactor) {
@@ -122,7 +128,7 @@ public class Channel {
     }
 
     public Channel scaleXY(ScaleFactor scaleFactor, Interpolator interpolator) {
-        // We round as sometimes we get values which, for example, are 7.999999, intended to be 8,
+        // Rounding as sometimes we get values which, for example, are 7.999999, intended to be 8,
         // due to how we use our ScaleFactors
         int newSizeX = ScaleFactorUtilities.scaleQuantity(scaleFactor.x(), dimensions().x());
         int newSizeY = ScaleFactorUtilities.scaleQuantity(scaleFactor.y(), dimensions().y());
@@ -159,11 +165,13 @@ public class Channel {
         return flattenZProjection(VoxelsExtracter::projectMean);
     }
 
-    // Duplicates the current channel
+    /**
+     * A deep-copy.
+     * 
+     * @return newly created deep-copy.
+     */
     public Channel duplicate() {
-        Channel duplicated = FACTORY.create(voxels.duplicate(), dimensions().resolution());
-        assert (duplicated.voxels.extent().equals(voxels.extent()));
-        return duplicated;
+        return FACTORY.create(voxels.duplicate(), dimensions().resolution());
     }
 
     /**

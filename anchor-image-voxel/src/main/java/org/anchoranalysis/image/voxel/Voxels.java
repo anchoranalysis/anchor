@@ -88,6 +88,11 @@ public abstract class Voxels<T> {
         return slices.extent();
     }
 
+    /**
+     * A deep-copy.
+     * 
+     * @return newly created deep-copy.
+     */
     public Voxels<T> duplicate() {
         Voxels<T> out = factory.createInitialized(slices().extent());
 

@@ -79,7 +79,6 @@ public class OverlayObjectMask extends Overlay {
                 overlayWriter, om, zoomFactorNew, om, dimensionsScaled, bvOut);
     }
 
-    // TODO do we need to duplicate here?
     @Override
     public ObjectWithProperties createObject(
             DrawOverlay overlayWriter, Dimensions dimEntireImage, BinaryValuesByte bvOut)

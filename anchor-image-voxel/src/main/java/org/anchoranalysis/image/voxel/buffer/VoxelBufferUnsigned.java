@@ -14,7 +14,7 @@ public abstract class VoxelBufferUnsigned<T extends UnsignedBuffer> extends Voxe
 
     private final T buffer;
     
-    public VoxelBufferUnsigned(T buffer) {
+    protected VoxelBufferUnsigned(T buffer) {
         Preconditions.checkArgument(buffer.hasArray());
         this.buffer = buffer;
     }
