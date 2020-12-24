@@ -58,9 +58,9 @@ public class OverlayObjectMask extends Overlay {
         this.id = id;
     }
 
-    // Assumes object-mask is always inside the dim. TODO verify that is valid.
     @Override
-    public BoundingBox box(DrawOverlay overlayWriter, Dimensions dim) {
+    public BoundingBox box(DrawOverlay overlayWriter, Dimensions dimensions) {
+        // Assumes thhe object-mask is always inside the dimensions.
         return object.boundingBox();
     }
 
@@ -98,9 +98,9 @@ public class OverlayObjectMask extends Overlay {
 
     // We delegate uniqueness-check to the object-mask
     @Override
-    public boolean equals(Object arg0) {
-        if (arg0 instanceof OverlayObjectMask) {
-            OverlayObjectMask objCast = (OverlayObjectMask) arg0;
+    public boolean equals(Object other) {
+        if (other instanceof OverlayObjectMask) {
+            OverlayObjectMask objCast = (OverlayObjectMask) other;
             return this.object.withoutProperties().equals(objCast.object.withoutProperties());
         } else {
             return false;
@@ -114,9 +114,13 @@ public class OverlayObjectMask extends Overlay {
 
     @Override
     public OverlayProperties generateProperties(Optional<Resolution> resolution) {
-        // TODO take the properties from the object-mask
         OverlayProperties out = new OverlayProperties();
         out.add("id", id);
+        object.forEachProperty( (name,value) -> {
+            if (value instanceof String) {
+                out.add(name, (String) value);
+            }
+        });
         return out;
     }
 }

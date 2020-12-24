@@ -186,7 +186,7 @@ public class ImageInitParams implements BeanInitParams {
 
     public void addToKeyValueParamsCollection(String identifier, KeyValueParams params)
             throws OperationFailedException {
-        params().getNamedKeyValueParamsCollection().add(identifier, () -> params);
+        params().getNamedKeyValueParams().add(identifier, () -> params);
     }
 
     public Path getModelDirectory() {

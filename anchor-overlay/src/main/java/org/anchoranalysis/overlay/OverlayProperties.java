@@ -36,10 +36,9 @@ import org.anchoranalysis.image.core.dimensions.SpatialUnits.UnitSuffix;
 
 public class OverlayProperties implements Iterable<NameValue<String>> {
 
-    private NameValueSet<String> nameValueSet;
+    private final NameValueSet<String> nameValueSet;
 
     public OverlayProperties() {
-        super();
         this.nameValueSet = new NameValueSet<>();
     }
 
