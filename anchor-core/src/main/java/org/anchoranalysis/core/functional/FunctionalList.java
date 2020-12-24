@@ -136,10 +136,32 @@ public class FunctionalList {
                 .map(Optional::get)
                 .collect(Collectors.toList());
     }
+    
+    /**
+     * Maps a collection to a list with each element in the original collection maybe producing an
+     * element in the output
+     *
+     * @param  <S> parameter-type for function
+     * @param  <T> return-type for function
+     * @param collection the collection to be mapped
+     * @param throwableClass class type of exception that may be thrown by {@code mapFunction}
+     * @param mapFunction function to do the mapping to an Optional (the item is included in the
+     *     output if the optional is defined)
+     * @return a list with the same size and same order, but using derived elements that are a
+     *     result of the mapping
+     * @throws E 
+     */
+    public static <S, T, E extends Exception> List<T> mapToListOptional(
+            Collection<S> collection, Class<? extends Exception> throwableClass, CheckedFunction<S, Optional<T>, E> mapFunction) throws E {
+        return CheckedStream.map( collection.stream(), throwableClass, mapFunction )
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toList());
+    }
 
     /**
      * Flat-maps a collection to a list where in the original collection can produce many elements
-     * in the outging list.
+     * in the outgoing list.
      *
      * @param  <S> parameter-type for function
      * @param  <T> return-type for function
@@ -176,8 +198,9 @@ public class FunctionalList {
      *
      * @param  <S> parameter-type for function
      * @param  <T> return-type for function
-     * @param  <E> exception that can be thrown by {code mapFunction}
+     * @param  <E> exception that can be thrown by @{code mapFunction}
      * @param collection the collection to be mapped
+     * @param throwableClass class type of exception that may be thrown by {@code mapFunction}
      * @param mapFunction function to do the mapping
      * @return a list with the same size and same order, but using derived elements that are a
      *     result of the mapping
@@ -198,6 +221,7 @@ public class FunctionalList {
      * @param  <T> return-type for function
      * @param  <E> exception that can be thrown by {code mapFunction}
      * @param array the array to be mapped
+     * @param throwableClass class type of exception that may be thrown by {@code mapFunction}
      * @param mapFunction function to do the mapping
      * @return a list with the same size and same order, but using derived elements that are a
      *     result of the mapping
@@ -214,7 +238,7 @@ public class FunctionalList {
     /**
      * Creates a list of elements, where each element corresponds to an index in a range.
      *
-     * @param <T> elment-type in the list
+     * @param <T> element-type in the list
      * @param startInclusive minimum-element in range (inclusive)
      * @param endExclusive maximum-element in range (exclusive)
      * @param mapFunction function to do the mapping
@@ -252,6 +276,7 @@ public class FunctionalList {
      * @param <E> exception that may be thrown during evaluating the predicate
      * @param predicate predicate to first filter the input collection before mapping
      * @param collection the collection to be filtered
+     * @param throwableClass class type of exception that may be thrown by {@code mapFunction}
      * @return a list with only the elements that pass the filter
      * @throws E if an exception is thrown during evaluating the predicate
      */

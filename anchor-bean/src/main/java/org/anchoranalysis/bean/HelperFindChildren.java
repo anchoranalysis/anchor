@@ -32,7 +32,6 @@ import java.util.Collection;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 import org.anchoranalysis.bean.exception.BeanStrangeException;
 
@@ -57,19 +56,9 @@ class HelperFindChildren {
 
         try {
             for (Field field : listFields) {
-                Object value = field.get(bean);
-
-                // If it's non-optional, then we insist it's non-null
-                if (value == null) {
-                    if (field.isAnnotationPresent(OptionalBean.class)) {
-                        continue;
-                    } else {
-                        HelperBeanFields.throwMissingPropertyException(
-                                field.getName(), bean.getBeanName());
-                    }
-                }
-
-                maybeAdd(value, match, out);
+                FieldAccessor.fieldFromBean(bean, field).ifPresent(
+                    value -> maybeAdd(value, match, out)
+                );
             }
         } catch (IllegalAccessException e) {
             throw new BeanStrangeException(

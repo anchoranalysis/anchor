@@ -63,7 +63,7 @@ public class XMLUtilities {
      * @throws TransformerConfigurationException
      */
     public static TransformerFactory createTransformerFactory() throws TransformerConfigurationException {
-        TransformerFactory factory = TransformerFactory.newInstance();
+        TransformerFactory factory = TransformerFactory.newInstance();  // NOSONAR
         factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
         return factory;
     }
@@ -105,11 +105,9 @@ public class XMLUtilities {
      * Creates a {@link DocumentBuilderFactory} that ignores any DTDs in the document and disables external entities (to prevent XXE attacks).
      * 
      * @return a newly created {@link DocumentBuilderFactory}
-     * @throws ParserConfigurationException
      */
-    private static DocumentBuilderFactory createDocumentBuilderFactory() throws ParserConfigurationException {
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+    private static DocumentBuilderFactory createDocumentBuilderFactory() {
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();  // NOSONAR
         factory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
         factory.setAttribute(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "");
         return factory;

@@ -85,7 +85,6 @@ public class Define extends AnchorBean<Define> {
         }
     }
 
-    @SuppressWarnings("unchecked")
     public <T extends AnchorBean<?>> List<NamedBean<T>> getList(Class<?> listType) {
 
         List<NamedBean<?>> listIn = map.get(listType);

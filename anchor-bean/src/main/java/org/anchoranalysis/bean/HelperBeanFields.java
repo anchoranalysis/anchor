@@ -26,138 +26,119 @@
 
 package org.anchoranalysis.bean;
 
+import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 import org.anchoranalysis.bean.exception.BeanStrangeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.functional.FunctionalList;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class HelperBeanFields {
-
+    
     public static String describeChildBeans(AnchorBean<?> bean) {
-
         try {
+            List<String> descriptions = FunctionalList.mapToListOptional(
+                 bean.fields(),
+                 OperationFailedException.class,
+                 field -> maybeDescribeChildBean(bean, field)
+             );
+            return String.join(", ", descriptions);
 
-            List<Field> listFields = bean.fields();
-
-            StringBuilder sb = new StringBuilder();
-
-            for (int i = 0; i < listFields.size(); i++) {
-                Field field = listFields.get(i);
-
-                Object value = field.get(bean);
-
-                // If it's non-optional, then we insist it's non-null
-                if (value == null) {
-                    if (field.isAnnotationPresent(OptionalBean.class)) {
-                        continue;
-                    } else {
-                        throwMissingPropertyException(field.getName(), bean.getBeanName());
-                    }
-                }
-
-                if (i != 0) {
-                    sb.append(", ");
-                }
-
-                sb.append(field.getName());
-                sb.append("=");
-                sb.append(describeField(field, bean));
-            }
-            return sb.toString();
-
-        } catch (IllegalAccessException | OperationFailedException | BeanMisconfiguredException e) {
+        } catch (OperationFailedException e) {
             throw new BeanStrangeException("Failed to describe child beans", e);
         }
     }
+    
+    /**
+     * Creates a list of all <i>bean property</i> fields associated with the bean.
+     * 
+     * {@link Field} is used in place of {@link PropertyDescriptor} as it seems to be much faster
+     * to access with reflection. Otherwise it's quite slow.
+     * And we make sure we set {@code setAccessible(true)} as this reportedly disables access checks,
+     * and makes access much faster. 
+     * 
+     * @param clss the class of the bean, whose fields should be listed
+     * @return a newly created list of all the bean-property fields associated with {@code clss}
+     */
+    public static List<Field> createListBeanPropertyFields(Class<?> clss) {
 
-    // We use Field instead of PropertyDescriptor has they seem to be much faster to access with
-    // reflection. Otherwise it's very slow
-    // And we make sure we set the setAccessible(true) as this reportedly disables access checks,
-    // and makes access much faster.
-    public static List<Field> createListBeanPropertyFields(Class<?> c) {
-
-        List<Field> fieldsOut = new ArrayList<>();
-
-        List<Field> listFields = HelperReflection.findAllFields(c);
-
-        for (Field field : listFields) {
-            if (field.isAnnotationPresent(BeanField.class)) {
-                field.setAccessible(true);
-                fieldsOut.add(field);
-            }
-        }
-
-        return fieldsOut;
+        List<Field> allFields = HelperReflection.findAllFields(clss);
+        
+        return FunctionalList.filterAndMapToList(allFields, field -> field.isAnnotationPresent(BeanField.class), field -> {
+            field.setAccessible(true);
+            return field;
+        });
     }
 
     private static String describeBean(AnchorBean<?> bean) {
-
-        StringBuilder sb = new StringBuilder();
-        sb.append(bean.getBeanName());
-        sb.append("(");
-        sb.append(describeChildBeans(bean));
-        sb.append(")");
-        return sb.toString();
+        StringBuilder builder = new StringBuilder();
+        builder.append(bean.getBeanName());
+        builder.append("(");
+        builder.append(describeChildBeans(bean));
+        builder.append(")");
+        return builder.toString();
     }
 
-    static void throwMissingPropertyException(String fieldName, String className)
-            throws BeanMisconfiguredException {
-        throw new BeanMisconfiguredException(
-                String.format("Property %s of class %s must be non-null", fieldName, className));
-    }
+    private static Optional<String> maybeDescribeChildBean(AnchorBean<?> bean, Field field) throws OperationFailedException {
 
+        try {
+            FieldAccessor.fieldFromBean(bean, field);
+                
+            return Optional.of( String.format("%s=%s", field.getName(), describeField(field, bean)));
+        } catch (IllegalArgumentException | OperationFailedException | BeanMisconfiguredException | IllegalAccessException e) {
+            throw new OperationFailedException(e);
+        }
+    }
+    
     private static String describeField(Field field, AnchorBean<?> bean)
             throws OperationFailedException {
         try {
 
-            Object val = field.get(bean);
-            if (val instanceof AnchorBean) {
-
-                AnchorBean<?> valCast = (AnchorBean<?>) val;
-                return describeBean(valCast);
+            Object value = field.get(bean);
+            if (value instanceof AnchorBean) {
+                return describeBean((AnchorBean<?>) value);
             }
 
-            if (val instanceof List) {
+            if (value instanceof List) {
                 return "list";
             }
 
-            if (val instanceof String) {
-                return "'" + (String) val + "'";
+            if (value instanceof String) {
+                return "'" + (String) value + "'";
             }
 
-            if (val instanceof Integer) {
-                return Integer.toString((Integer) val);
+            if (value instanceof Integer) {
+                return Integer.toString((Integer) value);
             }
 
-            if (val instanceof Double) {
-                return Double.toString((Double) val);
+            if (value instanceof Double) {
+                return Double.toString((Double) value);
             }
 
-            if (val instanceof Float) {
-                return Float.toString((Float) val);
+            if (value instanceof Float) {
+                return Float.toString((Float) value);
             }
 
-            if (val instanceof Byte) {
-                return Byte.toString((Byte) val);
+            if (value instanceof Byte) {
+                return Byte.toString((Byte) value);
             }
 
-            if (val instanceof Short) {
-                return Short.toString((Short) val);
+            if (value instanceof Short) {
+                return Short.toString((Short) value);
             }
 
-            if (val instanceof Long) {
-                return Long.toString((Long) val);
+            if (value instanceof Long) {
+                return Long.toString((Long) value);
             }
 
-            if (val instanceof Boolean) {
-                return (boolean) val ? "true" : "false";
+            if (value instanceof Boolean) {
+                return (boolean) value ? "true" : "false";
             }
 
             throw new OperationFailedException("Unknown bean type");
