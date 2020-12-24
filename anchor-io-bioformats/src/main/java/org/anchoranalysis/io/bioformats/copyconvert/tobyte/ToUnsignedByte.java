@@ -40,7 +40,7 @@ public abstract class ToUnsignedByte extends ConvertTo<UnsignedByteBuffer> {
     protected int bytesPerPixel;
     protected int sizeBytes;
 
-    public ToUnsignedByte() {
+    protected ToUnsignedByte() {
         super(VoxelsWrapper::asByte);
     }
 

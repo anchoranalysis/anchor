@@ -52,7 +52,7 @@ public abstract class AnchorFriendlyCheckedException extends AnchorCheckedExcept
      * @param message a user-friendly error message to display to the user indicating the problem
      * @param cause the cause of the error
      */
-    public AnchorFriendlyCheckedException(String message, Throwable cause) {
+    protected AnchorFriendlyCheckedException(String message, Throwable cause) {
         super(message, cause);
     }
 
@@ -62,7 +62,7 @@ public abstract class AnchorFriendlyCheckedException extends AnchorCheckedExcept
      *
      * @param message a message describing the error
      */
-    public AnchorFriendlyCheckedException(String message) {
+    protected AnchorFriendlyCheckedException(String message) {
         super(message);
     }
 
@@ -71,7 +71,7 @@ public abstract class AnchorFriendlyCheckedException extends AnchorCheckedExcept
      *
      * @param cause the cause of the error
      */
-    public AnchorFriendlyCheckedException(Throwable cause) {
+    protected AnchorFriendlyCheckedException(Throwable cause) {
         // We pass an empty message, so that future error message skip it
         // If we simply use the super(cause) constructor, a message will be assigned from the
         // exceptions .toString method

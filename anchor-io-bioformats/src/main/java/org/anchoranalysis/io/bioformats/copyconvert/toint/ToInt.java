@@ -32,7 +32,7 @@ import org.anchoranalysis.io.bioformats.copyconvert.ConvertTo;
 
 public abstract class ToInt extends ConvertTo<UnsignedIntBuffer> {
 
-    public ToInt() {
+    protected ToInt() {
         super(VoxelsWrapper::asInt);
     }
 }

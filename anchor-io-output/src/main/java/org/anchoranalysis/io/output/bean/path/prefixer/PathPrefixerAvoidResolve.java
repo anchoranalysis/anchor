@@ -64,7 +64,7 @@ public abstract class PathPrefixerAvoidResolve extends PathPrefixer {
     // Caches the calculation
     private Path resolvedRoot = null;
 
-    public PathPrefixerAvoidResolve(String outPathPrefix) {
+    protected PathPrefixerAvoidResolve(String outPathPrefix) {
         this.outPathPrefix = outPathPrefix;
     }
 

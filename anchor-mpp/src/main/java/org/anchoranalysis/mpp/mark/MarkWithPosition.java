@@ -52,13 +52,12 @@ public abstract class MarkWithPosition extends Mark implements Serializable {
     // END mark state
 
     // Constructor
-    public MarkWithPosition() {
-        super();
+    protected MarkWithPosition() {
         this.pos = new Point3d();
     }
 
     // Copy constructor
-    public MarkWithPosition(MarkWithPosition src) {
+    protected MarkWithPosition(MarkWithPosition src) {
         super(src);
         this.pos = new Point3d(src.pos);
     }

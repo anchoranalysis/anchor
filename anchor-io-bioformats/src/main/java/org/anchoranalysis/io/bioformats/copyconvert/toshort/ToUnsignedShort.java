@@ -47,7 +47,7 @@ public abstract class ToUnsignedShort extends ConvertTo<UnsignedShortBuffer> {
     private int sizeBytes;
     private int numberChannelsPerArray;
 
-    public ToUnsignedShort(boolean littleEndian) {
+    protected ToUnsignedShort(boolean littleEndian) {
         super(VoxelsWrapper::asShort);
         this.littleEndian = littleEndian;
     }

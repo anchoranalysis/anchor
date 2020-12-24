@@ -46,7 +46,7 @@ public abstract class FeatureConvertUnits<T extends FeatureInputWithResolution>
     @BeanField @Getter @Setter private String unitType;
     // END BEAN PROPERTIES
 
-    public FeatureConvertUnits(Feature<T> feature, UnitSuffix unitType) {
+    protected FeatureConvertUnits(Feature<T> feature, UnitSuffix unitType) {
         super(feature);
         this.unitType = SpatialUnits.suffixStringForMeters(unitType);
     }

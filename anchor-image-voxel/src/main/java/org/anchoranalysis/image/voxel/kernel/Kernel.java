@@ -30,29 +30,19 @@ import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.spatial.Extent;
 import org.anchoranalysis.spatial.point.Point3i;
+import lombok.Getter;
+import lombok.Setter;
 
 public abstract class Kernel {
 
-    private int size;
-    private int sizeHalf;
+    @Getter @Setter private int size;
+    @Getter private int sizeHalf;
 
     // Only use odd sizes
-    public Kernel(int size) {
+    protected Kernel(int size) {
         super();
         this.size = size;
         this.sizeHalf = (size - 1) / 2;
-    }
-
-    public int getSize() {
-        return size;
-    }
-
-    public void setSize(int size) {
-        this.size = size;
-    }
-
-    public int getSizeHalf() {
-        return sizeHalf;
     }
 
     public int getYMin(Point3i point) {

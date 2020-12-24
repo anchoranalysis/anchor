@@ -50,7 +50,7 @@ public abstract class FeatureTableCSVGenerator<T> extends CSVGenerator<T> {
      * @param manifestFunction the manifest-function.
      * @param headerNames the headers of all columns for the CSV output.
      */
-    public FeatureTableCSVGenerator(String manifestFunction, List<String> headerNames) {
+    protected FeatureTableCSVGenerator(String manifestFunction, List<String> headerNames) {
         super(manifestFunction);
         this.headerNames = headerNames;
     }

@@ -30,7 +30,7 @@ import org.anchoranalysis.spatial.point.Point3i;
 
 public abstract class BinaryKernel extends Kernel {
 
-    public BinaryKernel(int size) {
+    protected BinaryKernel(int size) {
         super(size);
     }
 

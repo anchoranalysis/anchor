@@ -76,14 +76,14 @@ public abstract class MutableDirectory
     /** A description of this directory for the manifest. */
     @Getter private ManifestDirectoryDescription description;
 
-    public MutableDirectory() {
+    protected MutableDirectory() {
         log.debug("New Directory Write: empty");
         this.parent = null;
         this.subdirectories = new ArrayList<>();
     }
 
     // Parent folder
-    public MutableDirectory(MutableDirectory parent) {
+    protected MutableDirectory(MutableDirectory parent) {
         super();
         log.debug("New Directory Write: " + parent.relativePath());
         this.parent = parent;
