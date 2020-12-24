@@ -37,15 +37,15 @@ public class IncreasingIntegersTest {
         IncompleteElementRange range = createRange();
         assertNextIndex(range, 9, 5);
         assertNextIndex(range, 5, 0);
-        assertNextIndex(range, 13, -1);
+        assertNextIndex(range, -1, 13);
     }
 
     @Test
     public void testPreviousIndex() throws SequenceTypeException {
         IncompleteElementRange range = createRange();
-        assertPreviousIndex(range, 5, 0);
-        assertPreviousIndex(range, 0, -1);
-        assertPreviousIndex(range, 13, 9);
+        assertPreviousIndex(range, 0, 5);
+        assertPreviousIndex(range, -1, 0);
+        assertPreviousIndex(range, 9, 13);
     }
     
     private static IncompleteElementRange createRange() throws SequenceTypeException {

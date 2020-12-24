@@ -38,16 +38,18 @@ import org.junit.Test;
  */
 public class PointTest {
 
+    /** Is a point equal to another object of <b><i>same type</i> with same values</b>? */
     @Test
     public void testEqualsSameType() {
         assertEquals(create2d(), create2d());
         assertEquals(create2f(), create2f());
         assertEquals(create3d(), create3d());
         assertEquals(create3f(), create3f());
-        assertEquals( create3i(), create3i() );
+        assertEquals(create3i(), create3i());
         assertEquals(create2i(), create2i());
     }
-    
+
+    /** Is a point equal to another object of <b><i>different</i> type with same values</b>? */
     @Test
     public void testEqualsDifferentType() {
         // At present, different types are not allowed be equal
