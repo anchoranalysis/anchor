@@ -46,7 +46,7 @@ import org.anchoranalysis.spatial.point.Point3i;
  * <p><ul>
  * <li><b>first</b> image passed is assumed to be the source.</li>
  * <li><b>second</b> image passed is assumed to be the overlay.</li>
- * </ul></p>
+ * </ul>
  * 
  * <p>We have no Z implemented yet, so we always overlay at z position 0.
  * 
