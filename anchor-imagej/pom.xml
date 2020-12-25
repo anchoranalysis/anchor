@@ -15,6 +15,7 @@
       <distribution>repo</distribution>
     </license>
   </licenses>
+	
    <dependencies>
 	    <dependency>
 		  <groupId>${project.groupId}</groupId>

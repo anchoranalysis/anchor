@@ -34,20 +34,35 @@ import org.anchoranalysis.image.voxel.kernel.LocalSlices;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.spatial.point.Point3i;
 
-// Keeps any on pixel that touches an off pixel where the off pixel has a corresponding HIGH value
-// in voxelsRequireHigh
+/**
+ * Outputs the outline of an object-mask, but only for voxels on the exterior which neighbour a binary-mask.
+ * 
+ * <p>Specifically, voxels on the object are set only to <i>on</i> if they neighbour a <i>off</i> voxel <b>and</b> this neighboring voxel is <i>on</i> in the binary-mask. Otherwise
+ * a voxel is <i>off</i>.
+ * 
+ * @author Owen Feehan
+ *
+ */
 public class OutlineKernelNeighborMatchValue extends OutlineKernelBase {
 
-    private BinaryVoxels<UnsignedByteBuffer> voxelsRequireHigh;
+    private final BinaryVoxels<UnsignedByteBuffer> voxelsRequireHigh;
+    private final ObjectMask object;
+    private final BinaryValuesByte bvRequireHigh;
+    
     private LocalSlices localSlicesRequireHigh;
-    private BinaryValuesByte bvRequireHigh;
-    private ObjectMask object;
 
+    /**
+     * Creates for an object.
+     *  
+     * @param object the object to create an outline for.
+     * @param mask the mask which outline voxels must neighbor.
+     * @param params parameters determining how the outline is calculated.
+     */
     public OutlineKernelNeighborMatchValue(
             ObjectMask object,
-            BinaryVoxels<UnsignedByteBuffer> voxelsRequireHigh,
+            BinaryVoxels<UnsignedByteBuffer> mask,
             OutlineKernelParameters params) {
-        this(object.binaryValuesByte(), object, voxelsRequireHigh, params);
+        this(object.binaryValuesByte(), object, mask, params);
     }
 
     // Constructor

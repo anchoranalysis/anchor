@@ -35,8 +35,6 @@ import org.junit.Test;
 
 public class IterateVoxelsIntersectingTest {
 
-    private static final Point2i CORNER = new Point2i(10, 15);
-
     /** Tests two objects in 2D that overlap a little. */
     @Test
     public void testObjectsOverlap2D() {
@@ -78,28 +76,13 @@ public class IterateVoxelsIntersectingTest {
      */
     private void testTwoObjects(int expectedNumberIntersectingVoxels, int shift, boolean use3D) {
 
-        ObjectMaskFixture fixture = new ObjectMaskFixture(false, use3D);
-        ObjectMask object1 = fixture.filledMask(CORNER);
-        ObjectMask object2 = fixture.filledMask(cornerSecondObject(shift));
+        TwoIntersectingObjectsFixture fixture = new TwoIntersectingObjectsFixture(shift, use3D);
 
         assertEquals(
                 expectedNumberIntersectingVoxels,
-                CountVoxelsIntersectingObjects.countIntersectingVoxels(object1, object2));
+                CountVoxelsIntersectingObjects.countIntersectingVoxels(fixture.getFirst(), fixture.getSecond()));
         assertEquals(
                 expectedNumberIntersectingVoxels != 0,
-                CountVoxelsIntersectingObjects.hasIntersectingVoxels(object1, object2));
-    }
-
-    /**
-     * Creates a corner for a second object that is adjacent to the side of the first object, with
-     * perhaps a shift
-     *
-     * @param shift how much to increase the corner of the second object
-     */
-    private Point2i cornerSecondObject(int shift) {
-        Point2i extent = new Point2i(ObjectMaskFixture.WIDTH, ObjectMaskFixture.HEIGHT);
-        extent.incrementX(shift);
-        extent.incrementY(shift);
-        return Point2i.immutableAdd(CORNER, extent);
+                CountVoxelsIntersectingObjects.hasIntersectingVoxels(fixture.getFirst(), fixture.getSecond()));
     }
 }
