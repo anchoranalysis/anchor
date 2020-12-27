@@ -26,20 +26,20 @@
 package org.anchoranalysis.image.extent.rtree;
 
 import static org.anchoranalysis.image.extent.rtree.BoxFixture.*;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Arrays;
 import java.util.List;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.rtree.RTree;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-public class BoundingBoxRTreeTest {
+class BoundingBoxRTreeTest {
 
     private RTree<BoundingBox> tree;
 
-    @Before
+    @BeforeEach
     public void before() {
         tree = new RTree<>(7);
         BoxFixture.addFirstCluster(tree);
@@ -47,16 +47,16 @@ public class BoundingBoxRTreeTest {
 
     /**
      * Tests that the boxes intersect as expected when bounding-boxes intersect, but not when they
-     * are exactly adjacent
+     * are exactly adjacent.
      */
     @Test
-    public void testIntersectsWith() {
+    void testIntersectsWith() {
         assertIntersectsWith("box1", BOX1, Arrays.asList(BOX1, BOX3));
         assertIntersectsWith("box2", BOX2, Arrays.asList(BOX2, BOX3));
         assertIntersectsWith("box3", BOX3, Arrays.asList(BOX1, BOX2, BOX3));
     }
 
     private void assertIntersectsWith(String message, BoundingBox box, List<BoundingBox> ids) {
-        assertEquals(message, ids, tree.intersectsWith(box));
+        assertEquals(ids, tree.intersectsWith(box), message);
     }
 }

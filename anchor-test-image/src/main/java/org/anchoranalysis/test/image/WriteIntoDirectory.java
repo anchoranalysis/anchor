@@ -54,13 +54,9 @@ import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.spatial.box.BoundedList;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.test.image.io.OutputterFixture;
-import org.junit.rules.TemporaryFolder;
-import org.junit.rules.TestRule;
-import org.junit.runner.Description;
-import org.junit.runners.model.Statement;
 
 /**
- * JUnit rule for writing one or more stacks/objects/channels into a temporary-folder during testing
+ * Writes one or more stacks/objects/channels into a directory during testing.
  *
  * <p>Any checked-exceptions thrown during writing stacks are converted into run-time exceptions, to
  * make it easy to temporarily use this class in a test for debugging with minimal alteration of
@@ -69,7 +65,7 @@ import org.junit.runners.model.Statement;
  * @author Owen Feehan
  */
 @RequiredArgsConstructor
-public class WriteIntoDirectory implements TestRule {
+public class WriteIntoDirectory {
 
     /**
      * If there are no objects or specified dimensions, this size is used for an output image as a
@@ -78,16 +74,17 @@ public class WriteIntoDirectory implements TestRule {
     private static final Dimensions FALLBACK_SIZE = new Dimensions(100, 100, 1);
 
     // START REQUIRED ARGUMENTS
+    /** The directory in which stacks are written */
+    @Getter private final Path directory;
+    
     /** If true, the path of {@code folder} is printed to the console */
     private final boolean printDirectoryToConsole;
     // END REQUIRED ARGUMENTS
 
-    /** The folder in which stacks are written */
-    @Getter private TemporaryFolder directory = new TemporaryFolder();
-
     /** Creates to print directory to the console. */
-    public WriteIntoDirectory() {
+    public WriteIntoDirectory(Path directory) {
         this.printDirectoryToConsole = true;
+        this.directory = directory;
     }
 
     private Outputter outputter;
@@ -95,11 +92,6 @@ public class WriteIntoDirectory implements TestRule {
     private DisplayStackGenerator generatorStack = new DisplayStackGenerator("irrelevant", false);
 
     private ObjectAsMaskGenerator generatorSingleObject = new ObjectAsMaskGenerator();
-
-    @Override
-    public Statement apply(Statement base, Description description) {
-        return directory.apply(base, description);
-    }
 
     /**
      * Writes a stack up to a maximum of three channels.
@@ -205,12 +197,10 @@ public class WriteIntoDirectory implements TestRule {
         try {
             if (outputter == null) {
 
-                Path path = directory.getRoot().toPath();
-
-                outputter = OutputterFixture.outputter(Optional.of(path));
+                outputter = OutputterFixture.outputter(Optional.of(directory));
 
                 if (printDirectoryToConsole) {
-                    System.out.println("Outputs written in test to: " + path); // NOSONAR
+                    System.out.println("Outputs written in test to: " + directory); // NOSONAR
                 }
             }
         } catch (BindFailedException e) {

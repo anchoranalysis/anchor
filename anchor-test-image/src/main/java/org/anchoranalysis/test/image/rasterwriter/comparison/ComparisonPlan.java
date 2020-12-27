@@ -25,6 +25,7 @@
  */
 package org.anchoranalysis.test.image.rasterwriter.comparison;
 
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
 import lombok.AccessLevel;
@@ -34,7 +35,6 @@ import org.anchoranalysis.core.format.ImageFileFormat;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.test.image.DualComparer;
 import org.anchoranalysis.test.image.rasterwriter.SavedFiles;
-import org.junit.rules.TemporaryFolder;
 
 /**
  * A plan on which comparisons to execute for a test.
@@ -107,7 +107,7 @@ public class ComparisonPlan {
      * @param extension the file-extension used in the temporary-directory
      * @return a newly created comparer
      */
-    public ImageComparer createComparer(TemporaryFolder directory, String extension) {
+    public ImageComparer createComparer(Path directory, String extension) {
         return maybeCopyMissingImages(
                 new CombineComparers(
                         maybeCreateBytewiseComparer(directory, extension),
@@ -124,12 +124,12 @@ public class ComparisonPlan {
     }
 
     private Optional<ImageComparer> maybeCreateBytewiseComparer(
-            TemporaryFolder directory, String extension) {
+            Path directory, String extension) {
         return OptionalUtilities.createFromFlag(
                 bytewiseCompare, () -> new CompareBytes(createComparer(extension, directory)));
     }
 
-    private Optional<ImageComparer> maybeCreateVoxelwiseComparer(TemporaryFolder directory) {
+    private Optional<ImageComparer> maybeCreateVoxelwiseComparer(Path directory) {
         return formatVoxelwiseCompare
                 .map(ImageFileFormat::getDefaultExtension)
                 .map(
@@ -137,7 +137,7 @@ public class ComparisonPlan {
                                 new CompareVoxels(createComparer(extension, directory), extension));
     }
 
-    private DualComparer createComparer(String extensionForComparer, TemporaryFolder directory) {
+    private DualComparer createComparer(String extensionForComparer, Path directory) {
         return SavedFiles.createComparer(directory, extensionForComparer);
     }
 }

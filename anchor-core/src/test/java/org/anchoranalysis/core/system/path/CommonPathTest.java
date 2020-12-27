@@ -25,7 +25,7 @@
  */
 package org.anchoranalysis.core.system.path;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,30 +33,30 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * Tests {@link CommonPath}.
  *
  * @author Owen Feehan
  */
-public class CommonPathTest {
+class CommonPathTest {
 
     /** Two absolute-paths with commonality. */
     @Test
-    public void testDirectoryAbsolutePath() throws IOException {
+    void testDirectoryAbsolutePath() throws IOException {
         assertCommonPath("/a/b/c/d", "/a/b", Optional.of("/a/b"));
     }
 
     /** Two relative-paths with commonality. */
     @Test
-    public void testDirectoryRelativePath() throws IOException {
+    void testDirectoryRelativePath() throws IOException {
         assertCommonPath("a/b/c/d", "a/b", Optional.of("a/b"));
     }
 
     /** One absolute path and one relative-path - with therefore no commonality. */
     @Test
-    public void testDirectoryAbsoluteAndRelativePath() throws IOException {
+    void testDirectoryAbsoluteAndRelativePath() throws IOException {
         assertCommonPath("/a/b/c/d", "a/b", Optional.empty());
     }
 

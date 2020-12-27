@@ -25,19 +25,19 @@
  */
 package org.anchoranalysis.image.extent.rtree;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.google.common.base.Functions;
 import java.util.Set;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.rtree.RTree;
 import org.anchoranalysis.spatial.rtree.SpatiallySeparate;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class SpatiallySeparateTest {
+class SpatiallySeparateTest {
 
     @Test
-    public void testIntersectsWith() {
+    void testIntersectsWith() {
 
         RTree<BoundingBox> tree = new RTree<>(12);
         BoxFixture.addAllClusters(tree);

@@ -26,12 +26,10 @@
 package org.anchoranalysis.test.image;
 
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.test.TestLoader;
-import org.junit.rules.TemporaryFolder;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class DualComparerFactory {
@@ -56,7 +54,7 @@ public class DualComparerFactory {
      * @return a comparer between the two directories.
      */
     public static DualComparer compareTemporaryDirectoryToTest(
-            TemporaryFolder directory,
+            Path directory,
             Optional<String> relativeTemporaryDirectory,
             String relativeResourcesRoot) {
 
@@ -82,15 +80,14 @@ public class DualComparerFactory {
     }
 
     private static TestLoader loaderTemporaryDirectory(
-            TemporaryFolder directory, Optional<String> additionalRelative) {
+            Path directory, Optional<String> additionalRelative) {
 
+        Path directoryAbsolute = directory.toAbsolutePath();
         Path pathTemporary =
                 additionalRelative
                         .map(
-                                additional ->
-                                        Paths.get(
-                                                directory.getRoot().getAbsolutePath(), additional))
-                        .orElseGet(() -> Paths.get(directory.getRoot().getAbsolutePath()));
+                                directoryAbsolute::resolve)
+                        .orElseGet(() -> directoryAbsolute);
 
         return TestLoader.createFromExplicitDirectory(pathTemporary);
     }

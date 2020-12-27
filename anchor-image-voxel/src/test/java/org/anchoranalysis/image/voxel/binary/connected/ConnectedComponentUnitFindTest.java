@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.image.voxel.binary.connected;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
@@ -41,38 +41,38 @@ import org.anchoranalysis.image.voxel.object.ObjectCollectionFixture;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.image.voxel.object.ObjectMaskFixture;
 import org.anchoranalysis.spatial.Extent;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-public class ConnectedComponentUnitFindTest {
+class ConnectedComponentUnitFindTest {
 
     private ConnectedComponentUnionFind connectedComponents;
 
     private ObjectCollectionFixture objectsFixture;
 
-    @Before
+    @BeforeEach
     public void setup() {
         connectedComponents = new ConnectedComponentUnionFind(1, false);
         objectsFixture = new ObjectCollectionFixture();
     }
 
     @Test
-    public void testByte2d() throws OperationFailedException, CreateException {
+    void testByte2d() throws OperationFailedException, CreateException {
         testObjects(deriveInt(false), ObjectMaskFixture.OBJECT_NUM_VOXELS_2D);
     }
 
     @Test
-    public void testInt2d() throws OperationFailedException, CreateException {
+    void testInt2d() throws OperationFailedException, CreateException {
         testObjects(deriveByte(false), ObjectMaskFixture.OBJECT_NUM_VOXELS_2D);
     }
 
     @Test
-    public void testByte3d() throws OperationFailedException, CreateException {
+    void testByte3d() throws OperationFailedException, CreateException {
         testObjects(deriveInt(true), ObjectMaskFixture.OBJECT_NUM_VOXELS_3D);
     }
 
     @Test
-    public void testInt3d() throws OperationFailedException, CreateException {
+    void testInt3d() throws OperationFailedException, CreateException {
         testObjects(deriveByte(true), ObjectMaskFixture.OBJECT_NUM_VOXELS_3D);
     }
 
@@ -92,12 +92,12 @@ public class ConnectedComponentUnitFindTest {
     private void testObjects(ObjectCollection objects, int expectedSingleObjectSize)
             throws CreateException, OperationFailedException {
         assertEquals(
-                "number of objects",
                 objectsFixture.getNumberNonOverlappingObjects() + 1,
-                objects.size());
+                objects.size(),
+                "number of objects");
         assertTrue(
-                "size of all objects except one",
-                allSizesEqualExceptOne(objects, expectedSingleObjectSize));
+                allSizesEqualExceptOne(objects, expectedSingleObjectSize),
+                "size of all objects except one");
     }
 
     private <T> BinaryVoxels<T> createBufferWithObjects(VoxelDataType bufferDataType, boolean do3D)

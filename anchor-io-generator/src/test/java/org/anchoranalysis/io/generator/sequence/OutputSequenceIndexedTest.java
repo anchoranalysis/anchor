@@ -25,8 +25,8 @@
  */
 package org.anchoranalysis.io.generator.sequence;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.io.generator.Generator;
@@ -39,26 +39,26 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.BindFailedException;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
 import org.anchoranalysis.test.io.output.OutputterCheckedFixture;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class OutputSequenceIndexedTest {
+class OutputSequenceIndexedTest {
 
     private static final String OUTPUT_NAME = "out";
 
     @Test
-    public void testOneConstantFileType()
+    void testOneConstantFileType()
             throws OutputWriteFailedException, OperationFailedException {
         test(1, false);
     }
 
     @Test
-    public void testTwoConstantFileTypes()
+    void testTwoConstantFileTypes()
             throws OutputWriteFailedException, OperationFailedException {
         test(2, false);
     }
 
     @Test
-    public void testTwoAlternatingFileTypes()
+    void testTwoAlternatingFileTypes()
             throws OutputWriteFailedException, OperationFailedException {
         test(2, true);
     }

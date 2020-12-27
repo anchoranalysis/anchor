@@ -25,25 +25,22 @@
  */
 package org.anchoranalysis.image.voxel.iterator;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.anchoranalysis.image.voxel.iterator.intersecting.CountVoxelsIntersectingObjects;
-import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.image.voxel.object.ObjectMaskFixture;
-import org.anchoranalysis.spatial.point.Point2i;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class IterateVoxelsIntersectingTest {
+class IterateVoxelsIntersectingTest {
 
     /** Tests two objects in 2D that overlap a little. */
     @Test
-    public void testObjectsOverlap2D() {
+    void testObjectsOverlap2D() {
         testTwoObjects(1, -1, false);
     }
 
     /** Tests two objects in 3D that overlap a little. */
     @Test
-    public void testObjectsOverlap3D() {
+    void testObjectsOverlap3D() {
         testTwoObjects(15, -1, true);
     }
 
@@ -52,7 +49,7 @@ public class IterateVoxelsIntersectingTest {
      * them.
      */
     @Test
-    public void testObjectsAdjacent2D() {
+    void testObjectsAdjacent2D() {
         testTwoObjects(0, 0, false);
     }
 
@@ -61,7 +58,7 @@ public class IterateVoxelsIntersectingTest {
      * them.
      */
     @Test
-    public void testObjectsAdjacent3D() {
+    void testObjectsAdjacent3D() {
         testTwoObjects(0, 0, true);
     }
 

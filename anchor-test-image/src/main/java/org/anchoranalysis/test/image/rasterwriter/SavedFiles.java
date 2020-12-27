@@ -25,13 +25,13 @@
  */
 package org.anchoranalysis.test.image.rasterwriter;
 
+import java.nio.file.Path;
 import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.image.DualComparer;
 import org.anchoranalysis.test.image.DualComparerFactory;
-import org.junit.rules.TemporaryFolder;
 
 /**
  * Access previously saved-files in resources.
@@ -53,7 +53,7 @@ public class SavedFiles {
      *     to compare).
      * @return a newly created comparer.
      */
-    public static DualComparer createComparer(TemporaryFolder directory, String extension) {
+    public static DualComparer createComparer(Path directory, String extension) {
         return DualComparerFactory.compareTemporaryDirectoryToTest(
                 directory, Optional.empty(), relativeResourcesDirectory(extension));
     }

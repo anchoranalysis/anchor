@@ -26,14 +26,14 @@
 
 package org.anchoranalysis.bean.permute.property;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class IntegerRangeTest {
+class IntegerRangeTest {
 
     @Test
-    public void test1() {
+    void test1() {
         SequenceIntegerIterator range = new SequenceIntegerIterator(2, 8, 3);
         assertHasNext(range);
         assertNextValue(2, range);
@@ -45,7 +45,7 @@ public class IntegerRangeTest {
     }
 
     @Test
-    public void test2() {
+    void test2() {
         SequenceIntegerIterator range = new SequenceIntegerIterator(-12, -4, 2);
         assertHasNext(range);
         assertNextValue(-12, range);

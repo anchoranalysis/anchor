@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.test;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
@@ -255,20 +255,20 @@ public class TestLoader {
     /**
      * Copies specific subdirectories from the test-data folder (recursively), preserving file-dates
      *
-     * @param subdirectoriesSrc which subdirectories to copy from (their full-path is preserved)
-     * @param dirDest destination-folder
+     * @param subdirectoriesSource which subdirectories to copy from (their full-path is preserved)
+     * @param directoryDestination destination-folder
      * @throws IOException if a copy error occurs
      */
-    public void copyToDirectory(String[] subdirectoriesSrc, File dirDest) throws IOException {
+    public void copyToDirectory(String[] subdirectoriesSource, File directoryDestination) throws IOException {
 
-        for (String subdir : subdirectoriesSrc) {
-            Path pathSubdir = pathTestDataRoot.resolve(subdir);
+        for (String subdirectory : subdirectoriesSource) {
+            Path pathSubdir = pathTestDataRoot.resolve(subdirectory);
 
             // Create the target folder
-            File destSubdir = new File(dirDest, subdir);
-            destSubdir.mkdirs();
+            File destSubdirectory = new File(directoryDestination, subdirectory);
+            destSubdirectory.mkdirs();
 
-            FileUtils.copyDirectory(pathSubdir.toFile(), destSubdir, true);
+            FileUtils.copyDirectory(pathSubdir.toFile(), destSubdirectory, true);
         }
     }
 

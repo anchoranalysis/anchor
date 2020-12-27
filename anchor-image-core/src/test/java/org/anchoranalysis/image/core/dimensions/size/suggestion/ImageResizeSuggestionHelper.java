@@ -25,7 +25,7 @@
  */
 package org.anchoranalysis.image.core.dimensions.size.suggestion;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Optional;
 import lombok.AccessLevel;

@@ -40,14 +40,14 @@ import org.jgrapht.alg.util.UnionFind;
 
 final class MergeWithNeighbors {
 
-    private static class PointTester
+    private static class PointEvaluator
             extends ProcessVoxelNeighborAbsoluteWithSlidingBuffer<Integer> {
 
         private int minLabel;
 
         private final UnionFind<Integer> unionIndex;
 
-        public PointTester(
+        public PointEvaluator(
                 SlidingBuffer<UnsignedIntBuffer> slidingIndex, UnionFind<Integer> unionIndex) {
             super(slidingIndex);
             this.unionIndex = unionIndex;
@@ -110,7 +110,7 @@ final class MergeWithNeighbors {
         neighborhood = NeighborhoodFactory.of(bigNeighborhood);
 
         this.process =
-                ProcessVoxelNeighborFactory.withinExtent(new PointTester(slidingIndex, unionIndex));
+                ProcessVoxelNeighborFactory.withinExtent(new PointEvaluator(slidingIndex, unionIndex));
     }
 
     /**

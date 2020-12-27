@@ -34,27 +34,30 @@ import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 import org.anchoranalysis.spatial.Extent;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.Point3i;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class BoundedVoxelsTest {
+
+class BoundedVoxelsTest {
 
     /**
      * Grows an object which is already partially outside the clip region
      *
      * @throws OperationFailedException
      */
-    @Test(expected = OperationFailedException.class)
-    public void testGrowObjectOutsideClampRegion() throws OperationFailedException {
-
-        // A bounding box that overlaps with the extent
-        Extent extent = extent(20);
-
-        BoundedVoxels<UnsignedByteBuffer> box =
-                VoxelsFactory.getUnsignedByte()
-                        .createBounded(new BoundingBox(point(10), extent(15)));
-
-        Point3i grow = point(1);
-        box.growBuffer(grow, grow, Optional.of(extent), VoxelsFactory.getUnsignedByte());
+    @Test
+    void testGrowObjectOutsideClampRegion() throws OperationFailedException {
+        assertThrows(OperationFailedException.class, () -> {
+            // A bounding box that overlaps with the extent
+            Extent extent = extent(20);
+    
+            BoundedVoxels<UnsignedByteBuffer> box =
+                    VoxelsFactory.getUnsignedByte()
+                            .createBounded(new BoundingBox(point(10), extent(15)));
+    
+            Point3i grow = point(1);
+            box.growBuffer(grow, grow, Optional.of(extent), VoxelsFactory.getUnsignedByte());
+        });
     }
 
     private static Point3i point(int value) {

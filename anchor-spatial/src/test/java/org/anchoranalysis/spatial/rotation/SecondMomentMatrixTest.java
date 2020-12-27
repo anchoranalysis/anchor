@@ -26,16 +26,16 @@
 
 package org.anchoranalysis.spatial.rotation;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.anchoranalysis.spatial.point.Vector3d;
 import org.anchoranalysis.spatial.rotation.factory.RotateAxisAngle;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class SecondMomentMatrixTest {
+class SecondMomentMatrixTest {
 
     @Test
-    public void test() {
+    void test() {
 
         RotateAxisAngle angleCreator =
                 new RotateAxisAngle(new Vector3d(-0.866, -0.5, 2.31e-014), 3);

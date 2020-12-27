@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.test.feature;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
