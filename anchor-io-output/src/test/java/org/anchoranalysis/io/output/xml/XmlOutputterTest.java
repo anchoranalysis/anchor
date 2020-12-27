@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.io.output.xml;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -34,22 +34,21 @@ import java.nio.file.Path;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import org.anchoranalysis.test.TestLoader;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
-public class XmlOutputterTest {
+class XmlOutputterTest {
 
-    @Rule public TemporaryFolder directory = new TemporaryFolder();
+    @TempDir Path directory;
 
     @Test
-    public void test()
+    void test()
             throws ParserConfigurationException, SAXException, IOException, TransformerException,
                     URISyntaxException {
         String testPathIn = "simpleXML01.xml";
-        Path pathOut = directory.newFile("a file name with_spaces_and_underscores_.xml").toPath();
+        Path pathOut = directory.resolve("a file name with_spaces_and_underscores_.xml");
 
         TestLoader loader = TestLoader.createFromMavenWorkingDirectory();
 

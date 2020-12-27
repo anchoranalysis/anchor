@@ -27,7 +27,7 @@
 package org.anchoranalysis.image.voxel.iterator;
 
 import static org.anchoranalysis.image.voxel.object.ObjectMaskFixture.*;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -35,9 +35,9 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.image.voxel.object.ObjectMaskFixture;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.Point3i;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class IterateVoxelsTest {
+class IterateVoxelsTest {
 
     /** START: Constants for object sizes and locations */
     private static final int Y_MASK_1 = 30;
@@ -54,7 +54,7 @@ public class IterateVoxelsTest {
     private static final int EXPECTED_INTERSECTION_CENTER_Y = 57;
     /** END: Constants for expected results */
     @Test
-    public void test2D() {
+    void test2D() {
         testTwoMasks(
                 false,
                 EXPECTED_SINGLE_NUM_VOXELS_2D,
@@ -63,7 +63,7 @@ public class IterateVoxelsTest {
     }
 
     @Test
-    public void test3D() {
+    void test3D() {
         testTwoMasks(
                 true,
                 EXPECTED_SINGLE_NUM_VOXELS_2D * DEPTH,
@@ -133,7 +133,7 @@ public class IterateVoxelsTest {
             Consumer<AggregatePoints> func) {
         AggregatePoints counter = new AggregatePoints();
         func.accept(counter);
-        assertEquals(message + " count", expectedNumberVoxels, counter.count());
-        assertEquals(message + " center", expectedCenter, counter.center());
+        assertEquals(expectedNumberVoxels, counter.count(), () -> message + " count");
+        assertEquals(expectedCenter, counter.center(), () -> message + " center");
     }
 }

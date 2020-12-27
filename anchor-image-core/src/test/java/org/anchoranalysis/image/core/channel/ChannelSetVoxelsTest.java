@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.image.core.channel;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.nio.FloatBuffer;
 import org.anchoranalysis.image.core.channel.factory.ChannelFactory;
@@ -36,9 +36,9 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBufferWrap;
 import org.anchoranalysis.image.voxel.datatype.FloatVoxelType;
 import org.anchoranalysis.image.voxel.extracter.VoxelsExtracter;
 import org.anchoranalysis.spatial.point.Point3i;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class ChannelSetVoxelsTest {
+class ChannelSetVoxelsTest {
 
     private static final double DELTA = 1e-3;
 

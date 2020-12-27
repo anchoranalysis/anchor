@@ -54,11 +54,12 @@ public class XMLWriter {
         try {
             Transformer transformer = createTransformer();
 
-            FileWriter writer = new FileWriter(path.toFile());
-            StreamResult result = new StreamResult(writer);
-            DOMSource source = new DOMSource(document);
-
-            transformer.transform(source, result);
+            try (FileWriter writer = new FileWriter(path.toFile())) {
+                StreamResult result = new StreamResult(writer);
+                DOMSource source = new DOMSource(document);
+    
+                transformer.transform(source, result);
+            }
         } catch (TransformerException e) {
             throw new IOException(e);
         }

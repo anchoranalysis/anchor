@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.image.bean.threshold;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import java.util.Optional;
@@ -42,10 +42,10 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.spatial.Extent;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.Point3i;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-public class ThresholderGlobalTest {
+class ThresholderGlobalTest {
 
     private static final int SCENE_WIDTH = 4000;
     private static final int SCENE_HEIGHT = 7000;
@@ -60,18 +60,18 @@ public class ThresholderGlobalTest {
 
     private VoxelsWrapper voxels;
 
-    @Before
-    public void setup() {
+    @BeforeEach
+    void setup() {
         voxels = createVoxels();
     }
 
     @Test
-    public void testNoMask() throws OperationFailedException {
+    void testNoMask() throws OperationFailedException {
         testThreshold(Optional.empty(), HALF_SCENE_EXTENT_VOLUME, HALF_SCENE_EXTENT_VOLUME);
     }
 
     @Test
-    public void testMask() throws OperationFailedException {
+    void testMask() throws OperationFailedException {
 
         // An object-mask in the left half
         ObjectMask object = new ObjectMask(new BoundingBox(MASK_CORNER_MIN, MASK_EXTENT));
@@ -89,8 +89,8 @@ public class ThresholderGlobalTest {
                 thresholder.threshold(
                         voxels, BinaryValuesByte.getDefault(), Optional.empty(), object);
 
-        assertEquals("onCount", expectedCountOn, out.countOn());
-        assertEquals("offCount", expectedCountOff, out.countOff());
+        assertEquals(expectedCountOn, out.countOn(), "onCount");
+        assertEquals(expectedCountOff, out.countOff(), "offCount");
     }
 
     private Thresholder createThresholder() {

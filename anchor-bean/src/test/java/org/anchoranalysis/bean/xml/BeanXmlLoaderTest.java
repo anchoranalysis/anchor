@@ -26,26 +26,27 @@
 
 package org.anchoranalysis.bean.xml;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.nio.file.Path;
 import org.anchoranalysis.bean.xml.exception.BeanXmlException;
 import org.anchoranalysis.bean.xml.mock.MockBeanNested;
 import org.anchoranalysis.core.format.NonImageFileFormat;
 import org.anchoranalysis.test.TestLoader;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 
-public class BeanXmlLoaderTest {
+class BeanXmlLoaderTest {
 
     private TestLoader loader = TestLoader.createFromMavenWorkingDirectory();
 
     @Test
-    public void testLoadBean() throws BeanXmlException {
+    void testLoadBean() throws BeanXmlException {
         testSimpleAndBean("nestedBean");
     }
 
     @Test
-    public void testLoadBeanInclude() throws BeanXmlException {
+    void testLoadBeanInclude() throws BeanXmlException {
         testSimpleAndBean("nestedBeanInclude");
     }
 
@@ -55,7 +56,7 @@ public class BeanXmlLoaderTest {
      * @throws BeanXmlException
      */
     @Test
-    public void testLoadBeanReplaceAttribute() throws BeanXmlException {
+    void testLoadBeanReplaceAttribute() throws BeanXmlException {
         MockBeanNested bean = registerLoad("replaceBeanAttribute");
         assertEquals("helloChanged", bean.getFieldSimpleNecessary());
     }
@@ -76,28 +77,28 @@ public class BeanXmlLoaderTest {
      * @throws BeanXmlException
      */
     @Test
-    public void testLoadBeanReplaceInclude() throws BeanXmlException {
+    void testLoadBeanReplaceInclude() throws BeanXmlException {
         testBean("replaceBeanInclude", "worldAlternative");
     }
 
     /**
      * A replace bean targeting a missing attribute
-     *
-     * @throws BeanXmlException
      */
-    @Test(expected = Exception.class)
-    public void testLoadBeanReplaceAttributeMissing() throws BeanXmlException {
-        testSimple("replaceBeanAttributeMissing", "helloChanged");
+    @Test
+    void testLoadBeanReplaceAttributeMissing() {
+        assertException(() ->
+            testSimple("replaceBeanAttributeMissing", "helloChanged")
+        );
     }
 
     /**
      * A replace bean targettng a missing attribute element
-     *
-     * @throws BeanXmlException
      */
-    @Test(expected = Exception.class)
-    public void testLoadBeanReplaceElementMissing() throws BeanXmlException {
-        testBean("replaceBeanElementMissing", "world2");
+    @Test
+    void testLoadBeanReplaceElementMissing() {
+        assertException(() ->
+            testBean("replaceBeanElementMissing", "world2")
+        );
     }
     
     private void testSimple(String fileIdentifier, String expectedFieldValue) throws BeanXmlException {
@@ -125,5 +126,8 @@ public class BeanXmlLoaderTest {
         T bean = BeanXMLLoader.loadBean(path);
         return bean;
     }
-
+    
+    private static void assertException(Executable executable) {
+        assertThrows(BeanXmlException.class, executable);
+    }
 }

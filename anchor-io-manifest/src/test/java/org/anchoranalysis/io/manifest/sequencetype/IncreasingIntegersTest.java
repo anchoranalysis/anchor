@@ -26,14 +26,14 @@
 
 package org.anchoranalysis.io.manifest.sequencetype;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class IncreasingIntegersTest {
+class IncreasingIntegersTest {
 
     @Test
-    public void testNextIndex() throws SequenceTypeException {
+    void testNextIndex() throws SequenceTypeException {
         IncompleteElementRange range = createRange();
         assertNextIndex(range, 9, 5);
         assertNextIndex(range, 5, 0);
@@ -41,7 +41,7 @@ public class IncreasingIntegersTest {
     }
 
     @Test
-    public void testPreviousIndex() throws SequenceTypeException {
+    void testPreviousIndex() throws SequenceTypeException {
         IncompleteElementRange range = createRange();
         assertPreviousIndex(range, 0, 5);
         assertPreviousIndex(range, -1, 0);

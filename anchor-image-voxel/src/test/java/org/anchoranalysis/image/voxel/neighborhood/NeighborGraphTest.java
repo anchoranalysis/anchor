@@ -25,26 +25,26 @@
  */
 package org.anchoranalysis.image.voxel.neighborhood;
 
-import static org.junit.Assert.*;
-
+import static org.junit.jupiter.api.Assertions.*;
+import java.util.function.ToIntFunction;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.graph.GraphWithPayload;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectCollectionFixture;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class NeighborGraphTest {
+class NeighborGraphTest {
 
     @Test
-    public void testAdjacent() throws CreateException {
+    void testAdjacent() throws CreateException {
         ObjectCollectionFixture fixture = new ObjectCollectionFixture(5, 0, 0, false);
         testBoth2DAnd3D(fixture.getNumberNonOverlappingObjects() - 1, false, fixture);
         testBoth2DAnd3D(fixture.getNumberNonOverlappingObjects() - 1, true, fixture);
     }
 
     @Test
-    public void testOverlapping() throws CreateException {
+    void testOverlapping() throws CreateException {
         ObjectCollectionFixture fixture = new ObjectCollectionFixture();
         testBoth2DAnd3D(fixture.getNumberOverlappingObjects() - 1, false, fixture);
         testBoth2DAnd3D(0, true, fixture);
@@ -78,8 +78,36 @@ public class NeighborGraphTest {
                         preventObjectIntersection,
                         do3D);
 
-        String prefixAugmented = prefix + (do3D ? "_3D_" : "_2D_");
-        assertEquals(prefixAugmented + "numberVertices", objects.size(), graph.numberVertices());
-        assertEquals(prefixAugmented + "numberEdges", expectedNumberEdges, graph.numberEdges());
+        GraphAsserter asserter = new GraphAsserter(graph, prefix, do3D);
+        asserter.value(objects.size(), GraphWithPayload::numberVertices, "numberVertices");
+        asserter.value(expectedNumberEdges, GraphWithPayload::numberEdges, "numberEdges");
+    }
+
+    /**
+     * Asserts if the graph has expected attributes.
+     * 
+     * @author Owen Feehan
+     *
+     */
+    private class GraphAsserter {
+        
+        private final GraphWithPayload<?, ?> graph;
+        private final String prefixAugmented;
+        
+        public GraphAsserter(GraphWithPayload<?, ?> graph, String prefix, boolean do3D) {
+            this.graph = graph;
+            this.prefixAugmented = prefix + (do3D ? "_3D_" : "_2D_");
+        }
+        
+        /** 
+         * Asserts that a value extracted from the graph is equal to nn expected-value.
+         * 
+         * @param expectedValue the expected-value
+         * @param extractValue the value extracted from the graph
+         * @param identifier an identifier that (after a prefixed is added) uniquely identifies the assertion, in case of failure.
+         */
+        public void value(int expectedValue, ToIntFunction<GraphWithPayload<?, ?>> extractValue, String identifier) {
+            assertEquals(expectedValue, extractValue.applyAsInt(graph), () -> prefixAugmented + identifier);
+        }
     }
 }

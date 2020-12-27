@@ -26,15 +26,15 @@
 
 package org.anchoranalysis.feature.session.calculator.multi;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
 import org.anchoranalysis.feature.results.ResultsVector;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-public class FeatureCalculatorCachedMultiTest {
+class FeatureCalculatorCachedMultiTest {
 
     private static final MockFeatureInput INPUT_1 = new MockFeatureInput("1");
     private static final MockFeatureInput INPUT_2 = new MockFeatureInput("2");
@@ -42,8 +42,8 @@ public class FeatureCalculatorCachedMultiTest {
 
     private FeatureCalculatorCachedMulti<MockFeatureInput> cached;
 
-    @Before
-    public void setup() throws FeatureCalculationException {
+    @BeforeEach
+    void setup() throws FeatureCalculationException {
         cached =
                 new FeatureCalculatorCachedMulti<>(
                         FeatureCalculatorMultiFixture.createFeatureCalculator(
@@ -58,7 +58,7 @@ public class FeatureCalculatorCachedMultiTest {
      * @throws NamedFeatureCalculateException
      */
     @Test
-    public void testCacheContainsExisting() throws NamedFeatureCalculateException {
+    void testCacheContainsExisting() throws NamedFeatureCalculateException {
 
         assertCurrentLoad(0);
 

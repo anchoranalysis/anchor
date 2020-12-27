@@ -25,7 +25,7 @@
  */
 package org.anchoranalysis.test.image.rasterwriter;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -147,7 +147,7 @@ public class StackTester {
 
     private void assertMinimumSize(Path path, String filenameWithoutExtension) throws IOException {
         assertTrue(
-                filenameWithoutExtension + "_minimumFileSize",
-                Files.size(path) > MINIMUM_FILE_SIZE);
+                Files.size(path) > MINIMUM_FILE_SIZE,
+                () -> filenameWithoutExtension + "_minimumFileSize");
     }
 }

@@ -26,39 +26,39 @@
 
 package org.anchoranalysis.image.feature.input;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-public class FeatureInputSingleObjectTest {
+class FeatureInputSingleObjectTest {
 
     private ObjectMask object;
 
-    @Before
-    public void setup() {
+    @BeforeEach
+    void setup() {
         // An arbitrary object
         object = Mockito.mock(ObjectMask.class);
     }
 
     @Test
-    public void testEquals_SameEnergyStack() {
+    void testEquals_SameEnergyStack() {
         EnergyStack energyStack = Mockito.mock(EnergyStack.class);
         assertEquals(createInput(energyStack), createInput(energyStack));
     }
 
     @Test
-    public void testEquals_DifferentEnergyStack() {
+    void testEquals_DifferentEnergyStack() {
         EnergyStack energyStack1 = Mockito.mock(EnergyStack.class);
         EnergyStack energyStack2 = Mockito.mock(EnergyStack.class);
         assertNotEquals(createInput(energyStack2), createInput(energyStack1));
     }
 
     @Test
-    public void testEquals_DifferentObjects() {
+    void testEquals_DifferentObjects() {
         EnergyStack energyStack = Mockito.mock(EnergyStack.class);
         assertNotEquals(createInputWithNewObject(energyStack), createInputWithNewObject(energyStack));
     }

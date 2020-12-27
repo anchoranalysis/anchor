@@ -25,6 +25,7 @@
  */
 package org.anchoranalysis.test.image.rasterwriter;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.io.IOException;
 import java.util.Optional;
 import org.anchoranalysis.core.format.ImageFileFormat;
@@ -35,7 +36,8 @@ import org.anchoranalysis.image.voxel.datatype.UnsignedIntVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.test.image.rasterwriter.comparison.ComparisonPlan;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 
 /**
  * For testing all {@link StackWriter}s that create PNGs.
@@ -69,41 +71,55 @@ public abstract class PNGTestBase extends RasterWriterTestBase {
     }
 
     @Test
-    public void testSingleChannel() throws ImageIOException, IOException {
+    void testSingleChannel() throws ImageIOException, IOException {
         tester.testSingleChannel(ALL_SUPPORTED_VOXEL_TYPES);
     }
 
-    @Test(expected = ImageIOException.class)
-    public void testSingleChannelInt() throws ImageIOException, IOException {
-        tester.testSingleChannel(UnsignedIntVoxelType.INSTANCE);
+    @Test
+    void testSingleChannelInt() {
+        assertException(() ->
+            tester.testSingleChannel(UnsignedIntVoxelType.INSTANCE)
+        );
     }
 
-    public void testSingleChannelRGB() throws ImageIOException, IOException {
+    void testSingleChannelRGB() throws ImageIOException, IOException {
         tester.testSingleChannelRGB();
     }
 
-    @Test(expected = ImageIOException.class)
-    public void testTwoChannels() throws ImageIOException, IOException {
-        tester.testTwoChannels();
-    }
-
-    @Test(expected = ImageIOException.class)
-    public void testThreeChannelsSeparate() throws ImageIOException, IOException {
-        tester.testThreeChannelsSeparate();
+    @Test
+    void testTwoChannels() {
+        assertException(() ->
+            tester.testTwoChannels()
+        );
     }
 
     @Test
-    public void testThreeChannelsRGBUnsignedByte() throws ImageIOException, IOException {
+    void testThreeChannelsSeparate() {
+        assertException(() ->
+            tester.testThreeChannelsSeparate()
+        );
+    }
+
+    @Test
+    void testThreeChannelsRGBUnsignedByte() throws ImageIOException, IOException {
         tester.testThreeChannelsRGB(UnsignedByteVoxelType.INSTANCE);
     }
 
-    @Test(expected = ImageIOException.class)
-    public void testFourChannels() throws ImageIOException, IOException {
-        tester.testFourChannels();
+    @Test
+    void testFourChannels() {
+        assertException(() ->
+            tester.testFourChannels()
+        );
     }
 
-    @Test(expected = ImageIOException.class)
-    public void testThreeChannelsRGBUnsignedShort() throws ImageIOException, IOException {
-        tester.testThreeChannelsRGB(UnsignedShortVoxelType.INSTANCE);
+    @Test
+    void testThreeChannelsRGBUnsignedShort() {
+        assertException(() ->
+            tester.testThreeChannelsRGB(UnsignedShortVoxelType.INSTANCE)
+        );
+    }
+    
+    private void assertException( Executable executable ) {
+        assertThrows(ImageIOException.class, executable);
     }
 }

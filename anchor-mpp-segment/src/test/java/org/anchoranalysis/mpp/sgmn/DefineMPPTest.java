@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.mpp.sgmn;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.nio.file.Path;
 import java.util.List;
@@ -39,25 +39,25 @@ import org.anchoranalysis.bean.xml.exception.BeanXmlException;
 import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.test.TestLoader;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-public class DefineMPPTest {
+class DefineMPPTest {
 
     private TestLoader loader = TestLoader.createFromMavenWorkingDirectory();
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         RegisterBeanFactories.registerAllPackageBeanFactories();
     }
 
     @Test
-    public void testStatic() throws BeanXmlException {
+    void testStatic() throws BeanXmlException {
         checkPath("defineStatic.xml");
     }
 
     @Test
-    public void testDynamic() throws BeanXmlException {
+    void testDynamic() throws BeanXmlException {
         checkPath("defineDynamic.xml");
     }
 

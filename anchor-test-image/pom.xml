@@ -57,14 +57,20 @@
 	      <artifactId>anchor-imagej</artifactId>
 	      <version>0.0.1-SNAPSHOT</version>
 	    </dependency>
-		
+		 
 	    <!-- Needed to expand scope outside "test" which is inherited from the parent pom -->
-        <dependency>
-		  <groupId>junit</groupId>
-		  <artifactId>junit</artifactId>
-		  <version>${junit.version}</version>
-		  <scope>compile</scope>
-	      <optional>false</optional>
+	       <dependency>
+		    <groupId>org.junit.jupiter</groupId>
+		    <artifactId>junit-jupiter-engine</artifactId>
+		    <version>${junit.version}</version>
+		    <scope>compile</scope>
+		</dependency>
+	
+	       <dependency>
+		    <groupId>org.junit.vintage</groupId>
+		    <artifactId>junit-vintage-engine</artifactId>
+		    <version>${junit.version}</version>
+		    <scope>compile</scope>
 		</dependency>
 		
 	</dependencies>

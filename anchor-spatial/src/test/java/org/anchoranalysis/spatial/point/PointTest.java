@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.spatial.point;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * Tests different types of {@code Point} classes, and particularly their interaction.
@@ -36,11 +36,11 @@ import org.junit.Test;
  * @author Owen Feehan
  *
  */
-public class PointTest {
+class PointTest {
 
     /** Is a point equal to another object of <b><i>same type</i> with same values</b>? */
     @Test
-    public void testEqualsSameType() {
+    void testEqualsSameType() {
         assertEquals(create2d(), create2d());
         assertEquals(create2f(), create2f());
         assertEquals(create3d(), create3d());
@@ -51,7 +51,7 @@ public class PointTest {
 
     /** Is a point equal to another object of <b><i>different</i> type with same values</b>? */
     @Test
-    public void testEqualsDifferentType() {
+    void testEqualsDifferentType() {
         // At present, different types are not allowed be equal
         assertNotEquals(create2d(), create2f());
         assertNotEquals(create3d(), create3f());

@@ -25,7 +25,7 @@
  */
 package org.anchoranalysis.io.bioformats.bean;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -103,11 +103,11 @@ class ExpectedImage {
     }
 
     private void assertEqualsPrefix(String message, int expected, int actual) {
-        assertEquals(fileNameWithoutExtension + " " + message, expected, actual);
+        assertEquals(expected, actual, () -> fileNameWithoutExtension + " " + message);
     }
 
     private void assertEqualsPrefix(String message, Object expected, Object actual) {
-        assertEquals(fileNameWithoutExtension + " " + message, expected, actual);
+        assertEquals(expected, actual, () -> fileNameWithoutExtension + " " + message);
     }
 
     private String relativePath() {

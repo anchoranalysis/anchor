@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-image
+ * anchor-image-voxel
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- *
+ * 
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- *
+ * 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -23,30 +23,28 @@
  * THE SOFTWARE.
  * #L%
  */
-
-package org.anchoranalysis.image.voxel.binary.values;
-
-import static org.junit.jupiter.api.Assertions.*;
+package org.anchoranalysis.image.voxel.kernel.outline;
 
 import org.junit.jupiter.api.Test;
 
-class BinaryValuesTest {
+/**
+ * Tests {@link OutlineKernelNeighborMatchValue}.
+ * 
+ * @author Owen Feehan
+ *
+ */
+class OutlineKernelNeighborMatchValueTest {
 
     @Test
-    void testEquals() {
-        assertEquals(createLowHigh(), createLowHigh());
-    }
-
-    @Test
-    void testInvert() {
-        assertEquals(createHighLow(), createLowHigh().createInverted());
-    }
-    
-    private static BinaryValues createLowHigh() {
-        return new BinaryValues(0, 255);
-    }
-    
-    private static BinaryValues createHighLow() {
-        return new BinaryValues(255, 0);
+    void test2D() {
+        
+        // TODO implememt
+        // Create a binary-mask of all voxels not lieing on the object.
+        /*ObjectMaskFixture.BOUNDING_BOX_NUM_VOXELS
+        
+        OutlineKernelNeighborMatchValue kernel = new OutlineKernelNeighborMatchValue(
+                ObjectMaskFixture.OBJECT_NUM_VOXELS_2D,  
+        );
+        kernel.*/
     }
 }

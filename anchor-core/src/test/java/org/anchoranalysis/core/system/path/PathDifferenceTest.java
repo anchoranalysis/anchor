@@ -26,17 +26,17 @@
 
 package org.anchoranalysis.core.system.path;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class PathDifferenceTest {
+class PathDifferenceTest {
 
     @Test
-    public void testDirectoryAbsoluteWindowsDirectory() throws PathDifferenceException {
+    void testDirectoryAbsoluteWindowsDirectory() throws PathDifferenceException {
         test(
                 "c:\\somebase\\",
                 "c:\\somebase\\someDir1\\someDir2\\someFile1.txt",
@@ -44,13 +44,15 @@ public class PathDifferenceTest {
                 "someFile1.txt");
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testDirectoryAbsoluteWindowsNonDirectoryBase() throws PathDifferenceException {
-        test("c:\\somebase\\base_", "c:\\somebase\\base_someDir1\\someDir2\\someFile1.txt");
+    @Test
+    void testDirectoryAbsoluteWindowsNonDirectoryBase() throws PathDifferenceException {
+        assertThrows(IllegalArgumentException.class, () ->
+            test("c:\\somebase\\base_", "c:\\somebase\\base_someDir1\\someDir2\\someFile1.txt")
+        );
     }
 
     @Test
-    public void testDirectoryAbsoluteUnixDirectory() throws PathDifferenceException {
+    void testDirectoryAbsoluteUnixDirectory() throws PathDifferenceException {
         test(
                 "/somebase/",
                 "/somebase/someDir1/someDir2/someFile1.txt",
@@ -58,13 +60,15 @@ public class PathDifferenceTest {
                 "someFile1.txt");
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testDirectoryAbsoluteUnixNonDirectoryBas() throws PathDifferenceException {
-        test("/somebase/extra_", "/somebase/someDir1/someDir2/someFile1.txt");
+    @Test
+    void testDirectoryAbsoluteUnixNonDirectoryBas() throws PathDifferenceException {
+        assertThrows(IllegalArgumentException.class, () ->
+            test("/somebase/extra_", "/somebase/someDir1/someDir2/someFile1.txt")
+        );
     }
 
     @Test
-    public void testDirectoryRelativeWindowsDirectory() throws PathDifferenceException {
+    void testDirectoryRelativeWindowsDirectory() throws PathDifferenceException {
         test(
                 "..\\somebase\\",
                 "..\\somebase\\someDir1\\someDir2\\someFile1.txt",
@@ -72,13 +76,15 @@ public class PathDifferenceTest {
                 "someFile1.txt");
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testDirectoryRelativeWindowsNonDirectoryBase() throws PathDifferenceException {
-        test("..\\somebase\\base_", "..\\somebase\\base_someDir1\\someDir2\\someFile1.txt");
+    @Test
+    void testDirectoryRelativeWindowsNonDirectoryBase() throws PathDifferenceException {
+        assertThrows(IllegalArgumentException.class, () ->
+            test("..\\somebase\\base_", "..\\somebase\\base_someDir1\\someDir2\\someFile1.txt")
+        );
     }
 
     @Test
-    public void testDirectoryRelativeUnixDirectory() throws PathDifferenceException {
+    void testDirectoryRelativeUnixDirectory() throws PathDifferenceException {
         test(
                 "../somebase/",
                 "../somebase/someDir1/someDir2/someFile1.txt",
@@ -86,9 +92,11 @@ public class PathDifferenceTest {
                 "someFile1.txt");
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testDirectoryRelativeUnixNonDirectoryBase() throws PathDifferenceException {
-        test("../somebase/extra_", "../somebase/someDir1/someDir2/someFile1.txt");
+    @Test
+    void testDirectoryRelativeUnixNonDirectoryBase() throws PathDifferenceException {
+        assertThrows(IllegalArgumentException.class, () ->
+            test("../somebase/extra_", "../somebase/someDir1/someDir2/someFile1.txt")
+        );
     }
 
     private void test(

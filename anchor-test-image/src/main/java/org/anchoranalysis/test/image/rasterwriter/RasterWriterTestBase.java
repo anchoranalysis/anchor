@@ -26,6 +26,7 @@
 package org.anchoranalysis.test.image.rasterwriter;
 
 import lombok.RequiredArgsConstructor;
+import java.nio.file.Path;
 import org.anchoranalysis.core.format.ImageFileFormat;
 import org.anchoranalysis.image.io.bean.stack.writer.StackWriter;
 import org.anchoranalysis.image.voxel.datatype.FloatVoxelType;
@@ -34,9 +35,8 @@ import org.anchoranalysis.image.voxel.datatype.UnsignedIntVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.test.image.rasterwriter.comparison.ComparisonPlan;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.io.TempDir;
 
 /**
  * Base class for testing various implementations of {@link StackWriter}.
@@ -66,7 +66,7 @@ public abstract class RasterWriterTestBase {
         FloatVoxelType.INSTANCE
     };
 
-    @Rule public TemporaryFolder directory = new TemporaryFolder();
+    @TempDir public Path directory;
 
     // START REQUIRED ARGUMENTS
     /** The format to be tested and written. */
@@ -82,13 +82,13 @@ public abstract class RasterWriterTestBase {
     /** Performs the tests. */
     protected FourChannelStackTester tester;
 
-    @Before
-    public void setup() {
+    @BeforeEach
+    void setup() {
         String extension = format.getDefaultExtension();
         tester =
                 new FourChannelStackTester(
                         new StackTester(
-                                createWriter(), directory.getRoot().toPath(), extension, include3D),
+                                createWriter(), directory, extension, include3D),
                         comparisonPlan.createComparer(directory, extension),
                         comparisonPlan.isSkipComparisonForRGB());
     }

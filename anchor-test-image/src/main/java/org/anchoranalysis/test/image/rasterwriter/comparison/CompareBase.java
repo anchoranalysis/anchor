@@ -25,7 +25,7 @@
  */
 package org.anchoranalysis.test.image.rasterwriter.comparison;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -52,7 +52,7 @@ abstract class CompareBase implements ImageComparer {
         try {
             String assertMessage = filenameWithoutExtension + "_" + identifierForTest();
             assertTrue(
-                    assertMessage, areIdentical(filenameWithoutExtension, filenameWithExtension));
+                    areIdentical(filenameWithoutExtension, filenameWithExtension), assertMessage);
         } catch (IOException e) {
             System.err.printf( // NOSONAR
                     "The test wrote a file to temporary-folder directory at:%n%s%n", path);

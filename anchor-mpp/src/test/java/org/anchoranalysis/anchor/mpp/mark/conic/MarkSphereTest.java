@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.anchor.mpp.mark.conic;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -35,12 +35,12 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import org.anchoranalysis.mpp.mark.conic.Sphere;
 import org.anchoranalysis.spatial.point.Point3d;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class MarkSphereTest {
+class MarkSphereTest {
 
     @Test
-    public void testSerialization() throws IOException, ClassNotFoundException {
+    void testSerialization() throws IOException, ClassNotFoundException {
 
         Sphere ms_in = new Sphere();
         ms_in.setId(3);

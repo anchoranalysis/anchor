@@ -35,12 +35,12 @@ import org.anchoranalysis.feature.results.ResultsVector;
 import org.anchoranalysis.feature.shared.SharedFeatureMulti;
 import org.anchoranalysis.test.LoggingFixture;
 import org.anchoranalysis.test.feature.ConstantsInListFixture;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class FeatureSessionTest {
+class FeatureSessionTest {
 
     @Test
-    public void testCalculateSimpleListOfFeatures()
+    void testCalculateSimpleListOfFeatures()
             throws InitException, NamedFeatureCalculateException {
 
         SequentialSession<FeatureInput> session =

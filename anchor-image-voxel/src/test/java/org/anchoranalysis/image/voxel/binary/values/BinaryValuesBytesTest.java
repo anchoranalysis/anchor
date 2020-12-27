@@ -26,14 +26,14 @@
 
 package org.anchoranalysis.image.voxel.binary.values;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class BinaryValuesBytesTest {
+class BinaryValuesBytesTest {
 
     @Test
-    public void testEquals() {
+    void testEquals() {
         assertEquals(createLowHigh(), createLowHigh());
     }
     

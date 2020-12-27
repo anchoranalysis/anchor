@@ -62,15 +62,35 @@ public class ObjectMaskFixture {
     private final boolean do3D;
     // END REQUIRED ARGUMENTS
 
+    /**
+     * Creates an object-mask whose bounding-box corner exists at a particular point.
+     *  
+     * @param corner the corner (minimal corner in all dimensions)
+     * @return a newly created object-mask (with a shape as described in the class comment) and with a bounding box starting at {@code corner}.
+     */
     public ObjectMask filledMask(Point2i corner) {
         return filledMask(corner.x(), corner.y());
     }
 
+    /**
+     * Creates an object-mask whose bounding-box corner exists at a particular point.
+     *  
+     * @param cornerX the corner in X dimension (minimal value of X)
+     * @param cornerY the corner in Y dimension (minimal value of Y)
+     * @return a newly created object-mask (with a shape as described in the class comment) and with a bounding box starting at {@code corner}.
+     */
     public ObjectMask filledMask(int cornerX, int cornerY) {
         return filledMask(cornerX, cornerY, WIDTH, HEIGHT);
     }
 
-    /** A rectangular object-mask with single-pixel corners removed */
+    /** 
+     * A rectangular object-mask with single-pixel corners removed.
+     *
+     * @param cornerX the corner in X dimension (minimal value of X)
+     * @param cornerY the corner in Y dimension (minimal value of Y)
+     * @param width width of the bounding-box
+     * @param height height of the bounding-box.
+     */
     public ObjectMask filledMask(int cornerX, int cornerY, int width, int height) {
         Point3i corner = new Point3i(cornerX, cornerY, 0);
         Extent extent = new Extent(width, height, do3D ? DEPTH : 1);
@@ -87,11 +107,11 @@ public class ObjectMaskFixture {
 
         BinaryVoxels<UnsignedByteBuffer> binaryValues = object.binaryVoxels();
 
-        Extent e = object.boundingBox().extent();
-        int widthMinusOne = e.x() - 1;
-        int heightMinusOne = e.y() - 1;
+        Extent extent = object.boundingBox().extent();
+        int widthMinusOne = extent.x() - 1;
+        int heightMinusOne = extent.y() - 1;
 
-        for (int z = 0; z < e.z(); z++) {
+        for (int z = 0; z < extent.z(); z++) {
             binaryValues.setOff(0, 0, z);
             binaryValues.setOff(widthMinusOne, 0, z);
             binaryValues.setOff(0, heightMinusOne, z);

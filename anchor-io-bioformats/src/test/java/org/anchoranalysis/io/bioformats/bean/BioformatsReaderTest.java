@@ -29,8 +29,8 @@ import org.anchoranalysis.core.format.ImageFileFormat;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.io.bioformats.ConfigureBioformatsLogging;
 import org.anchoranalysis.test.TestLoader;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * Opens diverse files (across format, bit depth, number of channels etc.) and checks that
@@ -40,7 +40,7 @@ import org.junit.Test;
  *
  * @author Owen Feehan
  */
-public class BioformatsReaderTest {
+class BioformatsReaderTest {
 
     static {
         ConfigureBioformatsLogging.instance().makeSureConfigured();
@@ -54,18 +54,18 @@ public class BioformatsReaderTest {
     private static final String EXTENSION_TIFF = ImageFileFormat.TIFF.getDefaultExtension();
     private static final String EXTENSION_PNG = ImageFileFormat.PNG.getDefaultExtension();
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         tester = new ExpectedImageTester(loader);
     }
 
     @Test
-    public void testJpeg() throws ImageIOException {
+    void testJpeg() throws ImageIOException {
         tester.assertRGBAndUnsigned8Bit(EXTENSION_JPEG, 4351, 1048);
     }
 
     @Test
-    public void testTiff() throws ImageIOException {
+    void testTiff() throws ImageIOException {
         tester.assertRGBAndUnsigned8BitUncompressed(EXTENSION_TIFF);
         tester.assertUnsigned16Bit(EXTENSION_TIFF, 16);
         tester.assertUnsigned8BitThreeChannels(
@@ -74,7 +74,7 @@ public class BioformatsReaderTest {
     }
 
     @Test
-    public void testPng() throws ImageIOException {
+    void testPng() throws ImageIOException {
         tester.assertRGBAndUnsigned8BitUncompressed(EXTENSION_PNG);
     }
 }

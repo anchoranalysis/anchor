@@ -25,34 +25,34 @@
  */
 package org.anchoranalysis.image.core.outline;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * Tests {@link FindOutline}.
  *
  * @author Owen Feehan
  */
-public class FindOutlineTest {
+class FindOutlineTest {
 
     /** Tests a 2D object with a outline-size of 1. */
     @Test
-    public void testSingleWidthObject2D() {
+    void testSingleWidthObject2D() {
         assertOutline(false, 1);
     }
 
     /** Tests a 2D object with a outline-size of 2. */
     @Test
-    public void testDoubleWidthObject2D() {
+    void testDoubleWidthObject2D() {
         assertOutline(false, 2);
     }
 
     /** Tests a 3D object with a outline-size of 1. */
     @Test
-    public void testSingleWidthObject3D() {
+    void testSingleWidthObject3D() {
         assertOutline(true, 1);
     }
 
@@ -122,8 +122,8 @@ public class FindOutlineTest {
     private static void assertNumberVoxels(
             String messagePrefix, int expectedNumberVoxels, ObjectMask object) {
         assertEquals(
-                messagePrefix + " - number of voxels",
                 expectedNumberVoxels,
-                object.numberVoxelsOn());
+                object.numberVoxelsOn(),
+                () -> messagePrefix + " - number of voxels");
     }
 }
