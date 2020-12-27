@@ -41,7 +41,7 @@ class PredicateRegionMembership implements PredicateTwoBytes {
     private final byte regionMembershipFlag;
 
     @Override
-    boolean test(byte first, byte second) {
+    public boolean test(byte first, byte second) {
         return isVoxelInRegion(first) && isVoxelInRegion(second);
     }
 

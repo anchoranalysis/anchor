@@ -56,7 +56,7 @@ import org.junit.jupiter.api.function.Executable;
  *
  * @author Owen Feehan
  */
-abstract class PNGTestBase extends RasterWriterTestBase {
+public abstract class PNGTestBase extends RasterWriterTestBase {
 
     private static final ComparisonPlan COMPARISON_PLAN =
             new ComparisonPlan(false, Optional.of(ImageFileFormat.OME_TIFF), false);

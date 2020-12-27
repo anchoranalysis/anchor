@@ -41,7 +41,7 @@ import org.anchoranalysis.test.image.rasterwriter.comparison.ImageComparer;
  *
  * @author Owen Feehan
  */
-class FourChannelStackTester {
+public class FourChannelStackTester {
 
     private static final VoxelDataType[] DEFAULT_VOXEL_TYPE_AS_ARRAY = {
         UnsignedByteVoxelType.INSTANCE
@@ -78,7 +78,7 @@ class FourChannelStackTester {
      * @throws ImageIOException if an error occurs by the writer
      * @throws IOException if an error occurs attempting a comparison
      */
-    void testSingleChannel() throws ImageIOException, IOException {
+    public void testSingleChannel() throws ImageIOException, IOException {
         testSingleChannel(DEFAULT_VOXEL_TYPE_AS_ARRAY);
     }
 
@@ -89,7 +89,7 @@ class FourChannelStackTester {
      * @throws ImageIOException if an error occurs by the writer
      * @throws IOException if an error occurs attempting a comparison
      */
-    void testSingleChannel(VoxelDataType channelVoxelType)
+    public void testSingleChannel(VoxelDataType channelVoxelType)
             throws ImageIOException, IOException {
         testSingleChannel(new VoxelDataType[] {channelVoxelType});
     }
@@ -101,7 +101,7 @@ class FourChannelStackTester {
      * @throws ImageIOException if an error occurs by the writer
      * @throws IOException if an error occurs attempting a comparison
      */
-    void testSingleChannel(VoxelDataType[] channelVoxelTypes)
+    public void testSingleChannel(VoxelDataType[] channelVoxelTypes)
             throws ImageIOException, IOException {
         tester.performTest(channelVoxelTypes, 1, false, comparer);
     }
@@ -113,7 +113,7 @@ class FourChannelStackTester {
      * @throws ImageIOException if an error occurs by the writer
      * @throws IOException if an error occurs attempting a comparison
      */
-    void testSingleChannelRGB() throws ImageIOException, IOException {
+    public void testSingleChannelRGB() throws ImageIOException, IOException {
         tester.performTest(
                 new ChannelSpecification(UnsignedByteVoxelType.INSTANCE, 1, true), comparerRGB);
     }
@@ -124,7 +124,7 @@ class FourChannelStackTester {
      * @throws ImageIOException if an error occurs by the writer
      * @throws IOException if an error occurs attempting a comparison
      */
-    void testTwoChannels() throws ImageIOException, IOException {
+    public void testTwoChannels() throws ImageIOException, IOException {
         testTwoChannels(DEFAULT_VOXEL_TYPE_AS_ARRAY);
     }
 
@@ -135,7 +135,7 @@ class FourChannelStackTester {
      * @throws ImageIOException if an error occurs by the writer
      * @throws IOException if an error occurs attempting a comparison
      */
-    void testTwoChannels(VoxelDataType[] channelVoxelTypes)
+    public void testTwoChannels(VoxelDataType[] channelVoxelTypes)
             throws ImageIOException, IOException {
         tester.performTest(channelVoxelTypes, 2, false, comparer);
     }
@@ -147,7 +147,7 @@ class FourChannelStackTester {
      * @throws ImageIOException if an error occurs by the writer
      * @throws IOException if an error occurs attempting a comparison
      */
-    void testThreeChannelsSeparate() throws ImageIOException, IOException {
+    public void testThreeChannelsSeparate() throws ImageIOException, IOException {
         testThreeChannelsSeparate(DEFAULT_VOXEL_TYPE_AS_ARRAY);
     }
 
@@ -171,7 +171,7 @@ class FourChannelStackTester {
      * @throws ImageIOException if an error occurs by the writer
      * @throws IOException if an error occurs attempting a comparison
      */
-    void testThreeChannelsRGB() throws ImageIOException, IOException {
+    public void testThreeChannelsRGB() throws ImageIOException, IOException {
         testThreeChannelsRGB(DEFAULT_VOXEL_TYPE_AS_ARRAY);
     }
 
@@ -183,7 +183,7 @@ class FourChannelStackTester {
      * @throws ImageIOException if an error occurs by the writer
      * @throws IOException if an error occurs attempting a comparison
      */
-    void testThreeChannelsRGB(VoxelDataType channelVoxelType)
+    public void testThreeChannelsRGB(VoxelDataType channelVoxelType)
             throws ImageIOException, IOException {
         testThreeChannelsRGB(new VoxelDataType[] {channelVoxelType});
     }
@@ -196,7 +196,7 @@ class FourChannelStackTester {
      * @throws ImageIOException if an error occurs by the writer
      * @throws IOException if an error occurs attempting a comparison
      */
-    void testThreeChannelsRGB(VoxelDataType[] channelVoxelTypes)
+    public void testThreeChannelsRGB(VoxelDataType[] channelVoxelTypes)
             throws ImageIOException, IOException {
         tester.performTest(channelVoxelTypes, 3, true, comparerRGB);
     }
@@ -210,7 +210,7 @@ class FourChannelStackTester {
      * @throws ImageIOException if an error occurs by the writer
      * @throws IOException if an error occurs attempting a comparison
      */
-    void testThreeChannelsHeterogeneous() throws ImageIOException, IOException {
+    public void testThreeChannelsHeterogeneous() throws ImageIOException, IOException {
         tester.performTest(
                 new ChannelSpecification(UnsignedByteVoxelType.INSTANCE, 3, false),
                 Optional.of(UnsignedShortVoxelType.INSTANCE),
@@ -223,7 +223,7 @@ class FourChannelStackTester {
      * @throws ImageIOException if an error occurs by the writer
      * @throws IOException if an error occurs attempting a comparison
      */
-    void testFourChannels() throws ImageIOException, IOException {
+    public void testFourChannels() throws ImageIOException, IOException {
         testFourChannels(DEFAULT_VOXEL_TYPE_AS_ARRAY);
     }
 
@@ -234,7 +234,7 @@ class FourChannelStackTester {
      * @throws ImageIOException if an error occurs by the writer
      * @throws IOException if an error occurs attempting a comparison
      */
-    void testFourChannels(VoxelDataType[] channelVoxelTypes)
+    public void testFourChannels(VoxelDataType[] channelVoxelTypes)
             throws ImageIOException, IOException {
         tester.performTest(channelVoxelTypes, 4, false, comparer);
     }
