@@ -43,7 +43,7 @@ class ChannelSetVoxelsTest {
     private static final double DELTA = 1e-3;
 
     @Test
-    public void testSetPixelsForPlane() {
+    void testSetPixelsForPlane() {
 
         Dimensions dimensions = new Dimensions(2, 2, 1);
 
