@@ -32,8 +32,12 @@ public class TriggerTerminationCondition extends TerminationCondition {
 
     private boolean triggered = false;
 
+    @Override
+    public void init() {
+        // NOTHING TO DO
+    }
+    
     // We don't bother with synchronize
-
     @Override
     public boolean continueFurther(
             int iteration, double score, int size, MessageLogger logger) {
