@@ -38,7 +38,7 @@ class OutlineKernelNeighborMatchValueTest {
     @Test
     void test2D() {
         
-        // TODO implememt
+        // TODO implement
         // Create a binary-mask of all voxels not lieing on the object.
         /*ObjectMaskFixture.BOUNDING_BOX_NUM_VOXELS
         

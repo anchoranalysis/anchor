@@ -38,8 +38,8 @@ import org.anchoranalysis.mpp.segment.transformer.TransformationContext;
 public interface KernelAssigner<S, T, U> {
 
     void assignProposal(
-            OptimizationStep<S, T, U> optStep,
+            OptimizationStep<S, T, U> step,
             TransformationContext context,
-            KernelWithIdentifier<S,U> kernel)
+            KernelWithIdentifier<S, U> kernel)
             throws KernelCalculateEnergyException;
 }

@@ -67,7 +67,7 @@ class BeanXmlLoaderTest {
      * @throws BeanXmlException
      */
     @Test
-    public void testLoadBeanReplaceElement() throws BeanXmlException {
+    void testLoadBeanReplaceElement() throws BeanXmlException {
         testBean("replaceBeanElement", "world2");
     }
 
