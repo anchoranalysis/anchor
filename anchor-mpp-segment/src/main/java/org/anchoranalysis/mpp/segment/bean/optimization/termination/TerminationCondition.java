@@ -30,14 +30,23 @@ import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.log.MessageLogger;
 
 /**
- * A test on whether to terminate the optimization or not
+ * A condition on whether to terminate the optimization or continue with further steps.
  *
  * @author Owen Feehan
  */
 public abstract class TerminationCondition extends AnchorBean<TerminationCondition> {
 
-    public abstract boolean continueIterations(
-            int currentIteration, double score, int size, MessageLogger logger);
+    /**
+     * Whether to continue for an additional iteration step or not.
+     * 
+     * @param iteration the current iteration of the optimization.
+     * @param score the current score associated with the optimization
+     * @param size the current size associated with the optimization.
+     * @param logger a logger to write messages to
+     * @return true iff a continuation should occur.
+     */
+    public abstract boolean continueFurther(
+            int iteration, double score, int size, MessageLogger logger);
 
     public void init() {}
 }

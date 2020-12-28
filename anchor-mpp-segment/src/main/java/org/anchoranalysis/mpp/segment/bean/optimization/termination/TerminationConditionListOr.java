@@ -58,11 +58,11 @@ public class TerminationConditionListOr extends TerminationCondition {
     }
 
     @Override
-    public boolean continueIterations(
-            int currentIteration, double score, int size, MessageLogger logger) {
+    public boolean continueFurther(
+            int iteration, double score, int size, MessageLogger logger) {
 
         for (TerminationCondition tc : this.list) {
-            if (!tc.continueIterations(currentIteration, score, size, logger)) {
+            if (!tc.continueFurther(iteration, score, size, logger)) {
                 return false;
             }
         }
