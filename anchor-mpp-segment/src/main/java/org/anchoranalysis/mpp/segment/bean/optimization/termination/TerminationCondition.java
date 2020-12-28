@@ -37,6 +37,13 @@ import org.anchoranalysis.core.log.MessageLogger;
 public abstract class TerminationCondition extends AnchorBean<TerminationCondition> {
 
     /**
+     * Called before {@link #continueFurther} once to setup state in the bean.
+     * 
+     * <p>If called again, it resets the current state.
+     */
+    public abstract void init();
+    
+    /**
      * Whether to continue for an additional iteration step or not.
      * 
      * @param iteration the current iteration of the optimization.
@@ -47,6 +54,4 @@ public abstract class TerminationCondition extends AnchorBean<TerminationConditi
      */
     public abstract boolean continueFurther(
             int iteration, double score, int size, MessageLogger logger);
-
-    public void init() {}
 }
