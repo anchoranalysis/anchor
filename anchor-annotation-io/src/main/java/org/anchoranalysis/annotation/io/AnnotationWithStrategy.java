@@ -33,10 +33,9 @@ import java.util.List;
 import java.util.Optional;
 import lombok.Getter;
 import org.anchoranalysis.annotation.io.bean.AnnotatorStrategy;
-import org.anchoranalysis.core.log.error.ErrorReporter;
 import org.anchoranalysis.image.core.stack.named.NamedStacksSupplier;
 import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
-import org.anchoranalysis.io.input.InputFromManager;
+import org.anchoranalysis.io.input.InputFromManagerDelegate;
 import org.anchoranalysis.io.input.InputReadFailedException;
 
 /**
@@ -44,55 +43,39 @@ import org.anchoranalysis.io.input.InputReadFailedException;
  *
  * @author Owen Feehan
  */
-public class AnnotationWithStrategy<T extends AnnotatorStrategy> implements InputFromManager {
+public class AnnotationWithStrategy<T extends AnnotatorStrategy> extends InputFromManagerDelegate<ProvidesStackInput> {
 
-    private ProvidesStackInput input;
-    @Getter private T strategy;
+    @Getter private final T strategy;
 
     /** Path to annotation */
-    @Getter private Path path;
+    @Getter private final Path path;
 
     public AnnotationWithStrategy(ProvidesStackInput input, T strategy)
             throws InputReadFailedException {
-        this.input = input;
+        super(input);
         this.strategy = strategy;
         this.path = strategy.annotationPathFor(input);
     }
 
     public Optional<File> associatedFile() {
-        return input.pathForBinding().map(Path::toFile);
+        return getDelegate().pathForBinding().map(Path::toFile);
     }
 
     /**
-     * A label to be used when aggregrating this annotation with others, or null if this makes no
-     * sense
+     * A label to be used when aggregating this annotation with others, or {@code null} if this makes no
+     * sense.
      *
      * @throws InputReadFailedException
      */
     public Optional<String> labelForAggregation() throws InputReadFailedException {
-        return strategy.annotationLabelFor(input);
-    }
-
-    @Override
-    public String name() {
-        return input.name();
-    }
-
-    @Override
-    public Optional<Path> pathForBinding() {
-        return input.pathForBinding();
+        return strategy.annotationLabelFor(getDelegate());
     }
 
     public List<File> deriveAssociatedFiles() {
         return Arrays.asList(path.toFile());
     }
 
-    @Override
-    public void close(ErrorReporter errorReporter) {
-        input.close(errorReporter);
-    }
-
     public NamedStacksSupplier stacks() {
-        return NamedStacksSupplier.cache(input::asSet);
+        return NamedStacksSupplier.cache(getDelegate()::asSet);
     }
 }
