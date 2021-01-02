@@ -36,17 +36,17 @@ import org.anchoranalysis.mpp.segment.kernel.proposer.WeightedKernel;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class EnsureUniqueNames {
 
-    public static <T,S> void apply(List<WeightedKernel<T,S>> listKernelFactories) {
+    public static <T, S> void apply(List<WeightedKernel<T, S>> listKernelFactories) {
         Map<String, Integer> hashName = cntUniqueNames(listKernelFactories);
         appendIntegerIfNecessary(listKernelFactories, hashName);
     }
 
-    private static <T,S> Map<String, Integer> cntUniqueNames(
-            List<WeightedKernel<T,S>> listKernelFactories) {
+    private static <T, S> Map<String, Integer> cntUniqueNames(
+            List<WeightedKernel<T, S>> listKernelFactories) {
 
         HashMap<String, Integer> hashName = new HashMap<>();
 
-        for (WeightedKernel<?,?> wkf : listKernelFactories) {
+        for (WeightedKernel<?, ?> wkf : listKernelFactories) {
 
             String name = wkf.getKernel().getBeanName();
             if (hashName.get(name) == null) {
@@ -61,11 +61,11 @@ class EnsureUniqueNames {
     }
 
     // Now append an integer index to each kernel name that appears multiple times
-    private static <T,S> void appendIntegerIfNecessary(
-            List<WeightedKernel<T,S>> lstKernelFactories, Map<String, Integer> hashName) {
+    private static <T, S> void appendIntegerIfNecessary(
+            List<WeightedKernel<T, S>> lstKernelFactories, Map<String, Integer> hashName) {
         HashMap<String, Integer> hashRunning = new HashMap<>();
 
-        for (WeightedKernel<?,?> wkf : lstKernelFactories) {
+        for (WeightedKernel<?, ?> wkf : lstKernelFactories) {
 
             String name = wkf.getKernel().getBeanName();
 

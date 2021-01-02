@@ -56,7 +56,7 @@ public abstract class MarksGeneratorBase
     private final DrawOverlay writer;
     private final IdentifierGetter<Overlay> idGetter;
     private final RegionMembershipWithFlags regionMembership;
-    // START REQUIRED FIELDS    
+    // START REQUIRED FIELDS
 
     @Getter @Setter private String manifestDescriptionFunction = "marks";
 

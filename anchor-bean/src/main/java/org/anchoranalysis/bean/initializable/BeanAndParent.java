@@ -28,11 +28,12 @@ package org.anchoranalysis.bean.initializable;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.anchoranalysis.bean.AnchorBean;
 import lombok.AllArgsConstructor;
 import lombok.Value;
+import org.anchoranalysis.bean.AnchorBean;
 
-@AllArgsConstructor @Value
+@AllArgsConstructor
+@Value
 class BeanAndParent {
 
     /** The bean */

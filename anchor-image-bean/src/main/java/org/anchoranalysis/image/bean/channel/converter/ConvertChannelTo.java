@@ -30,7 +30,7 @@ import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.bean.ImageBean;
 import org.anchoranalysis.image.core.channel.convert.ChannelConverter;
 
-/** 
+/**
  * Converts a channel from one type to another.
  *
  * @param <T> destination voxel type to convert to

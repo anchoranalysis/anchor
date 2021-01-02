@@ -32,9 +32,8 @@ import org.junit.jupiter.api.Test;
 
 /**
  * Tests different types of {@code Point} classes, and particularly their interaction.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 class PointTest {
 
@@ -55,31 +54,31 @@ class PointTest {
         // At present, different types are not allowed be equal
         assertNotEquals(create2d(), create2f());
         assertNotEquals(create3d(), create3f());
-        
+
         assertEquals(create2d().toFloat(), create2f());
-        assertEquals(PointConverter.floatFromDouble(create3d()), create3f());        
+        assertEquals(PointConverter.floatFromDouble(create3d()), create3f());
     }
 
     private static Point2f create2f() {
         return new Point2f(-3.1f, 4.2f);
     }
-    
+
     private static Point2d create2d() {
         return new Point2d(-3.1, 4.2);
     }
-    
+
     private static Point2i create2i() {
         return new Point2i(-3, 4);
     }
-    
+
     private static Point3d create3d() {
         return new Point3d(-3.1, 4.2, 6.3);
     }
-    
+
     private static Point3i create3i() {
         return new Point3i(-3, 4, 6);
     }
-    
+
     private static Point3f create3f() {
         return new Point3f(-3.1f, 4.2f, 6.3f);
     }

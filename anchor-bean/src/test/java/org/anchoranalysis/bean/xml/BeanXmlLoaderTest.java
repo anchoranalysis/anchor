@@ -81,42 +81,35 @@ class BeanXmlLoaderTest {
         testBean("replaceBeanInclude", "worldAlternative");
     }
 
-    /**
-     * A replace bean targeting a missing attribute
-     */
+    /** A replace bean targeting a missing attribute */
     @Test
     void testLoadBeanReplaceAttributeMissing() {
-        assertException(() ->
-            testSimple("replaceBeanAttributeMissing", "helloChanged")
-        );
+        assertException(() -> testSimple("replaceBeanAttributeMissing", "helloChanged"));
     }
 
-    /**
-     * A replace bean targettng a missing attribute element
-     */
+    /** A replace bean targettng a missing attribute element */
     @Test
     void testLoadBeanReplaceElementMissing() {
-        assertException(() ->
-            testBean("replaceBeanElementMissing", "world2")
-        );
+        assertException(() -> testBean("replaceBeanElementMissing", "world2"));
     }
-    
-    private void testSimple(String fileIdentifier, String expectedFieldValue) throws BeanXmlException {
+
+    private void testSimple(String fileIdentifier, String expectedFieldValue)
+            throws BeanXmlException {
         MockBeanNested bean = registerLoad(fileIdentifier);
-        assertEquals(expectedFieldValue, bean.getFieldSimpleNecessary() );
+        assertEquals(expectedFieldValue, bean.getFieldSimpleNecessary());
     }
-    
+
     private void testBean(String fileIdentifier, String expectedMessage) throws BeanXmlException {
         MockBeanNested bean = registerLoad(fileIdentifier);
         assertEquals(expectedMessage, bean.getFieldBeanNecessary().getMessage());
     }
-    
+
     private void testSimpleAndBean(String fileIdentifier) throws BeanXmlException {
         MockBeanNested bean = registerLoad(fileIdentifier);
         assertEquals("hello", bean.getFieldSimpleNecessary());
         assertEquals("world", bean.getFieldBeanNecessary().getMessage());
     }
-    
+
     private <T> T registerLoad(String fileIdentifier) throws BeanXmlException {
         RegisterBeanFactories.registerAllPackageBeanFactories();
 
@@ -126,7 +119,7 @@ class BeanXmlLoaderTest {
         T bean = BeanXMLLoader.loadBean(path);
         return bean;
     }
-    
+
     private static void assertException(Executable executable) {
         assertThrows(BeanXmlException.class, executable);
     }

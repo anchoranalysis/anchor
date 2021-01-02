@@ -85,8 +85,7 @@ public class DualComparerFactory {
         Path directoryAbsolute = directory.toAbsolutePath();
         Path pathTemporary =
                 additionalRelative
-                        .map(
-                                directoryAbsolute::resolve)
+                        .map(directoryAbsolute::resolve)
                         .orElseGet(() -> directoryAbsolute);
 
         return TestLoader.createFromExplicitDirectory(pathTemporary);

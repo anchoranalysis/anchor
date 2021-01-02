@@ -41,7 +41,7 @@ public abstract class BinaryKernelMorphological extends BinaryKernel {
     public void notifyZChange(LocalSlices inSlices, int z) {
         this.inSlices = inSlices;
     }
-    
+
     protected LocalSlices getVoxels() {
         return inSlices;
     }

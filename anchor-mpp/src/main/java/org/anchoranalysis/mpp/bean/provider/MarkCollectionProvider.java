@@ -36,5 +36,4 @@ import org.anchoranalysis.mpp.mark.MarkCollection;
  */
 @GroupingRoot
 public abstract class MarkCollectionProvider
-        extends MPPProvider<MarkCollectionProvider, MarkCollection> {
-}
+        extends MPPProvider<MarkCollectionProvider, MarkCollection> {}

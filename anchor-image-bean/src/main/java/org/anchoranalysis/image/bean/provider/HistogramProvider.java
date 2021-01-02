@@ -33,5 +33,4 @@ import org.anchoranalysis.math.histogram.Histogram;
 
 @GroupingRoot
 public abstract class HistogramProvider extends ImageBean<HistogramProvider>
-        implements Provider<Histogram> {
-}
+        implements Provider<Histogram> {}

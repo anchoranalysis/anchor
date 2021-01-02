@@ -41,11 +41,11 @@ class BinaryValuesTest {
     void testInvert() {
         assertEquals(createHighLow(), createLowHigh().createInverted());
     }
-    
+
     private static BinaryValues createLowHigh() {
         return new BinaryValues(0, 255);
     }
-    
+
     private static BinaryValues createHighLow() {
         return new BinaryValues(255, 0);
     }

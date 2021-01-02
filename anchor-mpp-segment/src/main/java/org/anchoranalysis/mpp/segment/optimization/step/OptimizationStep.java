@@ -51,7 +51,7 @@ public class OptimizationStep<S, T, V> {
 
     private Optional<T> proposalOptional = Optional.empty();
 
-    private DescribeData<S,V> describeData = new DescribeData<>();
+    private DescribeData<S, V> describeData = new DescribeData<>();
 
     public OptimizationStep() {
         state = new DualState<>();
@@ -62,7 +62,7 @@ public class OptimizationStep<S, T, V> {
         describeData.setTemperature(temperature);
     }
 
-    public void assignProposal(Optional<T> proposalToAssign, KernelWithIdentifier<S,V> kid) {
+    public void assignProposal(Optional<T> proposalToAssign, KernelWithIdentifier<S, V> kid) {
 
         describeData.setKernel(kid);
 
@@ -137,7 +137,7 @@ public class OptimizationStep<S, T, V> {
                 > funcScore.applyAsDouble(state.getBest().get()); // NOSONAR
     }
 
-    private void markChanged(KernelWithIdentifier<S,V> kid) {
+    private void markChanged(KernelWithIdentifier<S, V> kid) {
         setChangedMarkIDs(kid.getKernel().changedMarkIDArray());
     }
 
@@ -150,7 +150,7 @@ public class OptimizationStep<S, T, V> {
         best = false;
     }
 
-    public KernelWithIdentifier<S,V> getKernel() {
+    public KernelWithIdentifier<S, V> getKernel() {
         return describeData.getKernel();
     }
 

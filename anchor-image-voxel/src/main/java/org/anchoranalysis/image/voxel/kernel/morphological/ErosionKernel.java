@@ -26,112 +26,35 @@
 
 package org.anchoranalysis.image.voxel.kernel.morphological;
 
-import java.util.Optional;
 import java.util.function.Supplier;
-import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
-import org.anchoranalysis.image.voxel.kernel.KernelApplicationParameters;
-import org.anchoranalysis.spatial.point.Point3i;
+import org.anchoranalysis.image.voxel.kernel.KernelPointCursor;
 
 /**
  * Erosion with a 3x3 or 3x3x3 kernel
  *
  * @author Owen Feehan
  */
-public final class ErosionKernel extends BinaryKernelMorphologicalExtent {
+public final class ErosionKernel extends BinaryKernelMorphologicalWithCursor {
+
+    public ErosionKernel() {
+        super(true);
+    }
 
     /**
-     * This method is deliberately not broken into smaller pieces to avoid inlining.
-     *
-     * <p>This efficiency matters as it is called so many times over a large image.
-     *
-     * <p>Apologies that it is difficult to read with high cognitive-complexity.
+     * Checks whether a particular neighbor voxel qualifies to make the current voxel an outline
+     * voxel.
      */
     @Override
-    public boolean acceptPoint(int index, Point3i point, BinaryValuesByte binaryValues, KernelApplicationParameters params) {
-
-        UnsignedByteBuffer buffer = getVoxels().getLocal(0).get(); // NOSONAR
-
-        int xLength = extent.x();
-
-        int x = point.x();
-        int y = point.y();
-
-        if (binaryValues.isOff(buffer.getRaw(index))) {
-            return false;
-        }
-
-        // We walk up and down in x
-        x--;
-        index--;
-        if (x >= 0) {
-            if (binaryValues.isOff(buffer.getRaw(index))) {
-                return false;
-            }
+    protected boolean doesNeighborQualify(
+            boolean guard,
+            KernelPointCursor point,
+            Supplier<UnsignedByteBuffer> buffer,
+            int zShift) {
+        if (guard) {
+            return point.isBufferOff(buffer.get());
         } else {
-            if (params.isOutsideHigh()) {
-                return false;
-            }
-        }
-
-        x += 2;
-        index += 2;
-        if (x < extent.x()) {
-            if (binaryValues.isOff(buffer.getRaw(index))) {
-                return false;
-            }
-        } else {
-            if (params.isOutsideHigh()) {
-                return false;
-            }
-        }
-        index--;
-
-        // We walk up and down in y
-        y--;
-        index -= xLength;
-        if (y >= 0) {
-            if (binaryValues.isOff(buffer.getRaw(index))) {
-                return false;
-            }
-        } else {
-            if (params.isOutsideHigh()) {
-                return false;
-            }
-        }
-
-        y += 2;
-        index += (2 * xLength);
-        if (y < (extent.y())) {
-            if (binaryValues.isOff(buffer.getRaw(index))) {
-                return false;
-            }
-        } else {
-            if (params.isOutsideHigh()) {
-                return false;
-            }
-        }
-        index -= xLength;
-
-        return maybeCheckZ(() -> getVoxels().getLocal(-1), () -> getVoxels().getLocal(+1), binaryValues, index, params);
-    }
-
-    private boolean maybeCheckZ(
-            Supplier<Optional<UnsignedByteBuffer>> bufferZLess1,
-            Supplier<Optional<UnsignedByteBuffer>> bufferZPlus1,
-            BinaryValuesByte binaryValues,
-            int index,
-            KernelApplicationParameters params) {
-        return !params.isUseZ()
-                || (checkZBuffer(bufferZLess1.get(), binaryValues, index, params)
-                        && checkZBuffer(bufferZPlus1.get(), binaryValues, index, params));
-    }
-
-    private boolean checkZBuffer(Optional<UnsignedByteBuffer> buffer, BinaryValuesByte binaryValues, int index, KernelApplicationParameters params) {
-        if (buffer.isPresent()) {
-            return !binaryValues.isOff(buffer.get().getRaw(index));
-        } else {
-            return !params.isOutsideHigh();
+            return point.isOutsideHigh();
         }
     }
 }

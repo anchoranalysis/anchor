@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -32,35 +32,38 @@ import org.anchoranalysis.image.voxel.kernel.OutsideKernelPolicy;
 import org.anchoranalysis.image.voxel.object.ObjectMaskFixture;
 
 abstract class OutlineTestBase extends BinaryKernelTestBase {
-    
+
     @Override
     protected int expectedInside2D(ObjectMaskFixture fixture, KernelApplicationParameters params) {
         return fixture.expectedSurfaceNumberVoxels(useZFor2D(params));
     }
-    
+
     @Override
     protected int expectedInside3D(ObjectMaskFixture fixture, KernelApplicationParameters params) {
         return fixture.expectedSurfaceNumberVoxels(params.isUseZ());
     }
-    
+
     @Override
-    protected int expectedBoundary2D(ObjectMaskFixture fixture, KernelApplicationParameters params) {
-        return whenOutsideOff(params, fixture, () -> 8 );
+    protected int expectedBoundary2D(
+            ObjectMaskFixture fixture, KernelApplicationParameters params) {
+        return whenOutsideOff(params, fixture, () -> 8);
     }
-    
+
     @Override
-    protected int expectedBoundary3D(ObjectMaskFixture fixture, KernelApplicationParameters params) {
-        return whenOutsideOff(params, fixture, () -> params.isUseZ() ? 36 : 24 );
+    protected int expectedBoundary3D(
+            ObjectMaskFixture fixture, KernelApplicationParameters params) {
+        return whenOutsideOff(params, fixture, () -> params.isUseZ() ? 36 : 24);
     }
-    
-    private static int whenOutsideOff(KernelApplicationParameters params, ObjectMaskFixture fixture, IntSupplier otherwise) {
-        if (params.getOutsideKernelPolicy()==OutsideKernelPolicy.AS_OFF) {
+
+    private static int whenOutsideOff(
+            KernelApplicationParameters params, ObjectMaskFixture fixture, IntSupplier otherwise) {
+        if (params.getOutsideKernelPolicy() == OutsideKernelPolicy.AS_OFF) {
             return fixture.expectedSurfaceNumberVoxels(params.isUseZ());
         } else {
             return otherwise.getAsInt();
         }
     }
-       
+
     private static boolean useZFor2D(KernelApplicationParameters params) {
         return params.isUseZ() && (!params.isIgnoreOutside() && !params.isOutsideHigh());
     }

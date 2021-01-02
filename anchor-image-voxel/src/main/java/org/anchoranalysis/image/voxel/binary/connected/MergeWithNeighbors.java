@@ -110,7 +110,8 @@ final class MergeWithNeighbors {
         neighborhood = NeighborhoodFactory.of(bigNeighborhood);
 
         this.process =
-                ProcessVoxelNeighborFactory.withinExtent(new PointEvaluator(slidingIndex, unionIndex));
+                ProcessVoxelNeighborFactory.withinExtent(
+                        new PointEvaluator(slidingIndex, unionIndex));
     }
 
     /**

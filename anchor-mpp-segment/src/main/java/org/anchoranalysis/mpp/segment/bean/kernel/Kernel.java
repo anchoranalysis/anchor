@@ -46,7 +46,7 @@ import org.anchoranalysis.mpp.segment.kernel.KernelCalculationContext;
  * @param <T> the type of entity that is modified
  * @param <S> updatable-state
  */
-public abstract class Kernel<T,S> extends MPPBean<Kernel<T,S>> implements CompatibleWithMark {
+public abstract class Kernel<T, S> extends MPPBean<Kernel<T, S>> implements CompatibleWithMark {
 
     // START BEAN PROPERTIES
     @BeanField @AllowEmpty @Getter @Setter
@@ -85,10 +85,7 @@ public abstract class Kernel<T,S> extends MPPBean<Kernel<T,S>> implements Compat
      * @param energyNew accepted energy
      * @throws UpdateMarkSetException
      */
-    public abstract void updateAfterAcceptance(
-            S updatableState,
-            T energyExisting,
-            T energyNew)
+    public abstract void updateAfterAcceptance(S updatableState, T energyExisting, T energyNew)
             throws UpdateMarkSetException;
 
     /**

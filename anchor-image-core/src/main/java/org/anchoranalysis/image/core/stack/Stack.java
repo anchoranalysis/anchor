@@ -175,13 +175,15 @@ public class Stack implements Iterable<Channel> {
     }
 
     /**
-     * Creates a <a href="https://en.wikipedia.org/wiki/Maximum_intensity_projection">Maximum Intensity Projection</a> of each channel.
+     * Creates a <a href="https://en.wikipedia.org/wiki/Maximum_intensity_projection">Maximum
+     * Intensity Projection</a> of each channel.
      *
      * <p>Note that if the channels do not need projections, the existing {@link Channel} is reused
-     * in the newly created {@link Stack}. But if a projection is needed, it is always freshly created
-     * as a new channel.
-     * 
-     * @return a newly created {@link Stack}, with maximum intensity projections of each {@link Channel}.
+     * in the newly created {@link Stack}. But if a projection is needed, it is always freshly
+     * created as a new channel.
+     *
+     * @return a newly created {@link Stack}, with maximum intensity projections of each {@link
+     *     Channel}.
      */
     public Stack projectMax() {
         // We know the sizes will be correct

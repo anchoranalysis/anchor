@@ -48,16 +48,16 @@ import org.anchoranalysis.spatial.point.Point3i;
 public class Tile extends ArrangeStackBean {
 
     // START BEAN PROPERTIES
-    /** 
+    /**
      * The number of <i>rows</i> to use in the table produced when tiling.
-     * 
+     *
      * <p>If this value is set to {@code -1} it is automatically set.
      */
     @BeanField @Positive @Getter @Setter private int numberRows = -1;
 
-    /** 
+    /**
      * The number of <i>columns</i> to use in the table produced when tiling.
-     * 
+     *
      * <p>If this value is set to {@code -1} it is automatically set.
      */
     @BeanField @Positive @Getter @Setter private int numberColumns = -1;
@@ -162,7 +162,8 @@ public class Tile extends ArrangeStackBean {
 
         try {
             TableItemArrangement<BoundingBoxesOnPlane> table =
-                    new TableItemArrangement<>(new CreateTable(rasterIterator), numberRows, numberColumns);
+                    new TableItemArrangement<>(
+                            new CreateTable(rasterIterator), numberRows, numberColumns);
 
             return createSet(table, new MaxWidthHeight(table));
 

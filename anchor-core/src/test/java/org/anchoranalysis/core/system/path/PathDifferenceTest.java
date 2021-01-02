@@ -46,9 +46,12 @@ class PathDifferenceTest {
 
     @Test
     void testDirectoryAbsoluteWindowsNonDirectoryBase() throws PathDifferenceException {
-        assertThrows(IllegalArgumentException.class, () ->
-            test("c:\\somebase\\base_", "c:\\somebase\\base_someDir1\\someDir2\\someFile1.txt")
-        );
+        assertThrows(
+                IllegalArgumentException.class,
+                () ->
+                        test(
+                                "c:\\somebase\\base_",
+                                "c:\\somebase\\base_someDir1\\someDir2\\someFile1.txt"));
     }
 
     @Test
@@ -62,9 +65,9 @@ class PathDifferenceTest {
 
     @Test
     void testDirectoryAbsoluteUnixNonDirectoryBas() throws PathDifferenceException {
-        assertThrows(IllegalArgumentException.class, () ->
-            test("/somebase/extra_", "/somebase/someDir1/someDir2/someFile1.txt")
-        );
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> test("/somebase/extra_", "/somebase/someDir1/someDir2/someFile1.txt"));
     }
 
     @Test
@@ -78,9 +81,12 @@ class PathDifferenceTest {
 
     @Test
     void testDirectoryRelativeWindowsNonDirectoryBase() throws PathDifferenceException {
-        assertThrows(IllegalArgumentException.class, () ->
-            test("..\\somebase\\base_", "..\\somebase\\base_someDir1\\someDir2\\someFile1.txt")
-        );
+        assertThrows(
+                IllegalArgumentException.class,
+                () ->
+                        test(
+                                "..\\somebase\\base_",
+                                "..\\somebase\\base_someDir1\\someDir2\\someFile1.txt"));
     }
 
     @Test
@@ -94,9 +100,9 @@ class PathDifferenceTest {
 
     @Test
     void testDirectoryRelativeUnixNonDirectoryBase() throws PathDifferenceException {
-        assertThrows(IllegalArgumentException.class, () ->
-            test("../somebase/extra_", "../somebase/someDir1/someDir2/someFile1.txt")
-        );
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> test("../somebase/extra_", "../somebase/someDir1/someDir2/someFile1.txt"));
     }
 
     private void test(

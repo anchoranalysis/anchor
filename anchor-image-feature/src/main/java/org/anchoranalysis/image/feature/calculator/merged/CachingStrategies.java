@@ -49,7 +49,8 @@ class CachingStrategies {
     }
 
     /* Don't cache inputs */
-    public static BoundReplaceStrategy<FeatureInputStack, ReuseSingletonStrategy<FeatureInputStack>> noCache() {
+    public static BoundReplaceStrategy<FeatureInputStack, ReuseSingletonStrategy<FeatureInputStack>>
+            noCache() {
         return new BoundReplaceStrategy<>(ReuseSingletonStrategy::new);
     }
 }

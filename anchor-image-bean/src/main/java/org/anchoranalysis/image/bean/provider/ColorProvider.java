@@ -36,6 +36,4 @@ import org.anchoranalysis.core.color.ColorList;
  * @author Owen Feehan
  */
 public abstract class ColorProvider extends NullParamsBean<ColorProvider>
-        implements Provider<ColorList> {
-
-}
+        implements Provider<ColorList> {}

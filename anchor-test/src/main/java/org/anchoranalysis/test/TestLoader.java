@@ -259,7 +259,8 @@ public class TestLoader {
      * @param directoryDestination destination-folder
      * @throws IOException if a copy error occurs
      */
-    public void copyToDirectory(String[] subdirectoriesSource, File directoryDestination) throws IOException {
+    public void copyToDirectory(String[] subdirectoriesSource, File directoryDestination)
+            throws IOException {
 
         for (String subdirectory : subdirectoriesSource) {
             Path pathSubdir = pathTestDataRoot.resolve(subdirectory);

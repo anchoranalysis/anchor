@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -27,20 +27,20 @@ package org.anchoranalysis.io.input;
 
 import java.nio.file.Path;
 import java.util.Optional;
-import org.anchoranalysis.core.log.error.ErrorReporter;
 import lombok.AllArgsConstructor;
+import org.anchoranalysis.core.log.error.ErrorReporter;
 
 /**
  * A base class for {@link InputFromManager}-implementing classes that delegate to another.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 @AllArgsConstructor
-public abstract class InputFromManagerDelegate<T extends InputFromManager> implements InputFromManager {
+public abstract class InputFromManagerDelegate<T extends InputFromManager>
+        implements InputFromManager {
 
     private final T delegate;
-    
+
     @Override
     public String name() {
         return delegate.name();

@@ -36,29 +36,29 @@ import org.anchoranalysis.image.voxel.kernel.LocalSlices;
 import org.anchoranalysis.spatial.point.Point3i;
 
 /**
- * Outputs the outline of an object-mask, but only for voxels on the exterior which neighbour a binary-mask.
- * 
- * <p>Specifically, voxels on the object are set only to <i>on</i> if they neighbour a <i>off</i> voxel <b>and</b> this neighboring voxel is <i>on</i> in the binary-mask. Otherwise
- * a voxel is <i>off</i>.
- * 
- * @author Owen Feehan
+ * Outputs the outline of an object-mask, but only for voxels on the exterior which neighbour a
+ * binary-mask.
  *
+ * <p>Specifically, voxels on the object are set only to <i>on</i> if they neighbour a <i>off</i>
+ * voxel <b>and</b> this neighboring voxel is <i>on</i> in the binary-mask. Otherwise a voxel is
+ * <i>off</i>.
+ *
+ * @author Owen Feehan
  */
 public class OutlineKernelNeighborMatchValue extends OutlineKernelBase {
 
     private final BinaryVoxels<UnsignedByteBuffer> voxelsRequireHigh;
     private final BinaryValuesByte bvRequireHigh;
-    
+
     private LocalSlices localSlicesRequireHigh;
 
     /**
      * Creates for an object.
-     *  
-     * @param mask the mask defining possible neighbors, defined on the same coordinate space as {@code object}.
+     *
+     * @param mask the mask defining possible neighbors, defined on the same coordinate space as
+     *     {@code object}.
      */
-    public OutlineKernelNeighborMatchValue(
-            BinaryVoxels<UnsignedByteBuffer> mask
-            ) {
+    public OutlineKernelNeighborMatchValue(BinaryVoxels<UnsignedByteBuffer> mask) {
         this.voxelsRequireHigh = mask;
         this.bvRequireHigh = voxelsRequireHigh.binaryValues().createByte();
     }
@@ -66,25 +66,30 @@ public class OutlineKernelNeighborMatchValue extends OutlineKernelBase {
     @Override
     public void notifyZChange(LocalSlices inSlices, int z) {
         super.notifyZChange(inSlices, z);
-        localSlicesRequireHigh =
-                new LocalSlices(
-                        z, 3, voxelsRequireHigh.voxels());
+        localSlicesRequireHigh = new LocalSlices(z, 3, voxelsRequireHigh.voxels());
     }
-    
-    /** Checks whether a particular neighbor voxel qualifies to make the current voxel an outline voxel. */
+
+    /**
+     * Checks whether a particular neighbor voxel qualifies to make the current voxel an outline
+     * voxel.
+     */
     @Override
-    protected boolean doesNeighborQualify(boolean guard, KernelPointCursor point, Supplier<UnsignedByteBuffer> buffer, int zShift) {
+    protected boolean doesNeighborQualify(
+            boolean guard,
+            KernelPointCursor point,
+            Supplier<UnsignedByteBuffer> buffer,
+            int zShift) {
         if (guard) {
             Optional<UnsignedByteBuffer> requireSlice = localSlicesRequireHigh.getLocal(zShift);
-            return point.isBufferOff(buffer.get()) && checkIfRequireHighIsTrue(requireSlice.get(), point.getPoint());
+            return point.isBufferOff(buffer.get())
+                    && checkIfRequireHighIsTrue(requireSlice.get(), point.getPoint()); // NOSONAR
         } else {
             return point.isOutsideLowUnignored();
         }
     }
 
-    private boolean checkIfRequireHighIsTrue(
-            UnsignedByteBuffer additionalBuffer, Point3i point) {
+    private boolean checkIfRequireHighIsTrue(UnsignedByteBuffer additionalBuffer, Point3i point) {
         int indexGlobal = voxelsRequireHigh.extent().offsetSlice(point);
-        return bvRequireHigh.isOn(additionalBuffer.getRaw(indexGlobal));            
+        return bvRequireHigh.isOn(additionalBuffer.getRaw(indexGlobal));
     }
 }

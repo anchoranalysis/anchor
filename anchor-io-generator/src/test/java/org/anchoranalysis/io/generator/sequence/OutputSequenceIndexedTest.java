@@ -46,20 +46,17 @@ class OutputSequenceIndexedTest {
     private static final String OUTPUT_NAME = "out";
 
     @Test
-    void testOneConstantFileType()
-            throws OutputWriteFailedException, OperationFailedException {
+    void testOneConstantFileType() throws OutputWriteFailedException, OperationFailedException {
         test(1, false);
     }
 
     @Test
-    void testTwoConstantFileTypes()
-            throws OutputWriteFailedException, OperationFailedException {
+    void testTwoConstantFileTypes() throws OutputWriteFailedException, OperationFailedException {
         test(2, false);
     }
 
     @Test
-    void testTwoAlternatingFileTypes()
-            throws OutputWriteFailedException, OperationFailedException {
+    void testTwoAlternatingFileTypes() throws OutputWriteFailedException, OperationFailedException {
         test(2, true);
     }
 
@@ -118,11 +115,7 @@ class OutputSequenceIndexedTest {
         assertEquals(numberExpectedFileTypes, subdirectory.getFileTypes().size());
         assertEquals(
                 GeneratorFixture.MANIFEST_DESCRIPTION,
-                subdirectory
-                        .getFileTypes()
-                        .iterator()
-                        .next()
-                        .getManifestDescription());
+                subdirectory.getFileTypes().iterator().next().getManifestDescription());
         assertEquals(OUTPUT_NAME, subdirectory.getOutputName().getOutputName());
     }
 

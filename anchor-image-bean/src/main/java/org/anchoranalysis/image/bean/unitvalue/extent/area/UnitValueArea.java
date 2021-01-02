@@ -33,7 +33,8 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.bean.unitvalue.extent.UnitValueAreaOrVolume;
 
-@NoArgsConstructor @AllArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 public abstract class UnitValueArea extends UnitValueAreaOrVolume {
 
     // START BEAN PROPERTIES

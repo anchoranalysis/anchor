@@ -37,7 +37,9 @@ public class RejectIterationIfLowDisconnected implements AcceptIterationPredicat
     @Override
     public boolean acceptIteration(BinaryVoxels<UnsignedByteBuffer> voxels)
             throws OperationFailedException {
-        BinaryVoxels<UnsignedByteBuffer> nextBinary = BinaryVoxelsFactory.reuseByte(voxels.voxels(), voxels.binaryValues().createInverted());
+        BinaryVoxels<UnsignedByteBuffer> nextBinary =
+                BinaryVoxelsFactory.reuseByte(
+                        voxels.voxels(), voxels.binaryValues().createInverted());
         return new ObjectMask(nextBinary).checkIfConnected();
     }
 }

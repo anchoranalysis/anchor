@@ -73,7 +73,8 @@ class HelperReadXML {
      * @throws BeanXmlException if something goes wrong, and either the file cannot be read, or the
      *     XML does not conform to Bean standards
      */
-    private static XMLConfiguration readBeanXMLFromStream(InputStream source) throws BeanXmlException {
+    private static XMLConfiguration readBeanXMLFromStream(InputStream source)
+            throws BeanXmlException {
 
         try {
             // We initialize a DocumentBuilder specifically, so that we can switch off

@@ -47,7 +47,7 @@ class IncreasingIntegersTest {
         assertPreviousIndex(range, -1, 0);
         assertPreviousIndex(range, 9, 13);
     }
-    
+
     private static IncompleteElementRange createRange() throws SequenceTypeException {
         IncreasingIntegers sequence = new IncreasingIntegers();
         sequence.update(0);
@@ -56,12 +56,14 @@ class IncreasingIntegersTest {
         sequence.update(13);
         return sequence.elementRange();
     }
-        
-    private static void assertNextIndex(IncompleteElementRange range, int expectedIndex, int indexToSeek) {
+
+    private static void assertNextIndex(
+            IncompleteElementRange range, int expectedIndex, int indexToSeek) {
         assertEquals(expectedIndex, range.nextIndex(indexToSeek));
     }
-    
-    private static void assertPreviousIndex(IncompleteElementRange range, int expectedIndex, int indexToSeek) {
+
+    private static void assertPreviousIndex(
+            IncompleteElementRange range, int expectedIndex, int indexToSeek) {
         assertEquals(expectedIndex, range.previousIndex(indexToSeek));
     }
 }

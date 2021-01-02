@@ -26,81 +26,11 @@
 
 package org.anchoranalysis.image.voxel.kernel.outline;
 
-import java.util.Optional;
-import java.util.function.Supplier;
-import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
-import org.anchoranalysis.image.voxel.kernel.KernelApplicationParameters;
-import org.anchoranalysis.image.voxel.kernel.KernelPointCursor;
-import org.anchoranalysis.image.voxel.kernel.morphological.BinaryKernelMorphologicalExtent;
-import org.anchoranalysis.spatial.point.Point3i;
+import org.anchoranalysis.image.voxel.kernel.morphological.BinaryKernelMorphologicalWithCursor;
 
-public abstract class OutlineKernelBase extends BinaryKernelMorphologicalExtent {
+public abstract class OutlineKernelBase extends BinaryKernelMorphologicalWithCursor {
 
-    @Override
-    public boolean acceptPoint(int index2, Point3i point2, BinaryValuesByte binaryValues, KernelApplicationParameters params) {
-
-        UnsignedByteBuffer buffer = getVoxels().getLocal(0).get(); // NOSONAR
-                
-        if (binaryValues.isOff(buffer.getRaw(index2))) {
-            return false;
-        }
-        
-        KernelPointCursor point = new KernelPointCursor(index2, point2, extent, binaryValues, params);
-                
-        // We walk up and down in x
-        point.decrementX();
-        
-        if (doesNeighborQualify(point.nonNegativeX(), point, () -> buffer, 0)) {
-            point.incrementX();
-            return true;
-        }
-
-        point.incrementXTwice();
-        
-        try {
-            if (doesNeighborQualify(point.nonNegativeX(), point, () -> buffer, 0)) {
-                return true;
-            }
-        } finally {
-            point.decrementX();
-        }
-
-        // We walk up and down in y
-        point.decrementY();
-        
-        if (doesNeighborQualify(point.nonNegativeY(), point, () -> buffer, 0)) {
-            point.incrementY();
-            return true;
-        }
-        
-        point.incrementYTwice();
-        
-        try {
-            if (doesNeighborQualify(point.lessThanMaxY(), point, () -> buffer, 0)) {
-                return true;
-            }
-        } finally {
-            point.decrementY();    
-        }
-
-        return slicesQualify(point);
+    public OutlineKernelBase() {
+        super(false);
     }
-    
-    /** Checks if any neighbor voxels on an adjacent z-slice qualify to make the current voxel an outline voxel. */
-    private boolean slicesQualify(KernelPointCursor point) {
-        if (point.isUseZ()) {
-            return doesNeighborQualifyFromSlice(point, -1) ||
-                    doesNeighborQualifyFromSlice(point, +1);
-        } else {
-            return false;
-        }
-    }
-    
-    private boolean doesNeighborQualifyFromSlice(KernelPointCursor point, int zShift) {
-        Optional<UnsignedByteBuffer> buffer = getVoxels().getLocal(zShift);
-        return doesNeighborQualify(buffer.isPresent(), point, buffer::get, zShift);
-    }
-    
-    protected abstract boolean doesNeighborQualify(boolean guard, KernelPointCursor point, Supplier<UnsignedByteBuffer> buffer, int zShift);
 }

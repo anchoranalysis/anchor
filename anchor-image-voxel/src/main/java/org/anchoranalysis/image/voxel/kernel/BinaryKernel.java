@@ -35,5 +35,9 @@ public abstract class BinaryKernel extends Kernel {
         super(size);
     }
 
-    public abstract boolean acceptPoint(int index, Point3i point, BinaryValuesByte binaryValues, KernelApplicationParameters params);
+    public abstract boolean acceptPoint(
+            int index,
+            Point3i point,
+            BinaryValuesByte binaryValues,
+            KernelApplicationParameters params);
 }

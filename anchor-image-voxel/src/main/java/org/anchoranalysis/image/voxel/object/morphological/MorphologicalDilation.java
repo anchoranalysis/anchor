@@ -124,17 +124,13 @@ public class MorphologicalDilation {
                 dilationKernelFactory.createDilationKernel(background, minIntensityValue);
 
         KernelApplicationParameters params = dilationKernelFactory.createParameters();
-        
+
         for (int i = 0; i < iterations; i++) {
             BinaryVoxels<UnsignedByteBuffer> next =
-                    ApplyKernel.apply(
-                            kernelDilation, voxelsBinary, params);
+                    ApplyKernel.apply(kernelDilation, voxelsBinary, params);
 
             try {
-                if (acceptConditions.isPresent()
-                        && !acceptConditions
-                                .get()
-                                .acceptIteration(next)) {
+                if (acceptConditions.isPresent() && !acceptConditions.get().acceptIteration(next)) {
                     break;
                 }
             } catch (OperationFailedException e) {

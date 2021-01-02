@@ -62,7 +62,7 @@ class HelperReflection {
 
         return out;
     }
-    
+
     private static void addFieldsToList(Class<?> beanClass, List<Field> out) {
         Arrays.stream(beanClass.getDeclaredFields()).forEach(out::add);
     }

@@ -48,8 +48,7 @@ public class DilationKernelFactory {
     private final boolean bigNeighborhood;
 
     public BinaryKernel createDilationKernel(
-            Optional<Voxels<UnsignedByteBuffer>> background,
-            int minIntensityValue)
+            Optional<Voxels<UnsignedByteBuffer>> background, int minIntensityValue)
             throws CreateException {
 
         BinaryKernel kernelDilation = createDilationKernel();
@@ -60,13 +59,12 @@ public class DilationKernelFactory {
             return kernelDilation;
         }
     }
-    
+
     public KernelApplicationParameters createParameters() {
-        return new KernelApplicationParameters( OutsideKernelPolicy.as(outsideAtThreshold), useZ());
+        return new KernelApplicationParameters(OutsideKernelPolicy.as(outsideAtThreshold), useZ());
     }
 
-    private BinaryKernel createDilationKernel()
-            throws CreateException {
+    private BinaryKernel createDilationKernel() throws CreateException {
         if (dimensions == SelectDimensions.Z_ONLY) {
             if (bigNeighborhood) {
                 throw new CreateException("Big-neighborhood not supported for zOnly");
@@ -76,8 +74,9 @@ public class DilationKernelFactory {
             return new DilationKernel(bigNeighborhood);
         }
     }
-    
+
     private boolean useZ() {
-        return dimensions == SelectDimensions.ALL_DIMENSIONS || dimensions == SelectDimensions.Z_ONLY;
+        return dimensions == SelectDimensions.ALL_DIMENSIONS
+                || dimensions == SelectDimensions.Z_ONLY;
     }
 }

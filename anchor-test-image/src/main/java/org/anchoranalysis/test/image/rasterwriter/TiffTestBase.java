@@ -25,6 +25,8 @@
  */
 package org.anchoranalysis.test.image.rasterwriter;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import java.io.IOException;
 import java.util.Optional;
 import org.anchoranalysis.core.format.ImageFileFormat;
@@ -34,7 +36,6 @@ import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.test.image.rasterwriter.comparison.ComparisonPlan;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * For testing all {@link StackWriter}s that create TIFFs.
@@ -67,9 +68,7 @@ public abstract class TiffTestBase extends RasterWriterTestBase {
 
     @Test
     void testTwoChannels() {
-        assertThrows(ImageIOException.class, () ->
-            tester.testTwoChannels()
-        );
+        assertThrows(ImageIOException.class, () -> tester.testTwoChannels());
     }
 
     @Test
@@ -89,8 +88,6 @@ public abstract class TiffTestBase extends RasterWriterTestBase {
 
     @Test
     void testFourChannels() {
-        assertThrows(ImageIOException.class, () ->
-            tester.testFourChannels()
-        );
+        assertThrows(ImageIOException.class, () -> tester.testFourChannels());
     }
 }

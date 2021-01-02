@@ -31,15 +31,16 @@ import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.kernel.KernelApplicationParameters;
 import org.anchoranalysis.spatial.point.Point3i;
-import lombok.AllArgsConstructor;
 
 // Erosion with a 3x3 or 3x3x3 kernel
-@AllArgsConstructor
 final class DilationKernel extends BinaryKernelMorphologicalExtent {
 
-    /**
-     * Use a big neighbourhood if in 2D, but ignored when in 3D.
-     */
+    public DilationKernel(boolean bigNeighborhood) {
+        super(false);
+        this.bigNeighborhood = bigNeighborhood;
+    }
+
+    /** Use a big neighbourhood if in 2D, but ignored when in 3D. */
     private final boolean bigNeighborhood;
 
     /**
@@ -50,7 +51,11 @@ final class DilationKernel extends BinaryKernelMorphologicalExtent {
      * <p>Apologies that it is difficult to read with high cognitive-complexity.
      */
     @Override
-    public boolean acceptPoint(int index, Point3i point, BinaryValuesByte binaryValues, KernelApplicationParameters params) {
+    public boolean acceptPoint(
+            int index,
+            Point3i point,
+            BinaryValuesByte binaryValues,
+            KernelApplicationParameters params) {
 
         UnsignedByteBuffer buffer = getVoxels().getLocal(0).get(); // NOSONAR
         Optional<UnsignedByteBuffer> bufferZLess1 = getVoxels().getLocal(-1);
@@ -70,11 +75,11 @@ final class DilationKernel extends BinaryKernelMorphologicalExtent {
         index--;
         if (x >= 0) {
             if (binaryValues.isOn(buffer.getRaw(index))) {
-                return true;
+                return isQualifiedOutcome();
             }
         } else {
             if (params.isOutsideHigh()) {
-                return true;
+                return isQualifiedOutcome();
             }
         }
 
@@ -82,11 +87,11 @@ final class DilationKernel extends BinaryKernelMorphologicalExtent {
         index += 2;
         if (x < extent.x()) {
             if (binaryValues.isOn(buffer.getRaw(index))) {
-                return true;
+                return isQualifiedOutcome();
             }
         } else {
             if (params.isOutsideHigh()) {
-                return true;
+                return isQualifiedOutcome();
             }
         }
         x--;
@@ -97,11 +102,11 @@ final class DilationKernel extends BinaryKernelMorphologicalExtent {
         index -= xLength;
         if (y >= 0) {
             if (binaryValues.isOn(buffer.getRaw(index))) {
-                return true;
+                return isQualifiedOutcome();
             }
         } else {
             if (params.isOutsideHigh()) {
-                return true;
+                return isQualifiedOutcome();
             }
         }
 
@@ -109,11 +114,11 @@ final class DilationKernel extends BinaryKernelMorphologicalExtent {
         index += (2 * xLength);
         if (y < (extent.y())) {
             if (binaryValues.isOn(buffer.getRaw(index))) {
-                return true;
+                return isQualifiedOutcome();
             }
         } else {
             if (params.isOutsideHigh()) {
-                return true;
+                return isQualifiedOutcome();
             }
         }
         y--;
@@ -131,11 +136,11 @@ final class DilationKernel extends BinaryKernelMorphologicalExtent {
 
             if (x >= 0 && y >= 0) {
                 if (binaryValues.isOn(buffer.getRaw(index))) {
-                    return true;
+                    return isQualifiedOutcome();
                 }
             } else {
                 if (params.isOutsideHigh()) {
-                    return true;
+                    return isQualifiedOutcome();
                 }
             }
 
@@ -145,11 +150,11 @@ final class DilationKernel extends BinaryKernelMorphologicalExtent {
             index += (2 * xLength);
             if (x >= 0 && y < (extent.y())) {
                 if (binaryValues.isOn(buffer.getRaw(index))) {
-                    return true;
+                    return isQualifiedOutcome();
                 }
             } else {
                 if (params.isOutsideHigh()) {
-                    return true;
+                    return isQualifiedOutcome();
                 }
             }
             y--;
@@ -165,11 +170,11 @@ final class DilationKernel extends BinaryKernelMorphologicalExtent {
 
             if (x < extent.x() && y >= 0) {
                 if (binaryValues.isOn(buffer.getRaw(index))) {
-                    return true;
+                    return isQualifiedOutcome();
                 }
             } else {
                 if (params.isOutsideHigh()) {
-                    return true;
+                    return isQualifiedOutcome();
                 }
             }
 
@@ -179,11 +184,11 @@ final class DilationKernel extends BinaryKernelMorphologicalExtent {
             index += (2 * xLength);
             if (x < extent.x() && y < (extent.y())) {
                 if (binaryValues.isOn(buffer.getRaw(index))) {
-                    return true;
+                    return isQualifiedOutcome();
                 }
             } else {
                 if (params.isOutsideHigh()) {
-                    return true;
+                    return isQualifiedOutcome();
                 }
             }
             index -= xLength;
@@ -195,25 +200,25 @@ final class DilationKernel extends BinaryKernelMorphologicalExtent {
 
             if (bufferZLess1.isPresent()) {
                 if (binaryValues.isOn(bufferZLess1.get().getRaw(index))) {
-                    return true;
+                    return isQualifiedOutcome();
                 }
             } else {
                 if (params.isOutsideHigh()) {
-                    return true;
+                    return isQualifiedOutcome();
                 }
             }
 
             if (bufferZPlus1.isPresent()) {
                 if (binaryValues.isOn(bufferZPlus1.get().getRaw(index))) {
-                    return true;
+                    return isQualifiedOutcome();
                 }
             } else {
                 if (params.isOutsideHigh()) {
-                    return true;
+                    return isQualifiedOutcome();
                 }
             }
         }
 
-        return false;
+        return isUnqualifiedOutcome();
     }
 }

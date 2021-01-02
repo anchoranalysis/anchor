@@ -116,11 +116,12 @@ public class OverlayObjectMask extends Overlay {
     public OverlayProperties generateProperties(Optional<Resolution> resolution) {
         OverlayProperties out = new OverlayProperties();
         out.add("id", id);
-        object.forEachProperty( (name,value) -> {
-            if (value instanceof String) {
-                out.add(name, (String) value);
-            }
-        });
+        object.forEachProperty(
+                (name, value) -> {
+                    if (value instanceof String) {
+                        out.add(name, (String) value);
+                    }
+                });
         return out;
     }
 }

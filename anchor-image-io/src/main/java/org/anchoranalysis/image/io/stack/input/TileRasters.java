@@ -54,15 +54,15 @@ public class TileRasters {
             arrange.addStack(provider.getStack());
             arrange.addStack(addGenerateString(provider, createShort, scaleLabel, expandLabelZ));
         }
-        arrange.setArrange( createTile(numberColumns, list.size()) );
-        
+        arrange.setArrange(createTile(numberColumns, list.size()));
+
         return arrange;
     }
-    
+
     private static Tile createTile(int numberColumns, int numberProviders) {
         Tile tile = new Tile();
         tile.setNumberColumns(numberColumns);
-        tile.setNumberRows( integerDivisionRoundUp(numberProviders,numberColumns) );
+        tile.setNumberRows(integerDivisionRoundUp(numberProviders, numberColumns));
         tile.setCellDefault(new Overlay("left", "top", "repeat"));
         return tile;
     }
@@ -84,7 +84,7 @@ public class TileRasters {
         }
         return out;
     }
-        
+
     private static int integerDivisionRoundUp(int dividend, int divisor) {
         return (int) Math.ceil(((double) dividend) / divisor);
     }

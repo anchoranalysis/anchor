@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.image.voxel.object;
 
+import com.google.common.base.Preconditions;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
@@ -35,7 +36,6 @@ import org.anchoranalysis.spatial.Extent;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.Point2i;
 import org.anchoranalysis.spatial.point.Point3i;
-import com.google.common.base.Preconditions;
 
 /**
  * Creates object-masks of a certain shape.
@@ -45,13 +45,14 @@ import com.google.common.base.Preconditions;
  *
  * @author Owen Feehan
  */
-@RequiredArgsConstructor @Accessors(fluent=true)
+@RequiredArgsConstructor
+@Accessors(fluent = true)
 public class ObjectMaskFixture {
 
-    public static final Extent DEFAULT_EXTENT = new Extent(40,50,15);
+    public static final Extent DEFAULT_EXTENT = new Extent(40, 50, 15);
 
     public static final int VOXELS_REMOVED_CORNERS = 4;
-    
+
     // START REQUIRED ARGUMENTS
     /** Whether to remove single-voxel pixels from corners or not */
     private final boolean removeCorners;
@@ -59,16 +60,17 @@ public class ObjectMaskFixture {
     /** Width of object-mask. */
     @Getter private final Extent extent;
     // END REQUIRED ARGUMENTS
-    
+
     public ObjectMaskFixture(boolean removeCorners, boolean do3D) {
         this(removeCorners, do3D ? DEFAULT_EXTENT : DEFAULT_EXTENT.flattenZ());
     }
 
     /**
      * Creates an object-mask whose bounding-box corner exists at a particular point.
-     *  
+     *
      * @param corner the corner (minimal corner in all dimensions)
-     * @return a newly created object-mask (with a shape as described in the class comment) and with a bounding box starting at {@code corner}.
+     * @return a newly created object-mask (with a shape as described in the class comment) and with
+     *     a bounding box starting at {@code corner}.
      */
     public ObjectMask filledMask(Point2i corner) {
         return filledMask(corner.x(), corner.y(), 0);
@@ -76,20 +78,22 @@ public class ObjectMaskFixture {
 
     /**
      * Creates an object-mask whose bounding-box corner exists at a particular point.
-     *  
+     *
      * @param corner the corner (minimal corner in all dimensions)
-     * @return a newly created object-mask (with a shape as described in the class comment) and with a bounding box starting at {@code corner}.
+     * @return a newly created object-mask (with a shape as described in the class comment) and with
+     *     a bounding box starting at {@code corner}.
      */
     public ObjectMask filledMask(Point3i corner) {
         return filledMask(corner.x(), corner.y(), corner.z());
     }
-    
+
     /**
      * Creates an object-mask whose bounding-box corner exists at a particular point.
-     *  
+     *
      * @param cornerX the corner in X dimension (minimal value of X)
      * @param cornerY the corner in Y dimension (minimal value of Y)
-     * @return a newly created object-mask (with a shape as described in the class comment) and with a bounding box starting at {@code corner}.
+     * @return a newly created object-mask (with a shape as described in the class comment) and with
+     *     a bounding box starting at {@code corner}.
      */
     public ObjectMask filledMask(int cornerX, int cornerY) {
         return filledMask(cornerX, cornerY, 0);
@@ -97,11 +101,12 @@ public class ObjectMaskFixture {
 
     /**
      * Creates an object-mask whose bounding-box corner exists at a particular point.
-     *  
+     *
      * @param cornerX the corner in X dimension (minimal value of X)
      * @param cornerY the corner in Y dimension (minimal value of Y)
      * @param cornerZ the corner in Z dimension (minimal value of Z)
-     * @return a newly created object-mask (with a shape as described in the class comment) and with a bounding box starting at {@code corner}.
+     * @return a newly created object-mask (with a shape as described in the class comment) and with
+     *     a bounding box starting at {@code corner}.
      */
     public ObjectMask filledMask(int cornerX, int cornerY, int cornerZ) {
         Point3i corner = new Point3i(cornerX, cornerY, cornerZ);
@@ -112,25 +117,27 @@ public class ObjectMaskFixture {
         }
         return object;
     }
-    
+
     /** The expected number of voxels in the object-mask. */
     public int expectedVolume() {
-        return (int) (extent.calculateVolume() - (removedPerSlice(removeCorners)*extent.z()));
+        return (int) (extent.calculateVolume() - (removedPerSlice(removeCorners) * extent.z()));
     }
-    
-    /** 
+
+    /**
      * The expected number of voxels on the surface of the object in total.
-     * 
-     * @param treatZAsSurface if true, z is also treated as a dimension in which a surface is indicated. If false, only surfaces in X and Y dimensions are considered.
+     *
+     * @param treatZAsSurface if true, z is also treated as a dimension in which a surface is
+     *     indicated. If false, only surfaces in X and Y dimensions are considered.
      * @return the number of voxels that are expected to appear on the surface
      */
     public int expectedSurfaceNumberVoxels(boolean treatZAsSurface) {
         if (removeCorners) {
-            throw new UnsupportedOperationException("removeCorners==true is not supported for this method");
+            throw new UnsupportedOperationException(
+                    "removeCorners==true is not supported for this method");
         } else {
             // The top and bottom lines in x
             int typicalSlice = multiplyFirstTwoDifferently(extent.y(), extent.x(), 2);
-            
+
             if (treatZAsSurface) {
                 return multiplyFirstTwoDifferently(extent.z(), extent.volumeXY(), typicalSlice);
             } else {
@@ -138,24 +145,28 @@ public class ObjectMaskFixture {
             }
         }
     }
-    
+
     /**
-     * A special <i>multiplication</i> that uses a different multiplicand for the first two values (if they exist) and another multiplicand for the remainder.
-     * 
+     * A special <i>multiplication</i> that uses a different multiplicand for the first two values
+     * (if they exist) and another multiplicand for the remainder.
+     *
      * @param number a positive number to be multiplied
-     * @param multiplicandFirstTwo the multiplicand to be applied for the first two "times" of {@code number}.
-     * @param multiplicandRest the multiplicand to be applied for any other "times" of {@code number}.
-     * @return the total sum of all the times a multiplicand is applied. 
+     * @param multiplicandFirstTwo the multiplicand to be applied for the first two "times" of
+     *     {@code number}.
+     * @param multiplicandRest the multiplicand to be applied for any other "times" of {@code
+     *     number}.
+     * @return the total sum of all the times a multiplicand is applied.
      */
-    private static int multiplyFirstTwoDifferently(int number, int multiplicandFirstTwo, int multiplicandRest) {
+    private static int multiplyFirstTwoDifferently(
+            int number, int multiplicandFirstTwo, int multiplicandRest) {
         Preconditions.checkArgument(number >= 0);
-        if (number<=2) {
+        if (number <= 2) {
             return multiplicandFirstTwo * number;
         } else {
-            return (multiplicandFirstTwo*2) + (number-2) * multiplicandRest;
+            return (multiplicandFirstTwo * 2) + (number - 2) * multiplicandRest;
         }
     }
-    
+
     private int removedPerSlice(boolean removeCorners) {
         return removeCorners ? VOXELS_REMOVED_CORNERS : 0;
     }

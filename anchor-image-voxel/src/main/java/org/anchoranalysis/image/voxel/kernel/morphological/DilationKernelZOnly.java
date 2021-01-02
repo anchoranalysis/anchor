@@ -42,7 +42,11 @@ final class DilationKernelZOnly extends BinaryKernelMorphological {
     }
 
     @Override
-    public boolean acceptPoint(int index, Point3i point, BinaryValuesByte binaryValues, KernelApplicationParameters params) {
+    public boolean acceptPoint(
+            int index,
+            Point3i point,
+            BinaryValuesByte binaryValues,
+            KernelApplicationParameters params) {
 
         UnsignedByteBuffer buffer = getVoxels().getLocal(0).get(); // NOSONAR
         Optional<UnsignedByteBuffer> bufferZLess1 = getVoxels().getLocal(-1);
@@ -51,7 +55,7 @@ final class DilationKernelZOnly extends BinaryKernelMorphological {
         if (binaryValues.isOn(buffer.getRaw(index))) {
             return true;
         }
-        
+
         if (!params.isUseZ()) {
             return false;
         }

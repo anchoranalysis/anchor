@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -31,23 +31,22 @@ import org.anchoranalysis.spatial.Extent;
 
 /**
  * Tests {@link ErosionKernel}.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 class ErosionKernelTest extends MorphologicalKernelTestBase {
-    
+
     private static final int USEZ_2D = 0;
     private static final int NOT_USEZ_2D = 6;
-    
+
     private static final int USEZ_3D = 6;
     private static final int NOT_USEZ_3D = 18;
-    
+
     @Override
     protected BinaryKernel createKernel(ObjectMask object, Extent extentScene) {
         return new ErosionKernel();
     }
-    
+
     @Override
     protected ExpectedValues inside2D() {
         return new ExpectedValues(USEZ_2D, NOT_USEZ_2D, 6);
@@ -57,12 +56,12 @@ class ErosionKernelTest extends MorphologicalKernelTestBase {
     protected ExpectedValues inside3D() {
         return new ExpectedValues(USEZ_3D, NOT_USEZ_3D, 6, 18);
     }
-    
+
     @Override
     protected ExpectedValues boundary2D() {
         return new ExpectedValues(USEZ_2D, NOT_USEZ_2D, 12);
     }
-    
+
     @Override
     protected ExpectedValues boundary3D() {
         return new ExpectedValues(USEZ_3D, NOT_USEZ_3D, 24, 36);

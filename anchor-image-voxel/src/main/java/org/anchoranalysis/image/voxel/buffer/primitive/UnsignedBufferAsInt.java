@@ -78,7 +78,7 @@ public abstract class UnsignedBufferAsInt extends UnsignedBuffer {
      * @param value the unsigned-byte (represented by an int)
      */
     public abstract void putUnsigned(int index, int value);
-    
+
     /***
      * Print a description and the the first {link #MAX_NUMBER_ROWS_COLUMNS_IN_TO_STRING} rows and columns as values.
      */
@@ -88,10 +88,11 @@ public abstract class UnsignedBufferAsInt extends UnsignedBuffer {
         try (PrintStream stream = new PrintStream(output)) {
             stream.printf("The buffer has capacity: %d%n", capacity());
 
-            for( int offset=0; offset<capacity(); offset++) {
-                stream.printf("%03d ", getUnsigned(offset));        }    
+            for (int offset = 0; offset < capacity(); offset++) {
+                stream.printf("%03d ", getUnsigned(offset));
             }
-            
+        }
+
         return output.toString();
     }
 }

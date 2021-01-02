@@ -78,9 +78,11 @@ class IterateVoxelsIntersectingTest {
 
         assertEquals(
                 expectedNumberIntersectingVoxels,
-                CountVoxelsIntersectingObjects.countIntersectingVoxels(fixture.getFirst(), fixture.getSecond()));
+                CountVoxelsIntersectingObjects.countIntersectingVoxels(
+                        fixture.getFirst(), fixture.getSecond()));
         assertEquals(
                 expectedNumberIntersectingVoxels != 0,
-                CountVoxelsIntersectingObjects.hasIntersectingVoxels(fixture.getFirst(), fixture.getSecond()));
+                CountVoxelsIntersectingObjects.hasIntersectingVoxels(
+                        fixture.getFirst(), fixture.getSecond()));
     }
 }

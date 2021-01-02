@@ -112,15 +112,16 @@ public class Channel {
         this.voxels = voxelsToAssign;
     }
 
-    /** 
+    /**
      * Creates a new channel containing only one particular slice.
-     * 
+     *
      * <p>The existing {@link Voxels} are reused, without creating new buffers.
      *
      * @param sliceIndex the index of the slice to extract (index in z-dimension)
      */
     public Channel extractSlice(int sliceIndex) {
-        return ChannelFactory.instance().create(voxels.extract().slice(sliceIndex), dimensions.resolution());
+        return ChannelFactory.instance()
+                .create(voxels.extract().slice(sliceIndex), dimensions.resolution());
     }
 
     public Channel scaleXY(ScaleFactor scaleFactor) {
@@ -167,7 +168,7 @@ public class Channel {
 
     /**
      * A deep-copy.
-     * 
+     *
      * @return newly created deep-copy.
      */
     public Channel duplicate() {

@@ -46,9 +46,7 @@ public class MaskXor {
      * @param second the second channel for operation
      */
     public static void apply(Mask first, Mask second) {
-        apply(
-                first.binaryVoxels(),
-                second.binaryVoxels());
+        apply(first.binaryVoxels(), second.binaryVoxels());
     }
 
     /**
@@ -60,8 +58,7 @@ public class MaskXor {
      */
     public static void apply(
             BinaryVoxels<UnsignedByteBuffer> voxelsFirst,
-            BinaryVoxels<UnsignedByteBuffer> voxelsSecond
-            ) {
+            BinaryVoxels<UnsignedByteBuffer> voxelsSecond) {
 
         BinaryValuesByte binaryValuesFirst = voxelsFirst.binaryValues().createByte();
         BinaryValuesByte binaryValuesSecond = voxelsSecond.binaryValues().createByte();

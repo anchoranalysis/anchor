@@ -33,10 +33,57 @@ import org.anchoranalysis.spatial.Extent;
 
 public abstract class BinaryKernelMorphologicalExtent extends BinaryKernelMorphological {
 
+    // START REQUIRED ARGUMENTS
+    /**
+     * The outcome that should occur for the kernel <b>if no neighbor fulfills the condition</b>
+     * required by the kernel.
+     */
+    private final boolean unqualifiedOutcome;
+
+    /**
+     * The outcome that should occur for the kernel <b>if at least one neighbor fulfills the
+     * condition</b> required by the kernel.
+     */
+    private final boolean qualifiedOutcome;
+    // END REQUIRED ARGUMENTS
+
     protected Extent extent;
+
+    /**
+     * Create with an unqualified-outcome, what occurs if no no neighbor fulfills the condition
+     * required by the kernel..
+     *
+     * <p>If a neighbor fulfills the condition, the outcome is assumed to be the opposite of this.
+     *
+     * <p>Thus if {@code unqualifiedOutcome==false} then the qualified-outcome is @{code true} and
+     * vice-versa.
+     *
+     * @param unqualifiedOutcome the outcome that occurs if no neighbor fulfills the condition
+     *     required by the kernel.
+     */
+    public BinaryKernelMorphologicalExtent(boolean unqualifiedOutcome) {
+        this.unqualifiedOutcome = unqualifiedOutcome;
+        this.qualifiedOutcome = !unqualifiedOutcome;
+    }
 
     @Override
     public void init(Voxels<UnsignedByteBuffer> in, KernelApplicationParameters params) {
         this.extent = in.extent();
+    }
+
+    /**
+     * The outcome that should occur for the kernel <b>if no neighbor fulfills the condition</b>
+     * required by the kernel.
+     */
+    protected boolean isUnqualifiedOutcome() {
+        return unqualifiedOutcome;
+    }
+
+    /**
+     * The outcome that should occur for the kernel <b>if at least one neighbor fulfills the
+     * condition</b> required by the kernel.
+     */
+    protected boolean isQualifiedOutcome() {
+        return qualifiedOutcome;
     }
 }

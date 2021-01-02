@@ -164,9 +164,7 @@ public class FindOutline {
         }
     }
 
-    /** 
-     * Find an outline only 1 pixel deep by using a kernel directly 
-     */
+    /** Find an outline only 1 pixel deep by using a kernel directly */
     private static BinaryVoxels<UnsignedByteBuffer> outlineByKernel(
             BinaryVoxels<UnsignedByteBuffer> voxels, boolean outlineAtBoundary, boolean do3D) {
 
@@ -180,7 +178,11 @@ public class FindOutline {
 
         BinaryKernel kernel = new OutlineKernel();
 
-        return ApplyKernel.apply(kernel, voxels, binaryValues, new KernelApplicationParameters( OutsideKernelPolicy.as(!outlineAtBoundary),  do3D));
+        return ApplyKernel.apply(
+                kernel,
+                voxels,
+                binaryValues,
+                new KernelApplicationParameters(OutsideKernelPolicy.as(!outlineAtBoundary), do3D));
     }
 
     /**
@@ -211,8 +213,9 @@ public class FindOutline {
         BinaryValuesByte binaryValues = voxels.binaryValues().createByte();
         BinaryKernel kernelErosion = new ErosionKernel();
 
-        KernelApplicationParameters params = new KernelApplicationParameters( OutsideKernelPolicy.as(erodeAtBoundary), do3D);
-        
+        KernelApplicationParameters params =
+                new KernelApplicationParameters(OutsideKernelPolicy.as(erodeAtBoundary), do3D);
+
         BinaryVoxels<UnsignedByteBuffer> eroded =
                 ApplyKernel.apply(kernelErosion, voxels, binaryValues, params);
         for (int i = 1; i < numberErosions; i++) {

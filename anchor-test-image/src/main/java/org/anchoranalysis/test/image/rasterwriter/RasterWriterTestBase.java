@@ -25,8 +25,8 @@
  */
 package org.anchoranalysis.test.image.rasterwriter;
 
-import lombok.RequiredArgsConstructor;
 import java.nio.file.Path;
+import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.format.ImageFileFormat;
 import org.anchoranalysis.image.io.bean.stack.writer.StackWriter;
 import org.anchoranalysis.image.voxel.datatype.FloatVoxelType;
@@ -87,8 +87,7 @@ public abstract class RasterWriterTestBase {
         String extension = format.getDefaultExtension();
         tester =
                 new FourChannelStackTester(
-                        new StackTester(
-                                createWriter(), directory, extension, include3D),
+                        new StackTester(createWriter(), directory, extension, include3D),
                         comparisonPlan.createComparer(directory, extension),
                         comparisonPlan.isSkipComparisonForRGB());
     }

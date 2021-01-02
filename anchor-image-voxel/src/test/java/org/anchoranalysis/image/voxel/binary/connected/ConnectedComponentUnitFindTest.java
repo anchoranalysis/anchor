@@ -90,19 +90,18 @@ class ConnectedComponentUnitFindTest {
                 createBufferWithObjects(UnsignedByteVoxelType.INSTANCE, fixture));
     }
 
-    private void testObjects(ObjectCollection objects, ObjectCollectionFixture fixture, int expectedSingleObjectSize)
+    private void testObjects(
+            ObjectCollection objects, ObjectCollectionFixture fixture, int expectedSingleObjectSize)
             throws CreateException, OperationFailedException {
         assertEquals(
-                fixture.getNumberNonOverlappingObjects() + 1,
-                objects.size(),
-                "number of objects");
+                fixture.getNumberNonOverlappingObjects() + 1, objects.size(), "number of objects");
         assertTrue(
                 allSizesEqualExceptOne(objects, expectedSingleObjectSize),
                 "size of all objects except one");
     }
 
-    private <T> BinaryVoxels<T> createBufferWithObjects(VoxelDataType bufferDataType, ObjectCollectionFixture fixture)
-            throws CreateException {
+    private <T> BinaryVoxels<T> createBufferWithObjects(
+            VoxelDataType bufferDataType, ObjectCollectionFixture fixture) throws CreateException {
 
         Extent extent = fixture.extentLargerThanAllObjects();
 

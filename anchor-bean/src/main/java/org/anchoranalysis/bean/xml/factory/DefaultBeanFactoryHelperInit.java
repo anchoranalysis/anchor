@@ -127,7 +127,8 @@ class DefaultBeanFactoryHelperInit {
                                     defaultClass.orElse(null),
                                     parameter));
                 } else {
-                    throw new BeanXmlException("The value of a Bean-Property field is neither a scalar primitive nor a bean.");
+                    throw new BeanXmlException(
+                            "The value of a Bean-Property field is neither a scalar primitive nor a bean.");
                 }
             }
         }
@@ -148,14 +149,15 @@ class DefaultBeanFactoryHelperInit {
             }
 
             try {
-                BeanUtils.setProperty(bean, propName, value);   // NOSONAR
+                BeanUtils.setProperty(bean, propName, value); // NOSONAR
             } catch (IllegalAccessException | InvocationTargetException iaex) {
                 throw new ConfigurationRuntimeException(iaex);
             }
         }
     }
 
-    public static void initBean(Object bean, BeanDeclaration data, Object parameter) throws BeanXmlException {
+    public static void initBean(Object bean, BeanDeclaration data, Object parameter)
+            throws BeanXmlException {
         BeanHelper.initBeanProperties(bean, data);
 
         Map<String, Object> nestedBeans = data.getNestedBeanDeclarations();

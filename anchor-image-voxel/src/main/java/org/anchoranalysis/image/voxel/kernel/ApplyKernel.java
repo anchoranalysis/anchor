@@ -59,20 +59,25 @@ public class ApplyKernel {
             VoxelsFactory.getUnsignedByte();
 
     public static BinaryVoxels<UnsignedByteBuffer> apply(
-            BinaryKernel kernel, BinaryVoxels<UnsignedByteBuffer> in, KernelApplicationParameters params) {
+            BinaryKernel kernel,
+            BinaryVoxels<UnsignedByteBuffer> in,
+            KernelApplicationParameters params) {
         return apply(kernel, in, BinaryValuesByte.getDefault(), params);
     }
 
     // 3 pixel diameter kernel
     public static BinaryVoxels<UnsignedByteBuffer> apply(
-            BinaryKernel kernel, BinaryVoxels<UnsignedByteBuffer> in, BinaryValuesByte outBinary, KernelApplicationParameters params) {
+            BinaryKernel kernel,
+            BinaryVoxels<UnsignedByteBuffer> in,
+            BinaryValuesByte outBinary,
+            KernelApplicationParameters params) {
 
         Voxels<UnsignedByteBuffer> out = FACTORY.createInitialized(in.extent());
         kernel.init(in.voxels(), params);
 
         Extent extent = in.extent();
         BinaryValuesByte binaryValues = in.binaryValues().createByte();
-        
+
         ProcessPointAndIndex process =
                 new ProcessPointAndIndex() {
 
@@ -80,7 +85,8 @@ public class ApplyKernel {
 
                     @Override
                     public void notifyChangeSlice(int z) {
-                        LocalSlices localSlices = new LocalSlices(z, LOCAL_SLICES_SIZE, in.voxels());
+                        LocalSlices localSlices =
+                                new LocalSlices(z, LOCAL_SLICES_SIZE, in.voxels());
                         outBuffer = out.sliceBuffer(z);
                         kernel.notifyZChange(localSlices, z);
                     }
@@ -108,7 +114,10 @@ public class ApplyKernel {
      * @return the sum of the count value returned by the kernel over all iterated voxels
      * @throws OperationFailedException
      */
-    public static int applyForCount(CountKernel kernel, Voxels<UnsignedByteBuffer> voxels, KernelApplicationParameters params)
+    public static int applyForCount(
+            CountKernel kernel,
+            Voxels<UnsignedByteBuffer> voxels,
+            KernelApplicationParameters params)
             throws OperationFailedException {
         return applyForCount(kernel, voxels, new BoundingBox(voxels.extent()), params);
     }
@@ -124,7 +133,10 @@ public class ApplyKernel {
      * @throws OperationFailedException
      */
     public static int applyForCount(
-            CountKernel kernel, Voxels<UnsignedByteBuffer> voxels, BoundingBox box, KernelApplicationParameters params)
+            CountKernel kernel,
+            Voxels<UnsignedByteBuffer> voxels,
+            BoundingBox box,
+            KernelApplicationParameters params)
             throws OperationFailedException {
 
         if (!voxels.extent().contains(box)) {
@@ -172,10 +184,14 @@ public class ApplyKernel {
      * @param box a bounding-box (coordinates relative to voxels) that restricts where iteration
      *     occurs. Must be contained within voxels.
      * @return true if a positive-value is encountered, 0 if it never is encountered
-     * @throws OperationFailedException 
+     * @throws OperationFailedException
      */
     public static boolean applyUntilPositive(
-            CountKernel kernel, Voxels<UnsignedByteBuffer> voxels, BoundingBox box, KernelApplicationParameters params) throws OperationFailedException {
+            CountKernel kernel,
+            Voxels<UnsignedByteBuffer> voxels,
+            BoundingBox box,
+            KernelApplicationParameters params)
+            throws OperationFailedException {
 
         if (!voxels.extent().contains(box)) {
             throw new OperationFailedException(
@@ -214,7 +230,10 @@ public class ApplyKernel {
         return false;
     }
 
-    public static int applyForCount(BinaryKernel kernel, BinaryVoxels<UnsignedByteBuffer> in, KernelApplicationParameters params) {
+    public static int applyForCount(
+            BinaryKernel kernel,
+            BinaryVoxels<UnsignedByteBuffer> in,
+            KernelApplicationParameters params) {
 
         int localSlicesSize = 3;
 
@@ -224,7 +243,6 @@ public class ApplyKernel {
 
         BinaryValuesByte binaryValues = in.binaryValues().createByte();
         kernel.init(in.voxels(), params);
-
 
         Point3i point = new Point3i();
         for (point.setZ(0); point.z() < extent.z(); point.incrementZ()) {
@@ -250,7 +268,10 @@ public class ApplyKernel {
     }
 
     public static int applyForCountOnMask(
-            BinaryKernel kernel, Voxels<UnsignedByteBuffer> in, ObjectMask object, KernelApplicationParameters params) {
+            BinaryKernel kernel,
+            Voxels<UnsignedByteBuffer> in,
+            ObjectMask object,
+            KernelApplicationParameters params) {
 
         int localSlicesSize = 3;
 

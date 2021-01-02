@@ -55,15 +55,15 @@ class IntegerRangeTest {
         assertNextValue(-4, range);
         assertDoesNotHaveNext(range);
     }
-    
+
     private static void assertNextValue(int expectedValue, SequenceIntegerIterator range) {
         assertEquals(expectedValue, range.next().intValue());
     }
-    
+
     private static void assertHasNext(SequenceIntegerIterator range) {
         assertTrue(range.hasNext());
     }
-    
+
     private static void assertDoesNotHaveNext(SequenceIntegerIterator range) {
         assertFalse(range.hasNext());
     }

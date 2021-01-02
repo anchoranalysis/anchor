@@ -55,8 +55,8 @@ public abstract class PathPrefixerAvoidResolve extends PathPrefixer {
     /**
      * A directory in which to output the experiment-directory and files
      *
-     * <p>If empty, first the bean will try to use any output-directory set in the input context if it
-     * exists, or otherwise use the system temp directory.
+     * <p>If empty, first the bean will try to use any output-directory set in the input context if
+     * it exists, or otherwise use the system temp directory.
      */
     @BeanField @AllowEmpty @Getter @Setter private String outPathPrefix = "";
     // END BEAN PROPERTIES

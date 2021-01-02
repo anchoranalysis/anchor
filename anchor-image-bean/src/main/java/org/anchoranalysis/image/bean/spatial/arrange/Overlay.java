@@ -42,18 +42,20 @@ import org.anchoranalysis.spatial.point.Point3i;
 
 /**
  * Overlays one image on the other.
- * 
- * <p><ul>
- * <li><b>first</b> image passed is assumed to be the source.</li>
- * <li><b>second</b> image passed is assumed to be the overlay.</li>
- * </ul>
- * 
- * <p>We have no Z implemented yet, so we always overlay at z position 0.
- * 
- * @author Owen Feehan
  *
+ * <p>
+ *
+ * <ul>
+ *   <li><b>first</b> image passed is assumed to be the source.
+ *   <li><b>second</b> image passed is assumed to be the overlay.
+ * </ul>
+ *
+ * <p>We have no Z implemented yet, so we always overlay at z position 0.
+ *
+ * @author Owen Feehan
  */
-@NoArgsConstructor @AllArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 public class Overlay extends ArrangeStackBean {
 
     // START BEAN PROPERTIES

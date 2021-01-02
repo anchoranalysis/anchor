@@ -71,7 +71,7 @@ class HelperCheckMisconfigured {
                     // for
                     //  a defaultInstance and throw an error if it doesn't exist
                     value = findDefaultInstance(field.getType());
-                    field.set(obj, value);    // NOSONAR
+                    field.set(obj, value); // NOSONAR
                 }
 
                 // If it's non-optional, then we insist it's non-null

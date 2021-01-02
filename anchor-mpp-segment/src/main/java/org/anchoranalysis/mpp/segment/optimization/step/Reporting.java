@@ -50,7 +50,7 @@ public class Reporting<S> {
     /** An optional additional marks-Energy that provides an additional explanation of proposed */
     @Getter private Optional<S> proposalSecondary;
 
-    private DescribeData<?,?> describeData;
+    private DescribeData<?, ?> describeData;
 
     @Getter private boolean accepted;
     private boolean best;
@@ -96,7 +96,7 @@ public class Reporting<S> {
         return describeData.getKernel().getIdentifier();
     }
 
-    public KernelWithIdentifier<?,?> getKernel() { // NOSONAR
+    public KernelWithIdentifier<?, ?> getKernel() { // NOSONAR
         return describeData.getKernel();
     }
 }

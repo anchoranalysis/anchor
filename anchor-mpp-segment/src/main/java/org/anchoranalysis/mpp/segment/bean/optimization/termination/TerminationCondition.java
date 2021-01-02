@@ -38,14 +38,14 @@ public abstract class TerminationCondition extends AnchorBean<TerminationConditi
 
     /**
      * Called before {@link #continueFurther} once to setup state in the bean.
-     * 
+     *
      * <p>If called again, it resets the current state.
      */
     public abstract void init();
-    
+
     /**
      * Whether to continue for an additional iteration step or not.
-     * 
+     *
      * @param iteration the current iteration of the optimization.
      * @param score the current score associated with the optimization
      * @param size the current size associated with the optimization.

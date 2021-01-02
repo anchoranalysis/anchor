@@ -28,11 +28,11 @@ package org.anchoranalysis.spatial.rotation;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import cern.colt.matrix.DoubleMatrix2D;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.spatial.point.Vector3d;
 import org.anchoranalysis.spatial.rotation.factory.RotateAxisAngle;
 import org.junit.jupiter.api.Test;
-import cern.colt.matrix.DoubleMatrix2D;
-import lombok.AllArgsConstructor;
 
 class RotationMatrixFromAxisAngleCreatorTest {
 
@@ -57,20 +57,19 @@ class RotationMatrixFromAxisAngleCreatorTest {
         asserter.value(-0.12221, 2, 1);
         asserter.value(-0.98999, 2, 2);
     }
-    
+
     /**
      * Shortcut means of asserting a particular value in the matrix.
-     * 
-     * @author Owen Feehan
      *
+     * @author Owen Feehan
      */
     @AllArgsConstructor
     private static class MatrixAsserter {
-        
+
         private static final double DELTA = 1e-3;
-        
+
         private final DoubleMatrix2D matrix;
-        
+
         public void value(double expectedValue, int indexRow, int indexColumn) {
             assertEquals(expectedValue, matrix.get(indexRow, indexColumn), DELTA);
         }

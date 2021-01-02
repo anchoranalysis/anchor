@@ -46,7 +46,7 @@ public class ObjectCollectionFixture {
      * overlapping objects
      */
     private final int distanceBetweenShift;
-    
+
     public ObjectCollectionFixture() {
         this(5, 3, 10, true);
     }
@@ -67,12 +67,16 @@ public class ObjectCollectionFixture {
         ObjectMaskFixture fixture = new ObjectMaskFixture(true, do3D);
         int heightSingleObject = fixture.extent().y();
         int heightAllObjects =
-                incrementY ? numberObjects * (heightSingleObject + distanceBetweenShift) : heightSingleObject;
+                incrementY
+                        ? numberObjects * (heightSingleObject + distanceBetweenShift)
+                        : heightSingleObject;
         int depthAllObjects = do3D ? fixture.extent().z() : 1;
         return new Extent(
-                numberObjects * (fixture.extent().x() + distanceBetweenShift), heightAllObjects, depthAllObjects);
+                numberObjects * (fixture.extent().x() + distanceBetweenShift),
+                heightAllObjects,
+                depthAllObjects);
     }
-    
+
     public int expectedSingleNumberVoxels() {
         return createObjects(true).get(0).numberVoxelsOn();
     }

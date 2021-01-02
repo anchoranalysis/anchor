@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -31,19 +31,19 @@ import org.anchoranalysis.spatial.Extent;
 
 /**
  * Tests {@link DilationKernelZOnly}.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 class DilationKernelZOnlyTest extends MorphologicalKernelTestBase {
-    
-    private static final ExpectedValues VALUES_2D = new ExpectedValues(EXPECTED_MAXIMAL_2D, 20, 20, 20);
-    
+
+    private static final ExpectedValues VALUES_2D =
+            new ExpectedValues(EXPECTED_MAXIMAL_2D, 20, 20, 20);
+
     @Override
     protected BinaryKernel createKernel(ObjectMask object, Extent extentScene) {
         return new DilationKernelZOnly();
     }
-    
+
     @Override
     protected ExpectedValues inside2D() {
         return VALUES_2D;
@@ -53,12 +53,12 @@ class DilationKernelZOnlyTest extends MorphologicalKernelTestBase {
     protected ExpectedValues inside3D() {
         return new ExpectedValues(280, 60, 100, 60);
     }
-    
+
     @Override
     protected ExpectedValues boundary2D() {
         return VALUES_2D;
     }
-    
+
     @Override
     protected ExpectedValues boundary3D() {
         return new ExpectedValues(240, 60, 80, 60);

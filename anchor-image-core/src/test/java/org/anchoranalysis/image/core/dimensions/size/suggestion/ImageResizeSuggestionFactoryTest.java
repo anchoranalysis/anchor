@@ -27,6 +27,7 @@ package org.anchoranalysis.image.core.dimensions.size.suggestion;
 
 import static org.anchoranalysis.image.core.dimensions.size.suggestion.ImageResizeSuggestionHelper.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 
@@ -81,9 +82,7 @@ class ImageResizeSuggestionFactoryTest {
      */
     @Test
     void testBothWithZero() throws SuggestionFormatException {
-        assertThrows(SuggestionFormatException.class, () ->
-            test("67x0")
-        );
+        assertThrows(SuggestionFormatException.class, () -> test("67x0"));
     }
 
     /**
@@ -92,9 +91,7 @@ class ImageResizeSuggestionFactoryTest {
      */
     @Test
     void testBothWithNegative() throws SuggestionFormatException {
-        assertThrows(SuggestionFormatException.class, () ->
-            test("-4x20")
-        );
+        assertThrows(SuggestionFormatException.class, () -> test("-4x20"));
     }
 
     /** Tests a <b>integer</b> scale-factor. */
@@ -112,32 +109,24 @@ class ImageResizeSuggestionFactoryTest {
     /** Tests a <b>zero-valued</b> scale-factor. */
     @Test
     void testScaleFactorWithZero() throws SuggestionFormatException {
-        assertThrows(SuggestionFormatException.class, () ->
-            test("0")
-        );
+        assertThrows(SuggestionFormatException.class, () -> test("0"));
     }
 
     /** Tests a <b>negative-valued</b> scale-factor. */
     @Test
     void testScaleFactorWithNegative() throws SuggestionFormatException {
-        assertThrows(SuggestionFormatException.class, () ->
-            test("-8.9")
-        );
+        assertThrows(SuggestionFormatException.class, () -> test("-8.9"));
     }
 
     /** Tests an empty string. */
     @Test
     void testEmpty() throws SuggestionFormatException {
-        assertThrows(SuggestionFormatException.class, () ->
-            test("")
-        );
+        assertThrows(SuggestionFormatException.class, () -> test(""));
     }
 
     /** Tests non-numeric text. */
     @Test
     void testNonNumericText() throws SuggestionFormatException {
-        assertThrows(SuggestionFormatException.class, () ->
-            test("fooBar")
-        );
+        assertThrows(SuggestionFormatException.class, () -> test("fooBar"));
     }
 }

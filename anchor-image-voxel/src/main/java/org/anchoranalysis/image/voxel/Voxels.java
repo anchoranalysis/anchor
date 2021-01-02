@@ -26,11 +26,11 @@
 
 package org.anchoranalysis.image.voxel;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.experimental.Accessors;
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
 import org.anchoranalysis.image.voxel.arithmetic.VoxelsArithmetic;
 import org.anchoranalysis.image.voxel.assigner.VoxelsAssigner;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
@@ -59,8 +59,8 @@ import org.anchoranalysis.spatial.point.Point3i;
 public abstract class Voxels<T> {
 
     /** The maximum number of rows/columns/slices to show in {@link #toString}. */
-    private static final Extent MAX_IN_TO_STRING = new Extent(100,100,5);
-    
+    private static final Extent MAX_IN_TO_STRING = new Extent(100, 100, 5);
+
     @Getter private final SliceBufferIndex<T> slices;
     @Getter private final VoxelsFactoryTypeBound<T> factory;
 
@@ -96,7 +96,7 @@ public abstract class Voxels<T> {
 
     /**
      * A deep-copy.
-     * 
+     *
      * @return newly created deep-copy.
      */
     public Voxels<T> duplicate() {
@@ -138,7 +138,7 @@ public abstract class Voxels<T> {
     public void replaceSlice(int sliceIndexToUpdate, VoxelBuffer<T> bufferToAssign) {
         slices().replaceSlice(sliceIndexToUpdate, bufferToAssign);
     }
-    
+
     /***
      * Print a description and the the first {link #MAX_NUMBER_ROWS_COLUMNS_IN_TO_STRING} rows and columns as values.
      */
@@ -147,20 +147,20 @@ public abstract class Voxels<T> {
         final ByteArrayOutputStream output = new ByteArrayOutputStream();
         try (PrintStream stream = new PrintStream(output)) {
             stream.printf("The voxels have dimensionality: %s%n", extent());
-            
+
             Extent bounds = extent().minimum(MAX_IN_TO_STRING);
-            bounds.iterateOverZ( sliceIndex ->
-                printSlice(stream, sliceIndex, bounds)
-            );
+            bounds.iterateOverZ(sliceIndex -> printSlice(stream, sliceIndex, bounds));
         }
         return output.toString();
     }
-    
+
     private void printSlice(PrintStream stream, int sliceIndex, Extent bounds) {
-        stream.printf("Showing slice %d, the first %d rows and %d columns:%n", sliceIndex, bounds.y(), bounds.x());
+        stream.printf(
+                "Showing slice %d, the first %d rows and %d columns:%n",
+                sliceIndex, bounds.y(), bounds.x());
         Point3i point = new Point3i(0, 0, sliceIndex);
-        for(point.setY(0); point.y()<bounds.y(); point.incrementY()) {
-            for(point.setX(0); point.x()<bounds.x(); point.incrementX()) {
+        for (point.setY(0); point.y() < bounds.y(); point.incrementY()) {
+            for (point.setX(0); point.x() < bounds.x(); point.incrementX()) {
                 stream.printf("%03d ", this.extract().voxel(point));
             }
             stream.println();

@@ -43,8 +43,8 @@ class IterateVoxelsTest {
 
     private static final int Y_MASK_2 = 35;
     /** END: Constants for object sizes and locations */
-
     private static final int EXPECTED_INTERSECTION_CENTER_X = 39;
+
     private static final int EXPECTED_INTERSECTION_CENTER_Y = 57;
     /** END: Constants for expected results */
     @Test
@@ -61,19 +61,22 @@ class IterateVoxelsTest {
         testTwoMasks(
                 fixture,
                 new Point3i(
-                        EXPECTED_INTERSECTION_CENTER_X, EXPECTED_INTERSECTION_CENTER_Y, fixture.extent().z() / 2));
+                        EXPECTED_INTERSECTION_CENTER_X,
+                        EXPECTED_INTERSECTION_CENTER_Y,
+                        fixture.extent().z() / 2));
     }
-    
+
     /** Expected number of voxels in the intersection. */
     private int expectedIntersection(ObjectMaskFixture fixture) {
-        return fixture.expectedVolume() - ((Y_MASK_2 - Y_MASK_1) * fixture.extent().x() * fixture.extent().z());
+        return fixture.expectedVolume()
+                - ((Y_MASK_2 - Y_MASK_1) * fixture.extent().x() * fixture.extent().z());
     }
 
     private void testTwoMasks(ObjectMaskFixture fixture, Point3i expectedIntersectionCenter) {
 
         int expectedSingleNumberVoxels = fixture.expectedVolume();
         int expectedIntersectionNumberVoxels = expectedIntersection(fixture);
-        
+
         ObjectMask object1 = fixture.filledMask(20, Y_MASK_1);
         ObjectMask object2 =
                 fixture.filledMask(20, Y_MASK_2); // Overlaps with mask1 but not entirely

@@ -32,9 +32,9 @@ import org.anchoranalysis.mpp.segment.bean.kernel.Kernel;
 
 @AllArgsConstructor
 @Value
-public class KernelWithIdentifier<T,S> {
+public class KernelWithIdentifier<T, S> {
 
-    private Kernel<T,S> kernel;
+    private Kernel<T, S> kernel;
     private int identifier;
 
     public String getDescription() {

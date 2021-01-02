@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -31,17 +31,16 @@ import org.anchoranalysis.spatial.Extent;
 
 /**
  * Tests {@link DilationKernel} with a small-neighbourhood.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 class DilationKernelBigTest extends MorphologicalKernelTestBase {
-        
+
     @Override
     protected BinaryKernel createKernel(ObjectMask object, Extent extentScene) {
         return new DilationKernel(true);
     }
-    
+
     @Override
     protected ExpectedValues inside2D() {
         return new ExpectedValues(EXPECTED_MAXIMAL_2D, 76, 42);
@@ -51,12 +50,12 @@ class DilationKernelBigTest extends MorphologicalKernelTestBase {
     protected ExpectedValues inside3D() {
         return new ExpectedValues(652, 500, 166, 126);
     }
-    
+
     @Override
     protected ExpectedValues boundary2D() {
         return new ExpectedValues(EXPECTED_MAXIMAL_2D, 54, 30);
     }
-    
+
     @Override
     protected ExpectedValues boundary3D() {
         return new ExpectedValues(538, 434, 110, EXPECTED_MAXIMAL_2D);

@@ -31,10 +31,10 @@ import org.anchoranalysis.image.core.channel.convert.attached.ChannelConverterAt
 import org.anchoranalysis.math.histogram.Histogram;
 
 /**
- * Creates a {@code ChannelConverterAttached<Histogram, T>} for converting a channel to a particular type, making use of a {@link Histogram}.
- * 
- * @author Owen Feehan
+ * Creates a {@code ChannelConverterAttached<Histogram, T>} for converting a channel to a particular
+ * type, making use of a {@link Histogram}.
  *
+ * @author Owen Feehan
  * @param <T> the buffer-type to convert the channel to
  */
 public abstract class ConvertChannelToWithHistogram<T>

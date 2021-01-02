@@ -56,7 +56,7 @@ class HelperDuplication {
                                 FieldAccessor.isFieldAnnotatedAsOptional(field),
                                 beanOut);
                 if (propertyNew.isPresent()) {
-                    field.set(beanOut, propertyNew.get());    // NOSONAR
+                    field.set(beanOut, propertyNew.get()); // NOSONAR
                 }
             }
 

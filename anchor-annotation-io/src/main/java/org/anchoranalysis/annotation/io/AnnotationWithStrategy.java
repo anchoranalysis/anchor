@@ -43,7 +43,8 @@ import org.anchoranalysis.io.input.InputReadFailedException;
  *
  * @author Owen Feehan
  */
-public class AnnotationWithStrategy<T extends AnnotatorStrategy> extends InputFromManagerDelegate<ProvidesStackInput> {
+public class AnnotationWithStrategy<T extends AnnotatorStrategy>
+        extends InputFromManagerDelegate<ProvidesStackInput> {
 
     @Getter private final T strategy;
 
@@ -62,8 +63,8 @@ public class AnnotationWithStrategy<T extends AnnotatorStrategy> extends InputFr
     }
 
     /**
-     * A label to be used when aggregating this annotation with others, or {@code null} if this makes no
-     * sense.
+     * A label to be used when aggregating this annotation with others, or {@code null} if this
+     * makes no sense.
      *
      * @throws InputReadFailedException
      */

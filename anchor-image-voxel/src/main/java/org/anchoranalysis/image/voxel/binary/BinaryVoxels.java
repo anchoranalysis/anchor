@@ -67,7 +67,7 @@ public abstract class BinaryVoxels<T> implements BinaryOnOffSetter {
     public void invert() {
         binaryValues = binaryValues.createInverted();
     }
-   
+
     public Extent extent() {
         return voxels.extent();
     }
@@ -123,7 +123,7 @@ public abstract class BinaryVoxels<T> implements BinaryOnOffSetter {
     public SliceBufferIndex<T> slices() {
         return voxels.slices();
     }
-    
+
     @Override
     public String toString() {
         return voxels.toString();

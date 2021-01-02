@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -25,29 +25,29 @@
  */
 package org.anchoranalysis.image.voxel.object;
 
-import org.anchoranalysis.spatial.point.Point2i;
 import lombok.Getter;
+import org.anchoranalysis.spatial.point.Point2i;
 
 /**
  * Two object-masks that intersect.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class TwoIntersectingObjectsFixture {
 
     private static final Point2i CORNER = new Point2i(10, 15);
-    
+
     /** The first object that intersects. */
     @Getter private final ObjectMask first;
-    
+
     /** The second object that intersects. */
     @Getter private final ObjectMask second;
-    
+
     /**
      * Create for a particular shift and dimensionality.
-     * 
-     * @param shift how much to increase the corner of the second object that is otherwise adjacent to the first object
+     *
+     * @param shift how much to increase the corner of the second object that is otherwise adjacent
+     *     to the first object
      * @param use3D whether to create objects in 3D or 2D
      */
     public TwoIntersectingObjectsFixture(int shift, boolean use3D) {
@@ -55,7 +55,7 @@ public class TwoIntersectingObjectsFixture {
         first = fixture.filledMask(CORNER);
         second = fixture.filledMask(cornerSecondObject(fixture, shift));
     }
-    
+
     /**
      * Creates a corner for a second object that is adjacent to the side of the first object, with
      * perhaps a shift

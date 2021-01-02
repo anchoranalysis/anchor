@@ -26,6 +26,7 @@
 package org.anchoranalysis.test.image.rasterwriter;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import java.io.IOException;
 import java.util.Optional;
 import org.anchoranalysis.core.format.ImageFileFormat;
@@ -77,9 +78,7 @@ public abstract class PNGTestBase extends RasterWriterTestBase {
 
     @Test
     void testSingleChannelInt() {
-        assertException(() ->
-            tester.testSingleChannel(UnsignedIntVoxelType.INSTANCE)
-        );
+        assertException(() -> tester.testSingleChannel(UnsignedIntVoxelType.INSTANCE));
     }
 
     void testSingleChannelRGB() throws ImageIOException, IOException {
@@ -88,16 +87,12 @@ public abstract class PNGTestBase extends RasterWriterTestBase {
 
     @Test
     void testTwoChannels() {
-        assertException(() ->
-            tester.testTwoChannels()
-        );
+        assertException(() -> tester.testTwoChannels());
     }
 
     @Test
     void testThreeChannelsSeparate() {
-        assertException(() ->
-            tester.testThreeChannelsSeparate()
-        );
+        assertException(() -> tester.testThreeChannelsSeparate());
     }
 
     @Test
@@ -107,19 +102,15 @@ public abstract class PNGTestBase extends RasterWriterTestBase {
 
     @Test
     void testFourChannels() {
-        assertException(() ->
-            tester.testFourChannels()
-        );
+        assertException(() -> tester.testFourChannels());
     }
 
     @Test
     void testThreeChannelsRGBUnsignedShort() {
-        assertException(() ->
-            tester.testThreeChannelsRGB(UnsignedShortVoxelType.INSTANCE)
-        );
+        assertException(() -> tester.testThreeChannelsRGB(UnsignedShortVoxelType.INSTANCE));
     }
-    
-    private void assertException( Executable executable ) {
+
+    private void assertException(Executable executable) {
         assertThrows(ImageIOException.class, executable);
     }
 }

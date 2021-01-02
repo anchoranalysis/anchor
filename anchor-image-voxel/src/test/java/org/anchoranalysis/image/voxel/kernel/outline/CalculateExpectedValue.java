@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -31,16 +31,15 @@ import org.anchoranalysis.image.voxel.object.ObjectMaskFixture;
 
 /**
  * Calculates the expected-value for a particular test.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 @FunctionalInterface
 public interface CalculateExpectedValue {
-    
+
     /**
      * Calculates the value expected for a a particular test.
-     * 
+     *
      * @param fixture the fixture used to create the {@link ObjectMask} used in the test.
      * @param params the particular {@link KernelApplicationParameters} used in the test.
      * @return the value expected to be returned by the test

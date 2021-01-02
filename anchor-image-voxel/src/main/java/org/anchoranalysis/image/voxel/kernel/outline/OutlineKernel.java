@@ -32,10 +32,17 @@ import org.anchoranalysis.image.voxel.kernel.KernelPointCursor;
 
 // Keeps any on pixel that touches an off pixel, off otherwise
 public class OutlineKernel extends OutlineKernelBase {
-    
-    /** Checks whether a particular neighbor voxel qualifies to make the current voxel an outline voxel. */
+
+    /**
+     * Checks whether a particular neighbor voxel qualifies to make the current voxel an outline
+     * voxel.
+     */
     @Override
-    protected boolean doesNeighborQualify(boolean guard, KernelPointCursor point, Supplier<UnsignedByteBuffer> buffer, int zShift) {
+    protected boolean doesNeighborQualify(
+            boolean guard,
+            KernelPointCursor point,
+            Supplier<UnsignedByteBuffer> buffer,
+            int zShift) {
         if (guard) {
             return point.isBufferOff(buffer.get());
         } else {

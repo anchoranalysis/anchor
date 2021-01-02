@@ -48,7 +48,11 @@ public class ConditionalKernel extends BinaryKernel {
     }
 
     @Override
-    public boolean acceptPoint(int index, Point3i point, BinaryValuesByte binaryValues, KernelApplicationParameters params) {
+    public boolean acceptPoint(
+            int index,
+            Point3i point,
+            BinaryValuesByte binaryValues,
+            KernelApplicationParameters params) {
 
         int value =
                 voxelsIntensity

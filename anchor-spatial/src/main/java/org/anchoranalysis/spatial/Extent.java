@@ -537,22 +537,18 @@ public final class Extent implements Serializable {
         arr[2] = z();
         return arr;
     }
-    
+
     /**
      * An extent that contains the minimum of two extents for each dimension respectively.
-     * 
+     *
      * <p>This is an <b>immutable</b> operation.
-     * 
+     *
      * @param extent the other extent to find a minimum with.
-     * 
      * @return a newly created extent
      */
     public Extent minimum(Extent extent) {
         return new Extent(
-             Math.min(x(), extent.x()),
-             Math.min(y(), extent.y()),
-             Math.min(z(), extent.z())
-        );
+                Math.min(x(), extent.x()), Math.min(y(), extent.y()), Math.min(z(), extent.z()));
     }
 
     private Point3i immutablePointOperation(Consumer<Point3i> pointOperation) {

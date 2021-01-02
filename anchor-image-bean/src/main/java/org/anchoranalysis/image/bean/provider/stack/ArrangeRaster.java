@@ -62,18 +62,18 @@ public class ArrangeRaster extends StackProvider {
 
     @BeanField @Getter @Setter private boolean createShort = false;
     // END BEAN
-    
+
     public ArrangeRaster(boolean createShort, boolean forceRGB) {
         this.createShort = createShort;
         this.forceRGB = forceRGB;
     }
-    
+
     /**
      * Adds a stack to the existing list of stack-providers.
-     * 
+     *
      * @param provider the provider of the stack to add.
      */
-    public void addStack( Provider<Stack> provider ) {
+    public void addStack(Provider<Stack> provider) {
         list.add(provider);
     }
 

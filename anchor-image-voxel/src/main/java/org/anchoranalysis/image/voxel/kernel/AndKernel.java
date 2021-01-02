@@ -55,7 +55,12 @@ public class AndKernel extends BinaryKernel {
     }
 
     @Override
-    public boolean acceptPoint(int index, Point3i point, BinaryValuesByte binaryValues, KernelApplicationParameters params) {
-        return kernel1.acceptPoint(index, point, binaryValues, params) && kernel2.acceptPoint(index, point, binaryValues, params);
+    public boolean acceptPoint(
+            int index,
+            Point3i point,
+            BinaryValuesByte binaryValues,
+            KernelApplicationParameters params) {
+        return kernel1.acceptPoint(index, point, binaryValues, params)
+                && kernel2.acceptPoint(index, point, binaryValues, params);
     }
 }

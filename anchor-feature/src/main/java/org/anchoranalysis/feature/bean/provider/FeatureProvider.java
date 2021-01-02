@@ -30,6 +30,4 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 public abstract class FeatureProvider<T extends FeatureInput>
-        extends FeatureProviderBean<FeatureProvider<T>, Feature<T>> {
-
-}
+        extends FeatureProviderBean<FeatureProvider<T>, Feature<T>> {}

@@ -36,5 +36,4 @@ import org.anchoranalysis.feature.input.FeatureInput;
  */
 @GroupingRoot
 public abstract class FeatureListProvider<T extends FeatureInput>
-        extends FeatureProviderBean<FeatureListProvider<T>, FeatureList<T>> {
-}
+        extends FeatureProviderBean<FeatureListProvider<T>, FeatureList<T>> {}
