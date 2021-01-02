@@ -33,10 +33,10 @@ import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
-import org.anchoranalysis.image.voxel.binary.BinaryVoxelsFactory;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.kernel.ApplyKernel;
 import org.anchoranalysis.image.voxel.kernel.BinaryKernel;
+import org.anchoranalysis.image.voxel.kernel.KernelApplicationParameters;
 import org.anchoranalysis.image.voxel.kernel.morphological.DilationKernelFactory;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.image.voxel.object.morphological.predicate.AcceptIterationPredicate;
@@ -121,29 +121,28 @@ public class MorphologicalDilation {
             throws CreateException {
 
         BinaryKernel kernelDilation =
-                dilationKernelFactory.createDilationKernel(
-                        voxelsBinary.binaryValues().createByte(), background, minIntensityValue);
+                dilationKernelFactory.createDilationKernel(background, minIntensityValue);
 
-        Voxels<UnsignedByteBuffer> voxels = voxelsBinary.voxels();
-
+        KernelApplicationParameters params = dilationKernelFactory.createParameters();
+        
         for (int i = 0; i < iterations; i++) {
-            Voxels<UnsignedByteBuffer> next =
+            BinaryVoxels<UnsignedByteBuffer> next =
                     ApplyKernel.apply(
-                            kernelDilation, voxels, voxelsBinary.binaryValues().createByte());
+                            kernelDilation, voxelsBinary, params);
 
             try {
                 if (acceptConditions.isPresent()
                         && !acceptConditions
                                 .get()
-                                .acceptIteration(next, voxelsBinary.binaryValues())) {
+                                .acceptIteration(next)) {
                     break;
                 }
             } catch (OperationFailedException e) {
                 throw new CreateException(e);
             }
 
-            voxels = next;
+            voxelsBinary = next;
         }
-        return BinaryVoxelsFactory.reuseByte(voxels, voxelsBinary.binaryValues());
+        return voxelsBinary;
     }
 }

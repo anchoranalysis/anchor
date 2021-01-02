@@ -27,6 +27,7 @@
 package org.anchoranalysis.image.voxel.kernel;
 
 import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.spatial.point.Point3i;
 
@@ -47,7 +48,7 @@ public class ConditionalKernel extends BinaryKernel {
     }
 
     @Override
-    public boolean acceptPoint(int ind, Point3i point) {
+    public boolean acceptPoint(int ind, Point3i point, BinaryValuesByte binaryValues, KernelApplicationParameters params) {
 
         int value =
                 voxelsIntensity
@@ -58,12 +59,12 @@ public class ConditionalKernel extends BinaryKernel {
             return false;
         }
 
-        return kernel.acceptPoint(ind, point);
+        return kernel.acceptPoint(ind, point, binaryValues, params);
     }
 
     @Override
-    public void init(Voxels<UnsignedByteBuffer> in) {
-        kernel.init(in);
+    public void init(Voxels<UnsignedByteBuffer> in, KernelApplicationParameters params) {
+        kernel.init(in, params);
     }
 
     @Override

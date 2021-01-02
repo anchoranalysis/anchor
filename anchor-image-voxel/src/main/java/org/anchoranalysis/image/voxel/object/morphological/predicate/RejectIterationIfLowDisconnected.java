@@ -27,20 +27,17 @@
 package org.anchoranalysis.image.voxel.object.morphological.predicate;
 
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxelsFactory;
-import org.anchoranalysis.image.voxel.binary.values.BinaryValues;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 
 public class RejectIterationIfLowDisconnected implements AcceptIterationPredicate {
 
     @Override
-    public boolean acceptIteration(Voxels<UnsignedByteBuffer> voxels, BinaryValues binaryValyesByte)
+    public boolean acceptIteration(BinaryVoxels<UnsignedByteBuffer> voxels)
             throws OperationFailedException {
-        BinaryVoxels<UnsignedByteBuffer> nextBinary =
-                BinaryVoxelsFactory.reuseByte(voxels, binaryValyesByte.createInverted());
+        BinaryVoxels<UnsignedByteBuffer> nextBinary = BinaryVoxelsFactory.reuseByte(voxels.voxels(), voxels.binaryValues().createInverted());
         return new ObjectMask(nextBinary).checkIfConnected();
     }
 }

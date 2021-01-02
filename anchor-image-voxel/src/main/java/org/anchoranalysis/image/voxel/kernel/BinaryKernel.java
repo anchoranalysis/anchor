@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.image.voxel.kernel;
 
+import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.spatial.point.Point3i;
 
 public abstract class BinaryKernel extends Kernel {
@@ -34,5 +35,5 @@ public abstract class BinaryKernel extends Kernel {
         super(size);
     }
 
-    public abstract boolean acceptPoint(int ind, Point3i point);
+    public abstract boolean acceptPoint(int ind, Point3i point, BinaryValuesByte binaryValues, KernelApplicationParameters params);
 }

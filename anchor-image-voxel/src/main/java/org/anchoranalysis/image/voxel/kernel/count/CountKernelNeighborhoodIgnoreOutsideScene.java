@@ -46,14 +46,14 @@ public class CountKernelNeighborhoodIgnoreOutsideScene extends CountKernelNeighb
 
     public CountKernelNeighborhoodIgnoreOutsideScene(
             boolean useZ,
-            BinaryValuesByte bv,
+            BinaryValuesByte binaryValues,
             boolean multipleMatchesPerVoxel,
             Extent extentScene, // The entire extent of the scene
             ReadableTuple3i
                     addPoint // Added to a point before determining if it is inside or outside the
             // scene.
             ) {
-        super(useZ, bv, multipleMatchesPerVoxel);
+        super(useZ, binaryValues, multipleMatchesPerVoxel);
         this.extentScene = extentScene;
         this.addPoint = addPoint;
     }

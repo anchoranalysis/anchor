@@ -26,17 +26,15 @@
 
 package org.anchoranalysis.image.voxel.object.morphological.predicate;
 
-import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.binary.BinaryVoxelsFactory;
-import org.anchoranalysis.image.voxel.binary.values.BinaryValues;
+import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 
 public class RejectIterationIfAllHigh implements AcceptIterationPredicate {
 
     @Override
     public boolean acceptIteration(
-            Voxels<UnsignedByteBuffer> voxels, BinaryValues binaryValyesByte) {
+            BinaryVoxels<UnsignedByteBuffer> voxels) {
         // We exit early if there's no off-pixel
-        return BinaryVoxelsFactory.reuseByte(voxels, binaryValyesByte).hasOffVoxel();
+        return voxels.hasOffVoxel();
     }
 }

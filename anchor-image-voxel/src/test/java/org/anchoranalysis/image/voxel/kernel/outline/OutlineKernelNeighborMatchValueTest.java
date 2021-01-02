@@ -25,7 +25,11 @@
  */
 package org.anchoranalysis.image.voxel.kernel.outline;
 
-import org.junit.jupiter.api.Test;
+import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
+import org.anchoranalysis.image.voxel.kernel.BinaryKernel;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.spatial.Extent;
 
 /**
  * Tests {@link OutlineKernelNeighborMatchValue}.
@@ -33,18 +37,11 @@ import org.junit.jupiter.api.Test;
  * @author Owen Feehan
  *
  */
-class OutlineKernelNeighborMatchValueTest {
+class OutlineKernelNeighborMatchValueTest extends OutlineTestBase {
 
-    @Test
-    void test2D() {
-        
-        // TODO implement
-        // Create a binary-mask of all voxels not lieing on the object.
-        /*ObjectMaskFixture.BOUNDING_BOX_NUM_VOXELS
-        
-        OutlineKernelNeighborMatchValue kernel = new OutlineKernelNeighborMatchValue(
-                ObjectMaskFixture.OBJECT_NUM_VOXELS_2D,  
-        );
-        kernel.*/
+    @Override
+    protected BinaryKernel createKernel(ObjectMask object, Extent extentScene) {
+        BinaryVoxels<UnsignedByteBuffer> voxelsMask = ObjectOnBinaryHelper.createVoxelsWithObject(object, extentScene, false);
+        return new OutlineKernelNeighborMatchValue(voxelsMask);
     }
 }

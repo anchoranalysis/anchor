@@ -54,10 +54,10 @@ public class CountKernelNeighborhoodMask extends CountKernelNeighborhoodBase {
 
     public CountKernelNeighborhoodMask(
             boolean useZ,
-            BinaryValuesByte bv,
+            BinaryValuesByte binaryValues,
             ObjectMask objectRequireHigh,
             boolean multipleMatchesPerVoxel) {
-        super(useZ, bv, multipleMatchesPerVoxel);
+        super(useZ, binaryValues, multipleMatchesPerVoxel);
         this.objectRequireHigh = objectRequireHigh;
         this.voxelsRequireHigh = objectRequireHigh.binaryVoxels();
         this.bvRequireHigh = voxelsRequireHigh.binaryValues().createByte();

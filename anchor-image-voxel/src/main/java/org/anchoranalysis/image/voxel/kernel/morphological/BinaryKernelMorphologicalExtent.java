@@ -27,23 +27,16 @@
 package org.anchoranalysis.image.voxel.kernel.morphological;
 
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
+import org.anchoranalysis.image.voxel.kernel.KernelApplicationParameters;
 import org.anchoranalysis.spatial.Extent;
 
 public abstract class BinaryKernelMorphologicalExtent extends BinaryKernelMorphological {
 
-    protected final boolean useZ;
     protected Extent extent;
 
-    protected BinaryKernelMorphologicalExtent(
-            BinaryValuesByte bv, boolean outsideAtThreshold, boolean useZ) {
-        super(bv, outsideAtThreshold);
-        this.useZ = useZ;
-    }
-
     @Override
-    public void init(Voxels<UnsignedByteBuffer> in) {
+    public void init(Voxels<UnsignedByteBuffer> in, KernelApplicationParameters params) {
         this.extent = in.extent();
     }
 }

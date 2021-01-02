@@ -30,6 +30,8 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
+import org.anchoranalysis.image.voxel.binary.BinaryVoxelsFactory;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
@@ -56,46 +58,46 @@ public class ApplyKernel {
     private static final VoxelsFactoryTypeBound<UnsignedByteBuffer> FACTORY =
             VoxelsFactory.getUnsignedByte();
 
-    public static Voxels<UnsignedByteBuffer> apply(
-            BinaryKernel kernel, Voxels<UnsignedByteBuffer> in) {
-        return apply(kernel, in, BinaryValuesByte.getDefault());
+    public static BinaryVoxels<UnsignedByteBuffer> apply(
+            BinaryKernel kernel, BinaryVoxels<UnsignedByteBuffer> in, KernelApplicationParameters params) {
+        return apply(kernel, in, BinaryValuesByte.getDefault(), params);
     }
 
     // 3 pixel diameter kernel
-    public static Voxels<UnsignedByteBuffer> apply(
-            BinaryKernel kernel, Voxels<UnsignedByteBuffer> in, BinaryValuesByte outBinary) {
+    public static BinaryVoxels<UnsignedByteBuffer> apply(
+            BinaryKernel kernel, BinaryVoxels<UnsignedByteBuffer> in, BinaryValuesByte outBinary, KernelApplicationParameters params) {
 
         Voxels<UnsignedByteBuffer> out = FACTORY.createInitialized(in.extent());
+        kernel.init(in.voxels(), params);
 
         Extent extent = in.extent();
-
-        kernel.init(in);
-
+        BinaryValuesByte binaryValues = in.binaryValues().createByte();
+        
         ProcessPointAndIndex process =
                 new ProcessPointAndIndex() {
 
-                    UnsignedByteBuffer outArr;
+                    UnsignedByteBuffer outBuffer;
 
                     @Override
                     public void notifyChangeSlice(int z) {
-                        LocalSlices localSlices = new LocalSlices(z, LOCAL_SLICES_SIZE, in);
-                        outArr = out.sliceBuffer(z);
+                        LocalSlices localSlices = new LocalSlices(z, LOCAL_SLICES_SIZE, in.voxels());
+                        outBuffer = out.sliceBuffer(z);
                         kernel.notifyZChange(localSlices, z);
                     }
 
                     @Override
                     public void process(Point3i point, int index) {
                         byte outValue =
-                                kernel.acceptPoint(index, point)
+                                kernel.acceptPoint(index, point, binaryValues, params)
                                         ? outBinary.getOnByte()
                                         : outBinary.getOffByte();
-                        outArr.putRaw(index, outValue);
+                        outBuffer.putRaw(index, outValue);
                     }
                 };
 
         IterateVoxelsAll.withPointAndIndex(extent, process);
 
-        return out;
+        return BinaryVoxelsFactory.reuseByte(out, outBinary.createInt());
     }
 
     /**
@@ -106,9 +108,9 @@ public class ApplyKernel {
      * @return the sum of the count value returned by the kernel over all iterated voxels
      * @throws OperationFailedException
      */
-    public static int applyForCount(CountKernel kernel, Voxels<UnsignedByteBuffer> voxels)
+    public static int applyForCount(CountKernel kernel, Voxels<UnsignedByteBuffer> voxels, KernelApplicationParameters params)
             throws OperationFailedException {
-        return applyForCount(kernel, voxels, new BoundingBox(voxels.extent()));
+        return applyForCount(kernel, voxels, new BoundingBox(voxels.extent()), params);
     }
 
     /**
@@ -122,7 +124,7 @@ public class ApplyKernel {
      * @throws OperationFailedException
      */
     public static int applyForCount(
-            CountKernel kernel, Voxels<UnsignedByteBuffer> voxels, BoundingBox box)
+            CountKernel kernel, Voxels<UnsignedByteBuffer> voxels, BoundingBox box, KernelApplicationParameters params)
             throws OperationFailedException {
 
         if (!voxels.extent().contains(box)) {
@@ -138,7 +140,7 @@ public class ApplyKernel {
 
         Extent extent = voxels.extent();
 
-        kernel.init(voxels);
+        kernel.init(voxels, params);
 
         ReadableTuple3i pointMax = box.calculateCornerMax();
 
@@ -170,11 +172,10 @@ public class ApplyKernel {
      * @param box a bounding-box (coordinates relative to voxels) that restricts where iteration
      *     occurs. Must be contained within voxels.
      * @return true if a positive-value is encountered, 0 if it never is encountered
-     * @throws OperationFailedException
+     * @throws OperationFailedException 
      */
     public static boolean applyUntilPositive(
-            CountKernel kernel, Voxels<UnsignedByteBuffer> voxels, BoundingBox box)
-            throws OperationFailedException {
+            CountKernel kernel, Voxels<UnsignedByteBuffer> voxels, BoundingBox box, KernelApplicationParameters params) throws OperationFailedException {
 
         if (!voxels.extent().contains(box)) {
             throw new OperationFailedException(
@@ -187,7 +188,7 @@ public class ApplyKernel {
 
         Extent extent = voxels.extent();
 
-        kernel.init(voxels);
+        kernel.init(voxels, params);
 
         ReadableTuple3i pointMax = box.calculateCornerMax();
 
@@ -213,20 +214,22 @@ public class ApplyKernel {
         return false;
     }
 
-    public static int applyForCount(BinaryKernel kernel, Voxels<UnsignedByteBuffer> in) {
+    public static int applyForCount(BinaryKernel kernel, BinaryVoxels<UnsignedByteBuffer> in, KernelApplicationParameters params) {
 
         int localSlicesSize = 3;
 
-        int cnt = 0;
+        int count = 0;
 
         Extent extent = in.extent();
 
-        kernel.init(in);
+        BinaryValuesByte binaryValues = in.binaryValues().createByte();
+        kernel.init(in.voxels(), params);
+
 
         Point3i point = new Point3i();
         for (point.setZ(0); point.z() < extent.z(); point.incrementZ()) {
 
-            LocalSlices localSlices = new LocalSlices(point.z(), localSlicesSize, in);
+            LocalSlices localSlices = new LocalSlices(point.z(), localSlicesSize, in.voxels());
             kernel.notifyZChange(localSlices, point.z());
 
             int ind = 0;
@@ -234,8 +237,8 @@ public class ApplyKernel {
             for (point.setY(0); point.y() < extent.y(); point.incrementY()) {
                 for (point.setX(0); point.x() < extent.x(); point.incrementX()) {
 
-                    if (kernel.acceptPoint(ind, point)) {
-                        cnt++;
+                    if (kernel.acceptPoint(ind, point, binaryValues, params)) {
+                        count++;
                     }
 
                     ind++;
@@ -243,11 +246,11 @@ public class ApplyKernel {
             }
         }
 
-        return cnt;
+        return count;
     }
 
     public static int applyForCountOnMask(
-            BinaryKernel kernel, Voxels<UnsignedByteBuffer> in, ObjectMask object) {
+            BinaryKernel kernel, Voxels<UnsignedByteBuffer> in, ObjectMask object, KernelApplicationParameters params) {
 
         int localSlicesSize = 3;
 
@@ -259,7 +262,7 @@ public class ApplyKernel {
 
         Extent extent = in.extent();
 
-        kernel.init(in);
+        kernel.init(in, params);
 
         BinaryValuesByte binaryValues = object.binaryValues().createByte();
 
@@ -279,7 +282,7 @@ public class ApplyKernel {
                     int indKernel = extent.offsetSlice(point);
 
                     if (bufMask.getRaw(ind) == binaryValues.getOnByte()
-                            && kernel.acceptPoint(indKernel, point)) {
+                            && kernel.acceptPoint(indKernel, point, binaryValues, params)) {
                         count++;
                     }
 

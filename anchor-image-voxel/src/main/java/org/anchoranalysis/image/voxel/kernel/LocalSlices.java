@@ -52,6 +52,8 @@ public class LocalSlices {
 
             if (rel >= 0 && rel < voxels.extent().z()) {
                 array[i] = voxels.sliceBuffer(rel).array();
+            } else {
+                array[i] = null;
             }
         }
     }

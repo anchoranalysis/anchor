@@ -30,6 +30,7 @@ import java.util.Optional;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
+import org.anchoranalysis.image.voxel.kernel.KernelApplicationParameters;
 import org.anchoranalysis.image.voxel.kernel.LocalSlices;
 import org.anchoranalysis.spatial.Extent;
 import org.anchoranalysis.spatial.point.Point3i;
@@ -71,7 +72,7 @@ public abstract class CountKernelNeighborhoodBase extends CountKernel {
     }
 
     @Override
-    public void init(Voxels<UnsignedByteBuffer> in) {
+    public void init(Voxels<UnsignedByteBuffer> in, KernelApplicationParameters params) {
         this.extent = in.extent();
     }
 

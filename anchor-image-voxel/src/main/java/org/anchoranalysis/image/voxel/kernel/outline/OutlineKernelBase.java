@@ -26,16 +26,8 @@
 
 package org.anchoranalysis.image.voxel.kernel.outline;
 
-import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.kernel.morphological.BinaryKernelMorphologicalExtent;
 
 public abstract class OutlineKernelBase extends BinaryKernelMorphologicalExtent {
 
-    /** Disconsiders anything outside the threshold. Takes priority ahead of outsideAtThreshold */
-    protected final boolean ignoreAtThreshold;
-
-    protected OutlineKernelBase(BinaryValuesByte bv, OutlineKernelParameters params) {
-        super(bv, params.isOutsideAtThreshold(), params.isUseZ());
-        this.ignoreAtThreshold = params.isIgnoreAtThreshold();
-    }
 }

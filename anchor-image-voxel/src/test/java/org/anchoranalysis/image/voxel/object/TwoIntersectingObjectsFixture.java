@@ -23,10 +23,8 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.image.voxel.iterator;
+package org.anchoranalysis.image.voxel.object;
 
-import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.image.voxel.object.ObjectMaskFixture;
 import org.anchoranalysis.spatial.point.Point2i;
 import lombok.Getter;
 
@@ -55,7 +53,7 @@ public class TwoIntersectingObjectsFixture {
     public TwoIntersectingObjectsFixture(int shift, boolean use3D) {
         ObjectMaskFixture fixture = new ObjectMaskFixture(false, use3D);
         first = fixture.filledMask(CORNER);
-        second = fixture.filledMask(cornerSecondObject(shift)); 
+        second = fixture.filledMask(cornerSecondObject(fixture, shift));
     }
     
     /**
@@ -64,10 +62,8 @@ public class TwoIntersectingObjectsFixture {
      *
      * @param shift how much to increase the corner of the second object
      */
-    private Point2i cornerSecondObject(int shift) {
-        Point2i extent = new Point2i(ObjectMaskFixture.WIDTH, ObjectMaskFixture.HEIGHT);
-        extent.incrementX(shift);
-        extent.incrementY(shift);
+    private Point2i cornerSecondObject(ObjectMaskFixture fixture, int shift) {
+        Point2i extent = new Point2i(fixture.extent().x() + shift, fixture.extent().y() + shift);
         return Point2i.immutableAdd(CORNER, extent);
     }
 }

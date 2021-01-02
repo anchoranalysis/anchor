@@ -29,18 +29,17 @@ package org.anchoranalysis.image.voxel.object.morphological.predicate;
 import java.util.ArrayList;
 import java.util.List;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.binary.values.BinaryValues;
+import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 
 public class AcceptIterationList implements AcceptIterationPredicate {
     private List<AcceptIterationPredicate> list = new ArrayList<>();
 
     @Override
-    public boolean acceptIteration(Voxels<UnsignedByteBuffer> voxels, BinaryValues binaryValuesByte)
+    public boolean acceptIteration(BinaryVoxels<UnsignedByteBuffer> voxels)
             throws OperationFailedException {
         for (AcceptIterationPredicate ai : list) {
-            if (!ai.acceptIteration(voxels, binaryValuesByte)) {
+            if (!ai.acceptIteration(voxels)) {
                 return false;
             }
         }

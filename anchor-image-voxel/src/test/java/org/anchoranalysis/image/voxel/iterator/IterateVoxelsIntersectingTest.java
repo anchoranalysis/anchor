@@ -28,6 +28,7 @@ package org.anchoranalysis.image.voxel.iterator;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.anchoranalysis.image.voxel.iterator.intersecting.CountVoxelsIntersectingObjects;
+import org.anchoranalysis.image.voxel.object.TwoIntersectingObjectsFixture;
 import org.junit.jupiter.api.Test;
 
 class IterateVoxelsIntersectingTest {

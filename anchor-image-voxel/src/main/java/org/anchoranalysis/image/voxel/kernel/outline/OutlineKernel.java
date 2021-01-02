@@ -29,18 +29,11 @@ package org.anchoranalysis.image.voxel.kernel.outline;
 import java.util.Optional;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
+import org.anchoranalysis.image.voxel.kernel.KernelApplicationParameters;
 import org.anchoranalysis.spatial.point.Point3i;
 
 // Keeps any on pixel that touches an off pixel, off otherwise
 public class OutlineKernel extends OutlineKernelBase {
-
-    public OutlineKernel(BinaryValuesByte bv, boolean outsideAtThreshold, boolean useZ) {
-        this(bv, new OutlineKernelParameters(outsideAtThreshold, useZ, false));
-    }
-
-    public OutlineKernel(BinaryValuesByte bv, OutlineKernelParameters params) {
-        super(bv, params);
-    }
 
     /**
      * This method is deliberately not broken into smaller pieces to avoid inlining.
@@ -50,11 +43,11 @@ public class OutlineKernel extends OutlineKernelBase {
      * <p>Apologies that it is difficult to read with high cognitive-complexity.
      */
     @Override
-    public boolean acceptPoint(int ind, Point3i point) {
+    public boolean acceptPoint(int ind, Point3i point, BinaryValuesByte binaryValues, KernelApplicationParameters params) {
 
-        UnsignedByteBuffer buffer = inSlices.getLocal(0).get(); // NOSONAR
-        Optional<UnsignedByteBuffer> bufferZLess1 = inSlices.getLocal(-1);
-        Optional<UnsignedByteBuffer> bufferZPlus1 = inSlices.getLocal(+1);
+        UnsignedByteBuffer buffer = getVoxels().getLocal(0).get(); // NOSONAR
+        Optional<UnsignedByteBuffer> bufferZLess1 = getVoxels().getLocal(-1);
+        Optional<UnsignedByteBuffer> bufferZPlus1 = getVoxels().getLocal(+1);
 
         int xLength = extent.x();
 
@@ -73,7 +66,7 @@ public class OutlineKernel extends OutlineKernelBase {
                 return true;
             }
         } else {
-            if (!ignoreAtThreshold && !outsideAtThreshold) {
+            if (!params.isIgnoreOutside() && !params.isOutsideHigh()) {
                 return true;
             }
         }
@@ -85,7 +78,7 @@ public class OutlineKernel extends OutlineKernelBase {
                 return true;
             }
         } else {
-            if (!ignoreAtThreshold && !outsideAtThreshold) {
+            if (!params.isIgnoreOutside() && !params.isOutsideHigh()) {
                 return true;
             }
         }
@@ -99,7 +92,7 @@ public class OutlineKernel extends OutlineKernelBase {
                 return true;
             }
         } else {
-            if (!ignoreAtThreshold && !outsideAtThreshold) {
+            if (!params.isIgnoreOutside() && !params.isOutsideHigh()) {
                 return true;
             }
         }
@@ -111,20 +104,20 @@ public class OutlineKernel extends OutlineKernelBase {
                 return true;
             }
         } else {
-            if (!ignoreAtThreshold && !outsideAtThreshold) {
+            if (!params.isIgnoreOutside() && !params.isOutsideHigh()) {
                 return true;
             }
         }
         ind -= xLength;
 
-        if (useZ) {
+        if (params.isUseZ()) {
 
             if (bufferZLess1.isPresent()) {
                 if (binaryValues.isOff(bufferZLess1.get().getRaw(ind))) {
                     return true;
                 }
             } else {
-                if (!ignoreAtThreshold && !outsideAtThreshold) {
+                if (!params.isIgnoreOutside() && !params.isOutsideHigh()) {
                     return true;
                 }
             }
@@ -134,7 +127,7 @@ public class OutlineKernel extends OutlineKernelBase {
                     return true;
                 }
             } else {
-                if (!ignoreAtThreshold && !outsideAtThreshold) {
+                if (!params.isIgnoreOutside() && !params.isOutsideHigh()) {
                     return true;
                 }
             }

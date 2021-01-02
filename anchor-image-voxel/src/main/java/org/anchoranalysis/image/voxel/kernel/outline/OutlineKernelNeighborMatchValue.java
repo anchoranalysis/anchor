@@ -30,8 +30,8 @@ import java.util.Optional;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
+import org.anchoranalysis.image.voxel.kernel.KernelApplicationParameters;
 import org.anchoranalysis.image.voxel.kernel.LocalSlices;
-import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.spatial.point.Point3i;
 
 /**
@@ -46,7 +46,6 @@ import org.anchoranalysis.spatial.point.Point3i;
 public class OutlineKernelNeighborMatchValue extends OutlineKernelBase {
 
     private final BinaryVoxels<UnsignedByteBuffer> voxelsRequireHigh;
-    private final ObjectMask object;
     private final BinaryValuesByte bvRequireHigh;
     
     private LocalSlices localSlicesRequireHigh;
@@ -54,26 +53,12 @@ public class OutlineKernelNeighborMatchValue extends OutlineKernelBase {
     /**
      * Creates for an object.
      *  
-     * @param object the object to create an outline for.
-     * @param mask the mask which outline voxels must neighbor.
-     * @param params parameters determining how the outline is calculated.
+     * @param mask the mask defining possible neighbors, defined on the same coordinate space as {@code object}.
      */
     public OutlineKernelNeighborMatchValue(
-            ObjectMask object,
-            BinaryVoxels<UnsignedByteBuffer> mask,
-            OutlineKernelParameters params) {
-        this(object.binaryValuesByte(), object, mask, params);
-    }
-
-    // Constructor
-    private OutlineKernelNeighborMatchValue(
-            BinaryValuesByte bv,
-            ObjectMask object,
-            BinaryVoxels<UnsignedByteBuffer> voxelsRequireHigh,
-            OutlineKernelParameters params) {
-        super(bv, params);
-        this.voxelsRequireHigh = voxelsRequireHigh;
-        this.object = object;
+            BinaryVoxels<UnsignedByteBuffer> mask
+            ) {
+        this.voxelsRequireHigh = mask;
         this.bvRequireHigh = voxelsRequireHigh.binaryValues().createByte();
     }
 
@@ -82,7 +67,7 @@ public class OutlineKernelNeighborMatchValue extends OutlineKernelBase {
         super.notifyZChange(inSlices, z);
         localSlicesRequireHigh =
                 new LocalSlices(
-                        z + object.boundingBox().cornerMin().z(), 3, voxelsRequireHigh.voxels());
+                        z, 3, voxelsRequireHigh.voxels());
     }
 
     /**
@@ -93,47 +78,47 @@ public class OutlineKernelNeighborMatchValue extends OutlineKernelBase {
      * <p>Apologies that it is difficult to read with high cognitive-complexity.
      */
     @Override
-    public boolean acceptPoint(int ind, Point3i point) {
+    public boolean acceptPoint(int ind, Point3i point, BinaryValuesByte binaryValues, KernelApplicationParameters params) {
 
-        UnsignedByteBuffer inArrZ = inSlices.getLocal(0).get(); // NOSONAR
-        Optional<UnsignedByteBuffer> inArrZLess1 = inSlices.getLocal(-1);
-        Optional<UnsignedByteBuffer> inArrZPlus1 = inSlices.getLocal(+1);
+        UnsignedByteBuffer inArrZ = getVoxels().getLocal(0).get(); // NOSONAR
+        Optional<UnsignedByteBuffer> inArrZLess1 = getVoxels().getLocal(-1);
+        Optional<UnsignedByteBuffer> inArrZPlus1 = getVoxels().getLocal(+1);
 
-        UnsignedByteBuffer inArrR = localSlicesRequireHigh.getLocal(0).get(); // NOSONAR
-        Optional<UnsignedByteBuffer> inArrRLess1 = localSlicesRequireHigh.getLocal(-1);
-        Optional<UnsignedByteBuffer> inArrRPlus1 = localSlicesRequireHigh.getLocal(+1);
+        Optional<UnsignedByteBuffer> inArrR = localSlicesRequireHigh.getLocal(0); // NOSONAR
+        Optional<UnsignedByteBuffer> requireSlicesLess1 = localSlicesRequireHigh.getLocal(-1);
+        Optional<UnsignedByteBuffer> requireSlicesPlus1 = localSlicesRequireHigh.getLocal(+1);
 
         int xLength = extent.x();
-
-        int x = point.x();
-        int y = point.y();
-
+                
         if (binaryValues.isOff(inArrZ.getRaw(ind))) {
             return false;
         }
 
+        int x = point.x();
+        int y = point.y();
+                
         // We walk up and down in x
         x--;
         ind--;
         if (x >= 0) {
-            if (binaryValues.isOff(inArrZ.getRaw(ind))) {
-                return checkIfRequireHighIsTrue(inArrR, point, -1, 0);
+            if (binaryValues.isOff(inArrZ.getRaw(ind)) && checkIfRequireHighIsTrue(inArrR, point, -1, 0, params)) {
+                return true;
             }
         } else {
-            if (!ignoreAtThreshold && !outsideAtThreshold) {
-                return checkIfRequireHighIsTrue(inArrR, point, -1, 0);
+            if (!params.isIgnoreOutside() && !params.isOutsideHigh()) {
+                return true;
             }
         }
 
         x += 2;
         ind += 2;
         if (x < extent.x()) {
-            if (binaryValues.isOff(inArrZ.getRaw(ind))) {
-                return checkIfRequireHighIsTrue(inArrR, point, +1, 0);
+            if (binaryValues.isOff(inArrZ.getRaw(ind)) && checkIfRequireHighIsTrue(inArrR, point, +1, 0, params)) {
+                return true;
             }
         } else {
-            if (!ignoreAtThreshold && !outsideAtThreshold) {
-                return checkIfRequireHighIsTrue(inArrR, point, +1, 0);
+            if (!params.isIgnoreOutside() && !params.isOutsideHigh()) {
+                return true;
             }
         }
         ind--;
@@ -142,47 +127,47 @@ public class OutlineKernelNeighborMatchValue extends OutlineKernelBase {
         y--;
         ind -= xLength;
         if (y >= 0) {
-            if (binaryValues.isOff(inArrZ.getRaw(ind))) {
-                return checkIfRequireHighIsTrue(inArrR, point, 0, -1);
+            if (binaryValues.isOff(inArrZ.getRaw(ind)) && checkIfRequireHighIsTrue(inArrR, point, 0, -1, params)) {
+                return true;
             }
         } else {
-            if (!ignoreAtThreshold && !outsideAtThreshold) {
-                return checkIfRequireHighIsTrue(inArrR, point, 0, -1);
+            if (!params.isIgnoreOutside() && !params.isOutsideHigh()) {
+                return true;
             }
         }
 
         y += 2;
         ind += (2 * xLength);
         if (y < (extent.y())) {
-            if (binaryValues.isOff(inArrZ.getRaw(ind))) {
-                return checkIfRequireHighIsTrue(inArrR, point, 0, +1);
+            if (binaryValues.isOff(inArrZ.getRaw(ind)) && checkIfRequireHighIsTrue(inArrR, point, 0, +1, params)) {
+                return true;
             }
         } else {
-            if (!ignoreAtThreshold && !outsideAtThreshold) {
-                return checkIfRequireHighIsTrue(inArrR, point, 0, +1);
+            if (!params.isIgnoreOutside() && !params.isOutsideHigh()) {
+                return true;
             }
         }
         ind -= xLength;
 
-        if (useZ) {
-
+        if (params.isUseZ()) {
+            
             if (inArrZLess1.isPresent()) {
-                if (binaryValues.isOff(inArrZLess1.get().getRaw(ind))) {
-                    return checkIfRequireHighIsTrue(inArrRLess1.get(), point, 0, 0);    // NOSONAR
+                if (binaryValues.isOff(inArrZLess1.get().getRaw(ind)) && checkIfRequireHighIsTrue(requireSlicesLess1, point, 0, 0, params)) {
+                    return true;    // NOSONAR
                 }
             } else {
-                if (!ignoreAtThreshold && !outsideAtThreshold) {
-                    return checkIfRequireHighIsTrue(inArrRLess1.get(), point, 0, 0);    // NOSONAR
+                if (!params.isIgnoreOutside() && !params.isOutsideHigh()) {
+                    return true;    // NOSONAR
                 }
             }
 
             if (inArrZPlus1.isPresent()) {
-                if (binaryValues.isOff(inArrZPlus1.get().getRaw(ind))) {
-                    return checkIfRequireHighIsTrue(inArrRPlus1.get(), point, 0, 0);    // NOSONAR
+                if (binaryValues.isOff(inArrZPlus1.get().getRaw(ind)) && checkIfRequireHighIsTrue(requireSlicesPlus1, point, 0, 0, params)) {
+                    return true;    // NOSONAR
                 }
             } else {
-                if (!ignoreAtThreshold && !outsideAtThreshold) {
-                    return checkIfRequireHighIsTrue(inArrRPlus1.get(), point, 0, 0);    // NOSONAR
+                if (!params.isIgnoreOutside() && !params.isOutsideHigh()) {
+                    return true;    // NOSONAR
                 }
             }
         }
@@ -191,25 +176,25 @@ public class OutlineKernelNeighborMatchValue extends OutlineKernelBase {
     }
 
     private boolean checkIfRequireHighIsTrue(
-            UnsignedByteBuffer inArr, Point3i point, int xShift, int yShift) {
+            Optional<UnsignedByteBuffer> inArr, Point3i point, int xShift, int yShift, KernelApplicationParameters params) {
 
-        if (inArr == null) {
-            return outsideAtThreshold;
+        if (inArr.isPresent()) {
+            int x1 = point.x() + xShift;
+
+            if (!voxelsRequireHigh.extent().containsX(x1)) {
+                return params.isOutsideHigh();
+            }
+
+            int y1 = point.y() + yShift;
+
+            if (!voxelsRequireHigh.extent().containsY(y1)) {
+                return params.isOutsideHigh();
+            }
+
+            int intGlobal = voxelsRequireHigh.extent().offset(x1, y1);
+            return bvRequireHigh.isOn(inArr.get().getRaw(intGlobal));            
+        } else {
+            return true;
         }
-
-        int x1 = point.x() + object.boundingBox().cornerMin().x() + xShift;
-
-        if (!voxelsRequireHigh.extent().containsX(x1)) {
-            return outsideAtThreshold;
-        }
-
-        int y1 = point.y() + object.boundingBox().cornerMin().y() + yShift;
-
-        if (!voxelsRequireHigh.extent().containsY(y1)) {
-            return outsideAtThreshold;
-        }
-
-        int intGlobal = voxelsRequireHigh.extent().offset(x1, y1);
-        return bvRequireHigh.isOn(inArr.getRaw(intGlobal));
     }
 }

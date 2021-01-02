@@ -25,10 +25,6 @@
  */
 package org.anchoranalysis.image.voxel.object;
 
-import static org.anchoranalysis.image.voxel.object.ObjectMaskFixture.DEPTH;
-import static org.anchoranalysis.image.voxel.object.ObjectMaskFixture.HEIGHT;
-import static org.anchoranalysis.image.voxel.object.ObjectMaskFixture.WIDTH;
-
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.spatial.Extent;
@@ -50,7 +46,7 @@ public class ObjectCollectionFixture {
      * overlapping objects
      */
     private final int distanceBetweenShift;
-
+    
     public ObjectCollectionFixture() {
         this(5, 3, 10, true);
     }
@@ -68,11 +64,17 @@ public class ObjectCollectionFixture {
     }
 
     public Extent extentLargerThanAllObjects() {
+        ObjectMaskFixture fixture = new ObjectMaskFixture(true, do3D);
+        int heightSingleObject = fixture.extent().y();
         int heightAllObjects =
-                incrementY ? numberObjects * (HEIGHT + distanceBetweenShift) : HEIGHT;
-        int depthAllObjects = do3D ? DEPTH : 1;
+                incrementY ? numberObjects * (heightSingleObject + distanceBetweenShift) : heightSingleObject;
+        int depthAllObjects = do3D ? fixture.extent().z() : 1;
         return new Extent(
-                numberObjects * (WIDTH + distanceBetweenShift), heightAllObjects, depthAllObjects);
+                numberObjects * (fixture.extent().x() + distanceBetweenShift), heightAllObjects, depthAllObjects);
+    }
+    
+    public int expectedSingleNumberVoxels() {
+        return createObjects(true).get(0).numberVoxelsOn();
     }
 
     public ObjectCollection createObjects(boolean removeCorners) {
@@ -94,9 +96,9 @@ public class ObjectCollectionFixture {
                 numberObjects,
                 () -> {
                     ObjectMask object = fixture.filledMask(running.x(), running.y());
-                    running.incrementX(WIDTH + shift);
+                    running.incrementX(fixture.extent().x() + shift);
                     if (incrementY) {
-                        running.incrementY(HEIGHT + shift);
+                        running.incrementY(fixture.extent().y() + shift);
                     }
                     return object;
                 });

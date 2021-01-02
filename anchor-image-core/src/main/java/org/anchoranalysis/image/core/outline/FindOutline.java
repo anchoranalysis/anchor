@@ -33,13 +33,14 @@ import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationExcep
 import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
 import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.image.core.mask.combine.MaskXor;
-import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxelsFactory;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.kernel.ApplyKernel;
 import org.anchoranalysis.image.voxel.kernel.BinaryKernel;
+import org.anchoranalysis.image.voxel.kernel.KernelApplicationParameters;
+import org.anchoranalysis.image.voxel.kernel.OutsideKernelPolicy;
 import org.anchoranalysis.image.voxel.kernel.morphological.ErosionKernel;
 import org.anchoranalysis.image.voxel.kernel.outline.OutlineKernel;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
@@ -163,7 +164,9 @@ public class FindOutline {
         }
     }
 
-    /** Find an outline only 1 pixel deep by using a kernel directly */
+    /** 
+     * Find an outline only 1 pixel deep by using a kernel directly 
+     */
     private static BinaryVoxels<UnsignedByteBuffer> outlineByKernel(
             BinaryVoxels<UnsignedByteBuffer> voxels, boolean outlineAtBoundary, boolean do3D) {
 
@@ -175,10 +178,9 @@ public class FindOutline {
 
         BinaryValuesByte binaryValues = voxels.binaryValues().createByte();
 
-        BinaryKernel kernel = new OutlineKernel(binaryValues, !outlineAtBoundary, do3D);
+        BinaryKernel kernel = new OutlineKernel();
 
-        Voxels<UnsignedByteBuffer> out = ApplyKernel.apply(kernel, voxels.voxels(), binaryValues);
-        return BinaryVoxelsFactory.reuseByte(out, voxels.binaryValues());
+        return ApplyKernel.apply(kernel, voxels, binaryValues, new KernelApplicationParameters( OutsideKernelPolicy.as(!outlineAtBoundary),  do3D));
     }
 
     /**
@@ -192,28 +194,29 @@ public class FindOutline {
             boolean do3D) {
 
         // Otherwise if > 1
-        Voxels<UnsignedByteBuffer> eroded =
+        BinaryVoxels<UnsignedByteBuffer> eroded =
                 multipleErode(voxels, numberErosions, outlineAtBoundary, do3D);
 
         // Binary and between the original version and the eroded version
-        BinaryValuesByte binaryValues = voxels.binaryValues().createByte();
-        MaskXor.apply(voxels.voxels(), eroded, binaryValues, binaryValues);
+        MaskXor.apply(voxels, eroded);
         return voxels;
     }
 
-    private static Voxels<UnsignedByteBuffer> multipleErode(
+    private static BinaryVoxels<UnsignedByteBuffer> multipleErode(
             BinaryVoxels<UnsignedByteBuffer> voxels,
             int numberErosions,
             boolean erodeAtBoundary,
             boolean do3D) {
 
         BinaryValuesByte binaryValues = voxels.binaryValues().createByte();
-        BinaryKernel kernelErosion = new ErosionKernel(binaryValues, erodeAtBoundary, do3D);
+        BinaryKernel kernelErosion = new ErosionKernel();
 
-        Voxels<UnsignedByteBuffer> eroded =
-                ApplyKernel.apply(kernelErosion, voxels.voxels(), binaryValues);
+        KernelApplicationParameters params = new KernelApplicationParameters( OutsideKernelPolicy.as(erodeAtBoundary), do3D);
+        
+        BinaryVoxels<UnsignedByteBuffer> eroded =
+                ApplyKernel.apply(kernelErosion, voxels, binaryValues, params);
         for (int i = 1; i < numberErosions; i++) {
-            eroded = ApplyKernel.apply(kernelErosion, eroded, binaryValues);
+            eroded = ApplyKernel.apply(kernelErosion, eroded, binaryValues, params);
         }
         return eroded;
     }

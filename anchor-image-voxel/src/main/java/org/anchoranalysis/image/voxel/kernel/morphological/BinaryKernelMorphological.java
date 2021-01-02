@@ -26,25 +26,23 @@
 
 package org.anchoranalysis.image.voxel.kernel.morphological;
 
-import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.kernel.BinaryKernel;
 import org.anchoranalysis.image.voxel.kernel.LocalSlices;
 
 public abstract class BinaryKernelMorphological extends BinaryKernel {
 
-    protected final BinaryValuesByte binaryValues;
-    protected final boolean outsideAtThreshold;
+    private LocalSlices inSlices;
 
-    protected LocalSlices inSlices;
-
-    protected BinaryKernelMorphological(BinaryValuesByte binaryValues, boolean outsideAtThreshold) {
+    protected BinaryKernelMorphological() {
         super(3);
-        this.binaryValues = binaryValues;
-        this.outsideAtThreshold = outsideAtThreshold;
     }
 
     @Override
     public void notifyZChange(LocalSlices inSlices, int z) {
         this.inSlices = inSlices;
+    }
+    
+    protected LocalSlices getVoxels() {
+        return inSlices;
     }
 }

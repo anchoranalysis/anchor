@@ -30,6 +30,7 @@ import java.util.Optional;
 import java.util.function.Supplier;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
+import org.anchoranalysis.image.voxel.kernel.KernelApplicationParameters;
 import org.anchoranalysis.spatial.point.Point3i;
 
 /**
@@ -39,11 +40,6 @@ import org.anchoranalysis.spatial.point.Point3i;
  */
 public final class ErosionKernel extends BinaryKernelMorphologicalExtent {
 
-    // Constructor
-    public ErosionKernel(BinaryValuesByte binaryValues, boolean outsideAtThreshold, boolean useZ) {
-        super(binaryValues, outsideAtThreshold, useZ);
-    }
-
     /**
      * This method is deliberately not broken into smaller pieces to avoid inlining.
      *
@@ -52,9 +48,9 @@ public final class ErosionKernel extends BinaryKernelMorphologicalExtent {
      * <p>Apologies that it is difficult to read with high cognitive-complexity.
      */
     @Override
-    public boolean acceptPoint(int index, Point3i point) {
+    public boolean acceptPoint(int index, Point3i point, BinaryValuesByte binaryValues, KernelApplicationParameters params) {
 
-        UnsignedByteBuffer buffer = inSlices.getLocal(0).get(); // NOSONAR
+        UnsignedByteBuffer buffer = getVoxels().getLocal(0).get(); // NOSONAR
 
         int xLength = extent.x();
 
@@ -73,7 +69,7 @@ public final class ErosionKernel extends BinaryKernelMorphologicalExtent {
                 return false;
             }
         } else {
-            if (outsideAtThreshold) {
+            if (params.isOutsideHigh()) {
                 return false;
             }
         }
@@ -85,7 +81,7 @@ public final class ErosionKernel extends BinaryKernelMorphologicalExtent {
                 return false;
             }
         } else {
-            if (outsideAtThreshold) {
+            if (params.isOutsideHigh()) {
                 return false;
             }
         }
@@ -99,7 +95,7 @@ public final class ErosionKernel extends BinaryKernelMorphologicalExtent {
                 return false;
             }
         } else {
-            if (outsideAtThreshold) {
+            if (params.isOutsideHigh()) {
                 return false;
             }
         }
@@ -111,29 +107,31 @@ public final class ErosionKernel extends BinaryKernelMorphologicalExtent {
                 return false;
             }
         } else {
-            if (outsideAtThreshold) {
+            if (params.isOutsideHigh()) {
                 return false;
             }
         }
         index -= xLength;
 
-        return maybeCheckZ(() -> inSlices.getLocal(-1), () -> inSlices.getLocal(+1), index);
+        return maybeCheckZ(() -> getVoxels().getLocal(-1), () -> getVoxels().getLocal(+1), binaryValues, index, params);
     }
 
     private boolean maybeCheckZ(
             Supplier<Optional<UnsignedByteBuffer>> bufferZLess1,
             Supplier<Optional<UnsignedByteBuffer>> bufferZPlus1,
-            int index) {
-        return !useZ
-                || (checkZBuffer(bufferZLess1.get(), index)
-                        && checkZBuffer(bufferZPlus1.get(), index));
+            BinaryValuesByte binaryValues,
+            int index,
+            KernelApplicationParameters params) {
+        return !params.isUseZ()
+                || (checkZBuffer(bufferZLess1.get(), binaryValues, index, params)
+                        && checkZBuffer(bufferZPlus1.get(), binaryValues, index, params));
     }
 
-    private boolean checkZBuffer(Optional<UnsignedByteBuffer> buffer, int index) {
+    private boolean checkZBuffer(Optional<UnsignedByteBuffer> buffer, BinaryValuesByte binaryValues, int index, KernelApplicationParameters params) {
         if (buffer.isPresent()) {
             return !binaryValues.isOff(buffer.get().getRaw(index));
         } else {
-            return !outsideAtThreshold;
+            return !params.isOutsideHigh();
         }
     }
 }

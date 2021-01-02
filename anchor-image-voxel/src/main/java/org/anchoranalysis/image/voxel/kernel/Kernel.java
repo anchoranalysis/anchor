@@ -45,6 +45,10 @@ public abstract class Kernel {
         this.sizeHalf = (size - 1) / 2;
     }
 
+    public abstract void init(Voxels<UnsignedByteBuffer> in, KernelApplicationParameters params);
+
+    public abstract void notifyZChange(LocalSlices inSlices, int z);
+    
     public int getYMin(Point3i point) {
         return Math.max(point.y() - getSizeHalf(), 0);
     }
@@ -60,8 +64,4 @@ public abstract class Kernel {
     public int getXMax(Point3i point, Extent extent) {
         return Math.min(point.x() + getSizeHalf(), extent.x() - 1);
     }
-
-    public abstract void init(Voxels<UnsignedByteBuffer> in);
-
-    public abstract void notifyZChange(LocalSlices inSlices, int z);
 }

@@ -30,27 +30,23 @@ import java.util.Optional;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
+import org.anchoranalysis.image.voxel.kernel.KernelApplicationParameters;
 import org.anchoranalysis.spatial.point.Point3i;
 
 // Erosion with a 3x3 or 3x3x3 kernel
 final class DilationKernelZOnly extends BinaryKernelMorphological {
 
-    // Constructor
-    public DilationKernelZOnly(BinaryValuesByte bv, boolean outsideAtThreshold) {
-        super(bv, outsideAtThreshold);
-    }
-
     @Override
-    public void init(Voxels<UnsignedByteBuffer> in) {
+    public void init(Voxels<UnsignedByteBuffer> in, KernelApplicationParameters params) {
         // NOTHING TO DO
     }
 
     @Override
-    public boolean acceptPoint(int index, Point3i point) {
+    public boolean acceptPoint(int index, Point3i point, BinaryValuesByte binaryValues, KernelApplicationParameters params) {
 
-        UnsignedByteBuffer buffer = inSlices.getLocal(0).get(); // NOSONAR
-        Optional<UnsignedByteBuffer> bufferZLess1 = inSlices.getLocal(-1);
-        Optional<UnsignedByteBuffer> bufferZPlus1 = inSlices.getLocal(+1);
+        UnsignedByteBuffer buffer = getVoxels().getLocal(0).get(); // NOSONAR
+        Optional<UnsignedByteBuffer> bufferZLess1 = getVoxels().getLocal(-1);
+        Optional<UnsignedByteBuffer> bufferZPlus1 = getVoxels().getLocal(+1);
 
         if (binaryValues.isOn(buffer.getRaw(index))) {
             return true;
@@ -61,7 +57,7 @@ final class DilationKernelZOnly extends BinaryKernelMorphological {
                 return true;
             }
         } else {
-            if (outsideAtThreshold) {
+            if (params.isOutsideHigh()) {
                 return true;
             }
         }
@@ -71,7 +67,7 @@ final class DilationKernelZOnly extends BinaryKernelMorphological {
                 return true;
             }
         } else {
-            if (outsideAtThreshold) {
+            if (params.isOutsideHigh()) {
                 return true;
             }
         }
