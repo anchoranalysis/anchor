@@ -70,92 +70,21 @@ public class OutlineKernelNeighborMatchValue extends OutlineKernelBase {
                 new LocalSlices(
                         z, 3, voxelsRequireHigh.voxels());
     }
-
-    /**
-     * This method is deliberately not broken into smaller pieces to avoid inlining.
-     *
-     * <p>This efficiency matters as it is called so many times over a large image.
-     *
-     * <p>Apologies that it is difficult to read with high cognitive-complexity.
-     */
-    @Override
-    public boolean acceptPoint(int ind, Point3i point, BinaryValuesByte binaryValues, KernelApplicationParameters params) {
-
-        UnsignedByteBuffer inArrZ = getVoxels().getLocal(0).get(); // NOSONAR
-
-        Optional<UnsignedByteBuffer> inArrR = localSlicesRequireHigh.getLocal(0); // NOSONAR
-
-        int xLength = extent.x();
-                
-        if (binaryValues.isOff(inArrZ.getRaw(ind))) {
-            return false;
-        }
-
-        int x = point.x();
-        int y = point.y();
-                
-        // We walk up and down in x
-        x--;
-        ind--;
-        
-        if (doesNeighborQualify(x >= 0, ind, point, binaryValues, params, () -> inArrZ, inArrR::get, -1, 0)) {
-            return true;
-        }
-
-        x += 2;
-        ind += 2;
-        
-        if (doesNeighborQualify(x < extent.x(), ind, point, binaryValues, params, () -> inArrZ, inArrR::get, +1, 0)) {
-            return true;
-        }
-        
-        ind--;
-
-        // We walk up and down in y
-        y--;
-        ind -= xLength;
-        
-        if (doesNeighborQualify(y >= 0, ind, point, binaryValues, params, () -> inArrZ, inArrR::get, 0, -1)) {
-            return true;
-        }
-
-        y += 2;
-        ind += (2 * xLength);
-        
-        if (doesNeighborQualify( y < extent.y(), ind, point, binaryValues, params, () -> inArrZ, inArrR::get, 0, +1)) {
-            return true;
-        }
-        ind -= xLength;
-
-        return slicesQualify(ind, point, binaryValues, params);
-    }
-
-    /** Checks if any neighbor voxels on an adjacent z-slice qualify to make the current voxel an outline voxel. */
-    private boolean slicesQualify(int ind, Point3i point, BinaryValuesByte binaryValues, KernelApplicationParameters params) {
-        Optional<UnsignedByteBuffer> minusOne = getVoxels().getLocal(-1);
-        Optional<UnsignedByteBuffer> plusOne = getVoxels().getLocal(+1);
-        if (params.isUseZ()) {
-            return doesNeighborQualify(minusOne.isPresent(), ind, point, binaryValues, params, minusOne::get, localSlicesRequireHigh.getLocal(-1)::get, 0, 0) ||
-                    doesNeighborQualify(plusOne.isPresent(), ind, point, binaryValues, params, plusOne::get, localSlicesRequireHigh.getLocal(+1)::get, 0, 0);
-        } else {
-            return false;
-        }
-    }
     
     /** Checks whether a particular neighbor voxel qualifies to make the current voxel an outline voxel. */
-    private boolean doesNeighborQualify(boolean guard, int ind, Point3i point, BinaryValuesByte binaryValues, KernelApplicationParameters params, Supplier<UnsignedByteBuffer> inArrZ, Supplier<UnsignedByteBuffer> requireSlice, int xShift, int yShift) {
+    @Override
+    protected boolean doesNeighborQualify(boolean guard, int index, Point3i point, BinaryValuesByte binaryValues, KernelApplicationParameters params, Supplier<UnsignedByteBuffer> buffer, int zShift) {
         if (guard) {
-            return binaryValues.isOff(inArrZ.get().getRaw(ind)) && checkIfRequireHighIsTrue(requireSlice.get(), point, xShift, yShift);
+            Optional<UnsignedByteBuffer> requireSlice = localSlicesRequireHigh.getLocal(zShift);
+            return binaryValues.isOff(buffer.get().getRaw(index)) && checkIfRequireHighIsTrue(requireSlice.get(), point);
         } else {
             return params.isOutsideLowUnignored();
         }
     }
 
     private boolean checkIfRequireHighIsTrue(
-            UnsignedByteBuffer inArr, Point3i point, int xShift, int yShift) {
-        int x1 = point.x() + xShift;
-        int y1 = point.y() + yShift;
-        int intGlobal = voxelsRequireHigh.extent().offset(x1, y1);
-        return bvRequireHigh.isOn(inArr.getRaw(intGlobal));            
+            UnsignedByteBuffer additionalBuffer, Point3i point) {
+        int indexGlobal = voxelsRequireHigh.extent().offsetSlice(point);
+        return bvRequireHigh.isOn(additionalBuffer.getRaw(indexGlobal));            
     }
 }

@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.image.voxel.kernel.outline;
 
-import java.util.Optional;
+import java.util.function.Supplier;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.kernel.KernelApplicationParameters;
@@ -34,105 +34,14 @@ import org.anchoranalysis.spatial.point.Point3i;
 
 // Keeps any on pixel that touches an off pixel, off otherwise
 public class OutlineKernel extends OutlineKernelBase {
-
-    /**
-     * This method is deliberately not broken into smaller pieces to avoid inlining.
-     *
-     * <p>This efficiency matters as it is called so many times over a large image.
-     *
-     * <p>Apologies that it is difficult to read with high cognitive-complexity.
-     */
+    
+    /** Checks whether a particular neighbor voxel qualifies to make the current voxel an outline voxel. */
     @Override
-    public boolean acceptPoint(int ind, Point3i point, BinaryValuesByte binaryValues, KernelApplicationParameters params) {
-
-        UnsignedByteBuffer buffer = getVoxels().getLocal(0).get(); // NOSONAR
-        Optional<UnsignedByteBuffer> bufferZLess1 = getVoxels().getLocal(-1);
-        Optional<UnsignedByteBuffer> bufferZPlus1 = getVoxels().getLocal(+1);
-
-        int xLength = extent.x();
-
-        int x = point.x();
-        int y = point.y();
-
-        if (binaryValues.isOff(buffer.getRaw(ind))) {
-            return false;
-        }
-
-        // We walk up and down in x
-        x--;
-        ind--;
-        if (x >= 0) {
-            if (binaryValues.isOff(buffer.getRaw(ind))) {
-                return true;
-            }
+    protected boolean doesNeighborQualify(boolean guard, int index, Point3i point, BinaryValuesByte binaryValues, KernelApplicationParameters params, Supplier<UnsignedByteBuffer> buffer, int zShift) {
+        if (guard) {
+            return binaryValues.isOff(buffer.get().getRaw(index));
         } else {
-            if (!params.isIgnoreOutside() && !params.isOutsideHigh()) {
-                return true;
-            }
+            return params.isOutsideLowUnignored();
         }
-
-        x += 2;
-        ind += 2;
-        if (x < extent.x()) {
-            if (binaryValues.isOff(buffer.getRaw(ind))) {
-                return true;
-            }
-        } else {
-            if (!params.isIgnoreOutside() && !params.isOutsideHigh()) {
-                return true;
-            }
-        }
-        ind--;
-
-        // We walk up and down in y
-        y--;
-        ind -= xLength;
-        if (y >= 0) {
-            if (binaryValues.isOff(buffer.getRaw(ind))) {
-                return true;
-            }
-        } else {
-            if (!params.isIgnoreOutside() && !params.isOutsideHigh()) {
-                return true;
-            }
-        }
-
-        y += 2;
-        ind += (2 * xLength);
-        if (y < (extent.y())) {
-            if (binaryValues.isOff(buffer.getRaw(ind))) {
-                return true;
-            }
-        } else {
-            if (!params.isIgnoreOutside() && !params.isOutsideHigh()) {
-                return true;
-            }
-        }
-        ind -= xLength;
-
-        if (params.isUseZ()) {
-
-            if (bufferZLess1.isPresent()) {
-                if (binaryValues.isOff(bufferZLess1.get().getRaw(ind))) {
-                    return true;
-                }
-            } else {
-                if (!params.isIgnoreOutside() && !params.isOutsideHigh()) {
-                    return true;
-                }
-            }
-
-            if (bufferZPlus1.isPresent()) {
-                if (binaryValues.isOff(bufferZPlus1.get().getRaw(ind))) {
-                    return true;
-                }
-            } else {
-                if (!params.isIgnoreOutside() && !params.isOutsideHigh()) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
     }
 }

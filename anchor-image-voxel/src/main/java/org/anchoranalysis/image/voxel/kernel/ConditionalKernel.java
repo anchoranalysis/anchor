@@ -48,7 +48,7 @@ public class ConditionalKernel extends BinaryKernel {
     }
 
     @Override
-    public boolean acceptPoint(int ind, Point3i point, BinaryValuesByte binaryValues, KernelApplicationParameters params) {
+    public boolean acceptPoint(int index, Point3i point, BinaryValuesByte binaryValues, KernelApplicationParameters params) {
 
         int value =
                 voxelsIntensity
@@ -59,7 +59,7 @@ public class ConditionalKernel extends BinaryKernel {
             return false;
         }
 
-        return kernel.acceptPoint(ind, point, binaryValues, params);
+        return kernel.acceptPoint(index, point, binaryValues, params);
     }
 
     @Override
