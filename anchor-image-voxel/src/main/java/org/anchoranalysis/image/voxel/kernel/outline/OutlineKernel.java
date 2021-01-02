@@ -27,21 +27,19 @@
 package org.anchoranalysis.image.voxel.kernel.outline;
 
 import java.util.function.Supplier;
-import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
-import org.anchoranalysis.image.voxel.kernel.KernelApplicationParameters;
-import org.anchoranalysis.spatial.point.Point3i;
+import org.anchoranalysis.image.voxel.kernel.KernelPointCursor;
 
 // Keeps any on pixel that touches an off pixel, off otherwise
 public class OutlineKernel extends OutlineKernelBase {
     
     /** Checks whether a particular neighbor voxel qualifies to make the current voxel an outline voxel. */
     @Override
-    protected boolean doesNeighborQualify(boolean guard, int index, Point3i point, BinaryValuesByte binaryValues, KernelApplicationParameters params, Supplier<UnsignedByteBuffer> buffer, int zShift) {
+    protected boolean doesNeighborQualify(boolean guard, KernelPointCursor point, Supplier<UnsignedByteBuffer> buffer, int zShift) {
         if (guard) {
-            return binaryValues.isOff(buffer.get().getRaw(index));
+            return point.isBufferOff(buffer.get());
         } else {
-            return params.isOutsideLowUnignored();
+            return point.isOutsideLowUnignored();
         }
     }
 }
