@@ -65,7 +65,7 @@ final class DilationKernelZOnly extends BinaryKernelMorphological {
                 return true;
             }
         } else {
-            if (params.isOutsideHigh()) {
+            if (params.isOutsideOn()) {
                 return true;
             }
         }
@@ -75,7 +75,7 @@ final class DilationKernelZOnly extends BinaryKernelMorphological {
                 return true;
             }
         } else {
-            if (params.isOutsideHigh()) {
+            if (params.isOutsideOn()) {
                 return true;
             }
         }

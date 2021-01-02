@@ -65,6 +65,6 @@ abstract class OutlineTestBase extends BinaryKernelTestBase {
     }
 
     private static boolean useZFor2D(KernelApplicationParameters params) {
-        return params.isUseZ() && (!params.isIgnoreOutside() && !params.isOutsideHigh());
+        return params.isUseZ() && (!params.isIgnoreOutside() && !params.isOutsideOn());
     }
 }

@@ -46,7 +46,7 @@ public class OutlineKernel extends OutlineKernelBase {
         if (guard) {
             return point.isBufferOff(buffer.get());
         } else {
-            return point.isOutsideLowUnignored();
+            return point.isOutsideOffUnignored();
         }
     }
 }

@@ -26,11 +26,18 @@
 
 package org.anchoranalysis.image.voxel.kernel.outline;
 
-import org.anchoranalysis.image.voxel.kernel.morphological.BinaryKernelMorphologicalWithCursor;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
+import org.anchoranalysis.image.voxel.kernel.KernelPointCursor;
+import org.anchoranalysis.image.voxel.kernel.morphological.BinaryKernelMorphologicalExtent;
 
-public abstract class OutlineKernelBase extends BinaryKernelMorphologicalWithCursor {
+public abstract class OutlineKernelBase extends BinaryKernelMorphologicalExtent {
 
     public OutlineKernelBase() {
-        super(false);
+        super(false, false, false);
+    }
+    
+    @Override
+    protected boolean firstCheck(KernelPointCursor point, UnsignedByteBuffer buffer) {
+        return point.isBufferOn(buffer);
     }
 }

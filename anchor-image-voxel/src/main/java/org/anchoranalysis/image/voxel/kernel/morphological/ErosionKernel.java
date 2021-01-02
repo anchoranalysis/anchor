@@ -35,10 +35,10 @@ import org.anchoranalysis.image.voxel.kernel.KernelPointCursor;
  *
  * @author Owen Feehan
  */
-public final class ErosionKernel extends BinaryKernelMorphologicalWithCursor {
+public final class ErosionKernel extends BinaryKernelMorphologicalExtent {
 
     public ErosionKernel() {
-        super(true);
+        super(false, true, false);
     }
 
     /**
@@ -54,7 +54,12 @@ public final class ErosionKernel extends BinaryKernelMorphologicalWithCursor {
         if (guard) {
             return point.isBufferOff(buffer.get());
         } else {
-            return point.isOutsideHigh();
+            return point.isOutsideOn();
         }
+    }
+
+    @Override
+    protected boolean firstCheck(KernelPointCursor point, UnsignedByteBuffer buffer) {
+        return point.isBufferOn(buffer);
     }
 }

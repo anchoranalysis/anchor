@@ -84,7 +84,7 @@ public class OutlineKernelNeighborMatchValue extends OutlineKernelBase {
             return point.isBufferOff(buffer.get())
                     && checkIfRequireHighIsTrue(requireSlice.get(), point.getPoint()); // NOSONAR
         } else {
-            return point.isOutsideLowUnignored();
+            return point.isOutsideOffUnignored();
         }
     }
 

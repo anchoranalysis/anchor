@@ -26,10 +26,15 @@
 
 package org.anchoranalysis.image.voxel.kernel.morphological;
 
+import java.util.Optional;
+import java.util.function.Supplier;
 import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.kernel.KernelApplicationParameters;
+import org.anchoranalysis.image.voxel.kernel.KernelPointCursor;
 import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.spatial.point.Point3i;
 
 public abstract class BinaryKernelMorphologicalExtent extends BinaryKernelMorphological {
 
@@ -49,41 +54,175 @@ public abstract class BinaryKernelMorphologicalExtent extends BinaryKernelMorpho
 
     protected Extent extent;
 
+    private final boolean bigNeighborhood;
+    
+    private final boolean failedFirstCheckOutcome;
+    
     /**
-     * Create with an unqualified-outcome, what occurs if no no neighbor fulfills the condition
-     * required by the kernel..
-     *
-     * <p>If a neighbor fulfills the condition, the outcome is assumed to be the opposite of this.
-     *
-     * <p>Thus if {@code unqualifiedOutcome==false} then the qualified-outcome is @{code true} and
-     * vice-versa.
-     *
-     * @param unqualifiedOutcome the outcome that occurs if no neighbor fulfills the condition
-     *     required by the kernel.
+     * Creates with a flag for big-neighborhood, and boolean outcomes for certain cases.
+     * 
+     * @param bigNeighborhood if true, a big neighborhood is used 2D-plane (8-connected instead of 4-connected), but not in Z-direction (remains 2-connected). 
+     * @param unqualifiedOutcome the (negative) outcome that occurs if no neighbor qualifies (fulfills a condition). The positive outcome is assumed to be the complement of this.
+     * @param failedFirstCheckOutcome if the first-check fails, this outcome is returned.
      */
-    public BinaryKernelMorphologicalExtent(boolean unqualifiedOutcome) {
+    public BinaryKernelMorphologicalExtent(boolean bigNeighborhood, boolean unqualifiedOutcome, boolean failedFirstCheckOutcome) {
         this.unqualifiedOutcome = unqualifiedOutcome;
         this.qualifiedOutcome = !unqualifiedOutcome;
+        this.bigNeighborhood = bigNeighborhood;
+        this.failedFirstCheckOutcome = failedFirstCheckOutcome;
     }
 
     @Override
     public void init(Voxels<UnsignedByteBuffer> in, KernelApplicationParameters params) {
         this.extent = in.extent();
     }
-
-    /**
-     * The outcome that should occur for the kernel <b>if no neighbor fulfills the condition</b>
-     * required by the kernel.
-     */
-    protected boolean isUnqualifiedOutcome() {
-        return unqualifiedOutcome;
+    
+    @Override
+    public boolean acceptPoint(
+            int index,
+            Point3i point,
+            BinaryValuesByte binaryValues,
+            KernelApplicationParameters params) {
+        return acceptPoint(new KernelPointCursor(index, point, extent, binaryValues, params));
     }
 
-    /**
-     * The outcome that should occur for the kernel <b>if at least one neighbor fulfills the
-     * condition</b> required by the kernel.
+    /** 
+     * The first check done on the kernel center-point, before checking any neighbors.
+     *
+     * @return true if the check passed, and false otherwise.
      */
-    protected boolean isQualifiedOutcome() {
-        return qualifiedOutcome;
+    protected abstract boolean firstCheck(KernelPointCursor point, UnsignedByteBuffer buffer);
+    
+    protected abstract boolean doesNeighborQualify(
+            boolean guard,
+            KernelPointCursor point,
+            Supplier<UnsignedByteBuffer> buffer,
+            int zShift);
+
+    private boolean acceptPoint(KernelPointCursor point) {
+
+        UnsignedByteBuffer buffer = getVoxels().getLocal(0).get(); // NOSONAR
+
+        if (!firstCheck(point,buffer)) {
+            return failedFirstCheckOutcome;
+        }
+
+        if (qualifyFromX(point, buffer) || qualifyFromY(point, buffer) || maybeQualifyFromZ(point) || maybeQualifyFromBigNeighbourhood(point, buffer) ) {
+            return qualifiedOutcome;
+        } else {
+            return unqualifiedOutcome;
+        }
+    }
+
+    /** Do any neighbor voxels in X direction qualify the voxel? */
+    private boolean qualifyFromX(KernelPointCursor point, UnsignedByteBuffer buffer) {
+        // We walk up and down in x
+        point.decrementX();
+
+        if (doesNeighborQualify(point.nonNegativeX(), point, () -> buffer, 0)) {
+            point.incrementX();
+            return true;
+        }
+
+        point.incrementXTwice();
+
+        try {
+            if (doesNeighborQualify(point.lessThanMaxX(), point, () -> buffer, 0)) {
+                return true;
+            }
+        } finally {
+            point.decrementX();
+        }
+
+        return false;
+    }
+
+    /** Do any neighbor voxels in Y direction qualify the voxel? */
+    private boolean qualifyFromY(KernelPointCursor point, UnsignedByteBuffer buffer) {
+        point.decrementY();
+
+        if (doesNeighborQualify(point.nonNegativeY(), point, () -> buffer, 0)) {
+            point.incrementY();
+            return true;
+        }
+
+        point.incrementYTwice();
+
+        try {
+            if (doesNeighborQualify(point.lessThanMaxY(), point, () -> buffer, 0)) {
+                return true;
+            }
+        } finally {
+            point.decrementY();
+        }
+
+        return false;
+    }
+
+    /** Do any neighbor voxels in Z direction qualify the voxel? */
+    private boolean maybeQualifyFromZ(KernelPointCursor point) {
+        if (point.isUseZ()) {
+            return qualifyFromZDirection(point, -1) || qualifyFromZDirection(point, +1);
+        } else {
+            return false;
+        }
+    }
+    
+    /** If big-neighbour is enabled, do any voxels from the big neighbourhood (not already covered) qualify the voxel? */
+    private boolean maybeQualifyFromBigNeighbourhood(KernelPointCursor point, UnsignedByteBuffer buffer) {
+        return bigNeighborhood && qualifyFromBigNeighbourhood(point, buffer);
+    }
+    
+    /** Do any voxels from the big neighbourhood (not already covered) qualify the voxel? */
+    private boolean qualifyFromBigNeighbourhood(KernelPointCursor point, UnsignedByteBuffer buffer) {
+        
+        // x-1, y-1
+        point.decrementX();
+        point.decrementY();
+
+        if (doesNeighborQualify(point.nonNegativeX() && point.nonNegativeY(), point, () -> buffer, 0)) {
+            point.incrementX();
+            point.incrementY();
+            return true;
+        }
+        
+        // x-1, y+1
+        point.incrementYTwice();
+        
+        if (doesNeighborQualify(point.nonNegativeX() && point.lessThanMaxY(), point, () -> buffer, 0)) {
+            point.incrementX();
+            point.decrementY();
+            return true;
+        }
+        
+        // x+1, y+1
+        point.incrementXTwice();
+
+        if (doesNeighborQualify(point.lessThanMaxX() && point.lessThanMaxY(), point, () -> buffer, 0)) {
+            point.decrementX();
+            point.decrementY();
+            return true;
+        }
+
+        // x+1, y-1
+        
+        point.decrementYTwice();
+        
+        try {
+            if (doesNeighborQualify(point.lessThanMaxX() && point.nonNegativeY(), point, () -> buffer, 0)) {
+                return true;
+            }
+        } finally {
+            point.decrementX();
+            point.incrementY();            
+        }
+        
+        return false;
+    }
+
+    /** Does a neighbor voxel in <b>a specific Z direction</b> qualify the voxel? */
+    private boolean qualifyFromZDirection(KernelPointCursor point, int zShift) {
+        Optional<UnsignedByteBuffer> buffer = getVoxels().getLocal(zShift);
+        return doesNeighborQualify(buffer.isPresent(), point, buffer::get, zShift);
     }
 }

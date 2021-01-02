@@ -51,6 +51,9 @@ public final class KernelPointCursor {
 
     private final int xExtent;
     private final int yExtent;
+    
+    /** Two times {@link #xExtent}, used to save computation as this occurs frequently in an operation. */
+    private final int xExtentTwice;
 
     public KernelPointCursor(
             int index,
@@ -62,6 +65,7 @@ public final class KernelPointCursor {
         this.point = point;
         this.xExtent = extent.x();
         this.yExtent = extent.y();
+        this.xExtentTwice = xExtent * 2;
         this.binaryValues = binaryValues;
         this.params = params;
     }
@@ -88,12 +92,17 @@ public final class KernelPointCursor {
 
     public void incrementYTwice() {
         point.incrementY(2);
-        index += (2 * xExtent);
+        index += xExtentTwice;
     }
 
     public void decrementY() {
         point.decrementY();
         index -= xExtent;
+    }
+    
+    public void decrementYTwice() {
+        point.decrementY(2);
+        index -= xExtentTwice;
     }
 
     public boolean isUseZ() {
@@ -116,15 +125,19 @@ public final class KernelPointCursor {
         return point.y() < yExtent;
     }
 
+    public boolean isBufferOn(UnsignedByteBuffer buffer) {
+        return binaryValues.isOn(buffer.getRaw(index));
+    }
+    
     public boolean isBufferOff(UnsignedByteBuffer buffer) {
         return binaryValues.isOff(buffer.getRaw(index));
     }
 
-    public boolean isOutsideHigh() {
-        return params.isOutsideHigh();
+    public boolean isOutsideOn() {
+        return params.isOutsideOn();
     }
 
-    public boolean isOutsideLowUnignored() {
-        return params.isOutsideLowUnignored();
+    public boolean isOutsideOffUnignored() {
+        return params.isOutsideOffUnignored();
     }
 }

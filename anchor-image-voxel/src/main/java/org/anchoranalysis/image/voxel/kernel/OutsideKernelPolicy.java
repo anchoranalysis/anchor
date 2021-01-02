@@ -63,7 +63,7 @@ public enum OutsideKernelPolicy {
      * If {@link #ignoreOutside} is false, then whether to treat voxels that lie outside the scene
      * as <i>on</i> (if true) or <i>off</i> (if false).
      */
-    private final boolean outsideHigh;
+    private final boolean outsideOn;
 
     /**
      * Multiplexes between {@link #AS_ON} and {@link #AS_OFF}.
@@ -103,8 +103,8 @@ public enum OutsideKernelPolicy {
      * If {@link #ignoreOutside} is false, then whether to treat voxels that lie outside the scene
      * as <i>on</i> (if true) or <i>off</i> (if false).
      */
-    public boolean isOutsideHigh() {
-        return outsideHigh;
+    public boolean isOutsideOn() {
+        return outsideOn;
     }
 
     /**

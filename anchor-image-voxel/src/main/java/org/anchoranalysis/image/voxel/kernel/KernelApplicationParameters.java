@@ -50,11 +50,11 @@ public class KernelApplicationParameters {
         return outsideKernelPolicy.isIgnoreOutside();
     }
 
-    public boolean isOutsideHigh() {
-        return outsideKernelPolicy.isOutsideHigh();
+    public boolean isOutsideOn() {
+        return outsideKernelPolicy.isOutsideOn();
     }
 
-    public boolean isOutsideLowUnignored() {
-        return !isIgnoreOutside() && !isOutsideHigh();
+    public boolean isOutsideOffUnignored() {
+        return !isIgnoreOutside() && !isOutsideOn();
     }
 }
