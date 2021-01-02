@@ -51,6 +51,10 @@ final class DilationKernelZOnly extends BinaryKernelMorphological {
         if (binaryValues.isOn(buffer.getRaw(index))) {
             return true;
         }
+        
+        if (!params.isUseZ()) {
+            return false;
+        }
 
         if (bufferZLess1.isPresent()) {
             if (binaryValues.isOn(bufferZLess1.get().getRaw(index))) {

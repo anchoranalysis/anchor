@@ -1,4 +1,4 @@
-package org.anchoranalysis.image.voxel.kernel.outline;
+package org.anchoranalysis.image.voxel.kernel;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.function.BiFunction;
@@ -6,10 +6,7 @@ import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValues;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
-import org.anchoranalysis.image.voxel.kernel.ApplyKernel;
-import org.anchoranalysis.image.voxel.kernel.BinaryKernel;
-import org.anchoranalysis.image.voxel.kernel.KernelApplicationParameters;
-import org.anchoranalysis.image.voxel.kernel.OutsideKernelPolicy;
+import org.anchoranalysis.image.voxel.kernel.outline.CalculateExpectedValue;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.image.voxel.object.ObjectMaskFixture;
 import org.anchoranalysis.spatial.Extent;
@@ -83,11 +80,11 @@ import lombok.AllArgsConstructor;
      */
     private void testAndCountOn(boolean scene3D, boolean atOrigin, KernelApplicationParameters params, CalculateExpectedValue calculateValue, String assertMessage) {
         
-        ObjectMaskFixture fixture = new ObjectMaskFixture(false, ObjectOnBinaryHelper.maybeFlattenExtent(EXTENT_OBJECT, scene3D));
+        ObjectMaskFixture fixture = new ObjectMaskFixture(false, FlattenHelper.maybeFlattenExtent(EXTENT_OBJECT, scene3D));
 
         ObjectMask object = fixture.filledMask(corner(scene3D,atOrigin));
         
-        Extent extentScene = ObjectOnBinaryHelper.maybeFlattenExtent(EXTENT_SCENE, scene3D);
+        Extent extentScene = FlattenHelper.maybeFlattenExtent(EXTENT_SCENE, scene3D);
         
         BinaryVoxels<UnsignedByteBuffer> voxelsObject = ObjectOnBinaryHelper.createVoxelsWithObject(object, extentScene, true);
         
@@ -103,7 +100,7 @@ import lombok.AllArgsConstructor;
         if (atOrigin) {
             return CORNER_ORIGIN;
         } else {
-            return ObjectOnBinaryHelper.maybeFlattenPoint(CORNER_NOT_AT_BORDER, scene3D);
+            return FlattenHelper.maybeFlattenPoint(CORNER_NOT_AT_BORDER, scene3D);
         }
     }
     

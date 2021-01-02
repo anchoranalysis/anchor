@@ -1,4 +1,4 @@
-package org.anchoranalysis.image.voxel.kernel.outline;
+package org.anchoranalysis.image.voxel.kernel;
 
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
@@ -6,11 +6,10 @@ import org.anchoranalysis.image.voxel.binary.BinaryVoxelsFactory;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.spatial.Extent;
-import org.anchoranalysis.spatial.point.Point3i;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
-class ObjectOnBinaryHelper {
+public class ObjectOnBinaryHelper {
     
     /**
      * Creates {@link Voxels} showing an object on top of an otherwise empty background.
@@ -30,13 +29,5 @@ class ObjectOnBinaryHelper {
             voxels.assignOff().toObject(object);
             return voxels;
         }
-    }
-    
-    public static Extent maybeFlattenExtent(Extent extent, boolean do3D) {
-        return do3D ? extent : extent.flattenZ();
-    }
-    
-    public static Point3i maybeFlattenPoint(Point3i point, boolean do3D) {
-        return do3D ? point : new Point3i(point.x(), point.y(), 0);
     }
 }
