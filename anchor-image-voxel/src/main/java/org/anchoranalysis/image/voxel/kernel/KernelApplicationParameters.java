@@ -51,4 +51,8 @@ public class KernelApplicationParameters {
     public boolean isOutsideHigh() {
         return outsideKernelPolicy.isOutsideHigh();
     }
+    
+    public boolean isOutsideLowUnignored() {
+        return !isIgnoreOutside() && !isOutsideHigh();
+    }
 }
