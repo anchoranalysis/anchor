@@ -27,20 +27,18 @@ package org.anchoranalysis.image.voxel.kernel.morphological;
 
 import java.util.Optional;
 import lombok.AllArgsConstructor;
-import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.kernel.BinaryKernel;
 import org.anchoranalysis.image.voxel.kernel.ConditionalKernel;
 import org.anchoranalysis.image.voxel.kernel.KernelApplicationParameters;
 import org.anchoranalysis.image.voxel.kernel.OutsideKernelPolicy;
-import org.anchoranalysis.image.voxel.object.morphological.SelectDimensions;
 
 @AllArgsConstructor
 public class DilationKernelFactory {
 
-    /** selects which dimensions dilation is applied on. */
-    private final SelectDimensions dimensions;
+    /** Whether to include the Z-dimension or not? */
+    private final boolean useZ;
 
     /** If true, pixels outside the buffer are treated as ON, otherwise as OFF. */
     private final boolean outsideAtThreshold;
@@ -48,10 +46,9 @@ public class DilationKernelFactory {
     private final boolean bigNeighborhood;
 
     public BinaryKernel createDilationKernel(
-            Optional<Voxels<UnsignedByteBuffer>> background, int minIntensityValue)
-            throws CreateException {
+            Optional<Voxels<UnsignedByteBuffer>> background, int minIntensityValue) {
 
-        BinaryKernel kernelDilation = createDilationKernel();
+        BinaryKernel kernelDilation = new DilationKernel(bigNeighborhood);
 
         if (minIntensityValue > 0 && background.isPresent()) {
             return new ConditionalKernel(kernelDilation, minIntensityValue, background.get());
@@ -61,22 +58,6 @@ public class DilationKernelFactory {
     }
 
     public KernelApplicationParameters createParameters() {
-        return new KernelApplicationParameters(OutsideKernelPolicy.as(outsideAtThreshold), useZ());
-    }
-
-    private BinaryKernel createDilationKernel() throws CreateException {
-        if (dimensions == SelectDimensions.Z_ONLY) {
-            if (bigNeighborhood) {
-                throw new CreateException("Big-neighborhood not supported for zOnly");
-            }
-            return new DilationKernelZOnly();
-        } else {
-            return new DilationKernel(bigNeighborhood);
-        }
-    }
-
-    private boolean useZ() {
-        return dimensions == SelectDimensions.ALL_DIMENSIONS
-                || dimensions == SelectDimensions.Z_ONLY;
+        return new KernelApplicationParameters(OutsideKernelPolicy.as(outsideAtThreshold), useZ);
     }
 }

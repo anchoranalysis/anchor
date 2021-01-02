@@ -31,7 +31,7 @@ import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.kernel.KernelPointCursor;
 
 // Erosion with a 3x3 or 3x3x3 kernel
-final class DilationKernel extends BinaryKernelMorphologicalExtent {
+final class DilationKernel extends BinaryKernelMorphological {
 
     public DilationKernel(boolean bigNeighborhood) {
         super(bigNeighborhood, false, true);

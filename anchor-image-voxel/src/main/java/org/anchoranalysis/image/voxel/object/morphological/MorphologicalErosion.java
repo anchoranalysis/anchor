@@ -56,7 +56,7 @@ public class MorphologicalErosion {
         ObjectMask objectOut;
 
         // TODO
-        // We can make this more efficient, then remaking an object-mask needlessly
+        // We can make this more efficient, than remaking an object-mask needlessly
         //  by having a smarter "isOutside" check in the Erosion routine
         if (!outsideAtThreshold) {
             // If we want to treat the outside of the image as if it's at a threshold, then
@@ -116,7 +116,7 @@ public class MorphologicalErosion {
                         minIntensityValue,
                         acceptConditionsDilation,
                         new DilationKernelFactory(
-                                SelectDimensionsFactory.of(do3D), outsideAtThreshold, false));
+                                do3D, outsideAtThreshold, false));
         dilated.invert();
         return dilated;
     }

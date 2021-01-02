@@ -95,7 +95,7 @@ public class MorphologicalDilation {
                 minIntensityValue,
                 Optional.empty(),
                 new DilationKernelFactory(
-                        SelectDimensionsFactory.of(do3D), false, bigNeighborhood));
+                        do3D, false, bigNeighborhood));
     }
 
     /**

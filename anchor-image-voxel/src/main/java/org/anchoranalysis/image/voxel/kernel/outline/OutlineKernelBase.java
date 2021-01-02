@@ -28,11 +28,18 @@ package org.anchoranalysis.image.voxel.kernel.outline;
 
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.kernel.KernelPointCursor;
-import org.anchoranalysis.image.voxel.kernel.morphological.BinaryKernelMorphologicalExtent;
+import org.anchoranalysis.image.voxel.kernel.morphological.BinaryKernelMorphological;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 
-public abstract class OutlineKernelBase extends BinaryKernelMorphologicalExtent {
+/**
+ * A base class for kernels that find the outline of an {@link ObjectMask}.
+ * 
+ * @author Owen Feehan
+ *
+ */
+public abstract class OutlineKernelBase extends BinaryKernelMorphological {
 
-    public OutlineKernelBase() {
+    protected OutlineKernelBase() {
         super(false, false, false);
     }
     
