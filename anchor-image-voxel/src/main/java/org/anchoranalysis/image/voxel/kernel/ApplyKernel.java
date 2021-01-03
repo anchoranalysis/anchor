@@ -46,14 +46,12 @@ import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.point.ReadableTuple3i;
 
 /**
- * Applies a kernel to a Voxel Box
+ * Applies various kinds of {@link Kernel} to {@link BinaryVoxels}.
  *
  * @author Owen Feehan
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ApplyKernel {
-
-    private static final int LOCAL_SLICES_SIZE = 3;
 
     private static final VoxelsFactoryTypeBound<UnsignedByteBuffer> FACTORY =
             VoxelsFactory.getUnsignedByte();
@@ -73,26 +71,20 @@ public class ApplyKernel {
             KernelApplicationParameters params) {
 
         Voxels<UnsignedByteBuffer> out = FACTORY.createInitialized(in.extent());
-        kernel.init(in.voxels(), params);
-
-        KernelPointCursor cursor = new KernelPointCursor(0, new Point3i(), in.extent(), in.binaryValues().createByte(), params);
         
-        IterateVoxelsAll.withCursor(cursor, new ProcessKernelPointCursor() {
+        iterateOverPointWithKernel(kernel, in, params, new ProcessKernelPointCursor() {
             
-            private LocalSlices localSlices;
             private UnsignedByteBuffer outBuffer;
             
             @Override
             public void notifyChangeSlice(int z) {
-                localSlices = new LocalSlices(cursor.getPoint().z(), LOCAL_SLICES_SIZE, in.voxels());
                 outBuffer = out.sliceBuffer(z);
-                kernel.notifyZChange(localSlices, cursor.getPoint().z());
             }
             
             @Override
             public void process(KernelPointCursor point) {
                 byte outValue =
-                        kernel.acceptPoint(cursor)
+                        kernel.acceptPoint(point)
                                 ? outBinary.getOnByte()
                                 : outBinary.getOffByte();
                 outBuffer.putRaw(point.getIndex(), outValue);                
@@ -196,8 +188,6 @@ public class ApplyKernel {
                             box, voxels.extent()));
         }
 
-        int localSlicesSize = 3;
-
         Extent extent = voxels.extent();
 
         kernel.init(voxels, params);
@@ -207,7 +197,7 @@ public class ApplyKernel {
         Point3i point = new Point3i();
         for (point.setZ(box.cornerMin().z()); point.z() <= pointMax.z(); point.incrementZ()) {
 
-            LocalSlices localSlices = new LocalSlices(point.z(), localSlicesSize, voxels);
+            LocalSlices localSlices = new LocalSlices(point.z(), 3, voxels);
             kernel.notifyZChange(localSlices, point.z());
 
             for (point.setY(box.cornerMin().y()); point.y() <= pointMax.y(); point.incrementY()) {
@@ -228,35 +218,39 @@ public class ApplyKernel {
 
     public static int applyForCount(
             BinaryKernel kernel,
-            BinaryVoxels<UnsignedByteBuffer> in,
+            BinaryVoxels<UnsignedByteBuffer> voxels,
             KernelApplicationParameters params) {
 
-        int localSlicesSize = 3;
-
         Counter counter = new Counter();
+        
+        iterateOverPointWithKernel(kernel, voxels, params, point -> {
+            if (kernel.acceptPoint(point)) {
+                counter.increment();
+            }            
+        });
 
-        kernel.init(in.voxels(), params);
+        return counter.getCount();
+    }
+    
+    private static void iterateOverPointWithKernel(BinaryKernel kernel,
+            BinaryVoxels<UnsignedByteBuffer> voxels,
+            KernelApplicationParameters params, ProcessKernelPointCursor processor) {
+        kernel.init(voxels.voxels(), params);
 
-        KernelPointCursor cursor = new KernelPointCursor(0, new Point3i(), in.extent(), in.binaryValues().createByte(), params);
-
-        IterateVoxelsAll.withCursor(cursor, new ProcessKernelPointCursor() {
-            
-            private LocalSlices localSlices;
+        int slicesNeeded = params.isUseZ() ? kernel.getSize() : 1;
+        
+        IterateVoxelsAll.withCursor(voxels, params, new ProcessKernelPointCursor() {
             
             @Override
             public void notifyChangeSlice(int z) {
-                localSlices = new LocalSlices(cursor.getPoint().z(), localSlicesSize, in.voxels());
-                kernel.notifyZChange(localSlices, cursor.getPoint().z());
+                kernel.notifyZChange(new LocalSlices(z, slicesNeeded, voxels.voxels()), z);
+                processor.notifyChangeSlice(z);
             }
             
             @Override
             public void process(KernelPointCursor point) {
-                if (kernel.acceptPoint(cursor)) {
-                    counter.increment();
-                }
+                processor.process(point);
             }
         });
-
-        return counter.getCount();
     }
 }

@@ -32,6 +32,5 @@ public abstract class BinaryKernel extends Kernel {
         super(size);
     }
 
-    public abstract boolean acceptPoint(
-            KernelPointCursor point);
+    public abstract boolean acceptPoint(KernelPointCursor point);
 }
