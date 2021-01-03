@@ -29,14 +29,12 @@ package org.anchoranalysis.image.voxel.kernel.morphological;
 import java.util.Optional;
 import java.util.function.Supplier;
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.kernel.BinaryKernel;
 import org.anchoranalysis.image.voxel.kernel.KernelApplicationParameters;
 import org.anchoranalysis.image.voxel.kernel.KernelPointCursor;
 import org.anchoranalysis.image.voxel.kernel.LocalSlices;
 import org.anchoranalysis.spatial.Extent;
-import org.anchoranalysis.spatial.point.Point3i;
 
 /**
  * A parent class for any {@link BinaryKernel} that implements a morphological operation.
@@ -92,14 +90,21 @@ public abstract class BinaryKernelMorphological extends BinaryKernel {
     public void notifyZChange(LocalSlices inSlices, int z) {
         this.inSlices = inSlices;
     }
-
+    
     @Override
-    public boolean acceptPoint(
-            int index,
-            Point3i point,
-            BinaryValuesByte binaryValues,
-            KernelApplicationParameters params) {
-        return acceptPoint(new KernelPointCursor(index, point, extent, binaryValues, params));
+    public boolean acceptPoint(KernelPointCursor point) {
+
+        UnsignedByteBuffer buffer = getVoxels().getLocal(0).get(); // NOSONAR
+
+        if (!firstCheck(point,buffer)) {
+            return failedFirstCheckOutcome;
+        }
+
+        if (qualifyFromX(point, buffer) || qualifyFromY(point, buffer) || maybeQualifyFromZ(point) || maybeQualifyFromBigNeighbourhood(point, buffer) ) {
+            return qualifiedOutcome;
+        } else {
+            return unqualifiedOutcome;
+        }
     }
 
     /** 
@@ -120,21 +125,6 @@ public abstract class BinaryKernelMorphological extends BinaryKernel {
         return inSlices;
     }
     
-    private boolean acceptPoint(KernelPointCursor point) {
-
-        UnsignedByteBuffer buffer = getVoxels().getLocal(0).get(); // NOSONAR
-
-        if (!firstCheck(point,buffer)) {
-            return failedFirstCheckOutcome;
-        }
-
-        if (qualifyFromX(point, buffer) || qualifyFromY(point, buffer) || maybeQualifyFromZ(point) || maybeQualifyFromBigNeighbourhood(point, buffer) ) {
-            return qualifiedOutcome;
-        } else {
-            return unqualifiedOutcome;
-        }
-    }
-
     /** Do any neighbor voxels in X direction qualify the voxel? */
     private boolean qualifyFromX(KernelPointCursor point, UnsignedByteBuffer buffer) {
         // We walk up and down in x

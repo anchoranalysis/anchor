@@ -37,9 +37,9 @@ import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactoryTypeBound;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxelsAll;
-import org.anchoranalysis.image.voxel.iterator.process.ProcessPointAndIndex;
+import org.anchoranalysis.image.voxel.iterator.process.ProcessKernelPointCursor;
 import org.anchoranalysis.image.voxel.kernel.count.CountKernel;
-import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.math.arithmetic.Counter;
 import org.anchoranalysis.spatial.Extent;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.Point3i;
@@ -75,33 +75,29 @@ public class ApplyKernel {
         Voxels<UnsignedByteBuffer> out = FACTORY.createInitialized(in.extent());
         kernel.init(in.voxels(), params);
 
-        Extent extent = in.extent();
-        BinaryValuesByte binaryValues = in.binaryValues().createByte();
-
-        ProcessPointAndIndex process =
-                new ProcessPointAndIndex() {
-
-                    UnsignedByteBuffer outBuffer;
-
-                    @Override
-                    public void notifyChangeSlice(int z) {
-                        LocalSlices localSlices =
-                                new LocalSlices(z, LOCAL_SLICES_SIZE, in.voxels());
-                        outBuffer = out.sliceBuffer(z);
-                        kernel.notifyZChange(localSlices, z);
-                    }
-
-                    @Override
-                    public void process(Point3i point, int index) {
-                        byte outValue =
-                                kernel.acceptPoint(index, point, binaryValues, params)
-                                        ? outBinary.getOnByte()
-                                        : outBinary.getOffByte();
-                        outBuffer.putRaw(index, outValue);
-                    }
-                };
-
-        IterateVoxelsAll.withPointAndIndex(extent, process);
+        KernelPointCursor cursor = new KernelPointCursor(0, new Point3i(), in.extent(), in.binaryValues().createByte(), params);
+        
+        IterateVoxelsAll.withCursor(cursor, new ProcessKernelPointCursor() {
+            
+            private LocalSlices localSlices;
+            private UnsignedByteBuffer outBuffer;
+            
+            @Override
+            public void notifyChangeSlice(int z) {
+                localSlices = new LocalSlices(cursor.getPoint().z(), LOCAL_SLICES_SIZE, in.voxels());
+                outBuffer = out.sliceBuffer(z);
+                kernel.notifyZChange(localSlices, cursor.getPoint().z());
+            }
+            
+            @Override
+            public void process(KernelPointCursor point) {
+                byte outValue =
+                        kernel.acceptPoint(cursor)
+                                ? outBinary.getOnByte()
+                                : outBinary.getOffByte();
+                outBuffer.putRaw(point.getIndex(), outValue);                
+            }
+        });
 
         return BinaryVoxelsFactory.reuseByte(out, outBinary.createInt());
     }
@@ -148,7 +144,7 @@ public class ApplyKernel {
 
         int localSlicesSize = 3;
 
-        int cnt = 0;
+        int count = 0;
 
         Extent extent = voxels.extent();
 
@@ -168,12 +164,12 @@ public class ApplyKernel {
                         point.incrementX()) {
 
                     int ind = extent.offsetSlice(point);
-                    cnt += kernel.countAtPosition(ind, point);
+                    count += kernel.countAtPosition(ind, point);
                 }
             }
         }
 
-        return cnt;
+        return count;
     }
 
     /**
@@ -237,81 +233,30 @@ public class ApplyKernel {
 
         int localSlicesSize = 3;
 
-        int count = 0;
+        Counter counter = new Counter();
 
-        Extent extent = in.extent();
-
-        BinaryValuesByte binaryValues = in.binaryValues().createByte();
         kernel.init(in.voxels(), params);
 
-        Point3i point = new Point3i();
-        for (point.setZ(0); point.z() < extent.z(); point.incrementZ()) {
+        KernelPointCursor cursor = new KernelPointCursor(0, new Point3i(), in.extent(), in.binaryValues().createByte(), params);
 
-            LocalSlices localSlices = new LocalSlices(point.z(), localSlicesSize, in.voxels());
-            kernel.notifyZChange(localSlices, point.z());
-
-            int ind = 0;
-
-            for (point.setY(0); point.y() < extent.y(); point.incrementY()) {
-                for (point.setX(0); point.x() < extent.x(); point.incrementX()) {
-
-                    if (kernel.acceptPoint(ind, point, binaryValues, params)) {
-                        count++;
-                    }
-
-                    ind++;
+        IterateVoxelsAll.withCursor(cursor, new ProcessKernelPointCursor() {
+            
+            private LocalSlices localSlices;
+            
+            @Override
+            public void notifyChangeSlice(int z) {
+                localSlices = new LocalSlices(cursor.getPoint().z(), localSlicesSize, in.voxels());
+                kernel.notifyZChange(localSlices, cursor.getPoint().z());
+            }
+            
+            @Override
+            public void process(KernelPointCursor point) {
+                if (kernel.acceptPoint(cursor)) {
+                    counter.increment();
                 }
             }
-        }
+        });
 
-        return count;
-    }
-
-    public static int applyForCountOnMask(
-            BinaryKernel kernel,
-            Voxels<UnsignedByteBuffer> in,
-            ObjectMask object,
-            KernelApplicationParameters params) {
-
-        int localSlicesSize = 3;
-
-        int count = 0;
-
-        BoundingBox box = object.boundingBox();
-        ReadableTuple3i cornerMin = box.cornerMin();
-        ReadableTuple3i cornerMax = box.calculateCornerMax();
-
-        Extent extent = in.extent();
-
-        kernel.init(in, params);
-
-        BinaryValuesByte binaryValues = object.binaryValues().createByte();
-
-        Point3i point = new Point3i();
-        for (point.setZ(cornerMin.z()); point.z() <= cornerMax.z(); point.incrementZ()) {
-
-            LocalSlices localSlices = new LocalSlices(point.z(), localSlicesSize, in);
-            kernel.notifyZChange(localSlices, point.z());
-
-            int ind = 0;
-
-            UnsignedByteBuffer bufMask = object.sliceBufferGlobal(point.z());
-
-            for (point.setY(cornerMin.y()); point.y() <= cornerMax.y(); point.incrementY()) {
-                for (point.setX(cornerMin.x()); point.x() <= cornerMax.x(); point.incrementX()) {
-
-                    int indKernel = extent.offsetSlice(point);
-
-                    if (bufMask.getRaw(ind) == binaryValues.getOnByte()
-                            && kernel.acceptPoint(indKernel, point, binaryValues, params)) {
-                        count++;
-                    }
-
-                    ind++;
-                }
-            }
-        }
-
-        return count;
+        return counter.getCount();
     }
 }

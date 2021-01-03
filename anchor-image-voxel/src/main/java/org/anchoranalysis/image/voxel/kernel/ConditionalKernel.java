@@ -27,7 +27,6 @@
 package org.anchoranalysis.image.voxel.kernel;
 
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.spatial.point.Point3i;
 
@@ -49,21 +48,15 @@ public class ConditionalKernel extends BinaryKernel {
 
     @Override
     public boolean acceptPoint(
-            int index,
-            Point3i point,
-            BinaryValuesByte binaryValues,
-            KernelApplicationParameters params) {
+            KernelPointCursor point) {
 
-        int value =
-                voxelsIntensity
-                        .sliceBuffer(point.z())
-                        .getUnsigned(voxelsIntensity.extent().offsetSlice(point));
+        int value = intensityAtPoint(point.getPoint());
 
         if (value < minValue) {
             return false;
         }
 
-        return kernel.acceptPoint(index, point, binaryValues, params);
+        return kernel.acceptPoint(point);
     }
 
     @Override
@@ -74,5 +67,11 @@ public class ConditionalKernel extends BinaryKernel {
     @Override
     public void notifyZChange(LocalSlices inSlices, int z) {
         kernel.notifyZChange(inSlices, z);
+    }
+    
+    private int intensityAtPoint(Point3i point) {
+        return voxelsIntensity
+        .sliceBuffer(point.z())
+        .getUnsigned(voxelsIntensity.extent().offsetSlice(point));        
     }
 }

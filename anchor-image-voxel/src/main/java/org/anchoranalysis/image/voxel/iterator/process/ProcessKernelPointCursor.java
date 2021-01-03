@@ -26,15 +26,16 @@
 
 package org.anchoranalysis.image.voxel.iterator.process;
 
+import org.anchoranalysis.image.voxel.kernel.KernelPointCursor;
 import org.anchoranalysis.spatial.point.Point3i;
 
 /**
- * Processes a {@link Point3i} also including an index.
+ * Processes a {@link KernelPointCursor} which includes a {@link Point3i}.
  *
  * @author Owen Feehan
  */
 @FunctionalInterface
-public interface ProcessPointAndIndex {
+public interface ProcessKernelPointCursor {
 
     /** Notifies the processor that there has been a change in y-coordinate */
     default void notifyChangeY(int y) {}
@@ -42,5 +43,5 @@ public interface ProcessPointAndIndex {
     /** Notifies the processor that there has been a change in z-coordinate */
     default void notifyChangeSlice(int z) {}
 
-    void process(Point3i point, int index);
+    void process(KernelPointCursor point);
 }

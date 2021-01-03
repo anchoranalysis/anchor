@@ -26,6 +26,7 @@
 package org.anchoranalysis.image.voxel.kernel;
 
 import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.spatial.Extent;
@@ -41,7 +42,7 @@ import org.anchoranalysis.spatial.point.Point3i;
  */
 public final class KernelPointCursor {
 
-    private int index;
+    @Getter @Setter private int index;
 
     /** The point around which the cursor may iterate. */
     @Getter private Point3i point;
@@ -49,6 +50,7 @@ public final class KernelPointCursor {
     private final BinaryValuesByte binaryValues;
     private final KernelApplicationParameters params;
 
+    @Getter private final Extent extent;
     private final int xExtent;
     private final int yExtent;
     
@@ -63,6 +65,7 @@ public final class KernelPointCursor {
             KernelApplicationParameters params) {
         this.index = index;
         this.point = point;
+        this.extent = extent;
         this.xExtent = extent.x();
         this.yExtent = extent.y();
         this.xExtentTwice = xExtent * 2;
@@ -139,5 +142,9 @@ public final class KernelPointCursor {
 
     public boolean isOutsideOffUnignored() {
         return params.isOutsideOffUnignored();
+    }
+    
+    public void incrementIndex() {
+        index++;
     }
 }
