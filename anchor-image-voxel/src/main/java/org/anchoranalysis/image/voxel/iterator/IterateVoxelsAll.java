@@ -84,7 +84,7 @@ public class IterateVoxelsAll {
     public static void withPointAndIndex(Extent extent, ProcessPointAndIndex process) {
         IterateVoxelsBoundingBox.withPointAndIndex(new BoundingBox(extent), process);
     }
-    
+
     /**
      * Iterate over each voxel using a {@link KernelPointCursor}.
      *
@@ -93,10 +93,19 @@ public class IterateVoxelsAll {
      * @param process process is called for each voxel inside the extent using the same coordinates
      *     as the extent.
      */
-    public static void withCursor(BinaryVoxels<UnsignedByteBuffer> voxels, KernelApplicationParameters params, ProcessKernelPointCursor process) {
-        
-        KernelPointCursor cursor = new KernelPointCursor(0, new Point3i(), voxels.extent(), voxels.binaryValues().createByte(), params);
-        
+    public static void withCursor(
+            BinaryVoxels<UnsignedByteBuffer> voxels,
+            KernelApplicationParameters params,
+            ProcessKernelPointCursor process) {
+
+        KernelPointCursor cursor =
+                new KernelPointCursor(
+                        0,
+                        new Point3i(),
+                        voxels.extent(),
+                        voxels.binaryValues().createByte(),
+                        params);
+
         Extent extent = voxels.extent();
         Point3i point = cursor.getPoint();
         for (point.setZ(0); point.z() < extent.z(); point.incrementZ()) {

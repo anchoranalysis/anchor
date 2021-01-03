@@ -47,8 +47,7 @@ public class ConditionalKernel extends BinaryKernel {
     }
 
     @Override
-    public boolean acceptPoint(
-            KernelPointCursor point) {
+    public boolean acceptPoint(KernelPointCursor point) {
 
         int value = intensityAtPoint(point.getPoint());
 
@@ -68,10 +67,10 @@ public class ConditionalKernel extends BinaryKernel {
     public void notifyZChange(LocalSlices inSlices, int z) {
         kernel.notifyZChange(inSlices, z);
     }
-    
+
     private int intensityAtPoint(Point3i point) {
         return voxelsIntensity
-        .sliceBuffer(point.z())
-        .getUnsigned(voxelsIntensity.extent().offsetSlice(point));        
+                .sliceBuffer(point.z())
+                .getUnsigned(voxelsIntensity.extent().offsetSlice(point));
     }
 }

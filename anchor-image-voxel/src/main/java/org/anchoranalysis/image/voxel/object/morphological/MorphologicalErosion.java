@@ -115,8 +115,7 @@ public class MorphologicalErosion {
                         backgroundVb,
                         minIntensityValue,
                         acceptConditionsDilation,
-                        new DilationKernelFactory(
-                                do3D, outsideAtThreshold, false));
+                        new DilationKernelFactory(do3D, outsideAtThreshold, false));
         dilated.invert();
         return dilated;
     }

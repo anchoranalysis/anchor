@@ -37,14 +37,14 @@ import org.anchoranalysis.spatial.point.Point3i;
 
 /**
  * The number of touching-faces of a voxel with a neighbor, so long as the neighbor is part of an
- * object-mask
+ * {@link ObjectMask}.
  *
  * <p>i.e. the sum of all faces of a voxel that touch the face of a voxel belonging to a neighboring
  * pixel
  *
  * @author Owen Feehan
  */
-public class CountKernelNeighborhoodMask extends CountKernelNeighborhoodBase {
+public class CountKernelNeighborhoodMask extends CountKernel {
 
     private BinaryVoxels<UnsignedByteBuffer> voxelsRequireHigh;
     private BinaryValuesByte bvRequireHigh;
@@ -52,12 +52,7 @@ public class CountKernelNeighborhoodMask extends CountKernelNeighborhoodBase {
 
     private LocalSlices localSlicesRequireHigh;
 
-    public CountKernelNeighborhoodMask(
-            boolean useZ,
-            BinaryValuesByte binaryValues,
-            ObjectMask objectRequireHigh,
-            boolean multipleMatchesPerVoxel) {
-        super(useZ, binaryValues, multipleMatchesPerVoxel);
+    public CountKernelNeighborhoodMask(ObjectMask objectRequireHigh) {
         this.objectRequireHigh = objectRequireHigh;
         this.voxelsRequireHigh = objectRequireHigh.binaryVoxels();
         this.bvRequireHigh = voxelsRequireHigh.binaryValues().createByte();

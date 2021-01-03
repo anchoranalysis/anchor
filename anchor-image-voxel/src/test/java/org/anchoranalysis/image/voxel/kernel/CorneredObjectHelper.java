@@ -26,36 +26,32 @@
 package org.anchoranalysis.image.voxel.kernel;
 
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
-import org.anchoranalysis.image.voxel.binary.BinaryVoxelsFactory;
-import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.image.voxel.object.ObjectMaskFixture;
+import org.anchoranalysis.spatial.point.Point3i;
 
 @NoArgsConstructor
-public class ObjectOnBinaryHelper {
+class CorneredObjectHelper {
 
     /**
-     * Creates {@link Voxels} showing an object on top of an otherwise empty background.
-     *
-     * @param object the object to show
-     * @param extent the size of the {@link Voxels} to create.
-     * @param objectOn if true, the objects use <i>on</i> and the background <i>off</i>. if false,
-     *     the opposite combination.
-     * @return a newly created {@link BinaryVoxels} using default values for <i>off</i> and
-     *     </i>on</i>.
+     * A corner for the object that doesn't touch a boundary, assuming it exists in a
+     * sufficiently-large scene.
      */
-    public static BinaryVoxels<UnsignedByteBuffer> createVoxelsWithObject(
-            ObjectMask object, Extent extent, boolean objectOn) {
-        if (objectOn) {
-            BinaryVoxels<UnsignedByteBuffer> voxels = BinaryVoxelsFactory.createEmptyOff(extent);
-            voxels.assignOn().toObject(object);
-            return voxels;
+    private static final Point3i CORNER_NOT_AT_BORDER = new Point3i(2, 3, 2);
+
+    /** A corner for the object that sits at the origin. */
+    private static final Point3i CORNER_ORIGIN = new Point3i(0, 0, 0);
+
+    public static ObjectMask createObjectFromFixture(
+            ObjectMaskFixture fixture, boolean scene3D, boolean atOrigin) {
+        return fixture.filledMask(corner(scene3D, atOrigin));
+    }
+
+    private static Point3i corner(boolean scene3D, boolean atOrigin) {
+        if (atOrigin) {
+            return CORNER_ORIGIN;
         } else {
-            BinaryVoxels<UnsignedByteBuffer> voxels = BinaryVoxelsFactory.createEmptyOn(extent);
-            voxels.assignOff().toObject(object);
-            return voxels;
+            return FlattenHelper.maybeFlattenPoint(CORNER_NOT_AT_BORDER, scene3D);
         }
     }
 }

@@ -94,8 +94,7 @@ public class MorphologicalDilation {
                 backgroundVb,
                 minIntensityValue,
                 Optional.empty(),
-                new DilationKernelFactory(
-                        do3D, false, bigNeighborhood));
+                new DilationKernelFactory(do3D, false, bigNeighborhood));
     }
 
     /**

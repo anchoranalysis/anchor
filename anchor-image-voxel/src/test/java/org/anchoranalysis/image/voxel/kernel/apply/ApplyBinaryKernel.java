@@ -2,7 +2,7 @@
  * #%L
  * anchor-image-voxel
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
+ * Copyright (C) 2010 - 2021 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- *
+ * 
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- *
+ * 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -23,26 +23,28 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.image.voxel.kernel.outline;
+package org.anchoranalysis.image.voxel.kernel.apply;
 
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
+import org.anchoranalysis.image.voxel.kernel.ApplyKernel;
 import org.anchoranalysis.image.voxel.kernel.BinaryKernel;
-import org.anchoranalysis.image.voxel.kernel.ObjectOnVoxelsHelper;
-import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.image.voxel.kernel.KernelApplicationParameters;
 
 /**
- * Tests {@link OutlineKernelNeighborMatchValue}.
- *
+ * Applies a {@link BinaryKernel} to a created {@link BinaryVoxels} and counts the number of
+ * <i>on</i> voxels in the resulting output.
+ *  
  * @author Owen Feehan
+ *
  */
-class OutlineKernelNeighborMatchValueTest extends OutlineTestBase {
+public class ApplyBinaryKernel extends ApplyKernelForCount<BinaryKernel> {
 
     @Override
-    protected BinaryKernel createKernel(ObjectMask object, Extent extentScene) {
-        BinaryVoxels<UnsignedByteBuffer> voxelsMask =
-                ObjectOnVoxelsHelper.createVoxelsWithObject(object, extentScene, false);
-        return new OutlineKernelNeighborMatchValue(voxelsMask);
+    protected int applyToVoxelsAndCount(BinaryKernel kernel,
+            BinaryVoxels<UnsignedByteBuffer> voxels, KernelApplicationParameters params) {
+        BinaryVoxels<UnsignedByteBuffer> out =
+                ApplyKernel.apply(kernel, voxels, voxels.binaryValues().createByte(), params);
+        return out.extract().voxelsEqualTo(voxels.binaryValues().getOnInt()).count();
     }
 }

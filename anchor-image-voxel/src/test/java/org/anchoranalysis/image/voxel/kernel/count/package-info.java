@@ -2,7 +2,7 @@
  * #%L
  * anchor-image-voxel
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
+ * Copyright (C) 2010 - 2021 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,26 +23,4 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.image.voxel.kernel.outline;
-
-import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
-import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
-import org.anchoranalysis.image.voxel.kernel.BinaryKernel;
-import org.anchoranalysis.image.voxel.kernel.ObjectOnVoxelsHelper;
-import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.spatial.Extent;
-
-/**
- * Tests {@link OutlineKernelNeighborMatchValue}.
- *
- * @author Owen Feehan
- */
-class OutlineKernelNeighborMatchValueTest extends OutlineTestBase {
-
-    @Override
-    protected BinaryKernel createKernel(ObjectMask object, Extent extentScene) {
-        BinaryVoxels<UnsignedByteBuffer> voxelsMask =
-                ObjectOnVoxelsHelper.createVoxelsWithObject(object, extentScene, false);
-        return new OutlineKernelNeighborMatchValue(voxelsMask);
-    }
-}
+package org.anchoranalysis.image.voxel.kernel.count;

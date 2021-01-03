@@ -53,8 +53,11 @@ public final class KernelPointCursor {
     @Getter private final Extent extent;
     private final int xExtent;
     private final int yExtent;
-    
-    /** Two times {@link #xExtent}, used to save computation as this occurs frequently in an operation. */
+
+    /**
+     * Two times {@link #xExtent}, used to save computation as this occurs frequently in an
+     * operation.
+     */
     private final int xExtentTwice;
 
     public KernelPointCursor(
@@ -102,7 +105,7 @@ public final class KernelPointCursor {
         point.decrementY();
         index -= xExtent;
     }
-    
+
     public void decrementYTwice() {
         point.decrementY(2);
         index -= xExtentTwice;
@@ -131,7 +134,7 @@ public final class KernelPointCursor {
     public boolean isBufferOn(UnsignedByteBuffer buffer) {
         return binaryValues.isOn(buffer.getRaw(index));
     }
-    
+
     public boolean isBufferOff(UnsignedByteBuffer buffer) {
         return binaryValues.isOff(buffer.getRaw(index));
     }
@@ -143,7 +146,7 @@ public final class KernelPointCursor {
     public boolean isOutsideOffUnignored() {
         return params.isOutsideOffUnignored();
     }
-    
+
     public void incrementIndex() {
         index++;
     }

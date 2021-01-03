@@ -53,9 +53,7 @@ public class AndKernel extends BinaryKernel {
     }
 
     @Override
-    public boolean acceptPoint(
-            KernelPointCursor point) {
-        return kernel1.acceptPoint(point)
-                && kernel2.acceptPoint(point);
+    public boolean acceptPoint(KernelPointCursor point) {
+        return kernel1.acceptPoint(point) && kernel2.acceptPoint(point);
     }
 }

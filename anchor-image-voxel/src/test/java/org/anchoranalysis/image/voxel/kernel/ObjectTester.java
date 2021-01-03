@@ -29,24 +29,21 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.function.BiFunction;
 import lombok.AllArgsConstructor;
-import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
-import org.anchoranalysis.image.voxel.binary.values.BinaryValues;
-import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
+import org.anchoranalysis.image.voxel.kernel.apply.ApplyKernelForCount;
 import org.anchoranalysis.image.voxel.kernel.outline.CalculateExpectedValue;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.image.voxel.object.ObjectMaskFixture;
 import org.anchoranalysis.spatial.Extent;
-import org.anchoranalysis.spatial.point.Point3i;
 
 /**
  * Applies the kernel to a created binary-mask showing a rectangular/cuboid object on a background,
  * and asserts an expected count on the number of outputted <i>on</i> voxels.
  *
  * @author Owen Feehan
+ * @param <T> kernel-type
  */
 @AllArgsConstructor
-class ObjectTester {
+class ObjectTester<T extends Kernel> {
 
     /**
      * An extent used for creating masks or other derived entities from the object-masks.
@@ -62,14 +59,11 @@ class ObjectTester {
      */
     private static final Extent EXTENT_SCENE = new Extent(10, 9, 11);
 
-    /** A corner for the object that doesn't touch a boundary in {@link #EXTENT_SCENE}. */
-    private static final Point3i CORNER_NOT_AT_BORDER = new Point3i(2, 3, 2);
-
-    /** A corner for the object that sits at the origin in {@link #EXTENT_SCENE}. */
-    private static final Point3i CORNER_ORIGIN = new Point3i(0, 0, 0);
-
     /** Creates a kernel to be tested for a particular {@link ObjectMask} and scene-size. */
-    private final BiFunction<ObjectMask, Extent, BinaryKernel> createKernel;
+    private final BiFunction<ObjectMask, Extent, T> createKernel;
+    
+    /** Applies the kernel to determine a count. */
+    private final ApplyKernelForCount<T> kernelApplier;
 
     /**
      * Runs the tests across all possible values of {@link KernelApplicationParameters}.
@@ -125,32 +119,17 @@ class ObjectTester {
             CalculateExpectedValue calculateValue,
             String assertMessage) {
 
-        ObjectMaskFixture fixture =
-                new ObjectMaskFixture(
-                        false, FlattenHelper.maybeFlattenExtent(EXTENT_OBJECT, scene3D));
-
-        ObjectMask object = fixture.filledMask(corner(scene3D, atOrigin));
-
+        Extent extentObject = FlattenHelper.maybeFlattenExtent(EXTENT_OBJECT, scene3D);
         Extent extentScene = FlattenHelper.maybeFlattenExtent(EXTENT_SCENE, scene3D);
 
-        BinaryVoxels<UnsignedByteBuffer> voxelsObject =
-                ObjectOnBinaryHelper.createVoxelsWithObject(object, extentScene, true);
+        ObjectMaskFixture fixture = new ObjectMaskFixture(false, extentObject);
+        ObjectMask object =
+                CorneredObjectHelper.createObjectFromFixture(fixture, scene3D, atOrigin);
 
-        BinaryKernel kernel = createKernel.apply(object, EXTENT_SCENE);
-
-        BinaryVoxels<UnsignedByteBuffer> out =
-                ApplyKernel.apply(kernel, voxelsObject, BinaryValuesByte.getDefault(), params);
-        int actualCount = out.extract().voxelsEqualTo(BinaryValues.getDefault().getOnInt()).count();
-        int expectedCount = calculateValue.calculate(fixture, params);
-        assertEquals(expectedCount, actualCount, assertMessage);
-    }
-
-    private Point3i corner(boolean scene3D, boolean atOrigin) {
-        if (atOrigin) {
-            return CORNER_ORIGIN;
-        } else {
-            return FlattenHelper.maybeFlattenPoint(CORNER_NOT_AT_BORDER, scene3D);
-        }
+        assertEquals(
+                calculateValue.calculate(fixture, params),
+                kernelApplier.apply(object, extentScene, params, createKernel),
+                assertMessage);
     }
 
     /** Returns {@code string} if {@code condition} is true, otherwise an empty-string. */

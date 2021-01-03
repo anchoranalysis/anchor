@@ -26,14 +26,145 @@
 
 package org.anchoranalysis.image.voxel.kernel.count;
 
+import java.util.Optional;
+import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.kernel.Kernel;
+import org.anchoranalysis.image.voxel.kernel.KernelApplicationParameters;
+import org.anchoranalysis.image.voxel.kernel.LocalSlices;
+import org.anchoranalysis.spatial.Extent;
 import org.anchoranalysis.spatial.point.Point3i;
 
 public abstract class CountKernel extends Kernel {
 
-    protected CountKernel(int size) {
-        super(size);
+    private LocalSlices inSlices;
+
+    private Extent extent;
+
+    private boolean outsideAtThreshold = false;
+    private boolean ignoreAtThreshold = false;
+
+    // Constructor
+    protected CountKernel() {
+        super(3);
     }
 
-    public abstract int countAtPosition(int ind, Point3i point);
+    @Override
+    public void init(Voxels<UnsignedByteBuffer> in, KernelApplicationParameters params) {
+        this.extent = in.extent();
+    }
+
+    @Override
+    public void notifyZChange(LocalSlices inSlices, int z) {
+        this.inSlices = inSlices;
+    }
+
+    protected abstract boolean isNeighborVoxelAccepted(
+            Point3i point, int xShift, int yShift, int zShift, Extent extent);
+
+    public int countAtPosition(int index, Point3i point, BinaryValuesByte binaryValues, KernelApplicationParameters params) {
+
+        UnsignedByteBuffer buffer = inSlices.getLocal(0).get(); // NOSONAR
+        Optional<UnsignedByteBuffer> bufferZLess1 = inSlices.getLocal(-1);
+        Optional<UnsignedByteBuffer> bufferZPlus1 = inSlices.getLocal(+1);
+
+        int xLength = extent.x();
+
+        int x = point.x();
+        int y = point.y();
+
+        if (binaryValues.isOff(buffer.getRaw(index))) {
+            return 0;
+        }
+
+        int count = 0;
+
+        // We walk up and down in x
+        x--;
+        index--;
+        if (x >= 0) {
+            if (binaryValues.isOff(buffer.getRaw(index))
+                    && isNeighborVoxelAccepted(point, -1, 0, 0, extent)) {
+                count++;
+            }
+        } else {
+            if (!ignoreAtThreshold
+                    && !outsideAtThreshold) {
+                count++;
+            }
+        }
+
+        x += 2;
+        index += 2;
+        if (x < extent.x()) {
+            if (binaryValues.isOff(buffer.getRaw(index))
+                    && isNeighborVoxelAccepted(point, +1, 0, 0, extent)) {
+                count++;
+            }
+        } else {
+            if (!ignoreAtThreshold
+                    && !outsideAtThreshold) {
+                count++;
+            }
+        }
+        index--;
+
+        // We walk up and down in y
+        y--;
+        index -= xLength;
+        if (y >= 0) {
+            if (binaryValues.isOff(buffer.getRaw(index))
+                    && isNeighborVoxelAccepted(point, 0, -1, 0, extent)) {
+                count++;
+            }
+        } else {
+            if (!ignoreAtThreshold
+                    && !outsideAtThreshold) {
+                count++;
+            }
+        }
+
+        y += 2;
+        index += (2 * xLength);
+        if (y < (extent.y())) {
+            if (binaryValues.isOff(buffer.getRaw(index))
+                    && isNeighborVoxelAccepted(point, 0, +1, 0, extent)) {
+                count++;
+            }
+        } else {
+            if (!ignoreAtThreshold
+                    && !outsideAtThreshold) {
+                count++;
+            }
+        }
+        index -= xLength;
+
+        if (params.isUseZ()) {
+            if (bufferZLess1.isPresent()) {
+                if (binaryValues.isOff(bufferZLess1.get().getRaw(index))
+                        && isNeighborVoxelAccepted(point, 0, 0, -1, extent)) {
+                    count++;
+                }
+            } else {
+                if (!ignoreAtThreshold
+                        && !outsideAtThreshold) {
+                    count++;
+                }
+            }
+
+            if (bufferZPlus1.isPresent()) {
+                if (binaryValues.isOff(bufferZPlus1.get().getRaw(index))
+                        && isNeighborVoxelAccepted(point, 0, 0, +1, extent)) {
+                    count++;
+                }
+            } else {
+                if (!ignoreAtThreshold
+                        && !outsideAtThreshold) {
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
 }

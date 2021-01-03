@@ -41,7 +41,7 @@ final class DilationKernel extends BinaryKernelMorphological {
     protected boolean firstCheck(KernelPointCursor point, UnsignedByteBuffer buffer) {
         return point.isBufferOff(buffer);
     }
-    
+
     @Override
     protected boolean doesNeighborQualify(
             boolean guard,

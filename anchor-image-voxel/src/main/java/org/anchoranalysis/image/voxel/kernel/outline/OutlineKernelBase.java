@@ -33,16 +33,15 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
 
 /**
  * A base class for kernels that find the outline of an {@link ObjectMask}.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public abstract class OutlineKernelBase extends BinaryKernelMorphological {
 
     protected OutlineKernelBase() {
         super(false, false, false);
     }
-    
+
     @Override
     protected boolean firstCheck(KernelPointCursor point, UnsignedByteBuffer buffer) {
         return point.isBufferOn(buffer);

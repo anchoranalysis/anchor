@@ -26,34 +26,27 @@
 
 package org.anchoranalysis.image.voxel.kernel.count;
 
-import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.spatial.Extent;
 import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.point.ReadableTuple3i;
 
 /**
- * For every voxel on the outline, count ALL neighbors that are adjacent, but ignoring any outside
- * the scene.
+ * For every voxel on the outline, count <b>all</b> neighbors that are adjacent, but ignoring any
+ * outside the scene.
  *
  * <p>Neighboring voxels can be counted more than once.
  *
  * @author Owen Feehan
  */
-public class CountKernelNeighborhoodIgnoreOutsideScene extends CountKernelNeighborhoodBase {
+public class CountKernelNeighborhoodIgnoreOutsideScene extends CountKernel {
 
     private Extent extentScene;
     private ReadableTuple3i addPoint;
 
     public CountKernelNeighborhoodIgnoreOutsideScene(
-            boolean useZ,
-            BinaryValuesByte binaryValues,
-            boolean multipleMatchesPerVoxel,
             Extent extentScene, // The entire extent of the scene
-            ReadableTuple3i
-                    addPoint // Added to a point before determining if it is inside or outside the
-            // scene.
+            ReadableTuple3i addPoint // Added to a point before determining if it is inside or outside the scene.
             ) {
-        super(useZ, binaryValues, multipleMatchesPerVoxel);
         this.extentScene = extentScene;
         this.addPoint = addPoint;
     }

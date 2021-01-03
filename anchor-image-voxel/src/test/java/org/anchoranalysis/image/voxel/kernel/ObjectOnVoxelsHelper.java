@@ -2,7 +2,7 @@
  * #%L
  * anchor-image-voxel
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
+ * Copyright (C) 2010 - 2021 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,26 +23,39 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.image.voxel.kernel.outline;
+package org.anchoranalysis.image.voxel.kernel;
 
+import lombok.NoArgsConstructor;
+import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
+import org.anchoranalysis.image.voxel.binary.BinaryVoxelsFactory;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
-import org.anchoranalysis.image.voxel.kernel.BinaryKernel;
-import org.anchoranalysis.image.voxel.kernel.ObjectOnVoxelsHelper;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.spatial.Extent;
 
-/**
- * Tests {@link OutlineKernelNeighborMatchValue}.
- *
- * @author Owen Feehan
- */
-class OutlineKernelNeighborMatchValueTest extends OutlineTestBase {
+@NoArgsConstructor
+public class ObjectOnVoxelsHelper {
 
-    @Override
-    protected BinaryKernel createKernel(ObjectMask object, Extent extentScene) {
-        BinaryVoxels<UnsignedByteBuffer> voxelsMask =
-                ObjectOnVoxelsHelper.createVoxelsWithObject(object, extentScene, false);
-        return new OutlineKernelNeighborMatchValue(voxelsMask);
+    /**
+     * Creates {@link Voxels} showing an object on top of an otherwise empty background.
+     *
+     * @param object the object to show
+     * @param extent the size of the {@link Voxels} to create.
+     * @param objectOn if true, the objects use <i>on</i> and the background <i>off</i>. if false,
+     *     the opposite combination.
+     * @return a newly created {@link BinaryVoxels} using default values for <i>off</i> and
+     *     </i>on</i>.
+     */
+    public static BinaryVoxels<UnsignedByteBuffer> createVoxelsWithObject(
+            ObjectMask object, Extent extent, boolean objectOn) {
+        if (objectOn) {
+            BinaryVoxels<UnsignedByteBuffer> voxels = BinaryVoxelsFactory.createEmptyOff(extent);
+            voxels.assignOn().toObject(object);
+            return voxels;
+        } else {
+            BinaryVoxels<UnsignedByteBuffer> voxels = BinaryVoxelsFactory.createEmptyOn(extent);
+            voxels.assignOff().toObject(object);
+            return voxels;
+        }
     }
 }

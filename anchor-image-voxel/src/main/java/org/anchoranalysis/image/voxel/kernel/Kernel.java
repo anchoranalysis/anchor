@@ -30,8 +30,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
-import org.anchoranalysis.spatial.Extent;
-import org.anchoranalysis.spatial.point.Point3i;
 
 public abstract class Kernel {
 
@@ -48,20 +46,4 @@ public abstract class Kernel {
     public abstract void init(Voxels<UnsignedByteBuffer> in, KernelApplicationParameters params);
 
     public abstract void notifyZChange(LocalSlices inSlices, int z);
-
-    public int getYMin(Point3i point) {
-        return Math.max(point.y() - getSizeHalf(), 0);
-    }
-
-    public int getYMax(Point3i point, Extent extent) {
-        return Math.min(point.y() + getSizeHalf(), extent.y() - 1);
-    }
-
-    public int getXMin(Point3i point) {
-        return Math.max(point.x() - getSizeHalf(), 0);
-    }
-
-    public int getXMax(Point3i point, Extent extent) {
-        return Math.min(point.x() + getSizeHalf(), extent.x() - 1);
-    }
 }
