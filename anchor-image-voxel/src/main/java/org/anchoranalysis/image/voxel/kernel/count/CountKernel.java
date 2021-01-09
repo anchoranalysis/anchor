@@ -26,22 +26,22 @@
 
 package org.anchoranalysis.image.voxel.kernel.count;
 
-import java.util.Optional;
-import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.kernel.Kernel;
-import org.anchoranalysis.image.voxel.kernel.KernelApplicationParameters;
 import org.anchoranalysis.image.voxel.kernel.KernelPointCursor;
 import org.anchoranalysis.image.voxel.kernel.LocalSlices;
-import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.math.arithmetic.Counter;
 import org.anchoranalysis.spatial.point.Point3i;
 
+/**
+ * Base class for kernels that return a count (positive integer) for every voxel.
+ * 
+ * @author Owen Feehan
+ *
+ */
 public abstract class CountKernel extends Kernel {
 
-    private LocalSlices inSlices;
-
-    private Extent extent;
+    private LocalSlices slices;
 
     // Constructor
     protected CountKernel() {
@@ -49,119 +49,36 @@ public abstract class CountKernel extends Kernel {
     }
 
     @Override
-    public void init(Voxels<UnsignedByteBuffer> in, KernelApplicationParameters params) {
-        this.extent = in.extent();
+    public void notifyZChange(LocalSlices slices, int z) {
+        this.slices = slices;
     }
 
-    @Override
-    public void notifyZChange(LocalSlices inSlices, int z) {
-        this.inSlices = inSlices;
-    }
+    /**
+     * Calculates the count at a particular point.
+     * 
+     * @param point the point
+     * @return the count
+     */
+    public int calculateAt(KernelPointCursor point) {
 
-    protected abstract boolean isNeighborVoxelAccepted(
-            Point3i point);
-
-    public int countAtPosition(int index, Point3i point, BinaryValuesByte binaryValues, KernelApplicationParameters params) {
-
+        UnsignedByteBuffer buffer = slices.getLocal(0).get(); // NOSONAR
         
-        UnsignedByteBuffer buffer = inSlices.getLocal(0).get(); // NOSONAR
-        Optional<UnsignedByteBuffer> bufferZLess1 = inSlices.getLocal(-1);
-        Optional<UnsignedByteBuffer> bufferZPlus1 = inSlices.getLocal(+1);
-        
-        KernelPointCursor cursor = new KernelPointCursor(index, point, extent, binaryValues, params);
-
-        if (binaryValues.isOff(buffer.getRaw(cursor.getIndex()))) {
+        if (point.isBufferOff(buffer)) {
             return 0;
         }
 
-        int count = 0;
+        Counter counter = new Counter();
 
-        // We walk up and down in x
-        cursor.decrementX();
-        
-        if (cursor.nonNegativeX()) {
-            if (binaryValues.isOff(buffer.getRaw(cursor.getIndex()))
-                    && isNeighborVoxelAccepted(cursor.getPoint())) {
-                count++;
-            }
-        } else {
-            if (cursor.isOutsideOffUnignored() && isNeighborVoxelAccepted(cursor.getPoint())) {
-                count++;
-            }
-        }
-
-        cursor.incrementXTwice();
-        if (cursor.lessThanMaxX()) {
-            if (binaryValues.isOff(buffer.getRaw(cursor.getIndex()))
-                    && isNeighborVoxelAccepted(cursor.getPoint())) {
-                count++;
-            }
-        } else {
-            if (cursor.isOutsideOffUnignored() && isNeighborVoxelAccepted(cursor.getPoint())) {
-                count++;
-            }
-        }
-        
-        cursor.decrementX();
-
-        cursor.decrementY();
-
-        if (cursor.nonNegativeY()) {
-            if (binaryValues.isOff(buffer.getRaw(cursor.getIndex()))
-                    && isNeighborVoxelAccepted(cursor.getPoint())) {
-                count++;
-            }
-        } else {
-            if (cursor.isOutsideOffUnignored() && isNeighborVoxelAccepted(cursor.getPoint()) ) {
-                count++;
-            }
-        }
-
-        cursor.incrementYTwice();
-
-        if (cursor.lessThanMaxY()) {
-            if (binaryValues.isOff(buffer.getRaw(cursor.getIndex()))
-                    && isNeighborVoxelAccepted(cursor.getPoint())) {
-                count++;
-            }
-        } else {
-            if (cursor.isOutsideOffUnignored() && isNeighborVoxelAccepted(cursor.getPoint())) {
-                count++;
-            }
-        }
-        
-        cursor.decrementY();
-
-        if (params.isUseZ()) {
-            
-            cursor.decrementZ();
-            
-            if (bufferZLess1.isPresent()) {
-                if (binaryValues.isOff(bufferZLess1.get().getRaw(cursor.getIndex()))
-                        && isNeighborVoxelAccepted(cursor.getPoint())) {
-                    count++;
-                }
-            } else {
-                if (cursor.isOutsideOffUnignored() && isNeighborVoxelAccepted(cursor.getPoint())) {
-                    count++;
-                }
-            }
-
-            cursor.incrementZTwice();
-            
-            if (bufferZPlus1.isPresent()) {
-                if (binaryValues.isOff(bufferZPlus1.get().getRaw(cursor.getIndex()))
-                        && isNeighborVoxelAccepted(cursor.getPoint())) {
-                    count++;
-                }
-            } else {
-                if (cursor.isOutsideOffUnignored() && isNeighborVoxelAccepted(cursor.getPoint())) {
-                    count++;
-                }
-            }
-            
-            cursor.decrementZ();
-        }
-        return count;
+        WalkAboutPoint walker = new WalkAboutPoint(point, this::doesNeighborVoxelQualify, counter::increment);
+        walker.walkAllDirections(buffer, slices::getLocal);
+        return counter.getCount();
     }
+    
+    /** 
+     * Whether a particular neighboring voxel is accepted or not.
+     *
+     * @param point the neighboring point which is queried if it qualifies or not
+     * @return true iff the point qualifies
+     */
+    protected abstract boolean doesNeighborVoxelQualify(Point3i point);
 }

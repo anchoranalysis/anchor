@@ -67,7 +67,12 @@ public class LocalSlices {
      * @return the buffer corresponding to the z-index, if it exists.
      */
     public Optional<UnsignedByteBuffer> getLocal(int relativeZIndex) {
-        byte[] slice = array[relativeZIndex + shift];
-        return Optional.ofNullable(slice).map(UnsignedByteBuffer::wrapRaw);
+        int index = relativeZIndex + shift;
+        if (index >= 0 && index<array.length) {
+            byte[] slice = array[index];
+            return Optional.ofNullable(slice).map(UnsignedByteBuffer::wrapRaw);    
+        } else {
+            return Optional.empty();
+        }
     }
 }

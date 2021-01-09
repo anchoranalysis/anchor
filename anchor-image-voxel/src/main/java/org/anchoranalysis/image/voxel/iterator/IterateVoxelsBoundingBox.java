@@ -32,14 +32,21 @@ import java.util.function.Predicate;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.iterator.predicate.PredicateBufferBinary;
+import org.anchoranalysis.image.voxel.iterator.predicate.PredicateKernelPointCursor;
+import org.anchoranalysis.image.voxel.iterator.process.ProcessKernelPointCursor;
 import org.anchoranalysis.image.voxel.iterator.process.ProcessPoint;
 import org.anchoranalysis.image.voxel.iterator.process.ProcessPointAndIndex;
 import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferBinary;
 import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferBinaryMixed;
 import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferTernary;
 import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferUnary;
+import org.anchoranalysis.image.voxel.kernel.KernelApplicationParameters;
+import org.anchoranalysis.image.voxel.kernel.KernelPointCursor;
+import org.anchoranalysis.spatial.Extent;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.point.ReadableTuple3i;
@@ -363,5 +370,95 @@ public class IterateVoxelsBoundingBox {
                 }
             }
         }
+    }
+    
+    
+    /**
+     * Iterate over each voxel in a bounding-box using a {@link KernelPointCursor}.
+     *
+     * @param voxels the voxels to iterator over
+     * @param box the box to iterate over (with coordinates referring to {@code voxels}.
+     * @param params to use when applying a kernel
+     * @param process process is called for each voxel inside the extent using the same coordinates
+     *     as the extent.
+     */
+    public static void withCursor(
+            BinaryVoxels<UnsignedByteBuffer> voxels,
+            BoundingBox box,
+            KernelApplicationParameters params,
+            ProcessKernelPointCursor process) {
+
+        KernelPointCursor cursor =
+                new KernelPointCursor(
+                        voxels.extent().offset(box.cornerMin()),
+                        new Point3i(box.cornerMin()),
+                        voxels.extent(),
+                        voxels.binaryValues().createByte(),
+                        params);
+
+        Extent extent = voxels.extent();
+        Point3i point = cursor.getPoint();
+        ReadableTuple3i cornerMin = box.cornerMin();
+        ReadableTuple3i cornerMax = box.calculateCornerMaxExclusive();
+        for (point.setZ(cornerMin.z()); point.z() < cornerMax.z(); point.incrementZ()) {
+
+            cursor.setIndex(extent.offset(cornerMin.x(), cornerMin.y()));
+            process.notifyChangeSlice(point.z());
+
+            for (point.setY(cornerMin.y()); point.y() < cornerMax.y(); point.incrementY()) {
+
+                for (point.setX(cornerMin.x()); point.x() < cornerMax.x(); point.incrementX()) {
+                    process.process(cursor);
+                    cursor.incrementIndex();
+                }
+            }
+        }
+    }
+    
+    
+    /**
+     * Iterate over each voxel in a bounding-box using a {@link KernelPointCursor} until a predicate returns true..
+     *
+     * @param voxels the voxels to iterator over
+     * @param box the box to iterate over (with coordinates referring to {@code voxels}.
+     * @param params to use when applying a kernel
+     * @param predicate evaluates each position of the cursor.
+     * @return true as soon as any voxel evaluates true with the {@code predicate}, false if it never happens.
+     */
+    public static boolean withCursorUntil(
+            BinaryVoxels<UnsignedByteBuffer> voxels,
+            BoundingBox box,
+            KernelApplicationParameters params,
+            PredicateKernelPointCursor predicate) {
+
+        KernelPointCursor cursor =
+                new KernelPointCursor(
+                        voxels.extent().offset(box.cornerMin()),
+                        new Point3i(box.cornerMin()),
+                        voxels.extent(),
+                        voxels.binaryValues().createByte(),
+                        params);
+
+        Extent extent = voxels.extent();
+        Point3i point = cursor.getPoint();
+        ReadableTuple3i cornerMin = box.cornerMin();
+        ReadableTuple3i cornerMax = box.calculateCornerMaxExclusive();
+        for (point.setZ(cornerMin.z()); point.z() < cornerMax.z(); point.incrementZ()) {
+
+            cursor.setIndex(extent.offset(cornerMin.x(), cornerMin.y()));
+            predicate.notifyChangeSlice(point.z());
+
+            for (point.setY(cornerMin.y()); point.y() < cornerMax.y(); point.incrementY()) {
+
+                for (point.setX(cornerMin.x()); point.x() < cornerMax.x(); point.incrementX()) {
+                    if (predicate.test(cursor)) {
+                        return true;
+                    }
+                    cursor.incrementIndex();
+                }
+            }
+        }
+        
+        return false;
     }
 }

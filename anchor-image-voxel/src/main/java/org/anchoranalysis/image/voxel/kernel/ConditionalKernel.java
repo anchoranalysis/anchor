@@ -47,7 +47,7 @@ public class ConditionalKernel extends BinaryKernel {
     }
 
     @Override
-    public boolean acceptPoint(KernelPointCursor point) {
+    public boolean calculateAt(KernelPointCursor point) {
 
         int value = intensityAtPoint(point.getPoint());
 
@@ -55,12 +55,7 @@ public class ConditionalKernel extends BinaryKernel {
             return false;
         }
 
-        return kernel.acceptPoint(point);
-    }
-
-    @Override
-    public void init(Voxels<UnsignedByteBuffer> in, KernelApplicationParameters params) {
-        kernel.init(in, params);
+        return kernel.calculateAt(point);
     }
 
     @Override

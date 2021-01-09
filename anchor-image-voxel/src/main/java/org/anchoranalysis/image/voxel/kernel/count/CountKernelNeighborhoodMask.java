@@ -54,7 +54,7 @@ public class CountKernelNeighborhoodMask extends CountKernel {
     }
 
     @Override
-    protected boolean isNeighborVoxelAccepted(
+    protected boolean doesNeighborVoxelQualify(
             Point3i point) {
         return objectRequireHigh.contains(point);
     }

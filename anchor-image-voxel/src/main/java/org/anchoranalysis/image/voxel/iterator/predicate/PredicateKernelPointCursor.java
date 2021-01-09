@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-core
+ * anchor-image
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -23,41 +23,21 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.math.arithmetic;
 
-import lombok.Getter;
+package org.anchoranalysis.image.voxel.iterator.predicate;
+
+import org.anchoranalysis.image.voxel.kernel.KernelPointCursor;
 
 /**
- * A simple counter that increments
- *
- * <p>This is useful when an object on the heap is required to track counting
+ * Processes a {@link KernelPointCursor} and evaluates a predicate on the current position.
  *
  * @author Owen Feehan
  */
-public class Counter {
+@FunctionalInterface
+public interface PredicateKernelPointCursor {
 
-    @Getter private int count = 0;
+    /** Notifies the processor that there has been a change in z-coordinate */
+    default void notifyChangeSlice(int z) {}
 
-    /**
-     * Increases the counter by one.
-     */
-    public void increment() {
-        count++;
-    }
-    
-    /**
-     * Increases the counter by a specific value.
-     * 
-     * @param value the value to increase the counter by.
-     */
-    public void incrementBy(int value) {
-        count += value;
-    }
-
-    /**
-     * Decreases the counter by one.
-     */
-    public void decrement() {
-        count--;
-    }
+    boolean test(KernelPointCursor point);
 }

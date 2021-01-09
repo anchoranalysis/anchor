@@ -28,8 +28,6 @@ package org.anchoranalysis.image.voxel.kernel;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 
 public abstract class Kernel {
 
@@ -42,8 +40,6 @@ public abstract class Kernel {
         this.size = size;
         this.sizeHalf = (size - 1) / 2;
     }
-
-    public abstract void init(Voxels<UnsignedByteBuffer> in, KernelApplicationParameters params);
 
     public abstract void notifyZChange(LocalSlices inSlices, int z);
 }

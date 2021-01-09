@@ -37,14 +37,10 @@ import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactoryTypeBound;
-import org.anchoranalysis.image.voxel.iterator.IterateVoxelsAll;
 import org.anchoranalysis.image.voxel.iterator.process.ProcessKernelPointCursor;
 import org.anchoranalysis.image.voxel.kernel.count.CountKernel;
 import org.anchoranalysis.math.arithmetic.Counter;
-import org.anchoranalysis.spatial.Extent;
 import org.anchoranalysis.spatial.box.BoundingBox;
-import org.anchoranalysis.spatial.point.Point3i;
-import org.anchoranalysis.spatial.point.ReadableTuple3i;
 
 /**
  * Applies various kinds of {@link Kernel} to {@link BinaryVoxels}.
@@ -73,7 +69,7 @@ public class ApplyKernel {
 
         Voxels<UnsignedByteBuffer> out = FACTORY.createInitialized(in.extent());
 
-        iterateOverPointWithKernel(
+        IterateWithKernelHelper.overAll(
                 kernel,
                 in,
                 params,
@@ -89,7 +85,7 @@ public class ApplyKernel {
                     @Override
                     public void process(KernelPointCursor point) {
                         byte outValue =
-                                kernel.acceptPoint(point)
+                                kernel.calculateAt(point)
                                         ? outBinary.getOnByte()
                                         : outBinary.getOffByte();
                         outBuffer.putRaw(point.getIndex(), outValue);
@@ -133,44 +129,18 @@ public class ApplyKernel {
             BoundingBox box,
             KernelApplicationParameters params)
             throws OperationFailedException {
-
-        if (!voxels.extent().contains(box)) {
-            throw new OperationFailedException(
-                    String.format(
-                            "BBox (%s) must be contained within extent (%s)",
-                            box, voxels.extent()));
-        }
-
-        int localSlicesSize = 3;
-
-        int count = 0;
-
-        Extent extent = voxels.extent();
-
-        kernel.init(voxels.voxels(), params);
-
-        ReadableTuple3i pointMax = box.calculateCornerMax();
-
-        BinaryValuesByte binaryValues = voxels.binaryValues().createByte();
         
-        Point3i point = new Point3i();
-        for (point.setZ(box.cornerMin().z()); point.z() <= pointMax.z(); point.incrementZ()) {
+        Counter counter = new Counter();
 
-            LocalSlices localSlices = new LocalSlices(point.z(), localSlicesSize, voxels.voxels());
-            kernel.notifyZChange(localSlices, point.z());
+        IterateWithKernelHelper.overBox(
+                kernel,
+                voxels,
+                box,
+                params,
+                point -> counter.incrementBy( kernel.calculateAt(point) )
+        );
 
-            for (point.setY(box.cornerMin().y()); point.y() <= pointMax.y(); point.incrementY()) {
-                for (point.setX(box.cornerMin().x());
-                        point.x() <= pointMax.x();
-                        point.incrementX()) {
-
-                    int ind = extent.offsetSlice(point);
-                    count += kernel.countAtPosition(ind, point, binaryValues, params);
-                }
-            }
-        }
-
-        return count;
+        return counter.getCount();
     }
 
     /**
@@ -190,41 +160,13 @@ public class ApplyKernel {
             KernelApplicationParameters params)
             throws OperationFailedException {
 
-        if (!voxels.extent().contains(box)) {
-            throw new OperationFailedException(
-                    String.format(
-                            "Bounding-box (%s) must be contained within extent (%s)",
-                            box, voxels.extent()));
-        }
-
-        Extent extent = voxels.extent();
-
-        kernel.init(voxels.voxels(), params);
-
-        BinaryValuesByte binaryValues = voxels.binaryValues().createByte();
-        
-        ReadableTuple3i pointMax = box.calculateCornerMax();
-
-        Point3i point = new Point3i();
-        for (point.setZ(box.cornerMin().z()); point.z() <= pointMax.z(); point.incrementZ()) {
-
-            LocalSlices localSlices = new LocalSlices(point.z(), 3, voxels.voxels());
-            kernel.notifyZChange(localSlices, point.z());
-
-            for (point.setY(box.cornerMin().y()); point.y() <= pointMax.y(); point.incrementY()) {
-                for (point.setX(box.cornerMin().x());
-                        point.x() <= pointMax.x();
-                        point.incrementX()) {
-
-                    int ind = extent.offsetSlice(point);
-                    if (kernel.countAtPosition(ind, point, binaryValues, params) > 0) {
-                        return true;
-                    }
-                }
-            }
-        }
-
-        return false;
+        return IterateWithKernelHelper.overBoxUntil(
+                kernel,
+                voxels,
+                box,
+                params,
+                point -> kernel.calculateAt(point) > 0
+        );
     }
 
     public static int applyForCount(
@@ -234,43 +176,17 @@ public class ApplyKernel {
 
         Counter counter = new Counter();
 
-        iterateOverPointWithKernel(
+        IterateWithKernelHelper.overAll(
                 kernel,
                 voxels,
                 params,
                 point -> {
-                    if (kernel.acceptPoint(point)) {
+                    if (kernel.calculateAt(point)) {
                         counter.increment();
                     }
                 });
 
+
         return counter.getCount();
-    }
-
-    private static void iterateOverPointWithKernel(
-            BinaryKernel kernel,
-            BinaryVoxels<UnsignedByteBuffer> voxels,
-            KernelApplicationParameters params,
-            ProcessKernelPointCursor processor) {
-        kernel.init(voxels.voxels(), params);
-
-        int slicesNeeded = params.isUseZ() ? kernel.getSize() : 1;
-
-        IterateVoxelsAll.withCursor(
-                voxels,
-                params,
-                new ProcessKernelPointCursor() {
-
-                    @Override
-                    public void notifyChangeSlice(int z) {
-                        kernel.notifyZChange(new LocalSlices(z, slicesNeeded, voxels.voxels()), z);
-                        processor.notifyChangeSlice(z);
-                    }
-
-                    @Override
-                    public void process(KernelPointCursor point) {
-                        processor.process(point);
-                    }
-                });
     }
 }

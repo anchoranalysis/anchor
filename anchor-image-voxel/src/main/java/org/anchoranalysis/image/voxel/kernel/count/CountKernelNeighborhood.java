@@ -38,7 +38,7 @@ import org.anchoranalysis.spatial.point.Point3i;
 public class CountKernelNeighborhood extends CountKernel {
 
     @Override
-    protected boolean isNeighborVoxelAccepted(
+    protected boolean doesNeighborVoxelQualify(
             Point3i point) {
         return true;
     }

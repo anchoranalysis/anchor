@@ -28,10 +28,8 @@ package org.anchoranalysis.image.voxel.kernel.morphological;
 
 import java.util.Optional;
 import java.util.function.Supplier;
-import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.kernel.BinaryKernel;
-import org.anchoranalysis.image.voxel.kernel.KernelApplicationParameters;
 import org.anchoranalysis.image.voxel.kernel.KernelPointCursor;
 import org.anchoranalysis.image.voxel.kernel.LocalSlices;
 
@@ -81,17 +79,12 @@ public abstract class BinaryKernelMorphological extends BinaryKernel {
     }
 
     @Override
-    public void init(Voxels<UnsignedByteBuffer> in, KernelApplicationParameters params) {
-        // NOTHING TO DO
+    public void notifyZChange(LocalSlices slices, int z) {
+        this.slices = slices;
     }
 
     @Override
-    public void notifyZChange(LocalSlices inSlices, int z) {
-        this.slices = inSlices;
-    }
-
-    @Override
-    public boolean acceptPoint(KernelPointCursor point) {
+    public boolean calculateAt(KernelPointCursor point) {
 
         UnsignedByteBuffer buffer = slices.getLocal(0).get(); // NOSONAR
 
@@ -99,9 +92,9 @@ public abstract class BinaryKernelMorphological extends BinaryKernel {
             return failedFirstCheckOutcome;
         }
 
-        if (qualifyFromX(point, buffer)
-                || qualifyFromY(point, buffer)
-                || maybeQualifyFromZ(point)
+        if (walkX(point, buffer)
+                || walkY(point, buffer)
+                || walkZ(point)
                 || maybeQualifyFromBigNeighbourhood(point, buffer)) {
             return qualifiedOutcome;
         } else {
@@ -123,7 +116,7 @@ public abstract class BinaryKernelMorphological extends BinaryKernel {
             int zShift);
 
     /** Do any neighbor voxels in X direction qualify the voxel? */
-    private boolean qualifyFromX(KernelPointCursor point, UnsignedByteBuffer buffer) {
+    private boolean walkX(KernelPointCursor point, UnsignedByteBuffer buffer) {
         // We walk up and down in x
         point.decrementX();
 
@@ -146,7 +139,7 @@ public abstract class BinaryKernelMorphological extends BinaryKernel {
     }
 
     /** Do any neighbor voxels in Y direction qualify the voxel? */
-    private boolean qualifyFromY(KernelPointCursor point, UnsignedByteBuffer buffer) {
+    private boolean walkY(KernelPointCursor point, UnsignedByteBuffer buffer) {
         point.decrementY();
 
         if (doesNeighborQualify(point.nonNegativeY(), point, () -> buffer, 0)) {
@@ -168,7 +161,7 @@ public abstract class BinaryKernelMorphological extends BinaryKernel {
     }
 
     /** Do any neighbor voxels in Z direction qualify the voxel? */
-    private boolean maybeQualifyFromZ(KernelPointCursor point) {
+    private boolean walkZ(KernelPointCursor point) {
         if (point.isUseZ()) {
             return qualifyFromZDirection(point, -1) || qualifyFromZDirection(point, +1);
         } else {
@@ -236,7 +229,7 @@ public abstract class BinaryKernelMorphological extends BinaryKernel {
         return false;
     }
 
-    /** Does a neighbor voxel in <b>a specific Z direction</b> qualify the voxel? */
+    /** Does a neighbor voxel in <b>a specific Z-direction</b> qualify the voxel? */
     private boolean qualifyFromZDirection(KernelPointCursor point, int zShift) {
         Optional<UnsignedByteBuffer> buffer = slices.getLocal(zShift);
         return doesNeighborQualify(buffer.isPresent(), point, buffer::get, zShift);
