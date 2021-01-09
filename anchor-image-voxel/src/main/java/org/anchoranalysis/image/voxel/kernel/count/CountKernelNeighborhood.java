@@ -26,12 +26,10 @@
 
 package org.anchoranalysis.image.voxel.kernel.count;
 
-import org.anchoranalysis.spatial.Extent;
 import org.anchoranalysis.spatial.point.Point3i;
 
 /**
- * For every voxel on the outline, count <b>all</b> neighbors that are adjacent, including those lying
- * outside the scene.
+ * For every voxel on the outline, count <b>all</b> neighbors that are adjacent.
  *
  * <p>Neighboring voxels can be counted more than once.
  *
@@ -41,7 +39,7 @@ public class CountKernelNeighborhood extends CountKernel {
 
     @Override
     protected boolean isNeighborVoxelAccepted(
-            Point3i point, int xShift, int yShift, int zShift, Extent extent) {
+            Point3i point) {
         return true;
     }
 }

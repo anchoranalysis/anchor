@@ -26,13 +26,8 @@
 
 package org.anchoranalysis.image.voxel.kernel.count;
 
-import java.util.Optional;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
-import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
-import org.anchoranalysis.image.voxel.kernel.LocalSlices;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.spatial.Extent;
 import org.anchoranalysis.spatial.point.Point3i;
 
 /**
@@ -46,51 +41,21 @@ import org.anchoranalysis.spatial.point.Point3i;
  */
 public class CountKernelNeighborhoodMask extends CountKernel {
 
-    private BinaryVoxels<UnsignedByteBuffer> voxelsRequireHigh;
-    private BinaryValuesByte bvRequireHigh;
-    private ObjectMask objectRequireHigh;
+    private final ObjectMask objectRequireHigh;
 
-    private LocalSlices localSlicesRequireHigh;
-
+    /**
+     * Create with object-mask.
+     * 
+     * @param objectRequireHigh an object with coordinates relative to the {@link BinaryVoxels} the kernel is being applied on,
+     *  only on whose <i>on</i> voxels is a neighboring voxel considered.
+     */
     public CountKernelNeighborhoodMask(ObjectMask objectRequireHigh) {
         this.objectRequireHigh = objectRequireHigh;
-        this.voxelsRequireHigh = objectRequireHigh.binaryVoxels();
-        this.bvRequireHigh = voxelsRequireHigh.binaryValues().createByte();
-    }
-
-    @Override
-    public void notifyZChange(LocalSlices inSlices, int z) {
-        super.notifyZChange(inSlices, z);
-        localSlicesRequireHigh =
-                new LocalSlices(
-                        z + objectRequireHigh.boundingBox().cornerMin().z(),
-                        3,
-                        voxelsRequireHigh.voxels());
     }
 
     @Override
     protected boolean isNeighborVoxelAccepted(
-            Point3i point, int xShift, int yShift, int zShift, Extent extent) {
-
-        Optional<UnsignedByteBuffer> inArr = localSlicesRequireHigh.getLocal(zShift);
-
-        if (!inArr.isPresent()) {
-            return false;
-        }
-
-        int x1 = point.x() + objectRequireHigh.boundingBox().cornerMin().x() + xShift;
-
-        if (!voxelsRequireHigh.extent().containsX(x1)) {
-            return false;
-        }
-
-        int y1 = point.y() + objectRequireHigh.boundingBox().cornerMin().y() + yShift;
-
-        if (!voxelsRequireHigh.extent().containsY(y1)) {
-            return false;
-        }
-
-        int indexGlobal = voxelsRequireHigh.extent().offset(x1, y1);
-        return bvRequireHigh.isOn(inArr.get().getRaw(indexGlobal));
+            Point3i point) {
+        return objectRequireHigh.contains(point);
     }
 }

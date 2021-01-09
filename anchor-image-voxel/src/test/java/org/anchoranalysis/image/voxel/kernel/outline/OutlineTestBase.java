@@ -35,12 +35,12 @@ abstract class OutlineTestBase extends BinaryKernelTestBase {
 
     @Override
     protected int expectedInside2D(ObjectMaskFixture fixture, KernelApplicationParameters params) {
-        return fixture.expectedSurfaceNumberVoxels(useZFor2D(params));
+        return fixture.sizeSurface(useZFor2D(params));
     }
 
     @Override
     protected int expectedInside3D(ObjectMaskFixture fixture, KernelApplicationParameters params) {
-        return fixture.expectedSurfaceNumberVoxels(params.isUseZ());
+        return fixture.sizeSurface(params.isUseZ());
     }
 
     @Override
@@ -58,7 +58,7 @@ abstract class OutlineTestBase extends BinaryKernelTestBase {
     private static int whenOutsideOff(
             KernelApplicationParameters params, ObjectMaskFixture fixture, IntSupplier otherwise) {
         if (params.getOutsideKernelPolicy() == OutsideKernelPolicy.AS_OFF) {
-            return fixture.expectedSurfaceNumberVoxels(params.isUseZ());
+            return fixture.sizeSurface(params.isUseZ());
         } else {
             return otherwise.getAsInt();
         }

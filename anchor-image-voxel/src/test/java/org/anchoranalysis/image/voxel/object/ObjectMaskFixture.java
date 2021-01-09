@@ -124,25 +124,49 @@ public class ObjectMaskFixture {
     }
 
     /**
-     * The expected number of voxels on the surface of the object in total.
+     * The total number of voxels on the surface of the object.
      *
-     * @param treatZAsSurface if true, z is also treated as a dimension in which a surface is
+     * @param useZ if true, z is also treated as a dimension in which a surface is
      *     indicated. If false, only surfaces in X and Y dimensions are considered.
      * @return the number of voxels that are expected to appear on the surface
      */
-    public int expectedSurfaceNumberVoxels(boolean treatZAsSurface) {
+    public int sizeSurface(boolean useZ) {
+        checkNoRemoveCorners();
+
+        // The top and bottom lines in x
+        int typicalSlice = multiplyFirstTwoDifferently(extent.y(), extent.x(), 2);
+
+        if (useZ) {
+            return multiplyFirstTwoDifferently(extent.z(), extent.volumeXY(), typicalSlice);
+        } else {
+            return typicalSlice * extent.z();
+        }
+    }
+    
+    /**
+     * The total number of neighbours voxels.
+     *
+     * @param useZ if true, z is also treated as a dimension in which neighbors
+     *     are considered. If false, only neighbours in X and Y dimensions are considered.
+     * @return the number of voxels that are expected to appear on the surface
+     */
+    public int numberNeighbors(boolean useZ) {
+        checkNoRemoveCorners();
+
+        // The top and bottom lines in x
+        int neighbours2D = 2 * (extent.x() + extent.y()) * extent.z();
+
+        if (useZ) {
+            return neighbours2D + (2 * extent.volumeXY());
+        } else {
+            return neighbours2D;
+        }
+    }
+    
+    private void checkNoRemoveCorners() {
         if (removeCorners) {
             throw new UnsupportedOperationException(
                     "removeCorners==true is not supported for this method");
-        } else {
-            // The top and bottom lines in x
-            int typicalSlice = multiplyFirstTwoDifferently(extent.y(), extent.x(), 2);
-
-            if (treatZAsSurface) {
-                return multiplyFirstTwoDifferently(extent.z(), extent.volumeXY(), typicalSlice);
-            } else {
-                return typicalSlice * extent.z();
-            }
         }
     }
 

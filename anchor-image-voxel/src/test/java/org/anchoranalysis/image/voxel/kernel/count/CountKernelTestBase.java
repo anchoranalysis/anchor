@@ -25,12 +25,61 @@
  */
 package org.anchoranalysis.image.voxel.kernel.count;
 
+import org.anchoranalysis.image.voxel.kernel.KernelApplicationParameters;
 import org.anchoranalysis.image.voxel.kernel.KernelTestBase;
 import org.anchoranalysis.image.voxel.kernel.apply.ApplyCountKernel;
+import org.anchoranalysis.image.voxel.object.ObjectMaskFixture;
 
+/**
+ * Base class for tests that involve a {@link CountKernel}.
+ * 
+ * @author Owen Feehan
+ *
+ */
 abstract class CountKernelTestBase extends KernelTestBase<CountKernel> {
-
+    
     protected CountKernelTestBase() {
         super( new ApplyCountKernel() );
     }
+
+    @Override
+    protected int expectedInside2D(ObjectMaskFixture fixture, KernelApplicationParameters params) {
+        return fixture.numberNeighbors(useZForExpectedInside(params));
+    }
+    
+    @Override
+    protected int expectedInside3D(ObjectMaskFixture fixture, KernelApplicationParameters params) {
+        return fixture.numberNeighbors(params.isUseZ());
+    }
+    
+    @Override
+    protected int expectedBoundary2D(ObjectMaskFixture fixture,
+            KernelApplicationParameters params) {
+        return boundaryFromInside(
+                expectedInside2D(fixture, params), params);
+    }
+
+    @Override
+    protected int expectedBoundary3D(ObjectMaskFixture fixture,
+            KernelApplicationParameters params) {
+        return boundaryFromInside(
+            expectedInside3D(fixture, params), params);
+    }
+    
+    /**
+     * Whether to use the z-dimension when calculating {@link #expectedInside2D}.
+     * 
+     * @param params the parameters
+     * @return whether to useZ or not
+     */
+    protected abstract boolean useZForExpectedInside(KernelApplicationParameters params);
+    
+    /**
+     * Calculates an expected number of voxels for an object adjacent to the boundary, given a value for an object inside the scene.
+     * 
+     * @param expectationForInside the expected number of voxels for an object fully inside the scene, not adjacent to a boundary.
+     * @param params the parameters for applying the kernel.
+     * @return the expected number of voxels for an object adjacent to the boundary.
+     */
+    protected abstract int boundaryFromInside(int expectationForInside, KernelApplicationParameters params);
 }

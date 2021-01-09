@@ -110,6 +110,18 @@ public final class KernelPointCursor {
         point.decrementY(2);
         index -= xExtentTwice;
     }
+    
+    public void incrementZ() {
+        point.incrementZ();
+    }
+
+    public void incrementZTwice() {
+        point.incrementZ(2);
+    }
+
+    public void decrementZ() {
+        point.decrementZ();
+    }
 
     public boolean isUseZ() {
         return params.isUseZ();
