@@ -39,11 +39,11 @@ public class OutlineKernel extends OutlineKernelBase {
      */
     @Override
     protected boolean doesNeighborQualify(
-            boolean guard,
+            boolean inside,
             KernelPointCursor point,
             Supplier<UnsignedByteBuffer> buffer,
             int zShift) {
-        if (guard) {
+        if (inside) {
             return point.isBufferOff(buffer.get());
         } else {
             return point.isOutsideOffUnignored();

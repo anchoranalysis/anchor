@@ -30,20 +30,23 @@ import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.spatial.point.Point3i;
 
-// Erosion with a 3x3 or 3x3x3 kernel
+/**
+ * Executes another {@link BinaryKernel} iff the voxel value at the point {@code >=} a threshold.
+ * @author Owen Feehan
+ *
+ */
 public class ConditionalKernel extends BinaryKernel {
 
     private BinaryKernel kernel;
-    private int minValue;
-    private Voxels<UnsignedByteBuffer> voxelsIntensity;
+    private int threshold;
+    private Voxels<UnsignedByteBuffer> voxels;
 
-    // Constructor
     public ConditionalKernel(
-            BinaryKernel kernel, int minValue, Voxels<UnsignedByteBuffer> voxelsIntensity) {
+            BinaryKernel kernel, int threshold, Voxels<UnsignedByteBuffer> voxels) {
         super(kernel.getSize());
         this.kernel = kernel;
-        this.minValue = minValue;
-        this.voxelsIntensity = voxelsIntensity;
+        this.threshold = threshold;
+        this.voxels = voxels;
     }
 
     @Override
@@ -51,11 +54,11 @@ public class ConditionalKernel extends BinaryKernel {
 
         int value = intensityAtPoint(point.getPoint());
 
-        if (value < minValue) {
+        if (value >= threshold) {
+            return kernel.calculateAt(point);    
+        } else {
             return false;
         }
-
-        return kernel.calculateAt(point);
     }
 
     @Override
@@ -64,8 +67,8 @@ public class ConditionalKernel extends BinaryKernel {
     }
 
     private int intensityAtPoint(Point3i point) {
-        return voxelsIntensity
+        return voxels
                 .sliceBuffer(point.z())
-                .getUnsigned(voxelsIntensity.extent().offsetSlice(point));
+                .getUnsigned(voxels.extent().offsetSlice(point));
     }
 }

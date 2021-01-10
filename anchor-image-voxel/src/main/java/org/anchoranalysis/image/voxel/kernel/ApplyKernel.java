@@ -37,6 +37,7 @@ import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactoryTypeBound;
+import org.anchoranalysis.image.voxel.iterator.neighbor.kernel.IterateKernelHelper;
 import org.anchoranalysis.image.voxel.iterator.process.ProcessKernelPointCursor;
 import org.anchoranalysis.image.voxel.kernel.count.CountKernel;
 import org.anchoranalysis.math.arithmetic.Counter;
@@ -69,7 +70,7 @@ public class ApplyKernel {
 
         Voxels<UnsignedByteBuffer> out = FACTORY.createInitialized(in.extent());
 
-        IterateWithKernelHelper.overAll(
+        IterateKernelHelper.overAll(
                 kernel,
                 in,
                 params,
@@ -132,7 +133,7 @@ public class ApplyKernel {
         
         Counter counter = new Counter();
 
-        IterateWithKernelHelper.overBox(
+        IterateKernelHelper.overBox(
                 kernel,
                 voxels,
                 box,
@@ -160,7 +161,7 @@ public class ApplyKernel {
             KernelApplicationParameters params)
             throws OperationFailedException {
 
-        return IterateWithKernelHelper.overBoxUntil(
+        return IterateKernelHelper.overBoxUntil(
                 kernel,
                 voxels,
                 box,
@@ -176,7 +177,7 @@ public class ApplyKernel {
 
         Counter counter = new Counter();
 
-        IterateWithKernelHelper.overAll(
+        IterateKernelHelper.overAll(
                 kernel,
                 voxels,
                 params,

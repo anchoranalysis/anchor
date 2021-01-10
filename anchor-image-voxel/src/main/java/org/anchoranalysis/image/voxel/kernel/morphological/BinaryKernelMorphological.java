@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.image.voxel.kernel.morphological;
 
-import java.util.Optional;
 import java.util.function.Supplier;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
+import org.anchoranalysis.image.voxel.iterator.neighbor.kernel.WalkPredicate;
 import org.anchoranalysis.image.voxel.kernel.BinaryKernel;
 import org.anchoranalysis.image.voxel.kernel.KernelPointCursor;
 import org.anchoranalysis.image.voxel.kernel.LocalSlices;
@@ -66,7 +66,7 @@ public abstract class BinaryKernelMorphological extends BinaryKernel {
      * @param bigNeighborhood if true, a big neighborhood is used 2D-plane (8-connected instead of
      *     4-connected), but not in Z-direction (remains 2-connected).
      * @param unqualifiedOutcome the (negative) outcome that occurs if no neighbor qualifies
-     *     (fulfills a condition). The positive outcome is assumed to be the complement of this.
+     *     (satisfies a condition). The positive outcome is assumed to be the complement of this.
      * @param failedFirstCheckOutcome if the first-check fails, this outcome is returned.
      */
     protected BinaryKernelMorphological(
@@ -92,10 +92,8 @@ public abstract class BinaryKernelMorphological extends BinaryKernel {
             return failedFirstCheckOutcome;
         }
 
-        if (walkX(point, buffer)
-                || walkY(point, buffer)
-                || walkZ(point)
-                || maybeQualifyFromBigNeighbourhood(point, buffer)) {
+        WalkPredicate walker = new WalkPredicate(point, this::doesNeighborQualify, bigNeighborhood);
+        if (walker.walk(buffer, slices)) {
             return qualifiedOutcome;
         } else {
             return unqualifiedOutcome;
@@ -109,129 +107,18 @@ public abstract class BinaryKernelMorphological extends BinaryKernel {
      */
     protected abstract boolean firstCheck(KernelPointCursor point, UnsignedByteBuffer buffer);
 
+    /**
+     * Does a particular neighboring-point satisfy the conditions.
+     * 
+     * @param inside true iff the neighboring-point is inside the scene.
+     * @param point the point
+     * @param buffer
+     * @param zShift the buffer associated with the current point
+     * @return true if the neighboring-point satisfied the conditions.
+     */
     protected abstract boolean doesNeighborQualify(
-            boolean guard,
+            boolean inside,
             KernelPointCursor point,
             Supplier<UnsignedByteBuffer> buffer,
             int zShift);
-
-    /** Do any neighbor voxels in X direction qualify the voxel? */
-    private boolean walkX(KernelPointCursor point, UnsignedByteBuffer buffer) {
-        // We walk up and down in x
-        point.decrementX();
-
-        if (doesNeighborQualify(point.nonNegativeX(), point, () -> buffer, 0)) {
-            point.incrementX();
-            return true;
-        }
-
-        point.incrementXTwice();
-
-        try {
-            if (doesNeighborQualify(point.lessThanMaxX(), point, () -> buffer, 0)) {
-                return true;
-            }
-        } finally {
-            point.decrementX();
-        }
-
-        return false;
-    }
-
-    /** Do any neighbor voxels in Y direction qualify the voxel? */
-    private boolean walkY(KernelPointCursor point, UnsignedByteBuffer buffer) {
-        point.decrementY();
-
-        if (doesNeighborQualify(point.nonNegativeY(), point, () -> buffer, 0)) {
-            point.incrementY();
-            return true;
-        }
-
-        point.incrementYTwice();
-
-        try {
-            if (doesNeighborQualify(point.lessThanMaxY(), point, () -> buffer, 0)) {
-                return true;
-            }
-        } finally {
-            point.decrementY();
-        }
-
-        return false;
-    }
-
-    /** Do any neighbor voxels in Z direction qualify the voxel? */
-    private boolean walkZ(KernelPointCursor point) {
-        if (point.isUseZ()) {
-            return qualifyFromZDirection(point, -1) || qualifyFromZDirection(point, +1);
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * If big-neighbor is enabled, do any voxels from the big neighborhood (not already covered)
-     * qualify the voxel?
-     */
-    private boolean maybeQualifyFromBigNeighbourhood(
-            KernelPointCursor point, UnsignedByteBuffer buffer) {
-        return bigNeighborhood && qualifyFromBigNeighbourhood(point, buffer);
-    }
-
-    /** Do any voxels from the big neighborhood (not already covered) qualify the voxel? */
-    private boolean qualifyFromBigNeighbourhood(
-            KernelPointCursor point, UnsignedByteBuffer buffer) {
-
-        // x-1, y-1
-        point.decrementX();
-        point.decrementY();
-
-        if (doesNeighborQualify(
-                point.nonNegativeX() && point.nonNegativeY(), point, () -> buffer, 0)) {
-            point.incrementX();
-            point.incrementY();
-            return true;
-        }
-
-        // x-1, y+1
-        point.incrementYTwice();
-
-        if (doesNeighborQualify(
-                point.nonNegativeX() && point.lessThanMaxY(), point, () -> buffer, 0)) {
-            point.incrementX();
-            point.decrementY();
-            return true;
-        }
-
-        // x+1, y+1
-        point.incrementXTwice();
-
-        if (doesNeighborQualify(
-                point.lessThanMaxX() && point.lessThanMaxY(), point, () -> buffer, 0)) {
-            point.decrementX();
-            point.decrementY();
-            return true;
-        }
-
-        // x+1, y-1
-        point.decrementYTwice();
-
-        try {
-            if (doesNeighborQualify(
-                    point.lessThanMaxX() && point.nonNegativeY(), point, () -> buffer, 0)) {
-                return true;
-            }
-        } finally {
-            point.decrementX();
-            point.incrementY();
-        }
-
-        return false;
-    }
-
-    /** Does a neighbor voxel in <b>a specific Z-direction</b> qualify the voxel? */
-    private boolean qualifyFromZDirection(KernelPointCursor point, int zShift) {
-        Optional<UnsignedByteBuffer> buffer = slices.getLocal(zShift);
-        return doesNeighborQualify(buffer.isPresent(), point, buffer::get, zShift);
-    }
 }

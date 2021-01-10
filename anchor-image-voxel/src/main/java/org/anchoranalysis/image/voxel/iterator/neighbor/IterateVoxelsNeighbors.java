@@ -57,7 +57,7 @@ public class IterateVoxelsNeighbors {
             int sourceVal,
             int sourceOffsetXY) {
         process.initSource(sourcePoint, sourceVal, sourceOffsetXY);
-        neighborhood.processAllPointsInNeighborhood(do3D, process);
+        neighborhood.processNeighborhoodPoints(do3D, process);
         return process.collectResult();
     }
 }

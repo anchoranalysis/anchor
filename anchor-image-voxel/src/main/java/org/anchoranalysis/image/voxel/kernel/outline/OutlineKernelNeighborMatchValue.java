@@ -75,11 +75,11 @@ public class OutlineKernelNeighborMatchValue extends OutlineKernelBase {
      */
     @Override
     protected boolean doesNeighborQualify(
-            boolean guard,
+            boolean inside,
             KernelPointCursor point,
             Supplier<UnsignedByteBuffer> buffer,
             int zShift) {
-        if (guard) {
+        if (inside) {
             Optional<UnsignedByteBuffer> requireSlice = localSlicesRequireHigh.getLocal(zShift);
             return point.isBufferOff(buffer.get())
                     && checkIfRequireHighIsTrue(requireSlice.get(), point.getPoint()); // NOSONAR

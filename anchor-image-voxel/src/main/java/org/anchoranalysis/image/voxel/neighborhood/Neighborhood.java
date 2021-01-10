@@ -38,5 +38,11 @@ import org.anchoranalysis.image.voxel.iterator.neighbor.ProcessVoxelNeighbor;
  */
 public interface Neighborhood {
 
-    void processAllPointsInNeighborhood(boolean do3D, ProcessVoxelNeighbor<?> processNeighbor);
+    /**
+     * Calls {@link ProcessVoxelNeighbor} for each voxel in the neighborhood of the current state of {@link ProcessVoxelNeighbor}.
+     * 
+     * @param useZ whether to include the z dimension or not.
+     * @param process the process to call for each point.
+     */
+    void processNeighborhoodPoints(boolean useZ, ProcessVoxelNeighbor<?> process);
 }

@@ -30,7 +30,12 @@ import java.util.function.Supplier;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.kernel.KernelPointCursor;
 
-// Erosion with a 3x3 or 3x3x3 kernel
+/**
+ * Morphological dilation with a 3x3 or 3x3x3 kernel size.
+ * 
+ * @author Owen Feehan
+ *
+ */
 final class DilationKernel extends BinaryKernelMorphological {
 
     public DilationKernel(boolean bigNeighborhood) {
@@ -44,11 +49,11 @@ final class DilationKernel extends BinaryKernelMorphological {
 
     @Override
     protected boolean doesNeighborQualify(
-            boolean guard,
+            boolean inside,
             KernelPointCursor point,
             Supplier<UnsignedByteBuffer> buffer,
             int zShift) {
-        if (guard) {
+        if (inside) {
             return point.isBufferOn(buffer.get());
         } else {
             return point.isOutsideOn();

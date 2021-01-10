@@ -27,6 +27,7 @@
 package org.anchoranalysis.image.voxel.kernel.count;
 
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
+import org.anchoranalysis.image.voxel.iterator.neighbor.kernel.WalkRunnable;
 import org.anchoranalysis.image.voxel.kernel.Kernel;
 import org.anchoranalysis.image.voxel.kernel.KernelPointCursor;
 import org.anchoranalysis.image.voxel.kernel.LocalSlices;
@@ -69,8 +70,8 @@ public abstract class CountKernel extends Kernel {
 
         Counter counter = new Counter();
 
-        WalkAboutPoint walker = new WalkAboutPoint(point, this::doesNeighborVoxelQualify, counter::increment);
-        walker.walkAllDirections(buffer, slices::getLocal);
+        WalkRunnable walker = new WalkRunnable(point, this::doesNeighborVoxelQualify, counter::increment);
+        walker.walk(buffer, slices::getLocal);
         return counter.getCount();
     }
     

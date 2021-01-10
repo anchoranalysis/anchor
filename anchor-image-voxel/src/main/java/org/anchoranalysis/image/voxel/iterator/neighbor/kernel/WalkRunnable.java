@@ -1,10 +1,35 @@
-package org.anchoranalysis.image.voxel.kernel.count;
+/*-
+ * #%L
+ * anchor-image-voxel
+ * %%
+ * Copyright (C) 2010 - 2021 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
+ * %%
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ * #L%
+ */
+package org.anchoranalysis.image.voxel.iterator.neighbor.kernel;
 
 import java.util.Optional;
-import java.util.function.IntFunction;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
+import org.anchoranalysis.image.voxel.kernel.BufferRetriever;
 import org.anchoranalysis.image.voxel.kernel.KernelApplicationParameters;
 import org.anchoranalysis.image.voxel.kernel.KernelPointCursor;
 import org.anchoranalysis.spatial.point.Point3i;
@@ -22,7 +47,7 @@ import lombok.AllArgsConstructor;
  * @author Owen Feehan
  *
  */
-@AllArgsConstructor class WalkAboutPoint {
+@AllArgsConstructor public class WalkRunnable {
     
     /** The cursor used for iterating through points. */
     private final KernelPointCursor point;
@@ -30,7 +55,7 @@ import lombok.AllArgsConstructor;
     /** An additional predicate that must also be satisfied, as the <b>second</b> condition (see class description). */
     private final Predicate<Point3i> additionalPredicate;
             
-    /** Executed whenever an neighbour satisfied the conditions. */
+    /** Executed whenever an neighbor satisfied the conditions. */
     private final Runnable executeWhenSatisfied;
     
     /**
@@ -39,7 +64,7 @@ import lombok.AllArgsConstructor;
      * @param buffer the buffer associated with the current slice
      * @param bufferRetriever a means of retrieving buffers for other slices, accepting a relative shift compared to current slice (e.g. -1, +1) etc.
      */
-    public void walkAllDirections(UnsignedByteBuffer buffer, IntFunction<Optional<UnsignedByteBuffer>> bufferRetriever) {
+    public void walk(UnsignedByteBuffer buffer, BufferRetriever bufferRetriever) {
         walkX(buffer);
         
         walkY(buffer);
@@ -53,46 +78,45 @@ import lombok.AllArgsConstructor;
     private void walkX(UnsignedByteBuffer buffer) {
         point.decrementX();
         
-        increaseCounterIf(point.nonNegativeX(), () -> buffer);
+        executeIf(point.nonNegativeX(), () -> buffer);
 
         point.incrementXTwice();
         
-        increaseCounterIf(point.lessThanMaxX(), () -> buffer);
+        executeIf(point.lessThanMaxX(), () -> buffer);
         
         point.decrementX();        
     }
     
     /** Walk in the y-dimension seeing if neighbors qualify. */
     private void walkY(UnsignedByteBuffer buffer) {
-        
         point.decrementY();
 
-        increaseCounterIf(point.nonNegativeY(), () -> buffer);
+        executeIf(point.nonNegativeY(), () -> buffer);
         
         point.incrementYTwice();
 
-        increaseCounterIf(point.lessThanMaxY(), () -> buffer);
+        executeIf(point.lessThanMaxY(), () -> buffer);
         
         point.decrementY();    
     }
     
     /** Walk in the z-dimension seeing if neighbors qualify. */
-    private void walkZ(IntFunction<Optional<UnsignedByteBuffer>> bufferRetriever) {
+    private void walkZ(BufferRetriever bufferRetriever) {
         point.decrementZ();
-        increaseCounterIfSpecificZ(bufferRetriever, -1);
+        executeIfZDirection(bufferRetriever, -1);
         point.incrementZTwice();
-        increaseCounterIfSpecificZ(bufferRetriever, +1);
+        executeIfZDirection(bufferRetriever, +1);
         point.decrementZ();
     }
     
     /** Does a neighbor voxel in <b>a specific Z-direction</b> qualify the voxel? */
-    private void increaseCounterIfSpecificZ(IntFunction<Optional<UnsignedByteBuffer>> bufferRetriever, int zShift) {
-        Optional<UnsignedByteBuffer> buffer = bufferRetriever.apply(zShift);
-        increaseCounterIf(buffer.isPresent(), buffer::get);
+    private void executeIfZDirection(BufferRetriever bufferRetriever, int zShift) {
+        Optional<UnsignedByteBuffer> buffer = bufferRetriever.getLocal(zShift);
+        executeIf(buffer.isPresent(), buffer::get);
     }
     
-    private void increaseCounterIf(boolean condition, Supplier<UnsignedByteBuffer> buffer) {
-        if (condition) {
+    private void executeIf(boolean inside, Supplier<UnsignedByteBuffer> buffer) {
+        if (inside) {
             if (point.isBufferOff(buffer.get()) && additionalPredicate.test(point.getPoint())) {
                 executeWhenSatisfied.run();
             }
