@@ -41,7 +41,7 @@ class MorphologicalErosionTest extends MorphologicalOperationTestBase {
     protected ObjectMask applyOperation(
             ObjectMask object, ObjectMaskFixture fixture, Extent sceneExtent, boolean useZ)
             throws CreateException {
-        return MorphologicalErosion.createErodedObject(object, 1, useZ);
+        return MorphologicalErosion.erode(object, 1, useZ);
     }
 
     @Override

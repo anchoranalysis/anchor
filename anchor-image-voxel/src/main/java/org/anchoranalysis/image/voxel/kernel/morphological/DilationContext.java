@@ -27,7 +27,6 @@ package org.anchoranalysis.image.voxel.kernel.morphological;
 
 import java.util.Optional;
 import java.util.function.Predicate;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.anchoranalysis.image.voxel.kernel.BinaryKernel;
 import org.anchoranalysis.image.voxel.kernel.ConditionalKernel;
@@ -41,7 +40,6 @@ import org.anchoranalysis.spatial.point.Point3i;
  *
  * @author Owen Feehan
  */
-@AllArgsConstructor
 public class DilationContext {
 
     /** How the kernel is applied to the scene. */
@@ -66,11 +64,21 @@ public class DilationContext {
             boolean useZ,
             boolean bigNeighborhood,
             Optional<Predicate<Point3i>> precondition) {
+        this(outsideKernelPolicy, useZ, bigNeighborhood, precondition, Optional.empty());
+    }
+
+    public DilationContext(
+            OutsideKernelPolicy outsideKernelPolicy,
+            boolean useZ,
+            boolean bigNeighborhood,
+            Optional<Predicate<Point3i>> precondition,
+            Optional<AcceptIterationPredicate> postcondition) {
         this.kernelApplication = new KernelApplicationParameters(outsideKernelPolicy, useZ);
         this.bigNeighborhood = bigNeighborhood;
         this.precondition = precondition;
-        this.postcondition = Optional.empty();
+        this.postcondition = postcondition;
     }
+
     /**
      * Creates a kernel for performing the dilation.
      *

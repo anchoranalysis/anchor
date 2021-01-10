@@ -33,13 +33,17 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
-import org.anchoranalysis.image.voxel.kernel.KernelApplicationParameters;
 import org.anchoranalysis.image.voxel.kernel.OutsideKernelPolicy;
 import org.anchoranalysis.image.voxel.kernel.morphological.DilationContext;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.image.voxel.object.morphological.predicate.AcceptIterationPredicate;
 import org.anchoranalysis.spatial.point.Point3i;
 
+/**
+ * Performs morphological erosion operation on an {@link ObjectMask} or {@link BinaryVoxels}.
+ *
+ * @author Owen Feehan
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MorphologicalErosion {
 
@@ -53,9 +57,9 @@ public class MorphologicalErosion {
      *     erosion operation was applied.
      * @throws CreateException
      */
-    public static ObjectMask createErodedObject(ObjectMask object, int iterations, boolean useZ)
+    public static ObjectMask erode(ObjectMask object, int iterations, boolean useZ)
             throws CreateException {
-        return createErodedObject(object, iterations, useZ);
+        return erode(object, iterations, useZ, Optional.empty());
     }
     /**
      * Performs a morphological erosion on an {@link ObjectMask} - with a <b>postcondition</b>.
@@ -118,14 +122,13 @@ public class MorphologicalErosion {
             Optional<AcceptIterationPredicate> postcondition)
             throws CreateException {
 
-        KernelApplicationParameters parameters =
-                new KernelApplicationParameters(OutsideKernelPolicy.AS_ON, useZ);
+        DilationContext context =
+                new DilationContext(
+                        OutsideKernelPolicy.AS_ON, useZ, false, precondition, postcondition);
+
         voxels.invert();
         BinaryVoxels<UnsignedByteBuffer> dilated =
-                MorphologicalDilation.dilate(
-                        voxels,
-                        iterations,
-                        new DilationContext(parameters, false, precondition, postcondition));
+                MorphologicalDilation.dilate(voxels, iterations, context);
         dilated.invert();
         return dilated;
     }
