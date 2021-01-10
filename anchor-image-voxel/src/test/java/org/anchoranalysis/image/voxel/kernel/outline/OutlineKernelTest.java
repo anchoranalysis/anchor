@@ -1,8 +1,8 @@
 /*-
  * #%L
- * anchor-image
+ * anchor-image-voxel
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
+ * Copyright (C) 2010 - 2021 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,15 +23,21 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.image.voxel.object.morphological;
+package org.anchoranalysis.image.voxel.kernel.outline;
 
-public enum SelectDimensions {
-    /** The dilation applies only in the Z-dimension. */
-    Z_ONLY,
+import org.anchoranalysis.image.voxel.kernel.BinaryKernel;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.spatial.Extent;
 
-    /** The dilation applies in X and Y -dimensions only, and not in Z-dimension. */
-    X_Y_ONLY,
+/**
+ * Tests {@link OutlineKernel}.
+ *
+ * @author Owen Feehan
+ */
+class OutlineKernelTest extends OutlineTestBase {
 
-    /** The dilation applies in all dimensions (X, Y and Z) */
-    ALL_DIMENSIONS
+    @Override
+    protected BinaryKernel createKernel(ObjectMask object, Extent extentScene) {
+        return new OutlineKernel();
+    }
 }

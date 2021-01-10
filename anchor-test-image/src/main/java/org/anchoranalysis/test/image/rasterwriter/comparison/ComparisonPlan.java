@@ -123,8 +123,7 @@ public class ComparisonPlan {
         }
     }
 
-    private Optional<ImageComparer> maybeCreateBytewiseComparer(
-            Path directory, String extension) {
+    private Optional<ImageComparer> maybeCreateBytewiseComparer(Path directory, String extension) {
         return OptionalUtilities.createFromFlag(
                 bytewiseCompare, () -> new CompareBytes(createComparer(extension, directory)));
     }

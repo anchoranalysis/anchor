@@ -34,11 +34,11 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerFactory;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class XMLUtilities {
@@ -50,63 +50,69 @@ public class XMLUtilities {
      * @throws ParserConfigurationException if the exception is thrown from
      *     DocumentBuilder.newDocumentBuilder
      */
-    public static DocumentBuilder createBuilderWithDefaultErrorHandler() throws ParserConfigurationException {
+    public static DocumentBuilder createBuilderWithDefaultErrorHandler()
+            throws ParserConfigurationException {
         DocumentBuilder builder = XMLUtilities.createDocumentBuilder();
         builder.setErrorHandler(new DefaultHandler());
         return builder;
     }
 
     /**
-     * Creates a {@link TransformerFactory} that ignores any DTDs in the document and disables external entities (to prevent XXE attacks).
-     * 
+     * Creates a {@link TransformerFactory} that ignores any DTDs in the document and disables
+     * external entities (to prevent XXE attacks).
+     *
      * @return a newly created {@link DocumentBuilderFactory}
      * @throws TransformerConfigurationException
      */
-    public static TransformerFactory createTransformerFactory() throws TransformerConfigurationException {
-        TransformerFactory factory = TransformerFactory.newInstance();  // NOSONAR
+    public static TransformerFactory createTransformerFactory()
+            throws TransformerConfigurationException {
+        TransformerFactory factory = TransformerFactory.newInstance(); // NOSONAR
         factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
         return factory;
     }
-    
+
     /**
      * Parses a XML file to produce a {@link Document}.
-     * 
+     *
      * @param file the XML file.
      * @return the document
      * @throws SAXException
      * @throws IOException
      * @throws ParserConfigurationException
      */
-    public static Document parse(File file) throws SAXException, IOException, ParserConfigurationException {
+    public static Document parse(File file)
+            throws SAXException, IOException, ParserConfigurationException {
         return createDocumentBuilder().parse(file);
     }
-    
+
     /**
      * Creates a new XML document.
-     * 
+     *
      * @return the newly created {@link Document}
      * @throws ParserConfigurationException
      */
     public static Document createNewDocument() throws ParserConfigurationException {
         return createDocumentBuilder().newDocument();
     }
-    
+
     /**
-     * Creates a {@link DocumentBuilder} that ignores any DTDs in the document and disables external entities (to prevent XXE attacks).
-     * 
+     * Creates a {@link DocumentBuilder} that ignores any DTDs in the document and disables external
+     * entities (to prevent XXE attacks).
+     *
      * @return a newly created {@link DocumentBuilder}
      * @throws ParserConfigurationException
      */
     private static DocumentBuilder createDocumentBuilder() throws ParserConfigurationException {
         return createDocumentBuilderFactory().newDocumentBuilder();
     }
-    
+
     /**
-     * Creates a {@link DocumentBuilderFactory} that ignores any DTDs in the document and disables external entities (to prevent XXE attacks).
-     * 
+     * Creates a {@link DocumentBuilderFactory} that ignores any DTDs in the document and disables
+     * external entities (to prevent XXE attacks).
+     *
      * @return a newly created {@link DocumentBuilderFactory}
      */
     private static DocumentBuilderFactory createDocumentBuilderFactory() {
-        return DocumentBuilderFactory.newInstance();  // NOSONAR
+        return DocumentBuilderFactory.newInstance(); // NOSONAR
     }
 }

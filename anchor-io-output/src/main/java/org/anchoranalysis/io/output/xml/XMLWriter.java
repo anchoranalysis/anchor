@@ -57,7 +57,7 @@ public class XMLWriter {
             try (FileWriter writer = new FileWriter(path.toFile())) {
                 StreamResult result = new StreamResult(writer);
                 DOMSource source = new DOMSource(document);
-    
+
                 transformer.transform(source, result);
             }
         } catch (TransformerException e) {

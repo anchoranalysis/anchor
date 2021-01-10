@@ -136,7 +136,7 @@ public class FunctionalList {
                 .map(Optional::get)
                 .collect(Collectors.toList());
     }
-    
+
     /**
      * Maps a collection to a list with each element in the original collection maybe producing an
      * element in the output
@@ -149,11 +149,14 @@ public class FunctionalList {
      *     output if the optional is defined)
      * @return a list with the same size and same order, but using derived elements that are a
      *     result of the mapping
-     * @throws E 
+     * @throws E
      */
     public static <S, T, E extends Exception> List<T> mapToListOptional(
-            Collection<S> collection, Class<? extends Exception> throwableClass, CheckedFunction<S, Optional<T>, E> mapFunction) throws E {
-        return CheckedStream.map( collection.stream(), throwableClass, mapFunction )
+            Collection<S> collection,
+            Class<? extends Exception> throwableClass,
+            CheckedFunction<S, Optional<T>, E> mapFunction)
+            throws E {
+        return CheckedStream.map(collection.stream(), throwableClass, mapFunction)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(Collectors.toList());

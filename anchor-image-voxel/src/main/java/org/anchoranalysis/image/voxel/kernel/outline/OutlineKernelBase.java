@@ -26,16 +26,24 @@
 
 package org.anchoranalysis.image.voxel.kernel.outline;
 
-import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.voxel.kernel.morphological.BinaryKernelMorphologicalExtent;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
+import org.anchoranalysis.image.voxel.kernel.KernelPointCursor;
+import org.anchoranalysis.image.voxel.kernel.morphological.BinaryKernelMorphological;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 
-public abstract class OutlineKernelBase extends BinaryKernelMorphologicalExtent {
+/**
+ * A base class for kernels that find the outline of an {@link ObjectMask}.
+ *
+ * @author Owen Feehan
+ */
+public abstract class OutlineKernelBase extends BinaryKernelMorphological {
 
-    /** Disconsiders anything outside the threshold. Takes priority ahead of outsideAtThreshold */
-    protected final boolean ignoreAtThreshold;
+    protected OutlineKernelBase() {
+        super(false, false, false);
+    }
 
-    protected OutlineKernelBase(BinaryValuesByte bv, OutlineKernelParameters params) {
-        super(bv, params.isOutsideAtThreshold(), params.isUseZ());
-        this.ignoreAtThreshold = params.isIgnoreAtThreshold();
+    @Override
+    protected boolean firstCheck(KernelPointCursor point, UnsignedByteBuffer buffer) {
+        return point.isBufferOn(buffer);
     }
 }

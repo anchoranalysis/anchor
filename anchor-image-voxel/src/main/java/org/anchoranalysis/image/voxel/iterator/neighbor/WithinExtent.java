@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.image.voxel.iterator.neighbor;
 
+import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.spatial.Extent;
 import org.anchoranalysis.spatial.point.Point3i;
 
@@ -37,22 +38,20 @@ import org.anchoranalysis.spatial.point.Point3i;
  * @param <T> result-type that can be collected after processing
  * @author Owen Feehan
  */
+@RequiredArgsConstructor
 final class WithinExtent<T> implements ProcessVoxelNeighbor<T> {
 
+    // START REQUIRED ARGUMENTS
     private final Extent extent;
-    private final ProcessVoxelNeighborAbsolute<T> delegate;
+    private final ProcessVoxelNeighborAbsolute<T> processAbsolutePoint;
+    // END REQUIRED ARGUMENTS
 
     private Point3i point;
-
-    public WithinExtent(Extent extent, ProcessVoxelNeighborAbsolute<T> processAbsolutePoint) {
-        this.extent = extent;
-        this.delegate = processAbsolutePoint;
-    }
 
     @Override
     public void initSource(Point3i point, int sourceVal, int sourceOffsetXY) {
         this.point = point;
-        this.delegate.initSource(sourceVal, sourceOffsetXY);
+        this.processAbsolutePoint.initSource(sourceVal, sourceOffsetXY);
     }
 
     @Override
@@ -65,7 +64,7 @@ final class WithinExtent<T> implements ProcessVoxelNeighbor<T> {
             return;
         }
 
-        delegate.processPoint(xChange, yChange, x1, y1);
+        processAbsolutePoint.processPoint(xChange, yChange, x1, y1);
     }
 
     @Override
@@ -76,12 +75,12 @@ final class WithinExtent<T> implements ProcessVoxelNeighbor<T> {
             return false;
         }
 
-        delegate.notifyChangeZ(zChange, z1);
+        processAbsolutePoint.notifyChangeZ(zChange, z1);
         return true;
     }
 
     @Override
     public T collectResult() {
-        return delegate.collectResult();
+        return processAbsolutePoint.collectResult();
     }
 }

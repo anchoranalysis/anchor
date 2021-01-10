@@ -36,7 +36,7 @@ import org.anchoranalysis.mpp.segment.optimization.feedback.period.PeriodTrigger
 public class FeedbackBeginParameters<T> {
 
     private OptimizationContext initContext;
-    private WeightedKernelList<?,?> kernelFactoryList;
+    private WeightedKernelList<?, ?> kernelFactoryList;
     private PeriodTriggerBank<T> periodTriggerBank;
     private AggregateTriggerBank<T> aggregateTriggerBank;
 }

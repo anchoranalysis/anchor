@@ -31,5 +31,4 @@ import org.anchoranalysis.image.bean.ImageBean;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 
 public abstract class DimensionsProvider extends ImageBean<DimensionsProvider>
-        implements Provider<Dimensions> {
-}
+        implements Provider<Dimensions> {}

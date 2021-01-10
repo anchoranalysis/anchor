@@ -23,15 +23,42 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.image.voxel.kernel.outline;
+package org.anchoranalysis.image.voxel.kernel;
 
 import lombok.AllArgsConstructor;
 import lombok.Value;
+import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
 
+/**
+ * Parameters used for applying a {@link Kernel} to a {@link BinaryVoxels}.
+ *
+ * @author Owen Feehan
+ */
 @Value
 @AllArgsConstructor
-public class OutlineKernelParameters {
-    boolean outsideAtThreshold;
-    boolean useZ;
-    boolean ignoreAtThreshold;
+public class KernelApplicationParameters {
+
+    /**
+     * How to handle voxels that appear in a neighbourhood that lies outside the scene boundaries.
+     */
+    private final OutsideKernelPolicy outsideKernelPolicy;
+
+    /** Whether to additionally apply the kernel along the Z dimension, as well as X and Y? */
+    private final boolean useZ;
+
+    public boolean isIgnoreOutside() {
+        return outsideKernelPolicy.isIgnoreOutside();
+    }
+
+    public boolean isOutsideOn() {
+        return outsideKernelPolicy.isOutsideOn();
+    }
+
+    public boolean isOutsideOffUnignored() {
+        return !isIgnoreOutside() && !isOutsideOn();
+    }
+
+    public boolean isOutsideOnUnignored() {
+        return !isIgnoreOutside() && isOutsideOn();
+    }
 }

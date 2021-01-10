@@ -120,7 +120,7 @@ public class MPPInitParams implements BeanInitParams {
     public NamedProviderStore<MarkSplitProposer> getMarkSplitProposerSet() {
         return storeMarkSplitProposer;
     }
-    
+
     public NamedProviderStore<RandomCollection<IdentifiablePair<Mark>>> getSimplePairCollection() {
         return storePairCollection;
     }

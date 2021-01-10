@@ -26,8 +26,8 @@
 
 package org.anchoranalysis.spatial.box;
 
-import lombok.AllArgsConstructor;
 import java.util.function.ToIntFunction;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.point.ReadableTuple3i;
 
@@ -69,8 +69,15 @@ public class BoundingBoxUnion {
                 extractPoint(comparerX, comparerY, comparerZ, ExtentBoundsComparer::min),
                 extractPoint(comparerX, comparerY, comparerZ, ExtentBoundsComparer::max));
     }
-    
-    private static Point3i extractPoint(ExtentBoundsComparer comparerX, ExtentBoundsComparer comparerY, ExtentBoundsComparer comparerZ, ToIntFunction<ExtentBoundsComparer> extract) {
-        return new Point3i( extract.applyAsInt(comparerX), extract.applyAsInt(comparerY), extract.applyAsInt(comparerZ));
+
+    private static Point3i extractPoint(
+            ExtentBoundsComparer comparerX,
+            ExtentBoundsComparer comparerY,
+            ExtentBoundsComparer comparerZ,
+            ToIntFunction<ExtentBoundsComparer> extract) {
+        return new Point3i(
+                extract.applyAsInt(comparerX),
+                extract.applyAsInt(comparerY),
+                extract.applyAsInt(comparerZ));
     }
 }

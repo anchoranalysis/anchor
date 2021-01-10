@@ -1,8 +1,8 @@
 /*-
  * #%L
- * anchor-image
+ * anchor-image-voxel
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
+ * Copyright (C) 2010 - 2021 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,27 +23,20 @@
  * THE SOFTWARE.
  * #L%
  */
+package org.anchoranalysis.image.voxel.kernel;
 
-package org.anchoranalysis.image.voxel.kernel.morphological;
-
-import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.spatial.point.Point3i;
 
-public abstract class BinaryKernelMorphologicalExtent extends BinaryKernelMorphological {
+@NoArgsConstructor
+class FlattenHelper {
 
-    protected final boolean useZ;
-    protected Extent extent;
-
-    protected BinaryKernelMorphologicalExtent(
-            BinaryValuesByte bv, boolean outsideAtThreshold, boolean useZ) {
-        super(bv, outsideAtThreshold);
-        this.useZ = useZ;
+    public static Extent maybeFlattenExtent(Extent extent, boolean do3D) {
+        return do3D ? extent : extent.flattenZ();
     }
 
-    @Override
-    public void init(Voxels<UnsignedByteBuffer> in) {
-        this.extent = in.extent();
+    public static Point3i maybeFlattenPoint(Point3i point, boolean do3D) {
+        return do3D ? point : new Point3i(point.x(), point.y(), 0);
     }
 }

@@ -26,44 +26,33 @@
 
 package org.anchoranalysis.image.voxel.kernel;
 
-import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
+import java.util.function.Predicate;
 import org.anchoranalysis.spatial.point.Point3i;
 
-// Erosion with a 3x3 or 3x3x3 kernel
+/**
+ * Executes another {@link BinaryKernel} iff a predicated is satisfied for a particular point.
+ *
+ * @author Owen Feehan
+ */
 public class ConditionalKernel extends BinaryKernel {
 
     private BinaryKernel kernel;
-    private int minValue;
-    private Voxels<UnsignedByteBuffer> voxelsIntensity;
+    private Predicate<Point3i> predicate;
 
-    // Constructor
-    public ConditionalKernel(
-            BinaryKernel kernel, int minValue, Voxels<UnsignedByteBuffer> voxelsIntensity) {
+    public ConditionalKernel(BinaryKernel kernel, Predicate<Point3i> predicate) {
         super(kernel.getSize());
         this.kernel = kernel;
-        this.minValue = minValue;
-        this.voxelsIntensity = voxelsIntensity;
+        this.predicate = predicate;
     }
 
     @Override
-    public boolean acceptPoint(int ind, Point3i point) {
+    public boolean calculateAt(KernelPointCursor point) {
 
-        int value =
-                voxelsIntensity
-                        .sliceBuffer(point.z())
-                        .getUnsigned(voxelsIntensity.extent().offsetSlice(point));
-
-        if (value < minValue) {
+        if (predicate.test(point.getPoint())) {
+            return kernel.calculateAt(point);
+        } else {
             return false;
         }
-
-        return kernel.acceptPoint(ind, point);
-    }
-
-    @Override
-    public void init(Voxels<UnsignedByteBuffer> in) {
-        kernel.init(in);
     }
 
     @Override

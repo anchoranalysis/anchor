@@ -1,8 +1,8 @@
 /*-
  * #%L
- * anchor-image
+ * anchor-image-voxel
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
+ * Copyright (C) 2010 - 2021 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,28 +23,35 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.image.voxel.object.morphological;
+package org.anchoranalysis.image.voxel.kernel;
 
-import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.image.voxel.object.ObjectMaskFixture;
+import org.anchoranalysis.spatial.point.Point3i;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class SelectDimensionsFactory {
+@NoArgsConstructor
+class CorneredObjectHelper {
 
-    public static SelectDimensions of(boolean do3D) {
-        return do3D ? SelectDimensions.ALL_DIMENSIONS : SelectDimensions.X_Y_ONLY;
+    /**
+     * A corner for the object that doesn't touch a boundary, assuming it exists in a
+     * sufficiently-large scene.
+     */
+    private static final Point3i CORNER_NOT_AT_BORDER = new Point3i(2, 3, 2);
+
+    /** A corner for the object that sits at the origin. */
+    private static final Point3i CORNER_ORIGIN = new Point3i(0, 0, 0);
+
+    public static ObjectMask createObjectFromFixture(
+            ObjectMaskFixture fixture, boolean scene3D, boolean atOrigin) {
+        return fixture.filledMask(corner(scene3D, atOrigin));
     }
 
-    public static SelectDimensions of(boolean do3D, boolean zOnly) throws OperationFailedException {
-        if (zOnly) {
-            if (do3D) {
-                return SelectDimensions.Z_ONLY;
-            } else {
-                throw new OperationFailedException("If zOnly is true, then do3D must also be true");
-            }
+    private static Point3i corner(boolean scene3D, boolean atOrigin) {
+        if (atOrigin) {
+            return CORNER_ORIGIN;
         } else {
-            return of(do3D);
+            return FlattenHelper.maybeFlattenPoint(CORNER_NOT_AT_BORDER, scene3D);
         }
     }
 }

@@ -47,8 +47,7 @@ public class FilePathProviderReference extends FilePathProvider {
 
         if (filePath == null) {
             try {
-                filePath =
-                        getInitializationParameters().getNamedFilePaths().getException(id);
+                filePath = getInitializationParameters().getNamedFilePaths().getException(id);
             } catch (NamedProviderGetException e) {
                 throw new CreateException(e);
             }

@@ -26,6 +26,7 @@
 package org.anchoranalysis.image.voxel.neighborhood;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 import java.util.function.ToIntFunction;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.graph.GraphWithPayload;
@@ -85,29 +86,35 @@ class NeighborGraphTest {
 
     /**
      * Asserts if the graph has expected attributes.
-     * 
-     * @author Owen Feehan
      *
+     * @author Owen Feehan
      */
     private class GraphAsserter {
-        
+
         private final GraphWithPayload<?, ?> graph;
         private final String prefixAugmented;
-        
+
         public GraphAsserter(GraphWithPayload<?, ?> graph, String prefix, boolean do3D) {
             this.graph = graph;
             this.prefixAugmented = prefix + (do3D ? "_3D_" : "_2D_");
         }
-        
-        /** 
+
+        /**
          * Asserts that a value extracted from the graph is equal to nn expected-value.
-         * 
+         *
          * @param expectedValue the expected-value
          * @param extractValue the value extracted from the graph
-         * @param identifier an identifier that (after a prefixed is added) uniquely identifies the assertion, in case of failure.
+         * @param identifier an identifier that (after a prefixed is added) uniquely identifies the
+         *     assertion, in case of failure.
          */
-        public void value(int expectedValue, ToIntFunction<GraphWithPayload<?, ?>> extractValue, String identifier) {
-            assertEquals(expectedValue, extractValue.applyAsInt(graph), () -> prefixAugmented + identifier);
+        public void value(
+                int expectedValue,
+                ToIntFunction<GraphWithPayload<?, ?>> extractValue,
+                String identifier) {
+            assertEquals(
+                    expectedValue,
+                    extractValue.applyAsInt(graph),
+                    () -> prefixAugmented + identifier);
         }
     }
 }

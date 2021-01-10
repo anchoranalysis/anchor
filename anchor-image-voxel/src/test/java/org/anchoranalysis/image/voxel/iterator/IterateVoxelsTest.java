@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.image.voxel.iterator;
 
-import static org.anchoranalysis.image.voxel.object.ObjectMaskFixture.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Optional;
@@ -44,51 +43,49 @@ class IterateVoxelsTest {
 
     private static final int Y_MASK_2 = 35;
     /** END: Constants for object sizes and locations */
-
-    /** START: Constants for expected results */
-    private static final int EXPECTED_SINGLE_NUM_VOXELS_2D = OBJECT_NUM_VOXELS_2D;
-
-    private static final int EXPECTED_INTERSECTION_NUM_VOXELS_2D =
-            OBJECT_NUM_VOXELS_2D - ((Y_MASK_2 - Y_MASK_1) * WIDTH);
     private static final int EXPECTED_INTERSECTION_CENTER_X = 39;
+
     private static final int EXPECTED_INTERSECTION_CENTER_Y = 57;
     /** END: Constants for expected results */
     @Test
     void test2D() {
+        ObjectMaskFixture fixture = new ObjectMaskFixture(true, false);
         testTwoMasks(
-                false,
-                EXPECTED_SINGLE_NUM_VOXELS_2D,
-                EXPECTED_INTERSECTION_NUM_VOXELS_2D,
+                fixture,
                 new Point3i(EXPECTED_INTERSECTION_CENTER_X, EXPECTED_INTERSECTION_CENTER_Y, 0));
     }
 
     @Test
     void test3D() {
+        ObjectMaskFixture fixture = new ObjectMaskFixture(true, true);
         testTwoMasks(
-                true,
-                EXPECTED_SINGLE_NUM_VOXELS_2D * DEPTH,
-                EXPECTED_INTERSECTION_NUM_VOXELS_2D * DEPTH,
+                fixture,
                 new Point3i(
-                        EXPECTED_INTERSECTION_CENTER_X, EXPECTED_INTERSECTION_CENTER_Y, DEPTH / 2));
+                        EXPECTED_INTERSECTION_CENTER_X,
+                        EXPECTED_INTERSECTION_CENTER_Y,
+                        fixture.extent().z() / 2));
     }
 
-    private void testTwoMasks(
-            boolean do3D,
-            int expectedSingleNumberVoxels,
-            int expectedIntersectionNumVoxels,
-            Point3i expectedIntersectionCenter) {
+    /** Expected number of voxels in the intersection. */
+    private int expectedIntersection(ObjectMaskFixture fixture) {
+        return fixture.expectedVolume()
+                - ((Y_MASK_2 - Y_MASK_1) * fixture.extent().x() * fixture.extent().z());
+    }
 
-        ObjectMaskFixture objectsFixture = new ObjectMaskFixture(true, do3D);
+    private void testTwoMasks(ObjectMaskFixture fixture, Point3i expectedIntersectionCenter) {
 
-        ObjectMask object1 = objectsFixture.filledMask(20, Y_MASK_1);
+        int expectedSingleNumberVoxels = fixture.expectedVolume();
+        int expectedIntersectionNumberVoxels = expectedIntersection(fixture);
+
+        ObjectMask object1 = fixture.filledMask(20, Y_MASK_1);
         ObjectMask object2 =
-                objectsFixture.filledMask(20, Y_MASK_2); // Overlaps with mask1 but not entirely
+                fixture.filledMask(20, Y_MASK_2); // Overlaps with mask1 but not entirely
 
         testSingleObject("object1", expectedSingleNumberVoxels, object1);
         testSingleObject("object2", expectedSingleNumberVoxels, object2);
         testIntersectionObjects(
                 "intersection",
-                expectedIntersectionNumVoxels,
+                expectedIntersectionNumberVoxels,
                 expectedIntersectionCenter,
                 object1,
                 object2);

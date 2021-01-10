@@ -39,7 +39,6 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectCollectionFixture;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.image.voxel.object.ObjectMaskFixture;
 import org.anchoranalysis.spatial.Extent;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -48,63 +47,61 @@ class ConnectedComponentUnitFindTest {
 
     private ConnectedComponentUnionFind connectedComponents;
 
-    private ObjectCollectionFixture objectsFixture;
-
     @BeforeEach
     public void setup() {
         connectedComponents = new ConnectedComponentUnionFind(1, false);
-        objectsFixture = new ObjectCollectionFixture();
     }
 
     @Test
     void testByte2d() throws OperationFailedException, CreateException {
-        testObjects(deriveInt(false), ObjectMaskFixture.OBJECT_NUM_VOXELS_2D);
+        ObjectCollectionFixture fixture = new ObjectCollectionFixture();
+        testObjects(deriveInt(false, fixture), fixture, fixture.expectedSingleNumberVoxels());
     }
 
     @Test
     void testInt2d() throws OperationFailedException, CreateException {
-        testObjects(deriveByte(false), ObjectMaskFixture.OBJECT_NUM_VOXELS_2D);
+        ObjectCollectionFixture fixture = new ObjectCollectionFixture();
+        testObjects(deriveByte(false, fixture), fixture, fixture.expectedSingleNumberVoxels());
     }
 
     @Test
     void testByte3d() throws OperationFailedException, CreateException {
-        testObjects(deriveInt(true), ObjectMaskFixture.OBJECT_NUM_VOXELS_3D);
+        ObjectCollectionFixture fixture = new ObjectCollectionFixture();
+        fixture.setDo3D(true);
+        testObjects(deriveInt(true, fixture), fixture, fixture.expectedSingleNumberVoxels());
     }
 
     @Test
     void testInt3d() throws OperationFailedException, CreateException {
-        testObjects(deriveByte(true), ObjectMaskFixture.OBJECT_NUM_VOXELS_3D);
+        ObjectCollectionFixture fixture = new ObjectCollectionFixture();
+        fixture.setDo3D(true);
+        testObjects(deriveByte(true, fixture), fixture, fixture.expectedSingleNumberVoxels());
     }
 
-    private ObjectCollection deriveInt(boolean do3D)
+    private ObjectCollection deriveInt(boolean do3D, ObjectCollectionFixture fixture)
             throws OperationFailedException, CreateException {
-        objectsFixture.setDo3D(do3D);
         return connectedComponents.deriveConnectedInt(
-                createBufferWithObjects(UnsignedIntVoxelType.INSTANCE, do3D));
+                createBufferWithObjects(UnsignedIntVoxelType.INSTANCE, fixture));
     }
 
-    private ObjectCollection deriveByte(boolean do3D)
+    private ObjectCollection deriveByte(boolean do3D, ObjectCollectionFixture fixture)
             throws OperationFailedException, CreateException {
         return connectedComponents.deriveConnectedByte(
-                createBufferWithObjects(UnsignedByteVoxelType.INSTANCE, do3D));
+                createBufferWithObjects(UnsignedByteVoxelType.INSTANCE, fixture));
     }
 
-    private void testObjects(ObjectCollection objects, int expectedSingleObjectSize)
+    private void testObjects(
+            ObjectCollection objects, ObjectCollectionFixture fixture, int expectedSingleObjectSize)
             throws CreateException, OperationFailedException {
         assertEquals(
-                objectsFixture.getNumberNonOverlappingObjects() + 1,
-                objects.size(),
-                "number of objects");
+                fixture.getNumberNonOverlappingObjects() + 1, objects.size(), "number of objects");
         assertTrue(
                 allSizesEqualExceptOne(objects, expectedSingleObjectSize),
                 "size of all objects except one");
     }
 
-    private <T> BinaryVoxels<T> createBufferWithObjects(VoxelDataType bufferDataType, boolean do3D)
-            throws CreateException {
-
-        ObjectCollectionFixture fixture = new ObjectCollectionFixture();
-        fixture.setDo3D(do3D);
+    private <T> BinaryVoxels<T> createBufferWithObjects(
+            VoxelDataType bufferDataType, ObjectCollectionFixture fixture) throws CreateException {
 
         Extent extent = fixture.extentLargerThanAllObjects();
 

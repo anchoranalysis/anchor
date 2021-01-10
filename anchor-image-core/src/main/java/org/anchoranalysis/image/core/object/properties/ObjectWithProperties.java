@@ -68,13 +68,13 @@ public class ObjectWithProperties {
     public boolean hasProperty(String name) {
         return properties.containsKey(name);
     }
-    
+
     /**
      * Executes a consumer on each property.
-     * 
+     *
      * @param consumer a consumer accepting the name and the value of the property.
      */
-    public void forEachProperty( BiConsumer<String,Object> consumer ) {
+    public void forEachProperty(BiConsumer<String, Object> consumer) {
         properties.forEach(consumer);
     }
 

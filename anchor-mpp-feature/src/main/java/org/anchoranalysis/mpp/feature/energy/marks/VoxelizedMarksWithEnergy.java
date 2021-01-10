@@ -37,9 +37,9 @@ import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
 import org.anchoranalysis.feature.shared.SharedFeatureMulti;
 import org.anchoranalysis.mpp.feature.energy.scheme.EnergyScheme;
 import org.anchoranalysis.mpp.feature.energy.scheme.EnergySchemeWithSharedFeatures;
-import org.anchoranalysis.mpp.feature.mark.UpdatableMarksList;
 import org.anchoranalysis.mpp.feature.mark.EnergyMemoList;
 import org.anchoranalysis.mpp.feature.mark.MemoList;
+import org.anchoranalysis.mpp.feature.mark.UpdatableMarksList;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.set.UpdateMarkSetException;
 import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
@@ -141,15 +141,13 @@ public final class VoxelizedMarksWithEnergy {
     }
 
     // Adds the particular memo to the updatable pair-list
-    public void addToUpdatablePairList(
-            UpdatableMarksList updatablePairList, VoxelizedMarkMemo memo)
+    public void addToUpdatablePairList(UpdatableMarksList updatablePairList, VoxelizedMarkMemo memo)
             throws UpdateMarkSetException {
         updatablePairList.add(memoMarks, memo);
     }
 
     // Removes a memo from the updatable pair-list
-    public void rmvFromUpdatablePairList(
-            UpdatableMarksList updatablePairList, Mark mark)
+    public void rmvFromUpdatablePairList(UpdatableMarksList updatablePairList, Mark mark)
             throws UpdateMarkSetException {
         VoxelizedMarkMemo memo = getMemoForMark(mark);
         updatablePairList.remove(memoMarks, memo);
@@ -157,9 +155,7 @@ public final class VoxelizedMarksWithEnergy {
 
     // Exchanges one mark with another on the updatable pair list
     public void exchangeOnUpdatablePairList(
-            UpdatableMarksList updatablePairList,
-            Mark markExst,
-            VoxelizedMarkMemo memoNew)
+            UpdatableMarksList updatablePairList, Mark markExst, VoxelizedMarkMemo memoNew)
             throws UpdateMarkSetException {
         VoxelizedMarkMemo memoExst = getMemoForMark(markExst);
         updatablePairList.exchange(memoMarks, memoExst, indexOf(markExst), memoNew);

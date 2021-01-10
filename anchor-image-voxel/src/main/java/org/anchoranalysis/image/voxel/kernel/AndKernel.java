@@ -26,25 +26,15 @@
 
 package org.anchoranalysis.image.voxel.kernel;
 
-import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
-import org.anchoranalysis.spatial.point.Point3i;
-
 public class AndKernel extends BinaryKernel {
 
-    private BinaryKernel kernel1;
-    private BinaryKernel kernel2;
+    private final BinaryKernel kernel1;
+    private final BinaryKernel kernel2;
 
     public AndKernel(BinaryKernel kernel1, BinaryKernel kernel2) {
         super(kernel1.getSize());
         this.kernel1 = kernel1;
         this.kernel2 = kernel2;
-    }
-
-    @Override
-    public void init(Voxels<UnsignedByteBuffer> in) {
-        kernel1.init(in);
-        kernel2.init(in);
     }
 
     @Override
@@ -54,7 +44,7 @@ public class AndKernel extends BinaryKernel {
     }
 
     @Override
-    public boolean acceptPoint(int ind, Point3i point) {
-        return kernel1.acceptPoint(ind, point) && kernel2.acceptPoint(ind, point);
+    public boolean calculateAt(KernelPointCursor point) {
+        return kernel1.calculateAt(point) && kernel2.calculateAt(point);
     }
 }

@@ -26,28 +26,19 @@
 
 package org.anchoranalysis.image.voxel.kernel.count;
 
-import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
-import org.anchoranalysis.spatial.Extent;
 import org.anchoranalysis.spatial.point.Point3i;
 
 /**
- * For every voxel on the outline, count ALL neighbors that are adjacent, including those lying
- * outside the scene.
+ * For every voxel on the outline, count <b>all</b> neighbors that are adjacent.
  *
- * <p>Neighbouing voxels can be counted more than once.
+ * <p>Neighboring voxels can be counted more than once.
  *
  * @author Owen Feehan
  */
-public class CountKernelNeighborhood extends CountKernelNeighborhoodBase {
-
-    public CountKernelNeighborhood(
-            boolean useZ, BinaryValuesByte bv, boolean multipleMatchesPerVoxel) {
-        super(useZ, bv, multipleMatchesPerVoxel);
-    }
+public class CountKernelNeighborhood extends CountKernel {
 
     @Override
-    protected boolean isNeighborVoxelAccepted(
-            Point3i point, int xShift, int yShift, int zShift, Extent extent) {
+    protected boolean doesNeighborVoxelQualify(Point3i point) {
         return true;
     }
 }

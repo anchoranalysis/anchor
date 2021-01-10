@@ -26,8 +26,8 @@
 
 package org.anchoranalysis.core.cache;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.junit.jupiter.api.Test;
@@ -55,7 +55,8 @@ class LRUCacheTest {
         assertTrue(cache.has(KEY3), "KEY3 is there as the most recently added.");
         cache.get(KEY2);
         cache.get(KEY4);
-        assertTrue(cache.has(KEY2), "KEY2 remains after fourth added after being most recently used");
+        assertTrue(
+                cache.has(KEY2), "KEY2 remains after fourth added after being most recently used");
         assertFalse(cache.has(KEY1), "KEY1 is removed as being least recently used");
     }
 }

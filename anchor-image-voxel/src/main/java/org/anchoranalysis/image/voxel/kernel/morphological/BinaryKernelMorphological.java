@@ -26,25 +26,99 @@
 
 package org.anchoranalysis.image.voxel.kernel.morphological;
 
-import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
+import java.util.function.Supplier;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
+import org.anchoranalysis.image.voxel.iterator.neighbor.kernel.WalkPredicate;
 import org.anchoranalysis.image.voxel.kernel.BinaryKernel;
+import org.anchoranalysis.image.voxel.kernel.KernelPointCursor;
 import org.anchoranalysis.image.voxel.kernel.LocalSlices;
 
+/**
+ * A parent class for any {@link BinaryKernel} that implements a morphological operation.
+ *
+ * @author Owen Feehan
+ */
 public abstract class BinaryKernelMorphological extends BinaryKernel {
 
-    protected final BinaryValuesByte binaryValues;
-    protected final boolean outsideAtThreshold;
+    // START REQUIRED ARGUMENTS
+    private final boolean bigNeighborhood;
 
-    protected LocalSlices inSlices;
+    /**
+     * The outcome that should occur for the kernel <b>if no neighbor fulfills the condition</b>
+     * required by the kernel.
+     */
+    private final boolean unqualifiedOutcome;
 
-    protected BinaryKernelMorphological(BinaryValuesByte binaryValues, boolean outsideAtThreshold) {
+    /**
+     * The outcome that should occur for the kernel <b>if at least one neighbor fulfills the
+     * condition</b> required by the kernel.
+     */
+    private final boolean qualifiedOutcome;
+
+    private final boolean failedFirstCheckOutcome;
+    // END REQUIRED ARGUMENTS
+
+    private LocalSlices slices;
+
+    /**
+     * Creates with a flag for big-neighborhood, and boolean outcomes for certain cases.
+     *
+     * @param bigNeighborhood if true, a big neighborhood is used 2D-plane (8-connected instead of
+     *     4-connected), but not in Z-direction (remains 2-connected).
+     * @param unqualifiedOutcome the (negative) outcome that occurs if no neighbor qualifies
+     *     (satisfies a condition). The positive outcome is assumed to be the complement of this.
+     * @param failedFirstCheckOutcome if the first-check fails, this outcome is returned.
+     */
+    protected BinaryKernelMorphological(
+            boolean bigNeighborhood, boolean unqualifiedOutcome, boolean failedFirstCheckOutcome) {
         super(3);
-        this.binaryValues = binaryValues;
-        this.outsideAtThreshold = outsideAtThreshold;
+        this.unqualifiedOutcome = unqualifiedOutcome;
+        this.qualifiedOutcome = !unqualifiedOutcome;
+        this.bigNeighborhood = bigNeighborhood;
+        this.failedFirstCheckOutcome = failedFirstCheckOutcome;
     }
 
     @Override
-    public void notifyZChange(LocalSlices inSlices, int z) {
-        this.inSlices = inSlices;
+    public void notifyZChange(LocalSlices slices, int z) {
+        this.slices = slices;
     }
+
+    @Override
+    public boolean calculateAt(KernelPointCursor point) {
+
+        UnsignedByteBuffer buffer = slices.getLocal(0).get(); // NOSONAR
+
+        if (!firstCheck(point, buffer)) {
+            return failedFirstCheckOutcome;
+        }
+
+        WalkPredicate walker = new WalkPredicate(point, this::doesNeighborQualify, bigNeighborhood);
+        if (walker.walk(buffer, slices)) {
+            return qualifiedOutcome;
+        } else {
+            return unqualifiedOutcome;
+        }
+    }
+
+    /**
+     * The first check done on the kernel center-point, before checking any neighbors.
+     *
+     * @return true if the check passed, and false otherwise.
+     */
+    protected abstract boolean firstCheck(KernelPointCursor point, UnsignedByteBuffer buffer);
+
+    /**
+     * Does a particular neighboring-point satisfy the conditions.
+     *
+     * @param inside true iff the neighboring-point is inside the scene.
+     * @param point the point
+     * @param buffer
+     * @param zShift the buffer associated with the current point
+     * @return true if the neighboring-point satisfied the conditions.
+     */
+    protected abstract boolean doesNeighborQualify(
+            boolean inside,
+            KernelPointCursor point,
+            Supplier<UnsignedByteBuffer> buffer,
+            int zShift);
 }

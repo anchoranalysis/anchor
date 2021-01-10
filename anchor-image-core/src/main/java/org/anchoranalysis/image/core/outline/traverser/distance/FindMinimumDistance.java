@@ -33,7 +33,8 @@ import org.anchoranalysis.image.core.outline.traverser.path.ContiguousVoxelPath;
 import org.anchoranalysis.spatial.point.Point3i;
 
 /**
- * Finds the minimum distance of a point among any {@link ContiguousVoxelPath}'s head and tail points.
+ * Finds the minimum distance of a point among any {@link ContiguousVoxelPath}'s head and tail
+ * points.
  *
  * @author Owen Feehan
  */

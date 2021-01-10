@@ -31,6 +31,4 @@ import org.anchoranalysis.bean.shared.params.ParamsBean;
 import org.anchoranalysis.core.value.KeyValueParams;
 
 public abstract class KeyValueParamsProvider extends ParamsBean<KeyValueParamsProvider>
-        implements Provider<KeyValueParams> {
-
-}
+        implements Provider<KeyValueParams> {}

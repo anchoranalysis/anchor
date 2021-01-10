@@ -53,7 +53,7 @@ import org.anchoranalysis.spatial.box.BoundingBox;
 public abstract class DrawOverlay {
 
     private static final String PROPERTY_COLOR_ID = "colorID";
-    
+
     public abstract DrawObject getDrawObject();
 
     /**
@@ -105,7 +105,7 @@ public abstract class DrawOverlay {
 
     /**
      * Write precalculated overlays onto the {@link RGBStack}.
-     * 
+     *
      * @param precalculatedMasks
      * @param dimensions dimensions for the <i>entire</i> masks, not just those in the container.
      * @param background

@@ -26,10 +26,6 @@
 
 package org.anchoranalysis.image.voxel.kernel;
 
-import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
-import org.anchoranalysis.spatial.Extent;
-import org.anchoranalysis.spatial.point.Point3i;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -44,24 +40,6 @@ public abstract class Kernel {
         this.size = size;
         this.sizeHalf = (size - 1) / 2;
     }
-
-    public int getYMin(Point3i point) {
-        return Math.max(point.y() - getSizeHalf(), 0);
-    }
-
-    public int getYMax(Point3i point, Extent extent) {
-        return Math.min(point.y() + getSizeHalf(), extent.y() - 1);
-    }
-
-    public int getXMin(Point3i point) {
-        return Math.max(point.x() - getSizeHalf(), 0);
-    }
-
-    public int getXMax(Point3i point, Extent extent) {
-        return Math.min(point.x() + getSizeHalf(), extent.x() - 1);
-    }
-
-    public abstract void init(Voxels<UnsignedByteBuffer> in);
 
     public abstract void notifyZChange(LocalSlices inSlices, int z);
 }

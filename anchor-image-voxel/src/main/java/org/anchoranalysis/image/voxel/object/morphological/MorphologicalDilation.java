@@ -31,13 +31,12 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
-import org.anchoranalysis.image.voxel.binary.BinaryVoxelsFactory;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.kernel.ApplyKernel;
 import org.anchoranalysis.image.voxel.kernel.BinaryKernel;
-import org.anchoranalysis.image.voxel.kernel.morphological.DilationKernelFactory;
+import org.anchoranalysis.image.voxel.kernel.OutsideKernelPolicy;
+import org.anchoranalysis.image.voxel.kernel.morphological.DilationContext;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.image.voxel.object.morphological.predicate.AcceptIterationPredicate;
 import org.anchoranalysis.spatial.Extent;
@@ -50,8 +49,8 @@ public class MorphologicalDilation {
      * Dilates an object-mask, growing the bounding-box as necessary.
      *
      * @param object the object to dilate
-     * @param extent if present, restricts the obejct to remain within certain bounds
-     * @param do3D whether to perform dilation in 3D or 2D
+     * @param extent if present, restricts the object to remain within certain bounds
+     * @param useZ whether to perform dilation in 2D or 3D
      * @param iterations number of dilations to perform
      * @return a newly created object-mask with bounding-box grown in relevant directions by {@code
      *     iterations}
@@ -60,82 +59,55 @@ public class MorphologicalDilation {
     public static ObjectMask createDilatedObject(
             ObjectMask object,
             Optional<Extent> extent,
-            boolean do3D,
+            boolean useZ,
             int iterations,
             boolean bigNeighborhood)
             throws CreateException {
 
         Point3i grow =
-                do3D
+                useZ
                         ? new Point3i(iterations, iterations, iterations)
                         : new Point3i(iterations, iterations, 0);
 
+        DilationContext context =
+                new DilationContext(
+                        OutsideKernelPolicy.IGNORE_OUTSIDE,
+                        useZ,
+                        bigNeighborhood,
+                        Optional.empty());
+
         try {
             ObjectMask objectGrown = object.growBuffer(grow, grow, extent);
-            return objectGrown.replaceVoxels(
-                    dilate(objectGrown.binaryVoxels(), do3D, iterations, null, 0, bigNeighborhood)
-                            .voxels());
+            BinaryVoxels<UnsignedByteBuffer> dilated =
+                    dilate(objectGrown.binaryVoxels(), iterations, context);
+            return objectGrown.replaceVoxels(dilated.voxels());
         } catch (OperationFailedException e) {
             throw new CreateException("Cannot grow object-mask", e);
         }
     }
 
-    public static BinaryVoxels<UnsignedByteBuffer> dilate(
-            BinaryVoxels<UnsignedByteBuffer> voxels,
-            boolean do3D,
-            int iterations,
-            Optional<Voxels<UnsignedByteBuffer>> backgroundVb,
-            int minIntensityValue,
-            boolean bigNeighborhood)
-            throws CreateException {
-        return dilate(
-                voxels,
-                iterations,
-                backgroundVb,
-                minIntensityValue,
-                Optional.empty(),
-                new DilationKernelFactory(
-                        SelectDimensionsFactory.of(do3D), false, bigNeighborhood));
-    }
-
     /**
-     * Performs a morpholgical dilation operation
+     * Performs a morphological dilation operation.
      *
-     * @param voxelsBinary input-voxels
+     * @param voxels input-voxels
      * @param iterations number of dilations
-     * @param background optional background-buffer that can influence the dilation with the
-     *     minIntensityValue
-     * @param minIntensityValue minimumIntensity on the background, for a pixel to be included
-     * @param acceptConditions if non-null, imposes a condition on each iteration that must be
-     *     passed
+     * @param context additional parameters for influencing how dilation occurs.
      * @return a new buffer containing the results of the dilation-operations
      * @throws CreateException
      */
     public static BinaryVoxels<UnsignedByteBuffer> dilate(
-            BinaryVoxels<UnsignedByteBuffer> voxelsBinary,
-            int iterations,
-            Optional<Voxels<UnsignedByteBuffer>> background,
-            int minIntensityValue,
-            Optional<AcceptIterationPredicate> acceptConditions,
-            DilationKernelFactory dilationKernelFactory)
+            BinaryVoxels<UnsignedByteBuffer> voxels, int iterations, DilationContext context)
             throws CreateException {
 
-        BinaryKernel kernelDilation =
-                dilationKernelFactory.createDilationKernel(
-                        voxelsBinary.binaryValues().createByte(), background, minIntensityValue);
-
-        Voxels<UnsignedByteBuffer> voxels = voxelsBinary.voxels();
+        BinaryKernel kernel = context.createKernel();
+        Optional<AcceptIterationPredicate> postcondition = context.getPostcondition();
 
         for (int i = 0; i < iterations; i++) {
-            Voxels<UnsignedByteBuffer> next =
-                    ApplyKernel.apply(
-                            kernelDilation, voxels, voxelsBinary.binaryValues().createByte());
+            BinaryVoxels<UnsignedByteBuffer> next =
+                    ApplyKernel.apply(kernel, voxels, context.getKernelApplication());
 
             try {
-                if (acceptConditions.isPresent()
-                        && !acceptConditions
-                                .get()
-                                .acceptIteration(next, voxelsBinary.binaryValues())) {
+                if (postcondition.isPresent() && !postcondition.get().acceptIteration(next)) {
                     break;
                 }
             } catch (OperationFailedException e) {
@@ -144,6 +116,6 @@ public class MorphologicalDilation {
 
             voxels = next;
         }
-        return BinaryVoxelsFactory.reuseByte(voxels, voxelsBinary.binaryValues());
+        return voxels;
     }
 }

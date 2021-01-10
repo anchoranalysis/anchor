@@ -26,13 +26,22 @@
 
 package org.anchoranalysis.image.voxel.kernel;
 
-import org.anchoranalysis.spatial.point.Point3i;
-
+/**
+ * Base class for kernels that return a boolean for every voxel.
+ *
+ * @author Owen Feehan
+ */
 public abstract class BinaryKernel extends Kernel {
 
     protected BinaryKernel(int size) {
         super(size);
     }
 
-    public abstract boolean acceptPoint(int ind, Point3i point);
+    /**
+     * Calculates the boolean at a particular point.
+     *
+     * @param point the point
+     * @return the boolean result at this point
+     */
+    public abstract boolean calculateAt(KernelPointCursor point);
 }

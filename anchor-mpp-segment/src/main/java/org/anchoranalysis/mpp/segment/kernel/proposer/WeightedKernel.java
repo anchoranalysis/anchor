@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.mpp.segment.kernel.proposer;
 
-import org.anchoranalysis.mpp.segment.bean.kernel.Kernel;
 import lombok.Getter;
 import lombok.Setter;
+import org.anchoranalysis.mpp.segment.bean.kernel.Kernel;
 
 /**
  * A kernel with an associated weight.
@@ -36,9 +36,9 @@ import lombok.Setter;
  * @author Owen Feehan
  * @param <T> type being modified by the kernel.
  */
-public class WeightedKernel<T,S> {
+public class WeightedKernel<T, S> {
 
-    @Getter @Setter private Kernel<T,S> kernel;
+    @Getter @Setter private Kernel<T, S> kernel;
 
     @Getter private double weight = 0;
 
@@ -50,7 +50,7 @@ public class WeightedKernel<T,S> {
      * @param kernel the kernel
      * @param weight an associated weight (a positive floating-point number)
      */
-    public WeightedKernel(Kernel<T,S> kernel, double weight) {
+    public WeightedKernel(Kernel<T, S> kernel, double weight) {
         this.setKernel(kernel);
         this.weight = weight;
         this.name = kernel.getBeanName();

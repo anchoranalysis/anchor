@@ -36,7 +36,7 @@ import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
  *
  * @author Owen Feehan
  */
-public class LocalSlices {
+public class LocalSlices implements BufferRetriever {
 
     private final byte[][] array;
     private final int shift;
@@ -52,20 +52,20 @@ public class LocalSlices {
 
             if (rel >= 0 && rel < voxels.extent().z()) {
                 array[i] = voxels.sliceBuffer(rel).array();
+            } else {
+                array[i] = null;
             }
         }
     }
 
-    /**
-     * All local access is indexed relative (e.g. -1, -2, +1, +2 etc.)
-     *
-     * <p>If an invalid index is requested, then {@link Optional#empty} is returned.
-     *
-     * @param relativeZIndex the shift in the z index relative to the current z-slice's index
-     * @return the buffer corresponding to the z-index, if it exists.
-     */
+    @Override
     public Optional<UnsignedByteBuffer> getLocal(int relativeZIndex) {
-        byte[] slice = array[relativeZIndex + shift];
-        return Optional.ofNullable(slice).map(UnsignedByteBuffer::wrapRaw);
+        int index = relativeZIndex + shift;
+        if (index >= 0 && index < array.length) {
+            byte[] slice = array[index];
+            return Optional.ofNullable(slice).map(UnsignedByteBuffer::wrapRaw);
+        } else {
+            return Optional.empty();
+        }
     }
 }

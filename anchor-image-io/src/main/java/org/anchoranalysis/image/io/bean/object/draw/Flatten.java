@@ -73,12 +73,7 @@ public class Flatten extends DrawObject {
                     int iteration,
                     BoundingBox restrictTo)
                     throws OperationFailedException {
-                writer.writeSingle(
-                        objectFlattened,
-                        background,
-                        attributes,
-                        iteration,
-                        restrictTo);
+                writer.writeSingle(objectFlattened, background, attributes, iteration, restrictTo);
             }
         };
     }

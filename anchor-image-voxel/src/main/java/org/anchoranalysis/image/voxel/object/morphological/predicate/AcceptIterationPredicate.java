@@ -27,8 +27,7 @@
 package org.anchoranalysis.image.voxel.object.morphological.predicate;
 
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.binary.values.BinaryValues;
+import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 
 /**
@@ -41,9 +40,8 @@ import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 public interface AcceptIterationPredicate {
     /**
      * @param voxels
-     * @param binaryValues
      * @return true if the particular iteration should be accepted, false otherwise
      */
-    boolean acceptIteration(Voxels<UnsignedByteBuffer> voxels, BinaryValues binaryValues)
+    boolean acceptIteration(BinaryVoxels<UnsignedByteBuffer> voxels)
             throws OperationFailedException;
 }

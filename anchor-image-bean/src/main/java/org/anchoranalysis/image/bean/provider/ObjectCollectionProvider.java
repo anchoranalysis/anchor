@@ -33,5 +33,4 @@ import org.anchoranalysis.image.voxel.object.ObjectCollection;
 
 @GroupingRoot
 public abstract class ObjectCollectionProvider extends ImageBean<ObjectCollectionProvider>
-        implements Provider<ObjectCollection> {
-}
+        implements Provider<ObjectCollection> {}

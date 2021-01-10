@@ -33,9 +33,11 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.functional.checked.IntBinaryOperation;
 import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedBufferAsInt;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
+import org.anchoranalysis.image.voxel.iterator.process.ProcessKernelPointCursor;
 import org.anchoranalysis.image.voxel.iterator.process.ProcessPoint;
 import org.anchoranalysis.image.voxel.iterator.process.ProcessPointAndIndex;
 import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferBinary;
@@ -45,6 +47,8 @@ import org.anchoranalysis.image.voxel.iterator.process.voxelbuffer.ProcessVoxelB
 import org.anchoranalysis.image.voxel.iterator.process.voxelbuffer.ProcessVoxelBufferBinaryMixed;
 import org.anchoranalysis.image.voxel.iterator.process.voxelbuffer.ProcessVoxelBufferUnary;
 import org.anchoranalysis.image.voxel.iterator.process.voxelbuffer.ProcessVoxelBufferUnaryWithPoint;
+import org.anchoranalysis.image.voxel.kernel.KernelApplicationParameters;
+import org.anchoranalysis.image.voxel.kernel.KernelPointCursor;
 import org.anchoranalysis.spatial.Extent;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.Point3i;
@@ -71,7 +75,7 @@ public class IterateVoxelsAll {
     }
 
     /**
-     * Iterate over each voxel in an {@link Extent}
+     * Iterate over each voxel in an {@link Extent}.
      *
      * @param extent the extent to be iterated over
      * @param process process is called for each voxel inside the extent using the same coordinates
@@ -79,6 +83,44 @@ public class IterateVoxelsAll {
      */
     public static void withPointAndIndex(Extent extent, ProcessPointAndIndex process) {
         IterateVoxelsBoundingBox.withPointAndIndex(new BoundingBox(extent), process);
+    }
+
+    /**
+     * Iterate over each voxel using a {@link KernelPointCursor}.
+     *
+     * @param voxels the voxels to iterator over
+     * @param params to use when applying a kernel
+     * @param process process is called for each voxel inside the extent using the same coordinates
+     *     as the extent.
+     */
+    public static void withCursor(
+            BinaryVoxels<UnsignedByteBuffer> voxels,
+            KernelApplicationParameters params,
+            ProcessKernelPointCursor process) {
+
+        KernelPointCursor cursor =
+                new KernelPointCursor(
+                        0,
+                        new Point3i(),
+                        voxels.extent(),
+                        voxels.binaryValues().createByte(),
+                        params);
+
+        Extent extent = voxels.extent();
+        Point3i point = cursor.getPoint();
+        for (point.setZ(0); point.z() < extent.z(); point.incrementZ()) {
+
+            cursor.setIndex(0);
+            process.notifyChangeSlice(point.z());
+
+            for (point.setY(0); point.y() < extent.y(); point.incrementY()) {
+
+                for (point.setX(0); point.x() < extent.x(); point.incrementX()) {
+                    process.process(cursor);
+                    cursor.incrementIndex();
+                }
+            }
+        }
     }
 
     /**

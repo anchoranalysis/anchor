@@ -26,120 +26,27 @@
 
 package org.anchoranalysis.image.voxel.kernel.outline;
 
-import java.util.Optional;
-import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
+import java.util.function.Supplier;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
-import org.anchoranalysis.spatial.point.Point3i;
+import org.anchoranalysis.image.voxel.kernel.KernelPointCursor;
 
 // Keeps any on pixel that touches an off pixel, off otherwise
 public class OutlineKernel extends OutlineKernelBase {
 
-    public OutlineKernel(BinaryValuesByte bv, boolean outsideAtThreshold, boolean useZ) {
-        this(bv, new OutlineKernelParameters(outsideAtThreshold, useZ, false));
-    }
-
-    public OutlineKernel(BinaryValuesByte bv, OutlineKernelParameters params) {
-        super(bv, params);
-    }
-
     /**
-     * This method is deliberately not broken into smaller pieces to avoid inlining.
-     *
-     * <p>This efficiency matters as it is called so many times over a large image.
-     *
-     * <p>Apologies that it is difficult to read with high cognitive-complexity.
+     * Checks whether a particular neighbor voxel qualifies to make the current voxel an outline
+     * voxel.
      */
     @Override
-    public boolean acceptPoint(int ind, Point3i point) {
-
-        UnsignedByteBuffer buffer = inSlices.getLocal(0).get(); // NOSONAR
-        Optional<UnsignedByteBuffer> bufferZLess1 = inSlices.getLocal(-1);
-        Optional<UnsignedByteBuffer> bufferZPlus1 = inSlices.getLocal(+1);
-
-        int xLength = extent.x();
-
-        int x = point.x();
-        int y = point.y();
-
-        if (binaryValues.isOff(buffer.getRaw(ind))) {
-            return false;
-        }
-
-        // We walk up and down in x
-        x--;
-        ind--;
-        if (x >= 0) {
-            if (binaryValues.isOff(buffer.getRaw(ind))) {
-                return true;
-            }
+    protected boolean doesNeighborQualify(
+            boolean inside,
+            KernelPointCursor point,
+            Supplier<UnsignedByteBuffer> buffer,
+            int zShift) {
+        if (inside) {
+            return point.isBufferOff(buffer.get());
         } else {
-            if (!ignoreAtThreshold && !outsideAtThreshold) {
-                return true;
-            }
+            return point.isOutsideOffUnignored();
         }
-
-        x += 2;
-        ind += 2;
-        if (x < extent.x()) {
-            if (binaryValues.isOff(buffer.getRaw(ind))) {
-                return true;
-            }
-        } else {
-            if (!ignoreAtThreshold && !outsideAtThreshold) {
-                return true;
-            }
-        }
-        ind--;
-
-        // We walk up and down in y
-        y--;
-        ind -= xLength;
-        if (y >= 0) {
-            if (binaryValues.isOff(buffer.getRaw(ind))) {
-                return true;
-            }
-        } else {
-            if (!ignoreAtThreshold && !outsideAtThreshold) {
-                return true;
-            }
-        }
-
-        y += 2;
-        ind += (2 * xLength);
-        if (y < (extent.y())) {
-            if (binaryValues.isOff(buffer.getRaw(ind))) {
-                return true;
-            }
-        } else {
-            if (!ignoreAtThreshold && !outsideAtThreshold) {
-                return true;
-            }
-        }
-        ind -= xLength;
-
-        if (useZ) {
-
-            if (bufferZLess1.isPresent()) {
-                if (binaryValues.isOff(bufferZLess1.get().getRaw(ind))) {
-                    return true;
-                }
-            } else {
-                if (!ignoreAtThreshold && !outsideAtThreshold) {
-                    return true;
-                }
-            }
-
-            if (bufferZPlus1.isPresent()) {
-                if (binaryValues.isOff(bufferZPlus1.get().getRaw(ind))) {
-                    return true;
-                }
-            } else {
-                if (!ignoreAtThreshold && !outsideAtThreshold) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
     }
 }

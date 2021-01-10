@@ -62,9 +62,7 @@ public abstract class Feature<T extends FeatureInput>
     // END BEAN PROPERTIES
 
     protected Feature() {
-        super(
-                new PropertyInitializer<>(FeatureInitParams.class),
-                new FeatureDefiner<>());
+        super(new PropertyInitializer<>(FeatureInitParams.class), new FeatureDefiner<>());
     }
 
     protected Feature(PropertyInitializer<FeatureInitParams> propertyInitializer) {

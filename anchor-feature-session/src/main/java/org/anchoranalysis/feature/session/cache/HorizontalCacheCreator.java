@@ -67,7 +67,7 @@ public class HorizontalCacheCreator implements CacheCreator {
             Class<? extends FeatureInput> inputType) {
         return namedFeatures.filterAndMap(
                 feature -> FeatureInputType.isCompatibleWith(feature.inputType(), inputType),
-                feature -> (Feature<T>) feature);   // NOSONAR
+                feature -> (Feature<T>) feature); // NOSONAR
     }
 
     private <T extends FeatureInput> FeatureSessionCache<T> createCache(

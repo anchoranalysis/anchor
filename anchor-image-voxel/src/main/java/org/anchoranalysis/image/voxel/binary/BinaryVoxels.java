@@ -123,4 +123,9 @@ public abstract class BinaryVoxels<T> implements BinaryOnOffSetter {
     public SliceBufferIndex<T> slices() {
         return voxels.slices();
     }
+
+    @Override
+    public String toString() {
+        return voxels.toString();
+    }
 }

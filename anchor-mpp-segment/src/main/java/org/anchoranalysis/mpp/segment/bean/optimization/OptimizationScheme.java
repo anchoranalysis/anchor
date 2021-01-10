@@ -47,14 +47,13 @@ public abstract class OptimizationScheme<S, U, V> extends AnchorBean<Optimizatio
      *
      * @param proposer proposes kernels to change current state
      * @param marks
-     * @param feedback gives feedback on ongoing state and changed as the optimziation
-     *     occurs
+     * @param feedback gives feedback on ongoing state and changed as the optimziation occurs
      * @param context the context in which the scheme runs
      * @return
      * @throws OptimizationTerminatedEarlyException
      */
     public abstract S findOptimum(
-            KernelProposer<U,V> proposer,
+            KernelProposer<U, V> proposer,
             V marks,
             FeedbackReceiver<S> feedback,
             OptimizationContext context)

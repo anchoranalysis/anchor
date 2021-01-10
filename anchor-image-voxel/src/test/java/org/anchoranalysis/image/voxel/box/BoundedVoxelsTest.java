@@ -26,6 +26,8 @@
 
 package org.anchoranalysis.image.voxel.box;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import java.util.Optional;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.voxel.BoundedVoxels;
@@ -35,8 +37,6 @@ import org.anchoranalysis.spatial.Extent;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.Point3i;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 
 class BoundedVoxelsTest {
 
@@ -47,17 +47,20 @@ class BoundedVoxelsTest {
      */
     @Test
     void testGrowObjectOutsideClampRegion() throws OperationFailedException {
-        assertThrows(OperationFailedException.class, () -> {
-            // A bounding box that overlaps with the extent
-            Extent extent = extent(20);
-    
-            BoundedVoxels<UnsignedByteBuffer> box =
-                    VoxelsFactory.getUnsignedByte()
-                            .createBounded(new BoundingBox(point(10), extent(15)));
-    
-            Point3i grow = point(1);
-            box.growBuffer(grow, grow, Optional.of(extent), VoxelsFactory.getUnsignedByte());
-        });
+        assertThrows(
+                OperationFailedException.class,
+                () -> {
+                    // A bounding box that overlaps with the extent
+                    Extent extent = extent(20);
+
+                    BoundedVoxels<UnsignedByteBuffer> box =
+                            VoxelsFactory.getUnsignedByte()
+                                    .createBounded(new BoundingBox(point(10), extent(15)));
+
+                    Point3i grow = point(1);
+                    box.growBuffer(
+                            grow, grow, Optional.of(extent), VoxelsFactory.getUnsignedByte());
+                });
     }
 
     private static Point3i point(int value) {

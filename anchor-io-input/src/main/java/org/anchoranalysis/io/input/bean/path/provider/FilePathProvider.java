@@ -31,5 +31,4 @@ import org.anchoranalysis.bean.provider.Provider;
 import org.anchoranalysis.bean.shared.params.ParamsBean;
 
 public abstract class FilePathProvider extends ParamsBean<FilePathProvider>
-        implements Provider<Path> {
-}
+        implements Provider<Path> {}

@@ -32,9 +32,9 @@ import org.anchoranalysis.image.voxel.iterator.neighbor.ProcessVoxelNeighbor;
 final class SmallNeighborhood implements Neighborhood {
 
     @Override
-    public void processAllPointsInNeighborhood(boolean do3D, ProcessVoxelNeighbor<?> process) {
+    public void processNeighborhoodPoints(boolean useZ, ProcessVoxelNeighbor<?> process) {
 
-        int numDims = do3D ? 3 : 2;
+        int numDims = useZ ? 3 : 2;
 
         process.notifyChangeZ(0);
 
@@ -44,16 +44,16 @@ final class SmallNeighborhood implements Neighborhood {
                 // If it's the z dimension we notify change in the Z value
                 if (d == 2) {
                     if (process.notifyChangeZ(j)) {
-                        processDim(process, j, d);
+                        processDimension(process, j, d);
                     }
                 } else {
-                    processDim(process, j, d);
+                    processDimension(process, j, d);
                 }
             }
         }
     }
 
-    private final void processDim(ProcessVoxelNeighbor<?> process, int j, int d) {
+    private final void processDimension(ProcessVoxelNeighbor<?> process, int j, int d) {
         switch (d) {
             case 0:
                 process.processPoint(j, 0);

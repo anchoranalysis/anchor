@@ -30,6 +30,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxelsAll;
@@ -45,11 +46,7 @@ public class MaskXor {
      * @param second the second channel for operation
      */
     public static void apply(Mask first, Mask second) {
-        apply(
-                first.voxels(),
-                second.voxels(),
-                first.binaryValues().createByte(),
-                second.binaryValues().createByte());
+        apply(first.binaryVoxels(), second.binaryVoxels());
     }
 
     /**
@@ -58,23 +55,21 @@ public class MaskXor {
      *
      * @param voxelsFirst the first voxels for operation
      * @param voxelsSecond the second voxels for operation (and in which the result is written)
-     * @param binaryValuesFirst binary-values to mask the first voxels
-     * @param binaryValuesSecond binary-values to mask the second voxels
      */
     public static void apply(
-            Voxels<UnsignedByteBuffer> voxelsFirst,
-            Voxels<UnsignedByteBuffer> voxelsSecond,
-            BinaryValuesByte binaryValuesFirst,
-            BinaryValuesByte binaryValuesSecond) {
+            BinaryVoxels<UnsignedByteBuffer> voxelsFirst,
+            BinaryVoxels<UnsignedByteBuffer> voxelsSecond) {
 
+        BinaryValuesByte binaryValuesFirst = voxelsFirst.binaryValues().createByte();
+        BinaryValuesByte binaryValuesSecond = voxelsSecond.binaryValues().createByte();
         byte sourceOn = binaryValuesFirst.getOnByte();
         byte sourceOff = binaryValuesFirst.getOffByte();
 
         byte receiveOn = binaryValuesSecond.getOnByte();
 
         IterateVoxelsAll.withTwoBuffersAndPoint(
-                voxelsFirst,
-                voxelsSecond,
+                voxelsFirst.voxels(),
+                voxelsSecond.voxels(),
                 (point, bufferSource, bufferReceive, offsetSource, offsetReceive) -> {
                     boolean identicalStates =
                             (bufferSource.getRaw(offsetSource) == sourceOn)

@@ -339,16 +339,15 @@ public class ObjectMask {
 
     /**
      * Determines if an object-mask is connected.
-     * 
+     *
      * <p>Adjacent is defined with a <i>big</i> neighborhood definition (i.e. 8 or 26 connectivity).
-     * 
-     * @return true if all <i>on</i> voxels in the mask are spatially adjacent
-     * to at least one other <i>on</i> voxel with. 
+     *
+     * @return true if all <i>on</i> voxels in the mask are spatially adjacent to at least one other
+     *     <i>on</i> voxel with.
      */
     public boolean checkIfConnected() {
         ObjectCollection objects =
-                CONNECTED_COMPONENT_CREATOR.createUnsignedByte(
-                        this.binaryVoxels().duplicate());
+                CONNECTED_COMPONENT_CREATOR.createUnsignedByte(this.binaryVoxels().duplicate());
         return objects.size() <= 1;
     }
 

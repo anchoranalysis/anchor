@@ -55,7 +55,7 @@ public class TextFileMessageLogger implements StatefulMessageLogger {
 
     /** For synchronizing against the writer. */
     private final Object lockWriter = new Object();
-    
+
     /**
      * Constructs a logger that (always) writes messages to a text-file with a specific path.
      *

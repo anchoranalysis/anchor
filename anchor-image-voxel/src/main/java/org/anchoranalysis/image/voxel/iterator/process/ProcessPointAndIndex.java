@@ -29,7 +29,7 @@ package org.anchoranalysis.image.voxel.iterator.process;
 import org.anchoranalysis.spatial.point.Point3i;
 
 /**
- * Processes a 3D point also including an index.
+ * Processes a {@link Point3i} also including an index.
  *
  * @author Owen Feehan
  */

@@ -60,7 +60,8 @@ class FeatureInputSingleObjectTest {
     @Test
     void testEquals_DifferentObjects() {
         EnergyStack energyStack = Mockito.mock(EnergyStack.class);
-        assertNotEquals(createInputWithNewObject(energyStack), createInputWithNewObject(energyStack));
+        assertNotEquals(
+                createInputWithNewObject(energyStack), createInputWithNewObject(energyStack));
     }
 
     private FeatureInputSingleObject createInput(EnergyStack energyStack) {

@@ -26,10 +26,10 @@ package org.anchoranalysis.core.index.bounded.bridge;
  * #L%
  */
 
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.index.bounded.BoundChangeListener;
 import org.anchoranalysis.core.index.bounded.BoundedIndexContainer;
-import lombok.AllArgsConstructor;
 
 /**
  * Bridges calls from hidden-type to external-type.
@@ -44,9 +44,7 @@ import lombok.AllArgsConstructor;
 public abstract class BoundedIndexContainerBridge<H, S, E extends Exception>
         implements BoundedIndexContainer<S> {
 
-    /**
-     * The source container that is <i>bridged</i>.
-     */
+    /** The source container that is <i>bridged</i>. */
     private BoundedIndexContainer<H> source;
 
     @Override

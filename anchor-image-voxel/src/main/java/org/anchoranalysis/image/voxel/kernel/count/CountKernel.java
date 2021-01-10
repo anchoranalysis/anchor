@@ -26,14 +26,60 @@
 
 package org.anchoranalysis.image.voxel.kernel.count;
 
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
+import org.anchoranalysis.image.voxel.iterator.neighbor.kernel.WalkRunnable;
 import org.anchoranalysis.image.voxel.kernel.Kernel;
+import org.anchoranalysis.image.voxel.kernel.KernelPointCursor;
+import org.anchoranalysis.image.voxel.kernel.LocalSlices;
+import org.anchoranalysis.math.arithmetic.Counter;
 import org.anchoranalysis.spatial.point.Point3i;
 
+/**
+ * Base class for kernels that return a count (positive integer) for every voxel.
+ *
+ * @author Owen Feehan
+ */
 public abstract class CountKernel extends Kernel {
 
-    protected CountKernel(int size) {
-        super(size);
+    private LocalSlices slices;
+
+    // Constructor
+    protected CountKernel() {
+        super(3);
     }
 
-    public abstract int countAtPosition(int ind, Point3i point);
+    @Override
+    public void notifyZChange(LocalSlices slices, int z) {
+        this.slices = slices;
+    }
+
+    /**
+     * Calculates the count at a particular point.
+     *
+     * @param point the point
+     * @return the count
+     */
+    public int calculateAt(KernelPointCursor point) {
+
+        UnsignedByteBuffer buffer = slices.getLocal(0).get(); // NOSONAR
+
+        if (point.isBufferOff(buffer)) {
+            return 0;
+        }
+
+        Counter counter = new Counter();
+
+        WalkRunnable walker =
+                new WalkRunnable(point, this::doesNeighborVoxelQualify, counter::increment);
+        walker.walk(buffer, slices::getLocal);
+        return counter.getCount();
+    }
+
+    /**
+     * Whether a particular neighboring voxel is accepted or not.
+     *
+     * @param point the neighboring point which is queried if it qualifies or not
+     * @return true iff the point qualifies
+     */
+    protected abstract boolean doesNeighborVoxelQualify(Point3i point);
 }

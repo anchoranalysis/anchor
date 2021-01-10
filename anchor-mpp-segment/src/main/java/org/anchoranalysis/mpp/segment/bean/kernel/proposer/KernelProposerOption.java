@@ -30,10 +30,10 @@ import java.util.List;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.mpp.segment.kernel.proposer.WeightedKernel;
 
-public abstract class KernelProposerOption<T,S> extends AnchorBean<KernelProposerOption<T,S>> {
+public abstract class KernelProposerOption<T, S> extends AnchorBean<KernelProposerOption<T, S>> {
 
     // Add weighted kernel factories to a list, and returns the total weight
-    public abstract double addWeightedKernelFactories(List<WeightedKernel<T,S>> lst);
+    public abstract double addWeightedKernelFactories(List<WeightedKernel<T, S>> lst);
 
     public abstract double getWeightPositive();
 

@@ -76,7 +76,7 @@ public class WriteIntoDirectory {
     // START REQUIRED ARGUMENTS
     /** The directory in which stacks are written */
     @Getter private final Path directory;
-    
+
     /** If true, the path of {@code folder} is printed to the console */
     private final boolean printDirectoryToConsole;
     // END REQUIRED ARGUMENTS

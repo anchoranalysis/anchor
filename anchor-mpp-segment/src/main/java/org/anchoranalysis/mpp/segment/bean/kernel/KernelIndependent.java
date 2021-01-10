@@ -35,7 +35,7 @@ import org.anchoranalysis.mpp.segment.kernel.KernelCalculationContext;
  *
  * @author feehano
  */
-public abstract class KernelIndependent<T,S> extends Kernel<T,S> {
+public abstract class KernelIndependent<T, S> extends Kernel<T, S> {
 
     // Call ONCE before calculating anything
     @Override

@@ -56,9 +56,8 @@ class HelperFindChildren {
 
         try {
             for (Field field : listFields) {
-                FieldAccessor.fieldFromBean(bean, field).ifPresent(
-                    value -> maybeAdd(value, match, out)
-                );
+                FieldAccessor.fieldFromBean(bean, field)
+                        .ifPresent(value -> maybeAdd(value, match, out));
             }
         } catch (IllegalAccessException e) {
             throw new BeanStrangeException(

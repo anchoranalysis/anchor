@@ -36,7 +36,7 @@ class BinaryValuesBytesTest {
     void testEquals() {
         assertEquals(createLowHigh(), createLowHigh());
     }
-    
+
     private static BinaryValuesByte createLowHigh() {
         return new BinaryValuesByte(0, 255);
     }

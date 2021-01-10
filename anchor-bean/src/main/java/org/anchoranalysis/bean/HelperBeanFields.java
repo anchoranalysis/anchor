@@ -40,40 +40,42 @@ import org.anchoranalysis.core.functional.FunctionalList;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class HelperBeanFields {
-    
+
     public static String describeChildBeans(AnchorBean<?> bean) {
         try {
-            List<String> descriptions = FunctionalList.mapToListOptional(
-                 bean.fields(),
-                 OperationFailedException.class,
-                 field -> maybeDescribeChildBean(bean, field)
-             );
+            List<String> descriptions =
+                    FunctionalList.mapToListOptional(
+                            bean.fields(),
+                            OperationFailedException.class,
+                            field -> maybeDescribeChildBean(bean, field));
             return String.join(", ", descriptions);
 
         } catch (OperationFailedException e) {
             throw new BeanStrangeException("Failed to describe child beans", e);
         }
     }
-    
+
     /**
      * Creates a list of all <i>bean property</i> fields associated with the bean.
-     * 
-     * {@link Field} is used in place of {@link PropertyDescriptor} as it seems to be much faster
-     * to access with reflection. Otherwise it's quite slow.
-     * And we make sure we set {@code setAccessible(true)} as this reportedly disables access checks,
-     * and makes access much faster. 
-     * 
+     *
+     * <p>{@link Field} is used in place of {@link PropertyDescriptor} as it seems to be much faster
+     * to access with reflection. Otherwise it's quite slow. And we make sure we set {@code
+     * setAccessible(true)} as this reportedly disables access checks, and makes access much faster.
+     *
      * @param clss the class of the bean, whose fields should be listed
      * @return a newly created list of all the bean-property fields associated with {@code clss}
      */
     public static List<Field> createListBeanPropertyFields(Class<?> clss) {
 
         List<Field> allFields = HelperReflection.findAllFields(clss);
-        
-        return FunctionalList.filterAndMapToList(allFields, field -> field.isAnnotationPresent(BeanField.class), field -> {
-            field.setAccessible(true);  // NOSONAR
-            return field;
-        });
+
+        return FunctionalList.filterAndMapToList(
+                allFields,
+                field -> field.isAnnotationPresent(BeanField.class),
+                field -> {
+                    field.setAccessible(true); // NOSONAR
+                    return field;
+                });
     }
 
     private static String describeBean(AnchorBean<?> bean) {
@@ -85,17 +87,21 @@ class HelperBeanFields {
         return builder.toString();
     }
 
-    private static Optional<String> maybeDescribeChildBean(AnchorBean<?> bean, Field field) throws OperationFailedException {
+    private static Optional<String> maybeDescribeChildBean(AnchorBean<?> bean, Field field)
+            throws OperationFailedException {
 
         try {
             FieldAccessor.fieldFromBean(bean, field);
-                
-            return Optional.of( String.format("%s=%s", field.getName(), describeField(field, bean)));
-        } catch (IllegalArgumentException | OperationFailedException | BeanMisconfiguredException | IllegalAccessException e) {
+
+            return Optional.of(String.format("%s=%s", field.getName(), describeField(field, bean)));
+        } catch (IllegalArgumentException
+                | OperationFailedException
+                | BeanMisconfiguredException
+                | IllegalAccessException e) {
             throw new OperationFailedException(e);
         }
     }
-    
+
     private static String describeField(Field field, AnchorBean<?> bean)
             throws OperationFailedException {
         try {

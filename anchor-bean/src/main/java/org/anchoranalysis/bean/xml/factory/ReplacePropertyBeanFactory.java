@@ -98,7 +98,7 @@ public class ReplacePropertyBeanFactory<T extends AnchorBean<T>> extends AnchorB
         }
 
         try {
-            BeanUtils.setProperty(bean, key, replacement);  // NOSONAR
+            BeanUtils.setProperty(bean, key, replacement); // NOSONAR
         } catch (IllegalAccessException | InvocationTargetException exc) {
             throw new BeanXmlException(String.format("Cannot set property '%s'", key), exc);
         }
