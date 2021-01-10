@@ -33,28 +33,43 @@ import org.anchoranalysis.image.voxel.kernel.BinaryKernel;
 import org.anchoranalysis.image.voxel.kernel.ConditionalKernel;
 import org.anchoranalysis.image.voxel.kernel.KernelApplicationParameters;
 import org.anchoranalysis.image.voxel.kernel.OutsideKernelPolicy;
+import org.anchoranalysis.image.voxel.object.morphological.predicate.AcceptIterationPredicate;
 import org.anchoranalysis.spatial.point.Point3i;
 
+/**
+ * Additional parameters for influencing a morphologicla dilation opperation.
+ *
+ * @author Owen Feehan
+ */
 @AllArgsConstructor
-public class DilationKernelParameters {
+public class DilationContext {
 
     /** How the kernel is applied to the scene. */
     @Getter private final KernelApplicationParameters kernelApplication;
 
     private final boolean bigNeighborhood;
 
-    /** A precondition which must be satisfied, before any voxel can be dilated. */
+    /**
+     * If defined, a condition which must be satisfied on a <i>voxel</i>, before any voxel can be
+     * dilated.
+     */
     private final Optional<Predicate<Point3i>> precondition;
 
-    public DilationKernelParameters(
+    /**
+     * If defined, a condition which must be satisfied <i>after</i> an iteration occurs, otherwise
+     * no more iterations occur.
+     */
+    @Getter private final Optional<AcceptIterationPredicate> postcondition;
+
+    public DilationContext(
             OutsideKernelPolicy outsideKernelPolicy,
             boolean useZ,
             boolean bigNeighborhood,
             Optional<Predicate<Point3i>> precondition) {
-        this(
-                new KernelApplicationParameters(outsideKernelPolicy, useZ),
-                bigNeighborhood,
-                precondition);
+        this.kernelApplication = new KernelApplicationParameters(outsideKernelPolicy, useZ);
+        this.bigNeighborhood = bigNeighborhood;
+        this.precondition = precondition;
+        this.postcondition = Optional.empty();
     }
     /**
      * Creates a kernel for performing the dilation.

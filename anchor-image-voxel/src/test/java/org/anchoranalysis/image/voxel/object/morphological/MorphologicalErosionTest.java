@@ -25,7 +25,6 @@
  */
 package org.anchoranalysis.image.voxel.object.morphological;
 
-import java.util.Optional;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.image.voxel.object.ObjectMaskFixture;
@@ -42,7 +41,7 @@ class MorphologicalErosionTest extends MorphologicalOperationTestBase {
     protected ObjectMask applyOperation(
             ObjectMask object, ObjectMaskFixture fixture, Extent sceneExtent, boolean useZ)
             throws CreateException {
-        return MorphologicalErosion.createErodedObject(object, useZ, 1, Optional.empty());
+        return MorphologicalErosion.createErodedObject(object, 1, useZ);
     }
 
     @Override

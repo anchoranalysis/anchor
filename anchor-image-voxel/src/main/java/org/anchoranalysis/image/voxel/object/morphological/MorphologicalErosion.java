@@ -35,7 +35,7 @@ import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.kernel.KernelApplicationParameters;
 import org.anchoranalysis.image.voxel.kernel.OutsideKernelPolicy;
-import org.anchoranalysis.image.voxel.kernel.morphological.DilationKernelParameters;
+import org.anchoranalysis.image.voxel.kernel.morphological.DilationContext;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.image.voxel.object.morphological.predicate.AcceptIterationPredicate;
 import org.anchoranalysis.spatial.point.Point3i;
@@ -43,48 +43,80 @@ import org.anchoranalysis.spatial.point.Point3i;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MorphologicalErosion {
 
-    public static ObjectMask createErodedObject(
+    /**
+     * Performs a morphological erosion on an {@link ObjectMask}.
+     *
+     * @param object the object-mask to perform the erosion on.
+     * @param iterations how many iterations of erosion to perform.
+     * @param useZ whether to use the Z dimension or not during the erosion
+     * @return a newly created {@code BinaryVoxels<UnsignedByteBuffer>} showing {@voxels} after the
+     *     erosion operation was applied.
+     * @throws CreateException
+     */
+    public static ObjectMask createErodedObject(ObjectMask object, int iterations, boolean useZ)
+            throws CreateException {
+        return createErodedObject(object, iterations, useZ);
+    }
+    /**
+     * Performs a morphological erosion on an {@link ObjectMask} - with a <b>postcondition</b>.
+     *
+     * @param object the object-mask to perform the erosion on.
+     * @param iterations how many iterations of erosion to perform.
+     * @param useZ whether to use the Z dimension or not during the erosion
+     * @param postcondition conditions applied after each iteration of the erosion, otherwise no
+     *     more iterations occur. Note that these are applied on an inverted version of {@code
+     *     voxels}.
+     * @return a newly created {@code BinaryVoxels<UnsignedByteBuffer>} showing {@voxels} after the
+     *     erosion operation was applied.
+     * @throws CreateException
+     */
+    public static ObjectMask erode(
             ObjectMask object,
-            boolean do3D,
             int iterations,
-            Optional<AcceptIterationPredicate>
-                    acceptConditionsDilation // NB applied on an inverted-version of the binary
-            // buffer!!!
-            ) throws CreateException {
+            boolean useZ,
+            Optional<AcceptIterationPredicate> postcondition)
+            throws CreateException {
 
         ObjectMask objectOut = object.duplicate();
 
         BinaryVoxels<UnsignedByteBuffer> eroded =
-                erode(
+                erodeInternal(
                         objectOut.binaryVoxels(),
                         iterations,
+                        useZ,
                         Optional.empty(),
-                        do3D,
-                        acceptConditionsDilation);
+                        postcondition);
         return objectOut.replaceVoxels(eroded.voxels());
     }
 
     /**
      * Performs a morphological erosion on a {@code BinaryVoxels<UnsignedByteBuffer> voxels}.
      *
-     * @param voxels the voxels to perform the ersion on
-     * @param iterations how many iterations of erosion
-     * @param precondition
+     * @param voxels the voxels to perform the erosion on.
+     * @param iterations how many iterations of erosion to perform.
      * @param useZ whether to use the Z dimension or not during the erosion
-     * @param acceptConditionsDilation conditions applied on each iteration of the erosion N.B. but
-     *     applied on an inverted-version when passes to Dilate
-     * @return
+     * @param precondition if defined, a condition which must be satisfied on a <i>voxel</i>, before
+     *     any voxel can be dilated.
+     * @return a newly created {@code BinaryVoxels<UnsignedByteBuffer>} showing {@voxels} after the
+     *     erosion operation was applied.
      * @throws CreateException
      */
     public static BinaryVoxels<UnsignedByteBuffer> erode(
             BinaryVoxels<UnsignedByteBuffer> voxels,
             int iterations,
-            Optional<Predicate<Point3i>> precondition,
             boolean useZ,
-            Optional<AcceptIterationPredicate>
-                    acceptConditionsDilation // NB applied on an inverted-version of the binary
-            // buffer!!!
-            ) throws CreateException {
+            Optional<Predicate<Point3i>> precondition)
+            throws CreateException {
+        return erodeInternal(voxels, iterations, useZ, precondition, Optional.empty());
+    }
+
+    private static BinaryVoxels<UnsignedByteBuffer> erodeInternal(
+            BinaryVoxels<UnsignedByteBuffer> voxels,
+            int iterations,
+            boolean useZ,
+            Optional<Predicate<Point3i>> precondition,
+            Optional<AcceptIterationPredicate> postcondition)
+            throws CreateException {
 
         KernelApplicationParameters parameters =
                 new KernelApplicationParameters(OutsideKernelPolicy.AS_ON, useZ);
@@ -93,8 +125,7 @@ public class MorphologicalErosion {
                 MorphologicalDilation.dilate(
                         voxels,
                         iterations,
-                        acceptConditionsDilation,
-                        new DilationKernelParameters(parameters, false, precondition));
+                        new DilationContext(parameters, false, precondition, postcondition));
         dilated.invert();
         return dilated;
     }
