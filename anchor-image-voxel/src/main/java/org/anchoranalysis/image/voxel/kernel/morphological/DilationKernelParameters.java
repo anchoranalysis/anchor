@@ -26,40 +26,42 @@
 package org.anchoranalysis.image.voxel.kernel.morphological;
 
 import java.util.Optional;
+import java.util.function.Predicate;
 import lombok.AllArgsConstructor;
-import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
+import lombok.Getter;
 import org.anchoranalysis.image.voxel.kernel.BinaryKernel;
 import org.anchoranalysis.image.voxel.kernel.ConditionalKernel;
 import org.anchoranalysis.image.voxel.kernel.KernelApplicationParameters;
+import org.anchoranalysis.image.voxel.kernel.OutsideKernelPolicy;
 import org.anchoranalysis.spatial.point.Point3i;
 
 @AllArgsConstructor
-public class DilationKernelFactory {
+public class DilationKernelParameters {
 
-    /** How the kernel is applied. */
-    private final KernelApplicationParameters parameters;
+    /** How the kernel is applied to the scene. */
+    @Getter private final KernelApplicationParameters kernelApplication;
 
     private final boolean bigNeighborhood;
-
-    public BinaryKernel createDilationKernel(
-            Optional<Voxels<UnsignedByteBuffer>> background, int minIntensityValue) {
+    
+    /** A precondition which must be satisfied, before any voxel can be dilated. */
+    private final Optional<Predicate<Point3i>> precondition;
+    
+    public DilationKernelParameters(OutsideKernelPolicy outsideKernelPolicy, boolean useZ, boolean bigNeighborhood, Optional<Predicate<Point3i>> precondition) {
+        this( new KernelApplicationParameters(outsideKernelPolicy, useZ), bigNeighborhood, precondition);
+    }
+    /**
+     * Creates a kernel for performing the dilation.
+     * 
+     * @return the kernel that performs the dilation.
+     */
+    public BinaryKernel createKernel() {
 
         BinaryKernel kernelDilation = new DilationKernel(bigNeighborhood);
 
-        if (minIntensityValue > 0 && background.isPresent()) {
-            return new ConditionalKernel(kernelDilation, 
-                point -> intensityCondition(background.get(), point, minIntensityValue));
+        if (precondition.isPresent()) {
+            return new ConditionalKernel(kernelDilation, precondition.get());
         } else {
             return kernelDilation;
         }
-    }
-
-    public KernelApplicationParameters createParameters() {
-        return parameters;
-    }
-    
-    private static boolean intensityCondition(Voxels<UnsignedByteBuffer> voxels, Point3i point, int minIntensityValue) {
-        return voxels.extract().voxel(point) >= minIntensityValue;
     }
 }

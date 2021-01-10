@@ -31,14 +31,12 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.kernel.ApplyKernel;
 import org.anchoranalysis.image.voxel.kernel.BinaryKernel;
-import org.anchoranalysis.image.voxel.kernel.KernelApplicationParameters;
 import org.anchoranalysis.image.voxel.kernel.OutsideKernelPolicy;
-import org.anchoranalysis.image.voxel.kernel.morphological.DilationKernelFactory;
+import org.anchoranalysis.image.voxel.kernel.morphological.DilationKernelParameters;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.image.voxel.object.morphological.predicate.AcceptIterationPredicate;
 import org.anchoranalysis.spatial.Extent;
@@ -71,11 +69,12 @@ public class MorphologicalDilation {
                         ? new Point3i(iterations, iterations, iterations)
                         : new Point3i(iterations, iterations, 0);
 
+        DilationKernelParameters parameters = new DilationKernelParameters(OutsideKernelPolicy.IGNORE_OUTSIDE, useZ, bigNeighborhood, Optional.empty());
+                        
         try {
-            KernelApplicationParameters parameters = new KernelApplicationParameters(OutsideKernelPolicy.IGNORE_OUTSIDE, useZ);
             ObjectMask objectGrown = object.growBuffer(grow, grow, extent);
             return objectGrown.replaceVoxels(
-                    dilate(objectGrown.binaryVoxels(), parameters, iterations, null, 0, bigNeighborhood)
+                    dilate(objectGrown.binaryVoxels(), parameters, iterations)
                             .voxels());
         } catch (OperationFailedException e) {
             throw new CreateException("Cannot grow object-mask", e);
@@ -84,29 +83,20 @@ public class MorphologicalDilation {
 
     public static BinaryVoxels<UnsignedByteBuffer> dilate(
             BinaryVoxels<UnsignedByteBuffer> voxels,
-            KernelApplicationParameters parameters,
-            int iterations,
-            Optional<Voxels<UnsignedByteBuffer>> backgroundVb,
-            int minIntensityValue,
-            boolean bigNeighborhood)
-            throws CreateException {
+            DilationKernelParameters parameters,
+            int iterations) throws CreateException {
         return dilate(
                 voxels,
                 iterations,
-                backgroundVb,
-                minIntensityValue,
                 Optional.empty(),
-                new DilationKernelFactory(parameters, bigNeighborhood));
+                parameters);
     }
 
     /**
-     * Performs a morpholgical dilation operation
+     * Performs a morphological dilation operation.
      *
      * @param voxelsBinary input-voxels
      * @param iterations number of dilations
-     * @param background optional background-buffer that can influence the dilation with the
-     *     minIntensityValue
-     * @param minIntensityValue minimumIntensity on the background, for a pixel to be included
      * @param acceptConditions if non-null, imposes a condition on each iteration that must be
      *     passed
      * @return a new buffer containing the results of the dilation-operations
@@ -115,20 +105,15 @@ public class MorphologicalDilation {
     public static BinaryVoxels<UnsignedByteBuffer> dilate(
             BinaryVoxels<UnsignedByteBuffer> voxelsBinary,
             int iterations,
-            Optional<Voxels<UnsignedByteBuffer>> background,
-            int minIntensityValue,
             Optional<AcceptIterationPredicate> acceptConditions,
-            DilationKernelFactory dilationKernelFactory)
+            DilationKernelParameters parameters)
             throws CreateException {
 
-        BinaryKernel kernelDilation =
-                dilationKernelFactory.createDilationKernel(background, minIntensityValue);
-
-        KernelApplicationParameters params = dilationKernelFactory.createParameters();
+        BinaryKernel kernelDilation = parameters.createKernel();
 
         for (int i = 0; i < iterations; i++) {
             BinaryVoxels<UnsignedByteBuffer> next =
-                    ApplyKernel.apply(kernelDilation, voxelsBinary, params);
+                    ApplyKernel.apply(kernelDilation, voxelsBinary, parameters.getKernelApplication());
 
             try {
                 if (acceptConditions.isPresent() && !acceptConditions.get().acceptIteration(next)) {

@@ -27,17 +27,18 @@
 package org.anchoranalysis.image.voxel.object.morphological;
 
 import java.util.Optional;
+import java.util.function.Predicate;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.exception.CreateException;
-import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.kernel.KernelApplicationParameters;
 import org.anchoranalysis.image.voxel.kernel.OutsideKernelPolicy;
-import org.anchoranalysis.image.voxel.kernel.morphological.DilationKernelFactory;
+import org.anchoranalysis.image.voxel.kernel.morphological.DilationKernelParameters;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.image.voxel.object.morphological.predicate.AcceptIterationPredicate;
+import org.anchoranalysis.spatial.point.Point3i;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MorphologicalErosion {
@@ -58,7 +59,6 @@ public class MorphologicalErosion {
                         objectOut.binaryVoxels(),
                         iterations,
                         Optional.empty(),
-                        0,
                         do3D,
                         acceptConditionsDilation);
         return objectOut.replaceVoxels(eroded.voxels());
@@ -69,8 +69,7 @@ public class MorphologicalErosion {
      *
      * @param voxels the voxels to perform the ersion on
      * @param iterations how many iterations of erosion
-     * @param background
-     * @param minIntensityValue
+     * @param precondition
      * @param useZ whether to use the Z dimension or not during the erosion
      * @param acceptConditionsDilation conditions applied on each iteration of the erosion N.B. but
      *     applied on an inverted-version when passes to Dilate
@@ -80,8 +79,7 @@ public class MorphologicalErosion {
     public static BinaryVoxels<UnsignedByteBuffer> erode(
             BinaryVoxels<UnsignedByteBuffer> voxels,
             int iterations,
-            Optional<Voxels<UnsignedByteBuffer>> background,
-            int minIntensityValue,
+            Optional<Predicate<Point3i>> precondition,
             boolean useZ,
             Optional<AcceptIterationPredicate>
                     acceptConditionsDilation // NB applied on an inverted-version of the binary
@@ -97,12 +95,8 @@ public class MorphologicalErosion {
                 MorphologicalDilation.dilate(
                         voxels,
                         iterations,
-                        background,
-                        minIntensityValue,
                         acceptConditionsDilation,
-                        new DilationKernelFactory(
-                                parameters, false)
-                        );
+                        new DilationKernelParameters(parameters, false, precondition));
         dilated.invert();
         return dilated;
     }
