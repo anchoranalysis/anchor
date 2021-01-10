@@ -66,6 +66,16 @@ public class ObjectMaskFixture {
     }
 
     /**
+     * Creates an object-mask whose bounding-box corner exists at the origin.
+     *
+     * @return a newly created object-mask (with a shape as described in the class comment) and with
+     *     a bounding box starting at {@code corner}.
+     */
+    public ObjectMask filledMaskAtOrigin() {
+        return filledMask(0, 0);
+    }
+    
+    /**
      * Creates an object-mask whose bounding-box corner exists at a particular point.
      *
      * @param corner the corner (minimal corner in all dimensions)

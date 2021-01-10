@@ -26,35 +26,30 @@
 
 package org.anchoranalysis.image.voxel.kernel;
 
-import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
+import java.util.function.Predicate;
 import org.anchoranalysis.spatial.point.Point3i;
 
 /**
- * Executes another {@link BinaryKernel} iff the voxel value at the point {@code >=} a threshold.
+ * Executes another {@link BinaryKernel} iff a predicated is satisfied for a particular point.
  * @author Owen Feehan
  *
  */
 public class ConditionalKernel extends BinaryKernel {
 
     private BinaryKernel kernel;
-    private int threshold;
-    private Voxels<UnsignedByteBuffer> voxels;
+    private Predicate<Point3i> predicate;
 
     public ConditionalKernel(
-            BinaryKernel kernel, int threshold, Voxels<UnsignedByteBuffer> voxels) {
+            BinaryKernel kernel, Predicate<Point3i> predicate) {
         super(kernel.getSize());
         this.kernel = kernel;
-        this.threshold = threshold;
-        this.voxels = voxels;
+        this.predicate = predicate;
     }
 
     @Override
     public boolean calculateAt(KernelPointCursor point) {
 
-        int value = intensityAtPoint(point.getPoint());
-
-        if (value >= threshold) {
+        if (predicate.test(point.getPoint())) {
             return kernel.calculateAt(point);    
         } else {
             return false;
@@ -64,11 +59,5 @@ public class ConditionalKernel extends BinaryKernel {
     @Override
     public void notifyZChange(LocalSlices inSlices, int z) {
         kernel.notifyZChange(inSlices, z);
-    }
-
-    private int intensityAtPoint(Point3i point) {
-        return voxels
-                .sliceBuffer(point.z())
-                .getUnsigned(voxels.extent().offsetSlice(point));
     }
 }

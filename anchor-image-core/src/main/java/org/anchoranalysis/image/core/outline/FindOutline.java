@@ -35,7 +35,6 @@ import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.image.core.mask.combine.MaskXor;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxelsFactory;
-import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.kernel.ApplyKernel;
 import org.anchoranalysis.image.voxel.kernel.BinaryKernel;
@@ -174,14 +173,11 @@ public class FindOutline {
             return voxels.duplicate();
         }
 
-        BinaryValuesByte binaryValues = voxels.binaryValues().createByte();
-
         BinaryKernel kernel = new OutlineKernel();
 
         return ApplyKernel.apply(
                 kernel,
                 voxels,
-                binaryValues,
                 new KernelApplicationParameters(OutsideKernelPolicy.as(!outlineAtBoundary), do3D));
     }
 
@@ -210,16 +206,15 @@ public class FindOutline {
             boolean erodeAtBoundary,
             boolean do3D) {
 
-        BinaryValuesByte binaryValues = voxels.binaryValues().createByte();
         BinaryKernel kernelErosion = new ErosionKernel();
 
         KernelApplicationParameters params =
                 new KernelApplicationParameters(OutsideKernelPolicy.as(erodeAtBoundary), do3D);
 
         BinaryVoxels<UnsignedByteBuffer> eroded =
-                ApplyKernel.apply(kernelErosion, voxels, binaryValues, params);
+                ApplyKernel.apply(kernelErosion, voxels, params);
         for (int i = 1; i < numberErosions; i++) {
-            eroded = ApplyKernel.apply(kernelErosion, eroded, binaryValues, params);
+            eroded = ApplyKernel.apply(kernelErosion, eroded, params);
         }
         return eroded;
     }

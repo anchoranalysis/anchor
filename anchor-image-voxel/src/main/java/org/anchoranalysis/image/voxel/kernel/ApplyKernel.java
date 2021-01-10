@@ -54,25 +54,26 @@ public class ApplyKernel {
     private static final VoxelsFactoryTypeBound<UnsignedByteBuffer> FACTORY =
             VoxelsFactory.getUnsignedByte();
 
+    /**
+     * Apply the kernel to {@code BinaryVoxels<UnsignedByteBuffer>} using the same binary-values as {@code voxels}.
+     * 
+     * @param kernel the kernel to apply
+     * @param voxels the voxels to apply the kernel on
+     * @param params parameters influencing how the kernel is applied
+     * @return a newly created {@code BinaryVoxels<UnsignedByteBuffer>} that is the result of applying the kernel, and using the same binary-values as {@code voxels}.
+     */
     public static BinaryVoxels<UnsignedByteBuffer> apply(
             BinaryKernel kernel,
-            BinaryVoxels<UnsignedByteBuffer> in,
-            KernelApplicationParameters params) {
-        return apply(kernel, in, BinaryValuesByte.getDefault(), params);
-    }
-
-    // 3 pixel diameter kernel
-    public static BinaryVoxels<UnsignedByteBuffer> apply(
-            BinaryKernel kernel,
-            BinaryVoxels<UnsignedByteBuffer> in,
-            BinaryValuesByte outBinary,
+            BinaryVoxels<UnsignedByteBuffer> voxels,
             KernelApplicationParameters params) {
 
-        Voxels<UnsignedByteBuffer> out = FACTORY.createInitialized(in.extent());
+        Voxels<UnsignedByteBuffer> out = FACTORY.createInitialized(voxels.extent());
 
+        BinaryValuesByte outBinaryValues = voxels.binaryValues().createByte();
+        
         IterateKernelHelper.overAll(
                 kernel,
-                in,
+                voxels,
                 params,
                 new ProcessKernelPointCursor() {
 
@@ -87,13 +88,13 @@ public class ApplyKernel {
                     public void process(KernelPointCursor point) {
                         byte outValue =
                                 kernel.calculateAt(point)
-                                        ? outBinary.getOnByte()
-                                        : outBinary.getOffByte();
+                                        ? outBinaryValues.getOnByte()
+                                        : outBinaryValues.getOffByte();
                         outBuffer.putRaw(point.getIndex(), outValue);
                     }
                 });
-
-        return BinaryVoxelsFactory.reuseByte(out, outBinary.createInt());
+        
+        return BinaryVoxelsFactory.reuseByte(out, outBinaryValues.createInt());
     }
 
     /**

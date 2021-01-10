@@ -37,6 +37,7 @@ import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.kernel.ApplyKernel;
 import org.anchoranalysis.image.voxel.kernel.BinaryKernel;
 import org.anchoranalysis.image.voxel.kernel.KernelApplicationParameters;
+import org.anchoranalysis.image.voxel.kernel.OutsideKernelPolicy;
 import org.anchoranalysis.image.voxel.kernel.morphological.DilationKernelFactory;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.image.voxel.object.morphological.predicate.AcceptIterationPredicate;
@@ -51,7 +52,7 @@ public class MorphologicalDilation {
      *
      * @param object the object to dilate
      * @param extent if present, restricts the obejct to remain within certain bounds
-     * @param do3D whether to perform dilation in 3D or 2D
+     * @param useZ whether to perform dilation in 3D or 2D
      * @param iterations number of dilations to perform
      * @return a newly created object-mask with bounding-box grown in relevant directions by {@code
      *     iterations}
@@ -60,20 +61,21 @@ public class MorphologicalDilation {
     public static ObjectMask createDilatedObject(
             ObjectMask object,
             Optional<Extent> extent,
-            boolean do3D,
+            boolean useZ,
             int iterations,
             boolean bigNeighborhood)
             throws CreateException {
 
         Point3i grow =
-                do3D
+                useZ
                         ? new Point3i(iterations, iterations, iterations)
                         : new Point3i(iterations, iterations, 0);
 
         try {
+            KernelApplicationParameters parameters = new KernelApplicationParameters(OutsideKernelPolicy.IGNORE_OUTSIDE, useZ);
             ObjectMask objectGrown = object.growBuffer(grow, grow, extent);
             return objectGrown.replaceVoxels(
-                    dilate(objectGrown.binaryVoxels(), do3D, iterations, null, 0, bigNeighborhood)
+                    dilate(objectGrown.binaryVoxels(), parameters, iterations, null, 0, bigNeighborhood)
                             .voxels());
         } catch (OperationFailedException e) {
             throw new CreateException("Cannot grow object-mask", e);
@@ -82,7 +84,7 @@ public class MorphologicalDilation {
 
     public static BinaryVoxels<UnsignedByteBuffer> dilate(
             BinaryVoxels<UnsignedByteBuffer> voxels,
-            boolean do3D,
+            KernelApplicationParameters parameters,
             int iterations,
             Optional<Voxels<UnsignedByteBuffer>> backgroundVb,
             int minIntensityValue,
@@ -94,7 +96,7 @@ public class MorphologicalDilation {
                 backgroundVb,
                 minIntensityValue,
                 Optional.empty(),
-                new DilationKernelFactory(do3D, false, bigNeighborhood));
+                new DilationKernelFactory(parameters, bigNeighborhood));
     }
 
     /**

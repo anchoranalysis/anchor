@@ -33,89 +33,76 @@ import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
+import org.anchoranalysis.image.voxel.kernel.KernelApplicationParameters;
+import org.anchoranalysis.image.voxel.kernel.OutsideKernelPolicy;
 import org.anchoranalysis.image.voxel.kernel.morphological.DilationKernelFactory;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.image.voxel.object.morphological.predicate.AcceptIterationPredicate;
-import org.anchoranalysis.spatial.Extent;
-import org.anchoranalysis.spatial.box.BoundingBox;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MorphologicalErosion {
 
     public static ObjectMask createErodedObject(
             ObjectMask object,
-            Optional<Extent> extent,
             boolean do3D,
             int iterations,
-            boolean outsideAtThreshold,
             Optional<AcceptIterationPredicate>
                     acceptConditionsDilation // NB applied on an inverted-version of the binary
             // buffer!!!
             ) throws CreateException {
 
-        ObjectMask objectOut;
-
-        // TODO
-        // We can make this more efficient, than remaking an object-mask needlessly
-        //  by having a smarter "isOutside" check in the Erosion routine
-        if (!outsideAtThreshold) {
-            // If we want to treat the outside of the image as if it's at a threshold, then
-            //  we put an extra 1-pixel border around the object-mask, so that there's always
-            //  whitespace around the object-mask, so long as it exists in the image scene
-            BoundingBox box = object.boundedVoxels().dilate(do3D, extent);
-            objectOut = object.regionIntersecting(box);
-
-        } else {
-            objectOut = object.duplicate();
-        }
+        ObjectMask objectOut = object.duplicate();
 
         BinaryVoxels<UnsignedByteBuffer> eroded =
                 erode(
                         objectOut.binaryVoxels(),
-                        do3D,
                         iterations,
                         Optional.empty(),
                         0,
-                        outsideAtThreshold,
+                        do3D,
                         acceptConditionsDilation);
         return objectOut.replaceVoxels(eroded.voxels());
     }
 
     /**
-     * Performs a morphological erosion by dilating an inverted version of the object
+     * Performs a morphological erosion on a {@code BinaryVoxels<UnsignedByteBuffer> voxels}.
      *
-     * @param binaryValues
-     * @param do3D
-     * @param iterations
-     * @param backgroundVb
+     * @param voxels the voxels to perform the ersion on
+     * @param iterations how many iterations of erosion
+     * @param background
      * @param minIntensityValue
-     * @param outsideAtThreshold
+     * @param useZ whether to use the Z dimension or not during the erosion
      * @param acceptConditionsDilation conditions applied on each iteration of the erosion N.B. but
      *     applied on an inverted-version when passes to Dilate
      * @return
      * @throws CreateException
      */
     public static BinaryVoxels<UnsignedByteBuffer> erode(
-            BinaryVoxels<UnsignedByteBuffer> binaryValues,
-            boolean do3D,
+            BinaryVoxels<UnsignedByteBuffer> voxels,
             int iterations,
-            Optional<Voxels<UnsignedByteBuffer>> backgroundVb,
+            Optional<Voxels<UnsignedByteBuffer>> background,
             int minIntensityValue,
-            boolean outsideAtThreshold,
+            boolean useZ,
             Optional<AcceptIterationPredicate>
                     acceptConditionsDilation // NB applied on an inverted-version of the binary
             // buffer!!!
             ) throws CreateException {
 
-        binaryValues.invert();
+        KernelApplicationParameters parameters = new KernelApplicationParameters(
+                OutsideKernelPolicy.AS_ON,
+                useZ
+        );
+        voxels.invert();
         BinaryVoxels<UnsignedByteBuffer> dilated =
                 MorphologicalDilation.dilate(
-                        binaryValues,
+                        voxels,
                         iterations,
-                        backgroundVb,
+                        background,
                         minIntensityValue,
                         acceptConditionsDilation,
-                        new DilationKernelFactory(do3D, outsideAtThreshold, false));
+                        new DilationKernelFactory(
+                                parameters, false)
+                        );
         dilated.invert();
         return dilated;
     }

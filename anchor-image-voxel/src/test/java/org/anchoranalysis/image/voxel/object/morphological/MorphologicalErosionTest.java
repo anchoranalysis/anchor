@@ -23,28 +23,30 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.image.voxel.kernel.apply;
+package org.anchoranalysis.image.voxel.object.morphological;
 
-import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
-import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
-import org.anchoranalysis.image.voxel.kernel.ApplyKernel;
-import org.anchoranalysis.image.voxel.kernel.BinaryKernel;
-import org.anchoranalysis.image.voxel.kernel.KernelApplicationParameters;
+import java.util.Optional;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.image.voxel.object.ObjectMaskFixture;
+import org.anchoranalysis.spatial.Extent;
 
 /**
- * Applies a {@link BinaryKernel} to a created {@link BinaryVoxels} and counts the number of
- * <i>on</i> voxels in the resulting output.
- *  
+ * Tests {@link MorphologicalErosion}.
+ * 
  * @author Owen Feehan
  *
  */
-public class ApplyBinaryKernel extends ApplyKernelForCount<BinaryKernel> {
+class MorphologicalErosionTest extends MorphologicalOperationTestBase {
 
     @Override
-    protected int applyToVoxelsAndCount(BinaryKernel kernel,
-            BinaryVoxels<UnsignedByteBuffer> voxels, KernelApplicationParameters params) {
-        BinaryVoxels<UnsignedByteBuffer> out =
-                ApplyKernel.apply(kernel, voxels, params);
-        return out.extract().voxelsEqualTo(voxels.binaryValues().getOnInt()).count();
+    protected ObjectMask applyOperation(ObjectMask object, ObjectMaskFixture fixture,
+            Extent sceneExtent, boolean useZ) throws CreateException {
+        return MorphologicalErosion.createErodedObject(object, useZ, 1, Optional.empty());
+    }
+
+    @Override
+    protected int expectedChangeNumberVoxels(ObjectMaskFixture fixture, boolean useZ) {
+        return -1 * fixture.sizeSurface(useZ);
     }
 }

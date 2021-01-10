@@ -32,16 +32,13 @@ import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.kernel.BinaryKernel;
 import org.anchoranalysis.image.voxel.kernel.ConditionalKernel;
 import org.anchoranalysis.image.voxel.kernel.KernelApplicationParameters;
-import org.anchoranalysis.image.voxel.kernel.OutsideKernelPolicy;
+import org.anchoranalysis.spatial.point.Point3i;
 
 @AllArgsConstructor
 public class DilationKernelFactory {
 
-    /** Whether to include the Z-dimension or not? */
-    private final boolean useZ;
-
-    /** If true, pixels outside the buffer are treated as ON, otherwise as OFF. */
-    private final boolean outsideAtThreshold;
+    /** How the kernel is applied. */
+    private final KernelApplicationParameters parameters;
 
     private final boolean bigNeighborhood;
 
@@ -51,13 +48,18 @@ public class DilationKernelFactory {
         BinaryKernel kernelDilation = new DilationKernel(bigNeighborhood);
 
         if (minIntensityValue > 0 && background.isPresent()) {
-            return new ConditionalKernel(kernelDilation, minIntensityValue, background.get());
+            return new ConditionalKernel(kernelDilation, 
+                point -> intensityCondition(background.get(), point, minIntensityValue));
         } else {
             return kernelDilation;
         }
     }
 
     public KernelApplicationParameters createParameters() {
-        return new KernelApplicationParameters(OutsideKernelPolicy.as(outsideAtThreshold), useZ);
+        return parameters;
+    }
+    
+    private static boolean intensityCondition(Voxels<UnsignedByteBuffer> voxels, Point3i point, int minIntensityValue) {
+        return voxels.extract().voxel(point) >= minIntensityValue;
     }
 }

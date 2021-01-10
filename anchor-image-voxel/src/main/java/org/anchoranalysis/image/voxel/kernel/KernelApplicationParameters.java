@@ -41,7 +41,7 @@ public class KernelApplicationParameters {
     /**
      * How to handle voxels that appear in a neighbourhood that lies outside the scene boundaries.
      */
-    OutsideKernelPolicy outsideKernelPolicy;
+    private final OutsideKernelPolicy outsideKernelPolicy;
 
     /** Whether to additionally apply the kernel along the Z dimension, as well as X and Y? */
     private final boolean useZ;
@@ -56,5 +56,9 @@ public class KernelApplicationParameters {
 
     public boolean isOutsideOffUnignored() {
         return !isIgnoreOutside() && !isOutsideOn();
+    }
+    
+    public boolean isOutsideOnUnignored() {
+        return !isIgnoreOutside() && isOutsideOn();
     }
 }
