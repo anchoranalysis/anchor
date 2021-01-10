@@ -57,7 +57,7 @@ public class KernelApplicationParameters {
     public boolean isOutsideOffUnignored() {
         return !isIgnoreOutside() && !isOutsideOn();
     }
-    
+
     public boolean isOutsideOnUnignored() {
         return !isIgnoreOutside() && isOutsideOn();
     }

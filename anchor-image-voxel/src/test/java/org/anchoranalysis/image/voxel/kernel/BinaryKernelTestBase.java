@@ -35,6 +35,6 @@ import org.anchoranalysis.image.voxel.kernel.apply.ApplyBinaryKernel;
 public abstract class BinaryKernelTestBase extends KernelTestBase<BinaryKernel> {
 
     protected BinaryKernelTestBase() {
-        super( new ApplyBinaryKernel() );
+        super(new ApplyBinaryKernel());
     }
 }

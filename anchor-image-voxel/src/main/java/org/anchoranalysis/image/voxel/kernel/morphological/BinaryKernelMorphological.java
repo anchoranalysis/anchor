@@ -109,7 +109,7 @@ public abstract class BinaryKernelMorphological extends BinaryKernel {
 
     /**
      * Does a particular neighboring-point satisfy the conditions.
-     * 
+     *
      * @param inside true iff the neighboring-point is inside the scene.
      * @param point the point
      * @param buffer

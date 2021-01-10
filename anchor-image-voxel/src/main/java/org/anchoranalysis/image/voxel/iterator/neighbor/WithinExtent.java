@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.image.voxel.iterator.neighbor;
 
+import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.spatial.Extent;
 import org.anchoranalysis.spatial.point.Point3i;
-import lombok.RequiredArgsConstructor;
 
 /**
  * Only processes points within a certain extent.

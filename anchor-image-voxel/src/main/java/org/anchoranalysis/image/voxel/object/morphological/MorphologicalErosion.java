@@ -86,10 +86,8 @@ public class MorphologicalErosion {
             // buffer!!!
             ) throws CreateException {
 
-        KernelApplicationParameters parameters = new KernelApplicationParameters(
-                OutsideKernelPolicy.AS_ON,
-                useZ
-        );
+        KernelApplicationParameters parameters =
+                new KernelApplicationParameters(OutsideKernelPolicy.AS_ON, useZ);
         voxels.invert();
         BinaryVoxels<UnsignedByteBuffer> dilated =
                 MorphologicalDilation.dilate(

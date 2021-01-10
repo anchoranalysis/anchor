@@ -38,25 +38,21 @@ public class Counter {
 
     @Getter private int count = 0;
 
-    /**
-     * Increases the counter by one.
-     */
+    /** Increases the counter by one. */
     public void increment() {
         count++;
     }
-    
+
     /**
      * Increases the counter by a specific value.
-     * 
+     *
      * @param value the value to increase the counter by.
      */
     public void incrementBy(int value) {
         count += value;
     }
 
-    /**
-     * Decreases the counter by one.
-     */
+    /** Decreases the counter by one. */
     public void decrement() {
         count--;
     }

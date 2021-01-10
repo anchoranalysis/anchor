@@ -61,9 +61,9 @@ public class LocalSlices implements BufferRetriever {
     @Override
     public Optional<UnsignedByteBuffer> getLocal(int relativeZIndex) {
         int index = relativeZIndex + shift;
-        if (index >= 0 && index<array.length) {
+        if (index >= 0 && index < array.length) {
             byte[] slice = array[index];
-            return Optional.ofNullable(slice).map(UnsignedByteBuffer::wrapRaw);    
+            return Optional.ofNullable(slice).map(UnsignedByteBuffer::wrapRaw);
         } else {
             return Optional.empty();
         }

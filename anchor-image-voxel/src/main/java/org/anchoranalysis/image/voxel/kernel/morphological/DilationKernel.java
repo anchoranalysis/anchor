@@ -32,9 +32,8 @@ import org.anchoranalysis.image.voxel.kernel.KernelPointCursor;
 
 /**
  * Morphological dilation with a 3x3 or 3x3x3 kernel size.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 final class DilationKernel extends BinaryKernelMorphological {
 

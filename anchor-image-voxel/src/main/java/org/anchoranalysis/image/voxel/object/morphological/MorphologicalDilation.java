@@ -69,13 +69,17 @@ public class MorphologicalDilation {
                         ? new Point3i(iterations, iterations, iterations)
                         : new Point3i(iterations, iterations, 0);
 
-        DilationKernelParameters parameters = new DilationKernelParameters(OutsideKernelPolicy.IGNORE_OUTSIDE, useZ, bigNeighborhood, Optional.empty());
-                        
+        DilationKernelParameters parameters =
+                new DilationKernelParameters(
+                        OutsideKernelPolicy.IGNORE_OUTSIDE,
+                        useZ,
+                        bigNeighborhood,
+                        Optional.empty());
+
         try {
             ObjectMask objectGrown = object.growBuffer(grow, grow, extent);
             return objectGrown.replaceVoxels(
-                    dilate(objectGrown.binaryVoxels(), parameters, iterations)
-                            .voxels());
+                    dilate(objectGrown.binaryVoxels(), parameters, iterations).voxels());
         } catch (OperationFailedException e) {
             throw new CreateException("Cannot grow object-mask", e);
         }
@@ -84,12 +88,9 @@ public class MorphologicalDilation {
     public static BinaryVoxels<UnsignedByteBuffer> dilate(
             BinaryVoxels<UnsignedByteBuffer> voxels,
             DilationKernelParameters parameters,
-            int iterations) throws CreateException {
-        return dilate(
-                voxels,
-                iterations,
-                Optional.empty(),
-                parameters);
+            int iterations)
+            throws CreateException {
+        return dilate(voxels, iterations, Optional.empty(), parameters);
     }
 
     /**
@@ -113,7 +114,8 @@ public class MorphologicalDilation {
 
         for (int i = 0; i < iterations; i++) {
             BinaryVoxels<UnsignedByteBuffer> next =
-                    ApplyKernel.apply(kernelDilation, voxelsBinary, parameters.getKernelApplication());
+                    ApplyKernel.apply(
+                            kernelDilation, voxelsBinary, parameters.getKernelApplication());
 
             try {
                 if (acceptConditions.isPresent() && !acceptConditions.get().acceptIteration(next)) {

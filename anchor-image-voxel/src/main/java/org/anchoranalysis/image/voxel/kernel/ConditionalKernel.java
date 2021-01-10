@@ -31,16 +31,15 @@ import org.anchoranalysis.spatial.point.Point3i;
 
 /**
  * Executes another {@link BinaryKernel} iff a predicated is satisfied for a particular point.
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class ConditionalKernel extends BinaryKernel {
 
     private BinaryKernel kernel;
     private Predicate<Point3i> predicate;
 
-    public ConditionalKernel(
-            BinaryKernel kernel, Predicate<Point3i> predicate) {
+    public ConditionalKernel(BinaryKernel kernel, Predicate<Point3i> predicate) {
         super(kernel.getSize());
         this.kernel = kernel;
         this.predicate = predicate;
@@ -50,7 +49,7 @@ public class ConditionalKernel extends BinaryKernel {
     public boolean calculateAt(KernelPointCursor point) {
 
         if (predicate.test(point.getPoint())) {
-            return kernel.calculateAt(point);    
+            return kernel.calculateAt(point);
         } else {
             return false;
         }

@@ -74,7 +74,7 @@ public class ObjectMaskFixture {
     public ObjectMask filledMaskAtOrigin() {
         return filledMask(0, 0);
     }
-    
+
     /**
      * Creates an object-mask whose bounding-box corner exists at a particular point.
      *
@@ -136,8 +136,8 @@ public class ObjectMaskFixture {
     /**
      * The total number of voxels on the surface of the object.
      *
-     * @param useZ if true, z is also treated as a dimension in which a surface is
-     *     indicated. If false, only surfaces in X and Y dimensions are considered.
+     * @param useZ if true, z is also treated as a dimension in which a surface is indicated. If
+     *     false, only surfaces in X and Y dimensions are considered.
      * @return the number of voxels that are expected to appear on the surface
      */
     public int sizeSurface(boolean useZ) {
@@ -152,12 +152,12 @@ public class ObjectMaskFixture {
             return typicalSlice * extent.z();
         }
     }
-    
+
     /**
      * The total number of neighbours voxels.
      *
-     * @param useZ if true, z is also treated as a dimension in which neighbors
-     *     are considered. If false, only neighbours in X and Y dimensions are considered.
+     * @param useZ if true, z is also treated as a dimension in which neighbors are considered. If
+     *     false, only neighbours in X and Y dimensions are considered.
      * @return the number of voxels that are expected to appear on the surface
      */
     public int numberNeighbors(boolean useZ) {
@@ -172,7 +172,7 @@ public class ObjectMaskFixture {
             return neighbours2D;
         }
     }
-    
+
     private void checkNoRemoveCorners() {
         if (removeCorners) {
             throw new UnsupportedOperationException(

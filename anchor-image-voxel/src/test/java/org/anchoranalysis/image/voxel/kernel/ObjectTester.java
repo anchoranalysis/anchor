@@ -61,7 +61,7 @@ class ObjectTester<T extends Kernel> {
 
     /** Creates a kernel to be tested for a particular {@link ObjectMask} and scene-size. */
     private final BiFunction<ObjectMask, Extent, T> createKernel;
-    
+
     /** Applies the kernel to determine a count. */
     private final ApplyKernelForCount<T> kernelApplier;
 

@@ -42,16 +42,23 @@ public class DilationKernelParameters {
     @Getter private final KernelApplicationParameters kernelApplication;
 
     private final boolean bigNeighborhood;
-    
+
     /** A precondition which must be satisfied, before any voxel can be dilated. */
     private final Optional<Predicate<Point3i>> precondition;
-    
-    public DilationKernelParameters(OutsideKernelPolicy outsideKernelPolicy, boolean useZ, boolean bigNeighborhood, Optional<Predicate<Point3i>> precondition) {
-        this( new KernelApplicationParameters(outsideKernelPolicy, useZ), bigNeighborhood, precondition);
+
+    public DilationKernelParameters(
+            OutsideKernelPolicy outsideKernelPolicy,
+            boolean useZ,
+            boolean bigNeighborhood,
+            Optional<Predicate<Point3i>> precondition) {
+        this(
+                new KernelApplicationParameters(outsideKernelPolicy, useZ),
+                bigNeighborhood,
+                precondition);
     }
     /**
      * Creates a kernel for performing the dilation.
-     * 
+     *
      * @return the kernel that performs the dilation.
      */
     public BinaryKernel createKernel() {

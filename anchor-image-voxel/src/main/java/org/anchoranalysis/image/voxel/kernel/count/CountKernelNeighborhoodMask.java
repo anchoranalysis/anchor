@@ -45,17 +45,17 @@ public class CountKernelNeighborhoodMask extends CountKernel {
 
     /**
      * Create with object-mask.
-     * 
-     * @param objectRequireHigh an object with coordinates relative to the {@link BinaryVoxels} the kernel is being applied on,
-     *  only on whose <i>on</i> voxels is a neighboring voxel considered.
+     *
+     * @param objectRequireHigh an object with coordinates relative to the {@link BinaryVoxels} the
+     *     kernel is being applied on, only on whose <i>on</i> voxels is a neighboring voxel
+     *     considered.
      */
     public CountKernelNeighborhoodMask(ObjectMask objectRequireHigh) {
         this.objectRequireHigh = objectRequireHigh;
     }
 
     @Override
-    protected boolean doesNeighborVoxelQualify(
-            Point3i point) {
+    protected boolean doesNeighborVoxelQualify(Point3i point) {
         return objectRequireHigh.contains(point);
     }
 }

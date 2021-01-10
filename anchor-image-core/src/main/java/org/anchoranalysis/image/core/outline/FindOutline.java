@@ -211,8 +211,7 @@ public class FindOutline {
         KernelApplicationParameters params =
                 new KernelApplicationParameters(OutsideKernelPolicy.as(erodeAtBoundary), do3D);
 
-        BinaryVoxels<UnsignedByteBuffer> eroded =
-                ApplyKernel.apply(kernelErosion, voxels, params);
+        BinaryVoxels<UnsignedByteBuffer> eroded = ApplyKernel.apply(kernelErosion, voxels, params);
         for (int i = 1; i < numberErosions; i++) {
             eroded = ApplyKernel.apply(kernelErosion, eroded, params);
         }

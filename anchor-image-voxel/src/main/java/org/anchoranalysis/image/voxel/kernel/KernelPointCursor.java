@@ -110,7 +110,7 @@ public final class KernelPointCursor {
         point.decrementY(2);
         index -= xExtentTwice;
     }
-    
+
     public void incrementZ() {
         point.incrementZ();
     }

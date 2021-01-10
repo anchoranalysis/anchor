@@ -55,12 +55,14 @@ public class ApplyKernel {
             VoxelsFactory.getUnsignedByte();
 
     /**
-     * Apply the kernel to {@code BinaryVoxels<UnsignedByteBuffer>} using the same binary-values as {@code voxels}.
-     * 
+     * Apply the kernel to {@code BinaryVoxels<UnsignedByteBuffer>} using the same binary-values as
+     * {@code voxels}.
+     *
      * @param kernel the kernel to apply
      * @param voxels the voxels to apply the kernel on
      * @param params parameters influencing how the kernel is applied
-     * @return a newly created {@code BinaryVoxels<UnsignedByteBuffer>} that is the result of applying the kernel, and using the same binary-values as {@code voxels}.
+     * @return a newly created {@code BinaryVoxels<UnsignedByteBuffer>} that is the result of
+     *     applying the kernel, and using the same binary-values as {@code voxels}.
      */
     public static BinaryVoxels<UnsignedByteBuffer> apply(
             BinaryKernel kernel,
@@ -70,7 +72,7 @@ public class ApplyKernel {
         Voxels<UnsignedByteBuffer> out = FACTORY.createInitialized(voxels.extent());
 
         BinaryValuesByte outBinaryValues = voxels.binaryValues().createByte();
-        
+
         IterateKernelHelper.overAll(
                 kernel,
                 voxels,
@@ -93,7 +95,7 @@ public class ApplyKernel {
                         outBuffer.putRaw(point.getIndex(), outValue);
                     }
                 });
-        
+
         return BinaryVoxelsFactory.reuseByte(out, outBinaryValues.createInt());
     }
 
@@ -131,7 +133,7 @@ public class ApplyKernel {
             BoundingBox box,
             KernelApplicationParameters params)
             throws OperationFailedException {
-        
+
         Counter counter = new Counter();
 
         IterateKernelHelper.overBox(
@@ -139,8 +141,7 @@ public class ApplyKernel {
                 voxels,
                 box,
                 params,
-                point -> counter.incrementBy( kernel.calculateAt(point) )
-        );
+                point -> counter.incrementBy(kernel.calculateAt(point)));
 
         return counter.getCount();
     }
@@ -163,12 +164,7 @@ public class ApplyKernel {
             throws OperationFailedException {
 
         return IterateKernelHelper.overBoxUntil(
-                kernel,
-                voxels,
-                box,
-                params,
-                point -> kernel.calculateAt(point) > 0
-        );
+                kernel, voxels, box, params, point -> kernel.calculateAt(point) > 0);
     }
 
     public static int applyForCount(
@@ -187,7 +183,6 @@ public class ApplyKernel {
                         counter.increment();
                     }
                 });
-
 
         return counter.getCount();
     }

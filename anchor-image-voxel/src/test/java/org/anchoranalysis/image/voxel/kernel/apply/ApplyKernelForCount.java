@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -35,8 +35,9 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.spatial.Extent;
 
 /**
- * Applies a {@link Kernel} to a created {@link BinaryVoxels} showing an {@link ObjectMask} resulting in a count.
- * 
+ * Applies a {@link Kernel} to a created {@link BinaryVoxels} showing an {@link ObjectMask}
+ * resulting in a count.
+ *
  * @author Owen Feehan
  * @param <T> kernel-type
  */
@@ -61,20 +62,18 @@ public abstract class ApplyKernelForCount<T extends Kernel> {
                 createBinaryVoxels(object, extentScene),
                 params);
     }
-    
+
     /**
      * Applies the kernel to a {@link BinaryVoxels} and determines the resulting count.
-     * 
+     *
      * @param kernel the kernel to apply
      * @param voxels the binary-voxels
      * @param params parameters to use when applying.
      * @return the count.
      */
     protected abstract int applyToVoxelsAndCount(
-            T kernel,
-            BinaryVoxels<UnsignedByteBuffer> voxels,
-            KernelApplicationParameters params);
-        
+            T kernel, BinaryVoxels<UnsignedByteBuffer> voxels, KernelApplicationParameters params);
+
     private static BinaryVoxels<UnsignedByteBuffer> createBinaryVoxels(
             ObjectMask object, Extent extentScene) {
         return ObjectOnVoxelsHelper.createVoxelsWithObject(object, extentScene, true);

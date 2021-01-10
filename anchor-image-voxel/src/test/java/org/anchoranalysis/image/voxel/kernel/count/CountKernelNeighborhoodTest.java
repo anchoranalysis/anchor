@@ -31,9 +31,8 @@ import org.anchoranalysis.spatial.Extent;
 
 /**
  * Tests {@link CountKernelNeighborhood}.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 class CountKernelNeighborhoodTest extends CountKernelTestBase {
 
@@ -41,7 +40,7 @@ class CountKernelNeighborhoodTest extends CountKernelTestBase {
     protected CountKernel createKernel(ObjectMask object, Extent extentScene) {
         return new CountKernelNeighborhood();
     }
-   
+
     @Override
     protected int boundaryFromInside(int expectationForInside, KernelApplicationParameters params) {
         if (params.isOutsideOffUnignored()) {

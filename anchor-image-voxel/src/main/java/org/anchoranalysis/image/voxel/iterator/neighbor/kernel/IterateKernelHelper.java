@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -25,6 +25,8 @@
  */
 package org.anchoranalysis.image.voxel.iterator.neighbor.kernel;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
@@ -37,16 +39,13 @@ import org.anchoranalysis.image.voxel.kernel.KernelApplicationParameters;
 import org.anchoranalysis.image.voxel.kernel.KernelPointCursor;
 import org.anchoranalysis.image.voxel.kernel.LocalSlices;
 import org.anchoranalysis.spatial.box.BoundingBox;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 
 /**
  * Routines to iterate a kernel over a set of points in a {@link BinaryVoxels}.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
-@NoArgsConstructor(access=AccessLevel.PACKAGE)
+@NoArgsConstructor(access = AccessLevel.PACKAGE)
 public class IterateKernelHelper {
 
     public static void overAll(
@@ -54,7 +53,8 @@ public class IterateKernelHelper {
             BinaryVoxels<UnsignedByteBuffer> voxels,
             KernelApplicationParameters params,
             ProcessKernelPointCursor processor) {
-        AddLocalSlicesProcessor process = new AddLocalSlicesProcessor(kernel, voxels, processor, params.isUseZ());
+        AddLocalSlicesProcessor process =
+                new AddLocalSlicesProcessor(kernel, voxels, processor, params.isUseZ());
         IterateVoxelsAll.withCursor(voxels, params, process);
     }
 
@@ -63,32 +63,38 @@ public class IterateKernelHelper {
             BinaryVoxels<UnsignedByteBuffer> voxels,
             BoundingBox box,
             KernelApplicationParameters params,
-            ProcessKernelPointCursor processor) throws OperationFailedException {
+            ProcessKernelPointCursor processor)
+            throws OperationFailedException {
         checkBoxInsideVoxels(voxels, box);
-        AddLocalSlicesProcessor processorWithSlices = new AddLocalSlicesProcessor(kernel, voxels, processor, params.isUseZ());
+        AddLocalSlicesProcessor processorWithSlices =
+                new AddLocalSlicesProcessor(kernel, voxels, processor, params.isUseZ());
         IterateVoxelsBoundingBox.withCursor(voxels, box, params, processorWithSlices);
     }
-    
+
     public static boolean overBoxUntil(
             Kernel kernel,
             BinaryVoxels<UnsignedByteBuffer> voxels,
             BoundingBox box,
             KernelApplicationParameters params,
-            PredicateKernelPointCursor predicate) throws OperationFailedException {
+            PredicateKernelPointCursor predicate)
+            throws OperationFailedException {
         checkBoxInsideVoxels(voxels, box);
-        AddLocalSlicesPredicate predicateWithSlices = new AddLocalSlicesPredicate(kernel, voxels, predicate, params.isUseZ());
+        AddLocalSlicesPredicate predicateWithSlices =
+                new AddLocalSlicesPredicate(kernel, voxels, predicate, params.isUseZ());
         return IterateVoxelsBoundingBox.withCursorUntil(voxels, box, params, predicateWithSlices);
     }
-    
-    private static void checkBoxInsideVoxels(BinaryVoxels<UnsignedByteBuffer> voxels, BoundingBox box) throws OperationFailedException {
+
+    private static void checkBoxInsideVoxels(
+            BinaryVoxels<UnsignedByteBuffer> voxels, BoundingBox box)
+            throws OperationFailedException {
         if (!voxels.extent().contains(box)) {
             throw new OperationFailedException(
                     String.format(
                             "Bounding-box (%s) must be contained within extent (%s)",
                             box, voxels.extent()));
-        }        
+        }
     }
-    
+
     private abstract static class AddSlices {
 
         private final Kernel kernel;
@@ -100,21 +106,26 @@ public class IterateKernelHelper {
             this.voxels = voxels;
             slicesNeeded = useZ ? kernel.getSize() : 1;
         }
-        
-        protected void notifyZChangeToKernel(int z) { 
+
+        protected void notifyZChangeToKernel(int z) {
             kernel.notifyZChange(new LocalSlices(z, slicesNeeded, voxels.voxels()), z);
         }
     }
-    
-    private static class AddLocalSlicesProcessor extends AddSlices implements ProcessKernelPointCursor {
+
+    private static class AddLocalSlicesProcessor extends AddSlices
+            implements ProcessKernelPointCursor {
 
         private final ProcessKernelPointCursor processor;
-        
-        public AddLocalSlicesProcessor(Kernel kernel, BinaryVoxels<UnsignedByteBuffer> voxels, ProcessKernelPointCursor processor, boolean useZ) {
+
+        public AddLocalSlicesProcessor(
+                Kernel kernel,
+                BinaryVoxels<UnsignedByteBuffer> voxels,
+                ProcessKernelPointCursor processor,
+                boolean useZ) {
             super(kernel, voxels, useZ);
             this.processor = processor;
         }
-        
+
         @Override
         public void notifyChangeSlice(int z) {
             notifyZChangeToKernel(z);
@@ -126,16 +137,21 @@ public class IterateKernelHelper {
             processor.process(point);
         }
     }
-    
-    private static class AddLocalSlicesPredicate extends AddSlices implements PredicateKernelPointCursor {
+
+    private static class AddLocalSlicesPredicate extends AddSlices
+            implements PredicateKernelPointCursor {
 
         private final PredicateKernelPointCursor predicate;
-        
-        public AddLocalSlicesPredicate(Kernel kernel, BinaryVoxels<UnsignedByteBuffer> voxels, PredicateKernelPointCursor predicate, boolean useZ) {
+
+        public AddLocalSlicesPredicate(
+                Kernel kernel,
+                BinaryVoxels<UnsignedByteBuffer> voxels,
+                PredicateKernelPointCursor predicate,
+                boolean useZ) {
             super(kernel, voxels, useZ);
             this.predicate = predicate;
         }
-        
+
         @Override
         public void notifyChangeSlice(int z) {
             notifyZChangeToKernel(z);

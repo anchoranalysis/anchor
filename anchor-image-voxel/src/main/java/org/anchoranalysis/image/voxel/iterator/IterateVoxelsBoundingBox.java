@@ -371,8 +371,7 @@ public class IterateVoxelsBoundingBox {
             }
         }
     }
-    
-    
+
     /**
      * Iterate over each voxel in a bounding-box using a {@link KernelPointCursor}.
      *
@@ -414,16 +413,17 @@ public class IterateVoxelsBoundingBox {
             }
         }
     }
-    
-    
+
     /**
-     * Iterate over each voxel in a bounding-box using a {@link KernelPointCursor} until a predicate returns true..
+     * Iterate over each voxel in a bounding-box using a {@link KernelPointCursor} until a predicate
+     * returns true..
      *
      * @param voxels the voxels to iterator over
      * @param box the box to iterate over (with coordinates referring to {@code voxels}.
      * @param params to use when applying a kernel
      * @param predicate evaluates each position of the cursor.
-     * @return true as soon as any voxel evaluates true with the {@code predicate}, false if it never happens.
+     * @return true as soon as any voxel evaluates true with the {@code predicate}, false if it
+     *     never happens.
      */
     public static boolean withCursorUntil(
             BinaryVoxels<UnsignedByteBuffer> voxels,
@@ -458,7 +458,7 @@ public class IterateVoxelsBoundingBox {
                 }
             }
         }
-        
+
         return false;
     }
 }

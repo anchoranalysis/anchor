@@ -42,7 +42,7 @@ final class BigNeighborhood implements Neighborhood {
     public BigNeighborhood() {
         this.includeCenterPoint = false;
     }
-    
+
     @Override
     public void processNeighborhoodPoints(boolean useZ, ProcessVoxelNeighbor<?> process) {
 
@@ -61,7 +61,7 @@ final class BigNeighborhood implements Neighborhood {
             }
         }
     }
-    
+
     private void walkXY(ProcessVoxelNeighbor<?> process) {
         for (int y = -1; y <= 1; y++) {
             for (int x = -1; x <= 1; x++) {
@@ -71,7 +71,7 @@ final class BigNeighborhood implements Neighborhood {
             }
         }
     }
-    
+
     private void walkXYForZ(ProcessVoxelNeighbor<?> process, int z) {
         for (int y = -1; y <= 1; y++) {
             for (int x = -1; x <= 1; x++) {
