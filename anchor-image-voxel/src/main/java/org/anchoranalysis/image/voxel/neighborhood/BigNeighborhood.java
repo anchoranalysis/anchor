@@ -51,13 +51,7 @@ final class BigNeighborhood implements Neighborhood {
             for (int z = -1; z <= 1; z++) {
 
                 if (process.notifyChangeZ(z)) {
-                    for (int y = -1; y <= 1; y++) {
-                        for (int x = -1; x <= 1; x++) {
-                            if (includeCenterPoint || x != 0 || y != 0 || z != 0) {
-                                process.processPoint(x, y);
-                            }
-                        }
-                    }    
+                    walkXYForZ(process, z);
                 }
             }
 
@@ -72,6 +66,16 @@ final class BigNeighborhood implements Neighborhood {
         for (int y = -1; y <= 1; y++) {
             for (int x = -1; x <= 1; x++) {
                 if (includeCenterPoint || x != 0 || y != 0) {
+                    process.processPoint(x, y);
+                }
+            }
+        }
+    }
+    
+    private void walkXYForZ(ProcessVoxelNeighbor<?> process, int z) {
+        for (int y = -1; y <= 1; y++) {
+            for (int x = -1; x <= 1; x++) {
+                if (includeCenterPoint || x != 0 || y != 0 || z != 0) {
                     process.processPoint(x, y);
                 }
             }
