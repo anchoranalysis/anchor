@@ -52,7 +52,7 @@ public class MorphologicalErosion {
      *
      * @param object the object-mask to perform the erosion on.
      * @param iterations how many iterations of erosion to perform.
-     * @param useZ whether to use the Z dimension or not during the erosion
+     * @param useZ whether to use the Z dimension or not during the erosion.
      * @return a newly created {@code BinaryVoxels<UnsignedByteBuffer>} showing {@code voxels} after the
      *     erosion operation was applied.
      * @throws CreateException
@@ -98,7 +98,7 @@ public class MorphologicalErosion {
      *
      * @param voxels the voxels to perform the erosion on.
      * @param iterations how many iterations of erosion to perform.
-     * @param useZ whether to use the Z dimension or not during the erosion
+     * @param useZ whether to use the Z dimension or not during the erosion.
      * @param precondition if defined, a condition which must be satisfied on a <i>voxel</i>, before
      *     any voxel can be dilated.
      * @return a newly created {@code BinaryVoxels<UnsignedByteBuffer>} showing {@code voxels} after the

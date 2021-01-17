@@ -29,6 +29,8 @@ package org.anchoranalysis.io.input.bean.files;
 import java.io.File;
 import java.nio.file.Path;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
@@ -72,6 +74,11 @@ public class SearchDirectory extends FilesProviderWithDirectoryString {
      * exception
      */
     @BeanField @Getter @Setter private boolean acceptDirectoryErrors = false;
+    
+    /**
+     * If true, the files are sorted after being searched, to achieve a deterministic order.
+     */
+    private boolean sort = true;
     // END BEAN PROPERTIES
 
     // Matching files
@@ -82,13 +89,17 @@ public class SearchDirectory extends FilesProviderWithDirectoryString {
         Optional<Integer> maxDirectoryDepthOptional =
                 OptionalUtilities.createFromFlag(maxDirectoryDepth >= 0, maxDirectoryDepth);
         try {
-            return matcher.matchingFiles(
+            List<File> filesUnsorted = matcher.matchingFiles(
                     directory,
                     recursive,
                     ignoreHidden,
                     acceptDirectoryErrors,
                     maxDirectoryDepthOptional,
                     Optional.of(params));
+            if (sort) {
+                Collections.sort(filesUnsorted);
+            }
+            return filesUnsorted;
         } catch (InputReadFailedException e) {
             throw new FilesProviderException(e);
         }

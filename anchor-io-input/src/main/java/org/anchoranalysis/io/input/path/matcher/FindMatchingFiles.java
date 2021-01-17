@@ -30,7 +30,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -53,7 +52,7 @@ public class FindMatchingFiles {
     /** The progress reporter */
     private Optional<Progress> progress = Optional.empty();
 
-    public Collection<File> findMatchingFiles(
+    public List<File> findMatchingFiles(
             Path directory, PathMatchConstraints constraints, Optional<Logger> logger)
             throws FindFilesException {
 
