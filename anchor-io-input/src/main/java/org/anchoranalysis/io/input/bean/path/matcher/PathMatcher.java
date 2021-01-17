@@ -28,7 +28,7 @@ package org.anchoranalysis.io.input.bean.path.matcher;
 
 import java.io.File;
 import java.nio.file.Path;
-import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 import org.anchoranalysis.bean.AnchorBean;
@@ -64,7 +64,7 @@ public abstract class PathMatcher extends AnchorBean<PathMatcher> {
      * @throws InputReadFailedException if an error occurrs reading/writing or interacting with the
      *     filesystem
      */
-    public Collection<File> matchingFiles(
+    public List<File> matchingFiles(
             Path directory,
             boolean recursive,
             boolean ignoreHidden,
@@ -96,7 +96,7 @@ public abstract class PathMatcher extends AnchorBean<PathMatcher> {
         return runMatch(predicates, maxDirectoryDepth, directory, true, progress, logger);
     }
 
-    private Collection<File> runMatch(
+    private List<File> runMatch(
             DualPathPredicates predicates,
             Optional<Integer> maxDirectoryDepth,
             Path directory,
