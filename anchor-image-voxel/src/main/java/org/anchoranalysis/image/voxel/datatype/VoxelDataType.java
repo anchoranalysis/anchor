@@ -41,7 +41,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 public abstract class VoxelDataType {
 
     /** The number of bits required to represent a voxel. */
-    @Getter private int numberBits;
+    @Getter private int bitDepth;
 
     /** A string to uniquely and compactly describe this type. */
     private String typeIdentifier;
@@ -69,7 +69,7 @@ public abstract class VoxelDataType {
             return false;
         }
 
-        return numberBits() == otherCasted.numberBits();
+        return bitDepth() == otherCasted.bitDepth();
     }
 
     @Override
@@ -77,7 +77,7 @@ public abstract class VoxelDataType {
         return new HashCodeBuilder()
                 .append(isInteger())
                 .append(isUnsigned())
-                .append(numberBits())
+                .append(bitDepth())
                 .toHashCode();
     }
 

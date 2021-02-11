@@ -141,7 +141,7 @@ public class NamedChannelsForSeriesMap implements NamedChannelsForSeries {
     }
 
     @Override
-    public void addAsSeparateChannels(NamedStacks stackCollection, int timeIndex, Progress progress)
+    public void addAsSeparateChannels(NamedStacks stacks, int timeIndex, Progress progress)
             throws OperationFailedException {
 
         try {
@@ -155,7 +155,7 @@ public class NamedChannelsForSeriesMap implements NamedChannelsForSeries {
                                     channelName,
                                     timeIndex,
                                     new ProgressOneOfMany(progressMultiple));
-                    stackCollection.add(channelName, new Stack(image));
+                    stacks.add(channelName, new Stack(image));
                     progressMultiple.incrementWorker();
                 }
             } catch (GetOperationFailedException e) {
