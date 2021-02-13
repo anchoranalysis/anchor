@@ -26,7 +26,10 @@
 package org.anchoranalysis.image.core.stack;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -37,6 +40,7 @@ import lombok.NoArgsConstructor;
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class RGBChannelNames {
+    
     /** Name for the <b>red</b> channel. */
     public static final String RED = "red";
 
@@ -47,12 +51,50 @@ public class RGBChannelNames {
     public static final String BLUE = "blue";
 
     /** Creates an array with all channel-names in R-G-B order. */
-    public static String[] rgbArray() {
+    public static String[] asArray() {
         return new String[] {RED, GREEN, BLUE};
     }
 
     /** Creates a list with all channel-names in R-G-B order. */
-    public static List<String> rgbList() {
+    public static List<String> asList() {
         return Arrays.asList(RED, GREEN, BLUE);
+    }
+    
+    /** Creates a set of the channel names. */
+    public static Set<String> asSet() {
+        return new HashSet<>(asList());
+    }
+    
+    /**
+     * Derives the index of a channel for a channel name.
+     * 
+     * <p>Names match only if lower-case.
+     * 
+     * @param channelName the name of the channel
+     * @return 0 for red, 1 for green, 2 for blue or {@link Optional#empty} if name is anything else.
+     */
+    public static Optional<Integer> deriveIndex(String channelName) {
+        switch(channelName) {
+            case RED:
+                return Optional.of(0);
+            case GREEN:
+                return Optional.of(1);                
+            case BLUE:
+                return Optional.of(2);
+            default:
+                return Optional.empty();
+        }
+    }
+
+    /**
+     * Whether the channel-name is one of red, green, or blue.
+     * 
+     * <p>Names match only if lower-case.
+     * 
+     * @param channelName name to check if it is valid.
+     * @return true iff {@code channelName} is red, green, or blue.
+     */
+    public static boolean isValidName(String channelName) {
+        return channelName.equals(RED) || channelName.equals(GREEN) || channelName.equals(BLUE); 
     }
 }
