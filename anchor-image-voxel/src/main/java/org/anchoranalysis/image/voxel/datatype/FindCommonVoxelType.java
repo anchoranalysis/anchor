@@ -74,11 +74,11 @@ public class FindCommonVoxelType {
         // This assumes, whether signed or unsigned, a type with a higher
         // number of bits, can contain one of a lower number.
         // This holds true with a unsigned/signed 8, 16, 32 combinations.
-        if (first.numberBits() > second.numberBits()) {
+        if (first.bitDepth() > second.bitDepth()) {
             return first;
         }
 
-        if (first.numberBits() < second.numberBits()) {
+        if (first.bitDepth() < second.bitDepth()) {
             return second;
         }
 

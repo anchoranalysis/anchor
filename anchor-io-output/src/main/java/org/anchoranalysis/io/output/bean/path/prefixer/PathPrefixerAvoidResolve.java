@@ -53,19 +53,22 @@ public abstract class PathPrefixerAvoidResolve extends PathPrefixer {
 
     // START BEAN PROPERTIES
     /**
-     * A directory in which to output the experiment-directory and files
+     * A string prefixed to each output-path.
+     * 
+     * This is typically a directory which to output the experiment-directory and files, but it may
+     * also be a combination of a directory and a file-name prefix.
      *
      * <p>If empty, first the bean will try to use any output-directory set in the input context if
      * it exists, or otherwise use the system temp directory.
      */
-    @BeanField @AllowEmpty @Getter @Setter private String outPathPrefix = "";
+    @BeanField @AllowEmpty @Getter @Setter private String prefix = "";
     // END BEAN PROPERTIES
 
     // Caches the calculation
     private Path resolvedRoot = null;
 
-    protected PathPrefixerAvoidResolve(String outPathPrefix) {
-        this.outPathPrefix = outPathPrefix;
+    protected PathPrefixerAvoidResolve(String prefix) {
+        this.prefix = prefix;
     }
 
     @Override
@@ -93,7 +96,7 @@ public abstract class PathPrefixerAvoidResolve extends PathPrefixer {
      * @return a prefixer
      */
     public DirectoryWithPrefix rootDirectoryPrefixAvoidResolve(String experimentIdentifier) {
-        String folder = getOutPathPrefix() + File.separator + experimentIdentifier + File.separator;
+        String folder = getPrefix() + File.separator + experimentIdentifier + File.separator;
         return new DirectoryWithPrefix(Paths.get(folder));
     }
 
@@ -136,14 +139,13 @@ public abstract class PathPrefixerAvoidResolve extends PathPrefixer {
     }
 
     private Path selectResolvedPath(PathPrefixerContext context) {
-
-        if (outPathPrefix.isEmpty()) {
-            // If there's an outPathPrefix specified, then use it, otherwise a temporary directory
+        if (!prefix.isEmpty()) {
+            return resolvePath(prefix);
+        } else {
+            // If there's an prefix specified, then use it, otherwise a temporary directory.
             return context.getOutputDirectory()
                     .orElseGet(PathPrefixerAvoidResolve::temporaryDirectory);
         }
-
-        return resolvePath(outPathPrefix);
     }
 
     private static Path temporaryDirectory() {
