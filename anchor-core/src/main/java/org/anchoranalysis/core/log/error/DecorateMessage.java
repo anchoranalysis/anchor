@@ -46,13 +46,17 @@ class DecorateMessage {
         
         StringBuilder builder = new StringBuilder();
         
-        addBanner(builder, warning ? START_WARNING : START_ERROR, bannerSize);
-        builder.append(System.lineSeparator());
+        addBannerMultiplex(builder, bannerSize, warning, START_WARNING, START_ERROR);
+        addNewline(builder);
         builder.append(message);
-        builder.append(System.lineSeparator());        
-        addBanner(builder, warning ? END_WARNING : END_ERROR, bannerSize);
+        addNewline(builder);        
+        addBannerMultiplex(builder, bannerSize, warning, END_WARNING, END_ERROR);
         
         return builder.toString();
+    }
+    
+    private static void addBannerMultiplex(StringBuilder builder, int bannerSize, boolean useFirstChoice, String firstChoice, String secondChoice) {
+        addBanner(builder, useFirstChoice ? firstChoice : secondChoice, bannerSize);
     }
     
     /** 
@@ -67,6 +71,10 @@ class DecorateMessage {
         builder.append( bannerText );
         builder.append( WHITESPACE_CHARACTER );
         builder.append( repeatedDecorativeCharacters(remaining - LEFT_MARGIN) );
+    }
+        
+    private static void addNewline(StringBuilder builder) {
+        builder.append(System.lineSeparator());
     }
     
     private static String repeatedDecorativeCharacters(int numberRepeats) {
