@@ -130,10 +130,10 @@ public abstract class PathPrefixerAvoidResolve extends PathPrefixer {
             NamedPath path, Path root, PathPrefixerContext context) throws PathPrefixerException;
 
     /** The root of the experiment for outputting files */
-    private Path resolveExperimentAbsoluteRootOut(String expName, PathPrefixerContext context) {
+    private Path resolveExperimentAbsoluteRootOut(String experimentName, PathPrefixerContext context) {
 
         if (resolvedRoot == null) {
-            resolvedRoot = selectResolvedPath(context).resolve(expName);
+            resolvedRoot = selectResolvedPath(context).resolve(experimentName);
         }
         return resolvedRoot;
     }

@@ -42,12 +42,12 @@ import org.anchoranalysis.core.log.MessageLogger;
 public class LoggingFixture {
 
     /** A {@link MessageLogger} that doesn't output anything */
-    public static MessageLogger suppressedLogReporter() {
+    public static MessageLogger suppressedMessageLogger() {
         return mock(MessageLogger.class);
     }
 
     /** A {@link Logger} that doesn't output anything */
-    public static Logger suppressedLogErrorReporter() {
-        return new Logger(suppressedLogReporter());
+    public static Logger suppressedLogger() {
+        return new Logger(suppressedMessageLogger());
     }
 }

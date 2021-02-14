@@ -27,8 +27,10 @@
 package org.anchoranalysis.image.io.bean.stack.writer;
 
 import java.nio.file.Path;
+import java.util.Optional;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.format.ImageFileFormat;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.stack.StackSeries;
@@ -58,6 +60,30 @@ public abstract class StackWriter extends AnchorBean<StackWriter> {
         Path filePathWithExtension = filePath.resolveSibling(fileNameWithExtension);
         writeStack(stack, filePathWithExtension, options);
         return filePathWithExtension;
+    }
+    
+    /**
+     * The file format that will be written by the generator, warning with a log
+     * message if different to suggestion.
+     *
+     * @param writeOptions options which may influence how a raster is written.
+     * @param logger the logger to use for the warning message.
+     */
+    public ImageFileFormat fileFormatWarnUnexpected(StackWriteOptions writeOptions, Optional<Logger> logger)
+            throws ImageIOException {
+        ImageFileFormat formatToWrite = fileFormat(writeOptions);
+        
+        Optional<ImageFileFormat> suggested = writeOptions.getSuggestedFormatToWrite(); 
+        if (suggested.isPresent() && logger.isPresent() && !formatToWrite.equals(suggested.get())) {
+            logger.get().errorReporter().recordWarningFormatted(
+               "Although output format %s was requested, %s was used instead, as %s is not compatible with %s images.",
+               suggested.get().toString(),
+               formatToWrite.toString(),
+               suggested.get().toString(),
+               writeOptions.getAttributes().toString()
+            );
+        }
+        return formatToWrite;
     }
 
     /**

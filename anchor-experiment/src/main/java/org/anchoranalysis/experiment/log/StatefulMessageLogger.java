@@ -33,5 +33,5 @@ public interface StatefulMessageLogger extends MessageLogger {
 
     void start();
 
-    void close(boolean successful);
+    void close(boolean successful, boolean warningOccurred);
 }

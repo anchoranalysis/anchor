@@ -65,11 +65,10 @@ public abstract class FileNamerIndependent extends FileNamer {
             String elseNameWithIndex = String.format("%s04%d", elseName, index);
 
             logger.errorReporter()
-                    .recordError(
+                    .recordErrorFormatted(
                             FileNamerIndependent.class,
-                            String.format(
-                                    "Cannot create a name for file %s and index %d. Using '%s' instead.",
-                                    file.getPath(), index, elseNameWithIndex));
+                            "Cannot create a name for file %s and index %d. Using '%s' instead.",
+                            file.getPath(), index, elseNameWithIndex);
             return elseNameWithIndex;
         }
     }

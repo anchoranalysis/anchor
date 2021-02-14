@@ -33,7 +33,7 @@ import org.anchoranalysis.io.manifest.file.FileType;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.output.namestyle.OutputNameStyle;
-import org.anchoranalysis.io.output.outputter.OutputterChecked;
+import org.anchoranalysis.io.output.writer.ElementOutputter;
 
 public class ManifestGenerator implements MultipleFileTypeGenerator<Manifest> {
 
@@ -47,7 +47,7 @@ public class ManifestGenerator implements MultipleFileTypeGenerator<Manifest> {
 
     @Override
     public FileType[] write(
-            Manifest element, OutputNameStyle outputNameStyle, OutputterChecked outputter)
+            Manifest element, OutputNameStyle outputNameStyle, ElementOutputter outputter)
             throws OutputWriteFailedException {
         return delegate.write(element, outputNameStyle, outputter);
     }
@@ -57,7 +57,7 @@ public class ManifestGenerator implements MultipleFileTypeGenerator<Manifest> {
             Manifest element,
             String index,
             IndexableOutputNameStyle outputNameStyle,
-            OutputterChecked outputter)
+            ElementOutputter outputter)
             throws OutputWriteFailedException {
         return delegate.writeWithIndex(element, index, outputNameStyle, outputter);
     }

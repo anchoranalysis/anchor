@@ -30,6 +30,7 @@ import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.format.NonImageFileFormat;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.io.generator.OneStageGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
@@ -40,7 +41,7 @@ public abstract class CSVGenerator<T> extends OneStageGenerator<T> {
     private final String manifestFunction;
 
     @Override
-    public String selectFileExtension(OutputWriteSettings outputWriteSettings) {
+    public String selectFileExtension(OutputWriteSettings settings, Optional<Logger> logger) {
         return NonImageFileFormat.CSV.extensionWithoutPeriod();
     }
 

@@ -56,7 +56,7 @@ public class OutputterFixture {
     }
 
     private static Outputter outputter(OutputterChecked outputter) {
-        ErrorReporter errorReporter = LoggingFixture.suppressedLogErrorReporter().errorReporter();
+        ErrorReporter errorReporter = LoggingFixture.suppressedLogger().errorReporter();
         return new Outputter(outputter, errorReporter);
     }
 }

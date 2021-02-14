@@ -50,7 +50,7 @@ public class HistogramCSVGenerator extends CSVGenerator<Histogram> {
 
     @Override
     public void writeToFile(
-            Histogram element, OutputWriteSettings outputWriteSettings, Path filePath)
+            Histogram element, OutputWriteSettings settings, Path filePath)
             throws OutputWriteFailedException {
         HistogramCSVWriter.writeHistogramToFile(element, filePath, ignoreZeros);
     }

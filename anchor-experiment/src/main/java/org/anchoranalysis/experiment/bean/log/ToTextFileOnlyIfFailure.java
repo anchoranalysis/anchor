@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.experiment.bean.log;
 
+import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.log.error.ErrorReporter;
 import org.anchoranalysis.experiment.arguments.ExecutionArguments;
 import org.anchoranalysis.experiment.log.FailureOnlyMessageLogger;
@@ -45,12 +46,18 @@ import org.anchoranalysis.io.output.outputter.OutputterChecked;
  */
 public class ToTextFileOnlyIfFailure extends ToTextFileBase {
 
+    // START BEAN PROPERTIES
+    /** If true, any warning message is considered as a failure. */
+    @BeanField
+    private boolean considerWarningAsFailure = true;
+    // END BEAN PROPERTIES
+    
     @Override
     public StatefulMessageLogger create(
             OutputterChecked outputter,
             ErrorReporter errorReporter,
             ExecutionArguments arguments,
             boolean detailedLogging) {
-        return new FailureOnlyMessageLogger(getOutputName(), outputter, errorReporter);
+        return new FailureOnlyMessageLogger(getOutputName(), outputter, errorReporter, considerWarningAsFailure);
     }
 }

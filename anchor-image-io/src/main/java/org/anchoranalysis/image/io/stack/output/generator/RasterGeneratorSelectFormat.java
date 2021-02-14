@@ -27,7 +27,9 @@
 package org.anchoranalysis.image.io.stack.output.generator;
 
 import java.nio.file.Path;
+import java.util.Optional;
 import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.writer.StackWriter;
@@ -49,9 +51,9 @@ public abstract class RasterGeneratorSelectFormat<T> extends RasterGenerator<T> 
      */
     @Override
     protected String selectFileExtension(
-            Stack stack, StackWriteOptions options, OutputWriteSettings settings)
+            Stack stack, StackWriteOptions options, OutputWriteSettings settings, Optional<Logger> logger)
             throws OperationFailedException {
-        return GeneratorOutputter.fileExtensionWriter(settings, options);
+        return GeneratorOutputter.fileExtensionWriter(settings, options, logger);
     }
 
     @Override

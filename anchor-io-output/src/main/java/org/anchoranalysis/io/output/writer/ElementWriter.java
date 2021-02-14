@@ -30,7 +30,6 @@ import org.anchoranalysis.io.manifest.file.FileType;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.output.namestyle.OutputNameStyle;
-import org.anchoranalysis.io.output.outputter.OutputterChecked;
 
 /**
  * Writes an element (with or without an index) to the file system.
@@ -49,7 +48,7 @@ public interface ElementWriter<T> {
      * @return all file-types written
      * @throws OutputWriteFailedException
      */
-    FileType[] write(T element, OutputNameStyle outputNameStyle, OutputterChecked outputter)
+    FileType[] write(T element, OutputNameStyle outputNameStyle, ElementOutputter outputter)
             throws OutputWriteFailedException;
 
     /**
@@ -66,6 +65,6 @@ public interface ElementWriter<T> {
             T element,
             String index,
             IndexableOutputNameStyle outputNameStyle,
-            OutputterChecked outputter)
+            ElementOutputter outputter)
             throws OutputWriteFailedException;
 }

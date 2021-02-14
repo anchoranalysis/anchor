@@ -47,6 +47,9 @@ public class FailureOnlyMessageLogger implements StatefulMessageLogger {
     private final String outputName;
     private final OutputterChecked outputter;
     private final ErrorReporter errorReporter;
+    
+    /** If true, any warning message is considered as a failure. */
+    private final boolean considerWarningAsFailure;
     // END REQUIRED ARGUMENTS
 
     private StringBuilder builder;
@@ -68,8 +71,8 @@ public class FailureOnlyMessageLogger implements StatefulMessageLogger {
     }
 
     @Override
-    public void close(boolean successful) {
-        if (!successful) {
+    public void close(boolean successful, boolean warningOccurred) {
+        if (!successful || (considerWarningAsFailure && warningOccurred)) {
             writeStringToFile(builder.toString());
         }
     }

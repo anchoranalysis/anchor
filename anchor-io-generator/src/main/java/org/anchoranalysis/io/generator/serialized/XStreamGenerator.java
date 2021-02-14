@@ -45,7 +45,7 @@ public class XStreamGenerator<T> extends SerializedGenerator<T> {
     }
 
     @Override
-    public void writeToFile(T element, OutputWriteSettings outputWriteSettings, Path filePath)
+    public void writeToFile(T element, OutputWriteSettings settings, Path filePath)
             throws OutputWriteFailedException {
         try {
             XStreamSerializer.serializeObjectToFile(element, filePath);

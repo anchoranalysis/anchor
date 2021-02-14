@@ -142,7 +142,7 @@ public abstract class OutputExperiment extends Experiment {
             tidyUpAfterExecution(params, stopWatchExperiment);
         } finally {
             // An experiment is considered always successful
-            params.getLoggerExperiment().close(true);
+            params.getLoggerExperiment().close(true, false);
         }
     }
 
@@ -163,7 +163,9 @@ public abstract class OutputExperiment extends Experiment {
                                             defaultOutputs(),
                                             arguments.output().getOutputEnabledDelta()),
                                     arguments.output().getSuggestedImageOutputFormat(),
-                                    arguments.createPrefixerContext());
+                                    arguments.createPrefixerContext(),
+                                    Optional.empty()
+                                    );
 
             Preconditions.checkArgument(rootOutputter.getSettings().hasBeenInitialized());
 
@@ -183,9 +185,9 @@ public abstract class OutputExperiment extends Experiment {
     }
 
     private StatefulMessageLogger createLogger(
-            OutputterChecked rootOutputter, ExecutionArguments expArgs) {
+            OutputterChecked rootOutputter, ExecutionArguments executionArguments) {
         return logExperiment.createWithConsoleFallback(
-                rootOutputter, expArgs, useDetailedLogging());
+                rootOutputter, executionArguments, useDetailedLogging());
     }
 
     private void initBeforeExecution(ParametersExperiment params)

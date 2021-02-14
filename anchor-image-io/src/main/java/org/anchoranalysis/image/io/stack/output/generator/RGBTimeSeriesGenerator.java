@@ -30,6 +30,7 @@ import java.nio.file.Path;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.writer.StackWriter;
 import org.anchoranalysis.image.io.stack.StackSeries;
@@ -46,11 +47,11 @@ public class RGBTimeSeriesGenerator extends OneStageGenerator<StackSeries> {
 
     @Override
     public void writeToFile(
-            StackSeries element, OutputWriteSettings outputWriteSettings, Path filePath)
+            StackSeries element, OutputWriteSettings settings, Path filePath)
             throws OutputWriteFailedException {
 
         try {
-            StackWriter writer = GeneratorOutputter.writer(outputWriteSettings);
+            StackWriter writer = GeneratorOutputter.writer(settings);
             writer.writeStackSeries(element, filePath, rasterOptions);
         } catch (ImageIOException e) {
             throw new OutputWriteFailedException(e);
@@ -58,9 +59,9 @@ public class RGBTimeSeriesGenerator extends OneStageGenerator<StackSeries> {
     }
 
     @Override
-    public String selectFileExtension(OutputWriteSettings outputWriteSettings)
+    public String selectFileExtension(OutputWriteSettings settings, Optional<Logger> logger)
             throws OperationFailedException {
-        return GeneratorOutputter.fileExtensionWriter(outputWriteSettings, rasterOptions);
+        return GeneratorOutputter.fileExtensionWriter(settings, rasterOptions, logger);
     }
 
     @Override

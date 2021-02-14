@@ -27,7 +27,9 @@ package org.anchoranalysis.image.io.stack.output;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.Value;
+import lombok.Getter;
+import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
+import org.anchoranalysis.core.value.StringUtilities;
 import org.anchoranalysis.image.core.stack.Stack;
 
 /**
@@ -37,18 +39,17 @@ import org.anchoranalysis.image.core.stack.Stack;
  *
  * @author Owen Feehan
  */
-@Value
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class StackWriteAttributes {
 
     /** True the output is guaranteed to only ever 2D i.e. maximally one z-slice? */
-    private boolean always2D;
+    @Getter private boolean always2D;
 
     /** The number of channels is guaranteed to be 1 in the output. */
-    private boolean singleChannel;
+    @Getter private boolean singleChannel;
 
     /** The number of channels is guaranteed to be 3 in the output. */
-    private boolean threeChannels;
+    @Getter private boolean threeChannels;
 
     /***
      * Whether it's an RGB image when it has three channels (the three channels visualized jointly, rather than independently)
@@ -57,7 +58,7 @@ public class StackWriteAttributes {
      *
      * <p>This flag is ignored, when the number of channels is not three.
      */
-    private boolean rgb;
+    @Getter private boolean rgb;
 
     /**
      * Whether all channels represent a binary image.
@@ -65,7 +66,7 @@ public class StackWriteAttributes {
      * <p>This implies each channel has only two allowed states: the max intensity value and the
      * minimum intensity value.
      */
-    private boolean binary;
+    @Getter private boolean binary;
 
     /**
      * Derives a {@link StackWriteAttributes} that will always be 2D, but is otherwise unchanged.
@@ -129,5 +130,40 @@ public class StackWriteAttributes {
      */
     public boolean writeAsRGB(Stack stack) {
         return rgb && stack.getNumberChannels() == 3 && stack.isRGB();
+    }
+
+    /**
+     * A user-friendly description of the stack-type to include in error and warning messages.
+     */
+    @Override
+    public String toString() {
+        return StringUtilities.joinNonEmpty(" ",
+          describeZDimension(),
+          describeChannels()      
+        ).orElseThrow(AnchorImpossibleSituationException::new);
+    }
+    
+    private String describeZDimension() {
+        if (always2D) {
+            return "2D";
+        } else {
+            return "possibly-3D";
+        }
+    }
+        
+    private String describeChannels() {
+        if (binary) {
+            return "binary";
+        } else if (singleChannel) {
+            return "grayscale";
+        } else if (threeChannels) {
+            if (rgb) {
+                return "rgb";
+            } else {
+                return "three-channel";
+            }
+        } else {
+            return "";
+        }
     }
 }

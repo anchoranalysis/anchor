@@ -32,7 +32,7 @@ import org.anchoranalysis.io.manifest.file.FileType;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.output.namestyle.OutputNameStyle;
-import org.anchoranalysis.io.output.outputter.OutputterChecked;
+import org.anchoranalysis.io.output.writer.ElementOutputter;
 
 /**
  * Allows us to call an {@code SingleFileTypeGenerator<V,S>} as if it was an {@code
@@ -57,7 +57,7 @@ public class TransformingGeneratorBridge<S, T, V> implements TransformingGenerat
     }
 
     @Override
-    public FileType[] write(T element, OutputNameStyle outputNameStyle, OutputterChecked outputter)
+    public FileType[] write(T element, OutputNameStyle outputNameStyle, ElementOutputter outputter)
             throws OutputWriteFailedException {
         return delegate.write(applyBridge(element), outputNameStyle, outputter);
     }
@@ -67,7 +67,7 @@ public class TransformingGeneratorBridge<S, T, V> implements TransformingGenerat
             T element,
             String index,
             IndexableOutputNameStyle outputNameStyle,
-            OutputterChecked outputter)
+            ElementOutputter outputter)
             throws OutputWriteFailedException {
         return delegate.writeWithIndex(applyBridge(element), index, outputNameStyle, outputter);
     }

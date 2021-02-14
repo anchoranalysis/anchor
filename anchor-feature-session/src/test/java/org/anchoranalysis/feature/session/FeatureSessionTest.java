@@ -47,7 +47,7 @@ class FeatureSessionTest {
         session.start(
                 new FeatureInitParams(),
                 new SharedFeatureMulti(),
-                LoggingFixture.suppressedLogErrorReporter());
+                LoggingFixture.suppressedLogger());
 
         ResultsVector rv1 = session.calculate(FeatureInputNull.instance());
         ConstantsInListFixture.checkResultVector(rv1);
