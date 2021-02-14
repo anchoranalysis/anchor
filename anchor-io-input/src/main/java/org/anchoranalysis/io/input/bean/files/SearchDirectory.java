@@ -74,10 +74,8 @@ public class SearchDirectory extends FilesProviderWithDirectoryString {
      * exception
      */
     @BeanField @Getter @Setter private boolean acceptDirectoryErrors = false;
-    
-    /**
-     * If true, the files are sorted after being searched, to achieve a deterministic order.
-     */
+
+    /** If true, the files are sorted after being searched, to achieve a deterministic order. */
     private boolean sort = true;
     // END BEAN PROPERTIES
 
@@ -89,13 +87,14 @@ public class SearchDirectory extends FilesProviderWithDirectoryString {
         Optional<Integer> maxDirectoryDepthOptional =
                 OptionalUtilities.createFromFlag(maxDirectoryDepth >= 0, maxDirectoryDepth);
         try {
-            List<File> filesUnsorted = matcher.matchingFiles(
-                    directory,
-                    recursive,
-                    ignoreHidden,
-                    acceptDirectoryErrors,
-                    maxDirectoryDepthOptional,
-                    Optional.of(params));
+            List<File> filesUnsorted =
+                    matcher.matchingFiles(
+                            directory,
+                            recursive,
+                            ignoreHidden,
+                            acceptDirectoryErrors,
+                            maxDirectoryDepthOptional,
+                            Optional.of(params));
             if (sort) {
                 Collections.sort(filesUnsorted);
             }

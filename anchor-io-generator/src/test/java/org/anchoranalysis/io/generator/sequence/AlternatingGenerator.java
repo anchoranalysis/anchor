@@ -31,7 +31,7 @@ import org.anchoranalysis.io.manifest.file.FileType;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.output.namestyle.OutputNameStyle;
-import org.anchoranalysis.io.output.outputter.OutputterChecked;
+import org.anchoranalysis.io.output.writer.ElementOutputter;
 
 @RequiredArgsConstructor
 class AlternatingGenerator<T> implements Generator<T> {
@@ -44,7 +44,7 @@ class AlternatingGenerator<T> implements Generator<T> {
     private int counter = 0;
 
     @Override
-    public FileType[] write(T element, OutputNameStyle outputNameStyle, OutputterChecked outputter)
+    public FileType[] write(T element, OutputNameStyle outputNameStyle, ElementOutputter outputter)
             throws OutputWriteFailedException {
         return selectAndIncrement().write(element, outputNameStyle, outputter);
     }
@@ -54,7 +54,7 @@ class AlternatingGenerator<T> implements Generator<T> {
             T element,
             String index,
             IndexableOutputNameStyle outputNameStyle,
-            OutputterChecked outputter)
+            ElementOutputter outputter)
             throws OutputWriteFailedException {
         return selectAndIncrement().writeWithIndex(element, index, outputNameStyle, outputter);
     }

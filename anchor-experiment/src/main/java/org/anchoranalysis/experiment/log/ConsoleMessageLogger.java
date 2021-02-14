@@ -44,7 +44,7 @@ public class ConsoleMessageLogger implements StatefulMessageLogger {
     }
 
     @Override
-    public void close(boolean successful) {
+    public void close(boolean successful, boolean warningOccurred) {
         // NOTHING TO CLOSE
     }
 }

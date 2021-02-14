@@ -119,6 +119,7 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
         Manifest manifestTask = new Manifest();
 
         // Bind an outputter for the task
+        // The outputter is initially created any log and this is attached later.
         OutputterChecked outputterTask =
                 TaskOutputterFactory.createOutputterForTask(
                         paramsUnbound.getInput(),
@@ -128,6 +129,9 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
 
         // Create bound parameters
         InputBound<T, S> paramsBound = bindOtherParams(paramsUnbound, outputterTask, manifestTask);
+
+        outputterTask.assignLogger(paramsBound.getLogger());
+
         return executeJobLogExceptions(paramsBound, paramsUnbound.isSuppressExceptions());
     }
 
@@ -258,7 +262,8 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
                 MemoryUtilities.logMemoryUsage("End file processing", loggerJob);
             }
 
-            loggerJob.close(successfullyFinished);
+            loggerJob.close(
+                    successfullyFinished, params.getLogger().errorReporter().hasWarningOccurred());
         }
         return successfullyFinished;
     }

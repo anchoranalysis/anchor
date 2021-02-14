@@ -119,7 +119,7 @@ public class TextFileMessageLogger implements StatefulMessageLogger {
     }
 
     @Override
-    public void close(boolean successful) {
+    public void close(boolean successful, boolean warningOccurred) {
         fileOutput.ifPresent(TextFileOutput::end);
     }
 }

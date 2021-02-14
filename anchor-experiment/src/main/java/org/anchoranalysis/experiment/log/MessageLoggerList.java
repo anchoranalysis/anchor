@@ -56,9 +56,9 @@ public class MessageLoggerList implements StatefulMessageLogger {
     }
 
     @Override
-    public void close(boolean successful) {
+    public void close(boolean successful, boolean warningOccurred) {
         for (StatefulMessageLogger logger : list) {
-            logger.close(successful);
+            logger.close(successful, warningOccurred);
         }
     }
 

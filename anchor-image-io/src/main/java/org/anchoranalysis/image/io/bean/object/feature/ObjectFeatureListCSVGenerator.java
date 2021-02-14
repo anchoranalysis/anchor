@@ -88,8 +88,7 @@ class ObjectFeatureListCSVGenerator extends CSVGenerator<ObjectCollection> {
     }
 
     @Override
-    public void writeToFile(
-            ObjectCollection element, OutputWriteSettings outputWriteSettings, Path filePath)
+    public void writeToFile(ObjectCollection element, OutputWriteSettings settings, Path filePath)
             throws OutputWriteFailedException {
 
         // We calculate a results vector for each object, across all features in memory. This is
@@ -101,7 +100,7 @@ class ObjectFeatureListCSVGenerator extends CSVGenerator<ObjectCollection> {
                             new FeatureInputSingleObject(objectMask), logger.errorReporter()));
         }
 
-        delegate.writeToFile(results, outputWriteSettings, filePath);
+        delegate.writeToFile(results, settings, filePath);
     }
 
     // Puts in some extra descriptive features at the start

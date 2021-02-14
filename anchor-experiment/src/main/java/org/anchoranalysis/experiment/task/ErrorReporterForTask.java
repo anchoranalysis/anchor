@@ -55,7 +55,17 @@ public class ErrorReporterForTask implements ErrorReporter {
     }
 
     @Override
-    public void recordError(Class<?> classOriginating, String errorMsg) {
-        delegate.recordError(classOriginating, errorMsg);
+    public void recordError(Class<?> classOriginating, String message) {
+        delegate.recordError(classOriginating, message);
+    }
+
+    @Override
+    public void recordWarning(String message) {
+        delegate.recordWarning(message);
+    }
+
+    @Override
+    public boolean hasWarningOccurred() {
+        return delegate.hasWarningOccurred();
     }
 }

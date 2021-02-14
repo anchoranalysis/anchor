@@ -31,6 +31,7 @@ import ch.systemsx.cisd.hdf5.IHDF5Writer;
 import java.nio.file.Path;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.io.object.HDF5PathHelper;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.io.generator.OneStageGenerator;
@@ -59,14 +60,13 @@ public class HDF5ObjectsGenerator extends OneStageGenerator<ObjectCollection> {
     }
 
     @Override
-    public void writeToFile(
-            ObjectCollection element, OutputWriteSettings outputWriteSettings, Path filePath) {
+    public void writeToFile(ObjectCollection element, OutputWriteSettings settings, Path filePath) {
         // Write a HDF file
         writeObjects(element, filePath);
     }
 
     @Override
-    public String selectFileExtension(OutputWriteSettings outputWriteSettings) {
+    public String selectFileExtension(OutputWriteSettings settings, Optional<Logger> logger) {
         return "h5";
     }
 

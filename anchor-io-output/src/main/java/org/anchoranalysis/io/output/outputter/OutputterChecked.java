@@ -30,6 +30,7 @@ import java.nio.file.Path;
 import java.util.Optional;
 import lombok.Getter;
 import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.ManifestDirectoryDescription;
 import org.anchoranalysis.io.manifest.directory.SubdirectoryBase;
@@ -43,6 +44,7 @@ import org.anchoranalysis.io.output.outputter.directory.OutputterTarget;
 import org.anchoranalysis.io.output.path.prefixer.DirectoryWithPrefix;
 import org.anchoranalysis.io.output.recorded.MultiLevelRecordedOutputs;
 import org.anchoranalysis.io.output.recorded.RecordingWriters;
+import org.anchoranalysis.io.output.writer.ElementOutputter;
 
 /**
  * A particular directory on the filesystem in which outputting can occur.
@@ -77,25 +79,30 @@ public class OutputterChecked {
     /** General settings for writing outputs. */
     @Getter private OutputWriteContext context;
 
+    private Optional<Logger> logger;
+
     /**
-     * Creates, defaulting to a permissive output-manager in a a particular directory.
+     * Creates, defaulting to a permissive output-manager in a particular directory.
      *
      * <p>Outputs are not recorded.
      *
-     * @param pathDirectory directory to associate with output-amanger
+     * @param pathDirectory directory to associate with output-manager
      * @param deleteExistingDirectory if true this directory if it already exists is deleted before
      *     executing the experiment, otherwise an exception is thrown if it exists.
+     * @param logger logger for warning for information messages when outputting
      * @throws BindFailedException
      */
     public static OutputterChecked createForDirectoryPermissive(
-            Path pathDirectory, boolean deleteExistingDirectory) throws BindFailedException {
+            Path pathDirectory, boolean deleteExistingDirectory, Optional<Logger> logger)
+            throws BindFailedException {
         return createWithPrefix(
                 new DirectoryWithPrefix(pathDirectory),
                 Permissive.INSTANCE,
                 new OutputWriteContext(),
                 Optional.empty(),
                 Optional.empty(),
-                deleteExistingDirectory);
+                deleteExistingDirectory,
+                logger);
     }
 
     /**
@@ -108,6 +115,7 @@ public class OutputterChecked {
      *     executing the experiment, otherwise an exception is thrown if it exists.
      * @param recordedOutputs if defined, records output-names that are written / not-written in
      *     {@link OutputterChecked} (but not any sub-directories thereof)
+     * @param logger logger for warning for information messages when outputting
      * @throws BindFailedException if a directory cannot be created at the intended path.
      */
     public static OutputterChecked createWithPrefix(
@@ -116,14 +124,16 @@ public class OutputterChecked {
             OutputWriteContext context,
             Optional<WriteOperationRecorder> writeOperationRecorder,
             Optional<MultiLevelRecordedOutputs> recordedOutputs,
-            boolean deleteExistingDirectory)
+            boolean deleteExistingDirectory,
+            Optional<Logger> logger)
             throws BindFailedException {
         return new OutputterChecked(
                 new OutputterTarget(prefix, deleteExistingDirectory),
                 writeOperationRecorder,
                 outputEnabled,
                 recordedOutputs,
-                context);
+                context,
+                logger);
     }
 
     /**
@@ -133,22 +143,27 @@ public class OutputterChecked {
      * @param writeOperationRecorder an entry for every outputted filr is written here
      * @param recordedOutputs records the names of all outputs written to, if defined.
      * @param context settings and user-supplied parameters for writing outputs.
+     * @param logger logger for warning for information messages when outputting
      */
     private OutputterChecked(
             OutputterTarget target,
             Optional<WriteOperationRecorder> writeOperationRecorder,
             MultiLevelOutputEnabled outputsEnabled,
             Optional<MultiLevelRecordedOutputs> recordedOutputs,
-            OutputWriteContext context) {
+            OutputWriteContext context,
+            Optional<Logger> logger) {
         this.target = target;
         this.writeOperationRecorder = writeOperationRecorder;
         this.context = context;
         this.recordedOutputs = recordedOutputs;
         this.outputsEnabled = maybeRecordOutputNames(outputsEnabled);
+        this.logger = logger;
 
+        // As the logger may change, we supply a lambda to it, instead of the object directly.
+        ElementOutputter outputter = new ElementOutputter(this, () -> this.logger);
         this.writers =
                 new RecordingWriters(
-                        this, target.getParentDirectoryCreator(), recordedOutputs); // NOSONAR
+                        outputter, target.getParentDirectoryCreator(), recordedOutputs); // NOSONAR
     }
 
     /** Adds an additional operation recorder alongside any existing recorders. */
@@ -184,7 +199,8 @@ public class OutputterChecked {
                 writeOperationRecorderToAssign,
                 outputsEnabled,
                 recordedOutputs,
-                context);
+                context,
+                Optional.empty());
     }
 
     /**
@@ -220,7 +236,8 @@ public class OutputterChecked {
                             ? recordedOutputs
                             : Optional.empty(), // Output-names are no longer recorded on
                     // sub-directories
-                    context);
+                    context,
+                    logger);
         } catch (BindFailedException e) {
             // This exception can only be thrown if the prefix-path doesn't reside within the
             // rootDirectory
@@ -249,6 +266,11 @@ public class OutputterChecked {
                                 outputName, manifestDescription, relativePath(pathSuffix), index));
     }
 
+    /**
+     * General settings for outputting.
+     *
+     * @return the settings.
+     */
     public OutputWriteSettings getSettings() {
         return context.getSettings();
     }
@@ -281,6 +303,16 @@ public class OutputterChecked {
             Optional<String> suffixWithoutExtension, String extension, String fallbackSuffix) {
         return target.pathCreator()
                 .makePathAbsolute(suffixWithoutExtension, Optional.of(extension), fallbackSuffix);
+    }
+
+    /**
+     * Assigns a logger to the outputter, which is used to output warnings or messages when
+     * outputting.
+     *
+     * @param logger the logger to assign
+     */
+    public void assignLogger(Logger logger) {
+        this.logger = Optional.of(logger);
     }
 
     public DirectoryWithPrefix getPrefix() {

@@ -31,6 +31,7 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.checked.CheckedFunction;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
@@ -53,9 +54,9 @@ public class SingleFileTypeGeneratorBridge<S, T, V> extends SingleFileTypeGenera
     // END REQUIRED ARGUMENTS
 
     @Override
-    public String selectFileExtension(OutputWriteSettings outputWriteSettings)
+    public String selectFileExtension(OutputWriteSettings settings, Optional<Logger> logger)
             throws OperationFailedException {
-        return delegate.selectFileExtension(outputWriteSettings);
+        return delegate.selectFileExtension(settings, logger);
     }
 
     @Override
@@ -69,9 +70,9 @@ public class SingleFileTypeGeneratorBridge<S, T, V> extends SingleFileTypeGenera
     }
 
     @Override
-    public void writeToFile(T element, OutputWriteSettings outputWriteSettings, Path filePath)
+    public void writeToFile(T element, OutputWriteSettings settings, Path filePath)
             throws OutputWriteFailedException {
-        delegate.writeToFile(applyBridge(element), outputWriteSettings, filePath);
+        delegate.writeToFile(applyBridge(element), settings, filePath);
     }
 
     private V applyBridge(T element) throws OutputWriteFailedException {

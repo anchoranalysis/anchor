@@ -29,11 +29,16 @@ package org.anchoranalysis.core.value;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
+/**
+ * Utility functions for pluralizing words in strings.
+ *
+ * @author Owen Feehan
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class LanguageUtilities {
 
     /**
-     * Returns something or somethings depending on the number
+     * Returns {@code something} or {@code somethings} depending on the number.
      *
      * @param number the number n
      * @param word the something
@@ -48,7 +53,7 @@ public class LanguageUtilities {
     }
 
     /**
-     * Returns 1 something or n somethings as is appropriate
+     * Returns {@code 1 something} or {@code n somethings} as is appropriate.
      *
      * @param number the number n
      * @param word the something
@@ -63,7 +68,7 @@ public class LanguageUtilities {
     }
 
     /**
-     * Returns n somethings
+     * Returns {@code n somethings}.
      *
      * @param number the number n
      * @param word the something
@@ -74,7 +79,7 @@ public class LanguageUtilities {
     }
 
     /**
-     * Given something, returns somethings
+     * Given {@code something}, returns {@code somethings}.
      *
      * @param word the something
      * @return the string as above

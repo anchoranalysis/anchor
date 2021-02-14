@@ -46,7 +46,7 @@ public class ObjectOutputStreamGenerator<T extends Serializable> extends Seriali
     }
 
     @Override
-    public void writeToFile(T element, OutputWriteSettings outputWriteSettings, Path filePath)
+    public void writeToFile(T element, OutputWriteSettings settings, Path filePath)
             throws OutputWriteFailedException {
 
         try (FileOutputStream fileOutput = new FileOutputStream(filePath.toFile())) {

@@ -28,13 +28,14 @@ package org.anchoranalysis.io.generator;
 import java.nio.file.Path;
 import java.util.Optional;
 import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.file.FileType;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.output.namestyle.OutputNameStyle;
-import org.anchoranalysis.io.output.outputter.OutputterChecked;
+import org.anchoranalysis.io.output.writer.ElementOutputter;
 
 /**
  * A {@link Generator} that eventually writes only a single file to the filesystem.
@@ -49,12 +50,19 @@ public abstract class SingleFileTypeGenerator<T, S> implements TransformingGener
     private static final ManifestDescription UNDEFINED_MANIFEST_DESCRIPTION =
             new ManifestDescription("undefined", "undefined");
 
-    public abstract void writeToFile(
-            T element, OutputWriteSettings outputWriteSettings, Path filePath)
+    public abstract void writeToFile(T element, OutputWriteSettings settings, Path filePath)
             throws OutputWriteFailedException;
 
-    public abstract String selectFileExtension(OutputWriteSettings outputWriteSettings)
-            throws OperationFailedException;
+    /**
+     * Selects the file/extension to be used for outputting the file.
+     *
+     * @param settings settings for outputting.
+     * @param logger logger for warning for information messages when outputting.
+     * @return the file extension (without leading period) to be used for outputting.
+     * @throws OperationFailedException
+     */
+    public abstract String selectFileExtension(
+            OutputWriteSettings settings, Optional<Logger> logger) throws OperationFailedException;
 
     public abstract Optional<ManifestDescription> createManifestDescription();
 
@@ -64,7 +72,7 @@ public abstract class SingleFileTypeGenerator<T, S> implements TransformingGener
     private FileType[] fileTypes;
 
     @Override
-    public FileType[] write(T element, OutputNameStyle outputNameStyle, OutputterChecked outputter)
+    public FileType[] write(T element, OutputNameStyle outputNameStyle, ElementOutputter outputter)
             throws OutputWriteFailedException {
         return writeInternal(
                 element,
@@ -79,7 +87,7 @@ public abstract class SingleFileTypeGenerator<T, S> implements TransformingGener
             T element,
             String index,
             IndexableOutputNameStyle outputNameStyle,
-            OutputterChecked outputter)
+            ElementOutputter outputter)
             throws OutputWriteFailedException {
         return writeInternal(
                 element,
@@ -94,17 +102,19 @@ public abstract class SingleFileTypeGenerator<T, S> implements TransformingGener
             Optional<String> filenameWithoutExtension,
             String outputName,
             String index,
-            OutputterChecked outputter)
+            ElementOutputter outputter)
             throws OutputWriteFailedException {
 
         try {
-            String fileExtension = selectFileExtension(outputter.getSettings());
+            OutputWriteSettings settings = outputter.getSettings();
+
+            String fileExtension = selectFileExtension(settings, outputter.logger());
 
             Path pathToWriteTo =
                     outputter.makeOutputPath(filenameWithoutExtension, fileExtension, outputName);
 
             // First write to the file system, and then write to the operation-recorder.
-            writeToFile(element, outputter.getSettings(), pathToWriteTo);
+            writeToFile(element, settings, pathToWriteTo);
 
             return writeToManifest(outputName, index, outputter, pathToWriteTo);
 
@@ -119,7 +129,7 @@ public abstract class SingleFileTypeGenerator<T, S> implements TransformingGener
      * @throws OperationFailedException
      */
     private FileType[] writeToManifest(
-            String outputName, String index, OutputterChecked outputter, Path pathToWriteTo)
+            String outputName, String index, ElementOutputter outputter, Path pathToWriteTo)
             throws OperationFailedException {
 
         Optional<ManifestDescription> manifestDescription = createManifestDescription();
@@ -130,7 +140,9 @@ public abstract class SingleFileTypeGenerator<T, S> implements TransformingGener
                                 outputName, pathToWriteTo, description, index));
 
         if (fileTypes == null) {
-            fileTypes = buildFileTypeArray(manifestDescription, outputter.getSettings());
+            fileTypes =
+                    buildFileTypeArray(
+                            manifestDescription, outputter.getSettings(), outputter.logger());
         }
         return fileTypes;
     }
@@ -138,18 +150,19 @@ public abstract class SingleFileTypeGenerator<T, S> implements TransformingGener
     /**
      * The types of files the generator writes to the filesystem.
      *
-     * @param outputWriteSettings general settings for outputting
+     * @param settings settings for outputting.
      * @return an array of all file-types written, if any exist
      * @throws OperationFailedException if anything goes wrong
      */
     private FileType[] buildFileTypeArray(
             Optional<ManifestDescription> manifestDescription,
-            OutputWriteSettings outputWriteSettings)
+            OutputWriteSettings settings,
+            Optional<Logger> logger)
             throws OperationFailedException {
         ManifestDescription selectedDescription =
                 manifestDescription.orElse(UNDEFINED_MANIFEST_DESCRIPTION);
         return new FileType[] {
-            new FileType(selectedDescription, selectFileExtension(outputWriteSettings))
+            new FileType(selectedDescription, selectFileExtension(settings, logger))
         };
     }
 }

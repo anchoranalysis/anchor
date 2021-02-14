@@ -48,8 +48,8 @@ import org.anchoranalysis.io.output.outputter.OutputterChecked;
 public class AlwaysAllowed implements Writer {
 
     // START REQUIRED ARGUMENTS
-    /** Bound output manager */
-    private final OutputterChecked outputter;
+    /** Outputter for elements. */
+    private final ElementOutputter outputter;
 
     /** Execute before every operation if defined. */
     private final Optional<WriterExecuteBeforeEveryOperation> preop;
@@ -116,11 +116,11 @@ public class AlwaysAllowed implements Writer {
 
         maybeExecutePreop();
 
-        Path outPath = outputter.makeOutputPath(Optional.of(outputName), extension, outputName);
+        Path path = outputter.makeOutputPath(Optional.of(outputName), extension, outputName);
 
         manifestDescription.ifPresent(
-                md -> outputter.writeFileToOperationRecorder(outputName, outPath, md, ""));
-        return Optional.of(outPath);
+                md -> outputter.writeFileToOperationRecorder(outputName, path, md, ""));
+        return Optional.of(path);
     }
 
     private void maybeExecutePreop() {

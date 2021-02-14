@@ -26,9 +26,11 @@
 
 package org.anchoranalysis.image.io.stack.output.generator;
 
+import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.writer.StackWriter;
 import org.anchoranalysis.image.io.stack.output.StackWriteOptions;
@@ -61,10 +63,14 @@ public class GeneratorOutputter {
     }
 
     public static String fileExtensionWriter(
-            OutputWriteSettings outputWriteSettings, StackWriteOptions writeOptions)
+            OutputWriteSettings outputWriteSettings,
+            StackWriteOptions writeOptions,
+            Optional<Logger> logger)
             throws OperationFailedException {
         try {
-            return writer(outputWriteSettings).fileFormat(writeOptions).getDefaultExtension();
+            return writer(outputWriteSettings)
+                    .fileFormatWarnUnexpected(writeOptions, logger)
+                    .getDefaultExtension();
         } catch (ImageIOException e) {
             throw new OperationFailedException(e);
         }

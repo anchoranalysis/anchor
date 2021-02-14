@@ -30,6 +30,7 @@ import java.nio.file.Path;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.stack.output.StackWriteAttributes;
 import org.anchoranalysis.image.io.stack.output.StackWriteAttributesFactory;
@@ -41,7 +42,7 @@ import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.output.namestyle.OutputNameStyle;
-import org.anchoranalysis.io.output.outputter.OutputterChecked;
+import org.anchoranalysis.io.output.writer.ElementOutputter;
 
 /**
  * Transfroms an entity to a {@link Stack} and writes it to the file-system.
@@ -56,7 +57,7 @@ public abstract class RasterGenerator<T> implements TransformingGenerator<T, Sta
             new ManifestDescription("raster", "unknown");
 
     @Override
-    public FileType[] write(T element, OutputNameStyle outputNameStyle, OutputterChecked outputter)
+    public FileType[] write(T element, OutputNameStyle outputNameStyle, ElementOutputter outputter)
             throws OutputWriteFailedException {
         return writeInternal(
                 element,
@@ -72,7 +73,7 @@ public abstract class RasterGenerator<T> implements TransformingGenerator<T, Sta
             T element,
             String index,
             IndexableOutputNameStyle outputNameStyle,
-            OutputterChecked outputter)
+            ElementOutputter outputter)
             throws OutputWriteFailedException {
         return writeInternal(
                 element,
@@ -96,7 +97,7 @@ public abstract class RasterGenerator<T> implements TransformingGenerator<T, Sta
             Optional<String> filenameWithoutExtension,
             String outputName,
             String index,
-            OutputterChecked outputter)
+            ElementOutputter outputter)
             throws OutputWriteFailedException {
 
         try {
@@ -105,21 +106,17 @@ public abstract class RasterGenerator<T> implements TransformingGenerator<T, Sta
             StackWriteOptions options =
                     new StackWriteOptions(
                             writeAttributes(transformedElement),
-                            outputter.getContext().getSuggestedFormatToWrite());
+                            outputter.getSuggestedFormatToWrite());
 
+            OutputWriteSettings settings = outputter.getSettings();
             String extension =
-                    selectFileExtension(transformedElement, options, outputter.getSettings());
+                    selectFileExtension(transformedElement, options, settings, outputter.logger());
 
             Path pathToWriteTo =
                     outputter.makeOutputPath(filenameWithoutExtension, extension, outputName);
 
             // First write to the file system, and then write to the operation-recorder.
-            writeToFile(
-                    elementUntransformed,
-                    transformedElement,
-                    options,
-                    outputter.getSettings(),
-                    pathToWriteTo);
+            writeToFile(elementUntransformed, transformedElement, options, settings, pathToWriteTo);
 
             return writeToManifest(outputName, index, outputter, pathToWriteTo, extension);
 
@@ -134,11 +131,15 @@ public abstract class RasterGenerator<T> implements TransformingGenerator<T, Sta
      * @param stack the stack to select a file-extension for
      * @param options options that describe how {@code stack} should be written
      * @param settings general settings for writing output
+     * @param logger logger for information messages or warnings associated with writing outputs
      * @return the file extension without any leading period
      * @throws OperationFailedException
      */
     protected abstract String selectFileExtension(
-            Stack stack, StackWriteOptions options, OutputWriteSettings settings)
+            Stack stack,
+            StackWriteOptions options,
+            OutputWriteSettings settings,
+            Optional<Logger> logger)
             throws OperationFailedException;
 
     /**
@@ -175,7 +176,7 @@ public abstract class RasterGenerator<T> implements TransformingGenerator<T, Sta
     private FileType[] writeToManifest(
             String outputName,
             String index,
-            OutputterChecked outputter,
+            ElementOutputter outputter,
             Path pathToWriteTo,
             String extension) {
         Optional<ManifestDescription> manifestDescription = createManifestDescription();

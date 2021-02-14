@@ -31,9 +31,9 @@ import lombok.Getter;
 import lombok.experimental.Accessors;
 import org.anchoranalysis.io.output.enabled.multi.MultiLevelOutputEnabled;
 import org.anchoranalysis.io.output.enabled.single.SingleLevelOutputEnabled;
-import org.anchoranalysis.io.output.outputter.OutputterChecked;
 import org.anchoranalysis.io.output.writer.AlwaysAllowed;
 import org.anchoranalysis.io.output.writer.CheckIfAllowed;
+import org.anchoranalysis.io.output.writer.ElementOutputter;
 import org.anchoranalysis.io.output.writer.Writer;
 import org.anchoranalysis.io.output.writer.WriterExecuteBeforeEveryOperation;
 
@@ -79,7 +79,7 @@ public class RecordingWriters {
      *     recorded here.
      */
     public RecordingWriters(
-            OutputterChecked outputter,
+            ElementOutputter outputter,
             Optional<WriterExecuteBeforeEveryOperation> preop,
             Optional<MultiLevelRecordedOutputs> recordedOutputs) {
         this.recordedOutputs = recordedOutputs;

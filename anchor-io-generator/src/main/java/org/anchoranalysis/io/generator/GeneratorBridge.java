@@ -35,7 +35,7 @@ import org.anchoranalysis.io.manifest.file.FileType;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.output.namestyle.OutputNameStyle;
-import org.anchoranalysis.io.output.outputter.OutputterChecked;
+import org.anchoranalysis.io.output.writer.ElementOutputter;
 
 /**
  * Exposes a {@code Generator<T>} as if it was an {@code Generator<S>}.
@@ -88,7 +88,7 @@ public class GeneratorBridge<S, T> implements Generator<S> {
     }
 
     @Override
-    public FileType[] write(S element, OutputNameStyle outputNameStyle, OutputterChecked outputter)
+    public FileType[] write(S element, OutputNameStyle outputNameStyle, ElementOutputter outputter)
             throws OutputWriteFailedException {
         return convertAndExecute(
                 element,
@@ -100,7 +100,7 @@ public class GeneratorBridge<S, T> implements Generator<S> {
             S element,
             String index,
             IndexableOutputNameStyle outputNameStyle,
-            OutputterChecked outputter)
+            ElementOutputter outputter)
             throws OutputWriteFailedException {
         return convertAndExecute(
                 element,

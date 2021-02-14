@@ -45,7 +45,7 @@ public class InputOutputContextFixture {
     }
 
     public static InputOutputContext withSuppressedLogger() {
-        return withLogger(LoggingFixture.suppressedLogErrorReporter());
+        return withLogger(LoggingFixture.suppressedLogger());
     }
 
     public static InputOutputContext withLogger(Logger logger) {

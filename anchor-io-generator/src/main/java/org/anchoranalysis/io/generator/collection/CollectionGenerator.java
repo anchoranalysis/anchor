@@ -38,6 +38,7 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.output.namestyle.OutputNameStyle;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
+import org.anchoranalysis.io.output.writer.ElementOutputter;
 
 /**
  * Writes a collection of elements as a subdirectory with each element as a single file in the
@@ -59,7 +60,7 @@ public class CollectionGenerator<T> implements Generator<Collection<T>> {
 
     @Override
     public FileType[] write(
-            Collection<T> element, OutputNameStyle outputNameStyle, OutputterChecked outputter)
+            Collection<T> element, OutputNameStyle outputNameStyle, ElementOutputter outputter)
             throws OutputWriteFailedException {
         String subdirectoryName =
                 outputNameStyle
@@ -68,7 +69,7 @@ public class CollectionGenerator<T> implements Generator<Collection<T>> {
                                 () ->
                                         new OutputWriteFailedException(
                                                 "No name is assigned in the output, so cannot create subdirectory"));
-        return writeElementAsSubdirectory(element, outputter, subdirectoryName);
+        return writeElementAsSubdirectory(element, outputter.getOutputter(), subdirectoryName);
     }
 
     @Override
@@ -76,7 +77,7 @@ public class CollectionGenerator<T> implements Generator<Collection<T>> {
             Collection<T> element,
             String index,
             IndexableOutputNameStyle outputNameStyle,
-            OutputterChecked outputter)
+            ElementOutputter outputter)
             throws OutputWriteFailedException {
         return write(element, outputNameStyle, outputter);
     }

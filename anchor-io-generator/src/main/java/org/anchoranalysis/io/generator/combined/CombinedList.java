@@ -35,7 +35,7 @@ import org.anchoranalysis.io.manifest.file.FileType;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.output.namestyle.OutputNameStyle;
-import org.anchoranalysis.io.output.outputter.OutputterChecked;
+import org.anchoranalysis.io.output.writer.ElementOutputter;
 import org.anchoranalysis.io.output.writer.ElementWriter;
 
 /**
@@ -48,7 +48,7 @@ class CombinedList<T> {
 
     private List<OptionalNameValue<Generator<T>>> list = new ArrayList<>();
 
-    public FileType[] write(T element, OutputNameStyle outputNameStyle, OutputterChecked outputter)
+    public FileType[] write(T element, OutputNameStyle outputNameStyle, ElementOutputter outputter)
             throws OutputWriteFailedException {
 
         ConcatenateFileTypes collect = new ConcatenateFileTypes(list.size() > 1);
@@ -65,7 +65,7 @@ class CombinedList<T> {
             T element,
             String index,
             IndexableOutputNameStyle outputNameStyle,
-            OutputterChecked outputter)
+            ElementOutputter outputter)
             throws OutputWriteFailedException {
 
         ConcatenateFileTypes collect = new ConcatenateFileTypes(list.size() > 1);
