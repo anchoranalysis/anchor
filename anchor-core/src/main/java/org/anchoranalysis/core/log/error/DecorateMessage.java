@@ -21,22 +21,24 @@ class DecorateMessage {
     /** One character is palced before and after the main message in a banner. */
     private static final char WHITESPACE_CHARACTER = ' ';
 
-    /** Message at beginning of an error. */
-    private static final String START_ERROR = "BEGIN ERROR";
+    /** Describes an error. */
+    private static final String ERROR = "ERROR";
 
-    /** Message at conclusion of an error. */
-    private static final String END_ERROR = "END ERROR";
+    /** Describes a warning. */
+    private static final String WARNING = "WARNING";
 
-    /** Message at beginning of a warning. */
-    private static final String START_WARNING = "BEGIN WARNING";
+    /** Describes a begginning. */
+    private static final String START = "START";
 
-    /** Message at conclusion of a warning. */
-    private static final String END_WARNING = "END WARNING";
+    /** Describes a conclusion. */
+    private static final String END = "END";
 
     /**
-     * @param message
-     * @param warning
-     * @return
+     * Places a line of banner text before and after a message.
+     * 
+     * @param message the message to embedded in a banner.
+     * @param warning if true, the message is associated with a warning, otherwise an error.
+     * @return a multi-line string with the existing message embedded within banner lines.
      */
     public static String decorate(String message, boolean warning) {
 
@@ -44,22 +46,19 @@ class DecorateMessage {
 
         StringBuilder builder = new StringBuilder();
 
-        addBannerMultiplex(builder, bannerSize, warning, START_WARNING, START_ERROR);
+        addBannerMultiplex(builder, bannerSize, START, warning);
         addNewline(builder);
         builder.append(message);
         addNewline(builder);
-        addBannerMultiplex(builder, bannerSize, warning, END_WARNING, END_ERROR);
+        addBannerMultiplex(builder, bannerSize, END, warning);
 
         return builder.toString();
     }
 
     private static void addBannerMultiplex(
-            StringBuilder builder,
-            int bannerSize,
-            boolean useFirstChoice,
-            String firstChoice,
-            String secondChoice) {
-        addBanner(builder, useFirstChoice ? firstChoice : secondChoice, bannerSize);
+            StringBuilder builder, int bannerSize, String prefix, boolean warning) {
+        String bannerText = prefix + " " + (warning ? WARNING : ERROR);
+        addBanner(builder, bannerText, bannerSize);
     }
 
     /**
