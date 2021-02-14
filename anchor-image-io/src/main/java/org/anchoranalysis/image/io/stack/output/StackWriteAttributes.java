@@ -132,17 +132,13 @@ public class StackWriteAttributes {
         return rgb && stack.getNumberChannels() == 3 && stack.isRGB();
     }
 
-    /**
-     * A user-friendly description of the stack-type to include in error and warning messages.
-     */
+    /** A user-friendly description of the stack-type to include in error and warning messages. */
     @Override
     public String toString() {
-        return StringUtilities.joinNonEmpty(" ",
-          describeZDimension(),
-          describeChannels()      
-        ).orElseThrow(AnchorImpossibleSituationException::new);
+        return StringUtilities.joinNonEmpty(" ", describeZDimension(), describeChannels())
+                .orElseThrow(AnchorImpossibleSituationException::new);
     }
-    
+
     private String describeZDimension() {
         if (always2D) {
             return "2D";
@@ -150,7 +146,7 @@ public class StackWriteAttributes {
             return "possibly-3D";
         }
     }
-        
+
     private String describeChannels() {
         if (binary) {
             return "binary";

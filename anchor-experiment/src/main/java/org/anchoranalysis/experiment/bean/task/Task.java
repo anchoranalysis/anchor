@@ -129,9 +129,9 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
 
         // Create bound parameters
         InputBound<T, S> paramsBound = bindOtherParams(paramsUnbound, outputterTask, manifestTask);
-        
+
         outputterTask.assignLogger(paramsBound.getLogger());
-        
+
         return executeJobLogExceptions(paramsBound, paramsUnbound.isSuppressExceptions());
     }
 
@@ -193,7 +193,7 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
                 createJobLog(paramsUnbound.getParametersExperiment(), outputterTaskChecked);
 
         ErrorReporter errorReporterJob = new ErrorReporterForTask(loggerJob);
-        
+
         // We initialize the output manager
         Outputter outputterTask = new Outputter(outputterTaskChecked, errorReporterJob);
 
@@ -262,7 +262,8 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
                 MemoryUtilities.logMemoryUsage("End file processing", loggerJob);
             }
 
-            loggerJob.close(successfullyFinished, params.getLogger().errorReporter().hasWarningOccurred());
+            loggerJob.close(
+                    successfullyFinished, params.getLogger().errorReporter().hasWarningOccurred());
         }
         return successfullyFinished;
     }

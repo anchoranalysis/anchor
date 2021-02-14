@@ -31,9 +31,8 @@ import lombok.NoArgsConstructor;
 
 /**
  * Utility functions for pluralizing words in strings.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class LanguageUtilities {

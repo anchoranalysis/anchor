@@ -49,8 +49,7 @@ public class HistogramCSVGenerator extends CSVGenerator<Histogram> {
     @Getter @Setter private boolean ignoreZeros = false;
 
     @Override
-    public void writeToFile(
-            Histogram element, OutputWriteSettings settings, Path filePath)
+    public void writeToFile(Histogram element, OutputWriteSettings settings, Path filePath)
             throws OutputWriteFailedException {
         HistogramCSVWriter.writeHistogramToFile(element, filePath, ignoreZeros);
     }

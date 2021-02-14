@@ -164,8 +164,7 @@ public abstract class OutputExperiment extends Experiment {
                                             arguments.output().getOutputEnabledDelta()),
                                     arguments.output().getSuggestedImageOutputFormat(),
                                     arguments.createPrefixerContext(),
-                                    Optional.empty()
-                                    );
+                                    Optional.empty());
 
             Preconditions.checkArgument(rootOutputter.getSettings().hasBeenInitialized());
 

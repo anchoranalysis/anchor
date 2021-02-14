@@ -3,6 +3,8 @@ package org.anchoranalysis.io.output.writer;
 import java.nio.file.Path;
 import java.util.Optional;
 import java.util.function.Supplier;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.anchoranalysis.core.format.ImageFileFormat;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.io.manifest.ManifestDescription;
@@ -11,21 +13,18 @@ import org.anchoranalysis.io.manifest.directory.SubdirectoryBase;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.enabled.multi.MultiLevelOutputEnabled;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 
 /**
  * Outputs an element to the file-system.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 @AllArgsConstructor
 public class ElementOutputter {
 
     /** The outputter for writing the element. */
     @Getter private OutputterChecked outputter;
-    
+
     /** Supplies a logger for information messages when outputting. */
     private Supplier<Optional<Logger>> logger;
 
@@ -41,11 +40,16 @@ public class ElementOutputter {
      *     unrecorded.
      * @return a bound-output-manager for the subdirectory
      */
-    public OutputterChecked deriveSubdirectory(String subdirectoryName,
+    public OutputterChecked deriveSubdirectory(
+            String subdirectoryName,
             ManifestDirectoryDescription manifestDescription,
-            Optional<SubdirectoryBase> manifestDirectory, boolean inheritOutputRulesAndRecording) {
-        return outputter.deriveSubdirectory(subdirectoryName, manifestDescription,
-                manifestDirectory, inheritOutputRulesAndRecording);
+            Optional<SubdirectoryBase> manifestDirectory,
+            boolean inheritOutputRulesAndRecording) {
+        return outputter.deriveSubdirectory(
+                subdirectoryName,
+                manifestDescription,
+                manifestDirectory,
+                inheritOutputRulesAndRecording);
     }
 
     /**
@@ -58,8 +62,8 @@ public class ElementOutputter {
      * @return a newly created absolute path, combining directory, prefix (if it exists), suffix and
      *     extension.
      */
-    public Path makeOutputPath(Optional<String> suffixWithoutExtension, String extension,
-            String fallbackSuffix) {
+    public Path makeOutputPath(
+            Optional<String> suffixWithoutExtension, String extension, String fallbackSuffix) {
         return outputter.makeOutputPath(suffixWithoutExtension, extension, fallbackSuffix);
     }
 
@@ -72,20 +76,23 @@ public class ElementOutputter {
      * @param index an index associated with this item (there may be other items with the same name,
      *     but not the same index)
      */
-    public void writeFileToOperationRecorder(String outputName, Path pathSuffix,
-            ManifestDescription manifestDescription, String index) {
+    public void writeFileToOperationRecorder(
+            String outputName,
+            Path pathSuffix,
+            ManifestDescription manifestDescription,
+            String index) {
         outputter.writeFileToOperationRecorder(outputName, pathSuffix, manifestDescription, index);
     }
 
     /**
      * General settings for outputting.
-     * 
+     *
      * @return the settings.
      */
     public OutputWriteSettings getSettings() {
         return outputter.getSettings();
     }
-    
+
     public Optional<ImageFileFormat> getSuggestedFormatToWrite() {
         return outputter.getContext().getSuggestedFormatToWrite();
     }
@@ -94,7 +101,7 @@ public class ElementOutputter {
     public MultiLevelOutputEnabled getOutputsEnabled() {
         return outputter.getOutputsEnabled();
     }
-    
+
     public Optional<Logger> logger() {
         return logger.get();
     }

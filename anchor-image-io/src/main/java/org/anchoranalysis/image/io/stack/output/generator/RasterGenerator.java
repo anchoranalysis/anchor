@@ -116,12 +116,7 @@ public abstract class RasterGenerator<T> implements TransformingGenerator<T, Sta
                     outputter.makeOutputPath(filenameWithoutExtension, extension, outputName);
 
             // First write to the file system, and then write to the operation-recorder.
-            writeToFile(
-                    elementUntransformed,
-                    transformedElement,
-                    options,
-                    settings,
-                    pathToWriteTo);
+            writeToFile(elementUntransformed, transformedElement, options, settings, pathToWriteTo);
 
             return writeToManifest(outputName, index, outputter, pathToWriteTo, extension);
 
@@ -141,7 +136,10 @@ public abstract class RasterGenerator<T> implements TransformingGenerator<T, Sta
      * @throws OperationFailedException
      */
     protected abstract String selectFileExtension(
-            Stack stack, StackWriteOptions options, OutputWriteSettings settings, Optional<Logger> logger)
+            Stack stack,
+            StackWriteOptions options,
+            OutputWriteSettings settings,
+            Optional<Logger> logger)
             throws OperationFailedException;
 
     /**

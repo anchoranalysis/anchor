@@ -50,19 +50,19 @@ public abstract class SingleFileTypeGenerator<T, S> implements TransformingGener
     private static final ManifestDescription UNDEFINED_MANIFEST_DESCRIPTION =
             new ManifestDescription("undefined", "undefined");
 
-    public abstract void writeToFile(
-            T element, OutputWriteSettings settings, Path filePath)
+    public abstract void writeToFile(T element, OutputWriteSettings settings, Path filePath)
             throws OutputWriteFailedException;
 
     /**
      * Selects the file/extension to be used for outputting the file.
-     * 
+     *
      * @param settings settings for outputting.
      * @param logger logger for warning for information messages when outputting.
      * @return the file extension (without leading period) to be used for outputting.
      * @throws OperationFailedException
      */
-    public abstract String selectFileExtension(OutputWriteSettings settings, Optional<Logger> logger) throws OperationFailedException;
+    public abstract String selectFileExtension(
+            OutputWriteSettings settings, Optional<Logger> logger) throws OperationFailedException;
 
     public abstract Optional<ManifestDescription> createManifestDescription();
 
@@ -102,13 +102,12 @@ public abstract class SingleFileTypeGenerator<T, S> implements TransformingGener
             Optional<String> filenameWithoutExtension,
             String outputName,
             String index,
-            ElementOutputter outputter
-            )
+            ElementOutputter outputter)
             throws OutputWriteFailedException {
 
         try {
             OutputWriteSettings settings = outputter.getSettings();
-            
+
             String fileExtension = selectFileExtension(settings, outputter.logger());
 
             Path pathToWriteTo =
@@ -141,7 +140,9 @@ public abstract class SingleFileTypeGenerator<T, S> implements TransformingGener
                                 outputName, pathToWriteTo, description, index));
 
         if (fileTypes == null) {
-            fileTypes = buildFileTypeArray(manifestDescription, outputter.getSettings(), outputter.logger());
+            fileTypes =
+                    buildFileTypeArray(
+                            manifestDescription, outputter.getSettings(), outputter.logger());
         }
         return fileTypes;
     }
@@ -155,7 +156,8 @@ public abstract class SingleFileTypeGenerator<T, S> implements TransformingGener
      */
     private FileType[] buildFileTypeArray(
             Optional<ManifestDescription> manifestDescription,
-            OutputWriteSettings settings, Optional<Logger> logger)
+            OutputWriteSettings settings,
+            Optional<Logger> logger)
             throws OperationFailedException {
         ManifestDescription selectedDescription =
                 manifestDescription.orElse(UNDEFINED_MANIFEST_DESCRIPTION);

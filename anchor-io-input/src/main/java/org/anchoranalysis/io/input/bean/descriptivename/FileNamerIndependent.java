@@ -68,7 +68,9 @@ public abstract class FileNamerIndependent extends FileNamer {
                     .recordErrorFormatted(
                             FileNamerIndependent.class,
                             "Cannot create a name for file %s and index %d. Using '%s' instead.",
-                            file.getPath(), index, elseNameWithIndex);
+                            file.getPath(),
+                            index,
+                            elseNameWithIndex);
             return elseNameWithIndex;
         }
     }

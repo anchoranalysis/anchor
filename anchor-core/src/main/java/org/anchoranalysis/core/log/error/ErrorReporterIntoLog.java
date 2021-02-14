@@ -48,7 +48,7 @@ public class ErrorReporterIntoLog implements ErrorReporter {
     // START REQUIRED ARGUMENTS
     private final MessageLogger logger;
     // END REQUIRED ARGUMENTS
-    
+
     /** True if at least one warning has been outputted. */
     private boolean warningOccurred = false;
 
@@ -80,7 +80,6 @@ public class ErrorReporterIntoLog implements ErrorReporter {
             logger.log("An error occurred while writing an error: " + e.toString());
         }
     }
-    
 
     @Override
     public void recordWarning(String message) {
@@ -93,11 +92,11 @@ public class ErrorReporterIntoLog implements ErrorReporter {
     }
 
     private void logWithBanner(String logMessage, boolean warning) {
-        logger.log( DecorateMessage.decorate(logMessage, warning) );
+        logger.log(DecorateMessage.decorate(logMessage, warning));
     }
 
     private void logWithBanner(String logMessage, Class<?> classOriginating) {
-        logger.log( DecorateMessage.decorate(logMessage + classMessage(classOriginating), false));
+        logger.log(DecorateMessage.decorate(logMessage + classMessage(classOriginating), false));
     }
 
     private static String classMessage(Class<?> c) {

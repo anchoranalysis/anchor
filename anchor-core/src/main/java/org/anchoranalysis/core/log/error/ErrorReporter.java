@@ -28,11 +28,10 @@ package org.anchoranalysis.core.log.error;
 
 /**
  * Reports errors as they occur.
- * 
- * <p>A lower category of "error", styled a warning that can be reported.
- * 
- * @author Owen Feehan
  *
+ * <p>A lower category of "error", styled a warning that can be reported.
+ *
+ * @author Owen Feehan
  */
 public interface ErrorReporter {
 
@@ -51,21 +50,21 @@ public interface ErrorReporter {
      * @param message a message describing the error that occurred
      */
     void recordError(Class<?> classOriginating, String message);
-    
+
     /**
      * Reports an <b>warning</b> with a constant string error message.
      *
      * @param message a message describing the warning.
      */
     void recordWarning(String message);
-    
+
     /**
      * Checks if at least one warning has been outputted.
-     * 
+     *
      * @return true if at least one warning has occurred, false otherwise.
      */
     boolean hasWarningOccurred();
-        
+
     /**
      * Reports an <b>error</b> with a string derived from a format-string.
      *
@@ -73,17 +72,17 @@ public interface ErrorReporter {
      * @param format the format-string for the error message
      * @param args the other arguments for the format-string like in {@link String#format}.
      */
-    default void recordErrorFormatted(Class<?> classOriginating, String format, Object...args) {
-        recordError( classOriginating, String.format(format, args) );
+    default void recordErrorFormatted(Class<?> classOriginating, String format, Object... args) {
+        recordError(classOriginating, String.format(format, args));
     }
-    
+
     /**
      * Reports an <b>warning</b> with a string derived from a format-string.
      *
      * @param format the format-string for the warning message
      * @param args the other arguments for the format-string like in {@link String#format}.
      */
-    default void recordWarningFormatted(String format, Object...args) {
-        recordWarning(String.format(format, args) );
+    default void recordWarningFormatted(String format, Object... args) {
+        recordWarning(String.format(format, args));
     }
 }

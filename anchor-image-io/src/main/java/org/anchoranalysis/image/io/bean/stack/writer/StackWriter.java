@@ -61,27 +61,28 @@ public abstract class StackWriter extends AnchorBean<StackWriter> {
         writeStack(stack, filePathWithExtension, options);
         return filePathWithExtension;
     }
-    
+
     /**
-     * The file format that will be written by the generator, warning with a log
-     * message if different to suggestion.
+     * The file format that will be written by the generator, warning with a log message if
+     * different to suggestion.
      *
      * @param writeOptions options which may influence how a raster is written.
      * @param logger the logger to use for the warning message.
      */
-    public ImageFileFormat fileFormatWarnUnexpected(StackWriteOptions writeOptions, Optional<Logger> logger)
-            throws ImageIOException {
+    public ImageFileFormat fileFormatWarnUnexpected(
+            StackWriteOptions writeOptions, Optional<Logger> logger) throws ImageIOException {
         ImageFileFormat formatToWrite = fileFormat(writeOptions);
-        
-        Optional<ImageFileFormat> suggested = writeOptions.getSuggestedFormatToWrite(); 
+
+        Optional<ImageFileFormat> suggested = writeOptions.getSuggestedFormatToWrite();
         if (suggested.isPresent() && logger.isPresent() && !formatToWrite.equals(suggested.get())) {
-            logger.get().errorReporter().recordWarningFormatted(
-               "Although output format %s was requested, %s was used instead, as %s is not compatible with %s images.",
-               suggested.get().toString(),
-               formatToWrite.toString(),
-               suggested.get().toString(),
-               writeOptions.getAttributes().toString()
-            );
+            logger.get()
+                    .errorReporter()
+                    .recordWarningFormatted(
+                            "Although output format %s was requested, %s was used instead, as %s is not compatible with %s images.",
+                            suggested.get().toString(),
+                            formatToWrite.toString(),
+                            suggested.get().toString(),
+                            writeOptions.getAttributes().toString());
         }
         return formatToWrite;
     }

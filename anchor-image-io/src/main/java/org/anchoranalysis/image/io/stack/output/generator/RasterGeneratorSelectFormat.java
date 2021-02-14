@@ -51,7 +51,10 @@ public abstract class RasterGeneratorSelectFormat<T> extends RasterGenerator<T> 
      */
     @Override
     protected String selectFileExtension(
-            Stack stack, StackWriteOptions options, OutputWriteSettings settings, Optional<Logger> logger)
+            Stack stack,
+            StackWriteOptions options,
+            OutputWriteSettings settings,
+            Optional<Logger> logger)
             throws OperationFailedException {
         return GeneratorOutputter.fileExtensionWriter(settings, options, logger);
     }

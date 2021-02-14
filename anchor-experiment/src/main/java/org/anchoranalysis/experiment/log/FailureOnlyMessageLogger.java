@@ -47,7 +47,7 @@ public class FailureOnlyMessageLogger implements StatefulMessageLogger {
     private final String outputName;
     private final OutputterChecked outputter;
     private final ErrorReporter errorReporter;
-    
+
     /** If true, any warning message is considered as a failure. */
     private final boolean considerWarningAsFailure;
     // END REQUIRED ARGUMENTS

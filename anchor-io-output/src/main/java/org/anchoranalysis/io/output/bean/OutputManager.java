@@ -100,8 +100,8 @@ public class OutputManager extends AnchorBean<OutputManager> {
             Manifest manifest,
             RecordedOutputsWithRules recordedOutputs,
             Optional<ImageFileFormat> suggestedFormatToWrite,
-            PathPrefixerContext prefixerContext, Optional<Logger> logger
-            )
+            PathPrefixerContext prefixerContext,
+            Optional<Logger> logger)
             throws BindFailedException {
 
         try {
@@ -114,7 +114,8 @@ public class OutputManager extends AnchorBean<OutputManager> {
                     new OutputWriteContext(getOutputWriteSettings(), suggestedFormatToWrite),
                     Optional.of(manifest.getRootDirectory()),
                     recordedOutputs.getRecordedOutputs(),
-                    silentlyDeleteExisting, logger);
+                    silentlyDeleteExisting,
+                    logger);
 
         } catch (PathPrefixerException e) {
             throw new BindFailedException(e);

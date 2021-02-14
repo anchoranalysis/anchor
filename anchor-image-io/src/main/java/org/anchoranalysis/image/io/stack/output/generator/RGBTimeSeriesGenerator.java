@@ -46,8 +46,7 @@ public class RGBTimeSeriesGenerator extends OneStageGenerator<StackSeries> {
     private final StackWriteOptions rasterOptions;
 
     @Override
-    public void writeToFile(
-            StackSeries element, OutputWriteSettings settings, Path filePath)
+    public void writeToFile(StackSeries element, OutputWriteSettings settings, Path filePath)
             throws OutputWriteFailedException {
 
         try {

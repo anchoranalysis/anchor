@@ -44,8 +44,7 @@ public class KeyValueParamsGenerator extends OneStageGenerator<KeyValueParams> {
     private final String manifestFunction;
 
     @Override
-    public void writeToFile(
-            KeyValueParams element, OutputWriteSettings settings, Path filePath)
+    public void writeToFile(KeyValueParams element, OutputWriteSettings settings, Path filePath)
             throws OutputWriteFailedException {
         try {
             element.writeToFile(filePath);

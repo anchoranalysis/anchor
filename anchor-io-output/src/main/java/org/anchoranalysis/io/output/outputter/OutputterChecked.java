@@ -78,7 +78,7 @@ public class OutputterChecked {
 
     /** General settings for writing outputs. */
     @Getter private OutputWriteContext context;
-    
+
     private Optional<Logger> logger;
 
     /**
@@ -93,14 +93,16 @@ public class OutputterChecked {
      * @throws BindFailedException
      */
     public static OutputterChecked createForDirectoryPermissive(
-            Path pathDirectory, boolean deleteExistingDirectory, Optional<Logger> logger) throws BindFailedException {
+            Path pathDirectory, boolean deleteExistingDirectory, Optional<Logger> logger)
+            throws BindFailedException {
         return createWithPrefix(
                 new DirectoryWithPrefix(pathDirectory),
                 Permissive.INSTANCE,
                 new OutputWriteContext(),
                 Optional.empty(),
                 Optional.empty(),
-                deleteExistingDirectory, logger);
+                deleteExistingDirectory,
+                logger);
     }
 
     /**
@@ -122,14 +124,16 @@ public class OutputterChecked {
             OutputWriteContext context,
             Optional<WriteOperationRecorder> writeOperationRecorder,
             Optional<MultiLevelRecordedOutputs> recordedOutputs,
-            boolean deleteExistingDirectory, Optional<Logger> logger)
+            boolean deleteExistingDirectory,
+            Optional<Logger> logger)
             throws BindFailedException {
         return new OutputterChecked(
                 new OutputterTarget(prefix, deleteExistingDirectory),
                 writeOperationRecorder,
                 outputEnabled,
                 recordedOutputs,
-                context, logger);
+                context,
+                logger);
     }
 
     /**
@@ -146,7 +150,8 @@ public class OutputterChecked {
             Optional<WriteOperationRecorder> writeOperationRecorder,
             MultiLevelOutputEnabled outputsEnabled,
             Optional<MultiLevelRecordedOutputs> recordedOutputs,
-            OutputWriteContext context, Optional<Logger> logger) {
+            OutputWriteContext context,
+            Optional<Logger> logger) {
         this.target = target;
         this.writeOperationRecorder = writeOperationRecorder;
         this.context = context;
@@ -155,10 +160,10 @@ public class OutputterChecked {
         this.logger = logger;
 
         // As the logger may change, we supply a lambda to it, instead of the object directly.
-        ElementOutputter outputter = new ElementOutputter(this, () -> this.logger); 
+        ElementOutputter outputter = new ElementOutputter(this, () -> this.logger);
         this.writers =
                 new RecordingWriters(
-                       outputter, target.getParentDirectoryCreator(), recordedOutputs); // NOSONAR
+                        outputter, target.getParentDirectoryCreator(), recordedOutputs); // NOSONAR
     }
 
     /** Adds an additional operation recorder alongside any existing recorders. */
@@ -194,7 +199,8 @@ public class OutputterChecked {
                 writeOperationRecorderToAssign,
                 outputsEnabled,
                 recordedOutputs,
-                context, Optional.empty());
+                context,
+                Optional.empty());
     }
 
     /**
@@ -230,7 +236,8 @@ public class OutputterChecked {
                             ? recordedOutputs
                             : Optional.empty(), // Output-names are no longer recorded on
                     // sub-directories
-                    context, logger);
+                    context,
+                    logger);
         } catch (BindFailedException e) {
             // This exception can only be thrown if the prefix-path doesn't reside within the
             // rootDirectory
@@ -261,7 +268,7 @@ public class OutputterChecked {
 
     /**
      * General settings for outputting.
-     * 
+     *
      * @return the settings.
      */
     public OutputWriteSettings getSettings() {
@@ -297,10 +304,11 @@ public class OutputterChecked {
         return target.pathCreator()
                 .makePathAbsolute(suffixWithoutExtension, Optional.of(extension), fallbackSuffix);
     }
-    
+
     /**
-     * Assigns a logger to the outputter, which is used to output warnings or messages when outputting.
-     * 
+     * Assigns a logger to the outputter, which is used to output warnings or messages when
+     * outputting.
+     *
      * @param logger the logger to assign
      */
     public void assignLogger(Logger logger) {
