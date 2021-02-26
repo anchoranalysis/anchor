@@ -25,12 +25,11 @@
  */
 package org.anchoranalysis.experiment.arguments;
 
-import java.nio.file.Path;
-import java.util.Optional;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.format.ImageFileFormat;
 import org.anchoranalysis.io.output.bean.OutputManager;
+import org.anchoranalysis.io.output.path.prefixer.OutputPrefixerSettings;
 import org.anchoranalysis.io.output.recorded.OutputEnabledDelta;
 
 /**
@@ -42,9 +41,11 @@ import org.anchoranalysis.io.output.recorded.OutputEnabledDelta;
 @NoArgsConstructor
 public class OutputArguments {
 
-    /** A directory indicating where inputs can be located */
-    @Getter private Optional<Path> outputDirectory = Optional.empty();
-
+    /**
+     * Where outputs are written, and how identifiers are styled.
+     */
+    @Getter private OutputPrefixerSettings prefixer = new OutputPrefixerSettings();
+    
     /**
      * Additions/subtractions of outputs for the experiment supplied by the user.
      *
@@ -53,24 +54,15 @@ public class OutputArguments {
      */
     @Getter private OutputEnabledDelta outputEnabledDelta = new OutputEnabledDelta();
 
-    /** A file format suggested for writing images to the file system. */
-    @Getter private Optional<ImageFileFormat> suggestedImageOutputFormat = Optional.empty();
-
-    /**
-     * Requests outputting with an incrementing number sequence, rather than the usual outputter
-     * (normally based upon input filenames).
-     */
-    @Getter private boolean outputIncrementingNumberSequence = false;
-
-    public void assignOutputDirectory(Path outputDirectory) {
-        this.outputDirectory = Optional.of(outputDirectory);
-    }
-
     public void assignSuggestedImageOutputFormat(ImageFileFormat format) {
-        this.suggestedImageOutputFormat = Optional.of(format);
+        prefixer.assignSuggestedImageOutputFormat(format);
     }
 
     public void requestOutputIncrementingNumberSequence() {
-        this.outputIncrementingNumberSequence = true;
+        prefixer.requestOutputIncrementingNumberSequence();
+    }
+
+    public void requestOutputSuppressDirectories() {
+        prefixer.requestOutputSuppressDirectories();
     }
 }

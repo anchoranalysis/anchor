@@ -83,10 +83,7 @@ public class ExecutionArguments {
     }
 
     public PathPrefixerContext createPrefixerContext() throws PathPrefixerException {
-        return new PathPrefixerContext(
-                isDebugModeEnabled(),
-                output.getOutputDirectory(),
-                output.isOutputIncrementingNumberSequence());
+        return new PathPrefixerContext(isDebugModeEnabled(), output.getPrefixer());
     }
 
     /**
