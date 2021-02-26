@@ -26,8 +26,6 @@
 
 package org.anchoranalysis.io.output.path.prefixer;
 
-import java.nio.file.Path;
-import java.util.Optional;
 import lombok.Getter;
 import org.anchoranalysis.io.output.bean.path.prefixer.PathPrefixer;
 
@@ -41,14 +39,8 @@ public class PathPrefixerContext {
     /** Whether debug-mode is activated. */
     @Getter private final boolean debugMode;
 
-    /** A directory indicating where inputs can be located. */
-    @Getter private final Optional<Path> outputDirectory;
-
-    /**
-     * Requests outputting with an incrementing number sequence, rather than the usual outputter
-     * (normally based upon input filenames).
-     */
-    @Getter private final boolean outputIncrementingNumberSequence;
+    /** Settings for where and how outputs should be prefixed. */
+    @Getter OutputPrefixerSettings prefixer;
 
     /**
      * Create with default parameters.
@@ -56,36 +48,23 @@ public class PathPrefixerContext {
      * @throws PathPrefixerException
      */
     public PathPrefixerContext() throws PathPrefixerException {
-        this(false, Optional.empty(), false);
+        this(false, new OutputPrefixerSettings());
     }
 
     /**
      * Create with specific parameters.
      *
      * @param debugMode whether debug-mode is activated
-     * @param outputDirectory a directory indicating where inputs can be located.
-     * @param outputIncrementingNumberSequence requests outputting with an incrementing number
-     *     sequence, rather than the usual outputter (normally based upon input filenames).
+     * @param prefixer settings for where and how outputs should be prefixed.
      * @throws PathPrefixerException if the the path in {@code outputDirectory} is relative instead
      *     of absolute
      */
     public PathPrefixerContext(
             boolean debugMode,
-            Optional<Path> outputDirectory,
-            boolean outputIncrementingNumberSequence)
+            OutputPrefixerSettings prefixer)
             throws PathPrefixerException {
         this.debugMode = debugMode;
-        this.outputDirectory = outputDirectory;
-        this.outputIncrementingNumberSequence = outputIncrementingNumberSequence;
-        checkAbsolutePath();
-    }
-
-    private void checkAbsolutePath() throws PathPrefixerException {
-        if (outputDirectory.isPresent() && !outputDirectory.get().isAbsolute()) {
-            throw new PathPrefixerException(
-                    String.format(
-                            "An non-absolute path was passed to %s of %s",
-                            this.getClass().getSimpleName(), outputDirectory.get()));
-        }
+        this.prefixer = prefixer;
+        this.prefixer.checkAbsolutePath();
     }
 }
