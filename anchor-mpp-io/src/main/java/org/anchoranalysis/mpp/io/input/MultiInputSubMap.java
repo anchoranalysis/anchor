@@ -31,7 +31,7 @@ import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
 import org.anchoranalysis.core.identifier.provider.store.StoreSupplier;
 
 /**
- * A sub-item of a {@Link MultiInput}.
+ * A sub-item of a {@link MultiInput}.
  * 
  * <p>It:
  * <ol>
