@@ -33,6 +33,7 @@ import org.anchoranalysis.core.identifier.getter.IdentifierGetter;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.io.manifest.directory.JobRootDirectory;
 import org.anchoranalysis.overlay.object.OverlayObjectMask;
 
 /**
@@ -64,7 +65,7 @@ public class OverlayCollectionObjectFactory {
         // Extract objects from any overlays that are object-mask overlays
         return ObjectCollectionFactory.filterAndMapFrom(
                 overlays.asList(),
-                overlay -> overlay instanceof OverlayObjectMask,
+                OverlayObjectMask.class::isInstance,
                 overlay -> ((OverlayObjectMask) overlay).getObject().withoutProperties());
     }
 }

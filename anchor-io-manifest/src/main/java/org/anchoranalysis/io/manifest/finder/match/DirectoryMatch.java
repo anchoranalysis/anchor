@@ -40,7 +40,7 @@ import org.anchoranalysis.io.manifest.directory.MutableDirectory;
 public class DirectoryMatch {
 
     public static Predicate<MutableDirectory> jobDirectory() {
-        return directory -> directory instanceof JobRootDirectory;
+        return JobRootDirectory.class::isInstance;
     }
 
     public static Predicate<MutableDirectory> path(String path) {
