@@ -35,37 +35,38 @@ import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.Set;
-import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
 
-/** 
+/**
  * Collection of parameters represented by key-value pairs.
- * 
+ *
  * <p>Values are always strings.
- * 
+ *
  * @author Owen Feehan
  */
-@AllArgsConstructor(access=AccessLevel.PRIVATE)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Dictionary {
 
     /** Container for key-value pairs, not exposed externally. */
     private Properties properties;
 
-    /**
-     * Creates empty, with no parameters.
-     */
+    /** Creates empty, with no parameters. */
     public Dictionary() {
         properties = new Properties();
     }
 
     /**
-     * Reads parameters from <a href="https://docs.oracle.com/javase/tutorial/essential/environment/properties.html">a Java properties file</a>.
-     * 
+     * Reads parameters from <a
+     * href="https://docs.oracle.com/javase/tutorial/essential/environment/properties.html">a Java
+     * properties file</a>.
+     *
      * @param path the path where the properties file is located.
      * @return a newly created dictionary
-     * @throws IOException if the path doesn't exist, is in the correct format, or otherwise cannot be read.
+     * @throws IOException if the path doesn't exist, is in the correct format, or otherwise cannot
+     *     be read.
      */
     public static Dictionary readFromFile(Path path) throws IOException {
         try (FileInputStream stream = new FileInputStream(path.toFile())) {
@@ -77,21 +78,21 @@ public class Dictionary {
 
     /**
      * Deep-copy of existing dictionary.
-     * 
+     *
      * @return a newly created dictionary, containing identical key-values.
      */
     public Dictionary duplicate() {
         Dictionary out = new Dictionary();
         for (Entry<Object, Object> entry : properties.entrySet()) {
             checkEntryTyping(entry);
-            out.put(entry.getKey().toString(), entry.getValue().toString());    
+            out.put(entry.getKey().toString(), entry.getValue().toString());
         }
         return out;
     }
-    
+
     /**
      * Retrieves a value from the dictionary as a {@link String}.
-     * 
+     *
      * @param key the key to retrieve
      * @return the value if {@code key} exists, otherwise {@link Optional#empty()}.
      */
@@ -101,7 +102,7 @@ public class Dictionary {
 
     /**
      * Retrieves a value from the dictionary, and converts to a {@code double}.
-     * 
+     *
      * @param key the key to retrieve
      * @return the value if {@code key} exists, otherwise {@code Double.NaN}.
      */
@@ -118,19 +119,19 @@ public class Dictionary {
 
     /**
      * Inserts a key-value pair.
-     * 
+     *
      * <p>If the key already exists, its value is replaced.
-     * 
+     *
      * @param key the key to insert
      * @param value the value corresponding to {@code key}
      */
     public void put(String key, String value) {
         properties.put(key, value);
     }
-    
+
     /**
      * Inserts a key-value pair, after converting {@code value} to a {@link String}.
-     * 
+     *
      * @param key the key to insert
      * @param value a floating-point value corresponding to {@code key}
      */
@@ -140,7 +141,7 @@ public class Dictionary {
 
     /**
      * Inserts a key/value pair, checking that the key doesn't already exist.
-     * 
+     *
      * @param key the key to insert
      * @param value a value corresponding to {@code key}
      * @throws OperationFailedException if {@code key} already exists in the dictionary.
@@ -149,10 +150,10 @@ public class Dictionary {
         checkKeyNotPresent(key);
         put(key, value);
     }
-    
+
     /**
      * Inserts a key/value pair, checking that the key doesn't already exist.
-     * 
+     *
      * @param key the key to insert
      * @param value a floating-point value corresponding to {@code key}
      * @throws OperationFailedException if {@code key} already exists in the dictionary.
@@ -164,7 +165,7 @@ public class Dictionary {
 
     /**
      * Inserts all key/value pairs from another dictionary, checking that no key already exists.
-     * 
+     *
      * @param dictionary the dictionary to insert all key/value pairs from
      * @throws OperationFailedException if {@code key} already exists in the dictionary.
      */
@@ -177,18 +178,19 @@ public class Dictionary {
 
     /**
      * All keys existing in the dictionary.
-     * 
-     * <p>The set is not backed by the dictionary. Changes to the set have no impact on the contents of the dictionary.
-     * 
+     *
+     * <p>The set is not backed by the dictionary. Changes to the set have no impact on the contents
+     * of the dictionary.
+     *
      * @return a newly created set of all keys in the dictionary.
      */
     public Set<String> keys() {
         return properties.stringPropertyNames();
     }
-    
+
     /**
      * Does a parameter exist with a particular key?
-     * 
+     *
      * @param key the key
      * @return true iff the parameter exists.
      */
@@ -209,11 +211,11 @@ public class Dictionary {
             properties.storeToXML(fop, "");
         }
     }
-    
+
     /** Checks that both the key and value of an entry are strings. */
     private void checkEntryTyping(Entry<Object, Object> entry) {
         if (!(entry.getKey() instanceof String) || !(entry.getValue() instanceof String)) {
-            throw new AnchorFriendlyRuntimeException("Non-string keys or values were encountered."); 
+            throw new AnchorFriendlyRuntimeException("Non-string keys or values were encountered.");
         }
     }
 

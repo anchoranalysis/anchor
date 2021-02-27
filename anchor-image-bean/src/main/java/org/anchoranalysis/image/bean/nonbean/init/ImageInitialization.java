@@ -119,15 +119,15 @@ public class ImageInitialization implements BeanInitialization {
     public NamedProviderStore<BinarySegmentation> binarySegmentations() {
         return storeBinarySegmentation;
     }
-    
+
     public NamedProviderStore<Path> filePaths() {
         return features.getFilePaths().getFilePaths();
     }
-    
+
     public NamedProviderStore<Dictionary> dictionaries() {
         return dictionaryInitialization().getDictionaries();
     }
-    
+
     public DictionaryInitialization dictionaryInitialization() {
         return features.getDictionary();
     }
@@ -191,13 +191,12 @@ public class ImageInitialization implements BeanInitialization {
 
     /**
      * Adds a dictionary to named-collection of dictionaries.
-     * 
+     *
      * @param identifier the unique name of the dictionary
      * @param toAdd the dictionary to add
      * @throws OperationFailedException
      */
-    public void addDictionary(String identifier, Dictionary toAdd)
-            throws OperationFailedException {
+    public void addDictionary(String identifier, Dictionary toAdd) throws OperationFailedException {
         dictionaries().add(identifier, () -> toAdd);
     }
 

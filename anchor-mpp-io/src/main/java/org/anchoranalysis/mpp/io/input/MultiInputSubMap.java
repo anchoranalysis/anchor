@@ -32,11 +32,12 @@ import org.anchoranalysis.core.identifier.provider.store.StoreSupplier;
 
 /**
  * A sub-item of a {@link MultiInput}.
- * 
+ *
  * <p>It:
+ *
  * <ol>
- * <li>involves a map of objects of type {@code T}
- * <li>can have its contents copied into a {@link NamedProviderStore}.
+ *   <li>involves a map of objects of type {@code T}
+ *   <li>can have its contents copied into a {@link NamedProviderStore}.
  * </ol>
  *
  * @param <T> object-type

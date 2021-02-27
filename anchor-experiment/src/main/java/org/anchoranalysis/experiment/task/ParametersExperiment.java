@@ -101,7 +101,8 @@ public class ParametersExperiment {
     }
 
     public InitializationContext createInitializationContext() {
-        return new InitializationContext(context, context.getExperimentArguments().task().getSize());
+        return new InitializationContext(
+                context, context.getExperimentArguments().task().getSize());
     }
 
     /** Redirects any output-exceptions into the log */

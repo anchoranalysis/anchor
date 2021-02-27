@@ -28,6 +28,7 @@ package org.anchoranalysis.feature.shared;
 
 import java.nio.file.Path;
 import java.util.List;
+import lombok.Getter;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.initializable.params.BeanInitialization;
 import org.anchoranalysis.bean.shared.dictionary.DictionaryInitialization;
@@ -42,16 +43,15 @@ import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.input.FeatureInput;
-import lombok.Getter;
 
 public class FeaturesInitialization implements BeanInitialization {
 
     @Getter private DictionaryInitialization dictionary;
-    
+
     @Getter private FilePathInitialization filePaths;
-    
+
     @Getter private SharedFeatureMulti sharedFeatures;
-    
+
     private NamedProviderStore<FeatureList<FeatureInput>> featuresStore;
 
     private FeaturesInitialization(SharedObjects sharedObjects) {

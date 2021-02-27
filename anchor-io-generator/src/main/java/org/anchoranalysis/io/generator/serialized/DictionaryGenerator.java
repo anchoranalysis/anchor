@@ -40,15 +40,14 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /**
  * Writes the contents of a {@link Dictionary} to the file-system as XML.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 @AllArgsConstructor
 public class DictionaryGenerator extends OneStageGenerator<Dictionary> {
 
     private static final String MANIFEST_TYPE = "dictionary";
-    
+
     private final String manifestFunction;
 
     @Override

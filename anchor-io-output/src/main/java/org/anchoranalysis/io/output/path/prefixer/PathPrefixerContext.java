@@ -59,9 +59,7 @@ public class PathPrefixerContext {
      * @throws PathPrefixerException if the the path in {@code outputDirectory} is relative instead
      *     of absolute
      */
-    public PathPrefixerContext(
-            boolean debugMode,
-            OutputPrefixerSettings prefixer)
+    public PathPrefixerContext(boolean debugMode, OutputPrefixerSettings prefixer)
             throws PathPrefixerException {
         this.debugMode = debugMode;
         this.prefixer = prefixer;

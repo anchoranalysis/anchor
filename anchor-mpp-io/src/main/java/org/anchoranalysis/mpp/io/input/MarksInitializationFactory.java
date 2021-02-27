@@ -71,7 +71,8 @@ public class MarksInitializationFactory {
             try {
                 // Tries to initialize any properties (of type MarksInitialization found in the
                 // NamedDefinitions
-                PropertyInitializer<MarksInitialization> initializer = MarksBean.initializerForMarksBeans();
+                PropertyInitializer<MarksInitialization> initializer =
+                        MarksBean.initializerForMarksBeans();
                 initializer.setParam(marks);
                 marks.populate(initializer, define.get(), context.getLogger());
 
@@ -105,8 +106,7 @@ public class MarksInitializationFactory {
             }
 
             if (dictionary.isPresent()) {
-                image.addDictionary(
-                        KEY_VALUE_PARAMS_IDENTIFIER, dictionary.get());
+                image.addDictionary(KEY_VALUE_PARAMS_IDENTIFIER, dictionary.get());
             }
 
             return marks;

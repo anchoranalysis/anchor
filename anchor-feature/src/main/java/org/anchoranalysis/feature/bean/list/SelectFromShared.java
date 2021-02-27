@@ -52,11 +52,7 @@ public class SelectFromShared<T extends FeatureInput> extends ReferencedFeatures
             return FeatureListFactory.mapFromFiltered(
                     getInitialization().getFeatureListSet().keys(),
                     key -> match == null || match.hasMatch(key),
-                    key ->
-                            getInitialization()
-                                    .getSharedFeatures()
-                                    .getException(key)
-                                    .downcast());
+                    key -> getInitialization().getSharedFeatures().getException(key).downcast());
         } catch (NamedProviderGetException e) {
             throw new CreateException(e);
         }

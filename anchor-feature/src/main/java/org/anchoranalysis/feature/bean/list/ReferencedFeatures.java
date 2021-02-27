@@ -44,8 +44,7 @@ public abstract class ReferencedFeatures<T extends FeatureInput> extends Feature
      *
      * <p>Useful for when this list references another list.
      */
-    @BeanField @OptionalBean @Getter @Setter
-    private StringSet referencesFeatureListCreator;
+    @BeanField @OptionalBean @Getter @Setter private StringSet referencesFeatureListCreator;
     // END BEAN PROPERITES
 
     @Override

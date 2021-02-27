@@ -26,6 +26,8 @@
 
 package org.anchoranalysis.feature.shared;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.identifier.name.NameValue;
 import org.anchoranalysis.core.identifier.provider.NameValueSet;
@@ -34,8 +36,6 @@ import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calculate.FeatureInitialization;
 import org.anchoranalysis.feature.input.FeatureInput;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 
 @AllArgsConstructor
 public class SharedFeatureSet<T extends FeatureInput> {

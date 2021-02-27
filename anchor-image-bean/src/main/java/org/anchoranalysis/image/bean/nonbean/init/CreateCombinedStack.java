@@ -35,6 +35,7 @@ import org.anchoranalysis.image.core.stack.Stack;
 public class CreateCombinedStack {
 
     public static NamedProvider<Stack> apply(ImageInitialization initialization) {
-        return new CombineDiverseProvidersAsStacks(initialization.stacks(), initialization.channels(), initialization.masks());
+        return new CombineDiverseProvidersAsStacks(
+                initialization.stacks(), initialization.channels(), initialization.masks());
     }
 }

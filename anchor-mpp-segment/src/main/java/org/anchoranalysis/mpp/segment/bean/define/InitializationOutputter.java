@@ -44,7 +44,8 @@ import org.anchoranalysis.mpp.mark.MarkCollection;
 import org.anchoranalysis.mpp.segment.define.OutputterDirectories;
 
 /**
- * This class will output entities associated with {@link MarksInitialization} in particular directories.
+ * This class will output entities associated with {@link MarksInitialization} in particular
+ * directories.
  *
  * <p>These outputs are:
  *

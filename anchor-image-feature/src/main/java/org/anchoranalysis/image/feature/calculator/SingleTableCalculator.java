@@ -52,7 +52,8 @@ public class SingleTableCalculator implements FeatureTableCalculator<FeatureInpu
     private FeatureCalculatorMulti<FeatureInputSingleObject> calculator;
 
     @Override
-    public void start(ImageInitialization initialization, Optional<EnergyStack> energyStack, Logger logger)
+    public void start(
+            ImageInitialization initialization, Optional<EnergyStack> energyStack, Logger logger)
             throws InitException {
 
         calculator =

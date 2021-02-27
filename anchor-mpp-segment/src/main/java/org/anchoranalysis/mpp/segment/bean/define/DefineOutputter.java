@@ -84,14 +84,16 @@ public abstract class DefineOutputter extends AnchorBean<DefineOutputter> {
         InitializationOutputter.addAllOutputNamesTo(outputEnabled);
     }
 
-    protected MarksInitialization createInitialization(InputForMarksBean input, InitializationContext context)
-            throws CreateException {
+    protected MarksInitialization createInitialization(
+            InputForMarksBean input, InitializationContext context) throws CreateException {
         return MarksInitializationFactory.create(
                 context, Optional.ofNullable(define), Optional.of(input));
     }
 
-    protected MarksInitialization createInitialization(InitializationContext context) throws CreateException {
-        return MarksInitializationFactory.create(context, Optional.ofNullable(define), Optional.empty());
+    protected MarksInitialization createInitialization(InitializationContext context)
+            throws CreateException {
+        return MarksInitializationFactory.create(
+                context, Optional.ofNullable(define), Optional.empty());
     }
 
     protected MarksInitialization createInitialization(
@@ -104,7 +106,8 @@ public abstract class DefineOutputter extends AnchorBean<DefineOutputter> {
                 context, Optional.ofNullable(define), stacks, objects, dictionary);
     }
 
-    protected void outputSharedObjects(MarksInitialization initialization, OutputterChecked outputter)
+    protected void outputSharedObjects(
+            MarksInitialization initialization, OutputterChecked outputter)
             throws OutputWriteFailedException {
         new InitializationOutputter(initialization, suppressSubfolders, outputter).output();
     }

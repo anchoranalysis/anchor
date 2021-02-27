@@ -46,8 +46,7 @@ public abstract class FeatureRelatedBean<T> extends InitializableBean<T, Feature
     protected FeatureRelatedBean() {
         super(
                 new PropertyInitializer<>(FeaturesInitialization.class, paramExtracters()),
-                new SimplePropertyDefiner<FeaturesInitialization>(
-                        FeaturesInitialization.class));
+                new SimplePropertyDefiner<FeaturesInitialization>(FeaturesInitialization.class));
     }
 
     private static List<ExtractFromParam<FeaturesInitialization, ?>> paramExtracters() {

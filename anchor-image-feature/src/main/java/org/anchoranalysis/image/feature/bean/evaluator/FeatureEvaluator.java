@@ -118,9 +118,7 @@ public class FeatureEvaluator<T extends FeatureInput>
 
         try {
             return FeatureSession.with(
-                    determineFeature(),
-                    getInitialization().getSharedFeatures(),
-                    getLogger());
+                    determineFeature(), getInitialization().getSharedFeatures(), getLogger());
 
         } catch (InitException | CreateException e) {
             throw new OperationFailedException(e);

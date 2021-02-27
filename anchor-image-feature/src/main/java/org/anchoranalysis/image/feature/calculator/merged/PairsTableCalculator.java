@@ -83,7 +83,8 @@ public class PairsTableCalculator implements FeatureTableCalculator<FeatureInput
     }
 
     @Override
-    public void start(ImageInitialization initializtion, Optional<EnergyStack> energyStack, Logger logger)
+    public void start(
+            ImageInitialization initializtion, Optional<EnergyStack> energyStack, Logger logger)
             throws InitException {
 
         calculator =

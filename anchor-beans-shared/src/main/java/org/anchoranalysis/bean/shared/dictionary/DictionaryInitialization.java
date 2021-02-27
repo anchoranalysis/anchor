@@ -34,9 +34,8 @@ import org.anchoranalysis.core.value.Dictionary;
 
 /**
  * Initialization parameters for a named-set of dictionaries.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class DictionaryInitialization implements BeanInitialization {
 

@@ -43,10 +43,11 @@ import org.anchoranalysis.io.input.bean.files.FilesProvider;
 import org.anchoranalysis.io.input.files.FilesProviderException;
 
 /**
- * Reads a {@link Dictionary} from a file in <a href="https://docs.oracle.com/javase/tutorial/essential/environment/properties.html">Java properties</a> format.
- * 
- * @author Owen Feehan
+ * Reads a {@link Dictionary} from a file in <a
+ * href="https://docs.oracle.com/javase/tutorial/essential/environment/properties.html">Java
+ * properties</a> format.
  *
+ * @author Owen Feehan
  */
 public class ReadFromFile extends DictionaryProvider {
 

@@ -84,7 +84,9 @@ class CombinedCalculator {
         this.features = features;
         this.include = include;
 
-        calculatorImage = features.createCalculator(calculatorCreator, initialization, CachingStrategies.cacheAndReuse());
+        calculatorImage =
+                features.createCalculator(
+                        calculatorCreator, initialization, CachingStrategies.cacheAndReuse());
 
         BoundReplaceStrategy<
                         FeatureInputSingleObject, CacheAndReuseStrategy<FeatureInputSingleObject>>
@@ -98,7 +100,8 @@ class CombinedCalculator {
 
         calculatorMerged = createMerged(initialization, cachingStrategyMerged);
 
-        calculatorPair = createPair(initialization, cachingStrategyFirstSecond, cachingStrategyMerged);
+        calculatorPair =
+                createPair(initialization, cachingStrategyFirstSecond, cachingStrategyMerged);
     }
 
     public ResultsVector calculateForInput(
@@ -163,7 +166,9 @@ class CombinedCalculator {
                     cachingStrategyFirstSecond)
             throws InitException {
         if (include.includeFirstOrSecond()) {
-            return Optional.of(features.createSingle(calculatorCreator, initialization, cachingStrategyFirstSecond));
+            return Optional.of(
+                    features.createSingle(
+                            calculatorCreator, initialization, cachingStrategyFirstSecond));
         } else {
             return Optional.empty();
         }
@@ -177,7 +182,9 @@ class CombinedCalculator {
                     cachingStrategyMerged)
             throws InitException {
         if (include.includeMerged()) {
-            return Optional.of(features.createSingle(calculatorCreator, initialization, cachingStrategyMerged));
+            return Optional.of(
+                    features.createSingle(
+                            calculatorCreator, initialization, cachingStrategyMerged));
         } else {
             return Optional.empty();
         }

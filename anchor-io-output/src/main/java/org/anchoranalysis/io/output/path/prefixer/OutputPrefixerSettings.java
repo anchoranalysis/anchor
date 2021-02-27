@@ -2,22 +2,22 @@ package org.anchoranalysis.io.output.path.prefixer;
 
 import java.nio.file.Path;
 import java.util.Optional;
-import org.anchoranalysis.core.format.ImageFileFormat;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.core.format.ImageFileFormat;
 
 /**
- * Arguments influencing into which directory outputs are written, and how identifiers are expressed.
- * 
- * @author Owen Feehan
+ * Arguments influencing into which directory outputs are written, and how identifiers are
+ * expressed.
  *
+ * @author Owen Feehan
  */
 @NoArgsConstructor
 public class OutputPrefixerSettings {
 
     /** A directory indicating where inputs can be located */
     @Getter private Optional<Path> outputDirectory = Optional.empty();
-    
+
     /** A file format suggested for writing images to the file system. */
     @Getter private Optional<ImageFileFormat> suggestedImageOutputFormat = Optional.empty();
 
@@ -26,13 +26,13 @@ public class OutputPrefixerSettings {
      * (normally based upon input filenames).
      */
     @Getter private boolean outputIncrementingNumberSequence = false;
-    
+
     /**
-     * Requests suppressing directories (replacing subdirectory separators with an underscore)
-     * in the identifiers that are outputted.
+     * Requests suppressing directories (replacing subdirectory separators with an underscore) in
+     * the identifiers that are outputted.
      */
     @Getter private boolean outputSuppressDirectories = false;
-    
+
     public void assignOutputDirectory(Path outputDirectory) {
         this.outputDirectory = Optional.of(outputDirectory);
     }
@@ -44,7 +44,7 @@ public class OutputPrefixerSettings {
     public void requestOutputIncrementingNumberSequence() {
         this.outputIncrementingNumberSequence = true;
     }
-    
+
     public void requestOutputSuppressDirectories() {
         this.outputSuppressDirectories = true;
     }
@@ -57,5 +57,4 @@ public class OutputPrefixerSettings {
                             this.getClass().getSimpleName(), outputDirectory.get()));
         }
     }
-
 }

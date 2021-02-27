@@ -219,6 +219,7 @@ public class PropertyInitializer<P> {
      * property-type
      */
     private ExtractFromParam<P, NullInitialization> nullExtracter() {
-        return new ExtractFromParam<>(NullInitialization.class, params -> NullInitialization.instance());
+        return new ExtractFromParam<>(
+                NullInitialization.class, params -> NullInitialization.instance());
     }
 }

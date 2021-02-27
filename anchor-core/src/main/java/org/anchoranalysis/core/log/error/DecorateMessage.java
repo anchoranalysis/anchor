@@ -35,7 +35,7 @@ class DecorateMessage {
 
     /**
      * Places a line of banner text before and after a message.
-     * 
+     *
      * @param message the message to embedded in a banner.
      * @param warning if true, the message is associated with a warning, otherwise an error.
      * @return a multi-line string with the existing message embedded within banner lines.

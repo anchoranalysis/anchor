@@ -103,7 +103,7 @@ public class XMLUtilities {
      * @throws ParserConfigurationException
      */
     private static DocumentBuilder createDocumentBuilder() throws ParserConfigurationException {
-        return createDocumentBuilderFactory().newDocumentBuilder();  // NOSONAR
+        return createDocumentBuilderFactory().newDocumentBuilder(); // NOSONAR
     }
 
     /**

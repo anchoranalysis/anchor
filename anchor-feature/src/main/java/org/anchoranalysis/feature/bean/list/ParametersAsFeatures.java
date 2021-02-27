@@ -50,7 +50,8 @@ public class ParametersAsFeatures<T extends FeatureInput> extends FeatureListPro
     @Override
     public FeatureList<T> create() throws CreateException {
         Dictionary dictionaryCreated = dictionary.create();
-        return FeatureListFactory.mapFrom(dictionaryCreated.keys(), key -> featureForKey(key, dictionaryCreated));
+        return FeatureListFactory.mapFrom(
+                dictionaryCreated.keys(), key -> featureForKey(key, dictionaryCreated));
     }
 
     private Feature<T> featureForKey(String key, Dictionary dictionary) {

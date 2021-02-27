@@ -52,7 +52,8 @@ public class PointsInitialization implements BeanInitialization {
         storePointsFitter = so.getOrCreate(PointsFitter.class);
     }
 
-    public static PointsInitialization create(ImageInitialization initialization, SharedObjects so) {
+    public static PointsInitialization create(
+            ImageInitialization initialization, SharedObjects so) {
         return new PointsInitialization(initialization, so);
     }
 

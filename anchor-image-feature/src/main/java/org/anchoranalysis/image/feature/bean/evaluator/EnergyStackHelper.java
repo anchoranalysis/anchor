@@ -49,8 +49,7 @@ class EnergyStackHelper {
 
                 EnergyStack energyStack = new EnergyStack(stackEnergy.create());
                 energyStack.setDictionary(
-                        OptionalFactory.create(dictionary)
-                                .orElseGet(Dictionary::new));
+                        OptionalFactory.create(dictionary).orElseGet(Dictionary::new));
                 return Optional.of(energyStack);
             } else {
                 return Optional.empty();

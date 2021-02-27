@@ -93,12 +93,7 @@ class AppendHelper {
 
         // Delayed-calculation of the appending path as it can be a bit expensive when multiplied by
         // so many items
-        append(
-                input,
-                listPaths,
-                MultiInput::dictionary,
-                Dictionary::readFromFile,
-                debugMode);
+        append(input, listPaths, MultiInput::dictionary, Dictionary::readFromFile, debugMode);
     }
 
     public static void appendMarks(

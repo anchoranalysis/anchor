@@ -134,7 +134,8 @@ public class FeatureSession {
             BoundReplaceStrategy<T, ? extends ReplaceStrategy<T>> replacePolicyFactory)
             throws InitException {
         SequentialSession<T> session = new SequentialSession<>(features, replacePolicyFactory);
-        startSession(session, initialization, sharedFeatures.orElse(new SharedFeatureMulti()), logger);
+        startSession(
+                session, initialization, sharedFeatures.orElse(new SharedFeatureMulti()), logger);
         return session;
     }
 

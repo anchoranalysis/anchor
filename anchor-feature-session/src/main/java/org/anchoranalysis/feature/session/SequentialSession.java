@@ -281,8 +281,7 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
         listFeatures.initRecursive(initializationDup, logger);
 
         replaceSession =
-                replacePolicyFactory.bind(
-                        listFeatures, initializationDup, sharedFeatures, logger);
+                replacePolicyFactory.bind(listFeatures, initializationDup, sharedFeatures, logger);
     }
 
     private void checkIsStarted() throws NamedFeatureCalculateException {

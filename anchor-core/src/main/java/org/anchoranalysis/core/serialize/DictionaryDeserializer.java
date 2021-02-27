@@ -32,7 +32,7 @@ import org.anchoranalysis.core.value.Dictionary;
 
 /**
  * Deserializes a {@link Dictionary} from a file-system representation as a Java properties file.
- * 
+ *
  * @author Owen Feehan
  * @param <T> object-type
  */

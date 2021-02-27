@@ -27,6 +27,7 @@
 package org.anchoranalysis.mpp.feature.energy.scheme;
 
 import java.util.Optional;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.InitException;
@@ -42,10 +43,10 @@ import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.single.FeatureCalculatorSingle;
 import org.anchoranalysis.feature.shared.SharedFeatureMulti;
 import org.anchoranalysis.image.feature.input.FeatureInputStack;
-import lombok.AllArgsConstructor;
 
 /**
- * Creates a {@link Dictionary} for a particular {@link EnergyStack} that is associated with a EnergyScheme
+ * Creates a {@link Dictionary} for a particular {@link EnergyStack} that is associated with a
+ * EnergyScheme
  *
  * @author Owen Feehan
  */
@@ -56,8 +57,7 @@ public class DictionaryForImageCreator {
     private SharedFeatureMulti sharedFeatures;
     private Logger logger;
 
-    public Dictionary create(EnergyStackWithoutParams energyStack)
-            throws CreateException {
+    public Dictionary create(EnergyStackWithoutParams energyStack) throws CreateException {
         try {
             Dictionary dictionary = energyScheme.createDictionary();
             addParamsForImage(energyStack, dictionary);
@@ -74,11 +74,14 @@ public class DictionaryForImageCreator {
         FeatureInputStack params = new FeatureInputStack(energyStack);
 
         FeatureInitialization initialization =
-                new FeatureInitialization(Optional.of(dictionary), Optional.of(energyStack), Optional.empty());
+                new FeatureInitialization(
+                        Optional.of(dictionary), Optional.of(energyStack), Optional.empty());
 
         for (NamedBean<Feature<FeatureInputStack>> feature : energyScheme.getListImageFeatures()) {
 
-            dictionary.putCheck(feature.getName(), calculateImageFeature(feature.getItem(), initialization, params));
+            dictionary.putCheck(
+                    feature.getName(),
+                    calculateImageFeature(feature.getItem(), initialization, params));
         }
     }
 
