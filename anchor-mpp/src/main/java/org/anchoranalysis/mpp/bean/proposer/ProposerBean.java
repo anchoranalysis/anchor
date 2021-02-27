@@ -26,10 +26,10 @@
 
 package org.anchoranalysis.mpp.bean.proposer;
 
-import org.anchoranalysis.mpp.bean.MPPBean;
+import org.anchoranalysis.mpp.bean.MarksBean;
 
 /**
  * @author Owen Feehan
  * @param <T> bean-type
  */
-public abstract class ProposerBean<T> extends MPPBean<T> {}
+public abstract class ProposerBean<T> extends MarksBean<T> {}

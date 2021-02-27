@@ -34,7 +34,7 @@ import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.FeatureInitParams;
+import org.anchoranalysis.feature.calculate.FeatureInitialization;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.session.calculator.multi.FeatureCalculatorMulti;
 import org.anchoranalysis.feature.session.calculator.single.FeatureCalculatorSingle;
@@ -69,7 +69,7 @@ public class FeatureSession {
      */
     public static <T extends FeatureInput> FeatureCalculatorSingle<T> with(
             Feature<T> feature, Logger logger) throws InitException {
-        return with(feature, new FeatureInitParams(), new SharedFeatureMulti(), logger);
+        return with(feature, new FeatureInitialization(), new SharedFeatureMulti(), logger);
     }
 
     /**
@@ -84,17 +84,17 @@ public class FeatureSession {
     public static <T extends FeatureInput> FeatureCalculatorSingle<T> with(
             Feature<T> feature, SharedFeatureMulti sharedFeatures, Logger logger)
             throws InitException {
-        return with(feature, new FeatureInitParams(), sharedFeatures, logger);
+        return with(feature, new FeatureInitialization(), sharedFeatures, logger);
     }
 
     public static <T extends FeatureInput> FeatureCalculatorSingle<T> with(
             Feature<T> feature,
-            FeatureInitParams initParams,
+            FeatureInitialization initialization,
             SharedFeatureMulti sharedFeatures,
             Logger logger)
             throws InitException {
         SequentialSession<T> session = new SequentialSession<>(feature);
-        startSession(session, initParams, sharedFeatures, logger);
+        startSession(session, initialization, sharedFeatures, logger);
         return new FeatureCalculatorSingleFromMulti<>(session);
     }
 
@@ -109,18 +109,18 @@ public class FeatureSession {
      */
     public static <T extends FeatureInput> FeatureCalculatorMulti<T> with(
             FeatureList<T> features, Logger logger) throws InitException {
-        return with(features, new FeatureInitParams(), new SharedFeatureMulti(), logger);
+        return with(features, new FeatureInitialization(), new SharedFeatureMulti(), logger);
     }
 
     public static <T extends FeatureInput> FeatureCalculatorMulti<T> with(
             FeatureList<T> features,
-            FeatureInitParams initParams,
+            FeatureInitialization initialization,
             SharedFeatureMulti sharedFeatures,
             Logger logger)
             throws InitException {
         return with(
                 features,
-                initParams,
+                initialization,
                 Optional.of(sharedFeatures),
                 logger,
                 new BoundReplaceStrategy<>(ReuseSingletonStrategy::new));
@@ -128,13 +128,14 @@ public class FeatureSession {
 
     public static <T extends FeatureInput> FeatureCalculatorMulti<T> with(
             FeatureList<T> features,
-            FeatureInitParams initParams,
+            FeatureInitialization initialization,
             Optional<SharedFeatureMulti> sharedFeatures,
             Logger logger,
             BoundReplaceStrategy<T, ? extends ReplaceStrategy<T>> replacePolicyFactory)
             throws InitException {
         SequentialSession<T> session = new SequentialSession<>(features, replacePolicyFactory);
-        startSession(session, initParams, sharedFeatures.orElse(new SharedFeatureMulti()), logger);
+        startSession(
+                session, initialization, sharedFeatures.orElse(new SharedFeatureMulti()), logger);
         return session;
     }
 
@@ -161,12 +162,12 @@ public class FeatureSession {
 
     private static <T extends FeatureInput> void startSession(
             SequentialSession<T> session,
-            FeatureInitParams initParams,
+            FeatureInitialization initialization,
             SharedFeatureMulti sharedFeatures,
             Logger logger)
             throws InitException {
         try {
-            session.start(initParams, sharedFeatures, logger);
+            session.start(initialization, sharedFeatures, logger);
         } catch (InitException e) {
             throw new InitException(
                     "An error occurred starting the feature (sequential) session", e);

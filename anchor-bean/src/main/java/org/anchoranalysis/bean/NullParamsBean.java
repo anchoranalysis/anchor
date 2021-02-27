@@ -27,7 +27,7 @@
 package org.anchoranalysis.bean;
 
 import org.anchoranalysis.bean.initializable.InitializableBean;
-import org.anchoranalysis.bean.initializable.params.NullInitParams;
+import org.anchoranalysis.bean.initializable.params.NullInitialization;
 import org.anchoranalysis.bean.initializable.property.PropertyInitializer;
 import org.anchoranalysis.bean.initializable.property.SimplePropertyDefiner;
 import org.anchoranalysis.core.exception.InitException;
@@ -39,16 +39,16 @@ import org.anchoranalysis.core.log.Logger;
  * @author Owen Feehan
  * @param <T> bean family-type
  */
-public abstract class NullParamsBean<T> extends InitializableBean<T, NullInitParams> {
+public abstract class NullParamsBean<T> extends InitializableBean<T, NullInitialization> {
 
     protected NullParamsBean() {
         super(
-                new PropertyInitializer<>(NullInitParams.class),
-                new SimplePropertyDefiner<NullInitParams>(NullInitParams.class));
+                new PropertyInitializer<>(NullInitialization.class),
+                new SimplePropertyDefiner<NullInitialization>(NullInitialization.class));
     }
 
     @Override
-    public final void onInit(NullInitParams so) throws InitException {
+    public final void onInit(NullInitialization so) throws InitException {
         onInit();
     }
 
@@ -58,6 +58,6 @@ public abstract class NullParamsBean<T> extends InitializableBean<T, NullInitPar
     }
 
     public void initRecursive(Logger logger) throws InitException {
-        super.initRecursive(NullInitParams.instance(), logger);
+        super.initRecursive(NullInitialization.instance(), logger);
     }
 }

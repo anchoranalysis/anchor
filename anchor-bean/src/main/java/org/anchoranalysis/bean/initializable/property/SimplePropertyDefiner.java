@@ -27,7 +27,7 @@
 package org.anchoranalysis.bean.initializable.property;
 
 import lombok.RequiredArgsConstructor;
-import org.anchoranalysis.bean.initializable.params.ParamsInitializer;
+import org.anchoranalysis.bean.initializable.params.BeanInitializer;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.log.Logger;
 
@@ -50,11 +50,11 @@ public class SimplePropertyDefiner<P> implements PropertyDefiner {
     public void doInitFor(Object propertyValue, Object param, Object parent, Logger logger)
             throws InitException {
 
-        if (!(propertyValue instanceof ParamsInitializer)) {
+        if (!(propertyValue instanceof BeanInitializer)) {
             throw new InitException(
                     String.format(
                             "propertyValue is not an instance of %s, as is required for this property-definer",
-                            ParamsInitializer.class.getSimpleName()));
+                            BeanInitializer.class.getSimpleName()));
         }
 
         if (!paramTypeMatch.isAssignableFrom(param.getClass())) {
@@ -64,7 +64,7 @@ public class SimplePropertyDefiner<P> implements PropertyDefiner {
                             paramTypeMatch.getSimpleName()));
         }
 
-        ParamsInitializer<P> propertyValueCast = (ParamsInitializer<P>) propertyValue;
+        BeanInitializer<P> propertyValueCast = (BeanInitializer<P>) propertyValue;
         propertyValueCast.init((P) param, logger);
     }
 

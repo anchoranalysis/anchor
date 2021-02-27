@@ -41,11 +41,9 @@ import org.anchoranalysis.io.output.recorded.OutputEnabledDelta;
 @NoArgsConstructor
 public class OutputArguments {
 
-    /**
-     * Where outputs are written, and how identifiers are styled.
-     */
+    /** Where outputs are written, and how identifiers are styled. */
     @Getter private OutputPrefixerSettings prefixer = new OutputPrefixerSettings();
-    
+
     /**
      * Additions/subtractions of outputs for the experiment supplied by the user.
      *

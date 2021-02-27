@@ -30,10 +30,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.bean.NamedBean;
-import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
+import org.anchoranalysis.bean.shared.dictionary.DictionaryProvider;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
-import org.anchoranalysis.core.value.KeyValueParams;
+import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.input.FeatureInput;
@@ -68,7 +68,7 @@ public class EnergyScheme {
 
     private final AddCriteriaPair pairAddCriteria;
 
-    private final Optional<KeyValueParamsProvider> params;
+    private final Optional<DictionaryProvider> dictionary;
 
     public EnergyScheme(
             FeatureList<FeatureInputSingleMemo> elemInd,
@@ -93,7 +93,7 @@ public class EnergyScheme {
             FeatureList<FeatureInputAllMemo> elemAll,
             RegionMap regionMap,
             AddCriteriaPair pairAddCriteria,
-            Optional<KeyValueParamsProvider> keyValueParamsProvider,
+            Optional<DictionaryProvider> dictionary,
             List<NamedBean<Feature<FeatureInputStack>>> listImageFeatures)
             throws CreateException {
         this.elemInd = elemInd;
@@ -101,17 +101,17 @@ public class EnergyScheme {
         this.elemAll = elemAll;
         this.regionMap = regionMap;
         this.pairAddCriteria = pairAddCriteria;
-        this.params = keyValueParamsProvider;
+        this.dictionary = dictionary;
         this.listImageFeatures = listImageFeatures;
         checkAtLeastOneEnergyElement();
     }
 
-    /*** returns the associated KeyValueParams or an empty set, if no params are associated with the energyScheme */
-    public KeyValueParams createKeyValueParams() throws CreateException {
-        if (params.isPresent()) {
-            return params.get().create().duplicate();
+    /*** returns the associated {@link Dictionary} or an empty set, if no params are associated with the energyScheme */
+    public Dictionary createDictionary() throws CreateException {
+        if (dictionary.isPresent()) {
+            return dictionary.get().create().duplicate();
         } else {
-            return new KeyValueParams();
+            return new Dictionary();
         }
     }
 

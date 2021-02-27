@@ -62,7 +62,7 @@ public class AnchorDefaultBeanFactory implements BeanFactory {
             Object result = createBeanInstance(beanClass, data);
             initBeanInstance(result, data, parameter);
 
-            // We check initParams and localise if it's a bean
+            // We check initialization and localize if it's a bean
             if (result instanceof AnchorBean) {
                 AnchorBean<?> resultCast = (AnchorBean<?>) result;
                 resultCast.checkMisconfigured(defaultInstances);

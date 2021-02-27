@@ -36,7 +36,7 @@ import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.feature.results.ResultsVector;
-import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.feature.calculator.FeatureTableCalculator;
 import org.anchoranalysis.image.feature.input.FeatureInputPairObjects;
 
@@ -83,7 +83,8 @@ public class PairsTableCalculator implements FeatureTableCalculator<FeatureInput
     }
 
     @Override
-    public void start(ImageInitParams soImage, Optional<EnergyStack> energyStack, Logger logger)
+    public void start(
+            ImageInitialization initializtion, Optional<EnergyStack> energyStack, Logger logger)
             throws InitException {
 
         calculator =
@@ -91,7 +92,7 @@ public class PairsTableCalculator implements FeatureTableCalculator<FeatureInput
                         features,
                         new CreateCalculatorHelper(energyStack, logger),
                         include,
-                        soImage);
+                        initializtion);
     }
 
     @Override

@@ -38,7 +38,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.session.calculator.single.FeatureCalculatorSingle;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
-import org.anchoranalysis.mpp.bean.init.MPPInitParams;
+import org.anchoranalysis.mpp.bean.init.MarksInitialization;
 
 public abstract class ReportFeatureOnObjectsBase<T extends FeatureInput>
         extends ReportFeatureEvaluator<T> {
@@ -48,7 +48,7 @@ public abstract class ReportFeatureOnObjectsBase<T extends FeatureInput>
     // END BEAN PROPERTIES
 
     @Override
-    public String featureDescription(MPPInitParams so, Logger logger)
+    public String featureDescription(MarksInitialization so, Logger logger)
             throws OperationFailedException {
         try {
             objects.initRecursive(so.getImage(), logger);

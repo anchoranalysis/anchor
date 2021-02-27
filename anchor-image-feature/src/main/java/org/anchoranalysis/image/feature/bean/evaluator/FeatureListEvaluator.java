@@ -40,7 +40,7 @@ import org.anchoranalysis.feature.bean.FeatureRelatedBean;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListFactory;
 import org.anchoranalysis.feature.bean.provider.FeatureProvider;
-import org.anchoranalysis.feature.calculate.FeatureInitParams;
+import org.anchoranalysis.feature.calculate.FeatureInitialization;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.multi.FeatureCalculatorMulti;
@@ -84,8 +84,8 @@ public class FeatureListEvaluator<T extends FeatureInput>
             FeatureCalculatorMulti<T> calculator =
                     FeatureSession.with(
                             featuresCreated,
-                            new FeatureInitParams(sharedObjects),
-                            getInitializationParameters().getSharedFeatureSet(),
+                            new FeatureInitialization(sharedObjects),
+                            getInitialization().getSharedFeatures(),
                             getLogger());
 
             return new NamedFeatureCalculatorMulti<>(calculator, featuresCreated.createNames());

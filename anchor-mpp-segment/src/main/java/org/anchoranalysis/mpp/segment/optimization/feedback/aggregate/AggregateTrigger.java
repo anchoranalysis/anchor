@@ -81,9 +81,9 @@ class AggregateTrigger<S, T extends AggregateReceiver<S>> {
         periodTriggerBank.obtain(aggInterval, new ReportOnUpdates());
     }
 
-    public void start(FeedbackBeginParameters<S> initParams) throws AggregatorException {
-        this.agg = new Aggregator(initParams.getKernelFactoryList().size());
-        periodReceiver.aggStart(initParams, this.agg);
+    public void start(FeedbackBeginParameters<S> initialization) throws AggregatorException {
+        this.agg = new Aggregator(initialization.getKernelFactoryList().size());
+        periodReceiver.aggStart(initialization, this.agg);
     }
 
     public void record(Reporting<S> reporting) throws ReporterException {

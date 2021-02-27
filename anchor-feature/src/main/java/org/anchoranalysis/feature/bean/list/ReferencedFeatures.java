@@ -34,27 +34,26 @@ import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
+import org.anchoranalysis.feature.shared.FeaturesInitialization;
 
 public abstract class ReferencedFeatures<T extends FeatureInput> extends FeatureListProvider<T> {
 
     // START BEAN PROPERTIES
-    @BeanField @OptionalBean @Getter @Setter
     /**
      * Ensures any feature-lists mentioned here are evaluated, before this list is created.
      *
      * <p>Useful for when this list references another list.
      */
-    private StringSet referencesFeatureListCreator;
+    @BeanField @OptionalBean @Getter @Setter private StringSet referencesFeatureListCreator;
     // END BEAN PROPERITES
 
     @Override
-    public void onInit(SharedFeaturesInitParams soFeature) throws InitException {
+    public void onInit(FeaturesInitialization soFeature) throws InitException {
         super.onInit(soFeature);
         ensureReferencedFeaturesCalled(soFeature);
     }
 
-    private void ensureReferencedFeaturesCalled(SharedFeaturesInitParams so) throws InitException {
+    private void ensureReferencedFeaturesCalled(FeaturesInitialization so) throws InitException {
         if (referencesFeatureListCreator != null && so != null) {
             for (String featureListReference : referencesFeatureListCreator.set()) {
 

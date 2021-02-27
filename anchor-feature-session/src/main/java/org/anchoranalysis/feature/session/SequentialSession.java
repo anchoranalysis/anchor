@@ -36,7 +36,7 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListFactory;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.FeatureInitParams;
+import org.anchoranalysis.feature.calculate.FeatureInitialization;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
 import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.feature.input.FeatureInput;
@@ -51,7 +51,7 @@ import org.anchoranalysis.feature.shared.SharedFeatureMulti;
  * Calculates features with successively different parameters, taking care of caching etc.
  * appropriately.
  *
- * <p>All feature use the same InitParams, but successively different {#FeatureCalcParams}
+ * <p>All feature use the same initialization, but successively different {#FeatureCalcParams}
  * sequentially.
  *
  * <p>Caching is applied only within each call to {{@link #calculate(FeatureInput)} but among
@@ -109,14 +109,14 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
     /**
      * Starts the session
      *
-     * @param featureInitParams The parameters used to initialise the feature
+     * @param initialization The parameters used to initialise the feature
      * @param logger Logger
      * @param sharedFeatures A list of features that are shared between the features we are
      *     calculating (and thus also init-ed)
      * @throws InitException
      */
     public void start(
-            FeatureInitParams featureInitParams, SharedFeatureMulti sharedFeatures, Logger logger)
+            FeatureInitialization initialization, SharedFeatureMulti sharedFeatures, Logger logger)
             throws InitException {
 
         if (isStarted) {
@@ -124,7 +124,7 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
         }
 
         checkNoIntersectionWithSharedFeatures(sharedFeatures);
-        setupCacheAndInit(featureInitParams, sharedFeatures, logger);
+        setupCacheAndInit(initialization, sharedFeatures, logger);
 
         isStarted = true;
     }
@@ -274,15 +274,14 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
     }
 
     private void setupCacheAndInit(
-            FeatureInitParams featureInitParams, SharedFeatureMulti sharedFeatures, Logger logger)
+            FeatureInitialization initialization, SharedFeatureMulti sharedFeatures, Logger logger)
             throws InitException {
-        assert (featureInitParams != null);
-        FeatureInitParams featureInitParamsDup = featureInitParams.duplicate();
-        listFeatures.initRecursive(featureInitParamsDup, logger);
+        assert (initialization != null);
+        FeatureInitialization initializationDup = initialization.duplicate();
+        listFeatures.initRecursive(initializationDup, logger);
 
         replaceSession =
-                replacePolicyFactory.bind(
-                        listFeatures, featureInitParamsDup, sharedFeatures, logger);
+                replacePolicyFactory.bind(listFeatures, initializationDup, sharedFeatures, logger);
     }
 
     private void checkIsStarted() throws NamedFeatureCalculateException {

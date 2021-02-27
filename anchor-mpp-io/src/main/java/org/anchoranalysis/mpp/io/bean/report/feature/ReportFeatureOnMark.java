@@ -37,7 +37,7 @@ import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.session.calculator.single.FeatureCalculatorSingle;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
-import org.anchoranalysis.mpp.bean.init.MPPInitParams;
+import org.anchoranalysis.mpp.bean.init.MarksInitialization;
 import org.anchoranalysis.mpp.bean.provider.SingleMarkProvider;
 import org.anchoranalysis.mpp.feature.bean.mark.FeatureInputMark;
 import org.anchoranalysis.mpp.mark.Mark;
@@ -54,7 +54,7 @@ public class ReportFeatureOnMark extends ReportFeatureForMPP<FeatureInputMark> {
     }
 
     @Override
-    public String featureDescription(MPPInitParams param, Logger logger)
+    public String featureDescription(MarksInitialization param, Logger logger)
             throws OperationFailedException {
 
         // Maybe we should duplicate the providers?

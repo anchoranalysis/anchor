@@ -32,12 +32,12 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.io.output.bean.ReportFeature;
-import org.anchoranalysis.mpp.bean.init.MPPInitParams;
+import org.anchoranalysis.mpp.bean.init.MarksInitialization;
 
 public class ReportFeatureWrapError extends ReportFeatureForSharedObjects {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private ReportFeature<MPPInitParams> item;
+    @BeanField @Getter @Setter private ReportFeature<MarksInitialization> item;
 
     @BeanField @Getter @Setter private String message;
     // END BEAN PROPERTIES
@@ -53,7 +53,7 @@ public class ReportFeatureWrapError extends ReportFeatureForSharedObjects {
     }
 
     @Override
-    public String featureDescription(MPPInitParams param, Logger logger)
+    public String featureDescription(MarksInitialization param, Logger logger)
             throws OperationFailedException {
         try {
             return item.featureDescription(param, logger);

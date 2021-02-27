@@ -5,8 +5,8 @@
    	    <artifactId>anchor-parent</artifactId>
 		<version>0.0.11-SNAPSHOT</version>
     </parent>
-  <artifactId>anchor-core</artifactId>
- <version>0.0.8-SNAPSHOT</version>
+  	<artifactId>anchor-core</artifactId>
+ 	<version>0.0.8-SNAPSHOT</version>
     <description>Fundamental core library objects for Anchor platform.</description>
   <dependencies>
     <dependency>

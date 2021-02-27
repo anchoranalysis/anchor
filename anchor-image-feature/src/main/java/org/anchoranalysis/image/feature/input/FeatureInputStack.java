@@ -43,20 +43,10 @@ public class FeatureInputStack extends FeatureInputEnergy {
         this.setEnergyStack(Optional.empty());
     }
 
-    /**
-     * Params without any ImageInitParams
-     *
-     * @param energyStack
-     */
     public FeatureInputStack(EnergyStackWithoutParams energyStack) {
         this.setEnergyStack(new EnergyStack(energyStack));
     }
 
-    /**
-     * Params without any ImageInitParams
-     *
-     * @param energyStack
-     */
     public FeatureInputStack(Optional<EnergyStackWithoutParams> energyStack) {
         if (energyStack.isPresent()) {
             this.setEnergyStack(new EnergyStack(energyStack.get()));

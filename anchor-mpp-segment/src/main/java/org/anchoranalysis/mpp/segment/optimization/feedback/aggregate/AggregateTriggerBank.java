@@ -62,9 +62,9 @@ public class AggregateTriggerBank<T> {
         return exst;
     }
 
-    public void start(FeedbackBeginParameters<T> initParams) throws AggregatorException {
+    public void start(FeedbackBeginParameters<T> initialization) throws AggregatorException {
         for (AggregateTrigger<T, AggregateReceiverList<T>> item : list) {
-            item.start(initParams);
+            item.start(initialization);
         }
     }
 

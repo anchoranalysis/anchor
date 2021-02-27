@@ -32,20 +32,24 @@ import org.anchoranalysis.bean.initializable.InitializableBean;
 import org.anchoranalysis.bean.initializable.property.ExtractFromParam;
 import org.anchoranalysis.bean.initializable.property.PropertyInitializer;
 import org.anchoranalysis.bean.initializable.property.SimplePropertyDefiner;
-import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsInitParams;
-import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
+import org.anchoranalysis.bean.shared.dictionary.DictionaryInitialization;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 
-public abstract class ImageBean<T> extends InitializableBean<T, ImageInitParams> {
+public abstract class ImageBean<T> extends InitializableBean<T, ImageInitialization> {
 
     protected ImageBean() {
         super(
-                new PropertyInitializer<>(ImageInitParams.class, paramExtracters()),
-                new SimplePropertyDefiner<ImageInitParams>(ImageInitParams.class));
+                new PropertyInitializer<>(ImageInitialization.class, paramExtracters()),
+                new SimplePropertyDefiner<ImageInitialization>(ImageInitialization.class));
     }
 
-    private static List<ExtractFromParam<ImageInitParams, ?>> paramExtracters() {
+    private static List<ExtractFromParam<ImageInitialization, ?>> paramExtracters() {
         return Arrays.asList(
-                new ExtractFromParam<>(KeyValueParamsInitParams.class, ImageInitParams::features),
-                new ExtractFromParam<>(KeyValueParamsInitParams.class, ImageInitParams::params));
+                new ExtractFromParam<>(
+                        DictionaryInitialization.class,
+                        ImageInitialization::featuresInitialization),
+                new ExtractFromParam<>(
+                        DictionaryInitialization.class,
+                        ImageInitialization::dictionaryInitialization));
     }
 }

@@ -58,32 +58,32 @@ public class MultiInputManager extends InputManagerWithStackReader<MultiInput> {
     private List<NamedBean<DerivePath>> appendStack = new ArrayList<>();
 
     @BeanField @OptionalBean @Getter @Setter
-    private List<NamedBean<DerivePath>> listAppendMarks = new ArrayList<>();
+    private List<NamedBean<DerivePath>> appendMarks = new ArrayList<>();
 
     @BeanField @OptionalBean @Getter @Setter
-    private List<NamedBean<DerivePath>> listAppendMarksFromAnnotation =
+    private List<NamedBean<DerivePath>> appendMarksFromAnnotation =
             new ArrayList<>(); // Uses both accepted and rejected
 
     @BeanField @OptionalBean @Getter @Setter
-    private List<NamedBean<DerivePath>> listAppendMarksFromAnnotationAcceptedOnly =
+    private List<NamedBean<DerivePath>> appendMarksFromAnnotationAcceptedOnly =
             new ArrayList<>(); // Uses both accepted only
 
     @BeanField @OptionalBean @Getter @Setter
-    private List<NamedBean<DerivePath>> listAppendMarksFromAnnotationRejectedOnly =
-            new ArrayList<>(); // Uses both accepted rejectedonly
+    private List<NamedBean<DerivePath>> appendMarksFromAnnotationRejectedOnly =
+            new ArrayList<>(); // Uses both accepted rejected only
 
-    /** Appends object-collections to the multi-input */
+    /** Appends object-collections to the {@link MultiInput}. */
     @BeanField @OptionalBean @Getter @Setter
     private List<NamedBean<DerivePath>> appendObjects = new ArrayList<>();
 
     @BeanField @OptionalBean @Getter @Setter
-    private List<NamedBean<DerivePath>> listAppendKeyValueParams = new ArrayList<>();
+    private List<NamedBean<DerivePath>> appendDictionary = new ArrayList<>();
 
     @BeanField @OptionalBean @Getter @Setter
     private List<NamedBean<DerivePath>> appendHistogram = new ArrayList<>();
 
     @BeanField @OptionalBean @Getter @Setter
-    private List<NamedBean<DerivePath>> listAppendFilePath = new ArrayList<>();
+    private List<NamedBean<DerivePath>> appendFilePath = new ArrayList<>();
     // END BEAN PROPERTIES
 
     public MultiInputManager(String inputName, InputManager<? extends ProvidesStackInput> input) {
@@ -106,17 +106,17 @@ public class MultiInputManager extends InputManagerWithStackReader<MultiInput> {
         appendStack(appendStack, input, doDebug, getStackReader());
         appendFromVariousMarksSources(input, doDebug);
         appendObjects(appendObjects, input, doDebug);
-        appendKeyValueParams(listAppendKeyValueParams, input, doDebug);
+        appendDictionary(appendDictionary, input, doDebug);
         appendHistogram(appendHistogram, input, doDebug);
-        appendFilePath(listAppendFilePath, input, doDebug);
+        appendFilePath(appendFilePath, input, doDebug);
     }
 
     private void appendFromVariousMarksSources(MultiInput input, boolean doDebug) {
-        appendMarks(listAppendMarks, input, doDebug);
-        appendMarksFromAnnotation(listAppendMarksFromAnnotation, input, true, true, doDebug);
+        appendMarks(appendMarks, input, doDebug);
+        appendMarksFromAnnotation(appendMarksFromAnnotation, input, true, true, doDebug);
         appendMarksFromAnnotation(
-                listAppendMarksFromAnnotationAcceptedOnly, input, true, false, doDebug);
+                appendMarksFromAnnotationAcceptedOnly, input, true, false, doDebug);
         appendMarksFromAnnotation(
-                listAppendMarksFromAnnotationRejectedOnly, input, false, true, doDebug);
+                appendMarksFromAnnotationRejectedOnly, input, false, true, doDebug);
     }
 }

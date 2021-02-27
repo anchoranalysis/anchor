@@ -43,16 +43,16 @@ public abstract class ReporterAggregate<T> extends ReporterInterval<T> {
     }
 
     @Override
-    public void reportBegin(FeedbackBeginParameters<T> initParams) throws ReporterException {
+    public void reportBegin(FeedbackBeginParameters<T> initialization) throws ReporterException {
 
-        initParams
+        initialization
                 .getAggregateTriggerBank()
                 .obtain(
                         this.getAggInterval(),
                         getAggregateReceiver(),
-                        initParams.getPeriodTriggerBank());
+                        initialization.getPeriodTriggerBank());
 
-        this.logger = initParams.getInitContext().getLogger();
+        this.logger = initialization.getInitContext().getLogger();
     }
 
     @Override

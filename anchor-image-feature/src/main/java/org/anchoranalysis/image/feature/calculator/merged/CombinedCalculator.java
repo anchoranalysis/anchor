@@ -34,7 +34,7 @@ import org.anchoranalysis.feature.results.ResultsVector;
 import org.anchoranalysis.feature.session.calculator.multi.FeatureCalculatorMulti;
 import org.anchoranalysis.feature.session.replace.BoundReplaceStrategy;
 import org.anchoranalysis.feature.session.replace.CacheAndReuseStrategy;
-import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.feature.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.feature.input.FeatureInputStack;
@@ -48,7 +48,7 @@ import org.anchoranalysis.image.feature.input.FeatureInputStack;
 class CombinedCalculator {
 
     private final MergedPairsFeatures features;
-    private final CreateCalculatorHelper cc;
+    private final CreateCalculatorHelper calculatorCreator;
     private final MergedPairsInclude include;
 
     private final FeatureCalculatorMulti<FeatureInputStack> calculatorImage;
@@ -75,30 +75,33 @@ class CombinedCalculator {
 
     public CombinedCalculator(
             MergedPairsFeatures features,
-            CreateCalculatorHelper cc,
+            CreateCalculatorHelper calculatorCreator,
             MergedPairsInclude include,
-            ImageInitParams soImage)
+            ImageInitialization initialization)
             throws InitException {
         super();
-        this.cc = cc;
+        this.calculatorCreator = calculatorCreator;
         this.features = features;
         this.include = include;
 
-        calculatorImage = features.createCalculator(cc, soImage, CachingStrategies.cacheAndReuse());
+        calculatorImage =
+                features.createCalculator(
+                        calculatorCreator, initialization, CachingStrategies.cacheAndReuse());
 
         BoundReplaceStrategy<
                         FeatureInputSingleObject, CacheAndReuseStrategy<FeatureInputSingleObject>>
                 cachingStrategyFirstSecond = CachingStrategies.cacheAndReuse();
 
-        calculatorFirstSecond = createFirstAndSecond(soImage, cachingStrategyFirstSecond);
+        calculatorFirstSecond = createFirstAndSecond(initialization, cachingStrategyFirstSecond);
 
         BoundReplaceStrategy<
                         FeatureInputSingleObject, CacheAndReuseStrategy<FeatureInputSingleObject>>
                 cachingStrategyMerged = CachingStrategies.cacheAndReuse();
 
-        calculatorMerged = createMerged(soImage, cachingStrategyMerged);
+        calculatorMerged = createMerged(initialization, cachingStrategyMerged);
 
-        calculatorPair = createPair(soImage, cachingStrategyFirstSecond, cachingStrategyMerged);
+        calculatorPair =
+                createPair(initialization, cachingStrategyFirstSecond, cachingStrategyMerged);
     }
 
     public ResultsVector calculateForInput(
@@ -156,35 +159,39 @@ class CombinedCalculator {
     }
 
     private Optional<FeatureCalculatorMulti<FeatureInputSingleObject>> createFirstAndSecond(
-            ImageInitParams soImage,
+            ImageInitialization initialization,
             BoundReplaceStrategy<
                             FeatureInputSingleObject,
                             CacheAndReuseStrategy<FeatureInputSingleObject>>
                     cachingStrategyFirstSecond)
             throws InitException {
         if (include.includeFirstOrSecond()) {
-            return Optional.of(features.createSingle(cc, soImage, cachingStrategyFirstSecond));
+            return Optional.of(
+                    features.createSingle(
+                            calculatorCreator, initialization, cachingStrategyFirstSecond));
         } else {
             return Optional.empty();
         }
     }
 
     private Optional<FeatureCalculatorMulti<FeatureInputSingleObject>> createMerged(
-            ImageInitParams soImage,
+            ImageInitialization initialization,
             BoundReplaceStrategy<
                             FeatureInputSingleObject,
                             CacheAndReuseStrategy<FeatureInputSingleObject>>
                     cachingStrategyMerged)
             throws InitException {
         if (include.includeMerged()) {
-            return Optional.of(features.createSingle(cc, soImage, cachingStrategyMerged));
+            return Optional.of(
+                    features.createSingle(
+                            calculatorCreator, initialization, cachingStrategyMerged));
         } else {
             return Optional.empty();
         }
     }
 
     private FeatureCalculatorMulti<FeatureInputPairObjects> createPair(
-            ImageInitParams soImage,
+            ImageInitialization initialization,
             BoundReplaceStrategy<
                             FeatureInputSingleObject,
                             CacheAndReuseStrategy<FeatureInputSingleObject>>
@@ -195,8 +202,8 @@ class CombinedCalculator {
                     cachingStrategyMerged)
             throws InitException {
         return features.createPair(
-                cc,
-                soImage,
+                calculatorCreator,
+                initialization,
                 TransferSourceHelper.createTransferSource(
                         cachingStrategyFirstSecond, cachingStrategyMerged));
     }

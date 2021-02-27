@@ -121,9 +121,14 @@ jobs:
                 "username": "$GITHUB_ACTOR",
                 "password": "${{ secrets.GITHUB_TOKEN }}"
             }]    
-    - name: Build with Maven
+    - name: Compile before running Javadoc
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      run: mvn --batch-mode --update-snapshots javadoc:javadoc
+      run: mvn --batch-mode --update-snapshots clean install            
+    - name: Generate Javadoc
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      run: mvn --batch-mode javadoc:javadoc
       

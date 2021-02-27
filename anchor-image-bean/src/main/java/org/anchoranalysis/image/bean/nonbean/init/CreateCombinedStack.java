@@ -34,7 +34,8 @@ import org.anchoranalysis.image.core.stack.Stack;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CreateCombinedStack {
 
-    public static NamedProvider<Stack> apply(ImageInitParams so) {
-        return new CombineDiverseProvidersAsStacks(so.stacks(), so.channels(), so.masks());
+    public static NamedProvider<Stack> apply(ImageInitialization initialization) {
+        return new CombineDiverseProvidersAsStacks(
+                initialization.stacks(), initialization.channels(), initialization.masks());
     }
 }

@@ -33,7 +33,7 @@ import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.core.log.error.ErrorReporterIntoLog;
 import org.anchoranalysis.experiment.arguments.ExecutionArguments;
 import org.anchoranalysis.experiment.bean.log.LoggingDestination;
-import org.anchoranalysis.experiment.io.InitParamsContext;
+import org.anchoranalysis.experiment.io.InitializationContext;
 import org.anchoranalysis.experiment.log.StatefulMessageLogger;
 import org.anchoranalysis.io.manifest.Manifest;
 import org.anchoranalysis.io.output.bean.OutputManager;
@@ -100,8 +100,9 @@ public class ParametersExperiment {
         return context.getExperimentArguments();
     }
 
-    public InitParamsContext createInitParamsContext() {
-        return new InitParamsContext(context, context.getExperimentArguments().task().getSize());
+    public InitializationContext createInitializationContext() {
+        return new InitializationContext(
+                context, context.getExperimentArguments().task().getSize());
     }
 
     /** Redirects any output-exceptions into the log */

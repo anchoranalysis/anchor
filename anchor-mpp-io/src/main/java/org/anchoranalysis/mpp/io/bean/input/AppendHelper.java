@@ -32,7 +32,7 @@ import java.util.function.Function;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.progress.ProgressIgnore;
-import org.anchoranalysis.core.value.KeyValueParams;
+import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.image.core.stack.TimeSequence;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
@@ -88,17 +88,12 @@ class AppendHelper {
         append(input, listPaths, MultiInput::filePath, outPath -> outPath, debugMode);
     }
 
-    public static void appendKeyValueParams(
+    public static void appendDictionary(
             List<NamedBean<DerivePath>> listPaths, MultiInput input, boolean debugMode) {
 
         // Delayed-calculation of the appending path as it can be a bit expensive when multiplied by
         // so many items
-        append(
-                input,
-                listPaths,
-                MultiInput::keyValueParams,
-                KeyValueParams::readFromFile,
-                debugMode);
+        append(input, listPaths, MultiInput::dictionary, Dictionary::readFromFile, debugMode);
     }
 
     public static void appendMarks(

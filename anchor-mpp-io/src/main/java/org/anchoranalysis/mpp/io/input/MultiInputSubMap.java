@@ -31,8 +31,14 @@ import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
 import org.anchoranalysis.core.identifier.provider.store.StoreSupplier;
 
 /**
- * a sub-item of multi-input which: 1. involves a map of objects of type T 2. can have its contents
- * copied into a NamedProviderStore
+ * A sub-item of a {@link MultiInput}.
+ *
+ * <p>It:
+ *
+ * <ol>
+ *   <li>involves a map of objects of type {@code T}
+ *   <li>can have its contents copied into a {@link NamedProviderStore}.
+ * </ol>
  *
  * @param <T> object-type
  */
@@ -41,7 +47,7 @@ public interface MultiInputSubMap<T> {
     /** Adds an entry to the map */
     void add(String name, StoreSupplier<T> supplier);
 
-    /** Copies all the existing entries into a NamedProvierStore */
+    /** Copies all the existing entries into a {@link NamedProviderStore}. */
     void addToStore(NamedProviderStore<T> namedStore) throws OperationFailedException;
 
     /** Returns null if non-existent */

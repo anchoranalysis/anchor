@@ -33,18 +33,18 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
 import org.anchoranalysis.core.log.error.ErrorReporter;
 import org.anchoranalysis.core.progress.Progress;
-import org.anchoranalysis.core.value.KeyValueParams;
-import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
+import org.anchoranalysis.core.value.Dictionary;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.core.stack.TimeSequence;
 import org.anchoranalysis.image.core.stack.time.WrapStackAsTimeSequenceStore;
 import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.math.histogram.Histogram;
-import org.anchoranalysis.mpp.bean.init.MPPInitParams;
+import org.anchoranalysis.mpp.bean.init.MarksInitialization;
 import org.anchoranalysis.mpp.mark.MarkCollection;
 
 @Accessors(fluent = true)
-public class MultiInput implements ProvidesStackInput, InputForMPPBean {
+public class MultiInput implements ProvidesStackInput, InputForMarksBean {
 
     public static final String DEFAULT_IMAGE_INPUT_NAME = "input_image";
 
@@ -52,7 +52,7 @@ public class MultiInput implements ProvidesStackInput, InputForMPPBean {
 
     private OperationMap<MarkCollection> mapMarks = new OperationMap<>();
     private OperationMap<ObjectCollection> mapObjects = new OperationMap<>();
-    private OperationMap<KeyValueParams> mapKeyValueParams = new OperationMap<>();
+    private OperationMap<Dictionary> mapDictionary = new OperationMap<>();
     private OperationMap<Histogram> mapHistogram = new OperationMap<>();
     private OperationMap<Path> mapFilePath = new OperationMap<>();
 
@@ -82,15 +82,15 @@ public class MultiInput implements ProvidesStackInput, InputForMPPBean {
     }
 
     @Override
-    public void addToSharedObjects(MPPInitParams soMPP, ImageInitParams soImage)
+    public void addToSharedObjects(MarksInitialization marks, ImageInitialization image)
             throws OperationFailedException {
 
-        marks().addToStore(soMPP.getMarksCollection());
-        stack().addToStore(new WrapStackAsTimeSequenceStore(soImage.stacks()));
-        objects().addToStore(soImage.objects());
-        keyValueParams().addToStore(soImage.params().getNamedKeyValueParams());
-        filePath().addToStore(soImage.params().getNamedFilePaths());
-        histogram().addToStore(soImage.histograms());
+        marks().addToStore(marks.getMarksCollection());
+        stack().addToStore(new WrapStackAsTimeSequenceStore(image.stacks()));
+        objects().addToStore(image.objects());
+        dictionary().addToStore(image.dictionaries());
+        filePath().addToStore(image.filePaths());
+        histogram().addToStore(image.histograms());
     }
 
     @Override
@@ -112,7 +112,7 @@ public class MultiInput implements ProvidesStackInput, InputForMPPBean {
         //   but just in case
         mapMarks = null;
         mapObjects = null;
-        mapKeyValueParams = null;
+        mapDictionary = null;
         mapHistogram = null;
         mapFilePath = null;
     }
@@ -125,8 +125,8 @@ public class MultiInput implements ProvidesStackInput, InputForMPPBean {
         return mapObjects;
     }
 
-    public MultiInputSubMap<KeyValueParams> keyValueParams() {
-        return mapKeyValueParams;
+    public MultiInputSubMap<Dictionary> dictionary() {
+        return mapDictionary;
     }
 
     public MultiInputSubMap<Histogram> histogram() {

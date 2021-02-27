@@ -32,7 +32,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.identifier.provider.NamedProvider;
-import org.anchoranalysis.core.value.KeyValueParams;
+import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.core.stack.StackIdentifiers;
 import org.anchoranalysis.image.core.stack.named.NamedStacks;
@@ -54,7 +54,7 @@ public abstract class SegmentIntoMarks extends AnchorBean<SegmentIntoMarks> {
     public abstract MarkCollection segment(
             NamedStacks stacks,
             NamedProvider<ObjectCollection> objects,
-            Optional<KeyValueParams> keyValueParams,
+            Optional<Dictionary> dictionary,
             InputOutputContext context)
             throws SegmentationFailedException;
 

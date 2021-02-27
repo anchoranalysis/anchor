@@ -144,7 +144,8 @@ public abstract class PathPrefixerAvoidResolve extends PathPrefixer {
             return resolvePath(prefix);
         } else {
             // If there's an prefix specified, then use it, otherwise a temporary directory.
-            return context.getPrefixer().getOutputDirectory()
+            return context.getPrefixer()
+                    .getOutputDirectory()
                     .orElseGet(PathPrefixerAvoidResolve::temporaryDirectory);
         }
     }

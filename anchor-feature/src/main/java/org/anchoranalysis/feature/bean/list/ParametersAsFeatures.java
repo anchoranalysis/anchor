@@ -29,42 +29,32 @@ package org.anchoranalysis.feature.bean.list;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.shared.dictionary.DictionaryProvider;
 import org.anchoranalysis.core.exception.CreateException;
-import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
-import org.anchoranalysis.core.value.KeyValueParams;
+import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.operator.Constant;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
- * Loads a {@link KeyValueParams} as features.
+ * Loads a {@link Dictionary} as features.
  *
  * @author Owen Feehan
  */
 public class ParametersAsFeatures<T extends FeatureInput> extends FeatureListProvider<T> {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private String collectionID = "";
+    @BeanField @Getter @Setter private DictionaryProvider dictionary;
     // END BEAN PROPERTIES
 
     @Override
     public FeatureList<T> create() throws CreateException {
-
-        try {
-            KeyValueParams kpv =
-                    getInitializationParameters()
-                            .getParams()
-                            .getNamedKeyValueParams()
-                            .getException(collectionID);
-
-            return FeatureListFactory.mapFrom(kpv.keySet(), key -> featureForKey(key, kpv));
-
-        } catch (NamedProviderGetException e) {
-            throw new CreateException(e);
-        }
+        Dictionary dictionaryCreated = dictionary.create();
+        return FeatureListFactory.mapFrom(
+                dictionaryCreated.keys(), key -> featureForKey(key, dictionaryCreated));
     }
 
-    private Feature<T> featureForKey(String key, KeyValueParams kpv) {
-        return new Constant<>(key, kpv.getPropertyAsDouble(key));
+    private Feature<T> featureForKey(String key, Dictionary dictionary) {
+        return new Constant<>(key, dictionary.getAsDouble(key));
     }
 }

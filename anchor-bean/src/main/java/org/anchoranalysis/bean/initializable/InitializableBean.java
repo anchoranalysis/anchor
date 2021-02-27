@@ -29,8 +29,8 @@ package org.anchoranalysis.bean.initializable;
 import java.util.Optional;
 import lombok.Getter;
 import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.bean.initializable.params.BeanInitParams;
-import org.anchoranalysis.bean.initializable.params.ParamsInitializer;
+import org.anchoranalysis.bean.initializable.params.BeanInitialization;
+import org.anchoranalysis.bean.initializable.params.BeanInitializer;
 import org.anchoranalysis.bean.initializable.property.PropertyDefiner;
 import org.anchoranalysis.bean.initializable.property.PropertyInitializer;
 import org.anchoranalysis.core.exception.InitException;
@@ -44,15 +44,15 @@ import org.anchoranalysis.core.log.Logger;
  * @param <B> bean-family type
  * @param <P> initialization-parameters type
  */
-public abstract class InitializableBean<B, P extends BeanInitParams> extends AnchorBean<B>
-        implements ParamsInitializer<P> {
+public abstract class InitializableBean<B, P extends BeanInitialization> extends AnchorBean<B>
+        implements BeanInitializer<P> {
 
     private final PropertyInitializer<P> propertyInitializer;
 
     @Getter private final PropertyDefiner propertyDefiner;
 
     /** Has the bean been initialized yet? */
-    private Optional<P> initializationParameters = Optional.empty();
+    private Optional<P> initialization = Optional.empty();
 
     /** the logger */
     private Logger logger;
@@ -66,16 +66,16 @@ public abstract class InitializableBean<B, P extends BeanInitParams> extends Anc
     // Dummy method, that children can optionally override
     @Override
     public void init(P params, Logger logger) throws InitException {
-        this.initializationParameters = Optional.of(params);
+        this.initialization = Optional.of(params);
         this.logger = logger;
         onInit(params);
     }
 
     /**
-     * Called after initialization. An empty impelmentation is provided, to be overridden as needed
+     * Called after initialization. An empty implementation is provided, to be overridden as needed
      * in the sub-classes.
      */
-    public void onInit(P paramsInit) throws InitException {
+    public void onInit(P initialization) throws InitException {
         // Empty implementation to be replaced in sub-classes
     }
 
@@ -110,7 +110,7 @@ public abstract class InitializableBean<B, P extends BeanInitParams> extends Anc
     }
 
     public boolean isInitialized() {
-        return initializationParameters.isPresent();
+        return initialization.isPresent();
     }
 
     protected PropertyInitializer<P> getPropertyInitializer() {
@@ -122,8 +122,8 @@ public abstract class InitializableBean<B, P extends BeanInitParams> extends Anc
         return logger;
     }
 
-    protected P getInitializationParameters() {
-        return initializationParameters.orElseThrow(
+    protected P getInitialization() {
+        return initialization.orElseThrow(
                 () ->
                         new AnchorFriendlyRuntimeException(
                                 "No initialization-params as the been has not been initialized"));

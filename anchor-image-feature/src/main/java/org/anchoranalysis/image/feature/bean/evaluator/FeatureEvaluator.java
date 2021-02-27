@@ -36,7 +36,7 @@ import org.anchoranalysis.bean.annotation.SkipInit;
 import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 import org.anchoranalysis.bean.initializable.CheckMisconfigured;
 import org.anchoranalysis.bean.provider.Provider;
-import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
+import org.anchoranalysis.bean.shared.dictionary.DictionaryProvider;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.exception.OperationFailedException;
@@ -83,7 +83,7 @@ public class FeatureEvaluator<T extends FeatureInput>
      * Parameters to optionally associated with {@code stackEnergy}, and meaningless if {@code
      * stackEnergy} is not specified.
      */
-    @BeanField @OptionalBean @Getter @Setter private KeyValueParamsProvider params;
+    @BeanField @OptionalBean @Getter @Setter private DictionaryProvider dictionary;
     // END BEAN PROPERTIES
 
     @Override
@@ -111,16 +111,14 @@ public class FeatureEvaluator<T extends FeatureInput>
      * @throws OperationFailedException if the energy-stack is specified but cannot be created.
      */
     public Optional<EnergyStack> energyStack() throws OperationFailedException {
-        return EnergyStackHelper.energyStack(stackEnergy, params);
+        return EnergyStackHelper.energyStack(stackEnergy, dictionary);
     }
 
     private FeatureCalculatorSingle<T> createCalculator() throws OperationFailedException {
 
         try {
             return FeatureSession.with(
-                    determineFeature(),
-                    getInitializationParameters().getSharedFeatureSet(),
-                    getLogger());
+                    determineFeature(), getInitialization().getSharedFeatures(), getLogger());
 
         } catch (InitException | CreateException e) {
             throw new OperationFailedException(e);

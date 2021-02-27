@@ -33,9 +33,9 @@ import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.checked.CheckedFunction;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.core.value.KeyValueParams;
+import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.FeatureInitParams;
+import org.anchoranalysis.feature.calculate.FeatureInitialization;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
@@ -65,17 +65,17 @@ public class EnergySchemeWithSharedFeatures {
 
         private VoxelizedMarkMemo mark;
         private EnergyStackWithoutParams raster;
-        private KeyValueParams kvp;
+        private Dictionary dictionary;
 
         public void update(VoxelizedMarkMemo mark, EnergyStackWithoutParams raster)
                 throws OperationFailedException {
             this.mark = mark;
             this.raster = raster;
 
-            KeyValueParamsForImageCreator creator =
-                    new KeyValueParamsForImageCreator(energyScheme, sharedFeatures, logger);
+            DictionaryForImageCreator creator =
+                    new DictionaryForImageCreator(energyScheme, sharedFeatures, logger);
             try {
-                this.kvp = creator.createParamsForImage(raster);
+                this.dictionary = creator.create(raster);
             } catch (CreateException e) {
                 throw new OperationFailedException(e);
             }
@@ -91,12 +91,12 @@ public class EnergySchemeWithSharedFeatures {
                 FeatureCalculatorMulti<FeatureInputSingleMemo> session =
                         FeatureSession.with(
                                 energyScheme.getElemIndAsFeatureList(),
-                                new FeatureInitParams(kvp),
+                                new FeatureInitialization(dictionary),
                                 sharedFeatures,
                                 logger);
 
                 FeatureInputSingleMemo params =
-                        new FeatureInputSingleMemo(mark, new EnergyStack(raster, kvp));
+                        new FeatureInputSingleMemo(mark, new EnergyStack(raster, dictionary));
 
                 return new EnergyTotal(session.calculate(params).total());
             } catch (InitException e) {
@@ -124,7 +124,7 @@ public class EnergySchemeWithSharedFeatures {
             FeatureCalculatorMulti<FeatureInputAllMemo> session =
                     FeatureSession.with(
                             energyScheme.getElemAllAsFeatureList(),
-                            new FeatureInitParams(energyStack.getParams()),
+                            new FeatureInitialization(energyStack.getDictionary()),
                             sharedFeatures,
                             logger);
 
@@ -147,16 +147,6 @@ public class EnergySchemeWithSharedFeatures {
         }
     }
 
-    private EnergyStack createEnergyStack(EnergyStackWithoutParams raster)
-            throws FeatureCalculationException {
-
-        try {
-            return new EnergyStack(raster, energyScheme.createKeyValueParams());
-        } catch (CreateException e) {
-            throw new FeatureCalculationException(e);
-        }
-    }
-
     public AddCriteriaEnergyPair createAddCriteria() throws CreateException {
         try {
             return new AddCriteriaEnergyPair(
@@ -169,5 +159,15 @@ public class EnergySchemeWithSharedFeatures {
 
     public RegionMap getRegionMap() {
         return energyScheme.getRegionMap();
+    }
+
+    private EnergyStack createEnergyStack(EnergyStackWithoutParams raster)
+            throws FeatureCalculationException {
+
+        try {
+            return new EnergyStack(raster, energyScheme.createDictionary());
+        } catch (CreateException e) {
+            throw new FeatureCalculationException(e);
+        }
     }
 }

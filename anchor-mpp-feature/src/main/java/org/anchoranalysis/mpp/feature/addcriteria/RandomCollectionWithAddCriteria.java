@@ -43,7 +43,7 @@ import org.anchoranalysis.core.graph.TypedEdge;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.feature.calculate.FeatureInitParams;
+import org.anchoranalysis.feature.calculate.FeatureInitialization;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.multi.FeatureCalculatorMulti;
@@ -138,7 +138,7 @@ public class RandomCollectionWithAddCriteria<T> extends RandomCollection<T> {
                             f ->
                                     FeatureSession.with(
                                             f,
-                                            new FeatureInitParams(stack.getParams()),
+                                            new FeatureInitialization(stack.getDictionary()),
                                             sharedFeatures,
                                             logger));
 
@@ -297,7 +297,7 @@ public class RandomCollectionWithAddCriteria<T> extends RandomCollection<T> {
                             f ->
                                     FeatureSession.with(
                                             f,
-                                            new FeatureInitParams(energyStack.getParams()),
+                                            new FeatureInitialization(energyStack.getDictionary()),
                                             sharedFeatures,
                                             logger));
         } catch (InitException e) {

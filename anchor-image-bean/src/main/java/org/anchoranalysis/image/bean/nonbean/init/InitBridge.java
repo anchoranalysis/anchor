@@ -27,7 +27,7 @@
 package org.anchoranalysis.image.bean.nonbean.init;
 
 import org.anchoranalysis.bean.initializable.InitializableBean;
-import org.anchoranalysis.bean.initializable.params.BeanInitParams;
+import org.anchoranalysis.bean.initializable.params.BeanInitialization;
 import org.anchoranalysis.bean.initializable.property.PropertyInitializer;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.InitException;
@@ -43,7 +43,7 @@ import org.anchoranalysis.core.log.Logger;
  * @param <T> destination type
  * @param <V> initialization-parameters type
  */
-class InitBridge<S extends InitializableBean<?, V>, T, V extends BeanInitParams>
+class InitBridge<S extends InitializableBean<?, V>, T, V extends BeanInitialization>
         implements CheckedFunction<S, T, OperationFailedException> {
 
     private PropertyInitializer<?> pi;

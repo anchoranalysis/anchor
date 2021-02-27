@@ -39,11 +39,11 @@ public class AggregateReceiverList<T> implements AggregateReceiver<T> {
     }
 
     @Override
-    public void aggStart(FeedbackBeginParameters<T> initParams, Aggregator agg)
+    public void aggStart(FeedbackBeginParameters<T> initialization, Aggregator agg)
             throws AggregatorException {
 
         for (AggregateReceiver<T> receiver : delegate) {
-            receiver.aggStart(initParams, agg);
+            receiver.aggStart(initialization, agg);
         }
     }
 

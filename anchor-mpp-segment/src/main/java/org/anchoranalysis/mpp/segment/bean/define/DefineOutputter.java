@@ -35,17 +35,17 @@ import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.identifier.provider.NamedProvider;
-import org.anchoranalysis.core.value.KeyValueParams;
-import org.anchoranalysis.experiment.io.InitParamsContext;
+import org.anchoranalysis.core.value.Dictionary;
+import org.anchoranalysis.experiment.io.InitializationContext;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
-import org.anchoranalysis.mpp.bean.init.MPPInitParams;
-import org.anchoranalysis.mpp.io.input.InputForMPPBean;
-import org.anchoranalysis.mpp.io.input.MPPInitParamsFactory;
+import org.anchoranalysis.mpp.bean.init.MarksInitialization;
+import org.anchoranalysis.mpp.io.input.InputForMarksBean;
+import org.anchoranalysis.mpp.io.input.MarksInitializationFactory;
 import org.anchoranalysis.mpp.mark.Mark;
 
 /**
@@ -81,31 +81,34 @@ public abstract class DefineOutputter extends AnchorBean<DefineOutputter> {
      * @param outputEnabled where to add all possible output-names
      */
     public void addAllOutputNamesTo(OutputEnabledMutable outputEnabled) {
-        ParamsOutputter.addAllOutputNamesTo(outputEnabled);
+        InitializationOutputter.addAllOutputNamesTo(outputEnabled);
     }
 
-    protected MPPInitParams createInitParams(InputForMPPBean input, InitParamsContext context)
-            throws CreateException {
-        return MPPInitParamsFactory.create(
+    protected MarksInitialization createInitialization(
+            InputForMarksBean input, InitializationContext context) throws CreateException {
+        return MarksInitializationFactory.create(
                 context, Optional.ofNullable(define), Optional.of(input));
     }
 
-    protected MPPInitParams createInitParams(InitParamsContext context) throws CreateException {
-        return MPPInitParamsFactory.create(context, Optional.ofNullable(define), Optional.empty());
+    protected MarksInitialization createInitialization(InitializationContext context)
+            throws CreateException {
+        return MarksInitializationFactory.create(
+                context, Optional.ofNullable(define), Optional.empty());
     }
 
-    protected MPPInitParams createInitParams(
-            InitParamsContext context,
+    protected MarksInitialization createInitialization(
+            InitializationContext context,
             Optional<NamedProvider<Stack>> stacks,
             Optional<NamedProvider<ObjectCollection>> objects,
-            Optional<KeyValueParams> keyValueParams)
+            Optional<Dictionary> dictionary)
             throws CreateException {
-        return MPPInitParamsFactory.createFromExistingCollections(
-                context, Optional.ofNullable(define), stacks, objects, keyValueParams);
+        return MarksInitializationFactory.createFromExistingCollections(
+                context, Optional.ofNullable(define), stacks, objects, dictionary);
     }
 
-    protected void outputSharedObjects(MPPInitParams initParams, OutputterChecked outputter)
+    protected void outputSharedObjects(
+            MarksInitialization initialization, OutputterChecked outputter)
             throws OutputWriteFailedException {
-        new ParamsOutputter(initParams, suppressSubfolders, outputter).output();
+        new InitializationOutputter(initialization, suppressSubfolders, outputter).output();
     }
 }

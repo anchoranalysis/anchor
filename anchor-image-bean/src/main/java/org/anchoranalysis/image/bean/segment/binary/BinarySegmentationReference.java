@@ -33,7 +33,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
-import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.bean.nonbean.segment.BinarySegmentationParameters;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
@@ -49,10 +49,10 @@ public class BinarySegmentationReference extends BinarySegmentation {
     private BinarySegmentation proxy;
 
     @Override
-    public void onInit(ImageInitParams so) throws InitException {
-        super.onInit(so);
+    public void onInit(ImageInitialization initialization) throws InitException {
+        super.onInit(initialization);
         try {
-            proxy = getInitializationParameters().binarySegmentations().getException(id);
+            proxy = getInitialization().binarySegmentations().getException(id);
         } catch (NamedProviderGetException e) {
             throw new InitException(e.summarize());
         }
