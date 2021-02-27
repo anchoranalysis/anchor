@@ -39,13 +39,13 @@ public class DictionaryProviderReference extends DictionaryProvider {
     @BeanField @Getter @Setter private String id = "";
     // END BEAN PROPERTIES
 
-    private Dictionary params;
+    private Dictionary dictionary;
 
     @Override
     public void onInit(DictionaryInitialization so) throws InitException {
         super.onInit(so);
         try {
-            params = so.getDictionaries().getException(id);
+            dictionary = so.getDictionaries().getException(id);
         } catch (NamedProviderGetException e) {
             throw new InitException(e.summarize());
         }
@@ -54,6 +54,6 @@ public class DictionaryProviderReference extends DictionaryProvider {
     @Override
     public Dictionary create() {
         assert (getInitialization() != null); // Otherwise init() has never been called
-        return params;
+        return dictionary;
     }
 }

@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-experiment
+ * anchor-image-feature
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -23,44 +23,26 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.experiment.io;
+
+package org.anchoranalysis.image.feature.calculator;
 
 import java.util.Optional;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import org.anchoranalysis.core.log.CommonContext;
-import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.image.core.dimensions.size.suggestion.ImageSizeSuggestion;
-import org.anchoranalysis.io.output.outputter.InputOutputContext;
-import org.anchoranalysis.io.output.outputter.Outputter;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import org.anchoranalysis.core.identifier.provider.store.SharedObjects;
+import org.anchoranalysis.core.value.Dictionary;
+import org.anchoranalysis.feature.calculate.FeatureInitialization;
+import org.anchoranalysis.feature.energy.EnergyStack;
 
-/**
- * Context for creating initialization-params.
- *
- * @author Owen Feehan
- */
-@AllArgsConstructor
-public class InitParamsContext {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public class InitializationFactory {
 
-    /** The input-output context. */
-    @Getter private final InputOutputContext inputOutput;
+    public static FeatureInitialization create(
+            Optional<SharedObjects> sharedObjects, Optional<EnergyStack> energyStack) {
 
-    /** A suggested input on how to resize an image, if one is provided. */
-    @Getter private final Optional<ImageSizeSuggestion> suggestedResize;
+        Optional<Dictionary> dictionary = energyStack.map(EnergyStack::getDictionary);
 
-    public InitParamsContext(InputOutputContext inputOutput) {
-        this(inputOutput, Optional.empty());
-    }
-
-    public Outputter getOutputter() {
-        return inputOutput.getOutputter();
-    }
-
-    public CommonContext common() {
-        return inputOutput.common();
-    }
-
-    public Logger getLogger() {
-        return inputOutput.getLogger();
+        return new FeatureInitialization(
+                dictionary, energyStack.map(EnergyStack::withoutParams), sharedObjects);
     }
 }

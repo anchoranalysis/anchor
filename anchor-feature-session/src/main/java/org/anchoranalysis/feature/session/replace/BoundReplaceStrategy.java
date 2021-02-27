@@ -55,11 +55,11 @@ public class BoundReplaceStrategy<T extends FeatureInput, S extends ReplaceStrat
 
     public ReplaceStrategy<T> bind(
             FeatureList<T> featureList,
-            FeatureInitialization featureInitParams,
+            FeatureInitialization initialization,
             SharedFeatureMulti sharedFeatures,
             Logger logger) {
         CacheCreator cacheCreator =
-                new HorizontalCacheCreator(featureList, sharedFeatures, featureInitParams, logger);
+                new HorizontalCacheCreator(featureList, sharedFeatures, initialization, logger);
         if (!strategy.isPresent()) {
             strategy = Optional.of(funcCreateStrategy.apply(cacheCreator));
         }

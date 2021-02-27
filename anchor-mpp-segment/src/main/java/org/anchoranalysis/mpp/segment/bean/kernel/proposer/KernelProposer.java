@@ -63,11 +63,11 @@ public class KernelProposer<T, S> extends AnchorBean<KernelProposer<T, S>> {
         EnsureUniqueNames.apply(kernels);
     }
 
-    public void initWithProposerSharedObjects(MarksInitialization paramsInit, Logger logger)
+    public void initWithProposerSharedObjects(MarksInitialization initialization, Logger logger)
             throws InitException {
 
         for (WeightedKernel<T, S> weightedKernel : kernels) {
-            weightedKernel.getKernel().initRecursive(paramsInit, logger);
+            weightedKernel.getKernel().initRecursive(initialization, logger);
         }
     }
 

@@ -145,14 +145,14 @@ class WriteXMLForGroup {
             ResultsVector results,
             InputOutputContext context) {
 
-        Dictionary paramsOut = new Dictionary();
+        Dictionary dictionary = new Dictionary();
 
         for (int i = 0; i < featuresAggregate.size(); i++) {
 
             NamedBean<Feature<T>> item = featuresAggregate.get(i);
 
             double val = results.get(i);
-            paramsOut.put(item.getName(), Double.toString(val));
+            dictionary.put(item.getName(), Double.toString(val));
         }
 
         try {
@@ -164,7 +164,7 @@ class WriteXMLForGroup {
                                     NonImageFileFormat.XML.extensionWithoutPeriod(),
                                     Optional.of(MANIFEST_DESCRIPTION));
             if (fileOutPath.isPresent()) {
-                paramsOut.writeToFile(fileOutPath.get());
+                dictionary.writeToFile(fileOutPath.get());
             }
         } catch (IOException e) {
             context.getLogger().errorReporter().recordError(ResultsWriter.class, e);

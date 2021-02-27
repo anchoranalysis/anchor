@@ -89,12 +89,12 @@ public class FeatureSession {
 
     public static <T extends FeatureInput> FeatureCalculatorSingle<T> with(
             Feature<T> feature,
-            FeatureInitialization initParams,
+            FeatureInitialization initialization,
             SharedFeatureMulti sharedFeatures,
             Logger logger)
             throws InitException {
         SequentialSession<T> session = new SequentialSession<>(feature);
-        startSession(session, initParams, sharedFeatures, logger);
+        startSession(session, initialization, sharedFeatures, logger);
         return new FeatureCalculatorSingleFromMulti<>(session);
     }
 
@@ -114,13 +114,13 @@ public class FeatureSession {
 
     public static <T extends FeatureInput> FeatureCalculatorMulti<T> with(
             FeatureList<T> features,
-            FeatureInitialization initParams,
+            FeatureInitialization initialization,
             SharedFeatureMulti sharedFeatures,
             Logger logger)
             throws InitException {
         return with(
                 features,
-                initParams,
+                initialization,
                 Optional.of(sharedFeatures),
                 logger,
                 new BoundReplaceStrategy<>(ReuseSingletonStrategy::new));
@@ -128,13 +128,13 @@ public class FeatureSession {
 
     public static <T extends FeatureInput> FeatureCalculatorMulti<T> with(
             FeatureList<T> features,
-            FeatureInitialization initParams,
+            FeatureInitialization initialization,
             Optional<SharedFeatureMulti> sharedFeatures,
             Logger logger,
             BoundReplaceStrategy<T, ? extends ReplaceStrategy<T>> replacePolicyFactory)
             throws InitException {
         SequentialSession<T> session = new SequentialSession<>(features, replacePolicyFactory);
-        startSession(session, initParams, sharedFeatures.orElse(new SharedFeatureMulti()), logger);
+        startSession(session, initialization, sharedFeatures.orElse(new SharedFeatureMulti()), logger);
         return session;
     }
 
@@ -161,12 +161,12 @@ public class FeatureSession {
 
     private static <T extends FeatureInput> void startSession(
             SequentialSession<T> session,
-            FeatureInitialization initParams,
+            FeatureInitialization initialization,
             SharedFeatureMulti sharedFeatures,
             Logger logger)
             throws InitException {
         try {
-            session.start(initParams, sharedFeatures, logger);
+            session.start(initialization, sharedFeatures, logger);
         } catch (InitException e) {
             throw new InitException(
                     "An error occurred starting the feature (sequential) session", e);

@@ -47,7 +47,7 @@ import org.anchoranalysis.spatial.Extent;
 public class EnergyStack {
 
     private final EnergyStackWithoutParams delegate;
-    @Getter @Setter private Dictionary params;
+    @Getter @Setter private Dictionary dictionary;
 
     public EnergyStack(Channel channel) {
         this(new EnergyStackWithoutParams(channel));
@@ -57,12 +57,12 @@ public class EnergyStack {
         this(energyStack, new Dictionary());
     }
 
-    public EnergyStack(Stack stackIn, Dictionary params) {
-        this(new EnergyStackWithoutParams(stackIn), params);
+    public EnergyStack(Stack stack, Dictionary dictionary) {
+        this(new EnergyStackWithoutParams(stack), dictionary);
     }
 
-    public EnergyStack(Stack stackIn) {
-        this(new EnergyStackWithoutParams(stackIn));
+    public EnergyStack(Stack stack) {
+        this(new EnergyStackWithoutParams(stack));
     }
 
     public EnergyStack(Dimensions dimensions) {
@@ -70,7 +70,7 @@ public class EnergyStack {
     }
 
     public EnergyStack extractSlice(int z) throws OperationFailedException {
-        return new EnergyStack(delegate.extractSlice(z), params);
+        return new EnergyStack(delegate.extractSlice(z), dictionary);
     }
 
     /**
@@ -100,8 +100,8 @@ public class EnergyStack {
         return dimensions().resolution();
     }
 
-    public EnergyStack copyChangeParams(Dictionary paramsToAssign) {
-        return new EnergyStack(delegate, paramsToAssign);
+    public EnergyStack copyChangeParams(Dictionary dictionaryToAssign) {
+        return new EnergyStack(delegate, dictionaryToAssign);
     }
 
     public Channel getChannel(int index) {

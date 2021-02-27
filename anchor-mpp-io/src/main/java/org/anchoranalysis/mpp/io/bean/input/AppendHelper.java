@@ -88,7 +88,7 @@ class AppendHelper {
         append(input, listPaths, MultiInput::filePath, outPath -> outPath, debugMode);
     }
 
-    public static void appendKeyValueParams(
+    public static void appendDictionary(
             List<NamedBean<DerivePath>> listPaths, MultiInput input, boolean debugMode) {
 
         // Delayed-calculation of the appending path as it can be a bit expensive when multiplied by
@@ -96,7 +96,7 @@ class AppendHelper {
         append(
                 input,
                 listPaths,
-                MultiInput::keyValueParams,
+                MultiInput::dictionary,
                 Dictionary::readFromFile,
                 debugMode);
     }

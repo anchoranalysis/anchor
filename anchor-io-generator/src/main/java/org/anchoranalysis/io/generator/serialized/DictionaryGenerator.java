@@ -38,9 +38,17 @@ import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
+/**
+ * Writes the contents of a {@link Dictionary} to the file-system as XML.
+ * 
+ * @author Owen Feehan
+ *
+ */
 @AllArgsConstructor
-public class KeyValueParamsGenerator extends OneStageGenerator<Dictionary> {
+public class DictionaryGenerator extends OneStageGenerator<Dictionary> {
 
+    private static final String MANIFEST_TYPE = "dictionary";
+    
     private final String manifestFunction;
 
     @Override
@@ -60,6 +68,6 @@ public class KeyValueParamsGenerator extends OneStageGenerator<Dictionary> {
 
     @Override
     public Optional<ManifestDescription> createManifestDescription() {
-        return Optional.of(new ManifestDescription("keyvalueparams", manifestFunction));
+        return Optional.of(new ManifestDescription(MANIFEST_TYPE, manifestFunction));
     }
 }

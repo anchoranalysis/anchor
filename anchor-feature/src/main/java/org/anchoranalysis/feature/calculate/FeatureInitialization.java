@@ -45,39 +45,39 @@ import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
 @AllArgsConstructor
 public class FeatureInitialization implements BeanInitialization {
 
-    private final Optional<Dictionary> keyValueParams;
+    private final Optional<Dictionary> dictionary;
 
     private final Optional<EnergyStackWithoutParams> energyStack;
 
     private final Optional<SharedObjects> sharedObjects;
 
     public FeatureInitialization() {
-        this.keyValueParams = Optional.empty();
+        this.dictionary = Optional.empty();
         this.energyStack = Optional.empty();
         this.sharedObjects = Optional.empty();
     }
 
     public FeatureInitialization(SharedObjects sharedObjects) {
-        this.keyValueParams = Optional.empty();
+        this.dictionary = Optional.empty();
         this.energyStack = Optional.empty();
         this.sharedObjects = Optional.of(sharedObjects);
     }
 
-    public FeatureInitialization(Dictionary keyValueParams) {
-        this.keyValueParams = Optional.of(keyValueParams);
+    public FeatureInitialization(Dictionary dictionary) {
+        this.dictionary = Optional.of(dictionary);
         this.energyStack = Optional.empty();
         this.sharedObjects = Optional.empty();
     }
 
     public FeatureInitialization(EnergyStack energyStack) {
         this.energyStack = Optional.of(energyStack.withoutParams());
-        this.keyValueParams = Optional.of(energyStack.getParams());
+        this.dictionary = Optional.of(energyStack.getDictionary());
         this.sharedObjects = Optional.empty();
     }
 
     // Shallow-copy
     public FeatureInitialization duplicate() {
-        return new FeatureInitialization(keyValueParams, energyStack, sharedObjects);
+        return new FeatureInitialization(dictionary, energyStack, sharedObjects);
     }
 
     public SharedObjects sharedObjectsRequired() throws InitException {

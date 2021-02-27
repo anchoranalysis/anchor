@@ -91,9 +91,9 @@ public class FeedbackReceiverList<T> extends FeedbackReceiverBean<T> {
     }
 
     @Override
-    public void reportBegin(FeedbackBeginParameters<T> initParams) throws ReporterException {
+    public void reportBegin(FeedbackBeginParameters<T> initialization) throws ReporterException {
         for (FeedbackReceiver<T> fr : list) {
-            fr.reportBegin(initParams);
+            fr.reportBegin(initialization);
         }
     }
 }

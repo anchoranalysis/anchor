@@ -63,8 +63,8 @@ public class ConvertToPhysicalDistance<T extends FeatureInputWithResolution>
     }
 
     @Override
-    protected void beforeCalc(FeatureInitialization paramsInit) throws InitException {
-        super.beforeCalc(paramsInit);
+    protected void beforeCalc(FeatureInitialization initialization) throws InitException {
+        super.beforeCalc(initialization);
         try {
             vectorInDirection = direction.createVector();
         } catch (CreateException e) {

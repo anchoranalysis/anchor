@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-mpp-io
+ * anchor-io
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -23,16 +23,5 @@
  * THE SOFTWARE.
  * #L%
  */
-
-package org.anchoranalysis.mpp.io.input;
-
-import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
-import org.anchoranalysis.mpp.bean.init.MarksInitialization;
-
-/** The input can be used to initialize an MPP Bean */
-public interface InputForMPPBean {
-
-    void addToSharedObjects(MarksInitialization soMPP, ImageInitialization soImage)
-            throws OperationFailedException;
-}
+/** Methods to provide a {@link org.anchoranalysis.core.value.Dictionary}. */
+package org.anchoranalysis.io.input.bean.dictionary;

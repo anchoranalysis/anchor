@@ -28,7 +28,7 @@ package org.anchoranalysis.mpp.segment.bean.define;
 
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.experiment.io.InitParamsContext;
+import org.anchoranalysis.experiment.io.InitializationContext;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.core.stack.time.WrapStackAsTimeSequenceStore;
 import org.anchoranalysis.image.io.channel.input.series.NamedChannelsForSeries;
@@ -36,21 +36,21 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.mpp.bean.init.MarksInitialization;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 
-public class DefineOutputterMPP extends DefineOutputter {
+public class DefineOutputterMarks extends DefineOutputter {
 
     @FunctionalInterface
-    public interface OperationWithInitParams<T> {
-        void process(T initParams) throws OperationFailedException;
+    public interface OperationWithInitialization<T> {
+        void process(T initialization) throws OperationFailedException;
     }
 
-    public void processInput(NamedChannelsForSeries input, InitParamsContext context)
+    public void processInput(NamedChannelsForSeries input, InitializationContext context)
             throws OperationFailedException {
         try {
-            MarksInitialization initParams = super.createInitParams(context);
+            MarksInitialization initialization = super.createInitialization(context);
             input.addAsSeparateChannels(
-                    new WrapStackAsTimeSequenceStore(initParams.getImage().stacks()), 0);
+                    new WrapStackAsTimeSequenceStore(initialization.getImage().stacks()), 0);
 
-            super.outputSharedObjects(initParams, context.getOutputter().getChecked());
+            super.outputSharedObjects(initialization, context.getOutputter().getChecked());
 
         } catch (CreateException | OutputWriteFailedException e) {
             throw new OperationFailedException(e);
@@ -59,15 +59,15 @@ public class DefineOutputterMPP extends DefineOutputter {
 
     public void processInputImage(
             MultiInput input,
-            InitParamsContext context,
-            OperationWithInitParams<ImageInitialization> operation)
+            InitializationContext context,
+            OperationWithInitialization<ImageInitialization> operation)
             throws OperationFailedException {
         try {
-            MarksInitialization initParams = super.createInitParams(input, context);
+            MarksInitialization initialization = super.createInitialization(input, context);
 
-            operation.process(initParams.getImage());
+            operation.process(initialization.getImage());
 
-            super.outputSharedObjects(initParams, context.getOutputter().getChecked());
+            super.outputSharedObjects(initialization, context.getOutputter().getChecked());
 
         } catch (CreateException | OutputWriteFailedException e) {
             throw new OperationFailedException(e);
@@ -76,15 +76,15 @@ public class DefineOutputterMPP extends DefineOutputter {
 
     public void processInputMPP(
             MultiInput input,
-            InitParamsContext context,
-            OperationWithInitParams<MarksInitialization> operation)
+            InitializationContext context,
+            OperationWithInitialization<MarksInitialization> operation)
             throws OperationFailedException {
         try {
-            MarksInitialization initParams = super.createInitParams(input, context);
+            MarksInitialization initialization = super.createInitialization(input, context);
 
-            operation.process(initParams);
+            operation.process(initialization);
 
-            super.outputSharedObjects(initParams, context.getOutputter().getChecked());
+            super.outputSharedObjects(initialization, context.getOutputter().getChecked());
 
         } catch (CreateException | OutputWriteFailedException e) {
             throw new OperationFailedException(e);

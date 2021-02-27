@@ -36,66 +36,61 @@ import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.FeatureInitialization;
+import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.single.FeatureCalculatorSingle;
 import org.anchoranalysis.feature.shared.SharedFeatureMulti;
 import org.anchoranalysis.image.feature.input.FeatureInputStack;
+import lombok.AllArgsConstructor;
 
 /**
- * Creates KeyValueParams for a particular EnergyStack that is associated with a EnergyScheme
+ * Creates a {@link Dictionary} for a particular {@link EnergyStack} that is associated with a EnergyScheme
  *
  * @author Owen Feehan
  */
-public class KeyValueParamsForImageCreator {
+@AllArgsConstructor
+public class DictionaryForImageCreator {
 
     private EnergyScheme energyScheme;
     private SharedFeatureMulti sharedFeatures;
     private Logger logger;
 
-    public KeyValueParamsForImageCreator(
-            EnergyScheme energyScheme, SharedFeatureMulti sharedFeatures, Logger logger) {
-        super();
-        this.energyScheme = energyScheme;
-        this.sharedFeatures = sharedFeatures;
-        this.logger = logger;
-    }
-
-    public Dictionary createParamsForImage(EnergyStackWithoutParams energyStack)
+    public Dictionary create(EnergyStackWithoutParams energyStack)
             throws CreateException {
         try {
-            Dictionary params = energyScheme.createKeyValueParams();
-            addParamsForImage(energyStack, params);
-            return params;
+            Dictionary dictionary = energyScheme.createDictionary();
+            addParamsForImage(energyStack, dictionary);
+            return dictionary;
 
         } catch (OperationFailedException e) {
             throw new CreateException(e);
         }
     }
 
-    private void addParamsForImage(EnergyStackWithoutParams energyStack, Dictionary kvp)
+    private void addParamsForImage(EnergyStackWithoutParams energyStack, Dictionary dictionary)
             throws OperationFailedException {
 
         FeatureInputStack params = new FeatureInputStack(energyStack);
 
-        FeatureInitialization paramsInit =
-                new FeatureInitialization(Optional.of(kvp), Optional.of(energyStack), Optional.empty());
+        FeatureInitialization initialization =
+                new FeatureInitialization(Optional.of(dictionary), Optional.of(energyStack), Optional.empty());
 
-        for (NamedBean<Feature<FeatureInputStack>> ni : energyScheme.getListImageFeatures()) {
+        for (NamedBean<Feature<FeatureInputStack>> feature : energyScheme.getListImageFeatures()) {
 
-            kvp.putCheck(ni.getName(), calculateImageFeature(ni.getItem(), paramsInit, params));
+            dictionary.putCheck(feature.getName(), calculateImageFeature(feature.getItem(), initialization, params));
         }
     }
 
     private double calculateImageFeature(
             Feature<FeatureInputStack> feature,
-            FeatureInitialization paramsInit,
+            FeatureInitialization initialization,
             FeatureInputStack params)
             throws OperationFailedException {
 
         try {
             FeatureCalculatorSingle<FeatureInputStack> session =
-                    FeatureSession.with(feature, paramsInit, sharedFeatures, logger);
+                    FeatureSession.with(feature, initialization, sharedFeatures, logger);
 
             return session.calculate(params);
 

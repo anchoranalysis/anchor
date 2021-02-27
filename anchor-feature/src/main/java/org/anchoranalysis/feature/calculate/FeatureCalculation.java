@@ -68,7 +68,7 @@ public abstract class FeatureCalculation<S, T extends FeatureInput>
         // as it would add computional cost. Consider an assert with the
         // checkParamsMatchesInput(input)
         // function for debugging.
-        initParams(input);
+        assignInitialization(input);
         return delegate.get();
     }
 
@@ -94,7 +94,7 @@ public abstract class FeatureCalculation<S, T extends FeatureInput>
      */
     protected abstract S execute(T input) throws FeatureCalculationException;
 
-    private synchronized void initParams(T input) {
+    private synchronized void assignInitialization(T input) {
         this.input = input;
     }
 

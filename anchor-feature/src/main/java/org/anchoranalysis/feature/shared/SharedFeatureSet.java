@@ -34,25 +34,19 @@ import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calculate.FeatureInitialization;
 import org.anchoranalysis.feature.input.FeatureInput;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
+@AllArgsConstructor
 public class SharedFeatureSet<T extends FeatureInput> {
 
-    private NameValueSet<Feature<T>> set;
+    @Getter private NameValueSet<Feature<T>> set;
 
-    public SharedFeatureSet(NameValueSet<Feature<T>> set) {
-        super();
-        this.set = set;
-    }
-
-    public void initRecursive(FeatureInitialization featureInitParams, Logger logger)
+    public void initRecursive(FeatureInitialization initialization, Logger logger)
             throws InitException {
         for (NameValue<Feature<T>> nv : set) {
-            nv.getValue().initRecursive(featureInitParams, logger);
+            nv.getValue().initRecursive(initialization, logger);
         }
-    }
-
-    public NameValueSet<Feature<T>> getSet() {
-        return set;
     }
 
     public Feature<T> getException(String name) throws NamedProviderGetException {

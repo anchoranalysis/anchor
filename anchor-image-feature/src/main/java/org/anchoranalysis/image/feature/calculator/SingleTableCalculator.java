@@ -52,15 +52,15 @@ public class SingleTableCalculator implements FeatureTableCalculator<FeatureInpu
     private FeatureCalculatorMulti<FeatureInputSingleObject> calculator;
 
     @Override
-    public void start(ImageInitialization soImage, Optional<EnergyStack> energyStack, Logger logger)
+    public void start(ImageInitialization initialization, Optional<EnergyStack> energyStack, Logger logger)
             throws InitException {
 
         calculator =
                 FeatureSession.with(
                         namedFeatureStore.listFeatures(),
-                        InitParamsHelper.createInitParams(
-                                Optional.of(soImage.getSharedObjects()), energyStack),
-                        soImage.featuresInitParams().getSharedFeatures(),
+                        InitializationFactory.create(
+                                Optional.of(initialization.getSharedObjects()), energyStack),
+                        initialization.featuresInitialization().getSharedFeatures(),
                         logger);
     }
 

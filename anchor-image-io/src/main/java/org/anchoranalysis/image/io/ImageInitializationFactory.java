@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-bean
+ * anchor-image-io
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -24,17 +24,26 @@
  * #L%
  */
 
-package org.anchoranalysis.bean.initializable.params;
+package org.anchoranalysis.image.io;
 
-import org.anchoranalysis.core.exception.InitException;
-import org.anchoranalysis.core.log.Logger;
+import java.util.Optional;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import org.anchoranalysis.core.identifier.provider.store.SharedObjects;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
+import org.anchoranalysis.image.core.dimensions.size.suggestion.ImageSizeSuggestion;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
 
-/**
- * @author Owen Feehan
- * @param <T> init-params type
- */
-@FunctionalInterface
-public interface ParamsInitializer<T> {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public class ImageInitializationFactory {
 
-    void init(T so, Logger logger) throws InitException;
+    public static ImageInitialization create(InputOutputContext context) {
+        return create(context, Optional.empty());
+    }
+
+    public static ImageInitialization create(
+            InputOutputContext context, Optional<ImageSizeSuggestion> suggestedResize) {
+        SharedObjects sharedObjects = new SharedObjects(context.common());
+        return new ImageInitialization(sharedObjects, suggestedResize);
+    }
 }

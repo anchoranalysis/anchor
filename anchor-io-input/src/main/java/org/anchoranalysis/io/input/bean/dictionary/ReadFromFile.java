@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.io.input.bean.params;
+package org.anchoranalysis.io.input.bean.dictionary;
 
 import java.io.File;
 import java.io.IOException;
@@ -42,9 +42,16 @@ import org.anchoranalysis.io.input.bean.InputManagerParams;
 import org.anchoranalysis.io.input.bean.files.FilesProvider;
 import org.anchoranalysis.io.input.files.FilesProviderException;
 
-public class KeyValueParamsProviderFromFile extends DictionaryProvider {
+/**
+ * Reads a {@link Dictionary} from a file in <a href="https://docs.oracle.com/javase/tutorial/essential/environment/properties.html">Java properties</a> format.
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class ReadFromFile extends DictionaryProvider {
 
     // START BEAN PROPERTIES
+    /** Provides a single file containing a dictionary. */
     @BeanField @Getter @Setter private FilesProvider files;
     // END BEAN PROPERTIES
 

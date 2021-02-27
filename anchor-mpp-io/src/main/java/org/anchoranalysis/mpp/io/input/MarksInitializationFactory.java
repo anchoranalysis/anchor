@@ -36,7 +36,7 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.identifier.provider.NamedProvider;
 import org.anchoranalysis.core.identifier.provider.store.SharedObjects;
 import org.anchoranalysis.core.value.Dictionary;
-import org.anchoranalysis.experiment.io.InitParamsContext;
+import org.anchoranalysis.experiment.io.InitializationContext;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
@@ -44,24 +44,24 @@ import org.anchoranalysis.mpp.bean.MarksBean;
 import org.anchoranalysis.mpp.bean.init.MarksInitialization;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class MPPInitParamsFactory {
+public class MarksInitializationFactory {
 
     private static final String KEY_VALUE_PARAMS_IDENTIFIER = "input_params";
 
     public static MarksInitialization create(
-            InitParamsContext context,
+            InitializationContext context,
             Optional<Define> define,
-            Optional<? extends InputForMPPBean> input)
+            Optional<? extends InputForMarksBean> input)
             throws CreateException {
 
         SharedObjects sharedObjects = new SharedObjects(context.common());
-        ImageInitialization imageInit =
+        ImageInitialization image =
                 new ImageInitialization(sharedObjects, context.getSuggestedResize());
-        MarksInitialization mppInit = new MarksInitialization(imageInit, sharedObjects);
+        MarksInitialization marks = new MarksInitialization(image, sharedObjects);
 
         if (input.isPresent()) {
             try {
-                input.get().addToSharedObjects(mppInit, imageInit);
+                input.get().addToSharedObjects(marks, image);
             } catch (OperationFailedException e) {
                 throw new CreateException(e);
             }
@@ -69,47 +69,47 @@ public class MPPInitParamsFactory {
 
         if (define.isPresent()) {
             try {
-                // Tries to initialize any properties (of type MPPInitParams) found in the
+                // Tries to initialize any properties (of type MarksInitialization found in the
                 // NamedDefinitions
                 PropertyInitializer<MarksInitialization> initializer = MarksBean.initializerForMarksBeans();
-                initializer.setParam(mppInit);
-                mppInit.populate(initializer, define.get(), context.getLogger());
+                initializer.setParam(marks);
+                marks.populate(initializer, define.get(), context.getLogger());
 
             } catch (OperationFailedException e) {
                 throw new CreateException(e);
             }
         }
 
-        return mppInit;
+        return marks;
     }
 
     public static MarksInitialization createFromExistingCollections(
-            InitParamsContext context,
+            InitializationContext context,
             Optional<Define> define,
             Optional<NamedProvider<Stack>> stacks,
             Optional<NamedProvider<ObjectCollection>> objects,
-            Optional<Dictionary> keyValueParams)
+            Optional<Dictionary> dictionary)
             throws CreateException {
 
         try {
-            MarksInitialization soMPP = create(context, define, Optional.empty());
+            MarksInitialization marks = create(context, define, Optional.empty());
 
-            ImageInitialization soImage = soMPP.getImage();
+            ImageInitialization image = marks.getImage();
 
             if (stacks.isPresent()) {
-                soImage.copyStacksFrom(stacks.get());
+                image.copyStacksFrom(stacks.get());
             }
 
             if (objects.isPresent()) {
-                soMPP.getImage().copyObjectsFrom(objects.get());
+                image.copyObjectsFrom(objects.get());
             }
 
-            if (keyValueParams.isPresent()) {
-                soImage.addDictionary(
-                        KEY_VALUE_PARAMS_IDENTIFIER, keyValueParams.get());
+            if (dictionary.isPresent()) {
+                image.addDictionary(
+                        KEY_VALUE_PARAMS_IDENTIFIER, dictionary.get());
             }
 
-            return soMPP;
+            return marks;
 
         } catch (OperationFailedException e) {
             throw new CreateException(e);

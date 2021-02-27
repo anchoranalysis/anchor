@@ -69,8 +69,8 @@ class FeatureCache<T extends FeatureInput> implements FeatureSessionCache<T> {
     }
 
     @Override
-    public void init(FeatureInitialization featureInitParams, Logger logger) {
-        cache.init(featureInitParams, logger);
+    public void init(FeatureInitialization initialization, Logger logger) {
+        cache.init(initialization, logger);
     }
 
     @Override

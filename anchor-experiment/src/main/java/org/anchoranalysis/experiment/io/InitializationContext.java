@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-image-feature
+ * anchor-experiment
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -23,26 +23,44 @@
  * THE SOFTWARE.
  * #L%
  */
-
-package org.anchoranalysis.image.feature.calculator;
+package org.anchoranalysis.experiment.io;
 
 import java.util.Optional;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.identifier.provider.store.SharedObjects;
-import org.anchoranalysis.core.value.Dictionary;
-import org.anchoranalysis.feature.calculate.FeatureInitialization;
-import org.anchoranalysis.feature.energy.EnergyStack;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import org.anchoranalysis.core.log.CommonContext;
+import org.anchoranalysis.core.log.Logger;
+import org.anchoranalysis.image.core.dimensions.size.suggestion.ImageSizeSuggestion;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
+import org.anchoranalysis.io.output.outputter.Outputter;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class InitParamsHelper {
+/**
+ * Context for creating initialization-params.
+ *
+ * @author Owen Feehan
+ */
+@AllArgsConstructor
+public class InitializationContext {
 
-    public static FeatureInitialization createInitParams(
-            Optional<SharedObjects> sharedObjects, Optional<EnergyStack> energyStack) {
+    /** The input-output context. */
+    @Getter private final InputOutputContext inputOutput;
 
-        Optional<Dictionary> kvp = energyStack.map(EnergyStack::getParams);
+    /** A suggested input on how to resize an image, if one is provided. */
+    @Getter private final Optional<ImageSizeSuggestion> suggestedResize;
 
-        return new FeatureInitialization(
-                kvp, energyStack.map(EnergyStack::withoutParams), sharedObjects);
+    public InitializationContext(InputOutputContext inputOutput) {
+        this(inputOutput, Optional.empty());
+    }
+
+    public Outputter getOutputter() {
+        return inputOutput.getOutputter();
+    }
+
+    public CommonContext common() {
+        return inputOutput.common();
+    }
+
+    public Logger getLogger() {
+        return inputOutput.getLogger();
     }
 }

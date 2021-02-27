@@ -42,14 +42,14 @@ import org.anchoranalysis.image.core.stack.Stack;
 class EnergyStackHelper {
 
     public static Optional<EnergyStack> energyStack(
-            Provider<Stack> stackEnergy, DictionaryProvider keyValueParamsProvider)
+            Provider<Stack> stackEnergy, DictionaryProvider dictionary)
             throws OperationFailedException {
         try {
             if (stackEnergy != null) {
 
                 EnergyStack energyStack = new EnergyStack(stackEnergy.create());
-                energyStack.setParams(
-                        OptionalFactory.create(keyValueParamsProvider)
+                energyStack.setDictionary(
+                        OptionalFactory.create(dictionary)
                                 .orElseGet(Dictionary::new));
                 return Optional.of(energyStack);
             } else {

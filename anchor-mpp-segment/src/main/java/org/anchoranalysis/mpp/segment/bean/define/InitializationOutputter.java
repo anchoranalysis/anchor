@@ -59,7 +59,7 @@ import org.anchoranalysis.mpp.segment.define.OutputterDirectories;
  * @author Owen Feehan
  */
 @AllArgsConstructor
-class ParamsOutputter {
+class InitializationOutputter {
 
     private MarksInitialization params;
     private boolean suppressSubfolders;

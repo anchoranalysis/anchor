@@ -65,17 +65,17 @@ public class EnergySchemeWithSharedFeatures {
 
         private VoxelizedMarkMemo mark;
         private EnergyStackWithoutParams raster;
-        private Dictionary kvp;
+        private Dictionary dictionary;
 
         public void update(VoxelizedMarkMemo mark, EnergyStackWithoutParams raster)
                 throws OperationFailedException {
             this.mark = mark;
             this.raster = raster;
 
-            KeyValueParamsForImageCreator creator =
-                    new KeyValueParamsForImageCreator(energyScheme, sharedFeatures, logger);
+            DictionaryForImageCreator creator =
+                    new DictionaryForImageCreator(energyScheme, sharedFeatures, logger);
             try {
-                this.kvp = creator.createParamsForImage(raster);
+                this.dictionary = creator.create(raster);
             } catch (CreateException e) {
                 throw new OperationFailedException(e);
             }
@@ -91,12 +91,12 @@ public class EnergySchemeWithSharedFeatures {
                 FeatureCalculatorMulti<FeatureInputSingleMemo> session =
                         FeatureSession.with(
                                 energyScheme.getElemIndAsFeatureList(),
-                                new FeatureInitialization(kvp),
+                                new FeatureInitialization(dictionary),
                                 sharedFeatures,
                                 logger);
 
                 FeatureInputSingleMemo params =
-                        new FeatureInputSingleMemo(mark, new EnergyStack(raster, kvp));
+                        new FeatureInputSingleMemo(mark, new EnergyStack(raster, dictionary));
 
                 return new EnergyTotal(session.calculate(params).total());
             } catch (InitException e) {
@@ -124,7 +124,7 @@ public class EnergySchemeWithSharedFeatures {
             FeatureCalculatorMulti<FeatureInputAllMemo> session =
                     FeatureSession.with(
                             energyScheme.getElemAllAsFeatureList(),
-                            new FeatureInitialization(energyStack.getParams()),
+                            new FeatureInitialization(energyStack.getDictionary()),
                             sharedFeatures,
                             logger);
 
@@ -151,7 +151,7 @@ public class EnergySchemeWithSharedFeatures {
             throws FeatureCalculationException {
 
         try {
-            return new EnergyStack(raster, energyScheme.createKeyValueParams());
+            return new EnergyStack(raster, energyScheme.createDictionary());
         } catch (CreateException e) {
             throw new FeatureCalculationException(e);
         }

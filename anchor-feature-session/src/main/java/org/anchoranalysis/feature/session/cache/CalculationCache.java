@@ -64,7 +64,7 @@ class CalculationCache<T extends FeatureInput> implements FeatureSessionCache<T>
 
     // Set up the cache
     @Override
-    public void init(FeatureInitialization featureInitParams, Logger logger) {
+    public void init(FeatureInitialization initialization, Logger logger) {
         calculator.init(logger);
     }
 

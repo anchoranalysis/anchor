@@ -52,9 +52,9 @@ import org.anchoranalysis.core.log.Logger;
 public class PropertyInitializer<P> {
 
     private P param;
-    private Class<?> initParamType;
+    private Class<?> initializationType;
 
-    // Initially only NullParamsInit are extracted (as they can be applied irrespective of current
+    // Initially only NullInitializtion is extracted (as they can be applied irrespective of current
     // parameters)
     // Depending on the constructor, more extracters may be added to this list
     private List<ExtractFromParam<P, ?>> extracters = listExtractersWithDefault();
@@ -63,25 +63,25 @@ public class PropertyInitializer<P> {
      * Simpler case where only the current-parameters can be initialized, but for no further
      * property-types.
      *
-     * @param initParamType type of parameters to be propagated
+     * @param initializationType type of parameters to be propagated
      */
-    public PropertyInitializer(Class<?> initParamType) {
+    public PropertyInitializer(Class<?> initializationType) {
         super();
-        this.initParamType = initParamType;
+        this.initializationType = initializationType;
     }
 
     /**
      * More complex-case where both current-parameters and other extracted property-types can be
      * initialized.
      *
-     * @param initParamType type of parameters to be propagated
+     * @param initializationType type of parameters to be propagated
      * @param extractersToAdd extracters to used for other property-types that can be derived from
      *     current property-type
      */
     public PropertyInitializer(
-            Class<?> initParamType, List<ExtractFromParam<P, ?>> extractersToAdd) {
+            Class<?> initializationType, List<ExtractFromParam<P, ?>> extractersToAdd) {
         super();
-        this.initParamType = initParamType;
+        this.initializationType = initializationType;
 
         // Add any additional extracters
         this.extracters.addAll(extractersToAdd);
@@ -119,7 +119,7 @@ public class PropertyInitializer<P> {
     }
 
     public Class<?> getInitParamType() {
-        return initParamType;
+        return initializationType;
     }
 
     /**
@@ -159,7 +159,7 @@ public class PropertyInitializer<P> {
         for (ExtractFromParam<P, ?> extract : extracters) {
 
             // We can always initialize anything that doesn't take parameters (i.e. takes
-            // NullInitParams)
+            // NullInitialization)
             if (extract.acceptsAsSource(param.getClass())
                     && initMatchingPropertiesWith(
                             propertyValue,

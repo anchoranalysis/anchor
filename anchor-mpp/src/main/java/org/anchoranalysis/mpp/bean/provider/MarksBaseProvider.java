@@ -34,4 +34,4 @@ import org.anchoranalysis.mpp.bean.MarksBean;
  * @param <T> bean-type
  * @param <S> provider-type
  */
-public abstract class MPPProvider<T, S> extends MarksBean<T> implements Provider<S> {}
+public abstract class MarksBaseProvider<T, S> extends MarksBean<T> implements Provider<S> {}

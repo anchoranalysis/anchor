@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-image-bean
+ * anchor-io
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -24,28 +24,29 @@
  * #L%
  */
 
-package org.anchoranalysis.image.bean;
+package org.anchoranalysis.core.serialize;
 
-import java.util.Arrays;
-import java.util.List;
-import org.anchoranalysis.bean.initializable.InitializableBean;
-import org.anchoranalysis.bean.initializable.property.ExtractFromParam;
-import org.anchoranalysis.bean.initializable.property.PropertyInitializer;
-import org.anchoranalysis.bean.initializable.property.SimplePropertyDefiner;
-import org.anchoranalysis.bean.shared.dictionary.DictionaryInitialization;
-import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
+import java.io.IOException;
+import java.nio.file.Path;
+import org.anchoranalysis.core.value.Dictionary;
 
-public abstract class ImageBean<T> extends InitializableBean<T, ImageInitialization> {
+/**
+ * Deserializes a {@link Dictionary} from a file-system representation as a Java properties file.
+ * 
+ * @author Owen Feehan
+ * @param <T> object-type
+ */
+public class DictionaryDeserializer<T> implements Deserializer<T> {
 
-    protected ImageBean() {
-        super(
-                new PropertyInitializer<>(ImageInitialization.class, paramExtracters()),
-                new SimplePropertyDefiner<ImageInitialization>(ImageInitialization.class));
-    }
+    @SuppressWarnings("unchecked")
+    @Override
+    public T deserialize(Path filePath) throws DeserializationFailedException {
+        try {
+            Dictionary obj = Dictionary.readFromFile(filePath);
+            return (T) obj;
 
-    private static List<ExtractFromParam<ImageInitialization, ?>> paramExtracters() {
-        return Arrays.asList(
-                new ExtractFromParam<>(DictionaryInitialization.class, ImageInitialization::featuresInitialization),
-                new ExtractFromParam<>(DictionaryInitialization.class, ImageInitialization::dictionaryInitialization));
+        } catch (IOException e) {
+            throw new DeserializationFailedException(e);
+        }
     }
 }

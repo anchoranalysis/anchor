@@ -83,7 +83,7 @@ public class FeatureEvaluator<T extends FeatureInput>
      * Parameters to optionally associated with {@code stackEnergy}, and meaningless if {@code
      * stackEnergy} is not specified.
      */
-    @BeanField @OptionalBean @Getter @Setter private DictionaryProvider params;
+    @BeanField @OptionalBean @Getter @Setter private DictionaryProvider dictionary;
     // END BEAN PROPERTIES
 
     @Override
@@ -111,7 +111,7 @@ public class FeatureEvaluator<T extends FeatureInput>
      * @throws OperationFailedException if the energy-stack is specified but cannot be created.
      */
     public Optional<EnergyStack> energyStack() throws OperationFailedException {
-        return EnergyStackHelper.energyStack(stackEnergy, params);
+        return EnergyStackHelper.energyStack(stackEnergy, dictionary);
     }
 
     private FeatureCalculatorSingle<T> createCalculator() throws OperationFailedException {

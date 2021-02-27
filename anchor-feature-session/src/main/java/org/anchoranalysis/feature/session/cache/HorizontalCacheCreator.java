@@ -45,14 +45,14 @@ public class HorizontalCacheCreator implements CacheCreator {
 
     private FeatureList<? extends FeatureInput> namedFeatures;
     private SharedFeatureMulti sharedFeatures;
-    private FeatureInitialization featureInitParams;
+    private FeatureInitialization initialization;
     private Logger logger;
 
     @Override
     public <T extends FeatureInput> FeatureSessionCache<T> create(
             Class<? extends FeatureInput> inputType) {
         FeatureList<T> featureList = filterFeatureList(inputType);
-        return createCache(featureList, inputType, featureInitParams, logger);
+        return createCache(featureList, inputType, initialization, logger);
     }
 
     /**
@@ -73,12 +73,12 @@ public class HorizontalCacheCreator implements CacheCreator {
     private <T extends FeatureInput> FeatureSessionCache<T> createCache(
             FeatureList<T> namedFeatures,
             Class<? extends FeatureInput> inputType,
-            FeatureInitialization featureInitParams,
+            FeatureInitialization initialization,
             Logger logger) {
         SharedFeatureSet<T> sharedFeaturesSet = sharedFeatures.subsetCompatibleWith(inputType);
 
         try {
-            sharedFeaturesSet.initRecursive(featureInitParams, logger);
+            sharedFeaturesSet.initRecursive(initialization, logger);
         } catch (InitException e) {
             logger.errorReporter()
                     .recordError(
@@ -88,7 +88,7 @@ public class HorizontalCacheCreator implements CacheCreator {
         }
 
         FeatureSessionCache<T> cache = createCache(namedFeatures, sharedFeaturesSet);
-        cache.init(featureInitParams, logger);
+        cache.init(initialization, logger);
         return cache;
     }
 

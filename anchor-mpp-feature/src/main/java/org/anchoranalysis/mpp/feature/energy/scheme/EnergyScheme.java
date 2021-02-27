@@ -68,7 +68,7 @@ public class EnergyScheme {
 
     private final AddCriteriaPair pairAddCriteria;
 
-    private final Optional<DictionaryProvider> params;
+    private final Optional<DictionaryProvider> dictionary;
 
     public EnergyScheme(
             FeatureList<FeatureInputSingleMemo> elemInd,
@@ -93,7 +93,7 @@ public class EnergyScheme {
             FeatureList<FeatureInputAllMemo> elemAll,
             RegionMap regionMap,
             AddCriteriaPair pairAddCriteria,
-            Optional<DictionaryProvider> keyValueParamsProvider,
+            Optional<DictionaryProvider> dictionary,
             List<NamedBean<Feature<FeatureInputStack>>> listImageFeatures)
             throws CreateException {
         this.elemInd = elemInd;
@@ -101,15 +101,15 @@ public class EnergyScheme {
         this.elemAll = elemAll;
         this.regionMap = regionMap;
         this.pairAddCriteria = pairAddCriteria;
-        this.params = keyValueParamsProvider;
+        this.dictionary = dictionary;
         this.listImageFeatures = listImageFeatures;
         checkAtLeastOneEnergyElement();
     }
 
-    /*** returns the associated KeyValueParams or an empty set, if no params are associated with the energyScheme */
-    public Dictionary createKeyValueParams() throws CreateException {
-        if (params.isPresent()) {
-            return params.get().create().duplicate();
+    /*** returns the associated {@link Dictionary} or an empty set, if no params are associated with the energyScheme */
+    public Dictionary createDictionary() throws CreateException {
+        if (dictionary.isPresent()) {
+            return dictionary.get().create().duplicate();
         } else {
             return new Dictionary();
         }

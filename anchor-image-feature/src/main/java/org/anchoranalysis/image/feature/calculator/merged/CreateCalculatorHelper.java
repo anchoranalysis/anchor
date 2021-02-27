@@ -44,7 +44,7 @@ import org.anchoranalysis.feature.session.replace.BoundReplaceStrategy;
 import org.anchoranalysis.feature.session.replace.ReplaceStrategy;
 import org.anchoranalysis.feature.session.replace.ReuseSingletonStrategy;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
-import org.anchoranalysis.image.feature.calculator.InitParamsHelper;
+import org.anchoranalysis.image.feature.calculator.InitializationFactory;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 
 @RequiredArgsConstructor
@@ -56,20 +56,20 @@ class CreateCalculatorHelper {
 
     public <T extends FeatureInputEnergy> FeatureCalculatorMulti<T> create(
             FeatureList<T> features,
-            ImageInitialization soImage,
+            ImageInitialization initialization,
             BoundReplaceStrategy<T, ? extends ReplaceStrategy<T>> replacePolicyFactory)
             throws InitException {
-        return wrapWithEnergy(createWithoutEnergy(features, soImage, replacePolicyFactory));
+        return wrapWithEnergy(createWithoutEnergy(features, initialization, replacePolicyFactory));
     }
 
     public <T extends FeatureInputEnergy> FeatureCalculatorMulti<T> createCached(
             FeatureList<T> features,
-            ImageInitialization soImage,
+            ImageInitialization initialization,
             BoundReplaceStrategy<T, ? extends ReplaceStrategy<T>> replacePolicyFactory)
             throws InitException {
         return wrapWithEnergy(
                 new FeatureCalculatorCachedMulti<>(
-                        createWithoutEnergy(features, soImage, replacePolicyFactory)));
+                        createWithoutEnergy(features, initialization, replacePolicyFactory)));
     }
 
     /**
@@ -81,13 +81,13 @@ class CreateCalculatorHelper {
      *
      * @param <T>
      * @param features
-     * @param soImage
+     * @param initialization
      * @return
      * @throws InitException
      */
     public <T extends FeatureInputEnergy> FeatureCalculatorMulti<T> createPair(
             FeatureList<T> features,
-            ImageInitialization soImage,
+            ImageInitialization initialization,
             CacheTransferSourceCollection cacheTransferSource)
             throws InitException {
 
@@ -100,17 +100,17 @@ class CreateCalculatorHelper {
                                                 FeatureInputSingleObject.class,
                                                 cacheTransferSource)));
 
-        return wrapWithEnergy(createWithoutEnergy(features, soImage, replaceStrategy));
+        return wrapWithEnergy(createWithoutEnergy(features, initialization, replaceStrategy));
     }
 
     private <T extends FeatureInputEnergy> FeatureCalculatorMulti<T> createWithoutEnergy(
             FeatureList<T> features,
-            ImageInitialization soImage,
+            ImageInitialization initialization,
             BoundReplaceStrategy<T, ? extends ReplaceStrategy<T>> replacePolicyFactory)
             throws InitException {
         return FeatureSession.with(
                 features,
-                createInitParams(soImage),
+                createInitialization(initialization),
                 Optional.empty(),
                 logger,
                 replacePolicyFactory);
@@ -123,8 +123,8 @@ class CreateCalculatorHelper {
                 calculator, input -> input.setEnergyStack(energyStack));
     }
 
-    private FeatureInitialization createInitParams(ImageInitialization soImage) {
-        return InitParamsHelper.createInitParams(
-                Optional.of(soImage.getSharedObjects()), energyStack);
+    private FeatureInitialization createInitialization(ImageInitialization initialization) {
+        return InitializationFactory.create(
+                Optional.of(initialization.getSharedObjects()), energyStack);
     }
 }

@@ -138,7 +138,7 @@ public class RandomCollectionWithAddCriteria<T> extends RandomCollection<T> {
                             f ->
                                     FeatureSession.with(
                                             f,
-                                            new FeatureInitialization(stack.getParams()),
+                                            new FeatureInitialization(stack.getDictionary()),
                                             sharedFeatures,
                                             logger));
 
@@ -297,7 +297,7 @@ public class RandomCollectionWithAddCriteria<T> extends RandomCollection<T> {
                             f ->
                                     FeatureSession.with(
                                             f,
-                                            new FeatureInitialization(energyStack.getParams()),
+                                            new FeatureInitialization(energyStack.getDictionary()),
                                             sharedFeatures,
                                             logger));
         } catch (InitException e) {

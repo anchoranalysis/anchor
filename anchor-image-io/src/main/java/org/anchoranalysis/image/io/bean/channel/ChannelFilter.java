@@ -40,7 +40,7 @@ import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.stack.Stack;
-import org.anchoranalysis.image.io.ImageInitParamsFactory;
+import org.anchoranalysis.image.io.ImageInitializationFactory;
 import org.anchoranalysis.image.io.channel.input.ChannelGetter;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 
@@ -80,7 +80,7 @@ public class ChannelFilter extends AnchorBean<ChannelFilter> implements ChannelG
             ChannelProvider providerDuplicated = channel.duplicateBean();
 
             Channel channelSelected = channels.getChannel(name, timeIndex, progress);
-            initProvider(providerDuplicated, channelSelected);
+            initializeProvider(providerDuplicated, channelSelected);
 
             return providerDuplicated.create();
 
@@ -94,13 +94,13 @@ public class ChannelFilter extends AnchorBean<ChannelFilter> implements ChannelG
         return channels.hasChannel(channelName);
     }
 
-    private void initProvider(ChannelProvider provider, Channel channel) throws InitException {
-        ImageInitialization soImage = ImageInitParamsFactory.create(context);
+    private void initializeProvider(ChannelProvider provider, Channel channel) throws InitException {
+        ImageInitialization initialization = ImageInitializationFactory.create(context);
         try {
-            soImage.addToStacks("input_channel", new Stack(channel));
+            initialization.addToStacks("input_channel", new Stack(channel));
         } catch (OperationFailedException e) {
             throw new InitException(e);
         }
-        provider.initRecursive(soImage, context.getLogger());
+        provider.initRecursive(initialization, context.getLogger());
     }
 }

@@ -76,10 +76,10 @@ public class FeatureList<T extends FeatureInput> extends AnchorBean<FeatureList<
         this.list = list;
     }
 
-    public void initRecursive(FeatureInitialization featureInitParams, Logger logger)
+    public void initRecursive(FeatureInitialization initialization, Logger logger)
             throws InitException {
         for (Feature<T> feature : list) {
-            feature.initRecursive(featureInitParams, logger);
+            feature.initRecursive(initialization, logger);
         }
     }
 

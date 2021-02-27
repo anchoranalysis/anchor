@@ -83,7 +83,7 @@ public class PairsTableCalculator implements FeatureTableCalculator<FeatureInput
     }
 
     @Override
-    public void start(ImageInitialization soImage, Optional<EnergyStack> energyStack, Logger logger)
+    public void start(ImageInitialization initializtion, Optional<EnergyStack> energyStack, Logger logger)
             throws InitException {
 
         calculator =
@@ -91,7 +91,7 @@ public class PairsTableCalculator implements FeatureTableCalculator<FeatureInput
                         features,
                         new CreateCalculatorHelper(energyStack, logger),
                         include,
-                        soImage);
+                        initializtion);
     }
 
     @Override

@@ -68,7 +68,7 @@ public class EnergySchemeCreatorByElement extends EnergySchemeCreator {
 
     @BeanField @Getter @Setter private RegionMap regionMap;
 
-    @BeanField @OptionalBean @Getter @Setter private DictionaryProvider params;
+    @BeanField @OptionalBean @Getter @Setter private DictionaryProvider dictionary;
 
     /**
      * If true, the names of the imageFeatures are taken as a combination of the namedItem and the
@@ -85,7 +85,7 @@ public class EnergySchemeCreatorByElement extends EnergySchemeCreator {
                 createAll(),
                 regionMap,
                 pairAddCriteria,
-                Optional.ofNullable(params),
+                Optional.ofNullable(dictionary),
                 buildImageFeatures());
     }
 

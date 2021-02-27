@@ -30,7 +30,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.experiment.arguments.TaskArguments;
-import org.anchoranalysis.experiment.io.InitParamsContext;
+import org.anchoranalysis.experiment.io.InitializationContext;
 import org.anchoranalysis.experiment.log.StatefulMessageLogger;
 import org.anchoranalysis.io.manifest.Manifest;
 import org.anchoranalysis.io.output.outputter.Outputter;
@@ -82,8 +82,8 @@ public class InputBound<T, S> {
                 contextJob);
     }
 
-    public InitParamsContext createInitParamsContext() {
-        return new InitParamsContext(
+    public InitializationContext createInitializationContext() {
+        return new InitializationContext(
                 contextJob, contextExperiment.getExperimentArguments().task().getSize());
     }
 

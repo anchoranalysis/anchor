@@ -74,9 +74,9 @@ public abstract class Feature<T extends FeatureInput>
      * in the sub-classes.
      */
     @Override
-    public void onInit(FeatureInitialization paramsInit) throws InitException {
-        super.onInit(paramsInit);
-        beforeCalc(paramsInit);
+    public void onInit(FeatureInitialization initialization) throws InitException {
+        super.onInit(initialization);
+        beforeCalc(initialization);
     }
 
     /**
@@ -174,9 +174,9 @@ public abstract class Feature<T extends FeatureInput>
     /**
      * Dummy method, that children can optionally override
      *
-     * @param paramsInit initialization parameters
+     * @param initialization initialization parameters
      */
-    protected void beforeCalc(FeatureInitialization paramsInit) throws InitException {
+    protected void beforeCalc(FeatureInitialization initialization) throws InitException {
         // Does nothing. To be overridden in children if needed.
     }
 

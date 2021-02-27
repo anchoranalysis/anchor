@@ -39,12 +39,12 @@ import org.anchoranalysis.feature.shared.FeaturesInitialization;
 public abstract class ReferencedFeatures<T extends FeatureInput> extends FeatureListProvider<T> {
 
     // START BEAN PROPERTIES
-    @BeanField @OptionalBean @Getter @Setter
     /**
      * Ensures any feature-lists mentioned here are evaluated, before this list is created.
      *
      * <p>Useful for when this list references another list.
      */
+    @BeanField @OptionalBean @Getter @Setter
     private StringSet referencesFeatureListCreator;
     // END BEAN PROPERITES
 

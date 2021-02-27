@@ -51,10 +51,10 @@ import org.anchoranalysis.mpp.pair.RandomCollection;
 
 public class MarksInitialization implements BeanInitialization {
 
-    // START: InitParams
-    private ImageInitialization soImage;
-    private PointsInitialization soPoints;
-    // END: InitParams
+    // START: Initialization
+    private ImageInitialization image;
+    private PointsInitialization points;
+    // END: Initialization
 
     // START: Stores
     private NamedProviderStore<MarkCollection> storeMarks;
@@ -66,34 +66,34 @@ public class MarksInitialization implements BeanInitialization {
     private NamedProviderStore<RandomCollection<IdentifiablePair<Mark>>> storePairCollection;
     // END: Stores
 
-    public MarksInitialization(ImageInitialization soImage, SharedObjects so) {
+    public MarksInitialization(ImageInitialization image, SharedObjects sharedObjects) {
         super();
-        this.soImage = soImage;
-        this.soPoints = PointsInitialization.create(soImage, so);
+        this.image = image;
+        this.points = PointsInitialization.create(image, sharedObjects);
 
-        storeMarks = so.getOrCreate(MarkCollection.class);
-        storeMarksProposer = so.getOrCreate(MarkCollectionProposer.class);
-        storeMarkBounds = so.getOrCreate(MarkBounds.class);
-        storeMarkProposer = so.getOrCreate(MarkProposer.class);
-        storeMarkMergeProposer = so.getOrCreate(MarkMergeProposer.class);
-        storeMarkSplitProposer = so.getOrCreate(MarkSplitProposer.class);
-        storePairCollection = so.getOrCreate(RandomCollection.class);
+        storeMarks = sharedObjects.getOrCreate(MarkCollection.class);
+        storeMarksProposer = sharedObjects.getOrCreate(MarkCollectionProposer.class);
+        storeMarkBounds = sharedObjects.getOrCreate(MarkBounds.class);
+        storeMarkProposer = sharedObjects.getOrCreate(MarkProposer.class);
+        storeMarkMergeProposer = sharedObjects.getOrCreate(MarkMergeProposer.class);
+        storeMarkSplitProposer = sharedObjects.getOrCreate(MarkSplitProposer.class);
+        storePairCollection = sharedObjects.getOrCreate(RandomCollection.class);
     }
 
     public ImageInitialization getImage() {
-        return soImage;
+        return image;
     }
 
     public FeaturesInitialization getFeature() {
-        return soImage.featuresInitParams();
+        return image.featuresInitialization();
     }
 
     public PointsInitialization getPoints() {
-        return soPoints;
+        return points;
     }
 
     public DictionaryInitialization getDictionary() {
-        return soImage.dictionaryInitParams();
+        return image.dictionaryInitialization();
     }
 
     public NamedProviderStore<MarkCollection> getMarksCollection() {
@@ -136,11 +136,11 @@ public class MarksInitialization implements BeanInitialization {
         return getMarkBoundsSet().getException("primary");
     }
 
-    public void populate(PropertyInitializer<?> pi, Define define, Logger logger)
+    public void populate(PropertyInitializer<?> initializer, Define define, Logger logger)
             throws OperationFailedException {
 
         PopulateStoreFromDefine<MarksInitialization> populater =
-                new PopulateStoreFromDefine<>(define, pi, logger);
+                new PopulateStoreFromDefine<>(define, initializer, logger);
         populater.copyWithoutInit(MarkBounds.class, getMarkBoundsSet());
         populater.copyInit(MarkProposer.class, getMarkProposerSet());
         populater.copyInit(MarkCollectionProposer.class, getMarksProposerSet());
@@ -150,7 +150,7 @@ public class MarksInitialization implements BeanInitialization {
 
         populater.copyProvider(MarkCollectionProvider.class, getMarksCollection());
 
-        soImage.populate(pi, define, logger);
-        soPoints.populate(pi, define, logger);
+        image.populate(initializer, define, logger);
+        points.populate(initializer, define, logger);
     }
 }

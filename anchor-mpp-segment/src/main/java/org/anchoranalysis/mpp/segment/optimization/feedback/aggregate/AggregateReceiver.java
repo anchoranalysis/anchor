@@ -31,7 +31,7 @@ import org.anchoranalysis.mpp.segment.optimization.step.Reporting;
 
 public interface AggregateReceiver<T> {
 
-    default void aggStart(FeedbackBeginParameters<T> initParams, Aggregator agg)
+    default void aggStart(FeedbackBeginParameters<T> initialization, Aggregator agg)
             throws AggregatorException {}
 
     default void aggEnd(Aggregator agg) throws AggregatorException {}

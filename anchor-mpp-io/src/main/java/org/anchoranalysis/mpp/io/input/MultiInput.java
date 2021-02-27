@@ -44,7 +44,7 @@ import org.anchoranalysis.mpp.bean.init.MarksInitialization;
 import org.anchoranalysis.mpp.mark.MarkCollection;
 
 @Accessors(fluent = true)
-public class MultiInput implements ProvidesStackInput, InputForMPPBean {
+public class MultiInput implements ProvidesStackInput, InputForMarksBean {
 
     public static final String DEFAULT_IMAGE_INPUT_NAME = "input_image";
 
@@ -52,7 +52,7 @@ public class MultiInput implements ProvidesStackInput, InputForMPPBean {
 
     private OperationMap<MarkCollection> mapMarks = new OperationMap<>();
     private OperationMap<ObjectCollection> mapObjects = new OperationMap<>();
-    private OperationMap<Dictionary> mapKeyValueParams = new OperationMap<>();
+    private OperationMap<Dictionary> mapDictionary = new OperationMap<>();
     private OperationMap<Histogram> mapHistogram = new OperationMap<>();
     private OperationMap<Path> mapFilePath = new OperationMap<>();
 
@@ -82,15 +82,15 @@ public class MultiInput implements ProvidesStackInput, InputForMPPBean {
     }
 
     @Override
-    public void addToSharedObjects(MarksInitialization soMPP, ImageInitialization soImage)
+    public void addToSharedObjects(MarksInitialization marks, ImageInitialization image)
             throws OperationFailedException {
 
-        marks().addToStore(soMPP.getMarksCollection());
-        stack().addToStore(new WrapStackAsTimeSequenceStore(soImage.stacks()));
-        objects().addToStore(soImage.objects());
-        keyValueParams().addToStore(soImage.dictionaries());
-        filePath().addToStore(soImage.filePaths());
-        histogram().addToStore(soImage.histograms());
+        marks().addToStore(marks.getMarksCollection());
+        stack().addToStore(new WrapStackAsTimeSequenceStore(image.stacks()));
+        objects().addToStore(image.objects());
+        dictionary().addToStore(image.dictionaries());
+        filePath().addToStore(image.filePaths());
+        histogram().addToStore(image.histograms());
     }
 
     @Override
@@ -112,7 +112,7 @@ public class MultiInput implements ProvidesStackInput, InputForMPPBean {
         //   but just in case
         mapMarks = null;
         mapObjects = null;
-        mapKeyValueParams = null;
+        mapDictionary = null;
         mapHistogram = null;
         mapFilePath = null;
     }
@@ -125,8 +125,8 @@ public class MultiInput implements ProvidesStackInput, InputForMPPBean {
         return mapObjects;
     }
 
-    public MultiInputSubMap<Dictionary> keyValueParams() {
-        return mapKeyValueParams;
+    public MultiInputSubMap<Dictionary> dictionary() {
+        return mapDictionary;
     }
 
     public MultiInputSubMap<Histogram> histogram() {

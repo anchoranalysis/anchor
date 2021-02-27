@@ -43,10 +43,10 @@ public abstract class VoxelScore extends ImageBean<VoxelScore> {
      * <p>Must be called before {@link #calculate}.
      *
      * @param histograms one or more histograms associated with this calculation
-     * @param keyValueParams optional {@link Dictionary} associated with this calculation
+     * @param dictionary optional {@link Dictionary} associated with this calculation
      * @throws InitException if anything goes wrong
      */
-    public void init(List<Histogram> histograms, Optional<Dictionary> keyValueParams)
+    public void init(List<Histogram> histograms, Optional<Dictionary> dictionary)
             throws InitException {
         // TO be overridden if needed
     }

@@ -57,7 +57,7 @@ public abstract class FeatureInputEnergy implements FeatureInputParams {
 
     @Override
     public Optional<Dictionary> getParamsOptional() {
-        return energyStack.map(EnergyStack::getParams);
+        return energyStack.map(EnergyStack::getDictionary);
     }
 
     public Dimensions dimensionsRequired() throws FeatureCalculationException {

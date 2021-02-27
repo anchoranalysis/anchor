@@ -54,7 +54,7 @@ public abstract class SegmentIntoMarks extends AnchorBean<SegmentIntoMarks> {
     public abstract MarkCollection segment(
             NamedStacks stacks,
             NamedProvider<ObjectCollection> objects,
-            Optional<Dictionary> keyValueParams,
+            Optional<Dictionary> dictionary,
             InputOutputContext context)
             throws SegmentationFailedException;
 

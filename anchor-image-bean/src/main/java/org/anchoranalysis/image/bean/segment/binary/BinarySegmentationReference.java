@@ -49,8 +49,8 @@ public class BinarySegmentationReference extends BinarySegmentation {
     private BinarySegmentation proxy;
 
     @Override
-    public void onInit(ImageInitialization so) throws InitException {
-        super.onInit(so);
+    public void onInit(ImageInitialization initialization) throws InitException {
+        super.onInit(initialization);
         try {
             proxy = getInitialization().binarySegmentations().getException(id);
         } catch (NamedProviderGetException e) {

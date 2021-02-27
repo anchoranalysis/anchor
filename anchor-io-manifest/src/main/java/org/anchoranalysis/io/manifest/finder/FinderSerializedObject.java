@@ -35,7 +35,7 @@ import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.log.error.ErrorReporter;
 import org.anchoranalysis.core.serialize.DeserializationFailedException;
 import org.anchoranalysis.core.serialize.Deserializer;
-import org.anchoranalysis.core.serialize.KeyValueParamsDeserializer;
+import org.anchoranalysis.core.serialize.DictionaryDeserializer;
 import org.anchoranalysis.core.serialize.ObjectInputStreamDeserializer;
 import org.anchoranalysis.core.serialize.XStreamDeserializer;
 import org.anchoranalysis.io.manifest.Manifest;
@@ -106,7 +106,7 @@ public class FinderSerializedObject<T> extends FinderSingleFile {
 
     private Deserializer<T> createDeserializer(OutputtedFile fileWrite) {
         if (NonImageFileFormat.PROPERTIES_XML.matchesEnd(fileWrite.getFileName())) {
-            return new KeyValueParamsDeserializer<>();
+            return new DictionaryDeserializer<>();
         } else if (NonImageFileFormat.XML.matchesEnd(fileWrite.getFileName())) {
             return new XStreamDeserializer<>();
         } else {

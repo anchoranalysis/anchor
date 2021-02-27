@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-io
+ * anchor-io-manifest
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -24,27 +24,47 @@
  * #L%
  */
 
-package org.anchoranalysis.core.serialize;
+package org.anchoranalysis.io.manifest.finder;
 
 import java.io.IOException;
-import java.nio.file.Path;
+import java.util.List;
+import java.util.Optional;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.log.error.ErrorReporter;
 import org.anchoranalysis.core.value.Dictionary;
+import org.anchoranalysis.io.manifest.Manifest;
+import org.anchoranalysis.io.manifest.file.OutputtedFile;
+import org.anchoranalysis.io.manifest.finder.match.FileMatch;
 
-/**
- * @author Owen Feehan
- * @param <T> object-type
- */
-public class KeyValueParamsDeserializer<T> implements Deserializer<T> {
+public class FinderDictionary extends FinderSingleFile {
 
-    @SuppressWarnings("unchecked")
-    @Override
-    public T deserialize(Path filePath) throws DeserializationFailedException {
+    private String manifestFunction;
+
+    public FinderDictionary(String manifestFunction, ErrorReporter errorReporter) {
+        super(errorReporter);
+        this.manifestFunction = manifestFunction;
+    }
+
+    public Dictionary get() throws OperationFailedException {
+        assert (exists());
         try {
-            Dictionary obj = Dictionary.readFromFile(filePath);
-            return (T) obj;
-
+            return Dictionary.readFromFile(getFoundFile().calculatePath());
         } catch (IOException e) {
-            throw new DeserializationFailedException(e);
+            throw new OperationFailedException(e);
         }
+    }
+
+    @Override
+    protected Optional<OutputtedFile> findFile(Manifest manifestRecorder)
+            throws FindFailedException {
+        List<OutputtedFile> files =
+                FinderUtilities.findListFile(
+                        manifestRecorder, FileMatch.description(manifestFunction));
+
+        if (files.isEmpty()) {
+            return Optional.empty();
+        }
+
+        return Optional.of(files.get(0));
     }
 }

@@ -43,14 +43,14 @@ public class FeatureInputMark implements FeatureInputParams {
 
     @Getter private final Mark mark;
     private final Optional<Dimensions> dimensions;
-    private final Optional<Dictionary> params;
+    private final Optional<Dictionary> dictionary;
 
     public FeatureInputMark(Mark mark, Optional<Dimensions> dimensions) {
         this(mark, dimensions, Optional.empty());
     }
 
-    public FeatureInputMark(Mark mark, Dimensions dimensions, Dictionary params) {
-        this(mark, Optional.of(dimensions), Optional.of(params));
+    public FeatureInputMark(Mark mark, Dimensions dimensions, Dictionary dictionary) {
+        this(mark, Optional.of(dimensions), Optional.of(dictionary));
     }
 
     @Override
@@ -60,7 +60,7 @@ public class FeatureInputMark implements FeatureInputParams {
 
     @Override
     public Optional<Dictionary> getParamsOptional() {
-        return params;
+        return dictionary;
     }
 
     public Optional<Dimensions> getDimensionsOptional() {

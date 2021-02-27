@@ -63,9 +63,9 @@ public class ImageInitialization implements BeanInitialization {
 
     @Getter private final Optional<ImageSizeSuggestion> suggestedResize;
 
-    // START: InitParams
+    // START: Initialization
     private final FeaturesInitialization features;
-    // END: InitParams
+    // END: Initialization
 
     // START: Stores
     private final NamedProviderStore<Stack> storeStack;
@@ -125,14 +125,14 @@ public class ImageInitialization implements BeanInitialization {
     }
     
     public NamedProviderStore<Dictionary> dictionaries() {
-        return dictionaryInitParams().getDictionaries();
+        return dictionaryInitialization().getDictionaries();
     }
     
-    public DictionaryInitialization dictionaryInitParams() {
+    public DictionaryInitialization dictionaryInitialization() {
         return features.getDictionary();
     }
 
-    public FeaturesInitialization featuresInitParams() {
+    public FeaturesInitialization featuresInitialization() {
         return features;
     }
 

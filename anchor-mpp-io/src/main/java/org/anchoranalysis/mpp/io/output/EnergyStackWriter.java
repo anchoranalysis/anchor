@@ -33,7 +33,7 @@ import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.io.channel.output.ChannelGenerator;
 import org.anchoranalysis.io.generator.sequence.OutputSequenceFactory;
 import org.anchoranalysis.io.generator.sequence.pattern.OutputPatternIntegerSuffix;
-import org.anchoranalysis.io.generator.serialized.KeyValueParamsGenerator;
+import org.anchoranalysis.io.generator.serialized.DictionaryGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.Outputter;
@@ -83,13 +83,13 @@ public class EnergyStackWriter {
                 .incrementingByOneStream(
                         directory, energyStack.withoutParams().asStack().asListChannels().stream());
 
-        if (energyStack.getParams() != null) {
+        if (energyStack.getDictionary() != null) {
             outputter
                     .writerSelective()
                     .write(
                             OUTPUT_PARAMS,
-                            () -> new KeyValueParamsGenerator(MANIFEST_FUNCTION_PARAMS),
-                            energyStack::getParams);
+                            () -> new DictionaryGenerator(MANIFEST_FUNCTION_PARAMS),
+                            energyStack::getDictionary);
         }
     }
 

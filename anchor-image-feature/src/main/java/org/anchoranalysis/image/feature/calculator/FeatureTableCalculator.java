@@ -48,11 +48,11 @@ public interface FeatureTableCalculator<T extends FeatureInput> extends FeatureC
      * Initializes a feature store that has the same structure as that previously created by
      * createFeatures() from the same object
      *
-     * @param initParams
+     * @param initialization
      * @param energyStack
      * @param logger
      */
-    void start(ImageInitialization initParams, Optional<EnergyStack> energyStack, Logger logger)
+    void start(ImageInitialization initialization, Optional<EnergyStack> energyStack, Logger logger)
             throws InitException;
 
     /**

@@ -98,30 +98,30 @@ public class MergedPairsFeatures {
     }
 
     public FeatureCalculatorMulti<FeatureInputStack> createCalculator(
-            CreateCalculatorHelper cc,
-            ImageInitialization soImage,
+            CreateCalculatorHelper calculatorCreator,
+            ImageInitialization initialization,
             BoundReplaceStrategy<FeatureInputStack, ? extends ReplaceStrategy<FeatureInputStack>>
                     cachingStrategy)
             throws InitException {
-        return cc.createCached(getImage(), soImage, cachingStrategy);
+        return calculatorCreator.createCached(getImage(), initialization, cachingStrategy);
     }
 
     public FeatureCalculatorMulti<FeatureInputSingleObject> createSingle(
-            CreateCalculatorHelper cc,
-            ImageInitialization soImage,
+            CreateCalculatorHelper calculatorCreator,
+            ImageInitialization initialization,
             BoundReplaceStrategy<
                             FeatureInputSingleObject,
                             CacheAndReuseStrategy<FeatureInputSingleObject>>
                     cachingStrategy)
             throws InitException {
-        return cc.createCached(getSingle(), soImage, cachingStrategy);
+        return calculatorCreator.createCached(getSingle(), initialization, cachingStrategy);
     }
 
     public FeatureCalculatorMulti<FeatureInputPairObjects> createPair(
-            CreateCalculatorHelper cc,
-            ImageInitialization soImage,
+            CreateCalculatorHelper calculatorCreator,
+            ImageInitialization initialization,
             CacheTransferSourceCollection cacheTransferSource)
             throws InitException {
-        return cc.createPair(getPair(), soImage, cacheTransferSource);
+        return calculatorCreator.createPair(getPair(), initialization, cacheTransferSource);
     }
 }

@@ -34,4 +34,4 @@ import org.anchoranalysis.mpp.mark.Mark;
  *
  * @author Owen Feehan
  */
-public abstract class SingleMarkProvider extends MPPProvider<SingleMarkProvider, Optional<Mark>> {}
+public abstract class SingleMarkProvider extends MarksBaseProvider<SingleMarkProvider, Optional<Mark>> {}

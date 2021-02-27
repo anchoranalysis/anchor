@@ -55,12 +55,12 @@ import org.anchoranalysis.feature.input.FeatureInput;
 public interface FeatureSessionCache<T extends FeatureInput> {
 
     /**
-     * Initialises the cache. Should always be called once before any calculations occur
+     * Initializes the cache. Should always be called once before any calculations occur
      *
-     * @param featureInitParams params for initialization
+     * @param initialization initialization for the feature.
      * @param logger logger
      */
-    public abstract void init(FeatureInitialization featureInitParams, Logger logger);
+    public abstract void init(FeatureInitialization initialization, Logger logger);
 
     /** Invalidates existing caches so all calculations occur freshly */
     void invalidate();
