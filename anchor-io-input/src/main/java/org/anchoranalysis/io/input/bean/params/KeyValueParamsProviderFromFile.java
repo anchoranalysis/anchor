@@ -36,7 +36,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.progress.ProgressIgnore;
-import org.anchoranalysis.core.value.KeyValueParams;
+import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.io.input.InputContextParams;
 import org.anchoranalysis.io.input.bean.InputManagerParams;
 import org.anchoranalysis.io.input.bean.files.FilesProvider;
@@ -49,7 +49,7 @@ public class KeyValueParamsProviderFromFile extends KeyValueParamsProvider {
     // END BEAN PROPERTIES
 
     @Override
-    public KeyValueParams create() throws CreateException {
+    public Dictionary create() throws CreateException {
         try {
             Collection<File> providedFiles =
                     files.create(
@@ -65,7 +65,7 @@ public class KeyValueParamsProviderFromFile extends KeyValueParamsProvider {
             }
 
             Path filePath = providedFiles.iterator().next().toPath();
-            return KeyValueParams.readFromFile(filePath);
+            return Dictionary.readFromFile(filePath);
 
         } catch (IOException e) {
             throw new CreateException(e);

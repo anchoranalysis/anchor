@@ -30,7 +30,7 @@ import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.identifier.provider.store.SharedObjects;
-import org.anchoranalysis.core.value.KeyValueParams;
+import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.feature.calculate.FeatureInitParams;
 import org.anchoranalysis.feature.energy.EnergyStack;
 
@@ -40,7 +40,7 @@ public class InitParamsHelper {
     public static FeatureInitParams createInitParams(
             Optional<SharedObjects> sharedObjects, Optional<EnergyStack> energyStack) {
 
-        Optional<KeyValueParams> kvp = energyStack.map(EnergyStack::getParams);
+        Optional<Dictionary> kvp = energyStack.map(EnergyStack::getParams);
 
         return new FeatureInitParams(
                 kvp, energyStack.map(EnergyStack::withoutParams), sharedObjects);

@@ -31,16 +31,16 @@ import lombok.Getter;
 import org.anchoranalysis.bean.initializable.params.BeanInitParams;
 import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
 import org.anchoranalysis.core.identifier.provider.store.SharedObjects;
-import org.anchoranalysis.core.value.KeyValueParams;
+import org.anchoranalysis.core.value.Dictionary;
 
 public class KeyValueParamsInitParams implements BeanInitParams {
 
-    @Getter private final NamedProviderStore<KeyValueParams> namedKeyValueParams;
+    @Getter private final NamedProviderStore<Dictionary> namedKeyValueParams;
 
     @Getter private final NamedProviderStore<Path> namedFilePaths;
 
     public KeyValueParamsInitParams(SharedObjects sharedObjects) {
-        namedKeyValueParams = sharedObjects.getOrCreate(KeyValueParams.class);
+        namedKeyValueParams = sharedObjects.getOrCreate(Dictionary.class);
         namedFilePaths = sharedObjects.getOrCreate(String.class);
     }
 }

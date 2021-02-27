@@ -33,7 +33,7 @@ import org.anchoranalysis.bean.provider.Provider;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.core.value.KeyValueParams;
+import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.input.FeatureInputEnergy;
 import org.anchoranalysis.image.core.stack.Stack;
@@ -50,7 +50,7 @@ class EnergyStackHelper {
                 EnergyStack energyStack = new EnergyStack(stackEnergy.create());
                 energyStack.setParams(
                         OptionalFactory.create(keyValueParamsProvider)
-                                .orElseGet(KeyValueParams::new));
+                                .orElseGet(Dictionary::new));
                 return Optional.of(energyStack);
             } else {
                 return Optional.empty();

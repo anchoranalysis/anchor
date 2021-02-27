@@ -32,7 +32,7 @@ import lombok.Value;
 import org.anchoranalysis.bean.initializable.params.BeanInitParams;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.identifier.provider.store.SharedObjects;
-import org.anchoranalysis.core.value.KeyValueParams;
+import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
 
@@ -45,7 +45,7 @@ import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
 @AllArgsConstructor
 public class FeatureInitParams implements BeanInitParams {
 
-    private final Optional<KeyValueParams> keyValueParams;
+    private final Optional<Dictionary> keyValueParams;
 
     private final Optional<EnergyStackWithoutParams> energyStack;
 
@@ -63,7 +63,7 @@ public class FeatureInitParams implements BeanInitParams {
         this.sharedObjects = Optional.of(sharedObjects);
     }
 
-    public FeatureInitParams(KeyValueParams keyValueParams) {
+    public FeatureInitParams(Dictionary keyValueParams) {
         this.keyValueParams = Optional.of(keyValueParams);
         this.energyStack = Optional.empty();
         this.sharedObjects = Optional.empty();

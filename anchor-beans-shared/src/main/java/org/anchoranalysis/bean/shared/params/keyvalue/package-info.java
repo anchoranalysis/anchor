@@ -23,5 +23,5 @@
  * THE SOFTWARE.
  * #L%
  */
-/** Referencing a particular {@link org.anchoranalysis.core.value.KeyValueParams}. */
+/** Referencing a particular {@link org.anchoranalysis.core.value.Dictionary}. */
 package org.anchoranalysis.bean.shared.params.keyvalue;

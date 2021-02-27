@@ -31,13 +31,13 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
-import org.anchoranalysis.core.value.KeyValueParams;
+import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.operator.Constant;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
- * Loads a {@link KeyValueParams} as features.
+ * Loads a {@link Dictionary} as features.
  *
  * @author Owen Feehan
  */
@@ -51,20 +51,20 @@ public class ParametersAsFeatures<T extends FeatureInput> extends FeatureListPro
     public FeatureList<T> create() throws CreateException {
 
         try {
-            KeyValueParams kpv =
+            Dictionary kpv =
                     getInitializationParameters()
                             .getParams()
                             .getNamedKeyValueParams()
                             .getException(collectionID);
 
-            return FeatureListFactory.mapFrom(kpv.keySet(), key -> featureForKey(key, kpv));
+            return FeatureListFactory.mapFrom(kpv.keys(), key -> featureForKey(key, kpv));
 
         } catch (NamedProviderGetException e) {
             throw new CreateException(e);
         }
     }
 
-    private Feature<T> featureForKey(String key, KeyValueParams kpv) {
-        return new Constant<>(key, kpv.getPropertyAsDouble(key));
+    private Feature<T> featureForKey(String key, Dictionary kpv) {
+        return new Constant<>(key, kpv.getAsDouble(key));
     }
 }

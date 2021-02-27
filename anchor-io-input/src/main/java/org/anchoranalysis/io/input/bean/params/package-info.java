@@ -23,5 +23,5 @@
  * THE SOFTWARE.
  * #L%
  */
-/** Methods to provide a {@link org.anchoranalysis.core.value.KeyValueParams}. */
+/** Methods to provide a {@link org.anchoranalysis.core.value.Dictionary}. */
 package org.anchoranalysis.io.input.bean.params;

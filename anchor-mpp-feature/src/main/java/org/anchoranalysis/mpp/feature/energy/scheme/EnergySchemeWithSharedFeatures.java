@@ -33,7 +33,7 @@ import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.checked.CheckedFunction;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.core.value.KeyValueParams;
+import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.FeatureInitParams;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
@@ -65,7 +65,7 @@ public class EnergySchemeWithSharedFeatures {
 
         private VoxelizedMarkMemo mark;
         private EnergyStackWithoutParams raster;
-        private KeyValueParams kvp;
+        private Dictionary kvp;
 
         public void update(VoxelizedMarkMemo mark, EnergyStackWithoutParams raster)
                 throws OperationFailedException {

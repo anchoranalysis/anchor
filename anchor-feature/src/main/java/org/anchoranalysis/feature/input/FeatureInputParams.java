@@ -27,7 +27,7 @@
 package org.anchoranalysis.feature.input;
 
 import java.util.Optional;
-import org.anchoranalysis.core.value.KeyValueParams;
+import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 
 /**
@@ -37,9 +37,9 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationException;
  */
 public interface FeatureInputParams extends FeatureInputWithResolution {
 
-    Optional<KeyValueParams> getParamsOptional();
+    Optional<Dictionary> getParamsOptional();
 
-    default KeyValueParams getParamsRequired() throws FeatureCalculationException {
+    default Dictionary getParamsRequired() throws FeatureCalculationException {
         return getParamsOptional()
                 .orElseThrow(
                         () ->

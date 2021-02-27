@@ -29,7 +29,7 @@ package org.anchoranalysis.feature.input;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
-import org.anchoranalysis.core.value.KeyValueParams;
+import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
@@ -56,7 +56,7 @@ public abstract class FeatureInputEnergy implements FeatureInputParams {
     }
 
     @Override
-    public Optional<KeyValueParams> getParamsOptional() {
+    public Optional<Dictionary> getParamsOptional() {
         return energyStack.map(EnergyStack::getParams);
     }
 

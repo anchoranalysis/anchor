@@ -31,7 +31,7 @@ import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.log.error.ErrorReporter;
-import org.anchoranalysis.core.value.KeyValueParams;
+import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.io.manifest.Manifest;
 import org.anchoranalysis.io.manifest.file.OutputtedFile;
 import org.anchoranalysis.io.manifest.finder.match.FileMatch;
@@ -45,10 +45,10 @@ public class FinderKeyValueParams extends FinderSingleFile {
         this.manifestFunction = manifestFunction;
     }
 
-    public KeyValueParams get() throws OperationFailedException {
+    public Dictionary get() throws OperationFailedException {
         assert (exists());
         try {
-            return KeyValueParams.readFromFile(getFoundFile().calculatePath());
+            return Dictionary.readFromFile(getFoundFile().calculatePath());
         } catch (IOException e) {
             throw new OperationFailedException(e);
         }

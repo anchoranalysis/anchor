@@ -33,7 +33,7 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
 import org.anchoranalysis.core.log.error.ErrorReporter;
 import org.anchoranalysis.core.progress.Progress;
-import org.anchoranalysis.core.value.KeyValueParams;
+import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.core.stack.TimeSequence;
 import org.anchoranalysis.image.core.stack.time.WrapStackAsTimeSequenceStore;
@@ -52,7 +52,7 @@ public class MultiInput implements ProvidesStackInput, InputForMPPBean {
 
     private OperationMap<MarkCollection> mapMarks = new OperationMap<>();
     private OperationMap<ObjectCollection> mapObjects = new OperationMap<>();
-    private OperationMap<KeyValueParams> mapKeyValueParams = new OperationMap<>();
+    private OperationMap<Dictionary> mapKeyValueParams = new OperationMap<>();
     private OperationMap<Histogram> mapHistogram = new OperationMap<>();
     private OperationMap<Path> mapFilePath = new OperationMap<>();
 
@@ -125,7 +125,7 @@ public class MultiInput implements ProvidesStackInput, InputForMPPBean {
         return mapObjects;
     }
 
-    public MultiInputSubMap<KeyValueParams> keyValueParams() {
+    public MultiInputSubMap<Dictionary> keyValueParams() {
         return mapKeyValueParams;
     }
 

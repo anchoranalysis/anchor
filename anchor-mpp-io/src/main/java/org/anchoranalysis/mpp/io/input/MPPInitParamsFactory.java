@@ -35,7 +35,7 @@ import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.identifier.provider.NamedProvider;
 import org.anchoranalysis.core.identifier.provider.store.SharedObjects;
-import org.anchoranalysis.core.value.KeyValueParams;
+import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.experiment.io.InitParamsContext;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.core.stack.Stack;
@@ -88,7 +88,7 @@ public class MPPInitParamsFactory {
             Optional<Define> define,
             Optional<NamedProvider<Stack>> stacks,
             Optional<NamedProvider<ObjectCollection>> objects,
-            Optional<KeyValueParams> keyValueParams)
+            Optional<Dictionary> keyValueParams)
             throws CreateException {
 
         try {

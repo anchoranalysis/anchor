@@ -28,7 +28,7 @@ package org.anchoranalysis.bean.shared.params.keyvalue;
 
 import org.anchoranalysis.bean.provider.Provider;
 import org.anchoranalysis.bean.shared.params.ParamsBean;
-import org.anchoranalysis.core.value.KeyValueParams;
+import org.anchoranalysis.core.value.Dictionary;
 
 public abstract class KeyValueParamsProvider extends ParamsBean<KeyValueParamsProvider>
-        implements Provider<KeyValueParams> {}
+        implements Provider<Dictionary> {}

@@ -33,7 +33,7 @@ import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
-import org.anchoranalysis.core.value.KeyValueParams;
+import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.input.FeatureInput;
@@ -107,11 +107,11 @@ public class EnergyScheme {
     }
 
     /*** returns the associated KeyValueParams or an empty set, if no params are associated with the energyScheme */
-    public KeyValueParams createKeyValueParams() throws CreateException {
+    public Dictionary createKeyValueParams() throws CreateException {
         if (params.isPresent()) {
             return params.get().create().duplicate();
         } else {
-            return new KeyValueParams();
+            return new Dictionary();
         }
     }
 

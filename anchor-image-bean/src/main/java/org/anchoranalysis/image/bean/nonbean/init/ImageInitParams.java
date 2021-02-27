@@ -41,7 +41,7 @@ import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
 import org.anchoranalysis.core.identifier.provider.store.SharedObjects;
 import org.anchoranalysis.core.identifier.provider.store.StoreSupplier;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.core.value.KeyValueParams;
+import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
 import org.anchoranalysis.image.bean.provider.ChannelProvider;
@@ -184,7 +184,7 @@ public class ImageInitParams implements BeanInitParams {
         }
     }
 
-    public void addToKeyValueParamsCollection(String identifier, KeyValueParams params)
+    public void addToKeyValueParamsCollection(String identifier, Dictionary params)
             throws OperationFailedException {
         params().getNamedKeyValueParams().add(identifier, () -> params);
     }

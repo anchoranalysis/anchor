@@ -29,7 +29,7 @@ package org.anchoranalysis.image.feature.bean;
 import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.core.exception.InitException;
-import org.anchoranalysis.core.value.KeyValueParams;
+import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.bean.ImageBean;
 import org.anchoranalysis.math.histogram.Histogram;
@@ -43,10 +43,10 @@ public abstract class VoxelScore extends ImageBean<VoxelScore> {
      * <p>Must be called before {@link #calculate}.
      *
      * @param histograms one or more histograms associated with this calculation
-     * @param keyValueParams optional {@link KeyValueParams} associated with this calculation
+     * @param keyValueParams optional {@link Dictionary} associated with this calculation
      * @throws InitException if anything goes wrong
      */
-    public void init(List<Histogram> histograms, Optional<KeyValueParams> keyValueParams)
+    public void init(List<Histogram> histograms, Optional<Dictionary> keyValueParams)
             throws InitException {
         // TO be overridden if needed
     }

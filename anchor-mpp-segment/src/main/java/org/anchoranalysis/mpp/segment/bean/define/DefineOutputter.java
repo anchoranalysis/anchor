@@ -35,7 +35,7 @@ import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.identifier.provider.NamedProvider;
-import org.anchoranalysis.core.value.KeyValueParams;
+import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.experiment.io.InitParamsContext;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
@@ -98,7 +98,7 @@ public abstract class DefineOutputter extends AnchorBean<DefineOutputter> {
             InitParamsContext context,
             Optional<NamedProvider<Stack>> stacks,
             Optional<NamedProvider<ObjectCollection>> objects,
-            Optional<KeyValueParams> keyValueParams)
+            Optional<Dictionary> keyValueParams)
             throws CreateException {
         return MPPInitParamsFactory.createFromExistingCollections(
                 context, Optional.ofNullable(define), stacks, objects, keyValueParams);

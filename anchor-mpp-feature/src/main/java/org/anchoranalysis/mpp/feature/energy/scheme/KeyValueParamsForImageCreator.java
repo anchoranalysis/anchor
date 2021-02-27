@@ -32,7 +32,7 @@ import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.core.value.KeyValueParams;
+import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.FeatureInitParams;
@@ -61,10 +61,10 @@ public class KeyValueParamsForImageCreator {
         this.logger = logger;
     }
 
-    public KeyValueParams createParamsForImage(EnergyStackWithoutParams energyStack)
+    public Dictionary createParamsForImage(EnergyStackWithoutParams energyStack)
             throws CreateException {
         try {
-            KeyValueParams params = energyScheme.createKeyValueParams();
+            Dictionary params = energyScheme.createKeyValueParams();
             addParamsForImage(energyStack, params);
             return params;
 
@@ -73,7 +73,7 @@ public class KeyValueParamsForImageCreator {
         }
     }
 
-    private void addParamsForImage(EnergyStackWithoutParams energyStack, KeyValueParams kvp)
+    private void addParamsForImage(EnergyStackWithoutParams energyStack, Dictionary kvp)
             throws OperationFailedException {
 
         FeatureInputStack params = new FeatureInputStack(energyStack);
@@ -83,7 +83,7 @@ public class KeyValueParamsForImageCreator {
 
         for (NamedBean<Feature<FeatureInputStack>> ni : energyScheme.getListImageFeatures()) {
 
-            kvp.putIfEmpty(ni.getName(), calculateImageFeature(ni.getItem(), paramsInit, params));
+            kvp.putCheck(ni.getName(), calculateImageFeature(ni.getItem(), paramsInit, params));
         }
     }
 

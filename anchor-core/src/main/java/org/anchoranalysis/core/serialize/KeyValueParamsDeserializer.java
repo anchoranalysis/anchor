@@ -28,7 +28,7 @@ package org.anchoranalysis.core.serialize;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import org.anchoranalysis.core.value.KeyValueParams;
+import org.anchoranalysis.core.value.Dictionary;
 
 /**
  * @author Owen Feehan
@@ -40,7 +40,7 @@ public class KeyValueParamsDeserializer<T> implements Deserializer<T> {
     @Override
     public T deserialize(Path filePath) throws DeserializationFailedException {
         try {
-            KeyValueParams obj = KeyValueParams.readFromFile(filePath);
+            Dictionary obj = Dictionary.readFromFile(filePath);
             return (T) obj;
 
         } catch (IOException e) {

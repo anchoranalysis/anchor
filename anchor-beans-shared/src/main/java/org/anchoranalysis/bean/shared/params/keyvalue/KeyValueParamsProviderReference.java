@@ -31,7 +31,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
-import org.anchoranalysis.core.value.KeyValueParams;
+import org.anchoranalysis.core.value.Dictionary;
 
 public class KeyValueParamsProviderReference extends KeyValueParamsProvider {
 
@@ -39,7 +39,7 @@ public class KeyValueParamsProviderReference extends KeyValueParamsProvider {
     @BeanField @Getter @Setter private String id = "";
     // END BEAN PROPERTIES
 
-    private KeyValueParams params;
+    private Dictionary params;
 
     @Override
     public void onInit(KeyValueParamsInitParams so) throws InitException {
@@ -52,7 +52,7 @@ public class KeyValueParamsProviderReference extends KeyValueParamsProvider {
     }
 
     @Override
-    public KeyValueParams create() {
+    public Dictionary create() {
         assert (getInitializationParameters() != null); // Otherwise init() has never been called
         return params;
     }

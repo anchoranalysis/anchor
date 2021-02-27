@@ -31,7 +31,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.core.value.KeyValueParams;
+import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.Resolution;
@@ -39,7 +39,7 @@ import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.spatial.Extent;
 
 /**
- * A {@link EnergyStackWithoutParams} with associated {@link KeyValueParams}.
+ * A {@link EnergyStackWithoutParams} with associated {@link Dictionary}.
  *
  * @author Owen Feehan
  */
@@ -47,17 +47,17 @@ import org.anchoranalysis.spatial.Extent;
 public class EnergyStack {
 
     private final EnergyStackWithoutParams delegate;
-    @Getter @Setter private KeyValueParams params;
+    @Getter @Setter private Dictionary params;
 
     public EnergyStack(Channel channel) {
         this(new EnergyStackWithoutParams(channel));
     }
 
     public EnergyStack(EnergyStackWithoutParams energyStack) {
-        this(energyStack, new KeyValueParams());
+        this(energyStack, new Dictionary());
     }
 
-    public EnergyStack(Stack stackIn, KeyValueParams params) {
+    public EnergyStack(Stack stackIn, Dictionary params) {
         this(new EnergyStackWithoutParams(stackIn), params);
     }
 
@@ -100,7 +100,7 @@ public class EnergyStack {
         return dimensions().resolution();
     }
 
-    public EnergyStack copyChangeParams(KeyValueParams paramsToAssign) {
+    public EnergyStack copyChangeParams(Dictionary paramsToAssign) {
         return new EnergyStack(delegate, paramsToAssign);
     }
 

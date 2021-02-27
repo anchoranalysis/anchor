@@ -32,7 +32,7 @@ import java.util.function.Function;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.progress.ProgressIgnore;
-import org.anchoranalysis.core.value.KeyValueParams;
+import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.image.core.stack.TimeSequence;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
@@ -97,7 +97,7 @@ class AppendHelper {
                 input,
                 listPaths,
                 MultiInput::keyValueParams,
-                KeyValueParams::readFromFile,
+                Dictionary::readFromFile,
                 debugMode);
     }
 

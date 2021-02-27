@@ -32,19 +32,19 @@ import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.format.NonImageFileFormat;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.core.value.KeyValueParams;
+import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.io.generator.OneStageGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 @AllArgsConstructor
-public class KeyValueParamsGenerator extends OneStageGenerator<KeyValueParams> {
+public class KeyValueParamsGenerator extends OneStageGenerator<Dictionary> {
 
     private final String manifestFunction;
 
     @Override
-    public void writeToFile(KeyValueParams element, OutputWriteSettings settings, Path filePath)
+    public void writeToFile(Dictionary element, OutputWriteSettings settings, Path filePath)
             throws OutputWriteFailedException {
         try {
             element.writeToFile(filePath);
