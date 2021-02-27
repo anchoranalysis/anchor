@@ -31,7 +31,7 @@ import java.util.Set;
 import org.anchoranalysis.core.identifier.name.NameValue;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.feature.calculate.FeatureInitParams;
+import org.anchoranalysis.feature.calculate.FeatureInitialization;
 import org.anchoranalysis.feature.calculate.cache.CacheCreator;
 import org.anchoranalysis.feature.calculate.cache.ChildCacheName;
 import org.anchoranalysis.feature.calculate.cache.FeatureSessionCache;
@@ -69,7 +69,7 @@ class FeatureCache<T extends FeatureInput> implements FeatureSessionCache<T> {
     }
 
     @Override
-    public void init(FeatureInitParams featureInitParams, Logger logger) {
+    public void init(FeatureInitialization featureInitParams, Logger logger) {
         cache.init(featureInitParams, logger);
     }
 

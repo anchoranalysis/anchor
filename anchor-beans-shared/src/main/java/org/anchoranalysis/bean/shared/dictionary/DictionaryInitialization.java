@@ -24,18 +24,26 @@
  * #L%
  */
 
-package org.anchoranalysis.bean.shared.params;
+package org.anchoranalysis.bean.shared.dictionary;
 
-import org.anchoranalysis.bean.initializable.InitializableBean;
-import org.anchoranalysis.bean.initializable.property.PropertyInitializer;
-import org.anchoranalysis.bean.initializable.property.SimplePropertyDefiner;
-import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsInitParams;
+import lombok.Getter;
+import org.anchoranalysis.bean.initializable.params.BeanInitialization;
+import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
+import org.anchoranalysis.core.identifier.provider.store.SharedObjects;
+import org.anchoranalysis.core.value.Dictionary;
 
-public abstract class ParamsBean<T> extends InitializableBean<T, KeyValueParamsInitParams> {
+/**
+ * Initialization parameters for a named-set of dictionaries.
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class DictionaryInitialization implements BeanInitialization {
 
-    protected ParamsBean() {
-        super(
-                new PropertyInitializer<>(KeyValueParamsInitParams.class),
-                new SimplePropertyDefiner<>(KeyValueParamsInitParams.class));
+    /** Named-store of {@link Dictionary} objects. */
+    @Getter private final NamedProviderStore<Dictionary> dictionaries;
+
+    public DictionaryInitialization(SharedObjects sharedObjects) {
+        dictionaries = sharedObjects.getOrCreate(Dictionary.class);
     }
 }

@@ -35,7 +35,7 @@ import org.anchoranalysis.core.functional.checked.CheckedFunction;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.FeatureInitParams;
+import org.anchoranalysis.feature.calculate.FeatureInitialization;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
@@ -91,7 +91,7 @@ public class EnergySchemeWithSharedFeatures {
                 FeatureCalculatorMulti<FeatureInputSingleMemo> session =
                         FeatureSession.with(
                                 energyScheme.getElemIndAsFeatureList(),
-                                new FeatureInitParams(kvp),
+                                new FeatureInitialization(kvp),
                                 sharedFeatures,
                                 logger);
 
@@ -124,7 +124,7 @@ public class EnergySchemeWithSharedFeatures {
             FeatureCalculatorMulti<FeatureInputAllMemo> session =
                     FeatureSession.with(
                             energyScheme.getElemAllAsFeatureList(),
-                            new FeatureInitParams(energyStack.getParams()),
+                            new FeatureInitialization(energyStack.getParams()),
                             sharedFeatures,
                             logger);
 

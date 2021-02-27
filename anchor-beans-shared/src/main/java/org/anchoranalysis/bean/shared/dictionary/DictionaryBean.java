@@ -24,11 +24,17 @@
  * #L%
  */
 
-package org.anchoranalysis.bean.shared.params.keyvalue;
+package org.anchoranalysis.bean.shared.dictionary;
 
-import org.anchoranalysis.bean.provider.Provider;
-import org.anchoranalysis.bean.shared.params.ParamsBean;
-import org.anchoranalysis.core.value.Dictionary;
+import org.anchoranalysis.bean.initializable.InitializableBean;
+import org.anchoranalysis.bean.initializable.property.PropertyInitializer;
+import org.anchoranalysis.bean.initializable.property.SimplePropertyDefiner;
 
-public abstract class KeyValueParamsProvider extends ParamsBean<KeyValueParamsProvider>
-        implements Provider<Dictionary> {}
+public abstract class DictionaryBean<T> extends InitializableBean<T, DictionaryInitialization> {
+
+    protected DictionaryBean() {
+        super(
+                new PropertyInitializer<>(DictionaryInitialization.class),
+                new SimplePropertyDefiner<>(DictionaryInitialization.class));
+    }
+}

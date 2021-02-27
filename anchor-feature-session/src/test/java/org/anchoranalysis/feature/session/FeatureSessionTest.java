@@ -27,7 +27,7 @@
 package org.anchoranalysis.feature.session;
 
 import org.anchoranalysis.core.exception.InitException;
-import org.anchoranalysis.feature.calculate.FeatureInitParams;
+import org.anchoranalysis.feature.calculate.FeatureInitialization;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.input.FeatureInputNull;
@@ -45,7 +45,7 @@ class FeatureSessionTest {
         SequentialSession<FeatureInput> session =
                 new SequentialSession<>(ConstantsInListFixture.create());
         session.start(
-                new FeatureInitParams(),
+                new FeatureInitialization(),
                 new SharedFeatureMulti(),
                 LoggingFixture.suppressedLogger());
 

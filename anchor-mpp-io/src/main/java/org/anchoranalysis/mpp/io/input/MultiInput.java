@@ -34,13 +34,13 @@ import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
 import org.anchoranalysis.core.log.error.ErrorReporter;
 import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.core.value.Dictionary;
-import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.core.stack.TimeSequence;
 import org.anchoranalysis.image.core.stack.time.WrapStackAsTimeSequenceStore;
 import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.math.histogram.Histogram;
-import org.anchoranalysis.mpp.bean.init.MPPInitParams;
+import org.anchoranalysis.mpp.bean.init.MarksInitialization;
 import org.anchoranalysis.mpp.mark.MarkCollection;
 
 @Accessors(fluent = true)
@@ -82,14 +82,14 @@ public class MultiInput implements ProvidesStackInput, InputForMPPBean {
     }
 
     @Override
-    public void addToSharedObjects(MPPInitParams soMPP, ImageInitParams soImage)
+    public void addToSharedObjects(MarksInitialization soMPP, ImageInitialization soImage)
             throws OperationFailedException {
 
         marks().addToStore(soMPP.getMarksCollection());
         stack().addToStore(new WrapStackAsTimeSequenceStore(soImage.stacks()));
         objects().addToStore(soImage.objects());
-        keyValueParams().addToStore(soImage.params().getNamedKeyValueParams());
-        filePath().addToStore(soImage.params().getNamedFilePaths());
+        keyValueParams().addToStore(soImage.dictionaries());
+        filePath().addToStore(soImage.filePaths());
         histogram().addToStore(soImage.histograms());
     }
 

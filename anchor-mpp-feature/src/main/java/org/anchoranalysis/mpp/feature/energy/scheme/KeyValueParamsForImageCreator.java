@@ -35,7 +35,7 @@ import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.FeatureInitParams;
+import org.anchoranalysis.feature.calculate.FeatureInitialization;
 import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.single.FeatureCalculatorSingle;
@@ -78,8 +78,8 @@ public class KeyValueParamsForImageCreator {
 
         FeatureInputStack params = new FeatureInputStack(energyStack);
 
-        FeatureInitParams paramsInit =
-                new FeatureInitParams(Optional.of(kvp), Optional.of(energyStack), Optional.empty());
+        FeatureInitialization paramsInit =
+                new FeatureInitialization(Optional.of(kvp), Optional.of(energyStack), Optional.empty());
 
         for (NamedBean<Feature<FeatureInputStack>> ni : energyScheme.getListImageFeatures()) {
 
@@ -89,7 +89,7 @@ public class KeyValueParamsForImageCreator {
 
     private double calculateImageFeature(
             Feature<FeatureInputStack> feature,
-            FeatureInitParams paramsInit,
+            FeatureInitialization paramsInit,
             FeatureInputStack params)
             throws OperationFailedException {
 

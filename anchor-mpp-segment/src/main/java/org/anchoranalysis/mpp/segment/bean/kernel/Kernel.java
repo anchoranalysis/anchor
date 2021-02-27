@@ -33,7 +33,7 @@ import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
-import org.anchoranalysis.mpp.bean.MPPBean;
+import org.anchoranalysis.mpp.bean.MarksBean;
 import org.anchoranalysis.mpp.mark.CompatibleWithMark;
 import org.anchoranalysis.mpp.mark.set.UpdateMarkSetException;
 import org.anchoranalysis.mpp.segment.kernel.KernelCalculateEnergyException;
@@ -46,7 +46,7 @@ import org.anchoranalysis.mpp.segment.kernel.KernelCalculationContext;
  * @param <T> the type of entity that is modified
  * @param <S> updatable-state
  */
-public abstract class Kernel<T, S> extends MPPBean<Kernel<T, S>> implements CompatibleWithMark {
+public abstract class Kernel<T, S> extends MarksBean<Kernel<T, S>> implements CompatibleWithMark {
 
     // START BEAN PROPERTIES
     @BeanField @AllowEmpty @Getter @Setter

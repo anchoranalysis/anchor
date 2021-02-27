@@ -32,36 +32,36 @@ import org.anchoranalysis.bean.initializable.InitializableBean;
 import org.anchoranalysis.bean.initializable.property.ExtractFromParam;
 import org.anchoranalysis.bean.initializable.property.PropertyInitializer;
 import org.anchoranalysis.bean.initializable.property.SimplePropertyDefiner;
-import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsInitParams;
-import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
-import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
-import org.anchoranalysis.mpp.bean.init.MPPInitParams;
-import org.anchoranalysis.mpp.bean.init.PointsInitParams;
+import org.anchoranalysis.bean.shared.dictionary.DictionaryInitialization;
+import org.anchoranalysis.feature.shared.FeaturesInitialization;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
+import org.anchoranalysis.mpp.bean.init.MarksInitialization;
+import org.anchoranalysis.mpp.bean.init.PointsInitialization;
 
-public abstract class MPPBean<T> extends InitializableBean<T, MPPInitParams> {
+public abstract class MarksBean<T> extends InitializableBean<T, MarksInitialization> {
 
-    protected MPPBean() {
-        super(initializerForMPPBeans(), new SimplePropertyDefiner<>(MPPInitParams.class));
+    protected MarksBean() {
+        super(initializerForMarksBeans(), new SimplePropertyDefiner<>(MarksInitialization.class));
     }
 
     /**
      * Creates a property-initializes for MPP-Beans
      *
-     * <p>Beware concuirrency. Initializers are stateful with the {#link {@link
+     * <p>Beware concurrency. Initializers are stateful with the {#link {@link
      * PropertyInitializer#setParam(Object)} method so this should be created newly for each thread,
      * rather reused statically
      *
      * @return
      */
-    public static PropertyInitializer<MPPInitParams> initializerForMPPBeans() {
-        return new PropertyInitializer<>(MPPInitParams.class, paramExtracters());
+    public static PropertyInitializer<MarksInitialization> initializerForMarksBeans() {
+        return new PropertyInitializer<>(MarksInitialization.class, paramExtracters());
     }
 
-    private static List<ExtractFromParam<MPPInitParams, ?>> paramExtracters() {
+    private static List<ExtractFromParam<MarksInitialization, ?>> paramExtracters() {
         return Arrays.asList(
-                new ExtractFromParam<>(PointsInitParams.class, MPPInitParams::getPoints),
-                new ExtractFromParam<>(SharedFeaturesInitParams.class, MPPInitParams::getFeature),
-                new ExtractFromParam<>(KeyValueParamsInitParams.class, MPPInitParams::getParams),
-                new ExtractFromParam<>(ImageInitParams.class, MPPInitParams::getImage));
+                new ExtractFromParam<>(PointsInitialization.class, MarksInitialization::getPoints),
+                new ExtractFromParam<>(FeaturesInitialization.class, MarksInitialization::getFeature),
+                new ExtractFromParam<>(DictionaryInitialization.class, MarksInitialization::getDictionary),
+                new ExtractFromParam<>(ImageInitialization.class, MarksInitialization::getImage));
     }
 }

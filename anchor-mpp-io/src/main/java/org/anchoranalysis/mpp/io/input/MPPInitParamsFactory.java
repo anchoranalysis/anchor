@@ -37,27 +37,27 @@ import org.anchoranalysis.core.identifier.provider.NamedProvider;
 import org.anchoranalysis.core.identifier.provider.store.SharedObjects;
 import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.experiment.io.InitParamsContext;
-import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
-import org.anchoranalysis.mpp.bean.MPPBean;
-import org.anchoranalysis.mpp.bean.init.MPPInitParams;
+import org.anchoranalysis.mpp.bean.MarksBean;
+import org.anchoranalysis.mpp.bean.init.MarksInitialization;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MPPInitParamsFactory {
 
     private static final String KEY_VALUE_PARAMS_IDENTIFIER = "input_params";
 
-    public static MPPInitParams create(
+    public static MarksInitialization create(
             InitParamsContext context,
             Optional<Define> define,
             Optional<? extends InputForMPPBean> input)
             throws CreateException {
 
         SharedObjects sharedObjects = new SharedObjects(context.common());
-        ImageInitParams imageInit =
-                new ImageInitParams(sharedObjects, context.getSuggestedResize());
-        MPPInitParams mppInit = new MPPInitParams(imageInit, sharedObjects);
+        ImageInitialization imageInit =
+                new ImageInitialization(sharedObjects, context.getSuggestedResize());
+        MarksInitialization mppInit = new MarksInitialization(imageInit, sharedObjects);
 
         if (input.isPresent()) {
             try {
@@ -71,7 +71,7 @@ public class MPPInitParamsFactory {
             try {
                 // Tries to initialize any properties (of type MPPInitParams) found in the
                 // NamedDefinitions
-                PropertyInitializer<MPPInitParams> initializer = MPPBean.initializerForMPPBeans();
+                PropertyInitializer<MarksInitialization> initializer = MarksBean.initializerForMarksBeans();
                 initializer.setParam(mppInit);
                 mppInit.populate(initializer, define.get(), context.getLogger());
 
@@ -83,7 +83,7 @@ public class MPPInitParamsFactory {
         return mppInit;
     }
 
-    public static MPPInitParams createFromExistingCollections(
+    public static MarksInitialization createFromExistingCollections(
             InitParamsContext context,
             Optional<Define> define,
             Optional<NamedProvider<Stack>> stacks,
@@ -92,9 +92,9 @@ public class MPPInitParamsFactory {
             throws CreateException {
 
         try {
-            MPPInitParams soMPP = create(context, define, Optional.empty());
+            MarksInitialization soMPP = create(context, define, Optional.empty());
 
-            ImageInitParams soImage = soMPP.getImage();
+            ImageInitialization soImage = soMPP.getImage();
 
             if (stacks.isPresent()) {
                 soImage.copyStacksFrom(stacks.get());
@@ -105,7 +105,7 @@ public class MPPInitParamsFactory {
             }
 
             if (keyValueParams.isPresent()) {
-                soImage.addToKeyValueParamsCollection(
+                soImage.addDictionary(
                         KEY_VALUE_PARAMS_IDENTIFIER, keyValueParams.get());
             }
 

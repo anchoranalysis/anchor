@@ -60,7 +60,7 @@ public class TileWithLabels extends StackProvider {
                 TileRasters.createStackProvider(
                         list, numCols, createShort, scaleLabel, expandLabelZ);
         try {
-            arrangeRaster.initRecursive(getInitializationParameters(), getLogger());
+            arrangeRaster.initRecursive(getInitialization(), getLogger());
         } catch (InitException e) {
             throw new CreateException(e);
         }

@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.bean.shared.params.keyvalue;
+package org.anchoranalysis.bean.shared.dictionary;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -33,7 +33,7 @@ import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.core.value.Dictionary;
 
-public class KeyValueParamsProviderReference extends KeyValueParamsProvider {
+public class DictionaryProviderReference extends DictionaryProvider {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private String id = "";
@@ -42,10 +42,10 @@ public class KeyValueParamsProviderReference extends KeyValueParamsProvider {
     private Dictionary params;
 
     @Override
-    public void onInit(KeyValueParamsInitParams so) throws InitException {
+    public void onInit(DictionaryInitialization so) throws InitException {
         super.onInit(so);
         try {
-            params = so.getNamedKeyValueParams().getException(id);
+            params = so.getDictionaries().getException(id);
         } catch (NamedProviderGetException e) {
             throw new InitException(e.summarize());
         }
@@ -53,7 +53,7 @@ public class KeyValueParamsProviderReference extends KeyValueParamsProvider {
 
     @Override
     public Dictionary create() {
-        assert (getInitializationParameters() != null); // Otherwise init() has never been called
+        assert (getInitialization() != null); // Otherwise init() has never been called
         return params;
     }
 }

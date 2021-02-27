@@ -52,9 +52,9 @@ public class ParametersAsFeatures<T extends FeatureInput> extends FeatureListPro
 
         try {
             Dictionary kpv =
-                    getInitializationParameters()
-                            .getParams()
-                            .getNamedKeyValueParams()
+                    getInitialization()
+                            .getDictionary()
+                            .getDictionaries()
                             .getException(collectionID);
 
             return FeatureListFactory.mapFrom(kpv.keys(), key -> featureForKey(key, kpv));

@@ -27,12 +27,12 @@
 package org.anchoranalysis.mpp.bean.bound;
 
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.mpp.bean.MPPBean;
+import org.anchoranalysis.mpp.bean.MarksBean;
 import org.anchoranalysis.mpp.bound.BidirectionalBound;
 import org.anchoranalysis.spatial.point.Point3d;
 import org.anchoranalysis.spatial.rotation.RotationMatrix;
 
-public abstract class BoundCalculator extends MPPBean<BoundCalculator> {
+public abstract class BoundCalculator extends MarksBean<BoundCalculator> {
 
     // angle is in radians
     public abstract BidirectionalBound calculateBound(Point3d point, RotationMatrix rotMatrix)

@@ -26,11 +26,15 @@
 
 package org.anchoranalysis.bean.initializable.params;
 
-import org.anchoranalysis.bean.initializable.InitializableBean;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
-/**
- * Parent class for all parameters used to initialise beans in {@link InitializableBean}
- *
- * @author Owen Feehan
- */
-public interface BeanInitParams {}
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public class NullInitialization implements BeanInitialization {
+
+    private static final NullInitialization INSTANCE = new NullInitialization();
+
+    public static NullInitialization instance() {
+        return INSTANCE;
+    }
+}

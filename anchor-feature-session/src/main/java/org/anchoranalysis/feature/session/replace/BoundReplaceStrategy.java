@@ -32,7 +32,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.feature.calculate.FeatureInitParams;
+import org.anchoranalysis.feature.calculate.FeatureInitialization;
 import org.anchoranalysis.feature.calculate.cache.CacheCreator;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.session.cache.HorizontalCacheCreator;
@@ -55,7 +55,7 @@ public class BoundReplaceStrategy<T extends FeatureInput, S extends ReplaceStrat
 
     public ReplaceStrategy<T> bind(
             FeatureList<T> featureList,
-            FeatureInitParams featureInitParams,
+            FeatureInitialization featureInitParams,
             SharedFeatureMulti sharedFeatures,
             Logger logger) {
         CacheCreator cacheCreator =

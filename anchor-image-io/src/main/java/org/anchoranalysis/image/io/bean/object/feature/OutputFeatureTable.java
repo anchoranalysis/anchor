@@ -102,7 +102,7 @@ public class OutputFeatureTable extends ImageBean<OutputFeatureTable> {
             throws OutputWriteFailedException {
         try {
             return new ObjectFeatureListCSVGenerator(
-                    feature, getInitializationParameters().getSharedObjects(), logger);
+                    feature, getInitialization().getSharedObjects(), logger);
         } catch (CreateException e) {
             throw new OutputWriteFailedException(e);
         }

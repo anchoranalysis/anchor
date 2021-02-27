@@ -33,7 +33,7 @@ import java.util.Collection;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
+import org.anchoranalysis.bean.shared.dictionary.DictionaryProvider;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.progress.ProgressIgnore;
 import org.anchoranalysis.core.value.Dictionary;
@@ -42,7 +42,7 @@ import org.anchoranalysis.io.input.bean.InputManagerParams;
 import org.anchoranalysis.io.input.bean.files.FilesProvider;
 import org.anchoranalysis.io.input.files.FilesProviderException;
 
-public class KeyValueParamsProviderFromFile extends KeyValueParamsProvider {
+public class KeyValueParamsProviderFromFile extends DictionaryProvider {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private FilesProvider files;

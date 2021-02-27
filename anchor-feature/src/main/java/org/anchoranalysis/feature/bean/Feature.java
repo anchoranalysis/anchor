@@ -38,7 +38,7 @@ import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListFactory;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.FeatureInitParams;
+import org.anchoranalysis.feature.calculate.FeatureInitialization;
 import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.feature.input.FeatureInput;
 
@@ -52,7 +52,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
  * @param <T> input-type
  */
 public abstract class Feature<T extends FeatureInput>
-        extends InitializableBean<Feature<T>, FeatureInitParams> {
+        extends InitializableBean<Feature<T>, FeatureInitialization> {
 
     // START BEAN PROPERTIES
     /**
@@ -62,10 +62,10 @@ public abstract class Feature<T extends FeatureInput>
     // END BEAN PROPERTIES
 
     protected Feature() {
-        super(new PropertyInitializer<>(FeatureInitParams.class), new FeatureDefiner<>());
+        super(new PropertyInitializer<>(FeatureInitialization.class), new FeatureDefiner<>());
     }
 
-    protected Feature(PropertyInitializer<FeatureInitParams> propertyInitializer) {
+    protected Feature(PropertyInitializer<FeatureInitialization> propertyInitializer) {
         super(propertyInitializer, new FeatureDefiner<>());
     }
 
@@ -74,7 +74,7 @@ public abstract class Feature<T extends FeatureInput>
      * in the sub-classes.
      */
     @Override
-    public void onInit(FeatureInitParams paramsInit) throws InitException {
+    public void onInit(FeatureInitialization paramsInit) throws InitException {
         super.onInit(paramsInit);
         beforeCalc(paramsInit);
     }
@@ -176,7 +176,7 @@ public abstract class Feature<T extends FeatureInput>
      *
      * @param paramsInit initialization parameters
      */
-    protected void beforeCalc(FeatureInitParams paramsInit) throws InitException {
+    protected void beforeCalc(FeatureInitialization paramsInit) throws InitException {
         // Does nothing. To be overridden in children if needed.
     }
 

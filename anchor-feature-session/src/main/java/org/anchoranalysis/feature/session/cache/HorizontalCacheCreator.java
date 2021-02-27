@@ -32,7 +32,7 @@ import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.feature.calculate.FeatureInitParams;
+import org.anchoranalysis.feature.calculate.FeatureInitialization;
 import org.anchoranalysis.feature.calculate.cache.CacheCreator;
 import org.anchoranalysis.feature.calculate.cache.FeatureSessionCache;
 import org.anchoranalysis.feature.input.FeatureInput;
@@ -45,7 +45,7 @@ public class HorizontalCacheCreator implements CacheCreator {
 
     private FeatureList<? extends FeatureInput> namedFeatures;
     private SharedFeatureMulti sharedFeatures;
-    private FeatureInitParams featureInitParams;
+    private FeatureInitialization featureInitParams;
     private Logger logger;
 
     @Override
@@ -73,7 +73,7 @@ public class HorizontalCacheCreator implements CacheCreator {
     private <T extends FeatureInput> FeatureSessionCache<T> createCache(
             FeatureList<T> namedFeatures,
             Class<? extends FeatureInput> inputType,
-            FeatureInitParams featureInitParams,
+            FeatureInitialization featureInitParams,
             Logger logger) {
         SharedFeatureSet<T> sharedFeaturesSet = sharedFeatures.subsetCompatibleWith(inputType);
 

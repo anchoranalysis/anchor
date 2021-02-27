@@ -34,7 +34,7 @@ import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.FeatureInitParams;
+import org.anchoranalysis.feature.calculate.FeatureInitialization;
 import org.anchoranalysis.feature.input.FeatureInputWithResolution;
 import org.anchoranalysis.image.bean.spatial.direction.DirectionVectorBean;
 import org.anchoranalysis.image.bean.spatial.direction.VectorInDirection;
@@ -63,7 +63,7 @@ public class ConvertToPhysicalDistance<T extends FeatureInputWithResolution>
     }
 
     @Override
-    protected void beforeCalc(FeatureInitParams paramsInit) throws InitException {
+    protected void beforeCalc(FeatureInitialization paramsInit) throws InitException {
         super.beforeCalc(paramsInit);
         try {
             vectorInDirection = direction.createVector();

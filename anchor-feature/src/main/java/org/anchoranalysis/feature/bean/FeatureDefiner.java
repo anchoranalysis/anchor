@@ -29,14 +29,14 @@ package org.anchoranalysis.feature.bean;
 import org.anchoranalysis.bean.initializable.property.PropertyDefiner;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.feature.calculate.FeatureInitParams;
+import org.anchoranalysis.feature.calculate.FeatureInitialization;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 class FeatureDefiner<T extends FeatureInput> implements PropertyDefiner {
 
     @Override
     public boolean accepts(Class<?> paramType) {
-        return FeatureInitParams.class.isAssignableFrom(paramType);
+        return FeatureInitialization.class.isAssignableFrom(paramType);
     }
 
     @SuppressWarnings("unchecked")
@@ -50,12 +50,12 @@ class FeatureDefiner<T extends FeatureInput> implements PropertyDefiner {
 
         if (propertyValue instanceof Feature) {
             Feature<T> propertyValueCast = (Feature<T>) propertyValue;
-            propertyValueCast.init((FeatureInitParams) params, logger);
+            propertyValueCast.init((FeatureInitialization) params, logger);
         }
     }
 
     @Override
     public String describeAcceptedClasses() {
-        return FeatureInitParams.class.getSimpleName();
+        return FeatureInitialization.class.getSimpleName();
     }
 }

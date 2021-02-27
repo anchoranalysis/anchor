@@ -29,7 +29,7 @@ package org.anchoranalysis.feature.calculate;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.Value;
-import org.anchoranalysis.bean.initializable.params.BeanInitParams;
+import org.anchoranalysis.bean.initializable.params.BeanInitialization;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.identifier.provider.store.SharedObjects;
 import org.anchoranalysis.core.value.Dictionary;
@@ -43,7 +43,7 @@ import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
  */
 @Value
 @AllArgsConstructor
-public class FeatureInitParams implements BeanInitParams {
+public class FeatureInitialization implements BeanInitialization {
 
     private final Optional<Dictionary> keyValueParams;
 
@@ -51,33 +51,33 @@ public class FeatureInitParams implements BeanInitParams {
 
     private final Optional<SharedObjects> sharedObjects;
 
-    public FeatureInitParams() {
+    public FeatureInitialization() {
         this.keyValueParams = Optional.empty();
         this.energyStack = Optional.empty();
         this.sharedObjects = Optional.empty();
     }
 
-    public FeatureInitParams(SharedObjects sharedObjects) {
+    public FeatureInitialization(SharedObjects sharedObjects) {
         this.keyValueParams = Optional.empty();
         this.energyStack = Optional.empty();
         this.sharedObjects = Optional.of(sharedObjects);
     }
 
-    public FeatureInitParams(Dictionary keyValueParams) {
+    public FeatureInitialization(Dictionary keyValueParams) {
         this.keyValueParams = Optional.of(keyValueParams);
         this.energyStack = Optional.empty();
         this.sharedObjects = Optional.empty();
     }
 
-    public FeatureInitParams(EnergyStack energyStack) {
+    public FeatureInitialization(EnergyStack energyStack) {
         this.energyStack = Optional.of(energyStack.withoutParams());
         this.keyValueParams = Optional.of(energyStack.getParams());
         this.sharedObjects = Optional.empty();
     }
 
     // Shallow-copy
-    public FeatureInitParams duplicate() {
-        return new FeatureInitParams(keyValueParams, energyStack, sharedObjects);
+    public FeatureInitialization duplicate() {
+        return new FeatureInitialization(keyValueParams, energyStack, sharedObjects);
     }
 
     public SharedObjects sharedObjectsRequired() throws InitException {

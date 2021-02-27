@@ -30,7 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.bean.initializable.InitializableBean;
-import org.anchoranalysis.bean.initializable.params.NullInitParams;
+import org.anchoranalysis.bean.initializable.params.NullInitialization;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.log.Logger;
 
@@ -215,10 +215,10 @@ public class PropertyInitializer<P> {
     }
 
     /**
-     * A simple extractor used to apply {@link NullInitParams} to any property looking for this
+     * A simple extractor used to apply {@link NullInitialization} to any property looking for this
      * property-type
      */
-    private ExtractFromParam<P, NullInitParams> nullExtracter() {
-        return new ExtractFromParam<>(NullInitParams.class, params -> NullInitParams.instance());
+    private ExtractFromParam<P, NullInitialization> nullExtracter() {
+        return new ExtractFromParam<>(NullInitialization.class, params -> NullInitialization.instance());
     }
 }

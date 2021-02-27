@@ -32,27 +32,27 @@ import org.anchoranalysis.bean.initializable.InitializableBean;
 import org.anchoranalysis.bean.initializable.property.ExtractFromParam;
 import org.anchoranalysis.bean.initializable.property.PropertyInitializer;
 import org.anchoranalysis.bean.initializable.property.SimplePropertyDefiner;
-import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsInitParams;
-import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
+import org.anchoranalysis.bean.shared.dictionary.DictionaryInitialization;
+import org.anchoranalysis.feature.shared.FeaturesInitialization;
 
 /**
- * Beans-related to features that require initialization with {@link SharedFeaturesInitParams}
+ * Beans-related to features that require initialization with {@link FeaturesInitialization}
  *
  * @author Owen Feehan
  * @param <T> bean-type
  */
-public abstract class FeatureRelatedBean<T> extends InitializableBean<T, SharedFeaturesInitParams> {
+public abstract class FeatureRelatedBean<T> extends InitializableBean<T, FeaturesInitialization> {
 
     protected FeatureRelatedBean() {
         super(
-                new PropertyInitializer<>(SharedFeaturesInitParams.class, paramExtracters()),
-                new SimplePropertyDefiner<SharedFeaturesInitParams>(
-                        SharedFeaturesInitParams.class));
+                new PropertyInitializer<>(FeaturesInitialization.class, paramExtracters()),
+                new SimplePropertyDefiner<FeaturesInitialization>(
+                        FeaturesInitialization.class));
     }
 
-    private static List<ExtractFromParam<SharedFeaturesInitParams, ?>> paramExtracters() {
+    private static List<ExtractFromParam<FeaturesInitialization, ?>> paramExtracters() {
         return Arrays.asList(
                 new ExtractFromParam<>(
-                        KeyValueParamsInitParams.class, SharedFeaturesInitParams::getParams));
+                        DictionaryInitialization.class, FeaturesInitialization::getDictionary));
     }
 }

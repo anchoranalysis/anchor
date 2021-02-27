@@ -34,7 +34,7 @@ import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
+import org.anchoranalysis.feature.shared.FeaturesInitialization;
 
 public abstract class ReferencedFeatures<T extends FeatureInput> extends FeatureListProvider<T> {
 
@@ -49,12 +49,12 @@ public abstract class ReferencedFeatures<T extends FeatureInput> extends Feature
     // END BEAN PROPERITES
 
     @Override
-    public void onInit(SharedFeaturesInitParams soFeature) throws InitException {
+    public void onInit(FeaturesInitialization soFeature) throws InitException {
         super.onInit(soFeature);
         ensureReferencedFeaturesCalled(soFeature);
     }
 
-    private void ensureReferencedFeaturesCalled(SharedFeaturesInitParams so) throws InitException {
+    private void ensureReferencedFeaturesCalled(FeaturesInitialization so) throws InitException {
         if (referencesFeatureListCreator != null && so != null) {
             for (String featureListReference : referencesFeatureListCreator.set()) {
 

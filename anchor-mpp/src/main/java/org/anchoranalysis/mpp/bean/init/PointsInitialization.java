@@ -27,35 +27,35 @@
 package org.anchoranalysis.mpp.bean.init;
 
 import org.anchoranalysis.bean.define.Define;
-import org.anchoranalysis.bean.initializable.params.BeanInitParams;
+import org.anchoranalysis.bean.initializable.params.BeanInitialization;
 import org.anchoranalysis.bean.initializable.property.PropertyInitializer;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
 import org.anchoranalysis.core.identifier.provider.store.SharedObjects;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.bean.nonbean.init.PopulateStoreFromDefine;
 import org.anchoranalysis.mpp.bean.points.fitter.PointsFitter;
 
-public class PointsInitParams implements BeanInitParams {
+public class PointsInitialization implements BeanInitialization {
 
     // START: InitParams
-    private ImageInitParams soImage;
+    private ImageInitialization soImage;
     // END: InitParams
 
     // START: Stores
     private NamedProviderStore<PointsFitter> storePointsFitter;
     // END: Stores
 
-    private PointsInitParams(ImageInitParams soImage, SharedObjects so) {
+    private PointsInitialization(ImageInitialization soImage, SharedObjects so) {
         super();
         this.soImage = soImage;
 
         storePointsFitter = so.getOrCreate(PointsFitter.class);
     }
 
-    public static PointsInitParams create(ImageInitParams soImage, SharedObjects so) {
-        return new PointsInitParams(soImage, so);
+    public static PointsInitialization create(ImageInitialization soImage, SharedObjects so) {
+        return new PointsInitialization(soImage, so);
     }
 
     public NamedProviderStore<PointsFitter> getPointsFitterSet() {
@@ -65,12 +65,12 @@ public class PointsInitParams implements BeanInitParams {
     public void populate(PropertyInitializer<?> pi, Define define, Logger logger)
             throws OperationFailedException {
 
-        PopulateStoreFromDefine<PointsInitParams> populater =
+        PopulateStoreFromDefine<PointsInitialization> populater =
                 new PopulateStoreFromDefine<>(define, pi, logger);
         populater.copyInit(PointsFitter.class, storePointsFitter);
     }
 
-    public ImageInitParams getImage() {
+    public ImageInitialization getImage() {
         return soImage;
     }
 }

@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-beans-shared
+ * anchor-bean
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -23,5 +23,14 @@
  * THE SOFTWARE.
  * #L%
  */
-/** Referencing a particular {@link org.anchoranalysis.core.value.Dictionary}. */
-package org.anchoranalysis.bean.shared.params.keyvalue;
+
+package org.anchoranalysis.bean.initializable.params;
+
+import org.anchoranalysis.bean.initializable.InitializableBean;
+
+/**
+ * Parent class for all state used to initialise beans in {@link InitializableBean}
+ *
+ * @author Owen Feehan
+ */
+public interface BeanInitialization {}

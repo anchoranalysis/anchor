@@ -61,7 +61,7 @@ public class Dictionary {
     }
 
     /**
-     * Reads parameters from <a href="https://docs.oracle.com/javase/tutorial/essential/environment/properties.html">a Java properties file</a.
+     * Reads parameters from <a href="https://docs.oracle.com/javase/tutorial/essential/environment/properties.html">a Java properties file</a>.
      * 
      * @param path the path where the properties file is located.
      * @return a newly created dictionary

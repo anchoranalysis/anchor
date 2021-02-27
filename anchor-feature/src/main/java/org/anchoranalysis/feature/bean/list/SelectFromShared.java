@@ -50,11 +50,11 @@ public class SelectFromShared<T extends FeatureInput> extends ReferencedFeatures
     public FeatureList<T> create() throws CreateException {
         try {
             return FeatureListFactory.mapFromFiltered(
-                    getInitializationParameters().getFeatureListSet().keys(),
+                    getInitialization().getFeatureListSet().keys(),
                     key -> match == null || match.hasMatch(key),
                     key ->
-                            getInitializationParameters()
-                                    .getSharedFeatureSet()
+                            getInitialization()
+                                    .getSharedFeatures()
                                     .getException(key)
                                     .downcast());
         } catch (NamedProviderGetException e) {

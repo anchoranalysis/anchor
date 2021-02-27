@@ -30,7 +30,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.OptionalFactory;
 import org.anchoranalysis.bean.provider.Provider;
-import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
+import org.anchoranalysis.bean.shared.dictionary.DictionaryProvider;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.value.Dictionary;
@@ -42,7 +42,7 @@ import org.anchoranalysis.image.core.stack.Stack;
 class EnergyStackHelper {
 
     public static Optional<EnergyStack> energyStack(
-            Provider<Stack> stackEnergy, KeyValueParamsProvider keyValueParamsProvider)
+            Provider<Stack> stackEnergy, DictionaryProvider keyValueParamsProvider)
             throws OperationFailedException {
         try {
             if (stackEnergy != null) {

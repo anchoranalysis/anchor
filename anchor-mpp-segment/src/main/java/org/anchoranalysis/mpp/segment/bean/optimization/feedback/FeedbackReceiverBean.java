@@ -26,8 +26,8 @@
 
 package org.anchoranalysis.mpp.segment.bean.optimization.feedback;
 
-import org.anchoranalysis.mpp.bean.MPPBean;
+import org.anchoranalysis.mpp.bean.MarksBean;
 import org.anchoranalysis.mpp.segment.optimization.feedback.FeedbackReceiver;
 
-public abstract class FeedbackReceiverBean<T> extends MPPBean<FeedbackReceiverBean<T>>
+public abstract class FeedbackReceiverBean<T> extends MarksBean<FeedbackReceiverBean<T>>
         implements FeedbackReceiver<T> {}

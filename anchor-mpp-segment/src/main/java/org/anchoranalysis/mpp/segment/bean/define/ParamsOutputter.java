@@ -39,12 +39,12 @@ import org.anchoranalysis.io.generator.serialized.XStreamGenerator;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
-import org.anchoranalysis.mpp.bean.init.MPPInitParams;
+import org.anchoranalysis.mpp.bean.init.MarksInitialization;
 import org.anchoranalysis.mpp.mark.MarkCollection;
 import org.anchoranalysis.mpp.segment.define.OutputterDirectories;
 
 /**
- * This class will output entities associated with {@link MPPInitParams} in particular directories.
+ * This class will output entities associated with {@link MarksInitialization} in particular directories.
  *
  * <p>These outputs are:
  *
@@ -61,7 +61,7 @@ import org.anchoranalysis.mpp.segment.define.OutputterDirectories;
 @AllArgsConstructor
 class ParamsOutputter {
 
-    private MPPInitParams params;
+    private MarksInitialization params;
     private boolean suppressSubfolders;
     private OutputterChecked outputter;
 

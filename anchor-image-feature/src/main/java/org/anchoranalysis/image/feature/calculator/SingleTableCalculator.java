@@ -39,7 +39,7 @@ import org.anchoranalysis.feature.results.ResultsVector;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.multi.FeatureCalculatorMulti;
 import org.anchoranalysis.feature.store.NamedFeatureStore;
-import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 
 @RequiredArgsConstructor
@@ -52,7 +52,7 @@ public class SingleTableCalculator implements FeatureTableCalculator<FeatureInpu
     private FeatureCalculatorMulti<FeatureInputSingleObject> calculator;
 
     @Override
-    public void start(ImageInitParams soImage, Optional<EnergyStack> energyStack, Logger logger)
+    public void start(ImageInitialization soImage, Optional<EnergyStack> energyStack, Logger logger)
             throws InitException {
 
         calculator =
@@ -60,7 +60,7 @@ public class SingleTableCalculator implements FeatureTableCalculator<FeatureInpu
                         namedFeatureStore.listFeatures(),
                         InitParamsHelper.createInitParams(
                                 Optional.of(soImage.getSharedObjects()), energyStack),
-                        soImage.features().getSharedFeatureSet(),
+                        soImage.featuresInitParams().getSharedFeatures(),
                         logger);
     }
 

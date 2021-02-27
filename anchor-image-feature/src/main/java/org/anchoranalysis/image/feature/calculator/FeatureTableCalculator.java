@@ -33,7 +33,7 @@ import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.feature.session.calculator.multi.FeatureCalculatorMulti;
-import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 
 /**
  * A feature-calculator with additional functions for encoding the output in in a tabular-format
@@ -52,7 +52,7 @@ public interface FeatureTableCalculator<T extends FeatureInput> extends FeatureC
      * @param energyStack
      * @param logger
      */
-    void start(ImageInitParams initParams, Optional<EnergyStack> energyStack, Logger logger)
+    void start(ImageInitialization initParams, Optional<EnergyStack> energyStack, Logger logger)
             throws InitException;
 
     /**

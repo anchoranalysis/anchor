@@ -34,7 +34,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
-import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
+import org.anchoranalysis.bean.shared.dictionary.DictionaryProvider;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.feature.bean.Feature;
@@ -68,7 +68,7 @@ public class EnergySchemeCreatorByElement extends EnergySchemeCreator {
 
     @BeanField @Getter @Setter private RegionMap regionMap;
 
-    @BeanField @OptionalBean @Getter @Setter private KeyValueParamsProvider params;
+    @BeanField @OptionalBean @Getter @Setter private DictionaryProvider params;
 
     /**
      * If true, the names of the imageFeatures are taken as a combination of the namedItem and the

@@ -29,8 +29,9 @@ package org.anchoranalysis.feature.shared;
 import java.nio.file.Path;
 import java.util.List;
 import org.anchoranalysis.bean.NamedBean;
-import org.anchoranalysis.bean.initializable.params.BeanInitParams;
-import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsInitParams;
+import org.anchoranalysis.bean.initializable.params.BeanInitialization;
+import org.anchoranalysis.bean.shared.dictionary.DictionaryInitialization;
+import org.anchoranalysis.bean.shared.path.FilePathInitialization;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.exception.OperationFailedException;
@@ -41,25 +42,31 @@ import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.input.FeatureInput;
+import lombok.Getter;
 
-public class SharedFeaturesInitParams implements BeanInitParams {
+public class FeaturesInitialization implements BeanInitialization {
 
-    private KeyValueParamsInitParams params;
-    private NamedProviderStore<FeatureList<FeatureInput>> storeFeatureList;
-    private SharedFeatureMulti sharedFeatureSet;
+    @Getter private DictionaryInitialization dictionary;
+    
+    @Getter private FilePathInitialization filePaths;
+    
+    @Getter private SharedFeatureMulti sharedFeatures;
+    
+    private NamedProviderStore<FeatureList<FeatureInput>> featuresStore;
 
-    private SharedFeaturesInitParams(SharedObjects sharedObjects) {
-        this.params = new KeyValueParamsInitParams(sharedObjects);
+    private FeaturesInitialization(SharedObjects sharedObjects) {
+        this.dictionary = new DictionaryInitialization(sharedObjects);
+        this.filePaths = new FilePathInitialization(sharedObjects);
 
-        storeFeatureList = sharedObjects.getOrCreate(FeatureList.class);
+        featuresStore = sharedObjects.getOrCreate(FeatureList.class);
 
         // We populate our shared features from our storeFeatureList
-        sharedFeatureSet = new SharedFeatureMulti();
-        sharedFeatureSet.addFromProviders(storeFeatureList);
+        sharedFeatures = new SharedFeatureMulti();
+        sharedFeatures.addFromProviders(featuresStore);
     }
 
-    public static SharedFeaturesInitParams create(SharedObjects sharedObjects) {
-        return new SharedFeaturesInitParams(sharedObjects);
+    public static FeaturesInitialization create(SharedObjects sharedObjects) {
+        return new FeaturesInitialization(sharedObjects);
     }
 
     /**
@@ -68,12 +75,12 @@ public class SharedFeaturesInitParams implements BeanInitParams {
      * @param logger
      * @return
      */
-    public static SharedFeaturesInitParams create(Logger logger, Path modelDirectory) {
+    public static FeaturesInitialization create(Logger logger, Path modelDirectory) {
         return create(new SharedObjects(new CommonContext(logger, modelDirectory)));
     }
 
     public NamedProviderStore<FeatureList<FeatureInput>> getFeatureListSet() {
-        return storeFeatureList;
+        return featuresStore;
     }
 
     public void populate(
@@ -100,24 +107,16 @@ public class SharedFeaturesInitParams implements BeanInitParams {
             String name = provider.getName();
 
             // If there's only one item in the feature list, then we set it as the custom
-            //  name of teh feature
+            //  name of the feature
             if (featureList.size() == 1) {
                 featureList.get(0).setCustomName(name);
             }
 
-            storeFeatureList.add(name, () -> featureList);
-            sharedFeatureSet.addNoDuplicate(featureList);
+            featuresStore.add(name, () -> featureList);
+            sharedFeatures.addNoDuplicate(featureList);
 
         } catch (CreateException e) {
             throw new OperationFailedException(e);
         }
-    }
-
-    public KeyValueParamsInitParams getParams() {
-        return params;
-    }
-
-    public SharedFeatureMulti getSharedFeatureSet() {
-        return sharedFeatureSet;
     }
 }

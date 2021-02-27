@@ -24,23 +24,10 @@
  * #L%
  */
 
-package org.anchoranalysis.bean.shared.params.keyvalue;
+package org.anchoranalysis.bean.shared.dictionary;
 
-import java.nio.file.Path;
-import lombok.Getter;
-import org.anchoranalysis.bean.initializable.params.BeanInitParams;
-import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
-import org.anchoranalysis.core.identifier.provider.store.SharedObjects;
+import org.anchoranalysis.bean.provider.Provider;
 import org.anchoranalysis.core.value.Dictionary;
 
-public class KeyValueParamsInitParams implements BeanInitParams {
-
-    @Getter private final NamedProviderStore<Dictionary> namedKeyValueParams;
-
-    @Getter private final NamedProviderStore<Path> namedFilePaths;
-
-    public KeyValueParamsInitParams(SharedObjects sharedObjects) {
-        namedKeyValueParams = sharedObjects.getOrCreate(Dictionary.class);
-        namedFilePaths = sharedObjects.getOrCreate(String.class);
-    }
-}
+public abstract class DictionaryProvider extends DictionaryBean<DictionaryProvider>
+        implements Provider<Dictionary> {}

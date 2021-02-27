@@ -36,7 +36,7 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListFactory;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.FeatureInitParams;
+import org.anchoranalysis.feature.calculate.FeatureInitialization;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
 import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.feature.input.FeatureInput;
@@ -116,7 +116,7 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
      * @throws InitException
      */
     public void start(
-            FeatureInitParams featureInitParams, SharedFeatureMulti sharedFeatures, Logger logger)
+            FeatureInitialization featureInitParams, SharedFeatureMulti sharedFeatures, Logger logger)
             throws InitException {
 
         if (isStarted) {
@@ -274,10 +274,10 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
     }
 
     private void setupCacheAndInit(
-            FeatureInitParams featureInitParams, SharedFeatureMulti sharedFeatures, Logger logger)
+            FeatureInitialization featureInitParams, SharedFeatureMulti sharedFeatures, Logger logger)
             throws InitException {
         assert (featureInitParams != null);
-        FeatureInitParams featureInitParamsDup = featureInitParams.duplicate();
+        FeatureInitialization featureInitParamsDup = featureInitParams.duplicate();
         listFeatures.initRecursive(featureInitParamsDup, logger);
 
         replaceSession =

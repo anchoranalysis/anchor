@@ -32,7 +32,7 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
- * A feature that should be initialized with {@link FeatureInitParams} (or a sub-class) before any
+ * A feature that should be initialized with {@link FeatureInitialization} (or a sub-class) before any
  * calculations occur.
  *
  * @author Owen Feehan
@@ -40,7 +40,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
  */
 public interface InitializableFeature<T extends FeatureInput> {
 
-    void init(FeatureInitParams params, Feature<T> parentFeature, Logger logger)
+    void init(FeatureInitialization params, Feature<T> parentFeature, Logger logger)
             throws InitException;
 
     /**

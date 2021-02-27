@@ -30,7 +30,7 @@ import lombok.AllArgsConstructor;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.bean.initializable.InitializableBean;
-import org.anchoranalysis.bean.initializable.params.BeanInitParams;
+import org.anchoranalysis.bean.initializable.params.BeanInitialization;
 import org.anchoranalysis.bean.initializable.property.PropertyInitializer;
 import org.anchoranalysis.bean.provider.Provider;
 import org.anchoranalysis.core.exception.OperationFailedException;
@@ -47,7 +47,7 @@ import org.anchoranalysis.core.log.Logger;
  * @param <V> initialization-parameters for provider
  */
 @AllArgsConstructor
-public class PopulateStoreFromDefine<V extends BeanInitParams> {
+public class PopulateStoreFromDefine<V extends BeanInitialization> {
 
     /** Define source for objects. */
     private Define define;

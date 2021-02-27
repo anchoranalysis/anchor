@@ -43,7 +43,7 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
-import org.anchoranalysis.mpp.bean.init.MPPInitParams;
+import org.anchoranalysis.mpp.bean.init.MarksInitialization;
 import org.anchoranalysis.mpp.io.input.InputForMPPBean;
 import org.anchoranalysis.mpp.io.input.MPPInitParamsFactory;
 import org.anchoranalysis.mpp.mark.Mark;
@@ -84,17 +84,17 @@ public abstract class DefineOutputter extends AnchorBean<DefineOutputter> {
         ParamsOutputter.addAllOutputNamesTo(outputEnabled);
     }
 
-    protected MPPInitParams createInitParams(InputForMPPBean input, InitParamsContext context)
+    protected MarksInitialization createInitParams(InputForMPPBean input, InitParamsContext context)
             throws CreateException {
         return MPPInitParamsFactory.create(
                 context, Optional.ofNullable(define), Optional.of(input));
     }
 
-    protected MPPInitParams createInitParams(InitParamsContext context) throws CreateException {
+    protected MarksInitialization createInitParams(InitParamsContext context) throws CreateException {
         return MPPInitParamsFactory.create(context, Optional.ofNullable(define), Optional.empty());
     }
 
-    protected MPPInitParams createInitParams(
+    protected MarksInitialization createInitParams(
             InitParamsContext context,
             Optional<NamedProvider<Stack>> stacks,
             Optional<NamedProvider<ObjectCollection>> objects,
@@ -104,7 +104,7 @@ public abstract class DefineOutputter extends AnchorBean<DefineOutputter> {
                 context, Optional.ofNullable(define), stacks, objects, keyValueParams);
     }
 
-    protected void outputSharedObjects(MPPInitParams initParams, OutputterChecked outputter)
+    protected void outputSharedObjects(MarksInitialization initParams, OutputterChecked outputter)
             throws OutputWriteFailedException {
         new ParamsOutputter(initParams, suppressSubfolders, outputter).output();
     }

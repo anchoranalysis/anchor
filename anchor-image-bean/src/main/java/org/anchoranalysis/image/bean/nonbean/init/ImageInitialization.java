@@ -30,9 +30,9 @@ import java.nio.file.Path;
 import java.util.Optional;
 import lombok.Getter;
 import org.anchoranalysis.bean.define.Define;
-import org.anchoranalysis.bean.initializable.params.BeanInitParams;
+import org.anchoranalysis.bean.initializable.params.BeanInitialization;
 import org.anchoranalysis.bean.initializable.property.PropertyInitializer;
-import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsInitParams;
+import org.anchoranalysis.bean.shared.dictionary.DictionaryInitialization;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.checked.CheckedFunction;
 import org.anchoranalysis.core.identifier.provider.NamedProvider;
@@ -43,7 +43,7 @@ import org.anchoranalysis.core.identifier.provider.store.StoreSupplier;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
-import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
+import org.anchoranalysis.feature.shared.FeaturesInitialization;
 import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.bean.provider.HistogramProvider;
 import org.anchoranalysis.image.bean.provider.MaskProvider;
@@ -57,16 +57,14 @@ import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.math.histogram.Histogram;
 
-// A wrapper around SharedObjects which types certain Image entities
-public class ImageInitParams implements BeanInitParams {
+public class ImageInitialization implements BeanInitialization {
 
     @Getter private final SharedObjects sharedObjects;
 
     @Getter private final Optional<ImageSizeSuggestion> suggestedResize;
 
     // START: InitParams
-    private final KeyValueParamsInitParams soParams;
-    private final SharedFeaturesInitParams soFeature;
+    private final FeaturesInitialization features;
     // END: InitParams
 
     // START: Stores
@@ -80,16 +78,15 @@ public class ImageInitParams implements BeanInitParams {
 
     private CheckedFunction<StackProvider, Stack, OperationFailedException> stackProviderBridge;
 
-    public ImageInitParams(SharedObjects sharedObjects) {
+    public ImageInitialization(SharedObjects sharedObjects) {
         this(sharedObjects, Optional.empty());
     }
 
-    public ImageInitParams(
+    public ImageInitialization(
             SharedObjects sharedObjects, Optional<ImageSizeSuggestion> suggestedResize) {
         this.sharedObjects = sharedObjects;
         this.suggestedResize = suggestedResize;
-        this.soParams = new KeyValueParamsInitParams(sharedObjects);
-        this.soFeature = SharedFeaturesInitParams.create(sharedObjects);
+        this.features = FeaturesInitialization.create(sharedObjects);
 
         storeStack = sharedObjects.getOrCreate(Stack.class);
         storeHistogram = sharedObjects.getOrCreate(Histogram.class);
@@ -122,21 +119,29 @@ public class ImageInitParams implements BeanInitParams {
     public NamedProviderStore<BinarySegmentation> binarySegmentations() {
         return storeBinarySegmentation;
     }
-
-    public KeyValueParamsInitParams params() {
-        return soParams;
+    
+    public NamedProviderStore<Path> filePaths() {
+        return features.getFilePaths().getFilePaths();
+    }
+    
+    public NamedProviderStore<Dictionary> dictionaries() {
+        return dictionaryInitParams().getDictionaries();
+    }
+    
+    public DictionaryInitialization dictionaryInitParams() {
+        return features.getDictionary();
     }
 
-    public SharedFeaturesInitParams features() {
-        return soFeature;
+    public FeaturesInitialization featuresInitParams() {
+        return features;
     }
 
     public void populate(PropertyInitializer<?> propertyInitializer, Define define, Logger logger)
             throws OperationFailedException {
 
-        soFeature.populate(define.getList(FeatureListProvider.class), logger);
+        features.populate(define.getList(FeatureListProvider.class), logger);
 
-        PopulateStoreFromDefine<ImageInitParams> populate =
+        PopulateStoreFromDefine<ImageInitialization> populate =
                 new PopulateStoreFromDefine<>(define, propertyInitializer, logger);
 
         populate.copyInit(BinarySegmentation.class, storeBinarySegmentation);
@@ -184,9 +189,16 @@ public class ImageInitParams implements BeanInitParams {
         }
     }
 
-    public void addToKeyValueParamsCollection(String identifier, Dictionary params)
+    /**
+     * Adds a dictionary to named-collection of dictionaries.
+     * 
+     * @param identifier the unique name of the dictionary
+     * @param toAdd the dictionary to add
+     * @throws OperationFailedException
+     */
+    public void addDictionary(String identifier, Dictionary toAdd)
             throws OperationFailedException {
-        params().getNamedKeyValueParams().add(identifier, () -> params);
+        dictionaries().add(identifier, () -> toAdd);
     }
 
     public Path getModelDirectory() {

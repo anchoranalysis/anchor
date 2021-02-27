@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-bean
+ * anchor-beans-shared
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -23,18 +23,5 @@
  * THE SOFTWARE.
  * #L%
  */
-
-package org.anchoranalysis.bean.initializable.params;
-
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class NullInitParams implements BeanInitParams {
-
-    private static final NullInitParams INSTANCE = new NullInitParams();
-
-    public static NullInitParams instance() {
-        return INSTANCE;
-    }
-}
+/** Setting, referencing and initializing key-value parameters. */
+package org.anchoranalysis.bean.shared.dictionary;

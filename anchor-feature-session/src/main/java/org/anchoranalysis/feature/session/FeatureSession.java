@@ -34,7 +34,7 @@ import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.FeatureInitParams;
+import org.anchoranalysis.feature.calculate.FeatureInitialization;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.session.calculator.multi.FeatureCalculatorMulti;
 import org.anchoranalysis.feature.session.calculator.single.FeatureCalculatorSingle;
@@ -69,7 +69,7 @@ public class FeatureSession {
      */
     public static <T extends FeatureInput> FeatureCalculatorSingle<T> with(
             Feature<T> feature, Logger logger) throws InitException {
-        return with(feature, new FeatureInitParams(), new SharedFeatureMulti(), logger);
+        return with(feature, new FeatureInitialization(), new SharedFeatureMulti(), logger);
     }
 
     /**
@@ -84,12 +84,12 @@ public class FeatureSession {
     public static <T extends FeatureInput> FeatureCalculatorSingle<T> with(
             Feature<T> feature, SharedFeatureMulti sharedFeatures, Logger logger)
             throws InitException {
-        return with(feature, new FeatureInitParams(), sharedFeatures, logger);
+        return with(feature, new FeatureInitialization(), sharedFeatures, logger);
     }
 
     public static <T extends FeatureInput> FeatureCalculatorSingle<T> with(
             Feature<T> feature,
-            FeatureInitParams initParams,
+            FeatureInitialization initParams,
             SharedFeatureMulti sharedFeatures,
             Logger logger)
             throws InitException {
@@ -109,12 +109,12 @@ public class FeatureSession {
      */
     public static <T extends FeatureInput> FeatureCalculatorMulti<T> with(
             FeatureList<T> features, Logger logger) throws InitException {
-        return with(features, new FeatureInitParams(), new SharedFeatureMulti(), logger);
+        return with(features, new FeatureInitialization(), new SharedFeatureMulti(), logger);
     }
 
     public static <T extends FeatureInput> FeatureCalculatorMulti<T> with(
             FeatureList<T> features,
-            FeatureInitParams initParams,
+            FeatureInitialization initParams,
             SharedFeatureMulti sharedFeatures,
             Logger logger)
             throws InitException {
@@ -128,7 +128,7 @@ public class FeatureSession {
 
     public static <T extends FeatureInput> FeatureCalculatorMulti<T> with(
             FeatureList<T> features,
-            FeatureInitParams initParams,
+            FeatureInitialization initParams,
             Optional<SharedFeatureMulti> sharedFeatures,
             Logger logger,
             BoundReplaceStrategy<T, ? extends ReplaceStrategy<T>> replacePolicyFactory)
@@ -161,7 +161,7 @@ public class FeatureSession {
 
     private static <T extends FeatureInput> void startSession(
             SequentialSession<T> session,
-            FeatureInitParams initParams,
+            FeatureInitialization initParams,
             SharedFeatureMulti sharedFeatures,
             Logger logger)
             throws InitException {

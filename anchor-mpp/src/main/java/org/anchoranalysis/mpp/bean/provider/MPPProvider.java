@@ -27,11 +27,11 @@
 package org.anchoranalysis.mpp.bean.provider;
 
 import org.anchoranalysis.bean.provider.Provider;
-import org.anchoranalysis.mpp.bean.MPPBean;
+import org.anchoranalysis.mpp.bean.MarksBean;
 
 /**
  * @author Owen Feehan
  * @param <T> bean-type
  * @param <S> provider-type
  */
-public abstract class MPPProvider<T, S> extends MPPBean<T> implements Provider<S> {}
+public abstract class MPPProvider<T, S> extends MarksBean<T> implements Provider<S> {}

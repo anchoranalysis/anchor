@@ -36,7 +36,7 @@ import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.progress.Progress;
-import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.stack.Stack;
@@ -95,7 +95,7 @@ public class ChannelFilter extends AnchorBean<ChannelFilter> implements ChannelG
     }
 
     private void initProvider(ChannelProvider provider, Channel channel) throws InitException {
-        ImageInitParams soImage = ImageInitParamsFactory.create(context);
+        ImageInitialization soImage = ImageInitParamsFactory.create(context);
         try {
             soImage.addToStacks("input_channel", new Stack(channel));
         } catch (OperationFailedException e) {

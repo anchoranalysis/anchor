@@ -27,12 +27,12 @@
 package org.anchoranalysis.mpp.io.input;
 
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
-import org.anchoranalysis.mpp.bean.init.MPPInitParams;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
+import org.anchoranalysis.mpp.bean.init.MarksInitialization;
 
 /** The input can be used to initialize an MPP Bean */
 public interface InputForMPPBean {
 
-    void addToSharedObjects(MPPInitParams soMPP, ImageInitParams soImage)
+    void addToSharedObjects(MarksInitialization soMPP, ImageInitialization soImage)
             throws OperationFailedException;
 }

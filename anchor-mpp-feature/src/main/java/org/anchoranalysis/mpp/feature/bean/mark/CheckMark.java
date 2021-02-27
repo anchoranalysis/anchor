@@ -28,7 +28,7 @@ package org.anchoranalysis.mpp.feature.bean.mark;
 
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.feature.energy.EnergyStack;
-import org.anchoranalysis.mpp.bean.MPPBean;
+import org.anchoranalysis.mpp.bean.MarksBean;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.mpp.feature.error.CheckException;
 import org.anchoranalysis.mpp.mark.CompatibleWithMark;
@@ -39,7 +39,7 @@ import org.anchoranalysis.mpp.mark.Mark;
  *
  * @author Owen Feehan
  */
-public abstract class CheckMark extends MPPBean<CheckMark> implements CompatibleWithMark {
+public abstract class CheckMark extends MarksBean<CheckMark> implements CompatibleWithMark {
 
     /**
      * Called before any calls to {@link #check}

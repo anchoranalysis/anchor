@@ -35,7 +35,7 @@ import org.anchoranalysis.feature.session.calculator.multi.FeatureCalculatorMult
 import org.anchoranalysis.feature.session.replace.BoundReplaceStrategy;
 import org.anchoranalysis.feature.session.replace.CacheAndReuseStrategy;
 import org.anchoranalysis.feature.session.replace.ReplaceStrategy;
-import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.feature.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.feature.input.FeatureInputStack;
@@ -99,7 +99,7 @@ public class MergedPairsFeatures {
 
     public FeatureCalculatorMulti<FeatureInputStack> createCalculator(
             CreateCalculatorHelper cc,
-            ImageInitParams soImage,
+            ImageInitialization soImage,
             BoundReplaceStrategy<FeatureInputStack, ? extends ReplaceStrategy<FeatureInputStack>>
                     cachingStrategy)
             throws InitException {
@@ -108,7 +108,7 @@ public class MergedPairsFeatures {
 
     public FeatureCalculatorMulti<FeatureInputSingleObject> createSingle(
             CreateCalculatorHelper cc,
-            ImageInitParams soImage,
+            ImageInitialization soImage,
             BoundReplaceStrategy<
                             FeatureInputSingleObject,
                             CacheAndReuseStrategy<FeatureInputSingleObject>>
@@ -119,7 +119,7 @@ public class MergedPairsFeatures {
 
     public FeatureCalculatorMulti<FeatureInputPairObjects> createPair(
             CreateCalculatorHelper cc,
-            ImageInitParams soImage,
+            ImageInitialization soImage,
             CacheTransferSourceCollection cacheTransferSource)
             throws InitException {
         return cc.createPair(getPair(), soImage, cacheTransferSource);

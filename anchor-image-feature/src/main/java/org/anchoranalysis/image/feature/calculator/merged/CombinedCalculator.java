@@ -34,7 +34,7 @@ import org.anchoranalysis.feature.results.ResultsVector;
 import org.anchoranalysis.feature.session.calculator.multi.FeatureCalculatorMulti;
 import org.anchoranalysis.feature.session.replace.BoundReplaceStrategy;
 import org.anchoranalysis.feature.session.replace.CacheAndReuseStrategy;
-import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.feature.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.feature.input.FeatureInputStack;
@@ -77,7 +77,7 @@ class CombinedCalculator {
             MergedPairsFeatures features,
             CreateCalculatorHelper cc,
             MergedPairsInclude include,
-            ImageInitParams soImage)
+            ImageInitialization soImage)
             throws InitException {
         super();
         this.cc = cc;
@@ -156,7 +156,7 @@ class CombinedCalculator {
     }
 
     private Optional<FeatureCalculatorMulti<FeatureInputSingleObject>> createFirstAndSecond(
-            ImageInitParams soImage,
+            ImageInitialization soImage,
             BoundReplaceStrategy<
                             FeatureInputSingleObject,
                             CacheAndReuseStrategy<FeatureInputSingleObject>>
@@ -170,7 +170,7 @@ class CombinedCalculator {
     }
 
     private Optional<FeatureCalculatorMulti<FeatureInputSingleObject>> createMerged(
-            ImageInitParams soImage,
+            ImageInitialization soImage,
             BoundReplaceStrategy<
                             FeatureInputSingleObject,
                             CacheAndReuseStrategy<FeatureInputSingleObject>>
@@ -184,7 +184,7 @@ class CombinedCalculator {
     }
 
     private FeatureCalculatorMulti<FeatureInputPairObjects> createPair(
-            ImageInitParams soImage,
+            ImageInitialization soImage,
             BoundReplaceStrategy<
                             FeatureInputSingleObject,
                             CacheAndReuseStrategy<FeatureInputSingleObject>>

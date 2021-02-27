@@ -30,7 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.bean.NamedBean;
-import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
+import org.anchoranalysis.bean.shared.dictionary.DictionaryProvider;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.core.value.Dictionary;
@@ -68,7 +68,7 @@ public class EnergyScheme {
 
     private final AddCriteriaPair pairAddCriteria;
 
-    private final Optional<KeyValueParamsProvider> params;
+    private final Optional<DictionaryProvider> params;
 
     public EnergyScheme(
             FeatureList<FeatureInputSingleMemo> elemInd,
@@ -93,7 +93,7 @@ public class EnergyScheme {
             FeatureList<FeatureInputAllMemo> elemAll,
             RegionMap regionMap,
             AddCriteriaPair pairAddCriteria,
-            Optional<KeyValueParamsProvider> keyValueParamsProvider,
+            Optional<DictionaryProvider> keyValueParamsProvider,
             List<NamedBean<Feature<FeatureInputStack>>> listImageFeatures)
             throws CreateException {
         this.elemInd = elemInd;

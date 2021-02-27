@@ -35,7 +35,7 @@ import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.session.calculator.single.FeatureCalculatorSingle;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
-import org.anchoranalysis.mpp.bean.init.MPPInitParams;
+import org.anchoranalysis.mpp.bean.init.MarksInitialization;
 
 public abstract class ReportFeatureEvaluator<T extends FeatureInput>
         extends ReportFeatureForSharedObjects {
@@ -46,7 +46,7 @@ public abstract class ReportFeatureEvaluator<T extends FeatureInput>
     @BeanField @Getter @Setter private String title;
     // END BEAN PROPERTIES
 
-    protected void init(MPPInitParams so, Logger logger) throws InitException {
+    protected void init(MarksInitialization so, Logger logger) throws InitException {
         // Maybe we should duplicate the providers?
         featureEvaluator.initRecursive(so.getFeature(), logger);
     }

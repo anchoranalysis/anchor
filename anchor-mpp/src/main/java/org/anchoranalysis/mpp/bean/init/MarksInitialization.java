@@ -27,16 +27,16 @@
 package org.anchoranalysis.mpp.bean.init;
 
 import org.anchoranalysis.bean.define.Define;
-import org.anchoranalysis.bean.initializable.params.BeanInitParams;
+import org.anchoranalysis.bean.initializable.params.BeanInitialization;
 import org.anchoranalysis.bean.initializable.property.PropertyInitializer;
-import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsInitParams;
+import org.anchoranalysis.bean.shared.dictionary.DictionaryInitialization;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
 import org.anchoranalysis.core.identifier.provider.store.SharedObjects;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
-import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
+import org.anchoranalysis.feature.shared.FeaturesInitialization;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.bean.nonbean.init.PopulateStoreFromDefine;
 import org.anchoranalysis.mpp.bean.bound.MarkBounds;
 import org.anchoranalysis.mpp.bean.proposer.MarkCollectionProposer;
@@ -49,12 +49,11 @@ import org.anchoranalysis.mpp.mark.MarkCollection;
 import org.anchoranalysis.mpp.pair.IdentifiablePair;
 import org.anchoranalysis.mpp.pair.RandomCollection;
 
-// A wrapper around SharedObjects which types certain MPP entities
-public class MPPInitParams implements BeanInitParams {
+public class MarksInitialization implements BeanInitialization {
 
     // START: InitParams
-    private ImageInitParams soImage;
-    private PointsInitParams soPoints;
+    private ImageInitialization soImage;
+    private PointsInitialization soPoints;
     // END: InitParams
 
     // START: Stores
@@ -67,10 +66,10 @@ public class MPPInitParams implements BeanInitParams {
     private NamedProviderStore<RandomCollection<IdentifiablePair<Mark>>> storePairCollection;
     // END: Stores
 
-    public MPPInitParams(ImageInitParams soImage, SharedObjects so) {
+    public MarksInitialization(ImageInitialization soImage, SharedObjects so) {
         super();
         this.soImage = soImage;
-        this.soPoints = PointsInitParams.create(soImage, so);
+        this.soPoints = PointsInitialization.create(soImage, so);
 
         storeMarks = so.getOrCreate(MarkCollection.class);
         storeMarksProposer = so.getOrCreate(MarkCollectionProposer.class);
@@ -81,20 +80,20 @@ public class MPPInitParams implements BeanInitParams {
         storePairCollection = so.getOrCreate(RandomCollection.class);
     }
 
-    public ImageInitParams getImage() {
+    public ImageInitialization getImage() {
         return soImage;
     }
 
-    public SharedFeaturesInitParams getFeature() {
-        return soImage.features();
+    public FeaturesInitialization getFeature() {
+        return soImage.featuresInitParams();
     }
 
-    public PointsInitParams getPoints() {
+    public PointsInitialization getPoints() {
         return soPoints;
     }
 
-    public KeyValueParamsInitParams getParams() {
-        return soImage.params();
+    public DictionaryInitialization getDictionary() {
+        return soImage.dictionaryInitParams();
     }
 
     public NamedProviderStore<MarkCollection> getMarksCollection() {
@@ -140,7 +139,7 @@ public class MPPInitParams implements BeanInitParams {
     public void populate(PropertyInitializer<?> pi, Define define, Logger logger)
             throws OperationFailedException {
 
-        PopulateStoreFromDefine<MPPInitParams> populater =
+        PopulateStoreFromDefine<MarksInitialization> populater =
                 new PopulateStoreFromDefine<>(define, pi, logger);
         populater.copyWithoutInit(MarkBounds.class, getMarkBoundsSet());
         populater.copyInit(MarkProposer.class, getMarkProposerSet());

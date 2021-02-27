@@ -43,7 +43,7 @@ import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.functional.checked.CheckedFunction;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.calculate.FeatureInitParams;
+import org.anchoranalysis.feature.calculate.FeatureInitialization;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.name.FeatureNameList;
 
@@ -76,7 +76,7 @@ public class FeatureList<T extends FeatureInput> extends AnchorBean<FeatureList<
         this.list = list;
     }
 
-    public void initRecursive(FeatureInitParams featureInitParams, Logger logger)
+    public void initRecursive(FeatureInitialization featureInitParams, Logger logger)
             throws InitException {
         for (Feature<T> feature : list) {
             feature.initRecursive(featureInitParams, logger);

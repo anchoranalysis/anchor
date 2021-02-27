@@ -29,7 +29,7 @@ package org.anchoranalysis.bean.initializable;
 import java.util.Optional;
 import lombok.Getter;
 import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.bean.initializable.params.BeanInitParams;
+import org.anchoranalysis.bean.initializable.params.BeanInitialization;
 import org.anchoranalysis.bean.initializable.params.ParamsInitializer;
 import org.anchoranalysis.bean.initializable.property.PropertyDefiner;
 import org.anchoranalysis.bean.initializable.property.PropertyInitializer;
@@ -44,7 +44,7 @@ import org.anchoranalysis.core.log.Logger;
  * @param <B> bean-family type
  * @param <P> initialization-parameters type
  */
-public abstract class InitializableBean<B, P extends BeanInitParams> extends AnchorBean<B>
+public abstract class InitializableBean<B, P extends BeanInitialization> extends AnchorBean<B>
         implements ParamsInitializer<P> {
 
     private final PropertyInitializer<P> propertyInitializer;
@@ -52,7 +52,7 @@ public abstract class InitializableBean<B, P extends BeanInitParams> extends Anc
     @Getter private final PropertyDefiner propertyDefiner;
 
     /** Has the bean been initialized yet? */
-    private Optional<P> initializationParameters = Optional.empty();
+    private Optional<P> initialization = Optional.empty();
 
     /** the logger */
     private Logger logger;
@@ -66,7 +66,7 @@ public abstract class InitializableBean<B, P extends BeanInitParams> extends Anc
     // Dummy method, that children can optionally override
     @Override
     public void init(P params, Logger logger) throws InitException {
-        this.initializationParameters = Optional.of(params);
+        this.initialization = Optional.of(params);
         this.logger = logger;
         onInit(params);
     }
@@ -110,7 +110,7 @@ public abstract class InitializableBean<B, P extends BeanInitParams> extends Anc
     }
 
     public boolean isInitialized() {
-        return initializationParameters.isPresent();
+        return initialization.isPresent();
     }
 
     protected PropertyInitializer<P> getPropertyInitializer() {
@@ -122,8 +122,8 @@ public abstract class InitializableBean<B, P extends BeanInitParams> extends Anc
         return logger;
     }
 
-    protected P getInitializationParameters() {
-        return initializationParameters.orElseThrow(
+    protected P getInitialization() {
+        return initialization.orElseThrow(
                 () ->
                         new AnchorFriendlyRuntimeException(
                                 "No initialization-params as the been has not been initialized"));

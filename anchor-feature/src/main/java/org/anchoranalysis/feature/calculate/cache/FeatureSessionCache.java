@@ -28,7 +28,7 @@ package org.anchoranalysis.feature.calculate.cache;
 
 import java.util.Set;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.feature.calculate.FeatureInitParams;
+import org.anchoranalysis.feature.calculate.FeatureInitialization;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
@@ -60,7 +60,7 @@ public interface FeatureSessionCache<T extends FeatureInput> {
      * @param featureInitParams params for initialization
      * @param logger logger
      */
-    public abstract void init(FeatureInitParams featureInitParams, Logger logger);
+    public abstract void init(FeatureInitialization featureInitParams, Logger logger);
 
     /** Invalidates existing caches so all calculations occur freshly */
     void invalidate();
