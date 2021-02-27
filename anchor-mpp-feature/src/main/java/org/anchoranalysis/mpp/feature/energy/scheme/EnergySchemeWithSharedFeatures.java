@@ -147,16 +147,6 @@ public class EnergySchemeWithSharedFeatures {
         }
     }
 
-    private EnergyStack createEnergyStack(EnergyStackWithoutParams raster)
-            throws FeatureCalculationException {
-
-        try {
-            return new EnergyStack(raster, energyScheme.createDictionary());
-        } catch (CreateException e) {
-            throw new FeatureCalculationException(e);
-        }
-    }
-
     public AddCriteriaEnergyPair createAddCriteria() throws CreateException {
         try {
             return new AddCriteriaEnergyPair(
@@ -169,5 +159,15 @@ public class EnergySchemeWithSharedFeatures {
 
     public RegionMap getRegionMap() {
         return energyScheme.getRegionMap();
+    }
+
+    private EnergyStack createEnergyStack(EnergyStackWithoutParams raster)
+            throws FeatureCalculationException {
+
+        try {
+            return new EnergyStack(raster, energyScheme.createDictionary());
+        } catch (CreateException e) {
+            throw new FeatureCalculationException(e);
+        }
     }
 }

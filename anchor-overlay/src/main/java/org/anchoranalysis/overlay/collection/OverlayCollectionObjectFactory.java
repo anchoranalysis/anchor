@@ -33,7 +33,6 @@ import org.anchoranalysis.core.identifier.getter.IdentifierGetter;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.io.manifest.directory.JobRootDirectory;
 import org.anchoranalysis.overlay.object.OverlayObjectMask;
 
 /**
