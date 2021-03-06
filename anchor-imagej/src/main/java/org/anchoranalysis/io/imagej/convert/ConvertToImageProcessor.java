@@ -37,7 +37,6 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedShortBuffer;
 import org.anchoranalysis.image.voxel.buffer.slice.SliceBufferIndex;
-import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelTypeException;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
@@ -60,8 +59,9 @@ public class ConvertToImageProcessor {
      * @param voxels the voxels to extract a slice from.
      * @param z slice-index
      * @return a newly created image-procesor (reusing the existing buffer).
+     * @throws ImageJConversionException if the voxels are neither unsigned byte nor unsigned short (the only two supported types)
      */
-    public static ImageProcessor from(VoxelsWrapper voxels, int z) {
+    public static ImageProcessor from(VoxelsWrapper voxels, int z) throws ImageJConversionException {
 
         if (voxels.any().extent().volumeXY() != voxels.slice(z).capacity()) {
             throw new AnchorFriendlyRuntimeException(
@@ -75,7 +75,7 @@ public class ConvertToImageProcessor {
         } else if (voxels.getVoxelDataType().equals(DATA_TYPE_SHORT)) {
             return fromShort(voxels.asShort().slices(), z);
         } else {
-            throw new IncorrectVoxelTypeException("Only byte or short data types are supported");
+            throw new ImageJConversionException("Only byte or short data types are supported");
         }
     }
 

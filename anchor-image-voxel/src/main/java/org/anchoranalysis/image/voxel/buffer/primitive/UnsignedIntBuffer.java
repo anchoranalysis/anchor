@@ -26,6 +26,7 @@
 package org.anchoranalysis.image.voxel.buffer.primitive;
 
 import java.nio.IntBuffer;
+import com.google.common.base.Preconditions;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
@@ -206,5 +207,18 @@ public final class UnsignedIntBuffer extends UnsignedBuffer {
 
     public IntBuffer put(int arg0, int arg1) {
         return delegate.put(arg0, arg1);
+    }
+    
+    /**
+     * The array of the buffer ala {@link IntBuffer#array}.
+     *
+     * <p>Unlike {@link IntBuffer#array} an array will always be returned, copying it into a newly
+     * created array, if it cannot be directly accessed.
+     *
+     * @return the array
+     */
+    public final int[] array() {
+        Preconditions.checkArgument(delegate.hasArray());
+        return delegate.array();
     }
 }
