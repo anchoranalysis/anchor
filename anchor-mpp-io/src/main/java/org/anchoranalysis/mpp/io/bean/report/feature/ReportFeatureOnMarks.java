@@ -42,7 +42,7 @@ import org.anchoranalysis.mpp.bean.provider.MarkCollectionProvider;
 import org.anchoranalysis.mpp.feature.bean.mark.collection.FeatureInputMarkCollection;
 import org.anchoranalysis.mpp.mark.MarkCollection;
 
-public class ReportFeatureOnMarks extends ReportFeatureForMPP<FeatureInputMarkCollection> {
+public class ReportFeatureOnMarks extends ReportFeatureForMarks<FeatureInputMarkCollection> {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private MarkCollectionProvider marks;
