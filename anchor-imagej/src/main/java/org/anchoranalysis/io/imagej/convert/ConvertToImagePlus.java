@@ -94,9 +94,10 @@ public class ConvertToImagePlus {
         // If we're making an RGB then we need to convert our stack
         ImageStack stackNew = ImageStackFactory.createFromStack(stack, makeRGB);
 
+        boolean makeComposite = !makeRGB && stack.getNumberChannels() != 1;
         ImagePlus imagePlus =
                 createImagePlus(
-                        stackNew, stack.dimensions(), stack.getNumberChannels(), 1, !makeRGB);
+                        stackNew, stack.dimensions(), stack.getNumberChannels(), 1, makeComposite);
 
         maybeCorrectComposite(stack, imagePlus);
 
@@ -133,6 +134,10 @@ public class ConvertToImagePlus {
         dimensions
                 .resolution()
                 .ifPresent(resolution -> configureCalibration(image.getCalibration(), resolution));
+
+        if (numberChannels == 1) {
+            image.setDisplayMode(IJ.GRAYSCALE);
+        }
 
         checkNumberSlices(image, dimensions);
 
