@@ -83,18 +83,18 @@ class ImageStackFactory {
 
         int channelIndex = 0;
 
-        Voxels<UnsignedByteBuffer> voxelsRed = extractChannel(stack, channelIndex++);
-        Voxels<UnsignedByteBuffer> voxelsGreen = extractChannel(stack, channelIndex++);
-        Voxels<UnsignedByteBuffer> voxelsBlue = extractChannel(stack, channelIndex);
+        RGBVoxels voxels = new RGBVoxels(
+                extractChannel(stack, channelIndex++),
+                extractChannel(stack, channelIndex++),
+                extractChannel(stack, channelIndex));
 
         return createFromProcessorsStream(
                 extent,
                 z ->
                         Stream.of(
-                                createColorProcessor(
-                                        extent, z, voxelsRed, voxelsGreen, voxelsBlue)));
+                                voxels.createColorProcessor(extent, z)));
     }
-
+    
     /**
      * Create a {@link ImageStack} with interleaved channels from a {@link Stack}
      *
@@ -166,27 +166,7 @@ class ImageStackFactory {
         CheckedStream.forEach(slices, ImageJConversionException.class, slice -> stack.addSlice(String.valueOf(z), slice));
     }
 
-    private static ColorProcessor createColorProcessor(
-            Extent extent,
-            int z,
-            Voxels<UnsignedByteBuffer> voxelsRed,
-            Voxels<UnsignedByteBuffer> voxelsGreen,
-            Voxels<UnsignedByteBuffer> voxelsBlue) {
-        ColorProcessor processor = new ColorProcessor(extent.x(), extent.y());
-
-        byte[] redPixels = extractSlice(voxelsRed, z);
-        byte[] greenPixels = extractSlice(voxelsGreen, z);
-        byte[] bluePixels = extractSlice(voxelsBlue, z);
-
-        processor.setRGB(redPixels, greenPixels, bluePixels);
-        return processor;
-    }
-
     private static Voxels<UnsignedByteBuffer> extractChannel(RGBStack stack, int channelIndex) {
         return stack.channelAt(channelIndex).voxels().asByte();
-    }
-
-    private static byte[] extractSlice(Voxels<UnsignedByteBuffer> voxels, int z) {
-        return voxels.sliceBuffer(z).array();
     }
 }
