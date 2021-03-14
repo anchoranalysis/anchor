@@ -7,6 +7,9 @@ import lombok.Value;
 /**
  * A file-name with the base (without extension) split from the extension.
  *
+ * <p>A period between the base and the extension exists in the filename, but this belongs to
+ * neither component.
+ *
  * @author Owen Feehan
  */
 @Value

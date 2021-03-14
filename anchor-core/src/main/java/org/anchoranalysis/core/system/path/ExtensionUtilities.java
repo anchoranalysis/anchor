@@ -3,6 +3,8 @@ package org.anchoranalysis.core.system.path;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -14,8 +16,8 @@ import org.apache.commons.io.FilenameUtils;
  *
  * <p>When a path contains only a single period, it is easy to reliably infer the extension.
  *
- * <p>However, some image file formats (e.g. OME-XML and OME-TIFF) have double periods e.g. ome.tiff
- * and ome.xml
+ * <p>However, some image file formats (e.g. OME-XML and OME-TIFF) have double periods, as specified
+ * in {@link #EXCEPTED_DOUBLE_EXTENSIONS}.
  *
  * <p>This class will ordinarily assume an extension is what follows the final period in a filename.
  * Any preceding second period will be treated as part of the file-name.
@@ -32,6 +34,21 @@ import org.apache.commons.io.FilenameUtils;
 public class ExtensionUtilities {
 
     /**
+     * Particular extensions with a double period, that are exceptionally checked for, and treated
+     * as a single extension.
+     *
+     * <p>Otherwise, in the presence of two periods, only the characters after the final period are
+     * considered the extension.
+     *
+     * <p>An explanation of many of the extensions can be found <a href="on
+     * imagej.net">https://imagej.net/Bio-Formats#Bio-Formats_Exporter</a>
+     *
+     * <p>Importantly, note <b>the leading period</b> in each entry in this list.
+     */
+    public static final List<String> EXCEPTED_DOUBLE_EXTENSIONS =
+            Arrays.asList(".ome.tif", ".ome.tiff", ".ome.xml", ".ome.tf2", ".ome.tf8", ".ome.btf");
+
+    /**
      * Splits the file-name of a path into a base part and an extension part.
      *
      * <p>The rules for how this split occurs are described in the class-level documentation.
@@ -41,9 +58,13 @@ public class ExtensionUtilities {
      * @return a newly-created class describing the split filename
      */
     public static FilenameSplitExtension splitFilename(String path) {
-        String baseName = FilenameUtils.getBaseName(path);
         Optional<String> extension = extractExtension(path);
-        return new FilenameSplitExtension(baseName, extension);
+        if (extension.isPresent()) {
+            String baseName = removeSuffix(path, extension.get());
+            return new FilenameSplitExtension(baseName, extension);
+        } else {
+            return new FilenameSplitExtension(path, Optional.empty());
+        }
     }
 
     /**
@@ -57,7 +78,11 @@ public class ExtensionUtilities {
      * @return the extension (excluding any leading period), if it exists.
      */
     public static Optional<String> extractExtension(String filename) {
-        return OptionalUtilities.create(FilenameUtils.getExtension(filename));
+
+        Optional<String> matchesSpecial = endsWithDoubleExtension(filename);
+        return OptionalUtilities.orElseGetFlat(
+                matchesSpecial,
+                () -> OptionalUtilities.create(FilenameUtils.getExtension(filename)));
     }
 
     /**
@@ -69,6 +94,45 @@ public class ExtensionUtilities {
      */
     public static Optional<String> extractExtension(Path path) {
         return extractExtension(path.toString());
+    }
+
+    /**
+     * Removes an extension from a filename or path.
+     *
+     * @param filename the filename or path to remove the extension from
+     * @return {@code filename} without the extension and any leading period to the extension
+     */
+    public static String removeExtension(String filename) {
+
+        Optional<String> matchesSpecial = endsWithDoubleExtension(filename);
+        if (matchesSpecial.isPresent()) {
+            return removeSuffix(filename, matchesSpecial.get());
+        } else {
+            return FilenameUtils.removeExtension(filename);
+        }
+    }
+
+    /**
+     * Like {@link #removeExtension(String)} but accepts and returns a {@link Path}.
+     *
+     * @param path the path to remove the extension from
+     * @return {@code path} without the extension and any leading period to the extension
+     */
+    public static Path removeExtension(Path path) {
+        return Paths.get(removeExtension(path.toString()));
+    }
+
+    /**
+     * Like {@link #removeExtension(String)} but accepts a {@link File}.
+     *
+     * <p>Note any directory components are ignored! Only the name of the file is returned.
+     *
+     * @param file a file to remove the extension from
+     * @return the name of {@code file} without the extension and any leading period to the
+     *     extension..
+     */
+    public static String removeExtension(File file) {
+        return removeExtension(file.getName());
     }
 
     /**
@@ -104,35 +168,25 @@ public class ExtensionUtilities {
     }
 
     /**
-     * Removes an extension from a filename or path.
+     * Checks if a path ends with any one of a list of special double-extensions.
      *
-     * @param filename the filename or path to remove the extension from
-     * @return {@code filename} without the extension and any leading period to the extension
+     * <p>The check occurs in a case-insensitive manner.
+     *
+     * @param path the path to check if it ends with any of the extensions
+     * @return the the matching extension (without the leading period), if it exists.
      */
-    public static String removeExtension(String filename) {
-        return FilenameUtils.removeExtension(filename);
+    private static Optional<String> endsWithDoubleExtension(String path) {
+        String pathLowercase = path.toLowerCase();
+        for (String extension : EXCEPTED_DOUBLE_EXTENSIONS) {
+            if (pathLowercase.endsWith(extension)) {
+                return Optional.of(extension.substring(1));
+            }
+        }
+        return Optional.empty();
     }
 
-    /**
-     * Like {@link #removeExtension(String)} but accepts and returns a {@link Path}.
-     *
-     * @param path the path to remove the extension from
-     * @return {@code path} without the extension and any leading period to the extension
-     */
-    public static Path removeExtension(Path path) {
-        return Paths.get(removeExtension(path.toString()));
-    }
-
-    /**
-     * Like {@link #removeExtension(String)} but accepts a {@link File}.
-     *
-     * <p>Note any directory components are ignored! Only the name of the file is returned.
-     *
-     * @param file a file to remove the extension from
-     * @return the name of {@code file} without the extension and any leading period to the
-     *     extension..
-     */
-    public static String removeExtension(File file) {
-        return removeExtension(file.getName());
+    /** Removes a suffix from the end of a string, immutably. */
+    private static String removeSuffix(String toRemoveFrom, String suffixToRemove) {
+        return toRemoveFrom.substring(0, toRemoveFrom.length() - suffixToRemove.length() - 1);
     }
 }

@@ -15,14 +15,20 @@ class ExtensionUtilitiesTest {
 
     /** A list of files without extensions. */
     private static List<String> BASE_NAMES =
-            Arrays.asList("someFile", "/path/to/someFile", "someFile.one", "someFile");
+            Arrays.asList("someFile", "/path/to/someFile", "someFile.one", "someFile", "someFile");
 
     /** An extension corresponding to each element in {@code BASE_NAMES}. */
-    private static List<Optional<String>> EXTENSIONS = asOptionalAppendEmpty("png", "tif", "two");
+    private static List<Optional<String>> EXTENSIONS =
+            asOptionalAppendEmpty("png", "tif", "two", "ome.xml");
 
     /** A list of strings combing each element in {@code BASE_NAMES} and {@code COMBINED}. */
     private static List<String> COMBINED =
-            Arrays.asList("someFile.png", "/path/to/someFile.tif", "someFile.one.two", "someFile");
+            Arrays.asList(
+                    "someFile.png",
+                    "/path/to/someFile.tif",
+                    "someFile.one.two",
+                    "someFile.ome.xml",
+                    "someFile");
 
     @Test
     void testExtractExtension() {
