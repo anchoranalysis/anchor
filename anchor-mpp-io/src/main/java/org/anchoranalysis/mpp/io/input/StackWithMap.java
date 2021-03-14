@@ -84,7 +84,7 @@ public class StackWithMap implements MultiInputSubMap<TimeSequence> {
     }
 
     public String inputName() {
-        return mainInputObject.name();
+        return mainInputObject.identifier();
     }
 
     public Optional<Path> pathForBinding() {

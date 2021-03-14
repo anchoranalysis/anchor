@@ -42,12 +42,12 @@ public abstract class SingleFileInputBase implements InputFromManager {
 
     protected SingleFileInputBase(NamedFile file) {
         this.file = file;
-        Preconditions.checkArgument(!file.getName().isEmpty());
+        Preconditions.checkArgument(!file.getIdentifier().isEmpty());
     }
 
     @Override
-    public String name() {
-        return file.getName();
+    public String identifier() {
+        return file.getIdentifier();
     }
 
     @Override
@@ -57,7 +57,7 @@ public abstract class SingleFileInputBase implements InputFromManager {
 
     @Override
     public String toString() {
-        return name();
+        return identifier();
     }
 
     public File getFile() {

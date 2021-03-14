@@ -42,8 +42,8 @@ public abstract class InputFromManagerDelegate<T extends InputFromManager>
     private final T delegate;
 
     @Override
-    public String name() {
-        return delegate.name();
+    public String identifier() {
+        return delegate.identifier();
     }
 
     @Override

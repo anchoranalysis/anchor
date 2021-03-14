@@ -112,7 +112,9 @@ public abstract class FileNamer extends AnchorBean<FileNamer> {
     private static void checkUniqueness(List<NamedFile> list) throws InputReadFailedException {
         Map<String, Long> countDescriptiveNames =
                 list.stream()
-                        .collect(Collectors.groupingBy(NamedFile::getName, Collectors.counting()));
+                        .collect(
+                                Collectors.groupingBy(
+                                        NamedFile::getIdentifier, Collectors.counting()));
 
         for (Map.Entry<String, Long> entry : countDescriptiveNames.entrySet()) {
             if (entry.getValue() > 1) {
@@ -128,7 +130,7 @@ public abstract class FileNamer extends AnchorBean<FileNamer> {
             List<NamedFile> list, Predicate<String> predicate, String dscr)
             throws InputReadFailedException {
         long numWithBackslashes =
-                list.stream().filter(file -> predicate.test(file.getName())).count();
+                list.stream().filter(file -> predicate.test(file.getIdentifier())).count();
 
         if (numWithBackslashes > 0) {
             throw new InputReadFailedException(
@@ -146,7 +148,7 @@ public abstract class FileNamer extends AnchorBean<FileNamer> {
     private static String keysWithNamePredicate(Predicate<String> predicate, List<NamedFile> list) {
         List<String> matches =
                 list.stream()
-                        .filter(file -> predicate.test(file.getName()))
+                        .filter(file -> predicate.test(file.getIdentifier()))
                         .map(file -> file.getPath().toString())
                         .collect(Collectors.toList());
 

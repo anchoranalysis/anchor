@@ -94,7 +94,7 @@ public class MultiInput implements ProvidesStackInput, InputForMarksBean {
     }
 
     @Override
-    public String name() {
+    public String identifier() {
         return stack.inputName();
     }
 

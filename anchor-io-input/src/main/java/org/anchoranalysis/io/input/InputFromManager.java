@@ -27,22 +27,81 @@
 package org.anchoranalysis.io.input;
 
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.core.log.error.ErrorReporter;
+import org.anchoranalysis.io.input.files.NamedFile;
 
+/**
+ * One particular input for processing.
+ *
+ * @author Owen Feehan
+ */
 public interface InputFromManager {
 
-    /** A unique name associated with the input. */
-    String name();
+    /**
+     * A unique name associated with the input.
+     *
+     * @return a string uniquely (in the current dataset) identifying the input in a meaningful way
+     */
+    String identifier();
 
+    /**
+     * A path to a file from which this input originated.
+     *
+     * <p>This path is not guaranteed to be unique for each input i.e. multiple inputs may originate
+     * from the same path.
+     *
+     * @return the primary path associated with the input, if it exists.
+     */
     Optional<Path> pathForBinding();
 
+    /**
+     * Like {@link #pathForBinding()} but throws an exception if a path isn't present.
+     *
+     * @return the primary path associated with the input
+     * @throws InputReadFailedException if such a path doesn't exist
+     */
     default Path pathForBindingRequired() throws InputReadFailedException {
         return pathForBinding()
                 .orElseThrow(
                         () ->
                                 new InputReadFailedException(
                                         "A binding path is required to be associated with each input for this algorithm, but is not"));
+    }
+
+    /**
+     * Expresses the input as a file with a name (the unique identifier).
+     *
+     * @return the file with its associated unique identifier as a name
+     * @throws InputReadFailedException if no path is associated with the input
+     */
+    default NamedFile asFile() throws InputReadFailedException {
+        return new NamedFile(identifier(), pathForBindingRequired().toFile());
+    }
+
+    /**
+     * A path to all files associated with the input, including {@link #pathForBinding()}.
+     *
+     * <p>Normally an input (e.g. an image) is stored as one file on the file-system, and this is
+     * associated with a single file.
+     *
+     * <p>However, an input (e.g. an image) may originate in several files, and have several
+     * associations.
+     *
+     * <p>Or an input may not originate on the file-system, and thus have no associations.
+     *
+     * @return a list with all paths associated with the input.
+     */
+    default List<Path> allAssociatedPaths() {
+        Optional<Path> bindingPath = pathForBinding();
+        if (bindingPath.isPresent()) {
+            return Arrays.asList(bindingPath.get());
+        } else {
+            return new ArrayList<>();
+        }
     }
 
     /**
