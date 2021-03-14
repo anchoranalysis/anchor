@@ -40,8 +40,8 @@ public class ExtensionUtilities {
      * <p>Otherwise, in the presence of two periods, only the characters after the final period are
      * considered the extension.
      *
-     * <p>An explanation of many of the extensions can be found <a href="on
-     * imagej.net">https://imagej.net/Bio-Formats#Bio-Formats_Exporter</a>
+     * <p>An explanation of many of the extensions can be found <a
+     * href="https://imagej.net/Bio-Formats#Bio-Formats_Exporter">on imagej.net</a>
      *
      * <p>Importantly, note <b>the leading period</b> in each entry in this list.
      */
@@ -187,6 +187,7 @@ public class ExtensionUtilities {
 
     /** Removes a suffix from the end of a string, immutably. */
     private static String removeSuffix(String toRemoveFrom, String suffixToRemove) {
-        return toRemoveFrom.substring(0, toRemoveFrom.length() - suffixToRemove.length() - 1);
+        int numberCharactersToKeep = toRemoveFrom.length() - suffixToRemove.length() - 1;
+        return toRemoveFrom.substring(0, numberCharactersToKeep);
     }
 }
