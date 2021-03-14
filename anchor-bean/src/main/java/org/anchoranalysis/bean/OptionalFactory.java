@@ -74,7 +74,7 @@ public class OptionalFactory {
             return Optional.empty();
         }
     }
-    
+
     /**
      * Like {@link #create} but accepts a supplier that throws a checked/exception.
      *
@@ -85,7 +85,8 @@ public class OptionalFactory {
      * @return an optional that is defined or empty depending on the flag
      * @throws E if <code>supplier</code> throws it
      */
-    public static <T,E extends Exception> Optional<T> createWithException(boolean flag, CheckedSupplier<T,E> supplier) throws E {
+    public static <T, E extends Exception> Optional<T> createWithException(
+            boolean flag, CheckedSupplier<T, E> supplier) throws E {
         if (flag) {
             return Optional.of(supplier.get());
         } else {

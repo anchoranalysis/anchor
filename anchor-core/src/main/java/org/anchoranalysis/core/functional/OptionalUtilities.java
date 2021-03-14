@@ -191,7 +191,7 @@ public class OptionalUtilities {
      * Creates an Optional from a string that might be empty or null
      *
      * @param possiblyEmptyString a string that might be empty or null
-     * @return the string, or empty() if the string is empty or null
+     * @return the string, or {@link Optional#empty} if the string is empty or null
      */
     public static Optional<String> create(String possiblyEmptyString) {
         if (possiblyEmptyString == null || possiblyEmptyString.isEmpty()) {

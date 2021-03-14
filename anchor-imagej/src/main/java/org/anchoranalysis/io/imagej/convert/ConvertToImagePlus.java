@@ -64,7 +64,8 @@ public class ConvertToImagePlus {
      *
      * @param voxels the voxels to be converted
      * @return a newly created image-plus, reusing the input voxel's buffer without copying.
-     * @throws ImageJConversionException if the voxels are neither unsigned byte nor unsigned short (the only two supported types)
+     * @throws ImageJConversionException if the voxels are neither unsigned byte nor unsigned short
+     *     (the only two supported types)
      */
     public static ImagePlus from(VoxelsWrapper voxels) throws ImageJConversionException {
         Dimensions dimensions = new Dimensions(voxels.any().extent(), Optional.empty());
@@ -77,7 +78,8 @@ public class ConvertToImagePlus {
      *
      * @param channel the channel to be converted
      * @return a newly created image-plus, reusing the input channels's buffer without copying.
-     * @throws ImageJConversionException if the voxels are neither unsigned byte nor unsigned short (the only two supported types) 
+     * @throws ImageJConversionException if the voxels are neither unsigned byte nor unsigned short
+     *     (the only two supported types)
      */
     public static ImagePlus from(Channel channel) throws ImageJConversionException {
         return from(channel.voxels());

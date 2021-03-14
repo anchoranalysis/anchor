@@ -99,7 +99,7 @@ public abstract class ImageJRasterWriter extends StackWriter {
         } catch (ImageJConversionException e) {
             throw new ImageIOException(e);
         }
-        
+
         try {
             writeImagePlus(image, path, stack.hasMoreThanOneSlice());
         } finally {

@@ -60,7 +60,8 @@ class ImageStackFactory {
      * @return a newly created {@link ImageStack}
      * @throws ImageJConversionException if any RGB channel is not unsigned 8-bit
      */
-    public static ImageStack createFromStack(Stack stack, boolean makeRGB) throws ImageJConversionException {
+    public static ImageStack createFromStack(Stack stack, boolean makeRGB)
+            throws ImageJConversionException {
         if (makeRGB) {
             return createRGB(new RGBStack(stack));
         } else {
@@ -77,30 +78,30 @@ class ImageStackFactory {
      */
     public static ImageStack createRGB(RGBStack stack) throws ImageJConversionException {
         if (!stack.allChannelsHaveType(UnsignedByteVoxelType.INSTANCE)) {
-            throw new ImageJConversionException("Only unsigned 8-bit channels are supported for an ImageJ RGB image");
+            throw new ImageJConversionException(
+                    "Only unsigned 8-bit channels are supported for an ImageJ RGB image");
         }
         Extent extent = stack.channelAt(0).extent();
 
         int channelIndex = 0;
 
-        RGBVoxels voxels = new RGBVoxels(
-                extractChannel(stack, channelIndex++),
-                extractChannel(stack, channelIndex++),
-                extractChannel(stack, channelIndex));
+        RGBVoxels voxels =
+                new RGBVoxels(
+                        extractChannel(stack, channelIndex++),
+                        extractChannel(stack, channelIndex++),
+                        extractChannel(stack, channelIndex));
 
         return createFromProcessorsStream(
-                extent,
-                z ->
-                        Stream.of(
-                                voxels.createColorProcessor(extent, z)));
+                extent, z -> Stream.of(voxels.createColorProcessor(extent, z)));
     }
-    
+
     /**
      * Create a {@link ImageStack} with interleaved channels from a {@link Stack}
      *
      * @param stack the channels that will be interleaved
      * @return a newly created {@link ImageStack}
-     * @throws ImageJConversionException if the voxels are neither unsigned byte nor unsigned short (the only two supported types)
+     * @throws ImageJConversionException if the voxels are neither unsigned byte nor unsigned short
+     *     (the only two supported types)
      */
     public static ImageStack createInterleaved(Stack stack) throws ImageJConversionException {
         return createFromVoxelsStream(
@@ -115,9 +116,11 @@ class ImageStackFactory {
      *
      * @param voxels the voxels corresponding to the single-channel
      * @return a newly created {@link ImageStack}
-     * @throws ImageJConversionException if the voxels are neither unsigned byte nor unsigned short (the only two supported types) 
+     * @throws ImageJConversionException if the voxels are neither unsigned byte nor unsigned short
+     *     (the only two supported types)
      */
-    public static ImageStack createSingleChannel(VoxelsWrapper voxels) throws ImageJConversionException {
+    public static ImageStack createSingleChannel(VoxelsWrapper voxels)
+            throws ImageJConversionException {
         return createFromVoxelsStream(voxels.extent(), z -> Stream.of(voxels));
     }
 
@@ -130,18 +133,19 @@ class ImageStackFactory {
      *     ImageStack} for a given slice-index
      * @return a newly created {@link ImageStack} with slices constructed from {@code createSlice}
      *     applied to all slice-indices
-     * @throws ImageJConversionException if the voxels are neither unsigned byte nor unsigned short (the only two supported types)
+     * @throws ImageJConversionException if the voxels are neither unsigned byte nor unsigned short
+     *     (the only two supported types)
      */
     private static ImageStack createFromVoxelsStream(
-            Extent extent, IntFunction<Stream<VoxelsWrapper>> createSlice) throws ImageJConversionException {
+            Extent extent, IntFunction<Stream<VoxelsWrapper>> createSlice)
+            throws ImageJConversionException {
         return createFromProcessorsStream(
                 extent,
-                z -> CheckedStream.map(
-                    createSlice.apply(z),
-                    ImageJConversionException.class,
-                    voxels -> ConvertToImageProcessor.from(voxels, z)
-                )
-        );
+                z ->
+                        CheckedStream.map(
+                                createSlice.apply(z),
+                                ImageJConversionException.class,
+                                voxels -> ConvertToImageProcessor.from(voxels, z)));
     }
 
     /**
@@ -153,17 +157,24 @@ class ImageStackFactory {
      *     ImageStack} for a given slice-index
      * @return a newly created {@link ImageStack} with slices constructed from {@code createSlice}
      *     applied to all slice-indices
-     * @throws ImageJConversionException if the voxels are neither unsigned byte nor unsigned short (the only two supported types)
+     * @throws ImageJConversionException if the voxels are neither unsigned byte nor unsigned short
+     *     (the only two supported types)
      */
     private static ImageStack createFromProcessorsStream(
-            Extent extent, CheckedIntFunction<Stream<ImageProcessor>,ImageJConversionException> createSlice) throws ImageJConversionException {
+            Extent extent,
+            CheckedIntFunction<Stream<ImageProcessor>, ImageJConversionException> createSlice)
+            throws ImageJConversionException {
         ImageStack stack = new ImageStack(extent.x(), extent.y());
         extent.iterateOverZ(z -> addSlices(stack, z, createSlice.apply(z)));
         return stack;
     }
 
-    private static void addSlices(ImageStack stack, int z, Stream<ImageProcessor> slices) throws ImageJConversionException {
-        CheckedStream.forEach(slices, ImageJConversionException.class, slice -> stack.addSlice(String.valueOf(z), slice));
+    private static void addSlices(ImageStack stack, int z, Stream<ImageProcessor> slices)
+            throws ImageJConversionException {
+        CheckedStream.forEach(
+                slices,
+                ImageJConversionException.class,
+                slice -> stack.addSlice(String.valueOf(z), slice));
     }
 
     private static Voxels<UnsignedByteBuffer> extractChannel(RGBStack stack, int channelIndex) {
