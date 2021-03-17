@@ -27,6 +27,7 @@
 package org.anchoranalysis.io.input;
 
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -47,6 +48,15 @@ public interface InputFromManager {
      * @return a string uniquely (in the current dataset) identifying the input in a meaningful way
      */
     String identifier();
+    
+    /**
+     * Like {@link #identifier} but converts the identifier to a path.
+     *
+     * @return a path based upon the unique identifier for the input
+     */
+    default Path identifierAsPath() {
+        return Paths.get( identifier() );
+    }
 
     /**
      * A path to a file from which this input originated.

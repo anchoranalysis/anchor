@@ -27,12 +27,15 @@
 package org.anchoranalysis.experiment.bean.io;
 
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.log.Logger;
+import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.core.progress.ProgressIgnore;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.bean.log.LoggingDestination;
@@ -42,6 +45,7 @@ import org.anchoranalysis.experiment.bean.task.Task;
 import org.anchoranalysis.experiment.io.ReplaceInputManager;
 import org.anchoranalysis.experiment.io.ReplaceOutputManager;
 import org.anchoranalysis.experiment.io.ReplaceTask;
+import org.anchoranalysis.experiment.log.Divider;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.input.InputReadFailedException;
@@ -50,6 +54,9 @@ import org.anchoranalysis.io.input.bean.InputManagerParams;
 import org.anchoranalysis.io.output.bean.OutputManager;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.enabled.multi.MultiLevelOutputEnabled;
+import org.apache.commons.io.IOCase;
+import com.owenfeehan.pathpatternfinder.PathPatternFinder;
+import com.owenfeehan.pathpatternfinder.Pattern;
 
 /**
  * An experiment that uses both an {@link InputManager} to specify inputs and a {@link
@@ -79,6 +86,8 @@ public class InputOutputExperiment<T extends InputFromManager, S> extends Output
 
     private static final String OUTPUT_JOB_LOG = "job_log";
 
+    private static final Divider DIVIDER = new Divider();
+    
     // START BEAN PROPERTIES
     /** The input-manager to specify where/which/how necessary inputs for the experiment occur. */
     @BeanField @Getter @Setter private InputManager<T> input;
@@ -142,15 +151,23 @@ public class InputOutputExperiment<T extends InputFromManager, S> extends Output
                             ProgressIgnore.get(),
                             new Logger(params.getLoggerExperiment()));
 
+            if (params.isDetailedLogging()) {
+                params.getLoggerExperiment().log(DIVIDER.withLabel("Inputs"));
+            }
+            
             List<T> inputs = getInput().inputs(paramsInput);
             checkCompabilityInputs(inputs);
 
             if (!inputs.isEmpty()) {
                 params.setLoggerTaskCreator(logTask);
+                
+                if (params.isDetailedLogging()) {
+                    describeInputs(params.getLoggerExperiment(), inputs);
+                }
                 taskProcessor.executeLogStats(params.getOutputter(), inputs, params);
             } else {
                 params.getLoggerExperiment().log(messageNoInputs);
-                params.getLoggerExperiment().log("");
+                params.getLoggerExperiment().logEmptyLine();
             }
 
         } catch (InputReadFailedException | IOException e) {
@@ -175,5 +192,19 @@ public class InputOutputExperiment<T extends InputFromManager, S> extends Output
                                 inputObject.getClass().toString()));
             }
         }
+    }
+    
+    /** Writes a message to the log describing the number of inputs, and any pattern in their naming. */
+    private void describeInputs(MessageLogger log, List<T> inputs) {
+        List<Path> identifiers = FunctionalList.mapToList(inputs, InputFromManager::identifierAsPath);
+        Pattern pattern = PathPatternFinder.findPatternPaths(identifiers, IOCase.SYSTEM);
+        
+        // Replace any backslashes with forward slashes, as conventionally we use only forward slashes
+        // in the input identifiers.
+        String patternDescription = pattern.describeDetailed().replace("\\", "/");
+        
+        log.logFormatted("The job has %d inputs.", inputs.size());
+        log.logEmptyLine();
+        log.logFormatted("They are named with the pattern: %s", patternDescription);
     }
 }
