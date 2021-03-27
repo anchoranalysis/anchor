@@ -57,7 +57,7 @@ class CommonPathTest {
     private static void assertCommonPath(
             String path1, String path2, Optional<String> expectedCommonPath) {
         List<File> files = Arrays.asList(file(path1), file(path2));
-        assertEquals(expectedCommonPath.map(Paths::get), CommonPath.commonPath(files));
+        assertEquals(expectedCommonPath.map(Paths::get), CommonPath.fromFiles(files));
     }
 
     private static File file(String path) {

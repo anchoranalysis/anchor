@@ -24,4 +24,4 @@
  * #L%
  */
 /** Beans to derive names (compact unique identifiers) from files. */
-package org.anchoranalysis.io.input.bean.descriptivename;
+package org.anchoranalysis.io.input.bean.namer;

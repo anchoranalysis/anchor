@@ -40,9 +40,10 @@ import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.functional.FunctionalProgress;
 import org.anchoranalysis.core.progress.Progress;
+import org.anchoranalysis.core.system.path.CommonPath;
 import org.anchoranalysis.io.input.InputContextParams;
 import org.anchoranalysis.io.input.bean.InputManagerParams;
-import org.anchoranalysis.io.input.files.FilesProviderException;
+import org.anchoranalysis.io.input.file.FilesProviderException;
 
 /**
  * A specific list of paths which form the input.
@@ -59,8 +60,12 @@ public class SpecificPathList extends FilesProvider {
 
     // START BEAN PROPERTIES
     /**
-     * If specified, this forms the list of paths which is provided as input. If not, then the
-     * input-context is asked. If still not, then the fallback.
+     * If specified, this forms the list of paths which is provided as input.
+     *
+     * <p>If not, then the input-context is asked. If still not, then the fallback.
+     *
+     * <p>If a list is specified, than the input-directory is derived from the maximally common root
+     * of all the files, if it exists.
      */
     @BeanField @OptionalBean @Getter @Setter private List<String> listPaths;
 
@@ -92,7 +97,22 @@ public class SpecificPathList extends FilesProvider {
         } else if (fallback != null) {
             return fallback.create(params);
         } else {
-            throw new FilesProviderException("No input-paths are specified, nor a fallback");
+            throw exceptionIfUnspecified();
+        }
+    }
+
+    @Override
+    public Optional<Path> rootDirectory(InputContextParams inputContext)
+            throws FilesProviderException {
+
+        Optional<List<String>> selectedPaths = selectListPaths(inputContext);
+
+        if (selectedPaths.isPresent()) {
+            return CommonPath.fromStrings(selectedPaths.get());
+        } else if (fallback != null) {
+            return fallback.rootDirectory(inputContext);
+        } else {
+            throw exceptionIfUnspecified();
         }
     }
 
@@ -102,6 +122,10 @@ public class SpecificPathList extends FilesProvider {
         } else {
             return inputContext.getInputPaths().map(SpecificPathList::stringFromPaths);
         }
+    }
+
+    private static FilesProviderException exceptionIfUnspecified() {
+        return new FilesProviderException("No input-paths are specified, nor a fallback");
     }
 
     private static List<String> stringFromPaths(List<Path> paths) {

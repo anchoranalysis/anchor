@@ -33,7 +33,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.core.log.error.ErrorReporter;
-import org.anchoranalysis.io.input.files.NamedFile;
+import org.anchoranalysis.io.input.file.NamedFile;
 
 /**
  * One particular input for processing.
@@ -48,14 +48,14 @@ public interface InputFromManager {
      * @return a string uniquely (in the current dataset) identifying the input in a meaningful way
      */
     String identifier();
-    
+
     /**
      * Like {@link #identifier} but converts the identifier to a path.
      *
      * @return a path based upon the unique identifier for the input
      */
     default Path identifierAsPath() {
-        return Paths.get( identifier() );
+        return Paths.get(identifier());
     }
 
     /**

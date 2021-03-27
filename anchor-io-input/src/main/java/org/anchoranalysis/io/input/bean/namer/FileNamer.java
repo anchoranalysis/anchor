@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.io.input.bean.descriptivename;
+package org.anchoranalysis.io.input.bean.namer;
 
 import java.io.File;
 import java.util.Arrays;
@@ -34,75 +34,53 @@ import java.util.Map;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.io.input.InputReadFailedException;
-import org.anchoranalysis.io.input.files.NamedFile;
+import org.anchoranalysis.io.input.file.FileNamerContext;
+import org.anchoranalysis.io.input.file.NamedFile;
 
 /**
  * Associates a name (a compact unique identifier) with a file.
  *
- * <p>The operation can be procesed on a single file or a collection of files.
+ * <p>The operation can be processed on a single file or a collection of files.
  *
  * @author Owen Feehan
  */
 public abstract class FileNamer extends AnchorBean<FileNamer> {
 
-    private static final String DEFAULT_ELSE_NAME = "unknownName";
-
     /**
      * A name for a file
      *
      * @param file the file to extract a name for
-     * @param elseName a fallback name to use if something goes wrong
+     * @param context additional context for naming
      * @return the file combined with an extracted name
      */
-    public NamedFile deriveName(File file, String elseName, Logger logger) {
-        return deriveName(Arrays.asList(file), elseName, logger).get(0);
-    }
-
-    /**
-     * Like {@link #deriveNameUnique(Collection, String, Logger)} but with a default for {@code
-     * elseName}.
-     *
-     * @param files the files to describe
-     * @param logger the logger
-     * @return a list of identical size and order to files, corresponding to the file the extracted
-     *     name
-     * @throws InputReadFailedException if more than one {@link NamedFile} have the same name
-     */
-    public List<NamedFile> deriveNameUnique(Collection<File> files, Logger logger)
-            throws InputReadFailedException {
-        return deriveNameUnique(files, DEFAULT_ELSE_NAME, logger);
+    public NamedFile deriveName(File file, FileNamerContext context) {
+        return deriveName(Arrays.asList(file), context).get(0);
     }
 
     /**
      * Derives a list of names (associated with each file) for some files.
      *
      * @param files the files to describe
-     * @param elseName a string to use if an error occurs extracting a particular name (used as a
-     *     prefix with an index)
-     * @param logger the logger
+     * @param context additional context for naming
      * @return a list of identical size and order to files, corresponding to the file the extracted
      *     name
      */
-    public abstract List<NamedFile> deriveName(
-            Collection<File> files, String elseName, Logger logger);
+    public abstract List<NamedFile> deriveName(Collection<File> files, FileNamerContext context);
 
     /**
-     * Like {@link #deriveName(Collection, String, Logger)} but checks that the final list of
+     * Like {@link #deriveName(Collection, FileNamerContext)} but checks that the final list of
      * named-files all have unique names
      *
      * @param files the files to describe
-     * @param elseName a string to use if an error occurs extracting a particular name (used as a
-     *     prefix with an index)
-     * @param logger the logger
+     * @param context additional context for naming
      * @return a list of identical size and order to files, corresponding to the file the extracted
      *     name
      * @throws InputReadFailedException if more than one {@link NamedFile} have the same name
      */
-    public List<NamedFile> deriveNameUnique(Collection<File> files, String elseName, Logger logger)
+    public List<NamedFile> deriveNameUnique(Collection<File> files, FileNamerContext context)
             throws InputReadFailedException {
-        List<NamedFile> list = deriveName(files, elseName, logger);
+        List<NamedFile> list = deriveName(files, context);
         checkUniqueness(list);
         checkNoPredicate(list, FileNamer::containsBackslash, "contain backslashes");
         checkNoPredicate(list, FileNamer::emptyString, "contain an empty string");

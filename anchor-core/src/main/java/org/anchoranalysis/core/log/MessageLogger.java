@@ -36,10 +36,8 @@ public interface MessageLogger {
     void log(String message);
 
     void logFormatted(String formatString, Object... args);
-    
-    /**
-     * Writes an empty line to the log file.
-     */
+
+    /** Writes an empty line to the log file. */
     default void logEmptyLine() {
         log("");
     }

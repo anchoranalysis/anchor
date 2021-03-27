@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-io-input
+ * anchor-io
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -23,44 +23,21 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.io.input.files;
 
-import com.google.common.base.Preconditions;
-import java.io.File;
-import java.nio.file.Path;
-import java.util.Optional;
-import org.anchoranalysis.io.input.InputFromManager;
+package org.anchoranalysis.io.input.file;
 
-/**
- * A base class for inputs that refer to a single file.
- *
- * @author Owen Feehan
- */
-public abstract class SingleFileInputBase implements InputFromManager {
+import org.anchoranalysis.core.exception.friendly.AnchorFriendlyCheckedException;
 
-    private NamedFile file;
+public class FilesProviderException extends AnchorFriendlyCheckedException {
 
-    protected SingleFileInputBase(NamedFile file) {
-        this.file = file;
-        Preconditions.checkArgument(!file.getIdentifier().isEmpty());
+    /** */
+    private static final long serialVersionUID = 1L;
+
+    public FilesProviderException(String message) {
+        super(message);
     }
 
-    @Override
-    public String identifier() {
-        return file.getIdentifier();
-    }
-
-    @Override
-    public Optional<Path> pathForBinding() {
-        return Optional.of(file.getPath());
-    }
-
-    @Override
-    public String toString() {
-        return identifier();
-    }
-
-    public File getFile() {
-        return file.getFile();
+    public FilesProviderException(Throwable cause) {
+        super(cause);
     }
 }

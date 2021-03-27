@@ -26,6 +26,8 @@
 
 package org.anchoranalysis.experiment.bean.io;
 
+import com.owenfeehan.pathpatternfinder.PathPatternFinder;
+import com.owenfeehan.pathpatternfinder.Pattern;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
@@ -55,8 +57,6 @@ import org.anchoranalysis.io.output.bean.OutputManager;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.enabled.multi.MultiLevelOutputEnabled;
 import org.apache.commons.io.IOCase;
-import com.owenfeehan.pathpatternfinder.PathPatternFinder;
-import com.owenfeehan.pathpatternfinder.Pattern;
 
 /**
  * An experiment that uses both an {@link InputManager} to specify inputs and a {@link
@@ -87,7 +87,7 @@ public class InputOutputExperiment<T extends InputFromManager, S> extends Output
     private static final String OUTPUT_JOB_LOG = "job_log";
 
     private static final Divider DIVIDER = new Divider();
-    
+
     // START BEAN PROPERTIES
     /** The input-manager to specify where/which/how necessary inputs for the experiment occur. */
     @BeanField @Getter @Setter private InputManager<T> input;
@@ -154,13 +154,13 @@ public class InputOutputExperiment<T extends InputFromManager, S> extends Output
             if (params.isDetailedLogging()) {
                 params.getLoggerExperiment().log(DIVIDER.withLabel("Inputs"));
             }
-            
+
             List<T> inputs = getInput().inputs(paramsInput);
             checkCompabilityInputs(inputs);
 
             if (!inputs.isEmpty()) {
                 params.setLoggerTaskCreator(logTask);
-                
+
                 if (params.isDetailedLogging()) {
                     describeInputs(params.getLoggerExperiment(), inputs);
                 }
@@ -193,16 +193,20 @@ public class InputOutputExperiment<T extends InputFromManager, S> extends Output
             }
         }
     }
-    
-    /** Writes a message to the log describing the number of inputs, and any pattern in their naming. */
+
+    /**
+     * Writes a message to the log describing the number of inputs, and any pattern in their naming.
+     */
     private void describeInputs(MessageLogger log, List<T> inputs) {
-        List<Path> identifiers = FunctionalList.mapToList(inputs, InputFromManager::identifierAsPath);
+        List<Path> identifiers =
+                FunctionalList.mapToList(inputs, InputFromManager::identifierAsPath);
         Pattern pattern = PathPatternFinder.findPatternPaths(identifiers, IOCase.SYSTEM);
-        
-        // Replace any backslashes with forward slashes, as conventionally we use only forward slashes
+
+        // Replace any backslashes with forward slashes, as conventionally we use only forward
+        // slashes
         // in the input identifiers.
         String patternDescription = pattern.describeDetailed().replace("\\", "/");
-        
+
         log.logFormatted("The job has %d inputs.", inputs.size());
         log.logEmptyLine();
         log.logFormatted("They are named with the pattern: %s", patternDescription);

@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-io-input
+ * anchor-io
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -23,5 +23,38 @@
  * THE SOFTWARE.
  * #L%
  */
-/** Non-bean classes that relate to using files during inputting. */
-package org.anchoranalysis.io.input.files;
+
+package org.anchoranalysis.io.input.file;
+
+import com.google.common.base.Preconditions;
+import java.nio.file.Path;
+import lombok.Getter;
+
+/**
+ * An input pertaining to a single file on the file-system - and a directory in which it resides.
+ *
+ * @author Owen Feehan
+ */
+public class FileWithDirectoryInput extends SingleFileInputBase {
+
+    /**
+     * A directory that must be a containing directory (at some hierarchical level) of file
+     * associated with this input.
+     */
+    @Getter private Path directory;
+
+    /**
+     * Create for a particular file and directory.
+     *
+     * @param file the file this input prefers to.
+     * @param directory a directory that must be a containing directory (at some hierarchical level)
+     *     of {@code file}
+     */
+    public FileWithDirectoryInput(NamedFile file, Path directory) {
+        super(file);
+        Preconditions.checkArgument(directory.toFile().isDirectory());
+        Preconditions.checkArgument(
+                file.getPath().toAbsolutePath().normalize().startsWith(directory));
+        this.directory = directory;
+    }
+}

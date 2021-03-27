@@ -48,7 +48,7 @@ public class InputArguments {
     /** A directory indicating where inputs can be located */
     @Getter private Optional<Path> inputDirectory = Optional.empty();
 
-    /** If non-null, a glob that is applied on inputDirectory */
+    /** If defined, a glob that is applied on inputDirectory */
     @Getter private Optional<String> inputFilterGlob = Optional.empty();
 
     /**
@@ -56,12 +56,18 @@ public class InputArguments {
      *
      * <p>A defined but empty set implies no check is applied
      *
-     * <p>An Optional.empty() implies no extension filters exist.
+     * <p>{@link Optional#empty} implies no extension filters exist.
      */
     @Getter private Optional<Set<String>> inputFilterExtensions = Optional.empty();
 
     /** A directory indicating where models can be located */
     private Optional<Path> modelDirectory;
+
+    /**
+     * If true, the entire filename or relative path (excluding extension) is used to determine a
+     * unique identifier.
+     */
+    @Getter private boolean relativeForIdentifier = false;
 
     Optional<List<Path>> getInputPaths() {
         return inputPaths;
@@ -104,6 +110,10 @@ public class InputArguments {
 
     public void assignInputFilterExtensions(Set<String> inputFilterExtensions) {
         this.inputFilterExtensions = Optional.of(inputFilterExtensions);
+    }
+
+    public void assignRelativeForIdentifier() {
+        this.relativeForIdentifier = true;
     }
 
     private static Path normalizeDirectory(Path directory) {

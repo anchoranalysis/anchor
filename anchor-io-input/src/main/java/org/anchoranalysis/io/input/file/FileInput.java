@@ -24,37 +24,16 @@
  * #L%
  */
 
-package org.anchoranalysis.io.input.files;
-
-import com.google.common.base.Preconditions;
-import java.nio.file.Path;
-import lombok.Getter;
+package org.anchoranalysis.io.input.file;
 
 /**
- * An input pertaining to a single file on the file-system - and a directory in which it resides.
+ * An input pertaining to a single file on the file-system.
  *
  * @author Owen Feehan
  */
-public class FileWithDirectoryInput extends SingleFileInputBase {
+public class FileInput extends SingleFileInputBase {
 
-    /**
-     * A directory that must be a containing directory (at some hierarchical level) of file
-     * associated with this input.
-     */
-    @Getter private Path directory;
-
-    /**
-     * Create for a particular file and directory.
-     *
-     * @param file the file this input prefers to.
-     * @param directory a directory that must be a containing directory (at some hierarchical level)
-     *     of {@code file}
-     */
-    public FileWithDirectoryInput(NamedFile file, Path directory) {
+    public FileInput(NamedFile file) {
         super(file);
-        Preconditions.checkArgument(directory.toFile().isDirectory());
-        Preconditions.checkArgument(
-                file.getPath().toAbsolutePath().normalize().startsWith(directory));
-        this.directory = directory;
     }
 }

@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-io
+ * anchor-io-input
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -23,21 +23,5 @@
  * THE SOFTWARE.
  * #L%
  */
-
-package org.anchoranalysis.io.input.files;
-
-import org.anchoranalysis.core.exception.friendly.AnchorFriendlyCheckedException;
-
-public class FilesProviderException extends AnchorFriendlyCheckedException {
-
-    /** */
-    private static final long serialVersionUID = 1L;
-
-    public FilesProviderException(String message) {
-        super(message);
-    }
-
-    public FilesProviderException(Throwable cause) {
-        super(cause);
-    }
-}
+/** Non-bean classes that relate to using files during inputting. */
+package org.anchoranalysis.io.input.file;

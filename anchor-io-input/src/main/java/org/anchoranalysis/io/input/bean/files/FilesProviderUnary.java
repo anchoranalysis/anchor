@@ -26,12 +26,15 @@
 package org.anchoranalysis.io.input.bean.files;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.util.Collection;
+import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.io.input.InputContextParams;
 import org.anchoranalysis.io.input.bean.InputManagerParams;
-import org.anchoranalysis.io.input.files.FilesProviderException;
+import org.anchoranalysis.io.input.file.FilesProviderException;
 
 /**
  * Like {@link FilesProvider} but employs a unary operator on a call to an existing {@link
@@ -48,6 +51,12 @@ public abstract class FilesProviderUnary extends FilesProvider {
     @Override
     public Collection<File> create(InputManagerParams params) throws FilesProviderException {
         return transform(files.create(params), params.isDebugModeActivated());
+    }
+
+    @Override
+    public Optional<Path> rootDirectory(InputContextParams inputContext)
+            throws FilesProviderException {
+        return files.rootDirectory(inputContext);
     }
 
     /**

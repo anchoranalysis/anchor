@@ -79,6 +79,7 @@ public class ExecutionArguments {
         out.setInputPaths(input.getInputPaths());
         input.getInputFilterGlob().ifPresent(out::setInputFilterGlob);
         input.getInputFilterExtensions().ifPresent(out::setInputFilterExtensions);
+        out.setRelativeForIdentifier(input.isRelativeForIdentifier());
         return out;
     }
 

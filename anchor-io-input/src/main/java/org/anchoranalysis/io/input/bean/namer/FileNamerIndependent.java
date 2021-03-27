@@ -24,15 +24,17 @@
  * #L%
  */
 
-package org.anchoranalysis.io.input.bean.descriptivename;
+package org.anchoranalysis.io.input.bean.namer;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import org.anchoranalysis.core.exception.CreateException;
-import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.io.input.files.NamedFile;
+import org.anchoranalysis.io.input.file.FileNamerContext;
+import org.anchoranalysis.io.input.file.NamedFile;
 
 /**
  * Base class for methods that derive the name independently for each file.
@@ -42,29 +44,31 @@ import org.anchoranalysis.io.input.files.NamedFile;
 public abstract class FileNamerIndependent extends FileNamer {
 
     @Override
-    public List<NamedFile> deriveName(Collection<File> files, String elseName, Logger logger) {
+    public List<NamedFile> deriveName(Collection<File> files, FileNamerContext context) {
 
         List<NamedFile> out = new ArrayList<>();
 
-        int i = 0;
+        int index = 0;
         for (File file : files) {
-            String name = deriveNameOrElse(file, i++, elseName, logger);
+            String name = deriveNameOrElse(file, index++, context);
             out.add(new NamedFile(name, file));
         }
 
         return out;
     }
 
-    protected abstract String deriveName(File file, int index) throws CreateException;
+    protected abstract String deriveName(File file, Optional<Path> inputDirectory, int index)
+            throws CreateException;
 
-    private String deriveNameOrElse(File file, int index, String elseName, Logger logger) {
+    private String deriveNameOrElse(File file, int index, FileNamerContext context) {
         try {
-            return deriveName(file, index);
+            return deriveName(file, context.getInputDirectory(), index);
         } catch (CreateException e) {
 
-            String elseNameWithIndex = String.format("%s04%d", elseName, index);
+            String elseNameWithIndex = String.format("%s04%d", context.getElseName(), index);
 
-            logger.errorReporter()
+            context.getLogger()
+                    .errorReporter()
                     .recordErrorFormatted(
                             FileNamerIndependent.class,
                             "Cannot create a name for file %s and index %d. Using '%s' instead.",

@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.io.input.files;
+package org.anchoranalysis.io.input.file;
 
 import java.io.File;
 import java.nio.file.Path;
