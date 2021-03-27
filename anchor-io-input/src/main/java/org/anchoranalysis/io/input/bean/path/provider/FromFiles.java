@@ -37,7 +37,7 @@ import org.anchoranalysis.core.progress.ProgressIgnore;
 import org.anchoranalysis.io.input.InputContextParams;
 import org.anchoranalysis.io.input.bean.InputManagerParams;
 import org.anchoranalysis.io.input.bean.files.FilesProvider;
-import org.anchoranalysis.io.input.files.FilesProviderException;
+import org.anchoranalysis.io.input.file.FilesProviderException;
 
 /**
  * Extracts a path from a {@link FilesProvider}.

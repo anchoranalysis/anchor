@@ -33,7 +33,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.input.InputContextParams;
 import org.anchoranalysis.io.input.bean.InputManagerParams;
-import org.anchoranalysis.io.input.files.FilesProviderException;
+import org.anchoranalysis.io.input.file.FilesProviderException;
 
 /**
  * Like {@link FilesProviderWithDirectory} but employs a unary operator on a call to an existing

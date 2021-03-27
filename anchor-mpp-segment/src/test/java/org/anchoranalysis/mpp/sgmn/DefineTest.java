@@ -42,7 +42,7 @@ import org.anchoranalysis.test.TestLoader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class DefineMPPTest {
+class DefineTest {
 
     private TestLoader loader = TestLoader.createFromMavenWorkingDirectory();
 

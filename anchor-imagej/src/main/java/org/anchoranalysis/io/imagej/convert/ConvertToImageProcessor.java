@@ -59,9 +59,11 @@ public class ConvertToImageProcessor {
      * @param voxels the voxels to extract a slice from.
      * @param z slice-index
      * @return a newly created image-procesor (reusing the existing buffer).
-     * @throws ImageJConversionException if the voxels are neither unsigned byte nor unsigned short (the only two supported types)
+     * @throws ImageJConversionException if the voxels are neither unsigned byte nor unsigned short
+     *     (the only two supported types)
      */
-    public static ImageProcessor from(VoxelsWrapper voxels, int z) throws ImageJConversionException {
+    public static ImageProcessor from(VoxelsWrapper voxels, int z)
+            throws ImageJConversionException {
 
         if (voxels.any().extent().volumeXY() != voxels.slice(z).capacity()) {
             throw new AnchorFriendlyRuntimeException(

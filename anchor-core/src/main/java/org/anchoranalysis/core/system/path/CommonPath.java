@@ -29,9 +29,11 @@ import com.owenfeehan.pathpatternfinder.commonpath.FindCommonPathElements;
 import com.owenfeehan.pathpatternfinder.commonpath.PathElements;
 import java.io.File;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.functional.FunctionalList;
@@ -47,9 +49,21 @@ import org.anchoranalysis.core.functional.FunctionalList;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CommonPath {
 
-    public static Optional<Path> commonPath(Collection<File> files) {
-        List<Path> paths = FunctionalList.mapToList(files, File::toPath);
+    public static Optional<Path> fromPaths(Iterable<Path> paths) {
         return FindCommonPathElements.findForFilePaths((Iterable<Path>) paths)
                 .map(PathElements::toPath);
+    }
+
+    public static Optional<Path> fromStrings(Collection<String> paths) {
+        return convert(paths, Paths::get);
+    }
+
+    public static Optional<Path> fromFiles(Collection<File> files) {
+        return convert(files, File::toPath);
+    }
+
+    private static <T> Optional<Path> convert(Collection<T> paths, Function<T, Path> convert) {
+        List<Path> converted = FunctionalList.mapToList(paths, convert);
+        return fromPaths(converted);
     }
 }

@@ -26,6 +26,7 @@ package org.anchoranalysis.core.functional;
  * #L%
  */
 
+import com.google.common.collect.Streams;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -43,6 +44,7 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.functional.checked.CheckedBiFunction;
 import org.anchoranalysis.core.functional.checked.CheckedFunction;
 import org.anchoranalysis.core.functional.checked.CheckedPredicate;
+import org.apache.commons.lang3.tuple.Pair;
 
 /** Utilities functions for manipulating or creating {@link java.util.List} in a functional way */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -96,6 +98,29 @@ public class FunctionalList {
      */
     public static <S, T> List<T> mapToList(Collection<S> collection, Function<S, T> mapFunction) {
         return mapToList(collection.stream(), mapFunction);
+    }
+
+    /**
+     * Maps a collection to a list with each element derived from a corresponding element in the
+     * original collection, <b>as well as a corresponding argument from a second list</b>.
+     *
+     * <p>This function's purpose is mostly an convenience utility to make source-code easier to
+     * read, as the paradigm below (although very idiomatic) occurs frequently.
+     *
+     * @param  <S> parameter-type for function
+     * @param  <T> return-type for function
+     * @param  <U> type of second argument for function
+     * @param collection the collection to be mapped
+     * @param arguments the argument to use together with element in {@code collection}
+     * @param mapFunction function to do the mapping
+     * @return a list with the same size and same order, but using derived elements that are a
+     *     result of the mapping
+     */
+    public static <S, T, U> List<T> mapToList(
+            Collection<S> collection, Collection<U> arguments, BiFunction<S, U, T> mapFunction) {
+        checkCollectionSize(collection, arguments);
+        List<Pair<S, U>> combined = zip(collection, arguments);
+        return mapToList(combined, pair -> mapFunction.apply(pair.getLeft(), pair.getRight()));
     }
 
     /**
@@ -348,11 +373,39 @@ public class FunctionalList {
         return out;
     }
 
+    /**
+     * Create a list of pairs of elements from two separate collections.
+     *
+     * <p>Elements are combined from each in the same order as iteration.
+     *
+     * @param <S> element-type in first collection
+     * @param <T> element-type in second collection
+     * @param first first collection
+     * @param second second collection
+     * @return a newly created list where each element is a pair comprising an element from {@code
+     *     first} and the corresponding element from {@code second}.
+     */
+    public static <S, T> List<Pair<S, T>> zip(Collection<S> first, Collection<T> second) {
+        checkCollectionSize(first, second);
+        return Streams.zip(first.stream(), second.stream(), Pair::of).collect(Collectors.toList());
+    }
+
     private static <S, T, E extends Exception> List<T> mapToList(
             Stream<S> stream,
             Class<? extends Exception> throwableClass,
             CheckedFunction<S, T, E> mapFunction)
             throws E {
         return CheckedStream.map(stream, throwableClass, mapFunction).collect(Collectors.toList());
+    }
+
+    /** Checks two collections have an identical number of elements. */
+    private static <S, T> void checkCollectionSize(
+            Collection<S> collection1, Collection<T> collection2) {
+        if (collection1.size() != collection2.size()) {
+            throw new IllegalArgumentException(
+                    String.format(
+                            "Both collections must have the same size. %d != %d",
+                            collection1.size(), collection2.size()));
+        }
     }
 }

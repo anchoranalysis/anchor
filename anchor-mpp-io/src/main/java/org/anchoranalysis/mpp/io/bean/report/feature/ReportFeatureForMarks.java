@@ -34,7 +34,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.image.bean.provider.DimensionsProvider;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 
-public abstract class ReportFeatureForMPP<T extends FeatureInput>
+public abstract class ReportFeatureForMarks<T extends FeatureInput>
         extends ReportFeatureEvaluator<T> {
 
     // START BEAN PROPERTIES

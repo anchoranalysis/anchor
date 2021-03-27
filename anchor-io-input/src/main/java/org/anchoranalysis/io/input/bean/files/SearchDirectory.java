@@ -40,7 +40,7 @@ import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.input.bean.InputManagerParams;
 import org.anchoranalysis.io.input.bean.path.matcher.MatchGlob;
 import org.anchoranalysis.io.input.bean.path.matcher.PathMatcher;
-import org.anchoranalysis.io.input.files.FilesProviderException;
+import org.anchoranalysis.io.input.file.FilesProviderException;
 import org.anchoranalysis.io.input.path.GlobExtractor;
 import org.anchoranalysis.io.input.path.GlobExtractor.GlobWithDirectory;
 

@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.io.input.files;
+package org.anchoranalysis.io.input.file;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -45,8 +45,8 @@ import lombok.Value;
 @Value
 public class NamedFile {
 
-    /** The name associated with the file. */
-    private String name;
+    /** Unique identifier associated with the file. */
+    private String identifier;
 
     /** The file. */
     private File file;
@@ -60,7 +60,22 @@ public class NamedFile {
         return file.toPath();
     }
 
-    public NamedFile mapName(BiFunction<String, File, String> function) {
-        return new NamedFile(function.apply(name, file), file);
+    /**
+     * Immutably renames the file, by assigning it a new identifier.
+     *
+     * @param function generates a new identifier from the existing identifier and file
+     * @return a newly created file with the assigned identifier, but existing file.
+     */
+    public NamedFile mapIdentifier(BiFunction<String, File, String> function) {
+        return new NamedFile(function.apply(identifier, file), file);
+    }
+
+    /**
+     * Like {@link File#toPath}.
+     *
+     * @return the path associated with the file.
+     */
+    public Path toPath() {
+        return file.toPath();
     }
 }

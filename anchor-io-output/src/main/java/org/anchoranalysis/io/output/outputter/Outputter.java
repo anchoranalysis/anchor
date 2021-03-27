@@ -36,6 +36,7 @@ import org.anchoranalysis.io.manifest.directory.Subdirectory;
 import org.anchoranalysis.io.manifest.operationrecorder.WriteOperationRecorder;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.enabled.multi.MultiLevelOutputEnabled;
+import org.anchoranalysis.io.output.path.prefixer.DirectoryWithPrefix;
 import org.anchoranalysis.io.output.writer.WriterRouterErrors;
 
 /**
@@ -157,5 +158,9 @@ public class Outputter {
      */
     public OutputterChecked getChecked() {
         return delegate;
+    }
+
+    public DirectoryWithPrefix getPrefix() {
+        return delegate.getPrefix();
     }
 }

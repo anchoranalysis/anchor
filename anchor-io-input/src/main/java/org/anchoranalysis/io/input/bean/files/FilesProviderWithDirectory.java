@@ -29,15 +29,27 @@ package org.anchoranalysis.io.input.bean.files;
 import java.io.File;
 import java.nio.file.Path;
 import java.util.Collection;
+import java.util.Optional;
 import org.anchoranalysis.io.input.InputContextParams;
 import org.anchoranalysis.io.input.bean.InputManagerParams;
-import org.anchoranalysis.io.input.files.FilesProviderException;
+import org.anchoranalysis.io.input.file.FilesProviderException;
 
+/**
+ * Base class for implementations of {@link FilesProvider} which <b>do</b> have an associated
+ * directory.
+ *
+ * @author Owen Feehan
+ */
 public abstract class FilesProviderWithDirectory extends FilesProvider {
 
     @Override
     public final Collection<File> create(InputManagerParams params) throws FilesProviderException {
         return matchingFilesForDirectory(getDirectoryAsPath(params.getInputContext()), params);
+    }
+
+    @Override
+    public Optional<Path> rootDirectory(InputContextParams inputContext) {
+        return Optional.of(getDirectoryAsPath(inputContext));
     }
 
     public abstract Path getDirectoryAsPath(InputContextParams inputContext);

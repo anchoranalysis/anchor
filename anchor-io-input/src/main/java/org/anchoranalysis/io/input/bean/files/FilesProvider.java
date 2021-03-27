@@ -27,13 +27,35 @@
 package org.anchoranalysis.io.input.bean.files;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.util.Collection;
+import java.util.Optional;
 import org.anchoranalysis.bean.AnchorBean;
+import org.anchoranalysis.io.input.InputContextParams;
 import org.anchoranalysis.io.input.bean.InputManagerParams;
-import org.anchoranalysis.io.input.files.FilesProviderException;
+import org.anchoranalysis.io.input.file.FilesProviderException;
 
 public abstract class FilesProvider extends AnchorBean<FilesProvider> {
 
+    /**
+     * Creates or provides a collection of files.
+     *
+     * @param params parameters influencing how input-files are obtained.
+     * @return the collection of files from the provider
+     * @throws FilesProviderException
+     */
     public abstract Collection<File> create(InputManagerParams params)
+            throws FilesProviderException;
+
+    /**
+     * A root directory for these files, if it exists.
+     *
+     * <p>Any file that is part of the collection returned by this provider, must exist inside this
+     * directory (either directly or in any nested subdirectories).
+     *
+     * @param inputContext TODO
+     * @return a path to this directory.
+     */
+    public abstract Optional<Path> rootDirectory(InputContextParams inputContext)
             throws FilesProviderException;
 }

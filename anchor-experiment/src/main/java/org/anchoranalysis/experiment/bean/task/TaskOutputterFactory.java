@@ -64,7 +64,7 @@ class TaskOutputterFactory {
     }
 
     private static NamedPath derivePathWithDescription(InputFromManager input) {
-        return new NamedPath(input.name(), input.pathForBinding().get()); // NOSONAR
+        return new NamedPath(input.identifier(), input.pathForBinding().get()); // NOSONAR
     }
 
     private static String describeInputForBinding(InputFromManager input) {

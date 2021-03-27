@@ -67,7 +67,7 @@ class PrefixForInput {
         DirectoryWithPrefix prefix = prefixer.outFilePrefix(path, experimentIdentifier, context);
 
         PathDifference difference =
-                differenceFromPrefixer(experimentIdentifier, prefix.getCombined());
+                differenceFromPrefixer(experimentIdentifier, prefix.asPath(true));
 
         experimentalManifest.ifPresent(
                 recorder -> writeRootDirectoryInManifest(recorder, difference.combined()));
@@ -79,7 +79,7 @@ class PrefixForInput {
             throws PathPrefixerException {
         try {
             return PathDifference.differenceFrom(
-                    prefixer.rootDirectoryPrefix(experimentIdentifier, context).getCombined(),
+                    prefixer.rootDirectoryPrefix(experimentIdentifier, context).asPath(true),
                     combinedPrefix);
         } catch (PathDifferenceException e) {
             throw new PathPrefixerException(e);

@@ -62,6 +62,17 @@ public class InputContextParams {
     @Getter @Setter private Optional<DebugModeParams> debugModeParams = Optional.empty();
 
     /**
+     * If true, the entire filename or relative path (excluding extension) is used to determine a
+     * unique identifier.
+     */
+    @Getter @Setter private boolean relativeForIdentifier = false;
+    
+    /**
+     * If true, the order of the inputs are shuffled (randomized).
+     */
+    @Getter @Setter private boolean shuffle = false;
+
+    /**
      * If defined, a directory which can be used by beans to find input.
      *
      * <p>This should always be an absolute path, never a relative one.

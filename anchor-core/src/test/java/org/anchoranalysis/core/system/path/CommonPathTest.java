@@ -54,16 +54,10 @@ class CommonPathTest {
         assertCommonPath("a/b/c/d", "a/b", Optional.of("a/b"));
     }
 
-    /** One absolute path and one relative-path - with therefore no commonality. */
-    @Test
-    void testDirectoryAbsoluteAndRelativePath() throws IOException {
-        assertCommonPath("/a/b/c/d", "a/b", Optional.empty());
-    }
-
     private static void assertCommonPath(
             String path1, String path2, Optional<String> expectedCommonPath) {
         List<File> files = Arrays.asList(file(path1), file(path2));
-        assertEquals(expectedCommonPath.map(Paths::get), CommonPath.commonPath(files));
+        assertEquals(expectedCommonPath.map(Paths::get), CommonPath.fromFiles(files));
     }
 
     private static File file(String path) {

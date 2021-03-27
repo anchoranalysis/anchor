@@ -42,7 +42,7 @@ import org.anchoranalysis.mpp.bean.provider.SingleMarkProvider;
 import org.anchoranalysis.mpp.feature.bean.mark.FeatureInputMark;
 import org.anchoranalysis.mpp.mark.Mark;
 
-public class ReportFeatureOnMark extends ReportFeatureForMPP<FeatureInputMark> {
+public class ReportFeatureOnMark extends ReportFeatureForMarks<FeatureInputMark> {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private SingleMarkProvider markProvider;

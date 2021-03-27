@@ -146,7 +146,7 @@ public class ParallelProcessor<T extends InputFromManager, S> extends JobProcess
             ParametersExperiment paramsExperiment,
             ConcurrentJobMonitor monitor) {
 
-        JobDescription description = new JobDescription(input.name(), index);
+        JobDescription description = new JobDescription(input.identifier(), index);
 
         ParametersUnbound<T, S> paramsUnbound =
                 new ParametersUnbound<>(

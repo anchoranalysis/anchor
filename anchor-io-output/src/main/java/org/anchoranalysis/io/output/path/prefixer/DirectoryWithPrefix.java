@@ -54,10 +54,15 @@ public class DirectoryWithPrefix implements PathCreator {
     /**
      * A path that combines the {@code directory} and {@code fileNamePrefix} and {@code delimiter}.
      *
+     * @param includeDelimeter if true, the delimeter is included in the combined prefix.
      * @return the combined path
      */
-    public Path getCombined() {
-        return getDirectory().resolve(prefixWithDelimeter());
+    public Path asPath(boolean includeDelimeter) {
+        if (includeDelimeter) {
+            return getDirectory().resolve(prefixWithDelimeter());
+        } else {
+            return getDirectory().resolve(prefix);
+        }
     }
 
     public String prefixWithDelimeter() {

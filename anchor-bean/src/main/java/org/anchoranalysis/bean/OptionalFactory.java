@@ -33,6 +33,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.provider.Provider;
 import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.functional.checked.CheckedSupplier;
 
 /**
  * Utility functions to create {@link Optional} from nullable providers or boolean flags.
@@ -67,6 +68,25 @@ public class OptionalFactory {
      * @return an optional that is defined or empty depending on the flag
      */
     public static <T> Optional<T> create(boolean flag, Supplier<T> supplier) {
+        if (flag) {
+            return Optional.of(supplier.get());
+        } else {
+            return Optional.empty();
+        }
+    }
+
+    /**
+     * Like {@link #create} but accepts a supplier that throws a checked/exception.
+     *
+     * @param <T> type of optional
+     * @param <E> the checked exception
+     * @param flag boolean flag
+     * @param supplier a function to create a value T only called if {@code flag} is true
+     * @return an optional that is defined or empty depending on the flag
+     * @throws E if <code>supplier</code> throws it
+     */
+    public static <T, E extends Exception> Optional<T> createWithException(
+            boolean flag, CheckedSupplier<T, E> supplier) throws E {
         if (flag) {
             return Optional.of(supplier.get());
         } else {

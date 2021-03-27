@@ -38,7 +38,7 @@ import org.anchoranalysis.io.input.InputContextParams;
 import org.anchoranalysis.io.input.bean.InputManagerParams;
 import org.anchoranalysis.io.input.bean.files.SearchDirectory;
 import org.anchoranalysis.io.input.bean.path.matcher.MatchGlob;
-import org.anchoranalysis.io.input.files.FilesProviderException;
+import org.anchoranalysis.io.input.file.FilesProviderException;
 import org.anchoranalysis.io.manifest.directory.Subdirectory;
 import org.anchoranalysis.io.manifest.directory.sequenced.SequencedDirectory;
 import org.anchoranalysis.io.manifest.file.OutputtedFile;

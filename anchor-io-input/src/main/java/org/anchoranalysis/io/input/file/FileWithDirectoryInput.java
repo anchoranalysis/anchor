@@ -24,20 +24,37 @@
  * #L%
  */
 
-package org.anchoranalysis.io.input.files;
+package org.anchoranalysis.io.input.file;
 
-import org.anchoranalysis.core.exception.friendly.AnchorFriendlyCheckedException;
+import com.google.common.base.Preconditions;
+import java.nio.file.Path;
+import lombok.Getter;
 
-public class FilesProviderException extends AnchorFriendlyCheckedException {
+/**
+ * An input pertaining to a single file on the file-system - and a directory in which it resides.
+ *
+ * @author Owen Feehan
+ */
+public class FileWithDirectoryInput extends SingleFileInputBase {
 
-    /** */
-    private static final long serialVersionUID = 1L;
+    /**
+     * A directory that must be a containing directory (at some hierarchical level) of file
+     * associated with this input.
+     */
+    @Getter private Path directory;
 
-    public FilesProviderException(String message) {
-        super(message);
-    }
-
-    public FilesProviderException(Throwable cause) {
-        super(cause);
+    /**
+     * Create for a particular file and directory.
+     *
+     * @param file the file this input prefers to.
+     * @param directory a directory that must be a containing directory (at some hierarchical level)
+     *     of {@code file}
+     */
+    public FileWithDirectoryInput(NamedFile file, Path directory) {
+        super(file);
+        Preconditions.checkArgument(directory.toFile().isDirectory());
+        Preconditions.checkArgument(
+                file.getPath().toAbsolutePath().normalize().startsWith(directory));
+        this.directory = directory;
     }
 }

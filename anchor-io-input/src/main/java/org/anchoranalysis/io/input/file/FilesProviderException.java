@@ -24,16 +24,20 @@
  * #L%
  */
 
-package org.anchoranalysis.io.input.files;
+package org.anchoranalysis.io.input.file;
 
-/**
- * An input pertaining to a single file on the file-system.
- *
- * @author Owen Feehan
- */
-public class FileInput extends SingleFileInputBase {
+import org.anchoranalysis.core.exception.friendly.AnchorFriendlyCheckedException;
 
-    public FileInput(NamedFile file) {
-        super(file);
+public class FilesProviderException extends AnchorFriendlyCheckedException {
+
+    /** */
+    private static final long serialVersionUID = 1L;
+
+    public FilesProviderException(String message) {
+        super(message);
+    }
+
+    public FilesProviderException(Throwable cause) {
+        super(cause);
     }
 }

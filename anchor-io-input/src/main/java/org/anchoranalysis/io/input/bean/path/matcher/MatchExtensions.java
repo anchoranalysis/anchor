@@ -34,9 +34,9 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
+import org.anchoranalysis.core.system.path.ExtensionUtilities;
 import org.anchoranalysis.io.input.InputContextParams;
 import org.anchoranalysis.io.input.InputReadFailedException;
-import org.apache.commons.io.FilenameUtils;
 
 /**
  * Maybe imposes a file-extension condition, optionally on top of an existing matcher
@@ -84,7 +84,12 @@ public class MatchExtensions extends PathMatcher {
         }
 
         // Extract extension from path
-        return fileExtensions.contains(FilenameUtils.getExtension(path.toString()).toLowerCase());
+        Optional<String> extension = ExtensionUtilities.extractExtension(path);
+        if (extension.isPresent()) {
+            return fileExtensions.contains(extension.get().toLowerCase());
+        } else {
+            return false;
+        }
     }
 
     private Set<String> fileExtensions(Optional<InputContextParams> inputContext)

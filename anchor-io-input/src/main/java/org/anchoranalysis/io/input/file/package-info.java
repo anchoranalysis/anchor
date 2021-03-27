@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-io
+ * anchor-io-input
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -23,5 +23,5 @@
  * THE SOFTWARE.
  * #L%
  */
-/** Beans to derive names (compact unique identifiers) from files. */
-package org.anchoranalysis.io.input.bean.descriptivename;
+/** Non-bean classes that relate to using files during inputting. */
+package org.anchoranalysis.io.input.file;
