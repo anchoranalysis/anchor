@@ -75,11 +75,12 @@ public class ExecutionArguments {
     public InputContextParams createInputContext() throws IOException {
         InputContextParams out = new InputContextParams();
         out.setDebugModeParams(debugModeParams);
-        out.setInputDirectory(input.getInputDirectory());
-        out.setInputPaths(input.getInputPaths());
-        input.getInputFilterGlob().ifPresent(out::setInputFilterGlob);
-        input.getInputFilterExtensions().ifPresent(out::setInputFilterExtensions);
+        out.setInputDirectory(input.getDirectory());
+        out.setInputPaths(input.getPaths());
+        input.getFilterGlob().ifPresent(out::setInputFilterGlob);
+        input.getFilterExtensions().ifPresent(out::setInputFilterExtensions);
         out.setRelativeForIdentifier(input.isRelativeForIdentifier());
+        out.setShuffle(input.isShuffle());
         return out;
     }
 

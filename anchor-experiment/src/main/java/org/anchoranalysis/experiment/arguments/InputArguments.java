@@ -43,13 +43,13 @@ import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException
 public class InputArguments {
 
     /** A list of paths referring to specific inputs; */
-    private Optional<List<Path>> inputPaths = Optional.empty();
+    @Getter private Optional<List<Path>> paths = Optional.empty();
 
     /** A directory indicating where inputs can be located */
-    @Getter private Optional<Path> inputDirectory = Optional.empty();
+    @Getter private Optional<Path> directory = Optional.empty();
 
     /** If defined, a glob that is applied on inputDirectory */
-    @Getter private Optional<String> inputFilterGlob = Optional.empty();
+    @Getter private Optional<String> filterGlob = Optional.empty();
 
     /**
      * If defined, a set of extension filters that can be applied on inputDirectory
@@ -58,23 +58,22 @@ public class InputArguments {
      *
      * <p>{@link Optional#empty} implies no extension filters exist.
      */
-    @Getter private Optional<Set<String>> inputFilterExtensions = Optional.empty();
-
-    /** A directory indicating where models can be located */
-    private Optional<Path> modelDirectory;
+    @Getter private Optional<Set<String>> filterExtensions = Optional.empty();
 
     /**
      * If true, the entire filename or relative path (excluding extension) is used to determine a
      * unique identifier.
      */
     @Getter private boolean relativeForIdentifier = false;
+    
+    /** If true, the order of the inputs are shuffled (randomized). */
+    @Getter private boolean shuffle = false;
+    
+    /** A directory indicating where models can be located */
+    private Optional<Path> modelDirectory;
 
-    Optional<List<Path>> getInputPaths() {
-        return inputPaths;
-    }
-
-    public void assignInputPaths(List<Path> inputPaths) {
-        this.inputPaths = Optional.of(inputPaths);
+    public void assignPaths(List<Path> inputPaths) {
+        this.paths = Optional.of(inputPaths);
     }
 
     /**
@@ -86,7 +85,7 @@ public class InputArguments {
      * @param inputDirectory the input-directory to an assign
      */
     public void assignInputDirectory(Optional<Path> inputDirectory) {
-        this.inputDirectory = inputDirectory.map(InputArguments::normalizeDirectory);
+        this.directory = inputDirectory.map(InputArguments::normalizeDirectory);
     }
 
     public Path getModelDirectory() {
@@ -98,22 +97,26 @@ public class InputArguments {
         this.modelDirectory = Optional.of(modelDirectory);
     }
 
-    public void assignInputFilterGlob(String inputFilterGlob) {
-        this.inputFilterGlob = Optional.of(inputFilterGlob);
+    public void assignFilterGlob(String filterGlob) {
+        this.filterGlob = Optional.of(filterGlob);
     }
 
-    public void assignInputFilterExtensionsIfMissing(Optional<Set<String>> inputFilterExtensions) {
-        if (!this.inputFilterExtensions.isPresent()) {
-            this.inputFilterExtensions = inputFilterExtensions;
+    public void assignFilterExtensionsIfMissing(Optional<Set<String>> filterExtensions) {
+        if (!this.filterExtensions.isPresent()) {
+            this.filterExtensions = filterExtensions;
         }
     }
 
-    public void assignInputFilterExtensions(Set<String> inputFilterExtensions) {
-        this.inputFilterExtensions = Optional.of(inputFilterExtensions);
+    public void assignFilterExtensions(Set<String> filterExtensions) {
+        this.filterExtensions = Optional.of(filterExtensions);
     }
 
     public void assignRelativeForIdentifier() {
         this.relativeForIdentifier = true;
+    }
+    
+    public void assignShuffle() {
+        this.shuffle = true;
     }
 
     private static Path normalizeDirectory(Path directory) {
