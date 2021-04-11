@@ -104,7 +104,7 @@ public class CallableJob<T extends InputFromManager, S>
             // If executeTask is called with suppressException==true then exceptions shouldn't occur
             // here as a rule from specific-tasks,
             //   as they should be logged internally to task-log. So if any error is actually thrown
-            // here, let's consider it suspciously
+            // here, let's consider it suspiciously
             //
             // If executeTask is called with suppressException==false then we arrive here fairly
             // easily, and record the error in the experiment-log just

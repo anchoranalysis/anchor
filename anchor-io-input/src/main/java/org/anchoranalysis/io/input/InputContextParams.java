@@ -66,10 +66,8 @@ public class InputContextParams {
      * unique identifier.
      */
     @Getter @Setter private boolean relativeForIdentifier = false;
-    
-    /**
-     * If true, the order of the inputs are shuffled (randomized).
-     */
+
+    /** If true, the order of the inputs are shuffled (randomized). */
     @Getter @Setter private boolean shuffle = false;
 
     /**

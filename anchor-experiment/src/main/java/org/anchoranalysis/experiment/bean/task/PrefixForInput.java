@@ -54,13 +54,16 @@ class PrefixForInput {
      * The prefix to use for outputs pertaining to a particular file.
      *
      * @param path the path from which a prefix is derived
-     * @param experimentIdentifier
+     * @param experimentIdentifier if defined, an identifier for the experiment, to be included in
+     *     the directory root.
      * @param experimentalManifest
      * @return
      * @throws PathPrefixerException
      */
     public DirectoryWithPrefix prefixForFile(
-            NamedPath path, String experimentIdentifier, Optional<Manifest> experimentalManifest)
+            NamedPath path,
+            Optional<String> experimentIdentifier,
+            Optional<Manifest> experimentalManifest)
             throws PathPrefixerException {
 
         // Calculate a prefix from the incoming file, and create a file path generator
@@ -75,7 +78,8 @@ class PrefixForInput {
         return prefix;
     }
 
-    private PathDifference differenceFromPrefixer(String experimentIdentifier, Path combinedPrefix)
+    private PathDifference differenceFromPrefixer(
+            Optional<String> experimentIdentifier, Path combinedPrefix)
             throws PathPrefixerException {
         try {
             return PathDifference.differenceFrom(

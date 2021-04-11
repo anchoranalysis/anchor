@@ -52,7 +52,7 @@ public class OutputterCheckedFixture {
             throws BindFailedException {
         try {
             return outputManager.createExperimentOutputter(
-                    "debug",
+                    Optional.of("debug"),
                     manifest,
                     new RecordedOutputsWithRules(),
                     Optional.empty(),

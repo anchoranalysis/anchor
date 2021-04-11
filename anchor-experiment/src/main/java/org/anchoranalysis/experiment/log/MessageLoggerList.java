@@ -29,6 +29,7 @@ package org.anchoranalysis.experiment.log;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.log.MessageLogger;
 
 public class MessageLoggerList implements StatefulMessageLogger {
@@ -40,7 +41,7 @@ public class MessageLoggerList implements StatefulMessageLogger {
     }
 
     @Override
-    public void start() {
+    public void start() throws OperationFailedException {
         for (StatefulMessageLogger logger : list) {
             assert logger != null;
             logger.start();

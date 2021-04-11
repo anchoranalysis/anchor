@@ -65,10 +65,10 @@ public class InputArguments {
      * unique identifier.
      */
     @Getter private boolean relativeForIdentifier = false;
-    
+
     /** If true, the order of the inputs are shuffled (randomized). */
     @Getter private boolean shuffle = false;
-    
+
     /** A directory indicating where models can be located */
     private Optional<Path> modelDirectory;
 
@@ -114,7 +114,7 @@ public class InputArguments {
     public void assignRelativeForIdentifier() {
         this.relativeForIdentifier = true;
     }
-    
+
     public void assignShuffle() {
         this.shuffle = true;
     }

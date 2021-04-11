@@ -33,6 +33,12 @@ public class OutputPrefixerSettings {
      */
     @Getter private boolean outputSuppressDirectories = false;
 
+    /**
+     * Requests that the experiment-identifier (name and index) is not included in the
+     * output-directory path.
+     */
+    @Getter private boolean omitExperimentIdentifier = false;
+
     public void assignOutputDirectory(Path outputDirectory) {
         this.outputDirectory = Optional.of(outputDirectory);
     }
@@ -47,6 +53,10 @@ public class OutputPrefixerSettings {
 
     public void requestOutputSuppressDirectories() {
         this.outputSuppressDirectories = true;
+    }
+
+    public void requestOmitExperimentIdentifier() {
+        this.omitExperimentIdentifier = true;
     }
 
     public void checkAbsolutePath() throws PathPrefixerException {

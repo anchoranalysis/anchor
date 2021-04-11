@@ -63,4 +63,12 @@ public class OutputArguments {
     public void requestOutputSuppressDirectories() {
         prefixer.requestOutputSuppressDirectories();
     }
+
+    public void requestOmitExperimentIdentifier() {
+        prefixer.requestOmitExperimentIdentifier();
+    }
+
+    public boolean isOmitExperimentIdentifier() {
+        return prefixer.isOmitExperimentIdentifier();
+    }
 }
