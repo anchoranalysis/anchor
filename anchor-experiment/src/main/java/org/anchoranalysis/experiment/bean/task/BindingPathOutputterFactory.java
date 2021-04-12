@@ -51,7 +51,7 @@ class BindingPathOutputterFactory {
                                     params.getExperimentArguments().createPrefixerContext())
                             .prefixForFile(
                                     path,
-                                    params.getExperimentIdentifier(),
+                                    params.experimentIdentifierForOutputPath(),
                                     params.getExperimentalManifest());
 
             // Initializes the manifest to be written

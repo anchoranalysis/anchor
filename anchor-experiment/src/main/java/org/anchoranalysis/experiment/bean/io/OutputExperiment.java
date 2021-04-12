@@ -30,8 +30,11 @@ import com.google.common.base.Preconditions;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
+import org.anchoranalysis.bean.OptionalFactory;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.format.ImageFileFormat;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.arguments.ExecutionArguments;
 import org.anchoranalysis.experiment.bean.Experiment;
@@ -150,22 +153,27 @@ public abstract class OutputExperiment extends Experiment {
 
         Manifest experimentalManifest = new Manifest();
 
-        String experimentId = experimentIdentifier.identifier(arguments.task().getTaskName());
+        String experimentId = experimentIdentifierOrOmit(arguments);
+        Optional<String> experimentIdentifierForOutputPath =
+                OptionalFactory.create(
+                        !arguments.output().isOmitExperimentIdentifier(), () -> experimentId);
 
+        RecordedOutputsWithRules outputs =
+                new RecordedOutputsWithRules(
+                        recordedOutputs,
+                        defaultOutputs(),
+                        arguments.output().getOutputEnabledDelta());
+        Optional<ImageFileFormat> suggestedImageOutputFormat =
+                arguments.output().getPrefixer().getSuggestedImageOutputFormat();
         try {
+
             OutputterChecked rootOutputter =
                     getOutput()
                             .createExperimentOutputter(
-                                    experimentId,
+                                    experimentIdentifierForOutputPath,
                                     experimentalManifest,
-                                    new RecordedOutputsWithRules(
-                                            recordedOutputs,
-                                            defaultOutputs(),
-                                            arguments.output().getOutputEnabledDelta()),
-                                    arguments
-                                            .output()
-                                            .getPrefixer()
-                                            .getSuggestedImageOutputFormat(),
+                                    outputs,
+                                    suggestedImageOutputFormat,
                                     arguments.createPrefixerContext(),
                                     Optional.empty());
 
@@ -186,6 +194,10 @@ public abstract class OutputExperiment extends Experiment {
         }
     }
 
+    private String experimentIdentifierOrOmit(ExecutionArguments arguments) {
+        return experimentIdentifier.identifier(arguments.task().getTaskName());
+    }
+
     private StatefulMessageLogger createLogger(
             OutputterChecked rootOutputter, ExecutionArguments executionArguments) {
         return logExperiment.createWithConsoleFallback(
@@ -194,7 +206,11 @@ public abstract class OutputExperiment extends Experiment {
 
     private void initBeforeExecution(ParametersExperiment params)
             throws ExperimentExecutionException {
-        params.getLoggerExperiment().start();
+        try {
+            params.getLoggerExperiment().start();
+        } catch (OperationFailedException e) {
+            throw new ExperimentExecutionException(e);
+        }
         OutputExperimentLogHelper.maybeLogStart(params);
 
         if (!params.getOutputter().getChecked().getSettings().hasBeenInitialized()) {

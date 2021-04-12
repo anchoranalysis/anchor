@@ -29,10 +29,12 @@ package org.anchoranalysis.experiment.log;
 import java.io.PrintWriter;
 import java.util.Optional;
 import java.util.function.Supplier;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.core.log.error.ErrorReporter;
 import org.anchoranalysis.io.generator.text.TextFileOutput;
+import org.anchoranalysis.io.output.error.OutputDirectoryAlreadyExistsException;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
 
 /**
@@ -91,7 +93,7 @@ public class TextFileMessageLogger implements StatefulMessageLogger {
     }
 
     @Override
-    public void start() {
+    public void start() throws OperationFailedException {
         try {
             fileOutput = fileOutputSupplier.get();
             printWriter =
@@ -101,6 +103,9 @@ public class TextFileMessageLogger implements StatefulMessageLogger {
                                 output.start();
                                 return output.getWriter();
                             });
+        } catch (OutputDirectoryAlreadyExistsException e) {
+            // Cannot write to a log file
+            throw new OperationFailedException(e);
         } catch (Exception e) {
             errorReporter.recordError(MessageLogger.class, e);
         }

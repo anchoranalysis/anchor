@@ -86,7 +86,8 @@ public class OutputManager extends AnchorBean<OutputManager> {
      *
      * <p>i.e. this is not an outputter for a specific job.
      *
-     * @param experimentIdentifier an identifier for the experiment
+     * @param experimentIdentifier if defined, an identifier for the experiment, to be included in
+     *     the directory root.
      * @param manifest where output files are store
      * @param recordedOutputs where output-names are recorded as used/tested
      * @param suggestedFormatToWrite a suggestion on what file-format to write
@@ -96,7 +97,7 @@ public class OutputManager extends AnchorBean<OutputManager> {
      * @throws BindFailedException
      */
     public OutputterChecked createExperimentOutputter(
-            String experimentIdentifier,
+            Optional<String> experimentIdentifier,
             Manifest manifest,
             RecordedOutputsWithRules recordedOutputs,
             Optional<ImageFileFormat> suggestedFormatToWrite,

@@ -26,12 +26,13 @@
 
 package org.anchoranalysis.experiment.log;
 
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.log.MessageLogger;
 
 /** A {@link MessageLogger} that can be started and stopped, and is aware this state. */
 public interface StatefulMessageLogger extends MessageLogger {
 
-    void start();
+    void start() throws OperationFailedException;
 
     void close(boolean successful, boolean warningOccurred);
 }

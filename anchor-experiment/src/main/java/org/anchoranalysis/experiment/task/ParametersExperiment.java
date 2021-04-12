@@ -48,6 +48,8 @@ import org.anchoranalysis.io.output.outputter.OutputterChecked;
  */
 public class ParametersExperiment {
 
+    private ExecutionArguments experimentArguments;
+
     // Parameters for all tasks in general (the experiment)
     @Getter private final Optional<Manifest> experimentalManifest;
 
@@ -75,6 +77,7 @@ public class ParametersExperiment {
             PathPrefixer prefixer,
             StatefulMessageLogger loggerExperiment,
             boolean detailedLogging) {
+        this.experimentArguments = experimentArguments;
         this.context =
                 new InputOutputContextStateful(
                         experimentArguments,
@@ -86,6 +89,19 @@ public class ParametersExperiment {
         this.experimentalManifest = experimentalManifest;
         this.detailedLogging = detailedLogging;
         this.prefixer = prefixer;
+    }
+
+    /**
+     * The experiment-identifier to use in the output-path, if one should be used.
+     *
+     * @return the identifier, or {@link Optional#empty} to exclude from output path.
+     */
+    public Optional<String> experimentIdentifierForOutputPath() {
+        if (!experimentArguments.output().getPrefixer().isOmitExperimentIdentifier()) {
+            return Optional.of(experimentIdentifier);
+        } else {
+            return Optional.empty();
+        }
     }
 
     public Outputter getOutputter() {
