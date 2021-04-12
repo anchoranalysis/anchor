@@ -101,7 +101,7 @@
 		<repository>
 			<id>imagej</id>
 			<name>ImageJ repository</name>
-			<url>http://maven.imagej.net/content/groups/public</url>
+			<url>https://maven.scijava.org/content/groups/public/</url>
 		</repository>
 		
    	</repositories>
