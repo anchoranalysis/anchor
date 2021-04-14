@@ -50,8 +50,7 @@ import org.anchoranalysis.core.functional.FunctionalList;
 public class CommonPath {
 
     public static Optional<Path> fromPaths(Iterable<Path> paths) {
-        return FindCommonPathElements.findForFilePaths((Iterable<Path>) paths)
-                .map(PathElements::toPath);
+        return FindCommonPathElements.findForFilePaths(paths).map(PathElements::toPath);
     }
 
     public static Optional<Path> fromStrings(Collection<String> paths) {
