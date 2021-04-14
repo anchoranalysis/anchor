@@ -48,7 +48,7 @@ import org.junit.jupiter.api.Test;
 public abstract class TiffTestBase extends RasterWriterTestBase {
 
     private static final ComparisonPlan COMPARISON_PLAN =
-            new ComparisonPlan(true, Optional.of(ImageFileFormat.OME_TIFF), false);
+            new ComparisonPlan(false, Optional.of(ImageFileFormat.OME_TIFF), false);
 
     private static final VoxelDataType[] SUPPORTED_VOXEL_TYPES =
             RasterWriterTestBase.ALL_SUPPORTED_VOXEL_TYPES;
