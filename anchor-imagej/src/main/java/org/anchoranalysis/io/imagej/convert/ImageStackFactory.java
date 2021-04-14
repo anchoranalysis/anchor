@@ -171,10 +171,11 @@ class ImageStackFactory {
 
     private static void addSlices(ImageStack stack, int z, Stream<ImageProcessor> slices)
             throws ImageJConversionException {
-        CheckedStream.forEach(
-                slices,
-                ImageJConversionException.class,
-                slice -> stack.addSlice(String.valueOf(z), slice));
+        try {
+            slices.forEach(slice -> stack.addSlice(String.valueOf(z), slice));
+        } catch (Exception e) {
+            throw new ImageJConversionException(e);
+        }
     }
 
     private static Voxels<UnsignedByteBuffer> extractChannel(RGBStack stack, int channelIndex) {
