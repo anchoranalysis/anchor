@@ -30,11 +30,11 @@
   <pluginRepositories>
     <pluginRepository>
       <id>ome.releases</id>
-      <url>http://artifacts.openmicroscopy.org/artifactory/ome.releases</url>
+      <url>https://artifacts.openmicroscopy.org/artifactory/ome.releases</url>
     </pluginRepository>
     <pluginRepository>
       <id>ome.external</id>
-      <url>http://artifacts.openmicroscopy.org/artifactory/ome.external</url>
+      <url>https://artifacts.openmicroscopy.org/artifactory/ome.external</url>
     </pluginRepository>
   </pluginRepositories>    
   
