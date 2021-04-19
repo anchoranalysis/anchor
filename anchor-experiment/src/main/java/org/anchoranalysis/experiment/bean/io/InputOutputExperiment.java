@@ -51,6 +51,7 @@ import org.anchoranalysis.experiment.log.Divider;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.input.InputReadFailedException;
+import org.anchoranalysis.io.input.InputsWithDirectory;
 import org.anchoranalysis.io.input.bean.InputManager;
 import org.anchoranalysis.io.input.bean.InputManagerParams;
 import org.anchoranalysis.io.output.bean.OutputManager;
@@ -155,16 +156,16 @@ public class InputOutputExperiment<T extends InputFromManager, S> extends Output
                 params.getLoggerExperiment().log(DIVIDER.withLabel("Inputs"));
             }
 
-            List<T> inputs = getInput().inputs(paramsInput);
-            checkCompabilityInputs(inputs);
+            InputsWithDirectory<T> inputs = getInput().inputs(paramsInput);
+            checkCompabilityInputs(inputs.inputs());
 
             if (!inputs.isEmpty()) {
                 params.setLoggerTaskCreator(logTask);
 
                 if (params.isDetailedLogging()) {
-                    describeInputs(params.getLoggerExperiment(), inputs);
+                    describeInputs(params.getLoggerExperiment(), inputs.inputs());
                 }
-                taskProcessor.executeLogStats(params.getOutputter(), inputs, params);
+                taskProcessor.executeLogStats(params.getOutputter(), inputs.inputs(), params);
             } else {
                 params.getLoggerExperiment().log(messageNoInputs);
                 params.getLoggerExperiment().logEmptyLine();

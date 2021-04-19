@@ -26,10 +26,10 @@
 
 package org.anchoranalysis.io.input.bean;
 
-import java.util.List;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.input.InputReadFailedException;
+import org.anchoranalysis.io.input.InputsWithDirectory;
 
 /**
  * Base class for describing the inputs.
@@ -45,8 +45,9 @@ public abstract class InputManager<T extends InputFromManager> extends AnchorBea
      * Creates a list of inputs given particular parameters.
      *
      * @param params the parameters
-     * @return the list of inputs
+     * @return the list of inputs, together with any associated parent directory.
      * @throws InputReadFailedException
      */
-    public abstract List<T> inputs(InputManagerParams params) throws InputReadFailedException;
+    public abstract InputsWithDirectory<T> inputs(InputManagerParams params)
+            throws InputReadFailedException;
 }

@@ -36,10 +36,10 @@ import lombok.Setter;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
-import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.image.io.bean.stack.reader.InputManagerWithStackReader;
 import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
 import org.anchoranalysis.io.input.InputReadFailedException;
+import org.anchoranalysis.io.input.InputsWithDirectory;
 import org.anchoranalysis.io.input.bean.InputManager;
 import org.anchoranalysis.io.input.bean.InputManagerParams;
 import org.anchoranalysis.io.input.bean.path.DerivePath;
@@ -92,14 +92,15 @@ public class MultiInputManager extends InputManagerWithStackReader<MultiInput> {
     }
 
     @Override
-    public List<MultiInput> inputs(InputManagerParams params) throws InputReadFailedException {
-        return FunctionalList.mapToList(
-                input.inputs(params),
-                mainStack -> {
-                    MultiInput inputToAdd = new MultiInput(inputName, mainStack);
-                    appendFromLists(inputToAdd, params.isDebugModeActivated());
-                    return inputToAdd;
-                });
+    public InputsWithDirectory<MultiInput> inputs(InputManagerParams params)
+            throws InputReadFailedException {
+        return input.inputs(params)
+                .map(
+                        mainStack -> {
+                            MultiInput inputToAdd = new MultiInput(inputName, mainStack);
+                            appendFromLists(inputToAdd, params.isDebugModeActivated());
+                            return inputToAdd;
+                        });
     }
 
     private void appendFromLists(MultiInput input, boolean doDebug) {
