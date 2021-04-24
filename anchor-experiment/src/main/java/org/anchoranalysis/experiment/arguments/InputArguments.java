@@ -70,7 +70,7 @@ public class InputArguments {
      * If True, any files in the input directory that are unused as inputs, are copied to the output
      * directory.
      */
-    @Getter private boolean copyUnused = false;
+    @Getter private boolean copyNonInputs = false;
 
     /** If true, the order of the inputs are shuffled (randomized). */
     @Getter private boolean shuffle = false;
@@ -117,8 +117,8 @@ public class InputArguments {
         this.filterExtensions = Optional.of(filterExtensions);
     }
 
-    public void assignCopyUnused() {
-        this.copyUnused = true;
+    public void assignCopyNonInputs() {
+        this.copyNonInputs = true;
     }
 
     public void assignRelativeForIdentifier() {

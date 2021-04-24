@@ -1,6 +1,7 @@
 package org.anchoranalysis.io.input;
 
 import java.nio.file.Path;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
@@ -9,10 +10,12 @@ import java.util.function.Function;
 import lombok.AllArgsConstructor;
 import lombok.Value;
 import lombok.experimental.Accessors;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.functional.FunctionalProgress;
 import org.anchoranalysis.core.functional.checked.CheckedFunction;
 import org.anchoranalysis.core.progress.Progress;
+import org.anchoranalysis.io.input.file.NamedFile;
 
 /**
  * All inputs for an experiment, together with any parent directory which is specified as a parent
@@ -81,6 +84,21 @@ public class InputsWithDirectory<T extends InputFromManager> {
      */
     public <S extends InputFromManager> InputsWithDirectory<S> withInputs(List<S> inputsToAssign) {
         return new InputsWithDirectory<>(inputsToAssign, directory);
+    }
+
+    /**
+     * Find all files in the input directory are not used as inputs.
+     *
+     * @return the files, with an identifier derived relative to the input-directory
+     * @raises {@link OperationFailedException} if directory isn't defined
+     */
+    public Collection<NamedFile> findAllNonInputFiles() throws OperationFailedException {
+        if (directory.isPresent()) {
+            return FindNonInputFiles.from(directory.get(), inputs);
+        } else {
+            throw new OperationFailedException(
+                    "A directory is not defined, so this operation is not possible.");
+        }
     }
 
     public boolean isEmpty() {

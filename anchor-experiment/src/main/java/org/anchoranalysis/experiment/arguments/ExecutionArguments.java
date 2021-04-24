@@ -80,7 +80,7 @@ public class ExecutionArguments {
         input.getFilterGlob().ifPresent(out::setInputFilterGlob);
         input.getFilterExtensions().ifPresent(out::setInputFilterExtensions);
         out.setRelativeForIdentifier(input.isRelativeForIdentifier());
-        out.setCopyUnused(input.isCopyUnused());
+        out.setCopyNonInputs(input.isCopyNonInputs());
         out.setShuffle(input.isShuffle());
         return out;
     }
