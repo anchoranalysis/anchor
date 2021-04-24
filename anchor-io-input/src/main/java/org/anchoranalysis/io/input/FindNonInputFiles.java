@@ -31,8 +31,8 @@ class FindNonInputFiles {
      *     returned.
      * @param <T> input-type
      * @return the files, with an identifier derived relative to the input-directory
-     * @raises {@link OperationFailedException} if a file exists that isn't contained the
-     *     input-directory (or it's sub-direcotires)
+     * @throws OperationFailedException if a file exists that isn't contained the
+     *     input-directory (or it's sub-directories)
      */
     public static <T extends InputFromManager> Collection<NamedFile> from(
             Path inputDirectory, List<T> inputs) throws OperationFailedException {

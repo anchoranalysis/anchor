@@ -90,7 +90,7 @@ public class InputsWithDirectory<T extends InputFromManager> {
      * Find all files in the input directory are not used as inputs.
      *
      * @return the files, with an identifier derived relative to the input-directory
-     * @raises {@link OperationFailedException} if directory isn't defined
+     * @throws OperationFailedException if directory isn't defined
      */
     public Collection<NamedFile> findAllNonInputFiles() throws OperationFailedException {
         if (directory.isPresent()) {
