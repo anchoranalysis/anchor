@@ -26,17 +26,15 @@
 
 package org.anchoranalysis.annotation.io.bean;
 
-import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.annotation.io.AnnotationWithStrategy;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.functional.FunctionalProgress;
-import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.core.progress.ProgressMultiple;
 import org.anchoranalysis.core.progress.ProgressOneOfMany;
 import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
 import org.anchoranalysis.io.input.InputReadFailedException;
+import org.anchoranalysis.io.input.InputsWithDirectory;
 import org.anchoranalysis.io.input.bean.InputManager;
 import org.anchoranalysis.io.input.bean.InputManagerParams;
 
@@ -50,29 +48,25 @@ public class AnnotationInputManager<T extends ProvidesStackInput, S extends Anno
     // END BEAN PROPERTIES
 
     @Override
-    public List<AnnotationWithStrategy<S>> inputs(InputManagerParams params)
+    public InputsWithDirectory<AnnotationWithStrategy<S>> inputs(InputManagerParams params)
             throws InputReadFailedException {
 
         try (ProgressMultiple progressMultiple = new ProgressMultiple(params.getProgress(), 2)) {
 
-            List<T> inputs = input.inputs(params);
+            InputsWithDirectory<T> inputs = input.inputs(params);
 
             progressMultiple.incrementWorker();
 
-            List<AnnotationWithStrategy<S>> outList =
-                    createListInput(inputs, new ProgressOneOfMany(progressMultiple));
+            InputsWithDirectory<AnnotationWithStrategy<S>> transformed =
+                    inputs.map(this::createListInput, new ProgressOneOfMany(progressMultiple));
+
             progressMultiple.incrementWorker();
 
-            return outList;
+            return transformed;
         }
     }
 
-    private List<AnnotationWithStrategy<S>> createListInput(List<T> listInputs, Progress progress)
-            throws InputReadFailedException {
-        return FunctionalProgress.mapList(
-                listInputs,
-                progress,
-                annotationInput ->
-                        new AnnotationWithStrategy<S>(annotationInput, annotatorStrategy));
+    private AnnotationWithStrategy<S> createListInput(T input) throws InputReadFailedException {
+        return new AnnotationWithStrategy<>(input, annotatorStrategy);
     }
 }

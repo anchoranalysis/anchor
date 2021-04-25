@@ -42,11 +42,14 @@ import org.anchoranalysis.image.core.dimensions.size.suggestion.SuggestionFormat
 @NoArgsConstructor
 public class TaskArguments {
 
-    /** A name to describe the ongoing task */
+    /** A name to describe the ongoing task. */
     @Getter private Optional<String> taskName = Optional.empty();
 
     /** Suggests dimensions or a scaling-factor to resize an image to. */
     @Getter private Optional<ImageSizeSuggestion> size = Optional.empty();
+
+    /** Suggests a maximum number of processors (CPUs) for a task. */
+    @Getter private Optional<Integer> maxNumberProcessors = Optional.empty();
 
     public void assignTaskName(Optional<String> taskName) {
         this.taskName = taskName;
@@ -58,5 +61,28 @@ public class TaskArguments {
         } catch (SuggestionFormatException e) {
             throw new ExperimentExecutionException(e);
         }
+    }
+
+    public void assignMaxNumberProcessors(String numberProcessors)
+            throws ExperimentExecutionException {
+        try {
+            Integer value = Integer.valueOf(numberProcessors);
+
+            if (value <= 0) {
+                throw positiveNumberProcessorsException(numberProcessors);
+            }
+
+            this.maxNumberProcessors = Optional.of(value);
+        } catch (NumberFormatException e) {
+            throw positiveNumberProcessorsException(numberProcessors);
+        }
+    }
+
+    private static ExperimentExecutionException positiveNumberProcessorsException(
+            String numberProcessors) {
+        return new ExperimentExecutionException(
+                String.format(
+                        "The number of processors must be a positive integer. %s is invalid.",
+                        numberProcessors));
     }
 }

@@ -71,6 +71,12 @@ public class InputContextParams {
     @Getter @Setter private boolean shuffle = false;
 
     /**
+     * If True, any files in the input directory that are unused as inputs, are copied to the output
+     * directory.
+     */
+    @Getter @Setter private boolean copyNonInputs = false;
+
+    /**
      * If defined, a directory which can be used by beans to find input.
      *
      * <p>This should always be an absolute path, never a relative one.

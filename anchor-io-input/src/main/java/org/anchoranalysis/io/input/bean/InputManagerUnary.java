@@ -25,12 +25,12 @@
  */
 package org.anchoranalysis.io.input.bean;
 
-import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.input.InputReadFailedException;
+import org.anchoranalysis.io.input.InputsWithDirectory;
 
 /**
  * Base class for an {@link InputManager} that delegates to another {@link InputManager} with the
@@ -46,7 +46,8 @@ public abstract class InputManagerUnary<T extends InputFromManager> extends Inpu
     // END BEAN PROPERITES
 
     @Override
-    public List<T> inputs(InputManagerParams params) throws InputReadFailedException {
+    public InputsWithDirectory<T> inputs(InputManagerParams params)
+            throws InputReadFailedException {
         return inputsFromDelegate(input.inputs(params), params);
     }
 
@@ -57,6 +58,7 @@ public abstract class InputManagerUnary<T extends InputFromManager> extends Inpu
      * @param params parameters for determining inputs
      * @return inputs to return after any further processing
      */
-    protected abstract List<T> inputsFromDelegate(List<T> fromDelegate, InputManagerParams params)
+    protected abstract InputsWithDirectory<T> inputsFromDelegate(
+            InputsWithDirectory<T> fromDelegate, InputManagerParams params)
             throws InputReadFailedException;
 }

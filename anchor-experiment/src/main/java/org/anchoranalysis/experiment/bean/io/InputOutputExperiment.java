@@ -30,7 +30,9 @@ import com.owenfeehan.pathpatternfinder.PathPatternFinder;
 import com.owenfeehan.pathpatternfinder.Pattern;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -51,8 +53,10 @@ import org.anchoranalysis.experiment.log.Divider;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.input.InputReadFailedException;
+import org.anchoranalysis.io.input.InputsWithDirectory;
 import org.anchoranalysis.io.input.bean.InputManager;
 import org.anchoranalysis.io.input.bean.InputManagerParams;
+import org.anchoranalysis.io.input.file.NamedFile;
 import org.anchoranalysis.io.output.bean.OutputManager;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.enabled.multi.MultiLevelOutputEnabled;
@@ -155,16 +159,11 @@ public class InputOutputExperiment<T extends InputFromManager, S> extends Output
                 params.getLoggerExperiment().log(DIVIDER.withLabel("Inputs"));
             }
 
-            List<T> inputs = getInput().inputs(paramsInput);
-            checkCompabilityInputs(inputs);
+            InputsWithDirectory<T> inputs = getInput().inputs(paramsInput);
+            checkCompabilityInputs(inputs.inputs());
 
             if (!inputs.isEmpty()) {
-                params.setLoggerTaskCreator(logTask);
-
-                if (params.isDetailedLogging()) {
-                    describeInputs(params.getLoggerExperiment(), inputs);
-                }
-                taskProcessor.executeLogStats(params.getOutputter(), inputs, params);
+                executeExperimentWIthInputs(inputs, params);
             } else {
                 params.getLoggerExperiment().log(messageNoInputs);
                 params.getLoggerExperiment().logEmptyLine();
@@ -181,6 +180,24 @@ public class InputOutputExperiment<T extends InputFromManager, S> extends Output
         OutputEnabledMutable taskDefaultOutputs = taskProcessor.getTask().defaultOutputs();
         taskDefaultOutputs.addEnabledOutputFirst(OUTPUT_EXPERIMENT_LOG, OUTPUT_JOB_LOG);
         return taskDefaultOutputs;
+    }
+
+    private void executeExperimentWIthInputs(
+            InputsWithDirectory<T> inputs, ParametersExperiment params)
+            throws ExperimentExecutionException {
+        params.setLoggerTaskCreator(logTask);
+
+        if (params.isDetailedLogging()) {
+            describeInputs(params.getLoggerExperiment(), inputs.inputs());
+        }
+
+        Optional<Collection<NamedFile>> nonInputs = CopyNonInputs.prepare(inputs, params);
+
+        taskProcessor.executeLogStats(params.getOutputter(), inputs.inputs(), params);
+
+        if (nonInputs.isPresent()) {
+            CopyNonInputs.copy(nonInputs.get(), params);
+        }
     }
 
     private void checkCompabilityInputs(List<T> listInputs) throws ExperimentExecutionException {
@@ -203,8 +220,7 @@ public class InputOutputExperiment<T extends InputFromManager, S> extends Output
         Pattern pattern = PathPatternFinder.findPatternPaths(identifiers, IOCase.SYSTEM);
 
         // Replace any backslashes with forward slashes, as conventionally we use only forward
-        // slashes
-        // in the input identifiers.
+        // slashes in the input identifiers.
         String patternDescription = pattern.describeDetailed().replace("\\", "/");
 
         log.logFormatted("The job has %d inputs.", inputs.size());

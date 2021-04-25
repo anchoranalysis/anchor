@@ -32,13 +32,15 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
+import org.anchoranalysis.experiment.arguments.ExecutionArguments;
+import org.anchoranalysis.experiment.arguments.TaskArguments;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.experiment.task.TaskStatistics;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.outputter.Outputter;
 
 /**
- * Executes different processors depending on whether we are in debug mode or not
+ * Executes different processors depending on whether we are in debug mode or not.
  *
  * @author Owen Feehan
  * @param <T> input-object type
@@ -50,8 +52,11 @@ public class DebugDependentProcessor<T extends InputFromManager, S> extends JobP
     /**
      * An upper limit on the number of the processors that can be simultaneously used in parallel,
      * if they are available.
+     *
+     * <p>If the current {@link ParametersExperiment} suggests an alternative maximum, it is
+     * afforded precedence over this property.
      */
-    @BeanField @Getter @Setter private int maxNumberProcessors;
+    @BeanField @Getter @Setter private int maxNumberProcessors = 64;
 
     /**
      * How many processors to avoid using for the tasks.
@@ -70,16 +75,15 @@ public class DebugDependentProcessor<T extends InputFromManager, S> extends JobP
 
         Preconditions.checkArgument(rootOutputter.getChecked().getSettings().hasBeenInitialized());
 
-        JobProcessor<T, S> processor =
-                createProcessor(paramsExperiment.getExperimentArguments().isDebugModeEnabled());
+        JobProcessor<T, S> processor = createProcessor(paramsExperiment.getExperimentArguments());
         return processor.execute(rootOutputter, inputs, paramsExperiment);
     }
 
-    private JobProcessor<T, S> createProcessor(boolean debugMode) {
-        if (debugMode) {
+    private JobProcessor<T, S> createProcessor(ExecutionArguments arguments) {
+        if (arguments.isDebugModeEnabled()) {
             return createSequentialProcessor();
         } else {
-            return creareParallelProcessor();
+            return creareParallelProcessor(arguments.task());
         }
     }
 
@@ -90,12 +94,20 @@ public class DebugDependentProcessor<T extends InputFromManager, S> extends JobP
         return processor;
     }
 
-    private ParallelProcessor<T, S> creareParallelProcessor() {
+    private ParallelProcessor<T, S> creareParallelProcessor(TaskArguments arguments) {
         ParallelProcessor<T, S> processor = new ParallelProcessor<>();
-        processor.setMaxNumberProcessors(maxNumberProcessors);
+        processor.setMaxNumberProcessors(maxNumberProcessors(arguments));
         processor.setTask(getTask());
         processor.setSuppressExceptions(isSuppressExceptions());
         processor.setKeepProcessorsFree(keepProcessorsFree);
         return processor;
+    }
+
+    private int maxNumberProcessors(TaskArguments arguments) {
+        if (arguments.getMaxNumberProcessors().isPresent()) {
+            return arguments.getMaxNumberProcessors().get(); // NOSONAR
+        } else {
+            return maxNumberProcessors;
+        }
     }
 }

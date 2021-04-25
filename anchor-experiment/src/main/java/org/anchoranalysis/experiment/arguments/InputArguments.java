@@ -66,6 +66,12 @@ public class InputArguments {
      */
     @Getter private boolean relativeForIdentifier = false;
 
+    /**
+     * If True, any files in the input directory that are unused as inputs, are copied to the output
+     * directory.
+     */
+    @Getter private boolean copyNonInputs = false;
+
     /** If true, the order of the inputs are shuffled (randomized). */
     @Getter private boolean shuffle = false;
 
@@ -109,6 +115,10 @@ public class InputArguments {
 
     public void assignFilterExtensions(Set<String> filterExtensions) {
         this.filterExtensions = Optional.of(filterExtensions);
+    }
+
+    public void assignCopyNonInputs() {
+        this.copyNonInputs = true;
     }
 
     public void assignRelativeForIdentifier() {
