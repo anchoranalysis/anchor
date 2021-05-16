@@ -26,6 +26,8 @@
 
 package org.anchoranalysis.mpp.bean.init;
 
+import lombok.Getter;
+import lombok.experimental.Accessors;
 import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.bean.initializable.params.BeanInitialization;
 import org.anchoranalysis.bean.initializable.property.PropertyInitializer;
@@ -49,79 +51,44 @@ import org.anchoranalysis.mpp.mark.MarkCollection;
 import org.anchoranalysis.mpp.pair.IdentifiablePair;
 import org.anchoranalysis.mpp.pair.RandomCollection;
 
+@Accessors(fluent = true)
 public class MarksInitialization implements BeanInitialization {
 
     // START: Initialization
-    private ImageInitialization image;
-    private PointsInitialization points;
+    @Getter private ImageInitialization image;
+    @Getter private PointsInitialization points;
     // END: Initialization
 
     // START: Stores
-    private NamedProviderStore<MarkCollection> storeMarks;
-    private NamedProviderStore<MarkCollectionProposer> storeMarksProposer;
-    private NamedProviderStore<MarkBounds> storeMarkBounds;
-    private NamedProviderStore<MarkProposer> storeMarkProposer;
-    private NamedProviderStore<MarkMergeProposer> storeMarkMergeProposer;
-    private NamedProviderStore<MarkSplitProposer> storeMarkSplitProposer;
-    private NamedProviderStore<RandomCollection<IdentifiablePair<Mark>>> storePairCollection;
+    @Getter private NamedProviderStore<MarkCollection> marks;
+    @Getter private NamedProviderStore<MarkCollectionProposer> markCollectionProposers;
+    @Getter private NamedProviderStore<MarkBounds> markBounds;
+    @Getter private NamedProviderStore<MarkProposer> markProposers;
+    @Getter private NamedProviderStore<MarkMergeProposer> markMergeProposers;
+    @Getter private NamedProviderStore<MarkSplitProposer> markSplitProposers;
+    @Getter private NamedProviderStore<RandomCollection<IdentifiablePair<Mark>>> markPairs;
     // END: Stores
 
-    public MarksInitialization(ImageInitialization image, SharedObjects sharedObjects) {
-        super();
+    public MarksInitialization(ImageInitialization image) {
+        SharedObjects sharedObjects = image.getSharedObjects();
         this.image = image;
         this.points = PointsInitialization.create(image, sharedObjects);
 
-        storeMarks = sharedObjects.getOrCreate(MarkCollection.class);
-        storeMarksProposer = sharedObjects.getOrCreate(MarkCollectionProposer.class);
-        storeMarkBounds = sharedObjects.getOrCreate(MarkBounds.class);
-        storeMarkProposer = sharedObjects.getOrCreate(MarkProposer.class);
-        storeMarkMergeProposer = sharedObjects.getOrCreate(MarkMergeProposer.class);
-        storeMarkSplitProposer = sharedObjects.getOrCreate(MarkSplitProposer.class);
-        storePairCollection = sharedObjects.getOrCreate(RandomCollection.class);
+        marks = sharedObjects.getOrCreate(MarkCollection.class);
+        markCollectionProposers = sharedObjects.getOrCreate(MarkCollectionProposer.class);
+        markBounds = sharedObjects.getOrCreate(MarkBounds.class);
+        markProposers = sharedObjects.getOrCreate(MarkProposer.class);
+        markMergeProposers = sharedObjects.getOrCreate(MarkMergeProposer.class);
+        markSplitProposers = sharedObjects.getOrCreate(MarkSplitProposer.class);
+        markPairs = sharedObjects.getOrCreate(RandomCollection.class);
     }
 
-    public ImageInitialization getImage() {
-        return image;
-    }
-
-    public FeaturesInitialization getFeature() {
+    public FeaturesInitialization feature() {
         return image.featuresInitialization();
     }
 
-    public PointsInitialization getPoints() {
-        return points;
-    }
-
-    public DictionaryInitialization getDictionary() {
+    public DictionaryInitialization dictionary() {
         return image.dictionaryInitialization();
-    }
-
-    public NamedProviderStore<MarkCollection> getMarksCollection() {
-        return storeMarks;
-    }
-
-    public NamedProviderStore<MarkCollectionProposer> getMarksProposerSet() {
-        return storeMarksProposer;
-    }
-
-    public NamedProviderStore<MarkBounds> getMarkBoundsSet() {
-        return storeMarkBounds;
-    }
-
-    public NamedProviderStore<MarkProposer> getMarkProposerSet() {
-        return storeMarkProposer;
-    }
-
-    public NamedProviderStore<MarkMergeProposer> getMarkMergeProposerSet() {
-        return storeMarkMergeProposer;
-    }
-
-    public NamedProviderStore<MarkSplitProposer> getMarkSplitProposerSet() {
-        return storeMarkSplitProposer;
-    }
-
-    public NamedProviderStore<RandomCollection<IdentifiablePair<Mark>>> getSimplePairCollection() {
-        return storePairCollection;
     }
 
     /**
@@ -132,8 +99,8 @@ public class MarksInitialization implements BeanInitialization {
      * @return
      * @throws NamedProviderGetException
      */
-    public MarkBounds getMarkBounds() throws NamedProviderGetException {
-        return getMarkBoundsSet().getException("primary");
+    public MarkBounds getPrimaryMarkBounds() throws NamedProviderGetException {
+        return markBounds().getException("primary");
     }
 
     public void populate(PropertyInitializer<?> initializer, Define define, Logger logger)
@@ -141,14 +108,14 @@ public class MarksInitialization implements BeanInitialization {
 
         PopulateStoreFromDefine<MarksInitialization> populater =
                 new PopulateStoreFromDefine<>(define, initializer, logger);
-        populater.copyWithoutInit(MarkBounds.class, getMarkBoundsSet());
-        populater.copyInit(MarkProposer.class, getMarkProposerSet());
-        populater.copyInit(MarkCollectionProposer.class, getMarksProposerSet());
-        populater.copyInit(MarkSplitProposer.class, getMarkSplitProposerSet());
-        populater.copyInit(MarkMergeProposer.class, getMarkMergeProposerSet());
-        populater.copyWithoutInit(RandomCollection.class, getSimplePairCollection());
+        populater.copyWithoutInit(MarkBounds.class, markBounds);
+        populater.copyInit(MarkProposer.class, markProposers);
+        populater.copyInit(MarkCollectionProposer.class, markCollectionProposers);
+        populater.copyInit(MarkSplitProposer.class, markSplitProposers);
+        populater.copyInit(MarkMergeProposer.class, markMergeProposers);
+        populater.copyWithoutInit(RandomCollection.class, markPairs);
 
-        populater.copyProvider(MarkCollectionProvider.class, getMarksCollection());
+        populater.copyProvider(MarkCollectionProvider.class, marks());
 
         image.populate(initializer, define, logger);
         points.populate(initializer, define, logger);

@@ -27,13 +27,15 @@
 package org.anchoranalysis.mpp.io.input;
 
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
-import org.anchoranalysis.mpp.bean.MarksBean;
-import org.anchoranalysis.mpp.bean.init.MarksInitialization;
+import org.anchoranalysis.core.identifier.provider.store.SharedObjects;
 
-/** The input can be used to initialize a {@link MarksBean}. */
-public interface InputForMarksBean {
+/** A method that copies certain shared-objects. */
+public interface ExportSharedObjects {
 
-    void addToSharedObjects(MarksInitialization marks, ImageInitialization image)
-            throws OperationFailedException;
+    /**
+     * Adds any exported shared-objects to {@code sharedObjects}.
+     *
+     * @param target where to add the exported objects to
+     */
+    void copyTo(SharedObjects target) throws OperationFailedException;
 }

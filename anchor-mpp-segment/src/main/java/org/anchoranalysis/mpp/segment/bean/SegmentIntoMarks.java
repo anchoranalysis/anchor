@@ -31,12 +31,10 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.identifier.provider.NamedProvider;
+import org.anchoranalysis.core.identifier.provider.store.SharedObjects;
 import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.core.stack.StackIdentifiers;
-import org.anchoranalysis.image.core.stack.named.NamedStacks;
-import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.io.output.bean.enabled.IgnoreUnderscorePrefix;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
@@ -52,8 +50,7 @@ public abstract class SegmentIntoMarks extends AnchorBean<SegmentIntoMarks> {
     public abstract ExperimentState createExperimentState();
 
     public abstract MarkCollection segment(
-            NamedStacks stacks,
-            NamedProvider<ObjectCollection> objects,
+            SharedObjects sharedObjects,
             Optional<Dictionary> dictionary,
             InputOutputContext context)
             throws SegmentationFailedException;
