@@ -34,9 +34,12 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.identifier.provider.NamedProvider;
 import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.experiment.io.InitializationContext;
+import org.anchoranalysis.experiment.task.InputBound;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
@@ -46,6 +49,7 @@ import org.anchoranalysis.io.output.outputter.OutputterChecked;
 import org.anchoranalysis.mpp.bean.init.MarksInitialization;
 import org.anchoranalysis.mpp.io.input.InputForMarksBean;
 import org.anchoranalysis.mpp.io.input.MarksInitializationFactory;
+import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.mpp.mark.Mark;
 
 /**
@@ -67,14 +71,19 @@ import org.anchoranalysis.mpp.mark.Mark;
  * </tbody>
  * </table>
  */
-public abstract class DefineOutputter extends AnchorBean<DefineOutputter> {
+public class DefineOutputter extends AnchorBean<DefineOutputter> {
 
     // START BEAN PROPERTIES
     @BeanField @OptionalBean @Getter @Setter private Define define = new Define();
 
     @BeanField @Getter @Setter private boolean suppressSubfolders = false;
     // END BEAN PROPERTIES
-
+    
+    @FunctionalInterface
+    public interface Processor<T> {
+        void process(T initialization) throws OperationFailedException;
+    }
+    
     /**
      * Adds all possible output-names to a {@link OutputEnabledMutable}.
      *
@@ -84,16 +93,27 @@ public abstract class DefineOutputter extends AnchorBean<DefineOutputter> {
         InitializationOutputter.addAllOutputNamesTo(outputEnabled);
     }
 
+    public <S> void process(
+            InputBound<MultiInput, S> input,
+            Processor<ImageInitialization> operation)
+            throws OperationFailedException {
+        InitializationContext context = input.createInitializationContext();
+        try {
+            MarksInitialization initialization = createInitialization(input.getInput(), context);
+
+            operation.process(initialization.getImage());
+
+            outputSharedObjects(initialization, context.getOutputter().getChecked());
+
+        } catch (CreateException | OutputWriteFailedException e) {
+            throw new OperationFailedException(e);
+        }
+    }
+
     protected MarksInitialization createInitialization(
             InputForMarksBean input, InitializationContext context) throws CreateException {
         return MarksInitializationFactory.create(
                 context, Optional.ofNullable(define), Optional.of(input));
-    }
-
-    protected MarksInitialization createInitialization(InitializationContext context)
-            throws CreateException {
-        return MarksInitializationFactory.create(
-                context, Optional.ofNullable(define), Optional.empty());
     }
 
     protected MarksInitialization createInitialization(
