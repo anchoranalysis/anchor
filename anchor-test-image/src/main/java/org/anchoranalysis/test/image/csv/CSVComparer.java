@@ -37,14 +37,14 @@ import org.apache.commons.lang.ArrayUtils;
 @AllArgsConstructor
 public class CSVComparer {
 
-    /** The separator for the csv file (a regular expression for split function) */
+    /** The separator for the CSV file (a regular expression for split function) */
     private String regExSeperator;
 
     /** Whether the first line of the CSV file headers */
     private boolean firstLineHeaders;
 
     /** Ignore the first number of columns (left most) when measuring equality */
-    private int ignoreFirstNumColumns;
+    private int ignoreFirstNumberColumns;
 
     /**
      * If true, all lines in the CSV file are sorted before comparison. If false, the order remains
@@ -67,21 +67,23 @@ public class CSVComparer {
     public boolean areCsvFilesEqual(Path path1, Path path2, PrintStream messageStream)
             throws CSVReaderException {
 
-        OpenedCSVFile file1 = openCsvFromFilePath(path1);
-        OpenedCSVFile file2 = openCsvFromFilePath(path2);
-
-        if (firstLineHeaders && !checkHeadersIdentical(file1, file2, messageStream)) {
-            return false;
-        }
-
-        if (sortLines) {
-            CompareSorted compareWithSorting =
-                    new CompareSorted(ignoreFirstNumColumns, rejectZeroRows);
-            return compareWithSorting.compare(file1, file2, System.out); // NOSONAR
-        } else {
-            CompareUnsorted compareUnsorted = new CompareUnsorted();
-            return compareUnsorted.compareCsvFilesWithoutSorting(
-                    file1, file2, ignoreFirstNumColumns, rejectZeroRows);
+        try(OpenedCSVFile file1 = openCsvFromFilePath(path1)) {
+            try(OpenedCSVFile file2 = openCsvFromFilePath(path2)) {
+    
+                if (firstLineHeaders && !checkHeadersIdentical(file1, file2, messageStream)) {
+                    return false;
+                }
+        
+                if (sortLines) {
+                    CompareSorted compareWithSorting =
+                            new CompareSorted(ignoreFirstNumberColumns, rejectZeroRows);
+                    return compareWithSorting.compare(file1, file2, System.out); // NOSONAR
+                } else {
+                    CompareUnsorted compareUnsorted = new CompareUnsorted();
+                    return compareUnsorted.compareCsvFilesWithoutSorting(
+                            file1, file2, ignoreFirstNumberColumns, rejectZeroRows);
+                }
+            }
         }
     }
 
