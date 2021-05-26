@@ -124,4 +124,8 @@ public class EnergyStack {
     public EnergyStackWithoutParams withoutParams() {
         return delegate;
     }
+
+    public final int getNumberChannels() {
+        return delegate.getNumberChannels();
+    }
 }

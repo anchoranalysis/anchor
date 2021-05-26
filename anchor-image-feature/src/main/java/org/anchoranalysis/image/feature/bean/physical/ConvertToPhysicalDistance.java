@@ -48,7 +48,6 @@ public class ConvertToPhysicalDistance<T extends FeatureInputWithResolution>
         extends FeatureConvertUnits<T> {
 
     // START BEAN PROPERTIES
-
     /** Direction of the distance being converted, defaults to a unit vector along the X-axis */
     @BeanField @Getter @Setter
     private DirectionVectorBean direction = new VectorInDirection(1.0, 0, 0);
