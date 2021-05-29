@@ -40,7 +40,7 @@ jobs:
       with:
         servers: |
             [{
-                "id": "path_path_finder",
+                "id": "path-pattern-finder",
                 "username": "$GITHUB_ACTOR",
                 "password": "${{ secrets.GITHUB_TOKEN }}"
             }]    
@@ -80,7 +80,7 @@ jobs:
       with:
         servers: |
             [{
-                "id": "path-path-finder",
+                "id": "path-pattern-finder",
                 "username": "$GITHUB_ACTOR",
                 "password": "${{ secrets.GITHUB_TOKEN }}"
             }]    
