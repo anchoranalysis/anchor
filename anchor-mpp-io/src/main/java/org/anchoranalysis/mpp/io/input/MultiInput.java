@@ -31,6 +31,7 @@ import java.util.Optional;
 import lombok.experimental.Accessors;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
+import org.anchoranalysis.core.identifier.provider.store.SharedObjects;
 import org.anchoranalysis.core.log.error.ErrorReporter;
 import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.core.value.Dictionary;
@@ -44,7 +45,7 @@ import org.anchoranalysis.mpp.bean.init.MarksInitialization;
 import org.anchoranalysis.mpp.mark.MarkCollection;
 
 @Accessors(fluent = true)
-public class MultiInput implements ProvidesStackInput, InputForMarksBean {
+public class MultiInput implements ProvidesStackInput, ExportSharedObjects {
 
     public static final String DEFAULT_IMAGE_INPUT_NAME = "input_image";
 
@@ -82,15 +83,17 @@ public class MultiInput implements ProvidesStackInput, InputForMarksBean {
     }
 
     @Override
-    public void addToSharedObjects(MarksInitialization marks, ImageInitialization image)
-            throws OperationFailedException {
+    public void copyTo(SharedObjects target) throws OperationFailedException {
 
-        marks().addToStore(marks.getMarksCollection());
+        ImageInitialization image = new ImageInitialization(target);
+
         stack().addToStore(new WrapStackAsTimeSequenceStore(image.stacks()));
         objects().addToStore(image.objects());
         dictionary().addToStore(image.dictionaries());
         filePath().addToStore(image.filePaths());
         histogram().addToStore(image.histograms());
+        
+        marks().addToStore(new MarksInitialization(image).marks());
     }
 
     @Override

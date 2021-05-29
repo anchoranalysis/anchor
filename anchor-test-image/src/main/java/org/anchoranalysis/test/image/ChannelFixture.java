@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.test.image;
 
-import java.util.Optional;
+import org.anchoranalysis.bean.OptionalFactory;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
@@ -35,8 +35,20 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxelsAll;
 import org.anchoranalysis.spatial.Extent;
 import org.anchoranalysis.spatial.point.Point3i;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
+/**
+ * Creates a {@link Channel} to use in tests. 
+ * 
+ * @author Owen Feehan
+ *
+ */
+@NoArgsConstructor @AllArgsConstructor
 public class ChannelFixture {
+    
+    /** Whether to include resolution with the channel's dimensions. */
+    private boolean includeResolution = true;
 
     // Creates an intensity value for a given location
     @FunctionalInterface
@@ -50,16 +62,16 @@ public class ChannelFixture {
     }
 
     // START: IntensityFunction examples
-    public static int sumMod(int x, int y, int z) {
-        return mod(x + y + z);
+    public static int sumModulo(int x, int y, int z) {
+        return modulo(x + y + z);
     }
 
-    public static int diffMod(int x, int y, int z) {
-        return mod(x - y - z);
+    public static int diffModulo(int x, int y, int z) {
+        return modulo(x - y - z);
     }
 
-    public static int multMod(int x, int y, int z) {
-        return mod(x * y * z);
+    public static int multModulo(int x, int y, int z) {
+        return modulo(x * y * z);
     }
     // END: IntensityFunction examples
 
@@ -72,10 +84,10 @@ public class ChannelFixture {
     public static final Extent LARGE_2D = LARGE_3D.flattenZ();
     // END: image size examples
 
-    public static Channel createChannel(
+    public Channel createChannel(
             Extent extent, IntensityFunction createIntensity, VoxelDataType channelVoxelType) {
 
-        Dimensions dimensions = new Dimensions(extent, Optional.of(ImageResFixture.INSTANCE));
+        Dimensions dimensions = createDimensions(extent);
 
         Channel channel =
                 ChannelFactory.instance().get(channelVoxelType).createEmptyInitialised(dimensions);
@@ -87,7 +99,9 @@ public class ChannelFixture {
         return channel;
     }
 
-    //
+    private Dimensions createDimensions(Extent extent) {
+        return new Dimensions(extent, OptionalFactory.create(includeResolution, () -> ImageResFixture.INSTANCE));
+    }
 
     /**
      * Finds modulus of a number with the maximum byte value (+1)
@@ -97,7 +111,7 @@ public class ChannelFixture {
      * @param number
      * @return
      */
-    private static int mod(int number) {
+    private static int modulo(int number) {
         if (number >= 0) {
             return Math.floorMod(number, UnsignedByteVoxelType.MAX_VALUE_INT + 1);
         } else {

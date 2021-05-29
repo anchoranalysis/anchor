@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-mpp-sgmn
+ * anchor-mpp-io
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -24,12 +24,18 @@
  * #L%
  */
 
-package org.anchoranalysis.mpp.segment.bean.define;
+package org.anchoranalysis.mpp.io.input;
 
-import org.anchoranalysis.bean.define.Define;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.identifier.provider.store.SharedObjects;
 
-/**
- * Helper for tasks that uses a {@link Define} in association with an input to execute some tasks,
- * and then outputs results *
- */
-public class DefineOutputterImage extends DefineOutputter {}
+/** A method that copies certain shared-objects. */
+public interface ExportSharedObjects {
+
+    /**
+     * Adds any exported shared-objects to {@code sharedObjects}.
+     *
+     * @param target where to add the exported objects to
+     */
+    void copyTo(SharedObjects target) throws OperationFailedException;
+}

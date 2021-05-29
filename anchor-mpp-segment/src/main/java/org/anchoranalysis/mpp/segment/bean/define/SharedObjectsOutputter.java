@@ -29,7 +29,9 @@ package org.anchoranalysis.mpp.segment.bean.define;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
+import org.anchoranalysis.core.identifier.provider.store.SharedObjects;
 import org.anchoranalysis.image.bean.nonbean.init.CreateCombinedStack;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.io.histogram.output.HistogramCSVGenerator;
 import org.anchoranalysis.image.io.object.output.hdf5.ObjectCollectionWriter;
 import org.anchoranalysis.image.io.stack.output.NamedStacksOutputter;
@@ -44,8 +46,7 @@ import org.anchoranalysis.mpp.mark.MarkCollection;
 import org.anchoranalysis.mpp.segment.define.OutputterDirectories;
 
 /**
- * This class will output entities associated with {@link MarksInitialization} in particular
- * directories.
+ * This class will output entities associated with {@link SharedObjects} in particular directories.
  *
  * <p>These outputs are:
  *
@@ -60,9 +61,9 @@ import org.anchoranalysis.mpp.segment.define.OutputterDirectories;
  * @author Owen Feehan
  */
 @AllArgsConstructor
-class InitializationOutputter {
+class SharedObjectsOutputter {
 
-    private MarksInitialization params;
+    private SharedObjects sharedObjects;
     private boolean suppressSubfolders;
     private OutputterChecked outputter;
 
@@ -92,37 +93,40 @@ class InitializationOutputter {
                     "The Outputter's settings have not yet been initialized");
         }
 
-        stacks();
-        marks();
-        histograms();
-        objects();
+        ImageInitialization initializationImage = new ImageInitialization(sharedObjects);
+
+        stacks(initializationImage);
+        histograms(initializationImage);
+        objects(initializationImage);
+
+        marks(new MarksInitialization(initializationImage));
     }
 
-    private void stacks() throws OutputWriteFailedException {
+    private void stacks(ImageInitialization initialization) throws OutputWriteFailedException {
         NamedStacksOutputter.output(
-                CreateCombinedStack.apply(params.getImage()),
+                CreateCombinedStack.apply(initialization),
                 OutputterDirectories.STACKS,
                 suppressSubfolders,
                 outputter);
     }
 
-    private void marks() throws OutputWriteFailedException {
+    private void marks(MarksInitialization initialization) throws OutputWriteFailedException {
         output(
-                params.getMarksCollection(),
+                initialization.marks(),
                 new XStreamGenerator<MarkCollection>(Optional.of("marks")),
                 OutputterDirectories.MARKS);
     }
 
-    private void histograms() throws OutputWriteFailedException {
+    private void histograms(ImageInitialization initialization) throws OutputWriteFailedException {
         output(
-                params.getImage().histograms(),
+                initialization.histograms(),
                 new HistogramCSVGenerator(),
                 OutputterDirectories.HISTOGRAMS);
     }
 
-    private void objects() throws OutputWriteFailedException {
+    private void objects(ImageInitialization initialization) throws OutputWriteFailedException {
         output(
-                params.getImage().objects(),
+                initialization.objects(),
                 ObjectCollectionWriter.generator(),
                 OutputterDirectories.OBJECTS);
     }

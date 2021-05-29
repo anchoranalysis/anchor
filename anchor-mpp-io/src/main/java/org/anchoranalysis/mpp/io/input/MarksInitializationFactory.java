@@ -33,40 +33,36 @@ import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.bean.initializable.property.PropertyInitializer;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.core.identifier.provider.NamedProvider;
 import org.anchoranalysis.core.identifier.provider.store.SharedObjects;
 import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.experiment.io.InitializationContext;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
-import org.anchoranalysis.image.core.stack.Stack;
-import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.mpp.bean.MarksBean;
 import org.anchoranalysis.mpp.bean.init.MarksInitialization;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MarksInitializationFactory {
 
-    private static final String KEY_VALUE_PARAMS_IDENTIFIER = "input_params";
-
     public static MarksInitialization create(
+            Optional<? extends ExportSharedObjects> input,
             InitializationContext context,
-            Optional<Define> define,
-            Optional<? extends InputForMarksBean> input)
+            Optional<Define> define)
             throws CreateException {
 
         SharedObjects sharedObjects = new SharedObjects(context.common());
         ImageInitialization image =
                 new ImageInitialization(sharedObjects, context.getSuggestedResize());
-        MarksInitialization marks = new MarksInitialization(image, sharedObjects);
 
         if (input.isPresent()) {
             try {
-                input.get().addToSharedObjects(marks, image);
+                input.get().copyTo(sharedObjects);
             } catch (OperationFailedException e) {
                 throw new CreateException(e);
             }
         }
 
+        MarksInitialization marks = new MarksInitialization(image);
+        
         if (define.isPresent()) {
             try {
                 // Tries to initialize any properties (of type MarksInitialization found in the
@@ -84,35 +80,14 @@ public class MarksInitializationFactory {
         return marks;
     }
 
-    public static MarksInitialization createFromExistingCollections(
+    public static MarksInitialization createFromExisting(
             InitializationContext context,
             Optional<Define> define,
-            Optional<NamedProvider<Stack>> stacks,
-            Optional<NamedProvider<ObjectCollection>> objects,
+            Optional<SharedObjects> sharedObjects,
             Optional<Dictionary> dictionary)
             throws CreateException {
-
-        try {
-            MarksInitialization marks = create(context, define, Optional.empty());
-
-            ImageInitialization image = marks.getImage();
-
-            if (stacks.isPresent()) {
-                image.copyStacksFrom(stacks.get());
-            }
-
-            if (objects.isPresent()) {
-                image.copyObjectsFrom(objects.get());
-            }
-
-            if (dictionary.isPresent()) {
-                image.addDictionary(KEY_VALUE_PARAMS_IDENTIFIER, dictionary.get());
-            }
-
+            MarksInitialization marks = create(Optional.empty(), context, define);
+            marks.image().addSharedObjectsDictionary(sharedObjects, dictionary);
             return marks;
-
-        } catch (OperationFailedException e) {
-            throw new CreateException(e);
-        }
     }
 }

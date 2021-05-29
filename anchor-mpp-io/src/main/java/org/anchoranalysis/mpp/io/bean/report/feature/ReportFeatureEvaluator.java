@@ -48,7 +48,7 @@ public abstract class ReportFeatureEvaluator<T extends FeatureInput>
 
     protected void init(MarksInitialization so, Logger logger) throws InitException {
         // Maybe we should duplicate the providers?
-        featureEvaluator.initRecursive(so.getFeature(), logger);
+        featureEvaluator.initRecursive(so.feature(), logger);
     }
 
     protected FeatureCalculatorSingle<T> createAndStartSession() throws OperationFailedException {

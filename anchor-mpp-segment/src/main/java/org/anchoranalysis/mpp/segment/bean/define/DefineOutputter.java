@@ -34,18 +34,21 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.core.exception.CreateException;
-import org.anchoranalysis.core.identifier.provider.NamedProvider;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.identifier.provider.store.SharedObjects;
 import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.experiment.io.InitializationContext;
-import org.anchoranalysis.image.core.stack.Stack;
-import org.anchoranalysis.image.voxel.object.ObjectCollection;
+import org.anchoranalysis.experiment.task.InputBound;
+import org.anchoranalysis.feature.energy.EnergyStack;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
-import org.anchoranalysis.io.output.outputter.OutputterChecked;
-import org.anchoranalysis.mpp.bean.init.MarksInitialization;
-import org.anchoranalysis.mpp.io.input.InputForMarksBean;
+import org.anchoranalysis.io.output.outputter.Outputter;
+import org.anchoranalysis.mpp.io.input.ExportSharedObjects;
 import org.anchoranalysis.mpp.io.input.MarksInitializationFactory;
+import org.anchoranalysis.mpp.io.input.MultiInput;
+import org.anchoranalysis.mpp.io.output.EnergyStackWriter;
 import org.anchoranalysis.mpp.mark.Mark;
 
 /**
@@ -67,7 +70,7 @@ import org.anchoranalysis.mpp.mark.Mark;
  * </tbody>
  * </table>
  */
-public abstract class DefineOutputter extends AnchorBean<DefineOutputter> {
+public class DefineOutputter extends AnchorBean<DefineOutputter> {
 
     // START BEAN PROPERTIES
     @BeanField @OptionalBean @Getter @Setter private Define define = new Define();
@@ -75,40 +78,64 @@ public abstract class DefineOutputter extends AnchorBean<DefineOutputter> {
     @BeanField @Getter @Setter private boolean suppressSubfolders = false;
     // END BEAN PROPERTIES
 
+    @FunctionalInterface
+    public interface Processor<T> {
+        void process(T initialization) throws OperationFailedException;
+    }
+
     /**
      * Adds all possible output-names to a {@link OutputEnabledMutable}.
      *
      * @param outputEnabled where to add all possible output-names
      */
     public void addAllOutputNamesTo(OutputEnabledMutable outputEnabled) {
-        InitializationOutputter.addAllOutputNamesTo(outputEnabled);
+        SharedObjectsOutputter.addAllOutputNamesTo(outputEnabled);
     }
 
-    protected MarksInitialization createInitialization(
-            InputForMarksBean input, InitializationContext context) throws CreateException {
+    public <S> void process(
+            InputBound<MultiInput, S> input, Processor<ImageInitialization> operation)
+            throws OperationFailedException {
+        InitializationContext context = input.createInitializationContext();
+        try {
+            ImageInitialization initialization = createInitialization(context, input.getInput());
+
+            operation.process(initialization);
+
+            outputSharedObjects(
+                    initialization.getSharedObjects(),
+                    Optional.empty(),
+                    context.getOutputter());
+
+        } catch (CreateException | OutputWriteFailedException e) {
+            throw new OperationFailedException(e);
+        }
+    }
+
+    protected ImageInitialization createInitialization(
+            InitializationContext context, ExportSharedObjects input) throws CreateException {
         return MarksInitializationFactory.create(
-                context, Optional.ofNullable(define), Optional.of(input));
+                Optional.of(input), context, Optional.ofNullable(define)).image();
     }
 
-    protected MarksInitialization createInitialization(InitializationContext context)
-            throws CreateException {
-        return MarksInitializationFactory.create(
-                context, Optional.ofNullable(define), Optional.empty());
-    }
-
-    protected MarksInitialization createInitialization(
+    protected ImageInitialization createInitialization(
             InitializationContext context,
-            Optional<NamedProvider<Stack>> stacks,
-            Optional<NamedProvider<ObjectCollection>> objects,
+            Optional<SharedObjects> sharedObjects,
             Optional<Dictionary> dictionary)
             throws CreateException {
-        return MarksInitializationFactory.createFromExistingCollections(
-                context, Optional.ofNullable(define), stacks, objects, dictionary);
+        ImageInitialization initialization = MarksInitializationFactory.create( Optional.empty(), context, Optional.ofNullable(define)).image();
+        initialization.addSharedObjectsDictionary(sharedObjects, dictionary);
+        return initialization;
     }
 
     protected void outputSharedObjects(
-            MarksInitialization initialization, OutputterChecked outputter)
+            SharedObjects sharedObjects, Optional<EnergyStack> energyStack, Outputter outputter)
             throws OutputWriteFailedException {
-        new InitializationOutputter(initialization, suppressSubfolders, outputter).output();
+        
+        new SharedObjectsOutputter(sharedObjects, suppressSubfolders, outputter.getChecked())
+                .output();
+
+        if (energyStack.isPresent()) {
+            new EnergyStackWriter(energyStack.get(), outputter).writeEnergyStack();
+        }
     }
 }

@@ -30,7 +30,6 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.feature.energy.EnergyStack;
-import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
 import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
@@ -39,19 +38,43 @@ import org.anchoranalysis.test.image.ChannelFixture.IntensityFunction;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class EnergyStackFixture {
-
+    
+    /**
+     * Creates the energy-stack to use.
+     * 
+     * @param big iff true, an image of larger size is created
+     * @param do3D iff true, a 3D image is created, otherwise 2D
+     * @return the newly created energy-stack
+     */
     public static EnergyStack create(boolean big, boolean do3D) {
+        return create(big, do3D, false, true);
+    }
+    
+    /**
+     * Creates the energy-stack to use.
+     * 
+     * @param big iff true, an image of larger size is created
+     * @param do3D iff true, a 3D image is created, otherwise 2D
+     * @param singleChannel iff true, a stack with a single channel is created, otherwise three channels
+     * @param includeResolution include resolution information in the channel
+     * @return the newly created energy-stack
+     */
+    public static EnergyStack create(boolean big, boolean do3D, boolean singleChannel, boolean includeResolution) {
 
+        ChannelFixture fixture = new ChannelFixture(includeResolution);
+        
         Extent size = multiplexExtent(big, do3D);
 
         try {
             Stack stack = new Stack();
-            addChannel(stack, size, ChannelFixture::sumMod);
-            addChannel(stack, size, ChannelFixture::diffMod);
-            addChannel(stack, size, ChannelFixture::multMod);
+            addChannel(stack, size, ChannelFixture::sumModulo, fixture);
+            
+            if (!singleChannel) {
+                addChannel(stack, size, ChannelFixture::diffModulo, fixture);
+                addChannel(stack, size, ChannelFixture::multModulo, fixture);
+            }
 
-            EnergyStackWithoutParams energyStack = new EnergyStackWithoutParams(stack);
-            return new EnergyStack(energyStack);
+            return new EnergyStack(stack);
 
         } catch (IncorrectImageSizeException e) {
             throw new AnchorImpossibleSituationException();
@@ -66,10 +89,10 @@ public class EnergyStackFixture {
         }
     }
 
-    private static void addChannel(Stack stack, Extent size, IntensityFunction intensityFunction)
+    private static void addChannel(Stack stack, Extent size, IntensityFunction intensityFunction, ChannelFixture fixture)
             throws IncorrectImageSizeException {
         stack.addChannel(
-                ChannelFixture.createChannel(
+                fixture.createChannel(
                         size, intensityFunction, UnsignedByteVoxelType.INSTANCE));
     }
 }

@@ -162,16 +162,16 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
      */
     public ResultsVector calculateSuppressErrors(T params, ErrorReporter errorReporter) {
 
-        ResultsVector res = new ResultsVector(listFeatures.size());
+        ResultsVector results = new ResultsVector(listFeatures.size());
 
         if (!isStarted) {
             errorReporter.recordError(SequentialSession.class, ERROR_NOT_STARTED);
-            res.setErrorAll(new OperationFailedException(ERROR_NOT_STARTED));
+            results.setErrorAll(new OperationFailedException(ERROR_NOT_STARTED));
         } else {
-            calculateCommonSuppressErrors(res, params, errorReporter);
+            calculateCommonSuppressErrors(results, params, errorReporter);
         }
 
-        return res;
+        return results;
     }
 
     public boolean hasSingleFeature() {
@@ -184,7 +184,7 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
     }
 
     private void calculateCommonSuppressErrors(
-            ResultsVector res, T params, ErrorReporter errorReporter) {
+            ResultsVector results, T params, ErrorReporter errorReporter) {
 
         // Create cacheable params, and record any errors for all features
         SessionInput<T> cacheableParams;
@@ -196,7 +196,7 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
                 errorReporter.recordError(SequentialSession.class, e);
             }
             for (int i = 0; i < listFeatures.size(); i++) {
-                res.setError(i, e);
+                results.setError(i, e);
             }
             return;
         }
@@ -206,13 +206,13 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
             Feature<T> f = listFeatures.get(i);
 
             try {
-                res.set(i, cacheableParams.calculate(f));
+                results.set(i, cacheableParams.calculate(f));
 
             } catch (FeatureCalculationException e) {
                 if (reportErrors) {
                     errorReporter.recordError(SequentialSession.class, e);
                 }
-                res.setError(i, e);
+                results.setError(i, e);
             }
         }
     }

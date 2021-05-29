@@ -28,7 +28,6 @@ package org.anchoranalysis.test.image;
 import java.util.Optional;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
-import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.image.core.channel.Channel;
@@ -45,14 +44,24 @@ import org.anchoranalysis.test.image.rasterwriter.ChannelSpecification;
  * @author Owen Feehan
  */
 @NoArgsConstructor
-@AllArgsConstructor
 public class StackFixture {
+    
+    private ChannelFixture channelFixture = new ChannelFixture();
 
     /**
-     * If defines, specifies the voxel-data type of the first channel, taking precedence over the
+     * If defined, specifies the voxel-data type of the first channel, taking precedence over the
      * {@code channelsVoxelType} argument.
      */
     private Optional<VoxelDataType> firstChannelVoxelType = Optional.empty();
+    
+    /**
+     * Create with a voxel-type for the first channel.
+     * 
+     * @param firstChannelVoxelType voxel-data type of the first channel, taking precedence over the {@code channelsVoxelType} argument.
+     */
+    public StackFixture(Optional<VoxelDataType> firstChannelVoxelType) {
+        this.firstChannelVoxelType = firstChannelVoxelType;
+    }
 
     /**
      * Creates a stack with a particular number of the channels of particular size.
@@ -86,7 +95,7 @@ public class StackFixture {
                         ? firstChannelVoxelType.get()
                         : defaultChannelVoxelType;
 
-        return ChannelFixture.createChannel(extent, multiplexIntensity(index), voxelType);
+        return channelFixture.createChannel(extent, multiplexIntensity(index), voxelType);
     }
 
     /**
@@ -100,13 +109,13 @@ public class StackFixture {
     private static IntensityFunction multiplexIntensity(int channelIndex) {
         switch (channelIndex) {
             case 0:
-                return ChannelFixture::sumMod;
+                return ChannelFixture::sumModulo;
             case 1:
-                return ChannelFixture::diffMod;
+                return ChannelFixture::diffModulo;
             case 2:
-                return ChannelFixture::multMod;
+                return ChannelFixture::multModulo;
             default:
-                return ChannelFixture::sumMod;
+                return ChannelFixture::sumModulo;
         }
     }
 }

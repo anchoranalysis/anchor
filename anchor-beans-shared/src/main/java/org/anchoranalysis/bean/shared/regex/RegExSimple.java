@@ -36,19 +36,29 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 
+/**
+ * Matches a Java-style regular expression against the string.
+ * 
+ * <p>The regular-expression should contain groups, each of which provides
+ * an element of the {@code String[]} returned for a match.
+ * 
+ * @author Owen Feehan
+ *
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 public class RegExSimple extends RegEx {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private String matchString;
+    /** A Java-style regular expression containing groups. */
+    @BeanField @Getter @Setter private String expression;
     // END BEAN PROPERTIES
 
     /** Lazy creation of a pattern from the regular-expression string. */
     private Pattern pattern = null;
 
     public RegExSimple(String matchString) {
-        this.matchString = matchString;
+        this.expression = matchString;
     }
 
     @Override
@@ -61,12 +71,12 @@ public class RegExSimple extends RegEx {
 
     @Override
     public String toString() {
-        return String.format("regEx(%s)", matchString);
+        return String.format("regEx(%s)", expression);
     }
 
     private void createPatternIfNeeded() {
         if (pattern == null) {
-            pattern = Pattern.compile(matchString);
+            pattern = Pattern.compile(expression);
         }
     }
 

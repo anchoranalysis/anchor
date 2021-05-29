@@ -51,7 +51,7 @@ public abstract class ReportFeatureOnObjectsBase<T extends FeatureInput>
     public String featureDescription(MarksInitialization so, Logger logger)
             throws OperationFailedException {
         try {
-            objects.initRecursive(so.getImage(), logger);
+            objects.initRecursive(so.image(), logger);
             super.init(so, logger);
         } catch (InitException e) {
             throw new OperationFailedException(e);

@@ -26,7 +26,11 @@
 
 package org.anchoranalysis.image.feature.bean.physical;
 
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import java.util.Optional;
+import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.operator.FeatureUnaryGeneric;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
@@ -34,10 +38,24 @@ import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.feature.input.FeatureInputWithResolution;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 
+/**
+ * Base-class for a feature that requires input-resolution to be calculated.
+ * 
+ * @author Owen Feehan
+ *
+ * @param <T> feature-input type.
+ */
 @NoArgsConstructor
 public abstract class WithResolutionBase<T extends FeatureInputWithResolution>
         extends FeatureUnaryGeneric<T> {
 
+    // START BEAN FIELDS
+    /**
+     * Whether to throw an exception (if true) if image-resolution is missing, or return {@code Double.Nan} (if false). 
+     */
+    private @BeanField @Getter @Setter boolean acceptMissingResolution = false;
+    // END BEAN FIELDS
+    
     protected WithResolutionBase(Feature<T> feature) {
         super(feature);
     }
@@ -46,8 +64,18 @@ public abstract class WithResolutionBase<T extends FeatureInputWithResolution>
     public final double calculate(SessionInput<T> input) throws FeatureCalculationException {
 
         double value = input.calculate(getItem());
-
-        return calculateWithResolution(value, input.get().getResolutionRequired());
+                
+        if (acceptMissingResolution) {
+            Optional<Resolution> resolution = input.get().getResolutionOptional();
+            if (resolution.isPresent()) {
+                return calculateWithResolution(value, resolution.get());
+            } else {
+                return Double.NaN;
+            }
+            
+        } else {
+            return calculateWithResolution(value, input.get().getResolutionRequired());
+        }
     }
 
     protected abstract double calculateWithResolution(double value, Resolution resolution)

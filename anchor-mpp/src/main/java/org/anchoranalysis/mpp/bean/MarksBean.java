@@ -59,11 +59,10 @@ public abstract class MarksBean<T> extends InitializableBean<T, MarksInitializat
 
     private static List<ExtractFromParam<MarksInitialization, ?>> paramExtracters() {
         return Arrays.asList(
-                new ExtractFromParam<>(PointsInitialization.class, MarksInitialization::getPoints),
+                new ExtractFromParam<>(PointsInitialization.class, MarksInitialization::points),
+                new ExtractFromParam<>(FeaturesInitialization.class, MarksInitialization::feature),
                 new ExtractFromParam<>(
-                        FeaturesInitialization.class, MarksInitialization::getFeature),
-                new ExtractFromParam<>(
-                        DictionaryInitialization.class, MarksInitialization::getDictionary),
-                new ExtractFromParam<>(ImageInitialization.class, MarksInitialization::getImage));
+                        DictionaryInitialization.class, MarksInitialization::dictionary),
+                new ExtractFromParam<>(ImageInitialization.class, MarksInitialization::image));
     }
 }
