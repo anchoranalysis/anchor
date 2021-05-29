@@ -12,7 +12,7 @@
   		<repository>
 			<id>path-pattern-finder</id>
 			<name>Path Pattern Finder</name>
-			<url>https://maven.pkg.github.com/path-pattern-finder/path-pattern-find/</url>
+			<url>https://maven.pkg.github.com/path-pattern-finder/path-pattern-finder/</url>
 		</repository>
   </repositories>
   <dependencies>
