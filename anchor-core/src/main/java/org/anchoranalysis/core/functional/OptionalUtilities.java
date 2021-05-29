@@ -175,11 +175,14 @@ public class OptionalUtilities {
      * The first optional if it's present, or the second, or the third etc. using an array
      *
      * @param <T> type of optionals
+     * @param <E> an exception that may be thrown by an {@code optional}.
      * @return a new optional that is optionals[0] OR optionals[1] OR optionals[2] etc.
+     * @throws E if any {@code optional} throws it
      */
     @SafeVarargs
-    public static <T> Optional<T> orFlat(Optional<T>... optionals) {
-        for (Optional<T> item : optionals) {
+    public static <T, E extends Exception> Optional<T> orFlat(CheckedSupplier<Optional<T>, E>... optional) throws E {
+        for (CheckedSupplier<Optional<T>, E> itemSupplier : optional) {
+            Optional<T> item = itemSupplier.get();
             if (item.isPresent()) {
                 return item;
             }
