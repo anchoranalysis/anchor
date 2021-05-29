@@ -41,7 +41,7 @@ jobs:
       with:
         servers: |
             [{
-                "id": "github_path_path_finder",
+                "id": "path_path_finder",
                 "username": "$GITHUB_ACTOR",
                 "password": "${{ secrets.GITHUB_TOKEN }}"
             }]    
