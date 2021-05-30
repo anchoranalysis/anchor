@@ -112,14 +112,19 @@ class CopyNonInputs {
         for (NamedFile toCopy : nonInputs) {
             try {
                 Path source = toCopy.getFile().toPath();
-                Path destination = outputDirectory.resolve(toCopy.getIdentifier());
-
+                Path destination = destinationPath(outputDirectory, toCopy.getIdentifier(), params);
                 copyMakeDirectories(source, destination);
             } catch (IOException e) {
                 throw new ExperimentExecutionException(
                         String.format("Failed to copy non-input file: %s", toCopy.getPath()), e);
             }
         }
+    }
+    
+    private static Path destinationPath(Path outputDirectory, String identifier, ParametersExperiment params) {
+        return outputDirectory.resolve(
+            params.getExperimentArguments().output().getPrefixer().maybeSuppressDirectories(identifier, false)
+        );
     }
 
     /** Copy a file making any necessary subdirectories in the destination path. */
