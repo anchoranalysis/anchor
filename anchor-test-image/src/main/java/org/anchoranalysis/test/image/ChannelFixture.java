@@ -26,6 +26,8 @@
 
 package org.anchoranalysis.test.image;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.OptionalFactory;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.channel.factory.ChannelFactory;
@@ -35,18 +37,16 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxelsAll;
 import org.anchoranalysis.spatial.Extent;
 import org.anchoranalysis.spatial.point.Point3i;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 
 /**
- * Creates a {@link Channel} to use in tests. 
- * 
- * @author Owen Feehan
+ * Creates a {@link Channel} to use in tests.
  *
+ * @author Owen Feehan
  */
-@NoArgsConstructor @AllArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 public class ChannelFixture {
-    
+
     /** Whether to include resolution with the channel's dimensions. */
     private boolean includeResolution = true;
 
@@ -100,7 +100,8 @@ public class ChannelFixture {
     }
 
     private Dimensions createDimensions(Extent extent) {
-        return new Dimensions(extent, OptionalFactory.create(includeResolution, () -> ImageResFixture.INSTANCE));
+        return new Dimensions(
+                extent, OptionalFactory.create(includeResolution, () -> ImageResFixture.INSTANCE));
     }
 
     /**

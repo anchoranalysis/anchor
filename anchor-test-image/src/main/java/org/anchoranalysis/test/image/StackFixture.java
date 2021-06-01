@@ -45,7 +45,7 @@ import org.anchoranalysis.test.image.rasterwriter.ChannelSpecification;
  */
 @NoArgsConstructor
 public class StackFixture {
-    
+
     private ChannelFixture channelFixture = new ChannelFixture();
 
     /**
@@ -53,11 +53,12 @@ public class StackFixture {
      * {@code channelsVoxelType} argument.
      */
     private Optional<VoxelDataType> firstChannelVoxelType = Optional.empty();
-    
+
     /**
      * Create with a voxel-type for the first channel.
-     * 
-     * @param firstChannelVoxelType voxel-data type of the first channel, taking precedence over the {@code channelsVoxelType} argument.
+     *
+     * @param firstChannelVoxelType voxel-data type of the first channel, taking precedence over the
+     *     {@code channelsVoxelType} argument.
      */
     public StackFixture(Optional<VoxelDataType> firstChannelVoxelType) {
         this.firstChannelVoxelType = firstChannelVoxelType;

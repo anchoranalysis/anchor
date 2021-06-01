@@ -40,6 +40,16 @@ import org.anchoranalysis.core.format.ImageFileFormat;
 @NoArgsConstructor
 public class OutputPrefixerSettings {
 
+    /** The Unix separator character. */
+    private static final char UNIX_SEPARATOR = '/';
+
+    /** The Windows separator character. */
+    private static final char WINDOWS_SEPARATOR = '\\';
+
+    /** The character to replace directory separators with when suppressed. */
+    private static final char REPLACEMENT_CHARACTER = '_';
+
+    // START: GETTERS AND SETTERS
     /** A directory indicating where inputs can be located */
     @Getter private Optional<Path> outputDirectory = Optional.empty();
 
@@ -53,16 +63,36 @@ public class OutputPrefixerSettings {
     @Getter private boolean outputIncrementingNumberSequence = false;
 
     /**
-     * Requests suppressing directories (replacing subdirectory separators with an underscore) in
-     * the identifiers that are outputted.
-     */
-    @Getter private boolean outputSuppressDirectories = false;
-
-    /**
      * Requests that the experiment-identifier (name and index) is not included in the
      * output-directory path.
      */
     @Getter private boolean omitExperimentIdentifier = false;
+    // END: GETTERS AND SETTERS
+
+    /**
+     * Requests suppressing directories (replacing subdirectory separators with an underscore) in
+     * the identifiers that are outputted.
+     */
+    private boolean outputSuppressDirectories = false;
+
+    /**
+     * Derives an identifier that maybe has its directories suppressed.
+     *
+     * <p>This can leave {@code identifier} unchanged, or suppress the subdirectories in identifier
+     * by replacing them with underscores.
+     *
+     * @param identifier the identifier whose directories are maybe suppressed.
+     * @param forceSuppressDirectories if true, forces the suppression of directories, regardless of
+     *     {@code outputSuppressDirectories}
+     * @return the identifier after any suppression of directories is maybe applied.
+     */
+    public String maybeSuppressDirectories(String identifier, boolean forceSuppressDirectories) {
+        if (forceSuppressDirectories || outputSuppressDirectories) {
+            return replaceSeperatorsWithUnderscore(identifier);
+        } else {
+            return identifier;
+        }
+    }
 
     public void assignOutputDirectory(Path outputDirectory) {
         this.outputDirectory = Optional.of(outputDirectory);
@@ -91,5 +121,10 @@ public class OutputPrefixerSettings {
                             "An non-absolute path was passed to %s of %s",
                             this.getClass().getSimpleName(), outputDirectory.get()));
         }
+    }
+
+    private static String replaceSeperatorsWithUnderscore(String string) {
+        return string.replace(WINDOWS_SEPARATOR, REPLACEMENT_CHARACTER)
+                .replace(UNIX_SEPARATOR, REPLACEMENT_CHARACTER);
     }
 }

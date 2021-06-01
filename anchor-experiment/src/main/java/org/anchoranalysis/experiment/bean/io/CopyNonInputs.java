@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -112,14 +112,22 @@ class CopyNonInputs {
         for (NamedFile toCopy : nonInputs) {
             try {
                 Path source = toCopy.getFile().toPath();
-                Path destination = outputDirectory.resolve(toCopy.getIdentifier());
-
+                Path destination = destinationPath(outputDirectory, toCopy.getIdentifier(), params);
                 copyMakeDirectories(source, destination);
             } catch (IOException e) {
                 throw new ExperimentExecutionException(
                         String.format("Failed to copy non-input file: %s", toCopy.getPath()), e);
             }
         }
+    }
+
+    private static Path destinationPath(
+            Path outputDirectory, String identifier, ParametersExperiment params) {
+        return outputDirectory.resolve(
+                params.getExperimentArguments()
+                        .output()
+                        .getPrefixer()
+                        .maybeSuppressDirectories(identifier, false));
     }
 
     /** Copy a file making any necessary subdirectories in the destination path. */

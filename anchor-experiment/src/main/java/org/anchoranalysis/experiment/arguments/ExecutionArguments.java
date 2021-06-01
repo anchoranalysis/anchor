@@ -79,8 +79,8 @@ public class ExecutionArguments {
         out.setInputPaths(input.getPaths());
         input.getFilterGlob().ifPresent(out::setInputFilterGlob);
         input.getFilterExtensions().ifPresent(out::setInputFilterExtensions);
+        out.setIdentifierSubrange(input.getIdentifierSubrange());
         out.setRelativeForIdentifier(input.isRelativeForIdentifier());
-        out.setCopyNonInputs(input.isCopyNonInputs());
         out.setShuffle(input.isShuffle());
         return out;
     }

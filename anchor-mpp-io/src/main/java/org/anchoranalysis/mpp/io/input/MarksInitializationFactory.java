@@ -62,7 +62,7 @@ public class MarksInitializationFactory {
         }
 
         MarksInitialization marks = new MarksInitialization(image);
-        
+
         if (define.isPresent()) {
             try {
                 // Tries to initialize any properties (of type MarksInitialization found in the
@@ -86,8 +86,8 @@ public class MarksInitializationFactory {
             Optional<SharedObjects> sharedObjects,
             Optional<Dictionary> dictionary)
             throws CreateException {
-            MarksInitialization marks = create(Optional.empty(), context, define);
-            marks.image().addSharedObjectsDictionary(sharedObjects, dictionary);
-            return marks;
+        MarksInitialization marks = create(Optional.empty(), context, define);
+        marks.image().addSharedObjectsDictionary(sharedObjects, dictionary);
+        return marks;
     }
 }
