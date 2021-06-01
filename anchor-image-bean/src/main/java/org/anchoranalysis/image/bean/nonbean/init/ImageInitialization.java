@@ -59,7 +59,7 @@ import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.math.histogram.Histogram;
 
 public class ImageInitialization implements BeanInitialization {
-    
+
     private static final String KEY_VALUE_PARAMS_IDENTIFIER = "input_params";
 
     @Getter private final SharedObjects sharedObjects;
@@ -202,23 +202,23 @@ public class ImageInitialization implements BeanInitialization {
     public void addDictionary(String identifier, Dictionary toAdd) throws OperationFailedException {
         dictionaries().add(identifier, () -> toAdd);
     }
-    
+
     public void addSharedObjectsDictionary(
-            Optional<SharedObjects> sharedObjects,
-            Optional<Dictionary> dictionary) throws CreateException {
+            Optional<SharedObjects> sharedObjects, Optional<Dictionary> dictionary)
+            throws CreateException {
         try {
             if (sharedObjects.isPresent()) {
                 ImageInitialization copyFrom = new ImageInitialization(sharedObjects.get());
                 copyStacksFrom(copyFrom.stacks());
                 copyObjectsFrom(copyFrom.objects());
             }
-    
+
             if (dictionary.isPresent()) {
                 addDictionary(KEY_VALUE_PARAMS_IDENTIFIER, dictionary.get());
             }
         } catch (OperationFailedException e) {
             throw new CreateException(e);
-        }        
+        }
     }
 
     public Path getModelDirectory() {

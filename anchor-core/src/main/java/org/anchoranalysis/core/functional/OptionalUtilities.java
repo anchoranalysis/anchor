@@ -180,7 +180,8 @@ public class OptionalUtilities {
      * @throws E if any {@code optional} throws it
      */
     @SafeVarargs
-    public static <T, E extends Exception> Optional<T> orFlat(CheckedSupplier<Optional<T>, E>... optional) throws E {
+    public static <T, E extends Exception> Optional<T> orFlat(
+            CheckedSupplier<Optional<T>, E>... optional) throws E {
         for (CheckedSupplier<Optional<T>, E> itemSupplier : optional) {
             Optional<T> item = itemSupplier.get();
             if (item.isPresent()) {

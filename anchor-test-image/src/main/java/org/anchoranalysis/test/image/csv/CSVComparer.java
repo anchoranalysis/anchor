@@ -67,13 +67,13 @@ public class CSVComparer {
     public boolean areCsvFilesEqual(Path path1, Path path2, PrintStream messageStream)
             throws CSVReaderException {
 
-        try(OpenedCSVFile file1 = openCsvFromFilePath(path1)) {
-            try(OpenedCSVFile file2 = openCsvFromFilePath(path2)) {
-    
+        try (OpenedCSVFile file1 = openCsvFromFilePath(path1)) {
+            try (OpenedCSVFile file2 = openCsvFromFilePath(path2)) {
+
                 if (firstLineHeaders && !checkHeadersIdentical(file1, file2, messageStream)) {
                     return false;
                 }
-        
+
                 if (sortLines) {
                     CompareSorted compareWithSorting =
                             new CompareSorted(ignoreFirstNumberColumns, rejectZeroRows);

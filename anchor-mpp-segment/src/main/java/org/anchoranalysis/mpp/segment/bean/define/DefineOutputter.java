@@ -102,9 +102,7 @@ public class DefineOutputter extends AnchorBean<DefineOutputter> {
             operation.process(initialization);
 
             outputSharedObjects(
-                    initialization.getSharedObjects(),
-                    Optional.empty(),
-                    context.getOutputter());
+                    initialization.getSharedObjects(), Optional.empty(), context.getOutputter());
 
         } catch (CreateException | OutputWriteFailedException e) {
             throw new OperationFailedException(e);
@@ -114,7 +112,8 @@ public class DefineOutputter extends AnchorBean<DefineOutputter> {
     protected ImageInitialization createInitialization(
             InitializationContext context, ExportSharedObjects input) throws CreateException {
         return MarksInitializationFactory.create(
-                Optional.of(input), context, Optional.ofNullable(define)).image();
+                        Optional.of(input), context, Optional.ofNullable(define))
+                .image();
     }
 
     protected ImageInitialization createInitialization(
@@ -122,7 +121,10 @@ public class DefineOutputter extends AnchorBean<DefineOutputter> {
             Optional<SharedObjects> sharedObjects,
             Optional<Dictionary> dictionary)
             throws CreateException {
-        ImageInitialization initialization = MarksInitializationFactory.create( Optional.empty(), context, Optional.ofNullable(define)).image();
+        ImageInitialization initialization =
+                MarksInitializationFactory.create(
+                                Optional.empty(), context, Optional.ofNullable(define))
+                        .image();
         initialization.addSharedObjectsDictionary(sharedObjects, dictionary);
         return initialization;
     }
@@ -130,7 +132,7 @@ public class DefineOutputter extends AnchorBean<DefineOutputter> {
     protected void outputSharedObjects(
             SharedObjects sharedObjects, Optional<EnergyStack> energyStack, Outputter outputter)
             throws OutputWriteFailedException {
-        
+
         new SharedObjectsOutputter(sharedObjects, suppressSubfolders, outputter.getChecked())
                 .output();
 

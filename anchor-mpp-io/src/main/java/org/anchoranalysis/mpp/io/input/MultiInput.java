@@ -92,7 +92,7 @@ public class MultiInput implements ProvidesStackInput, ExportSharedObjects {
         dictionary().addToStore(image.dictionaries());
         filePath().addToStore(image.filePaths());
         histogram().addToStore(image.histograms());
-        
+
         marks().addToStore(new MarksInitialization(image).marks());
     }
 

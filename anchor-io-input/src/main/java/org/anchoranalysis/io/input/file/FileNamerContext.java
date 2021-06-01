@@ -29,6 +29,7 @@ import java.nio.file.Path;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.Value;
+import org.anchoranalysis.core.index.IndexRange;
 import org.anchoranalysis.core.log.Logger;
 
 /**
@@ -57,19 +58,25 @@ public class FileNamerContext {
     /** A fallback name, if a failure occurs when naming. */
     private String elseName;
 
+    /** If defined, this indicates and specifies only a subset of the naming-elements to use. */
+    private Optional<IndexRange> nameSubrange;
+
     /** Logs information messages. */
     private Logger logger;
 
     public FileNamerContext(Logger logger) {
-        this(Optional.empty(), false, logger);
+        this(Optional.empty(), false, Optional.empty(), logger);
     }
 
     public FileNamerContext(
-            Optional<Path> inputDirectory, boolean relativeToDirectory, Logger logger) {
-        this(inputDirectory, relativeToDirectory, DEFAULT_ELSE_NAME, logger);
+            Optional<Path> inputDirectory,
+            boolean relativeToDirectory,
+            Optional<IndexRange> nameSubrange,
+            Logger logger) {
+        this(inputDirectory, relativeToDirectory, DEFAULT_ELSE_NAME, nameSubrange, logger);
     }
 
     public FileNamerContext(String elseName, Logger logger) {
-        this(Optional.empty(), false, elseName, logger);
+        this(Optional.empty(), false, elseName, Optional.empty(), logger);
     }
 }

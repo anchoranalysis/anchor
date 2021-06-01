@@ -38,12 +38,11 @@ import org.anchoranalysis.core.functional.OptionalUtilities;
 
 /**
  * Matches a Java-style regular expression against the string.
- * 
- * <p>The regular-expression should contain groups, each of which provides
- * an element of the {@code String[]} returned for a match.
- * 
- * @author Owen Feehan
  *
+ * <p>The regular-expression should contain groups, each of which provides an element of the {@code
+ * String[]} returned for a match.
+ *
+ * @author Owen Feehan
  */
 @NoArgsConstructor
 @AllArgsConstructor
