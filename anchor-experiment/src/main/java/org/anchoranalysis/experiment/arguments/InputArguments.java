@@ -68,7 +68,7 @@ public class InputArguments {
     @Getter private boolean relativeForIdentifier = false;
 
     /** If defined, this indicates and specifies only a subset of the naming-elements to use. */
-    @Getter private Optional<IndexRange> identifierSubrange;
+    @Getter private Optional<IndexRange> identifierSubrange = Optional.empty();
 
     /**
      * If True, any files in the input directory that are unused as inputs, are copied to the output

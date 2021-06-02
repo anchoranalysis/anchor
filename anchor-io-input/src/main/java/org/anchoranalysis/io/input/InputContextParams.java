@@ -72,7 +72,7 @@ public class InputContextParams {
     @Getter @Setter private boolean shuffle = false;
 
     /** If defined, this indicates and specifies only a subset of the naming-elements to use. */
-    @Getter @Setter private Optional<IndexRange> identifierSubrange;
+    @Getter @Setter private Optional<IndexRange> identifierSubrange = Optional.empty();
 
     /**
      * If defined, a directory which can be used by beans to find input.
