@@ -44,8 +44,8 @@ public class IndexRange {
      */
     public <T> List<T> extract(List<T> list) throws OperationFailedException {
         int listSize = list.size();
-        int startCorrected = correctNegative(startIndex, listSize);
-        int endCorrected = correctNegative(endIndex, listSize);
+        int startCorrected = correctedStartIndex(listSize);
+        int endCorrected = correctedEndIndex(listSize);
 
         if (startCorrected > endCorrected) {
             throw new OperationFailedException(
@@ -55,6 +55,26 @@ public class IndexRange {
         }
 
         return list.subList(startCorrected, endCorrected + 1);
+    }
+    
+    /**
+     * The start-index, corrected so that it is no longer negative.
+     * 
+     * @param size the total number of elements
+     * @throws OperationFailedException 
+     */
+    public int correctedStartIndex(int size) throws OperationFailedException {
+        return correctNegative(startIndex, size);
+    }
+    
+    /**
+     * The end-index, corrected so that it is no longer negative.
+     * 
+     * @param size the total number of elements
+     * @throws OperationFailedException 
+     */
+    public int correctedEndIndex(int size) throws OperationFailedException {
+        return correctNegative(endIndex, size);
     }
 
     /**

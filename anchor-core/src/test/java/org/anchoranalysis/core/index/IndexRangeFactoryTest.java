@@ -16,7 +16,7 @@ class IndexRangeFactoryTest {
     /** Tests without a colon. */
     @Test
     void testWithoutColon() throws OperationFailedException {
-        test("-11", -11, -1);
+        test("-11", -11, -11);
     }
 
     /** Tests a colon sandwiched between two components. */
@@ -34,7 +34,7 @@ class IndexRangeFactoryTest {
     /** Tests a colon on the right hand side. */
     @Test
     void testColonRight() throws OperationFailedException {
-        test("8:", 8, -1);
+        test("8:", 8, 8);
     }
 
     @Test

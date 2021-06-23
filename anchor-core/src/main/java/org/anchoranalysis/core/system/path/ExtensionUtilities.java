@@ -154,7 +154,7 @@ public class ExtensionUtilities {
     }
 
     /**
-     * Like {@link #removeExtension(String)} but accepts a {@link File}.
+     * Retrieves filename from a {@link File} but without any extension.
      *
      * <p>Note any directory components are ignored! Only the name of the file is returned.
      *
@@ -162,7 +162,7 @@ public class ExtensionUtilities {
      * @return the name of {@code file} without the extension and any leading period to the
      *     extension..
      */
-    public static String removeExtension(File file) {
+    public static String filenameWithoutExtension(File file) {
         return removeExtension(file.getName());
     }
 

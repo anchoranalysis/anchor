@@ -20,9 +20,9 @@ public class IndexRangeFactory {
      *
      * <ul>
      *   <li>{@code start:end}
-     *   <li>{@code start}
+     *   <li>{@code single_index}
      *   <li>{@code :end}
-     *   <li>{@code :start}
+     *   <li>{@code start:}
      * </ul>
      *
      * where
@@ -32,6 +32,7 @@ public class IndexRangeFactory {
      *       the range (where 0 is the first element).
      *   <li>{@code end} is a positive or negative integer indicating the <b>end index</b> of the
      *       range (inclusive, where either -1 or length(array) - 1 is the last element).
+     *   <li>{@code single_index} implies the same value for both {@code start} and {@code end}.
      * </ul>
      *
      * @param str the string to parse
@@ -80,7 +81,7 @@ public class IndexRangeFactory {
     /** If there is no colon in the string. */
     private static IndexRange parseStringWithoutColon(String str) throws OperationFailedException {
         int parsed = parseAsInt(str);
-        return new IndexRange(parsed, -1);
+        return new IndexRange(parsed, parsed);
     }
 
     private static IndexRange parseStringAfterColon(String component)

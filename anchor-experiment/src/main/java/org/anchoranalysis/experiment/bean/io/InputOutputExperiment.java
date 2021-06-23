@@ -217,7 +217,7 @@ public class InputOutputExperiment<T extends InputFromManager, S> extends Output
     private void describeInputs(MessageLogger log, List<T> inputs) {
         List<Path> identifiers =
                 FunctionalList.mapToList(inputs, InputFromManager::identifierAsPath);
-        Pattern pattern = PathPatternFinder.findPatternPaths(identifiers, IOCase.SYSTEM);
+        Pattern pattern = PathPatternFinder.findPatternPaths(identifiers, IOCase.SYSTEM, true);
 
         // Replace any backslashes with forward slashes, as conventionally we use only forward
         // slashes in the input identifiers.
