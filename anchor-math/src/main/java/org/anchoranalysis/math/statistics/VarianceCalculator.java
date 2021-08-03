@@ -46,7 +46,7 @@ public class VarianceCalculator {
 
     public void add(int histogramCount, long k) {
         // Longs to avoid hitting maximum value
-        long addSum = ((long) histogramCount) * k;
+        long addSum = histogramCount * k;
         long addSumSquares = addSum * k;
         assert (addSum >= 0);
         assert (addSumSquares >= 0);
@@ -79,8 +79,8 @@ public class VarianceCalculator {
         // Formula for variance
         // https://en.wikipedia.org/wiki/Variance
         // https://www.sciencebuddies.org/science-fair-projects/science-fair/variance-and-standard-deviation
-        double second = (Math.pow(sum, 2.0)) / count;
-        double val = ((double) sumSquares - second) / count;
+        double second = Math.pow(sum, 2.0) / count;
+        double val = (sumSquares - second) / count;
 
         assert (val >= 0);
         return val;

@@ -67,12 +67,12 @@ final class VoxelBufferFloat extends VoxelBuffer<FloatBuffer> {
 
     @Override
     public void putInt(int index, int value) {
-        buffer.put(index, (float) value);
+        buffer.put(index, value);
     }
 
     @Override
     public void putByte(int index, byte value) {
-        buffer.put(index, (float) PrimitiveConverter.unsignedByteToInt(value));
+        buffer.put(index, PrimitiveConverter.unsignedByteToInt(value));
     }
 
     @Override

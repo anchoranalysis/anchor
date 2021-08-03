@@ -60,7 +60,7 @@ public class UnsignedByteFromUnsignedShort extends ToUnsignedByte {
 
             int indexInPlus = indexIn + (channelIndexRelative * 2);
 
-            int value = (int) DataTools.bytesToShort(sourceArray, indexInPlus, 2, littleEndian);
+            int value = DataTools.bytesToShort(sourceArray, indexInPlus, 2, littleEndian);
 
             // Make unsigned
             if (value < 0) {

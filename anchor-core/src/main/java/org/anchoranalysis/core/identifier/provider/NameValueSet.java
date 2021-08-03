@@ -42,10 +42,8 @@ public class NameValueSet<T> implements Iterable<NameValue<T>>, NamedProvider<T>
     private Map<String, NameValue<T>> map = new HashMap<>();
 
     public NameValueSet(Iterable<? extends NameValue<T>> list) {
-        super();
-
-        for (NameValue<T> nmp : list) {
-            map.put(nmp.getName(), nmp);
+        for (NameValue<T> namedValue : list) {
+            map.put(namedValue.getName(), namedValue);
         }
     }
 
@@ -91,11 +89,6 @@ public class NameValueSet<T> implements Iterable<NameValue<T>>, NamedProvider<T>
 
     public int size() {
         return map.size();
-    }
-
-    // Maybe this doesn't work too well
-    public T getArbitrary() {
-        return map.get(map.keySet().iterator().next()).getValue();
     }
 
     public Stream<NameValue<T>> stream() {
