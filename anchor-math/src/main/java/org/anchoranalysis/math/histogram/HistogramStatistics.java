@@ -80,6 +80,6 @@ public class HistogramStatistics {
 
         double dem = sd * sd * sd;
 
-        return (((double) firstTerm) + secondTerm + thirdTerm) / dem;
+        return (firstTerm + secondTerm + thirdTerm) / dem;
     }
 }

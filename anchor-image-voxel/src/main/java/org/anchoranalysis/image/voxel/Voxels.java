@@ -113,7 +113,6 @@ public abstract class Voxels<T> {
      * @param other the other voxels to compare with
      * @return true if the size, data-type and each voxel-value of both are identical
      */
-    @SuppressWarnings("unchecked")
     public boolean equalsDeep(Voxels<?> other) {
 
         if (!factory.dataType().equals(other.factory().dataType())) {
@@ -124,7 +123,7 @@ public abstract class Voxels<T> {
             return false;
         }
 
-        return extent().iterateOverZUntil(z -> sliceBuffer(z).equals((T) other.sliceBuffer(z)));
+        return extent().iterateOverZUntil(z -> sliceBuffer(z).equals(other.sliceBuffer(z)));
     }
 
     /**

@@ -170,15 +170,15 @@ public abstract class Tuple3d implements Serializable {
     }
 
     public final void setX(int x) {
-        this.x = (double) x;
+        this.x = x;
     }
 
     public final void setY(int y) {
-        this.y = (double) y;
+        this.y = y;
     }
 
     public final void setZ(int z) {
-        this.z = (double) z;
+        this.z = z;
     }
 
     public void setX(double x) {

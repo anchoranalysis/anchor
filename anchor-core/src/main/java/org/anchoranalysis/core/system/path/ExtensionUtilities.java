@@ -70,7 +70,7 @@ public class ExtensionUtilities {
      *
      * <p>Importantly, note <b>the leading period</b> in each entry in this list.
      */
-    public static final List<String> EXCEPTED_DOUBLE_EXTENSIONS =
+    public static final List<String> EXCEPTED_DOUBLE_EXTENSIONS =   //NOSONAR
             Arrays.asList(
                     ".ome.tif",
                     ".ome.tiff",
