@@ -55,13 +55,60 @@ public final class Resolution implements Serializable {
     /** */
     private static final long serialVersionUID = 1L;
 
-    // Stores in Metres. If we change this, do we need to update annotations?
+    // Stores in meters. If we change this, do we need to update annotations?
     private final Point3d res;
 
+    /**
+     * Constructions a default resolution with value 1.0 in each dimension.
+     * 
+     */
     public Resolution() {
         this.res = new Point3d(1.0, 1.0, 1.0);
     }
+    
+    /**
+     * Constructions with only XY resolution, identical in both dimensions.
+     * 
+     * <p>Z-resolution is considered unknown.
+     * 
+     * @param xy the resolution in meters for <i>both</i> x and y dimension.
+     */
+    public static Resolution createWithXY(double xy) {
+        try {
+            return new Resolution(xy, xy, Double.NaN);
+        } catch (CreateException e) {
+            throw new AnchorImpossibleSituationException();
+        }
+    }
+    
+    /**
+     * Constructions with XY resolution and Z resolution.
+     * 
+     * <p>The X and Y resolution is considered identical in both dimensions.
+     * 
+     * @param xy the resolution in meters for <i>both</i> x and y dimension.
+     * @param z the resolution in meters for the z dimension.
+     */
+    public static Resolution createWithXYAndZ(double xy, double z) {
+        try {
+            return new Resolution(xy, xy, z);
+        } catch (CreateException e) {
+            throw new AnchorImpossibleSituationException();
+        }
+    }
 
+    /**
+     * Constructs a resolution from three double values for each dimension.
+     *
+     * <p>Note all dimensions must have positive (i.e. non-zero) resolution.
+     *
+     * <p>X and Y are not allowed have NaN but this is acceptable for the Z-value.
+     *
+     * @param x the resolution for the X-dimension
+     * @param y the resolution for the Y-dimension
+     * @param z the resolution for the Z-dimension
+     * @throws CreateException if a non-positive value is passed, or a NaN for the X or Y components
+     */
     public Resolution(double x, double y, double z) throws CreateException {
         this(new Point3d(x, y, z));
     }
@@ -74,7 +121,7 @@ public final class Resolution implements Serializable {
      * <p>X and Y are not allowed have NaN but this is acceptable for the Z-value.
      *
      * @param tuple the resolution for X, Y and Z
-     * @throws CreateException
+     * @throws CreateException if a non-positive value is passed, or a NaN for the X or Y components
      */
     public Resolution(Tuple3d tuple) throws CreateException {
         checkPositive(tuple.x(), "x");
@@ -103,6 +150,27 @@ public final class Resolution implements Serializable {
 
     public double z() {
         return res.z();
+    }
+    
+    /**
+     * Returns the z-resolution like {@link #z()} if the z-resolution is not NaN.
+     * 
+     * <p>Otherwise returns {@code fallback}.
+     * 
+     * @param fallback the value to return if the z-resolution is NaN
+     * @return either the z-resolution (if not NaN) or {@code fallback}.
+     */
+    public double zIfDefined(double fallback) {
+        double z = res.z();
+        if (!Double.isNaN(z)) {
+            return z;
+        } else {
+            return fallback;
+        }
+    }
+    
+    public double meanXY() {
+        return (x() + y()) / 2;
     }
 
     public double unitVolume() {

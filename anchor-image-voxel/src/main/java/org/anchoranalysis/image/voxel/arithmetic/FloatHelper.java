@@ -38,8 +38,8 @@ class FloatHelper {
     }
 
     public static void calculateForEveryVoxel(FloatBuffer buffer, FloatUnaryOperator operator) {
-        while (buffer.hasRemaining()) {
-            buffer.put(operator.applyAsFloat(buffer.get()));
+        for( int i=0; i<buffer.capacity(); i++) {
+            buffer.put(i, operator.applyAsFloat(buffer.get(i)));
         }
     }
 

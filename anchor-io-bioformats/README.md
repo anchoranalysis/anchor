@@ -11,6 +11,10 @@ Anchor is a platform for image analysis, developed by [Owen Feehan](http://www.o
 * Hoffmann la Roche
 * ongoing as a open-source personal/community project
 
+## Acknowledgements
+
+The image [src/test/resource/tif/withResolution.tif](src/test/resource/tif/withResolution.tif) was received from Naemi Luithle and Ulrike Kutay, Institute of Biochemistry, ETH Zurich, with kind permission to distribute.
+
 ## Documentation
 
 Please consider:

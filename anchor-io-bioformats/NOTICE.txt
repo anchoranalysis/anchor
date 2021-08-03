@@ -30,3 +30,5 @@ Joda.org (http://www.joda.org/).
 
 
 The JUnit depends on Java Hamcrest (http://hamcrest.org/JavaHamcrest/).
+
+The image src/test/resource/tif/withResolution.tif was received from Naemi Luithle and Ulrike Kutay, Institute of Biochemistry, ETH Zurich, with kind permission to distribute.

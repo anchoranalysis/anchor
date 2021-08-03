@@ -63,7 +63,8 @@
 		  <groupId>${project.groupId}</groupId>
 		  <artifactId>anchor-image-io</artifactId>
 		  <version>0.0.8-SNAPSHOT</version>
-		</dependency>		
+		</dependency>
+	
 					
 		<!-- license-compatible parts of BIOFORMATS -->
 	    <dependency>

@@ -29,8 +29,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.progress.ProgressIgnore;
+import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.core.stack.TimeSequence;
 import org.anchoranalysis.image.io.ImageIOException;
@@ -78,9 +80,12 @@ class ExpectedImage {
     /** The expected data-type of voxels */
     private VoxelDataType expectedDataType;
 
+    /** The expected image-resolution. */
+    private Optional<Resolution> expectedResolution;
+    
     /** Which intensity value to count */
     private int intensityValueToCount;
-
+    
     public void openAndAssert(StackReader stackReader, TestLoader loader) throws ImageIOException {
         Stack stack = openStackFromReader(stackReader, loader);
         assertEqualsPrefix(
@@ -90,6 +95,7 @@ class ExpectedImage {
                 "count of voxels==" + intensityValueToCount,
                 expectedCount,
                 stack.getChannel(0).voxelsEqualTo(intensityValueToCount).count());
+        assertEquals(expectedResolution, stack.resolution());
     }
 
     private Stack openStackFromReader(StackReader reader, TestLoader loader)

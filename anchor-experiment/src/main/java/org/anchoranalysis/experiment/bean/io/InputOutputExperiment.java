@@ -41,6 +41,7 @@ import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.core.progress.ProgressIgnore;
+import org.anchoranalysis.core.value.LanguageUtilities;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.bean.log.LoggingDestination;
 import org.anchoranalysis.experiment.bean.log.ToConsole;
@@ -223,8 +224,11 @@ public class InputOutputExperiment<T extends InputFromManager, S> extends Output
         // slashes in the input identifiers.
         String patternDescription = pattern.describeDetailed().replace("\\", "/");
 
-        log.logFormatted("The job has %d inputs.", inputs.size());
-        log.logEmptyLine();
-        log.logFormatted("They are named with the pattern: %s", patternDescription);
+        int numberInputs = inputs.size();
+        log.logFormatted("The job has %d %s.", numberInputs, LanguageUtilities.pluralizeMaybe(numberInputs, "input"));
+        if (numberInputs > 1) {
+            log.logEmptyLine();
+            log.logFormatted("They are named with the pattern: %s", patternDescription);
+        }
     }
 }

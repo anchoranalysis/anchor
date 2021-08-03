@@ -43,7 +43,7 @@ public class BackgroundCreator {
         try {
             return DisplayStack.create(stackCollection.getException(backgroundStackName));
         } catch (NamedProviderGetException e) {
-            throw new CreateException("Cannot create background display-stack", e);
+            throw new CreateException("Cannot get background display-stack with identifier: ", e);
         }
     }
 }
