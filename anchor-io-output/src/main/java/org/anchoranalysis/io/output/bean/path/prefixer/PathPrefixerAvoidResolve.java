@@ -100,8 +100,12 @@ public abstract class PathPrefixerAvoidResolve extends PathPrefixer {
      */
     public DirectoryWithPrefix rootDirectoryPrefixAvoidResolve(
             Optional<String> experimentIdentifier) {
-        String folder = getPrefix() + File.separator + experimentIdentifier + File.separator;
-        return new DirectoryWithPrefix(Paths.get(folder));
+        StringBuilder folder = new StringBuilder(getPrefix() + File.separator);
+        if (experimentIdentifier.isPresent()) {
+            folder.append(experimentIdentifier.get());
+            folder.append(File.separator);
+        }
+        return new DirectoryWithPrefix(Paths.get(folder.toString()));
     }
 
     /**

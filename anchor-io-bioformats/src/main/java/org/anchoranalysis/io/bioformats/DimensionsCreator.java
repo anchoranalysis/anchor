@@ -65,20 +65,20 @@ public class DimensionsCreator {
     private Optional<Resolution> maybeConstructResolution(int seriesIndex) throws CreateException {
 
         // By default the resolution is 1 in all dimensions
-        Point3d res = new Point3d(Double.NaN, Double.NaN, Double.NaN);
+        Point3d resolution = new Point3d(Double.NaN, Double.NaN, Double.NaN);
 
         boolean xUpdated =
                 maybeUpdateDimension(
-                        metadata -> metadata.getPixelsPhysicalSizeX(seriesIndex), res::setX);
+                        metadata -> metadata.getPixelsPhysicalSizeX(seriesIndex), resolution::setX);
 
         boolean yUpdated =
                 maybeUpdateDimension(
-                        metadata -> metadata.getPixelsPhysicalSizeY(seriesIndex), res::setY);
+                        metadata -> metadata.getPixelsPhysicalSizeY(seriesIndex), resolution::setY);
 
-        maybeUpdateDimension(metadata -> metadata.getPixelsPhysicalSizeZ(seriesIndex), res::setZ);
+        maybeUpdateDimension(metadata -> metadata.getPixelsPhysicalSizeZ(seriesIndex), resolution::setZ);
 
         if (xUpdated && yUpdated) {
-            return Optional.of(new Resolution(res));
+            return Optional.of(new Resolution(resolution));
         } else {
             return Optional.empty();
         }

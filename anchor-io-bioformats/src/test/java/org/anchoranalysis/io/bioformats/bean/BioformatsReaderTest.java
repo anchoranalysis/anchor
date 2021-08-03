@@ -25,6 +25,7 @@
  */
 package org.anchoranalysis.io.bioformats.bean;
 
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.format.ImageFileFormat;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.io.bioformats.ConfigureBioformatsLogging;
@@ -65,7 +66,7 @@ class BioformatsReaderTest {
     }
 
     @Test
-    void testTiff() throws ImageIOException {
+    void testTiff() throws ImageIOException, CreateException {
         tester.assertRGBAndUnsigned8BitUncompressed(EXTENSION_TIFF);
         tester.assertUnsigned16Bit(EXTENSION_TIFF, 16);
         tester.assertUnsigned8BitThreeChannels(
@@ -76,5 +77,10 @@ class BioformatsReaderTest {
     @Test
     void testPng() throws ImageIOException {
         tester.assertRGBAndUnsigned8BitUncompressed(EXTENSION_PNG);
+    }
+    
+    @Test
+    void testWithResolution() throws ImageIOException {
+        tester.assertWithResolution(EXTENSION_TIFF, 6900);
     }
 }

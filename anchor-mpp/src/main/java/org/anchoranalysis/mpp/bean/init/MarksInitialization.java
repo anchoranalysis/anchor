@@ -33,7 +33,6 @@ import org.anchoranalysis.bean.initializable.params.BeanInitialization;
 import org.anchoranalysis.bean.initializable.property.PropertyInitializer;
 import org.anchoranalysis.bean.shared.dictionary.DictionaryInitialization;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
 import org.anchoranalysis.core.identifier.provider.store.SharedObjects;
 import org.anchoranalysis.core.log.Logger;
@@ -89,18 +88,6 @@ public class MarksInitialization implements BeanInitialization {
 
     public DictionaryInitialization dictionary() {
         return image.dictionaryInitialization();
-    }
-
-    /**
-     * Backwards compatible for when we only had a single bounds
-     *
-     * <p>This is stored in all our named-definition files, from now on as "primary"
-     *
-     * @return
-     * @throws NamedProviderGetException
-     */
-    public MarkBounds getPrimaryMarkBounds() throws NamedProviderGetException {
-        return markBounds().getException("primary");
     }
 
     public void populate(PropertyInitializer<?> initializer, Define define, Logger logger)
