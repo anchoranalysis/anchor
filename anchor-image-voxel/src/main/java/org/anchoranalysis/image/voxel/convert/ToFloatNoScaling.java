@@ -40,17 +40,17 @@ public final class ToFloatNoScaling extends VoxelsConverter<FloatBuffer> {
 
     @Override
     protected void convertUnsignedByte(UnsignedByteBuffer in, FloatBuffer out) {
-        out.put((float) in.getUnsigned());
+        out.put(in.getUnsigned());
     }
 
     @Override
     protected void convertUnsignedShort(UnsignedShortBuffer in, FloatBuffer out) {
-        out.put((float) in.getUnsigned());
+        out.put(in.getUnsigned());
     }
 
     @Override
     protected void convertUnsignedInt(UnsignedIntBuffer in, FloatBuffer out) {
-        out.put((float) in.getUnsigned());
+        out.put(in.getUnsigned());
     }
 
     @Override

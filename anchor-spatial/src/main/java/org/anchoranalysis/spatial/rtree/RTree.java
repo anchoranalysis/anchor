@@ -83,9 +83,9 @@ public class RTree<T> {
      * @return indices for all bounding-boxes that contain {@code point}.
      */
     public List<T> contains(Point3i point) {
-        singlePoint[0] = (float) point.x();
-        singlePoint[1] = (float) point.y();
-        singlePoint[2] = (float) point.z();
+        singlePoint[0] = point.x();
+        singlePoint[1] = point.y();
+        singlePoint[2] = point.z();
 
         return tree.search(singlePoint, SINGLE_POINT_EXTENT);
     }

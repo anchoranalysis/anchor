@@ -97,7 +97,7 @@ public class LabelObjects<T> {
                 ChannelFactory.instance()
                         .createEmptyInitialisedToSupportMaxValue(
                                 new Dimensions(elements.boundingBox().extent()),
-                                (long) (elements.size() + 1));
+                                elements.size() + 1l);
 
         ReadableTuple3i shiftBack = elements.boundingBox().cornerMin();
         Point3i shiftBackMult = Point3i.immutableScale(shiftBack, -1);

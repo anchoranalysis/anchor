@@ -198,8 +198,8 @@ public abstract class Mark implements Serializable, Identifiable {
             for (point.setY(box.cornerMin().y()); point.y() <= maxPos.y(); point.incrementY()) {
                 for (point.setX(box.cornerMin().x()); point.x() <= maxPos.x(); point.incrementX()) {
 
-                    pointScaled.setX(((double) point.x()) / scaleFactor);
-                    pointScaled.setY(((double) point.y()) / scaleFactor);
+                    pointScaled.setX(point.x() / scaleFactor);
+                    pointScaled.setY(point.y() / scaleFactor);
 
                     byte membership = isPointInside(pointScaled);
 

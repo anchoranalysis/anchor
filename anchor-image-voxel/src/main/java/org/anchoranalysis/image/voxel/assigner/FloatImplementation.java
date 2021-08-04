@@ -34,7 +34,7 @@ class FloatImplementation extends Base<FloatBuffer> {
 
     public FloatImplementation(Voxels<FloatBuffer> voxels, int valueToAssign) {
         super(voxels, valueToAssign);
-        valueCast = (float) valueToAssign;
+        this.valueCast = valueToAssign;
     }
 
     @Override

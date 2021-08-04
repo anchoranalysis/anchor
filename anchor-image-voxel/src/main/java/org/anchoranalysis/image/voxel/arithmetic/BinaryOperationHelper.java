@@ -40,6 +40,6 @@ class BinaryOperationHelper {
     }
 
     public static float multiplyByFloat(float value, double factor) {
-        return (float) Math.round(value * factor);
+        return Math.round(value * factor);
     }
 }

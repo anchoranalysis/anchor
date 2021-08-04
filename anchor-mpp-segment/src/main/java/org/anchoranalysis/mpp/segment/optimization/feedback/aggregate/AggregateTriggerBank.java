@@ -33,33 +33,30 @@ import org.anchoranalysis.mpp.segment.optimization.feedback.FeedbackBeginParamet
 import org.anchoranalysis.mpp.segment.optimization.feedback.ReporterException;
 import org.anchoranalysis.mpp.segment.optimization.feedback.period.PeriodTriggerBank;
 import org.anchoranalysis.mpp.segment.optimization.step.Reporting;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 public class AggregateTriggerBank<T> {
 
     private HashMap<Integer, AggregateTrigger<T, AggregateReceiverList<T>>> map = new HashMap<>();
     private ArrayList<AggregateTrigger<T, AggregateReceiverList<T>>> list = new ArrayList<>();
 
-    private ExtractScoreSize<T> extractScoreSize;
-
-    public AggregateTriggerBank(ExtractScoreSize<T> extractScoreSize) {
-        super();
-        this.extractScoreSize = extractScoreSize;
-    }
+    private final ExtractScoreSize<T> extractScoreSize;
 
     public AggregateTrigger<T, AggregateReceiverList<T>> obtain(
             int period, AggregateReceiver<T> receiver, PeriodTriggerBank<T> periodTriggerBank) {
 
-        AggregateTrigger<T, AggregateReceiverList<T>> exst = map.get(period);
+        AggregateTrigger<T, AggregateReceiverList<T>> existing = map.get(period);
 
         // If we don't already have a trigger for this specific period, we create one
-        if (exst == null) {
+        if (existing == null) {
             AggregateReceiverList<T> listNew = new AggregateReceiverList<>();
-            exst = new AggregateTrigger<>(listNew, period, periodTriggerBank, extractScoreSize);
-            list.add(exst);
+            existing = new AggregateTrigger<>(listNew, period, periodTriggerBank, extractScoreSize);
+            list.add(existing);
         }
 
-        exst.getPeriodReceiver().add(receiver);
-        return exst;
+        existing.getPeriodReceiver().add(receiver);
+        return existing;
     }
 
     public void start(FeedbackBeginParameters<T> initialization) throws AggregatorException {
@@ -68,10 +65,10 @@ public class AggregateTriggerBank<T> {
         }
     }
 
-    public void record(Reporting<T> reporting) throws ReporterException {
+    public void trigger(Reporting<T> reporting) throws ReporterException {
 
         for (AggregateTrigger<T, AggregateReceiverList<T>> item : list) {
-            item.record(reporting);
+            item.trigger(reporting);
         }
     }
 

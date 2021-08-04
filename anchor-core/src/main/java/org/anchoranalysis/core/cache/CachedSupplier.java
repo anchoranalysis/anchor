@@ -46,7 +46,7 @@ public class CachedSupplier<T, E extends Exception> extends CachedSupplierBase<T
     // END: REQUIRED ARGUMENTS
 
     /**
-     * Creates a cached-version of a {@link CheckedSupplier}
+     * Creates a cached-version of a {@link CheckedSupplier}.
      *
      * @param <T> return-type
      * @param <E> exception that may be thrown.

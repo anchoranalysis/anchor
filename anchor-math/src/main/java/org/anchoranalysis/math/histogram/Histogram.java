@@ -525,7 +525,7 @@ public final class Histogram {
         long sum = 0;
 
         for (int bin = minBin; bin <= maxBin; bin++) {
-            long add = getAsLong(bin) * func.applyAsLong((long) bin);
+            long add = getAsLong(bin) * func.applyAsLong(bin);
             sum += add;
         }
 
@@ -548,7 +548,7 @@ public final class Histogram {
     }
 
     private long getAsLong(int value) {
-        return (long) getCount(value);
+        return getCount(value);
     }
 
     private void chopBefore(int index) {

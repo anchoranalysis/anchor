@@ -76,15 +76,15 @@ public class PointConverter {
     }
 
     public static Point3d doubleFromInt(Point2i point) {
-        return new Point3d((double) point.x(), (double) point.y(), 0);
+        return new Point3d(point.x(), point.y(), 0);
     }
 
     public static Point3d doubleFromInt(ReadableTuple3i point) {
-        return new Point3d((double) point.x(), (double) point.y(), (double) point.z());
+        return new Point3d(point.x(), point.y(), point.z());
     }
 
     public static Point3f floatFromInt(Point2i point) {
-        return new Point3f((float) point.x(), (float) point.y(), 0);
+        return new Point3f(point.x(), point.y(), 0);
     }
 
     public static Point3f floatFromDouble(Point3d point) {
@@ -92,14 +92,14 @@ public class PointConverter {
     }
 
     public static Point3f floatFromInt(ReadableTuple3i point) {
-        return new Point3f((float) point.x(), (float) point.y(), (float) point.z());
+        return new Point3f(point.x(), point.y(), point.z());
     }
 
     /**
      * Creates a new {@code Point3f} with X, Y values from the {@code Point3i} but setting Z to be 0
      */
     public static Point3f floatFromIntDropZ(ReadableTuple3i point) {
-        return new Point3f((float) point.x(), (float) point.y(), 0);
+        return new Point3f(point.x(), point.y(), 0);
     }
 
     public static Point3i intFromFloat(Point3f point, boolean round) {

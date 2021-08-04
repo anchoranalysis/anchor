@@ -43,16 +43,16 @@ import org.anchoranalysis.spatial.box.BoundingBox;
 public class ColoredOverlayCollection implements Iterable<Overlay> {
 
     @Getter private OverlayCollection overlays;
-    private ColorList colors;
+    @Getter private ColorList colors;
 
     public ColoredOverlayCollection() {
         overlays = new OverlayCollection();
         colors = new ColorList();
     }
 
-    public boolean add(Overlay e, RGBColor color) {
+    public boolean add(Overlay overlay, RGBColor color) {
         colors.add(color);
-        return overlays.add(e);
+        return overlays.add(overlay);
     }
 
     @Override
@@ -76,22 +76,30 @@ public class ColoredOverlayCollection implements Iterable<Overlay> {
     public RGBColor getColor(int index) {
         return colors.get(index);
     }
+    
+    public OverlayCollection withoutColor() {
+        return overlays;
+    }
+
+    public List<BoundingBox> boxList(DrawOverlay drawOverlay, Dimensions dim) {
+        return overlays.boxList(drawOverlay, dim);
+    }
+
+    public Set<Overlay> createSet() {
+        return overlays.createSet();
+    }
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("{\n");
+        StringBuilder builder = new StringBuilder();
+        builder.append("{\n");
         for (int i = 0; i < overlays.size(); i++) {
-            RGBColor col = colors.get(i);
-            Overlay ol = overlays.get(i);
-            sb.append(String.format("col=%s\tol=%s%n", col, ol));
+            RGBColor color = colors.get(i);
+            Overlay overlay = overlays.get(i);
+            builder.append(String.format("col=%s\tol=%s%n", color, overlay));
         }
-        sb.append("}\n");
-        return sb.toString();
-    }
-
-    public ColorList getColorList() {
-        return colors;
+        builder.append("}\n");
+        return builder.toString();
     }
 
     public ColoredOverlayCollection createSubsetFromIDs(IntPredicate predicateOnIndex) {
@@ -103,7 +111,7 @@ public class ColoredOverlayCollection implements Iterable<Overlay> {
             Overlay overlay = get(i);
 
             if (predicateOnIndex.test(overlay.getIdentifier())) {
-                out.add(overlay, getColorList().get(i));
+                out.add(overlay, getColors().get(i));
             }
         }
 
@@ -112,7 +120,7 @@ public class ColoredOverlayCollection implements Iterable<Overlay> {
 
     // TODO - make more efficient using RTrees
     public ColoredOverlayCollection subsetWhereBBoxIntersects(
-            Dimensions bndScene, DrawOverlay drawOverlay, List<BoundingBox> intersectList) {
+            Dimensions scene, DrawOverlay drawOverlay, List<BoundingBox> toIntersectWith) {
 
         ColoredOverlayCollection out = new ColoredOverlayCollection();
 
@@ -120,7 +128,7 @@ public class ColoredOverlayCollection implements Iterable<Overlay> {
 
             Overlay overlay = get(i);
 
-            if (overlay.box(drawOverlay, bndScene).intersection().existsWithAny(intersectList)) {
+            if (overlay.box(drawOverlay, scene).intersection().existsWithAny(toIntersectWith)) {
                 out.add(overlay, getColor(i));
             }
         }
@@ -129,42 +137,30 @@ public class ColoredOverlayCollection implements Iterable<Overlay> {
 
     // Everything from the two Markss which isn't in the intersection
     public static OverlayCollection createIntersectionComplement(
-            ColoredOverlayCollection marks1, ColoredOverlayCollection marks2) {
+            ColoredOverlayCollection overlays1, ColoredOverlayCollection overlays2) {
 
         OverlayCollection out = new OverlayCollection();
 
-        if (marks2 == null) {
-            out.addAll(marks1.withoutColor());
+        if (overlays2 == null) {
+            out.addAll(overlays1.withoutColor());
             return out;
         }
 
-        Set<Overlay> set1 = marks1.createSet();
-        Set<Overlay> set2 = marks2.createSet();
+        Set<Overlay> set1 = overlays1.createSet();
+        Set<Overlay> set2 = overlays2.createSet();
 
-        for (Overlay m : marks1) {
-            if (!set2.contains(m)) {
-                out.add(m);
+        for (Overlay overlay : overlays1) {
+            if (!set2.contains(overlay)) {
+                out.add(overlay);
             }
         }
 
-        for (Overlay m : marks2) {
-            if (!set1.contains(m)) {
-                out.add(m);
+        for (Overlay overlay : overlays2) {
+            if (!set1.contains(overlay)) {
+                out.add(overlay);
             }
         }
 
         return out;
-    }
-
-    public OverlayCollection withoutColor() {
-        return overlays;
-    }
-
-    public List<BoundingBox> boxList(DrawOverlay drawOverlay, Dimensions dim) {
-        return overlays.boxList(drawOverlay, dim);
-    }
-
-    public Set<Overlay> createSet() {
-        return overlays.createSet();
     }
 }

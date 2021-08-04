@@ -46,10 +46,10 @@ public abstract class Indexable implements IndexGetter, Comparable<IndexGetter> 
     }
 
     @Override
-    public int compareTo(IndexGetter arg0) {
-        if (this.getIndex() < arg0.getIndex()) {
+    public int compareTo(IndexGetter other) {
+        if (this.getIndex() < other.getIndex()) {
             return -1;
-        } else if (this.getIndex() > arg0.getIndex()) {
+        } else if (this.getIndex() > other.getIndex()) {
             return 1;
         } else {
             return 0;
