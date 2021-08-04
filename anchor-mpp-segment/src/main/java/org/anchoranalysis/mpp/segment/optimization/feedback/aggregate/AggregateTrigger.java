@@ -57,7 +57,7 @@ class AggregateTrigger<S, T extends AggregateReceiver<S>> {
         @Override
         public void periodEnd(Reporting<S> reporting) throws PeriodReceiverException {
 
-            agg.div(getAggInterval());
+            agg.divideBy(getAggInterval());
 
             // Report aggregate
             try {
@@ -86,17 +86,17 @@ class AggregateTrigger<S, T extends AggregateReceiver<S>> {
         periodReceiver.aggStart(initialization, this.agg);
     }
 
-    public void record(Reporting<S> reporting) throws ReporterException {
+    public void trigger(Reporting<S> reporting) throws ReporterException {
 
         // If accepted we increase the total for this kernel
         if (reporting.isAccepted()) {
-            agg.incrKernelAccpt(reporting.kernelIdentifier());
+            agg.incrementKernelAcceptance(reporting.kernelIdentifier());
         }
 
-        agg.incrKernelProp(reporting.kernelIdentifier());
-        agg.incrEnergy(extractScoreSize.extractScore(reporting.getMarksAfter()));
-        agg.incrSize(extractScoreSize.extractSize(reporting.getMarksAfter()));
-        agg.incrTemperature(reporting.getTemperature());
+        agg.incrementKernelProp(reporting.kernelIdentifier());
+        agg.incrementEnergy(extractScoreSize.extractScore(reporting.getMarksAfter()));
+        agg.incrementSize(extractScoreSize.extractSize(reporting.getMarksAfter()));
+        agg.incrementTemperature(reporting.getTemperature());
     }
 
     public void end() throws AggregatorException {

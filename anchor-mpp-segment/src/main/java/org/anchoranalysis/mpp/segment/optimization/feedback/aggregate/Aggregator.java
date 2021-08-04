@@ -73,7 +73,7 @@ public class Aggregator {
         lastDivider = -1;
     }
 
-    public void div(int divider) {
+    public void divideBy(int divider) {
         energy /= divider;
         size /= divider;
         temperature /= divider;
@@ -105,23 +105,23 @@ public class Aggregator {
         kernelAccepted.outputHeaderToWriter(writer, "Accpt");
     }
 
-    public void incrEnergy(double incr) {
-        energy += incr;
+    public void incrementEnergy(double value) {
+        energy += value;
     }
 
-    public void incrSize(double incr) {
+    public void incrementSize(double incr) {
         size += incr;
     }
 
-    public void incrTemperature(double incr) {
+    public void incrementTemperature(double incr) {
         temperature += incr;
     }
 
-    public void incrKernelProp(int kernelID) {
+    public void incrementKernelProp(int kernelID) {
         kernelProposed.incr(kernelID);
     }
 
-    public void incrKernelAccpt(int kernelID) {
+    public void incrementKernelAcceptance(int kernelID) {
         kernelAccepted.incr(kernelID);
         acceptAll++;
     }

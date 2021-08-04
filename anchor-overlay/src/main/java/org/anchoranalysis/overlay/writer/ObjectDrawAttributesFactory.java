@@ -42,7 +42,7 @@ public class ObjectDrawAttributesFactory {
             IdentifierGetter<Overlay> idGetter,
             IdentifierGetter<ObjectWithProperties> idGetterColor) {
         return new ObjectDrawAttributes(
-                overlays.getColorList(), createMaskIDGetter(overlays, idGetter), idGetterColor);
+                overlays.getColors(), createMaskIDGetter(overlays, idGetter), idGetterColor);
     }
 
     private static IdentifierGetter<ObjectWithProperties> createMaskIDGetter(

@@ -135,14 +135,14 @@ public class RecordingWriters {
 
     /** Records the writer as a first-level output. */
     private Writer recordFirstLevel(Writer writer) {
-        return record(writer, MultiLevelRecordedOutputs::first);
+        return recordWriter(writer, MultiLevelRecordedOutputs::first);
     }
 
     private Writer recordSecondLevel(Writer writer, String outputNameFirstLevel) {
-        return record(writer, multiLevel -> multiLevel.second(outputNameFirstLevel));
+        return recordWriter(writer, multiLevel -> multiLevel.second(outputNameFirstLevel));
     }
 
-    private Writer record(
+    private Writer recordWriter(
             Writer writer,
             Function<MultiLevelRecordedOutputs, RecordedOutputs> extractRecordedOutputs) {
         // Indexable outputs are ignored, as it is assumed that the outputName
