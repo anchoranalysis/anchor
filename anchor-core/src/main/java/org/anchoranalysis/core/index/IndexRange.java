@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -81,22 +81,22 @@ public class IndexRange {
 
         return list.subList(startCorrected, endCorrected + 1);
     }
-    
+
     /**
      * The start-index, corrected so that it is no longer negative.
-     * 
+     *
      * @param size the total number of elements
-     * @throws OperationFailedException 
+     * @throws OperationFailedException
      */
     public int correctedStartIndex(int size) throws OperationFailedException {
         return correctNegative(startIndex, size);
     }
-    
+
     /**
      * The end-index, corrected so that it is no longer negative.
-     * 
+     *
      * @param size the total number of elements
-     * @throws OperationFailedException 
+     * @throws OperationFailedException
      */
     public int correctedEndIndex(int size) throws OperationFailedException {
         return correctNegative(endIndex, size);

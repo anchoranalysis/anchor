@@ -143,10 +143,11 @@ public class IterateVoxelsAll {
      * @param voxels1 first voxels provides the <b>first</b> buffer
      * @param voxels2 second voxels
      * @param process is called for each voxel using <i>global</i> coordinates.
-     * @param <T> buffer-type for voxels
+     * @param <S> <i>first</i> buffer-type for voxels
+     * @param <T> <i>second</i> buffer-type for voxels
      */
-    public static <T> void withTwoBuffersAndPoint(
-            Voxels<T> voxels1, Voxels<T> voxels2, ProcessBufferBinary<T, T> process) {
+    public static <S, T> void withTwoBuffersAndPoint(
+            Voxels<S> voxels1, Voxels<T> voxels2, ProcessBufferBinary<S, T> process) {
         Preconditions.checkArgument(voxels1.extent().equals(voxels2.extent()));
         withPoint(voxels1.extent(), new RetrieveBuffersForTwoSlices<>(voxels1, voxels2, process));
     }
@@ -243,7 +244,7 @@ public class IterateVoxelsAll {
      * <p>The extent's of both {@code voxels1} and {@code voxels2} must be equal.
      *
      * @param voxels1 voxels that provide the <b>first</b> voxel-buffer
-     * @param voxels2 voxels that provide the <b>first</b> buffer
+     * @param voxels2 voxels that provide the <b>second</b> buffer
      * @param process is called for each voxel using <i>global</i> coordinates.
      * @param <T> buffer-type for voxels
      */

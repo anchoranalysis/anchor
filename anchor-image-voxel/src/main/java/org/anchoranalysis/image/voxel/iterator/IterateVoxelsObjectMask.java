@@ -38,6 +38,7 @@ import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.iterator.process.ProcessPoint;
 import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferBinary;
 import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferUnary;
+import org.anchoranalysis.image.voxel.iterator.process.voxelbuffer.ProcessVoxelBufferBinary;
 import org.anchoranalysis.image.voxel.iterator.process.voxelbuffer.ProcessVoxelBufferBinaryMixed;
 import org.anchoranalysis.image.voxel.iterator.process.voxelbuffer.ProcessVoxelBufferUnary;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
@@ -163,13 +164,14 @@ public class IterateVoxelsObjectMask {
      *     provides the <b>second</b> buffer
      * @param process is called for each voxel within the bounding-box using <i>global</i>
      *     coordinates.
-     * @param <T> buffer-type for voxels
+     * @param <S> <i>first</i> buffer-type for voxels.
+     * @param <T> <i>second</i> buffer-type for voxels.
      */
-    public static <T> void withTwoBuffers(
+    public static <S, T> void withTwoBuffers(
             ObjectMask object,
-            Voxels<T> voxels1,
+            Voxels<S> voxels1,
             Voxels<T> voxels2,
-            ProcessBufferBinary<T, T> process) {
+            ProcessBufferBinary<S, T> process) {
         Preconditions.checkArgument(voxels1.extent().equals(voxels2.extent()));
         IterateVoxelsObjectMask.withPoint(
                 object, new RetrieveBuffersForTwoSlices<>(voxels1, voxels2, process));
@@ -229,6 +231,49 @@ public class IterateVoxelsObjectMask {
                         .orElseGet(boxVoxels::shiftToOrigin);
 
         callEachPoint(object, voxels, boxVoxels, iterateBox, process);
+    }
+
+    /**
+     * Iterate over each voxel in an object-mask - with <b>two associated voxel-buffers</b> and for
+     * each slice.
+     *
+     * <p>The extent's of both {@code voxels1} and {@code voxels2} must be equal.
+     *
+     * @param voxels1 voxels that provide the element from the <i>first</i> voxel-buffer.
+     * @param voxels2 voxels that provide the element from the <i>second</i> voxel-buffer.
+     * @param process is called for each voxel using <i>global</i> coordinates.
+     * @param <T> buffer-type for voxels
+     */
+    public static <S, T> void withTwoVoxelBuffers(
+            ObjectMask object,
+            Voxels<S> voxels1,
+            Voxels<T> voxels2,
+            ProcessVoxelBufferBinary<S, T> process) {
+        Preconditions.checkArgument(voxels1.extent().equals(voxels2.extent()));
+
+        ReadableTuple3i cornerMin = object.boundingBox().cornerMin();
+        ReadableTuple3i cornerMax = object.boundingBox().calculateCornerMax();
+
+        byte maskOn = object.binaryValuesByte().getOnByte();
+
+        Extent e = voxels1.extent();
+        for (int z = cornerMin.z(); z <= cornerMax.z(); z++) {
+
+            VoxelBuffer<S> buffer = voxels1.slice(z);
+            VoxelBuffer<T> bufferFinalized = voxels2.slice(z);
+            UnsignedByteBuffer bufferMask = object.sliceBufferGlobal(z);
+
+            int offset = 0;
+            for (int y = cornerMin.y(); y <= cornerMax.y(); y++) {
+                for (int x = cornerMin.x(); x <= cornerMax.x(); x++) {
+                    if (bufferMask.getRaw(offset) == maskOn) {
+                        process.process(buffer, bufferFinalized, e.offset(x, y));
+                    }
+
+                    offset++;
+                }
+            }
+        }
     }
 
     /**

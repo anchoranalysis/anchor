@@ -295,7 +295,7 @@ public class Mask {
     private void applyThreshold(Mask mask) {
         int thresholdVal = (binaryValues.getOnInt() + binaryValues.getOffInt()) / 2;
 
-        VoxelsThresholder.thresholdForLevel(
+        VoxelsThresholder.thresholdForLevelByte(
                 mask.voxels(), thresholdVal, mask.binaryValues().createByte());
     }
 

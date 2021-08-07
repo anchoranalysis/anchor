@@ -291,7 +291,7 @@ public class ObjectMask {
                 // We threshold to make sure it's still binary
                 int thresholdVal = (binaryValues.getOnInt() + binaryValues.getOffInt()) / 2;
 
-                VoxelsThresholder.thresholdForLevel(
+                VoxelsThresholder.thresholdForLevelByte(
                         scaled.voxels(), thresholdVal, binaryValues.createByte());
             }
             return new ObjectMask(scaled, binaryValues);

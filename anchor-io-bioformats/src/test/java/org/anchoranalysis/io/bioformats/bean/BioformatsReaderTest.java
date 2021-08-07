@@ -78,7 +78,7 @@ class BioformatsReaderTest {
     void testPng() throws ImageIOException {
         tester.assertRGBAndUnsigned8BitUncompressed(EXTENSION_PNG);
     }
-    
+
     @Test
     void testWithResolution() throws ImageIOException {
         tester.assertWithResolution(EXTENSION_TIFF, 6900);

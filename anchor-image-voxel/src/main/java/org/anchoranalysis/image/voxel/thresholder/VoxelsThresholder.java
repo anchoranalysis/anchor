@@ -26,16 +26,21 @@
 
 package org.anchoranalysis.image.voxel.thresholder;
 
+import java.nio.FloatBuffer;
 import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxelsFactory;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
+import org.anchoranalysis.image.voxel.datatype.FloatVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
+import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxelsObjectMaskOptional;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 
@@ -48,27 +53,52 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class VoxelsThresholder {
 
-    public static void thresholdForLevel(
-            Voxels<UnsignedByteBuffer> inputBuffer, int level, BinaryValuesByte bvOut) {
+    public static void thresholdForLevelByte(
+            Voxels<UnsignedByteBuffer> buffer, int level, BinaryValuesByte bvOut) {
         // We know that as the inputType is byte, it will be performed in place
-        thresholdForLevel(VoxelsWrapper.wrap(inputBuffer), level, bvOut, Optional.empty(), false);
+        try {
+            thresholdForLevel(VoxelsWrapper.wrap(buffer), level, bvOut, Optional.empty(), false);
+        } catch (OperationFailedException e) {
+            throw new AnchorImpossibleSituationException();
+        }
+    }
+
+    public static BinaryVoxels<UnsignedByteBuffer> thresholdForLevelFloat(
+            Voxels<FloatBuffer> buffer, float level, BinaryValuesByte bvOut) {
+        // We know that as the inputType is byte, it will be performed in place
+        try {
+            return thresholdForLevel(
+                    VoxelsWrapper.wrap(buffer), level, bvOut, Optional.empty(), false);
+        } catch (OperationFailedException e) {
+            throw new AnchorImpossibleSituationException();
+        }
     }
 
     // Perform inplace
     public static BinaryVoxels<UnsignedByteBuffer> thresholdForLevel(
-            VoxelsWrapper inputBuffer,
-            int level,
+            VoxelsWrapper voxels,
+            float level,
             BinaryValuesByte bvOut,
             Optional<ObjectMask> objectMask,
-            boolean alwaysDuplicate) {
-        Voxels<UnsignedByteBuffer> boxOut = inputBuffer.asByteOrCreateEmpty(alwaysDuplicate);
+            boolean alwaysDuplicate)
+            throws OperationFailedException {
 
-        if (inputBuffer.getVoxelDataType().equals(UnsignedByteVoxelType.INSTANCE)) {
-
+        Voxels<UnsignedByteBuffer> out;
+        if (voxels.getVoxelDataType().equals(UnsignedByteVoxelType.INSTANCE)) {
+            out = voxels.asByteOrCreateEmpty(alwaysDuplicate);
             IterateVoxelsObjectMaskOptional.withBuffer(
-                    objectMask, inputBuffer.asByte(), new ThresholdEachVoxel(level, boxOut, bvOut));
-        }
+                    objectMask,
+                    voxels.asByte(),
+                    new ThresholdEachVoxelByte((int) level, out, bvOut));
 
-        return BinaryVoxelsFactory.reuseByte(boxOut, bvOut.createInt());
+        } else if (voxels.getVoxelDataType().equals(FloatVoxelType.INSTANCE)) {
+            out = VoxelsFactory.getUnsignedByte().createInitialized(voxels.extent());
+            IterateVoxelsObjectMaskOptional.withTwoBuffers(
+                    objectMask, voxels.asFloat(), out, new ThresholdEachVoxelFloat(level, bvOut));
+        } else {
+            throw new OperationFailedException(
+                    "Unsupported voxel-data-type, only unsigned byte and float are supported");
+        }
+        return BinaryVoxelsFactory.reuseByte(out, bvOut.createInt());
     }
 }

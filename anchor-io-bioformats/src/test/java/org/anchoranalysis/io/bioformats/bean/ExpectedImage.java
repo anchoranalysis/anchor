@@ -82,10 +82,10 @@ class ExpectedImage {
 
     /** The expected image-resolution. */
     private Optional<Resolution> expectedResolution;
-    
+
     /** Which intensity value to count */
     private int intensityValueToCount;
-    
+
     public void openAndAssert(StackReader stackReader, TestLoader loader) throws ImageIOException {
         Stack stack = openStackFromReader(stackReader, loader);
         assertEqualsPrefix(

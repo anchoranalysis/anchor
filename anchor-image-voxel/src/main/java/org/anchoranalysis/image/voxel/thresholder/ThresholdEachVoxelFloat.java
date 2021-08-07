@@ -24,21 +24,41 @@
  * #L%
  */
 
-package org.anchoranalysis.image.voxel.interpolator;
+package org.anchoranalysis.image.voxel.thresholder;
 
-import net.imglib2.interpolation.randomaccess.NearestNeighborInterpolatorFactory;
+import java.nio.FloatBuffer;
+import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
+import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferBinary;
+import org.anchoranalysis.spatial.point.Point3i;
 
-public class InterpolatorImgLib2NearestNeighbor extends InterpolatorImgLib2 {
+/**
+ * Puts an <i>on</i> voxel in the output-buffer if {@code voxel-value >= level} or <i>off</i>
+ * otherwise.
+ *
+ * @author Owen Feehan
+ */
+final class ThresholdEachVoxelFloat
+        implements ProcessBufferBinary<FloatBuffer, UnsignedByteBuffer> {
 
-    public InterpolatorImgLib2NearestNeighbor() {
-        super(
-                new NearestNeighborInterpolatorFactory<>(),
-                new NearestNeighborInterpolatorFactory<>(),
-                new NearestNeighborInterpolatorFactory<>());
+    private final float level;
+    private final byte byteOn;
+    private final byte byteOff;
+
+    public ThresholdEachVoxelFloat(float level, BinaryValuesByte bvOut) {
+        this.level = level;
+        this.byteOn = bvOut.getOnByte();
+        this.byteOff = bvOut.getOffByte();
     }
 
     @Override
-    public boolean isNewValuesPossible() {
-        return false;
+    public void process(
+            Point3i point,
+            FloatBuffer buffer1,
+            UnsignedByteBuffer buffer2,
+            int offset1,
+            int offset2) {
+        float value = buffer1.get(offset1);
+        buffer2.putRaw(offset2, value >= level ? byteOn : byteOff);
     }
 }

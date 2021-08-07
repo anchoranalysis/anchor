@@ -27,8 +27,8 @@
 package org.anchoranalysis.mpp.bound;
 
 import java.util.Optional;
-import org.anchoranalysis.mpp.bean.bound.ResolvedBound;
 import lombok.AllArgsConstructor;
+import org.anchoranalysis.mpp.bean.bound.ResolvedBound;
 
 @AllArgsConstructor
 public class BidirectionalBound {

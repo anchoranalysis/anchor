@@ -58,19 +58,16 @@ public final class Resolution implements Serializable {
     // Stores in meters. If we change this, do we need to update annotations?
     private final Point3d res;
 
-    /**
-     * Constructions a default resolution with value 1.0 in each dimension.
-     * 
-     */
+    /** Constructions a default resolution with value 1.0 in each dimension. */
     public Resolution() {
         this.res = new Point3d(1.0, 1.0, 1.0);
     }
-    
+
     /**
      * Constructions with only XY resolution, identical in both dimensions.
-     * 
+     *
      * <p>Z-resolution is considered unknown.
-     * 
+     *
      * @param xy the resolution in meters for <i>both</i> x and y dimension.
      */
     public static Resolution createWithXY(double xy) {
@@ -80,12 +77,12 @@ public final class Resolution implements Serializable {
             throw new AnchorImpossibleSituationException();
         }
     }
-    
+
     /**
      * Constructions with XY resolution and Z resolution.
-     * 
+     *
      * <p>The X and Y resolution is considered identical in both dimensions.
-     * 
+     *
      * @param xy the resolution in meters for <i>both</i> x and y dimension.
      * @param z the resolution in meters for the z dimension.
      */
@@ -151,12 +148,12 @@ public final class Resolution implements Serializable {
     public double z() {
         return res.z();
     }
-    
+
     /**
      * Returns the z-resolution like {@link #z()} if the z-resolution is not NaN.
-     * 
+     *
      * <p>Otherwise returns {@code fallback}.
-     * 
+     *
      * @param fallback the value to return if the z-resolution is NaN
      * @return either the z-resolution (if not NaN) or {@code fallback}.
      */
@@ -168,7 +165,7 @@ public final class Resolution implements Serializable {
             return fallback;
         }
     }
-    
+
     public double meanXY() {
         return (x() + y()) / 2;
     }

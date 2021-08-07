@@ -29,10 +29,10 @@ package org.anchoranalysis.mpp.bean;
 import org.anchoranalysis.bean.AnchorBean;
 
 /**
- * Base class for approaches to <a href="https://en.wikipedia.org/wiki/Simulated_annealing">simulated annealing</a>.
- * 
- * @author Owen Feehan
+ * Base class for approaches to <a
+ * href="https://en.wikipedia.org/wiki/Simulated_annealing">simulated annealing</a>.
  *
+ * @author Owen Feehan
  */
 public abstract class AnnealScheme extends AnchorBean<AnnealScheme> {
 
