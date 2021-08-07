@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.image.voxel.interpolator;
 
+import java.nio.FloatBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedShortBuffer;
@@ -66,6 +67,23 @@ public interface Interpolator {
     VoxelBuffer<UnsignedShortBuffer> interpolateShort(
             VoxelBuffer<UnsignedShortBuffer> voxelsSource,
             VoxelBuffer<UnsignedShortBuffer> voxelsDestination,
+            Extent extentSource,
+            Extent extentDestination);
+
+    /**
+     * Interpolates from {@code voxelsSource} to {@code voxelsDestination} for float buffers.
+     *
+     * <p>Both buffers must be 2-dimensional, not 3-dimensional.
+     *
+     * @param voxelsSource voxels to interpolate from
+     * @param voxelsDestination voxels to write the interpolated values into
+     * @param extentSource extent corresponding to {@code voxelsSource}
+     * @param extentDestination extent corresponding to {@code extentDestination}
+     * @return the destination buffer (either as passed, or a new one that was created)
+     */
+    VoxelBuffer<FloatBuffer> interpolateFloat(
+            VoxelBuffer<FloatBuffer> voxelsSource,
+            VoxelBuffer<FloatBuffer> voxelsDestination,
             Extent extentSource,
             Extent extentDestination);
 

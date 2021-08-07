@@ -38,26 +38,27 @@ import org.anchoranalysis.spatial.point.Point3i;
  * from voxels for each z-slice.
  *
  * <p>Note that {@link #notifyChangeSlice} <b>need not</b> be be called for all slices (perhaps only
- * a subset), but {@link #process} <b>must</b> be called for ALL voxels on a given slice.
+ * a subset), but {@link #process} <b>must</b> be called for <b>all</b> voxels on a given slice.
  *
  * @author Owen Feehan
- * @param <T> buffer-type for slice
+ * @param <S> buffer-type for <i>first</i> slice.
+ * @param <T> buffer-type for <i>second</i> slice.
  */
 @RequiredArgsConstructor
-final class RetrieveBuffersForTwoSlices<T> implements ProcessPoint {
+final class RetrieveBuffersForTwoSlices<S, T> implements ProcessPoint {
 
     // START REQUIRED ARGUMENTS
     /** Voxels for first buffer */
-    private final Voxels<T> voxels1;
+    private final Voxels<S> voxels1;
 
     /** Voxels for second buffer */
     private final Voxels<T> voxels2;
 
     /** Processor */
-    private final ProcessBufferBinary<T, T> processor;
+    private final ProcessBufferBinary<S, T> processor;
     // END REQUIRED ARGUMENTS
 
-    private T bufferSlice1;
+    private S bufferSlice1;
     private T bufferSlice2;
 
     /** A 2D offset within the current slices */

@@ -31,6 +31,7 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.SlidingBuffer;
 import org.anchoranalysis.image.voxel.iterator.process.ProcessPoint;
+import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferBinary;
 import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferUnary;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.spatial.Extent;
@@ -69,7 +70,8 @@ public class IterateVoxelsObjectMaskOptional {
     }
 
     /**
-     * Iterate over each voxel on an object-mask with <b>one</b> associated <b>buffer</b>.
+     * Iterate over each voxel (or optionally only on object-mask) with <b>one</b> associated
+     * <b>buffer</b>.
      *
      * @param objectMask an optional object-mask that is used as a condition on what voxels to
      *     iterate. If not defined, all voxels are iterated over.
@@ -81,18 +83,34 @@ public class IterateVoxelsObjectMaskOptional {
      */
     public static <T> void withBuffer(
             Optional<ObjectMask> objectMask, Voxels<T> voxels, ProcessBufferUnary<T> process) {
-
-        // Note the offsets must be added before any additional restriction like an object-mask, to
-        // make
-        // sure they are calculated for EVERY process.
-        // Therefore we {@link AddOffsets} must be interested as the top-most level in the
-        // processing chain
-        // (i.e. {@link AddOffsets} must delegate to {@link RequireIntersectionWithMask} but not the
-        // other way round.
         if (objectMask.isPresent()) {
             IterateVoxelsObjectMask.withBuffer(objectMask.get(), voxels, process);
         } else {
             IterateVoxelsAll.withBuffer(voxels, process);
+        }
+    }
+
+    /**
+     * Iterate over each voxel (or optionally only on object-mask) with <b>two</b> associated
+     * <b>buffers</b>.
+     *
+     * @param objectMask an optional object-mask that is used as a condition on what voxels to
+     *     iterate. If not defined, all voxels are iterated over.
+     * @param voxels1 voxels that provide the <b>first</b> voxel-buffer
+     * @param voxels2 voxels that provide the <b>second</b> buffer
+     * @param process is called for each voxel within the bounding-box using <i>global</i>
+     *     coordinates.
+     * @param <T> buffer-type for voxels
+     */
+    public static <S, T> void withTwoBuffers(
+            Optional<ObjectMask> objectMask,
+            Voxels<S> voxels1,
+            Voxels<T> voxels2,
+            ProcessBufferBinary<S, T> process) {
+        if (objectMask.isPresent()) {
+            IterateVoxelsObjectMask.withTwoBuffers(objectMask.get(), voxels1, voxels2, process);
+        } else {
+            IterateVoxelsAll.withTwoBuffersAndPoint(voxels1, voxels2, process);
         }
     }
 

@@ -36,6 +36,7 @@ public class InterpolatorImgLib2Linear extends InterpolatorImgLib2 {
         // https://github.com/imglib/imglib2/issues/166
         super(
                 new ClampingNLinearInterpolatorFactory<>(),
+                new ClampingNLinearInterpolatorFactory<>(),
                 new ClampingNLinearInterpolatorFactory<>());
     }
 

@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.image.voxel.interpolator;
 
+import java.nio.FloatBuffer;
 import lombok.RequiredArgsConstructor;
 import net.imglib2.Cursor;
 import net.imglib2.RandomAccessible;
@@ -34,9 +35,10 @@ import net.imglib2.RealRandomAccessible;
 import net.imglib2.img.Img;
 import net.imglib2.interpolation.InterpolatorFactory;
 import net.imglib2.type.Type;
-import net.imglib2.type.numeric.IntegerType;
 import net.imglib2.type.numeric.integer.UnsignedByteType;
 import net.imglib2.type.numeric.integer.UnsignedShortType;
+import net.imglib2.type.numeric.real.AbstractRealType;
+import net.imglib2.type.numeric.real.FloatType;
 import net.imglib2.view.ExtendedRandomAccessibleInterval;
 import net.imglib2.view.Views;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
@@ -73,6 +75,8 @@ public abstract class InterpolatorImgLib2 implements Interpolator {
 
     private final InterpolatorFactory<UnsignedShortType, RandomAccessible<UnsignedShortType>>
             factoryShort;
+
+    private final InterpolatorFactory<FloatType, RandomAccessible<FloatType>> factoryFloat;
     // END REQUIRED ARGUMENTS
 
     /** If set, rather than using the default mirroring strategy, an extend strategy is used */
@@ -88,13 +92,13 @@ public abstract class InterpolatorImgLib2 implements Interpolator {
             Extent extentSource,
             Extent extentDestination) {
 
-        Img<UnsignedByteType> imgIn = ConvertToImg.fromByte(voxelsSource, extentSource);
-        Img<UnsignedByteType> imgOut = ConvertToImg.fromByte(voxelsDestination, extentDestination);
+        Img<UnsignedByteType> in = ConvertToImg.fromByte(voxelsSource, extentSource);
+        Img<UnsignedByteType> out = ConvertToImg.fromByte(voxelsDestination, extentDestination);
 
         RealRandomAccessible<UnsignedByteType> interpolant =
-                Views.interpolate(outOfBoundsView(imgIn), factoryByte);
+                Views.interpolate(outOfBoundsView(in), factoryByte);
 
-        interpolate2D(interpolant, imgOut, extentSource);
+        interpolate2D(interpolant, out, extentSource);
 
         return voxelsDestination;
     }
@@ -106,14 +110,30 @@ public abstract class InterpolatorImgLib2 implements Interpolator {
             Extent extentSource,
             Extent extentDestination) {
 
-        Img<UnsignedShortType> imIng = ConvertToImg.fromShort(voxelsSource, extentSource);
-        Img<UnsignedShortType> imgOut =
-                ConvertToImg.fromShort(voxelsDestination, extentDestination);
+        Img<UnsignedShortType> in = ConvertToImg.fromShort(voxelsSource, extentSource);
+        Img<UnsignedShortType> out = ConvertToImg.fromShort(voxelsDestination, extentDestination);
 
         RealRandomAccessible<UnsignedShortType> interpolant =
-                Views.interpolate(outOfBoundsView(imIng), factoryShort);
+                Views.interpolate(outOfBoundsView(in), factoryShort);
 
-        interpolate2D(interpolant, imgOut, extentSource);
+        interpolate2D(interpolant, out, extentSource);
+        return voxelsDestination;
+    }
+
+    @Override
+    public VoxelBuffer<FloatBuffer> interpolateFloat(
+            VoxelBuffer<FloatBuffer> voxelsSource,
+            VoxelBuffer<FloatBuffer> voxelsDestination,
+            Extent extentSource,
+            Extent extentDestination) {
+
+        Img<FloatType> in = ConvertToImg.fromFloat(voxelsSource, extentSource);
+        Img<FloatType> out = ConvertToImg.fromFloat(voxelsDestination, extentDestination);
+
+        RealRandomAccessible<FloatType> interpolant =
+                Views.interpolate(outOfBoundsView(in), factoryFloat);
+
+        interpolate2D(interpolant, out, extentSource);
         return voxelsDestination;
     }
 
@@ -128,8 +148,8 @@ public abstract class InterpolatorImgLib2 implements Interpolator {
     }
 
     /** Multiplexes between two different strategies for handling out-of-bounds boundary values */
-    private <T extends IntegerType<T>> ExtendedRandomAccessibleInterval<T, Img<T>> outOfBoundsView(
-            Img<T> imgIn) {
+    private <T extends AbstractRealType<T>>
+            ExtendedRandomAccessibleInterval<T, Img<T>> outOfBoundsView(Img<T> imgIn) {
         if (extend) {
             return Views.extendValue(imgIn, extendValue);
         } else {

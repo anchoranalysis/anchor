@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.image.voxel.interpolator;
 
+import java.nio.FloatBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedShortBuffer;
@@ -53,6 +54,17 @@ public class InterpolatorNone implements Interpolator {
             Extent extentSource,
             Extent extentDestination) {
         copyShort(
+                voxelsSource.buffer(), voxelsDestination.buffer(), extentSource, extentDestination);
+        return voxelsDestination;
+    }
+
+    @Override
+    public VoxelBuffer<FloatBuffer> interpolateFloat(
+            VoxelBuffer<FloatBuffer> voxelsSource,
+            VoxelBuffer<FloatBuffer> voxelsDestination,
+            Extent extentSource,
+            Extent extentDestination) {
+        copyFloat(
                 voxelsSource.buffer(), voxelsDestination.buffer(), extentSource, extentDestination);
         return voxelsDestination;
     }
@@ -95,6 +107,24 @@ public class InterpolatorNone implements Interpolator {
                 int yOrig = intMin(yScale * y, extentIn.y() - 1);
 
                 bufferOut.putRaw(bufferIn.getRaw(extentIn.offset(xOrig, yOrig)));
+            }
+        }
+    }
+
+    private static void copyFloat(
+            FloatBuffer bufferIn, FloatBuffer bufferOut, Extent extentIn, Extent extentOut) {
+
+        double xScale = intDiv(extentIn.x(), extentOut.x());
+        double yScale = intDiv(extentIn.y(), extentOut.y());
+
+        // We loop through every pixel in the output buffer
+        for (int y = 0; y < extentOut.y(); y++) {
+            for (int x = 0; x < extentOut.x(); x++) {
+
+                int xOrig = intMin(xScale * x, extentIn.x() - 1);
+                int yOrig = intMin(yScale * y, extentIn.y() - 1);
+
+                bufferOut.put(bufferIn.get(extentIn.offset(xOrig, yOrig)));
             }
         }
     }

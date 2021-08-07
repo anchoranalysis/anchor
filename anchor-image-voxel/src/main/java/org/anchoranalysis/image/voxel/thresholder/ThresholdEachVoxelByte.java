@@ -38,7 +38,7 @@ import org.anchoranalysis.spatial.point.Point3i;
  *
  * @author Owen Feehan
  */
-final class ThresholdEachVoxel implements ProcessBufferUnary<UnsignedByteBuffer> {
+final class ThresholdEachVoxelByte implements ProcessBufferUnary<UnsignedByteBuffer> {
 
     private final int level;
     private final Voxels<UnsignedByteBuffer> voxelsOut;
@@ -47,11 +47,11 @@ final class ThresholdEachVoxel implements ProcessBufferUnary<UnsignedByteBuffer>
 
     private UnsignedByteBuffer bufferOut;
 
-    public ThresholdEachVoxel(
-            int level, Voxels<UnsignedByteBuffer> boxOut, BinaryValuesByte bvOut) {
+    public ThresholdEachVoxelByte(
+            int level, Voxels<UnsignedByteBuffer> voxelsOut, BinaryValuesByte bvOut) {
         super();
         this.level = level;
-        this.voxelsOut = boxOut;
+        this.voxelsOut = voxelsOut;
         this.byteOn = bvOut.getOnByte();
         this.byteOff = bvOut.getOffByte();
     }

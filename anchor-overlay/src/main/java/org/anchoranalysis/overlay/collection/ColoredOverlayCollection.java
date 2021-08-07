@@ -76,7 +76,7 @@ public class ColoredOverlayCollection implements Iterable<Overlay> {
     public RGBColor getColor(int index) {
         return colors.get(index);
     }
-    
+
     public OverlayCollection withoutColor() {
         return overlays;
     }

@@ -225,7 +225,9 @@ public class InputOutputExperiment<T extends InputFromManager, S> extends Output
         String patternDescription = pattern.describeDetailed().replace("\\", "/");
 
         int numberInputs = inputs.size();
-        log.logFormatted("The job has %d %s.", numberInputs, LanguageUtilities.pluralizeMaybe(numberInputs, "input"));
+        log.logFormatted(
+                "The job has %d %s.",
+                numberInputs, LanguageUtilities.pluralizeMaybe(numberInputs, "input"));
         if (numberInputs > 1) {
             log.logEmptyLine();
             log.logFormatted("They are named with the pattern: %s", patternDescription);

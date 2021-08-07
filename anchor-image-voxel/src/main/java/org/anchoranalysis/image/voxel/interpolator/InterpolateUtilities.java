@@ -30,6 +30,7 @@ import com.google.common.base.Preconditions;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
+import org.anchoranalysis.image.voxel.datatype.FloatVoxelType;
 import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelTypeException;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
@@ -76,8 +77,24 @@ public class InterpolateUtilities {
                                     voxelsDestination,
                                     extentSource,
                                     extentDestination));
+        } else if (source.getVoxelDataType().equals(FloatVoxelType.INSTANCE)) {
+            return new TransferViaSpecificType<>(
+                    source,
+                    destination,
+                    VoxelsWrapper::asFloat,
+                    (interpolator,
+                            voxelsSource,
+                            voxelsDestination,
+                            extentSource,
+                            extentDestination) ->
+                            interpolator.interpolateFloat(
+                                    voxelsSource,
+                                    voxelsDestination,
+                                    extentSource,
+                                    extentDestination));
         } else {
-            throw new IncorrectVoxelTypeException("Only unsigned byte and short are supported");
+            throw new IncorrectVoxelTypeException(
+                    "Only unsigned byte and short and float are supported");
         }
     }
 

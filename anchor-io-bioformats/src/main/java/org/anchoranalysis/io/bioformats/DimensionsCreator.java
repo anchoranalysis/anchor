@@ -75,7 +75,8 @@ public class DimensionsCreator {
                 maybeUpdateDimension(
                         metadata -> metadata.getPixelsPhysicalSizeY(seriesIndex), resolution::setY);
 
-        maybeUpdateDimension(metadata -> metadata.getPixelsPhysicalSizeZ(seriesIndex), resolution::setZ);
+        maybeUpdateDimension(
+                metadata -> metadata.getPixelsPhysicalSizeZ(seriesIndex), resolution::setZ);
 
         if (xUpdated && yUpdated) {
             return Optional.of(new Resolution(resolution));

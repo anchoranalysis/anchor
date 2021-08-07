@@ -25,8 +25,8 @@
  */
 package org.anchoranalysis.io.bioformats.bean;
 
-import lombok.RequiredArgsConstructor;
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.io.ImageIOException;
@@ -56,15 +56,15 @@ class ExpectedImageTester {
     /** Which intensity-value to count in unsigned 16 bit images? */
     private static final int INTENSITY_TO_COUNT_UNSIGNED_16_BIT = 1000;
 
-    /** The XY resolution expected for the <code>unsigned_16bit.tif</code> image. */    
+    /** The XY resolution expected for the <code>unsigned_16bit.tif</code> image. */
     private static final double EXPECTED_UNSIGNED_16_BIT_RESOLUTION_XY = 0.0033333333333333335e-6;
-    
+
     /** The XY resolution expected for the <code>withResolution.tif</code> image. */
     private static final double EXPECTED_WITH_RESOLUTION_XY = 0.21964707985796741e-6;
-    
+
     /** The Z resolution expected for the <code>withResolution.tif</code> image. */
     private static final double EXPECTED_WITH_RESOLUTION_Z = 0.28e-6;
-    
+
     // START REQUIRED ARGUMENTS
     private final TestLoader loader;
     // END REQUIRED ARGUMENTS
@@ -83,7 +83,8 @@ class ExpectedImageTester {
         assertUnsigned8Bit(extension, expectedCountUnsigned8Bit);
     }
 
-    public void assertUnsigned16Bit(String extension, int expectedCount) throws ImageIOException, CreateException {
+    public void assertUnsigned16Bit(String extension, int expectedCount)
+            throws ImageIOException, CreateException {
         openAndAssert(
                 new ExpectedImage(
                         extension,
@@ -91,10 +92,11 @@ class ExpectedImageTester {
                         expectedCount,
                         1,
                         UnsignedShortVoxelType.INSTANCE,
-                        Optional.of(Resolution.createWithXY(EXPECTED_UNSIGNED_16_BIT_RESOLUTION_XY)),
+                        Optional.of(
+                                Resolution.createWithXY(EXPECTED_UNSIGNED_16_BIT_RESOLUTION_XY)),
                         INTENSITY_TO_COUNT_UNSIGNED_16_BIT));
     }
-    
+
     public void assertUnsigned8BitThreeChannels(String extension, int expectedCount)
             throws ImageIOException {
         openAndAssert(
@@ -120,7 +122,6 @@ class ExpectedImageTester {
                         Optional.empty(),
                         INTENSITY_TO_COUNT_UNSIGNED_16_BIT));
     }
-    
 
     public void assertWithResolution(String extension, int expectedCount) throws ImageIOException {
         openAndAssert(
@@ -130,12 +131,15 @@ class ExpectedImageTester {
                         expectedCount,
                         1,
                         UnsignedByteVoxelType.INSTANCE,
-                        Optional.of(Resolution.createWithXYAndZ(EXPECTED_WITH_RESOLUTION_XY, EXPECTED_WITH_RESOLUTION_Z)),                        
+                        Optional.of(
+                                Resolution.createWithXYAndZ(
+                                        EXPECTED_WITH_RESOLUTION_XY, EXPECTED_WITH_RESOLUTION_Z)),
                         INTENSITY_TO_COUNT_UNSIGNED_8_BIT));
     }
 
     private void assertRGB(String extension, int expectedCount) throws ImageIOException {
-        openAndAssert(new ExpectedImage(
+        openAndAssert(
+                new ExpectedImage(
                         extension,
                         "rgb",
                         expectedCount,
@@ -156,8 +160,8 @@ class ExpectedImageTester {
                         Optional.empty(),
                         INTENSITY_TO_COUNT_UNSIGNED_8_BIT));
     }
-        
-    private void openAndAssert( ExpectedImage image ) throws ImageIOException {
+
+    private void openAndAssert(ExpectedImage image) throws ImageIOException {
         image.openAndAssert(reader, loader);
     }
 }
