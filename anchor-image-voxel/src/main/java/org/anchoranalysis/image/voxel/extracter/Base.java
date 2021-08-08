@@ -158,8 +158,6 @@ public abstract class Base<T> implements VoxelsExtracter<T> {
 
         BinaryValuesByte binaryValues = object.binaryValuesByte();
 
-        Extent extent = voxels.extent();
-
         for (int z = sourceStart.z(); z <= sourceEnd.z(); z++) {
 
             T srcArr = voxels.sliceBuffer(z);
@@ -167,10 +165,10 @@ public abstract class Base<T> implements VoxelsExtracter<T> {
 
             UnsignedByteBuffer maskBuffer = object.sliceBufferGlobal(z);
 
+            int srcIndex = 0;
             for (int y = sourceStart.y(); y <= sourceEnd.y(); y++) {
                 for (int x = sourceStart.x(); x <= sourceEnd.x(); x++) {
 
-                    int srcIndex = extent.offset(x, y);
                     int destIndex =
                             voxelsDestination
                                     .extent()
@@ -179,6 +177,7 @@ public abstract class Base<T> implements VoxelsExtracter<T> {
                     if (maskBuffer.getRaw() == binaryValues.getOnByte()) {
                         copyBufferIndexTo(srcArr, srcIndex, destArr, destIndex);
                     }
+                    srcIndex++;
                 }
             }
         }

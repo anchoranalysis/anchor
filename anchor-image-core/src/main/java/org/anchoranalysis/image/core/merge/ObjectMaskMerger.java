@@ -153,7 +153,7 @@ public class ObjectMaskMerger {
 
     private static void copyPixelsCheckMask(
             ObjectMask source, ObjectMask destination, BoundingBox box) {
-
+        
         Point3i pointDest = source.boundingBox().relativePositionTo(box);
         Extent extent = source.boundingBox().extent();
 
