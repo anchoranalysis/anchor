@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-image
+ * anchor-plugin-opencv
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -23,30 +23,37 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.image.extent;
+package org.anchoranalysis.spatial.box;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.spatial.Extent;
-import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.Point3i;
 
+/**
+ * Utility methods to create a {@link BoundingBox}.
+ * 
+ * @author Owen Feehan
+ *
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class BoundingBoxFixture {
+public class BoundingBoxFactory {
 
     /**
-     * Short-hand factory method for creating a bounding-box, where each dimension is uniform
+     * Short-hand factory method for creating a 2D bounding-box.
      *
-     * @param corner left-corner in every dimension
-     * @param extent extent in every dimension
+     * @param x left-corner in x-dimension
+     * @param y left-corner in y-dimension
+     * @param width bounding-box width (extent in x-dimension)
+     * @param height bounding-box width (extent in y-dimension)
      * @return the newly created bounding-box
      */
-    public static BoundingBox of(int corner, int extent) {
-        return of(corner, corner, corner, extent, extent, extent);
+    public static BoundingBox at(int x, int y, int width, int height) {
+        return new BoundingBox(new Point3i(x, y, 0), new Extent(width, height));
     }
 
     /**
-     * Short-hand factory method for creating a bounding-box
+     * Short-hand factory method for creating a 3D bounding-box.
      *
      * @param x left-corner in x-dimension
      * @param y left-corner in y-dimension
@@ -56,7 +63,19 @@ public class BoundingBoxFixture {
      * @param depth bounding-box width (extent in z-dimension)
      * @return the newly created bounding-box
      */
-    public static BoundingBox of(int x, int y, int z, int width, int height, int depth) {
+    public static BoundingBox at(int x, int y, int z, int width, int height, int depth) {
         return new BoundingBox(new Point3i(x, y, z), new Extent(width, height, depth));
+    }
+    
+    
+    /**
+     * Short-hand factory method for creating a 3D bounding-box, where a coordinate is identical in each dimension.
+     *
+     * @param corner left-corner in every dimension
+     * @param extent extent in every dimension
+     * @return the newly created bounding-box
+     */
+    public static BoundingBox uniform3D(int corner, int extent) {
+        return BoundingBoxFactory.at(corner, corner, corner, extent, extent, extent);
     }
 }

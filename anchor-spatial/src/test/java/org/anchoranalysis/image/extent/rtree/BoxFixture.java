@@ -30,8 +30,8 @@ import java.util.HashSet;
 import java.util.Set;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.image.extent.BoundingBoxFixture;
 import org.anchoranalysis.spatial.box.BoundingBox;
+import org.anchoranalysis.spatial.box.BoundingBoxFactory;
 import org.anchoranalysis.spatial.rtree.RTree;
 
 /**
@@ -43,18 +43,18 @@ import org.anchoranalysis.spatial.rtree.RTree;
 class BoxFixture {
 
     // START FIRST CLUSTER
-    public static final BoundingBox BOX1 = BoundingBoxFixture.of(10, 10);
-    public static final BoundingBox BOX2 = BoundingBoxFixture.of(20, 20);
-    public static final BoundingBox BOX3 = BoundingBoxFixture.of(15, 10);
+    public static final BoundingBox BOX1 = BoundingBoxFactory.uniform3D(10, 10);
+    public static final BoundingBox BOX2 = BoundingBoxFactory.uniform3D(20, 20);
+    public static final BoundingBox BOX3 = BoundingBoxFactory.uniform3D(15, 10);
     // END FIRST CLUSTER
 
     // START SECOND CLUSTER
-    public static final BoundingBox BOX4 = BoundingBoxFixture.of(40, 10);
+    public static final BoundingBox BOX4 = BoundingBoxFactory.uniform3D(40, 10);
     // END SECOND CLUSTER
 
     // START THIRD CLUSTER
-    public static final BoundingBox BOX5 = BoundingBoxFixture.of(90, 20);
-    public static final BoundingBox BOX6 = BoundingBoxFixture.of(95, 10);
+    public static final BoundingBox BOX5 = BoundingBoxFactory.uniform3D(90, 20);
+    public static final BoundingBox BOX6 = BoundingBoxFactory.uniform3D(95, 10);
     // END THIRD CLUSTER
 
     /** All bounding-boxes as elements in a set, which is not nested */

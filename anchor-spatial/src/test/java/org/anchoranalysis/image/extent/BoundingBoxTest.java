@@ -30,6 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.anchoranalysis.spatial.box.BoundingBox;
+import org.anchoranalysis.spatial.box.BoundingBoxFactory;
 import org.junit.jupiter.api.Test;
 
 class BoundingBoxTest {
@@ -37,8 +38,8 @@ class BoundingBoxTest {
     @Test
     void testIntersect1() {
 
-        BoundingBox obj1 = BoundingBoxFixture.of(154, 58, 3, 12, 30, 16);
-        BoundingBox obj2 = BoundingBoxFixture.of(46, 62, 5, 26, 24, 17);
+        BoundingBox obj1 = BoundingBoxFactory.at(154, 58, 3, 12, 30, 16);
+        BoundingBox obj2 = BoundingBoxFactory.at(46, 62, 5, 26, 24, 17);
 
         assertTrue(!obj1.intersection().existsWith(obj2));
     }
@@ -46,8 +47,8 @@ class BoundingBoxTest {
     @Test
     void testIntersect2() {
 
-        BoundingBox obj1 = BoundingBoxFixture.of(0, 0, 0, 1024, 1024, 1);
-        BoundingBox obj2 = BoundingBoxFixture.of(433, 95, 1, 1, 1, 1);
+        BoundingBox obj1 = BoundingBoxFactory.at(0, 0, 0, 1024, 1024, 1);
+        BoundingBox obj2 = BoundingBoxFactory.at(433, 95, 1, 1, 1, 1);
 
         assertTrue(!obj1.intersection().existsWith(obj2));
     }
@@ -55,8 +56,8 @@ class BoundingBoxTest {
     @Test
     void testUnion() {
 
-        BoundingBox box1 = BoundingBoxFixture.of(156, 56, 0, 139, 139, 1);
-        BoundingBox box2 = BoundingBoxFixture.of(94, 94, 0, 117, 117, 1);
+        BoundingBox box1 = BoundingBoxFactory.at(156, 56, 0, 139, 139, 1);
+        BoundingBox box2 = BoundingBoxFactory.at(94, 94, 0, 117, 117, 1);
 
         BoundingBox boxUnion = box1.union().with(box2);
 

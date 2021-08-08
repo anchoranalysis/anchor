@@ -32,7 +32,9 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.image.core.mask.MaskInverter;
+import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValues;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
@@ -69,9 +71,11 @@ public class ObjectMaskMerger {
 
         BoundingBox box = first.boundingBox().union().with(second.boundingBox());
 
+        Voxels<UnsignedByteBuffer> voxels = createAllOffVoxels(box.extent(), first.binaryValues());
+        
         ObjectMask out =
                 new ObjectMask(
-                        box, VoxelsFactory.getUnsignedByte().createInitialized(box.extent()));
+                        box, voxels, first.binaryValuesByte());
         copyPixelsCheckMask(first, out, box);
         copyPixelsCheckMask(second, out, box);
         return out;
@@ -181,5 +185,20 @@ public class ObjectMaskMerger {
         } else {
             return second;
         }
+    }
+    
+    /**
+     * Create a new {@link Voxels} to match a certain extent, whose value is the same as OFF pixels for the outputted merged object.
+     * 
+     * @param extent size of the voxels
+     * @param binaryValues what constiutes off and on values
+     * @return a newly created {@link Voxels} with all off values
+     */
+    private static Voxels<UnsignedByteBuffer> createAllOffVoxels(Extent extent, BinaryValues binaryValues) {
+        Voxels<UnsignedByteBuffer> voxels = VoxelsFactory.getUnsignedByte().createInitialized(extent);
+        if (binaryValues.getOffInt()!=0) {
+            voxels.assignValue(binaryValues.getOffInt()).toAll();
+        }
+        return voxels;
     }
 }
