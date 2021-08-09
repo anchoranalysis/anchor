@@ -27,8 +27,7 @@
 package org.anchoranalysis.test.image.object;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import lombok.AllArgsConstructor;
+import java.util.Optional;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxelsFactory;
@@ -37,38 +36,87 @@ import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
+import org.anchoranalysis.image.voxel.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.spatial.Extent;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.Point3i;
 
-@AllArgsConstructor
-public class ObjectMaskFixture {
+/**
+ * Creates one or more objects that are otherwise rectangles with <i>on</i> values, but with corner voxels as <i>off</i>.
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class CutOffCornersObjectFixture {
 
-    private final Dimensions dimensions;
+    /** If defined, a check occurs to make sure objects fit inside these dimensions. */
+    private final Optional<Dimensions> dimensions;
+    
+    /**
+     * Create <b>without</b> any check on dimensions.
+     */
+    public CutOffCornersObjectFixture() {
+        this.dimensions = Optional.empty();
+    }
+    
+    /**
+     * Create <b>with</b> any check on dimensions.
+     * 
+     * @param dimensions a check occurs to make sure objects fit inside these dimensions.
+     */
+    public CutOffCornersObjectFixture(Dimensions dimensions) {
+        this.dimensions = Optional.of(dimensions);
+    }
 
+    /**
+     * Create the <b>first</b> object.
+     * 
+     * @return a newly created object.
+     */
     public ObjectMask create1() {
-        Extent extent = new Extent(20, 34, 11);
-        CutOffCorners pattern = new CutOffCorners(3, 2, extent);
-        return createAt(new Point3i(10, 15, 3), extent, pattern);
+        return create(new Point3i(10, 15, 3), new Extent(20, 34, 11), 3, 2);
     }
 
+    /**
+     * Create the <b>second</b> object.
+     * 
+     * @return a newly created object.
+     */
     public ObjectMask create2() {
-        Extent extent = new Extent(19, 14, 5);
-        CutOffCorners pattern = new CutOffCorners(5, 1, extent);
-        return createAt(new Point3i(3, 1, 7), extent, pattern);
+        return create(new Point3i(3, 1, 7), new Extent(19, 14, 5), 5, 1);
     }
-
+    
+    /**
+     * Create the <b>third</b> object.
+     * 
+     * @return a newly created object.
+     */
     public ObjectMask create3() {
-        Extent extent = new Extent(19, 14, 13);
-        CutOffCorners pattern = new CutOffCorners(1, 5, extent);
-        return createAt(new Point3i(17, 15, 2), extent, pattern);
+        return create(new Point3i(17, 15, 2), new Extent(19, 14, 13), 1, 5);
+    }
+    
+    private ObjectMask create(Point3i corner, Extent extent, int cornerEdgeXY, int cornerEdgeZ) {
+        CutOffCorners pattern = new CutOffCorners(cornerEdgeXY, cornerEdgeZ, extent);
+        return createAt(corner, extent, pattern);  
+    }
+    
+    /**
+     * Creates <b>all three</b> objects.
+     * 
+     * @return collection of newly created objects.
+     */
+    public ObjectCollection createAll() {
+        return ObjectCollectionFactory.of( create1(), create2(), create3() );
     }
 
     private ObjectMask createAt(Point3i cornerMin, Extent extent, VoxelPattern pattern) {
         BoundingBox box = new BoundingBox(cornerMin, extent);
 
-        assertTrue(dimensions.contains(box));
+        if (dimensions.isPresent()) {
+            assertTrue(dimensions.get().contains(box));
+        }
 
         Voxels<UnsignedByteBuffer> voxels =
                 VoxelsFactory.getUnsignedByte().createInitialized(extent);
