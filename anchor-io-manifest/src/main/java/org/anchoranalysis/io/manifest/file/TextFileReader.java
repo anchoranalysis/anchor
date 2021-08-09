@@ -30,13 +30,22 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class TextFileReader {
 
-    public static String readFile(Path path) throws IOException {
+    /**
+     * Reads all the lines in a text-file into a string.
+     * 
+     * @param path to the text file to read.
+     * @return the string
+     * @throws IOException if a text-file cannot be read.
+     */
+    public static String readFileAsString(Path path) throws IOException {
 
         StringBuilder stringBuilder = new StringBuilder();
 
@@ -49,6 +58,27 @@ public class TextFileReader {
         }
 
         return stringBuilder.toString();
+    }
+    
+    /**
+     * Reads all the lines in a text-file into a list of strings.
+     * 
+     * @param path to the text file to read.
+     * @return the strings
+     * @throws IOException if a text-file cannot be read.
+     */
+    public static List<String> readLinesAsList(Path path) throws IOException {
+
+        List<String> list = new ArrayList<>();
+        
+        String line;
+        try (BufferedReader reader = createReader(path)) {
+            while ((line = reader.readLine()) != null) {
+                list.add(line);
+            }
+        }
+
+        return list;
     }
 
     private static BufferedReader createReader(Path path) throws FileNotFoundException {

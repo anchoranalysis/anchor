@@ -52,7 +52,7 @@ public class FinderFileAsText extends FinderSingleFile {
         if (!text.isPresent()) {
             try {
                 Path path = getFoundFile().calculatePath();
-                text = Optional.of(TextFileReader.readFile(path));
+                text = Optional.of(TextFileReader.readFileAsString(path));
             } catch (IOException e) {
                 throw new OperationFailedException(e);
             }
