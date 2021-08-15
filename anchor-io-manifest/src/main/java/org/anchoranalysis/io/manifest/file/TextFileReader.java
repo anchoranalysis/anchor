@@ -40,7 +40,7 @@ public class TextFileReader {
 
     /**
      * Reads all the lines in a text-file into a string.
-     * 
+     *
      * @param path to the text file to read.
      * @return the string
      * @throws IOException if a text-file cannot be read.
@@ -59,10 +59,10 @@ public class TextFileReader {
 
         return stringBuilder.toString();
     }
-    
+
     /**
      * Reads all the lines in a text-file into a list of strings.
-     * 
+     *
      * @param path to the text file to read.
      * @return the strings
      * @throws IOException if a text-file cannot be read.
@@ -70,7 +70,7 @@ public class TextFileReader {
     public static List<String> readLinesAsList(Path path) throws IOException {
 
         List<String> list = new ArrayList<>();
-        
+
         String line;
         try (BufferedReader reader = createReader(path)) {
             while ((line = reader.readLine()) != null) {

@@ -28,6 +28,7 @@ package org.anchoranalysis.image.voxel.neighborhood;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Function;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.exception.CreateException;
@@ -83,7 +84,7 @@ class EdgeAdder<V> {
 
     private void addWithDilatedMask(
             int ignoreIndex, ObjectMask object, V vertexWith, ObjectMask dilated) {
-        List<Integer> indicesIntersects = rTree.intersectsWithAsIndices(dilated.boundingBox());
+        Set<Integer> indicesIntersects = rTree.intersectsWithAsIndices(dilated.boundingBox());
         for (int j : indicesIntersects) {
 
             // We enforce an ordering, so as not to do the same pair twice (or the identity case)

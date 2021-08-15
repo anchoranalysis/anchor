@@ -27,6 +27,7 @@
 package org.anchoranalysis.image.voxel.object;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -287,7 +288,8 @@ public final class ObjectMaskStream {
      * @param indices which indices of the collection to consider
      * @return a newly created object-collection, a filtered version of particular elements
      */
-    public ObjectCollection filterSubset(Predicate<ObjectMask> predicate, List<Integer> indices) {
+    public ObjectCollection filterSubset(
+            Predicate<ObjectMask> predicate, Collection<Integer> indices) {
         return new ObjectCollection(delegate.streamIndices(indices).filter(predicate));
     }
 

@@ -27,6 +27,7 @@
 package org.anchoranalysis.test.image.object;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.Optional;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.voxel.Voxels;
@@ -44,26 +45,24 @@ import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.Point3i;
 
 /**
- * Creates one or more objects that are otherwise rectangles with <i>on</i> values, but with corner voxels as <i>off</i>.
- * 
- * @author Owen Feehan
+ * Creates one or more objects that are otherwise rectangles with <i>on</i> values, but with corner
+ * voxels as <i>off</i>.
  *
+ * @author Owen Feehan
  */
 public class CutOffCornersObjectFixture {
 
     /** If defined, a check occurs to make sure objects fit inside these dimensions. */
     private final Optional<Dimensions> dimensions;
-    
-    /**
-     * Create <b>without</b> any check on dimensions.
-     */
+
+    /** Create <b>without</b> any check on dimensions. */
     public CutOffCornersObjectFixture() {
         this.dimensions = Optional.empty();
     }
-    
+
     /**
      * Create <b>with</b> any check on dimensions.
-     * 
+     *
      * @param dimensions a check occurs to make sure objects fit inside these dimensions.
      */
     public CutOffCornersObjectFixture(Dimensions dimensions) {
@@ -72,7 +71,7 @@ public class CutOffCornersObjectFixture {
 
     /**
      * Create the <b>first</b> object.
-     * 
+     *
      * @return a newly created object.
      */
     public ObjectMask create1() {
@@ -81,16 +80,16 @@ public class CutOffCornersObjectFixture {
 
     /**
      * Create the <b>second</b> object.
-     * 
+     *
      * @return a newly created object.
      */
     public ObjectMask create2() {
         return create(new Point3i(3, 1, 7), new Extent(19, 14, 5), 5, 1);
     }
-    
+
     /**
      * Create the <b>third</b> object.
-     * 
+     *
      * @return a newly created object.
      */
     public ObjectMask create3() {
@@ -99,16 +98,16 @@ public class CutOffCornersObjectFixture {
 
     /**
      * Creates <b>all three</b> objects.
-     * 
+     *
      * @return collection of newly created objects.
      */
     public ObjectCollection createAll() {
-        return ObjectCollectionFactory.of( create1(), create2(), create3() );
+        return ObjectCollectionFactory.of(create1(), create2(), create3());
     }
-    
+
     private ObjectMask create(Point3i corner, Extent extent, int cornerEdgeXY, int cornerEdgeZ) {
         CutOffCorners pattern = new CutOffCorners(cornerEdgeXY, cornerEdgeZ, extent);
-        return createAt(corner, extent, pattern);  
+        return createAt(corner, extent, pattern);
     }
 
     private ObjectMask createAt(Point3i cornerMin, Extent extent, VoxelPattern pattern) {

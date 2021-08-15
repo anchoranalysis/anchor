@@ -40,14 +40,14 @@ class NeighborGraphTest {
     @Test
     void testAdjacent() throws CreateException {
         ObjectCollectionFixture fixture = new ObjectCollectionFixture(5, 0, 0, false);
-        testBoth2DAnd3D(fixture.getNumberNonOverlappingObjects() - 1, false, fixture);
-        testBoth2DAnd3D(fixture.getNumberNonOverlappingObjects() - 1, true, fixture);
+        testBoth2DAnd3D(fixture.getNumberNonOverlapping() - 1, false, fixture);
+        testBoth2DAnd3D(fixture.getNumberNonOverlapping() - 1, true, fixture);
     }
 
     @Test
     void testOverlapping() throws CreateException {
         ObjectCollectionFixture fixture = new ObjectCollectionFixture();
-        testBoth2DAnd3D(fixture.getNumberOverlappingObjects() - 1, false, fixture);
+        testBoth2DAnd3D(fixture.getNumberOverlapping() - 1, false, fixture);
         testBoth2DAnd3D(0, true, fixture);
     }
 
@@ -70,7 +70,7 @@ class NeighborGraphTest {
             ObjectCollectionFixture fixture)
             throws CreateException {
 
-        fixture.setDo3D(do3D);
+        fixture.setUseZ(do3D);
         ObjectCollection objects = fixture.createObjects(false);
         GraphWithPayload<ObjectMask, Integer> graph =
                 NeighborGraph.create(

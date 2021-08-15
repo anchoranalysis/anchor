@@ -32,6 +32,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
 import lombok.AllArgsConstructor;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.spatial.box.BoundingBox;
 
 @AllArgsConstructor
@@ -120,7 +122,11 @@ public class SpatiallySeparate<T> {
 
                 BoundingBox boxCurrent = extractBoundingBox.apply(current);
 
-                tree.remove(current, boxCurrent);
+                try {
+                    tree.remove(current, boxCurrent);
+                } catch (OperationFailedException e) {
+                    throw new AnchorImpossibleSituationException();
+                }
                 out.add(current);
 
                 intersecting.addAll(tree.intersectsWith(boxCurrent));
