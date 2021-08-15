@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 import lombok.experimental.Accessors;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.Point3i;
@@ -75,28 +76,43 @@ public class ObjectCollectionRTree {
      * just within the bounding box of the object.
      *
      * @param point the particular point that must exist in all objects that are searched for.
-     * @return a newly created collection of all objects that contain {@code point}, being empty if
-     *     no objects do.
+     * @return a newly created set of all objects that contain {@code point}, being empty if no
+     *     objects do.
      */
-    public ObjectCollection contains(Point3i point) {
+    public Set<ObjectMask> contains(Point3i point) {
         // We do an additional check to make sure the point is inside the object,
         //  as points can be inside the Bounding Box but not inside the object
         return objects.stream()
-                .filterSubset(object -> object.contains(point), tree.contains(point));
+                .filterSubsetStream(object -> object.contains(point), tree.contains(point))
+                .collect(Collectors.toSet());
     }
 
     /**
      * All objects that intersect with another particular object.
      *
      * @param object the object with which objects should intersect
-     * @return a newly created collection of all objects that intersect with {@code
-     *     objectToIntersectWith}, being empty if no objects intersect.
+     * @return a newly created set of all objects that intersect with {@code objectToIntersectWith},
+     *     being empty if no objects intersect.
      */
-    public ObjectCollection intersectsWith(ObjectMask object) {
+    public Set<ObjectMask> intersectsWith(ObjectMask object) {
+        // We do an additional check to make sure the point is inside the object,
+        //  as points can be inside the Bounding Box but not inside the object
+        return intersectsWithStream(object).collect(Collectors.toSet());
+    }
+
+    /**
+     * Like {@link #intersectsWith(ObjectMask)} but returns the objects as a stream rather than a
+     * {@link ObjectCollection}.
+     *
+     * @param object the object with which objects should intersect
+     * @return a stream of all objects that intersect with {@code objectToIntersectWith}, being
+     *     empty if no objects intersect.
+     */
+    public Stream<ObjectMask> intersectsWithStream(ObjectMask object) {
         // We do an additional check to make sure the point is inside the object,
         //  as points can be inside the Bounding Box but not inside the object
         return objects.stream()
-                .filterSubset(
+                .filterSubsetStream(
                         objectToIterate -> objectToIterate.hasIntersectingVoxels(object),
                         tree.intersectsWith(object.boundingBox()));
     }
@@ -105,11 +121,11 @@ public class ObjectCollectionRTree {
      * All objects that intersect with a particular bounding box.
      *
      * @param box the bounding-box with which objects should intersect.
-     * @return a newly created collection of all objects that intersect with {@code box}, being
-     *     empty if no objects intersect.
+     * @return a newly created set of all objects that intersect with {@code box}, being empty if no
+     *     objects intersect.
      */
-    public ObjectCollection intersectsWith(BoundingBox box) {
-        return objects.createSubset(tree.intersectsWith(box));
+    public Set<ObjectMask> intersectsWith(BoundingBox box) {
+        return objects.streamIndices(tree.intersectsWith(box)).collect(Collectors.toSet());
     }
 
     /**

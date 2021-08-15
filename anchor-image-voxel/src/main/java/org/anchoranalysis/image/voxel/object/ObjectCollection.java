@@ -289,8 +289,13 @@ public class ObjectCollection implements Iterable<ObjectMask> {
         return delegate.stream();
     }
 
-    /** Streams only objects at specific indices */
-    Stream<ObjectMask> streamIndices(Collection<Integer> indices) {
+    /**
+     * Streams only objects at specific indices.
+     *
+     * @param indices indices of objects to place in the stream.
+     * @return the stream containing only the objects whose indices are in {@code indices}.
+     */
+    public Stream<ObjectMask> streamIndices(Collection<Integer> indices) {
         return indices.stream().map(this::get);
     }
 

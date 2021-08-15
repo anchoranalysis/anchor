@@ -3,6 +3,7 @@ package org.anchoranalysis.image.voxel;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.Set;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectCollectionFactory;
@@ -114,12 +115,13 @@ class ObjectCollectionRTreeTest {
     }
 
     /** Asserts that a collection of objects contains a single object (by deep equivalence). */
-    private static void assertContainsOnly(ObjectCollection objects, ObjectMask singleObject) {
-        assertTrue(objects.equalsDeep(ObjectCollectionFactory.of(singleObject)));
+    private static void assertContainsOnly(Set<ObjectMask> objects, ObjectMask singleObject) {
+        ObjectCollection objectsAsCollection = ObjectCollectionFactory.of(objects);
+        assertTrue(objectsAsCollection.equalsDeep(ObjectCollectionFactory.of(singleObject)));
     }
 
     /** Asserts that a collection of objects contains no elements. */
-    private static void assertEmpty(ObjectCollection objects) {
+    private static void assertEmpty(Set<ObjectMask> objects) {
         assertTrue(objects.isEmpty());
     }
 }

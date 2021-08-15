@@ -40,6 +40,7 @@ import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.functional.CheckedStream;
 import org.anchoranalysis.core.functional.checked.CheckedFunction;
@@ -290,7 +291,21 @@ public final class ObjectMaskStream {
      */
     public ObjectCollection filterSubset(
             Predicate<ObjectMask> predicate, Collection<Integer> indices) {
-        return new ObjectCollection(delegate.streamIndices(indices).filter(predicate));
+        return new ObjectCollection(filterSubsetStream(predicate, indices));
+    }
+
+    /**
+     * Like {@link #filterSubset} but returns a stream rather than a {@link ObjectCollection}.
+     *
+     * <p>This is an <i>immutable</i> operation
+     *
+     * @param predicate iff true object is included, otherwise excluded
+     * @param indices which indices of the collection to consider
+     * @return a stream of filtered objects
+     */
+    public Stream<ObjectMask> filterSubsetStream(
+            Predicate<ObjectMask> predicate, Collection<Integer> indices) {
+        return delegate.streamIndices(indices).filter(predicate);
     }
 
     /**
