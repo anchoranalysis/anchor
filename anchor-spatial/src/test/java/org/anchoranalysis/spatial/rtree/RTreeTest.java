@@ -1,11 +1,11 @@
 package org.anchoranalysis.spatial.rtree;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.box.BoundingBoxFactory;
 import org.anchoranalysis.spatial.point.Point3i;
@@ -145,7 +145,8 @@ class RTreeTest {
 
     /** Asserts a {@link List} is equal to another, disregarding the order of elements. */
     private static void assertUnordered(List<Integer> expected, Set<Integer> actual) {
-        assertTrue(ListCompareHelper.equalsUnordered(expected, actual));
+        Set<Integer> expectedAsSet = expected.stream().collect(Collectors.toSet());
+        assertEquals(expectedAsSet, actual);
     }
 
     /** The minimum corner of a bounding box, with 1 added in each dimension. */
