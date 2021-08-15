@@ -35,6 +35,13 @@ import org.anchoranalysis.image.voxel.object.ObjectCollectionFixture;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.junit.jupiter.api.Test;
 
+
+/**
+ * Tests {@link NeighborGraph}.
+ * 
+ * @author Owen Feehan
+ *
+ */
 class NeighborGraphTest {
 
     @Test

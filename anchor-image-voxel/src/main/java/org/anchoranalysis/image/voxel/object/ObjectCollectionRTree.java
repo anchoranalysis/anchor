@@ -38,8 +38,14 @@ import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.rtree.RTree;
 
 /**
- * An R-Tree of object-masks (indexed via a derived bounding-box).
+ * An R-Tree of object-masks (indexed via a derived bounding-box) used to determine which objects intersect.
  *
+ * <p>Search methods check not only bounding-box overlap, but also that objects have an overlapping pixel.
+ * 
+ * <p>All objects that are passed to the constructor are initially added to the underlying r-tree structure.
+ *
+ * <p>An existing object may be removed, but no object may be added.
+ *  
  * <p>Note that when an object is removed, it remains in the {@code objects} associated with the
  * r-tree, but is removed from the index.
  *
@@ -126,20 +132,6 @@ public class ObjectCollectionRTree {
      */
     public Set<ObjectMask> intersectsWith(BoundingBox box) {
         return objects.streamIndices(tree.intersectsWith(box)).collect(Collectors.toSet());
-    }
-
-    /**
-     * The indices of all objects that intersect with a particular bounding box.
-     *
-     * <p>The indices are unique identifiers corresponding to the position of the object in the
-     * {@link ObjectCollection} as passed to the constructor.
-     *
-     * @param box the bounding-box with which objects should intersect.
-     * @return a newly created list of all indices that intersect with {@code box}, being empty if
-     *     no objects intersect.
-     */
-    public Set<Integer> intersectsWithAsIndices(BoundingBox box) {
-        return tree.intersectsWith(box);
     }
 
     /**
