@@ -2,13 +2,14 @@ package org.anchoranalysis.image.voxel;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
+import java.util.Arrays;
 import java.util.Set;
+import java.util.stream.Collectors;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.voxel.object.ObjectCollectionFixture;
-import org.anchoranalysis.image.voxel.object.ObjectCollectionRTree;
+import org.anchoranalysis.image.voxel.object.IntersectingObjects;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.spatial.Extent;
 import org.anchoranalysis.spatial.box.BoundingBox;
@@ -19,11 +20,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 /**
- * Tests {@link ObjectCollectionRTree}
+ * Tests {@link IntersectingObjects}
  *
  * @author Owen Feehan
  */
-class ObjectCollectionRTreeTest {
+class IntersectingObjectsTest {
 
     /** All objects used in the r-tree. */
     private static final ObjectCollection OBJECTS =
@@ -42,12 +43,12 @@ class ObjectCollectionRTreeTest {
     private static final Extent CONTAINING_EXTENT = new Extent(100, 100, 100);
 
     /** The r-tree of {@code OBJECTS}, freshly initialized for each test. */
-    private ObjectCollectionRTree tree;
+    private IntersectingObjects tree;
 
     @BeforeEach
     private void init() {
         // We duplicate the original object-list in case the tests involve mutations (removals etc.)
-        tree = new ObjectCollectionRTree(OBJECTS.duplicateShallow());
+        tree = new IntersectingObjects(OBJECTS.duplicateShallow());
     }
 
     /** Which objects contain a point? */
@@ -57,13 +58,9 @@ class ObjectCollectionRTreeTest {
         assertEmpty(tree.contains(new Point3i(1, 1, 1)));
     }
 
-    /**
-     * Which objects intersect with a particular object?
-     *
-     * @throws OperationFailedException
-     */
+    /** Which objects intersect with a particular object? */
     @Test
-    void intersectsObject() throws OperationFailedException {
+    void intersectsObject() {
         tree.remove(FIRST, 0);
         tree.remove(SECOND, 1);
         assertContainsOnly(tree.intersectsWith(SECOND), THIRD);
@@ -90,12 +87,22 @@ class ObjectCollectionRTreeTest {
     }
 
     /** Removes an object from the r-tree. */
+    @Test
     void remove() {
-        assertSize(3);
+        assertSize(4);
 
         // Remove object with valid index
         tree.remove(FIRST, 0);
-        assertSize(2);
+        assertSize(3);
+    }
+    
+    /** Separates objects into spatial clusters. */
+    @Test
+    void spatiallySeparate() {
+        Set<ObjectCollection> set = tree.spatiallySeparate();
+        Set<Integer> sizesActual = set.stream().map(ObjectCollection::size).collect(Collectors.toSet());
+        Set<Integer> sizesExpected = Arrays.asList(1,3).stream().collect(Collectors.toSet()); 
+        assertEquals(sizesExpected, sizesActual);
     }
 
     /** Asserts a particular number of objects in the r-tree. */

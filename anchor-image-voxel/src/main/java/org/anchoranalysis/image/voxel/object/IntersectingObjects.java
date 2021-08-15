@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.image.voxel.object;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -38,13 +38,11 @@ import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.rtree.RTree;
 
 /**
- * An R-Tree of object-masks (indexed via a derived bounding-box) used to determine which objects intersect.
- *
- * <p>Search methods check not only bounding-box overlap, but also that objects have an overlapping pixel.
+ * A data-structure to efficiently determine which object-masks intersect in a collection.
  * 
- * <p>All objects that are passed to the constructor are initially added to the underlying r-tree structure.
- *
- * <p>An existing object may be removed, but no object may be added.
+ * <p>Internally, a r-tree data structure is used of object-masks (indexed via a derived bounding-box) for efficient queries. However, search methods check not only bounding-box overlap, but also that objects have at least one overlapping voxel.
+ * 
+ * <p>All objects that are passed to the constructor are initially included. An existing object may be removed, but no additional object may be added.
  *  
  * <p>Note that when an object is removed, it remains in the {@code objects} associated with the
  * r-tree, but is removed from the index.
@@ -54,7 +52,7 @@ import org.anchoranalysis.spatial.rtree.RTree;
  * @author Owen Feehan
  */
 @Accessors(fluent = true)
-public class ObjectCollectionRTree {
+public class IntersectingObjects {
 
     /** An r-tree that stores indices of the objects for each bounding-box */
     private RTree<Integer> tree;
@@ -67,7 +65,7 @@ public class ObjectCollectionRTree {
      *
      * @param objects the objects
      */
-    public ObjectCollectionRTree(ObjectCollection objects) {
+    public IntersectingObjects(ObjectCollection objects) {
         this.objects = objects;
         tree = new RTree<>(objects.size());
         for (int i = 0; i < objects.size(); i++) {
@@ -135,16 +133,14 @@ public class ObjectCollectionRTree {
     }
 
     /**
-     * Removes an object-mask from the r-tree index.
+     * Removes an object-mask, so that it is no longer considered in queries.
      *
-     * <p>Note the associated {@link ObjectCollection} remains unchanged, and the indices of the
-     * other elements remain unchanged.
+     * <p>Note the associated {@link ObjectCollection} remains unchanged.
      *
-     * <p>If no entry can be found matching exactly the object's bounding-box and {@code index}, no
-     * change happens to the r-tree. No error is reported.
+     * <p>If no entry can be found matching exactly the object, no
+     * change happens. No error is reported.
      *
-     * <p>If multiple entries exist that match exactly the object's bounding-box and {@code index},
-     * then all entries are removed.
+     * <p>If multiple entries exist that match exactly the object,then all entries are removed.
      *
      * @param object the object to remove
      * @param index the associated index of the object
@@ -164,9 +160,9 @@ public class ObjectCollectionRTree {
      * @return a list of object-collections, each object-collection is guaranteed to be spatially
      *     separate from the others.
      */
-    public List<ObjectCollection> spatiallySeparate() {
+    public Set<ObjectCollection> spatiallySeparate() {
         Set<Integer> unprocessed = createIntegerSequence(objects.size());
-        List<ObjectCollection> out = new ArrayList<>();
+        Set<ObjectCollection> out = new HashSet<>();
 
         while (!unprocessed.isEmpty()) {
 
