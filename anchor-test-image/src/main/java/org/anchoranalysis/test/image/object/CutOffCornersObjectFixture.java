@@ -96,12 +96,7 @@ public class CutOffCornersObjectFixture {
     public ObjectMask create3() {
         return create(new Point3i(17, 15, 2), new Extent(19, 14, 13), 1, 5);
     }
-    
-    private ObjectMask create(Point3i corner, Extent extent, int cornerEdgeXY, int cornerEdgeZ) {
-        CutOffCorners pattern = new CutOffCorners(cornerEdgeXY, cornerEdgeZ, extent);
-        return createAt(corner, extent, pattern);  
-    }
-    
+
     /**
      * Creates <b>all three</b> objects.
      * 
@@ -109,6 +104,11 @@ public class CutOffCornersObjectFixture {
      */
     public ObjectCollection createAll() {
         return ObjectCollectionFactory.of( create1(), create2(), create3() );
+    }
+    
+    private ObjectMask create(Point3i corner, Extent extent, int cornerEdgeXY, int cornerEdgeZ) {
+        CutOffCorners pattern = new CutOffCorners(cornerEdgeXY, cornerEdgeZ, extent);
+        return createAt(corner, extent, pattern);  
     }
 
     private ObjectMask createAt(Point3i cornerMin, Extent extent, VoxelPattern pattern) {
