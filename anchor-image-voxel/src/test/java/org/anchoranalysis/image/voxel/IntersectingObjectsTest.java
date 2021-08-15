@@ -2,14 +2,15 @@ package org.anchoranalysis.image.voxel;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.image.voxel.object.IntersectingObjects;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.voxel.object.ObjectCollectionFixture;
-import org.anchoranalysis.image.voxel.object.IntersectingObjects;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.spatial.Extent;
 import org.anchoranalysis.spatial.box.BoundingBox;
@@ -61,8 +62,8 @@ class IntersectingObjectsTest {
     /** Which objects intersect with a particular object? */
     @Test
     void intersectsObject() {
-        tree.remove(FIRST, 0);
-        tree.remove(SECOND, 1);
+        tree.remove(FIRST);
+        tree.remove(SECOND);
         assertContainsOnly(tree.intersectsWith(SECOND), THIRD);
         assertEmpty(tree.intersectsWith(FIRST));
     }
@@ -82,7 +83,7 @@ class IntersectingObjectsTest {
         assertContainsOnly(tree.intersectsWith(firstGrown), FIRST);
 
         // Remove the first item, and verify nothing is found
-        tree.remove(FIRST, 0);
+        tree.remove(FIRST);
         assertEmpty(tree.intersectsWith(FIRST.boundingBox()));
     }
 
@@ -92,16 +93,17 @@ class IntersectingObjectsTest {
         assertSize(4);
 
         // Remove object with valid index
-        tree.remove(FIRST, 0);
+        tree.remove(FIRST);
         assertSize(3);
     }
-    
+
     /** Separates objects into spatial clusters. */
     @Test
     void spatiallySeparate() {
         Set<ObjectCollection> set = tree.spatiallySeparate();
-        Set<Integer> sizesActual = set.stream().map(ObjectCollection::size).collect(Collectors.toSet());
-        Set<Integer> sizesExpected = Arrays.asList(1,3).stream().collect(Collectors.toSet()); 
+        Set<Integer> sizesActual =
+                set.stream().map(ObjectCollection::size).collect(Collectors.toSet());
+        Set<Integer> sizesExpected = Arrays.asList(1, 3).stream().collect(Collectors.toSet());
         assertEquals(sizesExpected, sizesActual);
     }
 

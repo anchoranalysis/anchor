@@ -64,7 +64,8 @@ public class NeighborGraph {
     }
 
     /**
-     * Like {@link #create(ObjectCollection, Extent, boolean, boolean)} but extracts objects from a list of vertices.
+     * Like {@link #create(ObjectCollection, Extent, boolean, boolean)} but extracts objects from a
+     * list of vertices.
      *
      * @param <V> vertex-type from which an object-mask must be derivable
      * @param vertices vertices to construct graph from

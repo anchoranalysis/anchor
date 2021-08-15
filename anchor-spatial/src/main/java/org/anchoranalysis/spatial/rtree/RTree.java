@@ -30,8 +30,10 @@ import com.github.davidmoten.rtreemulti.Entry;
 import com.github.davidmoten.rtreemulti.geometry.Geometry;
 import com.github.davidmoten.rtreemulti.geometry.Point;
 import com.github.davidmoten.rtreemulti.geometry.Rectangle;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.ReadableTuple3i;
@@ -70,8 +72,18 @@ public class RTree<T> {
      * @return payloads for all bounding-boxes that contain {@code point}.
      */
     public Set<T> contains(ReadableTuple3i point) {
+        return containsStream(point).collect(Collectors.toSet());
+    }
+
+    /**
+     * Like {@link #contains} but returns a {@link Stream} instead of a {@link Set}.
+     *
+     * @param point the point
+     * @return payloads for all bounding-boxes that contain {@code point}.
+     */
+    public Stream<T> containsStream(ReadableTuple3i point) {
         Point pointToSearch = Point.create(point.x(), point.y(), point.z());
-        return toSet(tree.search(pointToSearch));
+        return toStream(tree.search(pointToSearch));
     }
 
     /**
@@ -81,8 +93,19 @@ public class RTree<T> {
      * @return payloads for all bounding-boxes that intersect with {@code toIntersectWith}.
      */
     public Set<T> intersectsWith(BoundingBox toIntersectWith) {
+        return intersectsWithStream(toIntersectWith).collect(Collectors.toSet());
+    }
+
+    /**
+     * Like {@link #intersectsWith(BoundingBox)} but returns a {@link Stream} instead of a {@link
+     * Set}.
+     *
+     * @param toIntersectWith the box that must be intersected with
+     * @return payloads for all bounding-boxes that intersect with {@code toIntersectWith}.
+     */
+    public Stream<T> intersectsWithStream(BoundingBox toIntersectWith) {
         Rectangle rectangle = asRectangle(toIntersectWith);
-        return toSet(tree.search(rectangle));
+        return toStream(tree.search(rectangle));
     }
 
     /**
@@ -127,11 +150,24 @@ public class RTree<T> {
         return tree.size();
     }
 
+    /**
+     * All <i>all</i> payloads contained within the tree.
+     *
+     * @return a newly created {@link List} of all the payloads, reusing the existing payload
+     *     objects.
+     */
+    public Set<T> payloads() {
+        return toSet(tree.entries());
+    }
+
     /** Creates a {@link Set} from entries found in the R-Tree. */
     private Set<T> toSet(Iterable<Entry<T, Geometry>> entries) {
-        return StreamSupport.stream(entries.spliterator(), false)
-                .map(Entry::value)
-                .collect(Collectors.toSet());
+        return toStream(entries).collect(Collectors.toSet());
+    }
+
+    /** Creates a {@link Stream} from entries found in the R-Tree. */
+    private Stream<T> toStream(Iterable<Entry<T, Geometry>> entries) {
+        return StreamSupport.stream(entries.spliterator(), false).map(Entry::value);
     }
 
     /** Converts a {@link BoundingBox} to a {@link Rectangle}. */

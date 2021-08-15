@@ -30,7 +30,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import lombok.experimental.Accessors;
 import org.anchoranalysis.spatial.box.BoundingBox;
@@ -39,11 +38,14 @@ import org.anchoranalysis.spatial.rtree.RTree;
 
 /**
  * A data-structure to efficiently determine which object-masks intersect in a collection.
- * 
- * <p>Internally, a r-tree data structure is used of object-masks (indexed via a derived bounding-box) for efficient queries. However, search methods check not only bounding-box overlap, but also that objects have at least one overlapping voxel.
- * 
- * <p>All objects that are passed to the constructor are initially included. An existing object may be removed, but no additional object may be added.
- *  
+ *
+ * <p>Internally, a r-tree data structure is used of object-masks (indexed via a derived
+ * bounding-box) for efficient queries. However, search methods check not only bounding-box overlap,
+ * but also that objects have at least one overlapping voxel.
+ *
+ * <p>All objects that are passed to the constructor are initially included. An existing object may
+ * be removed, but no additional object may be added.
+ *
  * <p>Note that when an object is removed, it remains in the {@code objects} associated with the
  * r-tree, but is removed from the index.
  *
@@ -55,10 +57,7 @@ import org.anchoranalysis.spatial.rtree.RTree;
 public class IntersectingObjects {
 
     /** An r-tree that stores indices of the objects for each bounding-box */
-    private RTree<Integer> tree;
-
-    /** All objects stored in the r-tree (whose order corresponds to indices in {@code delegate} */
-    private ObjectCollection objects;
+    private RTree<ObjectMask> tree;
 
     /**
      * Creates an r-tree for particular objects.
@@ -66,11 +65,8 @@ public class IntersectingObjects {
      * @param objects the objects
      */
     public IntersectingObjects(ObjectCollection objects) {
-        this.objects = objects;
         tree = new RTree<>(objects.size());
-        for (int i = 0; i < objects.size(); i++) {
-            tree.add(objects.get(i).boundingBox(), i);
-        }
+        objects.forEach(objectToAdd -> tree.add(objectToAdd.boundingBox(), objectToAdd));
     }
 
     /**
@@ -86,8 +82,8 @@ public class IntersectingObjects {
     public Set<ObjectMask> contains(Point3i point) {
         // We do an additional check to make sure the point is inside the object,
         //  as points can be inside the Bounding Box but not inside the object
-        return objects.stream()
-                .filterSubsetStream(object -> object.contains(point), tree.contains(point))
+        return tree.containsStream(point)
+                .filter(object -> object.contains(point))
                 .collect(Collectors.toSet());
     }
 
@@ -115,10 +111,8 @@ public class IntersectingObjects {
     public Stream<ObjectMask> intersectsWithStream(ObjectMask object) {
         // We do an additional check to make sure the point is inside the object,
         //  as points can be inside the Bounding Box but not inside the object
-        return objects.stream()
-                .filterSubsetStream(
-                        objectToIterate -> objectToIterate.hasIntersectingVoxels(object),
-                        tree.intersectsWith(object.boundingBox()));
+        return tree.intersectsWithStream(object.boundingBox())
+                .filter(objectToIterate -> objectToIterate.hasIntersectingVoxels(object));
     }
 
     /**
@@ -129,7 +123,7 @@ public class IntersectingObjects {
      *     objects intersect.
      */
     public Set<ObjectMask> intersectsWith(BoundingBox box) {
-        return objects.streamIndices(tree.intersectsWith(box)).collect(Collectors.toSet());
+        return tree.intersectsWith(box);
     }
 
     /**
@@ -137,16 +131,15 @@ public class IntersectingObjects {
      *
      * <p>Note the associated {@link ObjectCollection} remains unchanged.
      *
-     * <p>If no entry can be found matching exactly the object, no
-     * change happens. No error is reported.
+     * <p>If no entry can be found matching exactly the object, no change happens. No error is
+     * reported.
      *
      * <p>If multiple entries exist that match exactly the object,then all entries are removed.
      *
      * @param object the object to remove
-     * @param index the associated index of the object
      */
-    public void remove(ObjectMask object, int index) {
-        tree.remove(object.boundingBox(), index);
+    public void remove(ObjectMask object) {
+        tree.remove(object.boundingBox(), object);
     }
 
     /**
@@ -161,12 +154,12 @@ public class IntersectingObjects {
      *     separate from the others.
      */
     public Set<ObjectCollection> spatiallySeparate() {
-        Set<Integer> unprocessed = createIntegerSequence(objects.size());
+        Set<ObjectMask> unprocessed = tree.payloads();
         Set<ObjectCollection> out = new HashSet<>();
 
         while (!unprocessed.isEmpty()) {
 
-            Integer identifier = unprocessed.iterator().next();
+            ObjectMask identifier = unprocessed.iterator().next();
 
             ObjectCollection spatiallyConnected = new ObjectCollection();
             addSpatiallyConnected(spatiallyConnected.asList(), identifier, unprocessed);
@@ -188,36 +181,27 @@ public class IntersectingObjects {
      * Moves objects that are spatially-connected (bounding-boxes intersect) from a set to a list.
      *
      * @param addTo the list to add the spatially-connected objects to
-     * @param identifier the identifier of the <i>source</i> object for which we seek spatially
-     *     connected objects
-     * @param unprocessed the indices of all objects that have not yet been processed (i.e. added to
-     *     a list).
+     * @param source the <i>source</i> object for which we seek spatially-connected objects
+     * @param unprocessed all objects that have not yet been processed (i.e. added to a list).
      */
     private void addSpatiallyConnected(
-            List<ObjectMask> addTo, Integer identifier, Set<Integer> unprocessed) {
+            List<ObjectMask> addTo, ObjectMask source, Set<ObjectMask> unprocessed) {
 
-        unprocessed.remove(identifier);
+        unprocessed.remove(source);
 
-        ObjectMask source = objects.get(identifier);
         addTo.add(source);
-        List<Integer> queue =
+        List<ObjectMask> queue =
                 tree.intersectsWith(source.boundingBox()).stream().collect(Collectors.toList());
 
         while (!queue.isEmpty()) {
-            Integer current = queue.remove(0);
+            ObjectMask current = queue.remove(0);
 
             if (unprocessed.contains(current)) {
                 unprocessed.remove(current);
 
-                ObjectMask currentObject = objects.get(current);
-                addTo.add(currentObject);
-                queue.addAll(tree.intersectsWith(currentObject.boundingBox()));
+                addTo.add(current);
+                queue.addAll(tree.intersectsWith(current.boundingBox()));
             }
         }
-    }
-
-    /** Create a sequence of integers beginning at 0 and with {@code numberElements}. */
-    private static Set<Integer> createIntegerSequence(int numberElements) {
-        return IntStream.range(0, numberElements).boxed().collect(Collectors.toSet());
     }
 }

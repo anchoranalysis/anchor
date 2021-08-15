@@ -60,24 +60,29 @@ class EdgeAdder<V> {
 
     /** The r-tree underpinning the vertices (or rather their derived object-masks) */
     private final RTree<Integer> rTree;
-    
+
     /**
      * Create extract objects from a vertex.
-     * 
+     *
      * @param verticesAsList a list of vertices.
      * @param vertexToObject how to convert a individual vertex to an object-mask.
      * @param objects the objects represented in the graph.
      * @param addEdge
      * @param params avoids any edge if any two objects have a common pixel.
      */
-    public EdgeAdder(List<V> verticesAsList, Function<V, ObjectMask> vertexToObject, ObjectCollection objects, AddEdge<V> addEdge, EdgeAdderParameters params) {
+    public EdgeAdder(
+            List<V> verticesAsList,
+            Function<V, ObjectMask> vertexToObject,
+            ObjectCollection objects,
+            AddEdge<V> addEdge,
+            EdgeAdderParameters params) {
         this.verticesAsList = verticesAsList;
         this.vertexToObject = vertexToObject;
         this.addEdge = addEdge;
         this.params = params;
         this.rTree = createIndicesRTree(objects);
     }
-    
+
     @FunctionalInterface
     public static interface AddEdge<V> {
         void addEdge(V src, V dest, int numBorderPixels);
@@ -145,11 +150,11 @@ class EdgeAdder<V> {
             addEdge.addEdge(vertexWith, vertexOther, numberSharedVoxels);
         }
     }
-    
+
     /** Creates an r-tree mapping the bounding-box of objects to their index in a collection. */
     private static RTree<Integer> createIndicesRTree(ObjectCollection objects) {
         RTree<Integer> tree = new RTree<>(objects.size());
-        for( int i=0; i<objects.size(); i++) {
+        for (int i = 0; i < objects.size(); i++) {
             tree.add(objects.get(i).boundingBox(), i);
         }
         return tree;
