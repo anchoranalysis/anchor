@@ -38,7 +38,7 @@ import org.anchoranalysis.image.voxel.iterator.intersecting.CountVoxelsIntersect
  * @author Owen Feehan
  */
 @AllArgsConstructor
-class CountIntersectingVoxels {
+public class CountIntersectingVoxels {
 
     private final PredicateRegionMembership predicate;
 

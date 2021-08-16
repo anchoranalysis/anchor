@@ -38,7 +38,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.session.calculator.single.FeatureCalculatorSingle;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
-import org.anchoranalysis.mpp.bean.init.MarksInitialization;
+import org.anchoranalysis.mpp.init.MarksInitialization;
 
 public abstract class ReportFeatureOnObjectsBase<T extends FeatureInput>
         extends ReportFeatureEvaluator<T> {

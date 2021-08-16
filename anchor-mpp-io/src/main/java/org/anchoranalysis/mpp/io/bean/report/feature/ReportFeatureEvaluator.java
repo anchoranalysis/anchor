@@ -35,7 +35,7 @@ import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.session.calculator.single.FeatureCalculatorSingle;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
-import org.anchoranalysis.mpp.bean.init.MarksInitialization;
+import org.anchoranalysis.mpp.init.MarksInitialization;
 
 public abstract class ReportFeatureEvaluator<T extends FeatureInput>
         extends ReportFeatureForSharedObjects {

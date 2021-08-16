@@ -28,7 +28,7 @@ package org.anchoranalysis.mpp.bean.proposer;
 
 import java.util.Optional;
 import org.anchoranalysis.bean.annotation.GroupingRoot;
-import org.anchoranalysis.mpp.bean.mark.MarkWithIdentifierFactory;
+import org.anchoranalysis.mpp.bean.mark.factory.MarkWithIdentifierFactory;
 import org.anchoranalysis.mpp.mark.CompatibleWithMark;
 import org.anchoranalysis.mpp.mark.MarkCollection;
 import org.anchoranalysis.mpp.proposer.ProposalAbnormalFailureException;

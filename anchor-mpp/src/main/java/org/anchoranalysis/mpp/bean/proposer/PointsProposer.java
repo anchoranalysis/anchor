@@ -35,7 +35,6 @@ import org.anchoranalysis.mpp.mark.CompatibleWithMark;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.mpp.proposer.error.ErrorNode;
-import org.anchoranalysis.mpp.proposer.visualization.CreateProposalVisualization;
 import org.anchoranalysis.spatial.point.Point3d;
 import org.anchoranalysis.spatial.point.Point3i;
 
@@ -49,6 +48,4 @@ public abstract class PointsProposer extends NullParamsBean<PointsProposer>
             RandomNumberGenerator randomNumberGenerator,
             ErrorNode errorNode)
             throws ProposalAbnormalFailureException;
-
-    public abstract Optional<CreateProposalVisualization> proposalVisualization(boolean detailed);
 }

@@ -52,14 +52,21 @@ public class RTree<T> {
     /** The underlying r-tree data structure. */
     private com.github.davidmoten.rtreemulti.RTree<T, Geometry> tree;
 
+    /** Creates an empty R-Tree. */
+    public RTree() {
+        tree = com.github.davidmoten.rtreemulti.RTree.dimensions(NUMBER_DIMENSIONS).create();
+    }
+
     /**
-     * Creates an empty R-Tree.
+     * Creates an empty R-Tree with a specified number of children.
      *
-     * @param maxNumberEntriesSuggested suggested a maximum number of entries in the r-tree
+     * @param maxNumberEntries maximum number of entries in the r-tree
      */
-    public RTree(int maxNumberEntriesSuggested) {
+    public RTree(int maxNumberEntries) {
+        // Three is minimum number for this parameter
+        int maxChildren = Math.max(maxNumberEntries, 3);
         tree =
-                com.github.davidmoten.rtreemulti.RTree.maxChildren(maxNumberEntriesSuggested)
+                com.github.davidmoten.rtreemulti.RTree.maxChildren(maxChildren)
                         .dimensions(NUMBER_DIMENSIONS)
                         .create();
     }

@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.mpp.proposer.error;
 
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -56,13 +55,6 @@ public class ErrorNodeImpl extends ErrorNode implements TreeNode {
     public ErrorNodeImpl add(String errorMessage) {
         ErrorNodeImpl toAdd = new ErrorNodeImpl(this, errorMessage);
         this.children.add(toAdd);
-        return toAdd;
-    }
-
-    @Override
-    public ErrorNode add(String errorMessage, Mark mark) {
-        ErrorNodeImpl toAdd = add(errorMessage);
-        toAdd.associatedMark = mark;
         return toAdd;
     }
 
@@ -117,16 +109,6 @@ public class ErrorNodeImpl extends ErrorNode implements TreeNode {
     @Override
     public ErrorNode addFormatted(String formatString, Object... args) {
         return add(String.format(formatString, args));
-    }
-
-    @Override
-    public ErrorNode addIter(int i) {
-        return add("iter=" + NumberFormat.getIntegerInstance().format(i));
-    }
-
-    @Override
-    public ErrorNode addBean(String propertyName, Object object) {
-        return add(propertyName + ": " + object.toString());
     }
 
     @Override

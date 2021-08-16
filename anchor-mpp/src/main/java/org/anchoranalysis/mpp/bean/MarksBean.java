@@ -35,8 +35,8 @@ import org.anchoranalysis.bean.initializable.property.SimplePropertyDefiner;
 import org.anchoranalysis.bean.shared.dictionary.DictionaryInitialization;
 import org.anchoranalysis.feature.shared.FeaturesInitialization;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
-import org.anchoranalysis.mpp.bean.init.MarksInitialization;
-import org.anchoranalysis.mpp.bean.init.PointsInitialization;
+import org.anchoranalysis.mpp.init.MarksInitialization;
+import org.anchoranalysis.mpp.init.PointsInitialization;
 
 public abstract class MarksBean<T> extends InitializableBean<T, MarksInitialization> {
 

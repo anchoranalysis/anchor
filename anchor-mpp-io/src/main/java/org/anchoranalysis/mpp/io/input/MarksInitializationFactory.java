@@ -38,7 +38,7 @@ import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.experiment.io.InitializationContext;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.mpp.bean.MarksBean;
-import org.anchoranalysis.mpp.bean.init.MarksInitialization;
+import org.anchoranalysis.mpp.init.MarksInitialization;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MarksInitializationFactory {

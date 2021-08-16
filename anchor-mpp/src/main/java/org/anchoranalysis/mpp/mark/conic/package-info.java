@@ -1,3 +1,7 @@
+/**
+ * {@link org.anchoranalysis.mpp.mark.Mark}s implementing <a
+ * href="https://en.wikipedia.org/wiki/Conic_section">conic sections</a>.
+ */
 package org.anchoranalysis.mpp.mark.conic;
 /*-
  * #%L

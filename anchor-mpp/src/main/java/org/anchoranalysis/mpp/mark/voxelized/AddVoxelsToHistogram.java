@@ -32,7 +32,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.math.histogram.Histogram;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipWithFlags;
-import org.anchoranalysis.mpp.voxel.partition.IndexByChannel;
+import org.anchoranalysis.mpp.index.IndexByChannel;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class AddVoxelsToHistogram {

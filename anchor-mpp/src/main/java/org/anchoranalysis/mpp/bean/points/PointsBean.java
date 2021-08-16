@@ -33,7 +33,7 @@ import org.anchoranalysis.bean.initializable.property.ExtractFromParam;
 import org.anchoranalysis.bean.initializable.property.PropertyInitializer;
 import org.anchoranalysis.bean.initializable.property.SimplePropertyDefiner;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
-import org.anchoranalysis.mpp.bean.init.PointsInitialization;
+import org.anchoranalysis.mpp.init.PointsInitialization;
 
 /**
  * @author Owen Feehan
