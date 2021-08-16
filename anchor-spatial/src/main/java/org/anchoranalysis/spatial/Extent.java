@@ -50,7 +50,7 @@ import org.anchoranalysis.spatial.scale.ScaleFactorUtilities;
  *
  * <p>This class is <b>immutable</b>.
  */
-public final class Extent implements Serializable {
+public final class Extent implements Serializable, Comparable<Extent> {
 
     /** */
     private static final long serialVersionUID = 1L;
@@ -555,5 +555,10 @@ public final class Extent implements Serializable {
         Point3i lenDup = new Point3i(size);
         pointOperation.accept(lenDup);
         return lenDup;
+    }
+
+    @Override
+    public int compareTo(Extent other) {
+        return size.compareTo(other.size);
     }
 }

@@ -61,7 +61,7 @@ public class ObjectCollectionFixture {
     @Getter private final int numberOverlapping;
 
     /** The total number of objects that is created, sum of non-overlapping and overlapping. */
-    private final int totalNumber;
+    @Getter private final int numberTotal;
 
     /**
      * Number of pixels between objects.
@@ -127,7 +127,7 @@ public class ObjectCollectionFixture {
         this.distanceBetweenShift = distanceBetweenShift;
         this.incrementY = incrementY;
 
-        this.totalNumber = numberNonOverlapping + numberOverlapping;
+        this.numberTotal = numberNonOverlapping + numberOverlapping;
     }
 
     /**
@@ -151,11 +151,11 @@ public class ObjectCollectionFixture {
         int heightSingleObject = fixture.extent().y();
         int heightAllObjects =
                 incrementY
-                        ? totalNumber * (heightSingleObject + distanceBetweenShift)
+                        ? numberTotal * (heightSingleObject + distanceBetweenShift)
                         : heightSingleObject;
         int depthAllObjects = useZ ? fixture.extent().z() : 1;
         return new Extent(
-                totalNumber * (fixture.extent().x() + distanceBetweenShift),
+                numberTotal * (fixture.extent().x() + distanceBetweenShift),
                 heightAllObjects,
                 depthAllObjects);
     }

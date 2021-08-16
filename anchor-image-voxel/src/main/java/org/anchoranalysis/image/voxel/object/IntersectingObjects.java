@@ -26,18 +26,26 @@
 
 package org.anchoranalysis.image.voxel.object;
 
+import com.google.common.base.Functions;
+import java.util.Collection;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.experimental.Accessors;
+import org.anchoranalysis.core.graph.GraphWithoutPayload;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.rtree.RTree;
 
 /**
  * A data-structure to efficiently determine which object-masks intersect in a collection.
+ *
+ * <p>It can store elements of any type, so long each element maps deterministically to an {@link
+ * ObjectMask}.
  *
  * <p>Internally, a r-tree data structure is used of object-masks (indexed via a derived
  * bounding-box) for efficient queries. However, search methods check not only bounding-box overlap,
@@ -51,78 +59,94 @@ import org.anchoranalysis.spatial.rtree.RTree;
  *
  * @see <a href="https://en.wikipedia.org/wiki/R-tree">R-tree on Wikipedia</a>
  * @see RTree for a related structure operating only on bounding-boxes
+ * @param <T> the type of elements stored in the structure, each of which must map to a {@link
+ *     ObjectMask}.
  * @author Owen Feehan
  */
 @Accessors(fluent = true)
-public class IntersectingObjects {
+public class IntersectingObjects<T> {
 
     /** An r-tree that stores indices of the objects for each bounding-box */
-    private RTree<ObjectMask> tree;
+    private RTree<T> tree;
+
+    /** Extracts an {@link ObjectMask} from an element. */
+    private final Function<T, ObjectMask> extractObject;
+
+    /**
+     * Creates from an {@link ObjectCollection}.
+     *
+     * @param objects the objects whose intersection will be checked
+     * @return a newly created {@link IntersectingObjects} for {@code objects}.
+     */
+    public static IntersectingObjects<ObjectMask> create(ObjectCollection objects) {
+        return new IntersectingObjects<>(objects.asList(), Functions.identity());
+    }
 
     /**
      * Creates an r-tree for particular objects.
      *
      * @param objects the objects
      */
-    public IntersectingObjects(ObjectCollection objects) {
-        tree = new RTree<>(objects.size());
-        objects.forEach(objectToAdd -> tree.add(objectToAdd.boundingBox(), objectToAdd));
+    public IntersectingObjects(Collection<T> objects, Function<T, ObjectMask> extractObject) {
+        this.extractObject = extractObject;
+        this.tree = new RTree<>(objects.size());
+        objects.stream().forEach(element -> tree.add(boxFor(element), element));
     }
 
     /**
-     * All objects in the collection that contain a particular point.
+     * All elements that contain a particular point.
      *
      * <p>Note that the point must exist as an <i>on</i> pixel on the actual {@link ObjectMask}, not
      * just within the bounding box of the object.
      *
      * @param point the particular point that must exist in all objects that are searched for.
-     * @return a newly created set of all objects that contain {@code point}, being empty if no
+     * @return a newly created set of all elements that contain {@code point}, being empty if no
      *     objects do.
      */
-    public Set<ObjectMask> contains(Point3i point) {
+    public Set<T> contains(Point3i point) {
         // We do an additional check to make sure the point is inside the object,
         //  as points can be inside the Bounding Box but not inside the object
         return tree.containsStream(point)
-                .filter(object -> object.contains(point))
+                .filter(object -> extractObject.apply(object).contains(point))
                 .collect(Collectors.toSet());
     }
 
     /**
-     * All objects that intersect with another particular object.
+     * All elements that intersect with a particular object.
      *
      * @param object the object with which objects should intersect
-     * @return a newly created set of all objects that intersect with {@code objectToIntersectWith},
-     *     being empty if no objects intersect.
+     * @return a newly created set of all elements that intersect with {@code
+     *     objectToIntersectWith}, being empty if no objects intersect.
      */
-    public Set<ObjectMask> intersectsWith(ObjectMask object) {
+    public Set<T> intersectsWith(ObjectMask object) {
         // We do an additional check to make sure the point is inside the object,
         //  as points can be inside the Bounding Box but not inside the object
         return intersectsWithStream(object).collect(Collectors.toSet());
     }
 
     /**
-     * Like {@link #intersectsWith(ObjectMask)} but returns the objects as a stream rather than a
-     * {@link ObjectCollection}.
+     * Like {@link #intersectsWith(ObjectMask)} but returns the objects as a {@link Stream} rather
+     * than a {@link Set}.
      *
      * @param object the object with which objects should intersect
      * @return a stream of all objects that intersect with {@code objectToIntersectWith}, being
      *     empty if no objects intersect.
      */
-    public Stream<ObjectMask> intersectsWithStream(ObjectMask object) {
+    public Stream<T> intersectsWithStream(ObjectMask object) {
         // We do an additional check to make sure the point is inside the object,
         //  as points can be inside the Bounding Box but not inside the object
         return tree.intersectsWithStream(object.boundingBox())
-                .filter(objectToIterate -> objectToIterate.hasIntersectingVoxels(object));
+                .filter(element -> extractObject.apply(element).hasIntersectingVoxels(object));
     }
 
     /**
-     * All objects that intersect with a particular bounding box.
+     * All elements that intersect with a particular bounding box.
      *
      * @param box the bounding-box with which objects should intersect.
      * @return a newly created set of all objects that intersect with {@code box}, being empty if no
      *     objects intersect.
      */
-    public Set<ObjectMask> intersectsWith(BoundingBox box) {
+    public Set<T> intersectsWith(BoundingBox box) {
         return tree.intersectsWith(box);
     }
 
@@ -136,10 +160,10 @@ public class IntersectingObjects {
      *
      * <p>If multiple entries exist that match exactly the object,then all entries are removed.
      *
-     * @param object the object to remove
+     * @param element the element to remove
      */
-    public void remove(ObjectMask object) {
-        tree.remove(object.boundingBox(), object);
+    public void remove(T element) {
+        tree.remove(boxFor(element), element);
     }
 
     /**
@@ -153,19 +177,45 @@ public class IntersectingObjects {
      * @return a list of object-collections, each object-collection is guaranteed to be spatially
      *     separate from the others.
      */
-    public Set<ObjectCollection> spatiallySeparate() {
-        Set<ObjectMask> unprocessed = tree.payloads();
-        Set<ObjectCollection> out = new HashSet<>();
+    public Set<Set<T>> spatiallySeparate() {
+        Set<T> unprocessed = tree.asSet();
+        Set<Set<T>> out = new HashSet<>();
 
         while (!unprocessed.isEmpty()) {
 
-            ObjectMask identifier = unprocessed.iterator().next();
+            T current = unprocessed.iterator().next();
 
-            ObjectCollection spatiallyConnected = new ObjectCollection();
-            addSpatiallyConnected(spatiallyConnected.asList(), identifier, unprocessed);
+            Set<T> spatiallyConnected = new HashSet<>();
+            addSpatiallyConnected(spatiallyConnected, current, unprocessed);
             out.add(spatiallyConnected);
         }
         return out;
+    }
+
+    /**
+     * Constructs a graph where each vertex is an element and an edge exists between any elements
+     * that intersect.
+     *
+     * @return a newly created graph, reusing the existing elements as vertices.
+     */
+    public GraphWithoutPayload<T> asGraph() {
+        GraphWithoutPayload<T> graph = new GraphWithoutPayload<>(true);
+
+        for (T element : tree.asSet()) {
+            graph.addVertex(element);
+
+            Iterator<T> intersecting =
+                    intersectsWithStream(extractObject.apply(element)).iterator();
+            while (intersecting.hasNext()) {
+                // We avoid creating an edge if it already exists, or between an element and itself.
+                T other = intersecting.next();
+                if (!element.equals(other) && !graph.containsEdge(other, element)) {
+                    graph.addEdge(element, other);
+                }
+            }
+        }
+
+        return graph;
     }
 
     /**
@@ -178,30 +228,34 @@ public class IntersectingObjects {
     }
 
     /**
-     * Moves objects that are spatially-connected (bounding-boxes intersect) from a set to a list.
+     * Moves unprocessed elements that are spatially-connected (bounding-boxes intersect) into a
+     * set.
      *
-     * @param addTo the list to add the spatially-connected objects to
-     * @param source the <i>source</i> object for which we seek spatially-connected objects
-     * @param unprocessed all objects that have not yet been processed (i.e. added to a list).
+     * @param addTo the set to add the spatially-connected objects to.
+     * @param source the <i>source</i> element for which we seek spatially-connected elements.
+     * @param unprocessed all elements that have not yet been processed (i.e. added to a list).
      */
-    private void addSpatiallyConnected(
-            List<ObjectMask> addTo, ObjectMask source, Set<ObjectMask> unprocessed) {
+    private void addSpatiallyConnected(Set<T> addTo, T source, Set<T> unprocessed) {
 
         unprocessed.remove(source);
 
         addTo.add(source);
-        List<ObjectMask> queue =
-                tree.intersectsWith(source.boundingBox()).stream().collect(Collectors.toList());
+        List<T> queue = tree.intersectsWith(boxFor(source)).stream().collect(Collectors.toList());
 
         while (!queue.isEmpty()) {
-            ObjectMask current = queue.remove(0);
+            T current = queue.remove(0);
 
             if (unprocessed.contains(current)) {
                 unprocessed.remove(current);
 
                 addTo.add(current);
-                queue.addAll(tree.intersectsWith(current.boundingBox()));
+                queue.addAll(tree.intersectsWith(boxFor(current)));
             }
         }
+    }
+
+    /** Extracts a {@link BoundingBox} for an element. */
+    private BoundingBox boxFor(T element) {
+        return extractObject.apply(element).boundingBox();
     }
 }

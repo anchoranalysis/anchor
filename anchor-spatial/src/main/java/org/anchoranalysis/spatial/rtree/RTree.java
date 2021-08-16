@@ -30,7 +30,6 @@ import com.github.davidmoten.rtreemulti.Entry;
 import com.github.davidmoten.rtreemulti.geometry.Geometry;
 import com.github.davidmoten.rtreemulti.geometry.Point;
 import com.github.davidmoten.rtreemulti.geometry.Rectangle;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -151,12 +150,12 @@ public class RTree<T> {
     }
 
     /**
-     * All <i>all</i> payloads contained within the tree.
+     * <i>All</i> elements contained within the tree, as a {@link Set}.
      *
-     * @return a newly created {@link List} of all the payloads, reusing the existing payload
+     * @return a newly created {@link Set} of all the elements, reusing the existing element
      *     objects.
      */
-    public Set<T> payloads() {
+    public Set<T> asSet() {
         return toSet(tree.entries());
     }
 

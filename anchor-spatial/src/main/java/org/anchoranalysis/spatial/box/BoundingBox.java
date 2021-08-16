@@ -50,7 +50,7 @@ import org.anchoranalysis.spatial.scale.ScaleFactorUtilities;
  */
 @EqualsAndHashCode
 @Accessors(fluent = true)
-public final class BoundingBox implements Serializable {
+public final class BoundingBox implements Serializable, Comparable<BoundingBox> {
 
     /** */
     private static final long serialVersionUID = 1L;
@@ -478,5 +478,20 @@ public final class BoundingBox implements Serializable {
 
     private static Point3i multiplyByTwo(Tuple3i point) {
         return Point3i.immutableScale(point, 2);
+    }
+
+    @Override
+    public int compareTo(BoundingBox other) {
+        int compareCornerMin = cornerMin.compareTo(other.cornerMin);
+        if (compareCornerMin != 0) {
+            return compareCornerMin;
+        }
+
+        int compareExtent = extent.compareTo(other.extent);
+        if (compareExtent != 0) {
+            return compareExtent;
+        }
+
+        return 0;
     }
 }
