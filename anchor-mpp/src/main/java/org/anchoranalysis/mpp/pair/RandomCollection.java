@@ -29,7 +29,7 @@ package org.anchoranalysis.mpp.pair;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.GroupingRoot;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.mpp.mark.set.UpdatableMarks;
+import org.anchoranalysis.mpp.mark.UpdatableMarks;
 
 /**
  * A collection of items from which one can randomly sample

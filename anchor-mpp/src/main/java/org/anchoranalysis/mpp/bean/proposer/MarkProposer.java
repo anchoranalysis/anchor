@@ -26,13 +26,11 @@
 
 package org.anchoranalysis.mpp.bean.proposer;
 
-import java.util.Optional;
 import org.anchoranalysis.bean.annotation.GroupingRoot;
 import org.anchoranalysis.mpp.mark.CompatibleWithMark;
 import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.mpp.proposer.ProposerContext;
-import org.anchoranalysis.mpp.proposer.visualization.CreateProposalVisualization;
 
 // Proposes a mark
 @GroupingRoot
@@ -42,6 +40,4 @@ public abstract class MarkProposer extends ProposerBean<MarkProposer>
     // The inputMark's attributes become changed in accordance to the internal rules of the proposer
     public abstract boolean propose(VoxelizedMarkMemo inputMark, ProposerContext context)
             throws ProposalAbnormalFailureException;
-
-    public abstract Optional<CreateProposalVisualization> proposalVisualization(boolean detailed);
 }

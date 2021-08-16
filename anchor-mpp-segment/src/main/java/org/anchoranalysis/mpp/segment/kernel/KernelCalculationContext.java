@@ -28,7 +28,7 @@ package org.anchoranalysis.mpp.segment.kernel;
 
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.feature.energy.EnergyStack;
-import org.anchoranalysis.mpp.bean.mark.MarkWithIdentifierFactory;
+import org.anchoranalysis.mpp.bean.mark.factory.MarkWithIdentifierFactory;
 import org.anchoranalysis.mpp.feature.energy.scheme.EnergySchemeWithSharedFeatures;
 import org.anchoranalysis.mpp.proposer.ProposerContext;
 import org.anchoranalysis.mpp.proposer.error.ErrorNode;

@@ -27,7 +27,6 @@
 package org.anchoranalysis.mpp.proposer.error;
 
 import java.io.Serializable;
-import org.anchoranalysis.mpp.mark.Mark;
 
 public abstract class ErrorNode implements Serializable {
     /** */
@@ -37,13 +36,7 @@ public abstract class ErrorNode implements Serializable {
 
     public abstract ErrorNode addFormatted(String formatString, Object... args);
 
-    public abstract ErrorNode add(String errorMessage, Mark mark);
-
     public abstract ErrorNode add(Exception e);
-
-    public abstract ErrorNode addIter(int i);
-
-    public abstract ErrorNode addBean(String propertyName, Object object);
 
     public abstract void addErrorDescription(StringBuilder sb);
 }

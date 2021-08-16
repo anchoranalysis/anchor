@@ -38,8 +38,8 @@ import org.anchoranalysis.mpp.feature.addcriteria.RandomCollectionWithAddCriteri
 import org.anchoranalysis.mpp.feature.energy.EnergyPair;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.MarkCollection;
-import org.anchoranalysis.mpp.mark.set.UpdatableMarks;
-import org.anchoranalysis.mpp.mark.set.UpdateMarkSetException;
+import org.anchoranalysis.mpp.mark.UpdatableMarks;
+import org.anchoranalysis.mpp.mark.UpdateMarkSetException;
 import org.anchoranalysis.mpp.mark.voxelized.memo.MemoForIndex;
 import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 

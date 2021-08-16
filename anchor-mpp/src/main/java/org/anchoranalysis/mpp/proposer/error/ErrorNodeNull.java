@@ -28,7 +28,6 @@ package org.anchoranalysis.mpp.proposer.error;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.mpp.mark.Mark;
 
 /**
  * Singleton that does nothing with errors
@@ -54,22 +53,7 @@ public class ErrorNodeNull extends ErrorNode {
     }
 
     @Override
-    public ErrorNode add(String errorMessage, Mark mark) {
-        return this;
-    }
-
-    @Override
     public ErrorNode addFormatted(String formatString, Object... args) {
-        return this;
-    }
-
-    @Override
-    public ErrorNode addIter(int i) {
-        return this;
-    }
-
-    @Override
-    public ErrorNode addBean(String propertyName, Object object) {
         return this;
     }
 
