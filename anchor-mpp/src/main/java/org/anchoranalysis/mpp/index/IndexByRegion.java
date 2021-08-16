@@ -28,6 +28,7 @@ package org.anchoranalysis.mpp.index;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.anchoranalysis.core.functional.FunctionalIterate;
 import org.anchoranalysis.mpp.index.factory.VoxelPartitionFactory;
 
 /**
@@ -36,13 +37,11 @@ import org.anchoranalysis.mpp.index.factory.VoxelPartitionFactory;
  */
 public class IndexByRegion<T> {
 
-    private List<VoxelPartition<T>> list;
+    private final List<VoxelPartition<T>> list;
 
-    public IndexByRegion(VoxelPartitionFactory<T> factory, int numRegions, int numSlices) {
+    public IndexByRegion(VoxelPartitionFactory<T> factory, int numberRegions, int numberSlices) {
         list = new ArrayList<>();
-        for (int i = 0; i < numRegions; i++) {
-            list.add(factory.create(numSlices));
-        }
+        FunctionalIterate.repeat(numberRegions, () -> list.add(factory.create(numberSlices)));
     }
 
     // Should only be used RO, if we want to maintain integrity with the combined list
