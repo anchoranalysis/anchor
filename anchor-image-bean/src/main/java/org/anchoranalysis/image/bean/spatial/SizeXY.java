@@ -42,8 +42,10 @@ import org.anchoranalysis.spatial.Extent;
 public class SizeXY extends AnchorBean<SizeXY> {
 
     // START BEAN PROPERTIES
+    /** Size in X dimension. */
     @BeanField @Positive @Getter @Setter private int width;
 
+    /** Size in Y dimension. */
     @BeanField @Positive @Getter @Setter private int height;
     // END BEAN PROPERTIES
 
