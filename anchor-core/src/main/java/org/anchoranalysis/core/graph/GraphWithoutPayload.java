@@ -26,6 +26,9 @@
 package org.anchoranalysis.core.graph;
 
 import java.util.Collection;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Stream;
 import javax.lang.model.type.NullType;
 import org.anchoranalysis.core.exception.OperationFailedException;
 
@@ -49,6 +52,27 @@ public class GraphWithoutPayload<V> {
      */
     public GraphWithoutPayload(boolean undirected) {
         this.delegate = new GraphWithPayload<>(undirected);
+    }
+
+    /**
+     * Does the graph contain a particular vertex?
+     *
+     * @param vertex the vertex to check if it is contained
+     * @return true iff the graph contains the vertex
+     */
+    public boolean containsVertex(V vertex) {
+        return delegate.containsVertex(vertex);
+    }
+
+    /**
+     * Does the graph contain a particular edge?
+     *
+     * @param from the vertex the edge eminates <i>from</i>.
+     * @param to the vertex the edge is connected <i>to</i>.
+     * @return true iff an edge exists from {@code from} to {@code to}.
+     */
+    public boolean containsEdge(V from, V to) {
+        return delegate.containsEdge(from, to);
     }
 
     /**
@@ -121,12 +145,85 @@ public class GraphWithoutPayload<V> {
     }
 
     /**
-     * The vertices that are connected to a particular vertex by an outgoing edge
+     * The vertices that are connected to a particular vertex by an outgoing edge.
      *
-     * @param vertex the vertex to find adjacent vertices for
-     * @return all vertices to which an outgoing edge exists from {@code vertex}
+     * @param vertex the vertex to find adjacent vertices for.
+     * @return all vertices to which an outgoing edge exists from {@code vertex}.
      */
-    public Collection<V> adjacentVerticesOutgoing(V vertex) {
+    public List<V> adjacentVerticesOutgoing(V vertex) {
         return delegate.adjacentVerticesOutgoing(vertex);
+    }
+
+    /**
+     * Like {@link #adjacentVerticesOutgoing} but returns a {@link Stream} instead of a {@link Set}.
+     *
+     * @param vertex the vertex to find adjacent vertices for.
+     * @return all vertices to which an outgoing edge exists from {@code vertex}.
+     */
+    public Stream<V> adjacentVerticesOutgoingStream(V vertex) {
+        return delegate.adjacentVerticesOutgoingStream(vertex);
+    }
+
+    /**
+     * Merges two existing vertices together.
+     *
+     * <p>The two existing vertices are replaced with {@code merged}.
+     *
+     * <p>Existing incoming and outgoing edges for the two vertices are then connected instead to
+     * {@code merged}.
+     *
+     * @param element1 the first element to merge.
+     * @param element2 the second element to merge.
+     * @param merged the merged element that replaces {@code element1} and {@code element2}.
+     * @throws OperationFailedException
+     */
+    public void mergeVertices(V element1, V element2, V merged) throws OperationFailedException {
+
+        Collection<V> adjacentSource = adjacentVerticesOutgoing(element1);
+        Collection<V> adjacentOverlapping = adjacentVerticesOutgoing(element2);
+
+        removeVertex(element1);
+        removeVertex(element2);
+
+        addVertex(merged);
+
+        addEdges(merged, adjacentSource);
+        addEdges(merged, adjacentOverlapping);
+    }
+
+    /**
+     * The number of vertices in the graph.
+     *
+     * @return the number of vertices
+     */
+    public int numberVertices() {
+        return delegate.numberVertices();
+    }
+
+    /**
+     * The number of edges in the graph.
+     *
+     * @return the number of edges
+     */
+    public int numberEdges() {
+        return delegate.numberEdges();
+    }
+
+    /**
+     * The set of all vertices in the graph.
+     *
+     * @return the set (as is used internally within the class, without any duplication).
+     */
+    public Set<V> vertices() {
+        return delegate.vertices();
+    }
+
+    /**
+     * Describes the graph in a multi-line string.
+     *
+     * @return a multi-line string describing the graph
+     */
+    public String describe() {
+        return delegate.describe(false);
     }
 }

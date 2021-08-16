@@ -255,7 +255,7 @@ public class ObjectCollection implements Iterable<ObjectMask> {
      * @param indices index of each element to keep in new collection.
      * @return newly-created collection with only the indexed elements.
      */
-    public ObjectCollection createSubset(List<Integer> indices) {
+    public ObjectCollection createSubset(Collection<Integer> indices) {
         return new ObjectCollection(streamIndices(indices));
     }
 
@@ -289,8 +289,13 @@ public class ObjectCollection implements Iterable<ObjectMask> {
         return delegate.stream();
     }
 
-    /** Streams only objects at specific indices */
-    Stream<ObjectMask> streamIndices(List<Integer> indices) {
+    /**
+     * Streams only objects at specific indices.
+     *
+     * @param indices indices of objects to place in the stream.
+     * @return the stream containing only the objects whose indices are in {@code indices}.
+     */
+    public Stream<ObjectMask> streamIndices(Collection<Integer> indices) {
         return indices.stream().map(this::get);
     }
 

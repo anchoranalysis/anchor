@@ -54,13 +54,19 @@ public class ObjectMaskFixture {
     public static final int VOXELS_REMOVED_CORNERS = 4;
 
     // START REQUIRED ARGUMENTS
-    /** Whether to remove single-voxel pixels from corners or not */
+    /** Whether to remove single-voxel pixels from corners or not? */
     private final boolean removeCorners;
 
     /** Width of object-mask. */
     @Getter private final Extent extent;
     // END REQUIRED ARGUMENTS
 
+    /**
+     * Creates with a default {@link Extent}.
+     *
+     * @param removeCorners whether to remove single-voxel pixels from corners or not?
+     * @param do3D whether to include a Z axis or not?
+     */
     public ObjectMaskFixture(boolean removeCorners, boolean do3D) {
         this(removeCorners, do3D ? DEFAULT_EXTENT : DEFAULT_EXTENT.flattenZ());
     }

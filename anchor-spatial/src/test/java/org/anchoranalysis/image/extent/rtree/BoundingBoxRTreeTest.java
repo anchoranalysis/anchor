@@ -30,6 +30,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.rtree.RTree;
 import org.junit.jupiter.api.BeforeEach;
@@ -56,7 +58,8 @@ class BoundingBoxRTreeTest {
         assertIntersectsWith("box3", BOX3, Arrays.asList(BOX1, BOX2, BOX3));
     }
 
-    private void assertIntersectsWith(String message, BoundingBox box, List<BoundingBox> ids) {
-        assertEquals(ids, tree.intersectsWith(box), message);
+    private void assertIntersectsWith(String message, BoundingBox box, List<BoundingBox> boxes) {
+        Set<BoundingBox> boxesAsSet = boxes.stream().collect(Collectors.toSet());
+        assertEquals(boxesAsSet, tree.intersectsWith(box), message);
     }
 }

@@ -29,8 +29,10 @@ package org.anchoranalysis.core.graph;
 import com.google.common.collect.HashBasedTable;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.anchoranalysis.core.exception.OperationFailedException;
 
 /**
@@ -120,6 +122,17 @@ public class GraphWithPayload<V, P> {
     }
 
     /**
+     * Does the graph contain a particular edge?
+     *
+     * @param from the vertex the edge eminates <i>from</i>.
+     * @param to the vertex the edge is connected <i>to</i>.
+     * @return true iff an edge exists from {@code from} to {@code to}.
+     */
+    public boolean containsEdge(V from, V to) {
+        return edges.contains(from, to);
+    }
+
+    /**
      * Adds a vertex.
      *
      * @param vertex the vertex to add
@@ -206,16 +219,26 @@ public class GraphWithPayload<V, P> {
     }
 
     /**
-     * The vertices that are connected to a particular vertex by an outgoing edge
+     * The vertices that are connected to a particular vertex by an outgoing edge.
+     *
+     * @param vertex the vertex to find adjacent vertices for
+     * @return a newly created {@link List} with all vertices to which an outgoing edge exists from
+     *     {@code vertex}
+     */
+    public List<V> adjacentVerticesOutgoing(V vertex) {
+        return adjacentVerticesOutgoingStream(vertex).collect(Collectors.toList());
+    }
+
+    /**
+     * Like {@link GraphWithPayload#adjacentVerticesOutgoing} but returns a {@link Stream} instead
+     * of a {@link Set}.
      *
      * @param vertex the vertex to find adjacent vertices for
      * @return all vertices to which an outgoing edge exists from {@code vertex}
      */
-    public Collection<V> adjacentVerticesOutgoing(V vertex) {
+    public Stream<V> adjacentVerticesOutgoingStream(V vertex) {
         Collection<TypedEdge<V, P>> edgesForVertex = outgoingEdgesFor(vertex);
-        return edgesForVertex.stream()
-                .map(edge -> edge.otherVertex(vertex))
-                .collect(Collectors.toList());
+        return edgesForVertex.stream().map(edge -> edge.otherVertex(vertex));
     }
 
     /**

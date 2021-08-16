@@ -28,38 +28,60 @@ package org.anchoranalysis.image.voxel.neighborhood;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Function;
-import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.exception.CreateException;
-import org.anchoranalysis.image.voxel.object.ObjectCollectionRTree;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.image.voxel.object.morphological.MorphologicalDilation;
 import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.spatial.rtree.RTree;
 
 /**
- * Adds edges if objects neighbor each other
+ * Adds edges if objects neighbor each other.
  *
  * @author Owen Feehan
  * @param <V> vertex-type
  */
-@RequiredArgsConstructor
 class EdgeAdder<V> {
 
     // START REQUIRED ARGUMENTS
     /** A list of vertices */
     private final List<V> verticesAsList;
 
-    /** How to convert a individual vertex to an object-mask */
+    /** How to convert a individual vertex to an object-mask. */
     private final Function<V, ObjectMask> vertexToObject;
-
-    /** The rTree underpinning the vertices (or rather their derived object-masks) */
-    private final ObjectCollectionRTree rTree;
 
     private final AddEdge<V> addEdge;
 
-    /** Avoids any edge if any two objects have a common pixel */
+    /** Avoids any edge if any two objects have a common pixel. */
     private final EdgeAdderParameters params;
     // END REQUIRED ARGUMENTS
+
+    /** The r-tree underpinning the vertices (or rather their derived object-masks) */
+    private final RTree<Integer> rTree;
+
+    /**
+     * Create extract objects from a vertex.
+     *
+     * @param verticesAsList a list of vertices.
+     * @param vertexToObject how to convert a individual vertex to an object-mask.
+     * @param objects the objects represented in the graph.
+     * @param addEdge
+     * @param params avoids any edge if any two objects have a common pixel.
+     */
+    public EdgeAdder(
+            List<V> verticesAsList,
+            Function<V, ObjectMask> vertexToObject,
+            ObjectCollection objects,
+            AddEdge<V> addEdge,
+            EdgeAdderParameters params) {
+        this.verticesAsList = verticesAsList;
+        this.vertexToObject = vertexToObject;
+        this.addEdge = addEdge;
+        this.params = params;
+        this.rTree = createIndicesRTree(objects);
+    }
 
     @FunctionalInterface
     public static interface AddEdge<V> {
@@ -83,7 +105,7 @@ class EdgeAdder<V> {
 
     private void addWithDilatedMask(
             int ignoreIndex, ObjectMask object, V vertexWith, ObjectMask dilated) {
-        List<Integer> indicesIntersects = rTree.intersectsWithAsIndices(dilated.boundingBox());
+        Set<Integer> indicesIntersects = rTree.intersectsWith(dilated.boundingBox());
         for (int j : indicesIntersects) {
 
             // We enforce an ordering, so as not to do the same pair twice (or the identity case)
@@ -127,6 +149,15 @@ class EdgeAdder<V> {
         if (numberSharedVoxels > 0) {
             addEdge.addEdge(vertexWith, vertexOther, numberSharedVoxels);
         }
+    }
+
+    /** Creates an r-tree mapping the bounding-box of objects to their index in a collection. */
+    private static RTree<Integer> createIndicesRTree(ObjectCollection objects) {
+        RTree<Integer> tree = new RTree<>(objects.size());
+        for (int i = 0; i < objects.size(); i++) {
+            tree.add(objects.get(i).boundingBox(), i);
+        }
+        return tree;
     }
 
     private static int numberBorderVoxels(ObjectMask object1Dilated, ObjectMask object2) {

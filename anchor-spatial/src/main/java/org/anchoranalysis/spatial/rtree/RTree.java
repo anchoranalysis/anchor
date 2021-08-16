@@ -26,9 +26,16 @@
 
 package org.anchoranalysis.spatial.rtree;
 
-import java.util.List;
+import com.github.davidmoten.rtreemulti.Entry;
+import com.github.davidmoten.rtreemulti.geometry.Geometry;
+import com.github.davidmoten.rtreemulti.geometry.Point;
+import com.github.davidmoten.rtreemulti.geometry.Rectangle;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 import org.anchoranalysis.spatial.box.BoundingBox;
-import org.anchoranalysis.spatial.point.Point3i;
+import org.anchoranalysis.spatial.point.ReadableTuple3i;
 
 /**
  * An R-Tree that contains items, each with an associated bounding-box.
@@ -39,16 +46,11 @@ import org.anchoranalysis.spatial.point.Point3i;
  */
 public class RTree<T> {
 
-    private static final float[] SINGLE_POINT_EXTENT = new float[] {1, 1, 1};
-
-    private static final int MIN_NUMBER_ENTRIES = 1;
-
+    /** The number of spatial dimensions that the bounding boxes are expected to support. */
     private static final int NUMBER_DIMENSIONS = 3;
 
-    // We re-use this singlePoint to avoid memory allocation for a single point
-    private float[] singlePoint = new float[] {0, 0, 0};
-
-    private final com.newbrightidea.util.RTree<T> tree;
+    /** The underlying r-tree data structure. */
+    private com.github.davidmoten.rtreemulti.RTree<T, Geometry> tree;
 
     /**
      * Creates an empty R-Tree.
@@ -56,62 +58,136 @@ public class RTree<T> {
      * @param maxNumberEntriesSuggested suggested a maximum number of entries in the r-tree
      */
     public RTree(int maxNumberEntriesSuggested) {
-        // Insist that maxEntries is at least twice the minimum num items
-        int maxNumberEntries = Math.max(maxNumberEntriesSuggested, MIN_NUMBER_ENTRIES * 2);
-
         tree =
-                new com.newbrightidea.util.RTree<>(
-                        maxNumberEntries, MIN_NUMBER_ENTRIES, NUMBER_DIMENSIONS);
+                com.github.davidmoten.rtreemulti.RTree.maxChildren(maxNumberEntriesSuggested)
+                        .dimensions(NUMBER_DIMENSIONS)
+                        .create();
+    }
+
+    /**
+     * Which bounding-boxes contain a particular point?
+     *
+     * @param point the point
+     * @return payloads for all bounding-boxes that contain {@code point}.
+     */
+    public Set<T> contains(ReadableTuple3i point) {
+        return containsStream(point).collect(Collectors.toSet());
+    }
+
+    /**
+     * Like {@link #contains} but returns a {@link Stream} instead of a {@link Set}.
+     *
+     * @param point the point
+     * @return payloads for all bounding-boxes that contain {@code point}.
+     */
+    public Stream<T> containsStream(ReadableTuple3i point) {
+        Point pointToSearch = Point.create(point.x(), point.y(), point.z());
+        return toStream(tree.search(pointToSearch));
+    }
+
+    /**
+     * Which bounding-boxes intersect with another specific bounding box?
+     *
+     * @param toIntersectWith the box that must be intersected with
+     * @return payloads for all bounding-boxes that intersect with {@code toIntersectWith}.
+     */
+    public Set<T> intersectsWith(BoundingBox toIntersectWith) {
+        return intersectsWithStream(toIntersectWith).collect(Collectors.toSet());
+    }
+
+    /**
+     * Like {@link #intersectsWith(BoundingBox)} but returns a {@link Stream} instead of a {@link
+     * Set}.
+     *
+     * @param toIntersectWith the box that must be intersected with
+     * @return payloads for all bounding-boxes that intersect with {@code toIntersectWith}.
+     */
+    public Stream<T> intersectsWithStream(BoundingBox toIntersectWith) {
+        Rectangle rectangle = asRectangle(toIntersectWith);
+        return toStream(tree.search(rectangle));
     }
 
     /**
      * Adds a bounding-box with a corresponding index.
      *
+     * <p>Note that the payload must not be unique, and multiple identical elements can exist with
+     * the same bounding-box and payload.
+     *
      * @param box the box to add
      * @param payload the payload associated with the bounding-box
      */
     public void add(BoundingBox box, T payload) {
-        float[] coords = minPoint(box);
-        float[] dimensions = extent(box);
-        tree.insert(coords, dimensions, payload);
+        Rectangle rectangle = asRectangle(box);
+
+        // Adding is an immutable operation, so we need to resassign the member variable
+        this.tree = tree.add(payload, rectangle);
     }
 
     /**
-     * Which bounding-boxes contain a particular point.
+     * Removes a particular item from the r-tree, identified by its bounding-box and payload.
      *
-     * @param point the point
-     * @return indices for all bounding-boxes that contain {@code point}.
+     * <p>If no entry can be found matching exactly the {@code box} and {@code entry}, no change
+     * happens to the r-tree. No error is reported.
+     *
+     * <p>If multiple entries exist that match exactly the {@code box} and {@code entry}, then all
+     * entries are removed.
+     *
+     * @param box the bounding-box
+     * @param payload the payload
      */
-    public List<T> contains(Point3i point) {
-        singlePoint[0] = point.x();
-        singlePoint[1] = point.y();
-        singlePoint[2] = point.z();
-
-        return tree.search(singlePoint, SINGLE_POINT_EXTENT);
+    public void remove(BoundingBox box, T payload) {
+        Rectangle rectangle = asRectangle(box);
+        this.tree = tree.delete(payload, rectangle, true);
     }
 
-    public List<T> intersectsWith(BoundingBox box) {
-
-        float[] coords = minPoint(box);
-        float[] dimensions = extent(box);
-
-        return tree.search(coords, dimensions);
-    }
-
-    public boolean delete(BoundingBox box, T payload) {
-        float[] coords = minPoint(box);
-        return tree.delete(coords, payload);
-    }
-
+    /**
+     * The total number of items stored in the tree.
+     *
+     * @return the total number of items.
+     */
     public int size() {
         return tree.size();
     }
 
-    private static float[] minPoint(BoundingBox box) {
-        return new float[] {box.cornerMin().x(), box.cornerMin().y(), box.cornerMin().z()};
+    /**
+     * <i>All</i> elements contained within the tree, as a {@link Set}.
+     *
+     * @return a newly created {@link Set} of all the elements, reusing the existing element
+     *     objects.
+     */
+    public Set<T> asSet() {
+        return toSet(tree.entries());
     }
 
-    private static float[] extent(BoundingBox box) {
-        return new float[] {box.extent().x() - 1, box.extent().y() - 1, box.extent().z() - 1};
+    /** Creates a {@link Set} from entries found in the R-Tree. */
+    private Set<T> toSet(Iterable<Entry<T, Geometry>> entries) {
+        return toStream(entries).collect(Collectors.toSet());
+    }
+
+    /** Creates a {@link Stream} from entries found in the R-Tree. */
+    private Stream<T> toStream(Iterable<Entry<T, Geometry>> entries) {
+        return StreamSupport.stream(entries.spliterator(), false).map(Entry::value);
+    }
+
+    /** Converts a {@link BoundingBox} to a {@link Rectangle}. */
+    private static Rectangle asRectangle(BoundingBox box) {
+        return Rectangle.create(minPoint(box), maxPoint(box));
+    }
+
+    /**
+     * The corner (minimum) point of a bounding-box in three dimensions, expressed as an array of
+     * floats.
+     */
+    private static double[] minPoint(BoundingBox box) {
+        return new double[] {box.cornerMin().x(), box.cornerMin().y(), box.cornerMin().z()};
+    }
+
+    /**
+     * The corner (maximum) point of a bounding-box in three dimensions, expressed as an array of
+     * floats.
+     */
+    private static double[] maxPoint(BoundingBox box) {
+        ReadableTuple3i max = box.calculateCornerMax();
+        return new double[] {max.x(), max.y(), max.z()};
     }
 }

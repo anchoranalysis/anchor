@@ -34,7 +34,7 @@ import org.anchoranalysis.spatial.axis.AxisType;
  *
  * @author Owen Feehan
  */
-public interface ReadableTuple3i extends Serializable {
+public interface ReadableTuple3i extends Serializable, Comparable<ReadableTuple3i> {
 
     int x();
 
@@ -47,4 +47,24 @@ public interface ReadableTuple3i extends Serializable {
     int byDimension(int dimIndex);
 
     ReadableTuple3i duplicateChangeZ(int zNew);
+
+    @Override
+    default int compareTo(ReadableTuple3i other) {
+        int compareZ = Integer.compare(z(), other.z());
+        if (compareZ != 0) {
+            return compareZ;
+        }
+
+        int compareY = Integer.compare(y(), other.y());
+        if (compareY != 0) {
+            return compareY;
+        }
+
+        int compareX = Integer.compare(x(), other.x());
+        if (compareX != 0) {
+            return compareX;
+        }
+
+        return 0;
+    }
 }

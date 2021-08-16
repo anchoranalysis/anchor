@@ -25,15 +25,15 @@
  */
 package org.anchoranalysis.spatial.rtree;
 
-import java.util.List;
 import java.util.Set;
 import lombok.AllArgsConstructor;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.spatial.box.BoundingBox;
 
 @AllArgsConstructor
 /**
- * An R-Tree coupled with a set, both of whose elements are maintained as identical across
- * add/remove operations.
+ * An R-Tree coupled with a set, both of whose elements are kept synchronized across add/remove
+ * operations.
  */
 class RTreeWithSet<T> {
 
@@ -55,12 +55,20 @@ class RTreeWithSet<T> {
         return set.iterator().next();
     }
 
-    public void remove(T element, BoundingBox box) {
+    /**
+     * Removes a particular item from the r-tree, identified by its bounding-box and payload.
+     *
+     * @param element the element to remove
+     * @param box the bounding-box
+     * @throws OperationFailedException if no item matching {@code box} and {@code payload} cannot
+     *     be found to be removed.
+     */
+    public void remove(T element, BoundingBox box) throws OperationFailedException {
         set.remove(element);
-        tree.delete(box, element);
+        tree.remove(box, element);
     }
 
-    public List<T> intersectsWith(BoundingBox box) {
+    public Set<T> intersectsWith(BoundingBox box) {
         return tree.intersectsWith(box);
     }
 }

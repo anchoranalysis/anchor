@@ -22,11 +22,14 @@
   	</dependency>
   	
   		
-	<!-- For the R-Tree implementation -->	
+	<!-- 
+	For the R-Tree implementation
+	https://github.com/davidmoten/rtree2
+	 -->	
 	<dependency>
-	  <groupId>newbrightidea-util</groupId>
-	  <artifactId>newbrightidea-util</artifactId>
-	  <version>1.0.0</version>
+	  <groupId>com.github.davidmoten</groupId>
+	  <artifactId>rtree-multi</artifactId>
+	  <version>0.1-RC1</version>
 	</dependency>
   	
   </dependencies>

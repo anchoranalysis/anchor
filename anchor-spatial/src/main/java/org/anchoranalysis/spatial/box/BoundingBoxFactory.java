@@ -32,9 +32,8 @@ import org.anchoranalysis.spatial.point.Point3i;
 
 /**
  * Utility methods to create a {@link BoundingBox}.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class BoundingBoxFactory {
@@ -66,10 +65,10 @@ public class BoundingBoxFactory {
     public static BoundingBox at(int x, int y, int z, int width, int height, int depth) {
         return new BoundingBox(new Point3i(x, y, z), new Extent(width, height, depth));
     }
-    
-    
+
     /**
-     * Short-hand factory method for creating a 3D bounding-box, where a coordinate is identical in each dimension.
+     * Short-hand factory method for creating a 3D bounding-box, where a coordinate is identical in
+     * each dimension.
      *
      * @param corner left-corner in every dimension
      * @param extent extent in every dimension

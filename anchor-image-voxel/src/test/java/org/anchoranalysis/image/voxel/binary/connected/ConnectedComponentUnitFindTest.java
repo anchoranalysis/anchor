@@ -55,27 +55,27 @@ class ConnectedComponentUnitFindTest {
     @Test
     void testByte2d() throws OperationFailedException, CreateException {
         ObjectCollectionFixture fixture = new ObjectCollectionFixture();
-        testObjects(deriveInt(false, fixture), fixture, fixture.expectedSingleNumberVoxels());
+        testObjects(deriveInt(false, fixture), fixture);
     }
 
     @Test
     void testInt2d() throws OperationFailedException, CreateException {
         ObjectCollectionFixture fixture = new ObjectCollectionFixture();
-        testObjects(deriveByte(false, fixture), fixture, fixture.expectedSingleNumberVoxels());
+        testObjects(deriveByte(false, fixture), fixture);
     }
 
     @Test
     void testByte3d() throws OperationFailedException, CreateException {
         ObjectCollectionFixture fixture = new ObjectCollectionFixture();
-        fixture.setDo3D(true);
-        testObjects(deriveInt(true, fixture), fixture, fixture.expectedSingleNumberVoxels());
+        fixture.setUseZ(true);
+        testObjects(deriveInt(true, fixture), fixture);
     }
 
     @Test
     void testInt3d() throws OperationFailedException, CreateException {
         ObjectCollectionFixture fixture = new ObjectCollectionFixture();
-        fixture.setDo3D(true);
-        testObjects(deriveByte(true, fixture), fixture, fixture.expectedSingleNumberVoxels());
+        fixture.setUseZ(true);
+        testObjects(deriveByte(true, fixture), fixture);
     }
 
     private ObjectCollection deriveInt(boolean do3D, ObjectCollectionFixture fixture)
@@ -90,14 +90,17 @@ class ConnectedComponentUnitFindTest {
                 createBufferWithObjects(UnsignedByteVoxelType.INSTANCE, fixture));
     }
 
-    private void testObjects(
-            ObjectCollection objects, ObjectCollectionFixture fixture, int expectedSingleObjectSize)
+    private void testObjects(ObjectCollection objects, ObjectCollectionFixture fixture)
             throws CreateException, OperationFailedException {
-        assertEquals(
-                fixture.getNumberNonOverlappingObjects() + 1, objects.size(), "number of objects");
+        int expectedSingleObjectSize = expectedSingleNumberVoxels(fixture);
+        assertEquals(fixture.getNumberNonOverlapping() + 1, objects.size(), "number of objects");
         assertTrue(
                 allSizesEqualExceptOne(objects, expectedSingleObjectSize),
                 "size of all objects except one");
+    }
+
+    private static int expectedSingleNumberVoxels(ObjectCollectionFixture fixture) {
+        return fixture.createObjects(true).get(0).numberVoxelsOn();
     }
 
     private <T> BinaryVoxels<T> createBufferWithObjects(
@@ -126,11 +129,11 @@ class ConnectedComponentUnitFindTest {
         boolean encounteredAlreadyTheException = false;
 
         for (ObjectMask objectMask : objects) {
-            int numVoxels = objectMask.numberVoxelsOn();
-            if (numVoxels == target) {
+            int numberVoxels = objectMask.numberVoxelsOn();
+            if (numberVoxels == target) {
                 continue;
             } else {
-                if (numVoxels < target) {
+                if (numberVoxels < target) {
                     // At least one LESS than the target
                     return false;
                 } else {

@@ -64,8 +64,8 @@ public class NeighborGraph {
     }
 
     /**
-     * Create the graph with object-masks as vertices, where edges represent the number of
-     * intersecting voxels between objects.
+     * Like {@link #create(ObjectCollection, Extent, boolean, boolean)} but extracts objects from a
+     * list of vertices.
      *
      * @param <V> vertex-type from which an object-mask must be derivable
      * @param vertices vertices to construct graph from

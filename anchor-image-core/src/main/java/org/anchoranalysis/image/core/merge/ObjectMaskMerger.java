@@ -72,10 +72,8 @@ public class ObjectMaskMerger {
         BoundingBox box = first.boundingBox().union().with(second.boundingBox());
 
         Voxels<UnsignedByteBuffer> voxels = createAllOffVoxels(box.extent(), first.binaryValues());
-        
-        ObjectMask out =
-                new ObjectMask(
-                        box, voxels, first.binaryValuesByte());
+
+        ObjectMask out = new ObjectMask(box, voxels, first.binaryValuesByte());
         copyPixelsCheckMask(first, out, box);
         copyPixelsCheckMask(second, out, box);
         return out;
@@ -153,7 +151,7 @@ public class ObjectMaskMerger {
 
     private static void copyPixelsCheckMask(
             ObjectMask source, ObjectMask destination, BoundingBox box) {
-        
+
         Point3i pointDest = source.boundingBox().relativePositionTo(box);
         Extent extent = source.boundingBox().extent();
 
@@ -186,17 +184,20 @@ public class ObjectMaskMerger {
             return second;
         }
     }
-    
+
     /**
-     * Create a new {@link Voxels} to match a certain extent, whose value is the same as OFF pixels for the outputted merged object.
-     * 
+     * Create a new {@link Voxels} to match a certain extent, whose value is the same as OFF pixels
+     * for the outputted merged object.
+     *
      * @param extent size of the voxels
      * @param binaryValues what constiutes off and on values
      * @return a newly created {@link Voxels} with all off values
      */
-    private static Voxels<UnsignedByteBuffer> createAllOffVoxels(Extent extent, BinaryValues binaryValues) {
-        Voxels<UnsignedByteBuffer> voxels = VoxelsFactory.getUnsignedByte().createInitialized(extent);
-        if (binaryValues.getOffInt()!=0) {
+    private static Voxels<UnsignedByteBuffer> createAllOffVoxels(
+            Extent extent, BinaryValues binaryValues) {
+        Voxels<UnsignedByteBuffer> voxels =
+                VoxelsFactory.getUnsignedByte().createInitialized(extent);
+        if (binaryValues.getOffInt() != 0) {
             voxels.assignValue(binaryValues.getOffInt()).toAll();
         }
         return voxels;
