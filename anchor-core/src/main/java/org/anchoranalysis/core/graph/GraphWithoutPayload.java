@@ -67,7 +67,7 @@ public class GraphWithoutPayload<V> {
     /**
      * Does the graph contain a particular edge?
      *
-     * @param from the vertex the edge eminates <i>from/i>.
+     * @param from the vertex the edge eminates <i>from</i>.
      * @param to the vertex the edge is connected <i>to</i>.
      * @return true iff an edge exists from {@code from} to {@code to}.
      */
