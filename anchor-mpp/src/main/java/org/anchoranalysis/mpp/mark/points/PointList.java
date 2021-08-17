@@ -36,6 +36,7 @@ import org.anchoranalysis.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.Point3d;
+import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 public class PointList extends PointListBase {
 
@@ -92,12 +93,12 @@ public class PointList extends PointListBase {
     }
 
     @Override
-    public void scale(double scaleFactor) throws OptionalOperationUnsupportedException {
+    public void scale(ScaleFactor scaleFactor) throws OptionalOperationUnsupportedException {
 
         for (int i = 0; i < getPoints().size(); i++) {
 
             Point3d point = getPoints().get(i);
-            point.scale(scaleFactor);
+            scaleFactor.scale(point);
         }
     }
 

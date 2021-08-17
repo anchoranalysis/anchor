@@ -32,6 +32,7 @@ import static org.anchoranalysis.mpp.mark.GlobalRegionIdentifiers.SUBMARK_INSIDE
 
 import java.util.List;
 import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.exception.OptionalOperationUnsupportedException;
 import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
@@ -45,6 +46,7 @@ import org.anchoranalysis.spatial.point.Point3d;
 import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.point.PointConverter;
 import org.anchoranalysis.spatial.rotation.RotationMatrix;
+import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 /**
  * A two-dimensional bounding-box rotated at arbitrary angle in XY plane around a point.
@@ -200,5 +202,12 @@ public class RotatableBoundingBox extends MarkWithPosition {
         Point3d out = rotMatrix.rotatedPoint(point);
         out.add(getPosition());
         return out;
+    }
+
+    @Override
+    public void scale(ScaleFactor scaleFactor) throws OptionalOperationUnsupportedException {
+        super.scale(scaleFactor);
+        scaleFactor.scale(distanceToLeftBottom);
+        scaleFactor.scale(distanceToRightTop);
     }
 }

@@ -40,6 +40,7 @@ import java.util.Optional;
 import java.util.function.DoubleBinaryOperator;
 import lombok.Getter;
 import lombok.Setter;
+import org.anchoranalysis.core.exception.OptionalOperationUnsupportedException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.core.object.properties.ObjectWithProperties;
@@ -55,6 +56,7 @@ import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.Point2d;
 import org.anchoranalysis.spatial.point.Point3d;
 import org.anchoranalysis.spatial.rotation.RotationMatrix;
+import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 public class Ellipse extends ConicBase implements Serializable {
 
@@ -318,9 +320,10 @@ public class Ellipse extends ConicBase implements Serializable {
 
     // NB objects are scaled in pre-rotated position i.e. when aligned to axes
     @Override
-    public void scale(double scaleFactor) {
+    public void scale(ScaleFactor scaleFactor) throws OptionalOperationUnsupportedException {
         super.scale(scaleFactor);
-        this.radii.scale(scaleFactor);
+        ScaleChecker.checkIdenticalXY(scaleFactor);
+        this.radii.scale(scaleFactor.x());
         updateAfterMarkChange();
     }
 

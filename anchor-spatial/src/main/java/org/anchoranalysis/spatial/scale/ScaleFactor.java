@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.spatial.scale;
 
+import org.anchoranalysis.spatial.point.Point3d;
 import com.google.common.base.Preconditions;
 import lombok.Value;
 import lombok.experimental.Accessors;
@@ -106,6 +107,26 @@ public final class ScaleFactor {
      */
     public double minimumDimension() {
         return Double.min(x, y);
+    }
+    
+    /**
+     * Multiplies a {@link Point3d} by the respective scaling-factor in each X and Y dimensions.
+     *
+     * <p>No scaling is applied in the Z dimension.
+     * 
+     * @param point the point to be scaled.
+     */
+    public void scale(Point3d point) {
+        point.setX(scaledX(point.x()));
+        point.setY(scaledY(point.y()));
+    }
+
+    private double scaledX(double val) {
+        return val * x;
+    }
+
+    private double scaledY(double val) {
+        return val * y;
     }
 
     @Override

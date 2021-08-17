@@ -37,6 +37,7 @@ import org.anchoranalysis.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.Point3d;
+import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 public class Polygon extends PointListBase {
 
@@ -92,8 +93,8 @@ public class Polygon extends PointListBase {
     }
 
     @Override
-    public void scale(double scaleFactor) throws OptionalOperationUnsupportedException {
-        throw new OptionalOperationUnsupportedException("Not supported");
+    public void scale(ScaleFactor scaleFactor) throws OptionalOperationUnsupportedException {
+        throw new OptionalOperationUnsupportedException();
     }
 
     @Override
