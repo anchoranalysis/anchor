@@ -29,6 +29,7 @@ import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.anchoranalysis.core.format.ImageFileFormat;
+import org.anchoranalysis.core.system.ExecutionTimeRecorder;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 
 /**
@@ -44,6 +45,9 @@ public class OutputWriteContext {
 
     /** A suggestion on what file-format to write. */
     @Getter private final Optional<ImageFileFormat> suggestedFormatToWrite;
+
+    /** Records the execution time of particular operations. */
+    @Getter private ExecutionTimeRecorder executionTimeRecorder;
 
     public OutputWriteContext() {
         settings = new OutputWriteSettings();

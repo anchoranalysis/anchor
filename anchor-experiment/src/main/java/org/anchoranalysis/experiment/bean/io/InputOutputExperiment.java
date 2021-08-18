@@ -52,6 +52,7 @@ import org.anchoranalysis.experiment.io.ReplaceOutputManager;
 import org.anchoranalysis.experiment.io.ReplaceTask;
 import org.anchoranalysis.experiment.log.Divider;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
+import org.anchoranalysis.experiment.task.TaskStatistics;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.input.InputsWithDirectory;
@@ -86,6 +87,8 @@ import org.apache.commons.io.IOCase;
  */
 public class InputOutputExperiment<T extends InputFromManager, S> extends OutputExperiment
         implements ReplaceInputManager, ReplaceOutputManager, ReplaceTask<T, S> {
+
+    private static final String EXECUTION_TIME_COLLECTING_INPUTS = "Collecting Inputs";
 
     private static final String OUTPUT_EXPERIMENT_LOG = "experiment_log";
 
@@ -147,7 +150,7 @@ public class InputOutputExperiment<T extends InputFromManager, S> extends Output
     }
 
     @Override
-    protected void executeExperimentWithParams(ParametersExperiment params)
+    protected Optional<TaskStatistics> executeExperimentWithParams(ParametersExperiment params)
             throws ExperimentExecutionException {
         try {
             InputManagerParams paramsInput =
@@ -160,14 +163,19 @@ public class InputOutputExperiment<T extends InputFromManager, S> extends Output
                 params.getLoggerExperiment().log(DIVIDER.withLabel("Inputs"));
             }
 
-            InputsWithDirectory<T> inputs = getInput().inputs(paramsInput);
+            InputsWithDirectory<T> inputs =
+                    params.getExecutionTimeStatistics()
+                            .recordExecutionTime(
+                                    EXECUTION_TIME_COLLECTING_INPUTS,
+                                    () -> getInput().inputs(paramsInput));
             checkCompabilityInputs(inputs.inputs());
 
             if (!inputs.isEmpty()) {
-                executeExperimentWIthInputs(inputs, params);
+                return Optional.of(executeExperimentWithInputs(inputs, params));
             } else {
                 params.getLoggerExperiment().log(messageNoInputs);
                 params.getLoggerExperiment().logEmptyLine();
+                return Optional.empty();
             }
 
         } catch (InputReadFailedException | IOException e) {
@@ -183,7 +191,7 @@ public class InputOutputExperiment<T extends InputFromManager, S> extends Output
         return taskDefaultOutputs;
     }
 
-    private void executeExperimentWIthInputs(
+    private TaskStatistics executeExperimentWithInputs(
             InputsWithDirectory<T> inputs, ParametersExperiment params)
             throws ExperimentExecutionException {
         params.setLoggerTaskCreator(logTask);
@@ -194,11 +202,14 @@ public class InputOutputExperiment<T extends InputFromManager, S> extends Output
 
         Optional<Collection<NamedFile>> nonInputs = CopyNonInputs.prepare(inputs, params);
 
-        taskProcessor.executeLogStats(params.getOutputter(), inputs.inputs(), params);
+        TaskStatistics statistics =
+                taskProcessor.executeLogStats(params.getOutputter(), inputs.inputs(), params);
 
         if (nonInputs.isPresent()) {
             CopyNonInputs.copy(nonInputs.get(), params);
         }
+
+        return statistics;
     }
 
     private void checkCompabilityInputs(List<T> listInputs) throws ExperimentExecutionException {

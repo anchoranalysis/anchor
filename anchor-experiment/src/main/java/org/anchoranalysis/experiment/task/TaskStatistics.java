@@ -64,6 +64,17 @@ public class TaskStatistics {
     }
 
     /**
+     * Execution-time of all jobs in milliseconds, ignoring any parallelism.
+     *
+     * @return the mean-time
+     */
+    public RunningSum executionTimeTotal() {
+        RunningSum total = success.duplicate();
+        total.add(failed);
+        return total;
+    }
+
+    /**
      * Mean execution-time of successfully-completed jobs in milliseconds.
      *
      * @return the mean-time
@@ -90,11 +101,18 @@ public class TaskStatistics {
         return numberCompletedSuccess() == numberTotalScheduledJobs;
     }
 
+    /** The number of jobs that completed successfully. */
     public long numberCompletedSuccess() {
         return success.getCount();
     }
 
+    /** The number of jobs that completed with failure. */
     public long numberCompletedFailed() {
         return failed.getCount();
+    }
+
+    /** The number of jobs that completed in total. */
+    public long numberCompletedTotal() {
+        return numberCompletedSuccess() + numberCompletedFailed();
     }
 }

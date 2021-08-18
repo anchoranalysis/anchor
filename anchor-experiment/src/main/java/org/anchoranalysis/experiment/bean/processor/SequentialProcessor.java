@@ -58,7 +58,7 @@ public class SequentialProcessor<T extends InputFromManager, S> extends JobProce
 
         ProcessorChecker.checkAtLeastOneInput(inputs);
 
-        ConcurrencyPlan concurrencyPlan = ConcurrencyPlan.singleProcessor();
+        ConcurrencyPlan concurrencyPlan = ConcurrencyPlan.singleCPUProcessor();
 
         S sharedState =
                 getTask()

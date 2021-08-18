@@ -77,8 +77,19 @@ public class AlwaysAllowed implements Writer {
     public <T> boolean write(
             String outputName, ElementWriterSupplier<T> elementWriter, ElementSupplier<T> element)
             throws OutputWriteFailedException {
-        maybeExecutePreop();
-        elementWriter.get().write(element.get(), new SimpleOutputNameStyle(outputName), outputter);
+        outputter
+                .getExecutionTimeRecorder()
+                .recordExecutionTime(
+                        outputNameForWriting(outputName),
+                        () -> {
+                            maybeExecutePreop();
+                            elementWriter
+                                    .get()
+                                    .write(
+                                            element.get(),
+                                            new SimpleOutputNameStyle(outputName),
+                                            outputter);
+                        });
         return true;
     }
 
@@ -89,20 +100,40 @@ public class AlwaysAllowed implements Writer {
             ElementSupplier<T> element,
             String index)
             throws OutputWriteFailedException {
-
-        maybeExecutePreop();
-        return Optional.of(
-                elementWriter
-                        .get()
-                        .writeWithIndex(element.get(), index, outputNameStyle, outputter));
+        return outputter
+                .getExecutionTimeRecorder()
+                .recordExecutionTime(
+                        outputNameForWriting(outputNameStyle.getOutputName()),
+                        () -> {
+                            maybeExecutePreop();
+                            return Optional.of(
+                                    elementWriter
+                                            .get()
+                                            .writeWithIndex(
+                                                    element.get(),
+                                                    index,
+                                                    outputNameStyle,
+                                                    outputter));
+                        });
     }
 
     @Override
     public <T> boolean writeWithoutName(
             String outputName, ElementWriterSupplier<T> elementWriter, ElementSupplier<T> element)
             throws OutputWriteFailedException {
-        maybeExecutePreop();
-        elementWriter.get().write(element.get(), new WithoutOutputNameStyle(outputName), outputter);
+        outputter
+                .getExecutionTimeRecorder()
+                .recordExecutionTime(
+                        outputNameForWriting(outputName),
+                        () -> {
+                            maybeExecutePreop();
+                            elementWriter
+                                    .get()
+                                    .write(
+                                            element.get(),
+                                            new WithoutOutputNameStyle(outputName),
+                                            outputter);
+                        });
         return true;
     }
 
@@ -125,5 +156,10 @@ public class AlwaysAllowed implements Writer {
 
     private void maybeExecutePreop() {
         preop.ifPresent(WriterExecuteBeforeEveryOperation::execute);
+    }
+
+    /** The name of {@code outputName} when recording the execution-time. */
+    private static String outputNameForWriting(String outputName) {
+        return "Writing output: " + outputName;
     }
 }

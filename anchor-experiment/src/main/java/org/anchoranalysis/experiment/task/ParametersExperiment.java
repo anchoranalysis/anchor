@@ -29,8 +29,6 @@ package org.anchoranalysis.experiment.task;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.core.log.MessageLogger;
-import org.anchoranalysis.core.log.error.ErrorReporterIntoLog;
 import org.anchoranalysis.experiment.arguments.ExecutionArguments;
 import org.anchoranalysis.experiment.bean.log.LoggingDestination;
 import org.anchoranalysis.experiment.io.InitializationContext;
@@ -55,12 +53,6 @@ public class ParametersExperiment {
 
     @Getter private final String experimentIdentifier;
 
-    /**
-     * Iff true, additional log messages are written to describe each job in terms of its unique
-     * name, output folder, average execution time etc.
-     */
-    @Getter private final boolean detailedLogging;
-
     @Getter private final InputOutputContextStateful context;
 
     /** The {@link OutputManager} associated with the experiment which {@link Outputter} uses. */
@@ -69,25 +61,28 @@ public class ParametersExperiment {
     /** This is a means to create new log-reporters for each task. */
     @Getter @Setter private LoggingDestination loggerTaskCreator;
 
+    /**
+     * Iff true, additional log messages are written to describe each job in terms of its unique
+     * name, output folder, average execution time etc.
+     */
+    @Getter private final boolean detailedLogging;
+
+    /** Allows execution-time for particular operations to be recorded. */
+    @Getter private ExecutionTimeStatistics executionTimeStatistics;
+
     public ParametersExperiment(
             ExecutionArguments experimentArguments,
             String experimentIdentifier,
             Optional<Manifest> experimentalManifest,
             OutputterChecked outputter,
             PathPrefixer prefixer,
-            StatefulMessageLogger loggerExperiment,
-            boolean detailedLogging) {
+            ExperimentFeedbackContext feedbackContext) {
+        this.executionTimeStatistics = feedbackContext.getExecutionTimeStatistics();
         this.experimentArguments = experimentArguments;
-        this.context =
-                new InputOutputContextStateful(
-                        experimentArguments,
-                        wrapExceptions(outputter, loggerExperiment),
-                        loggerExperiment,
-                        new ErrorReporterForTask(loggerExperiment));
-
+        this.context = feedbackContext.inputOutput(experimentArguments, outputter);
         this.experimentIdentifier = experimentIdentifier;
         this.experimentalManifest = experimentalManifest;
-        this.detailedLogging = detailedLogging;
+        this.detailedLogging = feedbackContext.isDetailedLogging();
         this.prefixer = prefixer;
     }
 
@@ -119,11 +114,5 @@ public class ParametersExperiment {
     public InitializationContext createInitializationContext() {
         return new InitializationContext(
                 context, context.getExperimentArguments().task().getSize());
-    }
-
-    /** Redirects any output-exceptions into the log */
-    private static Outputter wrapExceptions(
-            OutputterChecked outputterChecked, MessageLogger logger) {
-        return new Outputter(outputterChecked, new ErrorReporterIntoLog(logger));
     }
 }

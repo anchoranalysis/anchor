@@ -68,9 +68,10 @@ public abstract class JobProcessor<T extends InputFromManager, S>
      * @param rootOutputter
      * @param inputs
      * @param paramsExperiment
+     * @return task statistics
      * @throws ExperimentExecutionException
      */
-    public void executeLogStats(
+    public TaskStatistics executeLogStats(
             Outputter rootOutputter, List<T> inputs, ParametersExperiment paramsExperiment)
             throws ExperimentExecutionException {
 
@@ -83,6 +84,8 @@ public abstract class JobProcessor<T extends InputFromManager, S>
         if (paramsExperiment.isDetailedLogging()) {
             logStats(stats, paramsExperiment);
         }
+
+        return stats;
     }
 
     @SuppressWarnings("unchecked")

@@ -32,8 +32,7 @@ package org.anchoranalysis.core.concurrency;
  */
 public class ConcurrencyPlan {
 
-    // GPUs are currently disabled, as no linked library can benefit from using them.
-    public static final int DEFAULT_NUMBER_GPUS = 0;
+    public static final int DEFAULT_NUMBER_GPUS = 1;
 
     /** The total number of available CPUs processors */
     private final int totalNumberCPUs;
@@ -42,12 +41,21 @@ public class ConcurrencyPlan {
     private final int numberGPUs;
 
     /**
+     * Creates a plan for no CPU processors with the default number of GPUs.
+     *
+     * @return
+     */
+    public static ConcurrencyPlan noCPUProcessor() {
+        return new ConcurrencyPlan(0, DEFAULT_NUMBER_GPUS);
+    }
+
+    /**
      * Creates a plan for a single-CPU processor with the default number of GPUs.
      *
      * @return
      */
-    public static ConcurrencyPlan singleProcessor() {
-        return singleProcessor(DEFAULT_NUMBER_GPUS);
+    public static ConcurrencyPlan singleCPUProcessor() {
+        return singleCPUProcessor(DEFAULT_NUMBER_GPUS);
     }
 
     /**
@@ -55,7 +63,7 @@ public class ConcurrencyPlan {
      *
      * @return
      */
-    public static ConcurrencyPlan singleProcessor(int maxNumberGPUs) {
+    public static ConcurrencyPlan singleCPUProcessor(int maxNumberGPUs) {
         return new ConcurrencyPlan(1, maxNumberGPUs);
     }
 

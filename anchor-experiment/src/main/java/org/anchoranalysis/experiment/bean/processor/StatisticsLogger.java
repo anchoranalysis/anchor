@@ -51,7 +51,7 @@ class StatisticsLogger {
                     "All ",
                     stats.numberCompletedSuccess(),
                     " completed successfully.",
-                    stats::meanExecutionTimeSuccess);
+                    stats.executionTimeTotal()::mean);
         } else {
 
             logMessageAboutTasks(
@@ -113,7 +113,7 @@ class StatisticsLogger {
             msg =
                     msg
                             + String.format(
-                                    " The %sexecution time was %.3f ms.",
+                                    " The %sexecution time was %.3f s.",
                                     maybeIncludeAverage(moreThanOneJob), execTimeSeconds);
         }
         logger.log(msg);

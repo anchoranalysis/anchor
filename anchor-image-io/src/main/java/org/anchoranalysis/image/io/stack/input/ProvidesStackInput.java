@@ -71,7 +71,7 @@ public interface ProvidesStackInput extends InputFromManager {
     }
 
     /**
-     * Adds the current object to a named-store of stacks
+     * Adds the current object to a named-store of stacks.
      *
      * @param stacks
      * @param seriesIndex

@@ -160,7 +160,8 @@ public class OutputterChecked {
         this.logger = logger;
 
         // As the logger may change, we supply a lambda to it, instead of the object directly.
-        ElementOutputter outputter = new ElementOutputter(this, () -> this.logger);
+        ElementOutputter outputter =
+                new ElementOutputter(this, context.getExecutionTimeRecorder(), () -> this.logger);
         this.writers =
                 new RecordingWriters(
                         outputter, target.getParentDirectoryCreator(), recordedOutputs); // NOSONAR

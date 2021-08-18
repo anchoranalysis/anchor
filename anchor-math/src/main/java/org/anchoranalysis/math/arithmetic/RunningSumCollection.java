@@ -26,7 +26,8 @@ package org.anchoranalysis.math.arithmetic;
  * #L%
  */
 
-import java.util.ArrayList;
+import java.util.List;
+import org.anchoranalysis.core.functional.FunctionalList;
 
 /**
  * A collection of {@link RunningSum} where an operation is executed on all objects in the
@@ -36,7 +37,7 @@ import java.util.ArrayList;
  */
 public class RunningSumCollection {
 
-    private ArrayList<RunningSum> list;
+    private List<RunningSum> list;
 
     /**
      * Constructor. Creates a collection with a certain number of (zeroed) {@link RunningSum}.
@@ -44,10 +45,7 @@ public class RunningSumCollection {
      * @param size number of items in the collection
      */
     public RunningSumCollection(int size) {
-        list = new ArrayList<>();
-        for (int i = 0; i < size; i++) {
-            list.add(new RunningSum());
-        }
+        list = FunctionalList.repeat(size, RunningSum::new);
     }
 
     /**
@@ -62,9 +60,7 @@ public class RunningSumCollection {
 
     /** Resets all items to zero. */
     public void reset() {
-        for (int i = 0; i < list.size(); i++) {
-            list.get(i).reset();
-        }
+        list.forEach(RunningSum::reset);
     }
 
     /**
@@ -73,11 +69,6 @@ public class RunningSumCollection {
      * @return an array with a mean corresponding to each item in the collection
      */
     public double[] meanAndReset() {
-
-        double[] res = new double[list.size()];
-        for (int i = 0; i < list.size(); i++) {
-            res[i] = list.get(i).meanAndReset();
-        }
-        return res;
+        return list.stream().mapToDouble(RunningSum::meanAndReset).toArray();
     }
 }

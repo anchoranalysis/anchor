@@ -43,7 +43,17 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
  */
 public interface OpenedImageFile extends AutoCloseable {
 
-    // Opens a time-series as a particular type. If it's not the correct type, an error is thrown
+    /**
+     * Opens a time-series, and checks that it is a particular type.
+     *
+     * <p>If it's not the correct type, an error is thrown.
+     *
+     * @param seriesIndex the index of the series to open.
+     * @param progress tracks progress when opening.
+     * @param channelDataType the expected data-type of the channels.
+     * @return a newly created {@link TimeSequence} of images for the series.
+     * @throws ImageIOException
+     */
     default TimeSequence openCheckType(
             int seriesIndex, Progress progress, VoxelDataType channelDataType)
             throws ImageIOException {
@@ -58,22 +68,41 @@ public interface OpenedImageFile extends AutoCloseable {
         return sequence;
     }
 
-    /** Open when we don't have a specific-type */
+    /** Open when we don't have a specific-type. */
     TimeSequence open(int seriesIndex, Progress progress) throws ImageIOException;
 
+    /** The number of series (distinct sets of images) in the image-file. */
     int numberSeries();
 
+    /**
+     * The names of each channel, if they are known.
+     *
+     * @return a list of the names, which should correspond (and have the same number of items) as
+     *     {@link #numberChannels()}.
+     */
     Optional<List<String>> channelNames() throws ImageIOException;
 
+    /** The number of channels in the image-file e.g. 1 for grayscale, 3 for RGB. */
     int numberChannels() throws ImageIOException;
 
+    /** The number of frames in the image-file i.e. distinct images for a particular time-point. */
     int numberFrames() throws ImageIOException;
 
+    /** The bit-depth of the image voxels e.g. 8 for 8-bit, 16 for 16-bit etc. */
     int bitDepth() throws ImageIOException;
 
+    /** Whether the image-file has RGB encoded voxels. */
     boolean isRGB() throws ImageIOException;
 
+    /** Closes the opened image-file, removing any intermediate data-structures. */
     void close() throws ImageIOException;
 
+    /**
+     * The {@link Dimensions} associated with a particular series.
+     *
+     * @param seriesIndex the index of the series
+     * @return the corresponding dimensions
+     * @throws ImageIOException
+     */
     Dimensions dimensionsForSeries(int seriesIndex) throws ImageIOException;
 }

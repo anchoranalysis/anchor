@@ -100,12 +100,13 @@ public abstract class MarkWithPositionAndSingleRadius extends MarkWithPosition
      *
      * <p>So when aligned to axes, we actually scale in all 3 dimensions, and ignore
      * scene-resolution
-     * @throws OptionalOperationUnsupportedException 
+     *
+     * @throws OptionalOperationUnsupportedException
      */
     @Override
     public void scale(ScaleFactor scaleFactor) throws OptionalOperationUnsupportedException {
         super.scale(scaleFactor);
-        
+
         ScaleChecker.checkIdenticalXY(scaleFactor);
 
         if (this.boundRadius != null) {

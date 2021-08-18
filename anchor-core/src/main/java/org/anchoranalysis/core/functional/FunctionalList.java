@@ -36,6 +36,7 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.IntFunction;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -276,6 +277,20 @@ public class FunctionalList {
             int startInclusive, int endExclusive, IntFunction<T> mapFunction) {
         return IntStream.range(startInclusive, endExclusive)
                 .mapToObj(mapFunction)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Creates a list of elements, by repeatedly calling the same operation.
+     *
+     * @param <T> element-type in the list
+     * @param numberRepeats the number of repeats
+     * @param mapFunction function to create each element
+     * @return a list with an element for every iteration
+     */
+    public static <T> List<T> repeat(int numberRepeats, Supplier<T> mapFunction) {
+        return IntStream.rangeClosed(0, numberRepeats)
+                .mapToObj(index -> mapFunction.get())
                 .collect(Collectors.toList());
     }
 
