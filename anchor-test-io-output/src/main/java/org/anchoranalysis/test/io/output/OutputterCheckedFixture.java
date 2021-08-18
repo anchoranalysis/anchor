@@ -28,7 +28,6 @@ package org.anchoranalysis.test.io.output;
 import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.system.ExecutionTimeRecorder;
 import org.anchoranalysis.io.manifest.Manifest;
 import org.anchoranalysis.io.output.bean.OutputManager;
 import org.anchoranalysis.io.output.outputter.BindFailedException;
@@ -36,7 +35,6 @@ import org.anchoranalysis.io.output.outputter.OutputterChecked;
 import org.anchoranalysis.io.output.path.prefixer.PathPrefixerContext;
 import org.anchoranalysis.io.output.path.prefixer.PathPrefixerException;
 import org.anchoranalysis.io.output.recorded.RecordedOutputsWithRules;
-import org.mockito.Mockito;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class OutputterCheckedFixture {
@@ -59,7 +57,7 @@ public class OutputterCheckedFixture {
                     new RecordedOutputsWithRules(),
                     Optional.empty(),
                     new PathPrefixerContext(),
-                    Mockito.mock(ExecutionTimeRecorder.class),
+                    new ExecutionTimeRecorderFixture(),
                     Optional.empty());
         } catch (PathPrefixerException e) {
             throw new BindFailedException(e);
