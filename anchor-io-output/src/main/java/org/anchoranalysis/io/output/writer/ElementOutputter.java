@@ -32,6 +32,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.anchoranalysis.core.format.ImageFileFormat;
 import org.anchoranalysis.core.log.Logger;
+import org.anchoranalysis.core.system.ExecutionTimeRecorder;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.ManifestDirectoryDescription;
 import org.anchoranalysis.io.manifest.directory.SubdirectoryBase;
@@ -49,6 +50,9 @@ public class ElementOutputter {
 
     /** The outputter for writing the element. */
     @Getter private OutputterChecked outputter;
+
+    /** Records the execution time of particular operations. */
+    @Getter private ExecutionTimeRecorder executionTimeRecorder;
 
     /** Supplies a logger for information messages when outputting. */
     private Supplier<Optional<Logger>> logger;

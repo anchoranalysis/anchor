@@ -34,6 +34,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.format.ImageFileFormat;
 import org.anchoranalysis.core.log.Logger;
+import org.anchoranalysis.core.system.ExecutionTimeRecorder;
 import org.anchoranalysis.io.manifest.Manifest;
 import org.anchoranalysis.io.output.bean.path.prefixer.PathPrefixer;
 import org.anchoranalysis.io.output.bean.rules.OutputEnabledRules;
@@ -92,6 +93,7 @@ public class OutputManager extends AnchorBean<OutputManager> {
      * @param recordedOutputs where output-names are recorded as used/tested
      * @param suggestedFormatToWrite a suggestion on what file-format to write
      * @param prefixerContext parameters for the file-path prefixer
+     * @param executionTimeRecorder records execution-times of write operations
      * @param logger logger for warning for information messages when outputting
      * @return a newly created outputter
      * @throws BindFailedException
@@ -102,6 +104,7 @@ public class OutputManager extends AnchorBean<OutputManager> {
             RecordedOutputsWithRules recordedOutputs,
             Optional<ImageFileFormat> suggestedFormatToWrite,
             PathPrefixerContext prefixerContext,
+            ExecutionTimeRecorder executionTimeRecorder,
             Optional<Logger> logger)
             throws BindFailedException {
 
@@ -112,7 +115,10 @@ public class OutputManager extends AnchorBean<OutputManager> {
             return OutputterChecked.createWithPrefix(
                     prefix,
                     recordedOutputs.selectOutputEnabled(Optional.ofNullable(outputsEnabled)),
-                    new OutputWriteContext(getOutputWriteSettings(), suggestedFormatToWrite),
+                    new OutputWriteContext(
+                            getOutputWriteSettings(),
+                            suggestedFormatToWrite,
+                            executionTimeRecorder),
                     Optional.of(manifest.getRootDirectory()),
                     recordedOutputs.getRecordedOutputs(),
                     silentlyDeleteExisting,

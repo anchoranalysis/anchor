@@ -53,23 +53,25 @@ public class ConcurrentModelPool<T> {
          * @param useGPU whether to use a GPU if possible (if not possible, revert to CPU)
          * @return the newly created model
          */
-        public T create(boolean useGPU);
+        public ConcurrentModel<T> create(boolean useGPU);
     }
 
     /**
      * A queue that prioritizes if {@code hasPriority==true} and blocks if {@link
      * PriorityBlockingQueue#take} is called but no elements are available.
      */
-    private PriorityBlockingQueue<WithPriority<T>> queue;
+    private PriorityBlockingQueue<WithPriority<ConcurrentModel<T>>> queue;
+
+    /** Function to create a model. */
+    private final CreateModelForPool<T> createModel;
 
     public ConcurrentModelPool(ConcurrencyPlan plan, CreateModelForPool<T> createModel) {
-        queue = new PriorityBlockingQueue<>();
+        this.createModel = createModel;
+        this.queue = new PriorityBlockingQueue<>();
 
         addNumberModels(plan.numberGPUs(), true, createModel);
 
-        // We deliberately create as many GPUs as the total-number of jobs, in case the GPUs are
-        // abandoned.
-        addNumberModels(plan.totalNumber(), false, createModel);
+        addNumberModels(plan.totalMinusGPUs(), false, createModel);
     }
 
     /**
@@ -80,10 +82,11 @@ public class ConcurrentModelPool<T> {
      * @param <S> return type
      * @throws Throwable
      */
-    public <S> S excuteOrWait(CheckedFunction<T, S, ConcurrentModelException> functionToExecute)
+    public <S> S excuteOrWait(
+            CheckedFunction<ConcurrentModel<T>, S, ConcurrentModelException> functionToExecute)
             throws Throwable { // NOSONAR
         while (true) {
-            WithPriority<T> model = getOrWait();
+            WithPriority<ConcurrentModel<T>> model = getOrWait();
             try {
                 S returnValue = functionToExecute.apply(model.get());
 
@@ -91,12 +94,13 @@ public class ConcurrentModelPool<T> {
                 giveBack(model);
                 return returnValue;
             } catch (ConcurrentModelException e) {
-                if (!model.isGPU()) {
+                if (model.isGPU()) {
+                    // Add extra CPU model, and try to execute the function again
+                    addNumberModels(1, false, createModel);
+                } else {
                     // Rethrow if error occurred on a CPU
                     throw e.getCause();
                 }
-                // Otherwise we try to execute the function again on the next available model (which
-                // will be eventually a CPU).
             }
         }
     }
@@ -109,7 +113,7 @@ public class ConcurrentModelPool<T> {
      * @return
      * @throws InterruptedException
      */
-    private WithPriority<T> getOrWait() throws InterruptedException {
+    private WithPriority<ConcurrentModel<T>> getOrWait() throws InterruptedException {
         return queue.take();
     }
 
@@ -118,7 +122,7 @@ public class ConcurrentModelPool<T> {
      *
      * @param model the model to return
      */
-    private void giveBack(WithPriority<T> model) {
+    private void giveBack(WithPriority<ConcurrentModel<T>> model) {
         queue.put(model);
     }
 
@@ -127,7 +131,8 @@ public class ConcurrentModelPool<T> {
         IntStream.range(0, numberModels).forEach(number -> queue.add(create(useGPU, createModel)));
     }
 
-    private WithPriority<T> create(boolean useGPU, CreateModelForPool<T> createModel) {
+    private WithPriority<ConcurrentModel<T>> create(
+            boolean useGPU, CreateModelForPool<T> createModel) {
         return new WithPriority<>(createModel.create(useGPU), useGPU);
     }
 }

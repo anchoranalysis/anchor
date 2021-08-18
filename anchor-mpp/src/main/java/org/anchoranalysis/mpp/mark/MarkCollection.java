@@ -49,6 +49,7 @@ import org.anchoranalysis.mpp.bean.regionmap.RegionMembership;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.Point3d;
+import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 /**
  * A collection of marks, termed a <i>configuration</i> in marked-point-processes academic
@@ -185,7 +186,7 @@ public final class MarkCollection implements Iterable<Mark>, Serializable {
      * @throws OptionalOperationUnsupportedException if the type of mark used in the annotation does
      *     not supported scaling.
      */
-    public void scaleXY(double scaleFactor) throws OptionalOperationUnsupportedException {
+    public void scaleXY(ScaleFactor scaleFactor) throws OptionalOperationUnsupportedException {
 
         for (Mark mark : marks) {
             mark.scale(scaleFactor);

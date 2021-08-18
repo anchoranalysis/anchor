@@ -95,7 +95,8 @@ public abstract class Mark implements Serializable, Identifiable {
      * @throws OptionalOperationUnsupportedException if the type of mark used in the annotation does
      *     not supported scaling.
      */
-    public abstract void scale(double scaleFactor) throws OptionalOperationUnsupportedException;
+    public abstract void scale(ScaleFactor scaleFactor)
+            throws OptionalOperationUnsupportedException;
 
     public abstract int numberDimensions();
 

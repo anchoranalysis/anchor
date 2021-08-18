@@ -32,11 +32,11 @@ import org.anchoranalysis.image.core.points.BoundingBoxFromPoints;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipUtilities;
 import org.anchoranalysis.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.mpp.mark.Mark;
-import org.anchoranalysis.mpp.mark.MarkWithPosition;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.Point3d;
 import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.point.PointConverter;
+import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 @NoArgsConstructor
 public class LineSegment extends Mark {
@@ -55,7 +55,6 @@ public class LineSegment extends Mark {
     private transient DistanceCalculatorToLine distanceCalcToLine = new DistanceCalculatorToLine();
 
     public LineSegment(Point3i startPoint, Point3i endPoint) {
-        this();
         setPoints(startPoint, endPoint);
     }
 
@@ -115,9 +114,9 @@ public class LineSegment extends Mark {
     }
 
     @Override
-    public void scale(double scaleFactor) {
-        MarkWithPosition.scaleXYPoint(distanceCalcToLine.getStartPoint(), scaleFactor);
-        MarkWithPosition.scaleXYPoint(distanceCalcToLine.getEndPoint(), scaleFactor);
+    public void scale(ScaleFactor scaleFactor) {
+        scaleFactor.scale(distanceCalcToLine.getStartPoint());
+        scaleFactor.scale(distanceCalcToLine.getEndPoint());
     }
 
     @Override

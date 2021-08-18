@@ -57,6 +57,7 @@ public class OutputterCheckedFixture {
                     new RecordedOutputsWithRules(),
                     Optional.empty(),
                     new PathPrefixerContext(),
+                    new ExecutionTimeRecorderFixture(),
                     Optional.empty());
         } catch (PathPrefixerException e) {
             throw new BindFailedException(e);

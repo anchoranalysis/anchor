@@ -1,7 +1,9 @@
-package org.anchoranalysis.core.log;
+package org.anchoranalysis.core.system;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.core.log.Logger;
+import org.anchoranalysis.core.log.NullMessageLogger;
 
 /*-
  * #%L

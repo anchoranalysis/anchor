@@ -120,7 +120,7 @@ public class RunningSum implements Serializable {
     }
 
     /**
-     * Deep-copy
+     * Deep-copy.
      *
      * @return a new object with new state
      */
@@ -129,5 +129,15 @@ public class RunningSum implements Serializable {
         out.sum = sum;
         out.count = count;
         return out;
+    }
+
+    /**
+     * Adds the values of another {@link RunningSum} to the current values.
+     *
+     * @param toAdd the other sum that will be added.
+     */
+    public void add(RunningSum toAdd) {
+        this.sum += toAdd.sum;
+        this.count += toAdd.count;
     }
 }

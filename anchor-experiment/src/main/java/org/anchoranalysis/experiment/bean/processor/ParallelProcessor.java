@@ -182,7 +182,6 @@ public class ParallelProcessor<T extends InputFromManager, S> extends JobProcess
                             availableProcessors,
                             numberGPUProcessors);
         }
-
         return ConcurrencyPlan.multipleProcessors(numberCPUs, numberGPUProcessors);
     }
 

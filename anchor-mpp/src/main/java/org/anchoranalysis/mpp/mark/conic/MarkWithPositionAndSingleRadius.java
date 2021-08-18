@@ -33,6 +33,7 @@ import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.core.exception.OptionalOperationUnsupportedException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.mpp.bean.bound.Bound;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipUtilities;
@@ -42,6 +43,7 @@ import org.anchoranalysis.mpp.mark.MarkWithPosition;
 import org.anchoranalysis.mpp.mark.QuickOverlapCalculation;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.Point3d;
+import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 /** Base-class for a conic that has a single radius (circle, sphere etc.) */
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -98,17 +100,21 @@ public abstract class MarkWithPositionAndSingleRadius extends MarkWithPosition
      *
      * <p>So when aligned to axes, we actually scale in all 3 dimensions, and ignore
      * scene-resolution
+     *
+     * @throws OptionalOperationUnsupportedException
      */
     @Override
-    public void scale(double scaleFactor) {
+    public void scale(ScaleFactor scaleFactor) throws OptionalOperationUnsupportedException {
         super.scale(scaleFactor);
+
+        ScaleChecker.checkIdenticalXY(scaleFactor);
 
         if (this.boundRadius != null) {
             this.boundRadius = this.boundRadius.duplicate();
-            this.boundRadius.scale(scaleFactor);
+            this.boundRadius.scale(scaleFactor.x());
         }
 
-        setRadius(this.radius * scaleFactor);
+        setRadius(this.radius * scaleFactor.x());
     }
 
     @Override

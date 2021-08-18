@@ -30,6 +30,7 @@ import java.io.Serializable;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
+import org.anchoranalysis.core.exception.OptionalOperationUnsupportedException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.core.object.properties.ObjectWithProperties;
@@ -40,6 +41,7 @@ import org.anchoranalysis.spatial.point.Point3d;
 import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.point.PointConverter;
 import org.anchoranalysis.spatial.point.ReadableTuple3i;
+import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 public abstract class MarkWithPosition extends Mark implements Serializable {
 
@@ -67,13 +69,8 @@ public abstract class MarkWithPosition extends Mark implements Serializable {
     }
 
     @Override
-    public void scale(double scaleFactor) {
-        scaleXYPoint(this.position, scaleFactor);
-    }
-
-    public static void scaleXYPoint(Point3d point, double multFactor) {
-        point.setX(point.x() * multFactor);
-        point.setY(point.y() * multFactor);
+    public void scale(ScaleFactor scaleFactor) throws OptionalOperationUnsupportedException {
+        scaleFactor.scale(position);
     }
 
     @Override

@@ -37,6 +37,7 @@ import java.io.Serializable;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
+import org.anchoranalysis.core.exception.OptionalOperationUnsupportedException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.core.orientation.Orientation;
@@ -47,6 +48,7 @@ import org.anchoranalysis.mpp.mark.QuickOverlapCalculation;
 import org.anchoranalysis.overlay.OverlayProperties;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.Point3d;
+import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 //
 //  3 sub-marks
@@ -337,12 +339,12 @@ public class Ellipsoid extends ConicBase implements Serializable {
 
     // NB objects are scaled in pre-rotated position i.e. when aligned to axes
     @Override
-    public void scale(double scaleFactor) {
+    public void scale(ScaleFactor scaleFactor) throws OptionalOperationUnsupportedException {
         super.scale(scaleFactor);
-
-        this.radii.setX(this.radii.x() * scaleFactor);
-        this.radii.setY(this.radii.y() * scaleFactor);
-        this.radii.setZ(this.radii.z() * scaleFactor);
+        ScaleChecker.checkIdenticalXY(scaleFactor);
+        this.radii.setX(this.radii.x() * scaleFactor.x());
+        this.radii.setY(this.radii.y() * scaleFactor.x());
+        this.radii.setZ(this.radii.z() * scaleFactor.x());
         updateAfterMarkChange();
     }
 

@@ -42,7 +42,10 @@ import org.anchoranalysis.experiment.bean.identifier.ExperimentIdentifier;
 import org.anchoranalysis.experiment.bean.log.LoggingDestination;
 import org.anchoranalysis.experiment.bean.log.ToConsole;
 import org.anchoranalysis.experiment.log.StatefulMessageLogger;
+import org.anchoranalysis.experiment.task.ExecutionTimeStatistics;
+import org.anchoranalysis.experiment.task.ExperimentFeedbackContext;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
+import org.anchoranalysis.experiment.task.TaskStatistics;
 import org.anchoranalysis.io.generator.combined.ManifestGenerator;
 import org.anchoranalysis.io.manifest.Manifest;
 import org.anchoranalysis.io.output.bean.OutputManager;
@@ -121,11 +124,12 @@ public abstract class OutputExperiment extends Experiment {
      *
      * @param params a combination of run-time and bean-time specified elements used in the
      *     experiment.
+     * @return statistics of the tasks, if they exist.
      * @throws ExperimentExecutionException if anything occurs stop the experiment finishing its
      *     execution
      */
-    protected abstract void executeExperimentWithParams(ParametersExperiment params)
-            throws ExperimentExecutionException;
+    protected abstract Optional<TaskStatistics> executeExperimentWithParams(
+            ParametersExperiment params) throws ExperimentExecutionException;
 
     /**
      * If specified, default rules for determine which outputs are enabled or not.
@@ -141,8 +145,8 @@ public abstract class OutputExperiment extends Experiment {
             stopWatchExperiment.start();
 
             initBeforeExecution(params);
-            executeExperimentWithParams(params);
-            tidyUpAfterExecution(params, stopWatchExperiment);
+            Optional<TaskStatistics> taskStatistics = executeExperimentWithParams(params);
+            tidyUpAfterExecution(params, stopWatchExperiment, taskStatistics);
         } finally {
             // An experiment is considered always successful
             params.getLoggerExperiment().close(true, false);
@@ -166,6 +170,7 @@ public abstract class OutputExperiment extends Experiment {
         Optional<ImageFileFormat> suggestedImageOutputFormat =
                 arguments.output().getPrefixer().getSuggestedImageOutputFormat();
         try {
+            ExecutionTimeStatistics executionTimeStatistics = new ExecutionTimeStatistics();
 
             OutputterChecked rootOutputter =
                     getOutput()
@@ -175,18 +180,23 @@ public abstract class OutputExperiment extends Experiment {
                                     outputs,
                                     suggestedImageOutputFormat,
                                     arguments.createPrefixerContext(),
+                                    executionTimeStatistics,
                                     Optional.empty());
 
             Preconditions.checkArgument(rootOutputter.getSettings().hasBeenInitialized());
 
+            ExperimentFeedbackContext feedbackContext =
+                    new ExperimentFeedbackContext(
+                            createLogger(rootOutputter, arguments),
+                            useDetailedLogging(),
+                            executionTimeStatistics);
             return new ParametersExperiment(
                     arguments,
                     experimentId,
                     Optional.of(experimentalManifest),
                     rootOutputter,
                     getOutput().getPrefixer(),
-                    createLogger(rootOutputter, arguments),
-                    useDetailedLogging());
+                    feedbackContext);
         } catch (PathPrefixerException e) {
             throw new CreateException("Cannot create params-context", e);
         } catch (BindFailedException e) {
@@ -218,7 +228,10 @@ public abstract class OutputExperiment extends Experiment {
         }
     }
 
-    private void tidyUpAfterExecution(ParametersExperiment params, StopWatch stopWatchExperiment) {
+    private void tidyUpAfterExecution(
+            ParametersExperiment params,
+            StopWatch stopWatchExperiment,
+            Optional<TaskStatistics> taskStatistics) {
 
         params.getExperimentalManifest()
                 .ifPresent(
@@ -232,6 +245,12 @@ public abstract class OutputExperiment extends Experiment {
 
         stopWatchExperiment.stop();
 
-        OutputExperimentLogHelper.maybeLogCompleted(recordedOutputs, params, stopWatchExperiment);
+        double totalExecutionTimeSeconds = ((double) stopWatchExperiment.getTime()) / 1000;
+
+        OutputExperimentLogHelper.maybeRecordedOutputs(recordedOutputs, params);
+
+        OutputExperimentLogHelper.maybeExecutionTimeStatistics(params, taskStatistics);
+
+        OutputExperimentLogHelper.maybeLogCompleted(params, (long) totalExecutionTimeSeconds);
     }
 }

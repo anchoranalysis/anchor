@@ -34,6 +34,7 @@ import org.anchoranalysis.mpp.bean.regionmap.RegionMapSingleton;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.mpp.mark.MarkCollection;
+import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 /**
  * An annotation that consists of two sets of marks, accepted and rejected.
@@ -116,7 +117,7 @@ public class DualMarksAnnotation<T> implements AnnotationWithMarks {
      * @throws OptionalOperationUnsupportedException if the type of mark used in the annotation does
      *     not supported scaling.
      */
-    public void scaleXY(double scaleFactor) throws OptionalOperationUnsupportedException {
+    public void scaleXY(ScaleFactor scaleFactor) throws OptionalOperationUnsupportedException {
         marks.scaleXY(scaleFactor);
         marksReject.scaleXY(scaleFactor);
     }

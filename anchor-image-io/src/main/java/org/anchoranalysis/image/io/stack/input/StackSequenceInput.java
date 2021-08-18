@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.image.io.stack.input;
 
+import org.anchoranalysis.image.core.stack.TimeSequence;
 import org.anchoranalysis.image.io.ImageIOException;
 
 /**
@@ -35,6 +36,10 @@ import org.anchoranalysis.image.io.ImageIOException;
  */
 public interface StackSequenceInput extends ProvidesStackInput {
 
-    /** Creates a TimeSequence of stacks for a particular series number */
-    TimeSequenceSupplier createStackSequenceForSeries(int seriesNum) throws ImageIOException;
+    /**
+     * Creates a supplier of a {@link TimeSequence} of stacks for a particular series number.
+     *
+     * @param seriesIndex the index
+     */
+    TimeSequenceSupplier createStackSequenceForSeries(int seriesIndex) throws ImageIOException;
 }
