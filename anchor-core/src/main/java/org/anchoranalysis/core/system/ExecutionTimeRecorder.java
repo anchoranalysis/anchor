@@ -1,5 +1,6 @@
 package org.anchoranalysis.core.system;
 
+import java.util.Optional;
 import org.anchoranalysis.core.functional.checked.CheckedRunnable;
 import org.anchoranalysis.core.functional.checked.CheckedSupplier;
 
@@ -81,9 +82,42 @@ public interface ExecutionTimeRecorder {
      * @param operationIdentifier a string uniquely identifying this operation
      * @param startTimestamp a system clock timestamp (in milliseconds since the epoch) for when the
      *     operation began.
+     * @return the current timestamp (millis from the epoch) used to measure the end of the
+     *     operation
      */
-    default void recordTimeDifferenceFrom(String operationIdentifier, long startTimestamp) {
-        long executionTime = System.currentTimeMillis() - startTimestamp;
+    default long recordTimeDifferenceFrom(String operationIdentifier, long startTimestamp) {
+        long currentTimestamp = System.currentTimeMillis();
+        long executionTime = currentTimestamp - startTimestamp;
         recordExecutionTime(operationIdentifier, executionTime);
+        return currentTimestamp;
+    }
+
+    /**
+     * Like {@link #recordTimeDifferenceFrom(String, long)} but uses an alternative identifier if
+     * the entry does not already exist.
+     *
+     * <p>The operation is presumed to end when this function is called.
+     *
+     * @param operationIdentifier the unique name of the operation to record the time against
+     * @param alternativeIdentifierIfFirst an alternative unique to use if this is the first time
+     *     the execution-time is recorded.
+     * @param startTimestamp the timestamp describing millis from the epoch at the start of the
+     *     operation
+     * @return the current timestamp (millis from the epoch) used to measure the end of the
+     *     operation
+     */
+    default long recordTimeDifferenceFrom(
+            String operationIdentifier,
+            Optional<String> alternativeIdentifierIfFirst,
+            long startTimestamp) {
+        long currentTimestamp = System.currentTimeMillis();
+        long executionTime = currentTimestamp - startTimestamp;
+        if (alternativeIdentifierIfFirst.isPresent()) {
+            recordExecutionTime(
+                    alternativeIdentifierIfFirst.get(), operationIdentifier, executionTime);
+        } else {
+            recordTimeDifferenceFrom(operationIdentifier, currentTimestamp);
+        }
+        return currentTimestamp;
     }
 }
