@@ -58,6 +58,23 @@ public class OptionalFactory {
             return Optional.empty();
         }
     }
+    
+    
+    /**
+     * Creates only if a boolean flag is true, otherwise returns {@code Optional.empty()}.
+     *
+     * @param <T> type of optional
+     * @param flag boolean flag
+     * @param value a value used only if {@code flag} is true
+     * @return an optional that is defined or empty depending on the flag
+     */
+    public static <T> Optional<T> create(boolean flag, T value) {
+        if (flag) {
+            return Optional.of(value);
+        } else {
+            return Optional.empty();
+        }
+    }
 
     /**
      * Creates only if a boolean flag is true, otherwise returns {@code Optional.empty()}.

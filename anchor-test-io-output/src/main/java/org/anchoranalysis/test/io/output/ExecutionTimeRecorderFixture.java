@@ -4,9 +4,8 @@ import org.anchoranalysis.core.system.ExecutionTimeRecorder;
 
 /**
  * Dummy implementation of {@link ExecutionTimeRecorder} that performs no operations.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 class ExecutionTimeRecorderFixture implements ExecutionTimeRecorder {
 
@@ -16,8 +15,8 @@ class ExecutionTimeRecorderFixture implements ExecutionTimeRecorder {
     }
 
     @Override
-    public void recordExecutionTime(String operationIdentifierFirst,
-            String operationIdentiferSubsequent, long millis) {
-        // NOTHING TO DO        
+    public void recordExecutionTime(
+            String operationIdentifierFirst, String operationIdentiferSubsequent, long millis) {
+        // NOTHING TO DO
     }
 }
