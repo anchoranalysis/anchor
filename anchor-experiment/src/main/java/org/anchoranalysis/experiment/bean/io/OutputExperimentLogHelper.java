@@ -26,15 +26,11 @@
 
 package org.anchoranalysis.experiment.bean.io;
 
-import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.experiment.log.Divider;
-import org.anchoranalysis.experiment.task.ExecutionTimeStatistics;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
-import org.anchoranalysis.experiment.task.TaskStatistics;
 import org.anchoranalysis.io.output.recorded.MultiLevelRecordedOutputs;
-import org.anchoranalysis.math.arithmetic.RunningSum;
 
 /**
  * Helps creating and outputting messages to the log for {@link
@@ -44,9 +40,6 @@ import org.anchoranalysis.math.arithmetic.RunningSum;
 class OutputExperimentLogHelper {
 
     private static final Divider DIVIDER = new Divider();
-
-    private static final String AVERAGE_TOTAL_LINE =
-            "\t\t\t\t\t\t     average       total      (ignoring any parallelism)";
 
     public static void maybeLogStart(ParametersExperiment params) {
         if (params.isDetailedLogging()) {
@@ -64,29 +57,9 @@ class OutputExperimentLogHelper {
 
             params.getLoggerExperiment()
                     .logFormatted(
-                            "%s%n%s",
+                            "%s%n%s%n%s",
                             DIVIDER.withLabel("Outputs"),
-                            new SummarizeRecordedOutputs(recordedOutputs).summarize());
-        }
-    }
-
-    public static void maybeExecutionTimeStatistics(
-            ParametersExperiment params, Optional<TaskStatistics> taskStatistics) {
-        ExecutionTimeStatistics operationStatistics = params.getExecutionTimeStatistics();
-        if (params.isDetailedLogging() && taskStatistics.isPresent()) {
-
-            RunningSum executionTimeTotal = taskStatistics.get().executionTimeTotal();
-            params.getLoggerExperiment()
-                    .logFormatted(
-                            "%s%n%s%n%s%s%s",
-                            DIVIDER.withLabel("Execution Time"),
-                            AVERAGE_TOTAL_LINE,
-                            DescribeExecutionTimes.individual(
-                                    "Entire Job",
-                                    executionTimeTotal.mean() / 1000,
-                                    executionTimeTotal.getSum() / 1000,
-                                    (int) taskStatistics.get().numberCompletedTotal()),
-                            DescribeExecutionTimes.allOperations(operationStatistics),
+                            new SummarizeRecordedOutputs(recordedOutputs).summarize(),
                             DIVIDER.withoutLabel());
         }
     }

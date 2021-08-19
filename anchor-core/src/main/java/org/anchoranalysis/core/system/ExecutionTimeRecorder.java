@@ -111,12 +111,12 @@ public interface ExecutionTimeRecorder {
             Optional<String> alternativeIdentifierIfFirst,
             long startTimestamp) {
         long currentTimestamp = System.currentTimeMillis();
-        long executionTime = currentTimestamp - startTimestamp;
         if (alternativeIdentifierIfFirst.isPresent()) {
+            long executionTime = currentTimestamp - startTimestamp;
             recordExecutionTime(
                     alternativeIdentifierIfFirst.get(), operationIdentifier, executionTime);
         } else {
-            recordTimeDifferenceFrom(operationIdentifier, currentTimestamp);
+            recordTimeDifferenceFrom(operationIdentifier, startTimestamp);
         }
         return currentTimestamp;
     }

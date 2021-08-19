@@ -61,7 +61,7 @@ class DescribeExecutionTimes {
                 String.format(
                         "across %d %s", count, LanguageUtilities.pluralizeMaybe(count, "instance"));
         return String.format(
-                "%s\t =     %s%s\t%s%n",
+                "%s\t = %s%s\t%s%n",
                 paddedIdentifier,
                 describeTime(averageExecutionTime),
                 describeTime(totalExecutionTime),
