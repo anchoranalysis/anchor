@@ -75,6 +75,17 @@ public class ConcurrencyPlan {
     public static ConcurrencyPlan multipleProcessors(int maxNumberCPUs, int maxNumberGPUs) {
         return new ConcurrencyPlan(maxNumberCPUs, maxNumberGPUs);
     }
+    
+    /**
+     * Derive a {@link ConcurrencyPlan} that preserves the number of CPUs but disables all GPUs.
+     * 
+     * <p>This operation is immutable.
+     * 
+     * @return a newly recreated {@link ConcurrencyPlan}
+     */
+    public ConcurrencyPlan disableGPUs() {
+        return new ConcurrencyPlan(totalNumberCPUs, 0);
+    }
 
     public int totalNumber() {
         return totalNumberCPUs;
