@@ -34,8 +34,8 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.cache.ChildCacheName;
 import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.mpp.feature.input.memo.FeatureInputPairMemo;
-import org.anchoranalysis.mpp.feature.input.memo.FeatureInputSingleMemo;
+import org.anchoranalysis.mpp.feature.input.FeatureInputPairMemo;
+import org.anchoranalysis.mpp.feature.input.FeatureInputSingleMemo;
 
 /**
  * Extracts one of the memos from the pair, and processes as a {@link FeatureSingleMemo}

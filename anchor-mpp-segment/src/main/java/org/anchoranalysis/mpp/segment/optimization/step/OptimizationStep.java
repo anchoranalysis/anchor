@@ -31,9 +31,9 @@ import java.util.function.ToDoubleFunction;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.mpp.proposer.error.ProposerFailureDescription;
-import org.anchoranalysis.mpp.segment.bean.optimization.StateReporter;
-import org.anchoranalysis.mpp.segment.kernel.proposer.KernelWithIdentifier;
+import org.anchoranalysis.mpp.segment.bean.optimization.feedback.StateReporter;
 import org.anchoranalysis.mpp.segment.optimization.DualState;
+import org.anchoranalysis.mpp.segment.optimization.kernel.KernelWithIdentifier;
 import org.anchoranalysis.mpp.segment.transformer.TransformationContext;
 
 /**

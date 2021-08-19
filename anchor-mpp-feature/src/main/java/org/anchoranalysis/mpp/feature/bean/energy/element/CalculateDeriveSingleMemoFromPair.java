@@ -29,8 +29,8 @@ package org.anchoranalysis.mpp.feature.bean.energy.element;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import org.anchoranalysis.feature.calculate.FeatureCalculation;
-import org.anchoranalysis.mpp.feature.input.memo.FeatureInputPairMemo;
-import org.anchoranalysis.mpp.feature.input.memo.FeatureInputSingleMemo;
+import org.anchoranalysis.mpp.feature.input.FeatureInputPairMemo;
+import org.anchoranalysis.mpp.feature.input.FeatureInputSingleMemo;
 
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)

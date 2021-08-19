@@ -27,7 +27,7 @@
 package org.anchoranalysis.mpp.segment.optimization.feedback.aggregate;
 
 import lombok.Getter;
-import org.anchoranalysis.mpp.segment.bean.optimization.ExtractScoreSize;
+import org.anchoranalysis.mpp.segment.bean.optimization.feedback.ExtractScoreSize;
 import org.anchoranalysis.mpp.segment.optimization.feedback.FeedbackBeginParameters;
 import org.anchoranalysis.mpp.segment.optimization.feedback.ReporterException;
 import org.anchoranalysis.mpp.segment.optimization.feedback.period.PeriodReceiver;

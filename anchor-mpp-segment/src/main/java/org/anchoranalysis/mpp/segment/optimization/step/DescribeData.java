@@ -28,7 +28,7 @@ package org.anchoranalysis.mpp.segment.optimization.step;
 
 import lombok.Data;
 import org.anchoranalysis.mpp.proposer.error.ProposerFailureDescription;
-import org.anchoranalysis.mpp.segment.kernel.proposer.KernelWithIdentifier;
+import org.anchoranalysis.mpp.segment.optimization.kernel.KernelWithIdentifier;
 
 /**
  * @author Owen Feehan

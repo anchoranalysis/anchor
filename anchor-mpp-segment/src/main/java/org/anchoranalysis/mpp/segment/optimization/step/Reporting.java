@@ -31,9 +31,9 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.anchoranalysis.mpp.proposer.error.ProposerFailureDescription;
-import org.anchoranalysis.mpp.segment.kernel.proposer.KernelWithIdentifier;
 import org.anchoranalysis.mpp.segment.optimization.DualState;
 import org.anchoranalysis.mpp.segment.optimization.feedback.ReporterException;
+import org.anchoranalysis.mpp.segment.optimization.kernel.KernelWithIdentifier;
 
 /**
  * Exposes data which is only needed by reporting tools

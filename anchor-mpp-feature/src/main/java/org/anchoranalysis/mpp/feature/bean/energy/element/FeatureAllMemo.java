@@ -28,7 +28,7 @@ package org.anchoranalysis.mpp.feature.bean.energy.element;
 
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.mpp.feature.input.memo.FeatureInputAllMemo;
+import org.anchoranalysis.mpp.feature.input.FeatureInputAllMemo;
 
 public abstract class FeatureAllMemo extends Feature<FeatureInputAllMemo> {
 

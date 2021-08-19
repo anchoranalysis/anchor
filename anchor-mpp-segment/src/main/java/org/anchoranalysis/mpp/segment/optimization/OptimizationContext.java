@@ -36,8 +36,8 @@ import org.anchoranalysis.mpp.bean.mark.factory.MarkWithIdentifierFactory;
 import org.anchoranalysis.mpp.feature.energy.scheme.EnergySchemeWithSharedFeatures;
 import org.anchoranalysis.mpp.proposer.error.ErrorNodeNull;
 import org.anchoranalysis.mpp.segment.bean.optimization.termination.TriggerTerminationCondition;
-import org.anchoranalysis.mpp.segment.kernel.KernelCalculationContext;
-import org.anchoranalysis.mpp.segment.kernel.MarkFactoryContext;
+import org.anchoranalysis.mpp.segment.optimization.kernel.KernelCalculationContext;
+import org.anchoranalysis.mpp.segment.optimization.kernel.MarkFactoryContext;
 
 @AllArgsConstructor
 public class OptimizationContext {

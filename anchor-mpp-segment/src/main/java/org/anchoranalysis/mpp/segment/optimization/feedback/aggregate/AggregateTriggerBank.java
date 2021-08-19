@@ -29,7 +29,7 @@ package org.anchoranalysis.mpp.segment.optimization.feedback.aggregate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import lombok.RequiredArgsConstructor;
-import org.anchoranalysis.mpp.segment.bean.optimization.ExtractScoreSize;
+import org.anchoranalysis.mpp.segment.bean.optimization.feedback.ExtractScoreSize;
 import org.anchoranalysis.mpp.segment.optimization.feedback.FeedbackBeginParameters;
 import org.anchoranalysis.mpp.segment.optimization.feedback.ReporterException;
 import org.anchoranalysis.mpp.segment.optimization.feedback.period.PeriodTriggerBank;
