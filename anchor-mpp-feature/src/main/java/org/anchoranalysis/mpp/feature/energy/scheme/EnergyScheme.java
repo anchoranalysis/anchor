@@ -40,9 +40,9 @@ import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.image.feature.input.FeatureInputStack;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.mpp.feature.addcriteria.AddCriteriaPair;
-import org.anchoranalysis.mpp.feature.input.memo.FeatureInputAllMemo;
-import org.anchoranalysis.mpp.feature.input.memo.FeatureInputPairMemo;
-import org.anchoranalysis.mpp.feature.input.memo.FeatureInputSingleMemo;
+import org.anchoranalysis.mpp.feature.input.FeatureInputAllMemo;
+import org.anchoranalysis.mpp.feature.input.FeatureInputPairMemo;
+import org.anchoranalysis.mpp.feature.input.FeatureInputSingleMemo;
 
 /**
  * The energy for a feature-list as factorized into different cliques.

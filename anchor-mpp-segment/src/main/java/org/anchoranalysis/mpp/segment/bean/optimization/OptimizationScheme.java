@@ -27,7 +27,7 @@
 package org.anchoranalysis.mpp.segment.bean.optimization;
 
 import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.mpp.segment.bean.kernel.proposer.KernelProposer;
+import org.anchoranalysis.mpp.segment.bean.optimization.kernel.KernelProposer;
 import org.anchoranalysis.mpp.segment.optimization.OptimizationContext;
 import org.anchoranalysis.mpp.segment.optimization.OptimizationTerminatedEarlyException;
 import org.anchoranalysis.mpp.segment.optimization.feedback.FeedbackReceiver;

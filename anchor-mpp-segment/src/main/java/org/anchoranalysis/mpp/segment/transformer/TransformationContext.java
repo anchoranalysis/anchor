@@ -31,7 +31,7 @@ import lombok.Getter;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.mpp.proposer.error.ErrorNode;
-import org.anchoranalysis.mpp.segment.kernel.KernelCalculationContext;
+import org.anchoranalysis.mpp.segment.optimization.kernel.KernelCalculationContext;
 
 @AllArgsConstructor
 public class TransformationContext {
