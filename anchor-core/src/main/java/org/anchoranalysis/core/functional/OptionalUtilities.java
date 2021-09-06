@@ -160,6 +160,7 @@ public class OptionalUtilities {
      * @param optional2 second incoming optional
      * @param mapFunction the function that does the mapping from both incoming objects to outgoing
      * @return the outgoing "mapped" optional (empty() if either incoming optional is empty)
+     * @throws E if {@code mapFunction} throws it.
      */
     public static <T, U, V, E extends Exception> Optional<T> mapBoth(
             Optional<U> optional1, Optional<V> optional2, CheckedBiFunction<U, V, T, E> mapFunction)

@@ -187,10 +187,11 @@ public class CheckedStream {
      *
      * @param <T> end-type for mapping
      * @param <E> an exception that be thrown during mapping
-     * @param stream stream of ints
+     * @param stream stream of {@code int}s
      * @param throwableClass the class of {@code E}
      * @param mapFunc function for mapping
      * @return the stream after the mapping
+     * @throws E if {@code mapFunc} throws it
      */
     public static <T, E extends Exception> Stream<T> mapIntStream(
             IntStream stream,

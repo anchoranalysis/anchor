@@ -71,16 +71,19 @@ public class ConcurrentModelPool<T> {
 
         addNumberModels(plan.numberGPUs(), true, createModel);
 
-        addNumberModels(plan.totalMinusGPUs(), false, createModel);
+        addNumberModels(plan.numberCPUs() - plan.numberGPUs(), false, createModel);
     }
 
     /**
      * Execute on the next available model (or wait until one becomes available)
+     * 
+     * <p>If an exception is thrown while executing on a GPU, the GPU processor is no longer used, and instead an additional CPU node is added.
+     * The failed job is tried again.
      *
      * @param functionToExecute function to execute on a given model, possibly throwing an
      *     exception.
      * @param <S> return type
-     * @throws Throwable
+     * @throws Throwable if thrown from {@code functionToExecute} while executing on a CPU. It is suppressed if thrown on a GPU.
      */
     public <S> S excuteOrWait(
             CheckedFunction<ConcurrentModel<T>, S, ConcurrentModelException> functionToExecute)
@@ -110,7 +113,7 @@ public class ConcurrentModelPool<T> {
      *
      * <p>After usage, {@link #giveBack} should be called to return the model to the pool.
      *
-     * @return
+     * @return the model to be used concurrently, with an associated priority.
      * @throws InterruptedException
      */
     private WithPriority<ConcurrentModel<T>> getOrWait() throws InterruptedException {

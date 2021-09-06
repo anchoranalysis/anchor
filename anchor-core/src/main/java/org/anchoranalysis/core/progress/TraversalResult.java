@@ -35,8 +35,9 @@ import lombok.Value;
 public class TraversalResult {
 
     /**
-     * All the directories in the bottom-most depth that was traversed.These directories were not
-     * traversed
+     * All the directories in the bottom-most depth that was traversed.
+     * 
+     * <p>These directories were not traversed.
      */
     private List<Path> leafDirectories;
 

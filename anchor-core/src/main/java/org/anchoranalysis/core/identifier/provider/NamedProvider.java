@@ -38,7 +38,11 @@ import org.anchoranalysis.core.exception.OperationFailedException;
  */
 public interface NamedProvider<T> {
 
-    /** Retrieves the item if it exists, or throws an exception if it doesn't exist. */
+    /** 
+     * Retrieves the item if it exists, or throws an exception if it doesn't exist.
+     *
+     * 
+     */
     default T getException(String identifier) throws NamedProviderGetException {
         return getOptional(identifier)
                 .orElseThrow(() -> NamedProviderGetException.nonExistingItem(identifier));

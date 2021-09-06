@@ -86,7 +86,7 @@ public class IndexRange {
      * The start-index, corrected so that it is no longer negative.
      *
      * @param size the total number of elements
-     * @throws OperationFailedException
+     * @throws OperationFailedException if {@code startIndex} is invalid for a list of size {@code size}.
      */
     public int correctedStartIndex(int size) throws OperationFailedException {
         return correctNegative(startIndex, size);
@@ -96,7 +96,7 @@ public class IndexRange {
      * The end-index, corrected so that it is no longer negative.
      *
      * @param size the total number of elements
-     * @throws OperationFailedException
+     * @throws OperationFailedException if {@code endIndex} is invalid for a list of size {@code size}.
      */
     public int correctedEndIndex(int size) throws OperationFailedException {
         return correctNegative(endIndex, size);
@@ -107,18 +107,19 @@ public class IndexRange {
      * list.
      */
     private static int correctNegative(int index, int listSize) throws OperationFailedException {
-        int indexToCorrect = index;
-        if (indexToCorrect < 0) {
-            indexToCorrect = indexToCorrect + listSize;
+        int toCorrect = index;
+        if (toCorrect < 0) {
+            toCorrect = toCorrect + listSize;
         } else {
-            if (indexToCorrect >= listSize) {
+            if (toCorrect >= listSize) {
                 throw createException(index, listSize);
             }
         }
-        if (indexToCorrect < 0) {
+        if (toCorrect >= 0) {
+            return toCorrect;
+        } else {
             throw createException(index, listSize);
         }
-        return indexToCorrect;
     }
 
     private static OperationFailedException createException(int index, int listSize) {

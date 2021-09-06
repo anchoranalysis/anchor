@@ -36,7 +36,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.xml.exception.BeanXmlException;
-import org.anchoranalysis.core.serialize.XMLUtilities;
+import org.anchoranalysis.core.serialize.XMLParser;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.XMLConfiguration;
 import org.xml.sax.SAXParseException;
@@ -80,7 +80,7 @@ class HelperReadXML {
             // We initialize a DocumentBuilder specifically, so that we can switch off
             //  the errorHandler as otherwise it prints ugly error messages to the screen
             XMLConfiguration config = new XMLConfiguration();
-            config.setDocumentBuilder(XMLUtilities.createBuilderWithDefaultErrorHandler());
+            config.setDocumentBuilder(XMLParser.createBuilderWithDefaultErrorHandler());
             config.load(source);
             return config;
 

@@ -44,19 +44,18 @@ import org.anchoranalysis.core.log.error.ErrorReporterIntoLog;
 @Accessors(fluent = true)
 public class Logger {
 
-    /** Where messages logged to */
+    /** Where messages are logged to. */
     @Getter private final MessageLogger messageLogger;
 
-    /** Where errors are reported to */
+    /** Where errors are reported to. */
     @Getter private final ErrorReporter errorReporter;
 
     /**
      * Constructs with an error-reporter that writes into the message logger.
      *
-     * @param messageLogger
+     * @param messageLogger where messages are logged to. 
      */
     public Logger(MessageLogger messageLogger) {
-        super();
         this.messageLogger = messageLogger;
         this.errorReporter = new ErrorReporterIntoLog(messageLogger);
     }

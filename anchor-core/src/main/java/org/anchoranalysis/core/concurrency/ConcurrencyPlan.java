@@ -26,7 +26,7 @@
 package org.anchoranalysis.core.concurrency;
 
 /**
- * How many allocated CPUS and CPUs can be used.
+ * How many allocated CPUs and CPUs can be used.
  *
  * @author Owen Feehan
  */
@@ -35,7 +35,7 @@ public class ConcurrencyPlan {
     public static final int DEFAULT_NUMBER_GPUS = 1;
 
     /** The total number of available CPUs processors */
-    private final int totalNumberCPUs;
+    private final int numberCPUs;
 
     /** The maximum number of available GPUs that can be used (to substitute for a CPU at places) */
     private final int numberGPUs;
@@ -43,7 +43,7 @@ public class ConcurrencyPlan {
     /**
      * Creates a plan for no CPU processors with the default number of GPUs.
      *
-     * @return
+     * @return a newly-created plan
      */
     public static ConcurrencyPlan noCPUProcessor() {
         return new ConcurrencyPlan(0, DEFAULT_NUMBER_GPUS);
@@ -52,7 +52,7 @@ public class ConcurrencyPlan {
     /**
      * Creates a plan for a single-CPU processor with the default number of GPUs.
      *
-     * @return
+     * @return a newly-created plan
      */
     public static ConcurrencyPlan singleCPUProcessor() {
         return singleCPUProcessor(DEFAULT_NUMBER_GPUS);
@@ -61,7 +61,7 @@ public class ConcurrencyPlan {
     /**
      * Creates a plan for a single-CPU processor - with a maximum number of GPUs.
      *
-     * @return
+     * @return a newly-created plan
      */
     public static ConcurrencyPlan singleCPUProcessor(int maxNumberGPUs) {
         return new ConcurrencyPlan(1, maxNumberGPUs);
@@ -70,7 +70,7 @@ public class ConcurrencyPlan {
     /**
      * Creates a plan for a multiple CPU-processors
      *
-     * @return
+     * @return a newly-created plan
      */
     public static ConcurrencyPlan multipleProcessors(int maxNumberCPUs, int maxNumberGPUs) {
         return new ConcurrencyPlan(maxNumberCPUs, maxNumberGPUs);
@@ -84,23 +84,29 @@ public class ConcurrencyPlan {
      * @return a newly recreated {@link ConcurrencyPlan}
      */
     public ConcurrencyPlan disableGPUs() {
-        return new ConcurrencyPlan(totalNumberCPUs, 0);
+        return new ConcurrencyPlan(numberCPUs, 0);
     }
 
-    public int totalNumber() {
-        return totalNumberCPUs;
+    /**
+     * The number of CPUs to be used in the plan.
+     * 
+     * @return the number of CPUs
+     */
+    public int numberCPUs() {
+        return numberCPUs;
     }
 
+    /**
+     * The number of GPUs to be used in the plan.
+     * 
+     * @return the number of GPUs
+     */
     public int numberGPUs() {
         return numberGPUs;
     }
 
-    public int totalMinusGPUs() {
-        return totalNumberCPUs - numberGPUs;
-    }
-
     private ConcurrencyPlan(int maxAvailableCPUs, int maxNumberGPUs) {
-        this.totalNumberCPUs = Math.max(maxAvailableCPUs, maxNumberGPUs);
+        this.numberCPUs = Math.max(maxAvailableCPUs, maxNumberGPUs);
         this.numberGPUs = Math.min(maxNumberGPUs, maxAvailableCPUs);
     }
 }

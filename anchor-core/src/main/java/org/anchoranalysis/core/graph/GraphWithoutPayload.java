@@ -31,6 +31,7 @@ import java.util.Set;
 import java.util.stream.Stream;
 import javax.lang.model.type.NullType;
 import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
 
 /**
  * A graph, either directed or undirected, where edges contain no payload.
@@ -175,15 +176,18 @@ public class GraphWithoutPayload<V> {
      * @param element1 the first element to merge.
      * @param element2 the second element to merge.
      * @param merged the merged element that replaces {@code element1} and {@code element2}.
-     * @throws OperationFailedException
      */
-    public void mergeVertices(V element1, V element2, V merged) throws OperationFailedException {
+    public void mergeVertices(V element1, V element2, V merged) {
 
         Collection<V> adjacentSource = adjacentVerticesOutgoing(element1);
         Collection<V> adjacentOverlapping = adjacentVerticesOutgoing(element2);
 
-        removeVertex(element1);
-        removeVertex(element2);
+        try {
+            removeVertex(element1);
+            removeVertex(element2);
+        } catch (OperationFailedException e) {
+            throw new AnchorImpossibleSituationException();
+        }
 
         addVertex(merged);
 

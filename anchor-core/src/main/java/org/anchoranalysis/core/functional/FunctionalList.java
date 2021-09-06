@@ -175,7 +175,7 @@ public class FunctionalList {
      *     output if the optional is defined)
      * @return a list with the same size and same order, but using derived elements that are a
      *     result of the mapping
-     * @throws E
+     * @throws E if it is thrown by any call to {@code mapFunction}
      */
     public static <S, T, E extends Exception> List<T> mapToListOptional(
             Collection<S> collection,

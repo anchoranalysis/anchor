@@ -28,24 +28,45 @@ package org.anchoranalysis.core.concurrency;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 
+
+/**
+ * Wraps an element of type {@code T} to ensure priority is given when the flag {@code gpu} is true.
+ * 
+ * <p>The priority exists via an ordering of elements, where elements with flag {@code gpu==true} always precede those
+ * with {@code gpu==false}.
+ * 
+ * @author Owen Feehan
+ *
+ * @param <T> the element-type
+ */
 @EqualsAndHashCode
 @AllArgsConstructor
 public class WithPriority<T> implements Comparable<WithPriority<T>> {
 
-    private T model;
+    private T element;
     private boolean gpu;
 
+    /**
+     * Gets the underlying element stored in the structure.
+     * 
+     * @return the underlying element, ignoring any priority.
+     */
     public T get() {
-        return model;
+        return element;
     }
 
+    /**
+     * Is the element returned by {@link #get} associated with a GPU?
+     * 
+     * @return true if it the element is associated with the GPU.
+     */
     public boolean isGPU() {
         return gpu;
     }
 
     /**
-     * Orders so that {@code hasPriority==true} has higher priority in queue to {@code
-     * hasPriority==false}
+     * Orders so that {@code gpu==true} has higher priority in queue to {@code
+     * gpu==false}.
      */
     @Override
     public int compareTo(WithPriority<T> other) {

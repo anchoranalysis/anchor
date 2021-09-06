@@ -101,7 +101,7 @@ public class ParallelProcessor<T extends InputFromManager, S> extends JobProcess
                                 rootOutputter, concurrencyPlan, inputs, paramsExperiment);
 
         ExecutorService executorService =
-                Executors.newFixedThreadPool(concurrencyPlan.totalNumber());
+                Executors.newFixedThreadPool(concurrencyPlan.numberCPUs());
 
         int count = 1;
 
