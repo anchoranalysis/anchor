@@ -30,14 +30,14 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.BeanInstanceMap;
+import org.anchoranalysis.bean.Provider;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.annotation.SkipInit;
 import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 import org.anchoranalysis.bean.initializable.CheckMisconfigured;
-import org.anchoranalysis.bean.provider.Provider;
 import org.anchoranalysis.bean.shared.dictionary.DictionaryProvider;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.feature.bean.Feature;
@@ -120,14 +120,14 @@ public class FeatureEvaluator<T extends FeatureInput>
             return FeatureSession.with(
                     determineFeature(), getInitialization().getSharedFeatures(), getLogger());
 
-        } catch (InitException | CreateException e) {
+        } catch (InitException | ProvisionFailedException e) {
             throw new OperationFailedException(e);
         }
     }
 
-    private Feature<T> determineFeature() throws CreateException {
+    private Feature<T> determineFeature() throws ProvisionFailedException {
         if (featureProvider != null) {
-            return featureProvider.create();
+            return featureProvider.get();
         } else {
             return feature;
         }

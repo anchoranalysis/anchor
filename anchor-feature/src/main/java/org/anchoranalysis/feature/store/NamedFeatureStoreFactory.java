@@ -31,7 +31,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.exception.BeanDuplicateException;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.input.FeatureInput;
@@ -59,10 +59,10 @@ public class NamedFeatureStoreFactory {
      * @param <T>
      * @param namedFeatures
      * @return
-     * @throws CreateException
+     * @throws ProvisionFailedException
      */
     public <T extends FeatureInput> NamedFeatureStore<T> createNamedFeatureList(
-            List<NamedBean<FeatureListProvider<T>>> namedFeatures) throws CreateException {
+            List<NamedBean<FeatureListProvider<T>>> namedFeatures) throws ProvisionFailedException {
 
         NamedFeatureStore<T> out = new NamedFeatureStore<>();
         for (NamedBean<FeatureListProvider<T>> namedProvider : namedFeatures) {
@@ -71,15 +71,15 @@ public class NamedFeatureStoreFactory {
                 // NOTE: Naming convention
                 //  When a featureList contains a single item, we use the name of the featureList,
                 // rather than the feature
-                FeatureList<T> featureList = namedProvider.getValue().create();
+                FeatureList<T> featureList = namedProvider.getValue().get();
 
                 if (featureList.size() > 0) {
                     AddFeaturesHelper.addFeaturesToStore(
                             featureList, namedProvider.getName(), paramsOnlyInDescription, out);
                 }
 
-            } catch (BeanDuplicateException | CreateException e) {
-                throw new CreateException(
+            } catch (BeanDuplicateException | ProvisionFailedException e) {
+                throw new ProvisionFailedException(
                         String.format(
                                 "An error occurred creating a named-feature-list from provider '%s'",
                                 namedProvider.getName()),

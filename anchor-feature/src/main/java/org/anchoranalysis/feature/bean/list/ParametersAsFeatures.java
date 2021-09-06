@@ -30,7 +30,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.dictionary.DictionaryProvider;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.operator.Constant;
@@ -48,8 +48,8 @@ public class ParametersAsFeatures<T extends FeatureInput> extends FeatureListPro
     // END BEAN PROPERTIES
 
     @Override
-    public FeatureList<T> create() throws CreateException {
-        Dictionary dictionaryCreated = dictionary.create();
+    public FeatureList<T> get() throws ProvisionFailedException {
+        Dictionary dictionaryCreated = dictionary.get();
         return FeatureListFactory.mapFrom(
                 dictionaryCreated.keys(), key -> featureForKey(key, dictionaryCreated));
     }

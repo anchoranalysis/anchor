@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.mpp.segment.optimization.kernel;
 
-import org.anchoranalysis.mpp.segment.bean.optimization.kernel.Kernel;
 import lombok.AllArgsConstructor;
 import lombok.Value;
+import org.anchoranalysis.mpp.segment.bean.optimization.kernel.Kernel;
 
 @AllArgsConstructor
 @Value

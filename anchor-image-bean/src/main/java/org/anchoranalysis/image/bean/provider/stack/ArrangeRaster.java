@@ -31,9 +31,9 @@ import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.anchoranalysis.bean.Provider;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.provider.Provider;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.RasterArranger;
 import org.anchoranalysis.image.bean.spatial.arrange.ArrangeStackBean;
@@ -78,16 +78,16 @@ public class ArrangeRaster extends StackProvider {
     }
 
     @Override
-    public Stack create() throws CreateException {
+    public Stack get() throws ProvisionFailedException {
 
         if (list.isEmpty()) {
-            throw new CreateException("At least one stack must be present in list");
+            throw new ProvisionFailedException("At least one stack must be present in list");
         }
 
         List<RGBStack> rasterList = new ArrayList<>();
         for (Provider<Stack> provider : list) {
 
-            Stack stack = provider.create();
+            Stack stack = provider.get();
 
             if (forceRGB) {
                 copyFirstChannelUntil3(stack);
@@ -99,7 +99,7 @@ public class ArrangeRaster extends StackProvider {
         try {
             rasterArranger.init(arrange, rasterList);
         } catch (InitException e) {
-            throw new CreateException(e);
+            throw new ProvisionFailedException(e);
         }
 
         ChannelFactorySingleType factory =

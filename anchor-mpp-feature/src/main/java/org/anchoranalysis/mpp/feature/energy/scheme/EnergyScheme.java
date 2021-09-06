@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.shared.dictionary.DictionaryProvider;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.core.value.Dictionary;
@@ -109,7 +110,11 @@ public class EnergyScheme {
     /*** returns the associated {@link Dictionary} or an empty set, if no params are associated with the energyScheme */
     public Dictionary createDictionary() throws CreateException {
         if (dictionary.isPresent()) {
-            return dictionary.get().create().duplicate();
+            try {
+                return dictionary.get().get().duplicate();
+            } catch (ProvisionFailedException e) {
+                throw new CreateException(e);
+            }
         } else {
             return new Dictionary();
         }

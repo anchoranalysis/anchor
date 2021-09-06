@@ -60,7 +60,6 @@ public class XStreamDeserializer<T> implements Deserializer<T> {
 
     private XStream setupXStream() {
         XStream xstream = new XStream(new Xpp3Driver());
-        XStream.setupDefaultSecurity(xstream); // to be removed after 1.5
         xstream.allowTypesByWildcard(ALLOWED_NAMESPACES);
         return xstream;
     }

@@ -29,7 +29,7 @@ package org.anchoranalysis.feature.bean.provider;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.input.FeatureInput;
@@ -45,10 +45,10 @@ public class FeatureProviderReference extends FeatureProvider<FeatureInput> {
     private Feature<FeatureInput> feature;
 
     @Override
-    public Feature<FeatureInput> create() throws CreateException {
+    public Feature<FeatureInput> get() throws ProvisionFailedException {
         if (feature == null) {
             if (getInitialization().getSharedFeatures() == null) {
-                throw new CreateException("shared-features are null");
+                throw new ProvisionFailedException("shared-features are not defined.");
             }
 
             if (featureListRef != null && !featureListRef.isEmpty()) {
@@ -57,14 +57,14 @@ public class FeatureProviderReference extends FeatureProvider<FeatureInput> {
                 try {
                     getInitialization().getFeatureListSet().getException(featureListRef);
                 } catch (NamedProviderGetException e) {
-                    throw new CreateException(e.summarize());
+                    throw new ProvisionFailedException(e.summarize());
                 }
             }
 
             try {
                 this.feature = getInitialization().getSharedFeatures().getException(id);
             } catch (NamedProviderGetException e) {
-                throw new CreateException(e.summarize());
+                throw new ProvisionFailedException(e.summarize());
             }
         }
         return feature;

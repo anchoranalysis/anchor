@@ -29,7 +29,7 @@ package org.anchoranalysis.image.bean.provider;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.image.core.channel.Channel;
 
 /**
@@ -46,17 +46,18 @@ public abstract class ChannelProviderBinary extends ChannelProvider {
     // END BEAN PROPERTIES
 
     @Override
-    public Channel create() throws CreateException {
+    public Channel get() throws ProvisionFailedException {
 
-        Channel channel1Created = channel1.create();
-        Channel channel2Created = channel2.create();
+        Channel channel1Created = channel1.get();
+        Channel channel2Created = channel2.get();
 
         if (!channel1Created.dimensions().equals(channel2Created.dimensions())) {
-            throw new CreateException("Dimensions of channels do not match");
+            throw new ProvisionFailedException("Dimensions of channels do not match");
         }
 
         return process(channel1Created, channel2Created);
     }
 
-    protected abstract Channel process(Channel channel1, Channel channel2) throws CreateException;
+    protected abstract Channel process(Channel channel1, Channel channel2)
+            throws ProvisionFailedException;
 }

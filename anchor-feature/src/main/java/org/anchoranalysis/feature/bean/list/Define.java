@@ -34,7 +34,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.SkipInit;
-import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.input.FeatureInput;
 
@@ -51,7 +50,7 @@ public class Define<T extends FeatureInput> extends ReferencedFeatures<T> {
     }
 
     @Override
-    public FeatureList<T> create() throws CreateException {
+    public FeatureList<T> get() {
         return FeatureListFactory.wrapDuplicate(list);
     }
 }

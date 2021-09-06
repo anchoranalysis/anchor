@@ -28,14 +28,14 @@ package org.anchoranalysis.mpp.sgmn.dummyProvider;
 
 import static org.mockito.Mockito.*;
 
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.core.stack.Stack;
 
 public class DummyStackProvider extends StackProvider {
 
     @Override
-    public Stack create() throws CreateException {
+    public Stack get() throws ProvisionFailedException {
         return mock(Stack.class);
     }
 }

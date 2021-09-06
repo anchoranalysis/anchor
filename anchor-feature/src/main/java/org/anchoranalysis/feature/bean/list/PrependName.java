@@ -29,7 +29,7 @@ package org.anchoranalysis.feature.bean.list;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.input.FeatureInput;
 
@@ -52,9 +52,9 @@ public class PrependName extends FeatureListProvider<FeatureInput> {
     }
 
     @Override
-    public FeatureList<FeatureInput> create() throws CreateException {
+    public FeatureList<FeatureInput> get() throws ProvisionFailedException {
 
-        FeatureList<FeatureInput> features = item.create();
+        FeatureList<FeatureInput> features = item.get();
 
         for (Feature<FeatureInput> f : features) {
             String existingName = f.getFriendlyName();

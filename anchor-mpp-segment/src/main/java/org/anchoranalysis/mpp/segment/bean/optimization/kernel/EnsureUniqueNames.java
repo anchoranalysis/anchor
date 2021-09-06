@@ -29,9 +29,9 @@ package org.anchoranalysis.mpp.segment.bean.optimization.kernel;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.anchoranalysis.mpp.segment.optimization.kernel.WeightedKernel;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.mpp.segment.optimization.kernel.WeightedKernel;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class EnsureUniqueNames {

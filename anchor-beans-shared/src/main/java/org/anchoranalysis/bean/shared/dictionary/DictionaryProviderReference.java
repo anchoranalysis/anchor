@@ -52,7 +52,7 @@ public class DictionaryProviderReference extends DictionaryProvider {
     }
 
     @Override
-    public Dictionary create() {
+    public Dictionary get() {
         assert (getInitialization() != null); // Otherwise init() has never been called
         return dictionary;
     }

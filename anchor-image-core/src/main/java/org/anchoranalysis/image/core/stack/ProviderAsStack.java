@@ -25,11 +25,11 @@
  */
 package org.anchoranalysis.image.core.stack;
 
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 
 /** Provides a stack */
 public interface ProviderAsStack {
 
     /** Creates from the image-bean in the form of a stack */
-    Stack createAsStack() throws CreateException;
+    Stack getAsStack() throws ProvisionFailedException;
 }

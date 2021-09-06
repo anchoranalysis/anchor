@@ -31,7 +31,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.exception.BeanDuplicateException;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
@@ -82,9 +82,9 @@ public class ChannelFilter extends AnchorBean<ChannelFilter> implements ChannelG
             Channel channelSelected = channels.getChannel(name, timeIndex, progress);
             initializeProvider(providerDuplicated, channelSelected);
 
-            return providerDuplicated.create();
+            return providerDuplicated.get();
 
-        } catch (InitException | CreateException | BeanDuplicateException e) {
+        } catch (InitException | ProvisionFailedException | BeanDuplicateException e) {
             throw new GetOperationFailedException(name, e);
         }
     }

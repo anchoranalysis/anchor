@@ -32,7 +32,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.annotation.SkipInit;
 import org.anchoranalysis.bean.permute.property.SequenceInteger;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.operator.FeatureListElem;
 import org.anchoranalysis.feature.bean.operator.Reference;
@@ -110,7 +110,7 @@ public class ListSequence<T extends FeatureInput> extends ReferencedFeatures<T> 
     }
 
     @Override
-    public FeatureList<T> create() throws CreateException {
+    public FeatureList<T> get() throws ProvisionFailedException {
         return FeatureListFactory.from(featureFromSequence());
     }
 

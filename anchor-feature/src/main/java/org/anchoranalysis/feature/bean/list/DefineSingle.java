@@ -26,9 +26,10 @@
 
 package org.anchoranalysis.feature.bean.list;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.SkipInit;
-import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.input.FeatureInput;
 
@@ -37,19 +38,11 @@ public class DefineSingle<T extends FeatureInput> extends ReferencedFeatures<T> 
     /** */
 
     // START BEAN PROPERTIES
-    @BeanField @SkipInit private Feature<T> item;
+    @Getter @Setter @BeanField @SkipInit private Feature<T> item;
     // END BEAN PROPERTIES
 
     @Override
-    public FeatureList<T> create() throws CreateException {
+    public FeatureList<T> get() {
         return FeatureListFactory.from(item);
-    }
-
-    public Feature<T> getItem() {
-        return item;
-    }
-
-    public void setItem(Feature<T> item) {
-        this.item = item;
     }
 }

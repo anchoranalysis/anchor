@@ -29,9 +29,9 @@ import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.OptionalFactory;
-import org.anchoranalysis.bean.provider.Provider;
+import org.anchoranalysis.bean.Provider;
 import org.anchoranalysis.bean.shared.dictionary.DictionaryProvider;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.feature.energy.EnergyStack;
@@ -47,14 +47,14 @@ class EnergyStackHelper {
         try {
             if (stackEnergy != null) {
 
-                EnergyStack energyStack = new EnergyStack(stackEnergy.create());
+                EnergyStack energyStack = new EnergyStack(stackEnergy.get());
                 energyStack.setDictionary(
                         OptionalFactory.create(dictionary).orElseGet(Dictionary::new));
                 return Optional.of(energyStack);
             } else {
                 return Optional.empty();
             }
-        } catch (CreateException e) {
+        } catch (ProvisionFailedException e) {
             throw new OperationFailedException(e);
         }
     }

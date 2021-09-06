@@ -29,6 +29,7 @@ package org.anchoranalysis.image.bean.provider;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.math.histogram.Histogram;
 
@@ -39,8 +40,12 @@ public abstract class HistogramProviderUnary extends HistogramProvider {
     // END BEAN PROPERTIES
 
     @Override
-    public Histogram create() throws CreateException {
-        return createFromHistogram(histogram.create());
+    public Histogram get() throws ProvisionFailedException {
+        try {
+            return createFromHistogram(histogram.get());
+        } catch (CreateException e) {
+            throw new ProvisionFailedException(e);
+        }
     }
 
     protected abstract Histogram createFromHistogram(Histogram source) throws CreateException;

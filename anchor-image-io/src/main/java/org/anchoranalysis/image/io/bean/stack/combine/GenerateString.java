@@ -29,9 +29,9 @@ package org.anchoranalysis.image.io.bean.stack.combine;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.anchoranalysis.bean.Provider;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.provider.Provider;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.channel.convert.ChannelConverter;
@@ -71,13 +71,13 @@ public class GenerateString extends StackProvider {
     }
 
     @Override
-    public Stack create() throws CreateException {
+    public Stack get() throws ProvisionFailedException {
 
         Stack label2D = create2D();
 
         if (repeatZProvider != null) {
 
-            Stack repeatZ = repeatZProvider.create();
+            Stack repeatZ = repeatZProvider.get();
             int zHeight = repeatZ.dimensions().z();
 
             Stack out = new Stack();
@@ -85,7 +85,7 @@ public class GenerateString extends StackProvider {
                 try {
                     out.addChannel(createExpandedChannel(channel, zHeight));
                 } catch (IncorrectImageSizeException e) {
-                    throw new CreateException(e);
+                    throw new ProvisionFailedException(e);
                 }
             }
             return out;
@@ -106,7 +106,7 @@ public class GenerateString extends StackProvider {
         return max;
     }
 
-    private Stack create2D() throws CreateException {
+    private Stack create2D() throws ProvisionFailedException {
         try {
             Stack stack = stringRasterGenerator.createGenerator().transform(text);
 
@@ -123,7 +123,7 @@ public class GenerateString extends StackProvider {
                                 ? UnsignedShortVoxelType.MAX_VALUE_INT
                                 : UnsignedByteVoxelType.MAX_VALUE_INT;
 
-                Stack stackIntensity = intensityProvider.create();
+                Stack stackIntensity = intensityProvider.get();
                 double maxValue = maxValueFromStack(stackIntensity);
                 double mult = maxValue / maxTypeValue;
 
@@ -134,7 +134,7 @@ public class GenerateString extends StackProvider {
 
             return stack;
         } catch (OutputWriteFailedException e) {
-            throw new CreateException(e);
+            throw new ProvisionFailedException(e);
         }
     }
 

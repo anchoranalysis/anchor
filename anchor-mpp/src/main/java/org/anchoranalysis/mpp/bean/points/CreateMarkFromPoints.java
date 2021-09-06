@@ -34,7 +34,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.SkipInit;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.mpp.bean.points.fitter.InsufficientPointsException;
@@ -76,7 +76,7 @@ public class CreateMarkFromPoints extends AnchorBean<CreateMarkFromPoints> {
         try {
             Mark mark =
                     markProvider
-                            .create()
+                            .get()
                             .orElseThrow(
                                     () ->
                                             new OperationFailedException(
@@ -91,7 +91,7 @@ public class CreateMarkFromPoints extends AnchorBean<CreateMarkFromPoints> {
                 return maybeThrowInsufficientPointsException(points);
             }
 
-        } catch (CreateException e) {
+        } catch (ProvisionFailedException e) {
             throw new OperationFailedException(e);
         }
     }

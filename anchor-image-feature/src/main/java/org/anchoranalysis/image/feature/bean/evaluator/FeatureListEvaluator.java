@@ -32,7 +32,7 @@ import java.util.function.UnaryOperator;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.identifier.provider.store.SharedObjects;
@@ -90,7 +90,7 @@ public class FeatureListEvaluator<T extends FeatureInput>
 
             return new NamedFeatureCalculatorMulti<>(calculator, featuresCreated.createNames());
 
-        } catch (CreateException | InitException e) {
+        } catch (ProvisionFailedException | InitException e) {
             throw new OperationFailedException(e);
         }
     }

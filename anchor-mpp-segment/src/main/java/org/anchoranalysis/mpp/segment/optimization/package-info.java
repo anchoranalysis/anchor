@@ -1,4 +1,2 @@
-/**
- * Non-bean classes used in {@code org.anchoranalysis.mpp.segment.bean.optimization}.
- */
+/** Non-bean classes used in {@code org.anchoranalysis.mpp.segment.bean.optimization}. */
 package org.anchoranalysis.mpp.segment.optimization;

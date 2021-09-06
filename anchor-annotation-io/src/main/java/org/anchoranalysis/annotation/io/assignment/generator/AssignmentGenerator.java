@@ -33,8 +33,8 @@ import java.util.Optional;
 import java.util.function.IntFunction;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.annotation.io.assignment.Assignment;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.color.ColorList;
-import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.stack.ArrangeRaster;
 import org.anchoranalysis.image.core.object.properties.ObjectCollectionWithProperties;
@@ -102,9 +102,9 @@ public class AssignmentGenerator extends RasterGeneratorSelectFormat<Assignment>
                         createLabel(element, true),
                         createLabel(element, false));
         try {
-            return delegate.transform(stackProvider.create());
+            return delegate.transform(stackProvider.get());
 
-        } catch (CreateException e) {
+        } catch (ProvisionFailedException e) {
             throw new OutputWriteFailedException(e);
         }
     }

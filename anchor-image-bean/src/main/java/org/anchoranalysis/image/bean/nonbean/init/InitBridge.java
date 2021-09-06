@@ -29,7 +29,7 @@ package org.anchoranalysis.image.bean.nonbean.init;
 import org.anchoranalysis.bean.initializable.InitializableBean;
 import org.anchoranalysis.bean.initializable.params.BeanInitialization;
 import org.anchoranalysis.bean.initializable.property.PropertyInitializer;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.checked.CheckedFunction;
@@ -48,7 +48,7 @@ class InitBridge<S extends InitializableBean<?, V>, T, V extends BeanInitializat
 
     private PropertyInitializer<?> pi;
     private Logger logger;
-    private CheckedFunction<S, T, CreateException> beanBridge;
+    private CheckedFunction<S, T, ProvisionFailedException> beanBridge;
 
     /**
      * Constructor
@@ -60,7 +60,7 @@ class InitBridge<S extends InitializableBean<?, V>, T, V extends BeanInitializat
     public InitBridge(
             PropertyInitializer<?> pi,
             Logger logger,
-            CheckedFunction<S, T, CreateException> beanBridge) {
+            CheckedFunction<S, T, ProvisionFailedException> beanBridge) {
         super();
         this.pi = pi;
         this.logger = logger;
@@ -76,7 +76,7 @@ class InitBridge<S extends InitializableBean<?, V>, T, V extends BeanInitializat
 
             // Bridge the source to the destination
             return beanBridge.apply(sourceObject);
-        } catch (InitException | CreateException e) {
+        } catch (InitException | ProvisionFailedException e) {
             throw new OperationFailedException(e);
         }
     }

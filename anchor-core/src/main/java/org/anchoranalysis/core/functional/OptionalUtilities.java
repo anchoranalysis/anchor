@@ -244,7 +244,7 @@ public class OptionalUtilities {
      * @param flag iff true an populated optional is returned, otherwise empty().
      * @param valueIfFlagTrue used to generate a positive value
      * @return a filled or empty optional depending on flag
-     * @throws E if the supplioer throws an exception
+     * @throws E if the supplier throws an exception
      */
     public static <T, E extends Exception> Optional<T> createFromFlagChecked(
             boolean flag, CheckedSupplier<T, E> valueIfFlagTrue) throws E {

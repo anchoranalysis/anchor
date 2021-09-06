@@ -28,9 +28,9 @@ package org.anchoranalysis.image.bean.provider.stack;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.anchoranalysis.bean.Provider;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.provider.Provider;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.image.core.stack.Stack;
 
 public abstract class StackProviderUnary extends StackProvider {
@@ -40,9 +40,9 @@ public abstract class StackProviderUnary extends StackProvider {
     // END BEAN FIELDS
 
     @Override
-    public Stack create() throws CreateException {
-        return createFromStack(stack.create());
+    public Stack get() throws ProvisionFailedException {
+        return createFromStack(stack.get());
     }
 
-    protected abstract Stack createFromStack(Stack source) throws CreateException;
+    protected abstract Stack createFromStack(Stack source) throws ProvisionFailedException;
 }

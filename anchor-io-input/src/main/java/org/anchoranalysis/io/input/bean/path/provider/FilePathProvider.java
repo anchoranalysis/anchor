@@ -27,7 +27,7 @@
 package org.anchoranalysis.io.input.bean.path.provider;
 
 import java.nio.file.Path;
-import org.anchoranalysis.bean.provider.Provider;
+import org.anchoranalysis.bean.Provider;
 import org.anchoranalysis.bean.shared.path.FilePathBean;
 
 public abstract class FilePathProvider extends FilePathBean<FilePathProvider>
