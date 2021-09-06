@@ -39,11 +39,14 @@ import org.apache.commons.configuration.beanutils.BeanDeclaration;
 import org.apache.commons.configuration.beanutils.XMLBeanDeclaration;
 
 /**
- * Creates a new Define
+ * Creates a new {@link Define}.
  *
- * <p>The following rules are applied to populate the Define 1. Elements named "add" are treated as
- * instances of DefineAdderBean 2. Otherwise every subelement of NamedDefinitions is simply assumed
- * to be a list of beans (the names of the subelements are irrelevant)
+ * <p>The following rules are applied to populate the {@link Define}.
+ * 
+ * <ol>
+ * <li>Elements named "add" are treated as instances of {@link DefineAdderBean}.
+ * <li>Otherwise every sub-element of {@link Define} is simply assumed to be a list of beans (the names of the sub-elements are irrelevant).
+ * </ol>
  *
  * @author Owen Feehan
  */
@@ -58,8 +61,8 @@ public class DefineFactory extends AnchorBeanFactory {
             throws Exception {
         Define out = new Define();
 
-        XMLBeanDeclaration declXML = (XMLBeanDeclaration) decl;
-        SubnodeConfiguration subConfig = declXML.getConfiguration();
+        XMLBeanDeclaration declaration = (XMLBeanDeclaration) decl;
+        SubnodeConfiguration subConfig = declaration.getConfiguration();
 
         // We find all items ELEMENT_NAME_ADD and treat them as adder
         List<DefineAdderBean> list =

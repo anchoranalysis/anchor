@@ -53,9 +53,9 @@ public class XStreamDeserializer<T> implements Deserializer<T> {
 
         XStream xstream = setupXStream();
 
-        Object o = xstream.fromXML(filePath.toFile());
+        Object object = xstream.fromXML(filePath.toFile());
 
-        return (T) o;
+        return (T) object;
     }
 
     private XStream setupXStream() {
