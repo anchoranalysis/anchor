@@ -110,8 +110,8 @@ public class Define extends AnchorBean<Define> {
     }
 
     private void addList(List<NamedBean<AnchorBean<?>>> beans) throws OperationFailedException {
-        for (NamedBean<?> nb : beans) {
-            add(nb);
+        for (NamedBean<?> bean : beans) {
+            add(bean);
         }
     }
 
