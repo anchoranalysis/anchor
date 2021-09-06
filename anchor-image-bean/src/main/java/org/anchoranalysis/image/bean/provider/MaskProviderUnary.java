@@ -28,9 +28,9 @@ package org.anchoranalysis.image.bean.provider;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.anchoranalysis.bean.Provider;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.provider.Provider;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.image.core.mask.Mask;
 
 public abstract class MaskProviderUnary extends MaskProvider {
@@ -40,9 +40,9 @@ public abstract class MaskProviderUnary extends MaskProvider {
     // END BEAN PROPERTIES
 
     @Override
-    public Mask create() throws CreateException {
-        return createFromMask(mask.create());
+    public Mask get() throws ProvisionFailedException {
+        return createFromMask(mask.get());
     }
 
-    protected abstract Mask createFromMask(Mask mask) throws CreateException;
+    protected abstract Mask createFromMask(Mask mask) throws ProvisionFailedException;
 }

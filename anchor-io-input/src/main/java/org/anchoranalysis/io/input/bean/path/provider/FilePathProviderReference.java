@@ -30,7 +30,7 @@ import java.nio.file.Path;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 
 public class FilePathProviderReference extends FilePathProvider {
@@ -42,14 +42,14 @@ public class FilePathProviderReference extends FilePathProvider {
     private Path filePath;
 
     @Override
-    public Path create() throws CreateException {
+    public Path get() throws ProvisionFailedException {
         assert (isInitialized());
 
         if (filePath == null) {
             try {
                 filePath = getInitialization().getFilePaths().getException(id);
             } catch (NamedProviderGetException e) {
-                throw new CreateException(e);
+                throw new ProvisionFailedException(e);
             }
         }
 

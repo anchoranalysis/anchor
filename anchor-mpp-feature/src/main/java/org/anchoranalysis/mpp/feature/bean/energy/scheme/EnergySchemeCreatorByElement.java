@@ -35,6 +35,7 @@ import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.shared.dictionary.DictionaryProvider;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.feature.bean.Feature;
@@ -79,30 +80,42 @@ public class EnergySchemeCreatorByElement extends EnergySchemeCreator {
 
     @Override
     public EnergyScheme create() throws CreateException {
-        return new EnergyScheme(
-                elemIndCreator.create(),
-                elemPairCreator.create(),
-                createAll(),
-                regionMap,
-                pairAddCriteria,
-                Optional.ofNullable(dictionary),
-                buildImageFeatures());
+        try {
+            return new EnergyScheme(
+                    elemIndCreator.get(),
+                    elemPairCreator.get(),
+                    createAll(),
+                    regionMap,
+                    pairAddCriteria,
+                    Optional.ofNullable(dictionary),
+                    buildImageFeatures());
+        } catch (ProvisionFailedException e) {
+            throw new CreateException(e);
+        }
     }
 
     private FeatureList<FeatureInputAllMemo> createAll() throws CreateException {
-        if (elemAllCreator != null) {
-            return elemAllCreator.create();
-        } else {
-            return FeatureListFactory.empty();
+        try {
+            if (elemAllCreator != null) {
+                return elemAllCreator.get();
+            } else {
+                return FeatureListFactory.empty();
+            }
+        } catch (ProvisionFailedException e) {
+            throw new CreateException(e);
         }
     }
 
     private List<NamedBean<Feature<FeatureInputStack>>> buildImageFeatures()
             throws CreateException {
-        return FunctionalList.mapToList(
-                listImageFeatures,
-                CreateException.class,
-                ni -> sumList(ni.getValue().create(), ni.getName()));
+        try {
+            return FunctionalList.mapToList(
+                    listImageFeatures,
+                    ProvisionFailedException.class,
+                    ni -> sumList(ni.getValue().get(), ni.getName()));
+        } catch (ProvisionFailedException e) {
+            throw new CreateException(e);
+        }
     }
 
     private NamedBean<Feature<FeatureInputStack>> sumList(

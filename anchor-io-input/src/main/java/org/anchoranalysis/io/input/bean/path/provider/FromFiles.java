@@ -32,7 +32,7 @@ import java.util.Collection;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.progress.ProgressIgnore;
 import org.anchoranalysis.io.input.InputContextParams;
 import org.anchoranalysis.io.input.bean.InputManagerParams;
@@ -54,7 +54,7 @@ public class FromFiles extends FilePathProvider {
     // END BEAN PROPERTIES
 
     @Override
-    public Path create() throws CreateException {
+    public Path get() throws ProvisionFailedException {
 
         Collection<File> filesCreated;
         try {
@@ -63,11 +63,11 @@ public class FromFiles extends FilePathProvider {
                             new InputManagerParams(
                                     new InputContextParams(), ProgressIgnore.get(), getLogger()));
         } catch (FilesProviderException e) {
-            throw new CreateException("Cannot find files", e);
+            throw new ProvisionFailedException("Cannot find files", e);
         }
 
         if (filesCreated.size() != 1) {
-            throw new CreateException(
+            throw new ProvisionFailedException(
                     String.format(
                             "files must return one file. Instead, it returned %d files.",
                             filesCreated.size()));

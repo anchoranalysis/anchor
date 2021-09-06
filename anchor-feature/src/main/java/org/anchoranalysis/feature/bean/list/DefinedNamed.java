@@ -32,7 +32,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.SkipInit;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.store.NamedFeatureStoreFactory;
@@ -47,7 +47,7 @@ public class DefinedNamed<T extends FeatureInput> extends ReferencedFeatures<T> 
     // END BEAN PROPERTIES
 
     @Override
-    public FeatureList<T> create() throws CreateException {
+    public FeatureList<T> get() throws ProvisionFailedException {
         return FeatureListFactory.mapFrom(
                 STORE_FACTORY.createNamedFeatureList(list),
                 item -> renameFeature(item.getName(), item.getValue()));

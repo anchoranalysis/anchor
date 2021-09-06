@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.mpp.bean.provider;
 
-import org.anchoranalysis.bean.provider.Provider;
+import org.anchoranalysis.bean.Provider;
 import org.anchoranalysis.mpp.bean.MarksBean;
 
 /**

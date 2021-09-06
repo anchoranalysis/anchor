@@ -34,7 +34,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.dictionary.DictionaryProvider;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.progress.ProgressIgnore;
 import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.io.input.InputContextParams;
@@ -57,7 +57,7 @@ public class ReadFromFile extends DictionaryProvider {
     // END BEAN PROPERTIES
 
     @Override
-    public Dictionary create() throws CreateException {
+    public Dictionary get() throws ProvisionFailedException {
         try {
             Collection<File> providedFiles =
                     files.create(
@@ -65,20 +65,20 @@ public class ReadFromFile extends DictionaryProvider {
                                     new InputContextParams(), ProgressIgnore.get(), getLogger()));
 
             if (providedFiles.isEmpty()) {
-                throw new CreateException("No files are provided");
+                throw new ProvisionFailedException("No files are provided");
             }
 
             if (providedFiles.size() > 1) {
-                throw new CreateException("More than one file is provided");
+                throw new ProvisionFailedException("More than one file is provided");
             }
 
             Path filePath = providedFiles.iterator().next().toPath();
             return Dictionary.readFromFile(filePath);
 
         } catch (IOException e) {
-            throw new CreateException(e);
+            throw new ProvisionFailedException(e);
         } catch (FilesProviderException e) {
-            throw new CreateException("Cannot find files", e);
+            throw new ProvisionFailedException("Cannot find files", e);
         }
     }
 }

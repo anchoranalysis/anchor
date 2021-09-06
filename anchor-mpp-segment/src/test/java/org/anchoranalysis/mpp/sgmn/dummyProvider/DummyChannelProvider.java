@@ -28,7 +28,7 @@ package org.anchoranalysis.mpp.sgmn.dummyProvider;
 
 import static org.mockito.Mockito.*;
 
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.core.channel.Channel;
 
@@ -36,7 +36,7 @@ import org.anchoranalysis.image.core.channel.Channel;
 public class DummyChannelProvider extends ChannelProvider {
 
     @Override
-    public Channel create() throws CreateException {
+    public Channel get() throws ProvisionFailedException {
         return mock(Channel.class);
     }
 }

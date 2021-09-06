@@ -30,7 +30,7 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
@@ -67,8 +67,8 @@ public class ReportFeatureOnMark extends ReportFeatureForMarks<FeatureInputMark>
 
         Optional<Mark> mark;
         try {
-            mark = markProvider.create();
-        } catch (CreateException e) {
+            mark = markProvider.get();
+        } catch (ProvisionFailedException e) {
             throw new OperationFailedException(e);
         }
 
@@ -84,7 +84,7 @@ public class ReportFeatureOnMark extends ReportFeatureForMarks<FeatureInputMark>
             double val =
                     session.calculate(new FeatureInputMark(mark.get(), Optional.of(dimensions)));
             return Double.toString(val);
-        } catch (FeatureCalculationException | CreateException e) {
+        } catch (FeatureCalculationException | ProvisionFailedException e) {
             throw new OperationFailedException(e);
         }
     }

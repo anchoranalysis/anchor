@@ -66,7 +66,7 @@ import org.apache.commons.lang.time.StopWatch;
 public abstract class OutputExperiment extends Experiment {
 
     public static final String OUTPUT_MANIFEST = "experiment_manifest";
-    
+
     public static final String OUTPUT_EXECUTION_TIME = "execution_time";
 
     // START BEAN PROPERTIES
@@ -251,10 +251,18 @@ public abstract class OutputExperiment extends Experiment {
         long totalExecutionTimeSeconds = stopWatchExperiment.getTime() / 1000;
 
         if (taskStatistics.isPresent()) {
-            params.getOutputter().writerSelective().write(OUTPUT_EXECUTION_TIME, StringGenerator::new, () ->
-            ExecutionTimeStatisticsReport.report(taskStatistics.get(), params.getExecutionTimeStatistics(), totalExecutionTimeSeconds));
+            params.getOutputter()
+                    .writerSelective()
+                    .write(
+                            OUTPUT_EXECUTION_TIME,
+                            StringGenerator::new,
+                            () ->
+                                    ExecutionTimeStatisticsReport.report(
+                                            taskStatistics.get(),
+                                            params.getExecutionTimeStatistics(),
+                                            totalExecutionTimeSeconds));
         }
-        
+
         OutputExperimentLogHelper.maybeRecordedOutputs(recordedOutputs, params);
 
         OutputExperimentLogHelper.maybeLogCompleted(params, totalExecutionTimeSeconds);

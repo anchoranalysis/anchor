@@ -28,9 +28,9 @@ package org.anchoranalysis.image.bean.provider;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.anchoranalysis.bean.Provider;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.provider.Provider;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 
 /**
@@ -46,10 +46,10 @@ public abstract class ObjectCollectionProviderUnary extends ObjectCollectionProv
     // END BEAN PROPERTIES
 
     @Override
-    public ObjectCollection create() throws CreateException {
-        return createFromObjects(objects.create());
+    public ObjectCollection get() throws ProvisionFailedException {
+        return createFromObjects(objects.get());
     }
 
     protected abstract ObjectCollection createFromObjects(ObjectCollection objects)
-            throws CreateException;
+            throws ProvisionFailedException;
 }

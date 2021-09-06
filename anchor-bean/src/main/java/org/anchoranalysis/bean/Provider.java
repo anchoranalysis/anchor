@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-plugin-image
+ * anchor-bean
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -24,26 +24,30 @@
  * #L%
  */
 
-package org.anchoranalysis.bean.provider;
+package org.anchoranalysis.bean;
 
-import lombok.AllArgsConstructor;
-import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
+import org.anchoranalysis.core.functional.checked.CheckedSupplier;
 
 /**
- * A convenient way of providing an object without using a {@link AnchorBean}.
+ * A class (usually an {@link AnchorBean}} that creates or otherwise supplies another object.
  *
- * <p>This class is not a bean there's no parameterless constructor.
+ * <p>This is like a {@link CheckedSupplier} but throws a particular type of exception.
+ *
+ * <p>It is a convenient base-class for a set of beans that provide similar functionality creating
+ * or referencing existing objects.
  *
  * @author Owen Feehan
+ * @param <T> the item the bean creates
  */
-@AllArgsConstructor
-public class ProviderHolder<T> implements Provider<T> {
+@FunctionalInterface
+public interface Provider<T> {
 
-    private T object;
-
-    @Override
-    public T create() throws CreateException {
-        return object;
-    }
+    /**
+     * Gets or creates an object of type {@code T}.
+     *
+     * @return the object returned by the provider.
+     * @throws ProvisionFailedException if the object cannot be returned.
+     */
+    T get() throws ProvisionFailedException;
 }

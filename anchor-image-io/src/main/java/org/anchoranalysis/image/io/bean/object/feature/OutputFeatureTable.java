@@ -29,6 +29,7 @@ package org.anchoranalysis.image.io.bean.object.feature;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.bean.ImageBean;
@@ -92,8 +93,8 @@ public class OutputFeatureTable extends ImageBean<OutputFeatureTable> {
 
     private ObjectCollection createObjectsWrapException() throws OutputWriteFailedException {
         try {
-            return objects.create();
-        } catch (CreateException e) {
+            return objects.get();
+        } catch (ProvisionFailedException e) {
             throw new OutputWriteFailedException(e);
         }
     }

@@ -29,7 +29,7 @@ package org.anchoranalysis.image.bean.provider;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.image.core.channel.Channel;
 
 public abstract class ChannelProviderUnary extends ChannelProvider {
@@ -39,9 +39,9 @@ public abstract class ChannelProviderUnary extends ChannelProvider {
     // END BEAN PROPERTIES
 
     @Override
-    public Channel create() throws CreateException {
-        return createFromChannel(channel.create());
+    public Channel get() throws ProvisionFailedException {
+        return createFromChannel(channel.get());
     }
 
-    protected abstract Channel createFromChannel(Channel channel) throws CreateException;
+    protected abstract Channel createFromChannel(Channel channel) throws ProvisionFailedException;
 }

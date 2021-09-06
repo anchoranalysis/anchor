@@ -28,11 +28,11 @@ package org.anchoranalysis.image.bean.nonbean.init;
 
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.bean.AnchorBean;
+import org.anchoranalysis.bean.Provider;
 import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.bean.initializable.InitializableBean;
 import org.anchoranalysis.bean.initializable.params.BeanInitialization;
 import org.anchoranalysis.bean.initializable.property.PropertyInitializer;
-import org.anchoranalysis.bean.provider.Provider;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.checked.CheckedFunction;
 import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
@@ -113,7 +113,7 @@ public class PopulateStoreFromDefine<V extends BeanInitialization> {
                 new InitBridge<>(
                         propertyInitializer,
                         logger,
-                        s -> s.create() // NOSONAR Initializes and then gets what's provided
+                        s -> s.get() // NOSONAR Initializes and then gets what's provided
                         );
 
         StoreAdderHelper.addPreserveName(define, defineClass, destination, bridge);

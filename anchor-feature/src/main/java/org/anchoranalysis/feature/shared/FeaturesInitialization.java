@@ -33,7 +33,7 @@ import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.initializable.params.BeanInitialization;
 import org.anchoranalysis.bean.shared.dictionary.DictionaryInitialization;
 import org.anchoranalysis.bean.shared.path.FilePathInitialization;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
@@ -103,7 +103,7 @@ public class FeaturesInitialization implements BeanInitialization {
             throws OperationFailedException {
 
         try {
-            FeatureList<FeatureInput> featureList = provider.getItem().create();
+            FeatureList<FeatureInput> featureList = provider.getItem().get();
             String name = provider.getName();
 
             // If there's only one item in the feature list, then we set it as the custom
@@ -115,7 +115,7 @@ public class FeaturesInitialization implements BeanInitialization {
             featuresStore.add(name, () -> featureList);
             sharedFeatures.addNoDuplicate(featureList);
 
-        } catch (CreateException e) {
+        } catch (ProvisionFailedException e) {
             throw new OperationFailedException(e);
         }
     }

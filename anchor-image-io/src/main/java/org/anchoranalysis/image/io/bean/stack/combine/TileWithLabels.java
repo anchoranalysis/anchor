@@ -31,7 +31,7 @@ import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.image.bean.provider.stack.ArrangeRaster;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
@@ -55,15 +55,15 @@ public class TileWithLabels extends StackProvider {
     // END BEAN PROPERTIES
 
     @Override
-    public Stack create() throws CreateException {
+    public Stack get() throws ProvisionFailedException {
         ArrangeRaster arrangeRaster =
                 TileRasters.createStackProvider(
                         list, numCols, createShort, scaleLabel, expandLabelZ);
         try {
             arrangeRaster.initRecursive(getInitialization(), getLogger());
         } catch (InitException e) {
-            throw new CreateException(e);
+            throw new ProvisionFailedException(e);
         }
-        return arrangeRaster.create();
+        return arrangeRaster.get();
     }
 }

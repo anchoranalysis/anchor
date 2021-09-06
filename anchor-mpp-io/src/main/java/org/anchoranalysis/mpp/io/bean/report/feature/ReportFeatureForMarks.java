@@ -29,7 +29,7 @@ package org.anchoranalysis.mpp.io.bean.report.feature;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.image.bean.provider.DimensionsProvider;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
@@ -41,7 +41,7 @@ public abstract class ReportFeatureForMarks<T extends FeatureInput>
     @BeanField @Getter @Setter private DimensionsProvider dimensions;
     // END BEAN PROPERTIES
 
-    protected Dimensions createImageDim() throws CreateException {
-        return dimensions.create();
+    protected Dimensions createImageDim() throws ProvisionFailedException {
+        return dimensions.get();
     }
 }

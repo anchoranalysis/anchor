@@ -26,8 +26,8 @@
 
 package org.anchoranalysis.image.bean.provider;
 
+import org.anchoranalysis.bean.Provider;
 import org.anchoranalysis.bean.annotation.GroupingRoot;
-import org.anchoranalysis.bean.provider.Provider;
 import org.anchoranalysis.image.bean.ImageBean;
 import org.anchoranalysis.math.histogram.Histogram;
 

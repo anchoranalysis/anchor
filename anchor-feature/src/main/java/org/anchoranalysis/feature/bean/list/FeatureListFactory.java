@@ -37,8 +37,8 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.bean.provider.Provider;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.Provider;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.functional.CheckedStream;
 import org.anchoranalysis.core.functional.checked.CheckedFunction;
 import org.anchoranalysis.core.functional.checked.CheckedIntFunction;
@@ -82,11 +82,11 @@ public class FeatureListFactory {
      * @param <T> input-type of feature(s) in list
      * @param featureProvider provides the single feature
      * @return a newly-created list
-     * @throws CreateException
+     * @throws ProvisionFailedException
      */
     public static <T extends FeatureInput> FeatureList<T> fromProvider(
-            Provider<Feature<T>> featureProvider) throws CreateException {
-        return from(featureProvider.create());
+            Provider<Feature<T>> featureProvider) throws ProvisionFailedException {
+        return from(featureProvider.get());
     }
 
     /**
@@ -118,13 +118,13 @@ public class FeatureListFactory {
      * @param <T> input-type of feature(s) in list
      * @param providers the providers, each of which provides a single feature
      * @return a newly created list
-     * @throws CreateException if an exception is occuring creating from the provider
+     * @throws ProvisionFailedException if an exception is occurring creating from the provider
      */
     public static <T extends FeatureInput> FeatureList<T> fromProviders(
-            Collection<FeatureProvider<T>> providers) throws CreateException {
+            Collection<FeatureProvider<T>> providers) throws ProvisionFailedException {
         return new FeatureList<>(
                 CheckedStream.map(
-                        providers.stream(), CreateException.class, FeatureProvider::create));
+                        providers.stream(), ProvisionFailedException.class, FeatureProvider::get));
     }
 
     /**

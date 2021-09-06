@@ -27,14 +27,14 @@
 package org.anchoranalysis.image.bean.provider;
 
 import org.anchoranalysis.bean.annotation.GroupingRoot;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.stack.Stack;
 
 @GroupingRoot
 public abstract class ChannelProvider extends BeanProviderAsStackBase<ChannelProvider, Channel> {
 
-    public Stack createAsStack() throws CreateException {
-        return new Stack(create());
+    public Stack getAsStack() throws ProvisionFailedException {
+        return new Stack(get());
     }
 }

@@ -31,8 +31,7 @@ import java.util.function.Supplier;
 import javax.annotation.Nullable;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.bean.provider.Provider;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.functional.checked.CheckedSupplier;
 
 /**
@@ -49,17 +48,17 @@ public class OptionalFactory {
      * @param <T> type of optional as created by the provider
      * @param provider a provider or null (if it doesn't exist)
      * @return the result of the create() option if provider is non-null, otherwise {@link Optional}
-     * @throws CreateException
+     * @throws ProvisionFailedException if this is thrown during the call to {@link Provider#get}.
      */
-    public static <T> Optional<T> create(@Nullable Provider<T> provider) throws CreateException {
+    public static <T> Optional<T> create(@Nullable Provider<T> provider)
+            throws ProvisionFailedException {
         if (provider != null) {
-            return Optional.of(provider.create());
+            return Optional.of(provider.get());
         } else {
             return Optional.empty();
         }
     }
-    
-    
+
     /**
      * Creates only if a boolean flag is true, otherwise returns {@code Optional.empty()}.
      *

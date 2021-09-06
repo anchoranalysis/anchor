@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.bean.shared.dictionary;
 
-import org.anchoranalysis.bean.provider.Provider;
+import org.anchoranalysis.bean.Provider;
 import org.anchoranalysis.core.value.Dictionary;
 
 public abstract class DictionaryProvider extends DictionaryBean<DictionaryProvider>

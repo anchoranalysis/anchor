@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.mpp.segment.optimization.kernel;
 
-import org.anchoranalysis.mpp.segment.bean.optimization.kernel.Kernel;
 import lombok.Getter;
 import lombok.Setter;
+import org.anchoranalysis.mpp.segment.bean.optimization.kernel.Kernel;
 
 /**
  * A kernel with an associated weight.

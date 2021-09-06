@@ -34,7 +34,9 @@ import org.anchoranalysis.feature.input.FeatureInput;
 public interface OrderedFeatureList<T extends FeatureInput> {
 
     /**
-     * A list of features used to determine the {@link org.anchoranalysis.mpp.feature.addcriteria.AddCriteria}, or {@link Optional#empty} if irrelvant.
+     * A list of features used to determine the {@link
+     * org.anchoranalysis.mpp.feature.addcriteria.AddCriteria}, or {@link Optional#empty} if
+     * irrelvant.
      *
      * @return
      */
