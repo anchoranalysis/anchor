@@ -31,7 +31,7 @@ import org.anchoranalysis.core.functional.checked.CheckedSupplier;
  */
 
 /**
- * Memoizes (caches) a {@link CheckedSupplier}
+ * Memoizes (caches) a {@link CheckedSupplier}.
  *
  * @author Owen Feehan
  * @param <T> result-type

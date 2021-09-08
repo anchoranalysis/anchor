@@ -79,7 +79,8 @@ public class ColoredMarks implements Iterable<Mark> {
 
     public void addChangeID(Mark mark, RGBColor color) {
         marks.add(mark);
-        mark.setId(colorList.addWithIndex(color));
+        colorList.add(color);
+        mark.setId(colorList.size() - 1);
     }
 
     public void add(Mark mark, RGBColor color) {

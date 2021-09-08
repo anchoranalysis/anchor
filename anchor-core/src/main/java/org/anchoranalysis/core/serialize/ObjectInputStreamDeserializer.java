@@ -31,6 +31,16 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.nio.file.Path;
 
+/**
+ * Deserializes using Java's Native serialization framework.
+ *
+ * <p>See <a
+ * href="https://docs.oracle.com/javase/8/docs/platform/serialization/spec/serialTOC.html">documentation
+ * on Java's native serialization</a>.
+ *
+ * @author Owen Feehan
+ * @param <T> type of object to deserialize.
+ */
 public class ObjectInputStreamDeserializer<T> implements Deserializer<T> {
 
     @SuppressWarnings("unchecked")
@@ -44,16 +54,16 @@ public class ObjectInputStreamDeserializer<T> implements Deserializer<T> {
 
         try {
             // Deserialize from a file
-            try (ObjectInputStream in = createInputStream(filePath)) {
+            try (ObjectInputStream stream = createInputStream(filePath)) {
 
-                Object objOutUncast = in.readObject();
+                Object uncast = stream.readObject();
 
-                if (objOutUncast == null) {
+                if (uncast == null) {
                     throw new DeserializationFailedException(
                             "Deserialization failed for unknown reasons");
                 }
 
-                return (T) objOutUncast;
+                return (T) uncast;
             }
 
         } catch (ClassNotFoundException | IOException e) {

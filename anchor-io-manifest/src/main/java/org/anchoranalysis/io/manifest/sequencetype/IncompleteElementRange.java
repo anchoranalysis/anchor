@@ -25,15 +25,15 @@
  */
 package org.anchoranalysis.io.manifest.sequencetype;
 
-import org.anchoranalysis.core.index.bounded.BoundedRangeIncomplete;
+import org.anchoranalysis.core.index.range.IndexRangeSeek;
 
 /**
- * An incomplete range of discrete integers (like {@link BoundedRangeIncomplete} but with a
+ * An incomplete range of discrete integers (like {@link IndexRangeSeek} but with a
  * string-representation for each index.
  *
  * @author Owen Feehan
  */
-public interface IncompleteElementRange extends BoundedRangeIncomplete {
+public interface IncompleteElementRange extends IndexRangeSeek {
 
     /**
      * Returns the typed-index corresponding to the integer-index.

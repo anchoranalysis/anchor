@@ -27,17 +27,11 @@ package org.anchoranalysis.core.exception.friendly;
  */
 
 /**
- * A run-time exception to throw in situations which should never occur, instead of
- *
- * <pre>assert false</pre>
+ * A run-time exception to throw in situations which should never logically occur by design.
+ * 
+ * <p>This is conveient to use instead of {@code assert false} as assertions are not always checked by the JVM.
  *
  * <p>If this is somehow thrown, it's an indication there is a logical error in the code.
- *
- * <p>This makes for more readable code and type-safety rather than
- *
- * <pre>assert false</pre>
- *
- * or other miscellaneous exceptions.
  *
  * @author Owen Feehan
  */
@@ -46,6 +40,7 @@ public class AnchorImpossibleSituationException extends AnchorFriendlyRuntimeExc
     /** */
     private static final long serialVersionUID = 1L;
 
+    /** Default constructor. */
     public AnchorImpossibleSituationException() {
         super(
                 "This situation should never occur in properly functioning code, as it is should be logically impossible to reach.");

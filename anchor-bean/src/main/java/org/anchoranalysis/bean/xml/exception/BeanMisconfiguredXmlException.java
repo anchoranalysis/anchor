@@ -62,8 +62,8 @@ public class BeanMisconfiguredXmlException extends AnchorCombinableException {
     }
 
     @Override
-    protected boolean canExceptionBeCombined(Throwable exc) {
-        return exc instanceof BeanMisconfiguredXmlException;
+    protected boolean canExceptionBeCombined(Throwable exception) {
+        return exception instanceof BeanMisconfiguredXmlException;
     }
 
     /**
@@ -78,12 +78,13 @@ public class BeanMisconfiguredXmlException extends AnchorCombinableException {
     }
 
     @Override
-    protected boolean canExceptionBeSkipped(Throwable exc) {
-        return exc instanceof ConfigurationRuntimeException || exc instanceof BeanXmlException;
+    protected boolean canExceptionBeSkipped(Throwable exception) {
+        return exception instanceof ConfigurationRuntimeException
+                || exception instanceof BeanXmlException;
     }
 
     @Override
-    protected String createMessageForDscr(String dscr) {
-        return dscr;
+    protected String createMessageForDescription(String description) {
+        return description;
     }
 }

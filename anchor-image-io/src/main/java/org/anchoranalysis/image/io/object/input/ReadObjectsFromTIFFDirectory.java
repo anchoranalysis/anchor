@@ -32,9 +32,6 @@ import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.format.NonImageFileFormat;
 import org.anchoranalysis.core.index.GetOperationFailedException;
-import org.anchoranalysis.core.index.GetterFromIndex;
-import org.anchoranalysis.core.index.bounded.BoundedIndexContainer;
-import org.anchoranalysis.core.index.bounded.BoundsFromRange;
 import org.anchoranalysis.core.serialize.DeserializationFailedException;
 import org.anchoranalysis.core.serialize.Deserializer;
 import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
@@ -43,6 +40,7 @@ import org.anchoranalysis.image.voxel.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.io.manifest.directory.sequenced.SequencedDirectory;
 import org.anchoranalysis.io.manifest.directory.sequenced.SequencedDirectoryDeserializer;
+import org.anchoranalysis.io.manifest.directory.sequenced.SupplierAtIndex;
 import org.anchoranalysis.io.manifest.sequencetype.SequenceTypeException;
 
 class ReadObjectsFromTIFFDirectory implements Deserializer<ObjectCollection> {
@@ -57,7 +55,7 @@ class ReadObjectsFromTIFFDirectory implements Deserializer<ObjectCollection> {
             throws DeserializationFailedException {
 
         try {
-            BoundedIndexContainer<ObjectMask> container =
+            BoundsFromRange<ObjectMask> container =
                     deserializeFromDirectory(
                             new SerializedObjectsFromDirectory(
                                     folderPath,
@@ -73,12 +71,12 @@ class ReadObjectsFromTIFFDirectory implements Deserializer<ObjectCollection> {
         }
     }
 
-    private static ObjectCollection createFromContainer(BoundedIndexContainer<ObjectMask> container)
+    private static ObjectCollection createFromContainer(BoundsFromRange<ObjectMask> container)
             throws CreateException {
         try {
             return ObjectCollectionFactory.mapFromRange(
-                    container.getMinimumIndex(),
-                    container.getMaximumIndex() + 1,
+                    container.getRange().getMinimumIndex(),
+                    container.getRange().getMaximumIndex() + 1,
                     GetOperationFailedException.class,
                     container::get);
 
@@ -87,9 +85,9 @@ class ReadObjectsFromTIFFDirectory implements Deserializer<ObjectCollection> {
         }
     }
 
-    private static <T> BoundedIndexContainer<T> deserializeFromDirectory(
+    private static <T> BoundsFromRange<T> deserializeFromDirectory(
             SequencedDirectory directory, Deserializer<T> deserializer) {
-        GetterFromIndex<T> container =
+        SupplierAtIndex<T> container =
                 new SequencedDirectoryDeserializer<>(directory, deserializer);
         return new BoundsFromRange<>(container, directory.getAssociatedElementRange());
     }

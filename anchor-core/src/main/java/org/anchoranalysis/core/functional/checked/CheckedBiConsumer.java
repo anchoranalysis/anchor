@@ -40,7 +40,7 @@ import java.util.function.BiConsumer;
 public interface CheckedBiConsumer<S, T, E extends Exception> {
 
     /**
-     * Calls the function
+     * Calls the function.
      *
      * @param first first parameter
      * @param second second parameter

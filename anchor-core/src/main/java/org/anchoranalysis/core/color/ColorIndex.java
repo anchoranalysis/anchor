@@ -26,12 +26,25 @@ package org.anchoranalysis.core.color;
  * #L%
  */
 
-// Indexable colors
+/**
+ * Associates an RGB-color with each index.
+ *
+ * @author Owen Feehan
+ */
 public interface ColorIndex {
 
+    /**
+     * The color for a particular index.
+     *
+     * @param index the index
+     * @return the associated color for {@code index}.
+     */
     public RGBColor get(int index);
 
+    /**
+     * The number of unique colors being described by the index.
+     *
+     * @return the total number of unique colors in the index.
+     */
     public int numberUniqueColors();
-
-    public boolean has(int index);
 }

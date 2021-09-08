@@ -36,7 +36,7 @@ import lombok.EqualsAndHashCode;
  */
 @AllArgsConstructor
 @EqualsAndHashCode
-public abstract class Indexable implements IndexGetter, Comparable<IndexGetter> {
+public abstract class Indexable implements AssociatedIndex, Comparable<AssociatedIndex> {
 
     private final int index;
 
@@ -46,7 +46,7 @@ public abstract class Indexable implements IndexGetter, Comparable<IndexGetter> 
     }
 
     @Override
-    public int compareTo(IndexGetter other) {
+    public int compareTo(AssociatedIndex other) {
         if (this.getIndex() < other.getIndex()) {
             return -1;
         } else if (this.getIndex() > other.getIndex()) {

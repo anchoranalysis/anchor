@@ -47,7 +47,11 @@ public interface CheckedSupplier<T, E extends Exception> {
      */
     T get() throws E;
 
-    /** An interface to a similar supplier that uses a progress-reporter */
+    /**
+     * An interface to a similar supplier that monitors progress.
+     *
+     * @return a supplier that also monitors progress, but executes the same task.
+     */
     default CheckedProgressingSupplier<T, E> progressing() {
         return progress -> get();
     }

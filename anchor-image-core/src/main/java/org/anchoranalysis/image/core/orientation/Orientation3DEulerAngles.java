@@ -29,7 +29,7 @@ package org.anchoranalysis.image.core.orientation;
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.identifier.name.SimpleNameValue;
-import org.anchoranalysis.core.identifier.provider.NameValueSet;
+import org.anchoranalysis.core.identifier.provider.NameValueMap;
 import org.anchoranalysis.image.core.object.properties.ObjectWithProperties;
 import org.anchoranalysis.spatial.rotation.RotationMatrix;
 import org.anchoranalysis.spatial.rotation.factory.RotateAngle3D;
@@ -77,13 +77,13 @@ public class Orientation3DEulerAngles extends Orientation {
     }
 
     @Override
-    public void addProperties(NameValueSet<String> namedValues) {
+    public void addProperties(NameValueMap<String> namedValues) {
         addProperty(namedValues, "X", rotationX);
         addProperty(namedValues, "Y", rotationY);
         addProperty(namedValues, "Z", rotationZ);
     }
 
-    private void addProperty(NameValueSet<String> nvc, String dimension, double radians) {
+    private void addProperty(NameValueMap<String> nvc, String dimension, double radians) {
         nvc.add(
                 new SimpleNameValue<>(
                         String.format("Orientation Angle %s (radians)", dimension),

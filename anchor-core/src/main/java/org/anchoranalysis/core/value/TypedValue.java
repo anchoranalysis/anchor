@@ -30,6 +30,15 @@ import java.text.DecimalFormat;
 import lombok.AllArgsConstructor;
 import lombok.Value;
 
+/**
+ * A union of two types, either {@link String} or a numeric-value.
+ *
+ * <p>The originating type is always known.
+ *
+ * <p>A number of decimal points may be optionally associated with the numeric-value.
+ *
+ * @author Owen Feehan
+ */
 @AllArgsConstructor
 @Value
 public class TypedValue {
@@ -37,14 +46,30 @@ public class TypedValue {
     private final String value;
     private final boolean isNumeric;
 
+    /**
+     * Creates for a {@link String} value.
+     *
+     * @param value the value
+     */
     public TypedValue(String value) {
         this(value, false);
     }
 
+    /**
+     * Creates for an {@code int} value.
+     *
+     * @param value the value
+     */
     public TypedValue(int value) {
         this(Integer.toString(value), true);
     }
 
+    /**
+     * Creates for an {@code double} value.
+     *
+     * @param value the value
+     * @param numberDecimalPlaces the number of decimal places to store for the value.
+     */
     public TypedValue(double value, int numberDecimalPlaces) {
         this(decimalValueOrNaN(value, numberDecimalPlaces), true);
     }

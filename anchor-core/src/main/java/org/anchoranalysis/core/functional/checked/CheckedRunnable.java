@@ -25,7 +25,19 @@
  */
 package org.anchoranalysis.core.functional.checked;
 
+/**
+ * Like {@link Runnable} but can also throw an exception.
+ *
+ * @author Owen Feehan
+ * @param <E> exception-type if {@link #run} fails.
+ */
 @FunctionalInterface
 public interface CheckedRunnable<E extends Exception> {
+
+    /**
+     * Runs an operation like with {@link Runnable#run}.
+     *
+     * @throws E an exception that may be thrown if the operation cannot complete successfully.
+     */
     public void run() throws E;
 }

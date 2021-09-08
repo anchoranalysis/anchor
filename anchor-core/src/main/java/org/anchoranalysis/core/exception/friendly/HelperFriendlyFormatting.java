@@ -93,7 +93,7 @@ class HelperFriendlyFormatting {
     /**
      * We search for the first non-empty error message
      *
-     * @param exc the exception to describe
+     * @param exception the exception to describe
      * @param writer where the friendly-messaged is outputted
      * @param wordWrapLimit max-number of characters of a single-line of the screen (considering
      *     only prefix + line), if it's -1 it is disabled
@@ -101,9 +101,9 @@ class HelperFriendlyFormatting {
      * @throws IOException if an I/O error occurs with the writer
      */
     public static void friendlyMessageHierarchical(
-            Throwable exc, Writer writer, int wordWrapLimit, boolean showExceptionType)
+            Throwable exception, Writer writer, int wordWrapLimit, boolean showExceptionType)
             throws IOException {
         RecursivelyDescribeExceptionStack.apply(
-                exc, writer, PREPEND_EXCEPTION_STRING, wordWrapLimit, showExceptionType);
+                exception, writer, PREPEND_EXCEPTION_STRING, wordWrapLimit, showExceptionType);
     }
 }

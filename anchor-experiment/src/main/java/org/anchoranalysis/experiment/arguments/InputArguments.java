@@ -32,7 +32,7 @@ import java.util.Set;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
-import org.anchoranalysis.core.index.IndexRange;
+import org.anchoranalysis.core.index.range.IndexRangeNegative;
 
 /**
  * Arguments that can further specify an experiment's <b>input</b> in addition to its bean
@@ -68,7 +68,7 @@ public class InputArguments {
     @Getter private boolean relativeForIdentifier = false;
 
     /** If defined, this indicates and specifies only a subset of the naming-elements to use. */
-    @Getter private Optional<IndexRange> identifierSubrange = Optional.empty();
+    @Getter private Optional<IndexRangeNegative> identifierSubrange = Optional.empty();
 
     /**
      * If True, any files in the input directory that are unused as inputs, are copied to the output
@@ -115,7 +115,7 @@ public class InputArguments {
      * If defined, this indicates and specifies only a subset of the elements of the identifier to
      * use.
      */
-    public void assignIdentifierSubrange(IndexRange identifierSubrange) {
+    public void assignIdentifierSubrange(IndexRangeNegative identifierSubrange) {
         this.identifierSubrange = Optional.of(identifierSubrange);
     }
 

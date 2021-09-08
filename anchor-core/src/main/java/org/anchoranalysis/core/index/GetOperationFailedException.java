@@ -31,7 +31,7 @@ import org.anchoranalysis.core.exception.friendly.AnchorFriendlyCheckedException
  */
 
 /**
- * When a get operation fails for a particular key
+ * When a <i>get</i> operation fails for a particular key.
  *
  * @author Owen Feehan
  */
@@ -40,36 +40,76 @@ public class GetOperationFailedException extends AnchorFriendlyCheckedException 
     /** */
     private static final long serialVersionUID = 4847382915351464834L;
 
+    /** The key that was used in the operation that created this exception. */
     @Getter private final String key;
 
+    /** A message describing the failure. */
     @Getter private final String message;
 
-    public GetOperationFailedException(Exception e) {
-        super(e);
+    /**
+     * Creates with only a cause, omitting a key and a message.
+     *
+     * <p>The key is instead stored as an empty string.
+     *
+     * @param cause the cause.
+     */
+    public GetOperationFailedException(Exception cause) {
+        super(cause);
         this.key = "";
-        this.message = e.getMessage();
+        this.message = cause.getMessage();
     }
 
+    /**
+     * Creates with a message, but no cause - with <i>an integer key</i>.
+     *
+     * @param key the key that was used in the operation that created this exception.
+     * @param message a message describing the failure.
+     */
     public GetOperationFailedException(int key, String message) {
         this(String.valueOf(key), message);
     }
 
-    public GetOperationFailedException(int key, Throwable exc) {
-        this(String.valueOf(key), exc);
-    }
-
+    /**
+     * Creates with a message, but no cause - with <i>a {@link String} key</i>.
+     *
+     * @param key the key that was used in the operation that created this exception.
+     * @param message a message describing the failure.
+     */
     public GetOperationFailedException(String key, String message) {
         super(messageFor(key, message));
         this.key = key;
         this.message = message;
     }
 
-    public GetOperationFailedException(String key, Throwable exc) {
-        super(messageFor(key, exc.toString()), exc);
-        this.key = key;
-        this.message = exc.toString();
+    /**
+     * Creates with a cause, but no message - with <i>an integer key</i>.
+     *
+     * @param key the key that was used in the operation that created this exception.
+     * @param cause the cause of the failure.
+     */
+    public GetOperationFailedException(int key, Throwable cause) {
+        this(String.valueOf(key), cause);
     }
 
+    /**
+     * Creates with a cause, but no message - with <i>a {@link String} key</i>.
+     *
+     * @param key the key that was used in the operation that created this exception.
+     * @param cause the cause of the failure.
+     */
+    public GetOperationFailedException(String key, Throwable cause) {
+        super(messageFor(key, cause.toString()), cause);
+        this.key = key;
+        this.message = cause.toString();
+    }
+
+    /**
+     * Converts to a {@link OperationFailedException} using an identical message.
+     *
+     * <p>Any cause and key information is discarded.
+     *
+     * @return the converted exception.
+     */
     public OperationFailedException asOperationFailedException() {
         return new OperationFailedException(getMessage());
     }

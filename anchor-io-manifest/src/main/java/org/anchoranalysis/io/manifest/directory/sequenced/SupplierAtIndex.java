@@ -1,8 +1,12 @@
-/*-
+package org.anchoranalysis.io.manifest.directory.sequenced;
+
+import org.anchoranalysis.core.index.GetOperationFailedException;
+
+/*
  * #%L
  * anchor-core
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
+ * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,5 +27,8 @@
  * THE SOFTWARE.
  * #L%
  */
-/** A range of elements with indiced, bounded to lie between particular a minimum and maximum. */
-package org.anchoranalysis.core.index.bounded;
+
+@FunctionalInterface
+public interface SupplierAtIndex<T> {
+    T get(int index) throws GetOperationFailedException;
+}

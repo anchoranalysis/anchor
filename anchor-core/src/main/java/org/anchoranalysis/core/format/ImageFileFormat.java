@@ -39,12 +39,26 @@ import java.util.stream.Stream;
  * @author Owen Feehan
  */
 public enum ImageFileFormat implements FileFormat {
+
+    /** TIFF */
     TIFF("tif", "tiff"),
+
+    /** PNG */
     PNG("png"),
+
+    /** JPEG */
     JPEG("jpg", "jpeg"),
+
+    /** GIF */
     GIF("gif"),
+
+    /** Windows Bitmap - note that this comes in many variants. */
     BMP("bmp"),
+
+    /** OME TIFF */
     OME_TIFF("ome.tif", "ome.tiff"),
+
+    /** OME XML */
     OME_XML("ome.xml");
 
     /**

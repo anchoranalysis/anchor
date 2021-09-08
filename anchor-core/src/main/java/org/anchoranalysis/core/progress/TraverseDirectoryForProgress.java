@@ -37,29 +37,32 @@ import java.util.function.Predicate;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-
 /**
- * Traverses files and subdirectories contained in a directory, in a way that is useful for tracking progress of processing algorithms that operate on each file.
- * 
- * @author Owen Feehan
+ * Traverses files and subdirectories contained in a directory, in a way that is useful for tracking
+ * progress of processing algorithms that operate on each file.
  *
+ * @author Owen Feehan
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class TraverseDirectoryForProgress {
 
     /**
-     * Performs a breadth-first traversal of the subdirectories of a {@code path} <i>recursively</i> until we get at least {@code
-     * minNumberDirectories} on a given level.
-     * 
+     * Performs a breadth-first traversal of the subdirectories of a {@code path} <i>recursively</i>
+     * until we get at least {@code minNumberDirectories} on a given level.
+     *
      * <p>At this point, traversal no longer continues.
-     * 
-     * <p>Traversal will also stop early if the depth of traversed subdirectories reaches {@code maxDirectoryDepth}.
+     *
+     * <p>Traversal will also stop early if the depth of traversed subdirectories reaches {@code
+     * maxDirectoryDepth}.
      *
      * @param path the path whose subdirectories will be traversed.
-     * @param minNumberDirectories the minimum number of sub-directories that should exist before traversal is seopped.
+     * @param minNumberDirectories the minimum number of sub-directories that should exist before
+     *     traversal is seopped.
      * @param matcherDirectory only subdirectories that match this predicate are considered
-     * @param maxDirectoryDepth the maximum allowable depth of subdirectories to be traversed. Traversal will be complete to avoid exceeding it.
-     * @return a newly created {@link TraversalResult} indicating which subdirectories and files have been traversed.
+     * @param maxDirectoryDepth the maximum allowable depth of subdirectories to be traversed.
+     *     Traversal will be complete to avoid exceeding it.
+     * @return a newly created {@link TraversalResult} indicating which subdirectories and files
+     *     have been traversed.
      * @throws IOException if any file or subdirectory cannot be accessed or traversed.
      */
     public static TraversalResult traverseRecursive(
@@ -98,13 +101,14 @@ public class TraverseDirectoryForProgress {
         }
     }
 
-    
     /**
-     * Traverses the subdirectories in {@code path} <i>without any recursion</i> into further sub-directories.
+     * Traverses the subdirectories in {@code path} <i>without any recursion</i> into further
+     * sub-directories.
      *
      * @param path the path whose subdirectories will be traversed.
      * @param matcherDirectory only subdirectories that match this predicate are considered
-     * @return a newly created {@link TraversalResult} indicating which subdirectories and files have been traversed.
+     * @return a newly created {@link TraversalResult} indicating which subdirectories and files
+     *     have been traversed.
      * @throws IOException if any file or subdirectory cannot be accessed or traversed.
      */
     public static TraversalResult traverseNotRecursive(Path path, Predicate<Path> matcherDirectory)
@@ -126,7 +130,8 @@ public class TraverseDirectoryForProgress {
         try (DirectoryStream<Path> stream = Files.newDirectoryStream(parent)) {
             for (Path file : stream) {
 
-                if (matcherDirectory.test(file) && addFileOrDirectory(file, directoriesOut, filesOut)) {
+                if (matcherDirectory.test(file)
+                        && addFileOrDirectory(file, directoriesOut, filesOut)) {
                     addedDirectory = true;
                 }
             }

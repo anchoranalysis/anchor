@@ -29,7 +29,8 @@ package org.anchoranalysis.core.identifier.name;
 import java.util.Comparator;
 
 /**
- * Orders two name-values by their name (alphabetic order from standard String.compareTo(String))
+ * Orders two name-values by their name (alphabetic order from standard {@link
+ * String#compareTo(String)}.
  *
  * @author Owen Feehan
  * @param <V> value-type

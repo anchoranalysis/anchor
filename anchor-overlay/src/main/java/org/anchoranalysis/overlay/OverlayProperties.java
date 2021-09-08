@@ -29,21 +29,20 @@ package org.anchoranalysis.overlay;
 import java.util.Iterator;
 import java.util.function.DoubleUnaryOperator;
 import org.anchoranalysis.core.identifier.name.NameValue;
-import org.anchoranalysis.core.identifier.name.SimpleNameValue;
-import org.anchoranalysis.core.identifier.provider.NameValueSet;
+import org.anchoranalysis.core.identifier.provider.NameValueMap;
 import org.anchoranalysis.image.core.dimensions.SpatialUnits;
 import org.anchoranalysis.image.core.dimensions.SpatialUnits.UnitSuffix;
 
 public class OverlayProperties implements Iterable<NameValue<String>> {
 
-    private final NameValueSet<String> nameValueSet;
+    private final NameValueMap<String> map;
 
     public OverlayProperties() {
-        this.nameValueSet = new NameValueSet<>();
+        this.map = new NameValueMap<>();
     }
 
     public void add(String name, String value) {
-        nameValueSet.add(new SimpleNameValue<>(name, value));
+        map.add(name, value);
     }
 
     public void add(String name, int value) {
@@ -66,13 +65,13 @@ public class OverlayProperties implements Iterable<NameValue<String>> {
         addDoubleAsString(name, val, "%1.2f");
     }
 
-    public NameValueSet<String> getNameValueSet() {
-        return nameValueSet;
+    public NameValueMap<String> getMap() {
+        return map;
     }
 
     @Override
     public Iterator<NameValue<String>> iterator() {
-        return nameValueSet.iterator();
+        return map.iterator();
     }
 
     private void addDoubleAsString(String name, double val, String precision) {

@@ -31,8 +31,8 @@ import static org.anchoranalysis.mpp.bean.regionmap.RegionMembershipUtilities.fl
 import static org.anchoranalysis.mpp.mark.GlobalRegionIdentifiers.SUBMARK_INSIDE;
 
 import java.util.List;
+import org.anchoranalysis.core.exception.CheckedUnsupportedOperationException;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.core.exception.OptionalOperationUnsupportedException;
 import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
@@ -205,7 +205,7 @@ public class RotatableBoundingBox extends MarkWithPosition {
     }
 
     @Override
-    public void scale(ScaleFactor scaleFactor) throws OptionalOperationUnsupportedException {
+    public void scale(ScaleFactor scaleFactor) throws CheckedUnsupportedOperationException {
         super.scale(scaleFactor);
         scaleFactor.scale(distanceToLeftBottom);
         scaleFactor.scale(distanceToRightTop);

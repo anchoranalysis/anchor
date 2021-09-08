@@ -29,22 +29,52 @@ package org.anchoranalysis.core.progress;
 /**
  * Tracks the completion of an operation, as divided into sub-units of progress.
  *
+ * <p>Unlike {@link ProgressIncrement}, a value is explictly communicated to represent the progress
+ * state.
+ *
  * @author Owen Feehan
  */
 public interface Progress extends AutoCloseable {
 
+    /** Begins tracking progress, to be called before any calls to {@link #update}. */
     void open();
 
+    /**
+     * Informs the tracker of an update in the progress.
+     *
+     * @param value how much progress has occurred.
+     */
+    void update(int value);
+
+    /** Ends tracking progress, to be called after any calls to {@link #update}. */
     @Override
     void close();
 
-    int getMax();
-
+    /**
+     * Retrieves the <i>minimum</i> value of progress that is possible.
+     *
+     * @return the minimum possible value.
+     */
     int getMin();
 
-    void update(int value);
+    /**
+     * Retrieves the <i>maximum</i> value of progress that is possible.
+     *
+     * @return the maximum possible value.
+     */
+    int getMax();
 
+    /**
+     * Assigns the <i>minimum</i> value of progress that is possible.
+     *
+     * @param min the minimum possible value
+     */
     void setMin(int min);
 
+    /**
+     * Assigns the <i>maximum</i> value of progress that is possible.
+     *
+     * @param max the maximum possible value
+     */
     void setMax(int max);
 }

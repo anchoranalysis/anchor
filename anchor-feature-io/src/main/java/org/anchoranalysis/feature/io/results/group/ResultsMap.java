@@ -28,7 +28,6 @@ package org.anchoranalysis.feature.io.results.group;
 import com.google.common.collect.Comparators;
 import java.util.Comparator;
 import java.util.Optional;
-import org.anchoranalysis.core.functional.FunctionalIterate;
 import org.anchoranalysis.core.functional.checked.CheckedBiConsumer;
 import org.anchoranalysis.core.identifier.name.MapCreate;
 import org.anchoranalysis.feature.io.csv.RowLabels;
@@ -48,15 +47,28 @@ class ResultsMap {
 
     public void addResultsFor(RowLabels labels, ResultsVector results) {
         // Place into the aggregate structure
-        map.getOrCreateNew(labels.getGroup()).add(results);
+        map.computeIfAbsent(labels.getGroup()).add(results);
     }
 
+    /**
+     * Iterate over each result the map, and apply an operation.
+     *
+     * @param <E> an exception that may be thrown by {code operation}.
+     * @param operation the operation applied to each element in the map, passing the key and value
+     *     as parameters.
+     * @throws E if {@code operation} throws it.
+     */
     public <E extends Exception> void iterateResults(
-            CheckedBiConsumer<Optional<MultiName>, ResultsVectorList, E> consumer) throws E {
-        FunctionalIterate.iterateMap(map.asMap(), consumer);
+            CheckedBiConsumer<Optional<MultiName>, ResultsVectorList, E> operation) throws E {
+        map.iterateEntries(operation);
     }
 
+    /**
+     * Whether the map is empty or not.
+     *
+     * @return true iff the map is empty.
+     */
     public boolean isEmpty() {
-        return map.entrySet().isEmpty();
+        return map.isEmpty();
     }
 }

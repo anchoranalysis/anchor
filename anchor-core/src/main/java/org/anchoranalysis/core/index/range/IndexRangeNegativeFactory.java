@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.core.index;
+package org.anchoranalysis.core.index.range;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -31,15 +31,15 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
 
 /**
- * Creates {@link IndexRange}.
+ * Creates {@link IndexRangeNegative}.
  *
  * @author Owen Feehan
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class IndexRangeFactory {
+public class IndexRangeNegativeFactory {
 
     /**
-     * Parses a string to convert it into an {@link IndexRange}.
+     * Parses a string to convert it into an {@link IndexRangeNegative}.
      *
      * <p>The string should be in any of the following formats:
      *
@@ -64,7 +64,7 @@ public class IndexRangeFactory {
      * @return the range extracted from the parsed string
      * @throws OperationFailedException if the string does not match any of the patterns above.
      */
-    public static IndexRange parse(String str) throws OperationFailedException {
+    public static IndexRangeNegative parse(String str) throws OperationFailedException {
         if (str.contains(":")) {
             String[] components = str.split(":");
             if (components.length > 2) {
@@ -82,19 +82,19 @@ public class IndexRangeFactory {
     }
 
     /** If there is a colon surrounded by text on both sides. */
-    private static IndexRange parseTwoComponents(String left, String right)
+    private static IndexRangeNegative parseTwoComponents(String left, String right)
             throws OperationFailedException {
         if (left.isEmpty()) {
             return parseStringAfterColon(right);
         } else if (right.isEmpty()) {
             return parseStringWithoutColon(left);
         } else {
-            return new IndexRange(parseAsInt(left), parseAsInt(right));
+            return new IndexRangeNegative(parseAsInt(left), parseAsInt(right));
         }
     }
 
     /** If there is a colon with text only on one side. */
-    private static IndexRange parseSingleComponent(String str, String component)
+    private static IndexRangeNegative parseSingleComponent(String str, String component)
             throws OperationFailedException {
         if (str.startsWith(":")) {
             return parseStringAfterColon(component);
@@ -104,15 +104,16 @@ public class IndexRangeFactory {
     }
 
     /** If there is no colon in the string. */
-    private static IndexRange parseStringWithoutColon(String str) throws OperationFailedException {
+    private static IndexRangeNegative parseStringWithoutColon(String str)
+            throws OperationFailedException {
         int parsed = parseAsInt(str);
-        return new IndexRange(parsed, parsed);
+        return new IndexRangeNegative(parsed, parsed);
     }
 
-    private static IndexRange parseStringAfterColon(String component)
+    private static IndexRangeNegative parseStringAfterColon(String component)
             throws OperationFailedException {
         int parsed = parseAsInt(component);
-        return new IndexRange(0, parsed);
+        return new IndexRangeNegative(0, parsed);
     }
 
     /**

@@ -27,7 +27,12 @@
 package org.anchoranalysis.core.progress;
 
 /**
- * Combines a number of sub progress reporters.
+ * Exposes several underlying <i>child</i> {@link Progress} trackers as a unitary <i>parent</i>
+ * tracker.
+ *
+ * <p>As initial state, any call to {@link #update(double)} refers to the first child tracker.
+ *
+ * <p>A call to {@link #incrementChild()} then moves future updates to the next tracker.
  *
  * @author Owen Feehan
  */
@@ -38,6 +43,13 @@ public class ProgressMultiple implements AutoCloseable {
     private double cumulativePart = 0.0;
     private int index = 0;
 
+    /**
+     * Creates for a particular number of child trackers.
+     *
+     * @param parent the unitary tracker which is automatically updated, as each child-tracker is
+     *     updated.
+     * @param numberChildren the number of children to track.
+     */
     public ProgressMultiple(Progress parent, int numberChildren) {
         this.parent = parent;
         this.part = 100.0 / numberChildren;
@@ -45,15 +57,35 @@ public class ProgressMultiple implements AutoCloseable {
         parent.setMax(100);
     }
 
-    public void incrementWorker() {
+    /**
+     * Creates a progress-tracker for the current child.
+     *
+     * <p>This exposes the current child's progress as an independent tracker.
+     *
+     * @return a newly created progress-tracker for the current child.
+     */
+    public Progress trackCurrentChild() {
+        return new ProgressOneOfMany(this);
+    }
+
+    /**
+     * Informs the tracker of an update in the progress of the <b>current child tracker</b>.
+     *
+     * @param value how much progress has occurred in the current child tracker.
+     */
+    public void update(double value) {
+        parent.update((int) Math.floor(cumulativePart + (value * part / 100)));
+    }
+
+    /**
+     * Increments the current child tracker to the next child.
+     *
+     * <p>No exception occurs if increments occur beyond the expected number of children.
+     */
+    public void incrementChild() {
         index++;
         this.cumulativePart = part * index;
         parent.update((int) Math.floor(cumulativePart));
-    }
-
-    // Progress for the current worker
-    public void update(double progress) {
-        parent.update((int) Math.floor(cumulativePart + (progress * part / 100)));
     }
 
     @Override

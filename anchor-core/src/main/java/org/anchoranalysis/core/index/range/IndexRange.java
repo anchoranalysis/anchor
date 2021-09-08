@@ -1,4 +1,4 @@
-package org.anchoranalysis.core.index.bounded;
+package org.anchoranalysis.core.index.range;
 
 /*
  * #%L
@@ -26,30 +26,24 @@ package org.anchoranalysis.core.index.bounded;
  * #L%
  */
 
-import java.util.EventObject;
+/**
+ * A range of discrete integers with a minimum and a maximum.
+ *
+ * @author Owen Feehan
+ */
+public interface IndexRange {
 
-public class BoundChangeEvent extends EventObject {
+    /**
+     * The minimum index in the range.
+     *
+     * @return the minimum index (inclusive).
+     */
+    int getMinimumIndex();
 
-    /** */
-    private static final long serialVersionUID = -563106449126106299L;
-
-    public enum BoundType {
-        MINIMUM,
-        MAXIMUM
-    }
-
-    private BoundType boundType;
-
-    public BoundChangeEvent(Object source, BoundType boundType) {
-        super(source);
-        this.boundType = boundType;
-    }
-
-    public BoundType getBoundType() {
-        return boundType;
-    }
-
-    public void setBoundType(BoundType boundType) {
-        this.boundType = boundType;
-    }
+    /**
+     * The maximum index in the range.
+     *
+     * @return the maximum index (inclusive).
+     */
+    int getMaximumIndex();
 }

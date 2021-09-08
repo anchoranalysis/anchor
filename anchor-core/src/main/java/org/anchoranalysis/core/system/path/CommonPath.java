@@ -41,22 +41,39 @@ import org.anchoranalysis.core.functional.FunctionalList;
 /**
  * Finds the common root directory of a set of paths.
  *
- * <p>This is derived from an example on <a
- * href="http://rosettacode.org/wiki/Find_common_directory_path#Java">Rosetta Code</a>.
+ * <p>This is the maximal leftmost common part of all paths (when treated in a canonical way).
  *
  * @author Owen Feehan
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CommonPath {
 
+    /**
+     * Finds the common root directory of several {@link Path}s.
+     *
+     * @param paths the paths
+     * @return the common root directory, if it exists.
+     */
     public static Optional<Path> fromPaths(Iterable<Path> paths) {
         return FindCommonPathElements.findForFilePaths(paths).map(PathElements::toPath);
     }
 
+    /**
+     * Finds the common root directory of several paths, encoded in {@link String}s.
+     *
+     * @param paths the paths
+     * @return the common root directory, if it exists.
+     */
     public static Optional<Path> fromStrings(Collection<String> paths) {
         return convert(paths, Paths::get);
     }
 
+    /**
+     * Finds the common root directory of the paths to several {@link File}s.
+     *
+     * @param files the files
+     * @return the common root directory, if it exists.
+     */
     public static Optional<Path> fromFiles(Collection<File> files) {
         return convert(files, File::toPath);
     }

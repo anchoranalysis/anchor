@@ -36,12 +36,32 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.identifier.name.NameValue;
 import org.anchoranalysis.core.identifier.name.SimpleNameValue;
 
+/**
+ * Builds a mapping from names to values, given {@link NameValue} instances.
+ *
+ * <p>Each name in {@link NameValue} should be unique.
+ *
+ * <p>This is similar as a standard {@link Map} but additionally:
+ *
+ * <ul>
+ *   <li>iteration provides {@link NameValue} elements.
+ *   <li>it exposes itself as a {@link NamedProvider}.
+ * </ul>
+ *
+ * @author Owen Feehan
+ * @param <T> element-type in {@link NameValue} instances.
+ */
 @NoArgsConstructor
-public class NameValueSet<T> implements Iterable<NameValue<T>>, NamedProvider<T> {
+public class NameValueMap<T> implements Iterable<NameValue<T>>, NamedProvider<T> {
 
     private Map<String, NameValue<T>> map = new HashMap<>();
 
-    public NameValueSet(Iterable<? extends NameValue<T>> list) {
+    /**
+     * Creates and populates with elements from an {@link Iterable}.
+     *
+     * @param list the elements to populate with.
+     */
+    public NameValueMap(Iterable<? extends NameValue<T>> list) {
         for (NameValue<T> namedValue : list) {
             map.put(namedValue.getName(), namedValue);
         }
@@ -63,34 +83,51 @@ public class NameValueSet<T> implements Iterable<NameValue<T>>, NamedProvider<T>
         return map.values().iterator();
     }
 
+    /**
+     * Adds an element.
+     *
+     * @param name the name that is added.
+     * @param value the value that is added.
+     */
     public void add(String name, T value) {
         NameValue<T> item = new SimpleNameValue<>(name, value);
         map.put(name, item);
     }
 
-    public void add(NameValue<T> ni) {
-        map.put(ni.getName(), ni);
+    /**
+     * Adds an element.
+     *
+     * @param value the name and value that is added, reusing the existing object.
+     */
+    public void add(NameValue<T> value) {
+        map.put(value.getName(), value);
     }
 
-    public void add(NameValueSet<T> set) {
-        for (String key : set.keys()) {
-            try {
-                add(key, set.getException(key));
-            } catch (NamedProviderGetException e) {
-                // This should never occur as we always use known key-values
-                assert false;
-            }
-        }
+    /**
+     * Removes an element from the set, if it exists.
+     *
+     * <p>If the element doesn't exist, nothing happens.
+     *
+     * @param element the element to remove, if it exists.
+     */
+    public void removeIfExists(T element) {
+        map.remove(element);
     }
 
-    public void removeIfExists(T item) {
-        map.remove(item);
-    }
-
+    /**
+     * The number of elements in the set.
+     *
+     * @return the number of elements.
+     */
     public int size() {
         return map.size();
     }
 
+    /**
+     * Exposes the elements in the set as a stream.
+     *
+     * @return a newly created stream of all elements in the set.
+     */
     public Stream<NameValue<T>> stream() {
         return map.values().stream();
     }

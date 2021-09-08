@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.core.progress;
 
+import java.util.function.Supplier;
 import org.anchoranalysis.core.functional.checked.CheckedSupplier;
 
 /**
@@ -38,8 +39,21 @@ import org.anchoranalysis.core.functional.checked.CheckedSupplier;
 @FunctionalInterface
 public interface CheckedProgressingSupplier<R, E extends Exception> {
 
+    /**
+     * Applies a supplier like with {@link Supplier#get}.
+     *
+     * @param progress the progress that may be updated during the {@link #get} operation.
+     * @return the supplied object.
+     * @throws E an exception that may be thrown
+     */
     R get(Progress progress) throws E;
 
+    /**
+     * Converts to a {@link CheckedSupplier} which performs the same operation without updating the
+     * progress.
+     *
+     * @return the same operation, without updating progress.
+     */
     default CheckedSupplier<R, E> withoutProgressReporter() {
         return () -> this.get(ProgressIgnore.get());
     }

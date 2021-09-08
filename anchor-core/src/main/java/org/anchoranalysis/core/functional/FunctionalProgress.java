@@ -35,7 +35,7 @@ import org.anchoranalysis.core.functional.checked.CheckedFunction;
 import org.anchoranalysis.core.progress.Progress;
 
 /**
- * Utilities for updating a {@link Progress} in a functional way
+ * Utilities for updating a {@link Progress} in a functional way.
  *
  * @author Owen Feehan
  */
@@ -43,7 +43,7 @@ import org.anchoranalysis.core.progress.Progress;
 public class FunctionalProgress {
 
     /**
-     * Maps a list to new list, updating a progress-reporter for every element
+     * Maps a list to new list, updating a progress-reporter for every element.
      *
      * @param <S> input-type to map
      * @param <T> output-type of map
@@ -80,7 +80,7 @@ public class FunctionalProgress {
 
     /**
      * Maps a list to a new list, including only certain items, updating a progress-reporter for
-     * every element
+     * every element.
      *
      * <p>Items where the mapping returns {@link Optional#empty} are not included in the outputted
      * list.

@@ -33,100 +33,39 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.core.functional.FunctionalIterate;
 
+/**
+ * A list of colors, each corresponding to a particular index position.
+ *
+ * <p>Note that a color may be duplicated in more than one position in the list. There is no check
+ * on uniqueness.
+ *
+ * @author Owen Feehan
+ */
 @NoArgsConstructor
 public class ColorList implements ColorIndex, Iterable<RGBColor> {
 
     private List<RGBColor> list = new ArrayList<>();
 
+    /**
+     * Create for one or more colors of type {@link Color}.
+     *
+     * @param colors the colors
+     */
     public ColorList(Color... colors) {
         this();
         Arrays.stream(colors).forEach(this::add);
     }
 
+    /**
+     * Create for one or more colors of type {@link RGBColor}.
+     *
+     * @param colors the colors
+     */
     public ColorList(RGBColor... colors) {
         this();
         Arrays.stream(colors).forEach(this::add);
-    }
-
-    public ColorList(RGBColor color) {
-        add(color);
-    }
-
-    @Override
-    public int numberUniqueColors() {
-        return size();
-    }
-
-    public void shuffle() {
-        Collections.shuffle(list);
-    }
-
-    public int addWithIndex(RGBColor color) {
-        int id = size();
-        add(color);
-        return id;
-    }
-
-    public void addMultiple(RGBColor color, int multiple) {
-        for (int i = 0; i < multiple; i++) {
-            add(color);
-        }
-    }
-
-    public void addAllScaled(ColorList list, double scale) {
-        for (RGBColor c : list) {
-            RGBColor scaled = new RGBColor();
-            scaled.setRed((int) (c.getRed() * scale));
-            scaled.setGreen((int) (c.getGreen() * scale));
-            scaled.setBlue((int) (c.getBlue() * scale));
-            this.add(scaled);
-        }
-    }
-
-    public ColorList shallowCopy() {
-
-        ColorList listOut = new ColorList();
-
-        // We copy all the marks
-        for (RGBColor color : this) {
-            listOut.add(color);
-        }
-
-        return listOut;
-    }
-
-    public ColorList deepCopy() {
-
-        ColorList listOut = new ColorList();
-
-        // We copy all the marks
-        for (RGBColor color : this) {
-            listOut.add(color.duplicate());
-        }
-
-        return listOut;
-    }
-
-    @Override
-    public boolean has(int i) {
-        return i < size();
-    }
-
-    public void add(Color color) {
-        add(new RGBColor(color));
-    }
-
-    public void add(RGBColor color) {
-        list.add(color);
-    }
-
-    public void add(int index, RGBColor color) {
-        list.add(index, color);
-    }
-
-    public int size() {
-        return list.size();
     }
 
     @Override
@@ -139,10 +78,126 @@ public class ColorList implements ColorIndex, Iterable<RGBColor> {
         return list.get(index);
     }
 
-    public boolean addAll(ColorList other) {
-        return list.addAll(other.list);
+    @Override
+    public int numberUniqueColors() {
+        return size();
     }
 
+    /**
+     * Randomize the order of the colors in the list.
+     *
+     * <p>This is a mutable operation, that will change the relationship between colors and indices.
+     */
+    public void shuffle() {
+        Collections.shuffle(list);
+    }
+
+    /**
+     * Creates a new list, containing the same elements as the current list.
+     *
+     * @return a newly created list, containing the same elements as the current list, in the same
+     *     order.
+     */
+    public ColorList shallowCopy() {
+
+        ColorList out = new ColorList();
+
+        // We copy all the marks
+        for (RGBColor color : this) {
+            out.add(color);
+        }
+
+        return out;
+    }
+
+    /**
+     * Creates a new list, containing the duplicates of same elements as the current list.
+     *
+     * @return a newly created list, containing duplicated elements from the current list, in the
+     *     same order.
+     */
+    public ColorList deepCopy() {
+
+        ColorList out = new ColorList();
+
+        // We copy all the marks
+        for (RGBColor color : this) {
+            out.add(color.duplicate());
+        }
+
+        return out;
+    }
+
+    /**
+     * The number of elements (colors) in the list.
+     *
+     * @return the size of the list.
+     */
+    public int size() {
+        return list.size();
+    }
+
+    /**
+     * Appends a {@link Color} to the list.
+     *
+     * <p>The color is added to the end of the list, so existing relationships between colors and
+     * indices remains unchanged.
+     *
+     * @param color the color to add
+     */
+    public void add(Color color) {
+        add(new RGBColor(color));
+    }
+
+    /**
+     * Like {@link #add(Color)} but adds a {@link RGBColor}.
+     *
+     * @param color the color to add
+     */
+    public void add(RGBColor color) {
+        list.add(color);
+    }
+
+    /**
+     * Inserts a {@link Color} into the list, at a particular index.
+     *
+     * <p>Note that this likely changes the relationship between existing colors and indices.
+     *
+     * @param index the index to insert the color at.
+     * @param color the color to insert.
+     */
+    public void add(int index, RGBColor color) {
+        list.add(index, color);
+    }
+
+    /**
+     * Appends {@link Color}s to the list.
+     *
+     * <p>The colors are added to the end of the list, so existing relationships between colors and
+     * indices remains unchanged.
+     *
+     * @param colors the colors to add
+     */
+    public void addAll(ColorList colors) {
+        list.addAll(colors.list);
+    }
+
+    /**
+     * Append multiple entries for the same color to the end of the list.
+     *
+     * @param color the color to add multiple times
+     * @param numberTimes how many times to add it.
+     */
+    public void addMultiple(RGBColor color, int numberTimes) {
+        FunctionalIterate.repeat(numberTimes, () -> add(color));
+    }
+
+    /**
+     * Remove an element at a particular index.
+     *
+     * @param index the index to remove at.
+     * @return the removed element
+     */
     public RGBColor remove(int index) {
         return list.remove(index);
     }

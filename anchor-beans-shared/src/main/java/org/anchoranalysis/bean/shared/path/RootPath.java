@@ -59,7 +59,6 @@ public class RootPath extends AnchorBean<RootPath> {
 
     /*** If true this root is preferred, when executing a job in debugging mode */
     @BeanField @Getter @Setter private boolean debug = false;
-
     // END PROPERTIES
 
     /**

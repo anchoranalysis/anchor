@@ -1,4 +1,4 @@
-package org.anchoranalysis.core.index;
+package org.anchoranalysis.io.manifest.sequencetype;
 
 /*
  * #%L
@@ -26,7 +26,8 @@ package org.anchoranalysis.core.index;
  * #L%
  */
 
+// TODO change to comparator???
 @FunctionalInterface
-public interface IndexGetter {
-    int getIndex();
+public interface OrderProvider {
+    int order(String index);
 }

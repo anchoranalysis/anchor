@@ -28,7 +28,6 @@ package org.anchoranalysis.mpp.segment.optimization.kernel;
 
 import java.io.Serializable;
 import lombok.Getter;
-import org.anchoranalysis.core.index.IndexGetter;
 import org.anchoranalysis.mpp.proposer.error.ProposerFailureDescription;
 
 /**
@@ -37,7 +36,7 @@ import org.anchoranalysis.mpp.proposer.error.ProposerFailureDescription;
  *
  * @author Owen Feehan
  */
-public class KernelDecision implements Serializable, IndexGetter {
+public class KernelDecision implements Serializable {
 
     /** */
     private static final long serialVersionUID = -5135255409310941727L;
@@ -77,7 +76,6 @@ public class KernelDecision implements Serializable, IndexGetter {
         this.noProposalReason = noProposalReason;
     }
 
-    @Override
     public int getIndex() {
         return iter;
     }

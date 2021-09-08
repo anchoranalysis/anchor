@@ -34,14 +34,25 @@ package org.anchoranalysis.core.format;
  * @author Owen Feehan
  */
 public enum NonImageFileFormat implements FileFormat {
+
+    /** CSV (Comma Separated Value) files. */
     CSV("csv"),
+
+    /** HDF5 */
     HDF5("h5"),
+
+    /** XML */
     XML("xml"),
+
+    /** Text files. */
     TEXT("txt"),
+
     /** XML for storing properties (key/value pairs). */
     PROPERTIES_XML("properties.xml"),
+
     /** XML for storing serialized XML (via XStream). */
     SERIALIZED_XML("ser.xml"),
+
     /** Binary serialization format from Java native serialization. */
     SERIALIZED_BINARY("ser");
 
@@ -60,7 +71,7 @@ public enum NonImageFileFormat implements FileFormat {
     /**
      * The extension <b>without</b> any leading period.
      *
-     * @return the extension (lower-case) without a period
+     * @return the extension (lower-case) without a period.
      */
     public String extensionWithoutPeriod() {
         return extension;
@@ -78,7 +89,7 @@ public enum NonImageFileFormat implements FileFormat {
     /**
      * The extension <b>with</b> a leading period.
      *
-     * @return the extension (lower-case) with a period
+     * @return the extension (lower-case) with a period.
      */
     public String extensionWithPeriod() {
         return "." + extension;

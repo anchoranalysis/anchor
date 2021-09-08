@@ -53,7 +53,7 @@ public class Logger {
     /**
      * Constructs with an error-reporter that writes into the message logger.
      *
-     * @param messageLogger where messages are logged to. 
+     * @param messageLogger where messages are logged to.
      */
     public Logger(MessageLogger messageLogger) {
         this.messageLogger = messageLogger;

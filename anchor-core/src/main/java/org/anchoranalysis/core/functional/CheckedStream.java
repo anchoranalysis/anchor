@@ -39,7 +39,7 @@ import org.anchoranalysis.core.functional.checked.CheckedIntFunction;
 import org.anchoranalysis.core.functional.checked.CheckedPredicate;
 import org.anchoranalysis.core.functional.checked.CheckedToIntFunction;
 
-/** Map operations for streams that can throw checked-exceptions */
+/** Map operations for streams that can throw checked-exceptions. */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CheckedStream {
 
@@ -53,6 +53,11 @@ public class CheckedStream {
 
         @Getter private final Throwable exception;
 
+        /**
+         * Creates for any exception.
+         *
+         * @param exception the underlying exception to be wrapped as a run-time exception.
+         */
         public ConvertedToRuntimeException(Throwable exception) {
             super(exception);
             this.exception = exception;
@@ -102,6 +107,7 @@ public class CheckedStream {
      * @param stream the stream to apply the map on
      * @param throwableClass the class of {@code E}
      * @param predicate the predicate to call for each object in the stream
+     * @return elements from {@code stream} that match the predicate
      * @throws E if the exception is thrown during filtering
      */
     public static <T, E extends Exception> Stream<T> filter(

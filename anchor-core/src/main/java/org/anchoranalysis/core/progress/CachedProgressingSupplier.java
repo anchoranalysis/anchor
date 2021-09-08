@@ -31,7 +31,7 @@ import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.cache.CachedSupplierBase;
 
 /**
- * Memoizes (caches) a call to {@link CheckedProgressingSupplier}
+ * Memoizes (caches) a call to {@link CheckedProgressingSupplier}.
  *
  * @author Owen Feehan
  * @param <T> result-type

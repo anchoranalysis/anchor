@@ -36,7 +36,6 @@ import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.core.progress.ProgressIgnore;
 import org.anchoranalysis.core.progress.ProgressMultiple;
-import org.anchoranalysis.core.progress.ProgressOneOfMany;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
@@ -152,11 +151,9 @@ public class NamedChannelsForSeriesMap implements NamedChannelsForSeries {
                 for (String channelName : channelMap.keySet()) {
                     Channel image =
                             getChannel(
-                                    channelName,
-                                    timeIndex,
-                                    new ProgressOneOfMany(progressMultiple));
+                                    channelName, timeIndex, progressMultiple.trackCurrentChild());
                     stacks.add(channelName, new Stack(image));
-                    progressMultiple.incrementWorker();
+                    progressMultiple.incrementChild();
                 }
             } catch (GetOperationFailedException e) {
                 throw new OperationFailedException(e);

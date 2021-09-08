@@ -29,7 +29,7 @@ import java.util.function.UnaryOperator;
  */
 
 /**
- * Like a {@link UnaryOperator} but allows an exception to be thrown
+ * Like a {@link UnaryOperator} but allows an exception to be thrown.
  *
  * @author Owen Feehan
  * @param <T> input and output-type of operator
@@ -37,5 +37,13 @@ import java.util.function.UnaryOperator;
  */
 @FunctionalInterface
 public interface CheckedUnaryOperator<T, E extends Exception> {
+
+    /**
+     * Applies the operation.
+     *
+     * @param in the argument passed <i>in</i> to the operation.
+     * @return the result of the operation, passed <i>out</i>.
+     * @throws E if the operation cannot succeed.
+     */
     T apply(T in) throws E;
 }

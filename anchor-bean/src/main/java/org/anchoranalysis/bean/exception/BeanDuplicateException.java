@@ -50,8 +50,8 @@ public class BeanDuplicateException extends AnchorFriendlyRuntimeException {
         super(string);
     }
 
-    public BeanDuplicateException(Exception exc) {
-        super(exc);
+    public BeanDuplicateException(Exception exception) {
+        super(exception);
     }
 
     public BeanDuplicateException(String message, Throwable cause) {

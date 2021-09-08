@@ -27,16 +27,31 @@ package org.anchoranalysis.core.index;
 
 import org.anchoranalysis.core.exception.AnchorCheckedException;
 
+/**
+ * When a <i>set</i> operation fails for a particular key.
+ *
+ * @author Owen Feehan
+ */
 public class SetOperationFailedException extends AnchorCheckedException {
 
     /** */
     private static final long serialVersionUID = -3323720426335397452L;
 
-    public SetOperationFailedException(String string) {
-        super(string);
+    /**
+     * Creates with only a message.
+     *
+     * @param message the message.
+     */
+    public SetOperationFailedException(String message) {
+        super(message);
     }
 
-    public SetOperationFailedException(Throwable exc) {
-        super(exc);
+    /**
+     * Creates with only a cause.
+     *
+     * @param cause the cause.
+     */
+    public SetOperationFailedException(Throwable cause) {
+        super(cause);
     }
 }

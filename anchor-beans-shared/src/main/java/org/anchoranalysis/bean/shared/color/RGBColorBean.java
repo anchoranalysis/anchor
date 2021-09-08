@@ -82,10 +82,6 @@ public class RGBColorBean extends AnchorBean<RGBColorBean> {
         return delegate;
     }
 
-    public RGBColor textColor() {
-        return delegate.textColor();
-    }
-
     public Color toAWTColor() {
         return delegate.toAWTColor();
     }

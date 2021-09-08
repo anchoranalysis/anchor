@@ -32,7 +32,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.core.identifier.name.SimpleNameValue;
-import org.anchoranalysis.core.identifier.provider.NameValueSet;
+import org.anchoranalysis.core.identifier.provider.NameValueMap;
 import org.anchoranalysis.image.core.object.properties.ObjectWithProperties;
 import org.anchoranalysis.spatial.rotation.RotationMatrix;
 import org.anchoranalysis.spatial.rotation.factory.RotateAngle2D;
@@ -76,7 +76,7 @@ public class Orientation2D extends Orientation {
     }
 
     @Override
-    public void addProperties(NameValueSet<String> namedValues) {
+    public void addProperties(NameValueMap<String> namedValues) {
         addAngleProperty(namedValues, "radians", getAngleRadians());
         addAngleProperty(namedValues, "degrees", getAngleDegrees());
     }
@@ -92,7 +92,7 @@ public class Orientation2D extends Orientation {
     }
 
     private static void addAngleProperty(
-            NameValueSet<String> namedValues, String unitType, double angleValue) {
+            NameValueMap<String> namedValues, String unitType, double angleValue) {
         namedValues.add(
                 new SimpleNameValue<>(
                         String.format("Orientation Angle (%s)", unitType),

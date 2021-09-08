@@ -28,20 +28,43 @@ import org.anchoranalysis.core.exception.friendly.AnchorFriendlyCheckedException
  * #L%
  */
 
+/**
+ * Generic <i>checked</i> exception that can be thrown when a particular operation fails.
+ *
+ * <p>{@link OperationFailedRuntimeException} is a similar runtime exception.
+ *
+ * @author Owen Feehan
+ */
 public class OperationFailedException extends AnchorFriendlyCheckedException {
 
     /** */
     private static final long serialVersionUID = -5014516097016484634L;
 
+    /**
+     * Creates with only a message.
+     *
+     * @param message the message.
+     */
     public OperationFailedException(String message) {
         super(message);
     }
 
-    public OperationFailedException(Throwable exc) {
-        super(exc);
+    /**
+     * Creates with only a cause.
+     *
+     * @param cause the cause.
+     */
+    public OperationFailedException(Throwable cause) {
+        super(cause);
     }
 
-    public OperationFailedException(String message, Throwable exc) {
-        super(message, exc);
+    /**
+     * Creates with message and cause.
+     *
+     * @param message the message.
+     * @param cause the cause.
+     */
+    public OperationFailedException(String message, Throwable cause) {
+        super(message, cause);
     }
 }

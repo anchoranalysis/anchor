@@ -38,7 +38,6 @@ import org.anchoranalysis.core.identifier.provider.store.StoreSupplier;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.core.progress.ProgressMultiple;
-import org.anchoranalysis.core.progress.ProgressOneOfMany;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
@@ -90,8 +89,8 @@ public class NamedChannelsForSeriesConcatenate implements NamedChannelsForSeries
 
             for (NamedChannelsForSeries item : list) {
                 item.addAsSeparateChannels(
-                        stackCollection, t, new ProgressOneOfMany(progressMultiple));
-                progressMultiple.incrementWorker();
+                        stackCollection, t, progressMultiple.trackCurrentChild());
+                progressMultiple.incrementChild();
             }
         }
     }

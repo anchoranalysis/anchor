@@ -27,8 +27,6 @@
 package org.anchoranalysis.core.identifier.provider.store;
 
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
@@ -38,7 +36,9 @@ import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 
 /**
- * Items are evaluated only when they are first needed. The value is thereafter stored.
+ * Lazily delays evaluating items until when they are first retrieved.
+ *
+ * <p>The {@link StoreSupplier} is called only upon first retieval, and thereafter stored.
  *
  * @author Owen Feehan
  * @param <T> item-type in the store
@@ -47,6 +47,10 @@ import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 public class LazyEvaluationStore<T> implements NamedProviderStore<T> {
 
     // START REQUIRED ARGUMENTS
+    /**
+     * A user-friendly name to describe the store, when printing its contents in a
+     * string-representation.
+     */
     private final String storeDisplayName;
     // END REQUIRED ARGUMENTS
 
@@ -64,24 +68,13 @@ public class LazyEvaluationStore<T> implements NamedProviderStore<T> {
         try {
             return OptionalUtilities.map(Optional.ofNullable(map.get(key)), CachedSupplier::get);
         } catch (Exception e) {
-            throw NamedProviderGetException.wrap(key, e);
+            throw new NamedProviderGetException(key, e);
         }
     }
 
-    // We only refer to
-    public Set<String> keysEvaluated() {
-        HashSet<String> keysUsed = new HashSet<>();
-        for (Entry<String, CachedSupplier<T, OperationFailedException>> entry : map.entrySet()) {
-            if (entry.getValue().isEvaluated()) {
-                keysUsed.add(entry.getKey());
-            }
-        }
-        return keysUsed;
-    }
-
-    // All keys that it is possible to evaluate
     @Override
     public Set<String> keys() {
+        // All keys that it is possible to evaluate
         return map.keySet();
     }
 

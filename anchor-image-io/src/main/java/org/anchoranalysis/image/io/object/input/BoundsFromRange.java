@@ -24,50 +24,21 @@
  * #L%
  */
 
-package org.anchoranalysis.core.index.bounded;
+package org.anchoranalysis.image.io.object.input;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.anchoranalysis.core.index.GetOperationFailedException;
-import org.anchoranalysis.core.index.GetterFromIndex;
+import org.anchoranalysis.core.index.range.IndexRangeSeek;
+import org.anchoranalysis.io.manifest.directory.sequenced.SupplierAtIndex;
 
 @AllArgsConstructor
-public class BoundsFromRange<T> implements GetterFromIndex<T>, BoundedIndexContainer<T> {
+class BoundsFromRange<T> {
 
-    private GetterFromIndex<T> typedIndexGetter;
-    private BoundedRangeIncomplete sequenceType;
+    private SupplierAtIndex<T> typedIndexGetter;
+    @Getter private IndexRangeSeek range;
 
-    @Override
     public T get(int index) throws GetOperationFailedException {
         return typedIndexGetter.get(index);
-    }
-
-    @Override
-    public void addBoundChangeListener(BoundChangeListener cl) {
-        // ASSUME STATIC
-    }
-
-    @Override
-    public int nextIndex(int index) {
-        return sequenceType.nextIndex(index);
-    }
-
-    @Override
-    public int previousIndex(int index) {
-        return sequenceType.previousIndex(index);
-    }
-
-    @Override
-    public int previousEqualIndex(int index) {
-        return sequenceType.previousEqualIndex(index);
-    }
-
-    @Override
-    public int getMinimumIndex() {
-        return sequenceType.getMinimumIndex();
-    }
-
-    @Override
-    public int getMaximumIndex() {
-        return sequenceType.getMaximumIndex();
     }
 }

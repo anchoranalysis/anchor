@@ -153,9 +153,10 @@ public class OptionalUtilities {
      * Mapping only occurs if both Optionals are non-empty (equivalent to a logical AND on the
      * optionals)
      *
-     * @param <T> outgoing optional-type for map
      * @param <U> first incoming optional-type for map
      * @param <V> second incoming optional-type for map
+     * @param <T> outgoing optional-type for map
+     * @param <E> an exception that may be thrown by an {@code mapFunction}.
      * @param optional1 first incoming optional
      * @param optional2 second incoming optional
      * @param mapFunction the function that does the mapping from both incoming objects to outgoing
@@ -177,6 +178,7 @@ public class OptionalUtilities {
      *
      * @param <T> type of optionals
      * @param <E> an exception that may be thrown by an {@code optional}.
+     * @param optional one or more optionals to combine together using a logical <b>or</b> operation
      * @return a new optional that is optionals[0] OR optionals[1] OR optionals[2] etc.
      * @throws E if any {@code optional} throws it
      */
@@ -193,7 +195,7 @@ public class OptionalUtilities {
     }
 
     /**
-     * Creates an Optional from a string that might be empty or null
+     * Creates an {@link Optional} from a string that might be empty or null.
      *
      * @param possiblyEmptyString a string that might be empty or null
      * @return the string, or {@link Optional#empty} if the string is empty or null
@@ -207,7 +209,7 @@ public class OptionalUtilities {
     }
 
     /**
-     * Creates an {@link Optional} from a boolean flag
+     * Creates an {@link Optional} from a boolean flag.
      *
      * @param <T> type in Optional
      * @param flag iff true an populated optional is returned, otherwise empty().
@@ -223,7 +225,7 @@ public class OptionalUtilities {
     }
 
     /**
-     * Creates an {@link Optional} from a boolean flag
+     * Creates an {@link Optional} from a boolean flag.
      *
      * @param <T> type in Optional
      * @param flag iff true an populated optional is returned, otherwise empty().
@@ -239,9 +241,10 @@ public class OptionalUtilities {
     }
 
     /**
-     * Creates an {@link Optional} from a boolean flag - where the supplier can thrown an exception
+     * Creates an {@link Optional} from a boolean flag - where the supplier can thrown an exception.
      *
-     * @param <T> type in Optional
+     * @param <T> type in optional
+     * @param <E> an exception that may be thrown by an {@code valueIfFlagTrue}.
      * @param flag iff true an populated optional is returned, otherwise empty().
      * @param valueIfFlagTrue used to generate a positive value
      * @return a filled or empty optional depending on flag
@@ -258,7 +261,7 @@ public class OptionalUtilities {
 
     /**
      * Creates an {@link Optional} from a boolean flag and a supplier that returns an {@link
-     * Optional}
+     * Optional}.
      *
      * @param <T> type in Optional
      * @param flag iff true an populated optional is returned, otherwise empty().

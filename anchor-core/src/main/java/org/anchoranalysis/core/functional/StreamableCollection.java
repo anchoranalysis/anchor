@@ -33,15 +33,16 @@ import lombok.experimental.Accessors;
 
 /**
  * As a stream can only be used once, this data-structure allows for repeatedly getting streams from
- * a collection
+ * a collection.
  *
  * @author Owen Feehan
- * @param<T> stream-type
+ * @param <T> element-type in stream
  */
 @AllArgsConstructor
 @Accessors(fluent = true)
 public class StreamableCollection<T> {
 
+    /** Supplies a stream of elements. */
     private final Supplier<Stream<T>> supplier;
 
     /**
@@ -53,6 +54,11 @@ public class StreamableCollection<T> {
         supplier = collection::stream;
     }
 
+    /**
+     * A single instance of the stream from the supplier.
+     *
+     * @return an instance of the stream via a call to {@link Supplier#get} for {@code supplier}.
+     */
     public Stream<T> stream() {
         return supplier.get();
     }

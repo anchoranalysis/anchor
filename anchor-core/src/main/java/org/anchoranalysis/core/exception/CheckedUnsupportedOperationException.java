@@ -1,14 +1,10 @@
-package org.anchoranalysis.core.identifier.getter;
+package org.anchoranalysis.core.exception;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-/*
+/*-
  * #%L
- * anchor-image
+ * anchor-core
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,18 +25,31 @@ import lombok.NoArgsConstructor;
  * THE SOFTWARE.
  * #L%
  */
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class IdentifierModulo<T> implements IdentifierGetter<T> {
 
-    private IdentifierGetter<T> idGetter;
+/**
+ * When a particular operation is unsupported in particular circumstances.
+ *
+ * <p>In constrast to {@link UnsupportedOperationException} this is a checked, not a runtime
+ * exception.
+ *
+ * @author Owen Feehan
+ */
+public class CheckedUnsupportedOperationException extends AnchorCheckedException {
 
-    /** What the identifier is divided by to find the modulo. */
-    private int divisor;
+    /** */
+    private static final long serialVersionUID = 7975790749088346594L;
 
-    @Override
-    public int getIdentifier(T element, int iteration) {
-        return idGetter.getIdentifier(element, iteration) % divisor;
+    /** Creates with a default message indicating that the operation is unsupported. */
+    public CheckedUnsupportedOperationException() {
+        super("unsupported operation");
+    }
+
+    /**
+     * Creates with a message explaining that the operation is unsupported.
+     *
+     * @param message the message.
+     */
+    public CheckedUnsupportedOperationException(String message) {
+        super(message);
     }
 }

@@ -29,7 +29,7 @@ package org.anchoranalysis.core.progress;
 import lombok.RequiredArgsConstructor;
 
 /**
- * Displays the current progress to the console.
+ * Displays the current progress on the console.
  *
  * <p>Percentages are incrementlly reported to the console as an operation progresses.
  *
@@ -47,18 +47,9 @@ public class ProgressConsole implements Progress {
 
     private int nextPercentageToReport = 0;
 
-    private double percentCompleted(int val) {
-        return ((double) (val - min)) / (max - min) * 100;
-    }
-
     @Override
     public void open() {
         System.out.printf("[ "); // NOSONAR
-    }
-
-    private void reportPercentage(int percent) {
-        System.out.printf("%d%s ", percent, "%"); // NOSONAR
-        nextPercentageToReport += incrementSize;
     }
 
     @Override
@@ -96,5 +87,14 @@ public class ProgressConsole implements Progress {
     @Override
     public void setMax(int max) {
         this.max = max;
+    }
+
+    private double percentCompleted(int val) {
+        return ((double) (val - min)) / (max - min) * 100;
+    }
+
+    private void reportPercentage(int percent) {
+        System.out.printf("%d%s ", percent, "%"); // NOSONAR
+        nextPercentageToReport += incrementSize;
     }
 }

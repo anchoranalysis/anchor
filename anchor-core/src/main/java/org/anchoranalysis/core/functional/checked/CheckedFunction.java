@@ -40,7 +40,7 @@ import java.util.function.Function;
 public interface CheckedFunction<S, V, E extends Exception> {
 
     /**
-     * Calls the function
+     * Calls the function.
      *
      * @param parameter parameter object
      * @return return-value

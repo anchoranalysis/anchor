@@ -40,7 +40,7 @@ import org.anchoranalysis.core.functional.checked.CheckedFunction;
 public class ConcurrentModelPool<T> {
 
     /**
-     * Creates a model to use in the pool
+     * Creates a model to use in the pool.
      *
      * @author Owen Feehan
      * @param <T> model-type
@@ -48,7 +48,7 @@ public class ConcurrentModelPool<T> {
     public interface CreateModelForPool<T> {
 
         /**
-         * Creates a model
+         * Creates a model.
          *
          * @param useGPU whether to use a GPU if possible (if not possible, revert to CPU)
          * @return the newly created model
@@ -65,6 +65,12 @@ public class ConcurrentModelPool<T> {
     /** Function to create a model. */
     private final CreateModelForPool<T> createModel;
 
+    /**
+     * Creates with a particular plan and function to create models.
+     *
+     * @param plan a plan determining how many CPUs and GPUs to use for inference.
+     * @param createModel called to create a new model, as needed.
+     */
     public ConcurrentModelPool(ConcurrencyPlan plan, CreateModelForPool<T> createModel) {
         this.createModel = createModel;
         this.queue = new PriorityBlockingQueue<>();
@@ -75,17 +81,19 @@ public class ConcurrentModelPool<T> {
     }
 
     /**
-     * Execute on the next available model (or wait until one becomes available)
-     * 
-     * <p>If an exception is thrown while executing on a GPU, the GPU processor is no longer used, and instead an additional CPU node is added.
-     * The failed job is tried again.
+     * Execute on the next available model (or wait until one becomes available).
+     *
+     * <p>If an exception is thrown while executing on a GPU, the GPU processor is no longer used,
+     * and instead an additional CPU node is added. The failed job is tried again.
      *
      * @param functionToExecute function to execute on a given model, possibly throwing an
      *     exception.
      * @param <S> return type
-     * @throws Throwable if thrown from {@code functionToExecute} while executing on a CPU. It is suppressed if thrown on a GPU.
+     * @return the value returned by {@code functionToExecute} after it is executed.
+     * @throws Throwable if thrown from {@code functionToExecute} while executing on a CPU. It is
+     *     suppressed if thrown on a GPU.
      */
-    public <S> S excuteOrWait(
+    public <S> S executeOrWait(
             CheckedFunction<ConcurrentModel<T>, S, ConcurrentModelException> functionToExecute)
             throws Throwable { // NOSONAR
         while (true) {

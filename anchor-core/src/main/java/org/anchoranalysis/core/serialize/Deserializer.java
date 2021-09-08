@@ -28,7 +28,20 @@ package org.anchoranalysis.core.serialize;
 
 import java.nio.file.Path;
 
+/**
+ * Creates an object from a serialized representation on the file-system.
+ *
+ * @author Owen Feehan
+ * @param <T> the type of object to create from the deserialized representation.
+ */
 public interface Deserializer<T> {
 
+    /**
+     * Deserializes a representation of an object stored on the filesystem.
+     *
+     * @param filePath the path on the file-system where the object is stored.
+     * @return the deserialized object.
+     * @throws DeserializationFailedException if deserialization fails, including IO failures.
+     */
     T deserialize(Path filePath) throws DeserializationFailedException;
 }

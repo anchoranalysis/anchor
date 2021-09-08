@@ -26,8 +26,6 @@
 
 package org.anchoranalysis.io.manifest.sequencetype;
 
-import org.anchoranalysis.core.index.bounded.OrderProvider;
-
 /**
  * Indices must be integers that always increase as added.
  *

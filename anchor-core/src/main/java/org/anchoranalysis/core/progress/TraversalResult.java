@@ -30,13 +30,18 @@ import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Value;
 
+/**
+ * The subdirectories and files found after traversing a directory on the file-system.
+ *
+ * @author Owen Feehan
+ */
 @AllArgsConstructor
 @Value
 public class TraversalResult {
 
     /**
      * All the directories in the bottom-most depth that was traversed.
-     * 
+     *
      * <p>These directories were not traversed.
      */
     private List<Path> leafDirectories;

@@ -36,27 +36,51 @@ import org.anchoranalysis.core.exception.friendly.AnchorFriendlyCheckedException
 public class InitException extends AnchorFriendlyCheckedException {
 
     /** */
-    private static final long serialVersionUID = -6589491763755816321L;
+    private static final long serialVersionUID = 1L;
 
-    public InitException(String string) {
-        super(string);
+    /**
+     * Creates with a message, but without a cause.
+     *
+     * @param message the message.
+     */
+    public InitException(String message) {
+        super(message);
     }
 
-    public InitException(Throwable exc) {
-        super(exc);
+    /**
+     * Creates with a cause, but without a message.
+     *
+     * @param cause the cause.
+     */
+    public InitException(Throwable cause) {
+        super(cause);
     }
 
+    /**
+     * Creates with message and cause.
+     *
+     * @param message the message.
+     * @param cause the cause.
+     */
     public InitException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public static InitException createOrReuse(Throwable exc) {
+    /**
+     * Wraps exception in a {@link InitException}, unless it already its cause is a {@link
+     * InitException}.
+     *
+     * @param exception the existing exception to consider wrapping.
+     * @return the exception wrapped into a newly-created {@link InitException}, or the cause of
+     *     {@code exception} if it's already a {@link InitException}.
+     */
+    public static InitException createOrReuse(Throwable exception) {
         // If it's an initialization error, we don't create a new one but re-throw
         //  as frequently initialization errors will pass through a recursive train
-        if (exc.getCause() instanceof InitException) {
-            return (InitException) exc.getCause();
+        if (exception.getCause() instanceof InitException) {
+            return (InitException) exception.getCause();
         } else {
-            return new InitException(exc);
+            return new InitException(exception);
         }
     }
 }

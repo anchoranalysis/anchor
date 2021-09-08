@@ -41,7 +41,7 @@ import java.util.function.BiFunction;
 public interface CheckedBiFunction<S, T, V, E extends Exception> {
 
     /**
-     * Calls the function
+     * Calls the function.
      *
      * @param first first parameter
      * @param second second parameter

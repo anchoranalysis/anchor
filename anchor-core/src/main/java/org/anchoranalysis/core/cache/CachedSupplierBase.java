@@ -25,11 +25,12 @@
  */
 package org.anchoranalysis.core.cache;
 
+import java.util.Optional;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.functional.checked.CheckedSupplier;
 
 /**
- * Base class for functions that memoize (cache) a call to an interface
+ * Base class for functions that memoize (cache) a call to an interface.
  *
  * @author Owen Feehan
  * @param <T> result-type
@@ -37,29 +38,39 @@ import org.anchoranalysis.core.functional.checked.CheckedSupplier;
 @NoArgsConstructor
 public abstract class CachedSupplierBase<T> {
 
-    private T result;
-    private boolean evaluated = false;
+    private Optional<T> result = Optional.empty();
 
-    public synchronized void assignFrom(CachedSupplierBase<T> source) {
-        this.result = source.result;
-        this.evaluated = source.evaluated;
-    }
-
-    public synchronized void reset() {
-        evaluated = false;
-        result = null;
-    }
-
+    /**
+     * Has the function already been evaluated?
+     *
+     * <p>i.e. does a value already exist in the cache.
+     *
+     * @return true iff a value exists in the cache.
+     */
     public synchronized boolean isEvaluated() {
-        return evaluated;
+        return result.isPresent();
     }
 
+    /**
+     * Gets the value supplied by {@code supplier} via the cache if it exists, or otherwise via the
+     * supplier.
+     *
+     * <p>The value is then cached, and the object is considered as <i>evaluated</i>.
+     *
+     * @param <E> an exception that can be thrown by {@code supplier}.
+     * @param supplier the operation used to create the value.
+     * @return the value, either created or from the cache.
+     * @throws E if thrown by {@code supplier}.
+     */
     protected synchronized <E extends Exception> T call(CheckedSupplier<T, E> supplier) throws E {
-
-        if (!evaluated) {
-            result = supplier.get();
-            evaluated = true;
+        if (!isEvaluated()) {
+            result = Optional.of(supplier.get());
         }
-        return result;
+        return result.get();    //NOSONAR
+    }
+
+    /** Ensures the object is unevaluated, deleting any cached result if it exists. */
+    public synchronized void reset() {
+        result = Optional.empty();
     }
 }

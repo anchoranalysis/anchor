@@ -29,10 +29,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.index.range.IndexRangeNegative;
+import org.anchoranalysis.core.index.range.IndexRangeNegativeFactory;
 import org.junit.jupiter.api.Test;
 
 /**
- * Tests {@link IndexRange}.
+ * Tests {@link IndexRangeNegative}.
  *
  * @author Owen Feehan
  */
@@ -83,10 +85,10 @@ class IndexRangeFactoryTest {
 
     private static void test(String strToParse, int expectedStart, int expectedEnd)
             throws OperationFailedException {
-        assertEquals(new IndexRange(expectedStart, expectedEnd), parse(strToParse));
+        assertEquals(new IndexRangeNegative(expectedStart, expectedEnd), parse(strToParse));
     }
 
-    private static IndexRange parse(String strToParse) throws OperationFailedException {
-        return IndexRangeFactory.parse(strToParse);
+    private static IndexRangeNegative parse(String strToParse) throws OperationFailedException {
+        return IndexRangeNegativeFactory.parse(strToParse);
     }
 }

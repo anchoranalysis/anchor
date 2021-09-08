@@ -62,7 +62,9 @@ public interface ExecutionTimeRecorder {
      * @param operationIdentifier an identifier for this type of write-operation, under which
      *     execution-times are aggregated.
      * @param operation the operation to execute
+     * @param <T> return-type of {@code operation}.
      * @param <E> type of an exception that {@code operation} may throw.
+     * @return the value returned by {@code operation}.
      * @throws E if {@code operation} throws this exception;
      */
     default <T, E extends Exception> T recordExecutionTime(

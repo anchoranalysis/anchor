@@ -37,17 +37,36 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class ExceptionTypes {
 
-    /** Is it the last exception in the chain? */
+    /**
+     * Is it the last exception in the chain?
+     *
+     * @param exc the exception to check
+     * @return true iff the exception is the final exception in a chain i.e. there is no further
+     *     underlying cause.
+     */
     public static boolean isFinal(Throwable exc) {
         return exc.getCause() == null || exc.getCause() == exc;
     }
 
-    /** Is it the last exception in the chain? */
+    /**
+     * Is it a friendly exception?
+     *
+     * @see <a
+     *     href="https://www.anchoranalysis.org/developer_guide_architecture_error_handling.html">friendly
+     *     exceptions</a>
+     * @param exc the exception to check
+     * @return true iff the exception is a friendly exception
+     */
     public static boolean isFriendly(Throwable exc) {
         return exc instanceof HasFriendlyErrorMessage;
     }
 
-    /** Does the exception lack a message? */
+    /**
+     * Does the exception lack a message?
+     *
+     * @param exc the exception to check
+     * @return true iff the exception has an empty or null message
+     */
     public static boolean hasEmptyMessage(Throwable exc) {
         return exc.getMessage() == null || exc.getMessage().isEmpty();
     }

@@ -26,16 +26,33 @@ package org.anchoranalysis.core.exception;
  * #L%
  */
 
+/**
+ * Generic <i>runtime</i> exception that can be thrown when a particular operation fails.
+ *
+ * <p>{@link OperationFailedRuntimeException} is a similar checked exception.
+ *
+ * @author Owen Feehan
+ */
 public class OperationFailedRuntimeException extends AnchorRuntimeException {
 
     /** */
     private static final long serialVersionUID = -5014516097016484634L;
 
-    public OperationFailedRuntimeException(String string) {
-        super(string);
+    /**
+     * Creates with only a message.
+     *
+     * @param message the message.
+     */
+    public OperationFailedRuntimeException(String message) {
+        super(message);
     }
 
-    public OperationFailedRuntimeException(Exception exc) {
-        super(exc);
+    /**
+     * Creates with only a cause.
+     *
+     * @param cause the cause.
+     */
+    public OperationFailedRuntimeException(Exception cause) {
+        super(cause);
     }
 }

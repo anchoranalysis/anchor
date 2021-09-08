@@ -28,53 +28,110 @@ package org.anchoranalysis.core.color;
 
 import java.awt.Color;
 
+/**
+ * A color encoded in red-green-blue colorspace.
+ *
+ * @author Owen Feehan
+ */
 public class RGBColor {
 
     private java.awt.Color delegate;
 
+    /** Create with black color. */
     public RGBColor() {
         this.delegate = new java.awt.Color(0, 0, 0);
     }
 
-    public RGBColor(java.awt.Color delegate) {
-        super();
-        this.delegate = delegate;
+    /**
+     * Create from a {@link java.awt.Color}.
+     *
+     * @param color the color to create from.
+     */
+    public RGBColor(java.awt.Color color) {
+        this.delegate = color;
     }
 
+    /**
+     * Creates with an RGB value encoded as an int, as in the constructor for {@link
+     * java.awt.Color}.
+     *
+     * @param rgb an integer with the red component in bits 16-23, the green component in bits 8-15,
+     *     and the blue component in bits 0-7.
+     */
     public RGBColor(int rgb) {
-        super();
         this.delegate = new java.awt.Color(rgb);
     }
 
+    /**
+     * Creates with specific values for the red, green and blue components.
+     *
+     * @param red value for the <i>red</i> component.
+     * @param green value for the <i>green</i> component.
+     * @param blue value for the <i>blue</i> component.
+     */
     public RGBColor(int red, int green, int blue) {
-        super();
         this.delegate = new java.awt.Color(red, green, blue);
     }
 
-    public int getBlue() {
-        return delegate.getBlue();
-    }
-
-    public int getGreen() {
-        return delegate.getGreen();
-    }
-
-    public int getRGB() {
-        return delegate.getRGB();
-    }
-
+    /**
+     * The <i>red</i> component value of the RGB color.
+     *
+     * @return a value between 0 and 255 (inclusive)
+     */
     public int getRed() {
         return delegate.getRed();
     }
 
+    /**
+     * The <i>green</i> component value of the RGB color.
+     *
+     * @return a value between 0 and 255 (inclusive)
+     */
+    public int getGreen() {
+        return delegate.getGreen();
+    }
+
+    /**
+     * The <i>blue</i> component value of the RGB color.
+     *
+     * @return a value between 0 and 255 (inclusive)
+     */
+    public int getBlue() {
+        return delegate.getBlue();
+    }
+
+    /**
+     * Returns the RGB value encoded as an int as in {@link java.awt.Color#getRGB()}.
+     *
+     * @return the rgb value encoded as an int.
+     */
+    public int getRGB() {
+        return delegate.getRGB();
+    }
+
+    /**
+     * Sets the <i>red</i> component value.
+     *
+     * @param value the value to assign
+     */
     public void setRed(int value) {
         delegate = new Color(value, delegate.getGreen(), delegate.getBlue());
     }
 
+    /**
+     * Sets the <i>green</i> component value.
+     *
+     * @param value the value to assign
+     */
     public void setGreen(int value) {
         delegate = new Color(delegate.getRed(), value, delegate.getBlue());
     }
 
+    /**
+     * Sets the <i>blue</i> component value.
+     *
+     * @param value the value to assign
+     */
     public void setBlue(int value) {
         delegate = new Color(delegate.getRed(), delegate.getGreen(), value);
     }
@@ -99,26 +156,29 @@ public class RGBColor {
         return delegate.toString();
     }
 
+    /**
+     * Converts the red-blue-green values as a hex-string.
+     *
+     * @return a hex representation of the color values.
+     */
     public String hexString() {
         return Integer.toHexString(getRGB() & 0x00ffffff);
     }
 
-    // from
-    // http://stackoverflow.com/questions/946544/good-text-foreground-color-for-a-given-background-color
-    public RGBColor textColor() {
-        double grayDouble = 0.299 * getRed() + 0.587 * getGreen() + 0.114 * getBlue();
-
-        if (grayDouble < 186) {
-            return new RGBColor(255, 255, 255);
-        } else {
-            return new RGBColor(0, 0, 0);
-        }
-    }
-
+    /**
+     * Converts to a {@link java.awt.Color} representation.
+     *
+     * @return the color
+     */
     public java.awt.Color toAWTColor() {
         return delegate;
     }
 
+    /**
+     * Creates a deep-copy of the current object.
+     *
+     * @return a newly-created deep copy.
+     */
     public RGBColor duplicate() {
         RGBColor out = new RGBColor();
         out.delegate = new Color(getRed(), getGreen(), getBlue());

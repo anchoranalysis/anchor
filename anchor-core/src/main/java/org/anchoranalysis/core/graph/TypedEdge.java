@@ -30,7 +30,7 @@ import lombok.Value;
  */
 
 /**
- * An edge that exists in a graph, together with the two vertices that it conntects.
+ * An edge that exists in a graph, together with the two vertices that it connects.
  *
  * @author Owen Feehan
  * @param <V> vertex-type

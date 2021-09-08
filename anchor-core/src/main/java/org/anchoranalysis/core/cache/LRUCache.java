@@ -37,13 +37,16 @@ import org.anchoranalysis.core.functional.checked.CheckedFunction;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 
 /**
- * A cache that discards items that haven't being used recently or frequently (as per Guava's
- * size-based eviction's defaults)
+ * A cache that discards items that haven't being used recently or frequently.
  *
- * <p>See <a href="https://github.com/google/guava/wiki/CachesExplained">Guava Caches Explained</a>
+ * <p>The discard strategy comes from Guava's size-based eviction's defaults.
+ *
+ * <p>See <a href="https://github.com/google/guava/wiki/CachesExplained">Guava Caches Explained</a>.
  *
  * <p>It's thread-safe.
  *
+ * @param <K> key-type used in the cache
+ * @param <V> value-type used in the cache
  * @author Owen Feehan
  */
 public class LRUCache<K, V> {
@@ -51,8 +54,9 @@ public class LRUCache<K, V> {
     private LoadingCache<K, V> cache;
 
     /**
-     * Constructor
+     * Constructor.
      *
+     * @param <E> type of an exception that may be thrown by {@code calculator}.
      * @param cacheSize maximum-size of cache
      * @param calculator calculates the value for a given key if it's not already in the cache
      */
@@ -73,6 +77,14 @@ public class LRUCache<K, V> {
                                 });
     }
 
+    /**
+     * Get a value, calculating if necessary, and caching the result.
+     *
+     * @param key the key whose value will be either calculated freshly or retrieved from the cache.
+     * @return the value of applying {@code calculator} (see constructor argument) on value {@code
+     *     key}.
+     * @throws GetOperationFailedException if the key doesn't exist
+     */
     public V get(K key) throws GetOperationFailedException {
         try {
             return cache.get(key);
@@ -81,11 +93,21 @@ public class LRUCache<K, V> {
         }
     }
 
+    /**
+     * Is a particular key present already in the cache?
+     *
+     * @param key they key to check
+     * @return true iff the key already exists in the cache.
+     */
     public boolean has(K key) {
         return cache.getIfPresent(key) != null;
     }
 
-    /** Number of items currently in the cache */
+    /**
+     * Number of items currently in the cache.
+     *
+     * @return the number of items
+     */
     public long sizeCurrentLoad() {
         return cache.size();
     }
@@ -100,7 +122,12 @@ public class LRUCache<K, V> {
         return Optional.ofNullable(cache.getIfPresent(key));
     }
 
-    /** Puts a key-value pair irrespective of whether its already present or not */
+    /**
+     * Puts a key-value pair irrespective of whether its already present or not.
+     *
+     * @param key the key
+     * @param value the value
+     */
     public void put(K key, V value) {
         cache.put(key, value);
     }

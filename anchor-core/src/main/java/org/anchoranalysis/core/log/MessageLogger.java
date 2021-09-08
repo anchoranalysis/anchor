@@ -33,8 +33,20 @@ package org.anchoranalysis.core.log;
  */
 public interface MessageLogger {
 
+    /**
+     * Logs a message.
+     *
+     * @param message the message to log.
+     */
     void log(String message);
 
+    /**
+     * Logs a message, derived from a format-string.
+     *
+     * @param formatString a format string like in {@link String#format}.
+     * @param args the arguments that match the placeholder in {@code formatString} like in {@link
+     *     String#format}.
+     */
     void logFormatted(String formatString, Object... args);
 
     /** Writes an empty line to the log file. */

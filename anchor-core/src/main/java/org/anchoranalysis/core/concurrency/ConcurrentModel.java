@@ -3,7 +3,7 @@ package org.anchoranalysis.core.concurrency;
 import lombok.Value;
 
 /**
- * A concurrent model.
+ * An instance of model that can be used concurrently for inference.
  *
  * @author Owen Feehan
  * @param <T> the type of model

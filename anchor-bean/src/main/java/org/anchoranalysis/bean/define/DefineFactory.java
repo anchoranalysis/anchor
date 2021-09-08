@@ -42,10 +42,11 @@ import org.apache.commons.configuration.beanutils.XMLBeanDeclaration;
  * Creates a new {@link Define}.
  *
  * <p>The following rules are applied to populate the {@link Define}.
- * 
+ *
  * <ol>
- * <li>Elements named "add" are treated as instances of {@link DefineAdderBean}.
- * <li>Otherwise every sub-element of {@link Define} is simply assumed to be a list of beans (the names of the sub-elements are irrelevant).
+ *   <li>Elements named "add" are treated as instances of {@link DefineAdderBean}.
+ *   <li>Otherwise every sub-element of {@link Define} is simply assumed to be a list of beans (the
+ *       names of the sub-elements are irrelevant).
  * </ol>
  *
  * @author Owen Feehan
