@@ -26,6 +26,12 @@ package org.anchoranalysis.core.identifier.getter;
  * #L%
  */
 
+/**
+ * Identify an element uniquely only by its iteration timepoint.
+ *
+ * @author Owen Feehan
+ * @param <T> element-type to be identified.
+ */
 public class IdentifyByIteration<T> implements IdentifierGetter<T> {
 
     @Override

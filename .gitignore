@@ -11,3 +11,5 @@ Thumbs.db
 target
 /.idea
 *.iml
+*.versionsBackup
+*.releaseBackup

@@ -3,10 +3,10 @@
   <parent>
 	  <groupId>org.anchoranalysis.anchor</groupId>
 	  <artifactId>anchor-parent</artifactId>
-	  <version>0.0.11-SNAPSHOT</version>
+	  <version>0.1.2</version>
   </parent>
   <artifactId>anchor-core</artifactId>
-  <version>0.0.8-SNAPSHOT</version>
+  <version>0.1.4-SNAPSHOT</version>
   <description>Fundamental core library objects for Anchor platform.</description>
   <repositories>
   		<repository>
@@ -57,4 +57,12 @@
 	  <version>1.4.18</version>
 	</dependency>    
   </dependencies>
+
+	<!-- Duplicated from parent POM file as workaround to issues with maven release plugin in multi-module projects. -->
+  	<scm>
+		<connection>scm:git:git@github.com:anchoranalysis/anchor.git</connection>
+		<developerConnection>scm:git:git@github.com:anchoranalysis/anchor.git</developerConnection>
+		<url>https://github.com/anchoranalysis/anchor</url>
+	  <tag>HEAD</tag>
+  </scm>
 </project>

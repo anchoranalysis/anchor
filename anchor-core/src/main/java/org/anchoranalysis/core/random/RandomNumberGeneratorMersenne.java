@@ -42,6 +42,11 @@ public class RandomNumberGeneratorMersenne implements RandomNumberGenerator {
 
     private RandomEngine randomEngine;
 
+    /**
+     * Creates indicating whether to use a fixed-seed or not.
+     *
+     * @param fixedSeed if true, a fixed constant-seed. if false, the seed is the system clock.
+     */
     public RandomNumberGeneratorMersenne(boolean fixedSeed) {
         randomEngine = createTwister(fixedSeed);
     }

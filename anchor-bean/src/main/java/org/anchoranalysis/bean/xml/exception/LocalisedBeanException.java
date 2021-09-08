@@ -58,13 +58,13 @@ public class LocalisedBeanException extends AnchorCombinableException {
     }
 
     @Override
-    protected boolean canExceptionBeCombined(Throwable exc) {
-        return exc instanceof LocalisedBeanException;
+    protected boolean canExceptionBeCombined(Throwable exception) {
+        return exception instanceof LocalisedBeanException;
     }
 
     @Override
     public Throwable summarize() {
-        return super.combineDscrsRecursively("at ", "\n-> ");
+        return super.combineDescriptionsRecursively("at ", "\n-> ");
     }
 
     /**
@@ -83,7 +83,7 @@ public class LocalisedBeanException extends AnchorCombinableException {
         if (hasNoCombinableNestedExceptions()) {
 
             // let's compare the filepath of the two
-            Path pathDesc = Paths.get(getDscr());
+            Path pathDesc = Paths.get(getDescription());
 
             try {
                 if (Files.isSameFile(pathMatch, pathDesc)) {
@@ -104,12 +104,12 @@ public class LocalisedBeanException extends AnchorCombinableException {
     }
 
     @Override
-    protected boolean canExceptionBeSkipped(Throwable exc) {
+    protected boolean canExceptionBeSkipped(Throwable exception) {
         return true;
     }
 
     @Override
-    protected String createMessageForDscr(String dscr) {
-        return dscr;
+    protected String createMessageForDescription(String description) {
+        return description;
     }
 }

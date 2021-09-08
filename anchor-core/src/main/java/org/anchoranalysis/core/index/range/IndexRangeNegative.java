@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.core.index;
+package org.anchoranalysis.core.index.range;
 
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -31,13 +31,15 @@ import lombok.Value;
 import org.anchoranalysis.core.exception.OperationFailedException;
 
 /**
- * Specifying a sub-range of indices.
+ * Specifying a sub-range of indices, tolerating also negative indices.
+ *
+ * <p>Negative indices, loop around the end of the range.
  *
  * @author Owen Feehan
  */
 @AllArgsConstructor
 @Value
-public class IndexRange {
+public class IndexRangeNegative {
 
     /**
      * The index if the <b>first element</b> to use in the subsetting range, zero-indexed.
@@ -83,20 +85,24 @@ public class IndexRange {
     }
 
     /**
-     * The start-index, corrected so that it is no longer negative.
+     * The start-index, maybe corrected so that it is no longer negative.
      *
      * @param size the total number of elements
-     * @throws OperationFailedException
+     * @return the maybe-corrected start-index
+     * @throws OperationFailedException if {@code startIndex} is invalid for a list of size {@code
+     *     size}.
      */
     public int correctedStartIndex(int size) throws OperationFailedException {
         return correctNegative(startIndex, size);
     }
 
     /**
-     * The end-index, corrected so that it is no longer negative.
+     * The end-index, maybe corrected so that it is no longer negative.
      *
      * @param size the total number of elements
-     * @throws OperationFailedException
+     * @return the maybe-corrected start-index
+     * @throws OperationFailedException if {@code endIndex} is invalid for a list of size {@code
+     *     size}.
      */
     public int correctedEndIndex(int size) throws OperationFailedException {
         return correctNegative(endIndex, size);
@@ -107,18 +113,19 @@ public class IndexRange {
      * list.
      */
     private static int correctNegative(int index, int listSize) throws OperationFailedException {
-        int indexToCorrect = index;
-        if (indexToCorrect < 0) {
-            indexToCorrect = indexToCorrect + listSize;
+        int toCorrect = index;
+        if (toCorrect < 0) {
+            toCorrect = toCorrect + listSize;
         } else {
-            if (indexToCorrect >= listSize) {
+            if (toCorrect >= listSize) {
                 throw createException(index, listSize);
             }
         }
-        if (indexToCorrect < 0) {
+        if (toCorrect >= 0) {
+            return toCorrect;
+        } else {
             throw createException(index, listSize);
         }
-        return indexToCorrect;
     }
 
     private static OperationFailedException createException(int index, int listSize) {

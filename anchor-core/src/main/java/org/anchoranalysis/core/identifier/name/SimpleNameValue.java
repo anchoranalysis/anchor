@@ -26,23 +26,22 @@
 
 package org.anchoranalysis.core.identifier.name;
 
+import lombok.AllArgsConstructor;
+
 /**
- * A simple container expressing a name-value pair
+ * A simple container expressing a name-value pair.
  *
  * @author Owen Feehan
  * @param <V> value-type
  */
+@AllArgsConstructor
 public final class SimpleNameValue<V> implements NameValue<V> {
 
+    /** The associated name. */
     private String name;
 
+    /** The associated value. */
     private V value;
-
-    public SimpleNameValue(String name, V value) {
-        super();
-        this.name = name;
-        this.value = value;
-    }
 
     @Override
     public String getName() {

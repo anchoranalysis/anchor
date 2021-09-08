@@ -1,4 +1,4 @@
-package org.anchoranalysis.core.index.bounded;
+package org.anchoranalysis.core.index;
 
 /*
  * #%L
@@ -26,7 +26,21 @@ package org.anchoranalysis.core.index.bounded;
  * #L%
  */
 
-public interface BoundedRangeIncompleteDynamic extends BoundedRangeIncomplete {
+/**
+ * Associated an index with the object.
+ *
+ * <p>The meaning of the index is context-dependent, but an index should always be unique for a
+ * particular instance.
+ *
+ * @author Owen Feehan
+ */
+@FunctionalInterface
+public interface AssociatedIndex {
 
-    void addBoundChangeListener(BoundChangeListener cl);
+    /**
+     * The associated index.
+     *
+     * @return the index.
+     */
+    int getIndex();
 }

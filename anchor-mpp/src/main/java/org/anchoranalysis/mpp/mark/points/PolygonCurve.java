@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.mpp.mark.points;
 
-import org.anchoranalysis.core.exception.OptionalOperationUnsupportedException;
+import org.anchoranalysis.core.exception.CheckedUnsupportedOperationException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipUtilities;
 import org.anchoranalysis.mpp.mark.GlobalRegionIdentifiers;
@@ -132,8 +132,8 @@ public class PolygonCurve extends PointListBase {
     }
 
     @Override
-    public void scale(ScaleFactor scaleFactor) throws OptionalOperationUnsupportedException {
-        throw new OptionalOperationUnsupportedException();
+    public void scale(ScaleFactor scaleFactor) throws CheckedUnsupportedOperationException {
+        throw new CheckedUnsupportedOperationException();
     }
 
     @Override

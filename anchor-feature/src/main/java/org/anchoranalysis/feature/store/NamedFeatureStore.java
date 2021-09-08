@@ -32,7 +32,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import org.anchoranalysis.bean.NamedBean;
-import org.anchoranalysis.core.identifier.provider.NameValueSet;
+import org.anchoranalysis.core.identifier.provider.NameValueMap;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
@@ -101,13 +101,13 @@ public class NamedFeatureStore<T extends FeatureInput> implements Iterable<Named
                 start, start + size, index -> list.get(index).getValue());
     }
 
-    public void copyTo(NameValueSet<Feature<T>> out) {
+    public void copyTo(NameValueMap<Feature<T>> out) {
         for (NamedBean<Feature<T>> ni : list) {
             out.add(ni.getName(), ni.getValue());
         }
     }
 
-    public void copyToDuplicate(NameValueSet<Feature<T>> out) {
+    public void copyToDuplicate(NameValueMap<Feature<T>> out) {
         for (NamedBean<Feature<T>> ni : list) {
             out.add(ni.getName(), ni.getValue().duplicateBean());
         }

@@ -34,7 +34,7 @@ import java.util.Set;
 import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.core.identifier.name.NameValue;
 import org.anchoranalysis.core.identifier.name.SimpleNameValue;
-import org.anchoranalysis.core.identifier.provider.NameValueSet;
+import org.anchoranalysis.core.identifier.provider.NameValueMap;
 import org.anchoranalysis.core.identifier.provider.NamedProvider;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.feature.bean.Feature;
@@ -55,7 +55,7 @@ public class SharedFeatureMulti
                 Iterable<NameValue<Feature<FeatureInput>>> {
 
     /** For searching by key */
-    private NameValueSet<Feature<FeatureInput>> mapByKey;
+    private NameValueMap<Feature<FeatureInput>> mapByKey;
 
     /**
      * For subsetting by descriptor-type
@@ -70,7 +70,7 @@ public class SharedFeatureMulti
     private Set<Feature<FeatureInput>> setFeatures;
 
     public SharedFeatureMulti() {
-        mapByKey = new NameValueSet<>();
+        mapByKey = new NameValueMap<>();
         mapByDescriptor = new MultiValueMap();
         setFeatures = new HashSet<>();
     }
@@ -80,7 +80,7 @@ public class SharedFeatureMulti
     public <S extends FeatureInput> SharedFeatureSet<S> subsetCompatibleWith(
             Class<? extends FeatureInput> inputType) {
 
-        NameValueSet<Feature<S>> out = new NameValueSet<>();
+        NameValueMap<Feature<S>> out = new NameValueMap<>();
 
         for (Class<? extends FeatureInput> descriptor :
                 (Set<Class<? extends FeatureInput>>) mapByDescriptor.keySet()) {
@@ -131,10 +131,7 @@ public class SharedFeatureMulti
     }
 
     public void removeIfExists(FeatureList<FeatureInput> features) {
-        // We loop over all features in the ni, and call them all the same thing with a number
-        for (Feature<FeatureInput> f : features) {
-            mapByKey.removeIfExists(f);
-        }
+        features.forEach(mapByKey::removeIfExists);
     }
 
     @Override
@@ -152,15 +149,15 @@ public class SharedFeatureMulti
         return mapByKey.keys();
     }
 
-    private void addNoDuplicate(NameValue<Feature<FeatureInput>> namedFeature) {
-        mapByKey.add(namedFeature);
-        mapByDescriptor.put(namedFeature.getValue().inputType(), namedFeature);
-        setFeatures.add(namedFeature.getValue());
+    private void addNoDuplicate(NameValue<Feature<FeatureInput>> feature) {
+        mapByKey.add(feature);
+        mapByDescriptor.put(feature.getValue().inputType(), feature);
+        setFeatures.add(feature.getValue());
     }
 
-    /** Transfers from a collection of name-values into a {@link NameValueSet} */
+    /** Transfers from a collection of name-values into a {@link NameValueMap} */
     private static <S extends FeatureInput> void transferToSet(
-            Collection<NameValue<Feature<S>>> in, NameValueSet<Feature<S>> out) {
+            Collection<NameValue<Feature<S>>> in, NameValueMap<Feature<S>> out) {
         for (NameValue<Feature<S>> nv : in) {
             out.add(nv);
         }

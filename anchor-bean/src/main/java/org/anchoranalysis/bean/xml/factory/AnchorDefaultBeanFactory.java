@@ -88,7 +88,7 @@ public class AnchorDefaultBeanFactory implements BeanFactory {
     }
 
     private static BeanMisconfiguredXmlException createMisconfiguredBeanException(
-            ConfigurationRuntimeException exc, XMLBeanDeclaration dataCast) {
+            ConfigurationRuntimeException exception, XMLBeanDeclaration dataCast) {
 
         // We can read the ClassType from beanClass.getName() but we don't report this to
         //  the user, as we assume it is presented later as part of the trace of the XML
@@ -98,7 +98,7 @@ public class AnchorDefaultBeanFactory implements BeanFactory {
                 String.format(
                         "A misconfigured bean exists%n%s",
                         HelperDescribeXmlNode.describeXMLNode(dataCast.getNode()));
-        return new BeanMisconfiguredXmlException(msg, maybeRepaceException(exc));
+        return new BeanMisconfiguredXmlException(msg, maybeRepaceException(exception));
     }
 
     /**

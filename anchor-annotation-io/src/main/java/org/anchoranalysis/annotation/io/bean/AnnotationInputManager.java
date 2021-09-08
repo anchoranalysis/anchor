@@ -31,7 +31,6 @@ import lombok.Setter;
 import org.anchoranalysis.annotation.io.AnnotationWithStrategy;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.progress.ProgressMultiple;
-import org.anchoranalysis.core.progress.ProgressOneOfMany;
 import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
 import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.input.InputsWithDirectory;
@@ -55,12 +54,12 @@ public class AnnotationInputManager<T extends ProvidesStackInput, S extends Anno
 
             InputsWithDirectory<T> inputs = input.inputs(params);
 
-            progressMultiple.incrementWorker();
+            progressMultiple.incrementChild();
 
             InputsWithDirectory<AnnotationWithStrategy<S>> transformed =
-                    inputs.map(this::createListInput, new ProgressOneOfMany(progressMultiple));
+                    inputs.map(this::createListInput, progressMultiple.trackCurrentChild());
 
-            progressMultiple.incrementWorker();
+            progressMultiple.incrementChild();
 
             return transformed;
         }

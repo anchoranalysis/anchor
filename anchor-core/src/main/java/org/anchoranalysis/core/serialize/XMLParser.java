@@ -40,19 +40,24 @@ import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
+/**
+ * Utility functions for parsing XML files using standard Java APIs.
+ *
+ * @author Owen Feehan
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class XMLUtilities {
+public class XMLParser {
 
     /**
-     * Creates a document-builder with default error-handling
+     * Creates a document-builder with default error-handling.
      *
-     * @return a document-builder with default-error-handling
-     * @throws ParserConfigurationException if the exception is thrown from
-     *     DocumentBuilder.newDocumentBuilder
+     * @return a document-builder with default-error-handling.
+     * @throws ParserConfigurationException if a {@link DocumentBuilder} cannot be created which
+     *     satisfies the configuration requested.
      */
     public static DocumentBuilder createBuilderWithDefaultErrorHandler()
             throws ParserConfigurationException {
-        DocumentBuilder builder = XMLUtilities.createDocumentBuilder();
+        DocumentBuilder builder = XMLParser.createDocumentBuilder();
         builder.setErrorHandler(new DefaultHandler());
         return builder;
     }
@@ -62,7 +67,7 @@ public class XMLUtilities {
      * external entities (to prevent XXE attacks).
      *
      * @return a newly created {@link DocumentBuilderFactory}
-     * @throws TransformerConfigurationException
+     * @throws TransformerConfigurationException if thrown by {@link TransformerFactory#setFeature}.
      */
     public static TransformerFactory createTransformerFactory()
             throws TransformerConfigurationException {
@@ -74,11 +79,12 @@ public class XMLUtilities {
     /**
      * Parses a XML file to produce a {@link Document}.
      *
-     * @param file the XML file.
-     * @return the document
-     * @throws SAXException
-     * @throws IOException
-     * @throws ParserConfigurationException
+     * @param file the XML file to parse.
+     * @return the parsed document
+     * @throws SAXException if any parse errors occur.
+     * @throws IOException if any IO errors occur.
+     * @throws ParserConfigurationException if a {@link DocumentBuilder} cannot be created which
+     *     satisfies the configuration requested.
      */
     public static Document parse(File file)
             throws SAXException, IOException, ParserConfigurationException {
@@ -89,7 +95,8 @@ public class XMLUtilities {
      * Creates a new XML document.
      *
      * @return the newly created {@link Document}
-     * @throws ParserConfigurationException
+     * @throws ParserConfigurationException if a {@link DocumentBuilder} cannot be created which
+     *     satisfies the configuration requested.
      */
     public static Document createNewDocument() throws ParserConfigurationException {
         return createDocumentBuilder().newDocument();
@@ -100,7 +107,8 @@ public class XMLUtilities {
      * entities (to prevent XXE attacks).
      *
      * @return a newly created {@link DocumentBuilder}
-     * @throws ParserConfigurationException
+     * @throws ParserConfigurationException if a {@link DocumentBuilder} cannot be created which
+     *     satisfies the configuration requested.
      */
     private static DocumentBuilder createDocumentBuilder() throws ParserConfigurationException {
         return createDocumentBuilderFactory().newDocumentBuilder(); // NOSONAR

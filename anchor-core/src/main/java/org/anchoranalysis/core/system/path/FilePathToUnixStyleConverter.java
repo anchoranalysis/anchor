@@ -32,7 +32,7 @@ import lombok.NoArgsConstructor;
 import org.apache.commons.io.FilenameUtils;
 
 /**
- * Conversion to Unix-style separators
+ * Conversion to Unix-style separators.
  *
  * @author Owen Feehan
  */

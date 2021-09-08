@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.anchoranalysis.core.exception.OptionalOperationUnsupportedException;
+import org.anchoranalysis.core.exception.CheckedUnsupportedOperationException;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.object.properties.ObjectCollectionWithProperties;
@@ -183,10 +183,10 @@ public final class MarkCollection implements Iterable<Mark>, Serializable {
      * Scales the mark in X and Y dimensions.
      *
      * @param scaleFactor how much to scale by.
-     * @throws OptionalOperationUnsupportedException if the type of mark used in the annotation does
+     * @throws CheckedUnsupportedOperationException if the type of mark used in the annotation does
      *     not supported scaling.
      */
-    public void scaleXY(ScaleFactor scaleFactor) throws OptionalOperationUnsupportedException {
+    public void scaleXY(ScaleFactor scaleFactor) throws CheckedUnsupportedOperationException {
 
         for (Mark mark : marks) {
             mark.scale(scaleFactor);

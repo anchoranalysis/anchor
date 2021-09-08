@@ -26,27 +26,23 @@
 
 package org.anchoranalysis.core.progress;
 
-public class ProgressOneOfMany implements Progress {
+/**
+ * A helper class for {@link ProgressMultiple} that exposes a particular child's progress as an
+ * independent tracker.
+ *
+ * @author Owen Feehan
+ */
+class ProgressOneOfMany implements Progress {
 
-    private int min;
-    private int max;
+    private int min = 0;
+    private int max = 1;
     private final ProgressMultiple parent;
 
     private int range;
 
-    public ProgressOneOfMany(ProgressMultiple parent) {
-        this(parent, 0, 1);
-    }
-
-    public ProgressOneOfMany(ProgressMultiple parent, int min, int max) {
+    ProgressOneOfMany(ProgressMultiple parent) {
         this.parent = parent;
-        this.min = min;
-        this.max = max;
         updateRange();
-    }
-
-    private void updateRange() {
-        this.range = max - min;
     }
 
     @Override
@@ -87,5 +83,9 @@ public class ProgressOneOfMany implements Progress {
     public void setMax(int max) {
         this.max = max;
         updateRange();
+    }
+
+    private void updateRange() {
+        this.range = max - min;
     }
 }

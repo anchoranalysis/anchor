@@ -30,17 +30,17 @@ import java.util.Optional;
 import java.util.Set;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.identifier.name.SimpleNameValue;
-import org.anchoranalysis.core.identifier.provider.NameValueSet;
+import org.anchoranalysis.core.identifier.provider.NameValueMap;
 
 /**
- * Evaluates items via their Getter as soon as they are added
+ * Evaluates items immediately via the {@link StoreSupplier} as soon as they are added.
  *
  * @author Owen Feehan
  * @param <T> item-type in the store
  */
 public class EagerEvaluationStore<T> implements NamedProviderStore<T> {
 
-    private NameValueSet<T> delegate = new NameValueSet<>();
+    private NameValueMap<T> delegate = new NameValueMap<>();
 
     @Override
     public Set<String> keys() {
@@ -48,9 +48,9 @@ public class EagerEvaluationStore<T> implements NamedProviderStore<T> {
     }
 
     @Override
-    public void add(String identifier, StoreSupplier<T> getter) throws OperationFailedException {
+    public void add(String identifier, StoreSupplier<T> supplier) throws OperationFailedException {
 
-        SimpleNameValue<T> item = new SimpleNameValue<>(identifier, getter.get());
+        SimpleNameValue<T> item = new SimpleNameValue<>(identifier, supplier.get());
 
         delegate.add(item);
     }

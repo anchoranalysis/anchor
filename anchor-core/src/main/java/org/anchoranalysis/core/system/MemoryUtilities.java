@@ -30,17 +30,22 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.log.MessageLogger;
 
+/**
+ * Logs a message about approximate memory (RAM) usage of the JVM.
+ *
+ * @author Owen Feehan
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MemoryUtilities {
 
-    public static long calculateMemoryUsage() {
-        Runtime runtime = java.lang.Runtime.getRuntime();
-        long totalMemory = runtime.totalMemory();
-        long freeMemory = runtime.freeMemory();
-        return totalMemory - freeMemory;
-    }
-
-    public static void logMemoryUsage(String id, MessageLogger logger) {
+    /**
+     * Logs a message to {@code logger} describing current memory usage of the JVM.
+     *
+     * @param identifier a human-readable string identifying the timepoint in the execution of the
+     *     program where memory is recorded.
+     * @param logger the logger to record the message onto
+     */
+    public static void logMemoryUsage(String identifier, MessageLogger logger) {
         Runtime runtime = java.lang.Runtime.getRuntime();
         long totalMemory = runtime.totalMemory();
         long freeMemory = runtime.freeMemory();
@@ -48,10 +53,6 @@ public class MemoryUtilities {
 
         logger.logFormatted(
                 "Total used memory (%s): %d MB (out of %d MB)",
-                id, memory / 1000000, totalMemory / 1000000);
-    }
-
-    public static String referenceString(Object object) {
-        return Integer.toHexString(System.identityHashCode(object));
+                identifier, memory / 1000000, totalMemory / 1000000);
     }
 }

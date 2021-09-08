@@ -27,15 +27,31 @@ package org.anchoranalysis.core.system.path;
 
 import org.anchoranalysis.core.exception.friendly.AnchorFriendlyCheckedException;
 
+/**
+ * When an error occurs calculating the difference between two file-paths.
+ *
+ * @author Owen Feehan
+ */
 public class PathDifferenceException extends AnchorFriendlyCheckedException {
 
     /** */
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Creates with only a message.
+     *
+     * @param message the message.
+     */
     public PathDifferenceException(String message) {
         super(message);
     }
 
+    /**
+     * Creates with message and cause.
+     *
+     * @param message the message.
+     * @param cause the cause.
+     */
     public PathDifferenceException(String message, Exception cause) {
         super(message, cause);
     }

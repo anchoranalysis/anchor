@@ -30,23 +30,50 @@ import org.anchoranalysis.core.exception.friendly.HasFriendlyErrorMessage;
  * #L%
  */
 
+/**
+ * A generic exception that be thrown when the creation of a new object fails.
+ *
+ * @author Owen Feehan
+ */
 public class CreateException extends AnchorFriendlyCheckedException {
 
     /** */
     private static final long serialVersionUID = 1842384434578361294L;
 
-    public CreateException(String string) {
-        super(string);
+    /**
+     * Creates with a message, but without a cause.
+     *
+     * @param message the message.
+     */
+    public CreateException(String message) {
+        super(message);
     }
 
-    public CreateException(Throwable exc) {
-        super(exc);
+    /**
+     * Creates with a cause, but without a message.
+     *
+     * @param cause the cause.
+     */
+    public CreateException(Throwable cause) {
+        super(cause);
     }
 
+    /**
+     * Creates with a message, and a cause with a user-friendly error message.
+     *
+     * @param message the message
+     * @param cause the cause with a user-friendly error message.
+     */
     public CreateException(String message, HasFriendlyErrorMessage cause) {
         super(friendly(message, cause));
     }
 
+    /**
+     * Creates with a message, and a combinable-exception as a cause.
+     *
+     * @param message the message
+     * @param cause a combinable-exception as a cause.
+     */
     public CreateException(String message, AnchorCombinableException cause) {
         super(combine(message, cause));
     }

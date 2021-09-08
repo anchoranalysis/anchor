@@ -30,7 +30,7 @@ import java.io.IOException;
 import java.io.Writer;
 
 /**
- * Methods for extracting a user-friendly error description
+ * Methods for extracting a user-friendly error description.
  *
  * @author Owen Feehan
  */

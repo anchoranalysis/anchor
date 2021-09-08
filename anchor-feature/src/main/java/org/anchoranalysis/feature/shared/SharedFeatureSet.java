@@ -30,7 +30,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.identifier.name.NameValue;
-import org.anchoranalysis.core.identifier.provider.NameValueSet;
+import org.anchoranalysis.core.identifier.provider.NameValueMap;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.Feature;
@@ -40,7 +40,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
 @AllArgsConstructor
 public class SharedFeatureSet<T extends FeatureInput> {
 
-    @Getter private NameValueSet<Feature<T>> set;
+    @Getter private NameValueMap<Feature<T>> set;
 
     public void initRecursive(FeatureInitialization initialization, Logger logger)
             throws InitException {

@@ -31,39 +31,51 @@ import java.util.Set;
 import org.anchoranalysis.core.exception.OperationFailedException;
 
 /**
- * A collection of named-elements that provides an element for a given name.
+ * A collection of elements, each with an associated name.
  *
  * @author Owen Feehan
  * @param <T> element-type
  */
 public interface NamedProvider<T> {
 
-    /** Retrieves the item if it exists, or throws an exception if it doesn't exist. */
+    /**
+     * Returns a set of keys associated with the provider.
+     *
+     * <p>There's no guarantee that it refers to all valid keys.
+     *
+     * @return a set of all keys associated with the provider.
+     */
+    Set<String> keys();
+
+    /**
+     * Retrieves the item if it exists, or returns {@link Optional#empty} if it doesn't exist.
+     *
+     * <p>Note that a 'key' might still throw an exception for another reason (but never because a
+     * particular key is absent).
+     *
+     * @param identifier a unique name for the item.
+     * @return the item, if it exists, otherwise {@link Optional#empty}.
+     * @throws NamedProviderGetException if no item exists for {@code identifier}.
+     */
+    Optional<T> getOptional(String identifier) throws NamedProviderGetException;
+
+    /**
+     * Retrieves the item if it exists, or throws an exception if it doesn't exist.
+     *
+     * @param identifier a unique name for the item.
+     * @return the item
+     * @throws NamedProviderGetException if no item exists for {@code identifier}
+     */
     default T getException(String identifier) throws NamedProviderGetException {
         return getOptional(identifier)
                 .orElseThrow(() -> NamedProviderGetException.nonExistingItem(identifier));
     }
 
     /**
-     * Retrieves the item if it exists, or returns empty() if it doesn't exist.
+     * Gets one element of the provider (arbitrarily).
      *
-     * <p>Note that a 'key' might still throw an exception for another reason (but never because a
-     * particular key is absent).
-     */
-    Optional<T> getOptional(String identifier) throws NamedProviderGetException;
-
-    /**
-     * Returns a set of keys associated with the provider.
-     *
-     * <p>There's no guarantee that it refers to all valid keys.
-     */
-    Set<String> keys();
-
-    /**
-     * Gets one element of the provider (arbitrarily)
-     *
-     * @return one of the elements of the array (arbitrary which one)
-     * @throws OperationFailedException if the array has no elements
+     * @return one of the elements of the array (arbitrary which one).
+     * @throws OperationFailedException if the array has no elements.
      */
     default T getArbitraryElement() throws OperationFailedException {
 
@@ -80,9 +92,9 @@ public interface NamedProvider<T> {
     }
 
     /**
-     * Are there any items in the provider
+     * Are there any items in the provider?
      *
-     * @return true iff at least one item exists
+     * @return true iff at least one item exists.
      */
     default boolean isEmpty() {
         return keys().isEmpty();

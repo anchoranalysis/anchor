@@ -30,7 +30,7 @@ import com.google.common.base.Preconditions;
 import ij.gui.PolygonRoi;
 import ij.gui.Roi;
 import java.util.List;
-import org.anchoranalysis.core.exception.OptionalOperationUnsupportedException;
+import org.anchoranalysis.core.exception.CheckedUnsupportedOperationException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipUtilities;
 import org.anchoranalysis.mpp.mark.GlobalRegionIdentifiers;
@@ -93,8 +93,8 @@ public class Polygon extends PointListBase {
     }
 
     @Override
-    public void scale(ScaleFactor scaleFactor) throws OptionalOperationUnsupportedException {
-        throw new OptionalOperationUnsupportedException();
+    public void scale(ScaleFactor scaleFactor) throws CheckedUnsupportedOperationException {
+        throw new CheckedUnsupportedOperationException();
     }
 
     @Override

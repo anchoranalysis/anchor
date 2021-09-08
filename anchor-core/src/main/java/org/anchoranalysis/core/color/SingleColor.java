@@ -38,6 +38,11 @@ public class SingleColor implements ColorIndex {
 
     private final RGBColor color;
 
+    /**
+     * Creates with a particular color.
+     *
+     * @param colorAwt the color as a {@link Color}.
+     */
     public SingleColor(Color colorAwt) {
         color = new RGBColor(colorAwt);
     }
@@ -50,10 +55,5 @@ public class SingleColor implements ColorIndex {
     @Override
     public int numberUniqueColors() {
         return 1;
-    }
-
-    @Override
-    public boolean has(int index) {
-        return true;
     }
 }

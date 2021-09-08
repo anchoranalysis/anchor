@@ -32,8 +32,8 @@ import java.util.function.Predicate;
  * Like {@link Predicate} but can also throw an exception.
  *
  * @author Owen Feehan
- * @param <T> type of object to test
- * @param <E> exception-type if testing fails
+ * @param <T> type of object to test.
+ * @param <E> exception-type if testing fails.
  */
 @FunctionalInterface
 public interface CheckedPredicate<T, E extends Exception> {

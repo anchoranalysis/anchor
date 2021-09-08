@@ -40,8 +40,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ProgressIgnore implements Progress {
 
+    /** Singleton instance. */
     private static ProgressIgnore instance = null;
 
+    /**
+     * Gets a singleton instance of the class.
+     *
+     * @return the instance
+     */
     public static ProgressIgnore get() {
         if (instance == null) {
             instance = new ProgressIgnore();

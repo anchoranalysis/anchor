@@ -27,22 +27,38 @@
 package org.anchoranalysis.core.identifier.name;
 
 /**
- * An object that has an associated textual name and value
+ * A pair combining a name and a value.
  *
  * @author Owen Feehan
  * @param <T> value-type
  */
 public interface NameValue<T> {
 
-    /** The associated name */
+    /**
+     * The associated name.
+     *
+     * @return the name
+     */
     String getName();
 
-    /** Sets the associated namme */
+    /**
+     * Assigns the associated name.
+     *
+     * @param name name to assign
+     */
     void setName(String name);
 
-    /** The associated value */
+    /**
+     * The associated value.
+     *
+     * @return the value
+     */
     T getValue();
 
-    /** Sets the associated value */
-    void setValue(T item);
+    /**
+     * Assigns the associated value.
+     *
+     * @param value value to assign
+     */
+    void setValue(T value);
 }

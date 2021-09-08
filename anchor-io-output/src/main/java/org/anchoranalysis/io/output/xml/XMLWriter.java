@@ -37,7 +37,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.serialize.XMLUtilities;
+import org.anchoranalysis.core.serialize.XMLParser;
 import org.w3c.dom.Document;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -66,7 +66,7 @@ public class XMLWriter {
     }
 
     private static Transformer createTransformer() throws TransformerConfigurationException {
-        Transformer transformer = XMLUtilities.createTransformerFactory().newTransformer();
+        Transformer transformer = XMLParser.createTransformerFactory().newTransformer();
         transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
         transformer.setOutputProperty(OutputKeys.INDENT, "yes");
         return transformer;

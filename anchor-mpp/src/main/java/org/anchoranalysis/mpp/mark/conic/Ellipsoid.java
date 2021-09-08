@@ -37,7 +37,7 @@ import java.io.Serializable;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.core.exception.OptionalOperationUnsupportedException;
+import org.anchoranalysis.core.exception.CheckedUnsupportedOperationException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.core.orientation.Orientation;
@@ -339,7 +339,7 @@ public class Ellipsoid extends ConicBase implements Serializable {
 
     // NB objects are scaled in pre-rotated position i.e. when aligned to axes
     @Override
-    public void scale(ScaleFactor scaleFactor) throws OptionalOperationUnsupportedException {
+    public void scale(ScaleFactor scaleFactor) throws CheckedUnsupportedOperationException {
         super.scale(scaleFactor);
         ScaleChecker.checkIdenticalXY(scaleFactor);
         this.radii.setX(this.radii.x() * scaleFactor.x());
@@ -391,7 +391,7 @@ public class Ellipsoid extends ConicBase implements Serializable {
         op.addDoubleAsString("Normalized Radius 1 (pixels)", arr[1]);
         op.addDoubleAsString("Normalized Radius 2 (pixels)", arr[2]);
 
-        orientation.addProperties(op.getNameValueSet());
+        orientation.addProperties(op.getMap());
         op.addDoubleAsString("Shell Radius Ratio", shellRad);
         op.addDoubleAsString("Inner Core Radius Ratio ", innerCoreDistance);
         return op;

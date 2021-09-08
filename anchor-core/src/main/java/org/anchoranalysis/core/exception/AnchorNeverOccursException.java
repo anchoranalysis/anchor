@@ -30,9 +30,6 @@ package org.anchoranalysis.core.exception;
  * This is an exceotion that should never be thrown, but can be used for type-safety where an
  * exception is needed
  *
- * <p>See e.g. {@link org.anchoranalysis.core.index.BridgeElementWithIndex} for the type of class
- * that regularly uses exceptions that may never be thrown
- *
  * @author Owen Feehan
  */
 public class AnchorNeverOccursException extends AnchorRuntimeException {

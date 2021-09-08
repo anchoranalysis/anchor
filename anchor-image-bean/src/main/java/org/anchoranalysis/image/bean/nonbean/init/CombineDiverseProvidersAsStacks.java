@@ -28,6 +28,7 @@ package org.anchoranalysis.image.bean.nonbean.init;
 
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Stream;
 import lombok.Getter;
 import org.anchoranalysis.core.identifier.provider.NamedProvider;
 import org.anchoranalysis.core.identifier.provider.NamedProviderBridge;
@@ -76,11 +77,7 @@ class CombineDiverseProvidersAsStacks implements NamedProvider<Stack> {
     }
 
     private NamedProvider<Stack> createCombinedStackProvider() {
-        NamedProviderCombine<Stack> combined = new NamedProviderCombine<>();
-        combined.add(stacks);
-        combined.add(channelsBridge());
-        combined.add(masksBridge());
-        return combined;
+        return new NamedProviderCombine<>(Stream.of(stacks, channelsBridge(), masksBridge()));
     }
 
     private NamedProviderBridge<Channel, Stack> channelsBridge() {

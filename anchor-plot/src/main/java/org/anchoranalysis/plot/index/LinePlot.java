@@ -31,8 +31,8 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.index.AssociatedIndex;
 import org.anchoranalysis.core.index.GetOperationFailedException;
-import org.anchoranalysis.core.index.IndexGetter;
 import org.anchoranalysis.plot.AxisLimits;
 import org.anchoranalysis.plot.PlotInstance;
 import org.jfree.chart.ChartFactory;
@@ -52,7 +52,7 @@ import org.jfree.data.xy.XYSeriesCollection;
  *
  * @param <T> item-type in container.
  */
-public class LinePlot<T extends IndexGetter> extends PlotIndexBase<T, XYDataset> {
+public class LinePlot<T extends AssociatedIndex> extends PlotIndexBase<T, XYDataset> {
 
     @Getter @Setter private int numberPoints = 1000;
 

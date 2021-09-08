@@ -27,7 +27,7 @@ package org.anchoranalysis.core.exception;
  */
 
 /**
- * A base class for all unchecked (runtime) exceptions used on the Anchor platform
+ * A base class for all unchecked (runtime) exceptions used on the Anchor platform.
  *
  * @author Owen Feehan
  */
@@ -36,19 +36,36 @@ public abstract class AnchorRuntimeException extends RuntimeException {
     /** */
     private static final long serialVersionUID = 1L;
 
+    /** Creates without message or cause. */
     protected AnchorRuntimeException() {
         super();
     }
 
+    /**
+     * Creates with message and cause.
+     *
+     * @param message the message.
+     * @param cause the cause.
+     */
     protected AnchorRuntimeException(String message, Throwable cause) {
         super(message, cause);
     }
 
+    /**
+     * Creates with only a message.
+     *
+     * @param message the message.
+     */
     protected AnchorRuntimeException(String message) {
         super(message);
         super.initCause(null);
     }
 
+    /**
+     * Creates with only a cause.
+     *
+     * @param cause the cause.
+     */
     protected AnchorRuntimeException(Throwable cause) {
         super(cause);
     }

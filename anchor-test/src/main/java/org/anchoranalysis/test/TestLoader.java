@@ -33,7 +33,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import javax.xml.parsers.ParserConfigurationException;
-import org.anchoranalysis.core.serialize.XMLUtilities;
+import org.anchoranalysis.core.serialize.XMLParser;
 import org.apache.commons.io.FileUtils;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
@@ -222,7 +222,7 @@ public class TestLoader {
      */
     public static Document openXmlAbsoluteFilePath(Path filePath) {
         try {
-            return XMLUtilities.parse(filePath.toFile());
+            return XMLParser.parse(filePath.toFile());
         } catch (ParserConfigurationException | SAXException | IOException e) {
             throw new TestDataLoadException(e);
         }

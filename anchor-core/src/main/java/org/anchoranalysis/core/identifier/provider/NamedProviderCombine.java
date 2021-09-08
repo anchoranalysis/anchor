@@ -26,26 +26,48 @@
 
 package org.anchoranalysis.core.identifier.provider;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+/**
+ * Combines one more {@link NamedProvider}s into a unitary {@link NamedProvider}.
+ *
+ * <p>Queries are applied sequentially to each {@link NamedProvider} until successful.
+ *
+ * <p>All keys from all underlying {@link NamedProvider}s are valid, but maximally one entry will be
+ * returned for a corresponding key, as first encountered during iteration.
+ *
+ * @author Owen Feehan
+ * @param <T> element-type
+ */
 public class NamedProviderCombine<T> implements NamedProvider<T> {
 
-    private List<NamedProvider<T>> list = new ArrayList<>();
+    private final List<NamedProvider<T>> list;
+
+    /**
+     * Create from a stream of {@link NamedProvider}s.
+     *
+     * <p>Note that the order of this stream, determines the order in which queries occur.
+     *
+     * @param stream the stream
+     */
+    public NamedProviderCombine(Stream<NamedProvider<T>> stream) {
+        this.list = stream.collect(Collectors.toList());
+    }
 
     @Override
     public Optional<T> getOptional(String key) throws NamedProviderGetException {
 
         for (NamedProvider<T> item : list) {
 
-            Optional<T> ret = item.getOptional(key);
+            Optional<T> value = item.getOptional(key);
 
-            if (ret.isPresent()) {
-                return ret;
+            if (value.isPresent()) {
+                return value;
             }
         }
         return Optional.empty();
@@ -56,9 +78,5 @@ public class NamedProviderCombine<T> implements NamedProvider<T> {
         return list.stream()
                 .flatMap(item -> item.keys().stream())
                 .collect(Collectors.toCollection(HashSet::new));
-    }
-
-    public void add(NamedProvider<T> key) {
-        list.add(key);
     }
 }

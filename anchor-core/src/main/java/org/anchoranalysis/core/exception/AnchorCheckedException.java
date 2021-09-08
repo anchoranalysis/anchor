@@ -27,7 +27,7 @@ package org.anchoranalysis.core.exception;
  */
 
 /**
- * A base class for all checked exceptions used on the Anchor platform
+ * A base class for all checked exceptions used on the Anchor platform.
  *
  * @author Owen Feehan
  */
@@ -36,19 +36,36 @@ public abstract class AnchorCheckedException extends Exception {
     /** */
     private static final long serialVersionUID = 1L;
 
+    /** Creates without message or cause. */
     protected AnchorCheckedException() {
         super();
     }
 
+    /**
+     * Creates with message and cause.
+     *
+     * @param message the message.
+     * @param cause the cause.
+     */
     protected AnchorCheckedException(String message, Throwable cause) {
         super(message, cause);
     }
 
+    /**
+     * Creates with only a message.
+     *
+     * @param message the message.
+     */
     protected AnchorCheckedException(String message) {
         super(message);
         super.initCause(null);
     }
 
+    /**
+     * Creates with only a cause.
+     *
+     * @param cause the cause.
+     */
     protected AnchorCheckedException(Throwable cause) {
         super(cause);
     }

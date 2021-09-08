@@ -40,16 +40,35 @@ public interface RandomNumberGenerator {
     /**
      * Samples from a uniformly-distributed range between 0.0 (<i>exclusive</i>) and 1.0
      * (<i>exclusive</i>).
+     *
+     * @return the randomly-sampled number.
      */
     double sampleDoubleZeroAndOne();
 
-    /** Generates a Poisson random variable with particular parameterization. */
+    /**
+     * Generates a Poisson random variable with particular parameterization.
+     *
+     * @param param the single parameter for the distribution.
+     * @return a random-distribution from which sampling can occur.
+     */
     Poisson generatePoisson(double param);
 
-    /** Generates a Gaussian (Normal) random variable with particular parameterization. */
+    /**
+     * Generates a Gaussian (Normal) random variable with particular parameterization.
+     *
+     * @param mean mean parameter for the distribution
+     * @param standardDeviation standard-deviation parameter for the distribution
+     * @return a random-distribution from which sampling can occur.
+     */
     Normal generateNormal(double mean, double standardDeviation);
 
-    /** Samples uniformly an item from a list */
+    /**
+     * Samples uniformly an element from a list.
+     *
+     * @param <T> type of elements in the list.
+     * @param list the list to sample an element from.
+     * @return a randomly-sampled element from the list.
+     */
     default <T> T sampleFromList(List<T> list) {
         return list.get(sampleIntFromRange(list.size()));
     }
@@ -57,6 +76,9 @@ public interface RandomNumberGenerator {
     /**
      * Generates a uniformly random discrete number within a range from 0 (<i>inclusive</i>) to
      * {@code endExclusive}.
+     *
+     * @param endExclusive the final number in the range (excluded from consideration).
+     * @return the randomly-sampled (discrete) number.
      */
     default int sampleIntFromRange(int endExclusive) {
         return (int) (sampleDoubleZeroAndOne() * endExclusive);
@@ -65,6 +87,9 @@ public interface RandomNumberGenerator {
     /**
      * Generates a uniformly random discrete number within a range from 0 (<i>inclusive</i>) to
      * {@code endExclusive}.
+     *
+     * @param endExclusive the final number in the range (excluded from consideration)
+     * @return the randomly-sampled (discrete) number
      */
     default long sampleLongFromRange(long endExclusive) {
         return (long) (sampleDoubleZeroAndOne() * endExclusive);
@@ -73,17 +98,32 @@ public interface RandomNumberGenerator {
     /**
      * Generates a uniformly random floating-point number within a range from {@code 0}
      * (<i>exclusive</i>) to {@code endExclusive}.
+     *
+     * @param endExclusive the final number in the range (excluded from consideration).
+     * @return the randomly-sampled number.
      */
     default double sampleDoubleFromRange(double endExclusive) {
         return sampleDoubleZeroAndOne() * endExclusive;
     }
 
-    /** Samples from a uniformly random discrete number within a range. */
+    /**
+     * Samples from a uniformly random discrete number within a range.
+     *
+     * @param startInclusive the starting number in the range (included).
+     * @param endExclusive the final number in the range (excluded from consideration).
+     * @return the randomly-sampled (discrete) number.
+     */
     default int sampleIntFromRange(int startInclusive, int endExclusive) {
         return sampleIntFromRange(endExclusive - startInclusive) + startInclusive;
     }
 
-    /** Generates a uniformly random floating-point number within a range. */
+    /**
+     * Generates a uniformly random floating-point number within a range.
+     *
+     * @param startExclusive the starting number in the range (excluded from consideration).
+     * @param endExclusive the final number in the range (excluded from consideration).
+     * @return the randomly-sampled number.
+     */
     default double sampleDoubleFromRange(double startExclusive, double endExclusive) {
         return sampleDoubleFromRange(endExclusive - startExclusive) + startExclusive;
     }
@@ -93,7 +133,7 @@ public interface RandomNumberGenerator {
      * {@code [-halfWidth,+halfWidth]} (both <i>exclusive</i>).
      *
      * @param halfWidth half the total width of the distribution (i.e. the width of one side)
-     * @return the sampled-number
+     * @return the randomly-sampled number
      */
     default double sampleDoubleFromZeroCenteredRange(double halfWidth) {
         return sampleDoubleFromRange(halfWidth * 2) - halfWidth;

@@ -33,7 +33,7 @@ import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.exception.OptionalOperationUnsupportedException;
+import org.anchoranalysis.core.exception.CheckedUnsupportedOperationException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.mpp.bean.bound.Bound;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipUtilities;
@@ -101,10 +101,10 @@ public abstract class MarkWithPositionAndSingleRadius extends MarkWithPosition
      * <p>So when aligned to axes, we actually scale in all 3 dimensions, and ignore
      * scene-resolution
      *
-     * @throws OptionalOperationUnsupportedException
+     * @throws CheckedUnsupportedOperationException
      */
     @Override
-    public void scale(ScaleFactor scaleFactor) throws OptionalOperationUnsupportedException {
+    public void scale(ScaleFactor scaleFactor) throws CheckedUnsupportedOperationException {
         super.scale(scaleFactor);
 
         ScaleChecker.checkIdenticalXY(scaleFactor);

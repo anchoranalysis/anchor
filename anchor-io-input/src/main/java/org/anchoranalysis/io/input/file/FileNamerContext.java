@@ -29,7 +29,7 @@ import java.nio.file.Path;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.Value;
-import org.anchoranalysis.core.index.IndexRange;
+import org.anchoranalysis.core.index.range.IndexRangeNegative;
 import org.anchoranalysis.core.log.Logger;
 
 /**
@@ -59,7 +59,7 @@ public class FileNamerContext {
     private String elseName;
 
     /** If defined, this indicates and specifies only a subset of the naming-elements to use. */
-    private Optional<IndexRange> nameSubrange;
+    private Optional<IndexRangeNegative> nameSubrange;
 
     /** Logs information messages. */
     private Logger logger;
@@ -71,7 +71,7 @@ public class FileNamerContext {
     public FileNamerContext(
             Optional<Path> inputDirectory,
             boolean relativeToDirectory,
-            Optional<IndexRange> nameSubrange,
+            Optional<IndexRangeNegative> nameSubrange,
             Logger logger) {
         this(inputDirectory, relativeToDirectory, DEFAULT_ELSE_NAME, nameSubrange, logger);
     }

@@ -29,7 +29,7 @@ package org.anchoranalysis.mpp.mark.points;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Stream;
-import org.anchoranalysis.core.exception.OptionalOperationUnsupportedException;
+import org.anchoranalysis.core.exception.CheckedUnsupportedOperationException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipUtilities;
 import org.anchoranalysis.mpp.mark.GlobalRegionIdentifiers;
@@ -93,7 +93,7 @@ public class PointList extends PointListBase {
     }
 
     @Override
-    public void scale(ScaleFactor scaleFactor) throws OptionalOperationUnsupportedException {
+    public void scale(ScaleFactor scaleFactor) throws CheckedUnsupportedOperationException {
 
         for (int i = 0; i < getPoints().size(); i++) {
 

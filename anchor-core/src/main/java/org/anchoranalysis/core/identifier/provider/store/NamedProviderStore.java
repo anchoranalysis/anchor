@@ -30,7 +30,7 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.identifier.provider.NamedProvider;
 
 /**
- * A provider, in which items can also be added.
+ * A {@link NamedProvider}, in which items can also be added.
  *
  * <p>So as to allow evaluate to be potentially lazy, an item is not directly added, but a Getter is
  * added that can be calculated on demand.
@@ -40,5 +40,14 @@ import org.anchoranalysis.core.identifier.provider.NamedProvider;
  */
 public interface NamedProviderStore<T> extends NamedProvider<T> {
 
-    void add(String identifier, StoreSupplier<T> getter) throws OperationFailedException;
+    /**
+     * Adds an element to the store.
+     *
+     * @param identifier a unique identifier for the element.
+     * @param supplier supplies the element to be added (which may be evaluated immediately, or a
+     *     later point lazily).
+     * @throws OperationFailedException if the identifier already exists, or otherwise the add
+     *     operation fails.
+     */
+    void add(String identifier, StoreSupplier<T> supplier) throws OperationFailedException;
 }

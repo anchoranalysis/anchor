@@ -41,9 +41,17 @@ import lombok.Value;
 @Value
 public class SplitPath {
 
+    /** The first component, the root of the path. */
     private Path root;
+
+    /** The second component, what remains in the path. */
     private Path remainder;
 
+    /**
+     * A path that combines the {@code root} together with the {@code remainder}.
+     *
+     * @return the {@code remainder} joined to the {@code root}.
+     */
     public Path combined() {
         return root.resolve(remainder);
     }

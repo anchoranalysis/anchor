@@ -31,10 +31,11 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.util.Arrays;
 import java.util.List;
 import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.index.range.IndexRangeNegative;
 import org.junit.jupiter.api.Test;
 
 /**
- * Tests {@link IndexRange}.
+ * Tests {@link IndexRangeNegative}.
  *
  * @author Owen Feehan
  */
@@ -113,7 +114,7 @@ class IndexRangeTest {
 
     private static List<String> performOperation(int startIndex, int endIndex)
             throws OperationFailedException {
-        IndexRange range = new IndexRange(startIndex, endIndex);
+        IndexRangeNegative range = new IndexRangeNegative(startIndex, endIndex);
         return range.extract(ELEMENTS);
     }
 }

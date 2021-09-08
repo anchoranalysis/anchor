@@ -30,7 +30,7 @@ import java.io.Serializable;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.core.exception.OptionalOperationUnsupportedException;
+import org.anchoranalysis.core.exception.CheckedUnsupportedOperationException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.core.object.properties.ObjectWithProperties;
@@ -69,7 +69,7 @@ public abstract class MarkWithPosition extends Mark implements Serializable {
     }
 
     @Override
-    public void scale(ScaleFactor scaleFactor) throws OptionalOperationUnsupportedException {
+    public void scale(ScaleFactor scaleFactor) throws CheckedUnsupportedOperationException {
         scaleFactor.scale(position);
     }
 

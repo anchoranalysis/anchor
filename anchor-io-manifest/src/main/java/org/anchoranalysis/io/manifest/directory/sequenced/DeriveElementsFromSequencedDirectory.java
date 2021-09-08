@@ -32,7 +32,6 @@ import java.util.List;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
-import org.anchoranalysis.core.index.GetterFromIndex;
 import org.anchoranalysis.io.manifest.file.OutputtedFile;
 import org.anchoranalysis.io.manifest.finder.FindFailedException;
 
@@ -43,7 +42,7 @@ import org.anchoranalysis.io.manifest.finder.FindFailedException;
  * @param <T> the element-type in the collection
  */
 @AllArgsConstructor
-public abstract class DeriveElementsFromSequencedDirectory<T> implements GetterFromIndex<T> {
+public abstract class DeriveElementsFromSequencedDirectory<T> implements SupplierAtIndex<T> {
 
     /** The manifest entry for directory in which a sequence of serialized files exists. */
     private SequencedDirectory directory;

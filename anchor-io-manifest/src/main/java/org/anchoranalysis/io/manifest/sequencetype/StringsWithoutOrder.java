@@ -27,7 +27,6 @@
 package org.anchoranalysis.io.manifest.sequencetype;
 
 import java.util.HashSet;
-import org.anchoranalysis.core.index.bounded.OrderProvider;
 
 /**
  * A sequence of strings that has no order.

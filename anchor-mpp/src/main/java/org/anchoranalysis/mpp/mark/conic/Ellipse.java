@@ -40,7 +40,7 @@ import java.util.Optional;
 import java.util.function.DoubleBinaryOperator;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.core.exception.OptionalOperationUnsupportedException;
+import org.anchoranalysis.core.exception.CheckedUnsupportedOperationException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.core.object.properties.ObjectWithProperties;
@@ -320,7 +320,7 @@ public class Ellipse extends ConicBase implements Serializable {
 
     // NB objects are scaled in pre-rotated position i.e. when aligned to axes
     @Override
-    public void scale(ScaleFactor scaleFactor) throws OptionalOperationUnsupportedException {
+    public void scale(ScaleFactor scaleFactor) throws CheckedUnsupportedOperationException {
         super.scale(scaleFactor);
         ScaleChecker.checkIdenticalXY(scaleFactor);
         this.radii.scale(scaleFactor.x());
@@ -366,7 +366,7 @@ public class Ellipse extends ConicBase implements Serializable {
 
         op.addDoubleAsString("Radius X (pixels)", radii.x());
         op.addDoubleAsString("Radius Y (pixels)", radii.y());
-        orientation.addProperties(op.getNameValueSet());
+        orientation.addProperties(op.getMap());
         op.addDoubleAsString("Shell Radius (pixels)", shellRad);
 
         return op;

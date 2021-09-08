@@ -47,7 +47,7 @@ import org.anchoranalysis.core.functional.checked.CheckedFunction;
 import org.anchoranalysis.core.functional.checked.CheckedPredicate;
 import org.apache.commons.lang3.tuple.Pair;
 
-/** Utilities functions for manipulating or creating {@link java.util.List} in a functional way */
+/** Utility functions for manipulating or creating {@link java.util.List} in a functional way. */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class FunctionalList {
 
@@ -144,7 +144,7 @@ public class FunctionalList {
 
     /**
      * Maps a collection to a list with each element in the original collection maybe producing an
-     * element in the output
+     * element in the output.
      *
      * @param  <S> parameter-type for function
      * @param  <T> return-type for function
@@ -165,17 +165,18 @@ public class FunctionalList {
 
     /**
      * Maps a collection to a list with each element in the original collection maybe producing an
-     * element in the output
+     * element in the output.
      *
      * @param  <S> parameter-type for function
      * @param  <T> return-type for function
+     * @param  <E> an exception that may be thrown by an {@code mapFunction}
      * @param collection the collection to be mapped
      * @param throwableClass class type of exception that may be thrown by {@code mapFunction}
      * @param mapFunction function to do the mapping to an Optional (the item is included in the
      *     output if the optional is defined)
      * @return a list with the same size and same order, but using derived elements that are a
      *     result of the mapping
-     * @throws E
+     * @throws E if it is thrown by any call to {@code mapFunction}
      */
     public static <S, T, E extends Exception> List<T> mapToListOptional(
             Collection<S> collection,
@@ -295,7 +296,7 @@ public class FunctionalList {
     }
 
     /**
-     * Filters a collection and maps the result to a list
+     * Filters a collection and maps the result to a list.
      *
      * <p>This function's purpose is mostly an convenience utility to make source-code easier to
      * read, as the paradigm below (although idiomatic) occurs in multiple places.
@@ -310,7 +311,7 @@ public class FunctionalList {
     }
 
     /**
-     * Filters a collection and maps the result to a list
+     * Filters a collection and maps the result to a list.
      *
      * <p>This function's purpose is mostly an convenience utility to make source-code easier to
      * read, as the paradigm below (although idiomatic) occurs in multiple places.
@@ -339,6 +340,8 @@ public class FunctionalList {
      * @param <T> type that will be mapped to
      * @param <E> exception that may be thrown during mapping
      * @param list incoming list to be mapped
+     * @param predicate a condition that must be fulfilled for elements in {@code list} to be
+     *     included in the returned list.
      * @param mapFunction function for mapping
      * @return a newly created list
      * @throws E if an exception is thrown during mapping
@@ -366,6 +369,8 @@ public class FunctionalList {
      * @param <T> type that will be mapped to
      * @param <E> exception that may be thrown during mapping
      * @param list incoming list to be mapped
+     * @param predicate a condition that must be fulfilled for elements in {@code list} to be
+     *     included in the returned list.
      * @param mapFuncWithIndex function for mapping, also including an index (the original position
      *     in the bounding-box)
      * @return a newly created list

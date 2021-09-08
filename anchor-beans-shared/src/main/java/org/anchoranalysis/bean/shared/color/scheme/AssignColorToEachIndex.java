@@ -77,9 +77,4 @@ class AssignColorToEachIndex implements ColorIndex {
     public int numberUniqueColors() {
         return colorList.numberUniqueColors();
     }
-
-    @Override
-    public boolean has(int index) {
-        return map.containsKey(index);
-    }
 }

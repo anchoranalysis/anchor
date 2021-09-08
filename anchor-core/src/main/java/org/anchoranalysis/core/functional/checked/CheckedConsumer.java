@@ -25,8 +25,10 @@
  */
 package org.anchoranalysis.core.functional.checked;
 
+import java.util.function.Consumer;
+
 /**
- * Consumes a value and throws an exception
+ * Consumes a value and throws an exception.
  *
  * @author Owen Feehan
  * @param <S> source-type
@@ -34,5 +36,12 @@ package org.anchoranalysis.core.functional.checked;
  */
 @FunctionalInterface
 public interface CheckedConsumer<S, E extends Exception> {
+
+    /**
+     * Like {@link Consumer#accept} but throws an exception.
+     *
+     * @param in the argument passed into the operation.
+     * @throws E if the operation does not succeed.
+     */
     void accept(S in) throws E;
 }

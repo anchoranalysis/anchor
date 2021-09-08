@@ -34,7 +34,7 @@ import java.util.function.ToDoubleBiFunction;
  * @author Owen Feehan
  * @param <T> the type of the first argument to the function
  * @param <U> the type of the second argument to the function
- * @param <E> exception-type that can be thrown during {@code applyAsInt}
+ * @param <E> exception-type that can be thrown during {@code applyAsDouble}
  */
 @FunctionalInterface
 public interface CheckedToDoubleBiFunction<T, U, E extends Exception> {
@@ -45,6 +45,7 @@ public interface CheckedToDoubleBiFunction<T, U, E extends Exception> {
      * @param t the first function argument
      * @param u the second function argument
      * @return the function result
+     * @throws E if an error occurs
      */
     double applyAsDouble(T t, U u) throws E;
 }

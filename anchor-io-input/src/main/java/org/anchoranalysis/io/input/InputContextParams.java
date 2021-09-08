@@ -37,7 +37,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.core.format.FormatExtensions;
 import org.anchoranalysis.core.functional.OptionalUtilities;
-import org.anchoranalysis.core.index.IndexRange;
+import org.anchoranalysis.core.index.range.IndexRangeNegative;
 import org.anchoranalysis.io.input.bean.DebugModeParams;
 
 /**
@@ -72,7 +72,7 @@ public class InputContextParams {
     @Getter @Setter private boolean shuffle = false;
 
     /** If defined, this indicates and specifies only a subset of the naming-elements to use. */
-    @Getter @Setter private Optional<IndexRange> identifierSubrange = Optional.empty();
+    @Getter @Setter private Optional<IndexRangeNegative> identifierSubrange = Optional.empty();
 
     /**
      * If defined, a directory which can be used by beans to find input.

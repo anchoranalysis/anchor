@@ -84,7 +84,7 @@ public class RecursivelyDescribeExceptionStack {
 
             // Extract a message from the exception, and append it to the writer
             // with maybe prefix and suffix
-            splitFromExc(e, !showExceptionType)
+            splitFromException(e, !showExceptionType)
                     .appendNicelyWrappedLines(
                             writer,
                             prefixBuilder.toString(),
@@ -108,37 +108,37 @@ public class RecursivelyDescribeExceptionStack {
      *
      * <p>Each message is split by its newline characters, so that each line is treated individually
      *
-     * @param excDescribe exception to describe
+     * @param exceptionDescribe exception to describe
      * @param prefix incrementally prepended to each message (first message is skipped)
      * @return the maximum-length of the message associated with an exception including its
      *     prepended string
      */
     private static int calculateMaximumLengthMessage(
-            Throwable excDescribe, String prefix, boolean showExceptionTypeIfUnfriendly) {
-        assert (excDescribe != null);
+            Throwable exceptionDescribe, String prefix, boolean showExceptionTypeIfUnfriendly) {
+        assert (exceptionDescribe != null);
 
         int maxLength = Integer.MIN_VALUE;
 
         int prefixCurrentLength = 0;
 
-        ExceptionToPrintIterator itr = new ExceptionToPrintIterator(excDescribe);
-        Throwable e = itr.getCurrent();
+        ExceptionToPrintIterator itr = new ExceptionToPrintIterator(exceptionDescribe);
+        Throwable exception = itr.getCurrent();
         do {
-            SplitString splitMessage = splitFromExc(e, showExceptionTypeIfUnfriendly);
+            SplitString splitMessage = splitFromException(exception, showExceptionTypeIfUnfriendly);
 
             // Size of message we are considering
-            int msgLength = splitMessage.maxLength() + prefixCurrentLength;
+            int messageLength = splitMessage.maxLength() + prefixCurrentLength;
 
             // Remember max length so far
-            if (msgLength > maxLength) {
-                maxLength = msgLength;
+            if (messageLength > maxLength) {
+                maxLength = messageLength;
             }
 
             // Update current size of the prepended string
             prefixCurrentLength += prefix.length();
 
             if (itr.hasNext()) {
-                e = itr.next();
+                exception = itr.next();
             } else {
                 break;
             }
@@ -146,46 +146,54 @@ public class RecursivelyDescribeExceptionStack {
         return maxLength;
     }
 
-    /** Extracts a message, and splits it by newline */
-    private static SplitString splitFromExc(Throwable exc, boolean showExceptionTypeIfUnfriendly) {
-        return new SplitString(messageFromExc(exc, showExceptionTypeIfUnfriendly));
+    /**
+     * Extracts a message, and splits it by newline.
+     *
+     * @param showExceptionTypeIfUnfriendly when true, the exception-class is included in the
+     *     message for "unfriendly" exceptions.
+     */
+    private static SplitString splitFromException(
+            Throwable exception, boolean showExceptionTypeIfUnfriendly) {
+        return new SplitString(messageFromException(exception, showExceptionTypeIfUnfriendly));
     }
 
     /**
-     * If there's a message it's used, otherwise the SimpleName of the exception
+     * If there's a message it's used, otherwise the simple-name of the exception.
      *
-     * @param exc exception to extract a descripive "message" from
-     * @param showExceptionTypeIfUnfriendly iff true the exception-class is included in the message
-     *     for "unfriendly" exceptions
+     * @param exception exception to extract a descriptive "message" from.
+     * @param showExceptionTypeIfUnfriendly when true, the exception-class is included in the
+     *     message for "unfriendly" exceptions.
      */
-    private static String messageFromExc(Throwable exc, boolean showExceptionTypeIfUnfriendly) {
+    private static String messageFromException(
+            Throwable exception, boolean showExceptionTypeIfUnfriendly) {
 
         // If there's no message, use the class
-        if (ExceptionTypes.hasEmptyMessage(exc)) {
-            return exc.getClass().getSimpleName();
+        if (ExceptionTypes.hasEmptyMessage(exception)) {
+            return exception.getClass().getSimpleName();
         }
 
         // If it's a "friendly' or 'combinable' exception rely on the message to be meaningful
         // without the exception type
-        if (exc instanceof AnchorFriendlyCheckedException
-                || exc instanceof AnchorFriendlyRuntimeException
-                || exc instanceof AnchorCombinableException) {
-            return exc.getMessage();
+        if (exception instanceof AnchorFriendlyCheckedException
+                || exception instanceof AnchorFriendlyRuntimeException
+                || exception instanceof AnchorCombinableException) {
+            return exception.getMessage();
         }
 
         // Otherwise include both the exception type and the message, if its allowed
         if (showExceptionTypeIfUnfriendly) {
-            return String.format("%s: %s", exc.getClass().getSimpleName(), exc.getMessage());
+            return String.format(
+                    "%s: %s", exception.getClass().getSimpleName(), exception.getMessage());
         } else {
             // There's no poitn showing the class-type as it will be done anyway in the suffix
-            return exc.getMessage();
+            return exception.getMessage();
         }
     }
 
     /** we only have a suffix if we are showing the exception type */
-    private static String suffixFor(boolean showExceptionType, Throwable e) {
+    private static String suffixFor(boolean showExceptionType, Throwable exception) {
         if (showExceptionType) {
-            return String.format("    (%s)", e.getClass().getSimpleName());
+            return String.format("    (%s)", exception.getClass().getSimpleName());
         } else {
             return "";
         }

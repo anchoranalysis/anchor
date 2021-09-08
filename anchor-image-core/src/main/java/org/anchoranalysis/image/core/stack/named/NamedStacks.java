@@ -71,7 +71,7 @@ public class NamedStacks implements NamedProviderStore<Stack> {
         try {
             return OptionalUtilities.map(ret, StoreSupplier::get);
         } catch (OperationFailedException e) {
-            throw NamedProviderGetException.wrap(identifier, e);
+            throw new NamedProviderGetException(identifier, e);
         }
     }
 

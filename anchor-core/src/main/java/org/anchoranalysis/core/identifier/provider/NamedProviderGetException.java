@@ -29,15 +29,32 @@ package org.anchoranalysis.core.identifier.provider;
 import org.anchoranalysis.core.exception.combinable.AnchorCombinableException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 
+/**
+ * When a <i>get</i> operation fails with a {@link NamedProvider}.
+ *
+ * @author Owen Feehan
+ */
 public class NamedProviderGetException extends AnchorCombinableException {
 
     /** */
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Create with a particular cause.
+     *
+     * @param key the key used for the get query, which caused this exception to be thrown.
+     * @param cause the cause
+     */
     public NamedProviderGetException(String key, Throwable cause) {
         super(key, cause);
     }
 
+    /**
+     * Creates using a standard-error message for a <i>non-existing item</i>
+     *
+     * @param key the key used for the get query, which caused this exception to be thrown.
+     * @return a newly created exception, with a {@link GetOperationFailedException} as cause.
+     */
     public static NamedProviderGetException nonExistingItem(String key) {
         return new NamedProviderGetException(
                 key,
@@ -45,35 +62,40 @@ public class NamedProviderGetException extends AnchorCombinableException {
                         key, String.format("The item '%s' doesn't exist!", key)));
     }
 
-    public static NamedProviderGetException nonExistingItem(String key, String storeName) {
+    /**
+     * Like {@link #nonExistingItem(String)} but with a message that also includes a
+     * user-friendly-name for the {@link NamedProvider}.
+     *
+     * @param key the key used for the get query, which caused this exception to be thrown.
+     * @param providerName user-friendly name for the {@link NamedProvider} that caused this
+     *     exception to be thrown.
+     * @return a newly created exception, with a {@link GetOperationFailedException} as cause.
+     */
+    public static NamedProviderGetException nonExistingItem(String key, String providerName) {
         return new NamedProviderGetException(
                 key,
                 new GetOperationFailedException(
                         key,
-                        String.format("The item '%s' doesn't exist in '%s'!", key, storeName)));
-    }
-
-    public static NamedProviderGetException wrap(String key, Throwable cause) {
-        return new NamedProviderGetException(key, cause);
+                        String.format("The item '%s' doesn't exist in '%s'!", key, providerName)));
     }
 
     @Override
-    protected boolean canExceptionBeCombined(Throwable exc) {
-        return exc instanceof NamedProviderGetException;
+    protected boolean canExceptionBeCombined(Throwable exception) {
+        return exception instanceof NamedProviderGetException;
     }
 
     @Override
-    protected boolean canExceptionBeSkipped(Throwable exc) {
-        return !(exc instanceof NamedProviderGetException);
+    protected boolean canExceptionBeSkipped(Throwable exception) {
+        return !(exception instanceof NamedProviderGetException);
     }
 
     @Override
     public Throwable summarize() {
-        return super.combineDscrsRecursively("at ", "\n-> ");
+        return super.combineDescriptionsRecursively("at ", "\n-> ");
     }
 
     @Override
-    protected String createMessageForDscr(String dscr) {
-        return dscr;
+    protected String createMessageForDescription(String description) {
+        return description;
     }
 }

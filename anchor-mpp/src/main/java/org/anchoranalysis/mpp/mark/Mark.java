@@ -30,7 +30,7 @@ import java.io.Serializable;
 import java.util.Optional;
 import java.util.function.DoubleUnaryOperator;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.exception.OptionalOperationUnsupportedException;
+import org.anchoranalysis.core.exception.CheckedUnsupportedOperationException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.core.dimensions.SpatialUnits.UnitSuffix;
@@ -92,11 +92,10 @@ public abstract class Mark implements Serializable, Identifiable {
      * Scales the mark in X and Y dimensions.
      *
      * @param scaleFactor how much to scale by.
-     * @throws OptionalOperationUnsupportedException if the type of mark used in the annotation does
+     * @throws CheckedUnsupportedOperationException if the type of mark used in the annotation does
      *     not supported scaling.
      */
-    public abstract void scale(ScaleFactor scaleFactor)
-            throws OptionalOperationUnsupportedException;
+    public abstract void scale(ScaleFactor scaleFactor) throws CheckedUnsupportedOperationException;
 
     public abstract int numberDimensions();
 

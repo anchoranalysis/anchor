@@ -33,40 +33,58 @@ import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.functional.checked.CheckedFunction;
 
 /**
+ * Exposes elements in a {@link NamedProvider} as a different type.
+ *
  * @author Owen Feehan
- * @param <S> src-type
- * @param <T> destination-type
+ * @param <S> source-type that is converted <i>from</i>.
+ * @param <T> destination-type that is converted <i>to</i>.
  */
 @RequiredArgsConstructor
 public class NamedProviderBridge<S, T> implements NamedProvider<T> {
 
-    private final NamedProvider<S> srcProvider;
+    /** The {@link NamedProvider} that supplies elements, before conversion. */
+    private final NamedProvider<S> provider;
+
+    /** A function that converts the elements in {@code provider} as they are accessed. */
     private final CheckedFunction<S, T, ? extends Exception> bridge;
+
+    /**
+     * Whether to apply the {@code bridge} function to null values.
+     *
+     * <p>Iff true, the {@code bridge} function is applied to null values. If false, a {@link
+     * Optional#empty} is returned instead.
+     */
     private final boolean bridgeNulls;
 
+    /**
+     * Creates with a particular provider and bridge.
+     *
+     * @param provider the {@link NamedProvider} that supplies elements, before conversion.
+     * @param bridge a function that converts the elements in {@code provider} as they are accessed.
+     */
     public NamedProviderBridge(
-            NamedProvider<S> srcProvider, CheckedFunction<S, T, ? extends Exception> bridge) {
-        this(srcProvider, bridge, true);
+            NamedProvider<S> provider, CheckedFunction<S, T, ? extends Exception> bridge) {
+        this(provider, bridge, true);
     }
 
     @Override
     public Optional<T> getOptional(String key) throws NamedProviderGetException {
-        Optional<S> srcVal = srcProvider.getOptional(key);
+        Optional<S> sourceValue = provider.getOptional(key);
 
-        if (!bridgeNulls && !srcVal.isPresent()) {
-            // Early exit if doNotBridgeNulls is witched on
+        if (!bridgeNulls && !sourceValue.isPresent()) {
+            // Early exit if doNotBridgeNulls is switched on
             return Optional.empty();
         }
 
         try {
-            return OptionalUtilities.map(srcVal, bridge::apply);
+            return OptionalUtilities.map(sourceValue, bridge::apply);
         } catch (Exception e) {
-            throw NamedProviderGetException.wrap(key, e);
+            throw new NamedProviderGetException(key, e);
         }
     }
 
     @Override
     public Set<String> keys() {
-        return srcProvider.keys();
+        return provider.keys();
     }
 }

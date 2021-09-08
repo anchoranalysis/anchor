@@ -26,7 +26,21 @@ package org.anchoranalysis.core.identifier.getter;
  * #L%
  */
 
+/**
+ * Gets a unique identifier for a particular element at a particular iteration point.
+ *
+ * @author Owen Feehan
+ * @param <T> the type of elements with an associated identifier
+ */
 public interface IdentifierGetter<T> {
 
+    /**
+     * Gets the unique identifier.
+     *
+     * @param element the element, that may or may not be used to form the identifier
+     * @param iteration the current iteration timepoint, that may or may not be used to form the
+     *     identifier
+     * @return the unique identifier
+     */
     int getIdentifier(T element, int iteration);
 }

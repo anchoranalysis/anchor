@@ -1,4 +1,4 @@
-package org.anchoranalysis.core.index.bounded;
+package org.anchoranalysis.core.index.range;
 
 /*
  * #%L
@@ -27,21 +27,38 @@ package org.anchoranalysis.core.index.bounded;
  */
 
 /**
- * A range of discrete integers that is not complete (missing many integers).
+ * A range of discrete integers, where one can always find the succeeding or preceding index.
  *
  * <p>It can be navigated to find where indexes are with {@link #nextIndex}, {@link #previousIndex}
- * ec.
+ * etc.
  *
  * @author Owen Feehan
  */
-public interface BoundedRangeIncomplete extends BoundedRange {
+public interface IndexRangeSeek extends IndexRange {
 
-    /** Return -1 if there is no next index. */
+    /**
+     * Finds the <i>next</i> index in the range after {@code index}.
+     *
+     * @param index the base index, for which a next index is to be found.
+     * @return the next index after {@code index} or -1 if none exists.
+     */
     int nextIndex(int index);
 
-    /** Return -1 if there is no previous index. */
+    /**
+     * Finds the <i>previous</i> index in the range before {@code index}.
+     *
+     * @param index the base index, for which a previous index is to be found.
+     * @return the previous index before {@code index} or -1 if none exists.
+     */
     int previousIndex(int index);
 
-    /** Return -1 if there is no previous index. */
+    /**
+     * Finds the <i>previous</i> index in the range before {@code index}, or returns {@code index}
+     * itself if it's a valid index.
+     *
+     * @param index the base index, for which a previous (or equal) index is to be found.
+     * @return {code index} itself it is a valid index, or the previous index before {@code index}
+     *     or -1 if none exists.
+     */
     int previousEqualIndex(int index);
 }

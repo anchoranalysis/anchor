@@ -61,6 +61,7 @@ public class PathDifference {
      *
      * @param baseDirectoryPath path to a base directory
      * @param filePath the path to resolve
+     * @return the difference between the paths
      * @throws PathDifferenceException if the canonical file cannot be found
      */
     public static PathDifference differenceFrom(Path baseDirectoryPath, Path filePath)

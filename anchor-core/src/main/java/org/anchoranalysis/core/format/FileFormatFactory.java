@@ -43,8 +43,9 @@ public class FileFormatFactory {
      *
      * <p>The case of the identifier is irrelevant.
      *
-     * @param identifier
-     * @return
+     * @param identifier an identifier of an image file-format that should match an extension (e.g.
+     *     jpg or GIF or bmp)
+     * @return an {@link ImageFileFormat} that matches {@code identifier} if it exists.
      */
     public static Optional<ImageFileFormat> createImageFormat(String identifier) {
         for (ImageFileFormat format : ImageFileFormat.values()) {

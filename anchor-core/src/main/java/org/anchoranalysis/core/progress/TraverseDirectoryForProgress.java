@@ -37,22 +37,36 @@ import java.util.function.Predicate;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
+/**
+ * Traverses files and subdirectories contained in a directory, in a way that is useful for tracking
+ * progress of processing algorithms that operate on each file.
+ *
+ * @author Owen Feehan
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class TraverseDirectoryForProgress {
 
     /**
-     * Performs a breadth-first traversal of the sub-folders until we get at least {@code
-     * minNumberDirectories}. on a given level. These are then used as our progress markers.
+     * Performs a breadth-first traversal of the subdirectories of a {@code path} <i>recursively</i>
+     * until we get at least {@code minNumberDirectories} on a given level.
      *
-     * @param parent
-     * @param minNumberDirectories
-     * @param matcherDirectory
-     * @param maxDirectoryDepth
-     * @return
-     * @throws IOException
+     * <p>At this point, traversal no longer continues.
+     *
+     * <p>Traversal will also stop early if the depth of traversed subdirectories reaches {@code
+     * maxDirectoryDepth}.
+     *
+     * @param path the path whose subdirectories will be traversed.
+     * @param minNumberDirectories the minimum number of sub-directories that should exist before
+     *     traversal is seopped.
+     * @param matcherDirectory only subdirectories that match this predicate are considered
+     * @param maxDirectoryDepth the maximum allowable depth of subdirectories to be traversed.
+     *     Traversal will be complete to avoid exceeding it.
+     * @return a newly created {@link TraversalResult} indicating which subdirectories and files
+     *     have been traversed.
+     * @throws IOException if any file or subdirectory cannot be accessed or traversed.
      */
     public static TraversalResult traverseRecursive(
-            Path parent,
+            Path path,
             int minNumberDirectories,
             Predicate<Path> matcherDirectory,
             int maxDirectoryDepth)
@@ -60,7 +74,7 @@ public class TraverseDirectoryForProgress {
 
         List<Path> filesOut = new ArrayList<>();
         List<Path> currentDirectories = new ArrayList<>();
-        currentDirectories.add(parent);
+        currentDirectories.add(path);
 
         int depth = 1;
         while (true) {
@@ -87,10 +101,20 @@ public class TraverseDirectoryForProgress {
         }
     }
 
-    public static TraversalResult traverseNotRecursive(Path parent, Predicate<Path> matcherDir)
+    /**
+     * Traverses the subdirectories in {@code path} <i>without any recursion</i> into further
+     * sub-directories.
+     *
+     * @param path the path whose subdirectories will be traversed.
+     * @param matcherDirectory only subdirectories that match this predicate are considered
+     * @return a newly created {@link TraversalResult} indicating which subdirectories and files
+     *     have been traversed.
+     * @throws IOException if any file or subdirectory cannot be accessed or traversed.
+     */
+    public static TraversalResult traverseNotRecursive(Path path, Predicate<Path> matcherDirectory)
             throws IOException {
         List<Path> filesOut = new ArrayList<>();
-        subdirectoriesFor(parent, Optional.empty(), Optional.of(filesOut), matcherDir);
+        subdirectoriesFor(path, Optional.empty(), Optional.of(filesOut), matcherDirectory);
         return new TraversalResult(new ArrayList<>(), filesOut, 1);
     }
 
@@ -98,7 +122,7 @@ public class TraverseDirectoryForProgress {
             Path parent,
             Optional<List<Path>> directoriesOut,
             Optional<List<Path>> filesOut,
-            Predicate<Path> matcherDir)
+            Predicate<Path> matcherDirectory)
             throws IOException {
 
         boolean addedDirectory = false;
@@ -106,7 +130,8 @@ public class TraverseDirectoryForProgress {
         try (DirectoryStream<Path> stream = Files.newDirectoryStream(parent)) {
             for (Path file : stream) {
 
-                if (matcherDir.test(file) && addFileOrDirectory(file, directoriesOut, filesOut)) {
+                if (matcherDirectory.test(file)
+                        && addFileOrDirectory(file, directoriesOut, filesOut)) {
                     addedDirectory = true;
                 }
             }

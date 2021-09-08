@@ -29,7 +29,7 @@ import org.anchoranalysis.core.cache.CachedSupplier;
 import org.anchoranalysis.core.exception.OperationFailedException;
 
 /**
- * Supplier of an object for a store
+ * Supplier of an object for a store.
  *
  * @author Owen Feehan
  * @param <T> type supplied to the store
@@ -38,7 +38,7 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 public interface StoreSupplier<T> {
 
     /**
-     * Gets the object being supplied to the store
+     * Gets the object being supplied to the store.
      *
      * @return the supplied object
      * @throws OperationFailedException if anything goes wrong
@@ -46,7 +46,7 @@ public interface StoreSupplier<T> {
     T get() throws OperationFailedException;
 
     /**
-     * Memoizes (caches) the supplied object, and returning it with an identical interface
+     * Memoizes (caches) the supplied object, and returning it with an identical interface.
      *
      * @param <T> type to supply
      * @param supplier supplier to cache

@@ -38,6 +38,11 @@ public class ConcurrentModelException extends AnchorCheckedException {
     /** */
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Creates with a cause.
+     *
+     * @param cause the cause.
+     */
     public ConcurrentModelException(Throwable cause) {
         super(cause);
     }

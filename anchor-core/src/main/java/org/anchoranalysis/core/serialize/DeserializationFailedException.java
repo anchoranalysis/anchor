@@ -27,19 +27,40 @@ package org.anchoranalysis.core.serialize;
 
 import org.anchoranalysis.core.exception.AnchorCheckedException;
 
+/**
+ * When a deserialization operation fails.
+ *
+ * @author Owen Feehan
+ */
 public class DeserializationFailedException extends AnchorCheckedException {
 
     /** */
     private static final long serialVersionUID = 7824941062757840315L;
 
-    public DeserializationFailedException(String string) {
-        super(string);
+    /**
+     * Creates with a message, but without a cause.
+     *
+     * @param message the message.
+     */
+    public DeserializationFailedException(String message) {
+        super(message);
     }
 
-    public DeserializationFailedException(Exception exc) {
-        super(exc);
+    /**
+     * Creates with a cause, but without a message.
+     *
+     * @param cause the cause.
+     */
+    public DeserializationFailedException(Exception cause) {
+        super(cause);
     }
 
+    /**
+     * Creates with message and cause.
+     *
+     * @param message the message.
+     * @param cause the cause.
+     */
     public DeserializationFailedException(String message, Throwable cause) {
         super(message, cause);
     }

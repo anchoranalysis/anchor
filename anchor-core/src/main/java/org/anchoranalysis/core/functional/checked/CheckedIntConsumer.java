@@ -25,13 +25,22 @@
  */
 package org.anchoranalysis.core.functional.checked;
 
+import java.util.function.IntConsumer;
+
 /**
- * Consumes an {@code int} and throws an exception
+ * Consumes an {@code int} and throws an exception.
  *
  * @author Owen Feehan
  * @param <E> exception that can be thrown during {@code accept}
  */
 @FunctionalInterface
 public interface CheckedIntConsumer<E extends Exception> {
+
+    /**
+     * Like {@link IntConsumer#accept} but throws an exception.
+     *
+     * @param in the argument passed into the operation.
+     * @throws E if the operation does not succeed.
+     */
     void accept(int in) throws E;
 }

@@ -30,6 +30,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.anchoranalysis.bean.shared.color.scheme.ColorScheme;
 import org.anchoranalysis.core.color.ColorList;
+import org.anchoranalysis.core.color.RGBColor;
 import org.anchoranalysis.core.exception.OperationFailedException;
 
 @AllArgsConstructor
@@ -47,7 +48,7 @@ public class ColorPool {
         if (differentColorsForMatches) {
 
             // Matched
-            colors.addAllScaled(colorSchemePaired.createList(numberPaired), 0.5);
+            addAllScaled(colors, colorSchemePaired.createList(numberPaired), 0.5);
 
             // Unmatched
             colors.addAll(colorSchemeUnpaired.createList(numberOtherObjects));
@@ -57,5 +58,24 @@ public class ColorPool {
         }
 
         return colors;
+    }
+
+    /**
+     * Adds scaled versions of colors to a destination list.
+     *
+     * @param destination the list to add colors to.
+     * @param toAdd the colors to add.
+     * @param scale a scaling-factor applied to the intensity values as the colors are added to
+     *     {@code destination}.
+     */
+    private static void addAllScaled(ColorList destination, ColorList toAdd, double scale) {
+        for (RGBColor color : toAdd) {
+            RGBColor scaled =
+                    new RGBColor(
+                            (int) (color.getRed() * scale),
+                            (int) (color.getGreen() * scale),
+                            (int) (color.getBlue() * scale));
+            destination.add(scaled);
+        }
     }
 }

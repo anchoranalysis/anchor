@@ -26,12 +26,19 @@
 package org.anchoranalysis.core.functional.checked;
 
 /**
- * A binary operation on two int-values that produces an int
+ * A binary operation on two int-values that produces an {@code int}.
  *
  * @author Owen Feehan
  */
 @FunctionalInterface
 public interface IntBinaryOperation {
 
+    /**
+     * Applies the operation on two integer values.
+     *
+     * @param value1 the first argument for the operation.
+     * @param value2 the second argument for the operation.
+     * @return the result of the operation.
+     */
     int apply(int value1, int value2);
 }

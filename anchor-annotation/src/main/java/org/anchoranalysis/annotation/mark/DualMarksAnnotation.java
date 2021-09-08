@@ -29,7 +29,7 @@ package org.anchoranalysis.annotation.mark;
 import java.util.Calendar;
 import java.util.Date;
 import lombok.Getter;
-import org.anchoranalysis.core.exception.OptionalOperationUnsupportedException;
+import org.anchoranalysis.core.exception.CheckedUnsupportedOperationException;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMapSingleton;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.mpp.mark.GlobalRegionIdentifiers;
@@ -42,11 +42,14 @@ import org.anchoranalysis.spatial.scale.ScaleFactor;
  * <p>It also contains a possible reason for rejecting the entire image.
  *
  * @author Owen Feehan
- * @param <T> rejection-reason
+ * @param <T> type of rejection-reason
  */
 public class DualMarksAnnotation<T> implements AnnotationWithMarks {
 
+    /** Whether the the annotation was marked as <i>accepted</i> by the annotator? */
     @Getter private boolean accepted = false;
+
+    /** A reason for rejection, if the annotation was <i>rejected</i> by the annotator. */
     @Getter private T rejectionReason;
 
     /** Marks in annotation */
@@ -114,10 +117,10 @@ public class DualMarksAnnotation<T> implements AnnotationWithMarks {
      * Scales the marks in the annotation in X and Y dimensions.
      *
      * @param scaleFactor how much to scale by
-     * @throws OptionalOperationUnsupportedException if the type of mark used in the annotation does
+     * @throws CheckedUnsupportedOperationException if the type of mark used in the annotation does
      *     not supported scaling.
      */
-    public void scaleXY(ScaleFactor scaleFactor) throws OptionalOperationUnsupportedException {
+    public void scaleXY(ScaleFactor scaleFactor) throws CheckedUnsupportedOperationException {
         marks.scaleXY(scaleFactor);
         marksReject.scaleXY(scaleFactor);
     }

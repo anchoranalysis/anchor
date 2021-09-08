@@ -32,9 +32,11 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.function.Supplier;
+import org.anchoranalysis.core.functional.FunctionalIterate;
+import org.anchoranalysis.core.functional.checked.CheckedBiConsumer;
 
 /**
- * A tree map that creates a new item, if it doesn't already exist, after a GET operation
+ * A tree map that creates a new item, if it doesn't already exist upon a <i>get</i> operation.
  *
  * @author Owen Feehan
  * @param <K> identifier (key)-type
@@ -47,26 +49,65 @@ public class MapCreate<K, V> {
     private Map<K, V> map;
     private Supplier<V> createNewElement;
 
+    /**
+     * Creates without a comparator, using instead the natural ordering of elements.
+     *
+     * @param createNewElement called as necessary to create a new element in the tree.
+     */
     public MapCreate(Supplier<V> createNewElement) {
         this.map = new TreeMap<>();
         this.createNewElement = createNewElement;
     }
 
-    public MapCreate(Supplier<V> opCreateNew, Comparator<K> comparator) {
-        super();
+    /**
+     * Creates with an explicit comparator.
+     *
+     * @param createNewElement called as necessary to create a new element in the tree.
+     * @param comparator used to impose an ordering on elements.
+     */
+    public MapCreate(Supplier<V> createNewElement, Comparator<K> comparator) {
         this.map = new TreeMap<>(comparator);
-        this.createNewElement = opCreateNew;
+        this.createNewElement = createNewElement;
     }
 
-    public synchronized V getOrCreateNew(K identifier) {
-        return map.computeIfAbsent(identifier, k -> createNewElement.get());
+    /**
+     * Gets an existing element from the map, newly creating and storing the element if it's absent.
+     *
+     * @param key the key for the map query.
+     * @return an element, either retrieved from the map, or newly created.
+     */
+    public synchronized V computeIfAbsent(K key) {
+        return map.computeIfAbsent(key, ignored -> createNewElement.get());
     }
 
+    /**
+     * The entries in the map.
+     *
+     * @return a set view of the mappings contained in this map.
+     */
     public Set<Entry<K, V>> entrySet() {
         return map.entrySet();
     }
 
-    public Map<K, V> asMap() {
-        return map;
+    /**
+     * Whether the map is empty or not.
+     *
+     * @return true iff the map is empty.
+     */
+    public boolean isEmpty() {
+        return map.isEmpty();
+    }
+
+    /**
+     * Iterate over each entry in the map, and apply an operation.
+     *
+     * @param <E> an exception that may be thrown by {code operation}.
+     * @param operation the operation applied to each element in the map, passing the key and value
+     *     as parameters.
+     * @throws E if {@code operation} throws it.
+     */
+    public <E extends Exception> void iterateEntries(CheckedBiConsumer<K, V, E> operation)
+            throws E {
+        FunctionalIterate.iterateMap(map, operation);
     }
 }

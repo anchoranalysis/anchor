@@ -28,23 +28,28 @@ package org.anchoranalysis.core.color;
 
 import lombok.AllArgsConstructor;
 
+/**
+ * Derives a new {@link ColorIndex} from an existing {@link ColorIndex} applying a modulo operation
+ * to each index call.
+ *
+ * <p>This can be used to allow a {@link ColorIndex} which supports a limited index range, be
+ * applied to an infinite range of indices.
+ *
+ * @author Owen Feehan
+ */
 @AllArgsConstructor
 public class ColorIndexModulo implements ColorIndex {
 
-    private ColorIndex delegate;
+    /** The index to call after applying the modulo to each index. */
+    private ColorIndex colorIndex;
 
     @Override
     public RGBColor get(int index) {
-        return delegate.get(index % numberUniqueColors());
+        return colorIndex.get(index % numberUniqueColors());
     }
 
     @Override
     public int numberUniqueColors() {
-        return delegate.numberUniqueColors();
-    }
-
-    @Override
-    public boolean has(int index) {
-        return delegate.has(index % numberUniqueColors());
+        return colorIndex.numberUniqueColors();
     }
 }

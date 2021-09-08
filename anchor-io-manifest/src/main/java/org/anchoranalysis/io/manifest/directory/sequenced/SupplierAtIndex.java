@@ -1,4 +1,6 @@
-package org.anchoranalysis.core.index;
+package org.anchoranalysis.io.manifest.directory.sequenced;
+
+import org.anchoranalysis.core.index.GetOperationFailedException;
 
 /*
  * #%L
@@ -27,6 +29,6 @@ package org.anchoranalysis.core.index;
  */
 
 @FunctionalInterface
-public interface IndexGetter {
-    int getIndex();
+public interface SupplierAtIndex<T> {
+    T get(int index) throws GetOperationFailedException;
 }

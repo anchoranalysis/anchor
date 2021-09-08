@@ -27,7 +27,7 @@
 package org.anchoranalysis.image.core.orientation;
 
 import lombok.EqualsAndHashCode;
-import org.anchoranalysis.core.identifier.provider.NameValueSet;
+import org.anchoranalysis.core.identifier.provider.NameValueMap;
 import org.anchoranalysis.image.core.object.properties.ObjectWithProperties;
 import org.anchoranalysis.spatial.rotation.RotationMatrix;
 
@@ -70,7 +70,7 @@ public class OrientationIdentity extends Orientation {
     }
 
     @Override
-    public void addProperties(NameValueSet<String> namedValues) {
+    public void addProperties(NameValueMap<String> namedValues) {
         delegate.addProperties(namedValues);
     }
 
