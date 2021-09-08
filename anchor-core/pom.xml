@@ -6,7 +6,7 @@
 	  <version>0.1.0</version>
   </parent>
   <artifactId>anchor-core</artifactId>
-  <version>0.0.8-SNAPSHOT</version>
+  <version>0.1.0</version>
   <description>Fundamental core library objects for Anchor platform.</description>
   <repositories>
   		<repository>
@@ -57,4 +57,8 @@
 	  <version>1.4.18</version>
 	</dependency>    
   </dependencies>
+
+  <scm>
+    <tag>anchor-core-0.1.0</tag>
+  </scm>
 </project>
