@@ -139,6 +139,19 @@
 		  
 		</resources>	
 		
+		<plugins>
+				<plugin>
+				    <!-- Prevent parent POM from being automatically deployed, relying instead on manually using the release plugin. -->
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-deploy-plugin</artifactId>
+					<configuration>
+						<skip>true</skip>
+					</configuration>
+					<inherited>false</inherited>
+			  </plugin>
+		</plugins>
+
+		
     </build>
 	
 	<dependencies>
