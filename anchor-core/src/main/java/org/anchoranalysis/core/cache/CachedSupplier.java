@@ -42,6 +42,7 @@ public class CachedSupplier<T, E extends Exception> extends CachedSupplierBase<T
         implements CheckedSupplier<T, E> {
 
     // START: REQUIRED ARGUMENTS
+    /** Supplies the value to be calculated and cached. */
     private final CheckedSupplier<T, E> supplier;
     // END: REQUIRED ARGUMENTS
 
@@ -50,7 +51,7 @@ public class CachedSupplier<T, E extends Exception> extends CachedSupplierBase<T
      *
      * @param <T> return-type
      * @param <E> exception that may be thrown.
-     * @param suppplier the supplier to be cached
+     * @param suppplier supplies the value to be calculated and cached.
      * @return a cached version, with the same interface, and additional functions to monitor
      *     progress, reset etc.
      */
