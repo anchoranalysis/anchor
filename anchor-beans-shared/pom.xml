@@ -3,7 +3,7 @@
 	<parent>
         <groupId>org.anchoranalysis.anchor</groupId>
    	    <artifactId>anchor-parent</artifactId>
-		<version>0.1.0</version>
+		<version>0.1.2</version>
     </parent>  
   <artifactId>anchor-beans-shared</artifactId>
   <version>0.0.8-SNAPSHOT</version>
