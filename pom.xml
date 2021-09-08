@@ -8,7 +8,7 @@
 	
     <artifactId>anchor-parent</artifactId>
     <packaging>pom</packaging>
-    <version>0.1.1-SNAPSHOT</version>
+    <version>0.1.0</version>
     <name>anchor-parent</name>
     <url>http://www.anchoranalysis.org/</url>
 	
