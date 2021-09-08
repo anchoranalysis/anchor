@@ -41,12 +41,12 @@ import org.anchoranalysis.core.log.MessageLogger;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class LoggingFixture {
 
-    /** A {@link MessageLogger} that doesn't output anything */
+    /** A {@link MessageLogger} that doesn't output anything. */
     public static MessageLogger suppressedMessageLogger() {
         return mock(MessageLogger.class);
     }
 
-    /** A {@link Logger} that doesn't output anything */
+    /** A {@link Logger} that doesn't output anything. */
     public static Logger suppressedLogger() {
         return new Logger(suppressedMessageLogger());
     }
