@@ -6,7 +6,7 @@
 		<version>0.1.2</version>
     </parent>
   <artifactId>anchor-test</artifactId>
-  <version>0.1.0</version>
+  <version>0.0.8-SNAPSHOT</version>
 	<description>Reusable test fixtures/utilities (at highest generality).</description>
 	<dependencies>
 	
@@ -51,8 +51,4 @@
 		</dependency>
 		    
     </dependencies>
-
-  <scm>
-    <tag>anchor-test-0.1.0</tag>
-  </scm>
 </project>
