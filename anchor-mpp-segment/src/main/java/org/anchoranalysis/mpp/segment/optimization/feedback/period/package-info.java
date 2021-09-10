@@ -23,5 +23,5 @@
  * THE SOFTWARE.
  * #L%
  */
-/** Collecting optimization feedback periodically i.e. every so often. */
+/** Collecting optimization feedback periodically. */
 package org.anchoranalysis.mpp.segment.optimization.feedback.period;
