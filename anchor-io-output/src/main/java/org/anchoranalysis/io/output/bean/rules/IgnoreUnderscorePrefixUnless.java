@@ -28,7 +28,7 @@ package org.anchoranalysis.io.output.bean.rules;
 
 import java.util.Optional;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.bean.StringSet;
+import org.anchoranalysis.bean.primitive.StringSet;
 import org.anchoranalysis.io.output.bean.enabled.IgnoreUnderscorePrefix;
 import org.anchoranalysis.io.output.bean.enabled.OutputEnabled;
 import org.anchoranalysis.io.output.bean.enabled.SpecificEnabled;

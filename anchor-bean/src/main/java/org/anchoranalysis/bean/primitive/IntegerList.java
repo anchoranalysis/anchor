@@ -24,46 +24,55 @@
  * #L%
  */
 
-package org.anchoranalysis.bean;
+package org.anchoranalysis.bean.primitive;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.experimental.Accessors;
+import org.anchoranalysis.bean.AnchorBean;
 
 /**
- * A list of strings (order is defined).
+ * A bean defining a list of {@link Integer}s with defined order.
  *
  * <p>An example:
  *
  * <pre>{@code
- *    <datasets config-class="org.anchoranalysis.bean.StringList" config-factory="stringList">
- * 	<item>first_dataset</item>
- * 	<item>second_dataset</item>
- * 	<item>some_other_dataset</item>
+ *    <datasets config-class="org.anchoranalysis.bean.primitive.IntegerList" config-factory="integerList">
+ * 	    <item>1</item>
+ * 	    <item>-4</item>
+ * 	    <item>8</item>
  *   </datasets>
  * }</pre>
  *
  * @author Owen Feehan
  */
 @Accessors(fluent = true)
-public class StringList extends AnchorBean<StringList> implements StringBeanCollection {
+@EqualsAndHashCode(callSuper = false)
+public class IntegerList extends AnchorBean<IntegerList>
+        implements PrimitiveBeanCollection<Integer> {
 
-    @Getter private List<String> list = new ArrayList<>();
+    @Getter private List<Integer> list = new ArrayList<>();
 
-    @Override
-    public void add(String text) {
-        list.add(text);
+    public IntegerList(Integer... values) {
+        Arrays.stream(values).forEach(list::add);
     }
 
     @Override
-    public boolean contains(String text) {
-        return list.contains(text);
+    public void add(Integer value) {
+        list.add(value);
     }
 
     @Override
-    public Iterator<String> iterator() {
+    public boolean contains(Integer value) {
+        return list.contains(value);
+    }
+
+    @Override
+    public Iterator<Integer> iterator() {
         return list.iterator();
     }
 
@@ -73,14 +82,15 @@ public class StringList extends AnchorBean<StringList> implements StringBeanColl
     }
 
     /**
-     * Duplicate the bean
+     * Duplicate the bean.
      *
-     * <p>NOTE: We need to specifically-implement it as the GeneralBean functionality won't work
-     * with this implementation, as it uses non-default initialization (using a config-factory)
+     * <p>NOTE: We need to specifically-implement it as the {@link AnchorBean} functionality won't
+     * work with this implementation, as it uses non-default initialization (using a
+     * config-factory).
      */
     @Override
-    public StringList duplicateBean() {
-        StringList out = new StringList();
+    public IntegerList duplicateBean() {
+        IntegerList out = new IntegerList();
         out.list.addAll(list);
         return out;
     }

@@ -1,0 +1,8 @@
+<config>
+<!--  We deliberately make this set unordered to check it is restored to natural order after loading -->
+<bean config-class="org.anchoranalysis.bean.primitive.StringSet" config-factory="stringSet">
+      <item></item>
+      <item>b</item>
+      <item>a</item>
+ </bean>
+</config>

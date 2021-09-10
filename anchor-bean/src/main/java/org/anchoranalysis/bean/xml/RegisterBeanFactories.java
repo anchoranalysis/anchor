@@ -37,8 +37,12 @@ import org.anchoranalysis.bean.xml.factory.IncludeBeanFactory;
 import org.anchoranalysis.bean.xml.factory.IncludeListFactory;
 import org.anchoranalysis.bean.xml.factory.ListBeanFactory;
 import org.anchoranalysis.bean.xml.factory.ReplacePropertyBeanFactory;
-import org.anchoranalysis.bean.xml.factory.StringListFactory;
-import org.anchoranalysis.bean.xml.factory.StringSetFactory;
+import org.anchoranalysis.bean.xml.factory.primitive.DoubleListFactory;
+import org.anchoranalysis.bean.xml.factory.primitive.DoubleSetFactory;
+import org.anchoranalysis.bean.xml.factory.primitive.IntegerListFactory;
+import org.anchoranalysis.bean.xml.factory.primitive.IntegerSetFactory;
+import org.anchoranalysis.bean.xml.factory.primitive.StringListFactory;
+import org.anchoranalysis.bean.xml.factory.primitive.StringSetFactory;
 import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
 import org.apache.commons.configuration.beanutils.BeanHelper;
 
@@ -56,7 +60,13 @@ public final class RegisterBeanFactories {
     // START keys for factories
     // i.e. what is found in the config-factory attribute in the XML
     private static final String FACTORY_STRING_SET = "stringSet";
+    private static final String FACTORY_INTEGER_SET = "integerSet";
+    private static final String FACTORY_DOUBLE_SET = "doubleSet";
+
     private static final String FACTORY_STRING_LIST = "stringList";
+    private static final String FACTORY_INTEGER_LIST = "integerList";
+    private static final String FACTORY_DOUBLE_LIST = "doubleList";
+
     private static final String FACTORY_INCLUDE = "include";
     private static final String FACTORY_OBJECT_LIST_INCLUDE = "listInclude";
     private static final String FACTORY_OBJECT_LIST = "list";
@@ -83,8 +93,12 @@ public final class RegisterBeanFactories {
         }
 
         register(FACTORY_STRING_SET, new StringSetFactory());
+        register(FACTORY_INTEGER_SET, new IntegerSetFactory());
+        register(FACTORY_DOUBLE_SET, new DoubleSetFactory());
 
         register(FACTORY_STRING_LIST, new StringListFactory());
+        register(FACTORY_INTEGER_LIST, new IntegerListFactory());
+        register(FACTORY_DOUBLE_LIST, new DoubleListFactory());
 
         register(FACTORY_INCLUDE, new IncludeBeanFactory());
         register(FACTORY_OBJECT_LIST_INCLUDE, new IncludeListFactory<>());

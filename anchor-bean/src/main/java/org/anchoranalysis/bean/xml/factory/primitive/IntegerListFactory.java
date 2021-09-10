@@ -24,27 +24,32 @@
  * #L%
  */
 
-package org.anchoranalysis.bean.permute.property;
+package org.anchoranalysis.bean.xml.factory.primitive;
 
-import java.util.Iterator;
-import lombok.Getter;
-import lombok.Setter;
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.primitive.StringSet;
+import org.anchoranalysis.bean.primitive.IntegerList;
+import org.anchoranalysis.bean.xml.factory.AnchorBeanFactory;
+import org.apache.commons.configuration.beanutils.BeanDeclaration;
 
-public class PermutePropertyDoubleSet extends PermutePropertyWithPath<Double> {
+/**
+ * Creates a {@link IntegerList} from a XML element.
+ *
+ * <p>It uses:
+ *
+ * <ul>
+ *   <li>all "item" sub-elements, and
+ *   <li>the "items" attribute, split by commas, if it exists
+ * </ul>
+ *
+ * @author Owen Feehan
+ */
+public class IntegerListFactory extends AnchorBeanFactory {
 
-    // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private StringSet values;
-    // END BEAN PROPERTIES
-
+    // Creates the bean. Checks if already an instance exists.
     @Override
-    public Iterator<Double> propertyValues() {
-        return values.set().stream().mapToDouble(Double::parseDouble).iterator(); // NOSONAR
-    }
-
-    @Override
-    public String nameForPropValue(Double value) {
-        return value.toString();
+    @SuppressWarnings("rawtypes")
+    public synchronized Object createBean(Class beanClass, BeanDeclaration decl, Object param)
+            throws Exception {
+        return new PopulatePrimitives<Integer>(decl, new IntegerList(), Integer::parseInt)
+                .populate();
     }
 }

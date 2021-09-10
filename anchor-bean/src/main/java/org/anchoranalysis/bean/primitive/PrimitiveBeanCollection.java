@@ -24,27 +24,36 @@
  * #L%
  */
 
-package org.anchoranalysis.bean.permute.property;
+package org.anchoranalysis.bean.primitive;
 
-import java.util.Iterator;
-import lombok.Getter;
-import lombok.Setter;
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.primitive.StringSet;
+/**
+ * A bean that provides a collection of primitive-types or {@link String}s.
+ *
+ * @param <T> primitive-type stored in the collection, if necessary, in boxed form e.g. Integer,
+ *     Double etc.
+ * @author Owen Feehan
+ */
+public interface PrimitiveBeanCollection<T> extends Iterable<T> {
 
-public class PermutePropertyDoubleSet extends PermutePropertyWithPath<Double> {
+    /**
+     * Add an element to the collection.
+     *
+     * @param element the element to add.
+     */
+    void add(T element);
 
-    // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private StringSet values;
-    // END BEAN PROPERTIES
+    /**
+     * Whether the collection contains a particular element?
+     *
+     * @param element the element to search for
+     * @return true iff the collection contains the element.
+     */
+    boolean contains(T element);
 
-    @Override
-    public Iterator<Double> propertyValues() {
-        return values.set().stream().mapToDouble(Double::parseDouble).iterator(); // NOSONAR
-    }
-
-    @Override
-    public String nameForPropValue(Double value) {
-        return value.toString();
-    }
+    /**
+     * Whether the collection is empty or not.
+     *
+     * @return true iff the collection contains zero elements.
+     */
+    boolean isEmpty();
 }

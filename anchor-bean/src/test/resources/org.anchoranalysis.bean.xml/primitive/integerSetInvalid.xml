@@ -1,0 +1,8 @@
+<config>
+<!--  Like integerSet.xml but contains an invalid element (with a floating point component). -->
+<bean config-class="org.anchoranalysis.bean.primitive.IntegerSet" config-factory="integerSet">
+      <item>8</item>
+      <item>1.7</item>
+      <item>-4</item>
+ </bean>
+</config>

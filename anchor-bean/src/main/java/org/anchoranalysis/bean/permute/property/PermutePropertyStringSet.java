@@ -29,8 +29,8 @@ package org.anchoranalysis.bean.permute.property;
 import java.util.Iterator;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.bean.StringSet;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.primitive.StringSet;
 import org.anchoranalysis.core.exception.OperationFailedException;
 
 public class PermutePropertyStringSet extends PermutePropertyWithPath<String> {

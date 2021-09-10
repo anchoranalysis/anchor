@@ -24,13 +24,14 @@
  * #L%
  */
 
-package org.anchoranalysis.bean.xml.factory;
+package org.anchoranalysis.bean.xml.factory.primitive;
 
-import org.anchoranalysis.bean.StringSet;
+import org.anchoranalysis.bean.primitive.DoubleList;
+import org.anchoranalysis.bean.xml.factory.AnchorBeanFactory;
 import org.apache.commons.configuration.beanutils.BeanDeclaration;
 
 /**
- * Creates a {@link StringSet} from a XML element.
+ * Creates a {@link DoubleList} from a XML element.
  *
  * <p>It uses:
  *
@@ -41,13 +42,14 @@ import org.apache.commons.configuration.beanutils.BeanDeclaration;
  *
  * @author Owen Feehan
  */
-public class StringSetFactory extends AnchorBeanFactory {
+public class DoubleListFactory extends AnchorBeanFactory {
 
     // Creates the bean. Checks if already an instance exists.
     @Override
     @SuppressWarnings("rawtypes")
     public synchronized Object createBean(Class beanClass, BeanDeclaration decl, Object param)
             throws Exception {
-        return HelperUtilities.populateStringCollection(new StringSet(), decl);
+        return new PopulatePrimitives<Double>(decl, new DoubleList(), Double::parseDouble)
+                .populate();
     }
 }

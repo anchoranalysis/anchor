@@ -24,18 +24,32 @@
  * #L%
  */
 
-package org.anchoranalysis.bean;
+package org.anchoranalysis.bean.xml.factory.primitive;
+
+import org.anchoranalysis.bean.primitive.DoubleSet;
+import org.anchoranalysis.bean.xml.factory.AnchorBeanFactory;
+import org.apache.commons.configuration.beanutils.BeanDeclaration;
 
 /**
- * A bean that provides a collection of Strings.
+ * Creates a {@link DoubleSet} from a XML element.
+ *
+ * <p>It uses:
+ *
+ * <ul>
+ *   <li>all "item" sub-elements, and
+ *   <li>the "items" attribute, split by commas, if it exists
+ * </ul>
  *
  * @author Owen Feehan
  */
-public interface StringBeanCollection extends Iterable<String> {
+public class DoubleSetFactory extends AnchorBeanFactory {
 
-    void add(String text);
-
-    boolean contains(String text);
-
-    boolean isEmpty();
+    // Creates the bean. Checks if already an instance exists.
+    @Override
+    @SuppressWarnings("rawtypes")
+    public synchronized Object createBean(Class beanClass, BeanDeclaration decl, Object param)
+            throws Exception {
+        return new PopulatePrimitives<Double>(decl, new DoubleSet(), Double::parseDouble)
+                .populate();
+    }
 }
