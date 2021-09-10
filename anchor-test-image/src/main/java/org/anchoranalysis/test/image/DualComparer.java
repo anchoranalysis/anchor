@@ -34,6 +34,7 @@ import java.nio.file.Path;
 import lombok.Getter;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.io.input.csv.CSVReaderException;
+import org.anchoranalysis.test.CompareXML;
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.image.csv.CSVComparer;
 import org.anchoranalysis.test.image.io.TestLoaderImage;
@@ -96,7 +97,7 @@ public class DualComparer {
      * @return true if the xml-documents are equal, fALSE otherwise
      */
     public boolean compareTwoXmlDocuments(String path) {
-        return TestLoader.areXmlEqual(
+        return CompareXML.areDocumentsEqual(
                 loader1.openXmlFromTestPath(path), loader2.openXmlFromTestPath(path));
     }
 

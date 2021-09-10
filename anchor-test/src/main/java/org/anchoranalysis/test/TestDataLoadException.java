@@ -28,6 +28,8 @@ package org.anchoranalysis.test;
 
 /**
  * An exception thrown when test-data cannot be loaded.
+ * 
+ * <p>This is declared as a {@link RuntimeException} so as to avoid JUnit tests declared a checked exception.
  *
  * @author Owen Feehan
  */
@@ -36,10 +38,20 @@ public class TestDataLoadException extends RuntimeException {
     /** */
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Creates with a message only.
+     * 
+     * @param message the message.
+     */
     public TestDataLoadException(String message) {
         super(message);
     }
 
+    /**
+     * Creates with a cause only.
+     * 
+     * @param cause the cause.
+     */
     public TestDataLoadException(Throwable cause) {
         super(cause);
     }

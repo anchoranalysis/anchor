@@ -33,6 +33,7 @@ import java.net.URISyntaxException;
 import java.nio.file.Path;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
+import org.anchoranalysis.test.CompareXML;
 import org.anchoranalysis.test.TestLoader;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -58,6 +59,6 @@ class XmlOutputterTest {
 
         Document docOut = TestLoader.openXmlAbsoluteFilePath(pathOut);
 
-        assertTrue(TestLoader.areXmlEqual(docIn, docOut));
+        assertTrue(CompareXML.areDocumentsEqual(docIn, docOut));
     }
 }

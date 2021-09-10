@@ -26,8 +26,6 @@
 
 package org.anchoranalysis.test;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -37,27 +35,28 @@ import org.anchoranalysis.core.serialize.XMLParser;
 import org.apache.commons.io.FileUtils;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
-import org.xmlunit.builder.DiffBuilder;
-import org.xmlunit.builder.Input;
-import org.xmlunit.diff.Diff;
+import lombok.Getter;
 
 /**
- * Loads test data, which is found at some location on the filesystem
+ * Loads test data, which is found at some location on the filesystem.
  *
  * @author Owen Feehan
  */
 public class TestLoader {
 
-    /** Path to where the test-data is stored */
-    private Path pathTestDataRoot;
+    /** Path to the resources directory, relative to the root of the project. */
+    public static final String PATH_RESOURCES = "src/test/resources";
+    
+    /** Path to where the test-data is stored. */
+    @Getter private Path root;
 
-    /** Makes a new test-data loader */
+    /** Creates a new test-data loader. */
     private TestLoader(String root) {
         this(Paths.get(root));
     }
 
     /**
-     * Makes a new test-data loader
+     * Creates a new test-data loader.
      *
      * @param root path to where the test-data is stored
      */
@@ -72,63 +71,63 @@ public class TestLoader {
             throw new TestDataInitException(String.format("Path '%s' is not a folder", root));
         }
 
-        this.pathTestDataRoot = root.toAbsolutePath();
+        this.root = root.toAbsolutePath();
     }
 
     /**
-     * Creates a new test-data loader finding "src/test/resources" using the Maven working directory
+     * Creates a new test-data loader finding {@code PATH_RESOURCES} using the Maven working directory.
      *
-     * @return a loader associated with MAVEN_WORKING_DIR/src/test/resources/
+     * @return a loader associated with {@code MAVEN_WORKING_DIR/PATH_RESOURCES}
      */
     public static TestLoader createFromMavenWorkingDirectory() {
-        return new TestLoader("src/test/resources");
+        return new TestLoader(PATH_RESOURCES);
     }
 
     /**
-     * Creates a new test-data loader finding "src/test/resources/PLUS_SOMETHING" using the Maven
-     * working directory
+     * Creates a new test-data loader finding {@code PATH_RESOURCES/PLUS_SOMETHING} using the Maven
+     * working directory.
      *
-     * @param toAppendToDirectory appended to maven working dir to determine final directory
-     * @return a loader associated with the MAVEN_WORKING_DIR/src/test/resources/PLUS_SOMETHING
+     * @param toAppendToDirectory appended to Maven working directory to determine final directory.
+     * @return a loader associated with the {@code MAVEN_WORKING_DIR/PATH_RESOURCES/PLUS_SOMETHING}
      */
     public static TestLoader createFromMavenWorkingDirectory(String toAppendToDirectory) {
-        Path path = Paths.get("src/test/resources").resolve(toAppendToDirectory);
+        Path path = Paths.get(PATH_RESOURCES).resolve(toAppendToDirectory);
         return new TestLoader(path.toString());
     }
 
     /**
-     * Creates a new test-data loader using an explicit File path as root
+     * Creates a new test-data loader using an explicit file path as root.
      *
-     * @param rootDirectory the path where the root folder is
-     * @return a loader associated with the explicit root
+     * @param rootDirectory the path where the root folder is.
+     * @return a loader associated with the explicit root.
      */
     public static TestLoader createFromExplicitDirectory(String rootDirectory) {
         return createFromExplicitDirectory(Paths.get(rootDirectory));
     }
 
     /**
-     * Creates a new test-data loader using an explicit File path as root
+     * Creates a new test-data loader using an explicit file path as root.
      *
-     * @param rootDirectory the path where the root folder is
-     * @return a loader associated with the explicit root
+     * @param rootDirectory the path where the root folder is.
+     * @return a loader associated with the explicit root.
      */
     public static TestLoader createFromExplicitDirectory(Path rootDirectory) {
         return new TestLoader(rootDirectory);
     }
 
     /**
-     * Creates a new test-loader for a subdirectory of the current test
+     * Creates a new test-loader for a subdirectory of the current test.
      *
-     * @param subdirectory the subdirectory to use (relative path to the current root)
+     * @param subdirectory the subdirectory to use (relative path to the current root).
      * @return the new test-loader
      */
     public TestLoader createForSubdirectory(String subdirectory) {
-        return new TestLoader(pathTestDataRoot.resolve(subdirectory));
+        return new TestLoader(root.resolve(subdirectory));
     }
 
     /**
      * Resolves a path to test-data (relative path to the test-data root) to an absolute path on the
-     * file system
+     * file system.
      *
      * @param testPath relative-path of a test-data item. It is relative to the test-data root.
      * @return the resolved-path
@@ -138,14 +137,14 @@ public class TestLoader {
             throw new IllegalArgumentException(
                     String.format("testPath should be relative, not absolute: %s", testPath));
         }
-        return pathTestDataRoot.resolve(testPath);
+        return root.resolve(testPath);
     }
 
     /**
-     * Does a resource exist with a particular folderPath + fileName
+     * Does a resource exist with a particular {@code folderPath + fileName}.
      *
-     * @param testFilePath path to a file in the test-data
-     * @return true if a file is found at the location, false otherwise
+     * @param testFilePath path to a file in the test-data.
+     * @return true if a file is found at the location, false otherwise.
      */
     public boolean doesPathExist(String testFilePath) {
 
@@ -155,70 +154,52 @@ public class TestLoader {
     }
 
     /**
-     * Does a resource exist with a particular folderPath + fileName
+     * Does a resource exist with a particular {@code folderPath + fileName}.
      *
-     * @param testDirectoryPath path to a folder in the test-data (can be empty)
-     * @param fileName a filename in the {@code testDirectoryPath}
-     * @return true if a file is found at the location, false otherwise
+     * @param testDirectoryPath path to a folder in the test-data (can be empty).
+     * @param fileName a filename in the {@code testDirectoryPath}.
+     * @return true if a file is found at the location, false otherwise.
      */
     public boolean doesPathExist(String testDirectoryPath, String fileName) {
         Path folder = resolveTestPath(testDirectoryPath);
         return folder.resolve(fileName).toFile().exists();
     }
 
-    private void listDirectory(String directoryPath, int level) {
-        File directory = new File(directoryPath);
-        File[] firstLevelFiles = directory.listFiles();
-        if (firstLevelFiles != null && firstLevelFiles.length > 0) {
-            for (File file : firstLevelFiles) {
-                for (int i = 0; i < level; i++) {
-                    System.out.print("\t"); // NOSONAR
-                }
-                if (file.isDirectory()) {
-                    System.out.println("[" + file.getName() + "]"); // NOSONAR
-                    listDirectory(file.getAbsolutePath(), level + 1);
-                } else {
-                    System.out.println(file.getName()); // NOSONAR
-                }
-            }
-        }
-    }
-
     /**
-     * Prints the names of all files (recursively) in a test-folder to stdout
+     * Prints the names of all files (recursively) in a test-folder to {@code stdout}.
      *
-     * @param testDirectoryPath path to a folder in the test-data (can be empty)
+     * @param testDirectoryPath path to a folder in the test-data (can be empty).
      */
     public void printAllFilesFromTestDirectoryPath(String testDirectoryPath) {
         Path folderPathResolved = resolveTestPath(testDirectoryPath);
-        listDirectory(folderPathResolved.toString(), 0);
+        PrintFilesInDirectory.printRecursively(folderPathResolved.toString());
     }
 
     /**
-     * Opens a XML document - with a path relative to the test root
+     * Opens a XML document - with a path relative to the test root.
      *
-     * @param testPath the path to the xml file (relative to the test root)
-     * @return the XML document
+     * @param testPath the path to the XML file (relative to the test root).
+     * @return the XML document.
      */
     public Document openXmlFromTestPath(String testPath) {
         return openXmlAbsoluteFilePath(resolveTestPath(testPath));
     }
 
     /**
-     * Opens a XML document - with an absolute path on the filesystem
+     * Opens a XML document - with an absolute path on the filesystem.
      *
-     * @param filePath the path to the xml file (absolute path)
-     * @return the XML document
+     * @param filePath the path to the XML file (absolute path).
+     * @return the XML document.
      */
     public static Document openXmlAbsoluteFilePath(String filePath) {
         return openXmlAbsoluteFilePath(Paths.get(filePath));
     }
 
     /**
-     * Opens a XML document - with an absolute path on the filesystem
+     * Opens a XML document - with an absolute path on the filesystem.
      *
-     * @param filePath the path to the xml file (absolute path)
-     * @return the XML document
+     * @param filePath the path to the XML file (absolute path).
+     * @return the XML document.
      */
     public static Document openXmlAbsoluteFilePath(Path filePath) {
         try {
@@ -229,41 +210,27 @@ public class TestLoader {
     }
 
     /**
-     * Does a check if the XML documents are equal
+     * Copies all the data in the test-data folder (recursively), preserving file modification times.
      *
-     * <p>Note that both objects are normalized during the check, and their state changes
-     * permanently.
-     *
-     * @param doc1 first document
-     * @param doc2 second document
-     * @return true if their contents match, false otherwise
+     * @param destination destination-folder.
+     * @throws IOException if a copy error occurs.
      */
-    public static boolean areXmlEqual(Document doc1, Document doc2) {
-        return areXmlEqual(Input.fromDocument(doc1), Input.fromDocument(doc2));
+    public void copyToDirectory(File destination) throws IOException {
+        FileUtils.copyDirectory(root.toFile(), destination, true);
     }
 
     /**
-     * Copies all the data in the test-data folder (recursively), preserving file-dates
+     * Copies specific subdirectories from the test-data folder (recursively), preserving file modification times.
      *
-     * @param dirDest destination-folder
-     * @throws IOException if a copy error occurs
-     */
-    public void copyToDirectory(File dirDest) throws IOException {
-        FileUtils.copyDirectory(pathTestDataRoot.toFile(), dirDest, true);
-    }
-
-    /**
-     * Copies specific subdirectories from the test-data folder (recursively), preserving file-dates
-     *
-     * @param subdirectoriesSource which subdirectories to copy from (their full-path is preserved)
-     * @param directoryDestination destination-folder
-     * @throws IOException if a copy error occurs
+     * @param subdirectoriesSource which subdirectories to copy from (their full-path is preserved).
+     * @param directoryDestination destination-folder.
+     * @throws IOException if a copy error occurs.
      */
     public void copyToDirectory(String[] subdirectoriesSource, File directoryDestination)
             throws IOException {
 
         for (String subdirectory : subdirectoriesSource) {
-            Path pathSubdir = pathTestDataRoot.resolve(subdirectory);
+            Path pathSubdir = root.resolve(subdirectory);
 
             // Create the target folder
             File destSubdirectory = new File(directoryDestination, subdirectory);
@@ -271,25 +238,5 @@ public class TestLoader {
 
             FileUtils.copyDirectory(pathSubdir.toFile(), destSubdirectory, true);
         }
-    }
-
-    public void testManifestExperiment(String outputDir) {
-        assertTrue(doesPathExist(outputDir, "manifestExperiment.ser"));
-        assertTrue(doesPathExist(outputDir, "manifestExperiment.ser.xml"));
-        assertTrue(!doesPathExist(outputDir, "manifestExperiment2.ser.xml"));
-    }
-
-    public Path getRoot() {
-        return pathTestDataRoot;
-    }
-
-    private static boolean areXmlEqual(Input.Builder expectedXML, Input.Builder actualXML) {
-        Diff difference =
-                DiffBuilder.compare(expectedXML)
-                        .ignoreWhitespace()
-                        .ignoreComments()
-                        .withTest(actualXML)
-                        .build();
-        return !difference.hasDifferences();
     }
 }
