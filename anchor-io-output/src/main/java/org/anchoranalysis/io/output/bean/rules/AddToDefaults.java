@@ -26,7 +26,7 @@
 package org.anchoranalysis.io.output.bean.rules;
 
 import java.util.Optional;
-import org.anchoranalysis.bean.StringSet;
+import org.anchoranalysis.bean.primitive.StringSet;
 import org.anchoranalysis.io.output.bean.enabled.None;
 import org.anchoranalysis.io.output.bean.enabled.SpecificEnabled;
 import org.anchoranalysis.io.output.enabled.multi.MultiLevelOr;

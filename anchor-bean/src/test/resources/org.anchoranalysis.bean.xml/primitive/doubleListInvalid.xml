@@ -1,0 +1,7 @@
+<config>
+<bean config-class="org.anchoranalysis.bean.primitive.DoubleList" config-factory="doubleList">
+      <item>8.1</item>
+      <item>someString</item>
+      <item>-4.3</item>
+ </bean>
+</config>

@@ -30,8 +30,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.anchoranalysis.bean.StringSet;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.primitive.StringSet;
 
 /**
  * Only specific outputs, identified by a textual name, are disabled, and all others are enabled.

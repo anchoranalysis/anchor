@@ -28,17 +28,19 @@ package org.anchoranalysis.bean.xml;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.nio.file.Path;
 import org.anchoranalysis.bean.xml.exception.BeanXmlException;
 import org.anchoranalysis.bean.xml.mock.MockBeanNested;
-import org.anchoranalysis.core.format.NonImageFileFormat;
-import org.anchoranalysis.test.TestLoader;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 
+/**
+ * Tests various different methods to load beans and perform perturbations.
+ *
+ * @author Owen Feehan
+ */
 class BeanXmlLoaderTest {
 
-    private TestLoader loader = TestLoader.createFromMavenWorkingDirectory();
+    private LoadFromResources loader = new LoadFromResources();
 
     @Test
     void testLoadBean() throws BeanXmlException {
@@ -57,7 +59,7 @@ class BeanXmlLoaderTest {
      */
     @Test
     void testLoadBeanReplaceAttribute() throws BeanXmlException {
-        MockBeanNested bean = registerLoad("replaceBeanAttribute");
+        MockBeanNested bean = loader.loadBean("replaceBeanAttribute");
         assertEquals("helloChanged", bean.getFieldSimpleNecessary());
     }
 
@@ -95,29 +97,19 @@ class BeanXmlLoaderTest {
 
     private void testSimple(String fileIdentifier, String expectedFieldValue)
             throws BeanXmlException {
-        MockBeanNested bean = registerLoad(fileIdentifier);
+        MockBeanNested bean = loader.loadBean(fileIdentifier);
         assertEquals(expectedFieldValue, bean.getFieldSimpleNecessary());
     }
 
     private void testBean(String fileIdentifier, String expectedMessage) throws BeanXmlException {
-        MockBeanNested bean = registerLoad(fileIdentifier);
+        MockBeanNested bean = loader.loadBean(fileIdentifier);
         assertEquals(expectedMessage, bean.getFieldBeanNecessary().getMessage());
     }
 
     private void testSimpleAndBean(String fileIdentifier) throws BeanXmlException {
-        MockBeanNested bean = registerLoad(fileIdentifier);
+        MockBeanNested bean = loader.loadBean(fileIdentifier);
         assertEquals("hello", bean.getFieldSimpleNecessary());
         assertEquals("world", bean.getFieldBeanNecessary().getMessage());
-    }
-
-    private <T> T registerLoad(String fileIdentifier) throws BeanXmlException {
-        RegisterBeanFactories.registerAllPackageBeanFactories();
-
-        Path path =
-                NonImageFileFormat.XML.buildPath(
-                        loader.resolveTestPath("org.anchoranalysis.bean.xml"), fileIdentifier);
-        T bean = BeanXMLLoader.loadBean(path);
-        return bean;
     }
 
     private static void assertException(Executable executable) {

@@ -34,19 +34,27 @@ import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.log.MessageLogger;
 
 /**
- * Fixtures to create loggers that don't output anything
+ * Fixtures to create loggers that don't output anything.
  *
  * @author Owen Feehan
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class LoggingFixture {
 
-    /** A {@link MessageLogger} that doesn't output anything. */
+    /** 
+     * A {@link MessageLogger} that doesn't output anything.
+     *
+     * @return the message-logger
+     */
     public static MessageLogger suppressedMessageLogger() {
         return mock(MessageLogger.class);
     }
 
-    /** A {@link Logger} that doesn't output anything. */
+    /** 
+     * A {@link Logger} that doesn't output anything.
+     *
+     * @return the logger
+     */
     public static Logger suppressedLogger() {
         return new Logger(suppressedMessageLogger());
     }

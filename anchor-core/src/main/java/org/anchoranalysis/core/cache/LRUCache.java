@@ -66,15 +66,13 @@ public class LRUCache<K, V> {
             throw new AnchorFriendlyRuntimeException("cacheSize must be a positive integer");
         }
 
-        cache =
-                CacheBuilder.newBuilder()
-                        .maximumSize(cacheSize)
-                        .build(
-                                new CacheLoader<K, V>() {
-                                    public V load(K key) throws E {
-                                        return calculator.apply(key);
-                                    }
-                                });
+        CacheLoader<K, V> loader =
+                new CacheLoader<K, V>() {
+                    public V load(K key) throws E {
+                        return calculator.apply(key);
+                    }
+                };
+        cache = CacheBuilder.newBuilder().maximumSize(cacheSize).build(loader);
     }
 
     /**

@@ -31,7 +31,7 @@ import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.UnaryOperator;
-import org.anchoranalysis.bean.StringSet;
+import org.anchoranalysis.bean.primitive.StringSet;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.FunctionalIterate;
 import org.anchoranalysis.core.functional.OptionalUtilities;

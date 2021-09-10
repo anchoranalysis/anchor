@@ -28,7 +28,7 @@ package org.anchoranalysis.core.log;
 
 /**
  * Does nothing with with any messages logged.
- * 
+ *
  * <p>i.e. logging is ignored.
  *
  * @author Owen Feehan

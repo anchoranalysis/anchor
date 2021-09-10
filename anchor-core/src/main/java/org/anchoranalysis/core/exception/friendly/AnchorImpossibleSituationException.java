@@ -28,8 +28,9 @@ package org.anchoranalysis.core.exception.friendly;
 
 /**
  * A run-time exception to throw in situations which should never logically occur by design.
- * 
- * <p>This is conveient to use instead of {@code assert false} as assertions are not always checked by the JVM.
+ *
+ * <p>This is conveient to use instead of {@code assert false} as assertions are not always checked
+ * by the JVM.
  *
  * <p>If this is somehow thrown, it's an indication there is a logical error in the code.
  *

@@ -64,5 +64,5 @@
 		<developerConnection>scm:git:git@github.com:anchoranalysis/anchor.git</developerConnection>
 		<url>https://github.com/anchoranalysis/anchor</url>
 	  <tag>HEAD</tag>
-  </scm>
+    </scm>
 </project>

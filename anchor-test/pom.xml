@@ -6,7 +6,7 @@
 		<version>0.1.2</version>
     </parent>
   <artifactId>anchor-test</artifactId>
-  <version>0.0.8-SNAPSHOT</version>
+  <version>0.1.2-SNAPSHOT</version>
 	<description>Reusable test fixtures/utilities (at highest generality).</description>
 	<dependencies>
 	
@@ -51,4 +51,13 @@
 		</dependency>
 		    
     </dependencies>
+	
+	<!-- Duplicated from parent POM file as workaround to issues with maven release plugin in multi-module projects. -->
+  	<scm>
+		<connection>scm:git:git@github.com:anchoranalysis/anchor.git</connection>
+		<developerConnection>scm:git:git@github.com:anchoranalysis/anchor.git</developerConnection>
+		<url>https://github.com/anchoranalysis/anchor</url>
+	  <tag>HEAD</tag>
+    </scm>
+	
 </project>

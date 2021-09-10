@@ -1,0 +1,3 @@
+<config>
+<bean config-class="org.anchoranalysis.bean.primitive.StringList" items="a,b," config-factory="stringList"/>
+ </config>

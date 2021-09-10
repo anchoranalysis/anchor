@@ -1,0 +1,7 @@
+<config>
+<bean config-class="org.anchoranalysis.bean.primitive.IntegerSet" config-factory="integerSet">
+      <item>8</item>
+      <item>1</item>
+      <item>-4</item>
+ </bean>
+</config>

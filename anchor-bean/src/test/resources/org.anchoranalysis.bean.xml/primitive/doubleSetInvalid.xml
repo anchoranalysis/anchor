@@ -1,0 +1,7 @@
+<config>
+<bean config-class="org.anchoranalysis.bean.primitive.DoubleSet" config-factory="doubleSet">
+      <item>8.1</item>
+      <item>1.2</item>
+      <item>56.5e56.7</item>
+ </bean>
+</config>

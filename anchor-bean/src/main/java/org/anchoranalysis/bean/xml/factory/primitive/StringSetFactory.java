@@ -24,13 +24,15 @@
  * #L%
  */
 
-package org.anchoranalysis.bean.xml.factory;
+package org.anchoranalysis.bean.xml.factory.primitive;
 
-import org.anchoranalysis.bean.StringList;
+import java.util.function.Function;
+import org.anchoranalysis.bean.primitive.StringSet;
+import org.anchoranalysis.bean.xml.factory.AnchorBeanFactory;
 import org.apache.commons.configuration.beanutils.BeanDeclaration;
 
 /**
- * Creates a {@link StringList} from a XML element.
+ * Creates a {@link StringSet} from a XML element.
  *
  * <p>It uses:
  *
@@ -41,13 +43,14 @@ import org.apache.commons.configuration.beanutils.BeanDeclaration;
  *
  * @author Owen Feehan
  */
-public class StringListFactory extends AnchorBeanFactory {
+public class StringSetFactory extends AnchorBeanFactory {
 
     // Creates the bean. Checks if already an instance exists.
     @Override
     @SuppressWarnings("rawtypes")
     public synchronized Object createBean(Class beanClass, BeanDeclaration decl, Object param)
             throws Exception {
-        return HelperUtilities.populateStringCollection(new StringList(), decl);
+        return new PopulatePrimitives<String>(decl, new StringSet(), Function.identity())
+                .populate();
     }
 }

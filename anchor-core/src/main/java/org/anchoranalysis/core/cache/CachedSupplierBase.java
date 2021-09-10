@@ -66,7 +66,7 @@ public abstract class CachedSupplierBase<T> {
         if (!isEvaluated()) {
             result = Optional.of(supplier.get());
         }
-        return result.get();    //NOSONAR
+        return result.get(); // NOSONAR
     }
 
     /** Ensures the object is unevaluated, deleting any cached result if it exists. */

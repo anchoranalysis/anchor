@@ -24,57 +24,61 @@
  * #L%
  */
 
-package org.anchoranalysis.bean;
+package org.anchoranalysis.bean.primitive;
 
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Stream;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.bean.AnchorBean;
 
 /**
- * A set of strings.
+ * A bean defining a set of {@link Double}s.
  *
- * <p>We use TreeSet to maintain an ordering that is consistent and meaningful for the iterator().
+ * <p>The elements are stored internally in a consistent ordering, according to their natural
+ * comparator.
  *
  * <p>An example:
  *
  * <pre>{@code
- *    <datasets config-class="org.anchoranalysis.bean.StringSet" config-factory="stringSet">
- * 	<item>first_dataset</item>
- * 	<item>second_dataset</item>
- * 	<item>some_other_dataset</item>
- *   </datasets>
+ *  <datasets config-class="org.anchoranalysis.bean.primitive.DoubleSet" config-factory="doubleSet">
+ *    <item>1.2</item>
+ *    <item>-0.34354</item>
+ *    <item>7.2e5</item>
+ * </datasets>
  * }</pre>
  *
  * @author Owen Feehan
  */
 @NoArgsConstructor
-public class StringSet extends AnchorBean<StringSet> implements StringBeanCollection {
+@EqualsAndHashCode(callSuper = false)
+public class DoubleSet extends AnchorBean<DoubleSet> implements PrimitiveBeanCollection<Double> {
 
-    private Set<String> set = new TreeSet<>();
+    private Set<Double> set = new TreeSet<>();
 
-    public StringSet(String... strings) {
-        Arrays.stream(strings).forEach(set::add);
+    public DoubleSet(Double... values) {
+        Arrays.stream(values).forEach(set::add);
     }
 
     @Override
-    public void add(String text) {
-        set.add(text);
+    public void add(Double value) {
+        set.add(value);
     }
 
     @Override
-    public boolean contains(String text) {
-        return set.contains(text);
+    public boolean contains(Double value) {
+        return set.contains(value);
     }
 
-    public Set<String> set() {
+    public Set<Double> set() {
         return set;
     }
 
     @Override
-    public Iterator<String> iterator() {
+    public Iterator<Double> iterator() {
         return set.iterator();
     }
 
@@ -83,19 +87,20 @@ public class StringSet extends AnchorBean<StringSet> implements StringBeanCollec
         return set.isEmpty();
     }
 
-    public Stream<String> stream() {
+    public Stream<Double> stream() {
         return set.stream();
     }
 
     /**
-     * Duplicate the bean
+     * Duplicate the bean.
      *
-     * <p>NOTE: We need to specifically-implement it as the GeneralBean functionality won't work
-     * with this implementation, as it uses non-default initialization (using a config-factory)
+     * <p>NOTE: We need to specifically-implement it as the {@link AnchorBean} functionality won't
+     * work with this implementation, as it uses non-default initialization (using a
+     * config-factory).
      */
     @Override
-    public StringSet duplicateBean() {
-        StringSet out = new StringSet();
+    public DoubleSet duplicateBean() {
+        DoubleSet out = new DoubleSet();
         out.set.addAll(set);
         return out;
     }
