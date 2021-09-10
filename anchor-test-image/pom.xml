@@ -13,7 +13,7 @@
 	   	<dependency>
 		  <groupId>${project.groupId}</groupId>
 		  <artifactId>anchor-test</artifactId>
-		  <version>0.0.8-SNAPSHOT</version>
+		  <version>0.1.1</version>
 		</dependency>
 
 	   	<dependency>
