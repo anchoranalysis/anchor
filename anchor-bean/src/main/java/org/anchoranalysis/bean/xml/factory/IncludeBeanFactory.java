@@ -29,11 +29,33 @@ package org.anchoranalysis.bean.xml.factory;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.xml.BeanXMLLoader;
-import org.anchoranalysis.bean.xml.exception.BeanXmlException;
+import org.anchoranalysis.bean.xml.exception.BeanXMLException;
+import org.anchoranalysis.core.system.path.ResolvePathAbsolute;
 import org.apache.commons.configuration.beanutils.BeanDeclaration;
 import org.apache.commons.configuration.beanutils.XMLBeanDeclaration;
 
+/**
+ * Defines an {@link AnchorBean} in a separate file on the file-system.
+ *
+ * <p>This file is read from {@code filePath} and loaded and integrated with current bean, as if the
+ * XML was contained directly in the object being loaded.
+ *
+ * <p>By default, the referenced bean should be specified as {@code <config><bean>bla
+ * blah</bean></config>} in the included XML.
+ *
+ * <p>An optional parameter {@code xpath} allows referencing an another element in the XML tree. It
+ * defaults to {@code bean}.
+ *
+ * <p>The {@code config} high-level tag is not considered in the XML tree, and should not be part of
+ * {@code xpath}.
+ *
+ * <p>As an example: {@code <input filePath="inputManager.xml"
+ * config-class="org.anchoranalysis.io.bean.input.InputManager" config-factory="include"/> }
+ *
+ * @author Owen Feehan
+ */
 public class IncludeBeanFactory extends AnchorBeanFactory {
 
     // Creates the bean. Checks if already an instance exists.
@@ -41,28 +63,36 @@ public class IncludeBeanFactory extends AnchorBeanFactory {
     @SuppressWarnings("rawtypes")
     public synchronized Object createBean(Class beanClass, BeanDeclaration decl, Object param)
             throws Exception {
-        XMLBeanDeclaration declXML = (XMLBeanDeclaration) decl;
+        XMLBeanDeclaration declaration = (XMLBeanDeclaration) decl;
 
-        String filePathStr = (String) declXML.getBeanProperties().get("filePath");
-        Path filePath = Paths.get(filePathStr);
+        Path existingPath = Paths.get((String) param);
 
-        Path exstPath = Paths.get((String) param);
-
-        Path totalPath = BeanPathUtilities.combine(exstPath, filePath);
-
-        String xmlPath = (String) declXML.getBeanProperties().get("xpath");
-
-        if (xmlPath == null) {
-            xmlPath = "bean";
-        }
+        Path totalPath = calculateTotalPath(existingPath, declaration);
 
         // A check in case its the same file, so we don't want to include it, and get a stack
         //  over flow. There's not much we can do if, X includes Y which includes X
-        if (Files.isSameFile(exstPath, totalPath)) {
-            throw new BeanXmlException(
-                    String.format("Including file would cause overflow: %s", exstPath));
+        if (Files.isSameFile(existingPath, totalPath)) {
+            throw new BeanXMLException(
+                    String.format("Including file would cause overflow: %s", existingPath));
         }
 
-        return BeanXMLLoader.loadBeanLocalized(totalPath, xmlPath);
+        return BeanXMLLoader.loadBeanLocalized(totalPath, calculateXMLPath(declaration));
+    }
+
+    private String calculateXMLPath(XMLBeanDeclaration declaration) {
+        String xmlPath = (String) declaration.getBeanProperties().get("xpath");
+
+        if (xmlPath != null) {
+            return xmlPath;
+        } else {
+            return "bean";
+        }
+    }
+
+    private Path calculateTotalPath(Path existingPath, XMLBeanDeclaration declaration) {
+        String filePathStr = (String) declaration.getBeanProperties().get("filePath");
+        Path filePath = Paths.get(filePathStr);
+
+        return ResolvePathAbsolute.resolve(existingPath, filePath);
     }
 }

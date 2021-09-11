@@ -31,7 +31,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.mpp.bean.MarksBean;
 import org.anchoranalysis.mpp.mark.CompatibleWithMark;
@@ -55,7 +55,7 @@ public abstract class Kernel<T, S> extends MarksBean<Kernel<T, S>> implements Co
     // END BEAN PROPERTIES
 
     // Call ONCE before calculating anything
-    public abstract void initBeforeCalc(KernelCalculationContext context) throws InitException;
+    public abstract void initBeforeCalc(KernelCalculationContext context) throws InitializeException;
 
     /**
      * Calculates the Energy for a proposal

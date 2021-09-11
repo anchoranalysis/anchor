@@ -70,10 +70,10 @@ public class TerminationConditionListOr extends TerminationCondition {
     }
 
     @Override
-    public void init() {
+    public void initialize() {
 
         for (TerminationCondition tc : this.list) {
-            tc.init();
+            tc.initialize();
         }
     }
 }

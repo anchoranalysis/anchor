@@ -47,13 +47,13 @@ import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 public class SequenceInteger extends AnchorBean<SequenceInteger> {
 
     // START BEAN PROPERTIES
-    /** The index to begin iteration from */
+    /** The index to begin iteration from. */
     @BeanField @Getter @Setter private int start = 0;
 
-    /** An index beyond which we cannot iterate (inclusive) */
+    /** An index beyond which we cannot iterate (inclusive). */
     @BeanField @Getter @Setter private int end = 0;
 
-    /** Size of step to use when incrementing */
+    /** Size of step to use when incrementing. */
     @BeanField @Getter @Setter private int increment = 1;
     // END BEAN PROPERTIES
 
@@ -68,9 +68,9 @@ public class SequenceInteger extends AnchorBean<SequenceInteger> {
     }
 
     /**
-     * An iterator for each element in the sequence
+     * An iterator for each element in the sequence.
      *
-     * @return the iterator
+     * @return the iterator.
      */
     public Iterator<Integer> iterator() {
         return new SequenceIntegerIterator(start, end, increment);

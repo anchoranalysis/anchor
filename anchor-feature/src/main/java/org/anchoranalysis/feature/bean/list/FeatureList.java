@@ -39,7 +39,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.functional.checked.CheckedFunction;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.Feature;
@@ -76,10 +76,10 @@ public class FeatureList<T extends FeatureInput> extends AnchorBean<FeatureList<
         this.list = list;
     }
 
-    public void initRecursive(FeatureInitialization initialization, Logger logger)
-            throws InitException {
+    public void initializeRecursive(FeatureInitialization initialization, Logger logger)
+            throws InitializeException {
         for (Feature<T> feature : list) {
-            feature.initRecursive(initialization, logger);
+            feature.initializeRecursive(initialization, logger);
         }
     }
 

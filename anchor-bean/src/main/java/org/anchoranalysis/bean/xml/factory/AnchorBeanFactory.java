@@ -29,7 +29,7 @@ package org.anchoranalysis.bean.xml.factory;
 import org.apache.commons.configuration.beanutils.DefaultBeanFactory;
 
 /**
- * Base class for all Anchor-specific bean factories
+ * Base class for all Anchor-specific bean factories.
  *
  * @author Owen Feehan
  */

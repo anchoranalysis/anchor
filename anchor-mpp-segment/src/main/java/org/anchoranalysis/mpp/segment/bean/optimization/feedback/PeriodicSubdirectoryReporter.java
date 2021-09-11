@@ -92,7 +92,7 @@ public abstract class PeriodicSubdirectoryReporter<T>
     }
 
     // We setup the manifest from a Generator
-    protected void init(Generator<T> generator) // NOSONAR
+    protected void initialize(Generator<T> generator) // NOSONAR
             throws OutputWriteFailedException {
 
         OutputPatternIntegerSuffix pattern =

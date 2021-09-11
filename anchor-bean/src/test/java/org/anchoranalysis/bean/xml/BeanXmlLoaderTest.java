@@ -28,7 +28,7 @@ package org.anchoranalysis.bean.xml;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.anchoranalysis.bean.xml.exception.BeanXmlException;
+import org.anchoranalysis.bean.xml.exception.BeanXMLException;
 import org.anchoranalysis.bean.xml.mock.MockBeanNested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
@@ -43,22 +43,22 @@ class BeanXmlLoaderTest {
     private LoadFromResources loader = new LoadFromResources();
 
     @Test
-    void testLoadBean() throws BeanXmlException {
+    void testLoadBean() throws BeanXMLException {
         testSimpleAndBean("nestedBean");
     }
 
     @Test
-    void testLoadBeanInclude() throws BeanXmlException {
+    void testLoadBeanInclude() throws BeanXMLException {
         testSimpleAndBean("nestedBeanInclude");
     }
 
     /**
      * Loads XML that replaces a filepath for an include with a different filepath
      *
-     * @throws BeanXmlException
+     * @throws BeanXMLException
      */
     @Test
-    void testLoadBeanReplaceAttribute() throws BeanXmlException {
+    void testLoadBeanReplaceAttribute() throws BeanXMLException {
         MockBeanNested bean = loader.loadBean("replaceBeanAttribute");
         assertEquals("helloChanged", bean.getFieldSimpleNecessary());
     }
@@ -66,20 +66,20 @@ class BeanXmlLoaderTest {
     /**
      * Loads XML that replaces a bean with another bean
      *
-     * @throws BeanXmlException
+     * @throws BeanXMLException
      */
     @Test
-    void testLoadBeanReplaceElement() throws BeanXmlException {
+    void testLoadBeanReplaceElement() throws BeanXMLException {
         testBean("replaceBeanElement", "world2");
     }
 
     /**
      * Loads XML that replaces a bean with another bean
      *
-     * @throws BeanXmlException
+     * @throws BeanXMLException
      */
     @Test
-    void testLoadBeanReplaceInclude() throws BeanXmlException {
+    void testLoadBeanReplaceInclude() throws BeanXMLException {
         testBean("replaceBeanInclude", "worldAlternative");
     }
 
@@ -96,23 +96,23 @@ class BeanXmlLoaderTest {
     }
 
     private void testSimple(String fileIdentifier, String expectedFieldValue)
-            throws BeanXmlException {
+            throws BeanXMLException {
         MockBeanNested bean = loader.loadBean(fileIdentifier);
         assertEquals(expectedFieldValue, bean.getFieldSimpleNecessary());
     }
 
-    private void testBean(String fileIdentifier, String expectedMessage) throws BeanXmlException {
+    private void testBean(String fileIdentifier, String expectedMessage) throws BeanXMLException {
         MockBeanNested bean = loader.loadBean(fileIdentifier);
         assertEquals(expectedMessage, bean.getFieldBeanNecessary().getMessage());
     }
 
-    private void testSimpleAndBean(String fileIdentifier) throws BeanXmlException {
+    private void testSimpleAndBean(String fileIdentifier) throws BeanXMLException {
         MockBeanNested bean = loader.loadBean(fileIdentifier);
         assertEquals("hello", bean.getFieldSimpleNecessary());
         assertEquals("world", bean.getFieldBeanNecessary().getMessage());
     }
 
     private static void assertException(Executable executable) {
-        assertThrows(BeanXmlException.class, executable);
+        assertThrows(BeanXMLException.class, executable);
     }
 }

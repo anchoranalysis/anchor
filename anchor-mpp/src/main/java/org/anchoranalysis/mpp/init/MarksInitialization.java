@@ -30,7 +30,7 @@ import lombok.Getter;
 import lombok.experimental.Accessors;
 import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.bean.initializable.params.BeanInitialization;
-import org.anchoranalysis.bean.initializable.property.PropertyInitializer;
+import org.anchoranalysis.bean.initializable.property.BeanInitializer;
 import org.anchoranalysis.bean.shared.dictionary.DictionaryInitialization;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
@@ -90,7 +90,7 @@ public class MarksInitialization implements BeanInitialization {
         return image.dictionaryInitialization();
     }
 
-    public void populate(PropertyInitializer<?> initializer, Define define, Logger logger)
+    public void populate(BeanInitializer<?> initializer, Define define, Logger logger)
             throws OperationFailedException {
 
         PopulateStoreFromDefine<MarksInitialization> populater =

@@ -31,7 +31,7 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.io.generator.sequence.pattern.OutputPattern;
 import org.anchoranalysis.io.manifest.ManifestDirectoryDescription;
 import org.anchoranalysis.io.manifest.file.FileType;
@@ -62,7 +62,7 @@ class SequenceWriters {
 
     private IndexableSubdirectory directoryManifest;
 
-    public void init(SequenceType<?> sequenceType) throws InitException {
+    public void initialize(SequenceType<?> sequenceType) throws InitializeException {
 
         this.directoryManifest = new IndexableSubdirectory(pattern.getOutputNameStyle());
 
@@ -71,7 +71,7 @@ class SequenceWriters {
                     selectWritersMaybeCreateSubdirectory(
                             createDirectoryDescription(sequenceType), directoryManifest);
         } catch (OutputWriteFailedException e) {
-            throw new InitException(e);
+            throw new InitializeException(e);
         }
     }
 

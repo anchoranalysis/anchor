@@ -28,7 +28,7 @@ package org.anchoranalysis.image.feature.calculator;
 
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.log.error.ErrorReporter;
 import org.anchoranalysis.feature.bean.list.FeatureList;
@@ -54,7 +54,7 @@ public class SingleTableCalculator implements FeatureTableCalculator<FeatureInpu
     @Override
     public void start(
             ImageInitialization initialization, Optional<EnergyStack> energyStack, Logger logger)
-            throws InitException {
+            throws InitializeException {
 
         calculator =
                 FeatureSession.with(

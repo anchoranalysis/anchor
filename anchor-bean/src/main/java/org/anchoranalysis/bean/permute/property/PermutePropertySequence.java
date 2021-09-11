@@ -32,19 +32,28 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 
 /**
- * Base class for permute-properties involving a sequence of numbers
+ * Base class for assigning a sequence of numbers to a particular property of a bean.
  *
  * @author Owen Feehan
- * @param <T>
+ * @param <T> element-type of the bean whose property or properties will be changed during
+ *     permutation.
  */
-public abstract class PermutePropertySequence<T> extends PermutePropertyWithPath<T> {
+public abstract class PermutePropertySequence<T> extends PermuteProperty<T> {
 
     // START BEAN PROPERTIES
-    /** Where the sequence starts */
+    /**
+     * A sequence of integers, with each element assigned assigned directly during the permutation,
+     * or after further manipulation.
+     */
     @BeanField @Getter @Setter private SequenceInteger sequence;
     // END BEAN PROPERTIES
 
-    protected Iterator<Integer> range() {
+    /**
+     * Iterates each element in {@code sequence}.
+     *
+     * @return the iterator for the elements.
+     */
+    protected Iterator<Integer> sequenceIterator() {
         return sequence.iterator();
     }
 }

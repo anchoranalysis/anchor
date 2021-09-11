@@ -34,7 +34,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.Provider;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.RasterArranger;
 import org.anchoranalysis.image.bean.spatial.arrange.ArrangeStackBean;
 import org.anchoranalysis.image.core.channel.factory.ChannelFactoryByte;
@@ -97,8 +97,8 @@ public class ArrangeRaster extends StackProvider {
 
         RasterArranger rasterArranger = new RasterArranger();
         try {
-            rasterArranger.init(arrange, rasterList);
-        } catch (InitException e) {
+            rasterArranger.initialize(arrange, rasterList);
+        } catch (InitializeException e) {
             throw new ProvisionFailedException(e);
         }
 

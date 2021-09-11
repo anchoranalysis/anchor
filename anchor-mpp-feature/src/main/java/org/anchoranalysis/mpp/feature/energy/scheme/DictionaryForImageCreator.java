@@ -30,7 +30,7 @@ import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.core.exception.CreateException;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.value.Dictionary;
@@ -97,7 +97,7 @@ public class DictionaryForImageCreator {
 
             return session.calculate(params);
 
-        } catch (FeatureCalculationException | InitException e) {
+        } catch (FeatureCalculationException | InitializeException e) {
             throw new OperationFailedException(e);
         }
     }

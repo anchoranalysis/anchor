@@ -31,7 +31,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.shared.SharedFeatureMulti;
@@ -53,7 +53,7 @@ public class UpdatableMarksList implements UpdatableMarks, List<UpdatableMarks> 
     @Override
     public void initUpdatableMarks(
             MemoForIndex marks, EnergyStack stack, Logger logger, SharedFeatureMulti sharedFeatures)
-            throws InitException {
+            throws InitializeException {
         for (UpdatableMarks item : delegate) {
             item.initUpdatableMarks(marks, stack, logger, sharedFeatures);
         }

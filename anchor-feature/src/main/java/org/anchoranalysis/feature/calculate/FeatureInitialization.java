@@ -30,7 +30,7 @@ import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.Value;
 import org.anchoranalysis.bean.initializable.params.BeanInitialization;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.identifier.provider.store.SharedObjects;
 import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.feature.energy.EnergyStack;
@@ -80,10 +80,10 @@ public class FeatureInitialization implements BeanInitialization {
         return new FeatureInitialization(dictionary, energyStack, sharedObjects);
     }
 
-    public SharedObjects sharedObjectsRequired() throws InitException {
+    public SharedObjects sharedObjectsRequired() throws InitializeException {
         return sharedObjects.orElseThrow(
                 () ->
-                        new InitException(
+                        new InitializeException(
                                 "Shared-objects are required for this bean, but are not available"));
     }
 }

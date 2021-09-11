@@ -31,12 +31,11 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.experimental.Accessors;
 import org.anchoranalysis.bean.AnchorBean;
 
 /**
- * A bean defining a list of {@link String}s with defined order.
+ * A bean defining a list of {@link String}s.
  *
  * <p>An example:
  *
@@ -54,10 +53,16 @@ import org.anchoranalysis.bean.AnchorBean;
 @EqualsAndHashCode(callSuper = false)
 public class StringList extends AnchorBean<StringList> implements PrimitiveBeanCollection<String> {
 
-    @Getter private List<String> list = new ArrayList<>();
+    /** The internal list storing the elements. */
+    private List<String> list = new ArrayList<>();
 
-    public StringList(String... strings) {
-        Arrays.stream(strings).forEach(list::add);
+    /**
+     * Constructs with one or more values added to the list.
+     *
+     * @param values the values
+     */
+    public StringList(String... values) {
+        Arrays.stream(values).forEach(list::add);
     }
 
     @Override

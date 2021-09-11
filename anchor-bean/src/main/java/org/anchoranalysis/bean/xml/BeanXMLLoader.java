@@ -32,8 +32,8 @@ import java.util.logging.Logger;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.exception.BeanStrangeException;
-import org.anchoranalysis.bean.xml.exception.BeanXmlException;
-import org.anchoranalysis.bean.xml.exception.HelperFriendlyExceptions;
+import org.anchoranalysis.bean.xml.exception.BeanXMLException;
+import org.anchoranalysis.bean.xml.exception.FriendlyExceptionCreator;
 import org.anchoranalysis.bean.xml.exception.LocalisedBeanException;
 import org.anchoranalysis.core.exception.combinable.AnchorCombinableException;
 import org.apache.commons.configuration.ConfigurationRuntimeException;
@@ -63,14 +63,14 @@ public class BeanXMLLoader {
      * @param path file-path to the file containing the XML
      * @param <T> bean-type
      * @return an initialized bean
-     * @throws BeanXmlException if something goes wrong
+     * @throws BeanXMLException if something goes wrong
      */
-    public static <T> T loadBean(Path path) throws BeanXmlException {
+    public static <T> T loadBean(Path path) throws BeanXMLException {
         return loadBean(path, "bean");
     }
 
     /**
-     * Creates a bean by loading an XML description from the filesystem
+     * Creates a bean by loading an XML description from the filesystem.
      *
      * <p>Exceptions are summarized and user-friendly
      *
@@ -78,9 +78,9 @@ public class BeanXMLLoader {
      * @param xmlPath xml-path to where the bean is located within the XML
      * @param <T> bean-type
      * @return an initialized bean
-     * @throws BeanXmlException if something goes wrong
+     * @throws BeanXMLException if something goes wrong
      */
-    public static <T> T loadBean(Path path, String xmlPath) throws BeanXmlException {
+    public static <T> T loadBean(Path path, String xmlPath) throws BeanXMLException {
         try {
             return loadBeanLocalized(path, xmlPath);
         } catch (LocalisedBeanException e) {
@@ -89,7 +89,7 @@ public class BeanXMLLoader {
     }
 
     /**
-     * Creates a bean by loading an XML description from the filesystem
+     * Creates a bean by loading an XML description from the filesystem.
      *
      * <p>Does not create summarized and user-friendly exception, but throws lots of
      * LocalisedBeanException exceptions.
@@ -101,17 +101,17 @@ public class BeanXMLLoader {
      * @param xmlPath xml-path to where the bean is located within the XML
      * @param <T> bean-type
      * @return an initialized bean
-     * @throws BeanXmlException problem with reading the beanXML from the filesystem
+     * @throws BeanXMLException problem with reading the beanXML from the filesystem
      * @throws LocalisedBeanException problem occurs somewhere processing a configuration
      */
     public static <T> T loadBeanLocalized(Path path, String xmlPath)
-            throws BeanXmlException, LocalisedBeanException {
+            throws BeanXMLException, LocalisedBeanException {
         checkBeansRegistered();
 
         XMLConfiguration includeXML;
         try {
             includeXML = HelperReadXML.readBeanXMLFromFilesystem(path);
-        } catch (BeanXmlException e) {
+        } catch (BeanXMLException e) {
             throw new LocalisedBeanException(path.toString(), e);
         }
 
@@ -123,7 +123,7 @@ public class BeanXMLLoader {
     }
 
     /**
-     * Creates a bean by loading an XML description from the filesystem
+     * Creates a bean by loading an XML description from the filesystem.
      *
      * <p>Additionally associated the XmlConfiguration with the created Bean
      *
@@ -131,10 +131,10 @@ public class BeanXMLLoader {
      * @param xmlPath xml-path to where the bean is located within the XML
      * @param <T> bean-type
      * @return an initialized bean
-     * @throws BeanXmlException if something goes wrong
+     * @throws BeanXMLException if something goes wrong
      */
-    public static <T extends AssociateXmlUponLoad> T loadBeanAssociatedXml(
-            Path path, String xmlPath) throws BeanXmlException {
+    public static <T extends AssociateXMLUponLoad> T loadBeanAssociatedXml(
+            Path path, String xmlPath) throws BeanXMLException {
         try {
             return loadBeanAssociatedXmlLocalized(path, xmlPath);
         } catch (LocalisedBeanException e) {
@@ -158,14 +158,14 @@ public class BeanXMLLoader {
      * @param xmlPath xml-path to where the bean is located within the XML
      * @param <T> bean-type
      */
-    private static <T extends AssociateXmlUponLoad> T loadBeanAssociatedXmlLocalized(
-            Path path, String xmlPath) throws BeanXmlException, LocalisedBeanException {
+    private static <T extends AssociateXMLUponLoad> T loadBeanAssociatedXmlLocalized(
+            Path path, String xmlPath) throws BeanXMLException, LocalisedBeanException {
         checkBeansRegistered();
         try {
             XMLConfiguration configXML = HelperReadXML.readBeanXMLFromFilesystem(path);
 
             T loadedBean = createFromXMLConfigurationLocalised(configXML, xmlPath, path);
-            loadedBean.associateXml(configXML);
+            loadedBean.associateXML(configXML);
             return loadedBean;
 
         } catch (IllegalArgumentException e) {
@@ -173,17 +173,17 @@ public class BeanXMLLoader {
         }
     }
 
-    private static BeanXmlException convertIllegalArgumentException(
+    private static BeanXMLException convertIllegalArgumentException(
             IllegalArgumentException e, String xmlPath) {
         // We catch a particular message when the xpath fails
         if (e.getMessage().contains("Passed in key must select exactly one node")) {
             // We give a shorted error message, and suppress the original exception
-            return new BeanXmlException(
+            return new BeanXMLException(
                     String.format(
                             "An expected XML node could not be found: <%s/> or <%s></%s>",
                             xmlPath, xmlPath, xmlPath));
         } else {
-            return new BeanXmlException(e);
+            return new BeanXMLException(e);
         }
     }
 
@@ -212,7 +212,7 @@ public class BeanXMLLoader {
         } catch (ConfigurationRuntimeException e) {
 
             Throwable cause =
-                    HelperFriendlyExceptions.maybeCreateUserFriendlyException(e.getCause());
+                    FriendlyExceptionCreator.maybeCreateUserFriendlyException(e.getCause());
 
             // If we can summarise the bean, then we do
             if (cause instanceof AnchorCombinableException) {

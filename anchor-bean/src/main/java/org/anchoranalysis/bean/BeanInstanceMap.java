@@ -30,10 +30,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Optional;
 import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 
 /**
- * Maps a {@link AnchorBean} family-type to some beans belong to the family.
+ * Maps a {@link AnchorBean} family-type to a bean that belongs to the family.
+ *
+ * <p>A family-type is always expresses as a class object for the most-abstract (i.e. highest level
+ * parent) of all classes in the family.
  *
  * @author Owen Feehan
  */
@@ -41,17 +45,42 @@ public class BeanInstanceMap {
 
     private Map<Class<?>, Object> map = new HashMap<>();
 
-    public boolean containsKey(Class<?> arg0) {
-        return map.containsKey(arg0);
+    /**
+     * Is a particular family-type contained in the map?
+     *
+     * @param familyType the class that defines the family
+     * @return true if the family type already exists in the map.
+     */
+    public boolean containsFamily(Class<?> familyType) {
+        return map.containsKey(familyType);
     }
 
+    /**
+     * Gets an instance from the map for a particular family-type.
+     *
+     * @param <T> the family-type.
+     * @param familyType the class that defines the family.
+     * @return an instance from the map if exists.
+     */
     @SuppressWarnings("unchecked")
-    public <T> T get(Class<? extends T> arg0) {
-        return (T) map.get(arg0);
+    public <T> Optional<T> getInstanceFor(Class<? extends T> familyType) {
+        T instance = (T) map.get(familyType);
+        if (instance != null) {
+            return Optional.of(instance);
+        } else {
+            return Optional.empty();
+        }
     }
 
-    public <T> void put(Class<? extends T> arg0, T arg1) {
-        map.put(arg0, arg1);
+    /**
+     * Assigns an instance to a particular family-type.
+     *
+     * @param <T> the family-type
+     * @param familyType the class that defines the family.
+     * @param instance an instance to add.
+     */
+    public <T> void putInstanceFor(Class<? extends T> familyType, T instance) {
+        map.put(familyType, instance);
     }
 
     /**

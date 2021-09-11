@@ -28,9 +28,9 @@ package org.anchoranalysis.bean;
 
 import org.anchoranalysis.bean.initializable.InitializableBean;
 import org.anchoranalysis.bean.initializable.params.NullInitialization;
-import org.anchoranalysis.bean.initializable.property.PropertyInitializer;
-import org.anchoranalysis.bean.initializable.property.SimplePropertyDefiner;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.bean.initializable.property.AssignerMatchClass;
+import org.anchoranalysis.bean.initializable.property.BeanInitializer;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.log.Logger;
 
 /**
@@ -41,23 +41,34 @@ import org.anchoranalysis.core.log.Logger;
  */
 public abstract class NullParamsBean<T> extends InitializableBean<T, NullInitialization> {
 
+    /** Default constructor. */
     protected NullParamsBean() {
         super(
-                new PropertyInitializer<>(NullInitialization.class),
-                new SimplePropertyDefiner<NullInitialization>(NullInitialization.class));
+                new BeanInitializer<>(NullInitialization.class),
+                new AssignerMatchClass<NullInitialization>(NullInitialization.class));
     }
 
     @Override
-    public final void onInit(NullInitialization so) throws InitException {
-        onInit();
+    public final void onInitialization(NullInitialization so) throws InitializeException {
+        onInitialization();
     }
 
-    /** As there's no parameters we expose a different method */
-    public void onInit() throws InitException {
+    /**
+     * As there's no parameters we expose a different method.
+     *
+     * @throws InitializeException if initialization does not successfully complete.
+     */
+    public void onInitialization() throws InitializeException {
         // NOTHING TO DO. This method exists so it can be overrided as needed in sub-classes.
     }
 
-    public void initRecursive(Logger logger) throws InitException {
-        super.initRecursive(NullInitialization.instance(), logger);
+    /**
+     * Initialize this bean and any suitable child beans.
+     *
+     * @param logger the logger
+     * @throws InitializeException if initialization cannot complete successfully.
+     */
+    public void initializeRecursive(Logger logger) throws InitializeException {
+        super.initializeRecursive(NullInitialization.instance(), logger);
     }
 }

@@ -31,7 +31,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.NullParamsBean;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.mpp.mark.Mark;
 
 @NoArgsConstructor
@@ -59,8 +59,8 @@ public class MarkWithIdentifierFactory extends NullParamsBean<MarkWithIdentifier
     }
 
     @Override
-    public void onInit() throws InitException {
-        super.onInit();
+    public void onInitialization() throws InitializeException {
+        super.onInitialization();
         idCounter = new IdCounter(1);
     }
 

@@ -31,28 +31,26 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.primitive.StringSet;
-import org.anchoranalysis.core.exception.OperationFailedException;
 
-public class PermutePropertyStringSet extends PermutePropertyWithPath<String> {
+/**
+ * Assigns each element from a set of strings to a particular property of a bean.
+ *
+ * @author Owen Feehan
+ */
+public class PermutePropertyStringSet extends PermuteProperty<String> {
 
     // START BEAN PROPERTIES
-    /** The values of the string-set */
+    /** The respect string values to assign during the permutation. */
     @BeanField @Getter @Setter private StringSet values;
     // END BEAN PROPERTIES
 
     @Override
-    public Iterator<String> propertyValues() throws OperationFailedException {
-
-        if (values.isEmpty()) {
-            throw new OperationFailedException(
-                    "No values have been defined for permutation. At least one must exist!");
-        }
-
+    public Iterator<String> propertyValues() {
         return values.iterator();
     }
 
     @Override
-    public String nameForPropValue(String value) {
+    public String describePropertyValue(String value) {
         return value;
     }
 }

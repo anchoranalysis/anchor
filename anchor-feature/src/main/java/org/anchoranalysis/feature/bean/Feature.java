@@ -33,8 +33,8 @@ import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 import org.anchoranalysis.bean.initializable.InitializableBean;
-import org.anchoranalysis.bean.initializable.property.PropertyInitializer;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.bean.initializable.property.BeanInitializer;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListFactory;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
@@ -62,11 +62,11 @@ public abstract class Feature<T extends FeatureInput>
     // END BEAN PROPERTIES
 
     protected Feature() {
-        super(new PropertyInitializer<>(FeatureInitialization.class), new FeatureDefiner<>());
+        super(new BeanInitializer<>(FeatureInitialization.class), new FeatureAssigner<>());
     }
 
-    protected Feature(PropertyInitializer<FeatureInitialization> propertyInitializer) {
-        super(propertyInitializer, new FeatureDefiner<>());
+    protected Feature(BeanInitializer<FeatureInitialization> propertyInitializer) {
+        super(propertyInitializer, new FeatureAssigner<>());
     }
 
     /**
@@ -74,15 +74,15 @@ public abstract class Feature<T extends FeatureInput>
      * in the sub-classes.
      */
     @Override
-    public void onInit(FeatureInitialization initialization) throws InitException {
-        super.onInit(initialization);
+    public void onInitialization(FeatureInitialization initialization) throws InitializeException {
+        super.onInitialization(initialization);
         beforeCalc(initialization);
     }
 
     /**
-     * The class corresponding to feature input-type (i.e. the {@code T} template parameter).
+     * The class corresponding to feature input-type i.e. the {@code T} template parameter.
      *
-     * @return
+     * @return the class.
      */
     public abstract Class<? extends FeatureInput> inputType();
 
@@ -176,7 +176,7 @@ public abstract class Feature<T extends FeatureInput>
      *
      * @param initialization initialization parameters
      */
-    protected void beforeCalc(FeatureInitialization initialization) throws InitException {
+    protected void beforeCalc(FeatureInitialization initialization) throws InitializeException {
         // Does nothing. To be overridden in children if needed.
     }
 

@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.feature.calculate;
 
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.input.FeatureInput;
@@ -40,8 +40,8 @@ import org.anchoranalysis.feature.input.FeatureInput;
  */
 public interface InitializableFeature<T extends FeatureInput> {
 
-    void init(FeatureInitialization params, Feature<T> parentFeature, Logger logger)
-            throws InitException;
+    void initialize(FeatureInitialization params, Feature<T> parentFeature, Logger logger)
+            throws InitializeException;
 
     /**
      * A friendly name that can be displayed to user describing the Feature. Should always

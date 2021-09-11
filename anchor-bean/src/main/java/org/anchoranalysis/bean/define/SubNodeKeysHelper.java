@@ -37,32 +37,38 @@ import org.apache.commons.configuration.SubnodeConfiguration;
 class SubNodeKeysHelper {
 
     /**
-     * A list of sub-nodes of the configuration
+     * A list of sub-nodes of the configuration.
      *
-     * <p>We rely on an API call that returns multiple entries per bean including for each
-     * config-class and config-factory
+     * <p>We rely on an API call that returns multiple entries per bean including for each {@code
+     * config-class} and {@code config-factory}.
      *
-     * <p>It only finds direct sub-nodes (i.e. it is not recursive)
+     * <p>It only finds direct sub-nodes (i.e. it is not recursive).
      *
-     * <p>e.g. for an example with two children (namedChannelProviderList and
-     * namedStackProviderList) the following is returned: Key:
-     * namedChannelProviderList[@config-class] Key: namedChannelProviderList[@config-factory] Key:
-     * namedChannelProviderList[@filePath] Key: namedStackProviderList[@config-class] Key:
-     * namedStackProviderList[@config-factory] Key: namedStackProviderList[@filePath]
+     * <p>e.g. for an example with two children ({@code namedChannelProviderList} and {@code
+     * namedStackProviderList}) the following is returned:
+     *
+     * <pre>
+     * namedChannelProviderList[@config-class]
+     * namedChannelProviderList[@config-factory]
+     * namedChannelProviderList[@filePath]
+     * namedStackProviderList[@config-class]
+     * namedStackProviderList[@config-factory]
+     * namedStackProviderList[@filePath]
+     * </pre>
      *
      * <p>We remove the [] component, and combine into a set for uniqueness to retrieve the desired
      * two items.
      *
-     * @param subConfig
-     * @return
+     * @param config the subnode configuration
+     * @return a newly created set of the extracted keys.
      */
-    public static Set<String> extractKeys(SubnodeConfiguration subConfig) {
+    public static Set<String> extractKeys(SubnodeConfiguration config) {
 
         // TreeSet is good for outputting a sorted list (just to be neat!)
         TreeSet<String> out = new TreeSet<>();
 
         // We iterate through all beans defined, and assume each is a list of NamedBeans
-        Iterator<String> itr = subConfig.getKeys();
+        Iterator<String> itr = config.getKeys();
         while (itr.hasNext()) {
             String keyShort = stripLongName(itr.next());
 

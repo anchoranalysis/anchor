@@ -28,7 +28,7 @@ package org.anchoranalysis.feature.session;
 
 import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 import org.anchoranalysis.core.exception.CreateException;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.log.error.ErrorReporter;
@@ -113,14 +113,14 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
      * @param logger Logger
      * @param sharedFeatures A list of features that are shared between the features we are
      *     calculating (and thus also init-ed)
-     * @throws InitException
+     * @throws InitializeException
      */
     public void start(
             FeatureInitialization initialization, SharedFeatureMulti sharedFeatures, Logger logger)
-            throws InitException {
+            throws InitializeException {
 
         if (isStarted) {
-            throw new InitException("Session has already been started.");
+            throw new InitializeException("Session has already been started.");
         }
 
         checkNoIntersectionWithSharedFeatures(sharedFeatures);
@@ -247,10 +247,10 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
      * create complications with initialisation of caches (recursive initializations)
      *
      * @param sharedFeatures
-     * @throws InitException
+     * @throws InitializeException
      */
     private void checkNoIntersectionWithSharedFeatures(SharedFeatureMulti sharedFeatures)
-            throws InitException {
+            throws InitializeException {
         assert (listFeatures != null);
         try {
             for (Feature<T> f : listFeatures) {
@@ -260,7 +260,7 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
                 for (Feature<FeatureInput> dep : allDependents) {
 
                     if (sharedFeatures.contains(dep)) {
-                        throw new InitException(
+                        throw new InitializeException(
                                 String.format(
                                         "Feature '%s' is found in both the session and in the SharedFeatures",
                                         dep.getFriendlyName()));
@@ -269,16 +269,16 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
             }
 
         } catch (BeanMisconfiguredException e) {
-            throw new InitException(e);
+            throw new InitializeException(e);
         }
     }
 
     private void setupCacheAndInit(
             FeatureInitialization initialization, SharedFeatureMulti sharedFeatures, Logger logger)
-            throws InitException {
+            throws InitializeException {
         assert (initialization != null);
         FeatureInitialization initializationDup = initialization.duplicate();
-        listFeatures.initRecursive(initializationDup, logger);
+        listFeatures.initializeRecursive(initializationDup, logger);
 
         replaceSession =
                 replacePolicyFactory.bind(listFeatures, initializationDup, sharedFeatures, logger);

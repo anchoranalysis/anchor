@@ -33,7 +33,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.identifier.provider.store.SharedObjects;
 import org.anchoranalysis.feature.bean.FeatureRelatedBean;
@@ -90,7 +90,7 @@ public class FeatureListEvaluator<T extends FeatureInput>
 
             return new NamedFeatureCalculatorMulti<>(calculator, featuresCreated.createNames());
 
-        } catch (ProvisionFailedException | InitException e) {
+        } catch (ProvisionFailedException | InitializeException e) {
             throw new OperationFailedException(e);
         }
     }

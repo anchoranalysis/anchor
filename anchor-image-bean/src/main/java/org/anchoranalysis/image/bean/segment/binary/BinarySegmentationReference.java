@@ -30,7 +30,7 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
@@ -49,12 +49,12 @@ public class BinarySegmentationReference extends BinarySegmentation {
     private BinarySegmentation proxy;
 
     @Override
-    public void onInit(ImageInitialization initialization) throws InitException {
-        super.onInit(initialization);
+    public void onInitialization(ImageInitialization initialization) throws InitializeException {
+        super.onInitialization(initialization);
         try {
             proxy = getInitialization().binarySegmentations().getException(id);
         } catch (NamedProviderGetException e) {
-            throw new InitException(e.summarize());
+            throw new InitializeException(e.summarize());
         }
     }
 

@@ -28,7 +28,7 @@ package org.anchoranalysis.mpp.feature.energy.saved;
 
 import java.util.Set;
 import lombok.Getter;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.graph.TypedEdge;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.energy.EnergyStack;
@@ -75,7 +75,7 @@ public class EnergySavedPairs implements UpdatableMarks {
             EnergyStack stack,
             Logger logger,
             SharedFeatureMulti sharedFeatures)
-            throws InitException {
+            throws InitializeException {
 
         this.pairCollection.initUpdatableMarks(pxlMarkMemoList, stack, logger, sharedFeatures);
         calculateTotalFresh();

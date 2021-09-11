@@ -29,7 +29,7 @@ package org.anchoranalysis.image.io.bean.stack.combine;
 import java.util.List;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.RasterArranger;
 import org.anchoranalysis.image.bean.spatial.arrange.ArrangeStackBean;
@@ -56,8 +56,8 @@ class CombineGenerator<T> extends RasterGeneratorSelectFormat<T> {
         RasterArranger rasterArranger = new RasterArranger();
 
         try {
-            rasterArranger.init(arrangeRaster, generated);
-        } catch (InitException e) {
+            rasterArranger.initialize(arrangeRaster, generated);
+        } catch (InitializeException e) {
             throw new OutputWriteFailedException(e);
         }
 

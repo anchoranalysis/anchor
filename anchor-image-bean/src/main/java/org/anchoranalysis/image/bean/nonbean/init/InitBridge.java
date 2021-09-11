@@ -28,9 +28,9 @@ package org.anchoranalysis.image.bean.nonbean.init;
 
 import org.anchoranalysis.bean.initializable.InitializableBean;
 import org.anchoranalysis.bean.initializable.params.BeanInitialization;
-import org.anchoranalysis.bean.initializable.property.PropertyInitializer;
+import org.anchoranalysis.bean.initializable.property.BeanInitializer;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.checked.CheckedFunction;
 import org.anchoranalysis.core.log.Logger;
@@ -46,7 +46,7 @@ import org.anchoranalysis.core.log.Logger;
 class InitBridge<S extends InitializableBean<?, V>, T, V extends BeanInitialization>
         implements CheckedFunction<S, T, OperationFailedException> {
 
-    private PropertyInitializer<?> pi;
+    private BeanInitializer<?> pi;
     private Logger logger;
     private CheckedFunction<S, T, ProvisionFailedException> beanBridge;
 
@@ -58,7 +58,7 @@ class InitBridge<S extends InitializableBean<?, V>, T, V extends BeanInitializat
      * @param beanBridge maps the bean to another type
      */
     public InitBridge(
-            PropertyInitializer<?> pi,
+            BeanInitializer<?> pi,
             Logger logger,
             CheckedFunction<S, T, ProvisionFailedException> beanBridge) {
         super();
@@ -76,7 +76,7 @@ class InitBridge<S extends InitializableBean<?, V>, T, V extends BeanInitializat
 
             // Bridge the source to the destination
             return beanBridge.apply(sourceObject);
-        } catch (InitException | ProvisionFailedException e) {
+        } catch (InitializeException | ProvisionFailedException e) {
             throw new OperationFailedException(e);
         }
     }

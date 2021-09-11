@@ -29,7 +29,7 @@ package org.anchoranalysis.bean.exception;
 import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
 
 /**
- * An exception occurs when the duplication of a bean fails
+ * An exception occurs when the duplication of a bean fails.
  *
  * <p>We keep this unchecked, as if a bean is properly configured it should not be thrown.
  *
@@ -46,14 +46,30 @@ public class BeanDuplicateException extends AnchorFriendlyRuntimeException {
     /** */
     private static final long serialVersionUID = 1842384434578361294L;
 
-    public BeanDuplicateException(String string) {
-        super(string);
+    /**
+     * Creates with a message only.
+     *
+     * @param message the message.
+     */
+    public BeanDuplicateException(String message) {
+        super(message);
     }
 
-    public BeanDuplicateException(Exception exception) {
-        super(exception);
+    /**
+     * Creates with a cause only.
+     *
+     * @param cause the cause.
+     */
+    public BeanDuplicateException(Throwable cause) {
+        super(cause);
     }
 
+    /**
+     * Creates with a message and cause.
+     *
+     * @param message the message.
+     * @param cause the cause.
+     */
     public BeanDuplicateException(String message, Throwable cause) {
         super(message, cause);
     }

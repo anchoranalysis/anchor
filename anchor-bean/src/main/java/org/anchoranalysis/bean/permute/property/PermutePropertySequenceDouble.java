@@ -32,29 +32,37 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 
 /**
- * An arithmetic sequence of doubles, obtained by dividing an integer sequence by a divider
+ * Assigns an arithmetic sequence of doubles, derived by diving an integer sequence by a divider.
+ *
+ * <p>Each element to be assigned corresponds to the respective element in the integer-sequence, but
+ * divided by {@code divisor}.
  *
  * @author Owen Feehan
  */
 public class PermutePropertySequenceDouble extends PermutePropertySequence<Double> {
 
     // START BEAN PROPERTIES
-    /** Divide by */
+    /** What to divide the integer-sequence by. */
     @BeanField @Getter @Setter private double divisor = 1.0;
+    // END BEAN PROPERTIES
 
     @Override
     public Iterator<Double> propertyValues() {
-        return new DoubleRange();
+        return new DoubleRange(sequenceIterator());
     }
-    // END BEAN PROPERTIES
 
-    // http://stackoverflow.com/questions/371026/shortest-way-to-get-an-iterator-over-a-range-of-integers-in-java
+    @Override
+    public String describePropertyValue(Double value) {
+        return value.toString();
+    }
 
-    public class DoubleRange implements Iterator<Double> {
+    /** The range of {@link Double} values that can be assigned. */
+    class DoubleRange implements Iterator<Double> {
+
         private Iterator<Integer> itr;
 
-        public DoubleRange() {
-            itr = range();
+        public DoubleRange(Iterator<Integer> integerSequence) {
+            itr = integerSequence;
         }
 
         @Override
@@ -71,10 +79,5 @@ public class PermutePropertySequenceDouble extends PermutePropertySequence<Doubl
         public void remove() {
             throw new UnsupportedOperationException();
         }
-    }
-
-    @Override
-    public String nameForPropValue(Double value) {
-        return value.toString();
     }
 }

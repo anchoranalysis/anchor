@@ -31,7 +31,7 @@ import java.nio.file.Path;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.bean.NamedBean;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.format.NonImageFileFormat;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.log.Logger;
@@ -128,7 +128,7 @@ class WriteXMLForGroup {
         try {
             calculator = FeatureSession.with(featuresAggregate.listFeatures(), logger);
 
-        } catch (InitException e1) {
+        } catch (InitializeException e1) {
             logger.errorReporter().recordError(ResultsWriter.class, e1);
             throw new OutputWriteFailedException("Cannot start feature-session", e1);
         }

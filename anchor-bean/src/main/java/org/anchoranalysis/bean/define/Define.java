@@ -35,7 +35,7 @@ import java.util.Set;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.GroupingRoot;
-import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.core.functional.FunctionalList;
 
 /**
@@ -48,7 +48,7 @@ import org.anchoranalysis.core.functional.FunctionalList;
 public class Define extends AnchorBean<Define> {
 
     /**
-     * A map from {#link GroupingRoot} to a list of {@link NamedBean}s that must subclass from this
+     * A map from {@link GroupingRoot} to a list of {@link NamedBean}s that must subclass from this
      * root
      */
     private Map<Class<?>, List<NamedBean<?>>> map = new HashMap<>();
@@ -60,10 +60,10 @@ public class Define extends AnchorBean<Define> {
      * <p>Any added-bean must of a type that contains the {@link GroupingRoot} annotation in its
      * class hierarchy.
      *
-     * @param bean a named-bean to add
-     * @throws OperationFailedException
+     * @param bean a named-bean to add.
+     * @throws DefineAddException if a {#link GroupingRoot} cannot be found in the class-hierarchy.
      */
-    public void add(NamedBean<?> bean) throws OperationFailedException {
+    public void add(NamedBean<?> bean) throws DefineAddException {
 
         Class<?> itemType = bean.getItem().getClass();
 
@@ -74,28 +74,60 @@ public class Define extends AnchorBean<Define> {
     }
 
     /**
-     * Adds all the named-beans (shallow copy) from source to th ecurrent map
+     * Adds all the named-beans from source to the current map.
      *
-     * @param source where to copy from
-     * @throws OperationFailedException
+     * <p>This is a shallow copy.
+     *
+     * @param source where to copy from.
      */
-    public void addAll(Define source) throws OperationFailedException {
+    public void addAll(Define source) {
         for (Class<?> key : source.keySet()) {
-            addList(source.getList(key));
+            try {
+                List<NamedBean<AnchorBean<?>>> list = source.listFor(key);
+                addAll(list);
+            } catch (DefineAddException e) {
+                throw new AnchorImpossibleSituationException();
+            }
         }
     }
 
-    public <T extends AnchorBean<?>> List<NamedBean<T>> getList(Class<?> listType) {
+    /**
+     * Adds all the named-beans from source to the current map.
+     *
+     * <p>This is a shallow copy.
+     *
+     * @param list where to copy from.
+     * @param <T> type of bean to add.
+     * @throws DefineAddException if a {#link GroupingRoot} cannot be found in the class-hierarchy.
+     */
+    public <T extends AnchorBean<?>> void addAll(List<NamedBean<T>> list)
+            throws DefineAddException {
+        for (NamedBean<?> bean : list) {
+            add(bean);
+        }
+    }
 
-        List<NamedBean<?>> listIn = map.get(listType);
+    /**
+     * Retrieves the list of elements associated with a grouping-root.
+     *
+     * @param <T> type of elements in the list to retrieve. This should correspond to {@code
+     *     groupingRoot} or a subclass.
+     * @param groupingRoot a class corresponding to a grouping-root (family-type) that may exist in
+     *     {@link Define}.
+     * @return a newly created list with all associated elements, or an empty-list if no elements
+     *     are associated.
+     */
+    public <T extends AnchorBean<?>> List<NamedBean<T>> listFor(Class<?> groupingRoot) {
 
-        if (listIn == null) {
+        List<NamedBean<?>> list = map.get(groupingRoot);
+
+        if (list == null) {
             // Nothing there, so we exit early
             return new ArrayList<>();
         }
 
         // We always create a new list, as a workaround for our inability to cast
-        return FunctionalList.mapToList(listIn, NamedBean.class::cast);
+        return FunctionalList.mapToList(list, NamedBean.class::cast);
     }
 
     @Override
@@ -107,12 +139,6 @@ public class Define extends AnchorBean<Define> {
             out.map.put(entry.getKey(), duplicateList(entry.getValue()));
         }
         return out;
-    }
-
-    private void addList(List<NamedBean<AnchorBean<?>>> beans) throws OperationFailedException {
-        for (NamedBean<?> bean : beans) {
-            add(bean);
-        }
     }
 
     private Set<Class<?>> keySet() {
@@ -132,7 +158,7 @@ public class Define extends AnchorBean<Define> {
         return FunctionalList.mapToList(in, NamedBean::duplicateBean);
     }
 
-    private static Class<?> findGroupingRoot(Class<?> leaf) throws OperationFailedException {
+    private static Class<?> findGroupingRoot(Class<?> leaf) throws DefineAddException {
 
         Class<?> consider = leaf;
         do {
@@ -143,7 +169,7 @@ public class Define extends AnchorBean<Define> {
             consider = consider.getSuperclass();
         } while (consider != null);
 
-        throw new OperationFailedException(
+        throw new DefineAddException(
                 String.format(
                         "Bean-class %s is missing a groupingRoot. This must exist in the class-hierarchy for any item in a NamedDefinitions",
                         leaf));

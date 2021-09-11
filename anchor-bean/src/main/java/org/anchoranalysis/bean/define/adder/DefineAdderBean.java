@@ -27,5 +27,11 @@
 package org.anchoranalysis.bean.define.adder;
 
 import org.anchoranalysis.bean.AnchorBean;
+import org.anchoranalysis.bean.define.Define;
 
+/**
+ * Base class for {@link AnchorBean}s that can add items to a {@link Define}.
+ *
+ * @author Owen Feehan
+ */
 public abstract class DefineAdderBean extends AnchorBean<DefineAdder> implements DefineAdder {}

@@ -32,9 +32,9 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.define.Define;
-import org.anchoranalysis.bean.xml.exception.BeanXmlException;
+import org.anchoranalysis.bean.define.DefineAddException;
 
-/** Concatenates a list of adders */
+/** Concatenates a list of adders. */
 public class Concatenate extends DefineAdderBean {
 
     // START BEAN PROPERTIES
@@ -42,10 +42,10 @@ public class Concatenate extends DefineAdderBean {
     // END BEAN PROPERTIES
 
     @Override
-    public void addTo(Define define) throws BeanXmlException {
+    public void addTo(Define define) throws DefineAddException {
 
-        for (DefineAdderBean da : list) {
-            da.addTo(define);
+        for (DefineAdderBean adder : list) {
+            adder.addTo(define);
         }
     }
 }

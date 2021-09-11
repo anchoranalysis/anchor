@@ -30,7 +30,7 @@ import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.define.Define;
-import org.anchoranalysis.bean.initializable.property.PropertyInitializer;
+import org.anchoranalysis.bean.initializable.property.BeanInitializer;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.identifier.provider.store.SharedObjects;
@@ -67,7 +67,7 @@ public class MarksInitializationFactory {
             try {
                 // Tries to initialize any properties (of type MarksInitialization found in the
                 // NamedDefinitions
-                PropertyInitializer<MarksInitialization> initializer =
+                BeanInitializer<MarksInitialization> initializer =
                         MarksBean.initializerForMarksBeans();
                 initializer.setParam(marks);
                 marks.populate(initializer, define.get(), context.getLogger());

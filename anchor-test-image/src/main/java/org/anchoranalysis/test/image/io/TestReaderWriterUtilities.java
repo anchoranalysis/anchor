@@ -69,14 +69,14 @@ public class TestReaderWriterUtilities {
 
     private static void addIfMissing(Class<?> cls, Object obj) {
         AnchorDefaultBeanFactory defaultFactory = getOrCreateBeanFactory();
-        if (defaultFactory.getDefaultInstances().get(cls) == null) {
+        if (!defaultFactory.getDefaultInstances().getInstanceFor(cls).isPresent()) {
             add(defaultFactory, cls, obj);
         }
     }
 
     private static void add(AnchorDefaultBeanFactory defaultFactory, Class<?> cls, Object obj) {
         BeanInstanceMap instanceMap = new BeanInstanceMap();
-        instanceMap.put(cls, obj);
+        instanceMap.putInstanceFor(cls, obj);
 
         defaultFactory.getDefaultInstances().addFrom(instanceMap);
     }

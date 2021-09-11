@@ -27,7 +27,7 @@
 package org.anchoranalysis.image.feature.calculator.merged;
 
 import lombok.Getter;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListFactory;
 import org.anchoranalysis.feature.session.cache.finder.CacheTransferSourceCollection;
@@ -102,7 +102,7 @@ public class MergedPairsFeatures {
             ImageInitialization initialization,
             BoundReplaceStrategy<FeatureInputStack, ? extends ReplaceStrategy<FeatureInputStack>>
                     cachingStrategy)
-            throws InitException {
+            throws InitializeException {
         return calculatorCreator.createCached(getImage(), initialization, cachingStrategy);
     }
 
@@ -113,7 +113,7 @@ public class MergedPairsFeatures {
                             FeatureInputSingleObject,
                             CacheAndReuseStrategy<FeatureInputSingleObject>>
                     cachingStrategy)
-            throws InitException {
+            throws InitializeException {
         return calculatorCreator.createCached(getSingle(), initialization, cachingStrategy);
     }
 
@@ -121,7 +121,7 @@ public class MergedPairsFeatures {
             CreateCalculatorHelper calculatorCreator,
             ImageInitialization initialization,
             CacheTransferSourceCollection cacheTransferSource)
-            throws InitException {
+            throws InitializeException {
         return calculatorCreator.createPair(getPair(), initialization, cacheTransferSource);
     }
 }

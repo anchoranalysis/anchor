@@ -27,14 +27,14 @@
 package org.anchoranalysis.bean.shared.dictionary;
 
 import org.anchoranalysis.bean.initializable.InitializableBean;
-import org.anchoranalysis.bean.initializable.property.PropertyInitializer;
-import org.anchoranalysis.bean.initializable.property.SimplePropertyDefiner;
+import org.anchoranalysis.bean.initializable.property.BeanInitializer;
+import org.anchoranalysis.bean.initializable.property.AssignerMatchClass;
 
 public abstract class DictionaryBean<T> extends InitializableBean<T, DictionaryInitialization> {
 
     protected DictionaryBean() {
         super(
-                new PropertyInitializer<>(DictionaryInitialization.class),
-                new SimplePropertyDefiner<>(DictionaryInitialization.class));
+                new BeanInitializer<>(DictionaryInitialization.class),
+                new AssignerMatchClass<>(DictionaryInitialization.class));
     }
 }

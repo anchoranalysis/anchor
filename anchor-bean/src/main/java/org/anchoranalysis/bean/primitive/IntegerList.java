@@ -31,12 +31,11 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.experimental.Accessors;
 import org.anchoranalysis.bean.AnchorBean;
 
 /**
- * A bean defining a list of {@link Integer}s with defined order.
+ * A bean defining a list of {@link Integer}s.
  *
  * <p>An example:
  *
@@ -55,8 +54,14 @@ import org.anchoranalysis.bean.AnchorBean;
 public class IntegerList extends AnchorBean<IntegerList>
         implements PrimitiveBeanCollection<Integer> {
 
-    @Getter private List<Integer> list = new ArrayList<>();
+    /** The internal list storing the elements. */
+    private List<Integer> list = new ArrayList<>();
 
+    /**
+     * Constructs with one or more values added to the list.
+     *
+     * @param values the values
+     */
     public IntegerList(Integer... values) {
         Arrays.stream(values).forEach(list::add);
     }

@@ -30,9 +30,11 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.input.FeatureInput;
+import org.anchoranalysis.feature.shared.FeaturesInitialization;
 
 public class FeatureProviderReference extends FeatureProvider<FeatureInput> {
 
@@ -46,27 +48,36 @@ public class FeatureProviderReference extends FeatureProvider<FeatureInput> {
 
     @Override
     public Feature<FeatureInput> get() throws ProvisionFailedException {
-        if (feature == null) {
-            if (getInitialization().getSharedFeatures() == null) {
-                throw new ProvisionFailedException("shared-features are not defined.");
+        
+        try {
+            if (feature == null) {
+                feature = createFeature(getInitialization());
             }
+            return feature;
+        } catch (InitializeException e) {
+            throw new ProvisionFailedException(e);
+        }
+    }
+    
+    private Feature<FeatureInput> createFeature(FeaturesInitialization initialization) throws ProvisionFailedException {
+        if (initialization.getSharedFeatures() == null) {
+            throw new ProvisionFailedException("shared-features are not defined.");
+        }
 
-            if (featureListRef != null && !featureListRef.isEmpty()) {
-                // We request this to make sure it's evaluated and added to the
-                // pso.getSharedFeatureSet()
-                try {
-                    getInitialization().getFeatureListSet().getException(featureListRef);
-                } catch (NamedProviderGetException e) {
-                    throw new ProvisionFailedException(e.summarize());
-                }
-            }
-
+        if (featureListRef != null && !featureListRef.isEmpty()) {
+            // We request this to make sure it's evaluated and added to the
+            // pso.getSharedFeatureSet()
             try {
-                this.feature = getInitialization().getSharedFeatures().getException(id);
+                initialization.getFeatureListSet().getException(featureListRef);
             } catch (NamedProviderGetException e) {
                 throw new ProvisionFailedException(e.summarize());
             }
         }
-        return feature;
+
+        try {
+            return initialization.getSharedFeatures().getException(id);
+        } catch (NamedProviderGetException e) {
+            throw new ProvisionFailedException(e.summarize());
+        }
     }
 }

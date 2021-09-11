@@ -32,7 +32,9 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Stream;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 import org.anchoranalysis.bean.AnchorBean;
 
 /**
@@ -55,10 +57,17 @@ import org.anchoranalysis.bean.AnchorBean;
  */
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
+@Accessors(fluent = true)
 public class IntegerSet extends AnchorBean<IntegerSet> implements PrimitiveBeanCollection<Integer> {
 
-    private Set<Integer> set = new TreeSet<>();
+    /** The underlying set of values. */
+    @Getter private Set<Integer> set = new TreeSet<>();
 
+    /**
+     * Constructs with one or more values added to the list.
+     *
+     * @param values the values
+     */
     public IntegerSet(Integer... values) {
         Arrays.stream(values).forEach(set::add);
     }
@@ -73,10 +82,6 @@ public class IntegerSet extends AnchorBean<IntegerSet> implements PrimitiveBeanC
         return set.contains(value);
     }
 
-    public Set<Integer> set() {
-        return set;
-    }
-
     @Override
     public Iterator<Integer> iterator() {
         return set.iterator();
@@ -87,6 +92,11 @@ public class IntegerSet extends AnchorBean<IntegerSet> implements PrimitiveBeanC
         return set.isEmpty();
     }
 
+    /**
+     * Creates a stream of elements in the set.
+     *
+     * @return a newly created stream.
+     */
     public Stream<Integer> stream() {
         return set.stream();
     }

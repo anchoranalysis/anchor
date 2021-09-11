@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.feature.session.calculator.single;
 
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.log.error.ErrorReporter;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
@@ -44,10 +44,10 @@ public class FeatureCalculatorSingleFromMulti<T extends FeatureInput>
 
     private FeatureCalculatorMulti<T> delegate;
 
-    public FeatureCalculatorSingleFromMulti(FeatureCalculatorMulti<T> multi) throws InitException {
+    public FeatureCalculatorSingleFromMulti(FeatureCalculatorMulti<T> multi) throws InitializeException {
         this.delegate = multi;
         if (delegate.sizeFeatures() != 1) {
-            throw new InitException(
+            throw new InitializeException(
                     String.format(
                             "When creating a %s, the multi must have exactly one feature",
                             FeatureCalculatorSingle.class.getSimpleName()));

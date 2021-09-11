@@ -35,7 +35,7 @@ import java.nio.file.Path;
 import javax.xml.parsers.ParserConfigurationException;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.bean.xml.exception.BeanXmlException;
+import org.anchoranalysis.bean.xml.exception.BeanXMLException;
 import org.anchoranalysis.core.serialize.XMLParser;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.XMLConfiguration;
@@ -49,11 +49,11 @@ class HelperReadXML {
      *
      * @param filePath path of the file to read
      * @return the wrapped XML file
-     * @throws BeanXmlException if something goes wrong, and either the file cannot be read, or the
+     * @throws BeanXMLException if something goes wrong, and either the file cannot be read, or the
      *     XML does not conform to Bean standards
      */
     public static XMLConfiguration readBeanXMLFromFilesystem(Path filePath)
-            throws BeanXmlException {
+            throws BeanXMLException {
 
         try {
             File configFile = filePath.toFile();
@@ -70,11 +70,11 @@ class HelperReadXML {
      *
      * @param source the stream to read the BeanXML from
      * @return the wrapped XML file
-     * @throws BeanXmlException if something goes wrong, and either the file cannot be read, or the
+     * @throws BeanXMLException if something goes wrong, and either the file cannot be read, or the
      *     XML does not conform to Bean standards
      */
     private static XMLConfiguration readBeanXMLFromStream(InputStream source)
-            throws BeanXmlException {
+            throws BeanXMLException {
 
         try {
             // We initialize a DocumentBuilder specifically, so that we can switch off
@@ -87,7 +87,7 @@ class HelperReadXML {
         } catch (ConfigurationException e) {
             throw convertConfigurationException(e);
         } catch (ParserConfigurationException e) {
-            throw new BeanXmlException(
+            throw new BeanXMLException(
                     "An error occurred creating the DocumentBuilder for reading xml", e);
         }
     }
@@ -99,7 +99,7 @@ class HelperReadXML {
      * @param exc exception to convert
      * @return converted-exception
      */
-    private static BeanXmlException convertConfigurationException(ConfigurationException exc) {
+    private static BeanXMLException convertConfigurationException(ConfigurationException exc) {
 
         // If the cause is a SAXParseException we promote it, and ignore the ConfigurationException
         // (for user-friendly error output)
@@ -107,7 +107,7 @@ class HelperReadXML {
 
             // We extr
             SAXParseException causeCast = (SAXParseException) exc.getCause();
-            return new BeanXmlException(locationOfXMLError(causeCast), exc.getCause());
+            return new BeanXMLException(locationOfXMLError(causeCast), exc.getCause());
         }
 
         // if the cause is a not-found file error we simplify it
@@ -121,7 +121,7 @@ class HelperReadXML {
                 || exc.getCause() instanceof NoSuchFileException) {
             return createIncludedFileFailedException(exc.getCause().getMessage());
         }
-        return new BeanXmlException(exc);
+        return new BeanXMLException(exc);
     }
 
     /**
@@ -130,8 +130,8 @@ class HelperReadXML {
      * @param filePath the filePath which failed when being included
      * @return the new exception
      */
-    private static BeanXmlException createIncludedFileFailedException(String filePath) {
-        return new BeanXmlException(String.format("Cannot find included file: %s", filePath));
+    private static BeanXMLException createIncludedFileFailedException(String filePath) {
+        return new BeanXMLException(String.format("Cannot find included file: %s", filePath));
     }
 
     /**

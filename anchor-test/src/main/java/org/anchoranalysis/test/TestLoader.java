@@ -31,11 +31,11 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import javax.xml.parsers.ParserConfigurationException;
+import lombok.Getter;
 import org.anchoranalysis.core.serialize.XMLParser;
 import org.apache.commons.io.FileUtils;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
-import lombok.Getter;
 
 /**
  * Loads test data, which is found at some location on the filesystem.
@@ -46,7 +46,7 @@ public class TestLoader {
 
     /** Path to the resources directory, relative to the root of the project. */
     public static final String PATH_RESOURCES = "src/test/resources";
-    
+
     /** Path to where the test-data is stored. */
     @Getter private Path root;
 
@@ -64,18 +64,19 @@ public class TestLoader {
         super();
 
         if (!root.toFile().exists()) {
-            throw new TestDataInitException(String.format("Cannot find path '%s' path", root));
+            throw new TestDataInitializeException(String.format("Cannot find path '%s' path", root));
         }
 
         if (!root.toFile().isDirectory()) {
-            throw new TestDataInitException(String.format("Path '%s' is not a folder", root));
+            throw new TestDataInitializeException(String.format("Path '%s' is not a folder", root));
         }
 
         this.root = root.toAbsolutePath();
     }
 
     /**
-     * Creates a new test-data loader finding {@code PATH_RESOURCES} using the Maven working directory.
+     * Creates a new test-data loader finding {@code PATH_RESOURCES} using the Maven working
+     * directory.
      *
      * @return a loader associated with {@code MAVEN_WORKING_DIR/PATH_RESOURCES}
      */
@@ -210,7 +211,8 @@ public class TestLoader {
     }
 
     /**
-     * Copies all the data in the test-data folder (recursively), preserving file modification times.
+     * Copies all the data in the test-data folder (recursively), preserving file modification
+     * times.
      *
      * @param destination destination-folder.
      * @throws IOException if a copy error occurs.
@@ -220,7 +222,8 @@ public class TestLoader {
     }
 
     /**
-     * Copies specific subdirectories from the test-data folder (recursively), preserving file modification times.
+     * Copies specific subdirectories from the test-data folder (recursively), preserving file
+     * modification times.
      *
      * @param subdirectoriesSource which subdirectories to copy from (their full-path is preserved).
      * @param directoryDestination destination-folder.

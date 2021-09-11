@@ -28,7 +28,7 @@ package org.anchoranalysis.mpp.feature.addcriteria;
 
 import java.util.Optional;
 import org.anchoranalysis.core.exception.CreateException;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
 import org.anchoranalysis.feature.energy.EnergyStack;
@@ -52,7 +52,7 @@ public class AddCriteriaEnergyPair implements AddCriteria<EnergyPair> {
 
     public AddCriteriaEnergyPair(
             FeatureList<FeatureInputPairMemo> energyPairs, AddCriteriaPair pairAddCriteria)
-            throws InitException {
+            throws InitializeException {
         super();
 
         this.energyPairs = energyPairs;
@@ -61,7 +61,7 @@ public class AddCriteriaEnergyPair implements AddCriteria<EnergyPair> {
         try {
             this.featuresAddCriteria = this.pairAddCriteria.orderedListOfFeatures();
         } catch (CreateException e) {
-            throw new InitException(e);
+            throw new InitializeException(e);
         }
     }
 

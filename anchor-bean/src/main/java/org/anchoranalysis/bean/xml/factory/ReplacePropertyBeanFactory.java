@@ -27,35 +27,34 @@
 package org.anchoranalysis.bean.xml.factory;
 
 import java.lang.reflect.InvocationTargetException;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.BeanInstanceMap;
-import org.anchoranalysis.bean.xml.exception.BeanXmlException;
+import org.anchoranalysis.bean.xml.creator.BeanCreator;
+import org.anchoranalysis.bean.xml.exception.BeanXMLException;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.configuration.beanutils.BeanDeclaration;
 import org.apache.commons.configuration.beanutils.XMLBeanDeclaration;
 
 /**
- * Replaces a property (an XML element of attribute) on a bean before loading it
+ * Replaces a property (an XML element of attribute) on a bean before loading it.
  *
- * <p>The String attribute 'key' specifies the name of the element or attribute to replace
+ * <p>The String attribute {@code key} specifies the name of the element or attribute to replace.
  *
- * <p>The replacement attribute or element specifies the replacement value (depending of if its an
- * attribute or element)
+ * <p>The replacement attribute or element specifies the replacement value, depending of whether
+ * it's an attribute or element.
  *
  * @param <T> type of bean to load
  */
+@AllArgsConstructor
 public class ReplacePropertyBeanFactory<T extends AnchorBean<T>> extends AnchorBeanFactory {
 
     private static final String ITEM = "item";
     private static final String REPLACEMENT = "replacement";
     private static final String KEY = "key";
 
-    private BeanInstanceMap defaultInstances;
-
-    public ReplacePropertyBeanFactory(BeanInstanceMap defaultInstances) {
-        super();
-        this.defaultInstances = defaultInstances;
-    }
+    /** Default instances of different family-types of beans. */
+    private final BeanInstanceMap defaultInstances;
 
     // Creates the bean. Checks if already an instance exists.
     @Override
@@ -83,15 +82,15 @@ public class ReplacePropertyBeanFactory<T extends AnchorBean<T>> extends AnchorB
 
     private T extractBeanAndReplace(
             XMLBeanDeclaration declXML, String key, boolean attribute, Object param)
-            throws BeanXmlException {
-        T bean = HelperUtilities.createBeanFromXML(declXML, ITEM, param);
+            throws BeanXMLException {
+        T bean = BeanCreator.createBeanFromXML(declXML, ITEM, param);
 
         // Update bean with replacement
         Object replacement = extractReplacement(declXML, attribute, param);
 
         // Check that the key exists to replace
         if (!hasProperty(bean, key)) {
-            throw new BeanXmlException(
+            throw new BeanXMLException(
                     String.format(
                             "There is no property '%s' on the item on which the replacement occurs",
                             key));
@@ -100,7 +99,7 @@ public class ReplacePropertyBeanFactory<T extends AnchorBean<T>> extends AnchorB
         try {
             BeanUtils.setProperty(bean, key, replacement); // NOSONAR
         } catch (IllegalAccessException | InvocationTargetException exc) {
-            throw new BeanXmlException(String.format("Cannot set property '%s'", key), exc);
+            throw new BeanXMLException(String.format("Cannot set property '%s'", key), exc);
         }
         return bean;
     }
@@ -119,36 +118,36 @@ public class ReplacePropertyBeanFactory<T extends AnchorBean<T>> extends AnchorB
         if (attribute) {
             return declXML.getBeanProperties().get(REPLACEMENT);
         } else {
-            return HelperUtilities.createBeanFromXML(declXML, REPLACEMENT, param);
+            return BeanCreator.createBeanFromXML(declXML, REPLACEMENT, param);
         }
     }
 
-    private boolean isReplaceAttribute(XMLBeanDeclaration declXML) throws BeanXmlException {
+    private boolean isReplaceAttribute(XMLBeanDeclaration declXML) throws BeanXMLException {
         boolean element = hasElement(declXML, REPLACEMENT);
         boolean attribute = hasAttribute(declXML, REPLACEMENT);
 
         if (element && attribute) {
-            throw new BeanXmlException(
+            throw new BeanXMLException(
                     "The 'replacement' property is set on the bean as both an attribute and element. Only one is allowed.");
         }
 
         if (!element && !attribute) {
-            throw new BeanXmlException("The 'replacement' property is NOT set on the bean");
+            throw new BeanXMLException("The 'replacement' property is NOT set on the bean");
         }
 
         return attribute;
     }
 
-    private void checkAttribute(XMLBeanDeclaration declXML, String key) throws BeanXmlException {
+    private void checkAttribute(XMLBeanDeclaration declXML, String key) throws BeanXMLException {
         if (!hasAttribute(declXML, key)) {
-            throw new BeanXmlException(
+            throw new BeanXMLException(
                     String.format("This bean must have a '%s' attribute set", key));
         }
     }
 
-    private void checkElement(XMLBeanDeclaration declXML, String key) throws BeanXmlException {
+    private void checkElement(XMLBeanDeclaration declXML, String key) throws BeanXMLException {
         if (!hasElement(declXML, key)) {
-            throw new BeanXmlException(
+            throw new BeanXMLException(
                     String.format("This bean must have a '%s' element set", key));
         }
     }

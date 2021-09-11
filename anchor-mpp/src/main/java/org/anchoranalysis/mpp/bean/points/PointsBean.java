@@ -29,9 +29,9 @@ package org.anchoranalysis.mpp.bean.points;
 import java.util.Arrays;
 import java.util.List;
 import org.anchoranalysis.bean.initializable.InitializableBean;
-import org.anchoranalysis.bean.initializable.property.ExtractFromParam;
-import org.anchoranalysis.bean.initializable.property.PropertyInitializer;
-import org.anchoranalysis.bean.initializable.property.SimplePropertyDefiner;
+import org.anchoranalysis.bean.initializable.property.ExtractDerivedParameter;
+import org.anchoranalysis.bean.initializable.property.BeanInitializer;
+import org.anchoranalysis.bean.initializable.property.AssignerMatchClass;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.mpp.init.PointsInitialization;
 
@@ -43,12 +43,12 @@ public abstract class PointsBean<T> extends InitializableBean<T, PointsInitializ
 
     protected PointsBean() {
         super(
-                new PropertyInitializer<>(PointsInitialization.class, paramExtracters()),
-                new SimplePropertyDefiner<PointsInitialization>(PointsInitialization.class));
+                new BeanInitializer<>(PointsInitialization.class, paramExtracters()),
+                new AssignerMatchClass<PointsInitialization>(PointsInitialization.class));
     }
 
-    private static List<ExtractFromParam<PointsInitialization, ?>> paramExtracters() {
+    private static List<ExtractDerivedParameter<PointsInitialization, ?>> paramExtracters() {
         return Arrays.asList(
-                new ExtractFromParam<>(ImageInitialization.class, PointsInitialization::getImage));
+                new ExtractDerivedParameter<>(ImageInitialization.class, PointsInitialization::getImage));
     }
 }

@@ -87,7 +87,7 @@ class StoreAdderHelper {
             NamedProviderStore<T> store,
             CheckedFunction<S, T, OperationFailedException> bridge)
             throws OperationFailedException {
-        addFromListPreserveName(define.getList(defineClass), store, bridge);
+        addFromListPreserveName(define.listFor(defineClass), store, bridge);
     }
 
     /**

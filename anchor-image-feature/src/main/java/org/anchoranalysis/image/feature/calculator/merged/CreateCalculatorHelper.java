@@ -28,7 +28,7 @@ package org.anchoranalysis.image.feature.calculator.merged;
 
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.calculate.FeatureInitialization;
@@ -58,7 +58,7 @@ class CreateCalculatorHelper {
             FeatureList<T> features,
             ImageInitialization initialization,
             BoundReplaceStrategy<T, ? extends ReplaceStrategy<T>> replacePolicyFactory)
-            throws InitException {
+            throws InitializeException {
         return wrapWithEnergy(createWithoutEnergy(features, initialization, replacePolicyFactory));
     }
 
@@ -66,7 +66,7 @@ class CreateCalculatorHelper {
             FeatureList<T> features,
             ImageInitialization initialization,
             BoundReplaceStrategy<T, ? extends ReplaceStrategy<T>> replacePolicyFactory)
-            throws InitException {
+            throws InitializeException {
         return wrapWithEnergy(
                 new FeatureCalculatorCachedMulti<>(
                         createWithoutEnergy(features, initialization, replacePolicyFactory)));
@@ -83,13 +83,13 @@ class CreateCalculatorHelper {
      * @param features
      * @param initialization
      * @return
-     * @throws InitException
+     * @throws InitializeException
      */
     public <T extends FeatureInputEnergy> FeatureCalculatorMulti<T> createPair(
             FeatureList<T> features,
             ImageInitialization initialization,
             CacheTransferSourceCollection cacheTransferSource)
-            throws InitException {
+            throws InitializeException {
 
         BoundReplaceStrategy<T, ReplaceStrategy<T>> replaceStrategy =
                 new BoundReplaceStrategy<>(
@@ -107,7 +107,7 @@ class CreateCalculatorHelper {
             FeatureList<T> features,
             ImageInitialization initialization,
             BoundReplaceStrategy<T, ? extends ReplaceStrategy<T>> replacePolicyFactory)
-            throws InitException {
+            throws InitializeException {
         return FeatureSession.with(
                 features,
                 createInitialization(initialization),

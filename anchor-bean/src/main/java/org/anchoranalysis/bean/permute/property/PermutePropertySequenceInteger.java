@@ -29,7 +29,7 @@ package org.anchoranalysis.bean.permute.property;
 import java.util.Iterator;
 
 /**
- * An arithmetic sequence of doubles, obtained by dividing an integer sequence by a divider
+ * An arithmetic sequence of integers, each directly assigned to a property during permutation.
  *
  * @author Owen Feehan
  */
@@ -37,15 +37,11 @@ public class PermutePropertySequenceInteger extends PermutePropertySequence<Inte
 
     @Override
     public Iterator<Integer> propertyValues() {
-        return propertyValuesDefinitelyInteger();
-    }
-
-    public Iterator<Integer> propertyValuesDefinitelyInteger() {
-        return range();
+        return sequenceIterator();
     }
 
     @Override
-    public String nameForPropValue(Integer value) {
+    public String describePropertyValue(Integer value) {
         int numDigitsEnd = Integer.toString(getSequence().getEnd()).length();
         if (numDigitsEnd == 1) {
             return value.toString();

@@ -27,12 +27,12 @@
 package org.anchoranalysis.experiment.bean;
 
 import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.bean.xml.AssociateXmlUponLoad;
+import org.anchoranalysis.bean.xml.AssociateXMLUponLoad;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.arguments.ExecutionArguments;
 import org.apache.commons.configuration.XMLConfiguration;
 
-public abstract class Experiment extends AnchorBean<Experiment> implements AssociateXmlUponLoad {
+public abstract class Experiment extends AnchorBean<Experiment> implements AssociateXMLUponLoad {
 
     // Allows to reference the xml configuration from where the experiment was defined
     private XMLConfiguration xmlConfiguration = null;
@@ -45,7 +45,7 @@ public abstract class Experiment extends AnchorBean<Experiment> implements Assoc
     }
 
     @Override
-    public void associateXml(XMLConfiguration xmlConfiguration) {
+    public void associateXML(XMLConfiguration xmlConfiguration) {
         this.xmlConfiguration = xmlConfiguration;
     }
 

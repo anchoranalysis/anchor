@@ -41,7 +41,7 @@ import org.anchoranalysis.core.log.MessageLogger;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class LoggingFixture {
 
-    /** 
+    /**
      * A {@link MessageLogger} that doesn't output anything.
      *
      * @return the message-logger
@@ -50,7 +50,7 @@ public class LoggingFixture {
         return mock(MessageLogger.class);
     }
 
-    /** 
+    /**
      * A {@link Logger} that doesn't output anything.
      *
      * @return the logger

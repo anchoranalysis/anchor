@@ -29,7 +29,7 @@ package org.anchoranalysis.bean.initializable.params;
 import org.anchoranalysis.bean.initializable.InitializableBean;
 
 /**
- * Parent class for all state used to initialise beans in {@link InitializableBean}
+ * Parent class for all state used to initialise beans in {@link InitializableBean}.
  *
  * @author Owen Feehan
  */

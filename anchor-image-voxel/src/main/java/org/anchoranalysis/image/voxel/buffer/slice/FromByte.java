@@ -40,7 +40,7 @@ public class FromByte implements SliceBufferIndex<UnsignedByteBuffer> {
     // START FACTORY METHODS
     public static SliceBufferIndex<UnsignedByteBuffer> createInitialized(Extent extent) {
         FromByte p = new FromByte(extent);
-        p.init();
+        p.initialize();
         return p;
     }
 
@@ -73,7 +73,7 @@ public class FromByte implements SliceBufferIndex<UnsignedByteBuffer> {
         return extent;
     }
 
-    private void init() {
+    private void initialize() {
         int volumeXY = extent.volumeXY();
         extent.iterateOverZ(z -> buffer[z] = VoxelBufferFactory.allocateUnsignedByte(volumeXY));
     }

@@ -39,14 +39,15 @@ import org.anchoranalysis.bean.exception.BeanStrangeException;
 class HelperFindChildren {
 
     /**
-     * Finds all bean-fields that are instance of a certain class. All immediate children are
-     * checked, and any items in immediate lists.
+     * Finds all bean-fields that are instance of a certain class.
      *
-     * @param bean the bean whose fields will be searched
-     * @param listFields the list of fields associated with the bean
-     * @param match the class that a field must be assignable from (equal to or inherit from)
-     * @return
-     * @throws BeanMisconfiguredException
+     * <p>All immediate children are checked, and any items in immediate lists.
+     *
+     * @param bean the bean whose fields will be searched.
+     * @param listFields the list of fields associated with the bean.
+     * @param match the class that a field must be assignable from (equal to or inherit from).
+     * @return a newly created list of the bean-fields that are a instance of {@code match}.
+     * @throws BeanMisconfiguredException if a bean is misconfigured.
      */
     public static <T extends AnchorBean<?>> List<T> findChildrenOfClass(
             AnchorBean<?> bean, List<Field> listFields, Class<?> match)

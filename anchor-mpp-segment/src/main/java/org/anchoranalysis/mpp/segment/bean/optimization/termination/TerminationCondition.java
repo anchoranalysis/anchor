@@ -41,7 +41,7 @@ public abstract class TerminationCondition extends AnchorBean<TerminationConditi
      *
      * <p>If called again, it resets the current state.
      */
-    public abstract void init();
+    public abstract void initialize();
 
     /**
      * Whether to continue for an additional iteration step or not.

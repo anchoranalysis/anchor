@@ -28,7 +28,7 @@ package org.anchoranalysis.image.bean.nonbean.spatial.arrange;
 
 import java.util.Iterator;
 import java.util.List;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.image.core.channel.factory.ChannelFactorySingleType;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.stack.RGBStack;
@@ -43,17 +43,17 @@ public class RasterArranger {
     private BoundingBoxesOnPlane boundingBoxes;
     private Dimensions dimensions;
 
-    public void init(ArrangeStack arrange, List<RGBStack> list) throws InitException {
+    public void initialize(ArrangeStack arrange, List<RGBStack> list) throws InitializeException {
 
         Iterator<RGBStack> rasterIterator = list.iterator();
         try {
             this.boundingBoxes = arrange.createBoundingBoxesOnPlane(rasterIterator);
         } catch (ArrangeStackException e) {
-            throw new InitException(e);
+            throw new InitializeException(e);
         }
 
         if (rasterIterator.hasNext()) {
-            throw new InitException("rasterIterator has more items than can be accomodated");
+            throw new InitializeException("rasterIterator has more items than can be accomodated");
         }
 
         dimensions = new Dimensions(boundingBoxes.extent());

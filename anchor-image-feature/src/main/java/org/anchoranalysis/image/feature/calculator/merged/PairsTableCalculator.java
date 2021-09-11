@@ -28,7 +28,7 @@ package org.anchoranalysis.image.feature.calculator.merged;
 
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.log.error.ErrorReporter;
 import org.anchoranalysis.feature.bean.list.FeatureList;
@@ -85,7 +85,7 @@ public class PairsTableCalculator implements FeatureTableCalculator<FeatureInput
     @Override
     public void start(
             ImageInitialization initializtion, Optional<EnergyStack> energyStack, Logger logger)
-            throws InitException {
+            throws InitializeException {
 
         calculator =
                 new CombinedCalculator(

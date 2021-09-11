@@ -29,6 +29,7 @@ package org.anchoranalysis.bean;
 import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.annotation.NonEmpty;
@@ -49,29 +50,33 @@ class HelperCheckMisconfigured {
     }
 
     /**
-     * Checks that a bean's properties are correct
+     * Checks that a bean's properties are correct, throwing an exception if any bean is
+     * misconfigured.
      *
      * <p>(e.g. that required fields are present, values match BeanField annotations etc.)
      *
-     * @param obj bean-object
+     * <p>Note that a {@link BeanMisconfiguredException} does not indicate XML errors, rather
+     * missing required properties etc.
+     *
+     * @param bean bean-object
      * @param listFields fields associated with the bean
-     * @throws BeanMisconfiguredException
+     * @throws BeanMisconfiguredException if any of beans have incorrect configuration.
      */
-    public void checkMisconfiguredWithFields(AnchorBean<?> obj, List<Field> listFields)
+    public void checkMisconfiguredWithFields(AnchorBean<?> bean, List<Field> listFields)
             throws BeanMisconfiguredException {
 
-        String beanName = obj.getClass().getName();
+        String beanName = bean.getClass().getName();
         try {
             for (Field field : listFields) {
 
-                Object value = field.get(obj);
+                Object value = field.get(bean);
 
                 if (value == null && field.isAnnotationPresent(DefaultInstance.class)) {
                     // If there's no value set, and there's a DefaultInstance annotation, we search
                     // for
                     //  a defaultInstance and throw an error if it doesn't exist
                     value = findDefaultInstance(field.getType());
-                    field.set(obj, value); // NOSONAR
+                    field.set(bean, value); // NOSONAR
                 }
 
                 // If it's non-optional, then we insist it's non-null
@@ -104,16 +109,16 @@ class HelperCheckMisconfigured {
      */
     private Object findDefaultInstance(Class<?> classType) throws BeanMisconfiguredException {
 
-        Object object = defaultInstances.get(classType);
+        Optional<Object> object = defaultInstances.getInstanceFor(classType);
 
-        if (object == null) {
+        if (!object.isPresent()) {
             throw new BeanMisconfiguredException(
                     String.format(
                             "No default property can be found for class '%s'",
                             classType.getName()));
         }
 
-        return object;
+        return object.get();
     }
 
     @SuppressWarnings("unchecked")

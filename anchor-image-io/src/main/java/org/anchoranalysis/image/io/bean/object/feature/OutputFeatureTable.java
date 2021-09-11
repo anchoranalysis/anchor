@@ -31,6 +31,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.bean.ImageBean;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
@@ -104,7 +105,7 @@ public class OutputFeatureTable extends ImageBean<OutputFeatureTable> {
         try {
             return new ObjectFeatureListCSVGenerator(
                     feature, getInitialization().getSharedObjects(), logger);
-        } catch (CreateException e) {
+        } catch (CreateException | InitializeException e) {
             throw new OutputWriteFailedException(e);
         }
     }

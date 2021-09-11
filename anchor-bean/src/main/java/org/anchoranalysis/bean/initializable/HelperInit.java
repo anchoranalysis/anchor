@@ -33,24 +33,24 @@ import java.util.Set;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.bean.initializable.property.PropertyInitializer;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.bean.initializable.property.BeanInitializer;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.log.Logger;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class HelperInit {
 
     /**
-     * Initializes the bean
+     * Initializes the bean.
      *
-     * @param bean bean to initialise
-     * @param initializer the property-initializer to use
-     * @param logger logger
-     * @throws InitException
+     * @param bean bean to initialize.
+     * @param initializer the property-initializer to use.
+     * @param logger logger.
+     * @throws InitializeException if errors occur initializing beans.
      */
-    public static void initRecursive(
-            AnchorBean<?> bean, PropertyInitializer<?> initializer, Logger logger)
-            throws InitException {
+    public static void initializeRecursive(
+            AnchorBean<?> bean, BeanInitializer<?> initializer, Logger logger)
+            throws InitializeException {
 
         List<BeanAndParent> everything = new ArrayList<>();
         everything.add(new BeanAndParent(bean, null));
@@ -61,58 +61,60 @@ class HelperInit {
 
             BeanAndParent removedObj = everything.remove(everything.size() - 1);
 
-            if (done.contains(removedObj.getBean())) {
-                continue;
+            if (!done.contains(removedObj.getBean())) {
+                maybeInitializeChildren(
+                        removedObj, everything, bean.getBeanName(), initializer, logger);
+
+                done.add(removedObj.getBean());
             }
-
-            maybeInitChildren(removedObj, everything, bean.getBeanName(), initializer, logger);
-
-            done.add(removedObj.getBean());
         }
     }
 
-    private static void maybeInitChildren(
+    private static void maybeInitializeChildren(
             BeanAndParent bean,
             List<BeanAndParent> listInit,
             String beanNameFollowingFrom,
-            PropertyInitializer<?> pi,
+            BeanInitializer<?> propertyInitializer,
             Logger logger)
-            throws InitException {
+            throws InitializeException {
 
         try {
             boolean didInitChild =
-                    pi.applyInitializationIfPossibleTo(bean.getBean(), bean.parentBean(), logger);
+                    propertyInitializer.applyInitializationIfPossibleTo(
+                            bean.getBean(), bean.parentBean(), logger);
             if (didInitChild) {
                 // Add children of the object, but only if PropertyInitializer initializes the
                 // object
                 FindChildrenForInit.addChildrenFromBean(bean, listInit);
             } else {
                 throwExceptionIfInitializable(
-                        bean.getBean(), beanNameFollowingFrom, pi.getInitParamType().toString());
+                        bean.getBean(),
+                        beanNameFollowingFrom,
+                        propertyInitializer.getInitializationType().toString());
             }
 
-        } catch (InitException e) {
+        } catch (InitializeException e) {
             String msg =
                     String.format(
                             "Cannot initialize a field '%s' when initializing '%s'",
                             bean.pathFromRootAsString(), beanNameFollowingFrom);
-            throw new InitException(msg, e);
+            throw new InitializeException(msg, e);
         }
     }
 
     private static void throwExceptionIfInitializable(
             AnchorBean<?> bean, String beanNameFollowingFrom, String provider)
-            throws InitException {
+            throws InitializeException {
 
         if (bean instanceof InitializableBean) {
-            InitializableBean<?, ?> objCast = (InitializableBean<?, ?>) bean;
-            throw new InitException(
+            InitializableBean<?, ?> beanCast = (InitializableBean<?, ?>) bean;
+            throw new InitializeException(
                     String.format(
                             "Could not find matching params to initialize %s (%s) (recursively following from %s). Requires %s. Provider is %s.",
-                            objCast.getBeanName(),
-                            objCast.getClass().getName(),
+                            beanCast.getBeanName(),
+                            beanCast.getClass().getName(),
                             beanNameFollowingFrom,
-                            objCast.getPropertyDefiner().describeAcceptedClasses(),
+                            beanCast.getPropertyInitializer().describeAcceptedClasses(),
                             provider));
         }
     }

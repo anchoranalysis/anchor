@@ -29,7 +29,7 @@ package org.anchoranalysis.bean.exception;
 import org.anchoranalysis.core.exception.friendly.AnchorFriendlyCheckedException;
 
 /**
- * If a Bean is misconfigured
+ * If a Bean is misconfigured.
  *
  * <p>e.g. missing a value that is required or with a value that violates the constraints of the
  * bean-field
@@ -43,11 +43,22 @@ public class BeanMisconfiguredException extends AnchorFriendlyCheckedException {
     /** */
     private static final long serialVersionUID = -6966810405755062033L;
 
-    public BeanMisconfiguredException(String string) {
-        super(string);
+    /**
+     * Creates with a message only.
+     *
+     * @param message the message.
+     */
+    public BeanMisconfiguredException(String message) {
+        super(message);
     }
 
-    public BeanMisconfiguredException(String arg0, Throwable arg1) {
-        super(arg0, arg1);
+    /**
+     * Creates with a message and a cause.
+     *
+     * @param message the message
+     * @param cause the cause.
+     */
+    public BeanMisconfiguredException(String message, Throwable cause) {
+        super(message, cause);
     }
 }

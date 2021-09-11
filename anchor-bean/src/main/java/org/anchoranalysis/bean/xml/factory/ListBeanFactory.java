@@ -27,12 +27,16 @@
 package org.anchoranalysis.bean.xml.factory;
 
 import java.util.List;
+import java.util.function.Function;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import org.anchoranalysis.bean.xml.creator.BeanListCreator;
 import org.apache.commons.configuration.SubnodeConfiguration;
 import org.apache.commons.configuration.beanutils.BeanDeclaration;
 import org.apache.commons.configuration.beanutils.XMLBeanDeclaration;
 
 /**
- * Factory for creating a java.util.List of Beans
+ * Factory for creating a {@link java.util.List} of beans.
  *
  * <p>Several {@code <item>someitem</item>} tags can be placed in the BeanXML and each becomes an
  * item in the list
@@ -48,18 +52,12 @@ import org.apache.commons.configuration.beanutils.XMLBeanDeclaration;
  * @author Owen Feehan
  * @param <T> list-item type
  */
+@AllArgsConstructor
+@NoArgsConstructor
 public class ListBeanFactory<T> extends AnchorBeanFactory {
 
-    private CreateFromList<T> creator;
-
-    public ListBeanFactory() {
-        // FOR BEAN INITIALIZATION
-    }
-
-    public ListBeanFactory(CreateFromList<T> creator) {
-        super();
-        this.creator = creator;
-    }
+    /** Creates an (untyped) object from a list of elements of type {@code T}. */
+    private Function<List<T>, Object> creator;
 
     // Creates the bean. Checks if already an instance exists.
     @Override
@@ -69,9 +67,9 @@ public class ListBeanFactory<T> extends AnchorBeanFactory {
         XMLBeanDeclaration declXML = (XMLBeanDeclaration) decl;
         SubnodeConfiguration subConfig = declXML.getConfiguration();
 
-        List<T> list = HelperListUtilities.listOfBeans("item", subConfig, param);
+        List<T> list = BeanListCreator.createListBeans("item", subConfig, param);
         if (creator != null) {
-            return creator.create(list);
+            return creator.apply(list);
         } else {
             return list;
         }

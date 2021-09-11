@@ -31,7 +31,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.primitive.StringSet;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.shared.FeaturesInitialization;
@@ -48,19 +48,19 @@ public abstract class ReferencedFeatures<T extends FeatureInput> extends Feature
     // END BEAN PROPERITES
 
     @Override
-    public void onInit(FeaturesInitialization soFeature) throws InitException {
-        super.onInit(soFeature);
+    public void onInitialization(FeaturesInitialization soFeature) throws InitializeException {
+        super.onInitialization(soFeature);
         ensureReferencedFeaturesCalled(soFeature);
     }
 
-    private void ensureReferencedFeaturesCalled(FeaturesInitialization so) throws InitException {
+    private void ensureReferencedFeaturesCalled(FeaturesInitialization so) throws InitializeException {
         if (referencesFeatureListCreator != null && so != null) {
             for (String featureListReference : referencesFeatureListCreator.set()) {
 
                 try {
                     so.getFeatureListSet().getException(featureListReference);
                 } catch (NamedProviderGetException e) {
-                    throw new InitException(e.summarize());
+                    throw new InitializeException(e.summarize());
                 }
             }
         }

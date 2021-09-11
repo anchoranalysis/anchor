@@ -41,10 +41,21 @@ public class BeanStrangeException extends AnchorFriendlyRuntimeException {
     /** */
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Creates with a message only.
+     *
+     * @param message the message.
+     */
     public BeanStrangeException(String message) {
         super(message);
     }
 
+    /**
+     * Creates with a message and cause.
+     *
+     * @param message the message.
+     * @param cause the cause.
+     */
     public BeanStrangeException(String message, Throwable cause) {
         super(message, cause);
     }

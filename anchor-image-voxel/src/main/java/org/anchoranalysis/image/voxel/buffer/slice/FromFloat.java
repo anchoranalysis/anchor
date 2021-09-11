@@ -39,7 +39,7 @@ public class FromFloat implements SliceBufferIndex<FloatBuffer> {
     // START FACTORY METHODS
     public static SliceBufferIndex<FloatBuffer> createInitialized(Extent extent) {
         FromFloat p = new FromFloat(extent);
-        p.init();
+        p.initialize();
         return p;
     }
 
@@ -53,7 +53,7 @@ public class FromFloat implements SliceBufferIndex<FloatBuffer> {
         buffer = VoxelBufferFactory.allocateFloatArray(extent.z());
     }
 
-    private void init() {
+    private void initialize() {
         int volumeXY = extent.volumeXY();
         for (int z = 0; z < extent.z(); z++) {
             buffer[z] = VoxelBufferFactory.allocateFloat(volumeXY);

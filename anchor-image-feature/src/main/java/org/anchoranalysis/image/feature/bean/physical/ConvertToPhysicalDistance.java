@@ -31,7 +31,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.CreateException;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.FeatureInitialization;
@@ -62,12 +62,12 @@ public class ConvertToPhysicalDistance<T extends FeatureInputWithResolution>
     }
 
     @Override
-    protected void beforeCalc(FeatureInitialization initialization) throws InitException {
+    protected void beforeCalc(FeatureInitialization initialization) throws InitializeException {
         super.beforeCalc(initialization);
         try {
             vectorInDirection = direction.createVector();
         } catch (CreateException e) {
-            throw new InitException(e);
+            throw new InitializeException(e);
         }
     }
 

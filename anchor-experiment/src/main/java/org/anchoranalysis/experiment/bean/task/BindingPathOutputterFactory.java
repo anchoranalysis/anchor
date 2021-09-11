@@ -55,7 +55,7 @@ class BindingPathOutputterFactory {
                                     params.getExperimentalManifest());
 
             // Initializes the manifest to be written
-            manifestTask.ifPresent(recorder -> recorder.init(prefixToAssign.getDirectory()));
+            manifestTask.ifPresent(recorder -> recorder.initialize(prefixToAssign.getDirectory()));
 
             OutputterChecked boundOutput =
                     params.getOutputter()

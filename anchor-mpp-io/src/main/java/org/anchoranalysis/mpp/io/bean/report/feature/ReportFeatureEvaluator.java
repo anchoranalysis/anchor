@@ -29,7 +29,7 @@ package org.anchoranalysis.mpp.io.bean.report.feature;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.input.FeatureInput;
@@ -46,9 +46,9 @@ public abstract class ReportFeatureEvaluator<T extends FeatureInput>
     @BeanField @Getter @Setter private String title;
     // END BEAN PROPERTIES
 
-    protected void init(MarksInitialization so, Logger logger) throws InitException {
+    protected void initialize(MarksInitialization so, Logger logger) throws InitializeException {
         // Maybe we should duplicate the providers?
-        featureEvaluator.initRecursive(so.feature(), logger);
+        featureEvaluator.initializeRecursive(so.feature(), logger);
     }
 
     protected FeatureCalculatorSingle<T> createAndStartSession() throws OperationFailedException {
