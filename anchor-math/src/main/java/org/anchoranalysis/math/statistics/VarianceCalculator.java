@@ -27,12 +27,15 @@
 package org.anchoranalysis.math.statistics;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 /**
- * Helper class for calculating variance from running variables.
+ * Calculates variance efficiently, as successive values are added.
+ * 
+ * <p>Efficiency occurs by maintaining a running sum, sum-of-squares and count as values are added.
  *
- * <p>It bundles a sum, sumSquares and count class together
+ * <p>This is useful for calculating variance in sequential order in an <a href="https://en.wikipedia.org/wiki/Online_machine_learning">online</a> manner.
  *
  * @author Owen Feehan
  */
@@ -40,36 +43,62 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class VarianceCalculator {
 
+    /** The running sum of values. */
     private long sum = 0;
+    
+    /** The running sum of squares of values. */
     private long sumSquares = 0;
-    private long count = 0;
+    
+    /** The running count of values. */
+    @Getter private long count = 0;
 
-    public void add(int histogramCount, long k) {
-        // Longs to avoid hitting maximum value
-        long addSum = histogramCount * k;
-        long addSumSquares = addSum * k;
+    /**
+     * Adds a value to the running sum.
+     * 
+     * @param value the value to add.
+     */
+    public void add(int value) {
+        long valueLong = value;
+        this.sum += valueLong;
+        this.sumSquares += (valueLong * valueLong);
+        this.count++;
+    }
+    
+    /**
+     * Adds a multiple instances of a value to the running sum.
+     * 
+     * @param value the value to add.
+     * @param instances how many instances of {@code value} to add.
+     */
+    public void add(int value, int instances) {
+        // A long is used to avoid hitting maximum value.
+        long addSum = ((long) instances) * value;
+        long addSumSquares = addSum * value;
         assert (addSum >= 0);
         assert (addSumSquares >= 0);
 
-        sum += addSum;
-        sumSquares += addSumSquares;
-        count += histogramCount;
-    }
-
-    // If all variables are greater-equal than there corresponding variables in other
-    public boolean greaterEqualThan(VarianceCalculator other) {
-        return (sum >= other.sum) && (sumSquares >= other.sumSquares) && (count >= other.count);
-    }
-
-    public VarianceCalculator subtract(VarianceCalculator other) {
-        return new VarianceCalculator(
-                this.sum - other.sum, this.sumSquares - other.sumSquares, this.count - other.count);
+        this.sum += addSum;
+        this.sumSquares += addSumSquares;
+        this.count += instances;
     }
 
     /**
-     * Calculate the variance
+     * Subtracts the running-sums and count from another {@link VarianceCalculator} from the current object's state.
+     * 
+     * <p>This occurs immutably, and the currently object's state is unaffected. 
+     * 
+     * @param toSubtract the other {@link VarianceCalculator} whose state is subtracted.
+     * @return a newly created {@link VarianceCalculator} whose state is the current object minus {@code toSubtract}.
+     */
+    public VarianceCalculator subtract(VarianceCalculator toSubtract) {
+        return new VarianceCalculator(
+                this.sum - toSubtract.sum, this.sumSquares - toSubtract.sumSquares, this.count - toSubtract.count);
+    }
+
+    /**
+     * Calculate the variance, based on the current state of running-sums.
      *
-     * @return
+     * @return the variance.
      */
     public double variance() {
         assert (sumSquares >= 0);
@@ -84,9 +113,5 @@ public class VarianceCalculator {
 
         assert (val >= 0);
         return val;
-    }
-
-    public long getCount() {
-        return count;
     }
 }

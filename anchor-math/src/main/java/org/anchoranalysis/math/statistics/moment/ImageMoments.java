@@ -35,7 +35,7 @@ import lombok.NoArgsConstructor;
 
 /**
  * The first moment (mean) and eigenvalues of the second moments (covariance) from a matrix of
- * points
+ * points.
  *
  * <p>See <a href="https://en.wikipedia.org/wiki/Image_moment">Image Moment on Wikipedia</a>
  *
@@ -68,21 +68,29 @@ public class ImageMoments {
                         calculateSecondMoments(matrixPoints, suppressZ), sortAscending);
     }
 
-    public EigenvalueAndVector get(int index) {
-        return list.get(index);
+    /**
+     * Get an eigenvalue and corresponding eigenvector for a particular axis.
+     * 
+     * @param axis axis 0 for X, 1 for Y, 2 for Z.
+     * @return the corresponding to {@link EigenvalueAndVector} as used internally.
+     */
+    public EigenvalueAndVector get(int axis) {
+        return list.get(axis);
     }
 
     /**
-     * Index is the axis (0 for X, 1 for Y, 2 for Z)
+     * Get the mean-value for a particular axis.
      *
-     * @param index
-     * @return
+     * @param axis 0 for X, 1 for Y, 2 for Z.
+     * @return the mean for the corresponding axis.
      */
-    public double getMean(int index) {
-        return mean[index];
+    public double getMean(int axis) {
+        return mean[axis];
     }
 
-    // Removes the entry that is closest to having an eigenVector in direction (0,0,1)
+    /** 
+     * Removes the entry that is closest to having an eigenVector in direction (0,0,1).
+     */
     public void removeClosestToUnitZ() {
 
         double zMax = Double.NEGATIVE_INFINITY;
@@ -103,6 +111,11 @@ public class ImageMoments {
         list.remove(index);
     }
 
+    /**
+     * Creates a deep-copy of the current object.
+     * 
+     * @return a deep copy.
+     */
     public ImageMoments duplicate() {
         ImageMoments out = new ImageMoments();
         out.list = new ArrayList<>();

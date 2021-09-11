@@ -26,9 +26,11 @@
 
 package org.anchoranalysis.bean.shared.relation.threshold;
 
+import java.util.function.DoublePredicate;
+import java.util.function.IntPredicate;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.GenerateUniqueParameterization;
-import org.anchoranalysis.math.relation.RelationToValue;
+import org.anchoranalysis.math.relation.DoubleBiPredicate;
 
 /**
  * A threshold and a relation to it, allowing for tests of a value in relation to a threshold.
@@ -42,5 +44,27 @@ public abstract class RelationToThreshold extends AnchorBean<RelationToThreshold
     public abstract double threshold();
 
     /** The relation to the threshold to consider */
-    public abstract RelationToValue relation();
+    public abstract DoubleBiPredicate relation();
+    
+    /**
+     * Expresses the relation as a predicate on values, where only values that fulfill the relation to threshold are true.
+     * 
+     * @return a newly-created predicate that accepts an double-value.
+     */
+    public DoublePredicate asPredicateDouble() {
+        double thresholdInstance = threshold();
+        DoubleBiPredicate relationInstance = relation();
+        return value -> relationInstance.test(value, thresholdInstance);
+    }
+    
+    /**
+     * Like {@link #asPredicateDouble()} but expresses the relationship for an integer.
+     * 
+     * @return a newly-created predicate that accepts an integer-value.
+     */
+    public IntPredicate asPredicateInt() {
+        double thresholdInstance = threshold();
+        DoubleBiPredicate relationInstance = relation();
+        return value -> relationInstance.test(value, thresholdInstance);
+    }
 }

@@ -26,10 +26,16 @@
 
 package org.anchoranalysis.math.relation;
 
-public class GreaterThanEqualTo implements RelationToValue {
+
+/**
+ * Returns true iff {@code valueFirst} is greater than or equal to {@code valueSecond}.
+ * 
+ * @author Owen Feehan
+ */
+public class GreaterThanEqualTo implements DoubleBiPredicate {
 
     @Override
-    public boolean isRelationToValueTrue(double valueFirst, double valueSecond) {
+    public boolean test(double valueFirst, double valueSecond) {
         return valueFirst >= valueSecond;
     }
 }

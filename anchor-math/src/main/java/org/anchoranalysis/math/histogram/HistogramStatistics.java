@@ -31,12 +31,22 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
 
 /**
- * Further statistics that can be derived from a histogram in addition to those callable directly
- * from the {@link Histogram} class
+ * Further statistics that can be derived from a histogram in addition to those existing as direct methods of {@link Histogram}.
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class HistogramStatistics {
 
+    /**
+     * Calculates the <b>coefficient-of-variation</b> of a distribution of values, represented by their histogram.
+     * 
+     * <p>This is the ratio of the standard-deviation to the mean.
+     * 
+     * <p>See <a href="https://en.wikipedia.org/wiki/Coefficient_of_variation">coefficient-of-variation on Wikipedia</a>.
+     * 
+     * @param histogram the histogram to calculate from.
+     * @return the coefficient-of-variation.
+     * @throws OperationFailedException if the statistic is undefined, for example with zero mean.
+     */
     public static double coefficientOfVariation(Histogram histogram)
             throws OperationFailedException {
         double mean = histogram.mean();
@@ -49,6 +59,44 @@ public class HistogramStatistics {
         return histogram.standardDeviation() / mean;
     }
 
+    /**
+     * Calculates the <b>skewness</b> of a distribution of values, represented by their histogram.
+     * 
+     * <p>This is the third standardized moment.
+     * 
+     * <p>See <a href="https://en.wikipedia.org/wiki/Skewness">skewness on Wikipedia</a>.
+     * 
+     * @param histogram the histogram to calculate from.
+     * @return the skewness.
+     * @throws OperationFailedException if the statistic is undefined, for example with zero variance.
+     */
+    public static double skewness(Histogram histogram) throws OperationFailedException {
+
+        long count = histogram.getTotalCount();
+        double mean = histogram.mean();
+        double stdDev = histogram.standardDeviation();
+
+        // Calculated using formula in https://en.wikipedia.org/wiki/Skewness
+        long firstTerm = histogram.calculateSumCubes() / count;
+        double secondTerm = -3.0 * mean * stdDev * stdDev;
+        double thirdTerm = mean * mean * mean;
+
+        double denominator = stdDev * stdDev * stdDev;
+
+        return (firstTerm + secondTerm + thirdTerm) / denominator;
+    }
+    
+    /**
+     * Calculates the <b>kurtosis</b> of a distribution of values, represented by their histogram.
+     * 
+     * <p>This is fourth standardized moment.
+     * 
+     * <p>See <a href="https://en.wikipedia.org/wiki/Kurtosis">kurtosis on Wikipedia</a>.
+     * 
+     * @param histogram the histogram to calculate from.
+     * @return the kurtosis.
+     * @throws OperationFailedException if the statistic is undefined, for example with zero variance.
+     */
     public static double kurtosis(Histogram histogram) throws OperationFailedException {
 
         // Kurtosis is calculated as in
@@ -57,29 +105,13 @@ public class HistogramStatistics {
 
         double fourthMomentAboutMean = histogram.mean(4.0, histogramMean);
 
-        double varSquared = Math.pow(histogram.variance(), 2.0);
+        double varianceSquared = Math.pow(histogram.variance(), 2.0);
 
-        if (varSquared == 0) {
+        if (varianceSquared == 0) {
             // We don't return infinity, but rather the maximum value allowed
             throw new OperationFailedException("Kurtosis is undefined as there is 0 variance");
         }
 
-        return fourthMomentAboutMean / varSquared;
-    }
-
-    public static double skewness(Histogram histogram) throws OperationFailedException {
-
-        long count = histogram.getTotalCount();
-        double mean = histogram.mean();
-        double sd = histogram.standardDeviation();
-
-        // Calculated using formula in https://en.wikipedia.org/wiki/Skewness
-        long firstTerm = histogram.calculateSumCubes() / count;
-        double secondTerm = -3.0 * mean * sd * sd;
-        double thirdTerm = mean * mean * mean;
-
-        double dem = sd * sd * sd;
-
-        return (firstTerm + secondTerm + thirdTerm) / dem;
+        return fourthMomentAboutMean / varianceSquared;
     }
 }

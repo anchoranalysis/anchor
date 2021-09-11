@@ -28,14 +28,15 @@ package org.anchoranalysis.math.arithmetic;
 import lombok.Getter;
 
 /**
- * A simple counter that increments
+ * A simple counter that increments.
  *
- * <p>This is useful when an object on the heap is required to track counting
+ * <p>This is useful when an object on the heap is required to track counting.
  *
  * @author Owen Feehan
  */
 public class Counter {
 
+    /** The count, as per current state. */
     @Getter private int count = 0;
 
     /** Increases the counter by one. */

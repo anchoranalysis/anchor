@@ -29,7 +29,7 @@ package org.anchoranalysis.image.bean.threshold.relation;
 import lombok.EqualsAndHashCode;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValues;
 import org.anchoranalysis.math.relation.LessThan;
-import org.anchoranalysis.math.relation.RelationToValue;
+import org.anchoranalysis.math.relation.DoubleBiPredicate;
 
 /**
  * Selects anything that is <b>not</b> <i>on</i> voxels from a binary mask.
@@ -50,7 +50,7 @@ public class BinaryNotOnVoxels extends BinaryVoxelsBase {
     }
 
     @Override
-    public RelationToValue relation() {
+    public DoubleBiPredicate relation() {
         return new LessThan();
     }
 }

@@ -28,20 +28,33 @@ package org.anchoranalysis.math.statistics;
 
 import lombok.Data;
 
-@Data
-public class FirstSecondOrderStatistic {
 
-    /** Mean */
+/**
+ * Stores the mean and scale for a distribution.
+ * 
+ * <p>The scale is often the standard-deviation.
+ * 
+ * @author Owen Feehan
+ *
+ */
+@Data
+public class MeanScale {
+
+    /** The mean. */
     private double mean;
 
-    /** Standard-Deviation */
+    /** The scale, typically the standard-deviation. */
     private double scale;
 
+    /**
+     * Converts a value to a z-score given the parameterization in this object.
+     * 
+     * See <a href="https://en.wikipedia.org/wiki/Standard_score">Standard score on Wikipedia</a>.
+     * 
+     * @param value the value to convert.
+     * @return the value converted to a z-score.
+     */
     public double zScore(double value) {
-        return calculateZScore(value, mean, scale);
-    }
-
-    public static double calculateZScore(double value, double mean, double scale) {
-        return (value - mean) / scale;
+        return ZScoreCalculator.calculateZScore(value, mean, scale);
     }
 }

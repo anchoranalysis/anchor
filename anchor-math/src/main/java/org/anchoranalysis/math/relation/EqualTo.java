@@ -28,10 +28,17 @@ package org.anchoranalysis.math.relation;
 
 import org.anchoranalysis.math.arithmetic.DoubleUtilities;
 
-public class EqualTo implements RelationToValue {
+/**
+ * Returns true if two values are equal, and false otherwise.
+ * 
+ * <p>Equality is considered within a small epsilon, as in {@link DoubleUtilities#areEqual}.
+ * 
+ * @author Owen Feehan
+ */
+public class EqualTo implements DoubleBiPredicate {
 
     @Override
-    public boolean isRelationToValueTrue(double valueFirst, double valueSecond) {
+    public boolean test(double valueFirst, double valueSecond) {
         return DoubleUtilities.areEqual(valueFirst, valueSecond);
     }
 }
