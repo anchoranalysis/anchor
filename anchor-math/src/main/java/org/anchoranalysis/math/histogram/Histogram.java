@@ -265,7 +265,7 @@ public final class Histogram {
         long sum = 0;
 
         for (int bin = minValue; bin <= maxValue; bin++) {
-            sum += getAsLong(bin) * bin;
+            sum += getCountAsLong(bin) * bin;
         }
 
         return ((double) sum) / sumCount;
@@ -450,7 +450,7 @@ public final class Histogram {
         for (int bin = minValue; bin <= maxValue; bin++) {
 
             if (predicate.test(bin)) {
-                sum += getAsLong(bin);
+                sum += getCountAsLong(bin);
             }
         }
 
@@ -592,7 +592,7 @@ public final class Histogram {
 
         for (int bin = minValue; bin <= maxValue; bin++) {
             double binSubtracted = (bin - subtractValue);
-            sum += getAsLong(bin) * Math.pow(binSubtracted, power);
+            sum += getCountAsLong(bin) * Math.pow(binSubtracted, power);
         }
 
         return sum / sumCount;
@@ -627,7 +627,7 @@ public final class Histogram {
         long sum = 0;
 
         for (int bin = minValue; bin <= maxValue; bin++) {
-            long add = getAsLong(bin) * function.applyAsLong(bin);
+            long add = getCountAsLong(bin) * function.applyAsLong(bin);
             sum += add;
         }
 
@@ -639,9 +639,9 @@ public final class Histogram {
         return value - minValue;
     }
 
-    /** Sets a count for a particular value. */
-    private void set(int value, int cntToSet) {
-        counts[index(value)] = cntToSet;
+    /** Assigns a count for a particular value. */
+    private void set(int value, int countToAssign) {
+        counts[index(value)] = countToAssign;
     }
 
     /** Increments the count for a particular value. */
@@ -649,7 +649,7 @@ public final class Histogram {
         counts[index(value)] += incrementBy;
     }
 
-    private long getAsLong(int value) {
+    private long getCountAsLong(int value) {
         return getCount(value);
     }
 
