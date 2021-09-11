@@ -28,6 +28,7 @@ package org.anchoranalysis.bean.initializable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 import lombok.AllArgsConstructor;
 import lombok.Value;
 import org.anchoranalysis.bean.AnchorBean;
@@ -72,17 +73,9 @@ class BeanAndParent {
         return listObjects;
     }
 
+    @SuppressWarnings("unchecked")
     private static String stringFromPath(List<AnchorBean<?>> listObjects) {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < listObjects.size(); i++) {
-
-            if (i != 0) {
-                sb.append("->");
-            }
-
-            AnchorBean<?> beanIter = listObjects.get(i);
-            sb.append(beanIter.getBeanName());
-        }
-        return sb.toString();
+        Stream<String> names = listObjects.stream().map(AnchorBean::getBeanName);
+        return String.join("->", (Iterable<String>) names);
     }
 }
