@@ -30,32 +30,38 @@ import lombok.NoArgsConstructor;
  */
 
 /**
- * Utilities for arithmetic operations involving type {@code double}
+ * Utilities for arithmetic operations involving type {@code double}.
  *
  * @author Owen Feehan
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class DoubleUtilities {
 
-    /** Are the two numbers equal? */
-    public static boolean areEqual(double d1, double d2) {
-        return Math.abs(d1 - d2) < PrecisionConstants.EPSILON;
+    /** 
+     * Are the two numbers equal?
+     * 
+     * @param value1 the first value.
+     * @param value2 the second value.
+     * @return true iff {@code value1} and {@code value2} differ by less than {@code PrecisionConstants.EPSILON}.
+     */
+    public static boolean areEqual(double value1, double value2) {
+        return Math.abs(value1 - value2) < PrecisionConstants.EPSILON;
     }
 
     /**
-     * Replaces a value with a constant if the divider is 0
+     * Replaces a value with a constant if the {@code denominator} is 0.
      *
-     * @param num numerator
-     * @param dem denominator
-     * @param replaceWithIfZero what to replace with if zero
-     * @return numerator divided denominator or replaceWithIfZero (if denominator is zero)
+     * @param numerator numerator.
+     * @param denominator denominator.
+     * @param replaceWithIfZero what to replace with if zero.
+     * @return numerator divided denominator or replaceWithIfZero (if denominator is zero).
      */
-    public static double divideByZeroReplace(double num, double dem, double replaceWithIfZero) {
+    public static double divideByZeroReplace(double numerator, double denominator, double replaceWithIfZero) {
 
-        if (areEqual(dem, 0.0)) {
+        if (areEqual(denominator, 0.0)) {
             return replaceWithIfZero;
         } else {
-            return num / dem;
+            return numerator / denominator;
         }
     }
 }

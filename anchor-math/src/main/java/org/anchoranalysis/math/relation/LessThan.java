@@ -26,10 +26,16 @@
 
 package org.anchoranalysis.math.relation;
 
-public class LessThan implements RelationToValue {
+
+/**
+ * Returns true iff {@code valueFirst} is less than {@code valueSecond}.
+ * 
+ * @author Owen Feehan
+ */
+public class LessThan implements DoubleBiPredicate {
 
     @Override
-    public boolean isRelationToValueTrue(double valueFirst, double valueSecond) {
+    public boolean test(double valueFirst, double valueSecond) {
         return valueFirst < valueSecond;
     }
 }

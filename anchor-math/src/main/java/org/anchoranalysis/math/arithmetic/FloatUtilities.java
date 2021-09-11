@@ -30,15 +30,21 @@ import lombok.NoArgsConstructor;
  */
 
 /**
- * Utilities for arithmetic operations involving type {@code float }
+ * Utilities for arithmetic operations involving type {@code float}.
  *
  * @author Owen Feehan
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class FloatUtilities {
 
-    /** Are the two numbers equal? */
-    public static boolean areEqual(float f1, float f2) {
-        return Math.abs(f1 - f2) < PrecisionConstants.EPSILON;
+    /** 
+     * Are the two numbers equal?
+     * 
+     * @param value1 the first value.
+     * @param value2 the second value.
+     * @return true iff {@code value1} and {@code value2} differ by less than {@code PrecisionConstants.EPSILON}.
+     */
+    public static boolean areEqual(float value1, float value2) {
+        return Math.abs(value1 - value2) < PrecisionConstants.EPSILON;
     }
 }

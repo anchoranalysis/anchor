@@ -203,7 +203,7 @@ public class HungarianAlgorithm {
         }
     }
 
-    /** @return the first unmatched worker or {@link #dim} if none. */
+    /** @return the first unmatched worker or the dimensionality if none. */
     protected int fetchUnmatchedWorker() {
         int w;
         for (w = 0; w < dim; w++) {
@@ -247,7 +247,12 @@ public class HungarianAlgorithm {
         }
     }
 
-    /** Helper method to record a matching between worker w and job j. */
+    /** 
+     * Helper method to record a matching between worker {@code w} and job {@code j}.
+     *
+     * @param w the worker
+     * @param j the job
+     */
     protected void match(int w, int j) {
         matchJobByWorker[w] = j;
         matchWorkerByJob[j] = w;
@@ -292,6 +297,8 @@ public class HungarianAlgorithm {
      * Update labels with the specified slack by adding the slack value for committed workers and by
      * subtracting the slack value for committed jobs. In addition, update the minimum slack values
      * appropriately.
+     * 
+     * @param slack the slack.
      */
     protected void updateLabeling(double slack) {
         for (int w = 0; w < dim; w++) {

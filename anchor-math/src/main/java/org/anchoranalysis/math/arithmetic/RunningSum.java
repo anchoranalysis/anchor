@@ -46,14 +46,14 @@ public class RunningSum implements Serializable {
     /** */
     private static final long serialVersionUID = -2147459521030056604L;
 
-    /** The running sum */
+    /** The running sum. */
     @Getter private double sum = 0;
 
-    /** The running count */
+    /** The running count. */
     @Getter private long count = 0;
 
     /**
-     * Calculates the mean
+     * Calculates the mean.
      *
      * @return the mean or {@code NaN} if the count is zero.
      */
@@ -62,7 +62,7 @@ public class RunningSum implements Serializable {
     }
 
     /**
-     * Calculates the mean
+     * Calculates the mean.
      *
      * @param valueIfCountZero value to use if the count is zero
      * @return the mean or {@code valueIfCountZero} if the count is zero.
@@ -75,14 +75,18 @@ public class RunningSum implements Serializable {
         }
     }
 
-    /** Calculate the mean and then reset to zero */
+    /** 
+     * Calculate the mean and then reset to zero.
+     *
+     * @return the mean, before being reset to zero.
+     */
     public double meanAndReset() {
-        double res = mean();
+        double mean = mean();
         reset();
-        return res;
+        return mean;
     }
 
-    /** Reset the sum and count to zero */
+    /** Reset the sum and count to zero. */
     public void reset() {
         sum = 0.0;
         count = 0;
@@ -91,7 +95,7 @@ public class RunningSum implements Serializable {
     /**
      * Adds a new item to the sum, and increments the count by 1.
      *
-     * @param sumIncrement the value to add to sum
+     * @param sumIncrement the value to add to sum.
      */
     public void increment(double sumIncrement) {
         sum += sumIncrement;
@@ -99,7 +103,7 @@ public class RunningSum implements Serializable {
     }
 
     /**
-     * Increments both the sum and count by particular values
+     * Increments both the sum and count by particular values.
      *
      * @param sumIncrement increment-value for sum
      * @param countIncrement increment-value for count
@@ -122,7 +126,7 @@ public class RunningSum implements Serializable {
     /**
      * Deep-copy.
      *
-     * @return a new object with new state
+     * @return a new object with new state.
      */
     public RunningSum duplicate() {
         RunningSum out = new RunningSum();

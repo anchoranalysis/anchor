@@ -55,20 +55,20 @@ class VoxelizedMarkHistogram implements VoxelizedMark {
             new VoxelPartitonFactoryHistogram();
 
     // Quick access to what is inside and what is outside
-    private final IndexByChannel<Histogram> partitionList;
+    private final IndexByChannel<Histogram> partitions;
 
     @Getter private ObjectMask object;
 
     @Getter private ObjectMask objectFlattened; // null until we need it
 
     public VoxelizedMarkHistogram(Mark mark, EnergyStackWithoutParams stack, RegionMap regionMap) {
-        partitionList = new IndexByChannel<>();
+        partitions = new IndexByChannel<>();
         initForMark(mark, stack, regionMap);
     }
 
     private VoxelizedMarkHistogram(VoxelizedMarkHistogram src) {
         // No duplication, only shallow copy (for now). This might change in future.
-        this.partitionList = src.partitionList;
+        this.partitions = src.partitions;
     }
 
     /** Does only a shallow copy of partition-list */
@@ -100,18 +100,18 @@ class VoxelizedMarkHistogram implements VoxelizedMark {
     @Override
     public VoxelStatistics statisticsForAllSlices(int channelID, int regionID) {
         return new VoxelStatisticsFromHistogram(
-                partitionList.get(channelID).getForAllSlices(regionID));
+                partitions.get(channelID).getForAllSlices(regionID));
     }
 
     @Override
     public VoxelStatistics statisticsFor(int channelID, int regionID, int sliceID) {
         return new VoxelStatisticsFromHistogram(
-                partitionList.get(channelID).getForSlice(regionID, sliceID));
+                partitions.get(channelID).getForSlice(regionID, sliceID));
     }
 
     @Override
     public void cleanUp() {
-        partitionList.cleanUp(FACTORY);
+        partitions.cleanUp(FACTORY);
     }
 
     @Override
@@ -121,14 +121,14 @@ class VoxelizedMarkHistogram implements VoxelizedMark {
         Histogram histogram = new Histogram(255);
 
         // We loop through each slice
-        for (int z = 0; z < partitionList.get(0).numSlices(); z++) {
+        for (int z = 0; z < partitions.get(0).numSlices(); z++) {
 
-            Histogram hChannel = partitionList.get(channelID).getForSlice(regionID, z);
-            Histogram hMaskChannel = partitionList.get(maskChannelID).getForSlice(regionID, z);
+            Histogram histogramChannel = partitions.get(channelID).getForSlice(regionID, z);
+            Histogram histogramMask = partitions.get(maskChannelID).getForSlice(regionID, z);
 
-            if (hMaskChannel.hasAboveZero()) {
+            if (histogramMask.hasNonZeroCount(1)) {
                 try {
-                    histogram.addHistogram(hChannel);
+                    histogram.addHistogram(histogramChannel);
                 } catch (OperationFailedException e) {
                     throw new AnchorImpossibleSituationException();
                 }
@@ -149,7 +149,7 @@ class VoxelizedMarkHistogram implements VoxelizedMark {
         objectFlattened = new ObjectMask(box.flattenZ());
 
         Extent localExtent = box.extent();
-        partitionList.initialize(
+        partitions.initialize(
                 FACTORY, stack.getNumberChannels(), regionMap.numRegions(), localExtent.z());
 
         UnsignedByteBuffer bufferMIP = getObjectFlattened().sliceBufferLocal(0);
@@ -214,7 +214,7 @@ class VoxelizedMarkHistogram implements VoxelizedMark {
                 AddVoxelsToHistogram.addVoxels(
                         membership,
                         listRegionMembership,
-                        partitionList,
+                        partitions,
                         bufferArrList,
                         globalOffset,
                         zLocal);

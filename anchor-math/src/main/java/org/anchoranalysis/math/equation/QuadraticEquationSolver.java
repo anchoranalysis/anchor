@@ -32,28 +32,34 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
 
-/** Solves a Quadratic Equation by finding non-complex roots */
+/** 
+ * Solves a <a href="https://en.wikipedia.org/wiki/Quadratic_equation">Quadratic Equation</a> by finding non-complex roots.
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class QuadraticEquationSolver {
 
-    /** Roots (solution) of a quadratic equation */
+    /** Roots (solution) of a quadratic equation. */
     @AllArgsConstructor
     @Data
     public static class QuadraticRoots {
+        
+        /** The first root. */
         private double root1;
+        
+        /** The second root. */
         private double root2;
     }
 
     /**
-     * Solves a quadratic equation in form x^2 + b^x + c = 0
+     * Solves a quadratic equation in form {@code x^2 + b^x + c = 0}.
+     * 
+     * <p>It does not support complex roots.
      *
-     * <p>Assumes no complex roots
-     *
-     * @param a coefficient for x^2
-     * @param b coefficient for x
-     * @param c coefficient for constant term
-     * @return simple roots
-     * @throws OperationFailedException if the solution requires complex roots
+     * @param a coefficient for {@code x^2}
+     * @param b coefficient for {@code x}
+     * @param c coefficient for constant term.
+     * @return simple roots.
+     * @throws OperationFailedException if the solution requires complex roots.
      */
     public static QuadraticRoots solveQuadraticEquation(double a, double b, double c)
             throws OperationFailedException {

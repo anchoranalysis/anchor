@@ -29,13 +29,13 @@ package org.anchoranalysis.bean.shared.relation;
 import lombok.EqualsAndHashCode;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.GenerateUniqueParameterization;
-import org.anchoranalysis.math.relation.RelationToValue;
+import org.anchoranalysis.math.relation.DoubleBiPredicate;
 
 @EqualsAndHashCode(callSuper = false)
 public abstract class RelationBean extends AnchorBean<RelationBean>
         implements GenerateUniqueParameterization {
 
-    public abstract RelationToValue create();
+    public abstract DoubleBiPredicate create();
 
     @Override
     public abstract String toString();

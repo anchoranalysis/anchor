@@ -34,7 +34,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.NonNegative;
 import org.anchoranalysis.bean.shared.relation.RelationBean;
-import org.anchoranalysis.math.relation.RelationToValue;
+import org.anchoranalysis.math.relation.DoubleBiPredicate;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -53,7 +53,7 @@ public class RelationToConstant extends RelationToThreshold {
     }
 
     @Override
-    public RelationToValue relation() {
+    public DoubleBiPredicate relation() {
         return relation.create();
     }
 

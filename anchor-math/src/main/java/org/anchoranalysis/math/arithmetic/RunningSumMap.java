@@ -47,7 +47,12 @@ public class RunningSumMap<T> {
      */
     private Map<T, RunningSum> map = new ConcurrentSkipListMap<>();
 
-    /** Whether the map contains the key {@code key}. ? */
+    /** 
+     * Whether the map contains the key {@code key}?
+     *
+     * @param key the key.
+     * @return true iff the map contains {@code key}.
+     */
     public boolean containsKey(T key) {
         return map.containsKey(key);
     }

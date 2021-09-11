@@ -28,13 +28,13 @@ package org.anchoranalysis.bean.shared.relation;
 
 import lombok.EqualsAndHashCode;
 import org.anchoranalysis.math.relation.EqualTo;
-import org.anchoranalysis.math.relation.RelationToValue;
+import org.anchoranalysis.math.relation.DoubleBiPredicate;
 
 @EqualsAndHashCode(callSuper = true)
 public class EqualToBean extends RelationBean {
 
     @Override
-    public RelationToValue create() {
+    public DoubleBiPredicate create() {
         return new EqualTo();
     }
 

@@ -28,7 +28,7 @@ package org.anchoranalysis.bean.shared.relation;
 
 import lombok.EqualsAndHashCode;
 import org.anchoranalysis.math.relation.GreaterThan;
-import org.anchoranalysis.math.relation.RelationToValue;
+import org.anchoranalysis.math.relation.DoubleBiPredicate;
 
 @EqualsAndHashCode(callSuper = true)
 public class GreaterThanBean extends RelationBean {
@@ -39,7 +39,7 @@ public class GreaterThanBean extends RelationBean {
     }
 
     @Override
-    public RelationToValue create() {
+    public DoubleBiPredicate create() {
         return new GreaterThan();
     }
 }

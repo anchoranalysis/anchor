@@ -48,5 +48,5 @@ public abstract class HistogramProviderUnary extends HistogramProvider {
         }
     }
 
-    protected abstract Histogram createFromHistogram(Histogram source) throws CreateException;
+    protected abstract Histogram createFromHistogram(Histogram histogram) throws CreateException;
 }

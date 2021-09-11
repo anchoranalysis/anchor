@@ -47,7 +47,7 @@ class HistogramCSVWriter {
         try (CSVWriter writer = CSVWriter.create(filePath)) {
             writer.writeHeaders(HEADERS);
 
-            histogram.iterateBins(
+            histogram.iterateValues(
                     (bin, count) -> {
 
                         // Skip any zeros if we are ignoring zeros
