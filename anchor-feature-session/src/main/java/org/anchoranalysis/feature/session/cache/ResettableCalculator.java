@@ -38,22 +38,22 @@ import org.anchoranalysis.feature.calculate.cache.ResolvedCalculationMap;
 import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 class ResettableCalculator<T extends FeatureInput> implements FeatureSessionCalculator<T> {
 
+    // START REQUIRED ARGUMENTS
+    private final SharedFeatureSet<T> sharedFeatures;
+    // END REQUIRED ARGUMENTS
+    
     private ResettableSet<FeatureCalculation<?, T>> setCalculation = new ResettableSet<>(false);
     private ResettableSet<FeatureCalculationMap<?, T, ?, FeatureCalculationException>>
             setCalculationMap = new ResettableSet<>(false);
 
     private Logger logger;
-    private SharedFeatureSet<T> sharedFeatures;
 
-    public ResettableCalculator(SharedFeatureSet<T> sharedFeatures) {
-        super();
-        this.sharedFeatures = sharedFeatures;
-    }
-
-    public void init(Logger logger) {
+    public void initialize(Logger logger) {
         this.logger = logger;
     }
 

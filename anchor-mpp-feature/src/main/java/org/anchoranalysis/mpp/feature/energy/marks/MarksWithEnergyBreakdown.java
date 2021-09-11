@@ -72,7 +72,7 @@ public class MarksWithEnergyBreakdown implements Serializable {
     }
 
     // The initial calculation of the Energy, thereafter it can be updated
-    public void init() throws NamedFeatureCalculateException {
+    public void initialize() throws NamedFeatureCalculateException {
         this.individual = new EnergySavedInd();
         try {
             this.pair = new EnergySavedPairs(marks.getEnergyScheme().createAddCriteria());

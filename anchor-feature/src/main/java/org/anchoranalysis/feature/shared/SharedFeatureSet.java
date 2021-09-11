@@ -28,7 +28,7 @@ package org.anchoranalysis.feature.shared;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.identifier.name.NameValue;
 import org.anchoranalysis.core.identifier.provider.NameValueMap;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
@@ -42,10 +42,10 @@ public class SharedFeatureSet<T extends FeatureInput> {
 
     @Getter private NameValueMap<Feature<T>> set;
 
-    public void initRecursive(FeatureInitialization initialization, Logger logger)
-            throws InitException {
+    public void initializeRecursive(FeatureInitialization initialization, Logger logger)
+            throws InitializeException {
         for (NameValue<Feature<T>> nv : set) {
-            nv.getValue().initRecursive(initialization, logger);
+            nv.getValue().initializeRecursive(initialization, logger);
         }
     }
 

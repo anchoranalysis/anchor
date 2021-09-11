@@ -33,7 +33,7 @@ public class TriggerTerminationCondition extends TerminationCondition {
     private boolean triggered = false;
 
     @Override
-    public void init() {
+    public void initialize() {
         // NOTHING TO DO
     }
 

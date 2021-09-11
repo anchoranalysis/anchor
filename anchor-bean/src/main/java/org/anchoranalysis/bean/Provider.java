@@ -30,7 +30,7 @@ import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.functional.checked.CheckedSupplier;
 
 /**
- * A class (usually an {@link AnchorBean}} that creates or otherwise supplies another object.
+ * A class (usually an {@link AnchorBean}) that creates or otherwise supplies another object.
  *
  * <p>This is like a {@link CheckedSupplier} but throws a particular type of exception.
  *

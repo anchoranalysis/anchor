@@ -1,4 +1,4 @@
-/** Performing initializion on particular properties in a bean. */
+/** Initializating a bean with parameters. */
 package org.anchoranalysis.bean.initializable.property;
 /*-
  * #%L

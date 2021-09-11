@@ -28,7 +28,7 @@ package org.anchoranalysis.bean;
 
 /**
  * Objects that must implement well-defined {@code equals()} and {@code hashCode()} methods and also
- * generate a name uniquely identifying the class and all parameterization
+ * generate a name uniquely identifying the class and all parameterization.
  *
  * @author Owen Feehan
  */
@@ -41,8 +41,11 @@ public interface GenerateUniqueParameterization {
     public abstract int hashCode();
 
     /**
-     * A string describing this class and all its parameterization that is guaranteed to be unique
-     * for a given set of parameters
+     * A string describing this class and all its parameterization.
+     *
+     * <p>It must be guaranteed to be unique for a given set of parameters.
+     *
+     * @return the unique name for the parameters.
      */
     public abstract String uniqueName();
 }

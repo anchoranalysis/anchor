@@ -69,7 +69,7 @@ class RTreeTest {
 
     /** Sets up an r-tree before each test using 1, 2 and 3 as payloads for the respective boxes. */
     @BeforeEach
-    void init() {
+    void initialize() {
         rTree = new RTree<>(3);
         rTree.add(BOX1, 1);
         rTree.add(BOX2, 2);

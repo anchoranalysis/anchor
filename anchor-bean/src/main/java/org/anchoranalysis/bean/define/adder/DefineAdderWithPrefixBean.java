@@ -33,11 +33,10 @@ import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.define.Define;
-import org.anchoranalysis.bean.xml.exception.BeanXmlException;
-import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.bean.define.DefineAddException;
 
 /**
- * Adds a prefix
+ * Like {@link DefineAdderBean} but adds a prefix to the name of beans when adding.
  *
  * @author Owen Feehan
  */
@@ -48,17 +47,26 @@ public abstract class DefineAdderWithPrefixBean extends DefineAdderBean {
     @BeanField @AllowEmpty @Getter @Setter private String prefix = "";
     // END BEAN PROPERTIES
 
+    /**
+     * Add an item to {@code define} with a name being added.
+     *
+     * @param define the define.
+     * @param name the name of the bean.
+     * @param item the item to add.
+     * @throws DefineAddException if a {#link GroupingRoot} cannot be found in the class-hierarchy.
+     */
     protected void addWithName(Define define, String name, AnchorBean<?> item)
-            throws BeanXmlException {
-        NamedBean<?> nb = new NamedBean<>(resolveName(name), item);
-        try {
-            define.add(nb);
-        } catch (OperationFailedException e) {
-            throw new BeanXmlException(e);
-        }
+            throws DefineAddException {
+        NamedBean<?> bean = new NamedBean<>(resolveName(name), item);
+        define.add(bean);
     }
 
-    /** Adds a prefix before the name */
+    /**
+     * Prepends a prefix before the name.
+     *
+     * @param name the name to prepend.
+     * @return the name with a prefix prepended.
+     */
     protected String resolveName(String name) {
         return prefix + name;
     }

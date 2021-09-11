@@ -34,7 +34,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.CreateException;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
@@ -117,7 +117,7 @@ public class RandomCollectionWithAddCriteria<T> extends RandomCollection<T> {
     @Override
     public void initUpdatableMarks(
             MemoForIndex marks, EnergyStack stack, Logger logger, SharedFeatureMulti sharedFeatures)
-            throws InitException {
+            throws InitializeException {
         this.logger = logger;
         this.sharedFeatures = sharedFeatures;
 
@@ -148,7 +148,7 @@ public class RandomCollectionWithAddCriteria<T> extends RandomCollection<T> {
             this.energyStack = stack;
 
         } catch (CreateException e) {
-            throw new InitException(e);
+            throw new InitializeException(e);
         }
     }
 
@@ -300,7 +300,7 @@ public class RandomCollectionWithAddCriteria<T> extends RandomCollection<T> {
                                             new FeatureInitialization(energyStack.getDictionary()),
                                             sharedFeatures,
                                             logger));
-        } catch (InitException e) {
+        } catch (InitializeException e) {
             throw new CreateException(e);
         }
 

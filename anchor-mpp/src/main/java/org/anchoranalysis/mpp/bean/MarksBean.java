@@ -29,9 +29,9 @@ package org.anchoranalysis.mpp.bean;
 import java.util.Arrays;
 import java.util.List;
 import org.anchoranalysis.bean.initializable.InitializableBean;
-import org.anchoranalysis.bean.initializable.property.ExtractFromParam;
-import org.anchoranalysis.bean.initializable.property.PropertyInitializer;
-import org.anchoranalysis.bean.initializable.property.SimplePropertyDefiner;
+import org.anchoranalysis.bean.initializable.property.ExtractDerivedParameter;
+import org.anchoranalysis.bean.initializable.property.BeanInitializer;
+import org.anchoranalysis.bean.initializable.property.AssignerMatchClass;
 import org.anchoranalysis.bean.shared.dictionary.DictionaryInitialization;
 import org.anchoranalysis.feature.shared.FeaturesInitialization;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
@@ -41,28 +41,28 @@ import org.anchoranalysis.mpp.init.PointsInitialization;
 public abstract class MarksBean<T> extends InitializableBean<T, MarksInitialization> {
 
     protected MarksBean() {
-        super(initializerForMarksBeans(), new SimplePropertyDefiner<>(MarksInitialization.class));
+        super(initializerForMarksBeans(), new AssignerMatchClass<>(MarksInitialization.class));
     }
 
     /**
      * Creates a property-initializes for MPP-Beans
      *
      * <p>Beware concurrency. Initializers are stateful with the {#link {@link
-     * PropertyInitializer#setParam(Object)} method so this should be created newly for each thread,
+     * BeanInitializer#setParam(Object)} method so this should be created newly for each thread,
      * rather reused statically
      *
      * @return
      */
-    public static PropertyInitializer<MarksInitialization> initializerForMarksBeans() {
-        return new PropertyInitializer<>(MarksInitialization.class, paramExtracters());
+    public static BeanInitializer<MarksInitialization> initializerForMarksBeans() {
+        return new BeanInitializer<>(MarksInitialization.class, paramExtracters());
     }
 
-    private static List<ExtractFromParam<MarksInitialization, ?>> paramExtracters() {
+    private static List<ExtractDerivedParameter<MarksInitialization, ?>> paramExtracters() {
         return Arrays.asList(
-                new ExtractFromParam<>(PointsInitialization.class, MarksInitialization::points),
-                new ExtractFromParam<>(FeaturesInitialization.class, MarksInitialization::feature),
-                new ExtractFromParam<>(
+                new ExtractDerivedParameter<>(PointsInitialization.class, MarksInitialization::points),
+                new ExtractDerivedParameter<>(FeaturesInitialization.class, MarksInitialization::feature),
+                new ExtractDerivedParameter<>(
                         DictionaryInitialization.class, MarksInitialization::dictionary),
-                new ExtractFromParam<>(ImageInitialization.class, MarksInitialization::image));
+                new ExtractDerivedParameter<>(ImageInitialization.class, MarksInitialization::image));
     }
 }

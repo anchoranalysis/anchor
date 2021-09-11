@@ -29,7 +29,7 @@ package org.anchoranalysis.mpp.feature.energy.marks;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
 import org.anchoranalysis.feature.energy.EnergyStack;
@@ -207,7 +207,7 @@ public final class VoxelizedMarksWithEnergy {
             Logger logger)
             throws NamedFeatureCalculateException {
         try {
-            marks.init();
+            marks.initialize();
 
             EnergyMemoList memo =
                     new EnergyMemoList(
@@ -223,7 +223,7 @@ public final class VoxelizedMarksWithEnergy {
             marks.updateTotal(memo, energyStack.withoutParams());
 
             return memo;
-        } catch (InitException e) {
+        } catch (InitializeException e) {
             throw new NamedFeatureCalculateException(e);
         }
     }

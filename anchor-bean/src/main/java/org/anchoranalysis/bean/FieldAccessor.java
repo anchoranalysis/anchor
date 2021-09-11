@@ -47,7 +47,8 @@ public class FieldAccessor {
      * @param field the field to retrieve a value from
      * @return the value, it it exists, or {@code Optional.empty()} if it doesn't exist <b>and</b>
      *     the bean is marked as optional.
-     * @throws IllegalAccessException
+     * @throws IllegalAccessException if reflection tries to access a property it has no permissions
+     *     for.
      * @throws BeanMisconfiguredException if no value exists for the field (and it's not marked as
      *     optional).
      */

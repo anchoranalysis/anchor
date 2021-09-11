@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.feature.session;
 
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.feature.calculate.FeatureInitialization;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
 import org.anchoranalysis.feature.input.FeatureInput;
@@ -40,7 +40,7 @@ import org.junit.jupiter.api.Test;
 class FeatureSessionTest {
 
     @Test
-    void testCalculateSimpleListOfFeatures() throws InitException, NamedFeatureCalculateException {
+    void testCalculateSimpleListOfFeatures() throws InitializeException, NamedFeatureCalculateException {
 
         SequentialSession<FeatureInput> session =
                 new SequentialSession<>(ConstantsInListFixture.create());

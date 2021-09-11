@@ -29,7 +29,7 @@ package org.anchoranalysis.bean.shared.dictionary;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.core.value.Dictionary;
 
@@ -42,18 +42,17 @@ public class DictionaryProviderReference extends DictionaryProvider {
     private Dictionary dictionary;
 
     @Override
-    public void onInit(DictionaryInitialization so) throws InitException {
-        super.onInit(so);
+    public void onInitialization(DictionaryInitialization so) throws InitializeException {
+        super.onInitialization(so);
         try {
             dictionary = so.getDictionaries().getException(id);
         } catch (NamedProviderGetException e) {
-            throw new InitException(e.summarize());
+            throw new InitializeException(e.summarize());
         }
     }
 
     @Override
     public Dictionary get() {
-        assert (getInitialization() != null); // Otherwise init() has never been called
         return dictionary;
     }
 }

@@ -29,9 +29,9 @@ package org.anchoranalysis.image.bean;
 import java.util.Arrays;
 import java.util.List;
 import org.anchoranalysis.bean.initializable.InitializableBean;
-import org.anchoranalysis.bean.initializable.property.ExtractFromParam;
-import org.anchoranalysis.bean.initializable.property.PropertyInitializer;
-import org.anchoranalysis.bean.initializable.property.SimplePropertyDefiner;
+import org.anchoranalysis.bean.initializable.property.ExtractDerivedParameter;
+import org.anchoranalysis.bean.initializable.property.BeanInitializer;
+import org.anchoranalysis.bean.initializable.property.AssignerMatchClass;
 import org.anchoranalysis.bean.shared.dictionary.DictionaryInitialization;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 
@@ -39,16 +39,16 @@ public abstract class ImageBean<T> extends InitializableBean<T, ImageInitializat
 
     protected ImageBean() {
         super(
-                new PropertyInitializer<>(ImageInitialization.class, paramExtracters()),
-                new SimplePropertyDefiner<ImageInitialization>(ImageInitialization.class));
+                new BeanInitializer<>(ImageInitialization.class, paramExtracters()),
+                new AssignerMatchClass<ImageInitialization>(ImageInitialization.class));
     }
 
-    private static List<ExtractFromParam<ImageInitialization, ?>> paramExtracters() {
+    private static List<ExtractDerivedParameter<ImageInitialization, ?>> paramExtracters() {
         return Arrays.asList(
-                new ExtractFromParam<>(
+                new ExtractDerivedParameter<>(
                         DictionaryInitialization.class,
                         ImageInitialization::featuresInitialization),
-                new ExtractFromParam<>(
+                new ExtractDerivedParameter<>(
                         DictionaryInitialization.class,
                         ImageInitialization::dictionaryInitialization));
     }

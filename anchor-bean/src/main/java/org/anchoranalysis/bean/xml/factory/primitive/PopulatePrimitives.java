@@ -1,10 +1,35 @@
+/*-
+ * #%L
+ * anchor-bean
+ * %%
+ * Copyright (C) 2010 - 2021 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
+ * %%
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ * #L%
+ */
 package org.anchoranalysis.bean.xml.factory.primitive;
 
 import java.util.function.Function;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.primitive.PrimitiveBeanCollection;
-import org.anchoranalysis.bean.xml.exception.BeanXmlException;
+import org.anchoranalysis.bean.xml.exception.BeanXMLException;
 import org.apache.commons.configuration.beanutils.BeanDeclaration;
 import org.apache.commons.configuration.beanutils.XMLBeanDeclaration;
 import org.apache.commons.configuration.tree.ConfigurationNode;
@@ -58,10 +83,10 @@ class PopulatePrimitives<T> {
      * <p>The items attribute can be a comma separated string.
      *
      * @return {@code collectionToPopulate}
-     * @throws BeanXmlException if the BeanXML contains content that cannot be formatted to the
+     * @throws BeanXMLException if the BeanXML contains content that cannot be formatted to the
      *     desired number.
      */
-    public PrimitiveBeanCollection<T> populate() throws BeanXmlException {
+    public PrimitiveBeanCollection<T> populate() throws BeanXMLException {
         populateFromElements();
         return populateFromAttribute();
     }
@@ -70,10 +95,10 @@ class PopulatePrimitives<T> {
      * Populates from an XML bean from any sub-elements from "item".
      *
      * @return {@code collectionToPopulate}
-     * @throws BeanXmlException if the BeanXML contains content that cannot be formatted to the
+     * @throws BeanXMLException if the BeanXML contains content that cannot be formatted to the
      *     desired number.
      */
-    private PrimitiveBeanCollection<T> populateFromElements() throws BeanXmlException {
+    private PrimitiveBeanCollection<T> populateFromElements() throws BeanXMLException {
         return populateFromExtractedStrings(decl -> decl.getConfiguration().getStringArray("item"));
     }
 
@@ -83,23 +108,23 @@ class PopulatePrimitives<T> {
      * <p>e.g. value could be a comma separated list of strings
      *
      * @return {@code collectionToPopulate}
-     * @throws BeanXmlException if the BeanXML contains content that cannot be formatted to the
+     * @throws BeanXMLException if the BeanXML contains content that cannot be formatted to the
      *     desired number.
      */
-    private PrimitiveBeanCollection<T> populateFromAttribute() throws BeanXmlException {
+    private PrimitiveBeanCollection<T> populateFromAttribute() throws BeanXMLException {
         return populateFromExtractedStrings(
                 xmlDeclaration -> separatedValuesFromAttribute(xmlDeclaration, "items"));
     }
 
     private PrimitiveBeanCollection<T> populateFromExtractedStrings(
-            Function<XMLBeanDeclaration, String[]> extractItems) throws BeanXmlException {
+            Function<XMLBeanDeclaration, String[]> extractItems) throws BeanXMLException {
         String[] items = extractItems.apply(declaration);
         for (String item : items) {
             try {
                 T converted = convertToPrimitive.apply(item);
                 collectionToPopulate.add(converted);
             } catch (Exception e) {
-                throw new BeanXmlException(
+                throw new BeanXMLException(
                         "The BeanXML contains invalid content for the desired primitives.", e);
             }
         }

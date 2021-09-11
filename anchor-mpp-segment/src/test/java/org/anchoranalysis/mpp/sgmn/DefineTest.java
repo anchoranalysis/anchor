@@ -35,7 +35,7 @@ import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.bean.xml.BeanXMLLoader;
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
-import org.anchoranalysis.bean.xml.exception.BeanXmlException;
+import org.anchoranalysis.bean.xml.exception.BeanXMLException;
 import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.test.TestLoader;
@@ -52,16 +52,16 @@ class DefineTest {
     }
 
     @Test
-    void testStatic() throws BeanXmlException {
+    void testStatic() throws BeanXMLException {
         checkPath("defineStatic.xml");
     }
 
     @Test
-    void testDynamic() throws BeanXmlException {
+    void testDynamic() throws BeanXMLException {
         checkPath("defineDynamic.xml");
     }
 
-    private void checkPath(String fileName) throws BeanXmlException {
+    private void checkPath(String fileName) throws BeanXMLException {
         Path path = loader.resolveTestPath(fileName);
         Define define = BeanXMLLoader.loadBean(path);
         checkDefine(define);
@@ -76,7 +76,7 @@ class DefineTest {
     }
 
     private void assertTwoElements(Define define, Class<?> provider, String prefix) {
-        List<NamedBean<AnchorBean<?>>> list = define.getList(provider);
+        List<NamedBean<AnchorBean<?>>> list = define.listFor(provider);
         assertEquals(2, list.size());
         assertElement(list, 0, prefix + "1");
         assertElement(list, 1, prefix + "2");

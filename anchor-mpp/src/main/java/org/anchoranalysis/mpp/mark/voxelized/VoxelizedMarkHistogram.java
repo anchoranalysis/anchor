@@ -149,7 +149,7 @@ class VoxelizedMarkHistogram implements VoxelizedMark {
         objectFlattened = new ObjectMask(box.flattenZ());
 
         Extent localExtent = box.extent();
-        partitionList.init(
+        partitionList.initialize(
                 FACTORY, stack.getNumberChannels(), regionMap.numRegions(), localExtent.z());
 
         UnsignedByteBuffer bufferMIP = getObjectFlattened().sliceBufferLocal(0);
@@ -157,7 +157,7 @@ class VoxelizedMarkHistogram implements VoxelizedMark {
         for (int z = box.cornerMin().z(); z <= cornerMax.z(); z++) {
 
             BufferArrayList bufferArrList = new BufferArrayList();
-            bufferArrList.init(stack, z);
+            bufferArrList.initialize(stack, z);
             initForSlice(
                     z,
                     mark,

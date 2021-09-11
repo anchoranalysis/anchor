@@ -27,7 +27,7 @@
 package org.anchoranalysis.image.feature.calculator;
 
 import java.util.Optional;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.input.FeatureInput;
@@ -53,7 +53,7 @@ public interface FeatureTableCalculator<T extends FeatureInput> extends FeatureC
      * @param logger
      */
     void start(ImageInitialization initialization, Optional<EnergyStack> energyStack, Logger logger)
-            throws InitException;
+            throws InitializeException;
 
     /**
      * Makes a copy of the feature-store for a new thread.

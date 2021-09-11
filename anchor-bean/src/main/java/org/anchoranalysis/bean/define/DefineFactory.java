@@ -31,9 +31,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import org.anchoranalysis.bean.define.adder.DefineAdder;
 import org.anchoranalysis.bean.define.adder.DefineAdderBean;
-import org.anchoranalysis.bean.xml.exception.BeanXmlException;
+import org.anchoranalysis.bean.xml.creator.BeanListCreator;
 import org.anchoranalysis.bean.xml.factory.AnchorBeanFactory;
-import org.anchoranalysis.bean.xml.factory.HelperListUtilities;
 import org.apache.commons.configuration.SubnodeConfiguration;
 import org.apache.commons.configuration.beanutils.BeanDeclaration;
 import org.apache.commons.configuration.beanutils.XMLBeanDeclaration;
@@ -67,7 +66,7 @@ public class DefineFactory extends AnchorBeanFactory {
 
         // We find all items ELEMENT_NAME_ADD and treat them as adder
         List<DefineAdderBean> list =
-                HelperListUtilities.listOfBeans(ELEMENT_NAME_ADD, subConfig, param);
+                BeanListCreator.createListBeans(ELEMENT_NAME_ADD, subConfig, param);
         addMany(out, list);
 
         // We iterate through all other beans, and create an adder for the assumption that each is a
@@ -79,7 +78,7 @@ public class DefineFactory extends AnchorBeanFactory {
     }
 
     private static <T extends DefineAdder> void addMany(Define out, Iterable<T> adderIterable)
-            throws BeanXmlException {
+            throws DefineAddException {
         for (DefineAdder adder : adderIterable) {
             adder.addTo(out);
         }

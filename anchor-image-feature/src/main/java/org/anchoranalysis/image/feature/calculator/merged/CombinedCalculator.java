@@ -27,7 +27,7 @@
 package org.anchoranalysis.image.feature.calculator.merged;
 
 import java.util.Optional;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.log.error.ErrorReporter;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
 import org.anchoranalysis.feature.results.ResultsVector;
@@ -78,7 +78,7 @@ class CombinedCalculator {
             CreateCalculatorHelper calculatorCreator,
             MergedPairsInclude include,
             ImageInitialization initialization)
-            throws InitException {
+            throws InitializeException {
         super();
         this.calculatorCreator = calculatorCreator;
         this.features = features;
@@ -164,7 +164,7 @@ class CombinedCalculator {
                             FeatureInputSingleObject,
                             CacheAndReuseStrategy<FeatureInputSingleObject>>
                     cachingStrategyFirstSecond)
-            throws InitException {
+            throws InitializeException {
         if (include.includeFirstOrSecond()) {
             return Optional.of(
                     features.createSingle(
@@ -180,7 +180,7 @@ class CombinedCalculator {
                             FeatureInputSingleObject,
                             CacheAndReuseStrategy<FeatureInputSingleObject>>
                     cachingStrategyMerged)
-            throws InitException {
+            throws InitializeException {
         if (include.includeMerged()) {
             return Optional.of(
                     features.createSingle(
@@ -200,7 +200,7 @@ class CombinedCalculator {
                             FeatureInputSingleObject,
                             CacheAndReuseStrategy<FeatureInputSingleObject>>
                     cachingStrategyMerged)
-            throws InitException {
+            throws InitializeException {
         return features.createPair(
                 calculatorCreator,
                 initialization,

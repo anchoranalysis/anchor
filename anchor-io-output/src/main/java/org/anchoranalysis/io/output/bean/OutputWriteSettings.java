@@ -27,6 +27,7 @@
 package org.anchoranalysis.io.output.bean;
 
 import java.util.List;
+import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.AnchorBean;
@@ -45,11 +46,11 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 /**
  * Settings for how to write output, including default writers.
  *
- * <p>It is very important that {@link #init} is run before using the bean. This normally occurs
+ * <p>It is very important that {@link #initialize} is run before using the bean. This normally occurs
  * from checkMisconfigured() that is called automatically from the bean-loading framework
  *
- * <p>However, if the bean is not loaded through this mechanism, please call {@link #init}
- * explicitly before usage
+ * <p>However, if the bean is not loaded through this mechanism, please call {@link #initialize}
+ * explicitly before usage.
  */
 public class OutputWriteSettings extends AnchorBean<OutputWriteSettings> {
 
@@ -71,10 +72,10 @@ public class OutputWriteSettings extends AnchorBean<OutputWriteSettings> {
     public void checkMisconfigured(BeanInstanceMap defaultInstances)
             throws BeanMisconfiguredException {
         super.checkMisconfigured(defaultInstances);
-        init(defaultInstances);
+        initialize(defaultInstances);
     }
 
-    public void init(BeanInstanceMap defaultInstances) throws BeanMisconfiguredException {
+    public void initialize(BeanInstanceMap defaultInstances) throws BeanMisconfiguredException {
 
         // A convenient place to set up our writerInstances, as it is executed once, before
         // getDefaultWriter()
@@ -105,12 +106,12 @@ public class OutputWriteSettings extends AnchorBean<OutputWriteSettings> {
      *
      * <p>When a writer is returned, it will always inherits from type c.
      *
-     * @param writerParentClass the class identifying which type of writer is sought
+     * @param writerFamilyType the class identifying which type of writer is sought
      * @return a matching writer, or null.
      */
-    public Object getWriterInstance(Class<?> writerParentClass) {
+    public <T> Optional<T> getWriterInstance(Class<? extends T> writerFamilyType) {
         // We look for the default instance, corresponding to the particular class
-        return writerInstances.get(writerParentClass);
+        return writerInstances.getInstanceFor(writerFamilyType);
     }
 
     public ColorIndex defaultColorIndexFor(int numberColors) throws OperationFailedException {

@@ -38,7 +38,7 @@ import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 import org.anchoranalysis.bean.initializable.CheckMisconfigured;
 import org.anchoranalysis.bean.shared.dictionary.DictionaryProvider;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.FeatureRelatedBean;
@@ -120,7 +120,7 @@ public class FeatureEvaluator<T extends FeatureInput>
             return FeatureSession.with(
                     determineFeature(), getInitialization().getSharedFeatures(), getLogger());
 
-        } catch (InitException | ProvisionFailedException e) {
+        } catch (InitializeException | ProvisionFailedException e) {
             throw new OperationFailedException(e);
         }
     }

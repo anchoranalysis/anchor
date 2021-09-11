@@ -60,7 +60,7 @@ public interface FeatureSessionCache<T extends FeatureInput> {
      * @param initialization initialization for the feature.
      * @param logger logger
      */
-    public abstract void init(FeatureInitialization initialization, Logger logger);
+    public abstract void initialize(FeatureInitialization initialization, Logger logger);
 
     /** Invalidates existing caches so all calculations occur freshly */
     void invalidate();

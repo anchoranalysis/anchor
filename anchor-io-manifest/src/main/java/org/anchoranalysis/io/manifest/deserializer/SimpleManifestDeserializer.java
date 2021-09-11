@@ -38,7 +38,7 @@ public class SimpleManifestDeserializer implements ManifestDeserializer {
         try {
             Manifest manifest =
                     new ObjectInputStreamDeserializer<Manifest>().deserialize(file.toPath());
-            manifest.init(file.toPath().getParent());
+            manifest.initialize(file.toPath().getParent());
             return manifest;
         } catch (DeserializationFailedException e) {
             throw new DeserializationFailedException(e);

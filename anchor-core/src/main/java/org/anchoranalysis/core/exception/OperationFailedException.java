@@ -59,7 +59,7 @@ public class OperationFailedException extends AnchorFriendlyCheckedException {
     }
 
     /**
-     * Creates with message and cause.
+     * Creates with both a message and cause.
      *
      * @param message the message.
      * @param cause the cause.

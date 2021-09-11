@@ -53,13 +53,13 @@ public class GeneratorOutputter {
      */
     public static StackWriter writer(OutputWriteSettings outputWriteSettings)
             throws ImageIOException {
-        StackWriter defaultWriter =
-                (StackWriter) outputWriteSettings.getWriterInstance(StackWriter.class);
-        if (defaultWriter == null) {
+        // We need duplicate the writer to help make it thread safe. Unsure if this is necessary or not.
+        Optional<StackWriter> defaultWriter = outputWriteSettings.getWriterInstance(StackWriter.class);
+        if (defaultWriter.isPresent()) {
+            return defaultWriter.get().duplicateBean();
+        } else {
             throw new ImageIOException("No default stackWriter has been set");
         }
-        // We duplicate the writer to make it thread safe
-        return defaultWriter;
     }
 
     public static String fileExtensionWriter(

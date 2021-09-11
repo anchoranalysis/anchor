@@ -45,10 +45,10 @@ public class NamedBean<T extends AnchorBean<?>> extends NullParamsBean<NamedBean
         implements NameValue<T> {
 
     // START BEAN PROPERTIES
-    /** The name associated with {@code item} */
+    /** The name associated with {@code item}. */
     @BeanField @Getter @Setter private String name;
 
-    /** The item that is to be named (i.e. the underlying bean) */
+    /** The item that is to be named, the underlying bean. */
     @BeanField @Getter @Setter private T item;
     // END BEAN PROPERTIES
 

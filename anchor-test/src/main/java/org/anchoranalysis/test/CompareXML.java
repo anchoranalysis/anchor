@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -25,20 +25,19 @@
  */
 package org.anchoranalysis.test;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.w3c.dom.Document;
 import org.xmlunit.builder.DiffBuilder;
 import org.xmlunit.builder.Input;
 import org.xmlunit.diff.Diff;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 
 /**
  * Compares two XML documents to see if they are equal.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CompareXML {
 
     /**
@@ -54,7 +53,7 @@ public class CompareXML {
     public static boolean areDocumentsEqual(Document document1, Document document2) {
         return areBuildersEqual(Input.fromDocument(document1), Input.fromDocument(document2));
     }
-        
+
     /** Are two {@link Input.Builder}s equal in content, ignoring whitespace and comments? */
     private static boolean areBuildersEqual(Input.Builder builder1, Input.Builder builder2) {
         Diff difference =

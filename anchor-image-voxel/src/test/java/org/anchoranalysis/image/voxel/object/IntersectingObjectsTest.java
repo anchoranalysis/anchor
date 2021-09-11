@@ -73,7 +73,7 @@ class IntersectingObjectsTest {
     private IntersectingObjects<ObjectMask> tree;
 
     @BeforeEach
-    private void init() {
+    private void initialize() {
         // We duplicate the original object-list in case the tests involve mutations (removals etc.)
         tree = IntersectingObjects.create(OBJECTS.duplicateShallow());
     }

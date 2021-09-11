@@ -33,6 +33,11 @@ import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 
+/**
+ * A mock {@link AnchorBean} containing two nested {@link AnchorBean}s as {@code BeanField}s.
+ *
+ * @author Owen Feehan
+ */
 public class MockBeanNested extends AnchorBean<MockBeanNested> {
 
     @BeanField @Getter @Setter private String fieldSimpleNecessary;

@@ -30,7 +30,7 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 
 /**
- * Routines for checking that particular patterns exist with bean-properties
+ * Routines for checking that particular patterns exist with bean-properties.
  *
  * <p>They are intended to be used inside an overridden {@link
  * org.anchoranalysis.bean.AnchorBean#checkMisconfigured} method.

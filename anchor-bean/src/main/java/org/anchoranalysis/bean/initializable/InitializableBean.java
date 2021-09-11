@@ -27,14 +27,14 @@
 package org.anchoranalysis.bean.initializable;
 
 import java.util.Optional;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.initializable.params.BeanInitialization;
-import org.anchoranalysis.bean.initializable.params.BeanInitializer;
-import org.anchoranalysis.bean.initializable.property.PropertyDefiner;
-import org.anchoranalysis.bean.initializable.property.PropertyInitializer;
-import org.anchoranalysis.core.exception.InitException;
-import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
+import org.anchoranalysis.bean.initializable.property.BeanInitializer;
+import org.anchoranalysis.bean.initializable.property.InitializationParameterAssigner;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.log.Logger;
 
 /**
@@ -44,12 +44,14 @@ import org.anchoranalysis.core.log.Logger;
  * @param <B> bean-family type
  * @param <P> initialization-parameters type
  */
-public abstract class InitializableBean<B, P extends BeanInitialization> extends AnchorBean<B>
-        implements BeanInitializer<P> {
+@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
+public abstract class InitializableBean<B, P extends BeanInitialization> extends AnchorBean<B> {
 
-    private final PropertyInitializer<P> propertyInitializer;
+    /** Initializes a bean with another parameter. */
+    private final BeanInitializer<P> beanInitializer;
 
-    @Getter private final PropertyDefiner propertyDefiner;
+    /** Assigns a parameter, if possible, to a bean - as used by {@code bean initializer}. */
+    @Getter private final InitializationParameterAssigner propertyInitializer;
 
     /** Has the bean been initialized yet? */
     private Optional<P> initialization = Optional.empty();
@@ -57,25 +59,30 @@ public abstract class InitializableBean<B, P extends BeanInitialization> extends
     /** the logger */
     private Logger logger;
 
-    protected InitializableBean(
-            PropertyInitializer<P> propertyInitializer, PropertyDefiner propertyDefiner) {
-        this.propertyInitializer = propertyInitializer;
-        this.propertyDefiner = propertyDefiner;
-    }
-
-    // Dummy method, that children can optionally override
-    @Override
-    public void init(P params, Logger logger) throws InitException {
+    /**
+     * Initializes the bean with the necessary parameters.
+     *
+     * <p>This method should always be called <b>once</b> before using the other methods of the
+     * bean.
+     *
+     * @param params parameters to initialize with.
+     * @param logger a logger for events.
+     * @throws InitializeException if initialization cannot complete successfully.
+     */
+    public void initialize(P params, Logger logger) throws InitializeException {
         this.initialization = Optional.of(params);
         this.logger = logger;
-        onInit(params);
+        onInitialization(params);
     }
 
     /**
      * Called after initialization. An empty implementation is provided, to be overridden as needed
      * in the sub-classes.
+     *
+     * @param initialization parameters used for initialization.
+     * @throws InitializeException if initialization does not successfully complete.
      */
-    public void onInit(P initialization) throws InitException {
+    public void onInitialization(P initialization) throws InitializeException {
         // Empty implementation to be replaced in sub-classes
     }
 
@@ -83,49 +90,58 @@ public abstract class InitializableBean<B, P extends BeanInitialization> extends
      * Initializes the bean and recursively all contained beans (who have compatible initialization
      * requirements)
      *
-     * <p>The correct initialization parameters are found for each bean via the {@code pi}
-     * parameter;
-     *
-     * @param pi the property-initializer to use
-     * @param logger logger
-     * @throws InitException if the initialization fails, including if correct
-     *     initialization-parameters cannot be derived
+     * @param initializer the property-initializer to use.
+     * @param logger logger.
+     * @throws InitializeException if the initialization fails, including if correct
+     *     initialization-parameters cannot be derived.
      */
-    public void initRecursiveWithInitializer(PropertyInitializer<?> pi, Logger logger)
-            throws InitException {
-        HelperInit.initRecursive(this, pi, logger);
+    public void initRecursiveWithInitializer(BeanInitializer<?> initializer, Logger logger)
+            throws InitializeException {
+        HelperInit.initializeRecursive(this, initializer, logger);
     }
 
     /**
-     * Inits this object, and all children objects, so long as they have P Once a Bean doesn't have
-     * {@code P}, the children are not evaluated
+     * Initializes this object, and all children objects, so long as they have {@code P} once a Bean
+     * doesn't have {@code P}, the children are not evaluated.
      *
-     * @param params init-params
-     * @param logger logger
-     * @throws InitException if the initialization fails
+     * @param params the parameters to initialize with.
+     * @param logger logger.
+     * @throws InitializeException if the initialization fails.
      */
-    public void initRecursive(P params, Logger logger) throws InitException {
-        propertyInitializer.setParam(params);
-        HelperInit.initRecursive(this, propertyInitializer, logger);
+    public void initializeRecursive(P params, Logger logger) throws InitializeException {
+        beanInitializer.setParam(params);
+        HelperInit.initializeRecursive(this, beanInitializer, logger);
     }
 
+    /**
+     * Has the been already been initialized via a call to {@link #initialize(BeanInitialization,
+     * Logger)} or similar.
+     *
+     * @return true iff the bean has been initialized.
+     */
     public boolean isInitialized() {
         return initialization.isPresent();
     }
 
-    protected PropertyInitializer<P> getPropertyInitializer() {
-        return propertyInitializer;
-    }
-
-    /** The logger */
+    /**
+     * The logger.
+     *
+     * @return the logger.
+     */
     protected Logger getLogger() {
         return logger;
     }
 
-    protected P getInitialization() {
+    /**
+     * The parameters used for initialization.
+     *
+     * @return the parameters passed for initialization.
+     * @throws InitializeException if the bean has not been initialized.
+     */
+    protected P getInitialization() throws InitializeException {
         return initialization.orElseThrow(
                 () ->
-                        new AnchorFriendlyRuntimeException(
+                        new InitializeException(
                                 "No initialization-params as the been has not been initialized"));
     }
 }

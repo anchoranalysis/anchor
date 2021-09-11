@@ -29,7 +29,7 @@ package org.anchoranalysis.io.generator.sequence;
 import java.util.Optional;
 import java.util.function.BiFunction;
 import lombok.Getter;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.manifest.file.FileType;
@@ -97,8 +97,8 @@ public class OutputSequenceIndexed<T, S> implements OutputSequence {
         this.combineIndexWithExtension = combineIndexWithExtension;
 
         try {
-            this.sequenceWriter.init(this.sequenceType);
-        } catch (InitException e) {
+            this.sequenceWriter.initialize(this.sequenceType);
+        } catch (InitializeException e) {
             throw new OutputWriteFailedException(e);
         }
     }

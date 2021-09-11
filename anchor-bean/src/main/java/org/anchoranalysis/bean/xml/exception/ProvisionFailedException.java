@@ -28,7 +28,10 @@ package org.anchoranalysis.bean.xml.exception;
 import org.anchoranalysis.core.exception.friendly.AnchorFriendlyCheckedException;
 
 /**
- * An {@link Exception} thrown when the operation of retrieving an object fails.
+ * If provisioning an object fails.
+ *
+ * <p>Provisioning is deliberately ambiguous term that can refer to either creating a new object or
+ * retrieving an existing object from a cache, either of which can cause failure.
  *
  * @author Owen Feehan
  */
@@ -37,14 +40,30 @@ public class ProvisionFailedException extends AnchorFriendlyCheckedException {
     /** */
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Creates with only a message.
+     *
+     * @param message the message.
+     */
     public ProvisionFailedException(String message) {
         super(message);
     }
 
+    /**
+     * Creates with only a cause.
+     *
+     * @param cause the cause.
+     */
     public ProvisionFailedException(Throwable cause) {
         super(cause);
     }
 
+    /**
+     * Creates with both a message and cause.
+     *
+     * @param message the message.
+     * @param cause the cause.
+     */
     public ProvisionFailedException(String message, Throwable cause) {
         super(message, cause);
     }

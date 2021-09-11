@@ -32,7 +32,7 @@ import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.exception.BeanDuplicateException;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.progress.Progress;
@@ -63,7 +63,7 @@ public class ChannelFilter extends AnchorBean<ChannelFilter> implements ChannelG
 
     private InputOutputContext context;
 
-    public void init(ChannelGetter channels, InputOutputContext context) {
+    public void initialize(ChannelGetter channels, InputOutputContext context) {
         this.channels = channels;
         this.context = context;
     }
@@ -84,7 +84,7 @@ public class ChannelFilter extends AnchorBean<ChannelFilter> implements ChannelG
 
             return providerDuplicated.get();
 
-        } catch (InitException | ProvisionFailedException | BeanDuplicateException e) {
+        } catch (InitializeException | ProvisionFailedException | BeanDuplicateException e) {
             throw new GetOperationFailedException(name, e);
         }
     }
@@ -95,13 +95,13 @@ public class ChannelFilter extends AnchorBean<ChannelFilter> implements ChannelG
     }
 
     private void initializeProvider(ChannelProvider provider, Channel channel)
-            throws InitException {
+            throws InitializeException {
         ImageInitialization initialization = ImageInitializationFactory.create(context);
         try {
             initialization.addToStacks("input_channel", new Stack(channel));
         } catch (OperationFailedException e) {
-            throw new InitException(e);
+            throw new InitializeException(e);
         }
-        provider.initRecursive(initialization, context.getLogger());
+        provider.initializeRecursive(initialization, context.getLogger());
     }
 }

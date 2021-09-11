@@ -39,7 +39,7 @@ public class FromInt implements SliceBufferIndex<UnsignedIntBuffer> {
     // START FACTORY METHODS
     public static SliceBufferIndex<UnsignedIntBuffer> createInitialized(Extent extent) {
         FromInt p = new FromInt(extent);
-        p.init();
+        p.initialize();
         return p;
     }
 
@@ -56,7 +56,7 @@ public class FromInt implements SliceBufferIndex<UnsignedIntBuffer> {
         buffer = VoxelBufferFactory.allocateUnsignedIntArray(extent.z());
     }
 
-    private void init() {
+    private void initialize() {
         int volumeXY = extent.volumeXY();
         for (int z = 0; z < extent.z(); z++) {
             buffer[z] = VoxelBufferFactory.allocateUnsignedInt(volumeXY);

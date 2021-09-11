@@ -34,7 +34,7 @@ import org.anchoranalysis.bean.initializable.params.BeanInitialization;
 import org.anchoranalysis.bean.shared.dictionary.DictionaryInitialization;
 import org.anchoranalysis.bean.shared.path.FilePathInitialization;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
 import org.anchoranalysis.core.identifier.provider.store.SharedObjects;
@@ -91,10 +91,10 @@ public class FeaturesInitialization implements BeanInitialization {
         assert (getFeatureListSet() != null);
         try {
             for (NamedBean<FeatureListProvider<FeatureInput>> namedBean : namedFeatureListCreator) {
-                namedBean.getItem().initRecursive(this, logger);
+                namedBean.getItem().initializeRecursive(this, logger);
                 addFeatureList(namedBean);
             }
-        } catch (InitException e) {
+        } catch (InitializeException e) {
             throw new OperationFailedException(e);
         }
     }

@@ -38,7 +38,7 @@ class BufferArrayList {
         return delegate.add(e);
     }
 
-    public void init(EnergyStackWithoutParams stack, int z) {
+    public void initialize(EnergyStackWithoutParams stack, int z) {
 
         for (int c = 0; c < stack.getNumberChannels(); c++) {
             delegate.add(stack.getChannel(c).voxels().asByte().slices().slice(z).buffer());

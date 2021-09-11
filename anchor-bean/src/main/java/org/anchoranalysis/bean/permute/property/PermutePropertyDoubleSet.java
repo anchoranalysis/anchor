@@ -30,21 +30,27 @@ import java.util.Iterator;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.primitive.StringSet;
+import org.anchoranalysis.bean.primitive.DoubleSet;
 
-public class PermutePropertyDoubleSet extends PermutePropertyWithPath<Double> {
+/**
+ * Assigns each element from a set of doubles to a particular property of a bean.
+ *
+ * @author Owen Feehan
+ */
+public class PermutePropertyDoubleSet extends PermuteProperty<Double> {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private StringSet values;
+    /** The respect double values to assign during the permutation. */
+    @BeanField @Getter @Setter private DoubleSet values;
     // END BEAN PROPERTIES
 
     @Override
     public Iterator<Double> propertyValues() {
-        return values.set().stream().mapToDouble(Double::parseDouble).iterator(); // NOSONAR
+        return values.set().iterator(); // NOSONAR
     }
 
     @Override
-    public String nameForPropValue(Double value) {
+    public String describePropertyValue(Double value) {
         return value.toString();
     }
 }

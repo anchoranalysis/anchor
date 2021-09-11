@@ -47,7 +47,7 @@ import org.anchoranalysis.bean.annotation.NonEmpty;
 import org.anchoranalysis.bean.shared.color.scheme.ColorScheme;
 import org.anchoranalysis.bean.shared.color.scheme.VeryBright;
 import org.anchoranalysis.core.exception.CreateException;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.identifier.name.NameValue;
 import org.anchoranalysis.core.identifier.name.SimpleNameValue;
 import org.anchoranalysis.core.log.Logger;
@@ -89,25 +89,25 @@ public class MultipleComparer extends AnchorBean<MultipleComparer> {
             boolean debugMode)
             throws CreateException {
 
-        FeaturesInitialization so = FeaturesInitialization.create(logger, modelDirectory);
+        FeaturesInitialization initialization = FeaturesInitialization.create(logger, modelDirectory);
         try {
-            featureEvaluator.initRecursive(so, logger);
-        } catch (InitException e) {
+            featureEvaluator.initializeRecursive(initialization, logger);
+        } catch (InitializeException e) {
             throw new CreateException(e);
         }
 
         List<NameValue<Stack>> out = new ArrayList<>();
 
-        for (NamedBean<Comparer> ni : listComparers) {
+        for (NamedBean<Comparer> comparer : listComparers) {
 
             ObjectCollection annotationObjects =
                     annotation.convertToObjects(background.dimensions());
 
             Findable<ObjectCollection> compareObjects =
-                    ni.getValue().createObjects(annotationPath, background.dimensions(), debugMode);
+                    comparer.getValue().createObjects(annotationPath, background.dimensions(), debugMode);
 
             Optional<ObjectCollection> foundObjects =
-                    compareObjects.getFoundOrLog(ni.getName(), logger);
+                    compareObjects.getFoundOrLog(comparer.getName(), logger);
 
             if (foundObjects.isPresent()) {
                 out.add(
@@ -115,7 +115,7 @@ public class MultipleComparer extends AnchorBean<MultipleComparer> {
                                 annotationObjects,
                                 foundObjects.get(),
                                 background,
-                                ni.getName(),
+                                comparer.getName(),
                                 colorScheme));
             }
         }

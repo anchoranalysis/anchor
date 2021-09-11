@@ -30,7 +30,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
@@ -51,9 +51,9 @@ public abstract class ReportFeatureOnObjectsBase<T extends FeatureInput>
     public String featureDescription(MarksInitialization so, Logger logger)
             throws OperationFailedException {
         try {
-            objects.initRecursive(so.image(), logger);
-            super.init(so, logger);
-        } catch (InitException e) {
+            objects.initializeRecursive(so.image(), logger);
+            super.initialize(so, logger);
+        } catch (InitializeException e) {
             throw new OperationFailedException(e);
         }
 

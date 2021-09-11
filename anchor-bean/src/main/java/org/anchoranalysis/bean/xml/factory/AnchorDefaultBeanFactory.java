@@ -29,31 +29,30 @@ package org.anchoranalysis.bean.xml.factory;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.BeanInstanceMap;
-import org.anchoranalysis.bean.xml.exception.BeanMisconfiguredXmlException;
-import org.anchoranalysis.bean.xml.exception.BeanXmlException;
-import org.anchoranalysis.bean.xml.exception.HelperFriendlyExceptions;
+import org.anchoranalysis.bean.xml.exception.BeanMisconfiguredXMLException;
+import org.anchoranalysis.bean.xml.exception.BeanXMLException;
+import org.anchoranalysis.bean.xml.exception.FriendlyExceptionCreator;
 import org.apache.commons.configuration.ConfigurationRuntimeException;
 import org.apache.commons.configuration.beanutils.BeanDeclaration;
 import org.apache.commons.configuration.beanutils.BeanFactory;
 import org.apache.commons.configuration.beanutils.XMLBeanDeclaration;
 
 /**
- * The default bean factory used for initializing AnchorBeans
+ * The default bean factory used for initializing {@link AnchorBean}s.
  *
- * <p>i.e. the factory used when no config-factory attribute is set in the XML
+ * <p>i.e. the factory used when no {@code config-factory} attribute is set in the XML.
  *
  * @author Owen Feehan
  */
+@AllArgsConstructor
 public class AnchorDefaultBeanFactory implements BeanFactory {
 
-    private BeanInstanceMap defaultInstances;
-
-    public AnchorDefaultBeanFactory(BeanInstanceMap defaultInstances) {
-        super();
-        this.defaultInstances = defaultInstances;
-    }
+    /** Default bean-classes to use for particular family types of beans. */
+    @Getter private BeanInstanceMap defaultInstances;
 
     @Override
     public Object createBean(Class<?> beanClass, BeanDeclaration data, Object parameter)
@@ -83,11 +82,11 @@ public class AnchorDefaultBeanFactory implements BeanFactory {
                     String.format(
                             "A misconfigured bean (%s) exists at unknown location",
                             beanClass.getName());
-            throw new BeanXmlException(msg, e.getCause());
+            throw new BeanXMLException(msg, e.getCause());
         }
     }
 
-    private static BeanMisconfiguredXmlException createMisconfiguredBeanException(
+    private static BeanMisconfiguredXMLException createMisconfiguredBeanException(
             ConfigurationRuntimeException exception, XMLBeanDeclaration dataCast) {
 
         // We can read the ClassType from beanClass.getName() but we don't report this to
@@ -98,7 +97,7 @@ public class AnchorDefaultBeanFactory implements BeanFactory {
                 String.format(
                         "A misconfigured bean exists%n%s",
                         HelperDescribeXmlNode.describeXMLNode(dataCast.getNode()));
-        return new BeanMisconfiguredXmlException(msg, maybeRepaceException(exception));
+        return new BeanMisconfiguredXMLException(msg, maybeRepaceException(exception));
     }
 
     /**
@@ -110,16 +109,11 @@ public class AnchorDefaultBeanFactory implements BeanFactory {
     private static Throwable maybeRepaceException(ConfigurationRuntimeException exc) {
 
         if (isListMissingFactory(exc.getCause())) {
-            return new BeanXmlException(
+            return new BeanXMLException(
                     "A list declaration in BeanXML is missing its factory. Please add config-factory=\"list\"");
         }
 
-        return HelperFriendlyExceptions.maybeCreateUserFriendlyException(exc);
-    }
-
-    private static boolean isListMissingFactory(Throwable exc) {
-        return (exc instanceof NoSuchMethodException
-                && exc.getMessage().equals("java.util.List.<init>()"));
+        return FriendlyExceptionCreator.maybeCreateUserFriendlyException(exc);
     }
 
     /** Returns null as {@link Optional} is not supported by {@link BeanFactory} interface. */
@@ -128,19 +122,20 @@ public class AnchorDefaultBeanFactory implements BeanFactory {
         return null;
     }
 
-    protected Object createBeanInstance(Class<?> beanClass, BeanDeclaration data) // NOSONAR
+    private Object createBeanInstance(Class<?> beanClass, BeanDeclaration data) // NOSONAR
             throws Exception // NOSONAR
             {
         return beanClass.getConstructor().newInstance();
     }
 
-    protected void initBeanInstance(Object bean, BeanDeclaration data, Object parameter)
+    private void initBeanInstance(Object bean, BeanDeclaration data, Object parameter)
             throws Exception // NOSONAR
             {
         DefaultBeanFactoryHelperInit.initBean(bean, data, parameter);
     }
 
-    public BeanInstanceMap getDefaultInstances() {
-        return defaultInstances;
+    private static boolean isListMissingFactory(Throwable exc) {
+        return (exc instanceof NoSuchMethodException
+                && exc.getMessage().equals("java.util.List.<init>()"));
     }
 }

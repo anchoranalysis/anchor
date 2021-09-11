@@ -32,7 +32,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
@@ -55,7 +55,7 @@ public class KernelProposer<T, S> extends AnchorBean<KernelProposer<T, S>> {
     private double[] cumalativeProbability;
     private ArrayList<WeightedKernel<T, S>> kernels = null;
 
-    public void init() throws InitException {
+    public void initialize() throws InitializeException {
         calculateCumulativeProbability(optionList);
 
         // Ensure no two kernel factories have the same name
@@ -63,14 +63,14 @@ public class KernelProposer<T, S> extends AnchorBean<KernelProposer<T, S>> {
     }
 
     public void initWithProposerSharedObjects(MarksInitialization initialization, Logger logger)
-            throws InitException {
+            throws InitializeException {
 
         for (WeightedKernel<T, S> weightedKernel : kernels) {
-            weightedKernel.getKernel().initRecursive(initialization, logger);
+            weightedKernel.getKernel().initializeRecursive(initialization, logger);
         }
     }
 
-    public void initBeforeCalc(KernelCalculationContext context) throws InitException {
+    public void initBeforeCalc(KernelCalculationContext context) throws InitializeException {
         for (WeightedKernel<T, S> weightedKernel : kernels) {
             weightedKernel.getKernel().initBeforeCalc(context);
         }
@@ -144,10 +144,10 @@ public class KernelProposer<T, S> extends AnchorBean<KernelProposer<T, S>> {
     }
 
     private void calculateCumulativeProbability(List<KernelProposerOption<T, S>> options)
-            throws InitException {
+            throws InitializeException {
 
         if (options.isEmpty()) {
-            throw new InitException("At least one option must be specified");
+            throw new InitializeException("At least one option must be specified");
         }
 
         kernels = new ArrayList<>();
@@ -166,7 +166,7 @@ public class KernelProposer<T, S> extends AnchorBean<KernelProposer<T, S>> {
         }
 
         if (total == 0) {
-            throw new InitException("The total weights of the kernel-factories must be > 0");
+            throw new InitializeException("The total weights of the kernel-factories must be > 0");
         }
 
         // We a derived array with the cumulative probabilities

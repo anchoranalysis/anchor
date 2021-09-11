@@ -31,12 +31,11 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.experimental.Accessors;
 import org.anchoranalysis.bean.AnchorBean;
 
 /**
- * A bean defining a list of {@link Double}s with defined order.
+ * A bean defining a list of {@link Double}s.
  *
  * <p>An example:
  *
@@ -54,8 +53,14 @@ import org.anchoranalysis.bean.AnchorBean;
 @EqualsAndHashCode(callSuper = false)
 public class DoubleList extends AnchorBean<DoubleList> implements PrimitiveBeanCollection<Double> {
 
-    @Getter private List<Double> list = new ArrayList<>();
+    /** The internal list storing the elements. */
+    private List<Double> list = new ArrayList<>();
 
+    /**
+     * Constructs with one or more values added to the list.
+     *
+     * @param values the values
+     */
     public DoubleList(Double... values) {
         Arrays.stream(values).forEach(list::add);
     }

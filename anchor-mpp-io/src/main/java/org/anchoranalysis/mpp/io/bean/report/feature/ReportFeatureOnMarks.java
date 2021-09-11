@@ -31,7 +31,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
@@ -59,9 +59,9 @@ public class ReportFeatureOnMarks extends ReportFeatureForMarks<FeatureInputMark
 
         // Maybe we should duplicate the providers?
         try {
-            init(param, logger);
-            marks.initRecursive(param, logger);
-        } catch (InitException e) {
+            initialize(param, logger);
+            marks.initializeRecursive(param, logger);
+        } catch (InitializeException e) {
             throw new OperationFailedException(e);
         }
 

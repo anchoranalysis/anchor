@@ -32,7 +32,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.shared.regex.RegEx;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
-import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
+import org.anchoranalysis.core.exception.AnchorCheckedException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
@@ -53,7 +53,7 @@ public class SelectFromShared<T extends FeatureInput> extends ReferencedFeatures
                     getInitialization().getFeatureListSet().keys(),
                     key -> match == null || match.hasMatch(key),
                     key -> getInitialization().getSharedFeatures().getException(key).downcast());
-        } catch (NamedProviderGetException e) {
+        } catch (AnchorCheckedException e) {
             throw new ProvisionFailedException(e);
         }
     }

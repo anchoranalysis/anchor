@@ -34,27 +34,42 @@ import org.anchoranalysis.bean.exception.BeanStrangeException;
 import org.anchoranalysis.core.exception.combinable.AnchorCombinableException;
 
 /**
- * Combines many exceptions into a single exception, searching for a Cause and creating message
- * string, incorporating the other strings
+ * Combines a chain of many exceptions into a single exception, searching for an ultimate cause and
+ * incorporating the messages from the chain into a single unified message.
  *
- * <p>All nested exceptions are traversed until null is found as a cause.
+ * <p>To do this, all nested exceptions are traversed until null is found as a cause.
  *
- * <p>To determine the message string: 1. If the exception is of class LocalisedBeanException, its
- * filenameDscr is added as a newline 2. If the exception is another class, it is not included in
- * the message string, but we keep on traversing
+ * <p>To determine the message string:
  *
- * <p>To determine the Cause 1. It finds the deep-most instance of LocalisedBeanException, and
- * considers its getCause() as the cause
+ * <ol>
+ *   <li>If the exception is of class {@link LocalisedBeanException}, its {@code message} is added
+ *       as a line.
+ *   <li>If the exception is another class, it is not included in the message string, but we keep on
+ *       traversing.
+ * </ol>
+ *
+ * <p>To determine the cause:
+ *
+ * <ol>
+ *   <li>It finds the deep-most instance of {@link LocalisedBeanException}, and considers its {#link
+ *       getCause()} as the cause.
+ * </ol>
  *
  * @author Owen Feehan
  */
 public class LocalisedBeanException extends AnchorCombinableException {
 
     /** */
-    private static final long serialVersionUID = -6966810405755062033L;
+    private static final long serialVersionUID = 1L;
 
-    public LocalisedBeanException(String filenameDscr, Throwable cause) {
-        super(filenameDscr, cause);
+    /**
+     * Create with a message and a cause.
+     *
+     * @param message the message.
+     * @param cause the cause.
+     */
+    public LocalisedBeanException(String message, Throwable cause) {
+        super(message, cause);
     }
 
     @Override
@@ -68,29 +83,30 @@ public class LocalisedBeanException extends AnchorCombinableException {
     }
 
     /**
-     * If there is no nested-set of combinable exceptions, and the filenameDscr related to this
-     * current exception, is identical as the passed parameter, then we simply ignore the
-     * LocalisedBean and promote its getCause()
+     * If there is no nested-set of combinable exceptions, and the {@code message} related to this
+     * current exception is identical as the passed parameter, then we simply ignore the current
+     * exception and promote its {@link #getCause()}.
      *
-     * <p>e.g. there's no point having two error lines indicating there's an error at file SOMEPATH
-     * it's only worthwhile doing this, if there's some extra information, like an include stack.
+     * <p>e.g. there's no point having two error lines e.g. indicating there's an error at file
+     * {@code SOMEPATH}. It's only worthwhile doing this, if there's some extra information, like an
+     * include stack.
      *
-     * @param pathMatch the path we ignored, if it's localized to the same file (and nowhere else)
-     * @return a new exception representing a summary of this exception and its nested causes
+     * @param pathMatch the path we ignored, if it's localized to the same file (and nowhere else).
+     * @return a new exception representing a summary of this exception and its nested causes.
      */
-    public BeanXmlException summarizeIgnoreIdenticalFilePath(Path pathMatch) {
+    public BeanXMLException summarizeIgnoreIdenticalFilePath(Path pathMatch) {
 
         if (hasNoCombinableNestedExceptions()) {
 
             // let's compare the filepath of the two
-            Path pathDesc = Paths.get(getDescription());
+            Path pathDescription = Paths.get(getDescription());
 
             try {
-                if (Files.isSameFile(pathMatch, pathDesc)) {
+                if (Files.isSameFile(pathMatch, pathDescription)) {
                     // We promote the cause, and remove the current exception from the stack
-                    return new BeanXmlException(getCause());
+                    return new BeanXMLException(getCause());
                 } else {
-                    return new BeanXmlException(summarize());
+                    return new BeanXMLException(summarize());
                 }
             } catch (IOException e) {
                 // Something goes wrong and we cannot compare the paths
@@ -99,7 +115,7 @@ public class LocalisedBeanException extends AnchorCombinableException {
 
         } else {
             // There are exceptions to combine, so we default back the normal summarize operation
-            return new BeanXmlException(summarize());
+            return new BeanXMLException(summarize());
         }
     }
 
@@ -109,7 +125,7 @@ public class LocalisedBeanException extends AnchorCombinableException {
     }
 
     @Override
-    protected String createMessageForDescription(String description) {
-        return description;
+    protected String createMessageForDescription(String message) {
+        return message;
     }
 }

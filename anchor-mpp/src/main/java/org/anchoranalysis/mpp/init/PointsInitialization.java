@@ -29,7 +29,7 @@ package org.anchoranalysis.mpp.init;
 import lombok.Getter;
 import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.bean.initializable.params.BeanInitialization;
-import org.anchoranalysis.bean.initializable.property.PropertyInitializer;
+import org.anchoranalysis.bean.initializable.property.BeanInitializer;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
 import org.anchoranalysis.core.identifier.provider.store.SharedObjects;
@@ -57,7 +57,7 @@ public class PointsInitialization implements BeanInitialization {
         return new PointsInitialization(image, so);
     }
 
-    public void populate(PropertyInitializer<?> initializer, Define define, Logger logger)
+    public void populate(BeanInitializer<?> initializer, Define define, Logger logger)
             throws OperationFailedException {
 
         PopulateStoreFromDefine<PointsInitialization> populater =

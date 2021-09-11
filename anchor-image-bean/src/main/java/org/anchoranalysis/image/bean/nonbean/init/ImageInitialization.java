@@ -31,7 +31,7 @@ import java.util.Optional;
 import lombok.Getter;
 import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.bean.initializable.params.BeanInitialization;
-import org.anchoranalysis.bean.initializable.property.PropertyInitializer;
+import org.anchoranalysis.bean.initializable.property.BeanInitializer;
 import org.anchoranalysis.bean.shared.dictionary.DictionaryInitialization;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
@@ -139,10 +139,10 @@ public class ImageInitialization implements BeanInitialization {
         return features;
     }
 
-    public void populate(PropertyInitializer<?> propertyInitializer, Define define, Logger logger)
+    public void populate(BeanInitializer<?> propertyInitializer, Define define, Logger logger)
             throws OperationFailedException {
 
-        features.populate(define.getList(FeatureListProvider.class), logger);
+        features.populate(define.listFor(FeatureListProvider.class), logger);
 
         PopulateStoreFromDefine<ImageInitialization> populate =
                 new PopulateStoreFromDefine<>(define, propertyInitializer, logger);

@@ -29,9 +29,9 @@ package org.anchoranalysis.feature.bean;
 import java.util.Arrays;
 import java.util.List;
 import org.anchoranalysis.bean.initializable.InitializableBean;
-import org.anchoranalysis.bean.initializable.property.ExtractFromParam;
-import org.anchoranalysis.bean.initializable.property.PropertyInitializer;
-import org.anchoranalysis.bean.initializable.property.SimplePropertyDefiner;
+import org.anchoranalysis.bean.initializable.property.ExtractDerivedParameter;
+import org.anchoranalysis.bean.initializable.property.BeanInitializer;
+import org.anchoranalysis.bean.initializable.property.AssignerMatchClass;
 import org.anchoranalysis.bean.shared.dictionary.DictionaryInitialization;
 import org.anchoranalysis.feature.shared.FeaturesInitialization;
 
@@ -45,13 +45,13 @@ public abstract class FeatureRelatedBean<T> extends InitializableBean<T, Feature
 
     protected FeatureRelatedBean() {
         super(
-                new PropertyInitializer<>(FeaturesInitialization.class, paramExtracters()),
-                new SimplePropertyDefiner<FeaturesInitialization>(FeaturesInitialization.class));
+                new BeanInitializer<>(FeaturesInitialization.class, paramExtracters()),
+                new AssignerMatchClass<FeaturesInitialization>(FeaturesInitialization.class));
     }
 
-    private static List<ExtractFromParam<FeaturesInitialization, ?>> paramExtracters() {
+    private static List<ExtractDerivedParameter<FeaturesInitialization, ?>> paramExtracters() {
         return Arrays.asList(
-                new ExtractFromParam<>(
+                new ExtractDerivedParameter<>(
                         DictionaryInitialization.class, FeaturesInitialization::getDictionary));
     }
 }

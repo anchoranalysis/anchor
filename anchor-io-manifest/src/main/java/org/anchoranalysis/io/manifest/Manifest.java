@@ -51,7 +51,7 @@ public class Manifest implements Serializable {
      */
     private RootDirectory rootDirectory = new RootDirectory();
 
-    public void init(Path rootPath) {
+    public void initialize(Path rootPath) {
         rootDirectory.setRootPath(rootPath);
     }
 

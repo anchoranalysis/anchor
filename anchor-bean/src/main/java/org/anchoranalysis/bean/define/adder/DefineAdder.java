@@ -27,15 +27,23 @@
 package org.anchoranalysis.bean.define.adder;
 
 import org.anchoranalysis.bean.define.Define;
-import org.anchoranalysis.bean.xml.exception.BeanXmlException;
+import org.anchoranalysis.bean.define.DefineAddException;
 
 /**
- * Adds bean-definitions to a Define class
+ * Indicates that an object can add one or more items to a {@link Define}.
  *
  * @author Owen Feehan
  */
 @FunctionalInterface
 public interface DefineAdder {
 
-    void addTo(Define define) throws BeanXmlException;
+    /**
+     * Adds items to {@code define}.
+     *
+     * <p>What items are added varies by implementation.
+     *
+     * @param define where to add items to
+     * @throws DefineAddException if the items cannot be added successfully.
+     */
+    void addTo(Define define) throws DefineAddException;
 }

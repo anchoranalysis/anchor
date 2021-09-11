@@ -29,7 +29,7 @@ package org.anchoranalysis.mpp.feature.energy.scheme;
 import lombok.Getter;
 import org.anchoranalysis.bean.exception.BeanDuplicateException;
 import org.anchoranalysis.core.exception.CreateException;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.checked.CheckedFunction;
 import org.anchoranalysis.core.log.Logger;
@@ -99,7 +99,7 @@ public class EnergySchemeWithSharedFeatures {
                         new FeatureInputSingleMemo(mark, new EnergyStack(raster, dictionary));
 
                 return new EnergyTotal(session.calculate(params).total());
-            } catch (InitException e) {
+            } catch (InitializeException e) {
                 throw new NamedFeatureCalculateException(e);
             }
         }
@@ -132,7 +132,7 @@ public class EnergySchemeWithSharedFeatures {
 
             return new EnergyTotal(session.calculate(params).total());
 
-        } catch (InitException | FeatureCalculationException e) {
+        } catch (InitializeException | FeatureCalculationException e) {
             throw new NamedFeatureCalculateException(e);
         }
     }
@@ -152,7 +152,7 @@ public class EnergySchemeWithSharedFeatures {
             return new AddCriteriaEnergyPair(
                     getEnergyScheme().getElemPairAsFeatureList(),
                     (AddCriteriaPair) getEnergyScheme().getPairAddCriteria().duplicateBean());
-        } catch (InitException | BeanDuplicateException e) {
+        } catch (InitializeException | BeanDuplicateException e) {
             throw new CreateException(e);
         }
     }

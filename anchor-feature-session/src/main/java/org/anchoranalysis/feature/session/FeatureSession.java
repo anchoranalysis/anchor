@@ -29,7 +29,7 @@ package org.anchoranalysis.feature.session;
 import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
@@ -65,10 +65,10 @@ public class FeatureSession {
      * @param feature the feature
      * @param logger a logger
      * @return a calculator that will calculate just this feature for each parameter.
-     * @throws InitException
+     * @throws InitializeException
      */
     public static <T extends FeatureInput> FeatureCalculatorSingle<T> with(
-            Feature<T> feature, Logger logger) throws InitException {
+            Feature<T> feature, Logger logger) throws InitializeException {
         return with(feature, new FeatureInitialization(), new SharedFeatureMulti(), logger);
     }
 
@@ -83,7 +83,7 @@ public class FeatureSession {
      */
     public static <T extends FeatureInput> FeatureCalculatorSingle<T> with(
             Feature<T> feature, SharedFeatureMulti sharedFeatures, Logger logger)
-            throws InitException {
+            throws InitializeException {
         return with(feature, new FeatureInitialization(), sharedFeatures, logger);
     }
 
@@ -92,7 +92,7 @@ public class FeatureSession {
             FeatureInitialization initialization,
             SharedFeatureMulti sharedFeatures,
             Logger logger)
-            throws InitException {
+            throws InitializeException {
         SequentialSession<T> session = new SequentialSession<>(feature);
         startSession(session, initialization, sharedFeatures, logger);
         return new FeatureCalculatorSingleFromMulti<>(session);
@@ -108,7 +108,7 @@ public class FeatureSession {
      *     parameter.
      */
     public static <T extends FeatureInput> FeatureCalculatorMulti<T> with(
-            FeatureList<T> features, Logger logger) throws InitException {
+            FeatureList<T> features, Logger logger) throws InitializeException {
         return with(features, new FeatureInitialization(), new SharedFeatureMulti(), logger);
     }
 
@@ -117,7 +117,7 @@ public class FeatureSession {
             FeatureInitialization initialization,
             SharedFeatureMulti sharedFeatures,
             Logger logger)
-            throws InitException {
+            throws InitializeException {
         return with(
                 features,
                 initialization,
@@ -132,7 +132,7 @@ public class FeatureSession {
             Optional<SharedFeatureMulti> sharedFeatures,
             Logger logger,
             BoundReplaceStrategy<T, ? extends ReplaceStrategy<T>> replacePolicyFactory)
-            throws InitException {
+            throws InitializeException {
         SequentialSession<T> session = new SequentialSession<>(features, replacePolicyFactory);
         startSession(
                 session, initialization, sharedFeatures.orElse(new SharedFeatureMulti()), logger);
@@ -155,7 +155,7 @@ public class FeatureSession {
         try {
             FeatureCalculatorSingle<T> calculator = with(feature, logger);
             return calculator.calculate(input);
-        } catch (InitException e) {
+        } catch (InitializeException e) {
             throw new FeatureCalculationException(e);
         }
     }
@@ -165,11 +165,11 @@ public class FeatureSession {
             FeatureInitialization initialization,
             SharedFeatureMulti sharedFeatures,
             Logger logger)
-            throws InitException {
+            throws InitializeException {
         try {
             session.start(initialization, sharedFeatures, logger);
-        } catch (InitException e) {
-            throw new InitException(
+        } catch (InitializeException e) {
+            throw new InitializeException(
                     "An error occurred starting the feature (sequential) session", e);
         }
     }

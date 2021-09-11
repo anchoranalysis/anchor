@@ -34,20 +34,21 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.FieldAccessor;
 import org.anchoranalysis.bean.annotation.SkipInit;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class FindChildrenForInit {
 
     /**
-     * Finds children of bean that need to be initialized - and adds them to a list
+     * Finds children of bean that need to be initialized - and adds them to a list.
      *
      * @param bean the bean whose children will be searched
-     * @param listOut a list containing all the children of the bean that should be initialized
-     * @throws InitException
+     * @param toAddTo a list containing all the children of the bean that should be initialized
+     * @throws InitializeException if any problems occurring access fields in the bean using
+     *     reflection.
      */
-    public static void addChildrenFromBean(BeanAndParent bean, List<BeanAndParent> listOut)
-            throws InitException {
+    public static void addChildrenFromBean(BeanAndParent bean, List<BeanAndParent> toAddTo)
+            throws InitializeException {
 
         List<Field> beanFields = bean.getBean().fields();
 
@@ -57,14 +58,14 @@ class FindChildrenForInit {
 
                 // Create a FIFO queue of items to be initialized
                 addChildrenMany(
-                        listOut, bean, field, FieldAccessor.isFieldAnnotatedAsOptional(field));
+                        toAddTo, bean, field, FieldAccessor.isFieldAnnotatedAsOptional(field));
             }
         }
     }
 
     private static void addChildrenMany(
             List<BeanAndParent> listOut, BeanAndParent bean, Field field, boolean optional)
-            throws InitException {
+            throws InitializeException {
 
         try {
             Object propertyValue = field.get(bean.getBean());
@@ -73,8 +74,8 @@ class FindChildrenForInit {
             if (propertyValue instanceof Collection) {
 
                 Collection<?> collection = (Collection<?>) propertyValue;
-                for (Object o : collection) {
-                    addChildren(listOut, bean, o, false);
+                for (Object object : collection) {
+                    addChildren(listOut, bean, object, false);
                 }
 
                 return;
@@ -83,7 +84,7 @@ class FindChildrenForInit {
             addChildren(listOut, bean, propertyValue, optional);
 
         } catch (IllegalArgumentException | IllegalAccessException e) {
-            throw new InitException(e);
+            throw new InitializeException(e);
         }
     }
 

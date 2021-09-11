@@ -39,7 +39,7 @@ public class FromShort implements SliceBufferIndex<UnsignedShortBuffer> {
     // START FACTORY METHODS
     public static SliceBufferIndex<UnsignedShortBuffer> createInitialized(Extent extent) {
         FromShort p = new FromShort(extent);
-        p.init();
+        p.initialize();
         return p;
     }
 
@@ -56,7 +56,7 @@ public class FromShort implements SliceBufferIndex<UnsignedShortBuffer> {
         buffer = VoxelBufferFactory.allocateUnsignedShortArray(extent.z());
     }
 
-    private void init() {
+    private void initialize() {
         int volumeXY = extent.volumeXY();
         for (int z = 0; z < extent.z(); z++) {
             buffer[z] = VoxelBufferFactory.allocateUnsignedShort(volumeXY);

@@ -32,10 +32,10 @@ import java.lang.annotation.RetentionPolicy;
 /**
  * Indicates a default bean-instance is available.
  *
- * <p>The default is emplyed if no explicit value is set.
+ * <p>The default is employed if no explicit value is set.
  *
- * <p>A corresponding default must be set in the defaults passed to the initialize bean route in
- * {\link org.anchoranalysis.bean.AnchorBean}
+ * <p>A corresponding default must be set in the defaults passed during initialization to an
+ * {@link org.anchoranalysis.bean.initializable.InitializableBean}.
  *
  * @author Owen Feehan
  */

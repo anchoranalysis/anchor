@@ -28,7 +28,7 @@ package org.anchoranalysis.feature.session.cache;
 
 import java.util.ArrayList;
 import lombok.AllArgsConstructor;
-import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
@@ -78,8 +78,8 @@ public class HorizontalCacheCreator implements CacheCreator {
         SharedFeatureSet<T> sharedFeaturesSet = sharedFeatures.subsetCompatibleWith(inputType);
 
         try {
-            sharedFeaturesSet.initRecursive(initialization, logger);
-        } catch (InitException e) {
+            sharedFeaturesSet.initializeRecursive(initialization, logger);
+        } catch (InitializeException e) {
             logger.errorReporter()
                     .recordError(
                             HorizontalCacheCreator.class,
@@ -88,7 +88,7 @@ public class HorizontalCacheCreator implements CacheCreator {
         }
 
         FeatureSessionCache<T> cache = createCache(namedFeatures, sharedFeaturesSet);
-        cache.init(initialization, logger);
+        cache.initialize(initialization, logger);
         return cache;
     }
 
