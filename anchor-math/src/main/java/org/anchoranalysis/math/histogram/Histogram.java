@@ -333,9 +333,9 @@ public final class Histogram {
         int maxCount = -1;
 
         for (int bin = minValue; bin <= maxValue; bin++) {
-            int val = getCount(bin);
-            if (val > maxCount) {
-                maxCount = val;
+            int count = getCount(bin);
+            if (count > maxCount) {
+                maxCount = count;
                 maxIndex = bin;
             }
         }
