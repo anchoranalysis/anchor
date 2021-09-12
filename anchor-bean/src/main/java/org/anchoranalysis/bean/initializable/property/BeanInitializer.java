@@ -42,7 +42,7 @@ import org.anchoranalysis.core.log.Logger;
  * <p>If the passed parameters are not directly suitable for initialization, other parameters may
  * also be derived and used instead.
  *
- * <div>Specifically, two types of properties will be initialized:
+ * <p><div>Specifically, two types of properties will be initialized:
  *
  * <ul>
  *   <li>Properties that have identical property-type to {@code P} (the current parameters).

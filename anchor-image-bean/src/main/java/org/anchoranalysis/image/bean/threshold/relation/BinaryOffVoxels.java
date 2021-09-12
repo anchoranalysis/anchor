@@ -28,8 +28,8 @@ package org.anchoranalysis.image.bean.threshold.relation;
 
 import lombok.EqualsAndHashCode;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValues;
-import org.anchoranalysis.math.relation.LessThan;
 import org.anchoranalysis.math.relation.DoubleBiPredicate;
+import org.anchoranalysis.math.relation.LessThan;
 
 /**
  * Selects only the <i>off</i> voxels from a binary mask.

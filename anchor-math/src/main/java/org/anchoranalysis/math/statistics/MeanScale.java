@@ -26,31 +26,34 @@
 
 package org.anchoranalysis.math.statistics;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
-
+import lombok.NoArgsConstructor;
 
 /**
  * Stores the mean and scale for a distribution.
- * 
- * <p>The scale is often the standard-deviation.
- * 
- * @author Owen Feehan
  *
+ * <p>The scale is often the standard-deviation.
+ *
+ * @author Owen Feehan
  */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class MeanScale {
 
     /** The mean. */
-    private double mean;
+    private double mean = 0.0;
 
     /** The scale, typically the standard-deviation. */
-    private double scale;
+    private double scale = 0.0;
 
     /**
      * Converts a value to a z-score given the parameterization in this object.
-     * 
-     * See <a href="https://en.wikipedia.org/wiki/Standard_score">Standard score on Wikipedia</a>.
-     * 
+     *
+     * <p>See <a href="https://en.wikipedia.org/wiki/Standard_score">Standard score on
+     * Wikipedia</a>.
+     *
      * @param value the value to convert.
      * @return the value converted to a z-score.
      */

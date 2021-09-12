@@ -73,7 +73,8 @@ public class ConcurrentModelPool<T> {
      * @param createModel called to create a new model, as needed.
      * @throws CreateModelFailedException if a model cannot be created.
      */
-    public ConcurrentModelPool(ConcurrencyPlan plan, CreateModelForPool<T> createModel) throws CreateModelFailedException {
+    public ConcurrentModelPool(ConcurrencyPlan plan, CreateModelForPool<T> createModel)
+            throws CreateModelFailedException {
         this.createModel = createModel;
         this.queue = new PriorityBlockingQueue<>();
 
@@ -140,7 +141,8 @@ public class ConcurrentModelPool<T> {
     }
 
     private void addNumberModels(
-            int numberModels, boolean useGPU, CreateModelForPool<T> createModel) throws CreateModelFailedException {
+            int numberModels, boolean useGPU, CreateModelForPool<T> createModel)
+            throws CreateModelFailedException {
         FunctionalIterate.repeat(numberModels, () -> queue.add(create(useGPU, createModel)));
     }
 

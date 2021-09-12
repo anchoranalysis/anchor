@@ -26,8 +26,8 @@
 package org.anchoranalysis.bean.shared.path;
 
 import org.anchoranalysis.bean.initializable.InitializableBean;
-import org.anchoranalysis.bean.initializable.property.BeanInitializer;
 import org.anchoranalysis.bean.initializable.property.AssignerMatchClass;
+import org.anchoranalysis.bean.initializable.property.BeanInitializer;
 
 public abstract class FilePathBean<T> extends InitializableBean<T, FilePathInitialization> {
 

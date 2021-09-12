@@ -75,7 +75,7 @@ public class RunningSum implements Serializable {
         }
     }
 
-    /** 
+    /**
      * Calculate the mean and then reset to zero.
      *
      * @return the mean, before being reset to zero.

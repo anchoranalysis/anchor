@@ -56,7 +56,10 @@ public class TestLoaderImage {
     public TestLoaderImage(TestLoader loader) {
         TestReaderWriterUtilities.ensureStackReader();
         this.loader = loader;
-        this.stackReader = RegisterBeanFactories.getDefaultInstances().getInstanceFor(StackReader.class).get(); // NOSONAR
+        this.stackReader =
+                RegisterBeanFactories.getDefaultInstances()
+                        .getInstanceFor(StackReader.class)
+                        .get(); // NOSONAR
     }
 
     public Channel openChannelFromTestPath(String testPath) {

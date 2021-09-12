@@ -64,7 +64,8 @@ public class TestLoader {
         super();
 
         if (!root.toFile().exists()) {
-            throw new TestDataInitializeException(String.format("Cannot find path '%s' path", root));
+            throw new TestDataInitializeException(
+                    String.format("Cannot find path '%s' path", root));
         }
 
         if (!root.toFile().isDirectory()) {

@@ -43,7 +43,7 @@ import org.anchoranalysis.bean.define.DefineAddException;
 public abstract class DefineAdderWithPrefixBean extends DefineAdderBean {
 
     // START BEAN PROPERTIES
-    /** A prefix that is placed before the name of every bean created */
+    /** A prefix that is placed before the name of every bean created. */
     @BeanField @AllowEmpty @Getter @Setter private String prefix = "";
     // END BEAN PROPERTIES
 

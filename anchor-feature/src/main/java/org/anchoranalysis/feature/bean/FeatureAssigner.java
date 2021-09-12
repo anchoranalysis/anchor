@@ -41,11 +41,12 @@ class FeatureAssigner<T extends FeatureInput> implements InitializationParameter
 
     @SuppressWarnings("unchecked")
     @Override
-    public void assignParameterToProperties(Object bean, Object params, Object parent, Logger logger)
-            throws InitializeException {
+    public void assignParameterToProperties(
+            Object bean, Object params, Object parent, Logger logger) throws InitializeException {
 
         if (parent != null && !(parent instanceof Feature)) {
-            throw new InitializeException("A feature may only have another feature as a bean-parent");
+            throw new InitializeException(
+                    "A feature may only have another feature as a bean-parent");
         }
 
         if (bean instanceof Feature) {

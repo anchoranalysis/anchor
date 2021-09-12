@@ -40,7 +40,8 @@ import org.junit.jupiter.api.Test;
 class FeatureSessionTest {
 
     @Test
-    void testCalculateSimpleListOfFeatures() throws InitializeException, NamedFeatureCalculateException {
+    void testCalculateSimpleListOfFeatures()
+            throws InitializeException, NamedFeatureCalculateException {
 
         SequentialSession<FeatureInput> session =
                 new SequentialSession<>(ConstantsInListFixture.create());

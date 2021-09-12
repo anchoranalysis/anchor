@@ -39,7 +39,7 @@ public class EigenvalueAndVector implements Comparable<EigenvalueAndVector> {
 
     /** The eigenvalue. */
     private final double eigenvalue;
-    
+
     /** The eigenvector corresponding to {@code eigenvalue}. */
     private final DoubleMatrix1D eigenvector;
 
@@ -50,7 +50,7 @@ public class EigenvalueAndVector implements Comparable<EigenvalueAndVector> {
 
     /**
      * Creates a deep-copy of the current object.
-     * 
+     *
      * @return a deep copy.
      */
     public EigenvalueAndVector duplicate() {

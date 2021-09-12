@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -32,25 +32,28 @@ import lombok.NoArgsConstructor;
 
 /**
  * More advanced implementation of {@link Path#resolve}.
- * 
- * <p>It will always return an absolute-path.
- * 
- * <p>If the base-path is a file, rather than a directory, it will consider only the directory component, and otherwise proceed.
- * 
- * @author Owen Feehan
  *
+ * <p>It will always return an absolute-path.
+ *
+ * <p>If the base-path is a file, rather than a directory, it will consider only the directory
+ * component, and otherwise proceed.
+ *
+ * @author Owen Feehan
  */
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ResolvePathAbsolute {
 
     /**
      * Like {@link Path#resolve} but with some additional quirks.
-     * 
-     * Please see the class-description.
-     *  
-     * @param basePath the base path onto which {@code relativePathToJoin} is joined. It it's a path to a file, only the directory component is used.
-     * @param toJoin normally a relative-path (relative to {@code basePath} but it can also be an absolute-path.
-     * @return an absolute-path to a combination of {@code basePath} and {@code toJoin}, or {@code toJoin} alone if it's absolute.
+     *
+     * <p>Please see the class-description.
+     *
+     * @param basePath the base path onto which {@code relativePathToJoin} is joined. It it's a path
+     *     to a file, only the directory component is used.
+     * @param toJoin normally a relative-path (relative to {@code basePath} but it can also be an
+     *     absolute-path.
+     * @return an absolute-path to a combination of {@code basePath} and {@code toJoin}, or {@code
+     *     toJoin} alone if it's absolute.
      */
     public static Path resolve(Path basePath, Path toJoin) {
 

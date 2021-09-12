@@ -48,7 +48,7 @@ public class FeatureProviderReference extends FeatureProvider<FeatureInput> {
 
     @Override
     public Feature<FeatureInput> get() throws ProvisionFailedException {
-        
+
         try {
             if (feature == null) {
                 feature = createFeature(getInitialization());
@@ -58,8 +58,9 @@ public class FeatureProviderReference extends FeatureProvider<FeatureInput> {
             throw new ProvisionFailedException(e);
         }
     }
-    
-    private Feature<FeatureInput> createFeature(FeaturesInitialization initialization) throws ProvisionFailedException {
+
+    private Feature<FeatureInput> createFeature(FeaturesInitialization initialization)
+            throws ProvisionFailedException {
         if (initialization.getSharedFeatures() == null) {
             throw new ProvisionFailedException("shared-features are not defined.");
         }

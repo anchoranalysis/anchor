@@ -70,7 +70,7 @@ public class ImageMoments {
 
     /**
      * Get an eigenvalue and corresponding eigenvector for a particular axis.
-     * 
+     *
      * @param axis axis 0 for X, 1 for Y, 2 for Z.
      * @return the corresponding to {@link EigenvalueAndVector} as used internally.
      */
@@ -88,9 +88,7 @@ public class ImageMoments {
         return mean[axis];
     }
 
-    /** 
-     * Removes the entry that is closest to having an eigenVector in direction (0,0,1).
-     */
+    /** Removes the entry that is closest to having an eigenVector in direction (0,0,1). */
     public void removeClosestToUnitZ() {
 
         double zMax = Double.NEGATIVE_INFINITY;
@@ -113,7 +111,7 @@ public class ImageMoments {
 
     /**
      * Creates a deep-copy of the current object.
-     * 
+     *
      * @return a deep copy.
      */
     public ImageMoments duplicate() {

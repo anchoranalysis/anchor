@@ -247,7 +247,7 @@ public class HungarianAlgorithm {
         }
     }
 
-    /** 
+    /**
      * Helper method to record a matching between worker {@code w} and job {@code j}.
      *
      * @param w the worker
@@ -297,7 +297,7 @@ public class HungarianAlgorithm {
      * Update labels with the specified slack by adding the slack value for committed workers and by
      * subtracting the slack value for committed jobs. In addition, update the minimum slack values
      * appropriately.
-     * 
+     *
      * @param slack the slack.
      */
     protected void updateLabeling(double slack) {

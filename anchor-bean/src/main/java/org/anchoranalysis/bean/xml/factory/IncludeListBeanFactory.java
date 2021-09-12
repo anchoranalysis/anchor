@@ -61,9 +61,7 @@ import org.apache.commons.configuration.beanutils.XMLBeanDeclaration;
  */
 public class IncludeListBeanFactory<T> extends AnchorBeanFactory {
 
-    /**
-     * Default constructor.
-     */
+    /** Default constructor. */
     public IncludeListBeanFactory() {
         // FOR BEAN INITIALIZATION
     }

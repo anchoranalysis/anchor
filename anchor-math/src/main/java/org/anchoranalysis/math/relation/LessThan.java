@@ -26,10 +26,9 @@
 
 package org.anchoranalysis.math.relation;
 
-
 /**
  * Returns true iff {@code valueFirst} is less than {@code valueSecond}.
- * 
+ *
  * @author Owen Feehan
  */
 public class LessThan implements DoubleBiPredicate {

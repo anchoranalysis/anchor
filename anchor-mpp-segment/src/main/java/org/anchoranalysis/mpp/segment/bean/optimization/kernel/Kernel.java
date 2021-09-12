@@ -55,7 +55,8 @@ public abstract class Kernel<T, S> extends MarksBean<Kernel<T, S>> implements Co
     // END BEAN PROPERTIES
 
     // Call ONCE before calculating anything
-    public abstract void initBeforeCalc(KernelCalculationContext context) throws InitializeException;
+    public abstract void initBeforeCalc(KernelCalculationContext context)
+            throws InitializeException;
 
     /**
      * Calculates the Energy for a proposal

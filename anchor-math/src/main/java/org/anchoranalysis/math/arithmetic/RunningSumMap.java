@@ -47,7 +47,7 @@ public class RunningSumMap<T> {
      */
     private Map<T, RunningSum> map = new ConcurrentSkipListMap<>();
 
-    /** 
+    /**
      * Whether the map contains the key {@code key}?
      *
      * @param key the key.

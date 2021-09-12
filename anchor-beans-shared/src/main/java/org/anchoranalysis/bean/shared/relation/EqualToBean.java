@@ -27,8 +27,8 @@
 package org.anchoranalysis.bean.shared.relation;
 
 import lombok.EqualsAndHashCode;
-import org.anchoranalysis.math.relation.EqualTo;
 import org.anchoranalysis.math.relation.DoubleBiPredicate;
+import org.anchoranalysis.math.relation.EqualTo;
 
 @EqualsAndHashCode(callSuper = true)
 public class EqualToBean extends RelationBean {

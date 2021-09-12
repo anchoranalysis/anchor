@@ -28,7 +28,7 @@ package org.anchoranalysis.math.relation;
 
 /**
  * Returns true iff {@code valueFirst} is greater than {@code valueSecond}.
- * 
+ *
  * @author Owen Feehan
  */
 public class GreaterThan implements DoubleBiPredicate {

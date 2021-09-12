@@ -53,8 +53,10 @@ public class GeneratorOutputter {
      */
     public static StackWriter writer(OutputWriteSettings outputWriteSettings)
             throws ImageIOException {
-        // We need duplicate the writer to help make it thread safe. Unsure if this is necessary or not.
-        Optional<StackWriter> defaultWriter = outputWriteSettings.getWriterInstance(StackWriter.class);
+        // We need duplicate the writer to help make it thread safe. Unsure if this is necessary or
+        // not.
+        Optional<StackWriter> defaultWriter =
+                outputWriteSettings.getWriterInstance(StackWriter.class);
         if (defaultWriter.isPresent()) {
             return defaultWriter.get().duplicateBean();
         } else {

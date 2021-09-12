@@ -30,9 +30,9 @@ import org.anchoranalysis.math.arithmetic.DoubleUtilities;
 
 /**
  * Returns true if two values are equal, and false otherwise.
- * 
+ *
  * <p>Equality is considered within a small epsilon, as in {@link DoubleUtilities#areEqual}.
- * 
+ *
  * @author Owen Feehan
  */
 public class EqualTo implements DoubleBiPredicate {

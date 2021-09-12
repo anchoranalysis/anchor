@@ -31,18 +31,22 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
 
 /**
- * Further statistics that can be derived from a histogram in addition to those existing as direct methods of {@link Histogram}.
+ * Further statistics that can be derived from a histogram in addition to those existing as direct
+ * methods of {@link Histogram}.
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class HistogramStatistics {
 
     /**
-     * Calculates the <b>coefficient-of-variation</b> of a distribution of values, represented by their histogram.
-     * 
+     * Calculates the <b>coefficient-of-variation</b> of a distribution of values, represented by
+     * their histogram.
+     *
      * <p>This is the ratio of the standard-deviation to the mean.
-     * 
-     * <p>See <a href="https://en.wikipedia.org/wiki/Coefficient_of_variation">coefficient-of-variation on Wikipedia</a>.
-     * 
+     *
+     * <p>See <a
+     * href="https://en.wikipedia.org/wiki/Coefficient_of_variation">coefficient-of-variation on
+     * Wikipedia</a>.
+     *
      * @param histogram the histogram to calculate from.
      * @return the coefficient-of-variation.
      * @throws OperationFailedException if the statistic is undefined, for example with zero mean.
@@ -61,14 +65,15 @@ public class HistogramStatistics {
 
     /**
      * Calculates the <b>skewness</b> of a distribution of values, represented by their histogram.
-     * 
+     *
      * <p>This is the third standardized moment.
-     * 
+     *
      * <p>See <a href="https://en.wikipedia.org/wiki/Skewness">skewness on Wikipedia</a>.
-     * 
+     *
      * @param histogram the histogram to calculate from.
      * @return the skewness.
-     * @throws OperationFailedException if the statistic is undefined, for example with zero variance.
+     * @throws OperationFailedException if the statistic is undefined, for example with zero
+     *     variance.
      */
     public static double skewness(Histogram histogram) throws OperationFailedException {
 
@@ -85,17 +90,18 @@ public class HistogramStatistics {
 
         return (firstTerm + secondTerm + thirdTerm) / denominator;
     }
-    
+
     /**
      * Calculates the <b>kurtosis</b> of a distribution of values, represented by their histogram.
-     * 
+     *
      * <p>This is fourth standardized moment.
-     * 
+     *
      * <p>See <a href="https://en.wikipedia.org/wiki/Kurtosis">kurtosis on Wikipedia</a>.
-     * 
+     *
      * @param histogram the histogram to calculate from.
      * @return the kurtosis.
-     * @throws OperationFailedException if the statistic is undefined, for example with zero variance.
+     * @throws OperationFailedException if the statistic is undefined, for example with zero
+     *     variance.
      */
     public static double kurtosis(Histogram histogram) throws OperationFailedException {
 

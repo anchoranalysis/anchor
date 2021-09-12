@@ -53,9 +53,11 @@ public abstract class PermuteProperty<T> extends AnchorBean<PermuteProperty<T>> 
 
     // START BEAN PROPERTIES
     /**
-     * Either a direct property of a bean <b>or</b> a nested-property with the children separated by full-stops.
-     * 
-     * e.g. a direct property {@code someproperty} or a nested-property e.g. {@code somechild1.somechild2.someproperty}
+     * Either a direct property of a bean <b>or</b> a nested-property with the children separated by
+     * full-stops.
+     *
+     * <p>e.g. a direct property {@code someproperty} or a nested-property e.g. {@code
+     * somechild1.somechild2.someproperty}
      *
      * <p>A child bean used in this way must be of single multiplicity, and always be a subclass of
      * {@link org.anchoranalysis.bean.AnchorBean}.
