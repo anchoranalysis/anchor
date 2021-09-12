@@ -1,5 +1,7 @@
 package org.anchoranalysis.core.functional;
 
+import java.util.Iterator;
+
 /*-
  * #%L
  * anchor-core
@@ -28,6 +30,7 @@ package org.anchoranalysis.core.functional;
 
 import java.util.Optional;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.functional.checked.CheckedBiFunction;
@@ -191,6 +194,27 @@ public class OptionalUtilities {
         }
         return Optional.empty();
     }
+        
+    /**
+     * The first optional if it's present, or the second, or the third etc. using an {@link
+     * Stream}.
+     *
+     * @param <T> type of optionals.
+     * @param optionals one or more optionals to combine together using a logical <b>or</b>
+     *     operation.
+     * @return a new optional that is {@code optionals[0]} OR {@code optionals[1]} OR {@code
+     *     optionals[2]} etc.
+     */
+    public static <T> Optional<T> orFlat(Stream<Optional<T>> optionals) {
+        Iterator<Optional<T>> iterator = optionals.iterator();
+        while( iterator.hasNext()) {
+            Optional<T> item = iterator.next();
+            if (item.isPresent()) {
+                return item;
+            }
+        }
+        return Optional.empty();
+    }
 
     /**
      * The first optional if it's present, or the second, or the third etc. using an iterable and a
@@ -201,6 +225,8 @@ public class OptionalUtilities {
      * @param optionals one or more optionals to combine together using a logical <b>or</b>
      *     operation. * @return a new optional that is {@code optionals[0]} OR {@code optionals[1]}
      *     OR {@code optionals[2]} etc.
+     * @return a new optional that is {@code optionals[0]} OR {@code optionals[1]} OR {@code
+     *     optionals[2]} etc.
      * @throws E if any {@code optional} throws it
      */
     public static <T, E extends Exception> Optional<T> orFlatSupplier(
