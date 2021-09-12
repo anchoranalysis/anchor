@@ -27,8 +27,8 @@
 package org.anchoranalysis.bean.shared.relation;
 
 import lombok.EqualsAndHashCode;
-import org.anchoranalysis.math.relation.LessThan;
 import org.anchoranalysis.math.relation.DoubleBiPredicate;
+import org.anchoranalysis.math.relation.LessThan;
 
 @EqualsAndHashCode(callSuper = true)
 public class LessThanEqualToBean extends RelationBean {

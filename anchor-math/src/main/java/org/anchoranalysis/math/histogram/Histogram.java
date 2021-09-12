@@ -36,32 +36,30 @@ import java.util.function.LongUnaryOperator;
 import lombok.Getter;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
-import org.anchoranalysis.math.statistics.VarianceCalculator;
+import org.anchoranalysis.math.statistics.VarianceCalculatorLong;
 import org.apache.commons.lang.ArrayUtils;
-
 
 /**
  * A histogram of integer values.
- * 
- * <p>The bin-size is always 1, so each bin corresponds to a discrete integer.
- * 
- * <p>See <a href="https://en.wikipedia.org/wiki/Histogram">histogram on Wikipedia</a>.
- * 
- * <p>This can be used to record a discrete probability distribution, and is typically used
- * in the Anchor software to record the distribution of image voxel intensity values.
- * 
- * @author Owen Feehan
  *
+ * <p>The bin-size is always 1, so each bin corresponds to a discrete integer.
+ *
+ * <p>See <a href="https://en.wikipedia.org/wiki/Histogram">histogram on Wikipedia</a>.
+ *
+ * <p>This can be used to record a discrete probability distribution, and is typically used in the
+ * Anchor software to record the distribution of image voxel intensity values.
+ *
+ * @author Owen Feehan
  */
 public final class Histogram {
 
     /** Consumes a bin and corresponding count. */
     @FunctionalInterface
     public interface BinConsumer {
-        
+
         /**
          * Accepts a particular bin and corresponding count.
-         * 
+         *
          * @param bin the bin.
          * @param count the corresponding count.
          */
@@ -80,17 +78,16 @@ public final class Histogram {
 
     /**
      * Constructs with a maximum value, and assuming a minimum value of 0.
-     * 
+     *
      * @param maxValue maximum possible value in the histogram (inclusive).
      */
     public Histogram(int maxValue) {
         this(0, maxValue);
     }
 
-    
     /**
      * Constructs with a maximum value, and assuming a minimum value of 0.
-     * 
+     *
      * @param minValue minimum possible value in the histogram (inclusive).
      * @param maxValue maximum possible value in the histogram (inclusive).
      */
@@ -103,7 +100,7 @@ public final class Histogram {
 
     /**
      * Creates a deep-copy of the current object.
-     * 
+     *
      * @return a deep-copy.
      */
     public Histogram duplicate() {
@@ -113,9 +110,7 @@ public final class Histogram {
         return out;
     }
 
-    /**
-     * Sets the count for all values to 0.
-     */
+    /** Sets the count for all values to 0. */
     public void reset() {
         sumCount = 0;
         for (int i = minValue; i <= maxValue; i++) {
@@ -125,7 +120,7 @@ public final class Histogram {
 
     /**
      * Sets the count for a particular value to 0.
-     * 
+     *
      * @param value the value whose count is zeroed.
      */
     public void zeroValue(int value) {
@@ -136,7 +131,7 @@ public final class Histogram {
 
     /**
      * Moves all count for a particular value and adds it to the count for another.
-     * 
+     *
      * @param valueFrom the value whose count is moved, after which it's count is set to zero.
      * @param valueTo the value to which the count for {@code valueFrom} is added.
      */
@@ -149,7 +144,7 @@ public final class Histogram {
 
     /**
      * Increments the count for a particular value by one.
-     * 
+     *
      * @param value the value whose count will be incremented by one.
      */
     public void incrementValue(int value) {
@@ -159,7 +154,7 @@ public final class Histogram {
 
     /**
      * Increments the count for a particular value.
-     * 
+     *
      * @param value the value whose count will be incremented.
      * @param increase how much to increase the count by.
      */
@@ -169,7 +164,8 @@ public final class Histogram {
     }
 
     /**
-     * Like {@link #incrementValueBy(int, int)} but accepts a {@code long} as the {@code increase} argument.
+     * Like {@link #incrementValueBy(int, int)} but accepts a {@code long} as the {@code increase}
+     * argument.
      *
      * @param value the value whose count will be incremented.
      * @param increase how much to increase the count by.
@@ -181,8 +177,9 @@ public final class Histogram {
 
     /**
      * All values less than {@code threshold} are removed.
-     * 
-     * @param threshold values greater or equal to this are kept in the histogram, lesser values are removed.
+     *
+     * @param threshold values greater or equal to this are kept in the histogram, lesser values are
+     *     removed.
      */
     public void removeBelowThreshold(int threshold) {
         for (int bin = minValue; bin < threshold; bin++) {
@@ -195,7 +192,7 @@ public final class Histogram {
 
     /**
      * If no value exists in the histogram with a count greater than zero.
-     * 
+     *
      * @return true iff the histogram has zero-count for all values.
      */
     public boolean isEmpty() {
@@ -204,7 +201,7 @@ public final class Histogram {
 
     /**
      * The count corresponding to a particular value.
-     * 
+     *
      * @param value the value (the bin) to find a count for.
      * @return the corresponding count.
      */
@@ -212,11 +209,11 @@ public final class Histogram {
         return counts[index(value)];
     }
 
-    /** 
+    /**
      * The size of the range of values in the histogram.
-     * 
+     *
      * <p>This is equivalent to {@code (maxValue - minValue + 1)}.
-     * 
+     *
      * @return the number of values represented in the histogram.
      */
     public int size() {
@@ -225,12 +222,13 @@ public final class Histogram {
 
     /**
      * Adds the counts from another histogram to the current object.
-     * 
-     * <p>Both histograms must have identical minimum and maximum values, and therefore
-     * represent the same range of values.
-     * 
+     *
+     * <p>Both histograms must have identical minimum and maximum values, and therefore represent
+     * the same range of values.
+     *
      * @param other the histogram to add.
-     * @throws OperationFailedException if the histograms do have identical minimum and maximum values.
+     * @throws OperationFailedException if the histograms do have identical minimum and maximum
+     *     values.
      */
     public void addHistogram(Histogram other) throws OperationFailedException {
         if (this.getMaxValue() != other.getMaxValue()) {
@@ -249,12 +247,11 @@ public final class Histogram {
         }
     }
 
-    
     /**
      * Calculates the <b>mean</b> of the histogram values, considering their frequency.
-     * 
+     *
      * <p>Specifically, this is the mean of {@code value * countFor(value)} across all values.
-     * 
+     *
      * @return the mean.
      * @throws OperationFailedException if the histogram has no values.
      */
@@ -265,28 +262,32 @@ public final class Histogram {
         long sum = 0;
 
         for (int bin = minValue; bin <= maxValue; bin++) {
-            sum += getAsLong(bin) * bin;
+            sum += getCountAsLong(bin) * bin;
         }
 
         return ((double) sum) / sumCount;
     }
 
     /**
-     * Calculates the corresponding value for a particular <b>quantile</b> in the distribution of values in the histogram.
-     * 
+     * Calculates the corresponding value for a particular <b>quantile</b> in the distribution of
+     * values in the histogram.
+     *
      * <p>See <a href="https://en.wikipedia.org/wiki/Quantile">Quantile on wikipedia</a>.
-     * 
-     * <p>A quantile of 0.3, would return the minimal value, greater or equal to at least 30% of the count.
-     * 
+     *
+     * <p>A quantile of 0.3, would return the minimal value, greater or equal to at least 30% of the
+     * count.
+     *
      * @param quantile the quantile, in the interval {@code [0, 1]}.
      * @return the mean.
-     * @throws OperationFailedException if the histogram has no values, or the quantile is outside acceptable bounds.
+     * @throws OperationFailedException if the histogram has no values, or the quantile is outside
+     *     acceptable bounds.
      */
     public int quantile(double quantile) throws OperationFailedException {
         checkAtLeastOneItemExists();
-        
+
         if (quantile < 0 || quantile > 1) {
-            throw new OperationFailedException( String.format("The quantile must be >= 0 and <= 1 but is %f", quantile));
+            throw new OperationFailedException(
+                    String.format("The quantile must be >= 0 and <= 1 but is %f", quantile));
         }
 
         double threshold = quantile * sumCount;
@@ -304,9 +305,11 @@ public final class Histogram {
 
     /**
      * Whether at least one value, greater or equal to {@code startMin} has non-zero count?
-     * 
-     * @param threshold only values greater or equal to {@code threshold} are considered. Use 0 for all values.
-     * @return true iff at least one value in this range has a non-zero count, false if all values in the range are zero.
+     *
+     * @param threshold only values greater or equal to {@code threshold} are considered. Use 0 for
+     *     all values.
+     * @return true iff at least one value in this range has a non-zero count, false if all values
+     *     in the range are zero.
      */
     public boolean hasNonZeroCount(int threshold) {
 
@@ -320,9 +323,9 @@ public final class Histogram {
 
     /**
      * Calculates the <b>mode</b> of the histogram values.
-     * 
-     * The mode is the most frequently occurring item.
-     * 
+     *
+     * <p>The mode is the most frequently occurring item.
+     *
      * @return the mode.
      * @throws OperationFailedException if the histogram has no values.
      */
@@ -333,9 +336,9 @@ public final class Histogram {
         int maxCount = -1;
 
         for (int bin = minValue; bin <= maxValue; bin++) {
-            int val = getCount(bin);
-            if (val > maxCount) {
-                maxCount = val;
+            int count = getCount(bin);
+            if (count > maxCount) {
+                maxCount = count;
                 maxIndex = bin;
             }
         }
@@ -345,7 +348,7 @@ public final class Histogram {
 
     /**
      * Calculates the <b>maximum value with non zero-count</b> among the histogram values.
-     * 
+     *
      * @return the maximal value with non-zero count.
      * @throws OperationFailedException if the histogram has no values.
      */
@@ -363,7 +366,7 @@ public final class Histogram {
 
     /**
      * Calculates the <b>minimum value with non zero-count</b> among the histogram values.
-     * 
+     *
      * @return the minimal value with non-zero count.
      * @throws OperationFailedException if the histogram has no values.
      */
@@ -381,9 +384,9 @@ public final class Histogram {
 
     /**
      * Calculates the <b>sum of all values</b> in the distribution considering their counts.
-     * 
+     *
      * <p>Specifically, the sum is {@code value * countFor(value)} across all values.
-     * 
+     *
      * @return the sum.
      */
     public long calculateSum() {
@@ -391,22 +394,23 @@ public final class Histogram {
     }
 
     /**
-     * Calculates the <b>sum of the squares of all values</b> in the distribution considering their counts.
-     * 
+     * Calculates the <b>sum of the squares of all values</b> in the distribution considering their
+     * counts.
+     *
      * <p>Specifically, the sum is {@code value^2 * countFor(value)} across all values.
-     * 
+     *
      * @return the sum of squares.
      */
     public long calculateSumSquares() {
         return calculateSumHelper(value -> value * value);
     }
 
-    
     /**
-     * Calculates the <b>cube of the squares of all values</b> in the distribution considering their counts.
-     * 
+     * Calculates the <b>cube of the squares of all values</b> in the distribution considering their
+     * counts.
+     *
      * <p>Specifically, the sum is {@code value^3 * countFor(value)} across all values.
-     * 
+     *
      * @return the sum of cubes.
      */
     public long calculateSumCubes() {
@@ -415,7 +419,7 @@ public final class Histogram {
 
     /**
      * Calculates the <b>standard-deviation</b> of the distribution represented by the histogram.
-     * 
+     *
      * @return the standard-deviation.
      * @throws OperationFailedException if the histogram has no values.
      */
@@ -426,21 +430,20 @@ public final class Histogram {
 
     /**
      * Calculates the <b>variance</b> of the distribution represented by the histogram.
-     * 
+     *
      * @return the variance.
      * @throws OperationFailedException if the histogram has no values.
      */
     public double variance() throws OperationFailedException {
         checkAtLeastOneItemExists();
-        return new VarianceCalculator(calculateSum(), calculateSumSquares(), getTotalCount())
+        return new VarianceCalculatorLong(calculateSum(), calculateSumSquares(), getTotalCount())
                 .variance();
     }
 
     /**
      * Gets the total count of all values that match a predicate.
-     * 
+     *
      * @param predicate the predicate a value must match to be included in the count.
-     * 
      * @return the sum of the counts corresponding to all values that match the predicate.
      */
     public long countMatching(IntPredicate predicate) {
@@ -450,7 +453,7 @@ public final class Histogram {
         for (int bin = minValue; bin <= maxValue; bin++) {
 
             if (predicate.test(bin)) {
-                sum += getAsLong(bin);
+                sum += getCountAsLong(bin);
             }
         }
 
@@ -459,11 +462,13 @@ public final class Histogram {
 
     /**
      * Generates a new histogram containing only values that match a predicate.
-     * 
+     *
      * <p>This is an <i>immutable operation</i>. The existing histogram's values are unchanged.
-     * 
-     * @param predicate a condition that must hold on the value for it to be included in the created histogram.
-     * @return a newly created {@link Histogram} containing values and corresponding counts from this object, but only if they fulfill the predicate.
+     *
+     * @param predicate a condition that must hold on the value for it to be included in the created
+     *     histogram.
+     * @return a newly created {@link Histogram} containing values and corresponding counts from
+     *     this object, but only if they fulfill the predicate.
      */
     public Histogram threshold(DoublePredicate predicate) {
 
@@ -484,16 +489,14 @@ public final class Histogram {
     /** A string representation of what's in the histogram. */
     @Override
     public String toString() {
-        return concatenateForEachBin(
-            value -> String.format("%d: %d%n", value, getCount(value))
-        );
+        return concatenateForEachBin(value -> String.format("%d: %d%n", value, getCount(value)));
     }
 
     /**
      * The total count across values in the histogram.
-     * 
+     *
      * <p>This is pre-calculated, so calling this operation occurs no computational expense.
-     * 
+     *
      * @return the total count.
      */
     public long getTotalCount() {
@@ -501,12 +504,15 @@ public final class Histogram {
     }
 
     /**
-     * Creates a {@link Histogram} reusing the bins in the current histogram, but with an upper limit on the total count.
-     * 
-     * <p>If more total count exists than {@code maxCount}, values are removed in <b>ascending order</b>, until the count is under the limit. 
-     * 
+     * Creates a {@link Histogram} reusing the bins in the current histogram, but with an upper
+     * limit on the total count.
+     *
+     * <p>If more total count exists than {@code maxCount}, values are removed in <b>ascending
+     * order</b>, until the count is under the limit.
+     *
      * @param maxCount the maximum allowable total-count for the extracted histogram.
-     * @return a newly created {@link Histogram} either a copy of the existing (if the total count is less than {@code maxCount} or cropped as per above rules.
+     * @return a newly created {@link Histogram} either a copy of the existing (if the total count
+     *     is less than {@code maxCount} or cropped as per above rules.
      */
     public Histogram cropRemoveSmallerValues(long maxCount) {
 
@@ -533,10 +539,12 @@ public final class Histogram {
     }
 
     /**
-     * Like {@link #cropRemoveSmallerValues(long)} but larger values are removed rather than smaller values if the total count is too high.
-     * 
+     * Like {@link #cropRemoveSmallerValues(long)} but larger values are removed rather than smaller
+     * values if the total count is too high.
+     *
      * @param maxCount the maximum allowable total-count for the extracted histogram.
-     * @return a newly created {@link Histogram} either a copy of the existing (if the total count is less than {@code maxCount} or cropped as per above rules.
+     * @return a newly created {@link Histogram} either a copy of the existing (if the total count
+     *     is less than {@code maxCount} or cropped as per above rules.
      */
     public Histogram cropRemoveLargerValues(long maxCount) {
 
@@ -563,9 +571,10 @@ public final class Histogram {
 
     /**
      * Calculates the mean of the values in the distribution, if each value is raised to a power.
-     * 
-     * <p>Specifically, it calculates the mean of {@code countFor(value) * value^power} across all values.
-     * 
+     *
+     * <p>Specifically, it calculates the mean of {@code countFor(value) * value^power} across all
+     * values.
+     *
      * @param power the power to raise each value to.
      * @return the calculated mean.
      * @throws OperationFailedException if the histogram has no values.
@@ -575,11 +584,12 @@ public final class Histogram {
         return mean(power, 0.0);
     }
 
-    /** 
+    /**
      * Like {@link #mean(double)} but a value may be subtracted before raising to a power.
-     * 
-     * <p>Specifically, it calculates the mean of {@code countFor(value) * (value - subtractValue)^power} across all values.
-     * 
+     *
+     * <p>Specifically, it calculates the mean of {@code countFor(value) * (value -
+     * subtractValue)^power} across all values.
+     *
      * @param power the power to raise each value to (after subtraction).
      * @param subtractValue a value subtracted before raising to a power.
      * @return the calculated mean.
@@ -592,7 +602,7 @@ public final class Histogram {
 
         for (int bin = minValue; bin <= maxValue; bin++) {
             double binSubtracted = (bin - subtractValue);
-            sum += getAsLong(bin) * Math.pow(binSubtracted, power);
+            sum += getCountAsLong(bin) * Math.pow(binSubtracted, power);
         }
 
         return sum / sumCount;
@@ -610,7 +620,8 @@ public final class Histogram {
     }
 
     /**
-     * Calls {@code consumer} for every value until a limit, <i>increasing</i> from min to {@code limit}.
+     * Calls {@code consumer} for every value until a limit, <i>increasing</i> from min to {@code
+     * limit}.
      *
      * @param limit the maximum-value to consume (inclusive).
      * @param consumer called for every bin
@@ -627,7 +638,7 @@ public final class Histogram {
         long sum = 0;
 
         for (int bin = minValue; bin <= maxValue; bin++) {
-            long add = getAsLong(bin) * function.applyAsLong(bin);
+            long add = getCountAsLong(bin) * function.applyAsLong(bin);
             sum += add;
         }
 
@@ -639,9 +650,9 @@ public final class Histogram {
         return value - minValue;
     }
 
-    /** Sets a count for a particular value. */
-    private void set(int value, int cntToSet) {
-        counts[index(value)] = cntToSet;
+    /** Assigns a count for a particular value. */
+    private void set(int value, int countToAssign) {
+        counts[index(value)] = countToAssign;
     }
 
     /** Increments the count for a particular value. */
@@ -649,7 +660,7 @@ public final class Histogram {
         counts[index(value)] += incrementBy;
     }
 
-    private long getAsLong(int value) {
+    private long getCountAsLong(int value) {
         return getCount(value);
     }
 

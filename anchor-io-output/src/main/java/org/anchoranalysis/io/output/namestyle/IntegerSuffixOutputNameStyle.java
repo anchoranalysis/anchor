@@ -40,7 +40,7 @@ import com.google.common.base.Preconditions;
 public class IntegerSuffixOutputNameStyle extends IndexableOutputNameStyle {
 
     /** */
-    private static final long serialVersionUID = -3128734431534880903L;
+    private static final long serialVersionUID = 0;
 
     // A string placed before the numberic part of the naming-style
     private String prefix;

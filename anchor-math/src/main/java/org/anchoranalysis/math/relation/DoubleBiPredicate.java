@@ -30,18 +30,18 @@ import java.util.function.BiPredicate;
 
 /**
  * Like {@link BiPredicate} but operates on doubles.
- * 
- * <p>This can be used to express a <a href="https://en.wikipedia.org/wiki/Binary_relation">binary relation</a>.
- * 
- * @author Owen Feehan
  *
+ * <p>This can be used to express a <a href="https://en.wikipedia.org/wiki/Binary_relation">binary
+ * relation</a>.
+ *
+ * @author Owen Feehan
  */
 @FunctionalInterface
 public interface DoubleBiPredicate {
-    
+
     /**
      * Considers the relationship between {@code valueFirst} and {@code valueSecond}.
-     * 
+     *
      * @param valueFirst the first-value.
      * @param valueSecond the second-value.
      * @return true if the relation holds.

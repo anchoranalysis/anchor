@@ -53,7 +53,8 @@ public abstract class ReferencedFeatures<T extends FeatureInput> extends Feature
         ensureReferencedFeaturesCalled(soFeature);
     }
 
-    private void ensureReferencedFeaturesCalled(FeaturesInitialization so) throws InitializeException {
+    private void ensureReferencedFeaturesCalled(FeaturesInitialization so)
+            throws InitializeException {
         if (referencesFeatureListCreator != null && so != null) {
             for (String featureListReference : referencesFeatureListCreator.set()) {
 

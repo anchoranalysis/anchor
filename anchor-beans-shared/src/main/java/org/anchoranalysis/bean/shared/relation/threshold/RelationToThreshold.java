@@ -45,10 +45,11 @@ public abstract class RelationToThreshold extends AnchorBean<RelationToThreshold
 
     /** The relation to the threshold to consider */
     public abstract DoubleBiPredicate relation();
-    
+
     /**
-     * Expresses the relation as a predicate on values, where only values that fulfill the relation to threshold are true.
-     * 
+     * Expresses the relation as a predicate on values, where only values that fulfill the relation
+     * to threshold are true.
+     *
      * @return a newly-created predicate that accepts an double-value.
      */
     public DoublePredicate asPredicateDouble() {
@@ -56,10 +57,10 @@ public abstract class RelationToThreshold extends AnchorBean<RelationToThreshold
         DoubleBiPredicate relationInstance = relation();
         return value -> relationInstance.test(value, thresholdInstance);
     }
-    
+
     /**
      * Like {@link #asPredicateDouble()} but expresses the relationship for an integer.
-     * 
+     *
      * @return a newly-created predicate that accepts an integer-value.
      */
     public IntPredicate asPredicateInt() {

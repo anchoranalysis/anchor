@@ -36,12 +36,12 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 /**
- * Calculates the "difference" between a path and a base
+ * Calculates the <i>"difference"</i> between a path and a base.
  *
  * <p>e.g. if a base is <code>c:\root\somePrefix_</code> and a file is <code>
  * c:\root\somePrefix_someFile.xml</code> then the difference is <code>_someFile.xml</code>
  *
- * <p>The difference is recorded separately as directory and filename components
+ * <p>The difference is recorded separately as directory and filename components.
  *
  * <p>Internally, both paths are converted to absolute paths and URIs.
  *
@@ -57,12 +57,12 @@ public class PathDifference {
     @Getter private final Optional<Path> directory;
 
     /**
-     * Finds the difference between a path and a base
+     * Finds the difference between a path and a base.
      *
-     * @param baseDirectoryPath path to a base directory
-     * @param filePath the path to resolve
-     * @return the difference between the paths
-     * @throws PathDifferenceException if the canonical file cannot be found
+     * @param baseDirectoryPath path to a base directory.
+     * @param filePath the path to resolve.
+     * @return the difference between the paths.
+     * @throws PathDifferenceException if the canonical file cannot be found.
      */
     public static PathDifference differenceFrom(Path baseDirectoryPath, Path filePath)
             throws PathDifferenceException {
@@ -83,7 +83,7 @@ public class PathDifference {
     }
 
     /**
-     * Performs the difference.
+     * Calculates the difference, given files in canonical form.
      *
      * <p>Assumes base is a directory. Relies on this.
      *

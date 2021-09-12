@@ -47,7 +47,13 @@ class ReadObjectsFromTIFFDirectory implements Deserializer<ObjectCollection> {
 
     @Override
     public ObjectCollection deserialize(Path folderPath) throws DeserializationFailedException {
-        StackReader stackReader = RegisterBeanFactories.getDefaultInstances().getInstanceFor(StackReader.class).orElseThrow( () -> new DeserializationFailedException("No default StackReader is defined, as is required."));
+        StackReader stackReader =
+                RegisterBeanFactories.getDefaultInstances()
+                        .getInstanceFor(StackReader.class)
+                        .orElseThrow(
+                                () ->
+                                        new DeserializationFailedException(
+                                                "No default StackReader is defined, as is required."));
         return readObjects(folderPath, stackReader);
     }
 

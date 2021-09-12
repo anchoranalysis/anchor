@@ -1,5 +1,7 @@
 package org.anchoranalysis.core.functional;
 
+import java.util.Iterator;
+
 /*-
  * #%L
  * anchor-core
@@ -28,6 +30,7 @@ package org.anchoranalysis.core.functional;
 
 import java.util.Optional;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.functional.checked.CheckedBiFunction;
@@ -174,18 +177,61 @@ public class OptionalUtilities {
     }
 
     /**
-     * The first optional if it's present, or the second, or the third etc. using an array
+     * The first optional if it's present, or the second, or the third etc. using an {@link
+     * Iterable}.
      *
-     * @param <T> type of optionals
+     * @param <T> type of optionals.
+     * @param optionals one or more optionals to combine together using a logical <b>or</b>
+     *     operation.
+     * @return a new optional that is {@code optionals[0]} OR {@code optionals[1]} OR {@code
+     *     optionals[2]} etc.
+     */
+    public static <T> Optional<T> orFlat(Iterable<Optional<T>> optionals) {
+        for (Optional<T> item : optionals) {
+            if (item.isPresent()) {
+                return item;
+            }
+        }
+        return Optional.empty();
+    }
+        
+    /**
+     * The first optional if it's present, or the second, or the third etc. using an {@link
+     * Stream}.
+     *
+     * @param <T> type of optionals.
+     * @param optionals one or more optionals to combine together using a logical <b>or</b>
+     *     operation.
+     * @return a new optional that is {@code optionals[0]} OR {@code optionals[1]} OR {@code
+     *     optionals[2]} etc.
+     */
+    public static <T> Optional<T> orFlat(Stream<Optional<T>> optionals) {
+        Iterator<Optional<T>> iterator = optionals.iterator();
+        while( iterator.hasNext()) {
+            Optional<T> item = iterator.next();
+            if (item.isPresent()) {
+                return item;
+            }
+        }
+        return Optional.empty();
+    }
+
+    /**
+     * The first optional if it's present, or the second, or the third etc. using an iterable and a
+     * {@link CheckedSupplier}.
+     *
+     * @param <T> type of optionals.
      * @param <E> an exception that may be thrown by an {@code optional}.
-     * @param optional one or more optionals to combine together using a logical <b>or</b> operation
-     * @return a new optional that is optionals[0] OR optionals[1] OR optionals[2] etc.
+     * @param optionals one or more optionals to combine together using a logical <b>or</b>
+     *     operation. * @return a new optional that is {@code optionals[0]} OR {@code optionals[1]}
+     *     OR {@code optionals[2]} etc.
+     * @return a new optional that is {@code optionals[0]} OR {@code optionals[1]} OR {@code
+     *     optionals[2]} etc.
      * @throws E if any {@code optional} throws it
      */
-    @SafeVarargs
-    public static <T, E extends Exception> Optional<T> orFlat(
-            CheckedSupplier<Optional<T>, E>... optional) throws E {
-        for (CheckedSupplier<Optional<T>, E> itemSupplier : optional) {
+    public static <T, E extends Exception> Optional<T> orFlatSupplier(
+            Iterable<CheckedSupplier<Optional<T>, E>> optionals) throws E {
+        for (CheckedSupplier<Optional<T>, E> itemSupplier : optionals) {
             Optional<T> item = itemSupplier.get();
             if (item.isPresent()) {
                 return item;
@@ -195,10 +241,43 @@ public class OptionalUtilities {
     }
 
     /**
+     * Like {@link #orFlat(Iterable)} but allows {@link Optional}s to be specified as
+     * variable-arguments.
+     *
+     * @param <T> type of optionals.
+     * @param optional one or more optionals to combine together using a logical <b>or</b>
+     *     operation.
+     * @return a new optional that is {@code optionals[0]} OR {@code optionals[1]} OR {@code
+     *     optionals[2]} etc.
+     */
+    @SafeVarargs
+    public static <T> Optional<T> orFlat(Optional<T>... optional) {
+        return orFlat(optional);
+    }
+
+    /**
+     * Like {@link #orFlatSupplier(Iterable)} but allows {@link Optional}s to be specified as
+     * variable-arguments.
+     *
+     * @param <T> type of optionals.
+     * @param <E> an exception that may be thrown by an {@code optional}.
+     * @param optional one or more optionals to combine together using a logical <b>or</b>
+     *     operation.
+     * @return a new optional that is {@code optionals[0]} OR {@code optionals[1]} OR {@code
+     *     optionals[2]} etc.
+     * @throws E if any {@code optional} throws it
+     */
+    @SafeVarargs
+    public static <T, E extends Exception> Optional<T> orFlatSupplier(
+            CheckedSupplier<Optional<T>, E>... optional) throws E {
+        return orFlatSupplier(optional);
+    }
+
+    /**
      * Creates an {@link Optional} from a string that might be empty or null.
      *
-     * @param possiblyEmptyString a string that might be empty or null
-     * @return the string, or {@link Optional#empty} if the string is empty or null
+     * @param possiblyEmptyString a string that might be empty or null.
+     * @return the string, or {@link Optional#empty} if the string is empty or null.
      */
     public static Optional<String> create(String possiblyEmptyString) {
         if (possiblyEmptyString == null || possiblyEmptyString.isEmpty()) {
@@ -227,10 +306,10 @@ public class OptionalUtilities {
     /**
      * Creates an {@link Optional} from a boolean flag.
      *
-     * @param <T> type in Optional
-     * @param flag iff true an populated optional is returned, otherwise empty().
-     * @param valueIfFlagTrue used to generate a positive value
-     * @return a filled or empty optional depending on flag
+     * @param <T> type in the optional.
+     * @param flag iff true an populated optional is returned, otherwise {@link Optional#empty()}.
+     * @param valueIfFlagTrue used to generate a positive value.
+     * @return a filled or empty optional depending on flag.
      */
     public static <T> Optional<T> createFromFlag(boolean flag, Supplier<T> valueIfFlagTrue) {
         if (flag) {
@@ -243,12 +322,12 @@ public class OptionalUtilities {
     /**
      * Creates an {@link Optional} from a boolean flag - where the supplier can thrown an exception.
      *
-     * @param <T> type in optional
+     * @param <T> type in optional.
      * @param <E> an exception that may be thrown by an {@code valueIfFlagTrue}.
-     * @param flag iff true an populated optional is returned, otherwise empty().
-     * @param valueIfFlagTrue used to generate a positive value
-     * @return a filled or empty optional depending on flag
-     * @throws E if the supplier throws an exception
+     * @param flag iff true an populated optional is returned, otherwise {@link Optional#empty()}.
+     * @param valueIfFlagTrue used to generate a positive value.
+     * @return a filled or empty optional depending on flag.
+     * @throws E if the supplier throws an exception.
      */
     public static <T, E extends Exception> Optional<T> createFromFlagChecked(
             boolean flag, CheckedSupplier<T, E> valueIfFlagTrue) throws E {
@@ -263,10 +342,10 @@ public class OptionalUtilities {
      * Creates an {@link Optional} from a boolean flag and a supplier that returns an {@link
      * Optional}.
      *
-     * @param <T> type in Optional
+     * @param <T> type in optional.
      * @param flag iff true an populated optional is returned, otherwise empty().
-     * @param valueIfFlagTrue used to generate a positive value
-     * @return a filled or empty optional depending on flag
+     * @param valueIfFlagTrue used to generate a positive value.
+     * @return a filled or empty optional depending on flag.
      */
     public static <T> Optional<T> createFromFlagOptional(
             boolean flag, Supplier<Optional<T>> valueIfFlagTrue) {

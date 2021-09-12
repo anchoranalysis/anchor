@@ -31,30 +31,35 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 /**
- * Calculates variance efficiently, as successive values are added.
- * 
+ * Calculates variance efficiently, as successive values are added, using {@code long} to store sums
+ * internally.
+ *
+ * <p>This is similar to {@link VarianceCalculatorDouble} but is designed for {@code int} values
+ * rather than {@code double}s.
+ *
  * <p>Efficiency occurs by maintaining a running sum, sum-of-squares and count as values are added.
  *
- * <p>This is useful for calculating variance in sequential order in an <a href="https://en.wikipedia.org/wiki/Online_machine_learning">online</a> manner.
+ * <p>This is useful for calculating variance in sequential order in an <a
+ * href="https://en.wikipedia.org/wiki/Online_machine_learning">online</a> manner.
  *
  * @author Owen Feehan
  */
 @AllArgsConstructor
 @NoArgsConstructor
-public class VarianceCalculator {
+public class VarianceCalculatorLong {
 
     /** The running sum of values. */
     private long sum = 0;
-    
+
     /** The running sum of squares of values. */
     private long sumSquares = 0;
-    
+
     /** The running count of values. */
     @Getter private long count = 0;
 
     /**
      * Adds a value to the running sum.
-     * 
+     *
      * @param value the value to add.
      */
     public void add(int value) {
@@ -63,10 +68,10 @@ public class VarianceCalculator {
         this.sumSquares += (valueLong * valueLong);
         this.count++;
     }
-    
+
     /**
      * Adds a multiple instances of a value to the running sum.
-     * 
+     *
      * @param value the value to add.
      * @param instances how many instances of {@code value} to add.
      */
@@ -83,35 +88,37 @@ public class VarianceCalculator {
     }
 
     /**
-     * Subtracts the running-sums and count from another {@link VarianceCalculator} from the current object's state.
-     * 
-     * <p>This occurs immutably, and the currently object's state is unaffected. 
-     * 
-     * @param toSubtract the other {@link VarianceCalculator} whose state is subtracted.
-     * @return a newly created {@link VarianceCalculator} whose state is the current object minus {@code toSubtract}.
+     * Subtracts the running-sums and count from another {@link VarianceCalculatorLong} from the
+     * current object's state.
+     *
+     * <p>This occurs immutably, and the currently object's state is unaffected.
+     *
+     * @param toSubtract the other {@link VarianceCalculatorLong} whose state is subtracted.
+     * @return a newly created {@link VarianceCalculatorLong} whose state is the current object
+     *     minus {@code toSubtract}.
      */
-    public VarianceCalculator subtract(VarianceCalculator toSubtract) {
-        return new VarianceCalculator(
-                this.sum - toSubtract.sum, this.sumSquares - toSubtract.sumSquares, this.count - toSubtract.count);
+    public VarianceCalculatorLong subtract(VarianceCalculatorLong toSubtract) {
+        return new VarianceCalculatorLong(
+                this.sum - toSubtract.sum,
+                this.sumSquares - toSubtract.sumSquares,
+                this.count - toSubtract.count);
     }
 
     /**
-     * Calculate the variance, based on the current state of running-sums.
+     * Calculate the <b>mean</b>, based on the current state of running-sums.
+     *
+     * @return the mean.
+     */
+    public double mean() {
+        return ((double) sum) / count;
+    }
+
+    /**
+     * Calculate the <b>variance</b>, based on the current state of running-sums.
      *
      * @return the variance.
      */
     public double variance() {
-        assert (sumSquares >= 0);
-        assert (sum >= 0);
-        assert (count >= 0);
-
-        // Formula for variance
-        // https://en.wikipedia.org/wiki/Variance
-        // https://www.sciencebuddies.org/science-fair-projects/science-fair/variance-and-standard-deviation
-        double second = Math.pow(sum, 2.0) / count;
-        double val = (sumSquares - second) / count;
-
-        assert (val >= 0);
-        return val;
+        return VarianceCalculatorHelper.calculateVariance(sum, sumSquares, count);
     }
 }

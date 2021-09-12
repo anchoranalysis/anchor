@@ -71,8 +71,8 @@ public class InitializeException extends AnchorFriendlyCheckedException {
      * InitializeException}.
      *
      * @param exception the existing exception to consider wrapping.
-     * @return the exception wrapped into a newly-created {@link InitializeException}, or the cause of
-     *     {@code exception} if it's already a {@link InitializeException}.
+     * @return the exception wrapped into a newly-created {@link InitializeException}, or the cause
+     *     of {@code exception} if it's already a {@link InitializeException}.
      */
     public static InitializeException createOrReuse(Throwable exception) {
         // If it's an initialization error, we don't create a new one but re-throw

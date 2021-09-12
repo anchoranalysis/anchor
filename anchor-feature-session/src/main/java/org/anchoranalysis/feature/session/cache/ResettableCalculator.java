@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.feature.session.cache;
 
+import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.Feature;
@@ -38,7 +39,6 @@ import org.anchoranalysis.feature.calculate.cache.ResolvedCalculationMap;
 import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.shared.SharedFeatureSet;
-import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 class ResettableCalculator<T extends FeatureInput> implements FeatureSessionCalculator<T> {
@@ -46,7 +46,7 @@ class ResettableCalculator<T extends FeatureInput> implements FeatureSessionCalc
     // START REQUIRED ARGUMENTS
     private final SharedFeatureSet<T> sharedFeatures;
     // END REQUIRED ARGUMENTS
-    
+
     private ResettableSet<FeatureCalculation<?, T>> setCalculation = new ResettableSet<>(false);
     private ResettableSet<FeatureCalculationMap<?, T, ?, FeatureCalculationException>>
             setCalculationMap = new ResettableSet<>(false);

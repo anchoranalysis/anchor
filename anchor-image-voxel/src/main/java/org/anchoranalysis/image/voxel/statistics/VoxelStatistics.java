@@ -29,7 +29,7 @@ package org.anchoranalysis.image.voxel.statistics;
 import org.anchoranalysis.bean.shared.relation.threshold.RelationToThreshold;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.math.histogram.Histogram;
-import org.anchoranalysis.math.statistics.VarianceCalculator;
+import org.anchoranalysis.math.statistics.VarianceCalculatorLong;
 
 /**
  * Allows retrieval of statistics about voxel intensities.
@@ -54,7 +54,7 @@ public interface VoxelStatistics {
     long countThreshold(RelationToThreshold relationToThreshold);
 
     default double variance() {
-        return new VarianceCalculator(sum(), sumOfSquares(), size()).variance();
+        return new VarianceCalculatorLong(sum(), sumOfSquares(), size()).variance();
     }
 
     default double stdDev() {

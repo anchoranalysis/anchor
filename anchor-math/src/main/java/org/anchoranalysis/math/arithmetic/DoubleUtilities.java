@@ -37,12 +37,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class DoubleUtilities {
 
-    /** 
+    /**
      * Are the two numbers equal?
-     * 
+     *
      * @param value1 the first value.
      * @param value2 the second value.
-     * @return true iff {@code value1} and {@code value2} differ by less than {@code PrecisionConstants.EPSILON}.
+     * @return true iff {@code value1} and {@code value2} differ by less than {@code
+     *     PrecisionConstants.EPSILON}.
      */
     public static boolean areEqual(double value1, double value2) {
         return Math.abs(value1 - value2) < PrecisionConstants.EPSILON;
@@ -56,7 +57,8 @@ public class DoubleUtilities {
      * @param replaceWithIfZero what to replace with if zero.
      * @return numerator divided denominator or replaceWithIfZero (if denominator is zero).
      */
-    public static double divideByZeroReplace(double numerator, double denominator, double replaceWithIfZero) {
+    public static double divideByZeroReplace(
+            double numerator, double denominator, double replaceWithIfZero) {
 
         if (areEqual(denominator, 0.0)) {
             return replaceWithIfZero;

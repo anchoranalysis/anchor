@@ -27,8 +27,8 @@
 package org.anchoranalysis.bean.shared.dictionary;
 
 import org.anchoranalysis.bean.initializable.InitializableBean;
-import org.anchoranalysis.bean.initializable.property.BeanInitializer;
 import org.anchoranalysis.bean.initializable.property.AssignerMatchClass;
+import org.anchoranalysis.bean.initializable.property.BeanInitializer;
 
 public abstract class DictionaryBean<T> extends InitializableBean<T, DictionaryInitialization> {
 

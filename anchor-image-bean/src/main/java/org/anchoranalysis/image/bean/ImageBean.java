@@ -29,9 +29,9 @@ package org.anchoranalysis.image.bean;
 import java.util.Arrays;
 import java.util.List;
 import org.anchoranalysis.bean.initializable.InitializableBean;
-import org.anchoranalysis.bean.initializable.property.ExtractDerivedParameter;
-import org.anchoranalysis.bean.initializable.property.BeanInitializer;
 import org.anchoranalysis.bean.initializable.property.AssignerMatchClass;
+import org.anchoranalysis.bean.initializable.property.BeanInitializer;
+import org.anchoranalysis.bean.initializable.property.ExtractDerivedParameter;
 import org.anchoranalysis.bean.shared.dictionary.DictionaryInitialization;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 

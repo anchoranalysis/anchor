@@ -89,7 +89,8 @@ public class MultipleComparer extends AnchorBean<MultipleComparer> {
             boolean debugMode)
             throws CreateException {
 
-        FeaturesInitialization initialization = FeaturesInitialization.create(logger, modelDirectory);
+        FeaturesInitialization initialization =
+                FeaturesInitialization.create(logger, modelDirectory);
         try {
             featureEvaluator.initializeRecursive(initialization, logger);
         } catch (InitializeException e) {
@@ -104,7 +105,8 @@ public class MultipleComparer extends AnchorBean<MultipleComparer> {
                     annotation.convertToObjects(background.dimensions());
 
             Findable<ObjectCollection> compareObjects =
-                    comparer.getValue().createObjects(annotationPath, background.dimensions(), debugMode);
+                    comparer.getValue()
+                            .createObjects(annotationPath, background.dimensions(), debugMode);
 
             Optional<ObjectCollection> foundObjects =
                     compareObjects.getFoundOrLog(comparer.getName(), logger);

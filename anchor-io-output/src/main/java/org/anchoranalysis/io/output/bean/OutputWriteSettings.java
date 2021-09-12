@@ -46,8 +46,8 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 /**
  * Settings for how to write output, including default writers.
  *
- * <p>It is very important that {@link #initialize} is run before using the bean. This normally occurs
- * from checkMisconfigured() that is called automatically from the bean-loading framework
+ * <p>It is very important that {@link #initialize} is run before using the bean. This normally
+ * occurs from checkMisconfigured() that is called automatically from the bean-loading framework
  *
  * <p>However, if the bean is not loaded through this mechanism, please call {@link #initialize}
  * explicitly before usage.

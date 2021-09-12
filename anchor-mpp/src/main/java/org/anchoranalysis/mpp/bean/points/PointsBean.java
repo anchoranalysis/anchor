@@ -29,9 +29,9 @@ package org.anchoranalysis.mpp.bean.points;
 import java.util.Arrays;
 import java.util.List;
 import org.anchoranalysis.bean.initializable.InitializableBean;
-import org.anchoranalysis.bean.initializable.property.ExtractDerivedParameter;
-import org.anchoranalysis.bean.initializable.property.BeanInitializer;
 import org.anchoranalysis.bean.initializable.property.AssignerMatchClass;
+import org.anchoranalysis.bean.initializable.property.BeanInitializer;
+import org.anchoranalysis.bean.initializable.property.ExtractDerivedParameter;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.mpp.init.PointsInitialization;
 
@@ -49,6 +49,7 @@ public abstract class PointsBean<T> extends InitializableBean<T, PointsInitializ
 
     private static List<ExtractDerivedParameter<PointsInitialization, ?>> paramExtracters() {
         return Arrays.asList(
-                new ExtractDerivedParameter<>(ImageInitialization.class, PointsInitialization::getImage));
+                new ExtractDerivedParameter<>(
+                        ImageInitialization.class, PointsInitialization::getImage));
     }
 }

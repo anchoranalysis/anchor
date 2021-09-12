@@ -34,8 +34,8 @@ import java.lang.annotation.RetentionPolicy;
  *
  * <p>The default is employed if no explicit value is set.
  *
- * <p>A corresponding default must be set in the defaults passed during initialization to an
- * {@link org.anchoranalysis.bean.initializable.InitializableBean}.
+ * <p>A corresponding default must be set in the defaults passed during initialization to an {@link
+ * org.anchoranalysis.bean.initializable.InitializableBean}.
  *
  * @author Owen Feehan
  */
