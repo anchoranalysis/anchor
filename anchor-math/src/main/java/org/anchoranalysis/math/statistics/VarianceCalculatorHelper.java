@@ -1,5 +1,6 @@
 package org.anchoranalysis.math.statistics;
 
+import com.google.common.base.Preconditions;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -15,10 +16,9 @@ class VarianceCalculatorHelper {
      * @return the variance.
      */
     public static double calculateVariance(double sum, double sumSquares, long count) {
-
-        assert (sumSquares >= 0);
-        assert (sum >= 0);
-        assert (count >= 0);
+        Preconditions.checkArgument(sumSquares >= 0);
+        Preconditions.checkArgument(sum >= 0);
+        Preconditions.checkArgument(count >= 0);
 
         // Formula for variance
         // https://en.wikipedia.org/wiki/Variance
