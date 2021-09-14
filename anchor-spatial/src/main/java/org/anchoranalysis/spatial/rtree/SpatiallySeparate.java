@@ -82,7 +82,7 @@ public class SpatiallySeparate<T> {
 
         Set<Set<T>> out = new HashSet<>();
 
-        RTreeWithSet<T> tree = createTree(elements);
+        BoundingBoxRTreeWithSet<T> tree = createTree(elements);
 
         while (!tree.isEmpty()) {
             out.add(findArbitrarySpatiallyConnected(tree));
@@ -91,12 +91,12 @@ public class SpatiallySeparate<T> {
         return out;
     }
 
-    private RTreeWithSet<T> createTree(Set<T> elements) {
-        RTree<T> tree = new RTree<>(elements.size());
+    private BoundingBoxRTreeWithSet<T> createTree(Set<T> elements) {
+        BoundingBoxRTree<T> tree = new BoundingBoxRTree<>(elements.size());
         for (T element : elements) {
             tree.add(extractBoundingBox.apply(element), element);
         }
-        return new RTreeWithSet<>(tree, elements);
+        return new BoundingBoxRTreeWithSet<>(tree, elements);
     }
 
     /**
@@ -109,7 +109,7 @@ public class SpatiallySeparate<T> {
      * @param tree the tree containing elements (which are removed if added to the outputted set)
      *     whose bounding-box intersects with an existing element) are recursively added.
      */
-    private Set<T> findArbitrarySpatiallyConnected(RTreeWithSet<T> tree) {
+    private Set<T> findArbitrarySpatiallyConnected(BoundingBoxRTreeWithSet<T> tree) {
         Set<T> out = new HashSet<>();
 
         List<T> intersecting = new ArrayList<>();

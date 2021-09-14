@@ -39,7 +39,7 @@ import lombok.experimental.Accessors;
 import org.anchoranalysis.core.graph.GraphWithoutPayload;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.Point3i;
-import org.anchoranalysis.spatial.rtree.RTree;
+import org.anchoranalysis.spatial.rtree.BoundingBoxRTree;
 
 /**
  * A data-structure to efficiently determine which object-masks intersect in a collection.
@@ -58,7 +58,7 @@ import org.anchoranalysis.spatial.rtree.RTree;
  * r-tree, but is removed from the index.
  *
  * @see <a href="https://en.wikipedia.org/wiki/R-tree">R-tree on Wikipedia</a>
- * @see RTree for a related structure operating only on bounding-boxes
+ * @see BoundingBoxRTree for a related structure operating only on bounding-boxes
  * @param <T> the type of elements stored in the structure, each of which must map to a {@link
  *     ObjectMask}.
  * @author Owen Feehan
@@ -67,7 +67,7 @@ import org.anchoranalysis.spatial.rtree.RTree;
 public class IntersectingObjects<T> {
 
     /** An r-tree that stores indices of the objects for each bounding-box */
-    private RTree<T> tree;
+    private BoundingBoxRTree<T> tree;
 
     /** Extracts an {@link ObjectMask} from an element. */
     private final Function<T, ObjectMask> extractObject;
@@ -89,7 +89,7 @@ public class IntersectingObjects<T> {
      */
     public IntersectingObjects(Collection<T> objects, Function<T, ObjectMask> extractObject) {
         this.extractObject = extractObject;
-        this.tree = new RTree<>(objects.size());
+        this.tree = new BoundingBoxRTree<>(objects.size());
         objects.stream().forEach(element -> tree.add(boxFor(element), element));
     }
 

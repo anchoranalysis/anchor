@@ -41,10 +41,13 @@ public abstract class Tuple3d implements Serializable {
     /** */
     private static final long serialVersionUID = 1L;
 
+    /** X-axis component of tuple. */
     @Getter protected double x = 0.0;
 
+    /** Y-axis component of tuple. */
     @Getter protected double y = 0.0;
 
+    /** Z-axis component of tuple. */
     @Getter protected double z = 0.0;
 
     public final void add(Tuple3d point) {
@@ -160,8 +163,8 @@ public abstract class Tuple3d implements Serializable {
         }
     }
 
-    public final double dot(Tuple3d vec) {
-        return (x * vec.x) + (y * vec.y) + (z * vec.z);
+    public final double dotProduct(Tuple3d vector) {
+        return (x * vector.x) + (y * vector.y) + (z * vector.z);
     }
 
     @Override
@@ -169,26 +172,32 @@ public abstract class Tuple3d implements Serializable {
         return String.format("[%5.1f,%5.1f,%5.1f]", x, y, z);
     }
 
+    /** X-axis component of tuple. */
     public final void setX(int x) {
         this.x = x;
     }
 
+    /** Y-axis component of tuple. */
     public final void setY(int y) {
         this.y = y;
     }
 
+    /** Z-axis component of tuple. */
     public final void setZ(int z) {
         this.z = z;
     }
 
+    /** X-axis component of tuple. */
     public void setX(double x) {
         this.x = x;
     }
 
+    /** Y-axis component of tuple. */
     public void setY(double y) {
         this.y = y;
     }
 
+    /** Z-axis component of tuple. */
     public void setZ(double z) {
         this.z = z;
     }

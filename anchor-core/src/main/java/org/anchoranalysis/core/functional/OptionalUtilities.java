@@ -1,7 +1,5 @@
 package org.anchoranalysis.core.functional;
 
-import java.util.Iterator;
-
 /*-
  * #%L
  * anchor-core
@@ -28,6 +26,7 @@ import java.util.Iterator;
  * #L%
  */
 
+import java.util.Iterator;
 import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -194,10 +193,9 @@ public class OptionalUtilities {
         }
         return Optional.empty();
     }
-        
+
     /**
-     * The first optional if it's present, or the second, or the third etc. using an {@link
-     * Stream}.
+     * The first optional if it's present, or the second, or the third etc. using an {@link Stream}.
      *
      * @param <T> type of optionals.
      * @param optionals one or more optionals to combine together using a logical <b>or</b>
@@ -207,7 +205,7 @@ public class OptionalUtilities {
      */
     public static <T> Optional<T> orFlat(Stream<Optional<T>> optionals) {
         Iterator<Optional<T>> iterator = optionals.iterator();
-        while( iterator.hasNext()) {
+        while (iterator.hasNext()) {
             Optional<T> item = iterator.next();
             if (item.isPresent()) {
                 return item;

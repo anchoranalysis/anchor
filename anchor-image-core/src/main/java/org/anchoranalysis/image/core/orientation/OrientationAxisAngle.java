@@ -77,7 +77,7 @@ public class OrientationAxisAngle extends Orientation {
         // See http://www.gamedev.net/topic/591937-rotate-one-vector-onto-another/
 
         // Dot product
-        double dotProd = vecSrc.dot(vecOnto);
+        double dotProd = vecSrc.dotProduct(vecOnto);
 
         Vector3d crossProd = Vector3d.cross(vecSrc, vecOnto);
 

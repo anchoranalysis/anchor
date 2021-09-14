@@ -57,7 +57,7 @@ public class TestLoaderImage {
         TestReaderWriterUtilities.ensureStackReader();
         this.loader = loader;
         this.stackReader =
-                RegisterBeanFactories.getDefaultInstances()     // NOSONAR
+                RegisterBeanFactories.getDefaultInstances() // NOSONAR
                         .getInstanceFor(StackReader.class)
                         .get();
     }

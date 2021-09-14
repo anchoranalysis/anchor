@@ -25,12 +25,8 @@
  */
 package org.anchoranalysis.spatial.rtree;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.box.BoundingBoxFactory;
 import org.anchoranalysis.spatial.point.Point3i;
@@ -39,11 +35,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 /**
- * Tests a {@link RTree}.
+ * Tests a {@link BoundingBoxRTree}.
  *
  * @author Owen Feehan
  */
-class RTreeTest {
+class BoundingBoxRTreeTest {
 
     /** First bounding box that doesn't intersect with any other. */
     private static final BoundingBox BOX1 = BoundingBoxFactory.at(3, 4, 5, 6, 7, 8);
@@ -65,15 +61,19 @@ class RTreeTest {
             BoundingBoxFactory.at(1, 1, 1, 1, 1, 1);
 
     /** The r-tree freshly created and intialized for each test. */
-    private RTree<Integer> rTree;
+    private BoundingBoxRTree<Integer> tree;
+
+    /** Performs asserts on {@code tree}. */
+    private RTreeChecker checker;
 
     /** Sets up an r-tree before each test using 1, 2 and 3 as payloads for the respective boxes. */
     @BeforeEach
     void initialize() {
-        rTree = new RTree<>(3);
-        rTree.add(BOX1, 1);
-        rTree.add(BOX2, 2);
-        rTree.add(BOX3, 3);
+        tree = new BoundingBoxRTree<>(3);
+        tree.add(BOX1, 1);
+        tree.add(BOX2, 2);
+        tree.add(BOX3, 3);
+        checker = new RTreeChecker(tree);
     }
 
     @Test
@@ -97,45 +97,51 @@ class RTreeTest {
         assertContainsSize(BOX3, Arrays.asList(2, 3), 3);
 
         // Add a box that intersects with box 3
-        rTree.add(BOX_ADDITIONAL, 4);
+        tree.add(BOX_ADDITIONAL, 4);
         assertContainsSize(BOX3, Arrays.asList(2, 3, 4), 4);
 
         // Add a box that already exists but with a different payload
-        rTree.add(BOX_ADDITIONAL, 5);
+        tree.add(BOX_ADDITIONAL, 5);
         assertContainsSize(BOX3, Arrays.asList(2, 3, 4, 5), 5);
 
         // Add a box that already exists but with an existing payload
-        rTree.add(BOX_ADDITIONAL, 5);
+        tree.add(BOX_ADDITIONAL, 5);
         assertContainsSize(BOX3, Arrays.asList(2, 3, 4, 5), 6);
     }
 
     @Test
     void remove() {
-        assertSize(3);
+        checker.assertSize(3);
 
         // Remove an bounding-box that exists with correct payload
-        rTree.remove(BOX2, 2);
-        assertSize(2);
-
-        // Remove an bounding-box that exists with incorrect payload
-        rTree.remove(BOX3, 3);
-        assertSize(1);
+        tree.remove(BOX2, 2);
+        checker.assertSize(2);
 
         // Remove a bounding-box that doesn't exist
-        rTree.remove(BOX_ADDITIONAL, 5);
-        assertSize(1);
+        tree.remove(BOX_ADDITIONAL, 5);
+        checker.assertSize(2);
 
         // Adds an additional box where BOX1 already exists, so there are two (with different
         // payloads)
-        rTree.add(BOX1, 6);
+        tree.add(BOX1, 6);
 
         // Removes the first box with correct payload
-        rTree.remove(BOX1, 1);
-        assertSize(1);
+        tree.remove(BOX1, 1);
+        checker.assertSize(2);
 
         // Removes the second box with correct payload
-        rTree.remove(BOX1, 6);
-        assertSize(0);
+        tree.remove(BOX1, 6);
+        checker.assertSize(1);
+    }
+
+    /** Assert that particular payloads are expected to intersect with a box. */
+    private void assertIntersectsWith(BoundingBox box, List<Integer> expectedIdentifiers) {
+        RTreeChecker.assertUnordered(expectedIdentifiers, tree.intersectsWith(box));
+    }
+
+    /** Assert that particular payloads are expected at a given point. */
+    private void assertContains(ReadableTuple3i point, List<Integer> expectedIdentifiers) {
+        RTreeChecker.assertUnordered(expectedIdentifiers, tree.contains(point));
     }
 
     /**
@@ -150,28 +156,7 @@ class RTreeTest {
     private void assertContainsSize(
             BoundingBox box, List<Integer> expectedIdentifiers, int expectedSize) {
         assertContains(box.cornerMin(), expectedIdentifiers);
-        assertSize(expectedSize);
-    }
-
-    /** Asserts the total size of the r-tree is as expected. */
-    private void assertSize(int expectedSize) {
-        assertEquals(expectedSize, rTree.size());
-    }
-
-    /** Assert that particular payloads are expected at a given point. */
-    private void assertContains(ReadableTuple3i point, List<Integer> expectedIdentifiers) {
-        assertUnordered(expectedIdentifiers, rTree.contains(point));
-    }
-
-    /** Assert that particular payloads are expected to intersect with a box. */
-    private void assertIntersectsWith(BoundingBox box, List<Integer> expectedIdentifiers) {
-        assertUnordered(expectedIdentifiers, rTree.intersectsWith(box));
-    }
-
-    /** Asserts a {@link List} is equal to another, disregarding the order of elements. */
-    private static void assertUnordered(List<Integer> expected, Set<Integer> actual) {
-        Set<Integer> expectedAsSet = expected.stream().collect(Collectors.toSet());
-        assertEquals(expectedAsSet, actual);
+        checker.assertSize(expectedSize);
     }
 
     /** The minimum corner of a bounding box, with 1 added in each dimension. */

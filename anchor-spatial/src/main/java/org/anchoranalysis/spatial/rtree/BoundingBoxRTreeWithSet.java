@@ -33,12 +33,14 @@ import org.anchoranalysis.spatial.box.BoundingBox;
 @AllArgsConstructor
 /**
  * An R-Tree coupled with a set, both of whose elements are kept synchronized across add/remove
- * operations.
+ *
+ * @param <T> object-type stored in structure.
+ *     <p>operations.
  */
-class RTreeWithSet<T> {
+class BoundingBoxRTreeWithSet<T> {
 
     /** The r-tree for elements */
-    private final RTree<T> tree;
+    private final BoundingBoxRTree<T> tree;
 
     /** A set containing identical elements to the r-tree. */
     private final Set<T> set;

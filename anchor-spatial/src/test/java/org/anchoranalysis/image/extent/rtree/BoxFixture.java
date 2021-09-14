@@ -32,7 +32,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.box.BoundingBoxFactory;
-import org.anchoranalysis.spatial.rtree.RTree;
+import org.anchoranalysis.spatial.rtree.BoundingBoxRTree;
 
 /**
  * Six bounding-boxes distributed over three spatially-overlapping clusters.
@@ -87,28 +87,28 @@ class BoxFixture {
         return new HashSet<>(Arrays.asList(BOX5, BOX6));
     }
 
-    public static void addAllClusters(RTree<BoundingBox> tree) {
+    public static void addAllClusters(BoundingBoxRTree<BoundingBox> tree) {
         addFirstCluster(tree);
         addSecondCluster(tree);
         addThirdCluster(tree);
     }
 
-    public static void addFirstCluster(RTree<BoundingBox> tree) {
+    public static void addFirstCluster(BoundingBoxRTree<BoundingBox> tree) {
         add(tree, BOX1);
         add(tree, BOX2);
         add(tree, BOX3);
     }
 
-    private static void addSecondCluster(RTree<BoundingBox> tree) {
+    private static void addSecondCluster(BoundingBoxRTree<BoundingBox> tree) {
         add(tree, BOX4);
     }
 
-    private static void addThirdCluster(RTree<BoundingBox> tree) {
+    private static void addThirdCluster(BoundingBoxRTree<BoundingBox> tree) {
         add(tree, BOX5);
         add(tree, BOX6);
     }
 
-    private static void add(RTree<BoundingBox> tree, BoundingBox box) {
+    private static void add(BoundingBoxRTree<BoundingBox> tree, BoundingBox box) {
         tree.add(box, box);
     }
 }

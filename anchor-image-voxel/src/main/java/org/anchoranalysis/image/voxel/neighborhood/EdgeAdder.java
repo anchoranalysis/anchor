@@ -35,7 +35,7 @@ import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.image.voxel.object.morphological.MorphologicalDilation;
 import org.anchoranalysis.spatial.Extent;
-import org.anchoranalysis.spatial.rtree.RTree;
+import org.anchoranalysis.spatial.rtree.BoundingBoxRTree;
 
 /**
  * Adds edges if objects neighbor each other.
@@ -59,7 +59,7 @@ class EdgeAdder<V> {
     // END REQUIRED ARGUMENTS
 
     /** The r-tree underpinning the vertices (or rather their derived object-masks) */
-    private final RTree<Integer> rTree;
+    private final BoundingBoxRTree<Integer> rTree;
 
     /**
      * Create extract objects from a vertex.
@@ -152,8 +152,8 @@ class EdgeAdder<V> {
     }
 
     /** Creates an r-tree mapping the bounding-box of objects to their index in a collection. */
-    private static RTree<Integer> createIndicesRTree(ObjectCollection objects) {
-        RTree<Integer> tree = new RTree<>(objects.size());
+    private static BoundingBoxRTree<Integer> createIndicesRTree(ObjectCollection objects) {
+        BoundingBoxRTree<Integer> tree = new BoundingBoxRTree<>(objects.size());
         for (int i = 0; i < objects.size(); i++) {
             tree.add(objects.get(i).boundingBox(), i);
         }
