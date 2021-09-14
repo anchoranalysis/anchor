@@ -33,11 +33,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.format.ImageFileFormat;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.input.bean.InputManagerParams;
+import org.anchoranalysis.io.input.bean.path.matcher.MatchExtensions;
 import org.anchoranalysis.io.input.bean.path.matcher.MatchGlob;
 import org.anchoranalysis.io.input.bean.path.matcher.PathMatcher;
 import org.anchoranalysis.io.input.file.FilesProviderException;
@@ -52,10 +55,11 @@ import org.anchoranalysis.io.input.path.GlobExtractor.GlobWithDirectory;
  *
  * @author Owen Feehan
  */
+@NoArgsConstructor
 public class SearchDirectory extends FilesProviderWithDirectoryString {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private PathMatcher matcher;
+    @BeanField @Getter @Setter private PathMatcher matcher = new MatchExtensions(ImageFileFormat.JPEG.getDefaultExtension());
 
     /** If true the search is applied recursively over sub-directories. */
     @BeanField @Getter @Setter private boolean recursive = false;
@@ -78,6 +82,15 @@ public class SearchDirectory extends FilesProviderWithDirectoryString {
     /** If true, the files are sorted after being searched, to achieve a deterministic order. */
     private boolean sort = true;
     // END BEAN PROPERTIES
+    
+    /**
+     * Create for a specific directory.
+     * 
+     * @param directory the directory to search.
+     */
+    public SearchDirectory(String directory) {
+        this.setDirectory(directory);
+    }
 
     // Matching files
     @Override
