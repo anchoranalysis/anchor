@@ -86,8 +86,8 @@ public class Channel {
         this.voxels = voxels;
     }
 
-    public ObjectMask equalMask(BoundingBox box, int equalVal) {
-        return voxels.extract().voxelsEqualTo(equalVal).deriveObject(box);
+    public ObjectMask equalMask(BoundingBox box, int equalValue) {
+        return voxels.extract().voxelsEqualTo(equalValue).deriveObject(box);
     }
 
     public VoxelsWrapper voxels() {
@@ -95,9 +95,9 @@ public class Channel {
     }
 
     /**
-     * Assigns new voxels to replace the existing voxels
+     * Assigns new voxels to replace the existing voxels.
      *
-     * @param voxelsToAssign voxels-to-assign
+     * @param voxelsToAssign voxels to be assigned.
      * @throws IncorrectImageSizeException
      */
     public void replaceVoxels(Voxels<?> voxelsToAssign) throws IncorrectImageSizeException {

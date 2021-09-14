@@ -33,17 +33,17 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.anchoranalysis.spatial.box.BoundingBox;
-import org.anchoranalysis.spatial.rtree.RTree;
+import org.anchoranalysis.spatial.rtree.BoundingBoxRTree;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class BoundingBoxRTreeTest {
 
-    private RTree<BoundingBox> tree;
+    private BoundingBoxRTree<BoundingBox> tree;
 
     @BeforeEach
     public void before() {
-        tree = new RTree<>(7);
+        tree = new BoundingBoxRTree<>(7);
         BoxFixture.addFirstCluster(tree);
     }
 

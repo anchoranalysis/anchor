@@ -44,7 +44,7 @@ import org.junit.jupiter.api.Test;
  *
  * @author Owen Feehan
  */
-class BeanXMLPrimitiveTester {
+class BeanXMLPrimitiveTest {
 
     private LoadFromResources loader = new LoadFromResources("primitive");
 

@@ -30,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import com.google.common.base.Functions;
 import java.util.Set;
 import org.anchoranalysis.spatial.box.BoundingBox;
-import org.anchoranalysis.spatial.rtree.RTree;
+import org.anchoranalysis.spatial.rtree.BoundingBoxRTree;
 import org.anchoranalysis.spatial.rtree.SpatiallySeparate;
 import org.junit.jupiter.api.Test;
 
@@ -39,7 +39,7 @@ class SpatiallySeparateTest {
     @Test
     void testIntersectsWith() {
 
-        RTree<BoundingBox> tree = new RTree<>(12);
+        BoundingBoxRTree<BoundingBox> tree = new BoundingBoxRTree<>(12);
         BoxFixture.addAllClusters(tree);
 
         SpatiallySeparate<BoundingBox> spatiallySeparate =
