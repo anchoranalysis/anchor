@@ -27,10 +27,12 @@
 package org.anchoranalysis.io.input.bean.path.matcher;
 
 import java.nio.file.Path;
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
@@ -39,12 +41,13 @@ import org.anchoranalysis.io.input.InputContextParams;
 import org.anchoranalysis.io.input.InputReadFailedException;
 
 /**
- * Maybe imposes a file-extension condition, optionally on top of an existing matcher
+ * Maybe imposes a file-extension condition, optionally on top of an existing matcher.
  *
- * <p>The extensions are always checked in a case-insensitive manner
+ * <p>The extensions are always checked in a case-insensitive manner.
  *
  * @author Owen Feehan
  */
+@NoArgsConstructor
 public class MatchExtensions extends PathMatcher {
 
     // START BEAN PROPERTIES
@@ -59,6 +62,16 @@ public class MatchExtensions extends PathMatcher {
      */
     @BeanField @OptionalBean @Getter @Setter private Set<String> extensions;
     // END BEAN PROPERTIES
+    
+    /**
+     * Create for specific extension.
+     * 
+     * @param extension the extension.
+     */
+    public MatchExtensions(String extension) {
+        this.extensions = new HashSet<>();
+        this.extensions.add(extension);
+    }
 
     @Override
     protected Predicate<Path> createMatcherFile(
