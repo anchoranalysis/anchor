@@ -30,7 +30,7 @@ import lombok.Getter;
 import lombok.experimental.Accessors;
 
 /**
- * Like a {@link RunningSum} but also remembers the <i>mean</i> and </i>max</i> across all the added values.
+ * Like a {@link RunningSum} but also remembers the <i>mean</i> and <i>max</i> across all the added values.
  * 
  * @author Owen Feehan
  *
