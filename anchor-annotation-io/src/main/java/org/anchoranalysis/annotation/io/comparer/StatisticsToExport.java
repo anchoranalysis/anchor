@@ -33,7 +33,9 @@ import org.apache.commons.lang.StringUtils;
 import lombok.Getter;
 
 /**
- * Statistics to be exported.
+ * Statistics to be exported, comprised of name-value pairs.
+ * 
+ * <p>The values may be of type {@code int}, {@code double} or {@link String}.
  * 
  * <p>Typically, they are later written to a CSV file. 
  * 
