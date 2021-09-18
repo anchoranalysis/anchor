@@ -33,16 +33,24 @@ import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.shared.StringMap;
+import org.anchoranalysis.image.core.stack.Stack;
 
+/**
+ * How to display one or more {@link Stack}s as background during an annotation process.
+ * 
+ * @author Owen Feehan
+ *
+ */
 public class AnnotationBackground extends AnchorBean<AnnotationBackground> {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private String stackNameVisualOriginal;
+    /** The name of the default stack from {@code backgroundStackMap} to display as background when annotating. */
+    @BeanField @Getter @Setter private String stackNameDefault;
 
-    /** If non-null, maps underlying stack-name to a background */
+    /** If non-null, maps underlying stack-name to a background. */
     @BeanField @OptionalBean @Getter @Setter private StringMap backgroundStackMap;
 
-    /** If non-empty any stackNames (after map) containing a certain string will be ignored */
+    /** If non-empty, to not display any stacks in {@code backgroundStackMap} whose name contains this string. */
     @BeanField @AllowEmpty @Getter @Setter private String ignoreContains = "";
     // END BEAN PROPERTIES
 }

@@ -24,25 +24,25 @@
  * #L%
  */
 
-package org.anchoranalysis.annotation.io.image.findable;
+package org.anchoranalysis.annotation.io.mark;
 
-import java.util.Optional;
-import org.anchoranalysis.core.log.Logger;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import org.anchoranalysis.annotation.io.AnnotationDeleter;
+import org.anchoranalysis.annotation.mark.DualMarksAnnotation;
 
 /**
- * Parent class for an element that exists in one of two-states, either {@link Found} or {@link NotFound}.
- *
+ * Deletes {@link DualMarksAnnotation}s from the file-system.
+ * 
  * @author Owen Feehan
- * @param <T> object-type to try to find.
+ *
  */
-public interface Findable<T> {
+public class DualMarksAnnotationDeleter implements AnnotationDeleter {
 
-    /**
-     * Gets an object or otherwise logs a message describing what went wrong.
-     *
-     * @param name the name of the object to find, as may appear in the log.
-     * @param logger the logger.
-     * @return the object if found, otherwise {@link Optional#empty}.
-     */
-    Optional<T> getOrLog(String name, Logger logger);
+    @Override
+    public void delete(Path annotationPath) throws IOException {
+        Files.deleteIfExists(annotationPath);
+        Files.deleteIfExists(TempPathCreator.deriveTempPath(annotationPath));
+    }
 }

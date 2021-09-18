@@ -34,30 +34,17 @@ import java.util.function.IntFunction;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.annotation.io.assignment.Assignment;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
-import org.anchoranalysis.core.color.ColorList;
-import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.stack.ArrangeRaster;
-import org.anchoranalysis.image.core.object.properties.ObjectCollectionWithProperties;
-import org.anchoranalysis.image.core.object.properties.ObjectWithProperties;
-import org.anchoranalysis.image.core.stack.DisplayStack;
-import org.anchoranalysis.image.core.stack.RGBStack;
 import org.anchoranalysis.image.core.stack.Stack;
-import org.anchoranalysis.image.io.bean.object.draw.Filled;
-import org.anchoranalysis.image.io.bean.object.draw.IfElse;
-import org.anchoranalysis.image.io.bean.object.draw.Outline;
 import org.anchoranalysis.image.io.bean.stack.combine.StackProviderWithLabel;
-import org.anchoranalysis.image.io.object.output.rgb.DrawObjectsGenerator;
 import org.anchoranalysis.image.io.stack.input.TileRasters;
 import org.anchoranalysis.image.io.stack.output.StackWriteAttributes;
 import org.anchoranalysis.image.io.stack.output.StackWriteAttributesFactory;
 import org.anchoranalysis.image.io.stack.output.generator.RasterGeneratorSelectFormat;
 import org.anchoranalysis.image.io.stack.output.generator.StackGenerator;
-import org.anchoranalysis.image.voxel.object.ObjectCollection;
-import org.anchoranalysis.image.voxel.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
-import org.anchoranalysis.overlay.bean.DrawObject;
 
 /**
  * Outputs a raster showing an {@link Assignment} on a background.
@@ -68,41 +55,39 @@ import org.anchoranalysis.overlay.bean.DrawObject;
  * @author Owen Feehan
  */
 @RequiredArgsConstructor
-public class AssignmentGenerator extends RasterGeneratorSelectFormat<Assignment> {
+public class AssignmentGenerator extends RasterGeneratorSelectFormat<Assignment<ObjectMask>> {
 
     // START REQUIRED ARGUMENTS
-    /** The background, which will feature in both left and right panes. */
-    private final DisplayStack background;
+    /** How to color objects in the image. */
+    private final DrawColoredObjects objectDrawer;
+    
+    /** Creates a {@link AssignmentColorPool} given a count of paired objects. */
+    private final IntFunction<AssignmentColorPool> colorPoolCreator;
 
-    private final IntFunction<ColorPool> colorPoolCreator;
-
-    /** Whether to flatten (maximum intensity projection) in the z-dimension. */
-    private final boolean flatten;
-
+    /** Names to assign respectively to the left and right images. */
     private final Tuple2<String, String> names;
 
-    private final boolean appendNumberBrackets;
-
-    /** How many pixels should the outline be around objects */
-    private final int outlineWidth;
+    /** Whether to append a count of unassigned objects (in parantheses) to the name of each image. */
+    private final boolean appendUnassignedCount;
     // END REQUIRED ARGUMENTS
 
-    private StackGenerator delegate =
+    /** A delegated generator. */
+    private StackGenerator generator =
             new StackGenerator(true, Optional.of("assignmentComparison"), false);
 
     @Override
-    public Stack transform(Assignment element) throws OutputWriteFailedException {
+    public Stack transform(Assignment<ObjectMask> element) throws OutputWriteFailedException {
 
-        ColorPool colorPool = colorPoolCreator.apply(element.numberPaired());
+        AssignmentColorPool colorPool = colorPoolCreator.apply(element.numberPaired());
 
         ArrangeRaster stackProvider =
                 createTiledStackProvider(
-                        createRGBOutlineStack(true, element, colorPool),
-                        createRGBOutlineStack(false, element, colorPool),
+                        objectDrawer.createObjectsImage(element, true, colorPool),
+                        objectDrawer.createObjectsImage(element, false, colorPool),
                         createLabel(element, true),
                         createLabel(element, false));
         try {
-            return delegate.transform(stackProvider.get());
+            return generator.transform(stackProvider.get());
 
         } catch (ProvisionFailedException e) {
             throw new OutputWriteFailedException(e);
@@ -128,66 +113,15 @@ public class AssignmentGenerator extends RasterGeneratorSelectFormat<Assignment>
         return TileRasters.createStackProvider(listProvider, 2, false, false, true);
     }
 
-    private Stack createRGBOutlineStack(boolean left, Assignment assignment, ColorPool colorPool)
-            throws OutputWriteFailedException {
-        try {
-            return createRGBOutlineStack(
-                    assignment.getListPaired(left), colorPool, assignment.getListUnassigned(left));
-        } catch (OperationFailedException e) {
-            throw new OutputWriteFailedException(e);
-        }
-    }
-
-    private Stack createRGBOutlineStack(
-            List<ObjectMask> matchedObjects,
-            ColorPool colorPool,
-            final List<ObjectMask> otherObjects)
-            throws OutputWriteFailedException, OperationFailedException {
-        ObjectCollection objects = ObjectCollectionFactory.of(matchedObjects, otherObjects);
-        DrawObjectsGenerator generator =
-                createGenerator(
-                        otherObjects,
-                        colorPool.createColors(otherObjects.size()),
-                        colorPool.isDifferentColorsForMatches());
-        return generator.transform(new ObjectCollectionWithProperties(objects));
-    }
-
-    private DrawObjectsGenerator createGenerator(
-            List<ObjectMask> otherObjects, ColorList colors, boolean differentColorsForMatches) {
-
-        DrawObject outlineWriter = createOutlineWriter();
-
-        if (differentColorsForMatches) {
-            DrawObject conditionalWriter = createConditionalWriter(otherObjects, outlineWriter);
-            return createGenerator(conditionalWriter, colors);
-        } else {
-            return createGenerator(outlineWriter, colors);
-        }
-    }
-
-    private DrawObjectsGenerator createGenerator(DrawObject drawObject, ColorList colors) {
-        return DrawObjectsGenerator.withBackgroundAndColors(drawObject, background, colors);
-    }
-
-    private DrawObject createConditionalWriter(List<ObjectMask> otherObjects, DrawObject writer) {
-        return new IfElse(
-                (ObjectWithProperties object, RGBStack stack, int id) ->
-                        otherObjects.contains(object.withoutProperties()),
-                writer,
-                new Filled());
-    }
-
-    private DrawObject createOutlineWriter() {
-        return new Outline(outlineWidth, !flatten);
-    }
-
-    private String createLabel(Assignment assignment, boolean left) {
+    /** Creates a label with the name (and optionally numeric count) for a particular image. */
+    private String createLabel(Assignment<ObjectMask> assignment, boolean left) {
         String name = left ? names._1() : names._2();
-        return maybeAppendNumber(appendNumberBrackets, name, assignment, true);
+        return maybeAppendUnassignedCount(appendUnassignedCount, name, assignment, true);
     }
 
-    private static String maybeAppendNumber(
-            boolean doAppend, String mainString, Assignment assignment, boolean left) {
+    /** Appends in the count of unassigned objects (in parentheses), if configured. */
+    private static String maybeAppendUnassignedCount(
+            boolean doAppend, String mainString, Assignment<ObjectMask> assignment, boolean left) {
         if (doAppend) {
             return String.format("%s (%d)", mainString, assignment.numberUnassigned(left));
         } else {

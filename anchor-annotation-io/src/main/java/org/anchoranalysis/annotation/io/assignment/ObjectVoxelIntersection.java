@@ -29,17 +29,29 @@ package org.anchoranalysis.annotation.io.assignment;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import org.anchoranalysis.core.value.TypedValue;
+import org.anchoranalysis.annotation.io.comparer.StatisticsToExport;
 import org.anchoranalysis.image.core.merge.ObjectMaskMerger;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 
 /**
- * Calculates statistics (DICE, Jaccard etc.) based upon corresponding two object-masks
+ * Creates an assignment between intersecting <i>voxels</i> in two objects.
+ * 
+ * <p>Voxels are considered to be assigned, if the exact same voxel exists in both {@link ObjectMask}s,
+ * and otherwise a voxel is considered unassigned.
+ * 
+ * <p>Calculates statistics based upon corresponding two object-masks:
+ * 
+ * <ul>
+ * <li><a href="https://en.wikipedia.org/wiki/S%C3%B8rensen%E2%80%93Dice_coefficient">DICE</a>.
+ * <li><a href="https://en.wikipedia.org/wiki/Jaccard_index">Jaccard</a>.
+ * </ul>
+ * 
+ * <p>The object-masks are arbitrarily termed <i>left</i> and <i>right</i>.
  *
  * @author Owen Feehan
  */
-public class AssignmentMaskIntersection implements Assignment {
-
+public class ObjectVoxelIntersection implements Assignment<ObjectMask> {
+    
     private final ObjectMask objectLeft;
     private final ObjectMask objectRight;
 
@@ -48,8 +60,13 @@ public class AssignmentMaskIntersection implements Assignment {
     private final int sizeLeft;
     private final int sizeRight;
 
-    public AssignmentMaskIntersection(ObjectMask left, ObjectMask right) {
-        super();
+    /**
+     * Determines a voxel-assignment between two objects.
+     * 
+     * @param left the left-object.
+     * @param right the right-object.
+     */
+    public ObjectVoxelIntersection(ObjectMask left, ObjectMask right) {
         this.objectLeft = left;
         this.objectRight = right;
 
@@ -71,32 +88,27 @@ public class AssignmentMaskIntersection implements Assignment {
     }
 
     @Override
-    public List<ObjectMask> getListPaired(boolean left) {
+    public List<ObjectMask> paired(boolean left) {
         return multiplexObjectIf(isIntersectionPresent(), left);
     }
 
     @Override
-    public List<ObjectMask> getListUnassigned(boolean left) {
+    public List<ObjectMask> unassigned(boolean left) {
         return multiplexObjectIf(!isIntersectionPresent(), left);
     }
-
+    
     @Override
-    public List<String> createStatisticsHeaderNames() {
-        return Arrays.asList(
-                "dice",
-                "jaccard",
-                "numIntersectingVoxels",
-                "numUnionVoxels",
-                "sizeLeft",
-                "sizeRight");
-    }
-
-    @Override
-    public List<TypedValue> createStatistics() {
-        WrappedTypeValueList out = new WrappedTypeValueList(4);
-        out.add(calculateDice(), calculateJaccard());
-        out.add(numberIntersectingVoxels, numberUnionVoxels, sizeLeft, sizeRight);
-        return out.asList();
+    public StatisticsToExport statistics() {
+        StatisticsToExport out = new StatisticsToExport();
+        
+        out.addDouble("dice", calculateDice());
+        out.addDouble("jaccard", calculateJaccard());
+        out.addInt("numberIntersectingVoxels", numberIntersectingVoxels);
+        out.addInt("numberUnionVoxels", numberUnionVoxels);
+        out.addInt("sizeLeft", sizeLeft);
+        out.addInt("sizeRight", sizeRight);
+        
+        return out;
     }
 
     private List<ObjectMask> multiplexObjectIf(boolean condition, boolean left) {

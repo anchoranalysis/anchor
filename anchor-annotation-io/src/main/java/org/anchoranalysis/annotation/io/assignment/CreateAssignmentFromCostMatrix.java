@@ -36,14 +36,14 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
 
 /** Creates overlap assignment from a distance matrix */
 @AllArgsConstructor
-class CreateAssignmentFromDistanceMatrix {
+class CreateAssignmentFromCostMatrix {
 
     private CostMatrix<ObjectMask> costMatrix;
     private int[] assign;
     private double maxAcceptedCost;
 
-    public AssignmentOverlapFromPairs createAssignment() {
-        AssignmentOverlapFromPairs assignment = new AssignmentOverlapFromPairs();
+    public OverlappingObjects createAssignment() {
+        OverlappingObjects assignment = new OverlappingObjects();
 
         List<ObjectMask> left = costMatrix.getFirst();
         List<ObjectMask> right = costMatrix.getSecond();
@@ -53,14 +53,14 @@ class CreateAssignmentFromDistanceMatrix {
 
         addPairsToAssignment(assignment, left, right, setAnnotationObjects, setResultObjects);
 
-        addObjectsFromIndices(left, setAnnotationObjects, assignment::addLeftObject);
-        addObjectsFromIndices(right, setResultObjects, assignment::addRightObject);
+        addObjectsFromIndices(left, setAnnotationObjects, assignment::addUnassignedLeft);
+        addObjectsFromIndices(right, setResultObjects, assignment::addUnassignedRight);
 
         return assignment;
     }
 
     private void addPairsToAssignment(
-            AssignmentOverlapFromPairs assignment,
+            OverlappingObjects assignment,
             List<ObjectMask> left,
             List<ObjectMask> right,
             Set<Integer> setLeft,
@@ -70,7 +70,7 @@ class CreateAssignmentFromDistanceMatrix {
             if (ref != -1) {
                 double cost = costMatrix.getCost(i, ref);
                 if (cost < maxAcceptedCost) {
-                    assignment.addPair(left.get(i), right.get(ref), 1.0 - cost);
+                    assignment.addAssignedPair(left.get(i), right.get(ref), 1.0 - cost);
                     setLeft.remove(i);
                     setRight.remove(ref);
                 }

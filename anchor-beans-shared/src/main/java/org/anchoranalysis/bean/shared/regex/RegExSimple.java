@@ -61,10 +61,10 @@ public class RegExSimple extends RegEx {
     }
 
     @Override
-    public Optional<String[]> match(String str) {
+    public Optional<String[]> match(String string) {
         createPatternIfNeeded();
 
-        Matcher matcher = pattern.matcher(str);
+        Matcher matcher = pattern.matcher(string);
         return OptionalUtilities.createFromFlag(matcher.matches(), () -> arrayFromMatcher(matcher));
     }
 

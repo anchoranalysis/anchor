@@ -31,14 +31,21 @@ import java.util.Optional;
 import org.anchoranalysis.annotation.Annotation;
 import org.anchoranalysis.io.input.InputReadFailedException;
 
+
+/**
+ * Allows an annotation to be <b>read</b> from the file-system.
+ * 
+ * @param <T> annotation-type.
+ * @author Owen Feehan
+ */
 public interface AnnotationReader<T extends Annotation> {
 
     /**
-     * Reads an annotation if it can, returns null otherwise
+     * Reads an annotation, if possible, from the file-system.
      *
-     * @param path a path representing the annotation (or we derive another path from this path)
-     * @return the annotation or null if it doesn't exist in a suitable state
-     * @throws InputReadFailedException
+     * @param path a path representing the annotation (or we derive another path from this path).
+     * @return the annotation or  {@link Optional#empty()} if it can't be read.
+     * @throws InputReadFailedException if the annotation cannot be read successfully.
      */
     Optional<T> read(Path path) throws InputReadFailedException;
 }

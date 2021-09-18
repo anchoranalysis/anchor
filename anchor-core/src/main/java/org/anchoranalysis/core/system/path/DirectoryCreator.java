@@ -1,8 +1,8 @@
 /*-
  * #%L
- * anchor-annotation-io
+ * anchor-core
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
+ * Copyright (C) 2010 - 2021 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- *
+ * 
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- *
+ * 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -23,19 +23,31 @@
  * THE SOFTWARE.
  * #L%
  */
-
-package org.anchoranalysis.annotation.io.mark;
+package org.anchoranalysis.core.system.path;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import org.anchoranalysis.annotation.io.AnnotationDeleter;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
-public class MarkAnnotationDeleter implements AnnotationDeleter {
+/**
+ * Creates necessary directories on a file-system to make a path valid.
+ * 
+ * @author Owen Feehan
+ *
+ */
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
+public class DirectoryCreator {
 
-    @Override
-    public void delete(Path annotationPath) throws IOException {
-        Files.deleteIfExists(annotationPath);
-        Files.deleteIfExists(TempPathCreator.deriveTempPath(annotationPath));
+    /**
+     * Creates necessary directories to make a path to a file valid.
+     * 
+     * @param pathToFile the path to a file. Do not pass a path to a directory.
+     * @throws IOException if any necessary subdirectories failed to be created on the file-system.
+     */
+    public static void createNecessaryDirectories(Path pathToFile) throws IOException {
+        // Create whatever directories we need
+        Files.createDirectories(pathToFile.getParent());
     }
 }

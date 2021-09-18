@@ -42,7 +42,7 @@ public class RunningSumCollection {
     /**
      * Constructor. Creates a collection with a certain number of (zeroed) {@link RunningSum}.
      *
-     * @param size number of items in the collection
+     * @param size number of items in the collection.
      */
     public RunningSumCollection(int size) {
         list = FunctionalList.repeat(size, RunningSum::new);
@@ -51,8 +51,8 @@ public class RunningSumCollection {
     /**
      * An individual item in the collection.
      *
-     * @param index index of the item
-     * @return the individual item
+     * @param index index of the item.
+     * @return the individual item.
      */
     public RunningSum get(int index) {
         return list.get(index);
@@ -66,7 +66,7 @@ public class RunningSumCollection {
     /**
      * Calculate the mean of each item and reset to zero.
      *
-     * @return an array with a mean corresponding to each item in the collection
+     * @return an array with a mean corresponding to each item in the collection.
      */
     public double[] meanAndReset() {
         return list.stream().mapToDouble(RunningSum::meanAndReset).toArray();

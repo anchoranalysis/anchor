@@ -30,14 +30,21 @@ import java.io.IOException;
 import java.nio.file.Path;
 import org.anchoranalysis.annotation.Annotation;
 
+
+/**
+ * Allows an annotation to be <b>written</b> to the file-system.
+ * 
+ * @param <T> annotation-type.
+ * @author Owen Feehan
+ */
 public interface AnnotationWriter<T extends Annotation> {
 
     /**
-     * Saves the annotation to the filesystem
+     * Saves the annotation to the filesystem.
      *
-     * @param annotation the annotation to save
-     * @param path the path to write to (or a slightly-modified path is derived from this)
-     * @throws IOException
+     * @param annotation the annotation to save.
+     * @param path the path to write to (or a slightly-modified path is derived from this).
+     * @throws IOException if the annotation fails to write successfully.
      */
     void write(T annotation, Path path) throws IOException;
 }

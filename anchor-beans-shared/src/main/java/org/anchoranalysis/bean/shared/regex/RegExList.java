@@ -32,18 +32,28 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.functional.FunctionalList;
 
+/**
+ * Combines one or more {@link RegEx} together, by successively trying to match each {@link RegEx} until success.
+ * 
+ * <p>The order of {@link RegEx}es in the list determines the order that matching is tried.
+ * 
+ * @author Owen Feehan
+ *
+ */
 public class RegExList extends RegEx {
 
     // START BEAN PROPERTIES
+    /** The list of {@link RegEx}es that are successively tried to be matched. */
     @BeanField @Getter @Setter private List<RegEx> list = new ArrayList<>();
     // END BEAN PROPERTIES
 
     @Override
-    public Optional<String[]> match(String str) {
+    public Optional<String[]> match(String string) {
 
-        for (RegEx re : list) {
-            Optional<String[]> matches = re.match(str);
+        for (RegEx regEx : list) {
+            Optional<String[]> matches = regEx.match(string);
             if (matches.isPresent()) {
                 return matches;
             }
@@ -53,17 +63,7 @@ public class RegExList extends RegEx {
 
     @Override
     public String toString() {
-        boolean first = true;
-        StringBuilder sb = new StringBuilder();
-        for (RegEx re : list) {
-            sb.append(re.toString());
-
-            if (first) {
-                first = false;
-            } else {
-                sb.append("\n");
-            }
-        }
-        return sb.toString();
+        List<String> strings = FunctionalList.mapToList(list.stream(), RegEx::toString);
+        return String.join("\n", strings);
     }
 }

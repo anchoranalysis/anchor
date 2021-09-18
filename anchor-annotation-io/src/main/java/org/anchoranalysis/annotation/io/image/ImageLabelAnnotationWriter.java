@@ -24,19 +24,27 @@
  * #L%
  */
 
-package org.anchoranalysis.annotation.io;
+package org.anchoranalysis.annotation.io.image;
 
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import org.anchoranalysis.annotation.image.ImageLabelAnnotation;
+import org.anchoranalysis.annotation.io.AnnotationWriter;
+import org.anchoranalysis.core.system.path.DirectoryCreator;
+import org.anchoranalysis.io.generator.text.WriteStringToFile;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class WriterUtilities {
+/**
+ * Writes a {@link ImageLabelAnnotation} to the file-system.
+ * 
+ * @author Owen Feehan
+ */
+public class ImageLabelAnnotationWriter implements AnnotationWriter<ImageLabelAnnotation> {
 
-    public static void createNecessaryDirectories(Path annotationPath) throws IOException {
-        // Create whatever directories we need
-        Files.createDirectories(annotationPath.getParent());
+    @Override
+    public void write(ImageLabelAnnotation annotation, Path path) throws IOException {
+
+        DirectoryCreator.createNecessaryDirectories(path);
+
+        WriteStringToFile.apply(annotation.getLabel(), path);
     }
 }

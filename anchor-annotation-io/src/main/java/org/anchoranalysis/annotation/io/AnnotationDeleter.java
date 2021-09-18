@@ -29,8 +29,18 @@ package org.anchoranalysis.annotation.io;
 import java.io.IOException;
 import java.nio.file.Path;
 
+/**
+ * Allows an annotation to be <b>deleted</b> from the file-system.
+ * 
+ * @author Owen Feehan
+ */
 public interface AnnotationDeleter {
 
-    /** Deletes all files at this path (or any other paths derived from this one */
+    /** 
+     * Deletes all files at this path (or any other paths derived from this one.
+     * 
+     * @param path the path to the primary file where the annotation is stored. There may be additional files.
+     * @throws IOException if the deletion does not occur successfully. 
+     */
     void delete(Path path) throws IOException;
 }

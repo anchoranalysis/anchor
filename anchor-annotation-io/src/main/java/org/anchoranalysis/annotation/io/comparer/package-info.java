@@ -2,7 +2,7 @@
  * #%L
  * anchor-annotation-io
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
+ * Copyright (C) 2010 - 2021 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- *
+ * 
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- *
+ * 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -23,23 +23,7 @@
  * THE SOFTWARE.
  * #L%
  */
-
-package org.anchoranalysis.annotation.io.image;
-
-import java.io.IOException;
-import java.nio.file.Path;
-import org.anchoranalysis.annotation.image.ImageLabelAnnotation;
-import org.anchoranalysis.annotation.io.AnnotationWriter;
-import org.anchoranalysis.annotation.io.WriterUtilities;
-import org.anchoranalysis.io.generator.text.WriteStringToFile;
-
-public class WholeImageLabelAnnotationWriter implements AnnotationWriter<ImageLabelAnnotation> {
-
-    @Override
-    public void write(ImageLabelAnnotation annotation, Path path) throws IOException {
-
-        WriterUtilities.createNecessaryDirectories(path);
-
-        WriteStringToFile.apply(annotation.getLabel(), path);
-    }
-}
+/**
+ * Non-bean classes involving comparing results and annotations.
+ */
+package org.anchoranalysis.annotation.io.comparer;
