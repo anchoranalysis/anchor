@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.core.concurrency;
+package org.anchoranalysis.inference.concurrency;
 
 import lombok.Value;
 

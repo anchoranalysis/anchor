@@ -27,10 +27,10 @@
 package org.anchoranalysis.experiment.bean.task;
 
 import java.util.List;
-import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.task.NoSharedState;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
+import org.anchoranalysis.inference.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;

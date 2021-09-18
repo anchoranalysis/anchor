@@ -23,48 +23,27 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.core.concurrency;
+package org.anchoranalysis.inference.concurrency;
 
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
+import org.anchoranalysis.core.exception.AnchorCheckedException;
 
 /**
- * Wraps an element of type {@code T} to ensure priority is given when the flag {@code gpu} is true.
- *
- * <p>The priority exists via an ordering of elements, where elements with flag {@code gpu==true}
- * always precede those with {@code gpu==false}.
+ * This exception indicates that an error occurred when performing inference from a model
+ * concurrently.
  *
  * @author Owen Feehan
- * @param <T> the element-type
  */
-@EqualsAndHashCode
-@AllArgsConstructor
-public class WithPriority<T> implements Comparable<WithPriority<T>> {
+public class ConcurrentModelException extends AnchorCheckedException {
 
-    private T element;
-    private boolean gpu;
+    /** */
+    private static final long serialVersionUID = 1L;
 
     /**
-     * Gets the underlying element stored in the structure.
+     * Creates with a cause.
      *
-     * @return the underlying element, ignoring any priority.
+     * @param cause the cause.
      */
-    public T get() {
-        return element;
-    }
-
-    /**
-     * Is the element returned by {@link #get} associated with a GPU?
-     *
-     * @return true if it the element is associated with the GPU.
-     */
-    public boolean isGPU() {
-        return gpu;
-    }
-
-    /** Orders so that {@code gpu==true} has higher priority in queue to {@code gpu==false}. */
-    @Override
-    public int compareTo(WithPriority<T> other) {
-        return Boolean.compare(other.gpu, gpu);
+    public ConcurrentModelException(Throwable cause) {
+        super(cause);
     }
 }

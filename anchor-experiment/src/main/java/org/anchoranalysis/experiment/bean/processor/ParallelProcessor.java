@@ -33,7 +33,6 @@ import java.util.concurrent.Executors;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.core.value.LanguageUtilities;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
@@ -44,6 +43,7 @@ import org.anchoranalysis.experiment.task.processor.ConcurrentJobMonitor;
 import org.anchoranalysis.experiment.task.processor.JobDescription;
 import org.anchoranalysis.experiment.task.processor.JobState;
 import org.anchoranalysis.experiment.task.processor.SubmittedJob;
+import org.anchoranalysis.inference.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.outputter.Outputter;
 

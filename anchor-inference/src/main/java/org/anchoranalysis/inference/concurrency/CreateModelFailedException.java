@@ -1,8 +1,8 @@
 /*-
  * #%L
- * anchor-core
+ * anchor-inference
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
+ * Copyright (C) 2010 - 2021 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,27 +23,26 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.core.concurrency;
+package org.anchoranalysis.inference.concurrency;
 
 import org.anchoranalysis.core.exception.AnchorCheckedException;
 
 /**
- * This exception indicates that an error occurred when performing inference from a model
- * concurrently.
+ * When creating a model to be used for inference fails.
  *
  * @author Owen Feehan
  */
-public class ConcurrentModelException extends AnchorCheckedException {
+public class CreateModelFailedException extends AnchorCheckedException {
 
     /** */
     private static final long serialVersionUID = 1L;
 
     /**
-     * Creates with a cause.
+     * Creates with a cause only.
      *
      * @param cause the cause.
      */
-    public ConcurrentModelException(Throwable cause) {
+    public CreateModelFailedException(Throwable cause) {
         super(cause);
     }
 }
