@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.core.concurrency;
+package org.anchoranalysis.inference.concurrency;
 
 /**
  * How many allocated CPUs and CPUs can be used concurrently for inference.

@@ -39,21 +39,17 @@ import org.anchoranalysis.mpp.io.marks.MarkCollectionDeserializer;
 import org.anchoranalysis.mpp.mark.MarkCollection;
 
 /**
- * Reads a {@link DualMarksAnnotation} from a path on the filesystem.
+ * Reads {@link DualMarksAnnotation}s from the file-system.
  *
  * @author Owen Feehan
  * @param <T> rejection-reason type
  */
 @AllArgsConstructor
-public class MarkAnnotationReader<T> implements AnnotationReader<DualMarksAnnotation<T>> {
+public class DualMarksAnnotationReader<T> implements AnnotationReader<DualMarksAnnotation<T>> {
 
     private static final MarkCollectionDeserializer DESERIALIZER = new MarkCollectionDeserializer();
 
     private final boolean acceptUnfinished;
-
-    public boolean annotationExistsCorrespondTo(Path annotationPath) {
-        return fileNameToRead(annotationPath).isPresent();
-    }
 
     @Override
     public Optional<DualMarksAnnotation<T>> read(Path path) throws InputReadFailedException {
@@ -66,7 +62,23 @@ public class MarkAnnotationReader<T> implements AnnotationReader<DualMarksAnnota
         }
     }
 
-    // Reads an annotation if it can, returns null otherwise
+    /**
+     * Whether an annotation exists at a particular path on the file-system.
+     * 
+     * @param path the path.
+     * @return true iff the annotation exists at this path.
+     */
+    public boolean annotationExistsAt(Path path) {
+        return fileNameToRead(path).isPresent();
+    }
+    
+    /**
+     * Reads the annotations as a {@link MarkCollection} from the file-system.
+     * 
+     * @param path the path where the annotations are stored.
+     * @return a newly created {@link MarkCollection} deserialized from {@code path}.
+     * @throws DeserializationFailedException if the deserialization failed.
+     */
     public MarkCollection readDefaultMarks(Path path) throws DeserializationFailedException {
         return DESERIALIZER.deserialize(path);
     }

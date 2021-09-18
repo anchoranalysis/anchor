@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-annotation-io
+ * anchor-core
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -23,26 +23,48 @@
  * THE SOFTWARE.
  * #L%
  */
+package org.anchoranalysis.inference.concurrency;
 
-package org.anchoranalysis.annotation.io.image.findable;
-
-import java.util.Optional;
-import org.anchoranalysis.core.log.Logger;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 
 /**
- * Parent class for an element that exists in one of two-states, either {@link Found} or {@link NotFound}.
+ * Wraps an element of type {@code T} to ensure priority is given when the flag {@code gpu} is true.
+ *
+ * <p>The priority exists via an ordering of elements, where elements with flag {@code gpu==true}
+ * always precede those with {@code gpu==false}.
  *
  * @author Owen Feehan
- * @param <T> object-type to try to find.
+ * @param <T> the element-type
  */
-public interface Findable<T> {
+@EqualsAndHashCode
+@AllArgsConstructor
+public class WithPriority<T> implements Comparable<WithPriority<T>> {
+
+    private T element;
+    private boolean gpu;
 
     /**
-     * Gets an object or otherwise logs a message describing what went wrong.
+     * Gets the underlying element stored in the structure.
      *
-     * @param name the name of the object to find, as may appear in the log.
-     * @param logger the logger.
-     * @return the object if found, otherwise {@link Optional#empty}.
+     * @return the underlying element, ignoring any priority.
      */
-    Optional<T> getOrLog(String name, Logger logger);
+    public T get() {
+        return element;
+    }
+
+    /**
+     * Is the element returned by {@link #get} associated with a GPU?
+     *
+     * @return true if it the element is associated with the GPU.
+     */
+    public boolean isGPU() {
+        return gpu;
+    }
+
+    /** Orders so that {@code gpu==true} has higher priority in queue to {@code gpu==false}. */
+    @Override
+    public int compareTo(WithPriority<T> other) {
+        return Boolean.compare(other.gpu, gpu);
+    }
 }

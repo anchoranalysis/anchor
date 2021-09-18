@@ -30,7 +30,11 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-/** Deletes any annotation that is only the file represented at the path */
+/** 
+ * Deletes any annotation when it is represented by a single file.
+ * 
+ * <p>This file should refer to this annotation alone, exclusively.
+ */
 public class SimpleAnnotationDeleter implements AnnotationDeleter {
 
     @Override

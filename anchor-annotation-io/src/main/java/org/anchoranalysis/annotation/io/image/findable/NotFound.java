@@ -32,21 +32,22 @@ import lombok.Value;
 import org.anchoranalysis.core.log.Logger;
 
 /**
- * A negative-result when an object is NOT found at a particular location.
+ * A negative-result when an object is <b>not found</b> at a particular location.
  *
  * @author Owen Feehan
- * @param <T>
+ * @param <T> the object-type that may be found.
  */
 @Value
 public class NotFound<T> implements Findable<T> {
 
-    /** the path an object was not found at. */
+    /** The path an object was not found at. */
     private final Path path;
 
+    /** The reason an object could not be found. */
     private final String reason;
 
     @Override
-    public Optional<T> getFoundOrLog(String name, Logger logger) {
+    public Optional<T> getOrLog(String name, Logger logger) {
 
         logger.messageLogger().logFormatted("Cannot find %s: %s at %s", name, reason, path);
 

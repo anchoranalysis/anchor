@@ -1,8 +1,8 @@
 /*-
  * #%L
- * anchor-core
+ * anchor-annotation-io
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
+ * Copyright (C) 2010 - 2021 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- *
+ * 
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- *
+ * 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -23,27 +23,7 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.core.concurrency;
-
-import org.anchoranalysis.core.exception.AnchorCheckedException;
-
 /**
- * This exception indicates that an error occurred when performing inference from a model
- * concurrently.
- *
- * @author Owen Feehan
+ * Non-bean classes involving comparing results and annotations.
  */
-public class ConcurrentModelException extends AnchorCheckedException {
-
-    /** */
-    private static final long serialVersionUID = 1L;
-
-    /**
-     * Creates with a cause.
-     *
-     * @param cause the cause.
-     */
-    public ConcurrentModelException(Throwable cause) {
-        super(cause);
-    }
-}
+package org.anchoranalysis.annotation.io.comparer;

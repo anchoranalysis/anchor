@@ -31,19 +31,19 @@ import lombok.Value;
 import org.anchoranalysis.core.log.Logger;
 
 /**
- * A positive-result when an object is found.
+ * A positive-result when an object is <b>found</b> at a particular location.
  *
  * @author Owen Feehan
- * @param <T>
+ * @param <T> the object-type that may be found.
  */
 @Value
 public class Found<T> implements Findable<T> {
 
-    /** The found object */
+    /** The found object. */
     private T object;
 
     @Override
-    public Optional<T> getFoundOrLog(String name, Logger logger) {
+    public Optional<T> getOrLog(String name, Logger logger) {
         return Optional.of(object);
     }
 }

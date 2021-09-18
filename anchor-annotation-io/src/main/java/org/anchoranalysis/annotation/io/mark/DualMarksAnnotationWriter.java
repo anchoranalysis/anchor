@@ -29,21 +29,27 @@ package org.anchoranalysis.annotation.io.mark;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.annotation.Annotation;
 import org.anchoranalysis.annotation.io.AnnotationWriter;
-import org.anchoranalysis.annotation.io.WriterUtilities;
 import org.anchoranalysis.annotation.mark.DualMarksAnnotation;
 import org.anchoranalysis.core.serialize.XStreamSerializer;
+import org.anchoranalysis.core.system.path.DirectoryCreator;
 
 /**
+ * Writes {@link DualMarksAnnotation}s to the file-system.
+ * 
+ * <p>Different paths are used when the annotations are considered <i>finished</i> or <i>unfinished</i>.
+ * 
  * @author Owen Feehan
  * @param <T> rejection-reason
  */
-public class MarkAnnotationWriter<T> implements AnnotationWriter<DualMarksAnnotation<T>> {
+@NoArgsConstructor @AllArgsConstructor
+public class DualMarksAnnotationWriter<T> implements AnnotationWriter<DualMarksAnnotation<T>> {
 
-    @Getter @Setter private boolean disablePathModification = false;
+    /** If true, always use file-paths as if they were <i>finished</i>. */
+    private boolean disablePathModification = false;
 
     @Override
     public void write(DualMarksAnnotation<T> annotation, Path path) throws IOException {
@@ -77,7 +83,7 @@ public class MarkAnnotationWriter<T> implements AnnotationWriter<DualMarksAnnota
             throws IOException {
 
         // Create whatever directories we need
-        WriterUtilities.createNecessaryDirectories(annotationPath);
+        DirectoryCreator.createNecessaryDirectories(annotationPath);
 
         XStreamSerializer.serializeObjectToFile(annotation, annotationPath);
 

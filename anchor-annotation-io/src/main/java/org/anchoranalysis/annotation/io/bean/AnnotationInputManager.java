@@ -30,6 +30,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.annotation.io.AnnotationWithStrategy;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.progress.ProgressMultiple;
 import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
 import org.anchoranalysis.io.input.InputReadFailedException;
@@ -37,12 +38,22 @@ import org.anchoranalysis.io.input.InputsWithDirectory;
 import org.anchoranalysis.io.input.bean.InputManager;
 import org.anchoranalysis.io.input.bean.InputManagerParams;
 
+/**
+ * An {@link InputManager} that provides annotations corresponding to images.
+ * 
+ * @author Owen Feehan
+ *
+ * @param <T> the input-type that provides image(s).
+ * @param <S> indicates the process of how annotation occurs.
+ */
 public class AnnotationInputManager<T extends ProvidesStackInput, S extends AnnotatorStrategy>
         extends InputManager<AnnotationWithStrategy<S>> {
 
     // START BEAN PROPERTIES
+    /** The inputs to be annotated. */
     @BeanField @Getter @Setter private InputManager<T> input;
 
+    /** The strategy to be used for annotating. */
     @BeanField @Getter @Setter private S annotatorStrategy;
     // END BEAN PROPERTIES
 
@@ -50,22 +61,25 @@ public class AnnotationInputManager<T extends ProvidesStackInput, S extends Anno
     public InputsWithDirectory<AnnotationWithStrategy<S>> inputs(InputManagerParams params)
             throws InputReadFailedException {
 
-        try (ProgressMultiple progressMultiple = new ProgressMultiple(params.getProgress(), 2)) {
+        try (ProgressMultiple progress = new ProgressMultiple(params.getProgress(), 2)) {
 
             InputsWithDirectory<T> inputs = input.inputs(params);
 
-            progressMultiple.incrementChild();
+            progress.incrementChild();
 
             InputsWithDirectory<AnnotationWithStrategy<S>> transformed =
-                    inputs.map(this::createListInput, progressMultiple.trackCurrentChild());
+                    inputs.map(this::combineInput, progress.trackCurrentChild());
 
-            progressMultiple.incrementChild();
+            progress.incrementChild();
 
             return transformed;
+        } catch (OperationFailedException e) {
+            throw new InputReadFailedException(e);
         }
     }
 
-    private AnnotationWithStrategy<S> createListInput(T input) throws InputReadFailedException {
+    /** Combines an input with the associated strategy. */
+    private AnnotationWithStrategy<S> combineInput(T input) throws OperationFailedException {
         return new AnnotationWithStrategy<>(input, annotatorStrategy);
     }
 }

@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-core
+ * anchor-annotation-io
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -23,5 +23,28 @@
  * THE SOFTWARE.
  * #L%
  */
-/** Specifying how many CPUs and GPUs can be allocated for some purpose. */
-package org.anchoranalysis.core.concurrency;
+
+package org.anchoranalysis.annotation.io.image;
+
+import java.io.IOException;
+import java.nio.file.Path;
+import org.anchoranalysis.annotation.image.ImageLabelAnnotation;
+import org.anchoranalysis.annotation.io.AnnotationWriter;
+import org.anchoranalysis.core.system.path.DirectoryCreator;
+import org.anchoranalysis.io.generator.text.WriteStringToFile;
+
+/**
+ * Writes a {@link ImageLabelAnnotation} to the file-system.
+ * 
+ * @author Owen Feehan
+ */
+public class ImageLabelAnnotationWriter implements AnnotationWriter<ImageLabelAnnotation> {
+
+    @Override
+    public void write(ImageLabelAnnotation annotation, Path path) throws IOException {
+
+        DirectoryCreator.createNecessaryDirectories(path);
+
+        WriteStringToFile.apply(annotation.getLabel(), path);
+    }
+}

@@ -28,7 +28,6 @@ package org.anchoranalysis.experiment.bean.processor;
 
 import java.util.List;
 import java.util.Optional;
-import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.core.log.error.ErrorReporter;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
@@ -39,6 +38,7 @@ import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.experiment.task.ParametersUnbound;
 import org.anchoranalysis.experiment.task.TaskStatistics;
 import org.anchoranalysis.experiment.task.processor.MonitoredSequentialExecutor;
+import org.anchoranalysis.inference.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.outputter.Outputter;
 

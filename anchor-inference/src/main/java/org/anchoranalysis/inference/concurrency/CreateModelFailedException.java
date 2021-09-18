@@ -1,8 +1,8 @@
 /*-
  * #%L
- * anchor-annotation-io
+ * anchor-inference
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
+ * Copyright (C) 2010 - 2021 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,23 +23,26 @@
  * THE SOFTWARE.
  * #L%
  */
+package org.anchoranalysis.inference.concurrency;
 
-package org.anchoranalysis.annotation.io.image;
+import org.anchoranalysis.core.exception.AnchorCheckedException;
 
-import java.io.IOException;
-import java.nio.file.Path;
-import org.anchoranalysis.annotation.image.ImageLabelAnnotation;
-import org.anchoranalysis.annotation.io.AnnotationWriter;
-import org.anchoranalysis.annotation.io.WriterUtilities;
-import org.anchoranalysis.io.generator.text.WriteStringToFile;
+/**
+ * When creating a model to be used for inference fails.
+ *
+ * @author Owen Feehan
+ */
+public class CreateModelFailedException extends AnchorCheckedException {
 
-public class WholeImageLabelAnnotationWriter implements AnnotationWriter<ImageLabelAnnotation> {
+    /** */
+    private static final long serialVersionUID = 1L;
 
-    @Override
-    public void write(ImageLabelAnnotation annotation, Path path) throws IOException {
-
-        WriterUtilities.createNecessaryDirectories(path);
-
-        WriteStringToFile.apply(annotation.getLabel(), path);
+    /**
+     * Creates with a cause only.
+     *
+     * @param cause the cause.
+     */
+    public CreateModelFailedException(Throwable cause) {
+        super(cause);
     }
 }

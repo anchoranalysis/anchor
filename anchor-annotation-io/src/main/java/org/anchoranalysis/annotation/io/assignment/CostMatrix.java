@@ -39,6 +39,8 @@ import org.anchoranalysis.core.functional.checked.CheckedToDoubleBiFunction;
  * <p>Note that costs are often distances (symmetric) but not necessarily.
  *
  * <p>Internally, a matrix-like structure is used.
+ * 
+ * <p>The two lists are referred to as <i>first</i> and <i>second</i>.
  *
  * @author Owen Feehan
  * @param <T> element-type in lists
@@ -47,8 +49,10 @@ import org.anchoranalysis.core.functional.checked.CheckedToDoubleBiFunction;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class CostMatrix<T> {
 
+    /** The <i>first</i> set of elements. */
     private List<T> first;
 
+    /** The <i>second</i> set of elements. */
     private List<T> second;
 
     /** A two-dimensional array mapping the costs from {@code first} to {@code second} */
@@ -68,7 +72,7 @@ public class CostMatrix<T> {
      * @param symmetric if cost(a,b) = cost(b,a), then set this true, for quicker calculations.
      * @param costCalculator calculates cost(a,b)
      * @return a newly created matrix
-     * @throws CreateException
+     * @throws CreateException if either list is empty or a distance cannot be calculated between elements.
      */
     public static <T> CostMatrix<T> create(
             List<T> first,

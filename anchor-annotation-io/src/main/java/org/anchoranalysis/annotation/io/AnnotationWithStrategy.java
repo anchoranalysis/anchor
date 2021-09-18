@@ -28,54 +28,69 @@ package org.anchoranalysis.annotation.io;
 
 import java.io.File;
 import java.nio.file.Path;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 import lombok.Getter;
 import org.anchoranalysis.annotation.io.bean.AnnotatorStrategy;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.stack.named.NamedStacksSupplier;
 import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
 import org.anchoranalysis.io.input.InputFromManagerDelegate;
-import org.anchoranalysis.io.input.InputReadFailedException;
 
 /**
- * An annotation that has been combined with its strategy.
+ * One particular annotation, associated with its strategy.
  *
  * @author Owen Feehan
+ * @param <T> type of annotation-strategy.
  */
 public class AnnotationWithStrategy<T extends AnnotatorStrategy>
         extends InputFromManagerDelegate<ProvidesStackInput> {
 
+    /** The strategy on how annotation occurs. */
     @Getter private final T strategy;
 
-    /** Path to annotation */
+    /** Path to annotation. */
     @Getter private final Path path;
 
+    /**
+     * Creates for a particular input and associated annotation strategy.
+     * 
+     * @param input the input.
+     * @param strategy the strategy.
+     * @throws OperationFailedException if a path cannot be determined by {@code strategy} for the respective {@code input}.
+     */
     public AnnotationWithStrategy(ProvidesStackInput input, T strategy)
-            throws InputReadFailedException {
+            throws OperationFailedException {
         super(input);
         this.strategy = strategy;
-        this.path = strategy.annotationPathFor(input);
+        this.path = strategy.pathFor(input);
     }
 
+    /**
+     * The file associated with the annotation, if such a file exists.
+     * 
+     * @return the file, if it exists.
+     */
     public Optional<File> associatedFile() {
         return getDelegate().pathForBinding().map(Path::toFile);
     }
 
     /**
-     * A label to be used when aggregating this annotation with others, or {@code null} if this
-     * makes no sense.
+     * A human-friendly textual description of the annotation, or {@link Optional#empty()} if no label is available.
      *
-     * @throws InputReadFailedException
+     * @return the label, if available.
+     * @throws OperationFailedException if a label cannot be successfully determined.
      */
-    public Optional<String> labelForAggregation() throws InputReadFailedException {
+    public Optional<String> label() throws OperationFailedException {
         return strategy.annotationLabelFor(getDelegate());
     }
 
-    public List<File> deriveAssociatedFiles() {
-        return Arrays.asList(path.toFile());
-    }
-
+    /**
+     * All stacks associated with the input, lazily evaluated.
+     * 
+     * <p>The stacks are cached the first time they are evaluated, to avoid repeated computation.
+     * 
+     * @return a supplier of the stacks.
+     */
     public NamedStacksSupplier stacks() {
         return NamedStacksSupplier.cache(getDelegate()::asSet);
     }

@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-annotation-io
+ * anchor-core
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -23,20 +23,5 @@
  * THE SOFTWARE.
  * #L%
  */
-
-package org.anchoranalysis.annotation.io;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class WriterUtilities {
-
-    public static void createNecessaryDirectories(Path annotationPath) throws IOException {
-        // Create whatever directories we need
-        Files.createDirectories(annotationPath.getParent());
-    }
-}
+/** Specifying how many CPUs and GPUs can be allocated for some purpose. */
+package org.anchoranalysis.inference.concurrency;

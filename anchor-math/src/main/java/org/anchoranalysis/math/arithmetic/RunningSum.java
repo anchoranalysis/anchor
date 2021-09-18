@@ -35,7 +35,7 @@ import lombok.NoArgsConstructor;
  * Mutable class that allows for incrementing jointly sum and count variables, so as to eventually
  * calculate the mean.
  *
- * <p>It can also be reset to zero, as needed..
+ * <p>It can also be reset to zero, as needed.
  *
  * @author Owen Feehan
  */
@@ -64,7 +64,7 @@ public class RunningSum implements Serializable {
     /**
      * Calculates the mean.
      *
-     * @param valueIfCountZero value to use if the count is zero
+     * @param valueIfCountZero value to use if the count is zero.
      * @return the mean or {@code valueIfCountZero} if the count is zero.
      */
     public double mean(double valueIfCountZero) {
@@ -105,8 +105,8 @@ public class RunningSum implements Serializable {
     /**
      * Increments both the sum and count by particular values.
      *
-     * @param sumIncrement increment-value for sum
-     * @param countIncrement increment-value for count
+     * @param sumIncrement increment-value for sum.
+     * @param countIncrement increment-value for count.
      */
     public void increment(double sumIncrement, long countIncrement) {
         sum += sumIncrement;

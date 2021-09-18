@@ -1,8 +1,8 @@
 /*-
  * #%L
- * anchor-inference
+ * anchor-annotation-io
  * %%
- * Copyright (C) 2010 - 2021 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,26 +23,26 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.core.concurrency;
 
-import org.anchoranalysis.core.exception.AnchorCheckedException;
+package org.anchoranalysis.annotation.io.mark;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import org.anchoranalysis.annotation.io.AnnotationDeleter;
+import org.anchoranalysis.annotation.mark.DualMarksAnnotation;
 
 /**
- * When creating a model to be used for inference fails.
- *
+ * Deletes {@link DualMarksAnnotation}s from the file-system.
+ * 
  * @author Owen Feehan
+ *
  */
-public class CreateModelFailedException extends AnchorCheckedException {
+public class DualMarksAnnotationDeleter implements AnnotationDeleter {
 
-    /** */
-    private static final long serialVersionUID = 1L;
-
-    /**
-     * Creates with a cause only.
-     *
-     * @param cause the cause.
-     */
-    public CreateModelFailedException(Throwable cause) {
-        super(cause);
+    @Override
+    public void delete(Path annotationPath) throws IOException {
+        Files.deleteIfExists(annotationPath);
+        Files.deleteIfExists(TempPathCreator.deriveTempPath(annotationPath));
     }
 }
