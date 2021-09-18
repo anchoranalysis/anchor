@@ -40,10 +40,10 @@ public class RunningSumExtrema {
 
     private RunningSum running = new RunningSum();
     
-    /** The minimum across all {@value}s passed to {@link #add} or {@link Double#MAX_VALUE} if the method was never called. */
+    /** The minimum across all {@link value}s passed to {@link #add} or {@link Double#MAX_VALUE} if the method was never called. */
     @Getter private double min = Double.MAX_VALUE;
 
-    /** The maximum across all {@value}s passed to {@link #add} or {@link Double#MIN_VALUE} if the method was never called. */
+    /** The maximum across all {@link value}s passed to {@link #add} or {@link Double#MIN_VALUE} if the method was never called. */
     @Getter private double max = Double.MIN_VALUE;
     
     /**
