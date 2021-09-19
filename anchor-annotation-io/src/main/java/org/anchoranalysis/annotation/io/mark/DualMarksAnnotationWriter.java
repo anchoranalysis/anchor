@@ -71,12 +71,11 @@ public class DualMarksAnnotationWriter<T> implements AnnotationWriter<DualMarksA
     }
 
     /**
-     * Saves an annotation to the filesystem to a specific path (without changing it)
+     * Saves an annotation to the filesystem to a specific path (without changing it).
      *
-     * @param annotation annotation to be saved
-     * @param annotationPath the path to save the annotation to
-     * @param annotationPathForDeletion if non-null, a path (if different to annotationPath) which
-     *     is deleted after a successful save
+     * @param annotation annotation to be saved.
+     * @param annotationPath the path to save the annotation to.
+     * @param annotationPathForDeletion a path (if different to annotationPath) which is deleted after a successful save.
      */
     private static void saveAnnotationNoPathChange(
             Annotation annotation, Path annotationPath, Path annotationPathForDeletion)
@@ -87,8 +86,7 @@ public class DualMarksAnnotationWriter<T> implements AnnotationWriter<DualMarksA
 
         XStreamSerializer.serializeObjectToFile(annotation, annotationPath);
 
-        if (annotationPathForDeletion != null
-                && !annotationPathForDeletion.equals(annotationPath)) {
+        if (!annotationPathForDeletion.equals(annotationPath)) {
             Files.deleteIfExists(annotationPathForDeletion);
         }
     }
