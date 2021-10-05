@@ -35,6 +35,12 @@ import org.anchoranalysis.image.feature.bean.FeatureHistogram;
 import org.anchoranalysis.image.feature.input.FeatureInputHistogram;
 import org.anchoranalysis.math.histogram.Histogram;
 
+/**
+ * Base class for {@link FeatureHistogram} implementations that calculate a statistic from the {@link Histogram}.
+ *  
+ * @author Owen Feehan
+ *
+ */
 public abstract class FeatureHistogramStatistic extends FeatureHistogram {
 
     // START BEAN PROPERTIES
@@ -44,7 +50,7 @@ public abstract class FeatureHistogramStatistic extends FeatureHistogram {
      */
     @BeanField @Getter @Setter private boolean exceptionIfEmpty = true;
 
-    /** The value to return iff {@code exceptionifEmpty} is false */
+    /** The value to return iff {@code exceptionifEmpty} is false. */
     @BeanField @Getter @Setter private double valueIfEmpty = 0;
     // END BEAN PROPERTIES
 
@@ -66,6 +72,13 @@ public abstract class FeatureHistogramStatistic extends FeatureHistogram {
         return calculateStatisticFrom(histogram);
     }
 
+    /**
+     * Calculates the statistic from the histogram, that is subsequently returned as the feature-value.
+     * 
+     * @param histogram the histogram to calculate the statistic from.
+     * @return the calculated statistic.
+     * @throws FeatureCalculationException if the calculation cannot succeed.
+     */
     protected abstract double calculateStatisticFrom(Histogram histogram)
             throws FeatureCalculationException;
 }
