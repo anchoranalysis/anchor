@@ -38,8 +38,15 @@ public abstract class KernelPosNeg<T, S> extends KernelIndependent<T, S> {
     @BeanField @Getter @Setter private double probNeg = 0.5;
     // END BEAN PROPERTIES
 
-    protected void duplicateHelper(KernelPosNeg<T, S> out) {
-        out.probPos = probPos;
-        out.probNeg = probNeg;
+    /**
+     * Copies fields in this (base) class to {@code target}.
+     * 
+     * <p>This is intended to be called by sub-classes to help when duplicating.
+     * 
+     * @param target the object fields are assigned to.
+     */
+    protected void assignTo(KernelPosNeg<T, S> target) {
+        target.probPos = probPos;
+        target.probNeg = probNeg;
     }
 }
