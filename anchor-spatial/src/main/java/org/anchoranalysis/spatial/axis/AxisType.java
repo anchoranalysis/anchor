@@ -26,6 +26,12 @@ package org.anchoranalysis.spatial.axis;
  * #L%
  */
 
+/**
+ * Identifies axis in a <a href="https://en.wikipedia.org/wiki/Cartesian_coordinate_system">Cartesian coordinate system</a>.
+ * 
+ * @author Owen Feehan
+ *
+ */
 public enum AxisType {
     X,
     Y,
