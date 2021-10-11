@@ -53,7 +53,7 @@ public abstract class RTree<T> {
      * @param numberDimensions the number of spatial dimensions that the bounding boxes are expected
      *     to support.
      */
-    public RTree(int numberDimensions) {
+    protected RTree(int numberDimensions) {
         tree = com.github.davidmoten.rtreemulti.RTree.dimensions(numberDimensions).create();
     }
 
@@ -64,7 +64,7 @@ public abstract class RTree<T> {
      *     to support.
      * @param maxNumberEntries maximum number of entries in the r-tree.
      */
-    public RTree(int numberDimensions, int maxNumberEntries) {
+    protected RTree(int numberDimensions, int maxNumberEntries) {
         // Three is minimum number for this parameter
         int maxChildren = Math.max(maxNumberEntries, 3);
         tree =
