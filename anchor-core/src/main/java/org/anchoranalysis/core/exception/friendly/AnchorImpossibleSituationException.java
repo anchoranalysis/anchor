@@ -52,12 +52,12 @@ public class AnchorImpossibleSituationException extends AnchorFriendlyRuntimeExc
 
     /**
      * Creates with a specific message explaining the exception.
-     * 
+     *
      * @param message the message.
      */
     public AnchorImpossibleSituationException(String message) {
         super(message);
-        
+
         // As a further warning, and assert is triggered.
         assert (false);
     }

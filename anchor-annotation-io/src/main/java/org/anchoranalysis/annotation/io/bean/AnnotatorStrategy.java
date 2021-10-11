@@ -30,21 +30,21 @@ import java.nio.file.Path;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
 import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
 
 /**
- * How an input is associated with annotations on the file-system, and how this is presented visually.
- * 
- * <p>This class gives instructions on how to present the annotations process visually.
- * 
- * @author Owen Feehan
+ * How an input is associated with annotations on the file-system, and how this is presented
+ * visually.
  *
+ * <p>This class gives instructions on how to present the annotations process visually.
+ *
+ * @author Owen Feehan
  */
 public abstract class AnnotatorStrategy extends AnchorBean<AnnotatorStrategy> {
 
@@ -58,18 +58,19 @@ public abstract class AnnotatorStrategy extends AnchorBean<AnnotatorStrategy> {
 
     /**
      * The path to where an annotation file for a particular input would be located.
-     * 
-     * <p>If the annotation is stored on multiple files, this refers to the principle file that
-     * must be unique.
-     * 
+     *
+     * <p>If the annotation is stored on multiple files, this refers to the principle file that must
+     * be unique.
+     *
      * @param input the input to find an annotation file for.
      * @return the path to where the annotation would be expected to be.
      * @throws OperationFailedException if the path cannot be successfully determined.
      */
     public abstract Path pathFor(ProvidesStackInput input) throws OperationFailedException;
-    
+
     /**
-     * A human-friendly textual description of the annotation, or {@link Optional#empty()} if no label is available.
+     * A human-friendly textual description of the annotation, or {@link Optional#empty()} if no
+     * label is available.
      *
      * @param input the input to find an annotation label for.
      * @return the label, if available.
@@ -79,10 +80,12 @@ public abstract class AnnotatorStrategy extends AnchorBean<AnnotatorStrategy> {
             throws OperationFailedException;
 
     /**
-     * The degree as to how lengthy the labels from {@link #annotationLabelFor(ProvidesStackInput)} can be.
-     * 
-     * <p>The higher the number, the lengthier {@link #annotationLabelFor(ProvidesStackInput)} can be.
-     * 
+     * The degree as to how lengthy the labels from {@link #annotationLabelFor(ProvidesStackInput)}
+     * can be.
+     *
+     * <p>The higher the number, the lengthier {@link #annotationLabelFor(ProvidesStackInput)} can
+     * be.
+     *
      * @return the weight.
      */
     public abstract int weightWidthDescription();

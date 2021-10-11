@@ -30,18 +30,19 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.DoubleStream;
+import lombok.Getter;
 import org.anchoranalysis.annotation.io.comparer.StatisticsToExport;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.spatial.Extent;
-import lombok.Getter;
 
 /**
- * Pairs an {@link ObjectMask} in one set with an {@link ObjectMask} in another, if deemed to overlap sufficiently.
+ * Pairs an {@link ObjectMask} in one set with an {@link ObjectMask} in another, if deemed to
+ * overlap sufficiently.
  *
  * <p>The sets are termed <i>left</i> and <i>right</i> as arbitrary names.
- * 
+ *
  * <p>Several statistics based upon overlap, the number of pairs, the number of unassigned objects
  * are derived.
  *
@@ -51,16 +52,16 @@ public class OverlappingObjects implements Assignment<ObjectMask> {
 
     /** The unassigned objects in the <i>left</i> set. */
     @Getter private List<ObjectMask> leftUnassigned = new ArrayList<>();
-    
+
     /** The unassigned objects in the <i>right</i> set. */
     @Getter private List<ObjectMask> rightUnassigned = new ArrayList<>();
-    
+
     /** The objects which have been paired. */
     private List<ObjectMaskPair> pairs = new ArrayList<>();
-    
+
     /**
      * Creates with only <i>left unassigned</i> objects.
-     * 
+     *
      * @param objects the objects.
      * @return a newly created {@link OverlappingObjects}.
      */
@@ -69,10 +70,10 @@ public class OverlappingObjects implements Assignment<ObjectMask> {
         out.addUnassignedLeft(objects);
         return out;
     }
-    
+
     /**
      * Creates with only <i>right unassigned</i> objects.
-     * 
+     *
      * @param objects the objects.
      * @return a newly created {@link OverlappingObjects}.
      */
@@ -85,7 +86,7 @@ public class OverlappingObjects implements Assignment<ObjectMask> {
     @Override
     public StatisticsToExport statistics() {
         StatisticsToExport out = new StatisticsToExport();
-        
+
         out.addDouble("percentMatchesInAnnotation", percentLeftAssigned());
         out.addDouble("percentMatchesInResult", percentRightAssigned());
         out.addInt("matches", numberPaired());
@@ -93,14 +94,18 @@ public class OverlappingObjects implements Assignment<ObjectMask> {
         out.addInt("countItemsInAnnotation", leftSize());
         out.addInt("unmatchedResult", numberUnassignedRight());
         out.addInt("countItemsInResult", rightSize());
-        out.addMeanExtrema("overlapFromPaired", meanOverlapFromPaired(), minOverlapFromPaired(), maxOverlapFromPaired());
-        
+        out.addMeanExtrema(
+                "overlapFromPaired",
+                meanOverlapFromPaired(),
+                minOverlapFromPaired(),
+                maxOverlapFromPaired());
+
         return out;
     }
 
     /**
      * Removes any objects from the assignment if they touch the X or Y scene border.
-     * 
+     *
      * @param extent the size of the scene, which determines its borders.
      */
     public void removeTouchingBorderXY(Extent extent) {
@@ -125,7 +130,7 @@ public class OverlappingObjects implements Assignment<ObjectMask> {
 
     /**
      * Sums the overlap-ratio across all assigned pairs.
-     * 
+     *
      * @return the sum.
      */
     public double sumOverlapFromPaired() {
@@ -138,7 +143,7 @@ public class OverlappingObjects implements Assignment<ObjectMask> {
 
     /**
      * Add an unassigned object to the <i>left</i> set.
-     * 
+     *
      * @param object the object to add.
      */
     public void addUnassignedLeft(ObjectMask object) {
@@ -147,7 +152,7 @@ public class OverlappingObjects implements Assignment<ObjectMask> {
 
     /**
      * Add unassigned objects to the <i>left</i> set.
-     * 
+     *
      * @param objects the object to add.
      */
     public void addUnassignedLeft(ObjectCollection objects) {
@@ -156,7 +161,7 @@ public class OverlappingObjects implements Assignment<ObjectMask> {
 
     /**
      * Add an unassigned object to the <i>right</i> set.
-     * 
+     *
      * @param object the object to add.
      */
     public void addUnassignedRight(ObjectMask object) {
@@ -165,7 +170,7 @@ public class OverlappingObjects implements Assignment<ObjectMask> {
 
     /**
      * Add unassigned objects to the <i>right</i> set.
-     * 
+     *
      * @param objects the object to add.
      */
     public void addUnassignedRight(ObjectCollection objects) {
@@ -174,7 +179,7 @@ public class OverlappingObjects implements Assignment<ObjectMask> {
 
     /**
      * Adds an assigned pair of objects with a particular overlap-ratio.
-     * 
+     *
      * @param object1 the <i>left</i> object.
      * @param object2 the <i>right</i> object.
      * @param overlapRatio the ratio of overlap between the two objects.
@@ -185,7 +190,7 @@ public class OverlappingObjects implements Assignment<ObjectMask> {
 
     /**
      * The percentage of objects in the <i>left</i> set that have been paired.
-     * 
+     *
      * @return the percentage.
      */
     public double percentLeftAssigned() {
@@ -198,7 +203,7 @@ public class OverlappingObjects implements Assignment<ObjectMask> {
 
     /**
      * The percentage of objects in the <i>right</i> set that have been paired.
-     * 
+     *
      * @return the percentage.
      */
     public double percentRightAssigned() {
@@ -225,7 +230,7 @@ public class OverlappingObjects implements Assignment<ObjectMask> {
 
     /**
      * The number of unassigned objects in the <i>left</i> set.
-     * 
+     *
      * @return the number of unassigned objects.
      */
     public int numberUnassignedLeft() {
@@ -234,7 +239,7 @@ public class OverlappingObjects implements Assignment<ObjectMask> {
 
     /**
      * The number of unassigned objects in the <i>right</i> set.
-     * 
+     *
      * @return the number of unassigned objects.
      */
     public int numberUnassignedRight() {
@@ -243,7 +248,7 @@ public class OverlappingObjects implements Assignment<ObjectMask> {
 
     /**
      * The total number of objects in the <i>left</i> set.
-     * 
+     *
      * @return the total number.
      */
     public int leftSize() {
@@ -252,7 +257,7 @@ public class OverlappingObjects implements Assignment<ObjectMask> {
 
     /**
      * The total number of objects in the <i>right</i> set.
-     * 
+     *
      * @return the total number.
      */
     public int rightSize() {
@@ -262,7 +267,7 @@ public class OverlappingObjects implements Assignment<ObjectMask> {
     private double meanOverlapFromPaired() {
         return sumOverlapFromPaired() / pairs.size();
     }
-    
+
     private double minOverlapFromPaired() {
         return pairsOverlapStream().min().orElse(Double.NaN);
     }
@@ -274,7 +279,7 @@ public class OverlappingObjects implements Assignment<ObjectMask> {
     private DoubleStream pairsOverlapStream() {
         return pairs.stream().mapToDouble(ObjectMaskPair::getOverlapRatio);
     }
-    
+
     private static void removeTouchingBorderXYObjects(Extent extent, List<ObjectMask> list) {
         Iterator<ObjectMask> itr = list.iterator();
         while (itr.hasNext()) {

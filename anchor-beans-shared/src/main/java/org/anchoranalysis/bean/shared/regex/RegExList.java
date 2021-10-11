@@ -35,12 +35,12 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.functional.FunctionalList;
 
 /**
- * Combines one or more {@link RegEx} together, by successively trying to match each {@link RegEx} until success.
- * 
- * <p>The order of {@link RegEx}es in the list determines the order that matching is tried.
- * 
- * @author Owen Feehan
+ * Combines one or more {@link RegEx} together, by successively trying to match each {@link RegEx}
+ * until success.
  *
+ * <p>The order of {@link RegEx}es in the list determines the order that matching is tried.
+ *
+ * @author Owen Feehan
  */
 public class RegExList extends RegEx {
 

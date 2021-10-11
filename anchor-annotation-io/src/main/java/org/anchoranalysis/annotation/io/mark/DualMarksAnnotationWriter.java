@@ -39,13 +39,15 @@ import org.anchoranalysis.core.system.path.DirectoryCreator;
 
 /**
  * Writes {@link DualMarksAnnotation}s to the file-system.
- * 
- * <p>Different paths are used when the annotations are considered <i>finished</i> or <i>unfinished</i>.
- * 
+ *
+ * <p>Different paths are used when the annotations are considered <i>finished</i> or
+ * <i>unfinished</i>.
+ *
  * @author Owen Feehan
  * @param <T> rejection-reason
  */
-@NoArgsConstructor @AllArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 public class DualMarksAnnotationWriter<T> implements AnnotationWriter<DualMarksAnnotation<T>> {
 
     /** If true, always use file-paths as if they were <i>finished</i>. */
@@ -75,7 +77,8 @@ public class DualMarksAnnotationWriter<T> implements AnnotationWriter<DualMarksA
      *
      * @param annotation annotation to be saved.
      * @param annotationPath the path to save the annotation to.
-     * @param annotationPathForDeletion a path (if different to annotationPath) which is deleted after a successful save.
+     * @param annotationPathForDeletion a path (if different to annotationPath) which is deleted
+     *     after a successful save.
      */
     private static void saveAnnotationNoPathChange(
             Annotation annotation, Path annotationPath, Path annotationPathForDeletion)

@@ -30,10 +30,9 @@ import java.io.IOException;
 import java.nio.file.Path;
 import org.anchoranalysis.annotation.Annotation;
 
-
 /**
  * Allows an annotation to be <b>written</b> to the file-system.
- * 
+ *
  * @param <T> annotation-type.
  * @author Owen Feehan
  */

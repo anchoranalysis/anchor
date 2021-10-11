@@ -40,9 +40,9 @@ public abstract class KernelPosNeg<T, S> extends KernelIndependent<T, S> {
 
     /**
      * Copies fields in this (base) class to {@code target}.
-     * 
+     *
      * <p>This is intended to be called by sub-classes to help when duplicating.
-     * 
+     *
      * @param target the object fields are assigned to.
      */
     protected void assignTo(KernelPosNeg<T, S> target) {

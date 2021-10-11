@@ -53,10 +53,11 @@ public class AnnotationWithStrategy<T extends AnnotatorStrategy>
 
     /**
      * Creates for a particular input and associated annotation strategy.
-     * 
+     *
      * @param input the input.
      * @param strategy the strategy.
-     * @throws OperationFailedException if a path cannot be determined by {@code strategy} for the respective {@code input}.
+     * @throws OperationFailedException if a path cannot be determined by {@code strategy} for the
+     *     respective {@code input}.
      */
     public AnnotationWithStrategy(ProvidesStackInput input, T strategy)
             throws OperationFailedException {
@@ -67,7 +68,7 @@ public class AnnotationWithStrategy<T extends AnnotatorStrategy>
 
     /**
      * The file associated with the annotation, if such a file exists.
-     * 
+     *
      * @return the file, if it exists.
      */
     public Optional<File> associatedFile() {
@@ -75,7 +76,8 @@ public class AnnotationWithStrategy<T extends AnnotatorStrategy>
     }
 
     /**
-     * A human-friendly textual description of the annotation, or {@link Optional#empty()} if no label is available.
+     * A human-friendly textual description of the annotation, or {@link Optional#empty()} if no
+     * label is available.
      *
      * @return the label, if available.
      * @throws OperationFailedException if a label cannot be successfully determined.
@@ -86,9 +88,9 @@ public class AnnotationWithStrategy<T extends AnnotatorStrategy>
 
     /**
      * All stacks associated with the input, lazily evaluated.
-     * 
+     *
      * <p>The stacks are cached the first time they are evaluated, to avoid repeated computation.
-     * 
+     *
      * @return a supplier of the stacks.
      */
     public NamedStacksSupplier stacks() {

@@ -30,9 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.anchoranalysis.core.value.TypedValue;
 
-/**
- * Wraps a {@code List<TypedValue>} with instructions on how to write floating-point values.
- */
+/** Wraps a {@code List<TypedValue>} with instructions on how to write floating-point values. */
 class WrappedTypeValueList {
 
     /** The number of decimals places to use when double values are added. */
@@ -50,7 +48,7 @@ class WrappedTypeValueList {
         this.numberDecimalPlaces = numberDecimalPlaces;
     }
 
-    /** 
+    /**
      * Adds one or more integer values.
      *
      * @param values the values.
@@ -61,7 +59,7 @@ class WrappedTypeValueList {
         }
     }
 
-    /** 
+    /**
      * Adds one or more doubles, with two decimal places.
      *
      * @param values the values.
@@ -72,9 +70,9 @@ class WrappedTypeValueList {
         }
     }
 
-    /** 
+    /**
      * The underlying list.
-     * 
+     *
      * @return the list, as used internally in the data-structure.
      */
     public List<TypedValue> asList() {

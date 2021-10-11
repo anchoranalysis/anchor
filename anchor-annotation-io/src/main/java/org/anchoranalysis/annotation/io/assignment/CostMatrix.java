@@ -39,7 +39,7 @@ import org.anchoranalysis.core.functional.checked.CheckedToDoubleBiFunction;
  * <p>Note that costs are often distances (symmetric) but not necessarily.
  *
  * <p>Internally, a matrix-like structure is used.
- * 
+ *
  * <p>The two lists are referred to as <i>first</i> and <i>second</i>.
  *
  * @author Owen Feehan
@@ -72,7 +72,8 @@ public class CostMatrix<T> {
      * @param symmetric if cost(a,b) = cost(b,a), then set this true, for quicker calculations.
      * @param costCalculator calculates cost(a,b)
      * @return a newly created matrix
-     * @throws CreateException if either list is empty or a distance cannot be calculated between elements.
+     * @throws CreateException if either list is empty or a distance cannot be calculated between
+     *     elements.
      */
     public static <T> CostMatrix<T> create(
             List<T> first,

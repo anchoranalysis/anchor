@@ -60,14 +60,16 @@ public class AssignmentGenerator extends RasterGeneratorSelectFormat<Assignment<
     // START REQUIRED ARGUMENTS
     /** How to color objects in the image. */
     private final DrawColoredObjects objectDrawer;
-    
+
     /** Creates a {@link AssignmentColorPool} given a count of paired objects. */
     private final IntFunction<AssignmentColorPool> colorPoolCreator;
 
     /** Names to assign respectively to the left and right images. */
     private final Tuple2<String, String> names;
 
-    /** Whether to append a count of unassigned objects (in parantheses) to the name of each image. */
+    /**
+     * Whether to append a count of unassigned objects (in parantheses) to the name of each image.
+     */
     private final boolean appendUnassignedCount;
     // END REQUIRED ARGUMENTS
 
