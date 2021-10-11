@@ -29,8 +29,8 @@ package org.anchoranalysis.feature.calculate.cache;
 /**
  * A calculation that be invalidated (resetted), removing any existing cached value.
  *
- * <p>All resettable calculations must have a hashCode and equals implementation that checks that
- * relevant parameters are equal. They will be used in sets
+ * <p>All resettable calculations must have a {@link Object#hashCode} and {@link Object#equals} implementation that
+ * checks that relevant parameters are equal.
  *
  * @author Owen Feehan
  */

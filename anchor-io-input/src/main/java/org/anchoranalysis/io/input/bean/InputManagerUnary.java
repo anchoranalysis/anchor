@@ -42,6 +42,7 @@ import org.anchoranalysis.io.input.InputsWithDirectory;
 public abstract class InputManagerUnary<T extends InputFromManager> extends InputManager<T> {
 
     // START BEAN PROPERTIES
+    /** The delegate input-manager which will be circumstantially called by the current input-manager. */
     @BeanField @Getter @Setter private InputManager<T> input;
     // END BEAN PROPERITES
 
@@ -54,9 +55,9 @@ public abstract class InputManagerUnary<T extends InputFromManager> extends Inpu
     /**
      * Calculates the inputs to return given the inputs from the delegate.
      *
-     * @param fromDelegate the inputs from the delegate
-     * @param params parameters for determining inputs
-     * @return inputs to return after any further processing
+     * @param fromDelegate the inputs from the delegate.
+     * @param params parameters for determining inputs.
+     * @return inputs to return after any further processing.
      */
     protected abstract InputsWithDirectory<T> inputsFromDelegate(
             InputsWithDirectory<T> fromDelegate, InputManagerParams params)

@@ -37,24 +37,24 @@ import org.anchoranalysis.feature.results.ResultsVector;
 /**
  * Encapsulates a feature-input in the context of a particular session.
  *
- * @param <T> underlying feature-input type
+ * @param <T> underlying feature-input type.
  * @author Owen Feehan
  */
 public interface SessionInput<T extends FeatureInput> {
 
-    /** Returns the underlying feature-input (independent of the session) */
+    /** The underlying feature-input (independent of the session). */
     T get();
 
     /**
-     * Calculates the result of a feature using this input
+     * Calculates the result of a feature using this input.
      *
-     * @param feature the feature to calculate with
-     * @return the result of the calculation
+     * @param feature the feature to calculate with.
+     * @return the result of the calculation.
      */
     double calculate(Feature<T> feature) throws FeatureCalculationException;
 
     /**
-     * Calculates the results of several features using this input
+     * Calculates the results of several features using this input.
      *
      * @param features features to calculate with
      * @return the results of each feature's calculation respectively
@@ -82,23 +82,23 @@ public interface SessionInput<T extends FeatureInput> {
     <S> S calculate(ResolvedCalculation<S, T> calculation) throws FeatureCalculationException;
 
     /**
-     * Returns a resolver for calculations
+     * A resolver for calculations.
      *
-     * @return
+     * @return the resolver.
      */
     CalculationResolver<T> resolver();
 
     /**
      * Performs calculations not on the main cache, but on a child cache
      *
-     * @return
+     * @return the calculator.
      */
     CalculateForChild<T> forChild();
 
     /**
      * Calculates a feature if only an symbol (ID/name) is known, which refers to another feature.
      *
-     * @return
+     * @return the calculator.
      */
     FeatureSymbolCalculator<T> bySymbol();
 

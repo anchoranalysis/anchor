@@ -35,8 +35,6 @@ import org.anchoranalysis.feature.input.FeatureInput;
  * Like a {@link FeatureCalculation} but has been resolved against a cache to reuse any existing
  * identical instance.
  *
- * <p>This operation should always occur before a cached-calculation is used
- *
  * @author Owen Feehan
  * @param <S> result-type of the calculation
  * @param <T> feature input-type

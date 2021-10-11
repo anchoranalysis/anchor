@@ -38,7 +38,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
  * feature-calculations are identical. This allows the user to search through a collection of {@link
  * FeatureCalculation} to find one with identical parameters and re-use it.
  *
- * <p>IMPORTANT NOTE: It is therefore important to make sure every class has a well-defined {@code
+ * <p><b>Important note:</b> It is therefore important to make sure every class has a well-defined {@code
  * equals()} and {@code hashCode()}.
  *
  * @author Owen Feehan
