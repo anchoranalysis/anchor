@@ -33,16 +33,23 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.color.RGBColorBean;
 import org.anchoranalysis.core.color.ColorList;
 
+/**
+ * Prepends a specific color to the list created by another {@link ColorScheme}.
+ * 
+ * @author Owen Feehan
+ *
+ */
 @NoArgsConstructor
 public class Prepend extends ColorSchemeUnary {
 
     // START BEAN PROPERTIES
+    /** The color to prepend. */
     @BeanField @Getter @Setter private RGBColorBean prependColor;
     // END BEAN PROPERTIES
 
     @Override
     protected ColorList transform(ColorList source) {
-        source.add(0, prependColor.rgbColor());
+        source.add(0, prependColor.toRGBColor());
         return source;
     }
 }

@@ -30,10 +30,10 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 /**
- * Merges one or more {@link BoundingBox} together, to create a single {@link BoundingBox} that spans them all.
- * 
- * @author Owen Feehan
+ * Merges one or more {@link BoundingBox} together, to create a single {@link BoundingBox} that
+ * spans them all.
  *
+ * @author Owen Feehan
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class BoundingBoxMerger {

@@ -29,9 +29,10 @@ package org.anchoranalysis.image.bean.provider;
 import org.anchoranalysis.bean.Provider;
 import org.anchoranalysis.image.bean.ImageBean;
 import org.anchoranalysis.image.core.stack.ProviderAsStack;
+import org.anchoranalysis.image.core.stack.Stack;
 
 /**
- * A provider base-class that as well as providing type S, also provide a stack
+ * A provider base-class that as well as providing type {@code S}, also provides a {@link Stack}.
  *
  * @param <T> family-type common base-class for all beans in this category
  * @param <S> provider-type what is provided

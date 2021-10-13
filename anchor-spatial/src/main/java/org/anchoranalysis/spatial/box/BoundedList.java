@@ -90,8 +90,7 @@ public class BoundedList<T> {
     public static <T> BoundedList<T> createFromList(
             List<T> list, Function<T, BoundingBox> extractBoundingBox) {
         Preconditions.checkArgument(!list.isEmpty());
-        BoundingBox mergedBox =
-                BoundingBoxMerger.merge(list.stream().map(extractBoundingBox));
+        BoundingBox mergedBox = BoundingBoxMerger.merge(list.stream().map(extractBoundingBox));
         return new BoundedList<>(list, mergedBox, extractBoundingBox);
     }
 
@@ -137,7 +136,7 @@ public class BoundedList<T> {
         return new BoundedList<>(list, boundingBox, extractBoundingBox);
     }
 
-    /** 
+    /**
      * The number of elements.
      *
      * @return the number of elements.
@@ -146,7 +145,7 @@ public class BoundedList<T> {
         return list.size();
     }
 
-    /** 
+    /**
      * Gets a particular element.
      *
      * @param index the index to get an element at.
@@ -156,9 +155,9 @@ public class BoundedList<T> {
         return list.get(index);
     }
 
-    /** 
+    /**
      * A stream of elements in the list.
-     * 
+     *
      * @return the stream.
      */
     public Stream<T> stream() {

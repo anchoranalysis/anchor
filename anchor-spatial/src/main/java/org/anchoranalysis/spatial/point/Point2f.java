@@ -57,7 +57,7 @@ public final class Point2f implements Serializable {
 
     /**
      * Multiplies each dimension's component by a factor.
-     * 
+     *
      * @param factor the factor to multiply by.
      */
     public void scale(double factor) {

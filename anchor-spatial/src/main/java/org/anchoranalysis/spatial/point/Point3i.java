@@ -46,10 +46,10 @@ public final class Point3i extends Tuple3i {
     public Point3i() {
         // Initializes with zeroes
     }
-    
+
     /**
      * Create with an identical value in each dimension.
-     * 
+     *
      * @param valueForAllDimensions the value for each dimension.
      */
     public Point3i(int valueForAllDimensions) {
@@ -58,7 +58,7 @@ public final class Point3i extends Tuple3i {
 
     /**
      * Create with values for each dimension.
-     * 
+     *
      * @param x the value for the X-dimension.
      * @param y the value for the Y-dimension.
      * @param z the value for the Z-dimension.
@@ -103,7 +103,7 @@ public final class Point3i extends Tuple3i {
         return (sx * sx) + (sy * sy) + (sz * sz);
     }
 
-    /** 
+    /**
      * The maximum distance across any individual axis to another point.
      *
      * @param point the point to consider distances to, across each axis.
@@ -121,12 +121,13 @@ public final class Point3i extends Tuple3i {
         return new Point3i(x, y, zValueToAssign);
     }
 
-    /** 
+    /**
      * Adds two tuples immutably.
-     * 
+     *
      * @param tuple1 the first tuple to add.
      * @param tuple2 the second tuple to add.
-     * @return a newly created point, where each dimension is the sum of the corresponding dimensions in the points.
+     * @return a newly created point, where each dimension is the sum of the corresponding
+     *     dimensions in the points.
      */
     public static Point3i immutableAdd(ReadableTuple3i tuple1, ReadableTuple3i tuple2) {
         Point3i pointCopy = new Point3i(tuple1);
@@ -134,14 +135,15 @@ public final class Point3i extends Tuple3i {
         return pointCopy;
     }
 
-    /** 
+    /**
      * Adds values to a tuple immutably.
-     * 
+     *
      * @param tuple the tuple to add.
      * @param x the value to add to the X-component.
      * @param y the value to add to the Y-component.
      * @param z the value to add to the Z-component.
-     * @return a newly created point, where each dimension is the sum of the corresponding dimensions in the points.
+     * @return a newly created point, where each dimension is the sum of the corresponding
+     *     dimensions in the points.
      */
     public static Point3i immutableAdd(ReadableTuple3i tuple, int x, int y, int z) {
         Point3i pointCopy = new Point3i(tuple);
@@ -151,12 +153,13 @@ public final class Point3i extends Tuple3i {
         return pointCopy;
     }
 
-    /** 
+    /**
      * Subtracts two tuples immutably.
-     * 
+     *
      * @param tuple the tuple to subtract from.
      * @param toSubtract the tuple to subtract.
-     * @return a newly created point, where each dimension is the subtraction of the corresponding dimensions in the points.
+     * @return a newly created point, where each dimension is the subtraction of the corresponding
+     *     dimensions in the points.
      */
     public static Point3i immutableSubtract(ReadableTuple3i tuple, ReadableTuple3i toSubtract) {
         Point3i pointCopy = new Point3i(tuple);
@@ -179,13 +182,16 @@ public final class Point3i extends Tuple3i {
         return pointCopy;
     }
 
-    /** 
-     * Creates a new point by applying a pairwise operation to each dimension's values for two tuples.
-     * 
+    /**
+     * Creates a new point by applying a pairwise operation to each dimension's values for two
+     * tuples.
+     *
      * @param tuple1 the first tuple.
      * @param tuple2 the second tuple.
-     * @param operator the operator to apply to each dimension of the tuples to produce the corresponding dimension in the returned tuple.
-     * @return a newly-created point arising from applying {@code operator} to the components of each tuple.
+     * @param operator the operator to apply to each dimension of the tuples to produce the
+     *     corresponding dimension in the returned tuple.
+     * @return a newly-created point arising from applying {@code operator} to the components of
+     *     each tuple.
      */
     public static Point3i elementwiseOperation(
             ReadableTuple3i tuple1, ReadableTuple3i tuple2, IntBinaryOperator operator) {

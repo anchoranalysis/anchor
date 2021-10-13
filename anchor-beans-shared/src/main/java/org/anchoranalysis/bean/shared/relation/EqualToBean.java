@@ -30,6 +30,12 @@ import lombok.EqualsAndHashCode;
 import org.anchoranalysis.math.relation.DoubleBiPredicate;
 import org.anchoranalysis.math.relation.EqualTo;
 
+/**
+ * A relation {@code double1 == double2}.
+ * 
+ * @author Owen Feehan
+ *
+ */
 @EqualsAndHashCode(callSuper = true)
 public class EqualToBean extends RelationBean {
 

@@ -143,13 +143,13 @@ public class ColoredMarks implements Iterable<Mark> {
     }
 
     public ColoredMarks subsetWhereBBoxIntersects(
-            Dimensions bndScene, int regionID, List<BoundingBox> intersectList) {
+            Dimensions dimensions, int regionID, List<BoundingBox> intersectList) {
 
         ColoredMarks intersectingMarks = new ColoredMarks();
         for (int i = 0; i < getMarks().size(); i++) {
             Mark mark = getMarks().get(i);
 
-            if (mark.box(bndScene, regionID).intersection().existsWithAny(intersectList)) {
+            if (mark.box(dimensions, regionID).intersection().existsWithAny(intersectList)) {
                 intersectingMarks.add(mark.duplicate(), getColorList().get(i));
             }
         }

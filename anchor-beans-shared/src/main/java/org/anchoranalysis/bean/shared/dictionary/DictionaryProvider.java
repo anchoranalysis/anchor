@@ -29,5 +29,10 @@ package org.anchoranalysis.bean.shared.dictionary;
 import org.anchoranalysis.bean.Provider;
 import org.anchoranalysis.core.value.Dictionary;
 
+/**
+ * Base class for beans that implement {@link Provider} to provide a {@link Dictionary}.
+ *
+ * @author Owen Feehan
+ */
 public abstract class DictionaryProvider extends DictionaryBean<DictionaryProvider>
         implements Provider<Dictionary> {}

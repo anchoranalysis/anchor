@@ -40,14 +40,13 @@ import org.anchoranalysis.spatial.box.BoundingBox;
  * Splits a collection of elements into spatially separate <i>clusters</i>.
  *
  * <p>Each element must provide a corresponding bounding-box.
- * 
+ *
  * <p>Any objects whose bounding-boxes intersect belong to the same cluster, but otherwise not.
  *
  * <p>This is similar to a simplified <a href="https://en.wikipedia.org/wiki/DBSCAN">DBSCAN
  * algorithm</a>.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  * @param <T> the element-type in the collection.
  */
 @AllArgsConstructor
@@ -61,8 +60,8 @@ public class SpatiallySeparate<T> {
     private Function<T, BoundingBox> extractBoundingBox;
 
     /**
-     * Splits a collection of elements into spatially separate <i>clusters</i>, <b>without
-     * consuming all elements</b> in {@code elements}.
+     * Splits a collection of elements into spatially separate <i>clusters</i>, <b>without consuming
+     * all elements</b> in {@code elements}.
      *
      * @param elements the collection of elements to separate.
      * @return a list of object-collections, each object-collection is guaranteed to be spatially

@@ -39,19 +39,19 @@ import org.anchoranalysis.bean.AnchorBean;
 public abstract class RegEx extends AnchorBean<RegEx> {
 
     /**
-     * Returns an array of string components it matches successfully, or empty() if it cannot match
+     * Returns an array of string components it matches successfully, or {@link Optional#empty()} if it cannot match.
      *
-     * @param string string to match against the regular-expression
-     * @return an array of string components representing each group in the match, or empty() if no
-     *     match is possible
+     * @param string string to match against the regular-expression.
+     * @return an array of string components representing each group in the match, or {@link Optional#empty()} if no
+     *     match is possible.
      */
     public abstract Optional<String[]> match(String string);
 
     /**
-     * Returns a boolean whether the regular-expression successfully matches a string or not
+     * Returns a boolean whether the regular-expression successfully matches a string or not.
      *
-     * @param string string to match against the regular-expression
-     * @return true if successfully matched, false otherwise
+     * @param string string to match against the regular-expression.
+     * @return true if successfully matched, false otherwise.
      */
     public boolean hasMatch(String string) {
         return match(string).isPresent();

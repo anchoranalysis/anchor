@@ -349,13 +349,16 @@ public class Ellipse extends ConicBase implements Serializable {
 
     @Override
     public ObjectWithProperties deriveObject(
-            Dimensions bndScene, RegionMembershipWithFlags rm, BinaryValuesByte bvOut) {
+            Dimensions dimensions,
+            RegionMembershipWithFlags regionMembership,
+            BinaryValuesByte binaryValuesOut) {
 
-        ObjectWithProperties object = super.deriveObject(bndScene, rm, bvOut);
+        ObjectWithProperties object =
+                super.deriveObject(dimensions, regionMembership, binaryValuesOut);
         orientation.addPropertiesToMask(object);
 
         // Axis orientation
-        addAxisOrientationProperties(object, rm);
+        addAxisOrientationProperties(object, regionMembership);
 
         return object;
     }

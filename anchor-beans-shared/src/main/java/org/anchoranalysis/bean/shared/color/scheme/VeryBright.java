@@ -30,7 +30,7 @@ import org.anchoranalysis.core.color.ColorList;
 import org.anchoranalysis.core.color.RGBColor;
 
 /**
- * Creates a list by repeating a defined list of very bright colors.
+ * Creates a list by repeating a defined constant list of very bright colors.
  *
  * <p>Thanks to the <a href="http://tango-project.org/Tango_Icon_Theme_Guidelines/">Tango project's
  * theme guidelines</a>.
@@ -39,7 +39,8 @@ import org.anchoranalysis.core.color.RGBColor;
  */
 public class VeryBright extends ColorScheme {
 
-    private static String[] hexCodes =
+    /** The hex-codes of the constant list of very bright colors. */
+    private static final String[] HEX_CODES =
             new String[] {
                 "#fce94f", // Butter
                 "#fcaf3e", // Orange
@@ -63,21 +64,22 @@ public class VeryBright extends ColorScheme {
     @Override
     public ColorList createList(int size) {
 
-        int hexCodesSize = hexCodes.length;
+        int hexCodesSize = HEX_CODES.length;
 
         ColorList out = new ColorList();
         for (int i = 0; i < size; i++) {
-            int hexCodeIndex = i % hexCodesSize;
-            out.add(hex2Rgb(hexCodes[hexCodeIndex]));
+            String hex = HEX_CODES[i % hexCodesSize];
+            out.add(hexToRGB(hex));
         }
 
         return out;
     }
 
-    private static RGBColor hex2Rgb(String colorStr) {
+    /** Converts the hex-code to a {@link RGBColor}. */
+    private static RGBColor hexToRGB(String hexCode) {
         return new RGBColor(
-                Integer.valueOf(colorStr.substring(1, 3), 16),
-                Integer.valueOf(colorStr.substring(3, 5), 16),
-                Integer.valueOf(colorStr.substring(5, 7), 16));
+                Integer.valueOf(hexCode.substring(1, 3), 16),
+                Integer.valueOf(hexCode.substring(3, 5), 16),
+                Integer.valueOf(hexCode.substring(5, 7), 16));
     }
 }

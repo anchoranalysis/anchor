@@ -31,7 +31,7 @@ import org.anchoranalysis.bean.Provider;
 import org.anchoranalysis.core.color.ColorList;
 
 /**
- * Provides a list of one or more colors
+ * Base class for beans that implement {@link Provider} to provide a {@link ColorList}.
  *
  * @author Owen Feehan
  */

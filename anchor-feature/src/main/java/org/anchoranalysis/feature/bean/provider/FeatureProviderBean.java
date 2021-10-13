@@ -30,6 +30,9 @@ import org.anchoranalysis.bean.Provider;
 import org.anchoranalysis.feature.bean.FeatureRelatedBean;
 
 /**
+ * Base class for {@link FeatureRelatedBean}s that implement {@link Provider} to provide an object
+ * of type {@code S}.
+ *
  * @author Owen Feehan
  * @param <B> bean-type
  * @param <P> provider-type

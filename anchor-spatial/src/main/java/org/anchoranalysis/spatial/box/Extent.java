@@ -30,6 +30,8 @@ import java.io.Serializable;
 import java.util.function.Consumer;
 import java.util.function.IntPredicate;
 import java.util.stream.IntStream;
+import lombok.Getter;
+import lombok.experimental.Accessors;
 import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.core.functional.checked.CheckedIntConsumer;
 import org.anchoranalysis.spatial.axis.Axis;
@@ -42,8 +44,6 @@ import org.anchoranalysis.spatial.point.consumer.OffsettedScalarTwoDimensionalCo
 import org.anchoranalysis.spatial.point.consumer.PointTwoDimensionalConsumer;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 import org.anchoranalysis.spatial.scale.Scaler;
-import lombok.Getter;
-import lombok.experimental.Accessors;
 
 /**
  * Width, height, depth etc. of an entity in 2 or 3 dimensions.
@@ -54,7 +54,7 @@ import lombok.experimental.Accessors;
  *
  * <p>This class is <b>immutable</b>. No operation will modify existing state.
  */
-@Accessors(fluent=true)
+@Accessors(fluent = true)
 public final class Extent implements Serializable, Comparable<Extent> {
 
     private static final long serialVersionUID = 1L;
@@ -62,9 +62,9 @@ public final class Extent implements Serializable, Comparable<Extent> {
     /** Sizes in each dimension. */
     private final ReadableTuple3i size;
 
-    /** 
+    /**
      * Size in X multiplied by size in Y.
-     * 
+     *
      * <p>This may be convenient for calculating offsets and for iterations.
      */
     @Getter private final int areaXY;
@@ -135,23 +135,23 @@ public final class Extent implements Serializable, Comparable<Extent> {
                     "An extent may not be negative in any dimension");
         }
     }
-    
+
     /**
      * Calculates the volume of the {@link Extent} when considered as a box.
-     * 
+     *
      * <p>This is is the size in the X, Y and Z dimensions multiplied together.
-     * 
+     *
      * @return the volume in voxels.
      */
     public long calculateVolume() {
         return ((long) areaXY) * size.z();
     }
-    
+
     /**
      * Like {@link #calculateVolume()} but uses an {@code int} to calculate the volume.
-     * 
+     *
      * <p>A {@link AnchorFriendlyRuntimeException} is thrown if an overflow occurs.
-     * 
+     *
      * @return the volume in voxels.
      */
     public int calculateVolumeAsInt() {
@@ -165,7 +165,7 @@ public final class Extent implements Serializable, Comparable<Extent> {
 
     /**
      * Does the extent contain zero voxels?
-     * 
+     *
      * @return true if any dimension has size 0.
      */
     public boolean isEmpty() {
@@ -174,7 +174,7 @@ public final class Extent implements Serializable, Comparable<Extent> {
 
     /**
      * The size in the X dimension.
-     * 
+     *
      * @return the size.
      */
     public int x() {
@@ -183,7 +183,7 @@ public final class Extent implements Serializable, Comparable<Extent> {
 
     /**
      * The size in the Y dimension.
-     * 
+     *
      * @return the size.
      */
     public int y() {
@@ -192,7 +192,7 @@ public final class Extent implements Serializable, Comparable<Extent> {
 
     /**
      * The size in the Z dimension.
-     * 
+     *
      * @return the size.
      */
     public int z() {
@@ -201,8 +201,9 @@ public final class Extent implements Serializable, Comparable<Extent> {
 
     /**
      * The size in the dimension identified by {@code dimensionIndex}.
-     * 
-     * @param dimensionIndex the dimension to return a size for, as per {@code ReadableTuple3i#valueByDimension(int)}.
+     *
+     * @param dimensionIndex the dimension to return a size for, as per {@code
+     *     ReadableTuple3i#valueByDimension(int)}.
      * @return the size.
      */
     public int valueByDimension(int dimensionIndex) {
@@ -211,8 +212,9 @@ public final class Extent implements Serializable, Comparable<Extent> {
 
     /**
      * The size in the dimension identified by {@code axis}.
-     * 
-     * @param axis the dimension to return a size for, as per {@code ReadableTuple3i#valueByDimension(Axis)}.
+     *
+     * @param axis the dimension to return a size for, as per {@code
+     *     ReadableTuple3i#valueByDimension(Axis)}.
      * @return the size.
      */
     public int valueByDimension(Axis axis) {
@@ -222,15 +224,15 @@ public final class Extent implements Serializable, Comparable<Extent> {
     /**
      * Exposes the extent as a tuple.
      *
-     * <p><b>Importantly,</b> this class is designed to be <b>immutable</b>, so this tuple should be treated
-     * as read-only, and never modified.
+     * <p><b>Importantly,</b> this class is designed to be <b>immutable</b>, so this tuple should be
+     * treated as read-only, and never modified.
      *
      * @return the extent's width, height, depth as a tuple.
      */
     public ReadableTuple3i asTuple() {
         return size;
     }
-    
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -250,7 +252,7 @@ public final class Extent implements Serializable, Comparable<Extent> {
         return size.equals(other.size);
     }
 
-    /** 
+    /**
      * Checks for equality with another extent ignoring any differences in the Z dimension.
      *
      * @param other the extent to check for equality with.
@@ -265,7 +267,7 @@ public final class Extent implements Serializable, Comparable<Extent> {
         return String.format("[%d,%d,%d]", x(), y(), z());
     }
 
-    /** 
+    /**
      * Calculates a XY-offset of a point in a buffer whose dimensions are this extent.
      *
      * @param x the value in the X-dimension for the point.
@@ -276,9 +278,9 @@ public final class Extent implements Serializable, Comparable<Extent> {
         return (y * size.x()) + x;
     }
 
-    /** 
+    /**
      * Calculates a XYZ-offset of a point in a buffer whose dimensions are this extent.
-     * 
+     *
      * @param x the value in the X-dimension for the point.
      * @param y the value in the Y-dimension for the point.
      * @param z the value in the Z-dimension for the point.
@@ -288,7 +290,7 @@ public final class Extent implements Serializable, Comparable<Extent> {
         return (z * areaXY) + (y * x()) + x;
     }
 
-    /** 
+    /**
      * Calculates a XYZ-offset of a point in a buffer whose dimensions are this extent.
      *
      * @param point the point to calculate an offset for.
@@ -298,7 +300,7 @@ public final class Extent implements Serializable, Comparable<Extent> {
         return offset(point.x(), point.y(), point.z());
     }
 
-    /** 
+    /**
      * Calculates a XY-offset of a point in a buffer whose dimensions are this extent.
      *
      * @param point the point to calculate an offset for.
@@ -308,7 +310,7 @@ public final class Extent implements Serializable, Comparable<Extent> {
         return offset(point.x(), point.y(), 0);
     }
 
-    /** 
+    /**
      * Calculates a XY-offset of a point in a buffer whose dimensions are this extent.
      *
      * @param point the point to calculate an offset for.
@@ -320,7 +322,7 @@ public final class Extent implements Serializable, Comparable<Extent> {
 
     /**
      * Creates a copy of the current {@link Extent} with the value for the Z-dimension changed.
-     * 
+     *
      * @param zToAssign the value to assign for the z-dimension.
      * @return the copy, with a changed z-value.
      */
@@ -330,9 +332,10 @@ public final class Extent implements Serializable, Comparable<Extent> {
 
     /**
      * Is a value contained within the extent on the X-axis?
-     * 
+     *
      * @param value the value to check.
-     * @return true iff the value is non-negative and less than the size of the extent in the X-axis.
+     * @return true iff the value is non-negative and less than the size of the extent in the
+     *     X-axis.
      */
     public boolean containsX(double value) {
         return value >= 0 && value < x();
@@ -340,9 +343,10 @@ public final class Extent implements Serializable, Comparable<Extent> {
 
     /**
      * Is a value contained within the extent on the Y-axis?
-     * 
+     *
      * @param value the value to check.
-     * @return true iff the value is non-negative and less than the size of the extent in the Y-axis.
+     * @return true iff the value is non-negative and less than the size of the extent in the
+     *     Y-axis.
      */
     public boolean containsY(double value) {
         return value >= 0 && value < y();
@@ -350,9 +354,10 @@ public final class Extent implements Serializable, Comparable<Extent> {
 
     /**
      * Is a value contained within the extent on the Z-axis?
-     * 
+     *
      * @param value the value to check.
-     * @return true iff the value is non-negative and less than the size of the extent in the Z-axis.
+     * @return true iff the value is non-negative and less than the size of the extent in the
+     *     Z-axis.
      */
     public boolean containsZ(double value) {
         return value >= 0 && value < z();
@@ -360,9 +365,10 @@ public final class Extent implements Serializable, Comparable<Extent> {
 
     /**
      * Is a value contained within the extent on the X-axis?
-     * 
+     *
      * @param value the value to check.
-     * @return true iff the value is non-negative and less than the size of the extent in the X-axis.
+     * @return true iff the value is non-negative and less than the size of the extent in the
+     *     X-axis.
      */
     public boolean containsX(int value) {
         return value >= 0 && value < x();
@@ -370,9 +376,10 @@ public final class Extent implements Serializable, Comparable<Extent> {
 
     /**
      * Is a value contained within the extent on the Y-axis?
-     * 
+     *
      * @param value the value to check.
-     * @return true iff the value is non-negative and less than the size of the extent in the Y-axis.
+     * @return true iff the value is non-negative and less than the size of the extent in the
+     *     Y-axis.
      */
     public boolean containsY(int value) {
         return value >= 0 && value < y();
@@ -380,9 +387,10 @@ public final class Extent implements Serializable, Comparable<Extent> {
 
     /**
      * Is a value contained within the extent on the Z-axis?
-     * 
+     *
      * @param value the value to check.
-     * @return true iff the value is non-negative and less than the size of the extent in the Z-axis.
+     * @return true iff the value is non-negative and less than the size of the extent in the
+     *     Z-axis.
      */
     public boolean containsZ(int value) {
         return value >= 0 && value < z();
@@ -390,9 +398,9 @@ public final class Extent implements Serializable, Comparable<Extent> {
 
     /**
      * Is a point of type {@link Point2i} contained within the extent in the XY plane?
-     * 
+     *
      * <p>The z-dimension is ignored.
-     * 
+     *
      * @param point the point to check.
      * @return true iff the point exists within the plane.
      */
@@ -402,7 +410,7 @@ public final class Extent implements Serializable, Comparable<Extent> {
 
     /**
      * Is a point of type {@link Point3d} contained within the extent?
-     * 
+     *
      * @param point the point to check.
      * @return true iff the point exists within the extent, considering all dimensions.
      */
@@ -412,7 +420,7 @@ public final class Extent implements Serializable, Comparable<Extent> {
 
     /**
      * Is a point of type {@link ReadableTuple3i} contained within the extent?
-     * 
+     *
      * @param point the point to check.
      * @return true iff the point exists within the extent, considering all dimensions.
      */
@@ -422,7 +430,7 @@ public final class Extent implements Serializable, Comparable<Extent> {
 
     /**
      * Is a point contained within the extent?
-     * 
+     *
      * @param x the value of the point on the x-axis.
      * @param y the value of the point on the y-axis.
      * @param z the value of the point on the z-axis.
@@ -455,7 +463,7 @@ public final class Extent implements Serializable, Comparable<Extent> {
 
     /**
      * Is {@code box} entirely contained within the extent?
-     * 
+     *
      * @param box the bounding-box to check.
      * @return true iff {@code} only describes space contained in the current extent.
      */
@@ -465,9 +473,10 @@ public final class Extent implements Serializable, Comparable<Extent> {
 
     /**
      * Scales the X- and Y- dimensions by a scaling-factor.
-     * 
+     *
      * @param scaleFactor the scaling-factor to multiply the respective X and Y dimension values by.
-     * @return a new {@link Extent} whose X and Y values are scaled versions of the current values, and Z value is unchanged.
+     * @return a new {@link Extent} whose X and Y values are scaled versions of the current values,
+     *     and Z value is unchanged.
      */
     public Extent scaleXYBy(ScaleFactor scaleFactor) {
         return new Extent(
@@ -498,7 +507,8 @@ public final class Extent implements Serializable, Comparable<Extent> {
     }
 
     /**
-     * Creates a new {@link Extent} with {@code toAdd} size <b>added to</b> each respective dimension.
+     * Creates a new {@link Extent} with {@code toAdd} size <b>added to</b> each respective
+     * dimension.
      *
      * @param toAdd the number of voxels to add to each dimension.
      * @return a newly created {@link Extent} grown as per above.
@@ -519,7 +529,7 @@ public final class Extent implements Serializable, Comparable<Extent> {
 
     /**
      * Collapses the Z dimension.
-     * 
+     *
      * @return a new otherwise identical extent bit with size of of 1 in Z-dimension.
      */
     public Extent flattenZ() {
@@ -692,7 +702,7 @@ public final class Extent implements Serializable, Comparable<Extent> {
      *     dimensions.
      */
     public int[] toArray() {
-        return new int[] { x(), y(), z() };
+        return new int[] {x(), y(), z()};
     }
 
     /**

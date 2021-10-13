@@ -29,7 +29,18 @@ package org.anchoranalysis.bean.shared.random;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 
+/**
+ * A bean that defines a type of {@link RandomNumberGenerator}.
+ * 
+ * @author Owen Feehan
+ *
+ */
 public abstract class RandomNumberGeneratorBean extends AnchorBean<RandomNumberGeneratorBean> {
 
+    /**
+     * Creates the {@link RandomNumberGenerator}.
+     * 
+     * @return a newly created {@link RandomNumberGenerator}.
+     */
     public abstract RandomNumberGenerator create();
 }

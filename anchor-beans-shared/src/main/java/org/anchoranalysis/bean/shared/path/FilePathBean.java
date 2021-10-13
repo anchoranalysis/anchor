@@ -29,6 +29,13 @@ import org.anchoranalysis.bean.initializable.InitializableBean;
 import org.anchoranalysis.bean.initializable.property.AssignerMatchClass;
 import org.anchoranalysis.bean.initializable.property.BeanInitializer;
 
+/**
+ * Base class for beans that require initialization with {@link FilePathInitialization}.
+ * 
+ * @author Owen Feehan
+ *
+ * @param <T> bean family-type.
+ */
 public abstract class FilePathBean<T> extends InitializableBean<T, FilePathInitialization> {
 
     protected FilePathBean() {

@@ -111,7 +111,7 @@ public final class Point2i implements Serializable {
 
     /**
      * Adds values from a {@link Point2i} across each corresponding dimension.
-     * 
+     *
      * @param point the point whose values are added.
      */
     public void add(Point2i point) {
@@ -131,12 +131,13 @@ public final class Point2i implements Serializable {
         return out;
     }
 
-    /** 
+    /**
      * Adds two points immutably.
-     * 
+     *
      * @param point1 the first point to add.
      * @param point2 the second point to add.
-     * @return a newly created point, where each dimension is the sum of the corresponding dimensions in the points.
+     * @return a newly created point, where each dimension is the sum of the corresponding
+     *     dimensions in the points.
      */
     public static Point2i immutableAdd(Point2i point1, Point2i point2) {
         Point2i pointCopy = new Point2i(point1);

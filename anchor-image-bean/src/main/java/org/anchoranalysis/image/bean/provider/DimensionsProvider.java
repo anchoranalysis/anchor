@@ -30,5 +30,10 @@ import org.anchoranalysis.bean.Provider;
 import org.anchoranalysis.image.bean.ImageBean;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 
+/**
+ * Base class for beans that implement {@link Provider} to provide {@link Dimensions}.
+ *
+ * @author Owen Feehan
+ */
 public abstract class DimensionsProvider extends ImageBean<DimensionsProvider>
         implements Provider<Dimensions> {}

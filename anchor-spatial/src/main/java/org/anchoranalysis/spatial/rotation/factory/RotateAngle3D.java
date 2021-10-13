@@ -32,12 +32,13 @@ import lombok.AllArgsConstructor;
 import org.anchoranalysis.spatial.rotation.RotationMatrix;
 
 /**
- * Creates a {@link RotationMatrix} that performs a 3D rotation using three angle parameters for the rotation.
- * 
- * <p>This is some form of <a href="https://en.wikipedia.org/wiki/Davenport_chained_rotations">Euler rotations</a> representation.
- * 
- * @author Owen Feehan
+ * Creates a {@link RotationMatrix} that performs a 3D rotation using three angle parameters for the
+ * rotation.
  *
+ * <p>This is some form of <a href="https://en.wikipedia.org/wiki/Davenport_chained_rotations">Euler
+ * rotations</a> representation.
+ *
+ * @author Owen Feehan
  */
 @AllArgsConstructor
 public class RotateAngle3D extends RotationMatrixFactory {

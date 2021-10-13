@@ -29,30 +29,46 @@ package org.anchoranalysis.bean.shared;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.AnchorBean;
+import org.anchoranalysis.core.exception.CreateException;
 
+/**
+ * A bean that defines a mapping between a set of {@link String}s to another set of {@link String}s.
+ *
+ * @author Owen Feehan
+ */
 public class StringMap extends AnchorBean<StringMap> {
 
     // START BEAN PROPERTIES
-    private List<StringMapItem> list;
+    /** A list of mappings between a single-items in the respective sets. */
+    @Getter @Setter private List<StringMapItem> list;
     // END BEAN PROPERTIES
 
-    public Map<String, String> create() {
+    /**
+     * Derives a {@link Map} representation for the mapping.
+     *
+     * <p>Each {@link StringMapItem#getSource()} should be unique in {@code list}, otherwise an
+     * exception is thrown.
+     *
+     * @return a newly created {@link Map} representing the items in {@code list}.
+     * @throws CreateException if the values of {@link StringMapItem#getSource()} in {@code list}
+     *     are not unique.
+     */
+    public Map<String, String> create() throws CreateException {
 
         HashMap<String, String> map = new HashMap<>();
 
         for (StringMapItem mapping : list) {
-            map.put(mapping.getSource(), mapping.getTarget());
+            if (map.putIfAbsent(mapping.getSource(), mapping.getTarget()) != null) {
+                throw new CreateException(
+                        String.format(
+                                "More than one element in list contains %s as a source. Each source must be unique.",
+                                mapping.getSource()));
+            }
         }
 
         return map;
-    }
-
-    public List<StringMapItem> getList() {
-        return list;
-    }
-
-    public void setList(List<StringMapItem> list) {
-        this.list = list;
     }
 }

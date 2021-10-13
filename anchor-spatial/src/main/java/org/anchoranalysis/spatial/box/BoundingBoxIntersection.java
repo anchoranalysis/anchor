@@ -43,9 +43,9 @@ public final class BoundingBoxIntersection {
 
     private final BoundingBox box;
 
-    /** 
+    /**
      * Does intersection exist with another bounding-box?
-     * 
+     *
      * @param other the other bounding-box to test intersection with.
      * @return true iff intersection exists.
      */
@@ -53,7 +53,7 @@ public final class BoundingBoxIntersection {
         return with(other, false).isPresent();
     }
 
-    /** 
+    /**
      * Does intersection exist with with any of the others in the list?
      *
      * @param others the other bounding-boxes to test intersection with.
@@ -71,22 +71,24 @@ public final class BoundingBoxIntersection {
         return false;
     }
 
-    /** 
+    /**
      * Finds the intersection with another bounding-box, if it exists.
      *
      * @param other the bounding-box to find intersection with.
-     * @return a bounding-box describing the in the intersection, or {@link Optional#empty()} if no intersection exists.
+     * @return a bounding-box describing the in the intersection, or {@link Optional#empty()} if no
+     *     intersection exists.
      */
     public Optional<BoundingBox> with(BoundingBox other) {
         return with(other, true);
     }
 
-    /** 
+    /**
      * Finds the intersection and clamp to a a containing extent.
      *
      * @param other the bounding-box to find intersection with.
      * @param containingExtent the extent the intersection is clamped to.
-     * @return a bounding-box describing the in the intersection, or {@link Optional#empty()} if no intersection exists.
+     * @return a bounding-box describing the in the intersection, or {@link Optional#empty()} if no
+     *     intersection exists.
      */
     public Optional<BoundingBox> withInside(BoundingBox other, Extent containingExtent) {
         // TODO what happens when the containing-extent does not contain the the intersection?

@@ -30,6 +30,12 @@ import org.anchoranalysis.bean.initializable.InitializableBean;
 import org.anchoranalysis.bean.initializable.property.AssignerMatchClass;
 import org.anchoranalysis.bean.initializable.property.BeanInitializer;
 
+/**
+ * Base class for beans that require initialization with {@link DictionaryInitialization}.
+ *
+ * @author Owen Feehan
+ * @param <T> bean-family type
+ */
 public abstract class DictionaryBean<T> extends InitializableBean<T, DictionaryInitialization> {
 
     protected DictionaryBean() {

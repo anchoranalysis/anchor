@@ -43,7 +43,7 @@ public class PointConverter {
     // START singular points
     /**
      * Convert a {@link Point2d} to a {@link Point2i} using the <i>floor</i> operation.
-     * 
+     *
      * @param point the point to convert.
      * @return the newly-created converted point.
      */
@@ -53,7 +53,7 @@ public class PointConverter {
 
     /**
      * Convert a {@link Point3d} to a {@link Point3i} using the <i>floor</i> operation.
-     * 
+     *
      * @param point the point to convert.
      * @return the newly-created converted point.
      */
@@ -63,7 +63,7 @@ public class PointConverter {
 
     /**
      * Convert a {@link Point3d} to a {@link Point3i} using the <i>ceiling</i> operation.
-     * 
+     *
      * @param point the point to convert.
      * @return the newly-created converted point.
      */
@@ -73,8 +73,9 @@ public class PointConverter {
     }
 
     /**
-     * Convert a {@link Point2i} to a {@link Point3i} using {@code 0} as the value of the Z-axis component.
-     * 
+     * Convert a {@link Point2i} to a {@link Point3i} using {@code 0} as the value of the Z-axis
+     * component.
+     *
      * @param point the point to convert.
      * @return the newly-created converted point.
      */
@@ -83,8 +84,9 @@ public class PointConverter {
     }
 
     /**
-     * Convert a {@link Point3i} to a {@link Point2i} using an explicit value for the Z-axis component.
-     * 
+     * Convert a {@link Point3i} to a {@link Point2i} using an explicit value for the Z-axis
+     * component.
+     *
      * @param point the point to convert.
      * @param z the value for the Z-axis component in the newly created point.
      * @return the newly-created converted point.
@@ -94,8 +96,9 @@ public class PointConverter {
     }
 
     /**
-     * Convert a {@link Point2d} to a {@link Point3d} using {@code 0} as the value of the Z-axis component.
-     * 
+     * Convert a {@link Point2d} to a {@link Point3d} using {@code 0} as the value of the Z-axis
+     * component.
+     *
      * @param point the point to convert.
      * @return the newly-created converted point.
      */
@@ -105,7 +108,7 @@ public class PointConverter {
 
     /**
      * Convert a {@link Point2f} to a {@link Point3d}.
-     * 
+     *
      * @param point the point to convert.
      * @return the newly-created converted point.
      */
@@ -115,7 +118,7 @@ public class PointConverter {
 
     /**
      * Convert a {@link Point3f} to a {@link Point3d}.
-     * 
+     *
      * @param point the point to convert.
      * @return the newly-created converted point.
      */
@@ -124,8 +127,9 @@ public class PointConverter {
     }
 
     /**
-     * Convert a {@link Point2i} to a {@link Point3d} using {@code 0} as the value of the Z-axis component.
-     * 
+     * Convert a {@link Point2i} to a {@link Point3d} using {@code 0} as the value of the Z-axis
+     * component.
+     *
      * @param point the point to convert.
      * @return the newly-created converted point.
      */
@@ -135,7 +139,7 @@ public class PointConverter {
 
     /**
      * Convert a {@link ReadableTuple3i} to a {@link Point3d}.
-     * 
+     *
      * @param point the point to convert.
      * @return the newly-created converted point.
      */
@@ -144,18 +148,19 @@ public class PointConverter {
     }
 
     /**
-     * Convert a {@link Point2i} to a {@link Point3f} using {@code 0} as the value of the Z-axis component.
-     * 
+     * Convert a {@link Point2i} to a {@link Point3f} using {@code 0} as the value of the Z-axis
+     * component.
+     *
      * @param point the point to convert.
      * @return the newly-created converted point.
      */
     public static Point3f floatFromInt(Point2i point) {
         return new Point3f(point.x(), point.y(), 0);
     }
-    
+
     /**
      * Convert a {@link Point2d} to a {@link Point2f}.
-     * 
+     *
      * @param point the point to convert.
      * @return the newly-created converted point.
      */
@@ -165,7 +170,7 @@ public class PointConverter {
 
     /**
      * Convert a {@link Point3d} to a {@link Point3f}.
-     * 
+     *
      * @param point the point to convert.
      * @return the newly-created converted point.
      */
@@ -175,7 +180,7 @@ public class PointConverter {
 
     /**
      * Convert a {@link ReadableTuple3i} to a {@link Point3f}.
-     * 
+     *
      * @param point the point to convert.
      * @return the newly-created converted point.
      */
@@ -184,8 +189,9 @@ public class PointConverter {
     }
 
     /**
-     * Creates a {@link ReadableTuple3i} to a {@link Point3f}, preserving X- and Y-components but set setting the Z-component to be {@code 0}.
-     * 
+     * Creates a {@link ReadableTuple3i} to a {@link Point3f}, preserving X- and Y-components but
+     * set setting the Z-component to be {@code 0}.
+     *
      * @param point the point to convert.
      * @return the newly-created converted point.
      */
@@ -195,9 +201,10 @@ public class PointConverter {
 
     /**
      * Convert a {@link Point3f} to a {@link Point3i}, optionally rounding values.
-     * 
+     *
      * @param point the point to convert.
-     * @param round if true, each component's value is rounded to the nearest integer, otherwise the <i>ceiling</i> operation is used.
+     * @param round if true, each component's value is rounded to the nearest integer, otherwise the
+     *     <i>ceiling</i> operation is used.
      * @return the newly-created converted point.
      */
     public static Point3i intFromFloat(Point3f point, boolean round) {
@@ -209,12 +216,11 @@ public class PointConverter {
     }
     // END singular points
 
-    
     // START lists of points
 
     /**
      * Convert a list of {@link Point3i} to a list of {@link Point3f}.
-     * 
+     *
      * @param points the list of points to convert.
      * @return a newly-created list of converted points.
      */
@@ -224,7 +230,7 @@ public class PointConverter {
 
     /**
      * Convert a list of {@link Point3d} to a list of {@link Point3f}.
-     * 
+     *
      * @param points the list of points to convert.
      * @return a newly-created list of converted points.
      */
@@ -234,7 +240,7 @@ public class PointConverter {
 
     /**
      * Convert a list of {@link Point2i} to a list of {@link Point3f}.
-     * 
+     *
      * @param points the list of points to convert.
      * @return a newly-created list of converted points.
      */
@@ -244,7 +250,7 @@ public class PointConverter {
 
     /**
      * Convert a list of {@link Point2i} to a list of {@link Point3d}.
-     * 
+     *
      * @param points the list of points to convert.
      * @return a newly-created list of converted points.
      */
@@ -254,7 +260,7 @@ public class PointConverter {
 
     /**
      * Convert a list of {@link Point3f} to a list of {@link Point3d}.
-     * 
+     *
      * @param points the list of points to convert.
      * @return a newly-created list of converted points.
      */
@@ -264,9 +270,10 @@ public class PointConverter {
 
     /**
      * Convert a list of {@link Point3f} to a list of {@link Point3i}, optionally rounding values.
-     * 
+     *
      * @param points the list of points to convert.
-     * @param round if true, each component's value is rounded to the nearest integer, otherwise the <i>ceiling</i> operation is used.
+     * @param round if true, each component's value is rounded to the nearest integer, otherwise the
+     *     <i>ceiling</i> operation is used.
      * @return a newly-created list of converted points.
      */
     public static List<Point3i> convert3i(List<Point3f> points, boolean round) {
@@ -275,7 +282,7 @@ public class PointConverter {
 
     /**
      * Convert a list of {@link Point3d} to a list of {@link Point3i}.
-     * 
+     *
      * @param points the list of points to convert.
      * @return a newly-created list of converted points.
      */

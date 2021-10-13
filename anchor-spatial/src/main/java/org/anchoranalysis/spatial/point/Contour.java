@@ -36,13 +36,13 @@ import lombok.Getter;
  * @author Owen Feehan
  */
 public class Contour {
-    
+
     /** An ordered list of points in the contour. */
     @Getter private List<Point3f> points = new ArrayList<>();
 
     /**
      * All the points in the contour, converted into {@link Point3i}.
-     * 
+     *
      * @return a newly created list with integer versions of all points.
      */
     public List<Point3i> pointsDiscrete() {

@@ -32,14 +32,14 @@ import org.anchoranalysis.core.color.ColorList;
 import org.anchoranalysis.core.exception.OperationFailedException;
 
 /**
- * Creates a set of related colors.
+ * Creates a sequence of related colors.
  *
  * @author Owen Feehan
  */
 public abstract class ColorScheme extends AnchorBean<ColorScheme> {
 
     /**
-     * Creates a list of colors of particular size.
+     * Creates a sequence of related colors.
      *
      * @param size the size of the list
      * @return a newly created list with colors
@@ -50,7 +50,7 @@ public abstract class ColorScheme extends AnchorBean<ColorScheme> {
     /**
      * Assigns a color to each index value from a list of size {@code numberColors}.
      *
-     * <p>This allows non-contigous indices to each use a unique-ish color.
+     * <p>This allows non-contiguous indices to each use a unique-<i>ish</i> color.
      *
      * <p>Indices will be assigned a unique color until the list has no more unique colors, at which
      * point they will be reused.

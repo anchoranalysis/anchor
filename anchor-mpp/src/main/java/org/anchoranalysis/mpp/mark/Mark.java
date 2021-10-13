@@ -38,6 +38,7 @@ import org.anchoranalysis.image.core.dimensions.UnitConverter;
 import org.anchoranalysis.image.core.object.properties.ObjectWithProperties;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.overlay.OverlayProperties;
 import org.anchoranalysis.overlay.identifier.Identifiable;
@@ -77,14 +78,14 @@ public abstract class Mark implements Serializable, Identifiable {
 
     public abstract String getName();
 
-    /** An alternative "quick" metric for overlap for a mark */
+    /** An alternative "quick" metric for overlap for a {@link Mark}. */
     public Optional<QuickOverlapCalculation> quickOverlap() {
         return Optional.empty();
     }
 
     public abstract double volume(int regionID);
 
-    /** String representation of the mark */
+    /** String representation of the {@link Mark}. */
     @Override
     public abstract String toString();
 
@@ -121,28 +122,35 @@ public abstract class Mark implements Serializable, Identifiable {
     }
 
     // Checks if two marks are equal by comparing all attributes
-    public boolean equalsDeep(Mark m) {
+    public boolean equalsDeep(Mark mark) {
         // ID check
-        return equalsID(m);
+        return equalsID(mark);
     }
 
     /**
-     * Create an object-mask representation of the mark (i.e. in voxels in a bounding-box)
+     * Create a {@link ObjectMask} representation of the {@link Mark}.
      *
-     * @param dimensions
-     * @param rm
-     * @param bv
-     * @return
+     * <p>i.e. the {@link Mark} is converted into voxels within a bounding-box.
+     *
+     * <p>The {@link ObjectMask} is forced to entirely be contained within {@code dimensions}.
+     *
+     * @param dimensions the size of the image in which the {@link Mark} resides.
+     * @param region which region(s) of the {@link Mark} to voxelize.
+     * @param binaryValues how to encode on and off voxels in the created {@link
+     *     ObjectWithProperties}.
+     * @return the created {@link ObjectMask} with associated properties.
      */
     public ObjectWithProperties deriveObject(
-            Dimensions dimensions, RegionMembershipWithFlags rm, BinaryValuesByte bv) {
+            Dimensions dimensions,
+            RegionMembershipWithFlags region,
+            BinaryValuesByte binaryValues) {
 
-        BoundingBox box = this.box(dimensions, rm.getRegionID());
+        BoundingBox box = this.box(dimensions, region.getRegionID());
 
         // We make a new mask and populate it from out iterator
         ObjectWithProperties object = new ObjectWithProperties(box);
 
-        byte maskOn = bv.getOnByte();
+        byte maskOn = binaryValues.getOnByte();
 
         ReadableTuple3i maxPos = box.calculateCornerMax();
 
@@ -158,7 +166,7 @@ public abstract class Mark implements Serializable, Identifiable {
 
                     byte membership = evalPointInside(point);
 
-                    if (rm.isMemberFlag(membership)) {
+                    if (region.isMemberFlag(membership)) {
                         maskSlice.putRaw(count, maskOn);
                     }
                     count++;
@@ -170,17 +178,18 @@ public abstract class Mark implements Serializable, Identifiable {
 
     // Calculates the mask of an object
     public ObjectWithProperties maskScaledXY(
-            Dimensions bndScene,
-            RegionMembershipWithFlags rm,
-            BinaryValuesByte bvOut,
+            Dimensions dimensions,
+            RegionMembershipWithFlags regionMembership,
+            BinaryValuesByte binaryValuesOut,
             double scaleFactor) {
 
-        BoundingBox box = box(bndScene, rm.getRegionID()).scale(new ScaleFactor(scaleFactor));
+        BoundingBox box =
+                box(dimensions, regionMembership.getRegionID()).scale(new ScaleFactor(scaleFactor));
 
         // We make a new mask and populate it from out iterator
         ObjectWithProperties object = new ObjectWithProperties(box);
 
-        byte maskOn = bvOut.getOnByte();
+        byte maskOn = binaryValuesOut.getOnByte();
 
         ReadableTuple3i maxPos = box.calculateCornerMax();
 
@@ -203,7 +212,7 @@ public abstract class Mark implements Serializable, Identifiable {
 
                     byte membership = isPointInside(pointScaled);
 
-                    if (rm.isMemberFlag(membership)) {
+                    if (regionMembership.isMemberFlag(membership)) {
                         maskSlice.putRaw(count, maskOn);
                     }
                     count++;
@@ -228,18 +237,19 @@ public abstract class Mark implements Serializable, Identifiable {
 
     public OverlayProperties generateProperties(Optional<Resolution> resolution) {
 
-        OverlayProperties nvc = new OverlayProperties();
-        nvc.add("Type", getName());
-        nvc.add("ID", Integer.toString(getIdentifier()));
+        OverlayProperties properties = new OverlayProperties();
+        properties.add("Type", getName());
+        properties.add("ID", Integer.toString(getIdentifier()));
         if (resolution.isPresent()) {
-            addPropertiesForRegions(nvc, resolution.get().unitConvert());
+            addPropertiesForRegions(properties, resolution.get().unitConvert());
         }
-        return nvc;
+        return properties;
     }
 
-    private void addPropertiesForRegions(OverlayProperties nvc, UnitConverter unitConverter) {
+    private void addPropertiesForRegions(
+            OverlayProperties properties, UnitConverter unitConverter) {
         for (int region = 0; region < numberRegions(); region++) {
-            double vol = volume(region);
+            double regionVolume = volume(region);
 
             String name = numberDimensions() == 3 ? "Volume" : "Area";
 
@@ -251,8 +261,11 @@ public abstract class Mark implements Serializable, Identifiable {
                             ? unitConverter::toPhysicalVolume
                             : unitConverter::toPhysicalArea;
 
-            nvc.addWithUnits(
-                    String.format("%s [geom] %d", name, region), vol, conversionFunc, unit);
+            properties.addWithUnits(
+                    String.format("%s [geom] %d", name, region),
+                    regionVolume,
+                    conversionFunc,
+                    unit);
         }
     }
 }

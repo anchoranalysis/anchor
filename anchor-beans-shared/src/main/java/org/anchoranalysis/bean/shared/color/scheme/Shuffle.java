@@ -30,15 +30,20 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.color.ColorList;
 
 /**
- * Randomizes the order of the colors from existing scheme.
+ * Randomizes the order of colors in a list created by another {@link ColorScheme}.
  *
  * @author Owen Feehan
  */
 @NoArgsConstructor
 public class Shuffle extends ColorSchemeUnary {
 
-    public Shuffle(ColorScheme colors) {
-        super(colors);
+    /**
+     * Creates with a specific delegate {@link ColorScheme}.
+     * 
+     * @param colorScheme the scheme to create a list of unshuffled colors.
+     */
+    public Shuffle(ColorScheme colorScheme) {
+        super(colorScheme);
     }
 
     @Override

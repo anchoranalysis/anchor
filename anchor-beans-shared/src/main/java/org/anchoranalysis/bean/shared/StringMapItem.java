@@ -32,15 +32,20 @@ import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 
 /**
- * A simple mapping from one string (source) to another (target)
+ * A bean with a pair of strings, representing a mapping from one string to the other.
+ *
+ * <p>The originating string is termed <i>source</i> and the destination of the mapping is termed
+ * <i>target</i>.
  *
  * @author Owen Feehan
  */
 public class StringMapItem extends AnchorBean<StringMapItem> {
 
     // START BEAN PROPERTIES
+    /** The origin of the mapping. */
     @BeanField @Getter @Setter private String source;
 
+    /** The destination of the mapping. */
     @BeanField @Getter @Setter private String target;
     // END BEAN PROPERTIES
 }

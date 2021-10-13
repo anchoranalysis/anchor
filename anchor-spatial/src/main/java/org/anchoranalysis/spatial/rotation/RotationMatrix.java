@@ -56,7 +56,7 @@ public class RotationMatrix implements Serializable {
 
     /**
      * Creates a rotation-matrix populated only with zeros.
-     * 
+     *
      * @param numberDimensions the dimensionality of the matrix to create.
      */
     public RotationMatrix(int numberDimensions) {
@@ -65,7 +65,7 @@ public class RotationMatrix implements Serializable {
 
     /**
      * Creates a rotation-matrix from an existing {@link DoubleMatrix2D}.
-     * 
+     *
      * @param matrix the matrix, which is then used internally in the structure.
      */
     public RotationMatrix(DoubleMatrix2D matrix) {
@@ -74,7 +74,7 @@ public class RotationMatrix implements Serializable {
 
     /**
      * Performs a rotation on a single point, encoded as a {@link Point3d}.
-     * 
+     *
      * @param point the point to rotate.
      * @return a newly-created rotated point.
      */
@@ -93,8 +93,9 @@ public class RotationMatrix implements Serializable {
 
     /**
      * Performs a rotation on a single point, encoded as an array.
-     * 
-     * @param point the point encoded as an array, where the length should match the number of dimensions of the rotation-matrix.
+     *
+     * @param point the point encoded as an array, where the length should match the number of
+     *     dimensions of the rotation-matrix.
      * @return a newly-created array encoding the rotated {@code point}.
      */
     public double[] rotatePoint(double[] point) {
@@ -110,13 +111,14 @@ public class RotationMatrix implements Serializable {
      * Extracts a column from the rotation-matrix as a point.
      *
      * <p>This should only be called on a three-dimensional rotation matrix.
-     * 
+     *
      * @param columnIndex the index of the column.
      * @return a newly created point from the column.
-     * @throws OperationFailedException if the rotation-matrix does not have three dimensions exactly.
+     * @throws OperationFailedException if the rotation-matrix does not have three dimensions
+     *     exactly.
      */
     public Point3d column(int columnIndex) throws OperationFailedException {
-        if(delegate.columns()!=3) {
+        if (delegate.columns() != 3) {
             throw new OperationFailedException("The rotation-matrix is not three-dimensional");
         }
         DoubleMatrix1D vector = delegate.viewColumn(columnIndex);
@@ -125,7 +127,7 @@ public class RotationMatrix implements Serializable {
 
     /**
      * The number of dimensions in the rotation-matrix.
-     * 
+     *
      * @return the number of dimensions.
      */
     public int getNumberDimensions() {
@@ -143,7 +145,7 @@ public class RotationMatrix implements Serializable {
 
     /**
      * Multiplies each element in the rotation-matrix by a value.
-     * 
+     *
      * @param value the value to multiply each element by.
      */
     public void multiplyByConstant(double value) {
@@ -152,7 +154,7 @@ public class RotationMatrix implements Serializable {
 
     /**
      * Transposes the matrix immutably.
-     * 
+     *
      * @return a newly-created {@link RotationMatrix} that is a transposed copy.
      */
     public RotationMatrix transpose() {
@@ -185,7 +187,7 @@ public class RotationMatrix implements Serializable {
         }
         return matrixIn;
     }
-    
+
     /** Decodes a point from a matrix. */
     private static double[] pointFromMatrix(DoubleMatrix2D matrixOut) {
         int dimensions = matrixOut.columns();

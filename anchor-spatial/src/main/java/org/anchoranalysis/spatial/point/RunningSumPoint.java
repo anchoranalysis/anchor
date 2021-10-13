@@ -39,9 +39,9 @@ public final class RunningSumPoint {
 
     /**
      * Increments the running-sum by a {@link Point2i}.
-     * 
+     *
      * <p>No impact occurs on the third-dimension of the running-sum.
-     * 
+     *
      * @param point the point to add to the running sum.
      */
     public void increment(Point2i point) {
@@ -51,9 +51,9 @@ public final class RunningSumPoint {
 
     /**
      * Increments the running-sum by a {@link Point2d}.
-     * 
+     *
      * <p>No impact occurs on the third-dimension of the running-sum.
-     * 
+     *
      * @param point the point to add to the running sum.
      */
     public void increment(Point2d point) {
@@ -63,7 +63,7 @@ public final class RunningSumPoint {
 
     /**
      * Increments the running-sum by a {@link Point3i}.
-     * 
+     *
      * @param point the point to add to the running sum.
      */
     public void increment(Point3i point) {
@@ -74,7 +74,7 @@ public final class RunningSumPoint {
 
     /**
      * Increments the running-sum by a {@link Point3d}.
-     * 
+     *
      * @param point the point to add to the running sum.
      */
     public void increment(Point3d point) {
@@ -85,7 +85,7 @@ public final class RunningSumPoint {
 
     /**
      * The mean value of all points added to the running-sum, separately for all three-dimensions.
-     * 
+     *
      * @return a newly created point, with the mean for each dimension.
      */
     public Point3d mean() {
@@ -94,19 +94,19 @@ public final class RunningSumPoint {
 
     /**
      * The mean value of all points added to the running-sum, only for the X- and Y-dimensions.
-     * 
+     *
      * @return a newly created point, with the mean for X- and Y- dimensions.
      */
     public Point2d meanXY() {
         return new Point2d(forDim(0).mean(), forDim(1).mean());
     }
 
-    /** 
+    /**
      * The count for the X or Y dimensions.
-     * 
+     *
      * <p>The count is guaranteed to always be the same for either the X or Y dimension.
-     * 
-     *  @return the count.
+     *
+     * @return the count.
      */
     public long countXY() {
         return forDim(0).getCount();
@@ -114,9 +114,9 @@ public final class RunningSumPoint {
 
     /**
      * The count for the Z dimension.
-     * 
+     *
      * <p>This is identical to {@link #countXY} if only 3D points have been added.
-     * 
+     *
      * @return the count.
      */
     public long countZ() {

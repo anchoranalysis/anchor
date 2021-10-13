@@ -50,7 +50,7 @@ public class FromSingle extends ColorScheme {
 
         ColorList out = new ColorList();
         for (int i = 0; i < size; i++) {
-            out.add(color.rgbColor());
+            out.add(color.toRGBColor());
         }
         return out;
     }

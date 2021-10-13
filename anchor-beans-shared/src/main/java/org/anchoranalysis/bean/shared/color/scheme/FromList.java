@@ -45,7 +45,7 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 public class FromList extends ColorScheme {
 
     // START BEAN PROPERTIES
-    /** The list of colors to specify */
+    /** The list of colors to specify. */
     @BeanField @Getter @Setter private List<RGBColorBean> colors;
     // END BEAN PROPERTIES
 
@@ -71,6 +71,6 @@ public class FromList extends ColorScheme {
     }
 
     private void addDuplicate(ColorList out, RGBColorBean bean) {
-        out.add(bean.rgbColor().duplicate());
+        out.add(bean.toRGBColor().duplicate());
     }
 }

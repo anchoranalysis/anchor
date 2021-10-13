@@ -32,24 +32,23 @@ import org.anchoranalysis.spatial.point.Vector3d;
 import org.anchoranalysis.spatial.rotation.RotationMatrix;
 
 /**
- * Creates a {@link RotationMatrix} that performs a 3D rotation using an <a href="https://en.wikipedia.org/wiki/Axis%E2%80%93angle_representation">Axis-angle</a> representation.
- * 
- * @author Owen Feehan
+ * Creates a {@link RotationMatrix} that performs a 3D rotation using an <a
+ * href="https://en.wikipedia.org/wiki/Axis%E2%80%93angle_representation">Axis-angle</a>
+ * representation.
  *
+ * @author Owen Feehan
  */
 @AllArgsConstructor
 public class RotateAxisAngle extends RotationMatrixFactory {
 
-    /** 
+    /**
      * The axis unit-vector parameter.
-     * 
+     *
      * <p>This should always be a unit-vector as a precondition. This is not checked.
      */
     private Vector3d axis;
-    
-    /**
-     * The angle parameter.
-     */
+
+    /** The angle parameter. */
     private double angle;
 
     @Override
