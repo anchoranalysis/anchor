@@ -96,8 +96,8 @@ public final class BoundingBoxIntersection {
     }
 
     /**
-     * Determines if the bounding box intersects with another, and optionally creates the
-     * bounding-box of intersection
+     * Determines if the bounding box intersects with another, and if so, creates the
+     * bounding-box of this intersection.
      *
      * @param other the other bounding-box to check intersection with
      * @param createIntersectionBox iff true the bounding-box of the intersection is returned,

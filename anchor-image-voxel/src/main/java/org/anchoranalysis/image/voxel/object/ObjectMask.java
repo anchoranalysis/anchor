@@ -64,8 +64,10 @@ import org.anchoranalysis.spatial.point.ReadableTuple3i;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 /**
- * A mask for an object in an image, expressed as a {@link BoundingBox}, with a corresponding mask
- * for the bounding-box.
+ * A localized-mask in an image, expressed as a {@link BoundingBox}, with a corresponding mask
+ * sized to match the bounding-box.
+ * 
+ * <p>This represents the concept of an <i>object</i> residing within the image.
  *
  * <p>Each voxel in the mask must be one of two states, either <i>on</i> or <i>off</i>. The object
  * is specified by all voxels that are <i>on</i>.
@@ -100,7 +102,7 @@ public class ObjectMask {
      *
      * <p>i.e. the bounding box corner is set as <code>0,0,0</code>.
      *
-     * <p>Default {@link BinaryValues} of (off=0, on=255) are used to interpret {@link Voxels} as a
+     * <p>Default {@link BinaryValues} of ({@code off=0}, {@code on=255}) are used to interpret {@link Voxels} as a
      * mask.
      *
      * <p>The {@link Voxels} are reused internally in memory without duplication.
@@ -112,7 +114,7 @@ public class ObjectMask {
     }
 
     /**
-     * Creates as a bounding-box with all pixels off (0).
+     * Creates as a bounding-box with all corresponding mask voxels set to <i>off</i>.
      *
      * <p>Default {@link BinaryValues} of (off=0, on=255) are used for the mask.
      *
@@ -171,12 +173,12 @@ public class ObjectMask {
     }
 
     /**
-     * Copy constructor
+     * Copy constructor.
      *
-     * @param src to copy from
+     * @param source to copy from.
      */
-    private ObjectMask(ObjectMask src) {
-        this(new BoundedVoxels<>(src.voxels), src.binaryValues, src.binaryValuesByte);
+    private ObjectMask(ObjectMask source) {
+        this(new BoundedVoxels<>(source.voxels), source.binaryValues, source.binaryValuesByte);
     }
 
     private ObjectMask(
@@ -230,7 +232,7 @@ public class ObjectMask {
      *
      * <p>This is an <i>immutable</i> operation.
      *
-     * @param other the other object-mask to consider
+     * @param other the other object-mask to consider.
      * @return number of <i>on</i>-voxels the two object-masks have in common.
      */
     public int countIntersectingVoxels(ObjectMask other) {
@@ -245,7 +247,7 @@ public class ObjectMask {
      * <p>The algorithm exits as soon as an intersecting voxel is encountered i.e. as early as
      * possible.
      *
-     * @param other the other object-mask to consider
+     * @param other the other object-mask to consider.
      * @return true if at least one voxel exists that is <i>on</i> in both object-masks.
      */
     public boolean hasIntersectingVoxels(ObjectMask other) {
@@ -265,7 +267,7 @@ public class ObjectMask {
     }
 
     /**
-     * Produces a new object-mask that uses the same voxel-buffer but inverts the OFF and ON
+     * Produces a new object-mask that uses the same voxel-buffer but switches the <i>off</i> and <i>on</i> mapping.
      *
      * @return a newly created object-mask (reusing the same buffer)
      */
@@ -346,7 +348,7 @@ public class ObjectMask {
     /**
      * Determines if an object-mask is connected.
      *
-     * <p>Adjacent is defined with a <i>big</i> neighborhood definition (i.e. 8 or 26 connectivity).
+     * <p>Adjacent is defined with a <i>big</i> neighborhood definition i.e. with 8 or 26 connectivity.
      *
      * @return true if all <i>on</i> voxels in the mask are spatially adjacent to at least one other
      *     <i>on</i> voxel with.
@@ -365,7 +367,7 @@ public class ObjectMask {
         return extract.voxelsEqualTo(binaryValues.getOffInt());
     }
 
-    /** The number of "ON" voxels on the object-mask */
+    /** The number of <i>on</i> voxels on the object-mask */
     public int numberVoxelsOn() {
         return voxelsOn().count();
     }
@@ -478,7 +480,7 @@ public class ObjectMask {
     /**
      * Creates an object-mask with a subrange of the slices.
      *
-     * <p>This will always reuse the existing voxel-buffers..
+     * <p>This will always reuse the existing {@link Voxels}.
      *
      * @param zMin minimum z-slice index, inclusive.
      * @param zMax maximum z-slice index, inclusive.
@@ -519,13 +521,13 @@ public class ObjectMask {
      * for the rest.
      *
      * <p>A new voxel-buffer is always created for this operation i.e. the existing box is never
-     * reused like sometimes in {@link #region}..
+     * reused like sometimes in {@link #region}.
      *
      * @param box bounding-box in absolute coordinates, that must at least partially intersect with
      *     the current object-mask bounds.
      * @return a newly created object-mask containing partially some parts of the existing
-     *     object-mask as well as OFF voxels for any other region.
-     * @throws CreateException if the boxes do not intersect
+     *     object-mask as well as <i>off</i> voxels for any other region.
+     * @throws CreateException if the boxes do not intersect.
      */
     public ObjectMask regionIntersecting(BoundingBox box) throws CreateException {
         return new ObjectMask(
@@ -533,15 +535,15 @@ public class ObjectMask {
     }
 
     /**
-     * Finds any arbitrary "ON" voxel on the object.
+     * Finds any arbitrary <i>on</i> voxel on the object.
      *
      * <p>First it tries the center-of-gravity voxel, and if that's not on, it iterates through the
-     * box until it finds an "ON" voxel.
+     * box until it finds an <i>on</i> voxel.
      *
      * <p>This is a DETERMINISTIC operation, so one can rely on the same voxel being found for a
      * given object.
      *
-     * @return the location (in absolute coordinates) of an arbitrary "ON" voxel on the object, if
+     * @return the location (in absolute coordinates) of an arbitrary <i>on</i> voxel on the object, if
      *     it exists.
      */
     public Optional<Point3i> findArbitraryOnVoxel() {
@@ -559,7 +561,9 @@ public class ObjectMask {
     }
 
     /**
-     * A slice buffer with <i>local</i> coordinates i.e. relative to the bounding-box corner
+     * A slice buffer with <i>local</i> coordinates.
+     * 
+     * <p>i.e. with coordinates relative to the bounding-box corner.
      *
      * @param sliceIndexRelative sliceIndex (z) relative to the bounding-box of the object-mask
      * @return the buffer
@@ -585,35 +589,37 @@ public class ObjectMask {
      * <p>This is an <i>immutable</i> operation: but beware the existing voxel-buffers are reused in
      * the new object.
      *
-     * @return a new object-mask reusing the existing voxel-buffers
+     * @return a new object-mask reusing the existing voxel-buffers.
      */
     public ObjectMask shiftToOrigin() {
         return mapBoundingBoxPreserveExtent(BoundingBox::shiftToOrigin);
     }
 
     /**
-     * Shifts the object-mask by moving its bounding-box forwards (i.e. adding {@code shift} from
-     * its corner)
+     * Shifts the object-mask by moving its bounding-box forwards.
+     * 
+     * <p>i.e. by adding {@code shift} from its corner.
      *
      * <p>This is an <i>immutable</i> operation: but beware the existing voxel-buffers are reused in
      * the new object.
      *
      * @param shift what to add from the corner position
-     * @return a new object-mask reusing the existing voxel-buffers
+     * @return a new object-mask reusing the existing voxel-buffers.
      */
     public ObjectMask shiftBy(ReadableTuple3i shift) {
         return mapBoundingBoxPreserveExtent(box -> box.shiftBy(shift));
     }
 
     /**
-     * Shifts the object-mask by moving its bounding-box backwards (i.e. sutracting {@code shift}
-     * from its corner)
+     * Shifts the object-mask by moving its bounding-box backwards.
+     * 
+     * <p>i.e. by subtracting {@code shift} from its corner.
      *
      * <p>This is an <i>immutable</i> operation: but beware the existing voxel-buffers are reused in
      * the new object.
      *
-     * @param shift what to subtract from the corner position
-     * @return a new object-mask reusing the existing voxel-buffers
+     * @param shift what to subtract from the corner position.
+     * @return a new object-mask reusing the existing voxel-buffers.
      */
     public ObjectMask shiftBackBy(ReadableTuple3i shift) {
         return mapBoundingBoxPreserveExtent(box -> box.shiftBackBy(shift));
@@ -626,8 +632,8 @@ public class ObjectMask {
      * <p>This is an <i>immutable</i> operation: but beware the existing voxel-buffers are reused in
      * the new object.
      *
-     * @param mapOperation map function to perform mapping of bounding-box
-     * @return a new object-mask with the updated bounding box (but unchanged voxels)
+     * @param mapOperation map function to perform mapping of bounding-box.
+     * @return a new object-mask with the updated bounding box (but unchanged voxels).
      */
     public ObjectMask mapBoundingBoxPreserveExtent(UnaryOperator<BoundingBox> mapOperation) {
         return mapBoundingBoxPreserveExtent(mapOperation.apply(voxels.boundingBox()));
@@ -690,7 +696,7 @@ public class ObjectMask {
     }
 
     /**
-     * Assigns ON value to voxels, expecting <i>global</i> coordinates
+     * Assigns the <i>on</i> value to voxels, expecting <i>global</i> coordinates.
      *
      * @return the assigner
      */
@@ -699,7 +705,7 @@ public class ObjectMask {
     }
 
     /**
-     * Assigns OFF value to voxels, expecting <i>global</i> coordinates
+     * Assigns the <i>off</i> value to voxels, expecting <i>global</i> coordinates.
      *
      * @return the assigner
      */
@@ -708,10 +714,10 @@ public class ObjectMask {
     }
 
     /**
-     * Creates a list of all ON voxels as points, using <i>local</i> coordinates i.e. relative to
-     * the bounding-box corner
+     * Creates a list of all <i>on</i> voxels as points, using <i>local</i> coordinates i.e. relative to
+     * the bounding-box corner.
      *
-     * @return a newly created list with newly created points
+     * @return a newly created list with newly created points.
      */
     public List<Point3i> derivePointsLocal() {
         List<Point3i> points = new ArrayList<>();
@@ -727,7 +733,7 @@ public class ObjectMask {
      *
      * <ol>
      *   <li>the center-of-gravity
-     *   <li>the number of "ON" voxels on the object
+     *   <li>the number of <i>on</i> voxels on the object
      * </ol>
      */
     @Override
@@ -742,14 +748,15 @@ public class ObjectMask {
     }
 
     /**
-     * Applies a function to map the bounding-box to a new-value (whose extent should be unchanged
-     * in value)
+     * Applies a function to map the bounding-box to a new-value.
+     * 
+     * <p>The {@link Extent} of the bounding-box should remain constant in this mapping.
      *
      * <p>This is an <i>immutable</i> operation: but beware the existing voxel-buffers are reused in
      * the new object.
      *
-     * @param boundingBoxToAssign bounding-box to assign
-     * @return a new object-mask with the updated bounding box (but unchanged voxels)
+     * @param boundingBoxToAssign bounding-box to assign.
+     * @return a new object-mask with the updated bounding box (but unchanged voxels).
      */
     private ObjectMask mapBoundingBoxPreserveExtent(BoundingBox boundingBoxToAssign) {
         return new ObjectMask(
