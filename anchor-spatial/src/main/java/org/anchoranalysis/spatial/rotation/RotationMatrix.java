@@ -50,7 +50,7 @@ public class RotationMatrix implements Serializable {
     /**
      * The underlying matrix implementing the rotation.
      *
-     * <p>This name is deliberately kept as 'delegate' to avoid breaking serialized objects.
+     * <p>This name is deliberately kept as {@code delegate} to avoid breaking serialized objects.
      */
     private DoubleMatrix2D delegate;
 
