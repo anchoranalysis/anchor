@@ -81,7 +81,7 @@ public final class BoundingBoxContains {
         return (value >= box.cornerMin().z()) && (value <= cornerMax.z());
     }
 
-    /** 
+    /**
      * Is this point within the bounding-box?
      *
      * @param point point to test whether it lies within the bounding-box.
@@ -91,17 +91,17 @@ public final class BoundingBoxContains {
         return x(point.x()) && y(point.y()) && z(point.z());
     }
 
-    /** 
+    /**
      * Like {@link #point(ReadableTuple3i)} but ignores the z-dimension.
-     * 
+     *
      * @param point point to test whether it lies within the bounding-box.
-     * @return true iff the point lies inside the bounding-box, disregarding the z-dimension. 
+     * @return true iff the point lies inside the bounding-box, disregarding the z-dimension.
      */
     public boolean pointIgnoreZ(Point3i point) {
         return x(point.x()) && y(point.y());
     }
 
-    /** 
+    /**
      * Is this other bounding-box <i>fully</i> contained within this bounding box?
      *
      * @param maybeContainedInside box to test whether it is contained inside or not.

@@ -31,8 +31,9 @@ import org.anchoranalysis.spatial.rotation.RotationMatrix;
 /**
  * Base class for a factory that create a {@link RotationMatrix} in a particular way.
  *
- * <p>This is an implementation of the <a href="https://en.wikipedia.org/wiki/Abstract_factory_pattern">abstract factory</a> pattern.
- * 
+ * <p>This is an implementation of the <a
+ * href="https://en.wikipedia.org/wiki/Abstract_factory_pattern">abstract factory</a> pattern.
+ *
  * @author Owen Feehan
  */
 public abstract class RotationMatrixFactory { // NOSONAR

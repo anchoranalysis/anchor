@@ -29,7 +29,22 @@ package org.anchoranalysis.bean.shared.color.scheme;
 import org.anchoranalysis.core.color.ColorList;
 import org.anchoranalysis.core.color.RGBColor;
 
+/**
+ * Creates a sequence of colors by varying the hue-component in a <a
+ * href="https://georeference.org/doc/colors_as_hue_saturation_and_brightness.htm">HSB color
+ * model</a>.
+ *
+ * <p>The saturation and brightness are held constant at {@code 0.5}.
+ *
+ * <p>The range of hues are partitioned evenly by the number of colors desired.
+ *
+ * @author Owen Feehan
+ */
 public class HSB extends ColorScheme {
+
+    private static final float SATURATION = 0.5f;
+
+    private static final float BRIGHTNESS = 0.5f;
 
     @Override
     public ColorList createList(int size) {
@@ -37,12 +52,8 @@ public class HSB extends ColorScheme {
         ColorList out = new ColorList();
 
         for (int i = 0; i < size; i++) {
-
-            float h = ((float) i) / size;
-            float s = (float) 0.5;
-            float b = (float) 0.5;
-
-            int rgb = java.awt.Color.HSBtoRGB(h, s, b);
+            float hue = ((float) i) / size;
+            int rgb = java.awt.Color.HSBtoRGB(hue, SATURATION, BRIGHTNESS);
             out.add(new RGBColor(rgb));
         }
 

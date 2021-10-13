@@ -32,9 +32,16 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.color.ColorList;
 import org.anchoranalysis.core.functional.FunctionalIterate;
 
+/**
+ * Duplicates a {@link ColorList} produced by another {@link ColorScheme} a certain number of times.
+ * 
+ * @author Owen Feehan
+ *
+ */
 public class Repeat extends ColorSchemeUnary {
 
     // START BEAN PROPERTIES
+    /** How many times to duplicate the list. */
     @BeanField @Getter @Setter private int times = 2;
     // END BEAN PROPERTIES
 

@@ -41,6 +41,12 @@ public class FilePathInitialization implements BeanInitialization {
     /** Named-store of file-paths. */
     @Getter private final NamedProviderStore<Path> filePaths;
 
+    /**
+     * Creates using a {@link SharedObjects} to create a {@link NamedProviderStore} for the
+     * file-paths.
+     *
+     * @param sharedObjects the shared-objects.
+     */
     public FilePathInitialization(SharedObjects sharedObjects) {
         filePaths = sharedObjects.getOrCreate(String.class);
     }

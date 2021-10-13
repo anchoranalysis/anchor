@@ -30,5 +30,10 @@ import java.nio.file.Path;
 import org.anchoranalysis.bean.Provider;
 import org.anchoranalysis.bean.shared.path.FilePathBean;
 
+/**
+ * Base class for beans that implement {@link Provider} to provide a {@link Path}.
+ *
+ * @author Owen Feehan
+ */
 public abstract class FilePathProvider extends FilePathBean<FilePathProvider>
         implements Provider<Path> {}

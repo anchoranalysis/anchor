@@ -31,21 +31,32 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
+import org.anchoranalysis.core.identifier.provider.store.SharedObjects;
 import org.anchoranalysis.core.value.Dictionary;
 
+/**
+ * References a particular {@link Dictionary} in shared-object-space.
+ *
+ * <p>The {@link SharedObjects}-space is provided during initialization.
+ *
+ * @author Owen Feehan
+ */
 public class DictionaryProviderReference extends DictionaryProvider {
 
     // START BEAN PROPERTIES
+    /** Unique identifier for the {@link Dictionary} to retrieve. */
     @BeanField @Getter @Setter private String id = "";
     // END BEAN PROPERTIES
 
+    /** The dictionary, assigned during initialization. */
     private Dictionary dictionary;
 
     @Override
-    public void onInitialization(DictionaryInitialization so) throws InitializeException {
-        super.onInitialization(so);
+    public void onInitialization(DictionaryInitialization initialization)
+            throws InitializeException {
+        super.onInitialization(initialization);
         try {
-            dictionary = so.getDictionaries().getException(id);
+            dictionary = initialization.getDictionaries().getException(id);
         } catch (NamedProviderGetException e) {
             throw new InitializeException(e.summarize());
         }

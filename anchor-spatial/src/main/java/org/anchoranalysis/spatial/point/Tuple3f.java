@@ -73,7 +73,7 @@ public abstract class Tuple3f implements Serializable {
                 throw new AnchorFriendlyRuntimeException(AxisConverter.INVALID_AXIS_INDEX);
         }
     }
-    
+
     /**
      * A component of a tuple corresponding to a particular dimension by index.
      *

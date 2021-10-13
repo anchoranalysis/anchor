@@ -26,11 +26,18 @@
 
 package org.anchoranalysis.image.bean.provider;
 
+import org.anchoranalysis.bean.Provider;
 import org.anchoranalysis.bean.annotation.GroupingRoot;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.stack.Stack;
 
+/**
+ * Base class for beans that implement {@link Provider} to provide a {@link Channel} and associated
+ * {@link Stack}.
+ *
+ * @author Owen Feehan
+ */
 @GroupingRoot
 public abstract class ChannelProvider extends BeanProviderAsStackBase<ChannelProvider, Channel> {
 

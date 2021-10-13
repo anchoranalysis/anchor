@@ -168,7 +168,7 @@ public class RGBColor {
     /**
      * Converts to a {@link java.awt.Color} representation.
      *
-     * @return the color
+     * @return the color, as used internally.
      */
     public java.awt.Color toAWTColor() {
         return delegate;

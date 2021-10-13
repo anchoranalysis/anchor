@@ -67,7 +67,7 @@ public final class Point3d extends Tuple3d {
 
     /**
      * Create with values for each dimension.
-     * 
+     *
      * @param x the value for the X-dimension.
      * @param y the value for the Y-dimension.
      * @param z the value for the Z-dimension.
@@ -190,12 +190,13 @@ public final class Point3d extends Tuple3d {
         return new Point3d(Math.max(x, point.x), Math.max(y, point.y), Math.max(z, point.z));
     }
 
-    /** 
+    /**
      * Adds two tuples immutably.
-     * 
+     *
      * @param tuple1 the first tuple to add.
      * @param tuple2 the second tuple to add.
-     * @return a newly created point, where each dimension is the sum of the corresponding dimensions in the points.
+     * @return a newly created point, where each dimension is the sum of the corresponding
+     *     dimensions in the points.
      */
     public static Point3d immutableAdd(Tuple3d tuple1, Tuple3d tuple2) {
         Point3d pointDup = new Point3d(tuple1);
@@ -203,14 +204,15 @@ public final class Point3d extends Tuple3d {
         return pointDup;
     }
 
-    /** 
+    /**
      * Adds values to a point immutably.
-     * 
+     *
      * @param point the point to add.
      * @param x the value to add to the X-component.
      * @param y the value to add to the Y-component.
      * @param z the value to add to the Z-component.
-     * @return a newly created point, where each dimension is the sum of the corresponding dimensions in the points.
+     * @return a newly created point, where each dimension is the sum of the corresponding
+     *     dimensions in the points.
      */
     public static Point3d immutableAdd(Point3d point, int x, int y, int z) {
         Point3d pointCopy = new Point3d(point);
@@ -220,12 +222,13 @@ public final class Point3d extends Tuple3d {
         return pointCopy;
     }
 
-    /** 
+    /**
      * Subtracts two tuples immutably.
-     * 
+     *
      * @param tuple the tuple to subtract from.
      * @param toSubtract the tuple to subtract.
-     * @return a newly created point, where each dimension is the subtraction of the corresponding dimensions in the points.
+     * @return a newly created point, where each dimension is the subtraction of the corresponding
+     *     dimensions in the points.
      */
     public static Point3d immutableSubtract(Tuple3d tuple, Tuple3d toSubtract) {
         Point3d pointDup = new Point3d(tuple);
@@ -233,9 +236,9 @@ public final class Point3d extends Tuple3d {
         return pointDup;
     }
 
-    /** 
+    /**
      * Scales a tuple immutably.
-     * 
+     *
      * @param tuple the tuple to scale.
      * @param factor what to multiply each dimension by.
      * @return a newly created point, where each component is scaled by {@code factor}.

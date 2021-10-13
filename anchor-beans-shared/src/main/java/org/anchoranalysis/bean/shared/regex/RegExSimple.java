@@ -56,6 +56,11 @@ public class RegExSimple extends RegEx {
     /** Lazy creation of a pattern from the regular-expression string. */
     private Pattern pattern = null;
 
+    /**
+     * Creates with an expression that should match one or more groups.
+     * 
+     * @param matchString a Java-style regular-expression.
+     */
     public RegExSimple(String matchString) {
         this.expression = matchString;
     }

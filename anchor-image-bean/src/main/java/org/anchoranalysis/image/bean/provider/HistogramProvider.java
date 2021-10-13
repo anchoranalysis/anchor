@@ -31,6 +31,11 @@ import org.anchoranalysis.bean.annotation.GroupingRoot;
 import org.anchoranalysis.image.bean.ImageBean;
 import org.anchoranalysis.math.histogram.Histogram;
 
+/**
+ * Base class for beans that implement {@link Provider} to provide a {@link Histogram}.
+ *
+ * @author Owen Feehan
+ */
 @GroupingRoot
 public abstract class HistogramProvider extends ImageBean<HistogramProvider>
         implements Provider<Histogram> {}

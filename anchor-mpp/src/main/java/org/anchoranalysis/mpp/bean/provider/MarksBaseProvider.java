@@ -30,6 +30,9 @@ import org.anchoranalysis.bean.Provider;
 import org.anchoranalysis.mpp.bean.MarksBean;
 
 /**
+ * Base class for {@link MarksBean} that implements {@link Provider} to provide an object of type
+ * {@code S}.
+ *
  * @author Owen Feehan
  * @param <T> bean-type
  * @param <S> provider-type

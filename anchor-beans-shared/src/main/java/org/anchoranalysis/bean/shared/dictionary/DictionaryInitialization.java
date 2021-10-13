@@ -33,7 +33,7 @@ import org.anchoranalysis.core.identifier.provider.store.SharedObjects;
 import org.anchoranalysis.core.value.Dictionary;
 
 /**
- * Initialization parameters for a named-set of dictionaries.
+ * Initialization parameters that provide a named-mapping to {@link Dictionary}s.
  *
  * @author Owen Feehan
  */
@@ -42,6 +42,12 @@ public class DictionaryInitialization implements BeanInitialization {
     /** Named-store of {@link Dictionary} objects. */
     @Getter private final NamedProviderStore<Dictionary> dictionaries;
 
+    /**
+     * Creates using a {@link SharedObjects} to create a {@link NamedProviderStore} for the
+     * dictionaries.
+     *
+     * @param sharedObjects the shared-objects.
+     */
     public DictionaryInitialization(SharedObjects sharedObjects) {
         dictionaries = sharedObjects.getOrCreate(Dictionary.class);
     }

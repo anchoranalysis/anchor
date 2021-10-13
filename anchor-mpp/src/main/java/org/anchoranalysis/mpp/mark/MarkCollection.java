@@ -52,8 +52,9 @@ import org.anchoranalysis.spatial.point.Point3d;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 /**
- * A collection of marks, termed a <i>configuration</i> in marked-point-processes academic
- * literature.
+ * An ordered collection of {@link Mark}s.
+ *
+ * <p>This is often termed a <i>configuration</i> in marked-point-processes academic literature.
  *
  * @author Owen Feehan
  */
@@ -63,16 +64,28 @@ public final class MarkCollection implements Iterable<Mark>, Serializable {
     /** */
     private static final long serialVersionUID = 2398855316191681489L;
 
+    /** The underlying {@link List} that stores the {@link Mark}s in the collection. */
     @Getter private final List<Mark> marks;
 
+    /** Creates with no elements in the collection. */
     public MarkCollection() {
         this(new ArrayList<>());
     }
 
+    /**
+     * Creates from a stream of {@link Mark}s.
+     *
+     * @param stream the stream.
+     */
     public MarkCollection(Stream<Mark> stream) {
         this(stream.collect(Collectors.toList()));
     }
 
+    /**
+     * Creates from a single {@link Mark}.
+     *
+     * @param mark the mark.
+     */
     public MarkCollection(Mark mark) {
         this();
         add(mark);
@@ -197,15 +210,15 @@ public final class MarkCollection implements Iterable<Mark>, Serializable {
 
         MarkCollection marksOut = new MarkCollection();
 
-        RegionMembership rm = regionMap.membershipForIndex(regionID);
-        byte flags = rm.flags();
+        RegionMembership region = regionMap.membershipForIndex(regionID);
+        byte flags = region.flags();
 
         // We cycle through each item in the configuration
-        for (Mark m : this) {
+        for (Mark mark : this) {
 
-            byte membership = m.isPointInside(point);
-            if (rm.isMemberFlag(membership, flags)) {
-                marksOut.add(m);
+            byte membership = mark.isPointInside(point);
+            if (region.isMemberFlag(membership, flags)) {
+                marksOut.add(mark);
             }
         }
         return marksOut;
@@ -282,20 +295,20 @@ public final class MarkCollection implements Iterable<Mark>, Serializable {
 
         Set<Mark> set = mergedNew.createSet();
 
-        for (Mark m : toMerge) {
-            if (!set.contains(m)) {
-                mergedNew.add(m);
+        for (Mark mark : toMerge) {
+            if (!set.contains(mark)) {
+                mergedNew.add(mark);
             }
         }
 
         return mergedNew;
     }
 
-    public List<BoundingBox> boxList(Dimensions bndScene, int regionID) {
+    public List<BoundingBox> boxList(Dimensions dimensions, int regionID) {
 
         ArrayList<BoundingBox> list = new ArrayList<>();
         for (Mark m : this) {
-            list.add(m.box(bndScene, regionID));
+            list.add(m.box(dimensions, regionID));
         }
         return list;
     }

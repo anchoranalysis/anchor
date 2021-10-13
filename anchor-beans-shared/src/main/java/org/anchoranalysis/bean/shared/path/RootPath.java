@@ -38,13 +38,15 @@ import org.anchoranalysis.core.system.path.PathDifferenceException;
 import org.anchoranalysis.core.system.path.SplitPath;
 
 /**
- * Defines a *root path* i.e. a directory in which files are read/written during analysis
+ * Defines a <b>root path</b>.
+ * 
+ * <p>This a directory in which files are read/written during analysis.
  *
- * <p>Analysis scripts may select different root-paths depending on how they are executed (during
- * debugging, locally/server)
+ * <p>Analysis scripts may select different root-paths depending on how they are executed (e.g. locally writing
+ * to the filesystem during debugging on a single-file, but to a server for many files).
  *
  * <p>The name of a root must not be unique, but the combination of all fields should be unique i.e.
- * several roots can have the same name, but should vary in their other settings
+ * several roots can have the same name, but should vary in their other settings.
  *
  * @author Owen Feehan
  */
@@ -52,21 +54,22 @@ import org.anchoranalysis.core.system.path.SplitPath;
 public class RootPath extends AnchorBean<RootPath> {
 
     // START PROPERTIES
+    /** The name of the root-path, which need not be unique in itself. */
     @BeanField @Getter @Setter private String name;
 
-    /*** A path on a filesystem to the directory, that defines the root */
+    /*** A path on a file-system to the directory, that defines the root. */
     @BeanField @Getter @Setter private String path;
 
-    /*** If true this root is preferred, when executing a job in debugging mode */
+    /*** If true this root is preferred, when executing a job in debugging mode. */
     @BeanField @Getter @Setter private boolean debug = false;
     // END PROPERTIES
 
     /**
-     * It splits the *root* portion of the path from the remainder
+     * It splits the <i>root</i> portion of a path from the remainder.
      *
-     * @param path path to split
-     * @return the split-path
-     * @throws PathDifferenceException if the path cannot be matched against the root
+     * @param path path to split.
+     * @return the split-path.
+     * @throws PathDifferenceException if the path cannot be matched against the root.
      */
     public SplitPath split(Path path) throws PathDifferenceException {
 
@@ -77,6 +80,11 @@ public class RootPath extends AnchorBean<RootPath> {
         return new SplitPath(rootPath, difference.combined());
     }
 
+    /**
+     * Exposes the {@code path} field as a {@link Path}.
+     * 
+     * @return the path.
+     */
     public Path asPath() {
         return Paths.get(path);
     }

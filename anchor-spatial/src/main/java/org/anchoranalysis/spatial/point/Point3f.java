@@ -59,7 +59,7 @@ public final class Point3f extends Tuple3f {
 
     /**
      * Create with values for each dimension.
-     * 
+     *
      * @param x the value for the X-dimension.
      * @param y the value for the Y-dimension.
      * @param z the value for the Z-dimension.

@@ -57,7 +57,7 @@ class BoxFixture {
     public static final BoundingBox BOX6 = BoundingBoxFactory.uniform3D(95, 10);
     // END THIRD CLUSTER
 
-    /** 
+    /**
      * All bounding-boxes as elements in a set, which is not nested.
      *
      * @return the newly-created set.
@@ -70,7 +70,7 @@ class BoxFixture {
         return set;
     }
 
-    /** 
+    /**
      * All bounding-boxes as elements in nested sets, for each cluster.
      *
      * @return the newly-created set.

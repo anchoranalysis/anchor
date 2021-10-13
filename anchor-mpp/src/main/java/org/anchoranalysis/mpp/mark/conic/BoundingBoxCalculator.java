@@ -42,18 +42,18 @@ import org.anchoranalysis.spatial.point.Point3i;
 public class BoundingBoxCalculator {
 
     /**
-     * Calculates a bounding box for a point with a scalar radius in all dimensions
+     * Calculates a bounding box for a point with a scalar radius in all dimensions.
      *
      * @param pos center-point
      * @param radius size of scalar radius
      * @param do3D 3 dimensions (XYZ) iff true, otherwise 2 dimensions (XZ)
-     * @param bndScene bounds on the scene, used to clip the bounding-box
+     * @param dimensions bounds on the scene, used to clip the bounding-box
      * @return a newly created bounding-box
      */
     public static BoundingBox boxFromBounds(
-            Point3d pos, double radius, boolean do3D, Dimensions bndScene) {
-        DoubleMatrix1D radiusBBoxMatrix = threeElementMatrix(radius, radius, radius);
-        return boxFromBounds(pos, radiusBBoxMatrix, do3D, bndScene);
+            Point3d pos, double radius, boolean do3D, Dimensions dimensions) {
+        DoubleMatrix1D radiiBoundingBoxes = threeElementMatrix(radius, radius, radius);
+        return boxFromBounds(pos, radiiBoundingBoxes, do3D, dimensions);
     }
 
     /**

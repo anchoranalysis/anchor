@@ -44,7 +44,7 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 public abstract class ColorSchemeUnary extends ColorScheme {
 
     // START BEAN PROPERTIES
-    /** The delegate that creates the (unshuffled) list. */
+    /** The delegate that creates the color-list before subsequent processing. */
     @BeanField @Getter @Setter private ColorScheme colors;
     // END BEAN PROPERTIES
 

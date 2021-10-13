@@ -26,11 +26,17 @@
 
 package org.anchoranalysis.image.bean.provider.stack;
 
+import org.anchoranalysis.bean.Provider;
 import org.anchoranalysis.bean.annotation.GroupingRoot;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.image.bean.provider.BeanProviderAsStackBase;
 import org.anchoranalysis.image.core.stack.Stack;
 
+/**
+ * Base class for beans that implement {@link Provider} to provide a {@link Stack}.
+ *
+ * @author Owen Feehan
+ */
 @GroupingRoot
 public abstract class StackProvider extends BeanProviderAsStackBase<StackProvider, Stack> {
 
