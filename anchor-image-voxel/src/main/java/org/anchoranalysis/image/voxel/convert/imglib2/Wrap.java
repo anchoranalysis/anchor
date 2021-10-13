@@ -39,7 +39,7 @@ import net.imglib2.util.Fraction;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
-import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.spatial.box.Extent;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Wrap {

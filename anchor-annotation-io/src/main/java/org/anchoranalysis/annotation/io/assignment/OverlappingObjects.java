@@ -35,7 +35,7 @@ import org.anchoranalysis.annotation.io.comparer.StatisticsToExport;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.spatial.box.Extent;
 
 /**
  * Pairs an {@link ObjectMask} in one set with an {@link ObjectMask} in another, if deemed to

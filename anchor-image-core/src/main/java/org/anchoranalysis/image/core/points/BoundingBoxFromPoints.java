@@ -58,7 +58,7 @@ public class BoundingBoxFromPoints {
         PointRange range = new PointRange();
         points.forEach(range::add);
 
-        return range.deriveBoundingBox();
+        return range.toBoundingBox();
     }
 
     /**

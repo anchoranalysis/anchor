@@ -32,8 +32,8 @@ import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.slice.SliceBufferIndex;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import org.anchoranalysis.spatial.Extent;
 import org.anchoranalysis.spatial.box.BoundingBox;
+import org.anchoranalysis.spatial.box.Extent;
 
 /**
  * A factory for creating voxels with a particular buffer-type
@@ -54,7 +54,7 @@ public interface VoxelsFactoryTypeBound<T> {
     VoxelDataType dataType();
 
     default Voxels<T> createForVoxelBuffer(VoxelBuffer<T> buffer, Extent extent) {
-        Preconditions.checkArgument(extent.volumeXY() == buffer.capacity());
+        Preconditions.checkArgument(extent.areaXY() == buffer.capacity());
 
         Voxels<T> out = createUninitialized(extent);
         out.replaceSlice(0, buffer);

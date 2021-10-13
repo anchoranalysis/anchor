@@ -37,7 +37,6 @@ import java.util.stream.StreamSupport;
 /**
  * Bases class for implementations of R-Trees that store objects with associated geometry.
  *
- * @author Owen Feehan
  * @see <a href="https://en.wikipedia.org/wiki/R-tree">R-tree on Wikipedia</a>
  * @param <T> object-type stored in structure (the payload).
  * @author Owen Feehan
@@ -110,16 +109,17 @@ public abstract class RTree<T> {
      * Which objects contain a particular point?
      *
      * @param point the point.
-     * @return payloads for all objects that contain {@code point}.
+     * @return a stream of payloads for all objects that contain {@code point}.
      */
     protected Stream<T> containsStream(Point point) {
         return toStream(tree.search(point));
     }
 
     /**
-     * Which elements that a rectangle intersects with as a {@link Stream}.
+     * A stream of the elements that a rectangle intersects with.
      *
      * @param rectangle the rectangle associated with the payload.
+     * @return the stream.
      */
     protected Stream<T> intersectsWithStream(Rectangle rectangle) {
         return toStream(tree.search(rectangle));

@@ -32,7 +32,7 @@ import lombok.experimental.Accessors;
 import org.anchoranalysis.spatial.point.Point3d;
 
 /**
- * What to scale x and y dimensions by
+ * What to scale X and Y dimensions by.
  *
  * <p>This class is <b>immutable</b>.
  *
@@ -42,10 +42,10 @@ import org.anchoranalysis.spatial.point.Point3d;
 @Accessors(fluent = true)
 public final class ScaleFactor {
 
-    /** How much to multiply the existing x-dimension by to create a scaled x-dimension. */
+    /** How much to multiply the existing x-dimension by to create a scaled X-dimension. */
     private final double x;
 
-    /** How much to multiply the existing y-dimension by to create a scaled y-dimension. */
+    /** How much to multiply the existing y-dimension by to create a scaled Y-dimension. */
     private final double y;
 
     /**
@@ -83,9 +83,9 @@ public final class ScaleFactor {
     }
 
     /**
-     * Is the scale-factor identical in x and y dimensions?
+     * Is the scale-factor identical in X and Y dimensions?
      *
-     * @return true if the scale-factor and y are identical within {@code 1e-3} precision.
+     * @return true if the scale-factor and Y are identical within {@code 1e-3} precision.
      */
     public boolean hasIdenticalXY() {
         return Math.abs(x - y) < 1e-3;

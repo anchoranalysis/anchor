@@ -33,7 +33,6 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.image.core.outline.traverser.path.ContiguousVoxelPath;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.point.ReadableTuple3i;
 
@@ -78,7 +77,7 @@ public class OutlineTraverser {
     public void applyGlobal(Point3i root, List<Point3i> listOut) throws OperationFailedException {
 
         ReadableTuple3i cornerMin = outline.boundingBox().cornerMin();
-        Point3i rootRel = BoundingBox.relativePositionTo(root, cornerMin);
+        Point3i rootRel = Point3i.immutableSubtract(root, cornerMin);
 
         listOut.addAll(applyLocal(rootRel).addShift(cornerMin));
     }

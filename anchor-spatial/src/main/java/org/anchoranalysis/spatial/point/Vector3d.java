@@ -29,6 +29,14 @@ import lombok.NoArgsConstructor;
  * #L%
  */
 
+/**
+ * A <i>three</i>-dimensional vector of <i>double</i> values.
+ *
+ * <p>We consider a vector to be a tuple with additional magnitude and direction, to give a physical
+ * interpretation.
+ *
+ * @author Owen Feehan
+ */
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public final class Vector3d extends Tuple3d {
@@ -36,36 +44,71 @@ public final class Vector3d extends Tuple3d {
     /** */
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Creates with the same values as an existing {@link Tuple3d}.
+     *
+     * @param tuple to copy values from.
+     */
     public Vector3d(Tuple3d tuple) {
         this.x = tuple.x;
         this.y = tuple.y;
         this.z = tuple.z;
     }
 
+    /**
+     * Create with values for each dimension.
+     * 
+     * @param x the value for the X-dimension.
+     * @param y the value for the Y-dimension.
+     * @param z the value for the Z-dimension.
+     */
     public Vector3d(double x, double y, double z) {
         this.x = x;
         this.y = y;
         this.z = z;
     }
 
+    /**
+     * The magnitude of the vector.
+     * 
+     * @return the vector's length.
+     */
     public double length() {
         double squared = (x * x) + (y * y) + (z * z);
         return Math.sqrt(squared);
     }
 
+    /**
+     * Normalizes the vector by dividing each component's value by the overall length.
+     */
     public void normalize() {
         double length = length();
         this.x /= length;
         this.y /= length;
         this.z /= length;
     }
+    
+    /**
+     * Computes the <a href="https://en.wikipedia.org/wiki/Dot_product">dot-product</a> of the tuple with another.
+     * 
+     * @param other the other tuple to use in the dot product operation.
+     * @return the computed dot-product.
+     */
+    public final double dotProduct(Tuple3d other) {
+        return (x * other.x) + (y * other.y) + (z * other.z);
+    }
 
-    // Cross product
-    public static Vector3d cross(Vector3d u, Vector3d v) {
+    /**
+     * Computes the <a href="https://en.wikipedia.org/wiki/Cross_product">cross-product</a> of the tuple with another.
+     * 
+     * @param other the other tuple to use in the dot product operation.
+     * @return the computed cross-product.
+     */
+    public Vector3d crossProduct(Vector3d other) {
         Vector3d out = new Vector3d();
-        out.x = u.y() * v.z() - u.z() * v.y();
-        out.y = u.z() * v.x() - u.x() * v.z();
-        out.z = u.x() * v.y() - u.y() * v.x();
+        out.x = y() * other.z() - z() * other.y();
+        out.y = z() * other.x() - x() * other.z();
+        out.z = x() * other.y() - y() * other.x();
         return out;
     }
 }

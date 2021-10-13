@@ -27,7 +27,7 @@
 package org.anchoranalysis.spatial.scale;
 
 import lombok.AllArgsConstructor;
-import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.spatial.box.Extent;
 import org.anchoranalysis.spatial.point.Point2i;
 
 /**

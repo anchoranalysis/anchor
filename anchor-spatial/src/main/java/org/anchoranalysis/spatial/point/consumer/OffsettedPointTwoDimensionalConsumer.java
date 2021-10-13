@@ -40,6 +40,7 @@ public interface OffsettedPointTwoDimensionalConsumer {
      * Accepts a point like with a {@link Consumer} in general.
      *
      * @param point the current iteration point in a buffer.
+     * @param offset the offset in the buffer.
      */
     void accept(Point2i point, int offset);
 }

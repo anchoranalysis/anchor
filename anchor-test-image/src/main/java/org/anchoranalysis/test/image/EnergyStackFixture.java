@@ -33,7 +33,7 @@ import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
-import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.spatial.box.Extent;
 import org.anchoranalysis.test.image.ChannelFixture.IntensityFunction;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)

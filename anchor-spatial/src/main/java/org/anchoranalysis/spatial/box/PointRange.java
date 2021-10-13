@@ -30,21 +30,38 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.spatial.point.Point3i;
 
 /**
- * Keeps track of the range experienced by points in the x, y and z dimensions
+ * Tracks the range experienced by points in the X, Y and Z dimensions.
+ * 
+ * <p>The minimum and maximum values of any point across the dimensions is always remembered.
  *
- * <p>Points can be dynamically added and the min/max is updated continuously
+ * <p>Points can be dynamically added and the min/max is updated, as needed.
  *
  * @author Owen Feehan
  */
 public final class PointRange {
 
-    private Point3i max;
+    /** The <b>minimum</b> encountered value in each dimension, with each dimension of each point considered separately. */
     private Point3i min;
-
+    
+    /** The <b>maximum</b> encountered value in each dimension, with each dimension of each point considered separately. */
+    private Point3i max;
+    
+    /**
+     * Adds a new point to be considered in the range.
+     * 
+     * @param point the point to add.
+     */
     public void add(Point3i point) {
         add(point.x(), point.y(), point.z());
     }
 
+    /**
+     * Adds a new point to be considered in the range.
+     * 
+     * @param x the value along the X-axis for the point to add.
+     * @param y the value along the Y-axis for the point to add.
+     * @param z the value along the Z-axis for the point to add.
+     */
     public void add(int x, int y, int z) {
 
         if (max == null || min == null) {
@@ -72,26 +89,40 @@ public final class PointRange {
         }
     }
 
-    public BoundingBox deriveBoundingBox() throws OperationFailedException {
+    /**
+     * Creates a {@link BoundingBox} to just cover the range of points that have been added.
+     * 
+     * @return a newly created box that spans from the minimum to maximum values encountered in each dimension - across all added points.
+     * @throws OperationFailedException if no point has been added yet.
+     */
+    public BoundingBox toBoundingBox() throws OperationFailedException {
 
         if (min == null || max == null) {
             throw new OperationFailedException(
                     "No point has been added, so no bounding-box can be derived");
         }
 
-        return deriveBoundingBoxNoCheck();
+        return toBoundingBoxNoCheck();
     }
 
     /**
-     * Like {@link #deriveBoundingBox} but doesn't throw an exception if no points exist.
+     * Like {@link #toBoundingBox()} but if no points exist, an exception is not thrown.
      *
      * <p>Consider calling {@link #isEmpty} first to check.
+     * 
+     * @return a newly created box that spans from the minimum to maximum values encountered in each dimension - across all added points.
      */
-    public BoundingBox deriveBoundingBoxNoCheck() {
+    public BoundingBox toBoundingBoxNoCheck() {
         return new BoundingBox(min, max);
     }
 
-    /** Has a valid min and max defined? In other words, has at least one point been added? */
+    /** 
+     * Has a valid min and max defined?
+     * 
+     * <p>In other words, has at least one point been added?
+     *
+     * @return true iff a valid minimum and maximum exists.
+     */
     public boolean isEmpty() {
         return (min == null) || (max == null);
     }

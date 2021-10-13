@@ -28,7 +28,7 @@ package org.anchoranalysis.image.core.object.seed;
 
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.spatial.box.Extent;
 
 /**
  * A seed provides an voxels that exclusively belong to a particular object, and can be used as a

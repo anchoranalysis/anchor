@@ -32,9 +32,9 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.size.ResizeExtentUtilities;
-import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.spatial.box.Extent;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
-import org.anchoranalysis.spatial.scale.ScaleFactorUtilities;
+import org.anchoranalysis.spatial.scale.Scaler;
 
 /** A series of suggestions to resize images. */
 @Value
@@ -100,6 +100,6 @@ class ScaleToSuggestion implements ImageSizeSuggestion {
     }
 
     private static ScaleFactor createFactorDerived(int target, int source) {
-        return new ScaleFactor(ScaleFactorUtilities.deriveScalingFactor(target, source));
+        return new ScaleFactor(Scaler.deriveScalingFactor(target, source));
     }
 }

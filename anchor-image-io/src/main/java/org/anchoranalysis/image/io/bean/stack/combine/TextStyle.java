@@ -106,7 +106,7 @@ public class TextStyle extends AnchorBean<TextStyle> {
             SizeXY resolvedSize =
                     Optional.ofNullable(size).orElseGet(() -> alternativeSizeFromDefault(element));
 
-            assert (resolvedSize.asExtent().volumeXY() > 0);
+            assert (resolvedSize.asExtent().areaXY() > 0);
 
             BufferedImage bufferedImage =
                     new BufferedImage(

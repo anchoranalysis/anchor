@@ -55,7 +55,7 @@ class PointTest {
         assertNotEquals(create2d(), create2f());
         assertNotEquals(create3d(), create3f());
 
-        assertEquals(create2d().toFloat(), create2f());
+        assertEquals(PointConverter.floatFromDouble(create2d()), create2f());
         assertEquals(PointConverter.floatFromDouble(create3d()), create3f());
     }
 

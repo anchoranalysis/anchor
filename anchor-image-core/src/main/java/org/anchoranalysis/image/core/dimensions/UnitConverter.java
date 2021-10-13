@@ -28,7 +28,7 @@ package org.anchoranalysis.image.core.dimensions;
 
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.image.core.orientation.DirectionVector;
-import org.anchoranalysis.spatial.axis.AxisType;
+import org.anchoranalysis.spatial.axis.Axis;
 
 /**
  * Converts from voxelized units to different physical measurements of area / volume / distance.
@@ -177,7 +177,7 @@ public class UnitConverter {
      * @return the distance converted into voxels.
      */
     public double fromPhysicalDistance(double value) {
-        DirectionVector unitX = new DirectionVector(AxisType.X);
+        DirectionVector unitX = new DirectionVector(Axis.X);
         return fromPhysicalDistance(value, unitX);
     }
 

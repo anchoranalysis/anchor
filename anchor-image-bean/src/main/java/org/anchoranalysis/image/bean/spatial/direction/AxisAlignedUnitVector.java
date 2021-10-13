@@ -30,8 +30,8 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.core.orientation.DirectionVector;
-import org.anchoranalysis.spatial.axis.AxisTypeConverter;
-import org.anchoranalysis.spatial.axis.AxisTypeException;
+import org.anchoranalysis.spatial.axis.AxisConversionException;
+import org.anchoranalysis.spatial.axis.AxisConverter;
 
 public class AxisAlignedUnitVector extends DirectionVectorBean {
 
@@ -43,8 +43,8 @@ public class AxisAlignedUnitVector extends DirectionVectorBean {
     @Override
     public DirectionVector createVector() throws CreateException {
         try {
-            return new DirectionVector(AxisTypeConverter.createFromString(axis));
-        } catch (AxisTypeException e) {
+            return new DirectionVector(AxisConverter.createFromString(axis));
+        } catch (AxisConversionException e) {
             throw new CreateException(e);
         }
     }

@@ -26,7 +26,7 @@
 package org.anchoranalysis.image.voxel.kernel;
 
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.spatial.box.Extent;
 import org.anchoranalysis.spatial.point.Point3i;
 
 @NoArgsConstructor

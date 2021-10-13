@@ -66,11 +66,12 @@ public class BoundedList<T> {
     private final Function<T, BoundingBox> extractBoundingBox;
 
     /**
-     * Creates for a single element, using its current bounding-box.
+     * Creates for a single element using its current bounding-box.
      *
      * @param element the single element
      * @param extractBoundingBox extracts a bounding box from an element. The operation is assumed
      *     to involve no computational cost.
+     * @return the newly-created list.
      */
     public static <T> BoundedList<T> createSingle(
             T element, Function<T, BoundingBox> extractBoundingBox) {
@@ -84,12 +85,13 @@ public class BoundedList<T> {
      * @param list the list
      * @param extractBoundingBox extracts a bounding box from an element. The operation is assumed
      *     to involve no computational cost.
+     * @return the newly-created list.
      */
     public static <T> BoundedList<T> createFromList(
             List<T> list, Function<T, BoundingBox> extractBoundingBox) {
         Preconditions.checkArgument(!list.isEmpty());
         BoundingBox mergedBox =
-                BoundingBoxMerger.mergeBoundingBoxes(list.stream().map(extractBoundingBox));
+                BoundingBoxMerger.merge(list.stream().map(extractBoundingBox));
         return new BoundedList<>(list, mergedBox, extractBoundingBox);
     }
 
@@ -135,17 +137,30 @@ public class BoundedList<T> {
         return new BoundedList<>(list, boundingBox, extractBoundingBox);
     }
 
-    /** The number of elements */
+    /** 
+     * The number of elements.
+     *
+     * @return the number of elements.
+     */
     public int size() {
         return list.size();
     }
 
-    /** Gets a particular element */
+    /** 
+     * Gets a particular element.
+     *
+     * @param index the index to get an element at.
+     * @return the element at {@code index}.
+     */
     public T get(int index) {
         return list.get(index);
     }
 
-    /** A stream of elements in the list. */
+    /** 
+     * A stream of elements in the list.
+     * 
+     * @return the stream.
+     */
     public Stream<T> stream() {
         return list.stream();
     }

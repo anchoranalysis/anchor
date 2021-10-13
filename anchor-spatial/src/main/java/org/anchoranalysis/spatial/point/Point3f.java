@@ -28,25 +28,68 @@ import lombok.EqualsAndHashCode;
  * #L%
  */
 
+/**
+ * A <i>three</i>-dimensional point of <i>float</i> values.
+ *
+ * <p>We consider a point to be a tuple representing a single physical point in space.
+ *
+ * @author Owen Feehan
+ */
 @EqualsAndHashCode(callSuper = true)
 public final class Point3f extends Tuple3f {
 
     /** */
     private static final long serialVersionUID = 1L;
 
+    /** Creates the points with a 0 in each dimension. */
     public Point3f() {
         // Initializes with [0, 0, 0]
     }
 
+    /**
+     * Creates with the same values as an existing {@link Point3f}.
+     *
+     * @param point to copy values from.
+     */
     public Point3f(Point3f point) {
         this.x = point.x;
         this.y = point.y;
         this.z = point.z;
     }
 
+    /**
+     * Create with values for each dimension.
+     * 
+     * @param x the value for the X-dimension.
+     * @param y the value for the Y-dimension.
+     * @param z the value for the Z-dimension.
+     */
     public Point3f(float x, float y, float z) {
         this.x = x;
         this.y = y;
         this.z = z;
+    }
+
+    /**
+     * The Euclidean distance between this point and another.
+     *
+     * @param point the other point to a measure a distance to.
+     * @return the distance.
+     */
+    public final double distance(Point3f point) {
+        return Math.sqrt(distanceSquared(point));
+    }
+
+    /**
+     * The square of the Euclidean distance between this point and another.
+     *
+     * @param point the other point to a measure a distance to.
+     * @return the distance squared.
+     */
+    public float distanceSquared(Point3f point) {
+        float sx = this.x - point.x;
+        float sy = this.y - point.y;
+        float sz = this.z - point.z;
+        return (sx * sx) + (sy * sy) + (sz * sz);
     }
 }

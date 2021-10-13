@@ -30,9 +30,14 @@ import java.io.Serializable;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
-import org.anchoranalysis.spatial.axis.AxisType;
-import org.anchoranalysis.spatial.axis.AxisTypeConverter;
+import org.anchoranalysis.spatial.axis.Axis;
+import org.anchoranalysis.spatial.axis.AxisConverter;
 
+/**
+ * A <i>three</i>-dimensional tuple of <i>float</i> values.
+ *
+ * @author Owen Feehan
+ */
 @Data
 @Accessors(fluent = true)
 public abstract class Tuple3f implements Serializable {
@@ -40,26 +45,23 @@ public abstract class Tuple3f implements Serializable {
     /** */
     private static final long serialVersionUID = 1L;
 
+    /** X-axis component of the tuple. */
     protected float x = 0.0f;
 
+    /** Y-axis component of the tuple. */
     protected float y = 0.0f;
 
+    /** Z-axis component of the tuple. */
     protected float z = 0.0f;
 
-    public final float valueByDimension(int dimIndex) {
-        if (dimIndex == 0) {
-            return x;
-        } else if (dimIndex == 1) {
-            return y;
-        } else if (dimIndex == 2) {
-            return z;
-        } else {
-            throw new AnchorFriendlyRuntimeException(AxisTypeConverter.INVALID_AXIS_STRING);
-        }
-    }
-
-    public final float valueByDimension(AxisType axisType) {
-        switch (axisType) {
+    /**
+     * A component of a tuple corresponding to a particular axis.
+     *
+     * @param axis the axis.
+     * @return the component of the tuple corresponding to that axis.
+     */
+    public final float valueByDimension(Axis axis) {
+        switch (axis) {
             case X:
                 return x;
             case Y:
@@ -68,35 +70,48 @@ public abstract class Tuple3f implements Serializable {
                 return z;
             default:
                 assert false;
-                throw new AnchorFriendlyRuntimeException(AxisTypeConverter.INVALID_AXIS_INDEX);
+                throw new AnchorFriendlyRuntimeException(AxisConverter.INVALID_AXIS_INDEX);
+        }
+    }
+    
+    /**
+     * A component of a tuple corresponding to a particular dimension by index.
+     *
+     * @param dimensionIndex the index corresponding to an axis, as per {@link AxisConverter}.
+     * @return the component of the tuple corresponding to that axis.
+     */
+    public final float valueByDimension(int dimensionIndex) {
+        if (dimensionIndex == 0) {
+            return x;
+        } else if (dimensionIndex == 1) {
+            return y;
+        } else if (dimensionIndex == 2) {
+            return z;
+        } else {
+            throw new AnchorFriendlyRuntimeException(AxisConverter.INVALID_AXIS_STRING);
         }
     }
 
-    public final void setValueByDimension(int dimIndex, float val) {
-        switch (dimIndex) {
+    /**
+     * Assigns a value to a component of a tuple corresponding to a particular dimension by index.
+     *
+     * @param dimensionIndex the index corresponding to an axis, as per {@link AxisConverter}.
+     * @param valueToAssign the value to assign.
+     */
+    public final void setValueByDimension(int dimensionIndex, float valueToAssign) {
+        switch (dimensionIndex) {
             case 0:
-                this.x = val;
+                this.x = valueToAssign;
                 break;
             case 1:
-                this.y = val;
+                this.y = valueToAssign;
                 break;
             case 2:
-                this.z = val;
+                this.z = valueToAssign;
                 break;
             default:
-                throw new AnchorFriendlyRuntimeException(AxisTypeConverter.INVALID_AXIS_STRING);
+                throw new AnchorFriendlyRuntimeException(AxisConverter.INVALID_AXIS_STRING);
         }
-    }
-
-    public float distanceSquared(Point3f point) {
-        float sx = this.x - point.x;
-        float sy = this.y - point.y;
-        float sz = this.z - point.z;
-        return (sx * sx) + (sy * sy) + (sz * sz);
-    }
-
-    public final double distance(Point3f point) {
-        return Math.sqrt(distanceSquared(point));
     }
 
     @Override

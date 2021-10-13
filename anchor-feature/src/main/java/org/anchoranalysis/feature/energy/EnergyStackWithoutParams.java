@@ -33,7 +33,7 @@ import org.anchoranalysis.core.exception.OperationFailedRuntimeException;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.stack.Stack;
-import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.spatial.box.Extent;
 
 /**
  * A stack of channels used as context to calculate features (or calculating <i>energy</i> more

@@ -79,7 +79,7 @@ public class OrientationAxisAngle extends Orientation {
         // Dot product
         double dotProd = vecSrc.dotProduct(vecOnto);
 
-        Vector3d crossProd = Vector3d.cross(vecSrc, vecOnto);
+        Vector3d crossProd = vecSrc.crossProduct(vecOnto);
 
         double mag = crossProd.length();
 

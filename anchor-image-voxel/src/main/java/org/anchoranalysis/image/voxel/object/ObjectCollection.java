@@ -34,11 +34,11 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValues;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
-import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.spatial.box.Extent;
 import org.anchoranalysis.spatial.point.ReadableTuple3i;
 
 /**
- * A collection of {@link ObjectMask}
+ * A collection of {@link ObjectMask}s.
  *
  * @author Owen Feehan
  */
@@ -46,15 +46,15 @@ public class ObjectCollection implements Iterable<ObjectMask> {
 
     private final List<ObjectMask> delegate;
 
-    /** Creates with no objects */
+    /** Creates with no objects. */
     public ObjectCollection() {
         delegate = new ArrayList<>();
     }
 
     /**
-     * Creates with elements from a stream
+     * Creates with elements from a stream.
      *
-     * @param stream objects
+     * @param stream the stream of objects.
      */
     public ObjectCollection(Stream<ObjectMask> stream) {
         delegate = stream.collect(Collectors.toList());
@@ -62,14 +62,14 @@ public class ObjectCollection implements Iterable<ObjectMask> {
 
     /**
      * Shifts the bounding-box of each object by adding to it i.e. adds a vector to the corner
-     * position
+     * position.
      *
      * <p>This is an <b>immutable</b> operation.
      *
      * <p>
      *
-     * @param shiftBy what to add to the corner position
-     * @return newly created object-collection with shifted corner position and identical extent
+     * @param shiftBy what to add to the corner position.
+     * @return newly created object-collection with shifted corner position and identical extent.
      */
     public ObjectCollection shiftBy(ReadableTuple3i shiftBy) {
         return stream().mapBoundingBoxPreserveExtent(box -> box.shiftBy(shiftBy));
@@ -92,12 +92,12 @@ public class ObjectCollection implements Iterable<ObjectMask> {
     }
 
     /**
-     * Checks if two collections are equal in a shallow way
+     * Checks if two collections are equal in a shallow way.
      *
      * <p>Specifically, objects are tested to be equal using their object references (i.e. they are
-     * equal iff they have the same reference)
+     * equal iff they have the same reference).
      *
-     * <p>This is a cheaper equality check than with {@link #equalsDeep}
+     * <p>This is a cheaper equality check than with {@link #equalsDeep}.
      *
      * <p>Both collections must have identical ordering.
      */
@@ -158,12 +158,12 @@ public class ObjectCollection implements Iterable<ObjectMask> {
 
     /**
      * A string representation of all objects in the collection using their center of gravities (and
-     * optionally indices)
+     * optionally indices).
      *
-     * @param newlines if true a newline separates each item, otherwise a whitespace
+     * @param newlines if true a newline separates each item, otherwise a whitespace.
      * @param includeIndices whether to additionally show the index of each item beside its center
-     *     of gravity
-     * @return a descriptive string of the collection (begining and ending with parantheses)
+     *     of gravity.
+     * @return a descriptive string of the collection (beginning and ending with parantheses).
      */
     public String toString(boolean newlines, boolean includeIndices) {
 
@@ -182,7 +182,7 @@ public class ObjectCollection implements Iterable<ObjectMask> {
 
     /**
      * Default string representation of the collection, one line with each object described by its
-     * center-of-gravity
+     * center-of-gravity.
      */
     @Override
     public String toString() {
@@ -237,12 +237,12 @@ public class ObjectCollection implements Iterable<ObjectMask> {
         return get(0).binaryValues();
     }
 
-    /** Deep copy, including duplicating object-masks */
+    /** Deep copy, including duplicating {@link ObjectMask}s. */
     public ObjectCollection duplicate() {
         return stream().map(ObjectMask::duplicate);
     }
 
-    /** Shallow copy of objects */
+    /** Shallow copy of objects. */
     public ObjectCollection duplicateShallow() {
         return new ObjectCollection(streamStandardJava());
     }
@@ -260,12 +260,12 @@ public class ObjectCollection implements Iterable<ObjectMask> {
     }
 
     /**
-     * Exposes the underlying objects as a list
+     * Exposes the underlying objects as a list.
      *
      * <p>Be careful when manipulating this list, as it is the same list used internally in the
      * object.
      *
-     * @return a list with the object-masks in this collection
+     * @return a list with the {@link ObjectMask}s in this collection.
      */
     public List<ObjectMask> asList() {
         return delegate;
@@ -274,16 +274,16 @@ public class ObjectCollection implements Iterable<ObjectMask> {
     /***
      * Provides various functional-programming operations on the object-collection
      *
-     * @return a stream-like interface of operations
+     * @return a stream-like interface of operations.
      */
     public ObjectMaskStream stream() {
         return new ObjectMaskStream(this);
     }
 
     /**
-     * A stream of object-masks as per Java's standard collections interface
+     * A stream of object-masks as per Java's standard collections interface.
      *
-     * @return the stream
+     * @return the stream.
      */
     public Stream<ObjectMask> streamStandardJava() {
         return delegate.stream();
@@ -299,7 +299,7 @@ public class ObjectCollection implements Iterable<ObjectMask> {
         return indices.stream().map(this::get);
     }
 
-    /** Descriptive string representation of an object-mask */
+    /** Descriptive string representation of an {@link ObjectMask}. */
     private static String objectToString(ObjectMask object, int index, boolean includeIndex) {
         String cog = object.centerOfGravity().toString();
         int numberVoxels = object.numberVoxelsOn();

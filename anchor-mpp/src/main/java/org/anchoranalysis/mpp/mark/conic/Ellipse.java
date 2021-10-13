@@ -422,18 +422,18 @@ public class Ellipse extends ConicBase implements Serializable {
     }
 
     private static double[] minMaxEndPoint(
-            double[] endPoint1, double[] endPoint2, int dimIndex, double toAdd) {
+            double[] endPoint1, double[] endPoint2, int dimensionIndex, double toAdd) {
         return twoElementArray(
-                applyEndPoint(endPoint1, endPoint2, dimIndex, toAdd, Math::min),
-                applyEndPoint(endPoint1, endPoint2, dimIndex, toAdd, Math::max));
+                applyEndPoint(endPoint1, endPoint2, dimensionIndex, toAdd, Math::min),
+                applyEndPoint(endPoint1, endPoint2, dimensionIndex, toAdd, Math::max));
     }
 
     private static double applyEndPoint(
             double[] endPoint1,
             double[] endPoint2,
-            int dimIndex,
+            int dimensionIndex,
             double toAdd,
             DoubleBinaryOperator func) {
-        return func.applyAsDouble(endPoint1[dimIndex], endPoint2[dimIndex]) + toAdd;
+        return func.applyAsDouble(endPoint1[dimensionIndex], endPoint2[dimensionIndex]) + toAdd;
     }
 }

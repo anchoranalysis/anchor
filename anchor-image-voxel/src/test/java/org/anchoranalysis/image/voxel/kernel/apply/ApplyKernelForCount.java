@@ -32,7 +32,7 @@ import org.anchoranalysis.image.voxel.kernel.Kernel;
 import org.anchoranalysis.image.voxel.kernel.KernelApplicationParameters;
 import org.anchoranalysis.image.voxel.kernel.ObjectOnVoxelsHelper;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.spatial.box.Extent;
 
 /**
  * Applies a {@link Kernel} to a created {@link BinaryVoxels} showing an {@link ObjectMask}

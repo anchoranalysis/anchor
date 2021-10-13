@@ -27,9 +27,9 @@ package org.anchoranalysis.image.core.dimensions.size;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.spatial.box.Extent;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
-import org.anchoranalysis.spatial.scale.ScaleFactorUtilities;
+import org.anchoranalysis.spatial.scale.Scaler;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ResizeExtentUtilities {
@@ -82,7 +82,7 @@ public class ResizeExtentUtilities {
      */
     public static ScaleFactor relativeScale(Extent source, Extent target) {
         return new ScaleFactor(
-                ScaleFactorUtilities.deriveScalingFactor(target.x(), source.x()),
-                ScaleFactorUtilities.deriveScalingFactor(target.y(), source.y()));
+                Scaler.deriveScalingFactor(target.x(), source.x()),
+                Scaler.deriveScalingFactor(target.y(), source.y()));
     }
 }

@@ -32,8 +32,14 @@ package org.anchoranalysis.spatial.axis;
  *
  * @author Owen Feehan
  */
-public enum AxisType {
+public enum Axis {
+
+    /** X-axis. */
     X,
+
+    /** Y-axis. */
     Y,
+
+    /** Z-axis (existing only in 3D images, often known as <i>z-stacks</i>). */
     Z
 }

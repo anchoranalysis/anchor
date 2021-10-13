@@ -111,7 +111,7 @@ public class DecodeLabels<T> {
         try {
             return FunctionalList.filterAndMapWithIndexToList(
                     deriveBoundingBoxes(),
-                    box -> box.extent().volumeXY() >= smallVolumeThreshold,
+                    box -> box.extent().areaXY() >= smallVolumeThreshold,
                     this::elementForIndex);
         } catch (OperationFailedException e) {
             throw new CreateException(e);
@@ -157,6 +157,6 @@ public class DecodeLabels<T> {
 
         /** Convert to bounding-boxes after filtering any empty point-ranges */
         return FunctionalList.filterAndMapToList(
-                list, pointRange -> !pointRange.isEmpty(), PointRange::deriveBoundingBoxNoCheck);
+                list, pointRange -> !pointRange.isEmpty(), PointRange::toBoundingBoxNoCheck);
     }
 }

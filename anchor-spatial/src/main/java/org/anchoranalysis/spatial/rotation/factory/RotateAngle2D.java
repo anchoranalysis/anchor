@@ -30,9 +30,16 @@ import cern.colt.matrix.DoubleMatrix2D;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.spatial.rotation.RotationMatrix;
 
+/**
+ * Creates a {@link RotationMatrix} that performs a 2D rotation in a plane.
+ *  
+ * @author Owen Feehan
+ *
+ */
 @AllArgsConstructor
 public class RotateAngle2D extends RotationMatrixFactory {
 
+    /** The angle in radians that defines the rotation. */
     private double angleRadians;
 
     @Override

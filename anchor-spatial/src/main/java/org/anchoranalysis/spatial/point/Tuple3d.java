@@ -31,9 +31,14 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
-import org.anchoranalysis.spatial.axis.AxisType;
-import org.anchoranalysis.spatial.axis.AxisTypeConverter;
+import org.anchoranalysis.spatial.axis.Axis;
+import org.anchoranalysis.spatial.axis.AxisConverter;
 
+/**
+ * A <i>three</i>-dimensional tuple of <i>double</i> values.
+ *
+ * @author Owen Feehan
+ */
 @EqualsAndHashCode
 @Accessors(fluent = true)
 public abstract class Tuple3d implements Serializable {
@@ -41,100 +46,157 @@ public abstract class Tuple3d implements Serializable {
     /** */
     private static final long serialVersionUID = 1L;
 
-    /** X-axis component of tuple. */
+    /** X-axis component of the tuple. */
     @Getter protected double x = 0.0;
 
-    /** Y-axis component of tuple. */
+    /** Y-axis component of the tuple. */
     @Getter protected double y = 0.0;
 
-    /** Z-axis component of tuple. */
+    /** Z-axis component of the tuple. */
     @Getter protected double z = 0.0;
 
-    public final void add(Tuple3d point) {
-        this.x += point.x;
-        this.y += point.y;
-        this.z += point.z;
-    }
-
+    /**
+     * Arithmetically adds values to each dimension's component.
+     *
+     * @param x value to add to X-axis component.
+     * @param y value to add to Y-axis component.
+     * @param z value to add to Z-axis component.
+     */
     public final void add(double x, double y, double z) {
         this.x += x;
         this.y += y;
         this.z += z;
     }
 
-    public final void add(ReadableTuple3i point) {
-        this.x += point.x();
-        this.y += point.y();
-        this.z += point.z();
+    /**
+     * Arithmetically adds a {@link Tuple3d}'s values across each dimension.
+     *
+     * @param toAdd tuple to add to current state.
+     */
+    public final void add(Tuple3d toAdd) {
+        this.x += toAdd.x;
+        this.y += toAdd.y;
+        this.z += toAdd.z;
     }
 
-    public final void subtract(Tuple3d point) {
-        this.x -= point.x;
-        this.y -= point.y;
-        this.z -= point.z;
+    /**
+     * Arithmetically adds a {@link ReadableTuple3i}'s values across each dimension.
+     *
+     * @param toAdd tuple to add to current state.
+     */
+    public final void add(ReadableTuple3i toAdd) {
+        this.x += toAdd.x();
+        this.y += toAdd.y();
+        this.z += toAdd.z();
     }
 
+    /**
+     * Arithmetically subtract a {@link Tuple3d}'s values across each dimension.
+     *
+     * @param toSubtract tuple to subtract from current state.
+     */
+    public final void subtract(Tuple3d toSubtract) {
+        this.x -= toSubtract.x;
+        this.y -= toSubtract.y;
+        this.z -= toSubtract.z;
+    }
+
+    /**
+     * Arithmetically multiply values across each dimension.
+     *
+     * @param factor value to multiply each component's value by.
+     */
     public final void scale(double factor) {
         this.x *= factor;
         this.y *= factor;
         this.z *= factor;
     }
 
+    /**
+     * Arithmetically multiply values by a factor only in X and Y dimensions.
+     *
+     * @param factor value to multiply each component's value by.
+     */
     public final void scaleXY(double factor) {
         this.x *= factor;
         this.y *= factor;
     }
 
+    /**
+     * Arithmetically divide values across each dimension.
+     *
+     * @param divisor value to divide each component's value by.
+     */
     public final void divideBy(int divisor) {
         this.x /= divisor;
         this.y /= divisor;
         this.z /= divisor;
     }
 
+    /**
+     * Arithmetically divide values across each dimension.
+     *
+     * @param divisor value to divide each component's value by.
+     */
     public final void divideBy(double divisor) {
         this.x /= divisor;
         this.y /= divisor;
         this.z /= divisor;
     }
 
+    /** Convert each dimension's component into its absolute value. */
     public final void absolute() {
         this.x = Math.abs(this.x);
         this.y = Math.abs(this.y);
         this.z = Math.abs(this.z);
     }
 
-    public final void increment(Tuple3d incrBy) {
-        incrementX(incrBy.x);
-        incrementY(incrBy.y);
-        incrementZ(incrBy.z);
+    /**
+     * Increments each component's value by the corresponding value in a {@link Tuple3d}.
+     *
+     * @param shift how much to increment by.
+     */
+    public final void increment(Tuple3d shift) {
+        incrementX(shift.x);
+        incrementY(shift.y);
+        incrementZ(shift.z);
     }
 
-    public final void incrementX(double val) {
-        this.x += val;
+    /**
+     * Increments the X component's value by a shift.
+     *
+     * @param shift how much to increment by.
+     */
+    public final void incrementX(double shift) {
+        this.x += shift;
     }
 
-    public final void incrementY(double val) {
-        this.y += val;
+    /**
+     * Increments the Y component's value by a shift.
+     *
+     * @param shift how much to increment by.
+     */
+    public final void incrementY(double shift) {
+        this.y += shift;
     }
 
-    public final void incrementZ(double val) {
-        this.z += val;
+    /**
+     * Increments the Z component's value by a shift.
+     *
+     * @param shift how much to increment by.
+     */
+    public final void incrementZ(double shift) {
+        this.z += shift;
     }
 
-    public final double valueByDimension(int dimIndex) {
-        if (dimIndex == 0) {
-            return x;
-        } else if (dimIndex == 1) {
-            return y;
-        } else if (dimIndex == 2) {
-            return z;
-        } else {
-            throw new AnchorFriendlyRuntimeException(AxisTypeConverter.INVALID_AXIS_STRING);
-        }
-    }
-
-    public final double valueByDimension(AxisType axisType) {
-        switch (axisType) {
+    /**
+     * A component of a tuple corresponding to a particular axis.
+     *
+     * @param axis the axis.
+     * @return the component of the tuple corresponding to that axis.
+     */
+    public final double valueByDimension(Axis axis) {
+        switch (axis) {
             case X:
                 return x;
             case Y:
@@ -143,28 +205,48 @@ public abstract class Tuple3d implements Serializable {
                 return z;
             default:
                 assert false;
-                throw new AnchorFriendlyRuntimeException(AxisTypeConverter.INVALID_AXIS_INDEX);
+                throw new AnchorFriendlyRuntimeException(AxisConverter.INVALID_AXIS_INDEX);
         }
     }
 
-    public final void setValueByDimension(int dimIndex, double val) {
-        switch (dimIndex) {
+    /**
+     * A component of a tuple corresponding to a particular dimension by index.
+     *
+     * @param dimensionIndex the index corresponding to an axis, as per {@link AxisConverter}.
+     * @return the component of the tuple corresponding to that axis.
+     */
+    public final double valueByDimension(int dimensionIndex) {
+        if (dimensionIndex == 0) {
+            return x;
+        } else if (dimensionIndex == 1) {
+            return y;
+        } else if (dimensionIndex == 2) {
+            return z;
+        } else {
+            throw new AnchorFriendlyRuntimeException(AxisConverter.INVALID_AXIS_STRING);
+        }
+    }
+
+    /**
+     * Assigns a value to a component of a tuple corresponding to a particular dimension by index.
+     *
+     * @param dimensionIndex the index corresponding to an axis, as per {@link AxisConverter}.
+     * @param valueToAssign the value to assign.
+     */
+    public final void setValueByDimension(int dimensionIndex, double valueToAssign) {
+        switch (dimensionIndex) {
             case 0:
-                this.x = val;
+                this.x = valueToAssign;
                 break;
             case 1:
-                this.y = val;
+                this.y = valueToAssign;
                 break;
             case 2:
-                this.z = val;
+                this.z = valueToAssign;
                 break;
             default:
-                throw new AnchorFriendlyRuntimeException(AxisTypeConverter.INVALID_AXIS_STRING);
+                throw new AnchorFriendlyRuntimeException(AxisConverter.INVALID_AXIS_STRING);
         }
-    }
-
-    public final double dotProduct(Tuple3d vector) {
-        return (x * vector.x) + (y * vector.y) + (z * vector.z);
     }
 
     @Override
@@ -172,32 +254,56 @@ public abstract class Tuple3d implements Serializable {
         return String.format("[%5.1f,%5.1f,%5.1f]", x, y, z);
     }
 
-    /** X-axis component of tuple. */
+    /**
+     * X-axis component of the tuple.
+     *
+     * @param x the value to set.
+     */
     public final void setX(int x) {
         this.x = x;
     }
 
-    /** Y-axis component of tuple. */
+    /**
+     * Y-axis component of the tuple.
+     *
+     * @param y the value to set.
+     */
     public final void setY(int y) {
         this.y = y;
     }
 
-    /** Z-axis component of tuple. */
+    /**
+     * Z-axis component of the tuple.
+     *
+     * @param z the value to set.
+     */
     public final void setZ(int z) {
         this.z = z;
     }
 
-    /** X-axis component of tuple. */
+    /**
+     * X-axis component of the tuple.
+     *
+     * @param x the value to set.
+     */
     public void setX(double x) {
         this.x = x;
     }
 
-    /** Y-axis component of tuple. */
+    /**
+     * Y-axis component of the tuple.
+     *
+     * @param y the value to set.
+     */
     public void setY(double y) {
         this.y = y;
     }
 
-    /** Z-axis component of tuple. */
+    /**
+     * Z-axis component of the tuple.
+     *
+     * @param z the value to set.
+     */
     public void setZ(double z) {
         this.z = z;
     }

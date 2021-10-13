@@ -54,7 +54,7 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.io.generator.tabular.CSVGenerator;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
-import org.anchoranalysis.spatial.axis.AxisType;
+import org.anchoranalysis.spatial.axis.Axis;
 
 /** @author Owen Feehan */
 class ObjectFeatureListCSVGenerator extends CSVGenerator<ObjectCollection> {
@@ -108,9 +108,9 @@ class ObjectFeatureListCSVGenerator extends CSVGenerator<ObjectCollection> {
             FeatureList<FeatureInputSingleObject> features) {
 
         StreamEx<Feature<FeatureInputSingleObject>> stream =
-                StreamEx.of(addFeaturesForAxis(AxisType.X));
-        stream.append(addFeaturesForAxis(AxisType.Y));
-        stream.append(addFeaturesForAxis(AxisType.Z));
+                StreamEx.of(addFeaturesForAxis(Axis.X));
+        stream.append(addFeaturesForAxis(Axis.Y));
+        stream.append(addFeaturesForAxis(Axis.Z));
         stream.append(createNumVoxels());
         stream.append(
                 features.asList().stream()
@@ -135,7 +135,7 @@ class ObjectFeatureListCSVGenerator extends CSVGenerator<ObjectCollection> {
         }
     }
 
-    private static Stream<Feature<FeatureInputSingleObject>> addFeaturesForAxis(AxisType axis) {
+    private static Stream<Feature<FeatureInputSingleObject>> addFeaturesForAxis(Axis axis) {
 
         // Using non-physical distances, and physical distances respectively
         Feature<FeatureInputSingleObject> feature = new CenterOfGravity(axis);

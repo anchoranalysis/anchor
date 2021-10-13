@@ -28,25 +28,33 @@ package org.anchoranalysis.spatial.point;
 
 import java.util.Comparator;
 
+/**
+ * Imposes an ordering on any sub-type of {@link Tuple3d}.
+ *
+ * <p>The ordering compares the X, Y and Z component values in that order.
+ *
+ * @author Owen Feehan
+ * @param <T> type to compare.
+ */
 public final class Comparator3d<T extends Tuple3d> implements Comparator<T> {
 
     @Override
-    public int compare(T arg0, T arg1) {
+    public int compare(T first, T second) {
 
         // First order by X
-        int cmpX = Double.compare(arg0.x(), arg1.x());
+        int cmpX = Double.compare(first.x(), second.x());
         if (cmpX != 0) {
             return cmpX;
         }
 
         // Then ordered by Y
-        int cmpY = Double.compare(arg0.y(), arg1.y());
+        int cmpY = Double.compare(first.y(), second.y());
         if (cmpY != 0) {
             return cmpY;
         }
 
         // Then ordered by X
-        int cmpZ = Double.compare(arg0.z(), arg1.z());
+        int cmpZ = Double.compare(first.z(), second.z());
         if (cmpZ != 0) {
             return cmpZ;
         }

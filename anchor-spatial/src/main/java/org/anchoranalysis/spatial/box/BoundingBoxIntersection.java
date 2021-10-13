@@ -30,12 +30,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.ToIntFunction;
 import lombok.AllArgsConstructor;
-import org.anchoranalysis.spatial.Extent;
 import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.point.ReadableTuple3i;
 
 /**
- * Methods for checking intersection between a particular bounding-box and others
+ * Methods for checking intersection between a particular bounding-box and others.
  *
  * @author Owen Feehan
  */
@@ -44,12 +43,22 @@ public final class BoundingBoxIntersection {
 
     private final BoundingBox box;
 
-    /** Does this bounding box intersect with another? */
+    /** 
+     * Does intersection exist with another bounding-box?
+     * 
+     * @param other the other bounding-box to test intersection with.
+     * @return true iff intersection exists.
+     */
     public boolean existsWith(BoundingBox other) {
         return with(other, false).isPresent();
     }
 
-    /** Does this bounding box intersection with any of the others in the list? */
+    /** 
+     * Does intersection exist with with any of the others in the list?
+     *
+     * @param others the other bounding-boxes to test intersection with.
+     * @return true iff intersection exists with at least one box in {@code others}.
+     */
     public boolean existsWithAny(List<BoundingBox> others) {
 
         for (BoundingBox other : others) {
@@ -62,12 +71,25 @@ public final class BoundingBoxIntersection {
         return false;
     }
 
+    /** 
+     * Finds the intersection with another bounding-box, if it exists.
+     *
+     * @param other the bounding-box to find intersection with.
+     * @return a bounding-box describing the in the intersection, or {@link Optional#empty()} if no intersection exists.
+     */
     public Optional<BoundingBox> with(BoundingBox other) {
         return with(other, true);
     }
 
-    /** Find the intersection and clamp to a a containing extent */
+    /** 
+     * Finds the intersection and clamp to a a containing extent.
+     *
+     * @param other the bounding-box to find intersection with.
+     * @param containingExtent the extent the intersection is clamped to.
+     * @return a bounding-box describing the in the intersection, or {@link Optional#empty()} if no intersection exists.
+     */
     public Optional<BoundingBox> withInside(BoundingBox other, Extent containingExtent) {
+        // TODO what happens when the containing-extent does not contain the the intersection?
         return with(other).map(boundingBox -> boundingBox.clampTo(containingExtent));
     }
 

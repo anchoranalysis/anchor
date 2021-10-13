@@ -26,25 +26,25 @@
 
 package org.anchoranalysis.spatial.box;
 
+import com.google.common.base.Preconditions;
 import java.io.Serializable;
 import java.util.function.ToDoubleFunction;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
-import org.anchoranalysis.spatial.Extent;
 import org.anchoranalysis.spatial.point.Point3d;
 import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.point.PointConverter;
 import org.anchoranalysis.spatial.point.ReadableTuple3i;
 import org.anchoranalysis.spatial.point.Tuple3i;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
-import org.anchoranalysis.spatial.scale.ScaleFactorUtilities;
+import org.anchoranalysis.spatial.scale.Scaler;
 
 /**
- * A bounding-box in 2 or 3 dimensions.
+ * A bounding-box in two or three dimensions.
  *
- * <p>A 2D bounding-box should always have a extent in z-dimension of 1 voxel.
+ * <p>A bounding-box in two dimensions should always set it's z-dimension's extent to {@code 1}.
  *
  * <p>This is an <i>immutable</i> class. No operation modifies the state of the existing object.
  */
@@ -52,19 +52,26 @@ import org.anchoranalysis.spatial.scale.ScaleFactorUtilities;
 @Accessors(fluent = true)
 public final class BoundingBox implements Serializable, Comparable<BoundingBox> {
 
-    /** */
     private static final long serialVersionUID = 1L;
 
-    /** The bottom-left corner of the bounding box. */
+    /**
+     * The bottom-left corner of the bounding box.
+     *
+     * <p>This the minimum point in all dimensions for the bounding-box.
+     */
     private final Point3i cornerMin;
 
-    /** Dimensions in pixels needed to represent the bounding box */
+    /**
+     * Dimensions in pixels needed to represent the bounding box.
+     *
+     * <p>This emanates in a positive direction from {@code cornerMin} to define the complete box.
+     */
     @Getter private final Extent extent;
 
     /**
      * Constructs a bounding-box to cover the entirety of a certain extent.
      *
-     * @param extent the extent
+     * @param extent the extent.
      */
     public BoundingBox(Extent extent) {
         this(new Point3i(), extent);
@@ -74,9 +81,9 @@ public final class BoundingBox implements Serializable, Comparable<BoundingBox> 
      * Creates from two {@code double} points (a minimum corner and a maximum corner).
      *
      * @param cornerMinInclusive minimum point in each dimension of the bounding-box (that exists
-     *     inside the box)
+     *     inside the box).
      * @param cornerMaxInclusive maximum point in each dimension of the bounding-box (that exists
-     *     inside the box)
+     *     inside the box).
      */
     public BoundingBox(Point3d cornerMinInclusive, Point3d cornerMaxInclusive) {
         this(
@@ -88,9 +95,9 @@ public final class BoundingBox implements Serializable, Comparable<BoundingBox> 
      * Creates from two {@code int} points (a minimum corner and a maximum corner).
      *
      * @param cornerMinInclusive minimum point in each dimension of the bounding-box (that exists
-     *     inside the box)
+     *     inside the box).
      * @param cornerMaxInclusive maximum point in each dimension of the bounding-box (that exists
-     *     inside the box)
+     *     inside the box).
      */
     public BoundingBox(ReadableTuple3i cornerMinInclusive, ReadableTuple3i cornerMaxInclusive) {
         this(
@@ -102,7 +109,12 @@ public final class BoundingBox implements Serializable, Comparable<BoundingBox> 
         checkMaxMoreThanMin(cornerMinInclusive, cornerMaxInclusive);
     }
 
-    // Extent is the number of pixels need to represent this bounding box
+    /**
+     * Creates a bounding-box from a corner and an extent.
+     *
+     * @param cornerMin the corner that is the minimum point in all dimensions for the bounding-box.
+     * @param extent the size of the bounding-box eminating from {@code cornerMin}.
+     */
     public BoundingBox(ReadableTuple3i cornerMin, Extent extent) {
         // Note this always duplicates the corner, creating some needless object-creation
         this.cornerMin = new Point3i(cornerMin);
@@ -110,44 +122,88 @@ public final class BoundingBox implements Serializable, Comparable<BoundingBox> 
     }
 
     /**
-     * A mid-point in the bounding box, in the exact half way point between (crnr+extent)/2.
+     * A mid-point in the bounding box, corresponding to the exact half-way point between {@code
+     * (corner+extent)/2}.
      *
-     * <p>It may not be integral, and could end with .5
+     * <p>It may not be integral, possibly ending with {@code 0.5}
      *
-     * @return the midpoint
+     * @return a newly created point representing the mid-point.
      */
     public Point3d midpoint() {
         return meanOfExtent(0);
     }
 
     /**
-     * Similar to {@link #midpoint} but not always identical. It is the mean of all the points in
-     * the box, and guaranteed to be integral.
+     * A mid-point in the bounding-box, corresponding to the mean of all points inside the box.
      *
-     * <p>It should always be identical in each dimension to {@code (corner()+extent()-1)/2}
+     * <p>i.e. in each dimension, it is {@code (corner+extent-1)/2}
      *
-     * @return the center-of-gravity
+     * <p>It is guaranteed to be integral, by flooring.
+     *
+     * <p>This is similar to {@link #midpoint} but can be marginally shifted left.
+     *
+     * @return the center-of-gravity.
      */
     public Point3i centerOfGravity() {
         return PointConverter.intFromDoubleFloor(meanOfExtent(1));
     }
 
+    /**
+     * Collapses the z-dimension of the box to a single voxel depth, and a corner at {@code 0}
+     * voxels.
+     *
+     * @return a newly created {@code BoundingBox} with identical X and Y values, but with the Z
+     *     dimension flattened.
+     */
     public BoundingBox flattenZ() {
         return new BoundingBox(cornerMin.duplicateChangeZ(0), extent.duplicateChangeZ(1));
     }
 
+    /**
+     * Creates a copied {@link BoundingBox} but with a different extent.
+     *
+     * @param extent the extent to assign.
+     * @return a newly-created {@link BoundingBox} that has a changed extent, but is otherwise
+     *     identical.
+     */
     public BoundingBox changeExtent(Extent extent) {
         return new BoundingBox(cornerMin, extent);
     }
 
-    public BoundingBox changeZ(int crnrZ, int extentZ) {
-        return new BoundingBox(cornerMin.duplicateChangeZ(crnrZ), extent.duplicateChangeZ(extentZ));
+    /**
+     * Creates a copied {@link BoundingBox} but with a different corner and extent in the
+     * Z-dimension.
+     *
+     * @param cornerZ the corner to assign in the z-dimension.
+     * @param extentZ the extent to assign in the z-dimension.
+     * @return a newly-created {@link BoundingBox} that has a changed extent and corner in the
+     *     Z-dimension, but is otherwise identical.
+     */
+    public BoundingBox changeZ(int cornerZ, int extentZ) {
+        return new BoundingBox(
+                cornerMin.duplicateChangeZ(cornerZ), extent.duplicateChangeZ(extentZ));
     }
 
+    /**
+     * Creates a copied {@link BoundingBox} but with a different extent in the Z-dimension.
+     *
+     * @param extentZ the extent to assign in the z-dimension.
+     * @return a newly-created {@link BoundingBox} that has a changed extent in the Z-dimension, but
+     *     is otherwise identical.
+     */
     public BoundingBox changeExtentZ(int extentZ) {
         return new BoundingBox(cornerMin, extent.duplicateChangeZ(extentZ));
     }
 
+    /**
+     * Does the bounding-box have an edge at the border of an image of size {@code extent}?
+     *
+     * <p>The border of the image is defined as the exterior including all voxels that are a minimum
+     * or maximum in any given dimension.
+     *
+     * @param extent the size of the image.
+     * @return true iff the bounding box lies at the border.
+     */
     public boolean atBorder(Extent extent) {
 
         if (atBorderXY(extent)) {
@@ -157,6 +213,12 @@ public final class BoundingBox implements Serializable, Comparable<BoundingBox> 
         return atBorderZ(extent);
     }
 
+    /**
+     * Like {@link #atBorder(Extent)} but considers only the X- and Y- dimensions.
+     *
+     * @param extent the size of the image.
+     * @return true iff the bounding box lies at the border along the X-axis or Y-axis.
+     */
     public boolean atBorderXY(Extent extent) {
 
         ReadableTuple3i cornerMax = this.calculateCornerMaxExclusive();
@@ -170,21 +232,50 @@ public final class BoundingBox implements Serializable, Comparable<BoundingBox> 
 
         if (cornerMax.x() == extent.x()) {
             return true;
+        } else {
+            return cornerMax.y() == extent.y();
         }
-        return cornerMax.y() == extent.y();
     }
 
+    /**
+     * Like {@link #atBorder(Extent)} but considers only the Z-dimension.
+     *
+     * @param extent the size of the image.
+     * @return true iff the bounding box lies at the border along the Z-axis.
+     */
     public boolean atBorderZ(Extent extent) {
 
         ReadableTuple3i cornerMax = this.calculateCornerMaxExclusive();
 
         if (cornerMin.z() == 0) {
             return true;
+        } else {
+            return cornerMax.z() == extent.z();
         }
-        return cornerMax.z() == extent.z();
     }
 
+    /**
+     * Grow the bounding-box by {@code toAdd} amount in each dimension in both positive and negative
+     * directions.
+     *
+     * <p>The box will never be allowed grow larger than {@code containingExtent}.
+     *
+     * <p>Unless constrained by the above, the bounding-box's corner and extent will typically both
+     * change.
+     *
+     * <p>This is an <i>immutable</i> operation and current state will not be affected.
+     *
+     * @param toAdd the number of voxels to grow by in each direction. Each component should be
+     *     non-negative.
+     * @param containingExtent an extent the box must never grow beyond, in either the positive or
+     *     negative directions.
+     * @return a newly created grown {@code BoundingBox} as per the above.
+     */
     public BoundingBox growBy(Tuple3i toAdd, Extent containingExtent) {
+
+        Preconditions.checkArgument(toAdd.x() >= 0);
+        Preconditions.checkArgument(toAdd.y() >= 0);
+        Preconditions.checkArgument(toAdd.z() >= 0);
 
         // Subtract the padding from the corner
         Point3i cornerMinShifted = Point3i.immutableSubtract(cornerMin, toAdd);
@@ -228,6 +319,19 @@ public final class BoundingBox implements Serializable, Comparable<BoundingBox> 
         return out;
     }
 
+    /**
+     * Ensures that the box fits inside a {@link Extent} by reducing any values to their limits in
+     * the respective dimension.
+     *
+     * <p>Values that are negative are forced to be 0.
+     *
+     * <p>Values that are larger than the corresponding dimension in {@code Extent} are reduced to
+     * the maximum permitted in that dimension.
+     *
+     * @param extent the extent the box is made fit inside.
+     * @return a newly created bounding-box as per above. A new object is always created, even if no
+     *     changes need to occur.
+     */
     public BoundingBox clampTo(Extent extent) {
 
         if (cornerMin.x() >= extent.x()
@@ -265,53 +369,50 @@ public final class BoundingBox implements Serializable, Comparable<BoundingBox> 
         return new BoundingBox(min, max);
     }
 
-    public Point3i closestPointOnBorder(Point3d pointIn) {
-
-        ReadableTuple3i cornerMax = calculateCornerMax();
-
-        Point3i pointOut = new Point3i();
-        pointOut.setX(closestPointOnAxis(pointIn.x(), cornerMin.x(), cornerMax.x()));
-        pointOut.setY(closestPointOnAxis(pointIn.y(), cornerMin.y(), cornerMax.y()));
-        pointOut.setZ(closestPointOnAxis(pointIn.z(), cornerMin.z(), cornerMax.z()));
-        return pointOut;
-    }
-
-    public static Point3i relativePositionTo(Point3i relPoint, ReadableTuple3i srcPoint) {
-        return Point3i.immutableSubtract(relPoint, srcPoint);
-    }
-
     /**
-     * The relative position of the corner to another bounding box
+     * The relative position of the corner to another bounding box.
      *
-     * @param other the other box, against whom we consider our coordinates relatively
-     * @return the difference between corners i.e. other bounding-box's corner - this bounding-box's
-     *     corner
+     * @param other the other box, against whom we consider our coordinates relatively.
+     * @return the difference between corners i.e. {@code other bounding-box's corner - this
+     *     bounding-box's corner}.
      */
     public Point3i relativePositionTo(BoundingBox other) {
-        return relativePositionTo(cornerMin, other.cornerMin);
+        return Point3i.immutableSubtract(cornerMin, other.cornerMin);
     }
 
     /**
-     * A new bounding-box using relative position coordinates to another box
+     * A new bounding-box using relative position coordinates to another box.
      *
-     * @param other the other box, against whom we consider our coordinates relatively
-     * @return a newly created bounding box with relative coordinates
+     * @param other the other box, against whom we consider our coordinates relatively.
+     * @return a newly created bounding box with relative coordinates.
      */
     public BoundingBox relativePositionToBox(BoundingBox other) {
         return new BoundingBox(relativePositionTo(other), extent);
     }
 
-    /** For evaluating whether this bounding-box contains other points, boxes etc.? */
+    /**
+     * For evaluating whether this bounding-box contains other points, boxes etc.?
+     *
+     * @return a newly-created class to evaluate the <i>contains</i> relationship.
+     */
     public BoundingBoxContains contains() {
         return new BoundingBoxContains(this);
     }
 
-    /** For evaluating the intersection between this bounding-box and others */
+    /**
+     * For evaluating the intersection between this bounding-box and others.
+     *
+     * @return a newly-created class to evaluate the <i>intersection</i> relationship.
+     */
     public BoundingBoxIntersection intersection() {
         return new BoundingBoxIntersection(this);
     }
 
-    /** For performing a union between this bounding-box and another */
+    /**
+     * For performing a union between this bounding-box and another.
+     *
+     * @return a newly-created class to evaluate the <i>union</i> relationship.
+     */
     public BoundingBoxUnion union() {
         return new BoundingBoxUnion(this);
     }
@@ -326,10 +427,10 @@ public final class BoundingBox implements Serializable, Comparable<BoundingBox> 
     }
 
     /**
-     * Moves the bounding-box to the origin (0,0,0) but preserves the extent
+     * Moves the bounding-box to the origin (0,0,0) but preserves the extent.
      *
      * @return newly-created bounding box with shifted corner position (to the origin) and identical
-     *     extent
+     *     extent.
      */
     public BoundingBox shiftToOrigin() {
         return new BoundingBox(extent);
@@ -340,8 +441,8 @@ public final class BoundingBox implements Serializable, Comparable<BoundingBox> 
      *
      * <p>i.e. adds a vector to the corner position.
      *
-     * @param shift what to add to the corner position
-     * @return newly created bounding-box with shifted corner position and identical extent
+     * @param shift what to add to the corner position.
+     * @return newly created bounding-box with shifted corner position and identical extent.
      */
     public BoundingBox shiftBy(ReadableTuple3i shift) {
         return new BoundingBox(Point3i.immutableAdd(cornerMin, shift), extent);
@@ -352,8 +453,8 @@ public final class BoundingBox implements Serializable, Comparable<BoundingBox> 
      *
      * <p>i.e. subtracts a vector from the corner position.
      *
-     * @param shift what to subtract from the corner position
-     * @return newly created bounding-box with shifted corner position and identical extent
+     * @param shift what to subtract from the corner position.
+     * @return newly created bounding-box with shifted corner position and identical extent.
      */
     public BoundingBox shiftBackBy(ReadableTuple3i shift) {
         return new BoundingBox(Point3i.immutableSubtract(cornerMin, shift), extent);
@@ -362,38 +463,39 @@ public final class BoundingBox implements Serializable, Comparable<BoundingBox> 
     /**
      * Assigns a new corner-location to the bounding-box.
      *
-     * @param cornerMinNew the new corner
-     * @return a bounding-box with a new corner and the same extent
+     * @param cornerMinToAssign the new corner.
+     * @return a bounding-box with a new corner and the same extent.
      */
-    public BoundingBox shiftTo(Point3i cornerMinNew) {
-        return new BoundingBox(cornerMinNew, extent);
+    public BoundingBox shiftTo(Point3i cornerMinToAssign) {
+        return new BoundingBox(cornerMinToAssign, extent);
     }
 
     /**
-     * Assigns a new z-slice corner-location to the bounding-box
+     * Assigns a new z-slice corner-location to the bounding-box.
      *
-     * @param crnrZNew the new value in Z for the corner
-     * @return a bounding-box with a new z-slice corner and the same extent
+     * @param cornerZToAssign the new value in Z for the corner.
+     * @return a newly-created bounding-box with a new z-slice corner and the same extent.
      */
-    public BoundingBox shiftToZ(int crnrZNew) {
-        return new BoundingBox(cornerMin.duplicateChangeZ(crnrZNew), extent);
+    public BoundingBox shiftToZ(int cornerZToAssign) {
+        return new BoundingBox(cornerMin.duplicateChangeZ(cornerZToAssign), extent);
     }
 
     /**
-     * Reflects the bounding box through the origin (i.e. {@code x, y, z} becomes {@code -x, -y,
-     * -z})
+     * Reflects the bounding box through the origin.
      *
-     * @return a bounding-box reflected through the origin
+     * <p>i.e. {@code x, y, z} becomes {@code -x, -y, -z}.
+     *
+     * @return a newly-created bounding-box reflected through the origin.
      */
     public BoundingBox reflectThroughOrigin() {
         return new BoundingBox(Point3i.immutableScale(cornerMin, -1), extent);
     }
 
     /**
-     * Scales the bounding-box, both the corner-point and the extent
+     * Scales the bounding-box, both the corner-point and the extent.
      *
-     * @param scaleFactor scaling-factor
-     * @return a new bounding-box with scaled corner-point and extent
+     * @param scaleFactor the scaling-factor.
+     * @return a new bounding-box with scaled corner-point and extent.
      */
     public BoundingBox scale(ScaleFactor scaleFactor) {
         return scale(scaleFactor, scaledExtent(scaleFactor));
@@ -403,10 +505,10 @@ public final class BoundingBox implements Serializable, Comparable<BoundingBox> 
      * Scales the bounding-box, both the corner-point and the extent - ensuring it remains inside a
      * containing-extent.
      *
-     * @param scaleFactor scaling-factor
+     * @param scaleFactor scaling-factor.
      * @param clampTo clamps scaled-object's bounding-box to ensure it always fit inside (to catch
-     *     any rounding errors that push the bounding box outside the scene-boundary)
-     * @return a new bounding-box with scaled corner-point and extent
+     *     any rounding errors that push the bounding box outside the scene-boundary).
+     * @return a new bounding-box with scaled corner-point and extent.
      */
     public BoundingBox scaleClampTo(ScaleFactor scaleFactor, Extent clampTo) {
         Point3i cornerScaled = scaledCorner(scaleFactor);
@@ -416,20 +518,39 @@ public final class BoundingBox implements Serializable, Comparable<BoundingBox> 
     }
 
     /**
-     * Scales the bounding-box corner-point, and assigns a new extent
+     * Scales the bounding-box corner-point, and assigns a new extent.
      *
-     * @param scaleFactor scaling-factor
-     * @param extentToAssign extent to assign
-     * @return a new bounding-box with scaled corner-point and the specified extent
+     * @param scaleFactor scaling-factor.
+     * @param extentToAssign extent to assign.
+     * @return a new bounding-box with scaled corner-point and the specified extent.
      */
     public BoundingBox scale(ScaleFactor scaleFactor, Extent extentToAssign) {
         return new BoundingBox(scaledCorner(scaleFactor), extentToAssign);
     }
 
-    /** The bottom-left corner of the bounding box. */
+    /**
+     * The minimum corner of the bounding box in each dimension.
+     *
+     * @return the point used internally as a corner (exposed read-only).
+     */
     public ReadableTuple3i cornerMin() {
         /** Exposed via {@link ReadableTuple3i} to keep it read-only */
         return cornerMin;
+    }
+
+    @Override
+    public int compareTo(BoundingBox other) {
+        int compareCornerMin = cornerMin.compareTo(other.cornerMin);
+        if (compareCornerMin != 0) {
+            return compareCornerMin;
+        }
+
+        int compareExtent = extent.compareTo(other.extent);
+        if (compareExtent != 0) {
+            return compareExtent;
+        }
+
+        return 0;
     }
 
     private Extent scaledExtent(ScaleFactor scaleFactor) {
@@ -437,7 +558,7 @@ public final class BoundingBox implements Serializable, Comparable<BoundingBox> 
     }
 
     private Point3i scaledCorner(ScaleFactor scaleFactor) {
-        return ScaleFactorUtilities.scale(scaleFactor, cornerMin);
+        return Scaler.scale(scaleFactor, cornerMin);
     }
 
     private void checkMaxMoreThanMin(ReadableTuple3i min, ReadableTuple3i max) {
@@ -463,35 +584,7 @@ public final class BoundingBox implements Serializable, Comparable<BoundingBox> 
         return extractDim.applyAsDouble(cornerMin) + midPointInExtent;
     }
 
-    private static int closestPointOnAxis(double value, int axisMin, int axisMax) {
-
-        if (value < axisMin) {
-            return axisMin;
-        }
-
-        if (value > axisMax) {
-            return axisMax;
-        }
-
-        return (int) value;
-    }
-
     private static Point3i multiplyByTwo(Tuple3i point) {
         return Point3i.immutableScale(point, 2);
-    }
-
-    @Override
-    public int compareTo(BoundingBox other) {
-        int compareCornerMin = cornerMin.compareTo(other.cornerMin);
-        if (compareCornerMin != 0) {
-            return compareCornerMin;
-        }
-
-        int compareExtent = extent.compareTo(other.extent);
-        if (compareExtent != 0) {
-            return compareExtent;
-        }
-
-        return 0;
     }
 }

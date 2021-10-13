@@ -30,25 +30,39 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.spatial.point.Point3i;
 
+/**
+ * Scales different types of entities with a {@link ScaleFactor}.
+ *
+ * @author Owen Feehan
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class ScaleFactorUtilities {
+public class Scaler {
 
-    /** Scales a point in XY (immutably) */
+    /**
+     * Scales a point in XY by multiplying each dimension by its corresponding scaling-factor.
+     *
+     * <p>This is an <i>immutable</i> operation.
+     *
+     * @param scalingFactor the factor to use for scaling.
+     * @param point the point to scale.
+     * @return a newly created point, where the X and Y dimensions have been scaled by the
+     *     corresponding factor in {@code scalingFactor} and the z-dimension value is identical.
+     */
     public static Point3i scale(ScaleFactor scalingFactor, Point3i point) {
         return new Point3i(
-                ScaleFactorUtilities.scaleQuantity(scalingFactor.x(), point.x()),
-                ScaleFactorUtilities.scaleQuantity(scalingFactor.y(), point.y()),
+                Scaler.scaleQuantity(scalingFactor.x(), point.x()),
+                Scaler.scaleQuantity(scalingFactor.y(), point.y()),
                 point.z());
     }
 
     /**
-     * Multiplies a quantity (integer) by a scaling-factor, returning it as an integer
+     * Multiplies a quantity (integer) by a scaling-factor, returning it as an integer.
      *
      * <p>Refuses to return 0 or any negative value, making 1 the minimum return value.
      *
-     * @param scalingFactor the scaling-factor
-     * @param quantity the quantity
-     * @return the scaled-quantity, rounded up or down an integer
+     * @param scalingFactor the scaling-factor.
+     * @param quantity the quantity.
+     * @return the scaled-quantity, rounded up or down an integer.
      */
     public static int scaleQuantity(double scalingFactor, int quantity) {
         int val = (int) Math.round(scalingFactor * quantity);
@@ -57,11 +71,11 @@ public class ScaleFactorUtilities {
 
     /**
      * Calculates a scaling-factor (for one dimension) by doing a floating point division of two
-     * integers
+     * integers.
      *
-     * @param numerator to divide by
-     * @param denominator divider
-     * @return floating-point result of division
+     * @param numerator to divide by.
+     * @param denominator divider.
+     * @return floating-point result of division.
      */
     public static double deriveScalingFactor(int numerator, int denominator) {
         return ((double) numerator) / denominator;

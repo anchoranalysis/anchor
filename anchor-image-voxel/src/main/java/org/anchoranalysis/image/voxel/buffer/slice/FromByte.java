@@ -30,7 +30,7 @@ import com.google.common.base.Preconditions;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferFactory;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
-import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.spatial.box.Extent;
 
 public class FromByte implements SliceBufferIndex<UnsignedByteBuffer> {
 
@@ -74,7 +74,7 @@ public class FromByte implements SliceBufferIndex<UnsignedByteBuffer> {
     }
 
     private void initialize() {
-        int volumeXY = extent.volumeXY();
+        int volumeXY = extent.areaXY();
         extent.iterateOverZ(z -> buffer[z] = VoxelBufferFactory.allocateUnsignedByte(volumeXY));
     }
 }

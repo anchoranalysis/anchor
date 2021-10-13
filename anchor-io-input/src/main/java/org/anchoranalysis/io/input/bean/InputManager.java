@@ -35,9 +35,11 @@ import org.anchoranalysis.io.input.InputsWithDirectory;
  * Base class for describing the inputs.
  *
  * <p>By inputs, this refers to files that form the necessary input to an experiment.
- * 
- * <p>This is an import class in specifying an <a href="https://www.anchoranalysis.org/user_guide.html#essentials-of-anchor">experiment</a> in the Anchor platform, of which many
- * different implementations specify different types and combinations of inputs. 
+ *
+ * <p>This is an import class in specifying an <a
+ * href="https://www.anchoranalysis.org/user_guide.html#essentials-of-anchor">experiment</a> in the
+ * Anchor platform, of which many different implementations specify different types and combinations
+ * of inputs.
  *
  * @author Owen Feehan
  * @param <T> input-type

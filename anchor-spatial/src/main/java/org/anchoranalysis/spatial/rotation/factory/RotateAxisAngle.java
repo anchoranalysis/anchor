@@ -31,11 +31,25 @@ import lombok.AllArgsConstructor;
 import org.anchoranalysis.spatial.point.Vector3d;
 import org.anchoranalysis.spatial.rotation.RotationMatrix;
 
+/**
+ * Creates a {@link RotationMatrix} that performs a 3D rotation using an <a href="https://en.wikipedia.org/wiki/Axis%E2%80%93angle_representation">Axis-angle</a> representation.
+ * 
+ * @author Owen Feehan
+ *
+ */
 @AllArgsConstructor
 public class RotateAxisAngle extends RotationMatrixFactory {
 
-    // assumes point is a unit-vector
-    private Vector3d point;
+    /** 
+     * The axis unit-vector parameter.
+     * 
+     * <p>This should always be a unit-vector as a precondition. This is not checked.
+     */
+    private Vector3d axis;
+    
+    /**
+     * The angle parameter.
+     */
     private double angle;
 
     @Override
@@ -47,17 +61,17 @@ public class RotateAxisAngle extends RotationMatrixFactory {
         double cos = Math.cos(angle);
         double sin = Math.sin(angle);
 
-        mat.set(0, 0, cos + point.x() * point.x() * oneMinusCos);
-        mat.set(1, 0, point.y() * point.x() * oneMinusCos + point.z() * sin);
-        mat.set(2, 0, point.z() * point.x() * oneMinusCos - point.y() * sin);
+        mat.set(0, 0, cos + axis.x() * axis.x() * oneMinusCos);
+        mat.set(1, 0, axis.y() * axis.x() * oneMinusCos + axis.z() * sin);
+        mat.set(2, 0, axis.z() * axis.x() * oneMinusCos - axis.y() * sin);
 
-        mat.set(0, 1, point.x() * point.y() * oneMinusCos - point.z() * sin);
-        mat.set(1, 1, cos + point.y() * point.y() * oneMinusCos);
-        mat.set(2, 1, point.z() * point.y() * oneMinusCos + point.x() * sin);
+        mat.set(0, 1, axis.x() * axis.y() * oneMinusCos - axis.z() * sin);
+        mat.set(1, 1, cos + axis.y() * axis.y() * oneMinusCos);
+        mat.set(2, 1, axis.z() * axis.y() * oneMinusCos + axis.x() * sin);
 
-        mat.set(0, 2, point.x() * point.z() * oneMinusCos + point.y() * sin);
-        mat.set(1, 2, point.y() * point.z() * oneMinusCos - point.x() * sin);
-        mat.set(2, 2, cos + point.z() * point.z() * oneMinusCos);
+        mat.set(0, 2, axis.x() * axis.z() * oneMinusCos + axis.y() * sin);
+        mat.set(1, 2, axis.y() * axis.z() * oneMinusCos - axis.x() * sin);
+        mat.set(2, 2, cos + axis.z() * axis.z() * oneMinusCos);
     }
 
     @Override

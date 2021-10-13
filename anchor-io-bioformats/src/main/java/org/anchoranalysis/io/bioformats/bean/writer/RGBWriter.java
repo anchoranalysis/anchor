@@ -46,7 +46,7 @@ abstract class RGBWriter {
 
     public void writeAsRGB() throws ImageIOException {
 
-        int capacity = channelRed.voxels().any().extent().volumeXY();
+        int capacity = channelRed.voxels().any().extent().areaXY();
 
         channelRed.extent().iterateOverZ(z -> mergeSliceAsRGB(z, capacity));
     }

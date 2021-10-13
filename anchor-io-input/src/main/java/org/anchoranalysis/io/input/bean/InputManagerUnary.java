@@ -42,7 +42,10 @@ import org.anchoranalysis.io.input.InputsWithDirectory;
 public abstract class InputManagerUnary<T extends InputFromManager> extends InputManager<T> {
 
     // START BEAN PROPERTIES
-    /** The delegate input-manager which will be circumstantially called by the current input-manager. */
+    /**
+     * The delegate input-manager which will be circumstantially called by the current
+     * input-manager.
+     */
     @BeanField @Getter @Setter private InputManager<T> input;
     // END BEAN PROPERITES
 

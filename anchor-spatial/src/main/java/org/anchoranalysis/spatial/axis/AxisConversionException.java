@@ -27,12 +27,22 @@ package org.anchoranalysis.spatial.axis;
 
 import org.anchoranalysis.core.exception.friendly.AnchorFriendlyCheckedException;
 
-public class AxisTypeException extends AnchorFriendlyCheckedException {
+/**
+ * When converting another type to a corresponding {@link Axis} fails.
+ *
+ * @author Owen Feehan
+ */
+public class AxisConversionException extends AnchorFriendlyCheckedException {
 
     /** */
     private static final long serialVersionUID = 1L;
 
-    public AxisTypeException(String message) {
+    /**
+     * Create with a messsage, without an underlying cause.
+     *
+     * @param message the message
+     */
+    public AxisConversionException(String message) {
         super(message);
     }
 }

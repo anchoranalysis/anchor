@@ -27,26 +27,64 @@ package org.anchoranalysis.spatial.point;
  */
 
 import java.io.Serializable;
-import org.anchoranalysis.spatial.axis.AxisType;
+import org.anchoranalysis.spatial.axis.Axis;
+import org.anchoranalysis.spatial.axis.AxisConverter;
 
 /**
- * Read-only access to a tuple
+ * A tuple with three-values, respectively for the X, Y and Z dimensions.
+ *
+ * <p>This is convenient to provide non-mutable (read-only) access to a tuple's values.
+ *
+ * <p>A natural ordering is imposed by comparing the Z, Y, X values in that order.
  *
  * @author Owen Feehan
  */
 public interface ReadableTuple3i extends Serializable, Comparable<ReadableTuple3i> {
 
+    /**
+     * X-axis component of the tuple.
+     *
+     * @return the component value.
+     */
     int x();
 
+    /**
+     * Y-axis component of the tuple.
+     *
+     * @return the component value.
+     */
     int y();
 
+    /**
+     * Z-axis component of the tuple.
+     *
+     * @return the component value.
+     */
     int z();
 
-    int byDimension(AxisType axisType);
+    /**
+     * A component of a tuple corresponding to a particular axis.
+     *
+     * @param axis the axis.
+     * @return the component of the tuple corresponding to that axis.
+     */
+    int valueByDimension(Axis axis);
 
-    int byDimension(int dimIndex);
+    /**
+     * A component of a tuple corresponding to a particular dimension by index.
+     *
+     * @param dimensionIndex the index corresponding to an axis, as per {@link AxisConverter}.
+     * @return the component of the tuple corresponding to that axis.
+     */
+    int valueByDimension(int dimensionIndex);
 
-    ReadableTuple3i duplicateChangeZ(int zNew);
+    /**
+     * Creates a copy of the current tuple, but with a different Z-component value.
+     *
+     * @param zValueToAssign the value to assign in the Z-axis.
+     * @return a copy of the current object with changed Z-component value.
+     */
+    ReadableTuple3i duplicateChangeZ(int zValueToAssign);
 
     @Override
     default int compareTo(ReadableTuple3i other) {

@@ -33,9 +33,9 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
-import org.anchoranalysis.spatial.axis.AxisType;
-import org.anchoranalysis.spatial.axis.AxisTypeConverter;
-import org.anchoranalysis.spatial.axis.AxisTypeException;
+import org.anchoranalysis.spatial.axis.Axis;
+import org.anchoranalysis.spatial.axis.AxisConversionException;
+import org.anchoranalysis.spatial.axis.AxisConverter;
 
 @NoArgsConstructor
 public class CenterOfGravity extends FeatureSingleObject {
@@ -51,7 +51,7 @@ public class CenterOfGravity extends FeatureSingleObject {
      *
      * @param axis axis
      */
-    public CenterOfGravity(AxisType axis) {
+    public CenterOfGravity(Axis axis) {
         this.axis = axis.toString().toLowerCase();
     }
 
@@ -61,7 +61,7 @@ public class CenterOfGravity extends FeatureSingleObject {
 
         FeatureInputSingleObject params = input.get();
 
-        double val = params.getObject().centerOfGravity(axisType());
+        double val = params.getObject().centerOfGravity(axis());
 
         if (Double.isNaN(val)) {
             return emptyValue;
@@ -70,10 +70,10 @@ public class CenterOfGravity extends FeatureSingleObject {
         return val;
     }
 
-    private AxisType axisType() throws FeatureCalculationException {
+    private Axis axis() throws FeatureCalculationException {
         try {
-            return AxisTypeConverter.createFromString(axis);
-        } catch (AxisTypeException e) {
+            return AxisConverter.createFromString(axis);
+        } catch (AxisConversionException e) {
             throw new FeatureCalculationException(e.friendlyMessageHierarchy());
         }
     }

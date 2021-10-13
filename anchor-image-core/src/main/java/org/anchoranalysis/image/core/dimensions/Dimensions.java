@@ -32,8 +32,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import org.anchoranalysis.image.core.dimensions.size.ResizeExtentUtilities;
-import org.anchoranalysis.spatial.Extent;
 import org.anchoranalysis.spatial.box.BoundingBox;
+import org.anchoranalysis.spatial.box.Extent;
 import org.anchoranalysis.spatial.point.Point3d;
 import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.point.ReadableTuple3i;
@@ -103,7 +103,7 @@ public final class Dimensions {
     }
 
     public int volumeXY() {
-        return extent.volumeXY();
+        return extent.areaXY();
     }
 
     public int x() {

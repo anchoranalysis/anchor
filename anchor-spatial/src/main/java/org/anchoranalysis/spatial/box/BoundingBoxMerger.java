@@ -29,6 +29,12 @@ import java.util.stream.Stream;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
+/**
+ * Merges one or more {@link BoundingBox} together, to create a single {@link BoundingBox} that spans them all.
+ * 
+ * @author Owen Feehan
+ *
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class BoundingBoxMerger {
 
@@ -38,7 +44,7 @@ public class BoundingBoxMerger {
      * @param stream a stream whose bounding-boxes are to be merged
      * @return a bounding-box just large enough to include all the bounding-boxes of the objects
      */
-    public static BoundingBox mergeBoundingBoxes(Stream<BoundingBox> stream) {
+    public static BoundingBox merge(Stream<BoundingBox> stream) {
         return stream // NOSONAR
                 .reduce( // NOSONAR
                         (boundingBox, other) -> boundingBox.union().with(other))

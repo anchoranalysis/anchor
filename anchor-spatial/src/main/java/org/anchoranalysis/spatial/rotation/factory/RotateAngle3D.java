@@ -31,6 +31,14 @@ import cern.colt.matrix.DoubleMatrix2D;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.spatial.rotation.RotationMatrix;
 
+/**
+ * Creates a {@link RotationMatrix} that performs a 3D rotation using three angle parameters for the rotation.
+ * 
+ * <p>This is some form of <a href="https://en.wikipedia.org/wiki/Davenport_chained_rotations">Euler rotations</a> representation.
+ * 
+ * @author Owen Feehan
+ *
+ */
 @AllArgsConstructor
 public class RotateAngle3D extends RotationMatrixFactory {
 
@@ -71,10 +79,10 @@ public class RotateAngle3D extends RotationMatrixFactory {
     }
 
     /**
-     * Assigns values for a rotation about a particular axis (in radians)
+     * Assigns values for a rotation about a particular axis (in radians).
      *
-     * @param matrix
-     * @param angleRadians
+     * @param matrix the matrix to assign to.
+     * @param angleRadians the angle in radians to assign.
      * @param axisShift 0 for x-axis, 1 for y-axis, 2 for z-axis
      */
     private static void assgnRotationMatrix(

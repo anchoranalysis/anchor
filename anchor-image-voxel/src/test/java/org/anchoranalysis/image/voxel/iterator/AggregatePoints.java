@@ -46,7 +46,7 @@ class AggregatePoints implements ProcessPoint {
     }
 
     public long count() {
-        return runningSum.getCountXY();
+        return runningSum.countXY();
     }
 
     /** The center-of-gravity of all points-processed (discretized) */

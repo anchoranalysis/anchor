@@ -29,7 +29,7 @@ import ij.process.ColorProcessor;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
-import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.spatial.box.Extent;
 
 @AllArgsConstructor
 class RGBVoxels {

@@ -64,7 +64,7 @@ public abstract class Overlay implements Identifiable {
             throws CreateException;
 
     public abstract ObjectWithProperties createObject(
-            DrawOverlay overlayWriter, Dimensions dimEntireImage, BinaryValuesByte bvOut)
+            DrawOverlay overlayWriter, Dimensions dimensionsEntireImage, BinaryValuesByte bvOut)
             throws CreateException;
 
     /**
