@@ -46,6 +46,6 @@ class PointRangeWithCount {
     }
 
     public BoundingBox deriveBoundingBox() throws OperationFailedException {
-        return pointRange.deriveBoundingBox();
+        return pointRange.toBoundingBox();
     }
 }

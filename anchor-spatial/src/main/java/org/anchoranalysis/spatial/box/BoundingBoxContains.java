@@ -30,7 +30,9 @@ import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.point.ReadableTuple3i;
 
 /**
- * Does a bounding box contain other objects? e.g. points, other bounding boxes etc.
+ * Does a bounding box contain other objects?
+ *
+ * <p>The other objects can be points, other bounding boxes etc.
  *
  * @author Owen Feehan
  */
@@ -39,38 +41,72 @@ public final class BoundingBoxContains {
     private final BoundingBox box;
     private final ReadableTuple3i cornerMax;
 
+    /**
+     * Create with the {@link BoundingBox} that is queried.
+     *
+     * @param box the bounding-box to query whether other entities are contained within it.
+     */
     public BoundingBoxContains(BoundingBox box) {
-        super();
         this.box = box;
         this.cornerMax = box.calculateCornerMax();
     }
 
-    /** Is this value in the x-dimension within the bounding box range? */
-    public boolean x(int x) {
-        return (x >= box.cornerMin().x()) && (x <= cornerMax.x());
+    /**
+     * Is this value in the X-dimension within the bounding box range?
+     *
+     * @param value a value to be tested whether it lies within the bounding-box on the X-axis.
+     * @return true iff the value is within the range.
+     */
+    public boolean x(int value) {
+        return (value >= box.cornerMin().x()) && (value <= cornerMax.x());
     }
 
-    /** Is this value in the y-dimension within the bounding box range? */
-    public boolean y(int y) {
-        return (y >= box.cornerMin().y()) && (y <= cornerMax.y());
+    /**
+     * Is this value in the Y-dimension within the bounding box range?
+     *
+     * @param value a value to be tested whether it lies within the bounding-box on the Y-axis.
+     * @return true iff the value is within the range.
+     */
+    public boolean y(int value) {
+        return (value >= box.cornerMin().y()) && (value <= cornerMax.y());
     }
 
-    /** Is this value in the z-dimension within the bounding box range? */
-    public boolean z(int z) {
-        return (z >= box.cornerMin().z()) && (z <= cornerMax.z());
+    /**
+     * Is this value in the Z-dimension within the bounding box range?
+     *
+     * @param value a value to be tested whether it lies within the bounding-box on the Z-axis.
+     * @return true iff the value is within the range.
+     */
+    public boolean z(int value) {
+        return (value >= box.cornerMin().z()) && (value <= cornerMax.z());
     }
 
-    /** Is this point within the bounding-box? */
+    /** 
+     * Is this point within the bounding-box?
+     *
+     * @param point point to test whether it lies within the bounding-box.
+     * @return true iff the point lies inside the bounding-box.
+     */
     public boolean point(ReadableTuple3i point) {
         return x(point.x()) && y(point.y()) && z(point.z());
     }
 
-    /** Is this point within the bounding-box, but ignoring the z-dimension? */
+    /** 
+     * Like {@link #point(ReadableTuple3i)} but ignores the z-dimension.
+     * 
+     * @param point point to test whether it lies within the bounding-box.
+     * @return true iff the point lies inside the bounding-box, disregarding the z-dimension. 
+     */
     public boolean pointIgnoreZ(Point3i point) {
         return x(point.x()) && y(point.y());
     }
 
-    /** Is this other bounding-box FULLY contained within this bounding box? */
+    /** 
+     * Is this other bounding-box <i>fully</i> contained within this bounding box?
+     *
+     * @param maybeContainedInside box to test whether it is contained inside or not.
+     * @return true iff the {@code maybeContainedInside} entirely lies inside the bounding-box.
+     */
     public boolean box(BoundingBox maybeContainedInside) {
         return point(maybeContainedInside.cornerMin())
                 && point(maybeContainedInside.calculateCornerMax());

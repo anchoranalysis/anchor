@@ -36,10 +36,10 @@ import org.anchoranalysis.image.feature.input.FeatureInputHistogram;
 import org.anchoranalysis.math.histogram.Histogram;
 
 /**
- * Base class for {@link FeatureHistogram} implementations that calculate a statistic from the {@link Histogram}.
- *  
- * @author Owen Feehan
+ * Base class for {@link FeatureHistogram} implementations that calculate a statistic from the
+ * {@link Histogram}.
  *
+ * @author Owen Feehan
  */
 public abstract class FeatureHistogramStatistic extends FeatureHistogram {
 
@@ -73,8 +73,9 @@ public abstract class FeatureHistogramStatistic extends FeatureHistogram {
     }
 
     /**
-     * Calculates the statistic from the histogram, that is subsequently returned as the feature-value.
-     * 
+     * Calculates the statistic from the histogram, that is subsequently returned as the
+     * feature-value.
+     *
      * @param histogram the histogram to calculate the statistic from.
      * @return the calculated statistic.
      * @throws FeatureCalculationException if the calculation cannot succeed.

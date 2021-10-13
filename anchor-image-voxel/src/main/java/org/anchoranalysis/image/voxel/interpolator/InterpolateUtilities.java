@@ -34,7 +34,7 @@ import org.anchoranalysis.image.voxel.datatype.FloatVoxelType;
 import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelTypeException;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
-import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.spatial.box.Extent;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class InterpolateUtilities {
@@ -122,6 +122,6 @@ public class InterpolateUtilities {
                 }
             }
         }
-        Preconditions.checkArgument(trgt.slice(0).capacity() == extentTarget.volumeXY());
+        Preconditions.checkArgument(trgt.slice(0).capacity() == extentTarget.areaXY());
     }
 }

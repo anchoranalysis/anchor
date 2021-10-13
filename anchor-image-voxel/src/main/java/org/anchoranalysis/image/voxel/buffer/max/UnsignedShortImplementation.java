@@ -29,7 +29,7 @@ package org.anchoranalysis.image.voxel.buffer.max;
 import org.anchoranalysis.image.voxel.buffer.primitive.PrimitiveConverter;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedShortBuffer;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
-import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.spatial.box.Extent;
 
 class UnsignedShortImplementation extends MaxIntensityBufferBase<UnsignedShortBuffer> {
 

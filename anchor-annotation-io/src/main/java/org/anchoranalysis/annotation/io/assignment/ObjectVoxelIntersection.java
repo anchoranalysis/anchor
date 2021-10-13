@@ -35,23 +35,23 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
 
 /**
  * Creates an assignment between intersecting <i>voxels</i> in two objects.
- * 
- * <p>Voxels are considered to be assigned, if the exact same voxel exists in both {@link ObjectMask}s,
- * and otherwise a voxel is considered unassigned.
- * 
+ *
+ * <p>Voxels are considered to be assigned, if the exact same voxel exists in both {@link
+ * ObjectMask}s, and otherwise a voxel is considered unassigned.
+ *
  * <p>Calculates statistics based upon corresponding two object-masks:
- * 
+ *
  * <ul>
- * <li><a href="https://en.wikipedia.org/wiki/S%C3%B8rensen%E2%80%93Dice_coefficient">DICE</a>.
- * <li><a href="https://en.wikipedia.org/wiki/Jaccard_index">Jaccard</a>.
+ *   <li><a href="https://en.wikipedia.org/wiki/S%C3%B8rensen%E2%80%93Dice_coefficient">DICE</a>.
+ *   <li><a href="https://en.wikipedia.org/wiki/Jaccard_index">Jaccard</a>.
  * </ul>
- * 
+ *
  * <p>The object-masks are arbitrarily termed <i>left</i> and <i>right</i>.
  *
  * @author Owen Feehan
  */
 public class ObjectVoxelIntersection implements Assignment<ObjectMask> {
-    
+
     private final ObjectMask objectLeft;
     private final ObjectMask objectRight;
 
@@ -62,7 +62,7 @@ public class ObjectVoxelIntersection implements Assignment<ObjectMask> {
 
     /**
      * Determines a voxel-assignment between two objects.
-     * 
+     *
      * @param left the left-object.
      * @param right the right-object.
      */
@@ -96,18 +96,18 @@ public class ObjectVoxelIntersection implements Assignment<ObjectMask> {
     public List<ObjectMask> unassigned(boolean left) {
         return multiplexObjectIf(!isIntersectionPresent(), left);
     }
-    
+
     @Override
     public StatisticsToExport statistics() {
         StatisticsToExport out = new StatisticsToExport();
-        
+
         out.addDouble("dice", calculateDice());
         out.addDouble("jaccard", calculateJaccard());
         out.addInt("numberIntersectingVoxels", numberIntersectingVoxels);
         out.addInt("numberUnionVoxels", numberUnionVoxels);
         out.addInt("sizeLeft", sizeLeft);
         out.addInt("sizeRight", sizeRight);
-        
+
         return out;
     }
 

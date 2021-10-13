@@ -53,7 +53,7 @@ public class HistogramFactory {
 
         Histogram histogram = new Histogram(maxValue);
 
-        int volumeXY = inputBox.extent().volumeXY();
+        int volumeXY = inputBox.extent().areaXY();
 
         inputBox.extent()
                 .iterateOverZ(z -> addBufferToHistogram(histogram, inputBox.slice(z), volumeXY));

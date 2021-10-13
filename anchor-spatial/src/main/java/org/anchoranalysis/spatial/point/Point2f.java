@@ -33,6 +33,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
+/**
+ * A <i>two</i>-dimensional point of <i>float</i> values.
+ *
+ * <p>We consider a point to be a tuple representing a single physical point in space.
+ *
+ * @author Owen Feehan
+ */
 @EqualsAndHashCode
 @Accessors(fluent = true)
 @AllArgsConstructor
@@ -42,9 +49,17 @@ public final class Point2f implements Serializable {
     /** */
     private static final long serialVersionUID = 1L;
 
+    /** X-axis component of point. */
     @Getter private float x;
+
+    /** Y-axis component of point. */
     @Getter private float y;
 
+    /**
+     * Multiplies each dimension's component by a factor.
+     * 
+     * @param factor the factor to multiply by.
+     */
     public void scale(double factor) {
         this.x *= factor;
         this.y *= factor;

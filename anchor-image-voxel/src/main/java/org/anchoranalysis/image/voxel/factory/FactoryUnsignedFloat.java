@@ -33,7 +33,7 @@ import org.anchoranalysis.image.voxel.buffer.slice.FromFloat;
 import org.anchoranalysis.image.voxel.buffer.slice.SliceBufferIndex;
 import org.anchoranalysis.image.voxel.datatype.FloatVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.spatial.box.Extent;
 
 final class FactoryUnsignedFloat implements VoxelsFactoryTypeBound<FloatBuffer> {
 

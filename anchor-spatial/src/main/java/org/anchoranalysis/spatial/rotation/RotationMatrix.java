@@ -32,6 +32,7 @@ import cern.colt.matrix.DoubleMatrix2D;
 import cern.jet.math.Functions;
 import com.google.common.base.Preconditions;
 import java.io.Serializable;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.spatial.point.Point3d;
 
@@ -53,14 +54,30 @@ public class RotationMatrix implements Serializable {
      */
     private DoubleMatrix2D delegate;
 
+    /**
+     * Creates a rotation-matrix populated only with zeros.
+     * 
+     * @param numberDimensions the dimensionality of the matrix to create.
+     */
     public RotationMatrix(int numberDimensions) {
         delegate = DoubleFactory2D.dense.make(numberDimensions, numberDimensions);
     }
 
+    /**
+     * Creates a rotation-matrix from an existing {@link DoubleMatrix2D}.
+     * 
+     * @param matrix the matrix, which is then used internally in the structure.
+     */
     public RotationMatrix(DoubleMatrix2D matrix) {
         this.delegate = matrix;
     }
 
+    /**
+     * Performs a rotation on a single point, encoded as a {@link Point3d}.
+     * 
+     * @param point the point to rotate.
+     * @return a newly-created rotated point.
+     */
     public Point3d rotatedPoint(Point3d point) {
 
         if (delegate.rows() == 3) {
@@ -74,49 +91,43 @@ public class RotationMatrix implements Serializable {
         }
     }
 
+    /**
+     * Performs a rotation on a single point, encoded as an array.
+     * 
+     * @param point the point encoded as an array, where the length should match the number of dimensions of the rotation-matrix.
+     * @return a newly-created array encoding the rotated {@code point}.
+     */
     public double[] rotatePoint(double[] point) {
         Preconditions.checkArgument(point.length == delegate.rows());
 
-        int numberDimensions = point.length;
-
-        DoubleFactory2D factory = DoubleFactory2D.dense;
-        DoubleMatrix2D matrixIn = factory.make(numberDimensions, 1);
-
-        for (int i = 0; i < numberDimensions; i++) {
-            matrixIn.set(i, 0, point[i]);
-        }
+        DoubleMatrix2D matrixIn = matrixFromPoint(point);
 
         DoubleMatrix2D matrixOut = delegate.zMult(matrixIn, null);
+        return pointFromMatrix(matrixOut);
+    }
 
-        double[] pointOut = new double[numberDimensions];
-        for (int i = 0; i < numberDimensions; i++) {
-            pointOut[i] = matrixOut.get(i, 0);
+    /**
+     * Extracts a column from the rotation-matrix as a point.
+     *
+     * <p>This should only be called on a three-dimensional rotation matrix.
+     * 
+     * @param columnIndex the index of the column.
+     * @return a newly created point from the column.
+     * @throws OperationFailedException if the rotation-matrix does not have three dimensions exactly.
+     */
+    public Point3d column(int columnIndex) throws OperationFailedException {
+        if(delegate.columns()!=3) {
+            throw new OperationFailedException("The rotation-matrix is not three-dimensional");
         }
-        return pointOut;
-    }
-
-    public static RotationMatrix createFromThreeVectors(
-            DoubleMatrix1D vector1, DoubleMatrix1D vector2, DoubleMatrix1D vector3) {
-
-        DoubleFactory2D factory = DoubleFactory2D.dense;
-        DoubleMatrix2D matrix = factory.make(3, 3);
-
-        assignMatrixColumnFromVector(matrix, 0, vector1);
-        assignMatrixColumnFromVector(matrix, 1, vector2);
-        assignMatrixColumnFromVector(matrix, 2, vector3);
-
-        return new RotationMatrix(matrix);
-    }
-
-    public RotationMatrix multiply(RotationMatrix other) {
-        return new RotationMatrix(delegate.zMult(other.delegate, null));
-    }
-
-    public Point3d column(int columnIndex) {
         DoubleMatrix1D vector = delegate.viewColumn(columnIndex);
         return new Point3d(vector.get(0), vector.get(1), vector.get(2));
     }
 
+    /**
+     * The number of dimensions in the rotation-matrix.
+     * 
+     * @return the number of dimensions.
+     */
     public int getNumberDimensions() {
         return delegate.columns();
     }
@@ -130,10 +141,20 @@ public class RotationMatrix implements Serializable {
         return delegate;
     }
 
+    /**
+     * Multiplies each element in the rotation-matrix by a value.
+     * 
+     * @param value the value to multiply each element by.
+     */
     public void multiplyByConstant(double value) {
         delegate.assign(Functions.mult(value));
     }
 
+    /**
+     * Transposes the matrix immutably.
+     * 
+     * @return a newly-created {@link RotationMatrix} that is a transposed copy.
+     */
     public RotationMatrix transpose() {
         return new RotationMatrix(delegate.viewDice().copy());
     }
@@ -152,11 +173,26 @@ public class RotationMatrix implements Serializable {
         return delegate.toString();
     }
 
-    /** Copies a vector into a particular column in the matrix. */
-    private static void assignMatrixColumnFromVector(
-            DoubleMatrix2D matrix, int columnIndex, DoubleMatrix1D vector) {
-        for (int i = 0; i < 3; i++) {
-            matrix.set(i, columnIndex, vector.get(i));
+    /** Encodes a point into a matrix. */
+    private static DoubleMatrix2D matrixFromPoint(double[] point) {
+        int dimensions = point.length;
+
+        DoubleFactory2D factory = DoubleFactory2D.dense;
+        DoubleMatrix2D matrixIn = factory.make(dimensions, 1);
+
+        for (int i = 0; i < dimensions; i++) {
+            matrixIn.set(i, 0, point[i]);
         }
+        return matrixIn;
+    }
+    
+    /** Decodes a point from a matrix. */
+    private static double[] pointFromMatrix(DoubleMatrix2D matrixOut) {
+        int dimensions = matrixOut.columns();
+        double[] pointOut = new double[dimensions];
+        for (int i = 0; i < dimensions; i++) {
+            pointOut[i] = matrixOut.get(i, 0);
+        }
+        return pointOut;
     }
 }

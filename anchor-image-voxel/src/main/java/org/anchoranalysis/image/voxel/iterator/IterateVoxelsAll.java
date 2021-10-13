@@ -49,8 +49,8 @@ import org.anchoranalysis.image.voxel.iterator.process.voxelbuffer.ProcessVoxelB
 import org.anchoranalysis.image.voxel.iterator.process.voxelbuffer.ProcessVoxelBufferUnaryWithPoint;
 import org.anchoranalysis.image.voxel.kernel.KernelApplicationParameters;
 import org.anchoranalysis.image.voxel.kernel.KernelPointCursor;
-import org.anchoranalysis.spatial.Extent;
 import org.anchoranalysis.spatial.box.BoundingBox;
+import org.anchoranalysis.spatial.box.Extent;
 import org.anchoranalysis.spatial.point.Point3i;
 
 /**
@@ -193,7 +193,7 @@ public class IterateVoxelsAll {
      */
     public static <T> void withVoxelBuffer(Voxels<T> voxels, ProcessVoxelBufferUnary<T> process) {
 
-        int volumeXY = voxels.extent().volumeXY();
+        int volumeXY = voxels.extent().areaXY();
 
         voxels.extent()
                 .iterateOverZ(
@@ -252,7 +252,7 @@ public class IterateVoxelsAll {
             Voxels<S> voxels1, Voxels<T> voxels2, ProcessVoxelBufferBinary<S, T> process) {
         Preconditions.checkArgument(voxels1.extent().equals(voxels2.extent()));
 
-        int volumeXY = voxels1.extent().volumeXY();
+        int volumeXY = voxels1.extent().areaXY();
 
         voxels1.extent()
                 .iterateOverZ(
@@ -362,7 +362,7 @@ public class IterateVoxelsAll {
         int max = 0;
         boolean first = true;
 
-        int sizeXY = voxels.extent().volumeXY();
+        int sizeXY = voxels.extent().areaXY();
         for (int z = 0; z < voxels.extent().z(); z++) {
 
             T buffer = voxels.sliceBuffer(z);

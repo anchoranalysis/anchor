@@ -62,10 +62,10 @@ public class MatchExtensions extends PathMatcher {
      */
     @BeanField @OptionalBean @Getter @Setter private Set<String> extensions;
     // END BEAN PROPERTIES
-    
+
     /**
      * Create for specific extension.
-     * 
+     *
      * @param extension the extension.
      */
     public MatchExtensions(String extension) {

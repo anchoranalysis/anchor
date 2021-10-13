@@ -35,12 +35,10 @@ import org.anchoranalysis.annotation.image.ImageLabelAnnotation;
 import org.anchoranalysis.annotation.io.AnnotationReader;
 import org.anchoranalysis.io.input.InputReadFailedException;
 
-
 /**
  * Reads a {@link ImageLabelAnnotation} from the file-system.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class ImageLabelAnnotationReader implements AnnotationReader<ImageLabelAnnotation> {
 

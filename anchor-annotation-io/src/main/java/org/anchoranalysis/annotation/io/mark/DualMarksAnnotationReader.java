@@ -64,17 +64,17 @@ public class DualMarksAnnotationReader<T> implements AnnotationReader<DualMarksA
 
     /**
      * Whether an annotation exists at a particular path on the file-system.
-     * 
+     *
      * @param path the path.
      * @return true iff the annotation exists at this path.
      */
     public boolean annotationExistsAt(Path path) {
         return fileNameToRead(path).isPresent();
     }
-    
+
     /**
      * Reads the annotations as a {@link MarkCollection} from the file-system.
-     * 
+     *
      * @param path the path where the annotations are stored.
      * @return a newly created {@link MarkCollection} deserialized from {@code path}.
      * @throws DeserializationFailedException if the deserialization failed.

@@ -29,7 +29,7 @@ package org.anchoranalysis.image.voxel.buffer.slice;
 import java.util.function.Consumer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.iterator.process.voxelbuffer.ProcessVoxelBufferUnary;
-import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.spatial.box.Extent;
 
 /**
  * A container with voxel-buffers for each z-slice.

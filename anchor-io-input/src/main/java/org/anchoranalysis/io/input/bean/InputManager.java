@@ -36,6 +36,11 @@ import org.anchoranalysis.io.input.InputsWithDirectory;
  *
  * <p>By inputs, this refers to files that form the necessary input to an experiment.
  *
+ * <p>This is an import class in specifying an <a
+ * href="https://www.anchoranalysis.org/user_guide.html#essentials-of-anchor">experiment</a> in the
+ * Anchor platform, of which many different implementations specify different types and combinations
+ * of inputs.
+ *
  * @author Owen Feehan
  * @param <T> input-type
  */
@@ -44,9 +49,9 @@ public abstract class InputManager<T extends InputFromManager> extends AnchorBea
     /**
      * Creates a list of inputs given particular parameters.
      *
-     * @param params the parameters
+     * @param params the parameters.
      * @return the list of inputs, together with any associated parent directory.
-     * @throws InputReadFailedException
+     * @throws InputReadFailedException if inputs cannot be successfully read from the file-system.
      */
     public abstract InputsWithDirectory<T> inputs(InputManagerParams params)
             throws InputReadFailedException;

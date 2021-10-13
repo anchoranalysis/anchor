@@ -32,7 +32,7 @@ import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.dimensions.UnitConverter;
 import org.anchoranalysis.image.core.orientation.DirectionVector;
-import org.anchoranalysis.spatial.axis.AxisType;
+import org.anchoranalysis.spatial.axis.Axis;
 import org.anchoranalysis.spatial.point.Point3d;
 import org.anchoranalysis.spatial.point.Point3i;
 
@@ -70,7 +70,7 @@ public abstract class UnitValueDistance extends AnchorBean<UnitValueDistance>
      * @return the distance in the direction of the axis
      * @throws OperationFailedException
      */
-    public double resolveForAxis(Optional<UnitConverter> unitConverter, AxisType axis)
+    public double resolveForAxis(Optional<UnitConverter> unitConverter, Axis axis)
             throws OperationFailedException {
         return resolve(unitConverter, new DirectionVector(axis));
     }

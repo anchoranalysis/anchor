@@ -34,7 +34,7 @@ import org.anchoranalysis.image.voxel.neighborhood.EdgeAdder.AddEdge;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.spatial.box.Extent;
 
 /**
  * Creates an undirected graph where each vertex is an object, and edge exists if the objects

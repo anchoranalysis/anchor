@@ -35,27 +35,31 @@ import org.anchoranalysis.io.input.InputReadFailedException;
 
 /**
  * A set of elements, loaded from the file-system, to be compared to another set.
- * 
- * <p>The source may or not be a {@link ObjectCollection}, but it is converted into a
- * {@link ObjectCollection} to be compared to another set (as a common basis for comparison
- * between different source types).
- * 
- * @author Owen Feehan
  *
+ * <p>The source may or not be a {@link ObjectCollection}, but it is converted into a {@link
+ * ObjectCollection} to be compared to another set (as a common basis for comparison between
+ * different source types).
+ *
+ * @author Owen Feehan
  */
 public abstract class ComparableSource extends AnchorBean<ComparableSource> {
 
     /**
      * Loads the source of elements from the file-system and converts to a {@link ObjectCollection}.
-     * 
+     *
      * <p>The location of elements on the file-system may be derived from a {@code reference} path.
-     * 
-     * @param reference the source file-path used to help identify where elements are located on the file-system. 
-     * @param dimensions how large the scene is, in which elements are being compared. This is usually the same as the image-size.
-     * @param debugMode true if debug-mode is activated, which can influence paths on the file-system.
-     * @return the elements converted into a {@link ObjectCollection} and wrapped into a {@link Findable} element that indicates if they were successfully found on the file-system.
+     *
+     * @param reference the source file-path used to help identify where elements are located on the
+     *     file-system.
+     * @param dimensions how large the scene is, in which elements are being compared. This is
+     *     usually the same as the image-size.
+     * @param debugMode true if debug-mode is activated, which can influence paths on the
+     *     file-system.
+     * @return the elements converted into a {@link ObjectCollection} and wrapped into a {@link
+     *     Findable} element that indicates if they were successfully found on the file-system.
      * @throws InputReadFailedException if the objects cannot be successfully loaded.
      */
     public abstract Findable<ObjectCollection> loadAsObjects(
-            Path reference, Dimensions dimensions, boolean debugMode) throws InputReadFailedException;
+            Path reference, Dimensions dimensions, boolean debugMode)
+            throws InputReadFailedException;
 }

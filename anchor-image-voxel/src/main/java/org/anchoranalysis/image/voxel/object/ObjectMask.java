@@ -55,28 +55,28 @@ import org.anchoranalysis.image.voxel.interpolator.InterpolatorFactory;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxelsEqualTo;
 import org.anchoranalysis.image.voxel.iterator.intersecting.CountVoxelsIntersectingObjects;
 import org.anchoranalysis.image.voxel.thresholder.VoxelsThresholder;
-import org.anchoranalysis.spatial.Extent;
-import org.anchoranalysis.spatial.axis.AxisType;
+import org.anchoranalysis.spatial.axis.Axis;
 import org.anchoranalysis.spatial.box.BoundingBox;
+import org.anchoranalysis.spatial.box.Extent;
 import org.anchoranalysis.spatial.point.Point3d;
 import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.point.ReadableTuple3i;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 /**
- * An object expressed in voxels, bounded within overall space.
+ * A mask for an object in an image, expressed as a {@link BoundingBox}, with a corresponding mask
+ * for the bounding-box.
  *
- * <p>A bounding-box specifies a location within an image, and a raster-mask specifies which voxels
- * inside this box belong to the object.
+ * <p>Each voxel in the mask must be one of two states, either <i>on</i> or <i>off</i>. The object
+ * is specified by all voxels that are <i>on</i>.
  *
- * <p>Each voxel in the raster-mask must be one of two states, either <i>on</i> or <i>off</i>. The
- * object is specified by all voxels that are <i>on</i>.
+ * <p>The <i>on</i> voxels need not be contiguous i.e. they need not form a single
+ * connected-component.
  *
- * <p><i>on</i> voxels need not be contiguous (i.e. one connected component).
+ * <p>The interfaces for assigning, extracting voxels etc. all expect <i>global</i> coordinates,
+ * expressed relative to the image's coordinates as a whole.
  *
- * <p>The interfaces for assigning, extracting voxels etc. all expect <i>global</i> coordinates.
- *
- * <p>These voxels are <b>mutable</b>.
+ * <p>The voxels in the mask are <i>mutable</i>.
  */
 @Accessors(fluent = true)
 public class ObjectMask {
@@ -96,20 +96,25 @@ public class ObjectMask {
     @Getter private final VoxelsExtracter<UnsignedByteBuffer> extract;
 
     /**
-     * Creates an object-mask with a corner at the origin (i.e. corner is 0,0,0)
+     * Creates from a {@link Voxels} mask that is cornered at the origin.
      *
-     * <p>Default binary-values of (off=0, on=255) are used.
+     * <p>i.e. the bounding box corner is set as <code>0,0,0</code>.
      *
-     * @param voxels voxels to be used in the object-mask
+     * <p>Default {@link BinaryValues} of (off=0, on=255) are used to interpret {@link Voxels} as a
+     * mask.
+     *
+     * <p>The {@link Voxels} are reused internally in memory without duplication.
+     *
+     * @param voxels voxels to be used in the object-mask.
      */
     public ObjectMask(Voxels<UnsignedByteBuffer> voxels) {
         this(new BoundedVoxels<>(voxels));
     }
 
     /**
-     * Creates an object-mask to corresponding to a bounding-box with all pixels off (0)
+     * Creates as a bounding-box with all pixels off (0).
      *
-     * <p>Default binary-values of (off=0, on=255) are used.
+     * <p>Default {@link BinaryValues} of (off=0, on=255) are used for the mask.
      *
      * @param box bounding-box
      */
@@ -118,11 +123,12 @@ public class ObjectMask {
     }
 
     /**
-     * Creates an object-mask to correspond to bounded-voxels.
+     * Creates an {@link ObjectMask} to correspond to a {@link BoundedVoxels} with {@link
+     * UnsignedByteBuffer}.
      *
      * <p>The voxels are reused without duplication.
      *
-     * <p>Default binary-values of (off=0, on=255) are used.
+     * <p>Default {@link BinaryValues} of (off=0, on=255) are used for the mask.
      *
      * @param voxels voxels to be used in the object-mask
      */
@@ -333,7 +339,7 @@ public class ObjectMask {
      * @param axis the axis
      * @return a point on the specific axis that is the center-of-gravity.
      */
-    public double centerOfGravity(AxisType axis) {
+    public double centerOfGravity(Axis axis) {
         return CenterOfGravityCalculator.centerOfGravityForAxis(this, axis);
     }
 

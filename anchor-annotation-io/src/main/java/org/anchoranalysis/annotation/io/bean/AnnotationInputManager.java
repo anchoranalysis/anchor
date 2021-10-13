@@ -40,9 +40,8 @@ import org.anchoranalysis.io.input.bean.InputManagerParams;
 
 /**
  * An {@link InputManager} that provides annotations corresponding to images.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  * @param <T> the input-type that provides image(s).
  * @param <S> indicates the process of how annotation occurs.
  */

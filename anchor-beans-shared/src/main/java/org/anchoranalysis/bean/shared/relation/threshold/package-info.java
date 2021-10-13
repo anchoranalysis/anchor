@@ -23,5 +23,5 @@
  * THE SOFTWARE.
  * #L%
  */
-/** Specifies a unary relation to a *threshold* value. */
+/** Specifies a unary relation to a <i>threshold</i> value. */
 package org.anchoranalysis.bean.shared.relation.threshold;

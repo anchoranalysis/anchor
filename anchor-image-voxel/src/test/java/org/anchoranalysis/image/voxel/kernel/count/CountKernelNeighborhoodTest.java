@@ -27,7 +27,7 @@ package org.anchoranalysis.image.voxel.kernel.count;
 
 import org.anchoranalysis.image.voxel.kernel.KernelApplicationParameters;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.spatial.box.Extent;
 
 /**
  * Tests {@link CountKernelNeighborhood}.

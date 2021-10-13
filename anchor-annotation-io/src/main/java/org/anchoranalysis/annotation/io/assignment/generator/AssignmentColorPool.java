@@ -36,9 +36,10 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 
 /**
  * Different {@link ColorScheme}s that can be used to select colors for paired and unpaired objects.
- * 
- * <p>This is useful when showing an assignment visually with the two objects side-by-side e.g. left and right.
- * 
+ *
+ * <p>This is useful when showing an assignment visually with the two objects side-by-side e.g. left
+ * and right.
+ *
  * @author Owen Feehan
  */
 @AllArgsConstructor
@@ -49,16 +50,19 @@ public class AssignmentColorPool {
 
     /** The color-scheme used to generate colors for <i>paired</i> objects. */
     private final ColorScheme colorSchemePaired;
-    
+
     /** The color-scheme used to generate colors for <i>unpaired</i> objects. */
     private final ColorScheme colorSchemeUnpaired;
-    
-    /** If true, different colors are used for paired objects, otherwise always the same color is used. */
+
+    /**
+     * If true, different colors are used for paired objects, otherwise always the same color is
+     * used.
+     */
     @Getter private final boolean differentColorsForPairs;
-    
+
     /**
      * Creates with a number and colors for the paired objects, and defaults colors for unpaired.
-     * 
+     *
      * @param numberPaired the number of paired objects that exist in the assignment.
      * @param colorSchemePaired the color-scheme used to generate colors for <i>paired</i> objects.
      */
@@ -68,15 +72,17 @@ public class AssignmentColorPool {
 
     /**
      * Creates a list of colors to describe the assignment.
-     * 
-     * <p>The first {@code numberPaired} elements in this list, are colors to describe the paired elements.
-     * 
+     *
+     * <p>The first {@code numberPaired} elements in this list, are colors to describe the paired
+     * elements.
+     *
      * <p>The remaining elements, are colors to describe the unpaired elements.
-     * 
-     * @param numberUnpaired the number of unapred objects that exist in this particular set of objects.
-     * 
+     *
+     * @param numberUnpaired the number of unapred objects that exist in this particular set of
+     *     objects.
      * @return a list of elements of size {@code numberPaired + numberUnpaired} as described above.
-     * @throws OperationFailedException if colors cannot be generated from the respective {@link ColorScheme}.
+     * @throws OperationFailedException if colors cannot be generated from the respective {@link
+     *     ColorScheme}.
      */
     public ColorList createColors(int numberUnpaired) throws OperationFailedException {
 

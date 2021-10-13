@@ -59,7 +59,8 @@ import org.anchoranalysis.io.input.path.GlobExtractor.GlobWithDirectory;
 public class SearchDirectory extends FilesProviderWithDirectoryString {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private PathMatcher matcher = new MatchExtensions(ImageFileFormat.JPEG.getDefaultExtension());
+    @BeanField @Getter @Setter
+    private PathMatcher matcher = new MatchExtensions(ImageFileFormat.JPEG.getDefaultExtension());
 
     /** If true the search is applied recursively over sub-directories. */
     @BeanField @Getter @Setter private boolean recursive = false;
@@ -82,10 +83,10 @@ public class SearchDirectory extends FilesProviderWithDirectoryString {
     /** If true, the files are sorted after being searched, to achieve a deterministic order. */
     private boolean sort = true;
     // END BEAN PROPERTIES
-    
+
     /**
      * Create for a specific directory.
-     * 
+     *
      * @param directory the directory to search.
      */
     public SearchDirectory(String directory) {

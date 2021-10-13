@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -37,7 +37,6 @@ import java.util.stream.StreamSupport;
 /**
  * Bases class for implementations of R-Trees that store objects with associated geometry.
  *
- * @author Owen Feehan
  * @see <a href="https://en.wikipedia.org/wiki/R-tree">R-tree on Wikipedia</a>
  * @param <T> object-type stored in structure (the payload).
  * @author Owen Feehan
@@ -53,7 +52,7 @@ public abstract class RTree<T> {
      * @param numberDimensions the number of spatial dimensions that the bounding boxes are expected
      *     to support.
      */
-    public RTree(int numberDimensions) {
+    protected RTree(int numberDimensions) {
         tree = com.github.davidmoten.rtreemulti.RTree.dimensions(numberDimensions).create();
     }
 
@@ -64,7 +63,7 @@ public abstract class RTree<T> {
      *     to support.
      * @param maxNumberEntries maximum number of entries in the r-tree.
      */
-    public RTree(int numberDimensions, int maxNumberEntries) {
+    protected RTree(int numberDimensions, int maxNumberEntries) {
         // Three is minimum number for this parameter
         int maxChildren = Math.max(maxNumberEntries, 3);
         tree =
@@ -110,16 +109,17 @@ public abstract class RTree<T> {
      * Which objects contain a particular point?
      *
      * @param point the point.
-     * @return payloads for all objects that contain {@code point}.
+     * @return a stream of payloads for all objects that contain {@code point}.
      */
     protected Stream<T> containsStream(Point point) {
         return toStream(tree.search(point));
     }
 
     /**
-     * Which elements that a rectangle intersects with as a {@link Stream}.
+     * A stream of the elements that a rectangle intersects with.
      *
      * @param rectangle the rectangle associated with the payload.
+     * @return the stream.
      */
     protected Stream<T> intersectsWithStream(Rectangle rectangle) {
         return toStream(tree.search(rectangle));

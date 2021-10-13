@@ -36,9 +36,9 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.annotation.io.assignment.AssignOverlappingObjects;
 import org.anchoranalysis.annotation.io.assignment.OverlappingObjects;
+import org.anchoranalysis.annotation.io.assignment.generator.AssignmentColorPool;
 import org.anchoranalysis.annotation.io.assignment.generator.AssignmentGenerator;
 import org.anchoranalysis.annotation.io.assignment.generator.DrawColoredObjects;
-import org.anchoranalysis.annotation.io.assignment.generator.AssignmentColorPool;
 import org.anchoranalysis.annotation.io.image.findable.Findable;
 import org.anchoranalysis.annotation.mark.AnnotationWithMarks;
 import org.anchoranalysis.bean.AnchorBean;
@@ -73,23 +73,31 @@ public class MultipleComparer extends AnchorBean<MultipleComparer> {
     /** Calculates the <i>cost</i> used when making assignments. */
     @BeanField @Getter @Setter private FeatureEvaluator<FeatureInputPairObjects> featureEvaluator;
 
-    /** The maximum cost (as calculated by {@code featureEvaluator}) to accept when creating an assignment between objects. */
+    /**
+     * The maximum cost (as calculated by {@code featureEvaluator}) to accept when creating an
+     * assignment between objects.
+     */
     @BeanField @Getter @Setter private double maxCost = 1.0;
-    
+
     /** The other entities to compare with the annotation. */
     @BeanField @NonEmpty @Getter @Setter
     private List<NamedBean<ComparableSource>> sources = new ArrayList<>();
 
-    /** If true, a maximum-intensity-projection is first applied to any 3D objects into a 2D plane, before comparison. */
+    /**
+     * If true, a maximum-intensity-projection is first applied to any 3D objects into a 2D plane,
+     * before comparison.
+     */
     @BeanField @Getter @Setter private boolean flatten = false;
     // END BEAN PROPERTIES
 
     /**
-     * Creates a {@link Stack} illustrating the comparison between {@code annotation} and each source in {@code sources}.
-     * 
+     * Creates a {@link Stack} illustrating the comparison between {@code annotation} and each
+     * source in {@code sources}.
+     *
      * @param annotation the annotation to compare.
      * @param background the background to use when comparing.
-     * @param annotationPath the path on the file-system to {@code annotation} to use as a reference.
+     * @param annotationPath the path on the file-system to {@code annotation} to use as a
+     *     reference.
      * @param colorScheme the color-scheme to use for unpaired objects.
      * @param modelDirectory a directory in which models reside.
      * @param logger the logger.
@@ -124,8 +132,9 @@ public class MultipleComparer extends AnchorBean<MultipleComparer> {
 
             Findable<ObjectCollection> compareObjects;
             try {
-                compareObjects = source.getValue()
-                        .loadAsObjects(annotationPath, background.dimensions(), debugMode);
+                compareObjects =
+                        source.getValue()
+                                .loadAsObjects(annotationPath, background.dimensions(), debugMode);
             } catch (InputReadFailedException e) {
                 throw new CreateException(e);
             }
@@ -155,7 +164,8 @@ public class MultipleComparer extends AnchorBean<MultipleComparer> {
             ColorScheme colorScheme)
             throws CreateException {
         // Don't know how it's possible for an object with 0 pixels to end up here, but it's somehow
-        // happening, so we prevent it from interfering with the rest of the analysis as a workaround.
+        // happening, so we prevent it from interfering with the rest of the analysis as a
+        // workaround.
         removeObjectsWithNoPixels(annotationObjects);
         removeObjectsWithNoPixels(compareObjects);
 

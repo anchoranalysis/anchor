@@ -32,6 +32,13 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * A <i>two</i>-dimensional point of <i>int</i> values.
+ *
+ * <p>We consider a point to be a tuple representing a single physical point in space.
+ *
+ * @author Owen Feehan
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
@@ -40,43 +47,73 @@ public final class Point2i implements Serializable {
     /** */
     private static final long serialVersionUID = 1L;
 
+    /** X-axis component of point. */
     @Setter private int x;
+
+    /** Y-axis component of point. */
     @Setter private int y;
 
     /**
-     * Copy constructor.
+     * Creates with the same values as an existing {@link Point2i}.
      *
-     * @param point point to copy from
+     * @param point to copy values from.
      */
     public Point2i(Point2i point) {
         x = point.x();
         y = point.y();
     }
 
+    /**
+     * X-axis component of point.
+     *
+     * @return the component value.
+     */
     public int x() {
         return x;
     }
 
+    /**
+     * Y-axis component of point.
+     *
+     * @return the component value.
+     */
     public int y() {
         return y;
     }
 
+    /** Increments the X component's value by one. */
     public void incrementX() {
         this.x++;
     }
 
-    public void incrementX(int val) {
-        this.x += val;
-    }
-
+    /** Increments the Y component's value by one. */
     public void incrementY() {
         this.y++;
     }
 
-    public void incrementY(int val) {
-        this.y += val;
+    /**
+     * Increments the X component's value by a shift.
+     *
+     * @param shift how much to increment by.
+     */
+    public void incrementX(int shift) {
+        this.x += shift;
     }
 
+    /**
+     * Increments the Y component's value by a shift.
+     *
+     * @param shift how much to increment by.
+     */
+    public void incrementY(int shift) {
+        this.y += shift;
+    }
+
+    /**
+     * Adds values from a {@link Point2i} across each corresponding dimension.
+     * 
+     * @param point the point whose values are added.
+     */
     public void add(Point2i point) {
         this.x = this.x + point.x();
         this.y = this.y + point.y();
@@ -94,10 +131,16 @@ public final class Point2i implements Serializable {
         return out;
     }
 
-    /** Performs an addition without changing any values in an existing point */
-    public static Point2i immutableAdd(Point2i point, Point2i toAdd) {
-        Point2i pointCopy = new Point2i(point);
-        pointCopy.add(toAdd);
+    /** 
+     * Adds two points immutably.
+     * 
+     * @param point1 the first point to add.
+     * @param point2 the second point to add.
+     * @return a newly created point, where each dimension is the sum of the corresponding dimensions in the points.
+     */
+    public static Point2i immutableAdd(Point2i point1, Point2i point2) {
+        Point2i pointCopy = new Point2i(point1);
+        pointCopy.add(point2);
         return pointCopy;
     }
 

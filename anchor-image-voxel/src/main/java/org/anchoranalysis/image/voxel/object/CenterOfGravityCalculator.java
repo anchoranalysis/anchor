@@ -29,9 +29,9 @@ package org.anchoranalysis.image.voxel.object;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
-import org.anchoranalysis.spatial.Extent;
-import org.anchoranalysis.spatial.axis.AxisType;
-import org.anchoranalysis.spatial.axis.AxisTypeConverter;
+import org.anchoranalysis.spatial.axis.Axis;
+import org.anchoranalysis.spatial.axis.AxisConverter;
+import org.anchoranalysis.spatial.box.Extent;
 import org.anchoranalysis.spatial.point.Point3d;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -82,10 +82,10 @@ final class CenterOfGravityCalculator {
      * Like {@link #centerOfGravity} but for a specific axis.
      *
      * @param object the object whose center-of-gravity is to be calculated on one axis.
-     * @param axisType which axis
+     * @param axis which axis
      * @return the cog for that axis, or NaN if there are no points.
      */
-    public static double centerOfGravityForAxis(ObjectMask object, AxisType axisType) {
+    public static double centerOfGravityForAxis(ObjectMask object, Axis axis) {
 
         int count = 0;
         double sum = 0.0;
@@ -101,7 +101,7 @@ final class CenterOfGravityCalculator {
                 for (int x = 0; x < extent.x(); x++) {
 
                     if (buffer.getRaw(offset) == onByte) {
-                        sum += AxisTypeConverter.valueFor(axisType, x, y, z);
+                        sum += AxisConverter.valueFor(axis, x, y, z);
                         count++;
                     }
                     offset++;
@@ -113,7 +113,7 @@ final class CenterOfGravityCalculator {
             return Double.NaN;
         }
 
-        return (sum / count) + object.boundingBox().cornerMin().byDimension(axisType);
+        return (sum / count) + object.boundingBox().cornerMin().valueByDimension(axis);
     }
 
     private static Point3d emptyPoint() {

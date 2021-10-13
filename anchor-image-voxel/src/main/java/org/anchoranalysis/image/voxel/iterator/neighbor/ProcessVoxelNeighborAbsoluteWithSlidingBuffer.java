@@ -28,7 +28,7 @@ package org.anchoranalysis.image.voxel.iterator.neighbor;
 
 import org.anchoranalysis.image.voxel.buffer.SlidingBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
-import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.spatial.box.Extent;
 
 /**
  * @author Owen Feehan

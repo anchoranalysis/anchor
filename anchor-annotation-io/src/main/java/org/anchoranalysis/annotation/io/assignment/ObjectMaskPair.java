@@ -29,7 +29,7 @@ package org.anchoranalysis.annotation.io.assignment;
 import lombok.AllArgsConstructor;
 import lombok.Value;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.spatial.box.Extent;
 
 @Value
 @AllArgsConstructor

@@ -28,7 +28,7 @@ package org.anchoranalysis.image.core.orientation;
 
 import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
-import org.anchoranalysis.spatial.axis.AxisType;
+import org.anchoranalysis.spatial.axis.Axis;
 import org.anchoranalysis.spatial.point.Point3d;
 import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.point.Tuple3d;
@@ -53,10 +53,10 @@ public final class DirectionVector {
     /**
      * Creates a direction aligned to a particular axis.
      *
-     * @param axisType
+     * @param axis
      */
-    public DirectionVector(AxisType axisType) {
-        switch (axisType) {
+    public DirectionVector(Axis axis) {
+        switch (axis) {
             case X:
                 this.vector = new Point3d(1, 0, 0);
                 break;

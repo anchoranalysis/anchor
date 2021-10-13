@@ -30,10 +30,21 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.spatial.point.ReadableTuple3i;
 
-/** Calculates distance between two bounding boxes */
+/** Calculates distance between two bounding boxes. */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class BoundingBoxDistance {
 
+    /**
+     * Calculates the distance between two {@link BoundingBox}es.
+     *
+     * <p>This is defined as the minimum Euclidean distance from one box's edge to the other's.
+     *
+     * @param box1 the first box.
+     * @param box2 the second box.
+     * @param includeZ if true, the Z-axis is included in the distance calculation, or otherwise
+     *     ignored.
+     * @return the distance.
+     */
     public static double distance(BoundingBox box1, BoundingBox box2, boolean includeZ) {
 
         if (box1.intersection().existsWith(box2)) {
@@ -68,8 +79,9 @@ public class BoundingBoxDistance {
         return Math.sqrt(Math.pow(xDistance, 2) + Math.pow(yDistance, 2) + Math.pow(zDistance, 2));
     }
 
-    // We have already guaranteed no intersection
     private static int minDistance(int box1Min, int box1Max, int box2Min, int box2Max) {
+
+        // Precondition: we have already guaranteed no intersection occurs.
 
         // Consider intersections
         if ((box2Min >= box1Min) && (box2Min <= box1Max)) {

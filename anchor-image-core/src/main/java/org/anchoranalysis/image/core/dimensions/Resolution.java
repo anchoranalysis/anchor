@@ -33,7 +33,7 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
-import org.anchoranalysis.spatial.axis.AxisType;
+import org.anchoranalysis.spatial.axis.Axis;
 import org.anchoranalysis.spatial.point.Point3d;
 import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.point.Tuple3d;
@@ -296,12 +296,12 @@ public final class Resolution implements Serializable {
         return String.format("[%6.3e,%6.3e,%6.3e]", res.x(), res.y(), res.z());
     }
 
-    public final double valueByDimension(int dimIndex) {
-        return res.valueByDimension(dimIndex);
+    public final double valueByDimension(int dimensionIndex) {
+        return res.valueByDimension(dimensionIndex);
     }
 
-    public final double valueByDimension(AxisType axisType) {
-        return res.valueByDimension(axisType);
+    public final double valueByDimension(Axis axis) {
+        return res.valueByDimension(axis);
     }
 
     private double sumSquares(double distanceX, double distanceY, double distanceZ) {

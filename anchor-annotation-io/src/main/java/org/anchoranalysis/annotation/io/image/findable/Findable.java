@@ -30,7 +30,8 @@ import java.util.Optional;
 import org.anchoranalysis.core.log.Logger;
 
 /**
- * Parent class for an element that exists in one of two-states, either {@link Found} or {@link NotFound}.
+ * Parent class for an element that exists in one of two-states, either {@link Found} or {@link
+ * NotFound}.
  *
  * @author Owen Feehan
  * @param <T> object-type to try to find.

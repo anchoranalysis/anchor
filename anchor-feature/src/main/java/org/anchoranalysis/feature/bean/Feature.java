@@ -45,15 +45,17 @@ import org.anchoranalysis.feature.input.FeatureInput;
 /**
  * Base class for a measurement that calculates a result (double) given <i>input</i> parameters.
  *
- * <p>This is a key base class in the <a href="http://www.anchoranalysis.org">Anchor</a> framework, and many algorithms and procedures use a {@link Feature}
- * on particular input-types to calculate measurements in a flexible way, and often to use these measurements
- * in a machine-learning algorithm.
- * 
- * <p>See <a href="https://en.wikipedia.org/wiki/Feature_(machine_learning)">Feature (Machine learning) on Wikipedia</a> for general background
- * on the concept of a <i>feature</i> in Machine Learning.
- * 
- * <p>It should always be called in a context of a <i>session</i>, which first initializes the feature
- * before doing calculations.
+ * <p>This is a key base class in the <a href="http://www.anchoranalysis.org">Anchor</a> framework,
+ * and many algorithms and procedures use a {@link Feature} on particular input-types to calculate
+ * measurements in a flexible way, and often to use these measurements in a machine-learning
+ * algorithm.
+ *
+ * <p>See <a href="https://en.wikipedia.org/wiki/Feature_(machine_learning)">Feature (Machine
+ * learning) on Wikipedia</a> for general background on the concept of a <i>feature</i> in Machine
+ * Learning.
+ *
+ * <p>It should always be called in a context of a <i>session</i>, which first initializes the
+ * feature before doing calculations.
  *
  * @author Owen Feehan
  * @param <T> input-type from which a measurement is calculated.
@@ -63,7 +65,8 @@ public abstract class Feature<T extends FeatureInput>
 
     // START BEAN PROPERTIES
     /**
-     * An optional additional name that be associated with the feature (defaults to an empty string).
+     * An optional additional name that be associated with the feature (defaults to an empty
+     * string).
      */
     @BeanField @AllowEmpty @Getter @Setter private String customName = "";
     // END BEAN PROPERTIES
@@ -192,9 +195,9 @@ public abstract class Feature<T extends FeatureInput>
 
     /**
      * Copies fields in this (base) class to {@code target}.
-     * 
+     *
      * <p>This is intended to be called by sub-classes to help when duplicating.
-     * 
+     *
      * @param target the object fields are assigned to.
      */
     protected void assignTo(Feature<FeatureInput> target) {

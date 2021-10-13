@@ -27,13 +27,19 @@ package org.anchoranalysis.spatial.axis;
  */
 
 /**
- * Identifies axis in a <a href="https://en.wikipedia.org/wiki/Cartesian_coordinate_system">Cartesian coordinate system</a>.
- * 
- * @author Owen Feehan
+ * Identifies axis in a <a
+ * href="https://en.wikipedia.org/wiki/Cartesian_coordinate_system">Cartesian coordinate system</a>.
  *
+ * @author Owen Feehan
  */
-public enum AxisType {
+public enum Axis {
+
+    /** X-axis. */
     X,
+
+    /** Y-axis. */
     Y,
+
+    /** Z-axis (existing only in 3D images, often known as <i>z-stacks</i>). */
     Z
 }

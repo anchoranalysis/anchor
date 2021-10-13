@@ -32,9 +32,8 @@ import org.anchoranalysis.image.feature.input.FeatureInputHistogram;
 
 /**
  * A base class for features that accept a histogram as input.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public abstract class FeatureHistogram extends Feature<FeatureInputHistogram> {
 

@@ -33,6 +33,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
+/**
+ * A <i>two</i>-dimensional point of <i>double</i> values.
+ *
+ * <p>We consider a point to be a tuple representing a single physical point in space.
+ *
+ * @author Owen Feehan
+ */
 @AllArgsConstructor
 @EqualsAndHashCode
 @NoArgsConstructor
@@ -42,45 +49,76 @@ public final class Point2d implements Serializable {
     /** */
     private static final long serialVersionUID = 1L;
 
+    /** X-axis component of point. */
     @Getter private double x;
+
+    /** Y-axis component of point. */
     @Getter private double y;
 
+    /**
+     * Creates with the same values as an existing {@link Point2d}.
+     *
+     * @param point to copy values from.
+     */
     public Point2d(Point2d point) {
         this.x = point.x;
         this.y = point.y;
     }
 
-    public void add(Point2i point) {
-        this.x = this.x + point.x();
-        this.y = this.y + point.y();
+    /**
+     * Arithmetically adds a {@link Point2i}'s values across each dimension.
+     *
+     * @param toAdd tuple to add to current state.
+     */
+    public void add(Point2i toAdd) {
+        this.x = this.x + toAdd.x();
+        this.y = this.y + toAdd.y();
     }
 
-    public void add(Point2d point) {
-        this.x = this.x + point.x();
-        this.y = this.y + point.y();
+    /**
+     * Arithmetically adds a {@link Point2d}'s values across each dimension.
+     *
+     * @param toAdd tuple to add to current state.
+     */
+    public void add(Point2d toAdd) {
+        this.x = this.x + toAdd.x();
+        this.y = this.y + toAdd.y();
     }
 
+    /**
+     * Arithmetically multiplies each dimension's value by a factor.
+     *
+     * @param factor the factor to multiply by.
+     */
     public void scale(double factor) {
         this.x *= factor;
         this.y *= factor;
     }
 
+    /**
+     * The square of the Euclidean distance between this point and another {@link Point2d}.
+     *
+     * @param point the other point to a measure a distance to.
+     * @return the distance squared.
+     */
+    public double distance(Point2d point) {
+        return Math.sqrt(distanceSquared(point));
+    }
+
+    /**
+     * The square of the Euclidean distance between this point and another {@link Point2d}.
+     *
+     * @param point the other point to a measure a distance to.
+     * @return the distance squared.
+     */
     public double distanceSquared(Point2d point) {
         double sx = this.x - point.x;
         double sy = this.y - point.y;
         return (sx * sx) + (sy * sy);
     }
 
-    public double distance(Point2d point) {
-        return Math.sqrt(distanceSquared(point));
-    }
-
     @Override
     public String toString() {
         return String.format("[%f,%f]", x, y);
-    }
-
-    public Point2f toFloat() {
-        return new Point2f((float) this.x, (float) this.y);
     }
 }

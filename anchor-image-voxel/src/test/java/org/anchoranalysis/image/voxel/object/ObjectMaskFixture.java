@@ -32,8 +32,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
-import org.anchoranalysis.spatial.Extent;
 import org.anchoranalysis.spatial.box.BoundingBox;
+import org.anchoranalysis.spatial.box.Extent;
 import org.anchoranalysis.spatial.point.Point2i;
 import org.anchoranalysis.spatial.point.Point3i;
 
@@ -153,7 +153,7 @@ public class ObjectMaskFixture {
         int typicalSlice = multiplyFirstTwoDifferently(extent.y(), extent.x(), 2);
 
         if (useZ) {
-            return multiplyFirstTwoDifferently(extent.z(), extent.volumeXY(), typicalSlice);
+            return multiplyFirstTwoDifferently(extent.z(), extent.areaXY(), typicalSlice);
         } else {
             return typicalSlice * extent.z();
         }
@@ -173,7 +173,7 @@ public class ObjectMaskFixture {
         int neighbours2D = 2 * (extent.x() + extent.y()) * extent.z();
 
         if (useZ) {
-            return neighbours2D + (2 * extent.volumeXY());
+            return neighbours2D + (2 * extent.areaXY());
         } else {
             return neighbours2D;
         }

@@ -38,7 +38,7 @@ import org.anchoranalysis.image.io.bean.stack.writer.StackWriter;
 import org.anchoranalysis.image.io.stack.output.StackWriteAttributesFactory;
 import org.anchoranalysis.image.io.stack.output.StackWriteOptions;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.spatial.box.Extent;
 import org.anchoranalysis.test.image.ChannelFixture;
 import org.anchoranalysis.test.image.StackFixture;
 import org.anchoranalysis.test.image.rasterwriter.comparison.ImageComparer;

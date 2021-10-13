@@ -40,7 +40,7 @@ import org.anchoranalysis.image.voxel.buffer.slice.SliceBufferIndex;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.spatial.box.Extent;
 
 /**
  * Converts other voxel data-structures (as used by Anchor) to an ImageJ {@link ImageProcessor}.
@@ -65,11 +65,11 @@ public class ConvertToImageProcessor {
     public static ImageProcessor from(VoxelsWrapper voxels, int z)
             throws ImageJConversionException {
 
-        if (voxels.any().extent().volumeXY() != voxels.slice(z).capacity()) {
+        if (voxels.any().extent().areaXY() != voxels.slice(z).capacity()) {
             throw new AnchorFriendlyRuntimeException(
                     String.format(
                             "Extent volume (%d) and buffer-capacity (%d) are not equal",
-                            voxels.any().extent().volumeXY(), voxels.slice(z).capacity()));
+                            voxels.any().extent().areaXY(), voxels.slice(z).capacity()));
         }
 
         if (voxels.getVoxelDataType().equals(DATA_TYPE_BYTE)) {

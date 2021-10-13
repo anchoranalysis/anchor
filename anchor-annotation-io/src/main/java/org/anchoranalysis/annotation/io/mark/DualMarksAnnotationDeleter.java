@@ -34,9 +34,8 @@ import org.anchoranalysis.annotation.mark.DualMarksAnnotation;
 
 /**
  * Deletes {@link DualMarksAnnotation}s from the file-system.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class DualMarksAnnotationDeleter implements AnnotationDeleter {
 

@@ -43,48 +43,63 @@ import org.anchoranalysis.math.optimization.HungarianAlgorithm;
 
 /**
  * Creates a one-to-one <i>assignment</i> between two sets of {@link ObjectMask}s.
- * 
- * <p>As arbitrary naming, these sets are termed <i>left</i> and <i>right</i>.
- * 
- * <p>An <i>assignment</i> is one-to-one mapping between the first set and the second,
- * borrowing terminology from the <a href="https://en.wikipedia.org/wiki/Assignment_problem">assignment problem</a>.
- * 
- * <p>Not all objects must be mapped. An object may only be mapped to maximally one object in the other set.
- * 
- * <p>The <a href="https://en.wikipedia.org/wiki/Hungarian_algorithm">Hungarian Algorithm</a> is used to determine the assignment,
- * based upon an overlap function between the corresponding objects. The assignments are chosen to maximize total overlap.
- * 
- * @author Owen Feehan
  *
+ * <p>As arbitrary naming, these sets are termed <i>left</i> and <i>right</i>.
+ *
+ * <p>An <i>assignment</i> is one-to-one mapping between the first set and the second, borrowing
+ * terminology from the <a href="https://en.wikipedia.org/wiki/Assignment_problem">assignment
+ * problem</a>.
+ *
+ * <p>Not all objects must be mapped. An object may only be mapped to maximally one object in the
+ * other set.
+ *
+ * <p>The <a href="https://en.wikipedia.org/wiki/Hungarian_algorithm">Hungarian Algorithm</a> is
+ * used to determine the assignment, based upon an overlap function between the corresponding
+ * objects. The assignments are chosen to maximize total overlap.
+ *
+ * @author Owen Feehan
  */
 @RequiredArgsConstructor
 public class AssignOverlappingObjects {
 
     // START REQUIRED ARGUMENTS
-    /** A feature that gives a measure of <i>cost</i> between a pair of objects, which should be maximally 1.0 (for no overlap) and 0.0 (for perfect overlap). */
+    /**
+     * A feature that gives a measure of <i>cost</i> between a pair of objects, which should be
+     * maximally 1.0 (for no overlap) and 0.0 (for perfect overlap).
+     */
     private final FeatureEvaluator<FeatureInputPairObjects> featureEvaluator;
-    
-    /** If true, a maximum-intensity-projection is first applied to any 3D objects into a 2D plane, before comparison. */
+
+    /**
+     * If true, a maximum-intensity-projection is first applied to any 3D objects into a 2D plane,
+     * before comparison.
+     */
     private final boolean flatten;
     // END REQUIRED ARGUMENTS
 
-    /** A matrix linking the overlap between each {@link ObjectMask} to each other, respectively as rows and columns. */
+    /**
+     * A matrix linking the overlap between each {@link ObjectMask} to each other, respectively as
+     * rows and columns.
+     */
     @Getter private CostMatrix<ObjectMask> costs;
 
     /**
      * Creates an assignment from the objects in {@code left} to those in {@code right}.
-     * 
+     *
      * <p>See the class documentation for the algorithm involved.
-     * 
+     *
      * @param left the left objects.
      * @param right the right objects.
-     * @param maxAcceptedCost an upper-maximum cost, above which a mapping will be disallowed between objects.
+     * @param maxAcceptedCost an upper-maximum cost, above which a mapping will be disallowed
+     *     between objects.
      * @param dimensions the dimensions of the scene in which all objects reside.
      * @return a newly created assignment.
      * @throws FeatureCalculationException if overlap cannot be calculated.
      */
     public OverlappingObjects createAssignment(
-            ObjectCollection left, ObjectCollection right, double maxAcceptedCost, Dimensions dimensions)
+            ObjectCollection left,
+            ObjectCollection right,
+            double maxAcceptedCost,
+            Dimensions dimensions)
             throws FeatureCalculationException {
 
         // Empty annotations
@@ -102,7 +117,7 @@ public class AssignOverlappingObjects {
         costs = createCostMatrix(maybeProject(left), maybeProject(right), dimensions);
 
         OverlappingObjects assignment = findMinimalCostMapping(costs, maxAcceptedCost);
-        
+
         if (assignment.rightSize() != right.size()) {
             throw new AnchorImpossibleSituationException(
                     "assignment.rightSize() does not equal the number of the right objects. This should never happen!");
@@ -145,13 +160,17 @@ public class AssignOverlappingObjects {
             throw new FeatureCalculationException(e);
         }
     }
-    
-    /** Finds the mapping that achieves minimal total cost, subject to the constraint that the cost of no two mapped objects exceeds {@code maxAcceptedCost}. */
-    private static OverlappingObjects findMinimalCostMapping(CostMatrix<ObjectMask> costs, double maxAcceptedCost) {
+
+    /**
+     * Finds the mapping that achieves minimal total cost, subject to the constraint that the cost
+     * of no two mapped objects exceeds {@code maxAcceptedCost}.
+     */
+    private static OverlappingObjects findMinimalCostMapping(
+            CostMatrix<ObjectMask> costs, double maxAcceptedCost) {
         HungarianAlgorithm hungarian = new HungarianAlgorithm(costs.getMatrix());
         int[] assign = hungarian.execute();
 
         return new CreateAssignmentFromCostMatrix(costs, assign, maxAcceptedCost)
-                        .createAssignment();
+                .createAssignment();
     }
 }

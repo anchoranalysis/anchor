@@ -47,10 +47,10 @@ import org.anchoranalysis.image.voxel.extracter.predicate.VoxelsPredicate;
 import org.anchoranalysis.image.voxel.interpolator.Interpolator;
 import org.anchoranalysis.image.voxel.interpolator.InterpolatorImgLib2Lanczos;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.spatial.Extent;
 import org.anchoranalysis.spatial.box.BoundingBox;
+import org.anchoranalysis.spatial.box.Extent;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
-import org.anchoranalysis.spatial.scale.ScaleFactorUtilities;
+import org.anchoranalysis.spatial.scale.Scaler;
 
 /**
  * A channel from an image.
@@ -131,8 +131,8 @@ public class Channel {
     public Channel scaleXY(ScaleFactor scaleFactor, Interpolator interpolator) {
         // Rounding as sometimes we get values which, for example, are 7.999999, intended to be 8,
         // due to how we use our ScaleFactors
-        int newSizeX = ScaleFactorUtilities.scaleQuantity(scaleFactor.x(), dimensions().x());
-        int newSizeY = ScaleFactorUtilities.scaleQuantity(scaleFactor.y(), dimensions().y());
+        int newSizeX = Scaler.scaleQuantity(scaleFactor.x(), dimensions().x());
+        int newSizeY = Scaler.scaleQuantity(scaleFactor.y(), dimensions().y());
         return resizeXY(newSizeX, newSizeY, interpolator);
     }
 

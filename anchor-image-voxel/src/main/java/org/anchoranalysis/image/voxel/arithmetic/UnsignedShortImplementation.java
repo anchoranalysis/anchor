@@ -28,7 +28,7 @@ package org.anchoranalysis.image.voxel.arithmetic;
 import java.util.function.IntFunction;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedShortBuffer;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
-import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.spatial.box.Extent;
 
 class UnsignedShortImplementation extends Base<UnsignedShortBuffer> {
 

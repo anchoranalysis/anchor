@@ -35,7 +35,7 @@ import org.anchoranalysis.io.generator.text.WriteStringToFile;
 
 /**
  * Writes a {@link ImageLabelAnnotation} to the file-system.
- * 
+ *
  * @author Owen Feehan
  */
 public class ImageLabelAnnotationWriter implements AnnotationWriter<ImageLabelAnnotation> {

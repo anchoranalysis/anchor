@@ -91,7 +91,7 @@ class ObjectMaskHDF5Writer {
 
     private static MDByteArray byteArray(BinaryVoxels<UnsignedByteBuffer> voxels) {
 
-        MDByteArray array = new MDByteArray(voxels.extent().deriveArray());
+        MDByteArray array = new MDByteArray(voxels.extent().toArray());
 
         IterateVoxelsAll.withBuffer(
                 voxels.voxels(),

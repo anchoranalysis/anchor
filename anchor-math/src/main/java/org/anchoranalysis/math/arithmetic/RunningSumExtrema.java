@@ -30,25 +30,32 @@ import lombok.Getter;
 import lombok.experimental.Accessors;
 
 /**
- * Like a {@link RunningSum} but also remembers the <i>mean</i> and <i>max</i> across all the added values.
- * 
- * @author Owen Feehan
+ * Like a {@link RunningSum} but also remembers the <i>mean</i> and <i>max</i> across all the added
+ * values.
  *
+ * @author Owen Feehan
  */
-@Accessors(fluent=true)
+@Accessors(fluent = true)
 public class RunningSumExtrema {
 
     private RunningSum running = new RunningSum();
-    
-    /** The minimum across all {@code value}s passed to {@link #add} or {@link Double#MAX_VALUE} if the method was never called. */
+
+    /**
+     * The minimum across all {@code value}s passed to {@link #add} or {@link Double#MAX_VALUE} if
+     * the method was never called.
+     */
     @Getter private double min = Double.MAX_VALUE;
 
-    /** The maximum across all {@code value}s passed to {@link #add} or {@link Double#MIN_VALUE} if the method was never called. */
-    @Getter private double max = Double.MIN_VALUE;
-    
     /**
-     * Adds a value to the running-sum, also remembering if {@code value} is the minimum or maximum of calls to this method.
-     * 
+     * The maximum across all {@code value}s passed to {@link #add} or {@link Double#MIN_VALUE} if
+     * the method was never called.
+     */
+    @Getter private double max = Double.MIN_VALUE;
+
+    /**
+     * Adds a value to the running-sum, also remembering if {@code value} is the minimum or maximum
+     * of calls to this method.
+     *
      * @param value the value.
      */
     public void add(double value) {

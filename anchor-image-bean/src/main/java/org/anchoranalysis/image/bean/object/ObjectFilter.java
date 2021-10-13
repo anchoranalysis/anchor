@@ -32,17 +32,24 @@ import org.anchoranalysis.image.bean.ImageBean;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 
+/**
+ * Base class for filtering an {@link ObjectCollection} to remove objects according to a criteria.
+ *
+ * <p>The filtering criteria is implemented by overriding a method in a sub-class.
+ *
+ * @author Owen Feehan
+ */
 public abstract class ObjectFilter extends ImageBean<ObjectFilter> {
 
     /**
-     * Filters an object-collection to remove objects according to a criteria
+     * Filters an {@link ObjectCollection} to remove objects.
      *
-     * @param objectsToFilter the objects to filter
-     * @param dimensions image-dimensions
+     * @param objectsToFilter the objects to filter.
+     * @param dimensions image-dimensions.
      * @param objectsRejected if set, any objects rejected by the filter can be added to this
-     *     collection
-     * @return a new object-collection containing only the objects that passed the filter
-     * @throws OperationFailedException
+     *     collection.
+     * @return a new object-collection containing only the objects that passed the filter.
+     * @throws OperationFailedException if the operation cannot complete successfully.
      */
     public abstract ObjectCollection filter(
             ObjectCollection objectsToFilter,
