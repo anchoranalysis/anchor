@@ -29,7 +29,7 @@ package org.anchoranalysis.core.color;
 import java.awt.Color;
 
 /**
- * A color encoded in red-green-blue colorspace.
+ * A color encoded in <a href="https://en.wikipedia.org/wiki/RGB_color_space">RGB color space</a>.
  *
  * @author Owen Feehan
  */

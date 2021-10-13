@@ -50,7 +50,7 @@ public class RotationMatrix implements Serializable {
     /**
      * The underlying matrix implementing the rotation.
      *
-     * <p>This name is deliberately kept as 'delegate' to avoid breaking serialized objects.
+     * <p>This name is deliberately kept as {@code delegate} to avoid breaking serialized objects.
      */
     private DoubleMatrix2D delegate;
 
@@ -190,7 +190,7 @@ public class RotationMatrix implements Serializable {
 
     /** Decodes a point from a matrix. */
     private static double[] pointFromMatrix(DoubleMatrix2D matrixOut) {
-        int dimensions = matrixOut.columns();
+        int dimensions = matrixOut.rows();
         double[] pointOut = new double[dimensions];
         for (int i = 0; i < dimensions; i++) {
             pointOut[i] = matrixOut.get(i, 0);
