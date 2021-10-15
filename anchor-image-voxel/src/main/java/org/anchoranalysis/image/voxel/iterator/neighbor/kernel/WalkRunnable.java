@@ -42,8 +42,8 @@ import org.anchoranalysis.spatial.point.Point3i;
  * <p>The conditions are:
  *
  * <ul>
- *   <li>An associated buffer for the point must have an OFF value, <i>or</i> if its outside the
- *       scene, the {@link KernelApplicationParameters} parameters must indicate off.
+ *   <li>An associated buffer for the point must have an <i>off</i> value, <i>or</i> if its outside
+ *       the scene, the {@link KernelApplicationParameters} parameters must indicate off.
  *   <li>An additional predicate around the point.
  * </ul>
  *

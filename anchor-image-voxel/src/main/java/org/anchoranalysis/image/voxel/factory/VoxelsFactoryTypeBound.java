@@ -36,7 +36,7 @@ import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.box.Extent;
 
 /**
- * A factory for creating voxels with a particular buffer-type
+ * A factory for creating voxels with a particular buffer-type.
  *
  * <p>This class (and all its sub-classes) are <b>immutable</b>.
  *

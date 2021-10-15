@@ -60,8 +60,8 @@ public class MaskXor {
             BinaryVoxels<UnsignedByteBuffer> voxelsFirst,
             BinaryVoxels<UnsignedByteBuffer> voxelsSecond) {
 
-        BinaryValuesByte binaryValuesFirst = voxelsFirst.binaryValues().createByte();
-        BinaryValuesByte binaryValuesSecond = voxelsSecond.binaryValues().createByte();
+        BinaryValuesByte binaryValuesFirst = voxelsFirst.binaryValues().asByte();
+        BinaryValuesByte binaryValuesSecond = voxelsSecond.binaryValues().asByte();
         byte sourceOn = binaryValuesFirst.getOnByte();
         byte sourceOff = binaryValuesFirst.getOffByte();
 

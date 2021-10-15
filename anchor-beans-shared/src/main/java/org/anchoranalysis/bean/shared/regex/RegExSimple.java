@@ -58,7 +58,7 @@ public class RegExSimple extends RegEx {
 
     /**
      * Creates with an expression that should match one or more groups.
-     * 
+     *
      * @param matchString a Java-style regular-expression.
      */
     public RegExSimple(String matchString) {

@@ -126,11 +126,19 @@ public class RasterArranger {
                     int outPos = stackOut.dimensions().offset(x, y);
 
                     for (int c = 0; c < numC; c++) {
-                        voxelsOut[c].transferFromConvert(outPos, voxelsIn[c], src);
+                        copyVoxel(voxelsOut[c], outPos, voxelsIn[c], src);
                     }
                     src++;
                 }
             }
         }
+    }
+
+    private static void copyVoxel(
+            VoxelBuffer<?> destination,
+            int destinationIndex,
+            VoxelBuffer<?> source,
+            int sourceIndex) {
+        destination.putInt(destinationIndex, source.getInt(sourceIndex));
     }
 }

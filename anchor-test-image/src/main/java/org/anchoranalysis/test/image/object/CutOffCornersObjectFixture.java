@@ -120,7 +120,7 @@ public class CutOffCornersObjectFixture {
         Voxels<UnsignedByteBuffer> voxels =
                 VoxelsFactory.getUnsignedByte().createInitialized(extent);
         BinaryValues binaryValues = BinaryValues.getDefault();
-        BinaryValuesByte binaryValuesByte = binaryValues.createByte();
+        BinaryValuesByte binaryValuesByte = binaryValues.asByte();
 
         boolean atLeastOneHigh = false;
 

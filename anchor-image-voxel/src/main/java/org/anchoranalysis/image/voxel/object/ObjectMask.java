@@ -64,9 +64,9 @@ import org.anchoranalysis.spatial.point.ReadableTuple3i;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 /**
- * A localized-mask in an image, expressed as a {@link BoundingBox}, with a corresponding mask
- * sized to match the bounding-box.
- * 
+ * A localized-mask in an image, expressed as a {@link BoundingBox}, with a corresponding mask sized
+ * to match the bounding-box.
+ *
  * <p>This represents the concept of an <i>object</i> residing within the image.
  *
  * <p>Each voxel in the mask must be one of two states, either <i>on</i> or <i>off</i>. The object
@@ -102,8 +102,8 @@ public class ObjectMask {
      *
      * <p>i.e. the bounding box corner is set as <code>0,0,0</code>.
      *
-     * <p>Default {@link BinaryValues} of ({@code off=0}, {@code on=255}) are used to interpret {@link Voxels} as a
-     * mask.
+     * <p>Default {@link BinaryValues} of ({@code off=0}, {@code on=255}) are used to interpret
+     * {@link Voxels} as a mask.
      *
      * <p>The {@link Voxels} are reused internally in memory without duplication.
      *
@@ -118,7 +118,7 @@ public class ObjectMask {
      *
      * <p>Default {@link BinaryValues} of (off=0, on=255) are used for the mask.
      *
-     * @param box bounding-box
+     * @param box bounding-box.
      */
     public ObjectMask(BoundingBox box) {
         this(VoxelsFactory.getUnsignedByte().createBounded(box));
@@ -132,7 +132,7 @@ public class ObjectMask {
      *
      * <p>Default {@link BinaryValues} of (off=0, on=255) are used for the mask.
      *
-     * @param voxels voxels to be used in the object-mask
+     * @param voxels voxels to be used in the object-mask.
      */
     public ObjectMask(BoundedVoxels<UnsignedByteBuffer> voxels) {
         this(voxels, BinaryValues.getDefault());
@@ -158,7 +158,7 @@ public class ObjectMask {
     public ObjectMask(BoundedVoxels<UnsignedByteBuffer> voxels, BinaryValues binaryValues) {
         this.voxels = voxels;
         this.binaryValues = binaryValues;
-        this.binaryValuesByte = binaryValues.createByte();
+        this.binaryValuesByte = binaryValues.asByte();
         this.interpolator = createInterpolator(binaryValues);
         this.extract = voxels.extract();
     }
@@ -166,7 +166,7 @@ public class ObjectMask {
     public ObjectMask(
             BoundingBox box, Voxels<UnsignedByteBuffer> voxels, BinaryValuesByte binaryValuesByte) {
         this.voxels = new BoundedVoxels<>(box, voxels);
-        this.binaryValues = binaryValuesByte.createInt();
+        this.binaryValues = binaryValuesByte.asInt();
         this.binaryValuesByte = binaryValuesByte;
         this.interpolator = createInterpolator(binaryValues);
         this.extract = voxels.extract();
@@ -208,8 +208,18 @@ public class ObjectMask {
         return new ObjectMask(voxels.replaceVoxels(voxelsToAssign), binaryValues);
     }
 
-    public ObjectMask growToZ(int sz) {
-        return new ObjectMask(voxels.growToZ(sz, FACTORY));
+    /**
+     * Grows a single z-sliced {@link ObjectMask} by duplicating the slice across the z-dimension
+     * {@code sizeZ} number of times.
+     *
+     * @param sizeZ the size in the z-dimension to grow to i.e. the number of duplicated sizes.
+     * @param factory a factory to use to create the duplicated voxels.
+     * @return a new {@link BoundedVoxels} with an identical corner, but with a 3D bounding-box (and
+     *     duplicated slices) instead of the previous 2D.
+     * @throws OperationFailedException if the existing voxels aren't 2D (a single slice).
+     */
+    public ObjectMask growToZ(int sizeZ) throws OperationFailedException {
+        return new ObjectMask(voxels.growToZ(sizeZ, FACTORY));
     }
 
     public ObjectMask growBuffer(Point3i neg, Point3i pos, Optional<Extent> clipRegion)
@@ -259,17 +269,18 @@ public class ObjectMask {
      *
      * <p>This is an <b>immutable</b> operation.
      *
-     * @param factor scale-factor
-     * @return a scaled object-mask
+     * @param factor scale-factor.
+     * @return a scaled object-mask.
      */
     public ObjectMask scale(ScaleFactor factor) {
         return scale(factor, Optional.empty());
     }
 
     /**
-     * Produces a new object-mask that uses the same voxel-buffer but switches the <i>off</i> and <i>on</i> mapping.
+     * Produces a new object-mask that uses the same voxel-buffer but switches the <i>off</i> and
+     * <i>on</i> mapping.
      *
-     * @return a newly created object-mask (reusing the same buffer)
+     * @return a newly created object-mask (reusing the same buffer).
      */
     public ObjectMask invert() {
         return new ObjectMask(voxels, binaryValues.createInverted());
@@ -280,10 +291,10 @@ public class ObjectMask {
      *
      * <p>This is an <i>immutable</i> operation.
      *
-     * @param factor scale-factor
+     * @param factor scale-factor.
      * @param clipTo an extent which the object-masks should always fit inside after scaling (to
-     *     catch any rounding errors that push the bounding box outside the scene-boundary)
-     * @return a scaled object-mask
+     *     catch any rounding errors that push the bounding box outside the scene-boundary).
+     * @return a scaled object-mask.
      */
     public ObjectMask scale(ScaleFactor factor, Optional<Extent> clipTo) {
 
@@ -300,7 +311,7 @@ public class ObjectMask {
                 int thresholdVal = (binaryValues.getOnInt() + binaryValues.getOffInt()) / 2;
 
                 VoxelsThresholder.thresholdForLevelByte(
-                        scaled.voxels(), thresholdVal, binaryValues.createByte());
+                        scaled.voxels(), thresholdVal, binaryValues.asByte());
             }
             return new ObjectMask(scaled, binaryValues);
 
@@ -313,8 +324,8 @@ public class ObjectMask {
     /**
      * Makes sure an object fits inside an extent, removing any parts which do not.
      *
-     * <p>This is NOT an <i>immutable</i> operation, returning the current object unchanged if it
-     * already fits inside.
+     * <p>This is <b>not</b> an <i>immutable</i> operation, returning the current object unchanged
+     * if it already fits inside.
      *
      * @param extent the extent an object must fit in
      * @return either the current object-mask unchanged (if it already fits inside) or a new
@@ -330,13 +341,13 @@ public class ObjectMask {
         }
     }
 
-    /** Calculates center-of-gravity across all axes */
+    /** Calculates center-of-gravity across all axes. */
     public Point3d centerOfGravity() {
         return CenterOfGravityCalculator.centerOfGravity(this);
     }
 
     /**
-     * Calculates center-of-gravity for one specific axis only
+     * Calculates center-of-gravity for one specific axis only.
      *
      * @param axis the axis
      * @return a point on the specific axis that is the center-of-gravity.
@@ -348,7 +359,8 @@ public class ObjectMask {
     /**
      * Determines if an object-mask is connected.
      *
-     * <p>Adjacent is defined with a <i>big</i> neighborhood definition i.e. with 8 or 26 connectivity.
+     * <p>Adjacent is defined with a <i>big</i> neighborhood definition i.e. with 8 or 26
+     * connectivity.
      *
      * @return true if all <i>on</i> voxels in the mask are spatially adjacent to at least one other
      *     <i>on</i> voxel with.
@@ -401,7 +413,7 @@ public class ObjectMask {
         voxelsMaskOut.assignValue(binaryValuesOut.getOnInt()).toAll();
 
         // Then we set any pixels NOT on either object to OFF..... leaving only the intersecting
-        // pixels as ON in the output buffer
+        // pixels as <i>on</i> in the output buffer
         voxelsMaskOut
                 .assignValue(binaryValuesOut.getOffInt())
                 .toEitherTwoObjects(invert(), other.invert(), boxIntersect.get());
@@ -514,11 +526,11 @@ public class ObjectMask {
      * Creates an object-mask covering the a bounding-box (that is required to intersect at least
      * partially)
      *
-     * <p>The region outputted will have the same size and coordinates as the bounding-box NOT the
-     * existing object-mask.
+     * <p>The region outputted will have the same size and coordinates as the bounding-box
+     * <i>not</i> the existing {@link ObjectMask}.
      *
-     * <p>It will contain the correct object-mask values for the intersecting region, and OFF values
-     * for the rest.
+     * <p>It will contain the correct object-mask values for the intersecting region, and <i>off</i>
+     * values for the rest.
      *
      * <p>A new voxel-buffer is always created for this operation i.e. the existing box is never
      * reused like sometimes in {@link #region}.
@@ -543,8 +555,8 @@ public class ObjectMask {
      * <p>This is a DETERMINISTIC operation, so one can rely on the same voxel being found for a
      * given object.
      *
-     * @return the location (in absolute coordinates) of an arbitrary <i>on</i> voxel on the object, if
-     *     it exists.
+     * @return the location (in absolute coordinates) of an arbitrary <i>on</i> voxel on the object,
+     *     if it exists.
      */
     public Optional<Point3i> findArbitraryOnVoxel() {
 
@@ -562,7 +574,7 @@ public class ObjectMask {
 
     /**
      * A slice buffer with <i>local</i> coordinates.
-     * 
+     *
      * <p>i.e. with coordinates relative to the bounding-box corner.
      *
      * @param sliceIndexRelative sliceIndex (z) relative to the bounding-box of the object-mask
@@ -597,7 +609,7 @@ public class ObjectMask {
 
     /**
      * Shifts the object-mask by moving its bounding-box forwards.
-     * 
+     *
      * <p>i.e. by adding {@code shift} from its corner.
      *
      * <p>This is an <i>immutable</i> operation: but beware the existing voxel-buffers are reused in
@@ -612,7 +624,7 @@ public class ObjectMask {
 
     /**
      * Shifts the object-mask by moving its bounding-box backwards.
-     * 
+     *
      * <p>i.e. by subtracting {@code shift} from its corner.
      *
      * <p>This is an <i>immutable</i> operation: but beware the existing voxel-buffers are reused in
@@ -714,8 +726,8 @@ public class ObjectMask {
     }
 
     /**
-     * Creates a list of all <i>on</i> voxels as points, using <i>local</i> coordinates i.e. relative to
-     * the bounding-box corner.
+     * Creates a list of all <i>on</i> voxels as points, using <i>local</i> coordinates i.e.
+     * relative to the bounding-box corner.
      *
      * @return a newly created list with newly created points.
      */
@@ -749,7 +761,7 @@ public class ObjectMask {
 
     /**
      * Applies a function to map the bounding-box to a new-value.
-     * 
+     *
      * <p>The {@link Extent} of the bounding-box should remain constant in this mapping.
      *
      * <p>This is an <i>immutable</i> operation: but beware the existing voxel-buffers are reused in

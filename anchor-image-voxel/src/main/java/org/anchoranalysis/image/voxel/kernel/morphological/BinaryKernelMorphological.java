@@ -41,6 +41,10 @@ import org.anchoranalysis.image.voxel.kernel.LocalSlices;
 public abstract class BinaryKernelMorphological extends BinaryKernel {
 
     // START REQUIRED ARGUMENTS
+    /**
+     * If true, a big neighborhood is used 2D-plane (8-connected instead of 4-connected), but not in
+     * Z-direction (remains always 2-connected).
+     */
     private final boolean bigNeighborhood;
 
     /**
@@ -55,6 +59,7 @@ public abstract class BinaryKernelMorphological extends BinaryKernel {
      */
     private final boolean qualifiedOutcome;
 
+    /** If the first-check fails, this outcome is returned. */
     private final boolean failedFirstCheckOutcome;
     // END REQUIRED ARGUMENTS
 
@@ -64,7 +69,7 @@ public abstract class BinaryKernelMorphological extends BinaryKernel {
      * Creates with a flag for big-neighborhood, and boolean outcomes for certain cases.
      *
      * @param bigNeighborhood if true, a big neighborhood is used 2D-plane (8-connected instead of
-     *     4-connected), but not in Z-direction (remains 2-connected).
+     *     4-connected), but not in Z-direction (remains always 2-connected).
      * @param unqualifiedOutcome the (negative) outcome that occurs if no neighbor qualifies
      *     (satisfies a condition). The positive outcome is assumed to be the complement of this.
      * @param failedFirstCheckOutcome if the first-check fails, this outcome is returned.
@@ -103,6 +108,8 @@ public abstract class BinaryKernelMorphological extends BinaryKernel {
     /**
      * The first check done on the kernel center-point, before checking any neighbors.
      *
+     * @param point a kernel focused on a particular point.
+     * @param buffer the associated buffer.
      * @return true if the check passed, and false otherwise.
      */
     protected abstract boolean firstCheck(KernelPointCursor point, UnsignedByteBuffer buffer);
@@ -111,9 +118,9 @@ public abstract class BinaryKernelMorphological extends BinaryKernel {
      * Does a particular neighboring-point satisfy the conditions.
      *
      * @param inside true iff the neighboring-point is inside the scene.
-     * @param point the point
-     * @param buffer
-     * @param zShift the buffer associated with the current point
+     * @param point the point.
+     * @param buffer the associated buffer.
+     * @param zShift the buffer associated with the current point.
      * @return true if the neighboring-point satisfied the conditions.
      */
     protected abstract boolean doesNeighborQualify(

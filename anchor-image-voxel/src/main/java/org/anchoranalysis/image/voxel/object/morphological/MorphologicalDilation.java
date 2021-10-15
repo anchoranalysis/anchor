@@ -107,7 +107,7 @@ public class MorphologicalDilation {
                     ApplyKernel.apply(kernel, voxels, context.getKernelApplication());
 
             try {
-                if (postcondition.isPresent() && !postcondition.get().acceptIteration(next)) {
+                if (postcondition.isPresent() && !postcondition.get().accept(next)) {
                     break;
                 }
             } catch (OperationFailedException e) {

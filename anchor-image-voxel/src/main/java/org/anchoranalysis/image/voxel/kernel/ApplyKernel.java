@@ -56,11 +56,11 @@ public class ApplyKernel {
 
     /**
      * Apply the kernel to {@code BinaryVoxels<UnsignedByteBuffer>} using the same binary-values as
-     * {@code voxels}.
+     * {@code voxels} to calculate a value for each voxel.
      *
-     * @param kernel the kernel to apply
-     * @param voxels the voxels to apply the kernel on
-     * @param params parameters influencing how the kernel is applied
+     * @param kernel the kernel to apply.
+     * @param voxels the voxels to apply the kernel on.
+     * @param params parameters influencing how the kernel is applied.
      * @return a newly created {@code BinaryVoxels<UnsignedByteBuffer>} that is the result of
      *     applying the kernel, and using the same binary-values as {@code voxels}.
      */
@@ -71,7 +71,7 @@ public class ApplyKernel {
 
         Voxels<UnsignedByteBuffer> out = FACTORY.createInitialized(voxels.extent());
 
-        BinaryValuesByte outBinaryValues = voxels.binaryValues().createByte();
+        BinaryValuesByte outBinaryValues = voxels.binaryValues().asByte();
 
         IterateKernelHelper.overAll(
                 kernel,
@@ -96,15 +96,16 @@ public class ApplyKernel {
                     }
                 });
 
-        return BinaryVoxelsFactory.reuseByte(out, outBinaryValues.createInt());
+        return BinaryVoxelsFactory.reuseByte(out, outBinaryValues.asInt());
     }
 
     /**
      * Applies the kernel to voxels and sums the returned value.
      *
-     * @param kernel the kernel to be applied
-     * @param voxels the voxels to iterate over
-     * @return the sum of the count value returned by the kernel over all iterated voxels
+     * @param kernel the kernel to be applied.
+     * @param voxels the voxels to iterate over.
+     * @param params parameters that affect how the kernel is applied.
+     * @return the sum of the count value returned by the kernel over all iterated voxels.
      */
     public static int applyForCount(
             CountKernel kernel,
@@ -120,12 +121,13 @@ public class ApplyKernel {
     /**
      * Applies the kernel to voxels and sums the returned value.
      *
-     * @param kernel the kernel to be applied
-     * @param voxels the voxels to iterate over
+     * @param kernel the kernel to be applied.
+     * @param voxels the voxels to iterate over.
      * @param box a bounding-box (coordinates relative to voxels) that restricts where iteration
      *     occurs. Must be contained within voxels.
-     * @return the sum of the count value returned by the kernel over all iterated voxels
-     * @throws OperationFailedException
+     * @param params parameters that affect how the kernel is applied.
+     * @return the sum of the count value returned by the kernel over all iterated voxels.
+     * @throws OperationFailedException if the operation cannot complete successfully.
      */
     public static int applyForCount(
             CountKernel kernel,
@@ -149,12 +151,13 @@ public class ApplyKernel {
     /**
      * Applies the kernel to voxels until a positive value is returned, then exits with true.
      *
-     * @param kernel the kernel to be applied
-     * @param voxels the voxels to iterate over
+     * @param kernel the kernel to be applied.
+     * @param voxels the voxels to iterate over.
      * @param box a bounding-box (coordinates relative to voxels) that restricts where iteration
      *     occurs. Must be contained within voxels.
-     * @return true if a positive-value is encountered, 0 if it never is encountered
-     * @throws OperationFailedException
+     * @param params parameters that affect how the kernel is applied.
+     * @return true if a positive-value is encountered, 0 if it never is encountered.
+     * @throws OperationFailedException if the operation cannot complete successfully.
      */
     public static boolean applyUntilPositive(
             CountKernel kernel,
@@ -167,6 +170,14 @@ public class ApplyKernel {
                 kernel, voxels, box, params, point -> kernel.calculateAt(point) > 0);
     }
 
+    /**
+     * Applies a {@link BinaryKernel} to voxels and counts how many true values occur en aggregate.
+     *
+     * @param kernel the kernel to be applied.
+     * @param voxels the voxels to iterate over.
+     * @param params parameters that affect how the kernel is applied.
+     * @return the total number of true values, after the kernel is applied to every voxel.
+     */
     public static int applyForCount(
             BinaryKernel kernel,
             BinaryVoxels<UnsignedByteBuffer> voxels,

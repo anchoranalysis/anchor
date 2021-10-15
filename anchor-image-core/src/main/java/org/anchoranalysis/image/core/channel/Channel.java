@@ -60,7 +60,10 @@ import org.anchoranalysis.spatial.scale.Scaler;
  * Stack}.
  *
  * <p>The channel's voxels have an underlying data-type that is not exposed as a templated
- * parameter, but can be accessed via {@link #getVoxelDataType}.
+ * parameter, but can be accessed via {@link #getVoxelDataType}. This is deliberate weak-typing.
+ *
+ * <p>Each channel has an associated size and optionally defines a physical size for each voxel, as
+ * stored in the associated {@link Dimensions} structure.
  *
  * @author Owen Feehan
  */
@@ -69,17 +72,20 @@ public class Channel {
 
     private static final Interpolator DEFAULT_INTERPOLATOR = new InterpolatorImgLib2Lanczos();
 
+    /** The factory to used to create any new {@link Channel}s. */
     private static final ChannelFactory FACTORY = ChannelFactory.instance();
 
+    /** The size and voxel-resolution of the channel. */
     @Getter private Dimensions dimensions;
 
+    /** The underlying voxels contained in the channel, with suppressed voxel type. */
     private Voxels<?> voxels;
 
     /**
-     * Constructor
+     * Creates for particular voxels and resolution.
      *
-     * @param voxels
-     * @param resolution
+     * @param voxels the voxels.
+     * @param resolution the resolution, if it is known.
      */
     public Channel(Voxels<?> voxels, Optional<Resolution> resolution) {
         this.dimensions = new Dimensions(voxels.extent(), resolution);
@@ -90,6 +96,11 @@ public class Channel {
         return voxels.extract().voxelsEqualTo(equalValue).deriveObject(box);
     }
 
+    /**
+     * The underlying voxels in the channel.
+     *
+     * @return the voxels, wrapped in a class that facilitates friendly conversion.
+     */
     public VoxelsWrapper voxels() {
         return new VoxelsWrapper(voxels);
     }
@@ -98,18 +109,19 @@ public class Channel {
      * Assigns new voxels to replace the existing voxels.
      *
      * @param voxelsToAssign voxels to be assigned.
-     * @throws IncorrectImageSizeException
+     * @throws IncorrectImageSizeException if {@code voxelsToAssign} has a different size to the
+     *     dimensions of the channel.
      */
     public void replaceVoxels(Voxels<?> voxelsToAssign) throws IncorrectImageSizeException {
 
-        if (!voxelsToAssign.extent().equals(dimensions.extent())) {
+        if (voxelsToAssign.extent().equals(dimensions.extent())) {
+            this.voxels = voxelsToAssign;
+        } else {
             throw new IncorrectImageSizeException(
                     String.format(
                             "voxels to be assigned (%s) are not the same size as the existing voxels (%s)",
                             voxelsToAssign.extent(), dimensions.extent()));
         }
-
-        this.voxels = voxelsToAssign;
     }
 
     /**
@@ -176,22 +188,22 @@ public class Channel {
     }
 
     /**
-     * Operations on whether particular voxels are equal to a particular value
+     * Operations on whether particular voxels are equal to a particular value.
      *
-     * @param equalToValue
+     * @param equalToValue the value all voxels should be equal to.
      * @return a newly instantiated object to perform queries to this voxels object as described
-     *     above
+     *     above.
      */
     public VoxelsPredicate voxelsEqualTo(int equalToValue) {
         return voxels.extract().voxelsEqualTo(equalToValue);
     }
 
     /**
-     * Operations on whether particular voxels are greater than a treshold (but not equal to)
+     * Operations on whether particular voxels are greater than a threshold (but not equal to).
      *
-     * @param threshold voxel-values greater than this threshold are included
+     * @param threshold voxel-values greater than this threshold are included.
      * @return a newly instantiated object to perform queries to this voxels object as described
-     *     above
+     *     above.
      */
     public VoxelsPredicate voxelsGreaterThan(int threshold) {
         return voxels.extract().voxelsGreaterThan(threshold);
@@ -201,11 +213,17 @@ public class Channel {
         dimensions = dimensions.duplicateChangeResolution(resolution);
     }
 
+    /**
+     * The underlying data-type of the voxels in the channel, represented by a {@link VoxelDataType}
+     * instance.
+     *
+     * @return an instance of {@link VoxelDataType}.
+     */
     public VoxelDataType getVoxelDataType() {
         return voxels.dataType();
     }
 
-    /** Display a histogram of voxel-intensities as the string-representation */
+    /** A string representation of a histogram of voxel-intensities in the channel. */
     @Override
     public String toString() {
         try {
@@ -218,7 +236,7 @@ public class Channel {
     /**
      * Are the two channels equal using a deep voxel by voxel comparison?
      *
-     * @param other the channel to compare with
+     * @param other the channel to compare with.
      * @param compareResolution if true, image-resolution must also be equal, otherwise it is not
      *     compared.
      * @return true if they are deemed equal, false otherwise.
@@ -229,39 +247,68 @@ public class Channel {
     }
 
     /**
-     * Flattens the voxels in the z direction, only if necessary (i.e. there's more than 1 z
-     * dimension).
+     * Flattens the voxels in the z direction.
      *
-     * @param flattener function to perform the flattening
-     * @return flattened box (i.e. 2D)
+     * <p>This only occurs if necessary (i.e. there's more than 1 z-slice), otherwise the current
+     * object is returned unchanged.
+     *
+     * @param flattener function to perform the flattening.
+     * @return a flattened channel, which is guaranteed to be 2D.
      */
     private Channel flattenZProjection(Function<VoxelsExtracter<?>, Voxels<?>> flattener) {
-        int prevZSize = voxels.extent().z();
-        if (prevZSize > 1) {
+        int previousZSize = voxels.extent().z();
+        if (previousZSize > 1) {
             return FACTORY.create(
                     flattener.apply(voxels.extract()),
-                    dimensions.resolution().map(res -> res.duplicateFlattenZ(prevZSize)));
+                    dimensions.resolution().map(res -> res.duplicateFlattenZ(previousZSize)));
         } else {
             return this;
         }
     }
 
+    /**
+     * Interface that allows manipulation of voxel intensities via arithmetic operations.
+     *
+     * @return the interface.
+     */
     public VoxelsArithmetic arithmetic() {
         return voxels.arithmetic();
     }
 
+    /**
+     * Interface that allows assignment of a particular value to all or subsets of the voxels.
+     *
+     * @param valueToAssign the value to assign.
+     * @return the interface.
+     */
     public VoxelsAssigner assignValue(int valueToAssign) {
         return voxels.assignValue(valueToAssign);
     }
 
+    /**
+     * Interface that allows read/copy/duplication operations to be performed regarding the voxels
+     * intensities.
+     *
+     * @return the interface.
+     */
     public VoxelsExtracter<?> extract() { // NOSONAR
         return voxels.extract();
     }
 
+    /**
+     * The size of the voxels across three dimensions.
+     *
+     * @return the size.
+     */
     public Extent extent() {
         return voxels.extent();
     }
 
+    /**
+     * The resolution of the voxel that describes a physical size for each voxel.
+     *
+     * @return the resolution, if it exists.
+     */
     public Optional<Resolution> resolution() {
         return dimensions.resolution();
     }

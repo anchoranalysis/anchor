@@ -99,6 +99,6 @@ public class VoxelsThresholder {
             throw new OperationFailedException(
                     "Unsupported voxel-data-type, only unsigned byte and float are supported");
         }
-        return BinaryVoxelsFactory.reuseByte(out, bvOut.createInt());
+        return BinaryVoxelsFactory.reuseByte(out, bvOut.asInt());
     }
 }

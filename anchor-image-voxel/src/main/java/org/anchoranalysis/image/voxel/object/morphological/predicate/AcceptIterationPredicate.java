@@ -38,10 +38,13 @@ import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
  */
 @FunctionalInterface
 public interface AcceptIterationPredicate {
+
     /**
-     * @param voxels
-     * @return true if the particular iteration should be accepted, false otherwise
+     * Whether a particular {@code voxels} fulfills the condition or not.
+     *
+     * @param voxels the voxels to test.
+     * @return true iff the condition is fulfilled.
+     * @throws OperationFailedException if the predicate cannot be successfully checked.
      */
-    boolean acceptIteration(BinaryVoxels<UnsignedByteBuffer> voxels)
-            throws OperationFailedException;
+    boolean accept(BinaryVoxels<UnsignedByteBuffer> voxels) throws OperationFailedException;
 }

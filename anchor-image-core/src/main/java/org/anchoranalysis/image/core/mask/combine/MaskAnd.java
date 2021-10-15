@@ -47,8 +47,8 @@ public class MaskAnd {
         apply(
                 first.voxels(),
                 second.voxels(),
-                first.binaryValues().createByte(),
-                second.binaryValues().createByte());
+                first.binaryValues().asByte(),
+                second.binaryValues().asByte());
     }
 
     /**

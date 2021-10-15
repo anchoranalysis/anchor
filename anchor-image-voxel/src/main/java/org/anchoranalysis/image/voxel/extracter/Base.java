@@ -42,11 +42,17 @@ import org.anchoranalysis.spatial.box.Extent;
 import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.point.ReadableTuple3i;
 
+/**
+ * A base class implementing common functionality for {@link VoxelsExtracter} functionality.
+ *
+ * @author Owen Feehan
+ * @param <T> buffer-type
+ */
 @AllArgsConstructor
 public abstract class Base<T> implements VoxelsExtracter<T> {
 
     // START REQUIRED ARGUMENTS
-    /** The voxels to extract from */
+    /** The voxels to extract from. */
     protected final Voxels<T> voxels;
     // END REQUIRED ARGUMENTS
 

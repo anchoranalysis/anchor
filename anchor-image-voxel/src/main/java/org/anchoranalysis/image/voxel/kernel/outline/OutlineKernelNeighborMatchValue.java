@@ -60,7 +60,7 @@ public class OutlineKernelNeighborMatchValue extends OutlineKernelBase {
      */
     public OutlineKernelNeighborMatchValue(BinaryVoxels<UnsignedByteBuffer> mask) {
         this.voxelsRequireHigh = mask;
-        this.bvRequireHigh = voxelsRequireHigh.binaryValues().createByte();
+        this.bvRequireHigh = voxelsRequireHigh.binaryValues().asByte();
     }
 
     @Override

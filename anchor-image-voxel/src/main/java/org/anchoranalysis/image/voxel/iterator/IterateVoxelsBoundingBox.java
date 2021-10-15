@@ -392,7 +392,7 @@ public class IterateVoxelsBoundingBox {
                         voxels.extent().offset(box.cornerMin()),
                         new Point3i(box.cornerMin()),
                         voxels.extent(),
-                        voxels.binaryValues().createByte(),
+                        voxels.binaryValues().asByte(),
                         params);
 
         Extent extent = voxels.extent();
@@ -436,7 +436,7 @@ public class IterateVoxelsBoundingBox {
                         voxels.extent().offset(box.cornerMin()),
                         new Point3i(box.cornerMin()),
                         voxels.extent(),
-                        voxels.binaryValues().createByte(),
+                        voxels.binaryValues().asByte(),
                         params);
 
         Extent extent = voxels.extent();

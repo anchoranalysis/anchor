@@ -54,7 +54,7 @@ public class SeedObjectMask implements Seed {
     }
 
     @Override
-    public void growToZ(int sz) {
+    public void growToZ(int sz) throws OperationFailedException {
         object = object.growToZ(sz);
     }
 

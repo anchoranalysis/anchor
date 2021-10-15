@@ -52,7 +52,7 @@ import org.anchoranalysis.spatial.box.BoundingBox;
  * Specifically, it expects:
  * <ol>
  * <li>A serialized {@link BoundingBox} <pre.somename.ser</pre>  (this filename is expected) in Java serialization form.
- * <li>An unsigned-8 bit raster-mask <pre>somename.tif</pre> corresponding to this bounding-box, using 255 as ON and 0 as on.
+ * <li>An unsigned-8 bit raster-mask <pre>somename.tif</pre> corresponding to this bounding-box, using 255 as <i>on</i> and 0 as on.
  * </ol>
  * @author Owen Feehan
  */

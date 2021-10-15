@@ -149,9 +149,9 @@ public class IterateVoxelsObjectMask {
     }
 
     /**
-     * Iterate over each voxel with a corresponding ON value in an object-mask - and with <b>two</b>
-     * associated <b>buffers</b> for each slice covering the <b>all the global space</b> i.e. the
-     * entire image.
+     * Iterate over each voxel with a corresponding <i>on</i> value in an object-mask - and with
+     * <b>two</b> associated <b>buffers</b> for each slice covering the <b>all the global space</b>
+     * i.e. the entire image.
      *
      * <p>The extent's of both {@code voxels1} and {@code voxels2} must be equal, and equal to the
      * coordinate space {@code object} is defined on.

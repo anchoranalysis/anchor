@@ -122,7 +122,7 @@ public class MaskFixture {
         return do3D ? BOX_EXTENT.z() : 1;
     }
 
-    /** Creates a rectangle (2D) or cuboid (3D) object-mask of ON pixels. */
+    /** Creates a rectangle (2D) or cuboid (3D) object-mask of <i>on</i> pixels. */
     private static BoundingBox createRectange(Point3i corner, boolean do3D) {
         Extent extentCorrected = Extent.createFromTupleReuse(maybeSuppressZ(BOX_EXTENT, do3D, 1));
         Point3i cornerCorrected = maybeSuppressZ(corner, do3D, 0);

@@ -56,7 +56,7 @@ import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 /**
- * A channel that is restricted to two values (ON and OFF) so as to act like a mask.
+ * A channel that is restricted to two states (<i>on</i> and<i>off</i>) so as to act like a mask.
  *
  * <p>This is one of Anchor's core data-objects.
  *
@@ -85,13 +85,14 @@ public class Mask {
     private final Interpolator interpolator;
 
     /**
-     * Creates a mask from an existing channel using default values for OFF (0) and ON (255)
+     * Creates a mask from an existing channel using default values for <i>off</i> (0) and <i>on</i>
+     * (255)
      *
-     * <p>The channel should have maximally two distinct intensity values, represeting OFF and ON
-     * states
+     * <p>The channel should have maximally two distinct intensity values, represeting <i>off</i>
+     * and ON states
      *
-     * <p>Precondition: no check occurs that only OFF and ON voxels exist in a channel, so please
-     * call only with valid input.
+     * <p>Precondition: no check occurs that only <i>off</i> and <i>on</i> voxels exist in a
+     * channel, so please call only with valid input.
      *
      * @param channel the channel to form the mask, whose voxel-buffer is reused internally in the
      *     mask
@@ -103,20 +104,21 @@ public class Mask {
     /**
      * Creates a mask from an existing channel
      *
-     * <p>The channel should have maximally two distinct intensity values, represeting OFF and ON
-     * states.
+     * <p>The channel should have maximally two distinct intensity values, represeting <i>off</i>
+     * and ON states.
      *
-     * <p>Precondition: no check occurs that only OFF and ON voxels exist in a channel, so please
-     * call only with valid input.
+     * <p>Precondition: no check occurs that only <i>off</i> and <i>on</i> voxels exist in a
+     * channel, so please call only with valid input.
      *
      * @param channel the channel to form the mask, whose voxel-buffer is reused internally in the
      *     mask
-     * @param binaryValues how to identify the OFF and ON states from intensity voxel-values
+     * @param binaryValues how to identify the <i>off</i> and <i>on</i> states from intensity
+     *     voxel-values
      */
     public Mask(Channel channel, BinaryValues binaryValues) {
         this.channel = channel;
         this.binaryValues = binaryValues;
-        this.binaryValuesByte = binaryValues.createByte();
+        this.binaryValuesByte = binaryValues.asByte();
 
         if (!channel.getVoxelDataType().equals(UnsignedByteVoxelType.INSTANCE)) {
             throw new IncorrectVoxelTypeException(
@@ -144,7 +146,7 @@ public class Mask {
     public Mask(BinaryVoxels<UnsignedByteBuffer> voxels, Optional<Resolution> resolution) {
         this.channel = FACTORY.create(voxels.voxels(), resolution);
         this.binaryValues = voxels.binaryValues();
-        this.binaryValuesByte = binaryValues.createByte();
+        this.binaryValuesByte = binaryValues.asByte();
 
         this.interpolator = createInterpolator(binaryValues);
     }
@@ -152,7 +154,7 @@ public class Mask {
     /**
      * Creates a new empty mask of particular dimensions and with particular binaryvalues
      *
-     * <p>Default mask values for OFF (0) and ON (255) are employed.
+     * <p>Default mask values for <i>off</i> (0) and <i>on</i> (255) are employed.
      *
      * @param dimensions the dimensions for the newly-created mask
      * @param binaryValues the binary-values to use for the newly created mask
@@ -269,7 +271,7 @@ public class Mask {
     }
 
     public BinaryValuesByte createByte() {
-        return binaryValues.createByte();
+        return binaryValues.asByte();
     }
 
     public BinaryValues createInverted() {
@@ -296,7 +298,7 @@ public class Mask {
         int thresholdVal = (binaryValues.getOnInt() + binaryValues.getOffInt()) / 2;
 
         VoxelsThresholder.thresholdForLevelByte(
-                mask.voxels(), thresholdVal, mask.binaryValues().createByte());
+                mask.voxels(), thresholdVal, mask.binaryValues().asByte());
     }
 
     private Interpolator createInterpolator(BinaryValues binaryValues) {

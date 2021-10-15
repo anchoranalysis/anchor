@@ -119,7 +119,7 @@ public interface VoxelsAssigner {
     void toObject(ObjectMask object, BoundingBox restrictTo);
 
     /**
-     * Sets voxels to a value if the position is ON in either of two masks
+     * Sets voxels to a value if the position is <i>on</i> in either of two masks
      *
      * @param object1 first-object
      * @param object2 second-object

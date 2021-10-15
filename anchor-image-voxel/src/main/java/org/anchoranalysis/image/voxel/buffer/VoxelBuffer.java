@@ -48,14 +48,17 @@ public abstract class VoxelBuffer<T> {
     /**
      * Data-type of each voxel in the buffer.
      *
-     * @return the data-type
+     * @return the data-type.
      */
     public abstract VoxelDataType dataType();
 
     /**
      * The associated buffer for storing the voxels.
      *
-     * @return the buffer
+     * <p>This buffer is either a NIO or other classes that wraps the underlying array storing voxel
+     * intensities.
+     *
+     * @return the buffer.
      */
     public abstract T buffer();
 
@@ -78,7 +81,8 @@ public abstract class VoxelBuffer<T> {
      * <p>The <i>disadvantage</i> is that this can be less efficient, unless conversion to {@code
      * int} needs to occur anyway.
      *
-     * @param index the index in the buffer
+     * @param index the index in the buffer.
+     * @return the intensity value corresponding to position {@code index} in the buffer.
      */
     public abstract int getInt(int index);
 
@@ -89,8 +93,8 @@ public abstract class VoxelBuffer<T> {
      * <p>Note this can provide slower access than reading directly in the native buffer type. See
      * the note in {@link #getInt(int)}.
      *
-     * @param index the index in the buffer
-     * @param value value to put in the biffer
+     * @param index the index in the buffer.
+     * @param value value to put in the buffer.
      */
     public abstract void putInt(int index, int value);
 
@@ -98,8 +102,8 @@ public abstract class VoxelBuffer<T> {
      * Puts a byte in the buffer at a particular position, converting, if necessary, to the buffer
      * type.
      *
-     * @param index the index in the buffer
-     * @param value value to put in the biffer
+     * @param index the index in the buffer.
+     * @param value value to put in the buffer.
      */
     public abstract void putByte(int index, byte value);
 
@@ -108,7 +112,7 @@ public abstract class VoxelBuffer<T> {
      *
      * <p>This is meant in the sense of Java's NIO {@link Buffer} classes.
      *
-     * @return the size
+     * @return the size.
      */
     public abstract int capacity();
 
@@ -142,18 +146,22 @@ public abstract class VoxelBuffer<T> {
     /**
      * An array of bytes that underlies the buffer (and can be written into a file).
      *
-     * @return an existing or newly created byte-array
+     * @return an existing or newly created byte-array.
      */
     public abstract byte[] underlyingBytes();
-
-    public void transferFromConvert(int destinationIndex, VoxelBuffer<?> source, int sourceIndex) {
-        putInt(destinationIndex, source.getInt(sourceIndex));
-    }
 
     @Override
     public String toString() {
         return HistogramFactory.create(this).toString();
     }
 
-    public abstract void transferFrom(int destinationIndex, VoxelBuffer<T> source, int sourceIndex);
+    /**
+     * Copies one particular intensity-value from another {@link VoxelBuffer} into this buffer.
+     *
+     * @param destinationIndex the index in the current buffer to write to.
+     * @param source the buffer to copy the value from.
+     * @param sourceIndex the index of the voxel in {@code source} to copy from.
+     */
+    public abstract void copyVoxelFrom(
+            int destinationIndex, VoxelBuffer<T> source, int sourceIndex);
 }

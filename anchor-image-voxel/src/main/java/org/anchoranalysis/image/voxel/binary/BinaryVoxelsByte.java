@@ -37,7 +37,7 @@ class BinaryVoxelsByte extends BinaryVoxels<UnsignedByteBuffer> {
 
     public BinaryVoxelsByte(Voxels<UnsignedByteBuffer> voxels, BinaryValues binaryValuesByte) {
         super(voxels, binaryValuesByte);
-        this.binaryValuesByte = binaryValues().createByte();
+        this.binaryValuesByte = binaryValues().asByte();
     }
 
     @Override

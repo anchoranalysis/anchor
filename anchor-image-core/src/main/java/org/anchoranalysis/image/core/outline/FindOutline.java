@@ -48,13 +48,13 @@ import org.anchoranalysis.spatial.box.Extent;
 /**
  * Finds outline voxels i.e. pixels on the contour/edge of the object.
  *
- * <p>Specifically, it converts a solid-object (where all voxels inside an object are ON) into where
- * only pixels on the contour are ON
+ * <p>Specifically, it converts a solid-object (where all voxels inside an object are <i>on</i>)
+ * into where only pixels on the contour are <i>on</i>.
  *
  * <p>A new object/mask is always created, so the existing buffers are not overwritten
  *
- * <p>The outline is always guaranteed to be inside the existing mask (so always a subset of ON
- * voxels).
+ * <p>The outline is always guaranteed to be inside the existing mask (so always a subset of
+ * <i>on</i> voxels).
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class FindOutline {

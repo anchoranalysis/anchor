@@ -32,10 +32,11 @@ import org.anchoranalysis.bean.GenerateUniqueParameterization;
 import org.anchoranalysis.math.relation.DoubleBiPredicate;
 
 /**
- * Base class that specifies a <a href="https://en.wikipedia.org/wiki/Relation_(mathematics)">relation</a> between two {@code double}s.
- * 
- * @author Owen Feehan
+ * Base class that specifies a <a
+ * href="https://en.wikipedia.org/wiki/Relation_(mathematics)">relation</a> between two {@code
+ * double}s.
  *
+ * @author Owen Feehan
  */
 @EqualsAndHashCode(callSuper = false)
 public abstract class RelationBean extends AnchorBean<RelationBean>
@@ -43,7 +44,7 @@ public abstract class RelationBean extends AnchorBean<RelationBean>
 
     /**
      * Creates a {@link DoubleBiPredicate} that implements the relation.
-     * 
+     *
      * @return the relation as a predicate.
      */
     public abstract DoubleBiPredicate create();

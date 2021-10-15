@@ -32,7 +32,7 @@ import org.anchoranalysis.spatial.point.PointConverter;
 import org.anchoranalysis.spatial.point.RunningSumPoint;
 
 /**
- * Aggregates points as they are successively processed
+ * Aggregates points as they are successively processed.
  *
  * @author Owen Feehan
  */
@@ -49,7 +49,13 @@ class AggregatePoints implements ProcessPoint {
         return runningSum.countXY();
     }
 
-    /** The center-of-gravity of all points-processed (discretized) */
+    /**
+     * The center-of-gravity of all processed points-processed.
+     *
+     * <p>The center-of-gravity is discretized by flooring.
+     *
+     * @return the center-of-gravity.
+     */
     public Point3i center() {
         return PointConverter.intFromDoubleFloor(runningSum.mean());
     }

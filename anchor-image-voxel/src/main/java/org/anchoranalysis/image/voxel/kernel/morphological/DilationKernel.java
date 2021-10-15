@@ -35,7 +35,7 @@ import org.anchoranalysis.image.voxel.kernel.KernelPointCursor;
  *
  * @author Owen Feehan
  */
-final class DilationKernel extends BinaryKernelMorphological {
+public final class DilationKernel extends BinaryKernelMorphological {
 
     public DilationKernel(boolean bigNeighborhood) {
         super(bigNeighborhood, false, true);

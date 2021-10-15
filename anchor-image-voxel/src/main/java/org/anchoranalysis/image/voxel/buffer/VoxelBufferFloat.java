@@ -76,7 +76,7 @@ final class VoxelBufferFloat extends VoxelBuffer<FloatBuffer> {
     }
 
     @Override
-    public void transferFrom(int destinationIndex, VoxelBuffer<FloatBuffer> src, int sourceIndex) {
+    public void copyVoxelFrom(int destinationIndex, VoxelBuffer<FloatBuffer> src, int sourceIndex) {
         buffer.put(destinationIndex, src.buffer().get(sourceIndex));
     }
 

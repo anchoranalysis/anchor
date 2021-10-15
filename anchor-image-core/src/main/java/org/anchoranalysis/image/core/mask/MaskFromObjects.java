@@ -50,7 +50,7 @@ public class MaskFromObjects {
                 dimensions,
                 outValues,
                 outValues.getOffInt(),
-                outValues.createByte().getOnByte());
+                outValues.asByte().getOnByte());
     }
 
     /** We look for space NOT in the objects, and create channel to display it */
@@ -61,20 +61,20 @@ public class MaskFromObjects {
                 dimensions,
                 outValues,
                 outValues.getOnInt(),
-                outValues.createByte().getOffByte());
+                outValues.asByte().getOffByte());
     }
 
     /**
      * Creates a mask where the voxels corresponding to any objects in a collection are assigned
      * {@code valueObjects} and other voxels are assigned {@code valueNotObjects}
      *
-     * @param objects objects which determine ON and OFF values for the mask
+     * @param objects objects which determine <i>on</i> and <i>off</i> values for the mask
      * @param dimensions the mask's dimensions
-     * @param binaryValuesToOutput what defines ON and OFF in the output channel
-     * @param valueNotObjects value to assign to voxels that <b>do not</b> correspond to an ON voxel
+     * @param binaryValuesToOutput what defines <i>on</i> and <i>off</i> in the output channel
+     * @param valueNotObjects value to assign to voxels that <b>do not</b> correspond to an
+     *     <i>on</i> voxel in any of {@code objects}
+     * @param valueObjects value to assign to voxels that <b>do</b> correspond to an <i>on</i> voxel
      *     in any of {@code objects}
-     * @param valueObjects value to assign to voxels that <b>do</b> correspond to an ON voxel in any
-     *     of {@code objects}
      * @return a newly created mask with newly created buffers
      */
     private static Mask createFromObjectsWithValues(

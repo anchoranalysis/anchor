@@ -26,11 +26,25 @@
 
 package org.anchoranalysis.image.voxel.kernel;
 
+/**
+ * Combines two {@Binary Kernel}s so that they only a true value exists only at a point where both
+ * kernels return true.
+ *
+ * <p>This implements a <i>logical and</i> operator.
+ *
+ * @author Owen Feehan
+ */
 public class AndKernel extends BinaryKernel {
 
     private final BinaryKernel kernel1;
     private final BinaryKernel kernel2;
 
+    /**
+     * Create for the two kernels.
+     *
+     * @param kernel1 the first kernel.
+     * @param kernel2 the second kernel.
+     */
     public AndKernel(BinaryKernel kernel1, BinaryKernel kernel2) {
         super(kernel1.getSize());
         this.kernel1 = kernel1;

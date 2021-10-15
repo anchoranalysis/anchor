@@ -53,6 +53,10 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  *
  * <p>This is one of the fundamental image data structures in Anchor.
  *
+ * <p>The contained channels have a particualar voxel type, but this is deliberately not exposed as
+ * a type-parameter to {@link Stack} as data-structure, relying on the user to remain aware i.e. it
+ * is weakly-typed.
+ *
  * @author Owen Feehan
  */
 @AllArgsConstructor(access = AccessLevel.PRIVATE)

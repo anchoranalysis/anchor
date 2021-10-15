@@ -39,6 +39,12 @@ import org.anchoranalysis.spatial.box.Extent;
  */
 public interface SliceBufferIndex<T> {
 
+    /**
+     * A {@link VoxelBuffer} corresponding to a particular z-slice.
+     *
+     * @param z the index (beginning at 0) of all z-slices.
+     * @return the corresponding buffer for {@code z}.
+     */
     VoxelBuffer<T> slice(int z);
 
     void replaceSlice(int z, VoxelBuffer<T> pixels);

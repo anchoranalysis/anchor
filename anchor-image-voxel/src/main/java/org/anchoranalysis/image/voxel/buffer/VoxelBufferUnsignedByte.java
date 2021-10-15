@@ -76,7 +76,7 @@ final class VoxelBufferUnsignedByte extends VoxelBufferUnsigned<UnsignedByteBuff
     }
 
     @Override
-    public void transferFrom(
+    public void copyVoxelFrom(
             int destinationIndex, VoxelBuffer<UnsignedByteBuffer> src, int sourceIndex) {
         buffer().putRaw(destinationIndex, src.buffer().getRaw(sourceIndex));
     }

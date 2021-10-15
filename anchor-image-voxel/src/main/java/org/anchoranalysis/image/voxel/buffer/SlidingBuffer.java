@@ -31,12 +31,25 @@ import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.spatial.box.Extent;
 
 /**
- * Contains the buffer for the current slice, the current slice minus 1, and the current slice plus
- * 1.
+ * An index that places a particular z-slice in local context.
+ *
+ * <p>It can <i>slide</i> along the z-dimension of {@link Voxels} tracking the current z-slice's
+ * buffer and neighboring buffers.
+ *
+ * <p>Specifically, three buffers are always tracked:
+ *
+ * <ol>
+ *   <li>the buffer for the current slice.
+ *   <li>the current slice minus 1.
+ *   <li>the current slice plus 1.
+ * </ol>
  *
  * <p>Can then be shifted (incremented) across all z-slices.
  *
- * @param <T> buffer-type
+ * <p>The {@link #shift} or {@link #seek} operations can be used to shift the buffer to focus on a
+ * particular z-slice.
+ *
+ * @param <T> buffer-type.
  */
 public final class SlidingBuffer<T> {
 
@@ -61,13 +74,21 @@ public final class SlidingBuffer<T> {
     /** The index of the currently selected slice. */
     private int sliceIndex = -1;
 
+    /**
+     * Create for particular voxels.
+     *
+     * @param voxels the voxels to slide a buffer across the z-dimension.
+     */
     public SlidingBuffer(Voxels<T> voxels) {
-        super();
         this.voxels = voxels;
         seek(0); // We start off on slice 0 always
     }
 
-    /** Seeks a particular slice */
+    /**
+     * Moves buffer to a particular z-slice.
+     *
+     * @param sliceIndexToSeek the index of the z-slice to move to.
+     */
     public void seek(int sliceIndexToSeek) {
 
         if (sliceIndexToSeek == sliceIndex) {
@@ -87,7 +108,7 @@ public final class SlidingBuffer<T> {
         }
     }
 
-    /** Increments the slice number by one */
+    /** Increments the slice number by one. */
     public void shift() {
         minusOne = center;
         center = plusOne;
@@ -101,6 +122,12 @@ public final class SlidingBuffer<T> {
         }
     }
 
+    /**
+     * Returns the corresponding buffer at a relative z-slice index to the current focused z-slice.
+     *
+     * @param relativeIndex an index relative to the current focus's z-slice e.g. -1 or 0 or 1
+     * @return the corresponding buffer.
+     */
     public VoxelBuffer<T> bufferRelative(int relativeIndex) {
         switch (relativeIndex) {
             case 1:
@@ -114,6 +141,13 @@ public final class SlidingBuffer<T> {
         }
     }
 
+    /**
+     * The size of the voxels across three dimensions.
+     *
+     * <p>Note this is not the size of an individual z-slice, but rather the size of all voxels.
+     *
+     * @return the size.
+     */
     public Extent extent() {
         return voxels.extent();
     }
