@@ -57,8 +57,8 @@ import org.anchoranalysis.spatial.box.Extent;
 import org.anchoranalysis.spatial.point.Point3i;
 
 /**
- * Stack that contains 1 or 3 channels so that we and display it as either or RGB unsigned 8-bit
- * image
+ * Stack that contains 1 or 3 channels so that we and display it as either or as an RGB unsigned 8-bit
+ * image.
  *
  * <p>A converter is optionally associated with each channel, used to convert the source images into
  * unsigned 8-bit.
@@ -70,8 +70,12 @@ public class DisplayStack {
     private static final double QUANTILE_LOWER = 0.0001;
     private static final double QUANTILE_UPPER = 0.9999;
 
+    /** The underlying stack that will be displayed, possibly after conversion. */
     @Getter private final Stack stack;
 
+    /** 
+     * A list of optional converters that will be applied to the respective channel in {@code stack} if they exist.
+     */
     @Getter
     private final List<Optional<ChannelConverterAttached<Channel, UnsignedByteBuffer>>> converters;
 

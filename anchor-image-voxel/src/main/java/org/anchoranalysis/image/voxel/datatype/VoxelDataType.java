@@ -32,7 +32,7 @@ import lombok.experimental.Accessors;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 /**
- * The type of data one voxel represents in an image-channel.
+ * The type of data that a single voxel represents in an image or related buffer.
  *
  * @author Owen Feehan
  */
@@ -81,8 +81,18 @@ public abstract class VoxelDataType {
                 .toHashCode();
     }
 
+    /**
+     * Whether the data-type represents an integer or floating-point?
+     * 
+     * @return true if the data-type represents integers only, false if it is float-point.
+     */
     public abstract boolean isInteger();
 
+    /**
+     * Whether the data-type is unsigned?
+     * 
+     * @return true if the data-type is unsigned, false if it is signed.
+     */
     public abstract boolean isUnsigned();
 
     @Override

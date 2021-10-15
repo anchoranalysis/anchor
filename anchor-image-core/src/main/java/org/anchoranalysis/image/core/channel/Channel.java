@@ -234,10 +234,20 @@ public class Channel {
         return FACTORY.create(resized, dimensionsScaled.resolution());
     }
 
+    /**
+     * A <a href="https://en.wikipedia.org/wiki/Maximum_intensity_projection">maximum-intensity projection</a> across the z-slices.
+     * 
+     * @return a newly created {@link Channel} with a newly created voxel-buffer.
+     */
     public Channel projectMax() {
         return flattenZProjection(VoxelsExtracter::projectMax);
     }
 
+    /**
+     * A mean-intensity projection across the z-slices.
+     * 
+     * @return a newly created {@link Channel} with a newly created voxel-buffer.
+     */
     public Channel projectMean() {
         return flattenZProjection(VoxelsExtracter::projectMean);
     }
@@ -273,7 +283,14 @@ public class Channel {
         return voxels.extract().voxelsGreaterThan(threshold);
     }
 
-    public void updateResolution(Optional<Resolution> resolution) {
+    /**
+     * Assigns a new resolution.
+     * 
+     * <p>This is a <i>mutable</i> operation that replaces existing state.
+     * 
+     * @param resolution the resolution to assign.
+     */
+    public void assignResolution(Optional<Resolution> resolution) {
         dimensions = dimensions.duplicateChangeResolution(resolution);
     }
 

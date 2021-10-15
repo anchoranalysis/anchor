@@ -38,7 +38,9 @@ import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeFactoryMultiplexer;
 
-/** Creates a channel for one of several data-types */
+/** 
+ * Creates a {@Channel} corresponding to one of several data-types.
+ */
 public class ChannelFactory extends VoxelDataTypeFactoryMultiplexer<ChannelFactorySingleType> {
 
     // Singleton
@@ -52,7 +54,11 @@ public class ChannelFactory extends VoxelDataTypeFactoryMultiplexer<ChannelFacto
                 new ChannelFactoryFloat());
     }
 
-    /** Singleton */
+    /** 
+     * Singleton instance of {@lLink ChannelFactory}.
+     * 
+     * @return the instance.
+     */
     public static ChannelFactory instance() {
         if (instance == null) {
             instance = new ChannelFactory();

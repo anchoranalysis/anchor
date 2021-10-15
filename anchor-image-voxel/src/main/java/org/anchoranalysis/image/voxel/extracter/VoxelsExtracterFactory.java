@@ -34,14 +34,20 @@ import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedIntBuffer;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedShortBuffer;
 import org.anchoranalysis.spatial.point.ReadableTuple3i;
 
+/**
+ * Creates {@link VoxelsExtracter} corresponding to {@link Voxels} of differing data-type.
+ * 
+ * @author Owen Feehan
+ *
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class VoxelsExtracterFactory {
 
     /**
      * Create voxels-extracter for {@link UnsignedByteBuffer}.
      *
-     * @param voxels the voxels to extract from
-     * @return a newly created extracter
+     * @param voxels the voxels to extract from.
+     * @return a newly created extracter.
      */
     public static VoxelsExtracter<UnsignedByteBuffer> createUnsignedByte(
             Voxels<UnsignedByteBuffer> voxels) {
@@ -51,8 +57,8 @@ public class VoxelsExtracterFactory {
     /**
      * Create voxels-extracter for {@link UnsignedShortBuffer}.
      *
-     * @param voxels the voxels to extract from
-     * @return a newly created extracter
+     * @param voxels the voxels to extract from.
+     * @return a newly created extracter.
      */
     public static VoxelsExtracter<UnsignedShortBuffer> createUnsignedShort(
             Voxels<UnsignedShortBuffer> voxels) {
@@ -60,10 +66,10 @@ public class VoxelsExtracterFactory {
     }
 
     /**
-     * Create voxels-extracter for {@link UnsignedIntBuffer}
+     * Create voxels-extracter for {@link UnsignedIntBuffer}.
      *
-     * @param voxels the voxels to extract from
-     * @return a newly created extracter
+     * @param voxels the voxels to extract from.
+     * @return a newly created extracter.
      */
     public static VoxelsExtracter<UnsignedIntBuffer> createUnsignedInt(
             Voxels<UnsignedIntBuffer> voxels) {
@@ -71,27 +77,27 @@ public class VoxelsExtracterFactory {
     }
 
     /**
-     * Create voxels-extracter for {@link FloatBuffer}
+     * Create voxels-extracter for {@link FloatBuffer}.
      *
-     * @param voxels the voxels to extract from
-     * @return a newly created extracter
+     * @param voxels the voxels to extract from.
+     * @return a newly created extracter.
      */
     public static VoxelsExtracter<FloatBuffer> createFloat(Voxels<FloatBuffer> voxels) {
         return new FloatImplementation(voxels);
     }
 
     /**
-     * Projects a {@link VoxelsExtracter} to a corner in a larger global space
+     * Projects a {@link VoxelsExtracter} to a corner in a larger global space.
      *
      * <p>Coordinates are translated appropriately for any calls from the larger global space to the
      * space on which {@code delegate} is defined.
      *
      * @param <T> buffer-type
      * @param corner the corner at which the voxels referred to by {@code delegate} are considered
-     *     to exist
-     * @param delegate the delegate
+     *     to exist.
+     * @param delegate the delegate.
      * @return an extracter that performs translation from global-coordinates to the coordinate
-     *     system expected by the delegate
+     *     system expected by the delegate.
      */
     public static <T> VoxelsExtracter<T> atCorner(
             ReadableTuple3i corner, VoxelsExtracter<T> delegate) {

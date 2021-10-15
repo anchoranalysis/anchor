@@ -121,16 +121,16 @@ public final class ScaleFactor {
         point.setY(scaledY(point.y()));
     }
 
-    private double scaledX(double val) {
-        return val * x;
-    }
-
-    private double scaledY(double val) {
-        return val * y;
-    }
-
     @Override
     public String toString() {
         return String.format("x=%f\ty=%f\t\tx^-1=%f\ty^-1=%f", x, y, 1 / x, 1 / y);
+    }
+
+    private double scaledX(double value) {
+        return value * x;
+    }
+
+    private double scaledY(double value) {
+        return value * y;
     }
 }

@@ -75,7 +75,7 @@ public abstract class ChannelConverter<T> {
      * @param channel channel whose voxels will be converted.
      * @param changeExisting if true, the contents of the existing channel will be changed with the
      *     new type, if false, rather a new channel will be created.
-     * @return
+     * @return the converted channel, either the existing channel, or a newly-created one, as per above.
      */
     public Channel convert(Channel channel, ConversionPolicy changeExisting) {
 

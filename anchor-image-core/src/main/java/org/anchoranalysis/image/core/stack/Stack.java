@@ -53,7 +53,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  *
  * <p>This is one of the fundamental image data structures in Anchor.
  *
- * <p>The contained channels have a particualar voxel type, but this is deliberately not exposed as
+ * <p>The contained channels have a particular voxel-type, but this is deliberately not exposed as
  * a type-parameter to {@link Stack} as data-structure, relying on the user to remain aware i.e. it
  * is weakly-typed.
  *
@@ -74,15 +74,28 @@ public class Stack implements Iterable<Channel> {
     /** An internal data-structure where the stacks are stored. */
     private final StackNotUniformSized delegate;
 
+    /**
+     * Creates a new empty {@link Stack} that will not become an RGB image after adding channels.
+     */
+    public Stack() {
+        this(false);
+    }
+
+    /**
+     * Creates a new empty {@link Stack} and whether it will become an RGB image or not.
+     * 
+     * @param rgb whether the stack will represent an RGB image after adding channels.
+     */
     public Stack(boolean rgb) {
         this.delegate = new StackNotUniformSized();
         this.rgb = rgb;
     }
 
-    public Stack() {
-        this(false);
-    }
-
+    /**
+     * Creates a {@link Stack} with a single channel.
+     * 
+     * @param channel the channel.
+     */
     public Stack(Channel channel) {
         this.delegate = new StackNotUniformSized(channel);
         this.rgb = false;
@@ -106,12 +119,27 @@ public class Stack implements Iterable<Channel> {
         }
     }
 
-    public Stack(Stream<Channel> channelStream) throws IncorrectImageSizeException {
-        this(false, channelStream);
+    /**
+     * Create a {@link Stack} from a stream of {@link Channel}s.
+     * 
+     * <p>It is assumed these channels will <b>not</b> represent an RGB image.
+     * 
+     * @param stream the stream of channels.
+     * @throws IncorrectImageSizeException if the channels are not of uniform size.
+     */
+    public Stack(Stream<Channel> stream) throws IncorrectImageSizeException {
+        this(false, stream);
     }
 
-    public Stack(boolean rgb, Stream<Channel> channelStream) throws IncorrectImageSizeException {
-        this.delegate = new StackNotUniformSized(channelStream);
+    /**
+     * Like {@link #Stack(Stream)} but allows explicitly setting whether it should be interpreted as RGB or not.
+     * 
+     * @param rgb whether to interpret the stream as RGB or not, when it is three channels.
+     * @param stream the stream of channels.
+     * @throws IncorrectImageSizeException if the channels are not of uniform size.
+     */
+    public Stack(boolean rgb, Stream<Channel> stream) throws IncorrectImageSizeException {
+        this.delegate = new StackNotUniformSized(stream);
         this.rgb = rgb;
         if (!delegate.isUniformlySized()) {
             throw new IncorrectImageSizeException("Channels in streams are not uniformly sized");
@@ -130,9 +158,9 @@ public class Stack implements Iterable<Channel> {
      * <p>The function applied to the channel should ensure it produces uniform sizes.
      *
      * @param mapping performs an operation on a channel and produces a modified channel (or a
-     *     different one entirely)
-     * @return a new stack (after any modification by {@code mapping}) preserving the channel order
-     * @throws OperationFailedException if the channels produced have non-uniform sizes
+     *     different one entirely).
+     * @return a new stack (after any modification by {@code mapping}) preserving the channel order.
+     * @throws OperationFailedException if the channels produced have non-uniform sizes.
      */
     public Stack mapChannel(CheckedUnaryOperator<Channel, OperationFailedException> mapping)
             throws OperationFailedException {
@@ -239,18 +267,42 @@ public class Stack implements Iterable<Channel> {
         return delegate.getChannel(index);
     }
 
+    /**
+     * The number of channels in the stack.
+     * 
+     * @return the number of channels.
+     */
     public final int getNumberChannels() {
         return delegate.getNumberChannels();
     }
 
+    /**
+     * The dimensions of all channels in the stack.
+     * 
+     * @return the dimensions.
+     */
     public Dimensions dimensions() {
         return delegate.getChannel(0).dimensions();
     }
 
+    /**
+     * Resolution of voxels to physical measurements.
+     * 
+     * <p>e.g. physical size of each voxel in a particular dimension.
+     * 
+     * @return the resolution.
+     */
     public Optional<Resolution> resolution() {
         return dimensions().resolution();
     }
 
+    /**
+     * The width and height and depth of the image
+     * 
+     * <p>i.e. the size of each of the three possible dimensions.
+     * 
+     * @return the extent.
+     */
     public Extent extent() {
         return dimensions().extent();
     }
@@ -378,7 +430,7 @@ public class Stack implements Iterable<Channel> {
     /**
      * Are the two stack equal using a deep voxel by voxel comparison of each channel?
      *
-     * @param other the stack to compare with
+     * @param other the stack to compare with.
      * @param compareResolution if true, the image-resolution is also compared for each channel.
      * @return true if they are deemed equals, false otherwise.
      */
@@ -412,9 +464,16 @@ public class Stack implements Iterable<Channel> {
         return builder.toHashCode();
     }
 
-    public void updateResolution(Resolution resolution) {
+    /**
+     * Assigns a new resolution.
+     * 
+     * <p>This is a <i>mutable</i> operation that replaces existing state.
+     * 
+     * @param resolution the resolution to assign.
+     */
+    public void assignResolution(Resolution resolution) {
         for (Channel channel : this) {
-            channel.updateResolution(Optional.of(resolution));
+            channel.assignResolution(Optional.of(resolution));
         }
     }
 
@@ -424,6 +483,8 @@ public class Stack implements Iterable<Channel> {
      *
      * <p>This is an important flag for determining how a stack is displayed visually, determining
      * whether a stack is portrayed as a color image or composite grayscale channels.
+     * 
+     * @return whether the stack can be interpreted as an RGB image when it has three channels.
      */
     public boolean isRGB() {
         return rgb;

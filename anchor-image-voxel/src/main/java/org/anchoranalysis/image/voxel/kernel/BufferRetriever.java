@@ -28,10 +28,18 @@ package org.anchoranalysis.image.voxel.kernel;
 import java.util.Optional;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 
+/**
+ * Retrieves a buffer corresponding to a relative index in the z-dimension.
+ * 
+ * @author Owen Feehan
+ *
+ */
 public interface BufferRetriever {
 
     /**
-     * All local access is indexed relative (e.g. -1, -2, +1, +2 etc.)
+     * Get a buffer at a particular index in the z-dimension.
+     * 
+     * The index is relative to a current position e.g. {@code -1, -2, +1, +2} etc.
      *
      * <p>If an invalid index is requested, then {@link Optional#empty} is returned.
      *

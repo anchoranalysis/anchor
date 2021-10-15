@@ -41,26 +41,62 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PrimitiveConverter {
 
+    /**
+     * Converts an <i>unsigned-byte</i> value to a <i>signed int</i>.
+     * 
+     * @param value the value to convert.
+     * @return the converted value.
+     */
     public static int unsignedByteToInt(byte value) {
         return Byte.toUnsignedInt(value);
     }
 
+    /**
+     * Converts an <i>unsigned-short</i> value to a <i>signed int</i>.
+     * 
+     * @param value the value to convert.
+     * @return the converted value.
+     */
     public static int unsignedShortToInt(short value) {
         return Short.toUnsignedInt(value);
     }
 
+    /**
+     * Converts an <i>unsigned-int</i> value to a <i>signed int</i>.
+     * 
+     * @param value the value to convert.
+     * @return the converted value.
+     */
     public static int unsignedIntToShort(int value) {
         return (short) value;
     }
-
+    
+    /**
+     * Converts an <i>unsigned-byte</i> value to a <i>signed short</i>.
+     * 
+     * @param value the value to convert.
+     * @return the converted value.
+     */
     public static int unsignedByteToShort(byte value) {
         return (short) unsignedByteToInt(value);
     }
 
+    /**
+     * Converts an <i>unsigned-int</i> value to a <i>signed long</i>.
+     * 
+     * @param value the value to convert.
+     * @return the converted value.
+     */
     public static long unsignedIntToLong(int value) {
         return Integer.toUnsignedLong(value);
     }
 
+    /**
+     * Converts an <i>unsigned-int</i> value to a <i>signed int</i>.
+     * 
+     * @param value the value to convert.
+     * @return the converted value.
+     */
     public static int unsignedIntToInt(int value) {
         return value;
     }

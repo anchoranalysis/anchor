@@ -28,8 +28,8 @@ package org.anchoranalysis.image.voxel.datatype;
 
 public abstract class SignedVoxelType extends VoxelDataType {
 
-    protected SignedVoxelType(int numBits, String typeIdentifier, long maxValue, long minValue) {
-        super(numBits, typeIdentifier, maxValue, minValue);
+    protected SignedVoxelType(int numberBits, String typeIdentifier, long maxValue, long minValue) {
+        super(numberBits, typeIdentifier, maxValue, minValue);
     }
 
     @Override
