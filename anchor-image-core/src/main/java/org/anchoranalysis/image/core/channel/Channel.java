@@ -166,7 +166,7 @@ public class Channel {
     }
 
     /**
-     * Like {@link #scaleXY(ScaleFactor) but allows an explicit choice of {@link Interpolator}.
+     * Like {@link #scaleXY(ScaleFactor)} but allows an explicit choice of {@link Interpolator}.
      * 
      * @param scaleFactor the scaling-factor to be applied to the sizes.
      * @param interpolator the interpolator.
