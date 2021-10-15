@@ -205,10 +205,6 @@ public final class UnsignedIntBuffer extends UnsignedBuffer {
         putUnsigned(value);
     }
 
-    public IntBuffer put(int arg0, int arg1) {
-        return delegate.put(arg0, arg1);
-    }
-
     /**
      * The array of the buffer ala {@link IntBuffer#array}.
      *

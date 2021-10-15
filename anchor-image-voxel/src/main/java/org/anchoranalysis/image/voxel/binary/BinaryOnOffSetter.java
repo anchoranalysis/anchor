@@ -94,9 +94,6 @@ public interface BinaryOnOffSetter {
     /**
      * Does the voxel at this point have an <i>on</i> state?
      *
-     * @param x the x-component of the point.
-     * @param y the y-component of the point.
-     * @param z the z-component of the point.
      * @param point the point to assign an <i>on</i> state to.
      * @return true if the voxel has an <i>on</i> state.
      */
@@ -107,9 +104,6 @@ public interface BinaryOnOffSetter {
     /**
      * Does the voxel at this point have an <i>off</i> state?
      *
-     * @param x the x-component of the point.
-     * @param y the y-component of the point.
-     * @param z the z-component of the point.
      * @param point the point to assign an <i>off</i> state to.
      * @return true if the voxel has an <i>off</i> state.
      */

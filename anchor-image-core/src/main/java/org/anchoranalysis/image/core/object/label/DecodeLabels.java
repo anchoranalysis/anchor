@@ -61,6 +61,14 @@ public class DecodeLabels<T> {
      */
     @FunctionalInterface
     public interface CreateElementFromScaledObject<T> {
+        
+        /**
+         * Create from an index and it's scaled-object.
+         * 
+         * @param index the index.
+         * @param scaledObject the object.
+         * @return the created element.
+         */
         T createFrom(int index, ObjectMask scaledObject);
     }
 

@@ -56,7 +56,7 @@ import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 /**
- * A channel that is restricted to two states (<i>on</i> and<i>off</i>) so as to act like a mask.
+ * A channel whose voxel-values are restricted to two states (<i>on</i> and<i>off</i>).
  *
  * <p>This is one of Anchor's core data-objects.
  *
@@ -74,13 +74,19 @@ public class Mask {
      */
     @Getter private Channel channel;
 
+    /**
+     * The two states which are permitted to be assigned to the voxels, stored as <i>unsigned int</i>s.
+     */
     @Getter private final BinaryValues binaryValues;
 
+    /**
+     * The two states which are permitted to be assigned to the voxels, stored as <i>byte</i>s.
+     */
     private final BinaryValuesByte binaryValuesByte;
 
     /**
-     * Interpolator used for resizing the mask (making sure to use an out-of-bounds strategy of OFF
-     * voxels)
+     * Interpolator used for resizing the mask (making sure to use an out-of-bounds strategy of <i>off</i>
+     * voxels).
      */
     private final Interpolator interpolator;
 
@@ -89,7 +95,7 @@ public class Mask {
      * (255)
      *
      * <p>The channel should have maximally two distinct intensity values, represeting <i>off</i>
-     * and ON states
+     * and <i>on</i> states.
      *
      * <p>Precondition: no check occurs that only <i>off</i> and <i>on</i> voxels exist in a
      * channel, so please call only with valid input.
@@ -152,7 +158,7 @@ public class Mask {
     }
 
     /**
-     * Creates a new empty mask of particular dimensions and with particular binaryvalues
+     * Creates a new empty mask of particular dimensions and with particular {@link BinaryValues}.
      *
      * <p>Default mask values for <i>off</i> (0) and <i>on</i> (255) are employed.
      *

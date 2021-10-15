@@ -78,7 +78,7 @@ class PopulateIndexProcessor<T> implements ProcessBufferUnary<T> {
                 mergeWithNeighbors.addElement(count);
                 count++;
             } else {
-                bufferIndex.put(offsetSlice, neighborLabel);
+                bufferIndex.putRaw(offsetSlice, neighborLabel);
             }
         }
     }

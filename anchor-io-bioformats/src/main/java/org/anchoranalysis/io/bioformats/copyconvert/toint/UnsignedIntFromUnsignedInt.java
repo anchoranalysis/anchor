@@ -66,7 +66,7 @@ public class UnsignedIntFromUnsignedInt extends ToInt {
 
         int indexOut = 0;
         for (int indexIn = 0; indexIn < sizeBytes; indexIn += BYTES_PER_PIXEL) {
-            out.put(
+            out.putRaw(
                     indexOut++,
                     DataTools.bytesToInt(sourceArray, indexIn, BYTES_PER_PIXEL, littleEndian));
         }

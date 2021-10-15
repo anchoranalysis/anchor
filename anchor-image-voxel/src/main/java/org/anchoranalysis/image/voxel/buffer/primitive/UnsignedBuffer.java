@@ -116,6 +116,7 @@ public abstract class UnsignedBuffer {
      * <p>This is meant in the sense of Java's NIO {@link Buffer} classes.
      *
      * @param newPosition the index to assign as position.
+     * @return the buffer.
      */
     public final Buffer position(int newPosition) {
         return delegate.position(newPosition);

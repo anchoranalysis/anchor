@@ -29,7 +29,6 @@ package org.anchoranalysis.image.voxel.binary;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.experimental.Accessors;
-import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.assigner.VoxelsAssigner;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValues;
@@ -95,33 +94,12 @@ public abstract class BinaryVoxels<T> implements BinaryOnOffSetter {
         return voxels.extract().voxelsEqualTo(binaryValues.getOffInt()).anyExists();
     }
 
+    /**
+     * Deep-copy of the object, including duplicating voxel buffers in memory.
+     * 
+     * @return a deep-copy.
+     */
     public abstract BinaryVoxels<T> duplicate();
-
-    public BinaryVoxels<T> extractSlice(int z) throws CreateException {
-        return binaryVoxelsFor(extract().slice(z), binaryValues());
-    }
-
-    protected abstract BinaryVoxels<T> binaryVoxelsFor(Voxels<T> slice, BinaryValues binaryValues);
-
-    public void updateSlice(int z, VoxelBuffer<T> buffer) {
-        voxels.replaceSlice(z, buffer);
-    }
-
-    public VoxelsAssigner assignOn() {
-        return voxels.assignValue(binaryValues.getOnInt());
-    }
-
-    public VoxelsAssigner assignOff() {
-        return voxels.assignValue(binaryValues.getOffInt());
-    }
-
-    public int countOn() {
-        return voxels.extract().voxelsEqualTo(binaryValues.getOnInt()).count();
-    }
-
-    public int countOff() {
-        return voxels.extract().voxelsEqualTo(binaryValues.getOffInt()).count();
-    }
 
     /**
      * A buffer corresponding to a particular z-slice.
@@ -144,6 +122,61 @@ public abstract class BinaryVoxels<T> implements BinaryOnOffSetter {
      */
     public VoxelBuffer<T> slice(int z) {
         return voxels.slice(z);
+    }
+    
+    /**
+     * A particular z-slice, wrapped into a {@link BinaryVoxels}.
+     *
+     * @param z the index (beginning at 0) of all z-slices.
+     * @return a newly created {@link BinaryVoxels} wrapping the single z-slice at position {@code z}.
+     */
+    public BinaryVoxels<T> sliceBinary(int z) {
+        return binaryVoxelsFor(extract().slice(z), binaryValues());
+    }
+
+    /**
+     * Creates a {@link BinaryVoxels} corresponding to a particular voxels and {@link BinaryValues}.
+     * 
+     * @param voxels the voxels.
+     * @param binaryValues the binary-values.
+     * @return the newly created {@link BinaryVoxels}.
+     */
+    protected abstract BinaryVoxels<T> binaryVoxelsFor(Voxels<T> voxels, BinaryValues binaryValues);
+
+    /**
+     * Creates an assigner that may set the <i>on</i> state in subsequently specified regions of the voxels.
+     * 
+     * @return a newly created assigner.
+     */
+    public VoxelsAssigner assignOn() {
+        return voxels.assignValue(binaryValues.getOnInt());
+    }
+
+    /**
+     * Creates an assigner that may set the <i>off</i> state in subsequently specified regions of the voxels.
+     * 
+     * @return a newly created assigner.
+     */
+    public VoxelsAssigner assignOff() {
+        return voxels.assignValue(binaryValues.getOffInt());
+    }
+
+    /**
+     * Counts the number of voxels with an <i>on</i> state.
+     * 
+     * @return the total number of voxels with an on state.
+     */
+    public int countOn() {
+        return voxels.extract().voxelsEqualTo(binaryValues.getOnInt()).count();
+    }
+
+    /**
+     * Counts the number of voxels with an <i>off</i> state.
+     * 
+     * @return the total number of voxels with an off state.
+     */
+    public int countOff() {
+        return voxels.extract().voxelsEqualTo(binaryValues.getOffInt()).count();
     }
 
     /**
