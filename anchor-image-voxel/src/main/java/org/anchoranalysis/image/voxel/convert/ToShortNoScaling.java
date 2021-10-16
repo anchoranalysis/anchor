@@ -32,9 +32,9 @@ import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedIntBuffer;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedShortBuffer;
 
 /**
- * Converts voxel buffers to a unsigned 16-bit buffer without scaling any values.
+ * Converts voxel buffers to an <b>unsigned 16-bit</b> buffer without scaling any values.
  *
- * <p>Values greater than 65535 are clamping to 65535 .
+ * <p>Values with intesity greater than {@code 65535} are clamped to {@code 65535}.
  *
  * @author Owen Feehan
  */

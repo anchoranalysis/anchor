@@ -213,7 +213,6 @@ public class ObjectMask {
      * {@code sizeZ} number of times.
      *
      * @param sizeZ the size in the z-dimension to grow to i.e. the number of duplicated sizes.
-     * @param factory a factory to use to create the duplicated voxels.
      * @return a new {@link BoundedVoxels} with an identical corner, but with a 3D bounding-box (and
      *     duplicated slices) instead of the previous 2D.
      * @throws OperationFailedException if the existing voxels aren't 2D (a single slice).
@@ -444,6 +443,12 @@ public class ObjectMask {
         return new ObjectMask(voxels.projectMax());
     }
 
+    /** 
+     * 
+     * The bounding-box which gives a location for the object-mask on an image.
+     *
+     * @return the bounding-box.
+     */
     public BoundingBox boundingBox() {
         return voxels.boundingBox();
     }

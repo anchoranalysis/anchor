@@ -70,9 +70,9 @@ public class VoxelsFactory extends VoxelDataTypeFactoryMultiplexer<VoxelsFactory
         return new VoxelsWrapper(buffer);
     }
 
-    public VoxelsWrapper create(Extent e, VoxelDataType dataType) {
+    public VoxelsWrapper create(Extent extent, VoxelDataType dataType) {
         VoxelsFactoryTypeBound<?> factory = get(dataType);
-        Voxels<?> buffer = factory.createInitialized(e);
+        Voxels<?> buffer = factory.createInitialized(extent);
         return new VoxelsWrapper(buffer);
     }
 

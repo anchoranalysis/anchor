@@ -39,14 +39,18 @@ package org.anchoranalysis.image.voxel.iterator.process.buffer;
 @FunctionalInterface
 public interface ProcessBufferBinaryWithoutOffset<S, T> {
 
-    /** Notifies the processor that there has been a change in slice (z global coordinate) */
+    /** 
+     * Notifies the processor that there has been a change in slice.
+     *
+     * @param z the slice-index (global coordinates).
+     */
     default void notifyChangeSlice(int z) {}
 
     /**
-     * Processes a voxel location in a buffer
+     * Processes a voxel location in a buffer.
      *
-     * @param buffer1 first buffer for the current slice
-     * @param buffer2 second buffer for the current slice
+     * @param buffer1 first buffer for the current slice.
+     * @param buffer2 second buffer for the current slice.
      */
     void process(S buffer1, T buffer2);
 }

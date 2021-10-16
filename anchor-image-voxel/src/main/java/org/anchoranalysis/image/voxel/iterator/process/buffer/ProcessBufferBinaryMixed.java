@@ -45,21 +45,25 @@ import org.anchoranalysis.spatial.point.Point3i;
 @FunctionalInterface
 public interface ProcessBufferBinaryMixed<S, T> {
 
-    /** Notifies the processor that there has been a change in slice (z global coordinate) */
+    /** 
+     * Notifies the processor that there has been a change in slice.
+     *
+     * @param z the slice-index (global coordinates).
+     */
     default void notifyChangeSlice(int z) {}
 
     /**
      * Processes a voxel location in two buffers.
      *
-     * @param point a point with global coordinates
+     * @param point a point with global coordinates.
      * @param buffer1 first buffer for the current slice for which {@code offsetSlice} refers to a
-     *     particular location
+     *     particular location.
      * @param buffer2 second buffer for the current slice for which {@code offsetSlice} refers to a
-     *     particular location
+     *     particular location.
      * @param offset1 an offset value for the current slice for <b>buffer1</b> (i.e. indexing XY
-     *     only, but not Z)
+     *     only, but not Z).
      * @param offset2 an offset value for the current slice for <b>buffer2</b> (i.e. indexing XY
-     *     only, but not Z)
+     *     only, but not Z).
      */
     void process(Point3i point, VoxelBuffer<S> buffer1, T buffer2, int offset1, int offset2);
 }

@@ -54,8 +54,8 @@ public abstract class VoxelsConverter<T> {
     /**
      * Creates a new voxels of type {@code T} and copies the voxels from {@code from}.
      *
-     * @param from where the voxels are copied from (the source)
-     * @param factory a factory that creates {@link Voxels} of tyoe {@code T}.
+     * @param from where the voxels are copied from (the source).
+     * @param factory a factory that creates {@link Voxels} of type {@code T}.
      * @return a newly created {@link Voxels} with values copied from {@code source}.
      */
     public Voxels<T> convertFrom(VoxelsWrapper from, VoxelsFactoryTypeBound<T> factory) {
@@ -92,8 +92,8 @@ public abstract class VoxelsConverter<T> {
     /**
      * Copies voxels from a source of type @{link UnsignedByteBuffer} to voxels of type {@code T}.
      *
-     * @param from where the voxels are copied from (the source)
-     * @param to where the voxels are copied to (the destination)
+     * @param from where the voxels are copied from (the source).
+     * @param to where the voxels are copied to (the destination).
      * @throws OperationFailedException if the extents of {@code from} and {@code to} are not equal.
      */
     public void copyFromUnsignedByte(Voxels<UnsignedByteBuffer> from, Voxels<T> to)
@@ -104,8 +104,8 @@ public abstract class VoxelsConverter<T> {
     /**
      * Copies voxels from a source of type @{link UnsignedShortBuffer} to voxels of type {@code T}.
      *
-     * @param from where the voxels are copied from (the source)
-     * @param to where the voxels are copied to (the destination)
+     * @param from where the voxels are copied from (the source).
+     * @param to where the voxels are copied to (the destination).
      * @throws OperationFailedException if the extents of {@code from} and {@code to} are not equal.
      */
     public void copyFromUnsignedShort(Voxels<UnsignedShortBuffer> from, Voxels<T> to)
@@ -116,8 +116,8 @@ public abstract class VoxelsConverter<T> {
     /**
      * Copies voxels from a source of type @{link UnsignedIntBuffer} to voxels of type {@code T}.
      *
-     * @param from where the voxels are copied from (the source)
-     * @param to where the voxels are copied to (the destination)
+     * @param from where the voxels are copied from (the source).
+     * @param to where the voxels are copied to (the destination).
      * @throws OperationFailedException if the extents of {@code from} and {@code to} are not equal.
      */
     public void copyFromUnsignedInt(Voxels<UnsignedIntBuffer> from, Voxels<T> to)
@@ -128,8 +128,8 @@ public abstract class VoxelsConverter<T> {
     /**
      * Copies voxels from a source of type @{link FloatBuffer} to voxels of type {@code T}.
      *
-     * @param from where the voxels are copied from (the source)
-     * @param to where the voxels are copied to (the destination)
+     * @param from where the voxels are copied from (the source).
+     * @param to where the voxels are copied to (the destination).
      * @throws OperationFailedException if the extents of {@code from} and {@code to} are not equal.
      */
     public void copyFromFloat(Voxels<FloatBuffer> from, Voxels<T> to)
