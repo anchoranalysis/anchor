@@ -46,7 +46,12 @@ class MeanIntensityBuffer<T> implements ProjectableBuffer<T> {
     private Voxels<FloatBuffer> voxelsSum;
     private int countSlices = 0;
 
-    /** Simple constructor since no preprocessing is necessary. */
+    /** 
+     * Creates with minimal parameters, as no preprocessing is necessary.
+     *
+     * @param flatType the voxel data-type to use for the flattened (mean-intensity) buffer.
+     * @param extent the size expected for images that will be projected.
+     */
     public MeanIntensityBuffer(VoxelsFactoryTypeBound<T> flatType, Extent extent) {
         Extent extentForProjection = extent.flattenZ();
         projection = flatType.createInitialized(extentForProjection);

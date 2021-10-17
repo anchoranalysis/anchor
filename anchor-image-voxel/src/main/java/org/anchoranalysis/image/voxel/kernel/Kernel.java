@@ -36,7 +36,6 @@ public abstract class Kernel {
 
     // Only use odd sizes
     protected Kernel(int size) {
-        super();
         this.size = size;
         this.sizeHalf = (size - 1) / 2;
     }

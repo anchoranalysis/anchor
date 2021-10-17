@@ -61,7 +61,7 @@ public class ConvertToImg {
      *
      * <p>The voxel buffers are reused (without duplication).
      *
-     * @param voxels the voxels to convert
+     * @param voxels the voxels to convert.
      * @return an {@link Img} object reusing the buffers of {@code voxels}.
      */
     public static Img<? extends RealType<?>> from(VoxelsWrapper voxels) { // NOSONAR
@@ -80,33 +80,79 @@ public class ConvertToImg {
         }
     }
 
+    /**
+     * Creates an {@link Img} from a single z-slice of a {@link VoxelsWrapper}.
+     * 
+     * @param voxels the voxels to extract z-slice from to create a {@link Img}.
+     * @param sliceIndex the index of the slice in the z dimension.
+     * @return a newly created {@link Img}, either reusing the memory in {@code voxels} or else a copy of it.
+     */
     public static Img<? extends RealType<?>> fromSlice( // NOSONAR
             VoxelsWrapper voxels, int sliceIndex) {
         return fromBuffer(voxels.slice(sliceIndex), voxels.extent());
     }
 
+    /**
+     * Creates an {@link Img} from a {@link VoxelBuffer} with an <i>unsigned byte</i> data-type.
+     * 
+     * @param buffer the buffer to use for the voxels in the {@link Img}.
+     * @param extent the size of the image, whose volume should match {@code buffer}'s size exactly.
+     * @return the newly created {@link Img}, either reusing the memory in {@code buffer} or else a copy of it.
+     */
     public static Img<UnsignedByteType> fromByte(
             VoxelBuffer<UnsignedByteBuffer> buffer, Extent extent) {
-        return Wrap.buffer(buffer, extent, ArrayFactory::fromByte, UnsignedByteType::new);
+        return WrapNativeImg.buffer(buffer, extent, ArrayFactory::fromByte, UnsignedByteType::new);
     }
 
+    /**
+     * Creates an {@link Img} from a {@link VoxelBuffer} with an <i>unsigned short</i> data-type.
+     * 
+     * @param buffer the buffer to use for the voxels in the {@link Img}.
+     * @param extent the size of the image, whose volume should match {@code buffer}'s size exactly.
+     * @return the newly created {@link Img}, either reusing the memory in {@code buffer} or else a copy of it.
+     */
     public static Img<UnsignedShortType> fromShort(
             VoxelBuffer<UnsignedShortBuffer> buffer, Extent extent) {
-        return Wrap.buffer(buffer, extent, ArrayFactory::fromShort, UnsignedShortType::new);
+        return WrapNativeImg.buffer(buffer, extent, ArrayFactory::fromShort, UnsignedShortType::new);
     }
 
+    /**
+     * Creates an {@link Img} from a {@link VoxelBuffer} with a <i>float</i> data-type.
+     * 
+     * @param buffer the buffer to use for the voxels in the {@link Img}.
+     * @param extent the size of the image, whose volume should match {@code buffer}'s size exactly.
+     * @return the newly created {@link Img},either reusing the memory in {@code buffer} or else a copy of it.
+     */
     public static Img<FloatType> fromFloat(VoxelBuffer<FloatBuffer> buffer, Extent extent) {
-        return Wrap.buffer(buffer, extent, ArrayFactory::fromFloat, FloatType::new);
+        return WrapNativeImg.buffer(buffer, extent, ArrayFactory::fromFloat, FloatType::new);
     }
 
+    /**
+     * Creates an {@link Img} from {@link Voxels} with an <i>unsigned byte</i> data-type.
+     * 
+     * @param voxels the voxels to use in the {@link Img}.
+     * @return the newly created {@link Img}, either reusing the memory in {@code voxels} or else a copy of it.
+     */
     public static Img<UnsignedByteType> fromByte(Voxels<UnsignedByteBuffer> voxels) {
         return ConvertToNativeImg.fromByte(voxels);
     }
 
+    /**
+     * Creates an {@link Img} from {@link Voxels} with an <i>unsigned short</i> data-type.
+     * 
+     * @param voxels the voxels to use in the {@link Img}.
+     * @return the newly created {@link Img}, either reusing the memory in {@code voxels} or else a copy of it.
+     */
     public static Img<UnsignedShortType> fromShort(Voxels<UnsignedShortBuffer> voxels) {
         return ConvertToNativeImg.fromShort(voxels);
     }
 
+    /**
+     * Creates an {@link Img} from {@link Voxels} with a <i>float</i> data-type.
+     * 
+     * @param voxels the voxels to use in the {@link Img}.
+     * @return the newly created {@link Img}, either reusing the memory in {@code voxels} or else a copy of it.
+     */
     public static Img<FloatType> fromFloat(Voxels<FloatBuffer> voxels) {
         return ConvertToNativeImg.fromFloat(voxels);
     }

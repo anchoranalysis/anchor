@@ -37,6 +37,12 @@ import org.anchoranalysis.image.voxel.kernel.KernelPointCursor;
  */
 public final class DilationKernel extends BinaryKernelMorphological {
 
+    /**
+     * Creates with a type of neighborhood.
+     * 
+     * @param bigNeighborhood if true, a big neighborhood is used 2D-plane (8-connected instead of 4-connected), but not in
+     * Z-direction (remains always 2-connected).
+     */
     public DilationKernel(boolean bigNeighborhood) {
         super(bigNeighborhood, false, true);
     }
