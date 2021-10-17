@@ -55,7 +55,7 @@ public class ChannelFactory extends VoxelDataTypeFactoryMultiplexer<ChannelFacto
     }
 
     /** 
-     * Singleton instance of {@lLink ChannelFactory}.
+     * Singleton instance of {@link ChannelFactory}.
      * 
      * @return the instance.
      */
@@ -67,39 +67,59 @@ public class ChannelFactory extends VoxelDataTypeFactoryMultiplexer<ChannelFacto
     }
 
     /**
-     * Creates an empty initialized channel for a particular data-type
+     * Creates an empty initialized channel for a particular data-type.
      *
-     * @param dimensions channel dimensions
-     * @param channelDataType data-type
-     * @return a newly created channel with newly created buffers
+     * @param dimensions channel dimensions.
+     * @param channelDataType data-type.
+     * @return a newly created channel with newly created buffers.
      */
     public Channel create(Dimensions dimensions, VoxelDataType channelDataType) {
         return get(channelDataType).createEmptyInitialised(dimensions);
     }
 
+    /**
+     * Create a {@link Channel} without initialization with voxel-buffers.
+     * 
+     * @param dimensions the size of the channel.
+     * @param channelDataType the data-type of the voxels in the channel.
+     * @return the created channel.
+     */
     public Channel createUninitialised(Dimensions dimensions, VoxelDataType channelDataType) {
         return get(channelDataType).createEmptyUninitialised(dimensions);
     }
 
+    /**
+     * Create a {@link Channel} from particular voxels.
+     * 
+     * @param voxels the voxels to create the channel from.
+     * @return the {@link Channel}.
+     */
     public Channel create(Voxels<?> voxels) {
         return create(voxels, Optional.empty());
     }
 
+    /**
+     * Create a {@link Channel} from particular voxels.
+     * 
+     * @param voxels the voxels to create the channel from.
+     * @param resolution the resolution to assign.
+     * @return the {@link Channel}.
+     */
     public Channel create(Voxels<?> voxels, Optional<Resolution> resolution) {
         return get(voxels.dataType()).create(voxels, resolution);
     }
 
     /**
      * Creates an empty initialized channel with discrete type with as minimal as needed data-type
-     * to support a maximum value
+     * to support a maximum value.
      *
-     * <p>byte, short and int are tried in that order.
+     * <p>{@code byte}, {@code short} and {@code int} are tried in that order.
      *
-     * @param dimensions dimensions
+     * @param dimensions dimensions.
      * @param maxIntensityValueNeeded the maximum value that the channel's data-type needs to
-     *     support
-     * @return a newly created channel of selected data-type with newly created buffers
-     * @throws CreateException if the max value exceeds all supported data types
+     *     support.
+     * @return a newly created channel of selected data-type with newly created buffers.
+     * @throws CreateException if the max value exceeds all supported data types.
      */
     public Channel createEmptyInitialisedToSupportMaxValue(
             Dimensions dimensions, long maxIntensityValueNeeded) throws CreateException {

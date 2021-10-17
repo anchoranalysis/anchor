@@ -37,6 +37,9 @@ import org.anchoranalysis.image.voxel.kernel.KernelPointCursor;
  */
 public final class ErosionKernel extends BinaryKernelMorphological {
 
+    /**
+     * Default constructor.
+     */
     public ErosionKernel() {
         super(false, true, false);
     }

@@ -47,7 +47,7 @@ import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferBinar
  * Converts voxels from one data-type to another.
  *
  * @author Owen Feehan
- * @param <T> destination-type (what the voxels will be converted <b>to</b>)
+ * @param <T> destination-type (what the voxels will be converted <b>to</b>).
  */
 public abstract class VoxelsConverter<T> {
 

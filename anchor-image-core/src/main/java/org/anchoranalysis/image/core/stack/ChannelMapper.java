@@ -39,7 +39,7 @@ import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 
 /**
- * Helps a retrieve channel and an associated converter and apply operation on them jointly
+ * Helps retrieve channel and an associated converter and apply operation on them jointly.
  *
  * @author Owen Feehan
  */

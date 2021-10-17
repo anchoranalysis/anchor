@@ -26,11 +26,21 @@
 
 package org.anchoranalysis.image.core.channel.factory;
 
+import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.voxel.datatype.FloatVoxelType;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 
+/**
+ * Creates a {@link Channel} with voxel-type {@link FloatVoxelType}.
+ * 
+ * @author Owen Feehan
+ *
+ */
 public class ChannelFactoryFloat extends ChannelFactorySingleType {
 
+    /**
+     * Default constructor.
+     */
     public ChannelFactoryFloat() {
         super(FloatVoxelType.INSTANCE, VoxelsFactory.getFloat());
     }

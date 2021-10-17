@@ -26,11 +26,21 @@
 
 package org.anchoranalysis.image.core.channel.factory;
 
+import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 
+/**
+ * Creates a {@link Channel} with voxel-type {@link UnsignedShortVoxelType}.
+ * 
+ * @author Owen Feehan
+ *
+ */
 public class ChannelFactoryShort extends ChannelFactorySingleType {
 
+    /**
+     * Default constructor.
+     */
     public ChannelFactoryShort() {
         super(UnsignedShortVoxelType.INSTANCE, VoxelsFactory.getUnsignedShort());
     }
