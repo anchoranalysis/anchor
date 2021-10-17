@@ -39,7 +39,7 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeFactoryMultiplexer;
 
 /** 
- * Creates a {@Channel} corresponding to one of several data-types.
+ * Creates a {@link Channel} corresponding to one of several data-types.
  */
 public class ChannelFactory extends VoxelDataTypeFactoryMultiplexer<ChannelFactorySingleType> {
 

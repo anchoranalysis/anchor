@@ -41,12 +41,19 @@ public class LocalSlices implements BufferRetriever {
     private final byte[][] array;
     private final int shift;
 
-    public LocalSlices(int z, int kernelSize, Voxels<UnsignedByteBuffer> voxels) {
-        array = new byte[kernelSize][];
+    /**
+     * Create with focus around a particular slice.
+     * 
+     * @param z index of the slice in the z-dimension.
+     * @param windowSize how big the windows is across the z-dimension for storing slices.
+     * @param voxels the voxels whose z-dimension is traversed for slices.
+     */
+    public LocalSlices(int z, int windowSize, Voxels<UnsignedByteBuffer> voxels) {
+        array = new byte[windowSize][];
 
-        shift = ((kernelSize - 1) / 2);
+        shift = ((windowSize - 1) / 2);
 
-        for (int i = 0; i < kernelSize; i++) {
+        for (int i = 0; i < windowSize; i++) {
 
             int rel = z + i - shift;
 
