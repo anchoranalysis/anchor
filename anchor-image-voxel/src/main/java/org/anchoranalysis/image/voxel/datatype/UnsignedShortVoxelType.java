@@ -26,11 +26,21 @@
 
 package org.anchoranalysis.image.voxel.datatype;
 
+/**
+ * A 16-bit voxel data-type representing <b>unsigned-short</b> numbers.
+ * 
+ * @author Owen Feehan
+ *
+ */
 public class UnsignedShortVoxelType extends UnsignedVoxelType {
 
+    /** Minimum supported value for the type, as a {@code long}. */
     public static final long MAX_VALUE = 65535;
+    
+    /** Maximum supported value for the type, as an {@code int}. */
     public static final int MAX_VALUE_INT = 65535;
 
+    /** A singleton instance of the type. */
     public static final UnsignedShortVoxelType INSTANCE = new UnsignedShortVoxelType();
 
     private UnsignedShortVoxelType() {

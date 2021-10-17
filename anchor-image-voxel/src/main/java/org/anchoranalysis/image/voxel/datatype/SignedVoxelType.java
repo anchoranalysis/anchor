@@ -26,6 +26,13 @@
 
 package org.anchoranalysis.image.voxel.datatype;
 
+
+/**
+ * Base class for voxel-data-types that are <b>signed</b> and <b>integral</b>.
+ * 
+ * @author Owen Feehan
+ *
+ */
 public abstract class SignedVoxelType extends VoxelDataType {
 
     protected SignedVoxelType(int numberBits, String typeIdentifier, long maxValue, long minValue) {

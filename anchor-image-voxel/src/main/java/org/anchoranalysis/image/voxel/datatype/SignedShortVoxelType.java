@@ -26,11 +26,21 @@
 
 package org.anchoranalysis.image.voxel.datatype;
 
+/**
+ * A 16-bit voxel data-type representing <b>signed-short</b> numbers.
+ * 
+ * @author Owen Feehan
+ *
+ */
 public class SignedShortVoxelType extends SignedVoxelType {
 
+    /** Minimum supported value for the type. */
     public static final long MIN_VALUE = -32768;
+    
+    /** Maximum supported value for the type. */
     public static final long MAX_VALUE = 32767;
 
+    /** A singleton instance of the type. */
     public static final SignedShortVoxelType INSTANCE = new SignedShortVoxelType();
 
     private SignedShortVoxelType() {

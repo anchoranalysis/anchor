@@ -34,6 +34,8 @@ import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedShortBuffer;
 /**
  * Converts voxel buffers to a unsigned 8-bit buffer linearly scaling against the maximum constant
  * value.
+ * 
+ * <p>The scaling occurs so that the full 8-bit range of values is supported.
  *
  * @author Owen Feehan
  */
@@ -41,11 +43,20 @@ public final class ToByteScaleByMaxValue extends ToByte {
 
     private float scale;
 
+    /**
+     * Creates with the maximum-value which existing values are scaled against.
+     * 
+     * @param maxValue the maximum-value that will be represented in the scaled-values.
+     */
     public ToByteScaleByMaxValue(int maxValue) {
-        super();
         setMaxValue(maxValue);
     }
 
+    /**
+     * Assigns the maximum-value that will be represented in the scaled-values.
+     * 
+     * @param maxValue the maximum-value.
+     */
     public void setMaxValue(long maxValue) {
         this.scale = 255.0f / maxValue;
     }

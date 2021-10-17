@@ -26,6 +26,12 @@
 
 package org.anchoranalysis.image.voxel.datatype;
 
+/**
+ * Base class for voxel-data-types that are <b>unsigned</b> and <b>integral</b>.
+ * 
+ * @author Owen Feehan
+ *
+ */
 public abstract class UnsignedVoxelType extends VoxelDataType {
 
     protected UnsignedVoxelType(int numBits, String typeIdentifier, long maxValue) {

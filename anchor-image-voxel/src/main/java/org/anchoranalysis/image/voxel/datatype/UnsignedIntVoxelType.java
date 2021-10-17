@@ -26,10 +26,18 @@
 
 package org.anchoranalysis.image.voxel.datatype;
 
+/**
+ * A 32-bit voxel data-type representing <b>unsigned-int</b> numbers.
+ * 
+ * @author Owen Feehan
+ *
+ */
 public class UnsignedIntVoxelType extends UnsignedVoxelType {
 
+    /** Maximum supported value for the type. */
     public static final long MAX_VALUE = 4294967295L;
 
+    /** A singleton instance of the type. */
     public static final UnsignedIntVoxelType INSTANCE = new UnsignedIntVoxelType();
 
     private UnsignedIntVoxelType() {

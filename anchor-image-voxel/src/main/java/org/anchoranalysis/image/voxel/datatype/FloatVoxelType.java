@@ -26,11 +26,21 @@
 
 package org.anchoranalysis.image.voxel.datatype;
 
+/**
+ * A 32-bit voxel data-type representing floating-point numbers, as per the Java primitive <b>float</b> type.
+ * 
+ * @author Owen Feehan
+ *
+ */
 public class FloatVoxelType extends VoxelDataType {
 
+    /** Minimum supported value for the type. */
     public static final long MAX_VALUE = (long) java.lang.Float.MAX_VALUE;
+    
+    /** Maximum supported value for the type. */
     public static final long MIN_VALUE = (long) java.lang.Float.MIN_VALUE;
 
+    /** A singleton instance of the type. */
     public static final FloatVoxelType INSTANCE = new FloatVoxelType();
 
     private FloatVoxelType() {
