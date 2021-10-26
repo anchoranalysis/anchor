@@ -31,18 +31,37 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBufferFactory;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedIntBuffer;
 import org.anchoranalysis.spatial.box.Extent;
 
+
+/**
+ * Implementation of {@link SliceBufferIndex} with voxels of type <b>unsigned int</b>.
+ * 
+ * @author Owen Feehan
+ *
+ */
 public class FromInt implements SliceBufferIndex<UnsignedIntBuffer> {
 
     private final VoxelBuffer<UnsignedIntBuffer>[] buffer;
     private final Extent extent;
 
     // START FACTORY METHODS
+    /**
+     * Create a buffer of a particular size, that <b>has been</b> initialized.
+     * 
+     * @param extent the size of buffer to create.
+     * @return the newly created buffer.
+     */
     public static SliceBufferIndex<UnsignedIntBuffer> createInitialized(Extent extent) {
         FromInt p = new FromInt(extent);
         p.initialize();
         return p;
     }
 
+    /**
+     * Create a buffer of a particular size, that <b>has not been</b> initialized.
+     * 
+     * @param extent the size of buffer to create.
+     * @return the newly created buffer.
+     */
     public static SliceBufferIndex<UnsignedIntBuffer> createUninitialized(Extent extent) {
         return new FromInt(extent);
     }

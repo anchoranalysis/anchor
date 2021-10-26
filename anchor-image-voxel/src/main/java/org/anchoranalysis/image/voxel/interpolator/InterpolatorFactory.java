@@ -29,6 +29,14 @@ package org.anchoranalysis.image.voxel.interpolator;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
+/**
+ * Creates instances of {@link Interpolator} to match particular circumstances.
+ * 
+ * <p>This is a <i>singleton</i> class.
+ * 
+ * @author Owen Feehan
+ *
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class InterpolatorFactory {
 
@@ -38,6 +46,11 @@ public class InterpolatorFactory {
 
     private static final Interpolator RESIZING_INTERPOLATOR = new InterpolatorImgLib2Linear();
 
+    /**
+     * Singleton instance of {@link InterpolatorFactory}.
+     * 
+     * @return a single instance of this class.
+     */
     public static InterpolatorFactory getInstance() {
         if (instance == null) {
             instance = new InterpolatorFactory();
@@ -45,17 +58,33 @@ public class InterpolatorFactory {
         return instance;
     }
 
+    /**
+     * An {@link Interpolator} that is effectively disabled, and performs no interpolation, copying a single (minimal corner) value for each voxel.
+     * 
+     * @return a corresponding interpolator.
+     */
     public Interpolator noInterpolation() {
         return NO_INTERPOLATOR;
     }
 
+    /**
+     * An {@link Interpolator} that is suitable for resizing a raster-image with a <i>range of intensity values</i>.
+     * 
+     * @return a corresponding interpolator.
+     */
     public Interpolator rasterResizing() {
         return RESIZING_INTERPOLATOR;
     }
 
-    public Interpolator binaryResizing(int offValue) {
+    /**
+     * An {@link Interpolator} that is suitable for resizing a <i>binary</i> raster-image, restricted to <i>two possible intensity values only</i>.
+     * 
+     * @param outOfBoundsValue a value used to represent <i>out-of-bounds</i> voxels to provide context for the interpolation at boundaries. This should be one of the two permitted binary states.
+     * @return a corresponding interpolator.
+     */
+    public Interpolator binaryResizing(int outOfBoundsValue) {
         InterpolatorImgLib2 interpolator = new InterpolatorImgLib2NearestNeighbor();
-        interpolator.extendWith(offValue);
+        interpolator.extendWith(outOfBoundsValue);
         return interpolator;
     }
 }

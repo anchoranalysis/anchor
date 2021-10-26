@@ -83,14 +83,15 @@ public class IntersectingObjects<T> {
     }
 
     /**
-     * Creates an r-tree for particular objects.
+     * Creates an r-tree for particular objects, as extracted from elements.
      *
-     * @param objects the objects
+     * @param elements the elements, each corresponding to a unique object.
+     * @param extractObject a function that extracts a unique {@link ObjectMask} from an element.
      */
-    public IntersectingObjects(Collection<T> objects, Function<T, ObjectMask> extractObject) {
+    public IntersectingObjects(Collection<T> elements, Function<T, ObjectMask> extractObject) {
         this.extractObject = extractObject;
-        this.tree = new BoundingBoxRTree<>(objects.size());
-        objects.stream().forEach(element -> tree.add(boxFor(element), element));
+        this.tree = new BoundingBoxRTree<>(elements.size());
+        elements.stream().forEach(element -> tree.add(boxFor(element), element));
     }
 
     /**

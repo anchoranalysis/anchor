@@ -33,21 +33,39 @@ import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.math.histogram.Histogram;
 
+/**
+ * Creates a {@link Histogram} to describe the intensity values of voxels in aggregate.
+ * 
+ * @author Owen Feehan
+ *
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class HistogramFactory {
 
-    public static Histogram create(VoxelBuffer<?> inputBuffer) {
+    /**
+     * Creates a {@link Histogram} of the aggregated voxel intensities in a {@link VoxelBuffer}.
+     * 
+     * @param buffer the buffer, whose voxel intensity values are aggregated into a {@link Histogram}.
+     * @return a newly created histogram.
+     */
+    public static Histogram create(VoxelBuffer<?> buffer) {
 
-        Histogram histogram = new Histogram((int) inputBuffer.dataType().maxValue());
-        addBufferToHistogram(histogram, inputBuffer, inputBuffer.capacity());
+        Histogram histogram = new Histogram((int) buffer.dataType().maxValue());
+        addBufferToHistogram(histogram, buffer, buffer.capacity());
         return histogram;
     }
 
-    public static Histogram create(VoxelsWrapper inputBuffer) {
-        return HistogramFactory.create(inputBuffer.any());
+    /**
+     * Creates a {@link Histogram} of the aggregated voxel intensities in a {@link VoxelsWrapper}.
+     * 
+     * @param voxels the {@link VoxelsWrapper}, whose voxel intensity values are aggregated into a {@link Histogram}.
+     * @return a newly created histogram.
+     */
+    public static Histogram create(VoxelsWrapper voxels) {
+        return createFromVoxels(voxels.any());
     }
 
-    private static Histogram create(Voxels<?> inputBox) {
+    private static Histogram createFromVoxels(Voxels<?> inputBox) {
 
         int maxValue = (int) inputBox.dataType().maxValue();
 

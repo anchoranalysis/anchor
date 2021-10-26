@@ -37,6 +37,12 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeFactoryMultiplexer;
 import org.anchoranalysis.spatial.box.Extent;
 
+/**
+ * Creates {@link VoxelsWrapper} and provides a singleton location for implementations of {@link VoxelsFactoryTypeBound} for different types.
+ * 
+ * @author Owen Feehan
+ *
+ */
 public class VoxelsFactory extends VoxelDataTypeFactoryMultiplexer<VoxelsFactoryTypeBound<?>> {
 
     // Singleton
@@ -55,7 +61,11 @@ public class VoxelsFactory extends VoxelDataTypeFactoryMultiplexer<VoxelsFactory
         super(FACTORY_UNSIGNED_BYTE, FACTORY_UNSIGNED_SHORT, FACTORY_UNSIGNED_INT, FACTORY_FLOAT);
     }
 
-    /** Singleton */
+    /** 
+     * Singleton instance.
+     *
+     * @return a single instance of this class.
+     */
     public static VoxelsFactory instance() {
         if (instance == null) {
             instance = new VoxelsFactory();
@@ -63,31 +73,66 @@ public class VoxelsFactory extends VoxelDataTypeFactoryMultiplexer<VoxelsFactory
         return instance;
     }
 
-    public <T> VoxelsWrapper create(SliceBufferIndex<T> pixelsForPlane, VoxelDataType dataType) {
+    /**
+     * Creates voxels from a particular {@link SliceBufferIndex} with specified type.
+     * 
+     * @param <T> the buffer-type to use in the voxels.
+     * @param buffer the buffer to create a {@link VoxelsWrapper} from.
+     * @param dataType the data-type that should be compatible with {@code T}.
+     * @return a newly created {@link VoxelsWrapper} that reuses the memory in {@code buffer}.
+     */
+    public <T> VoxelsWrapper createFrom(SliceBufferIndex<T> buffer, VoxelDataType dataType) {
         @SuppressWarnings("unchecked")
         VoxelsFactoryTypeBound<T> factory = (VoxelsFactoryTypeBound<T>) get(dataType);
-        Voxels<T> buffer = factory.create(pixelsForPlane);
-        return new VoxelsWrapper(buffer);
+        Voxels<T> voxels = factory.create(buffer);
+        return new VoxelsWrapper(voxels);
     }
-
-    public VoxelsWrapper create(Extent extent, VoxelDataType dataType) {
+    
+    /**
+     * Creates empty voxels to match a particular size.
+     * 
+     * @param extent the size of the {@link VoxelsWrapper} to create.
+     * @param dataType the voxel data-type to create.
+     * @return the created voxels.
+     */
+    public VoxelsWrapper createEmpty(Extent extent, VoxelDataType dataType) {
         VoxelsFactoryTypeBound<?> factory = get(dataType);
         Voxels<?> buffer = factory.createInitialized(extent);
         return new VoxelsWrapper(buffer);
     }
 
+    /**
+     * A factory that creates voxels of type <i>unsigned byte</i>.
+     * 
+     * @return the corresponding factory.
+     */
     public static VoxelsFactoryTypeBound<UnsignedByteBuffer> getUnsignedByte() {
         return FACTORY_UNSIGNED_BYTE;
     }
 
+    /**
+     * A factory that creates voxels of type <i>unsigned short</i>.
+     * 
+     * @return the corresponding factory.
+     */
     public static VoxelsFactoryTypeBound<UnsignedShortBuffer> getUnsignedShort() {
         return FACTORY_UNSIGNED_SHORT;
     }
 
+    /**
+     * A factory that creates voxels of type <i>unsigned int</i>.
+     * 
+     * @return the corresponding factory.
+     */
     public static VoxelsFactoryTypeBound<UnsignedIntBuffer> getUnsignedInt() {
         return FACTORY_UNSIGNED_INT;
     }
 
+    /**
+     * A factory that creates voxels of type <i>float</i>.
+     * 
+     * @return the corresponding factory.
+     */
     public static VoxelsFactoryTypeBound<FloatBuffer> getFloat() {
         return FACTORY_FLOAT;
     }

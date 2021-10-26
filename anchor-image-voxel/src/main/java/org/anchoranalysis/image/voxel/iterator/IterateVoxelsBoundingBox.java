@@ -129,7 +129,8 @@ public class IterateVoxelsBoundingBox {
      *
      * @param box the box that is used as a condition on what voxels to iterate i.e. only voxels
      *     within these bounds
-     * @param process is called for each voxel within the bounding-box using <i>global</i>
+     * @param predicate only voxels that match this predicate are processed.
+     * @param process is called for each voxel that matches {@code predicate} within the bounding-box using <i>global</i>
      *     coordinates.
      */
     public static void withMatchingPoints(

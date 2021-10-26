@@ -40,13 +40,12 @@ import org.anchoranalysis.image.voxel.datatype.UnsignedIntVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.extracter.VoxelsExtracter;
-import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.box.Extent;
 
 /**
- * Wraps a voxels associated with a channel so it can be easily casted to an appropriate data type
+ * Wraps a voxels associated with a channel so it can be easily casted to an appropriate data type.
  *
  * @author Owen Feehan
  */
@@ -55,17 +54,21 @@ public class VoxelsWrapper {
     private VoxelDataType dataType;
     private Voxels<?> voxels;
 
+    /**
+     * Creates to wrap a {@link Voxels} of unspecified type.
+     * 
+     * @param voxels the voxels to wrap, whose memory is reused without duplication.
+     */
     public VoxelsWrapper(Voxels<?> voxels) {
-        super();
         this.dataType = voxels.dataType();
         this.voxels = voxels;
     }
 
-    public static VoxelsWrapper wrap(Voxels<?> voxels) {
-        return new VoxelsWrapper(voxels);
-    }
-
-    /** Returns voxels that are not cast to any specific buffer type */
+    /** 
+     * Exposes without any specific buffer type.
+     *
+     * @return the current object, without typing on the buffer.
+     */
     public Voxels<?> any() { // NOSONAR
         return voxels;
     }
@@ -128,26 +131,6 @@ public class VoxelsWrapper {
         return (Voxels<UnsignedIntBuffer>) voxels;
     }
 
-    /**
-     * Reuses the existing buffer if byte, otherwise creates a new empty byte buffer
-     *
-     * @param alwaysDuplicate
-     * @return
-     */
-    public Voxels<UnsignedByteBuffer> asByteOrCreateEmpty(boolean alwaysDuplicate) {
-        Voxels<UnsignedByteBuffer> boxOut;
-
-        // If the input-channel is Byte then we do it in-place
-        // Otherwise we create new voxels
-        if (!alwaysDuplicate && getVoxelDataType().equals(UnsignedByteVoxelType.INSTANCE)) {
-            boxOut = asByte();
-        } else {
-            boxOut = VoxelsFactory.getUnsignedByte().createInitialized(any().extent());
-        }
-
-        return boxOut;
-    }
-
     public VoxelDataType getVoxelDataType() {
         return dataType;
     }
@@ -193,15 +176,6 @@ public class VoxelsWrapper {
         }
     }
 
-    private static <T> VoxelBuffer<T> sourceSlice(
-            Voxels<T> sourceVoxels, int sliceIndexSource, boolean duplicate) {
-        if (duplicate) {
-            return sourceVoxels.slice(sliceIndexSource);
-        } else {
-            return sourceVoxels.slice(sliceIndexSource).duplicate();
-        }
-    }
-
     @SuppressWarnings("unchecked")
     public <T> VoxelBuffer<T> slice(int z) {
         return (VoxelBuffer<T>) voxels.slice(z);
@@ -211,15 +185,41 @@ public class VoxelsWrapper {
         return voxels.extent();
     }
 
+    /** 
+     * Interface that allows manipulation of voxel intensities via arithmetic operations.
+     *
+     * @return the interface.
+     */
     public VoxelsArithmetic arithmetic() {
         return voxels.arithmetic();
     }
 
+    /**
+     * Interface that allows assignment of a particular value to all or subsets of the voxels.
+     *
+     * @param valueToAssign the value to assign.
+     * @return the interface.
+     */
     public VoxelsAssigner assignValue(int valueToAssign) {
         return voxels.assignValue(valueToAssign);
     }
 
+    /**
+     * Interface that allows read/copy/duplication operations to be performed regarding the voxels
+     * intensities.
+     *
+     * @return the interface.
+     */
     public VoxelsExtracter<?> extract() { // NOSONAR
         return voxels.extract();
+    }
+    
+    private static <T> VoxelBuffer<T> sourceSlice(
+            Voxels<T> sourceVoxels, int sliceIndexSource, boolean duplicate) {
+        if (duplicate) {
+            return sourceVoxels.slice(sliceIndexSource);
+        } else {
+            return sourceVoxels.slice(sliceIndexSource).duplicate();
+        }
     }
 }

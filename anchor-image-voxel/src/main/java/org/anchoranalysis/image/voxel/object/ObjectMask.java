@@ -304,7 +304,7 @@ public class ObjectMask {
 
             // We should do a thresholding afterwards to make sure our values correspond to the two
             // binary values
-            if (interpolator.isNewValuesPossible()) {
+            if (interpolator.canValueRangeChange()) {
 
                 // We threshold to make sure it's still binary
                 int thresholdVal = (binaryValues.getOnInt() + binaryValues.getOffInt()) / 2;

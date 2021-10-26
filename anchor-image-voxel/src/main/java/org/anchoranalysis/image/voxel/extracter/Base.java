@@ -34,7 +34,6 @@ import org.anchoranalysis.image.voxel.buffer.ProjectableBuffer;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.extracter.predicate.PredicateImplementation;
 import org.anchoranalysis.image.voxel.extracter.predicate.VoxelsPredicate;
-import org.anchoranalysis.image.voxel.interpolator.InterpolateUtilities;
 import org.anchoranalysis.image.voxel.interpolator.Interpolator;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.spatial.box.BoundingBox;
@@ -122,8 +121,8 @@ public abstract class Base<T> implements VoxelsExtracter<T> {
 
         assert (bufferTarget.slice(0).capacity() == extentResized.areaXY());
 
-        InterpolateUtilities.transferSlicesResizeXY(
-                new VoxelsWrapper(voxels), new VoxelsWrapper(bufferTarget), interpolator);
+        interpolator.interpolate(
+                new VoxelsWrapper(voxels), new VoxelsWrapper(bufferTarget));
 
         assert (bufferTarget.slice(0).capacity() == extentResized.areaXY());
         return bufferTarget;

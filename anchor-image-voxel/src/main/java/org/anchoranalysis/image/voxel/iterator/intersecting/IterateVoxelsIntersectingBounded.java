@@ -49,9 +49,9 @@ public class IterateVoxelsIntersectingBounded {
     /**
      * Iterates over the intersection of two bounded-voxels of type {@link BoundedVoxels}.
      *
-     * @param voxels1 the first bounded-voxels
-     * @param voxels2 the second bounded-voxels
-     * @param <T> voxel buffer data type
+     * @param voxels1 the first bounded-voxels.
+     * @param voxels2 the second bounded-voxels.
+     * @param <T> voxel buffer data type.
      * @param process called for every voxel in the intersection containing the respective buffers
      *     and offsets for {@code first} and {@code second}.
      */
@@ -78,8 +78,8 @@ public class IterateVoxelsIntersectingBounded {
      *     have an <i>on</i> value in this mask, in addition to being part of the intersection of
      *     {@code voxels1} and {@code voxels2}.
      * @param onMaskGlobal the <i>on</i> value in {@code maskGlobal}.
-     * @param voxels1 the first bounded-voxels
-     * @param voxels2 the second bounded-voxels
+     * @param voxels1 the first bounded-voxels.
+     * @param voxels2 the second bounded-voxels.
      * @param process called for every matching voxel in the intersection containing the respective
      *     buffers and offsets for {@code first} and {@code second}.
      */
@@ -108,11 +108,12 @@ public class IterateVoxelsIntersectingBounded {
      * Iterates over the intersection of two bounded-voxels of type {@link BoundedVoxels} until a
      * predicate is satisfied.
      *
-     * @param voxels1 the first bounded-voxels
-     * @param voxels2 the second bounded-voxels
-     * @param <T> voxel buffer data type
+     * @param voxels1 the first bounded-voxels.
+     * @param voxels2 the second bounded-voxels.
+     * @param <T> voxel buffer data type.
+     * @param predicate iteration occurs until this predicate is satisfied, or no more voxels exist in the intersection.
      * @return Point3i if intersection exists, then the first point of intersection found
-     *     (newly-created), or else empty if no intersection exists
+     *     (newly-created), or else empty if no intersection exists.
      */
     public static <T> Optional<Point3i> withTwoBuffersUntil(
             BoundedVoxels<T> voxels1,

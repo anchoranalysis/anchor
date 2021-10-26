@@ -255,7 +255,7 @@ public class DisplayStack {
 
                     VoxelsWrapper destBoxNonByte =
                             VoxelsFactory.instance()
-                                    .create(destinationBox.extent(), channel.getVoxelDataType());
+                                    .createEmpty(destinationBox.extent(), channel.getVoxelDataType());
                     channel.voxels().copyVoxelsTo(sourceBox, destBoxNonByte, allLocalBox);
 
                     Voxels<UnsignedByteBuffer> destBoxByte =

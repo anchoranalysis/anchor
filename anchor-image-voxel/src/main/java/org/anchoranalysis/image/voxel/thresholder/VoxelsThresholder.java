@@ -57,7 +57,7 @@ public class VoxelsThresholder {
             Voxels<UnsignedByteBuffer> buffer, int level, BinaryValuesByte bvOut) {
         // We know that as the inputType is byte, it will be performed in place
         try {
-            thresholdForLevel(VoxelsWrapper.wrap(buffer), level, bvOut, Optional.empty(), false);
+            thresholdForLevel(new VoxelsWrapper(buffer), level, bvOut, Optional.empty(), false);
         } catch (OperationFailedException e) {
             throw new AnchorImpossibleSituationException();
         }
@@ -68,7 +68,7 @@ public class VoxelsThresholder {
         // We know that as the inputType is byte, it will be performed in place
         try {
             return thresholdForLevel(
-                    VoxelsWrapper.wrap(buffer), level, bvOut, Optional.empty(), false);
+                    new VoxelsWrapper(buffer), level, bvOut, Optional.empty(), false);
         } catch (OperationFailedException e) {
             throw new AnchorImpossibleSituationException();
         }
@@ -85,7 +85,7 @@ public class VoxelsThresholder {
 
         Voxels<UnsignedByteBuffer> out;
         if (voxels.getVoxelDataType().equals(UnsignedByteVoxelType.INSTANCE)) {
-            out = voxels.asByteOrCreateEmpty(alwaysDuplicate);
+            out = voxelsAsByteOrEmpty(voxels, alwaysDuplicate);
             IterateVoxelsObjectMaskOptional.withBuffer(
                     objectMask,
                     voxels.asByte(),
@@ -100,5 +100,26 @@ public class VoxelsThresholder {
                     "Unsupported voxel-data-type, only unsigned byte and float are supported");
         }
         return BinaryVoxelsFactory.reuseByte(out, bvOut.asInt());
+    }
+    
+    /**
+     * Reuses the existing buffer if of type {@link UnsignedByteBuffer}, otherwise creates a new empty byte buffer.
+     *
+     * @param buffer the buffer to reuse, copy, or create a an empty buffer in it's place of different type.
+     * @param duplicate if true, an existing buffer of type {@link UnsignedByteBuffer} will not be reused directly, but duplicated.
+     * @return either the current buffer (possibly duplicated if {@code duplicate} is true} or an empty buffer if the same-size.
+     */
+    private static Voxels<UnsignedByteBuffer> voxelsAsByteOrEmpty(VoxelsWrapper buffer, boolean duplicate) {
+        Voxels<UnsignedByteBuffer> boxOut;
+
+        // If the input-channel is Byte then we do it in-place
+        // Otherwise we create new voxels
+        if (!duplicate && buffer.getVoxelDataType().equals(UnsignedByteVoxelType.INSTANCE)) {
+            boxOut = buffer.asByte();
+        } else {
+            boxOut = VoxelsFactory.getUnsignedByte().createInitialized(buffer.any().extent());
+        }
+
+        return boxOut;
     }
 }

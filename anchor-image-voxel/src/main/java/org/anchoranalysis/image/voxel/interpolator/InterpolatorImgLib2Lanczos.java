@@ -28,8 +28,18 @@ package org.anchoranalysis.image.voxel.interpolator;
 
 import net.imglib2.interpolation.randomaccess.LanczosInterpolatorFactory;
 
+/**
+ * An interpolator that uses <a href="https://en.wikipedia.org/wiki/Lanczos_resampling">Lanczos resampling</a> as implemented in Imglib2.
+ * 
+ * @see LanczosInterpolatorFactory
+ * @author Owen Feehan
+ *
+ */
 public class InterpolatorImgLib2Lanczos extends InterpolatorImgLib2 {
 
+    /**
+     * Default constructor.
+     */
     public InterpolatorImgLib2Lanczos() {
         super(
                 new LanczosInterpolatorFactory<>(),
@@ -38,7 +48,7 @@ public class InterpolatorImgLib2Lanczos extends InterpolatorImgLib2 {
     }
 
     @Override
-    public boolean isNewValuesPossible() {
+    public boolean canValueRangeChange() {
         return true;
     }
 }

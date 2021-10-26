@@ -31,18 +31,37 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferFactory;
 import org.anchoranalysis.spatial.box.Extent;
 
+
+/**
+ * Implementation of {@link SliceBufferIndex} with voxels of type <b>float</b>.
+ * 
+ * @author Owen Feehan
+ *
+ */
 public class FromFloat implements SliceBufferIndex<FloatBuffer> {
 
     private final VoxelBuffer<FloatBuffer>[] buffer;
     private final Extent extent;
 
     // START FACTORY METHODS
+    /**
+     * Create a buffer of a particular size, that <b>has been</b> initialized.
+     * 
+     * @param extent the size of buffer to create.
+     * @return the newly created buffer.
+     */
     public static SliceBufferIndex<FloatBuffer> createInitialized(Extent extent) {
         FromFloat p = new FromFloat(extent);
         p.initialize();
         return p;
     }
 
+    /**
+     * Create a buffer of a particular size, that <b>has not been</b> initialized.
+     * 
+     * @param extent the size of buffer to create.
+     * @return the newly created buffer.
+     */
     public static SliceBufferIndex<FloatBuffer> createUninitialized(Extent extent) {
         return new FromFloat(extent);
     }
