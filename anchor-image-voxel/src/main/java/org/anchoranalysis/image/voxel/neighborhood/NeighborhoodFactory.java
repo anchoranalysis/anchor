@@ -31,6 +31,12 @@ import lombok.NoArgsConstructor;
 
 /**
  * Creates either a big voxel-neighborhood or a small voxel-neighborhood.
+ * 
+ * <p>In two dimensions, a big voxel neighborhood is 8-connected, and a small neighborhood is 4-connected.
+ * 
+ * <p>In three dimensions, a big voxel neighborhood is 26-connected, and a small neighborhood is 6-connected.
+ * 
+ * @see <a href="https://en.wikipedia.org/wiki/Pixel_connectivity">Pixel connectivity</a>
  *
  * @author Owen Feehan
  */

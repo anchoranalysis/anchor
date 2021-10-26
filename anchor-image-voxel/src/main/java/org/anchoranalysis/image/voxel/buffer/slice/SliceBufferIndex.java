@@ -49,6 +49,11 @@ public interface SliceBufferIndex<T> {
 
     void replaceSlice(int z, VoxelBuffer<T> pixels);
 
+    /**
+     * The size of each buffer.
+     * 
+     * @return the size.
+     */
     Extent extent();
 
     default T sliceBuffer(int z) {

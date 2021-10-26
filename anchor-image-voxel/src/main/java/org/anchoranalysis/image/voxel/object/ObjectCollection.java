@@ -66,8 +66,6 @@ public class ObjectCollection implements Iterable<ObjectMask> {
      *
      * <p>This is an <b>immutable</b> operation.
      *
-     * <p>
-     *
      * @param shiftBy what to add to the corner position.
      * @return newly created object-collection with shifted corner position and identical extent.
      */
@@ -75,20 +73,21 @@ public class ObjectCollection implements Iterable<ObjectMask> {
         return stream().mapBoundingBoxPreserveExtent(box -> box.shiftBy(shiftBy));
     }
 
-    public boolean add(ObjectMask object) {
-        return delegate.add(object);
+    /**
+     * Adds an object to the collection.
+     * 
+     * @param object the object to add.
+     */
+    public void add(ObjectMask object) {
+        delegate.add(object);
     }
 
-    public boolean addAll(ObjectCollection objects) {
-        return addAll(objects.delegate);
+    public void addAll(ObjectCollection objects) {
+        addAll(objects.delegate);
     }
 
-    public boolean addAll(Collection<? extends ObjectMask> c) {
-        return delegate.addAll(c);
-    }
-
-    public void clear() {
-        delegate.clear();
+    public void addAll(Collection<? extends ObjectMask> c) {
+        delegate.addAll(c);
     }
 
     /**

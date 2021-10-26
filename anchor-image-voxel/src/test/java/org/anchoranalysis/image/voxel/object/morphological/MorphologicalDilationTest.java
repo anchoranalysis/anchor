@@ -42,7 +42,7 @@ class MorphologicalDilationTest extends MorphologicalOperationTestBase {
     protected ObjectMask applyOperation(
             ObjectMask object, ObjectMaskFixture fixture, Extent sceneExtent, boolean useZ)
             throws CreateException {
-        return MorphologicalDilation.createDilatedObject(
+        return MorphologicalDilation.dilate(
                 object, Optional.of(sceneExtent), useZ, 1, false);
     }
 

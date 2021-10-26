@@ -93,7 +93,7 @@ class EdgeAdder<V> {
             throws CreateException {
 
         ObjectMask dilated =
-                MorphologicalDilation.createDilatedObject(
+                MorphologicalDilation.dilate(
                         object,
                         Optional.of(sceneExtent),
                         do3D && sceneExtent.z() > 1,

@@ -54,21 +54,21 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
 public class VoxelsThresholder {
 
     public static void thresholdForLevelByte(
-            Voxels<UnsignedByteBuffer> buffer, int level, BinaryValuesByte bvOut) {
+            Voxels<UnsignedByteBuffer> buffer, int level, BinaryValuesByte binaryValuesOut) {
         // We know that as the inputType is byte, it will be performed in place
         try {
-            thresholdForLevel(new VoxelsUntyped(buffer), level, bvOut, Optional.empty(), false);
+            thresholdForLevel(new VoxelsUntyped(buffer), level, binaryValuesOut, Optional.empty(), false);
         } catch (OperationFailedException e) {
             throw new AnchorImpossibleSituationException();
         }
     }
 
     public static BinaryVoxels<UnsignedByteBuffer> thresholdForLevelFloat(
-            Voxels<FloatBuffer> buffer, float level, BinaryValuesByte bvOut) {
+            Voxels<FloatBuffer> buffer, float level, BinaryValuesByte binaryValuesOut) {
         // We know that as the inputType is byte, it will be performed in place
         try {
             return thresholdForLevel(
-                    new VoxelsUntyped(buffer), level, bvOut, Optional.empty(), false);
+                    new VoxelsUntyped(buffer), level, binaryValuesOut, Optional.empty(), false);
         } catch (OperationFailedException e) {
             throw new AnchorImpossibleSituationException();
         }
@@ -78,7 +78,7 @@ public class VoxelsThresholder {
     public static BinaryVoxels<UnsignedByteBuffer> thresholdForLevel(
             VoxelsUntyped voxels,
             float level,
-            BinaryValuesByte bvOut,
+            BinaryValuesByte binaryValuesOut,
             Optional<ObjectMask> objectMask,
             boolean alwaysDuplicate)
             throws OperationFailedException {
@@ -89,17 +89,17 @@ public class VoxelsThresholder {
             IterateVoxelsObjectMaskOptional.withBuffer(
                     objectMask,
                     voxels.asByte(),
-                    new ThresholdEachVoxelByte((int) level, out, bvOut));
+                    new ThresholdEachVoxelByte((int) level, out, binaryValuesOut));
 
         } else if (voxels.getVoxelDataType().equals(FloatVoxelType.INSTANCE)) {
             out = VoxelsFactory.getUnsignedByte().createInitialized(voxels.extent());
             IterateVoxelsObjectMaskOptional.withTwoBuffers(
-                    objectMask, voxels.asFloat(), out, new ThresholdEachVoxelFloat(level, bvOut));
+                    objectMask, voxels.asFloat(), out, new ThresholdEachVoxelFloat(level, binaryValuesOut));
         } else {
             throw new OperationFailedException(
                     "Unsupported voxel-data-type, only unsigned byte and float are supported");
         }
-        return BinaryVoxelsFactory.reuseByte(out, bvOut.asInt());
+        return BinaryVoxelsFactory.reuseByte(out, binaryValuesOut.asInt());
     }
     
     /**

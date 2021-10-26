@@ -68,7 +68,7 @@ abstract class MaxIntensityBufferBase<T> implements ProjectableBuffer<T> {
 
     /**
      * Maybe perform a replacement on the current buffer position of {@code projection} with the
-     * current buffer positio nof {@code sliceToBeAdded}.
+     * current buffer position of {@code sliceToBeAdded}.
      *
      * @param sliceToBeAdded the buffer being iterated over for the slice that is being added
      * @param projection the buffer being iterated over for the projection voxels.

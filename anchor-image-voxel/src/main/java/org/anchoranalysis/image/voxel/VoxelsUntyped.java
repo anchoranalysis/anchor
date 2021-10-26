@@ -171,7 +171,7 @@ public class VoxelsUntyped {
      * @param destination the voxels we copy into.
      * @param boxDestination the bounding-box relative to the destination voxels.
      */
-    @SuppressWarnings({"rawtypes", "unchecked"})
+    @SuppressWarnings({"unchecked"})
     public void copyVoxelsTo(
             BoundingBox boxSource, VoxelsUntyped destination, BoundingBox boxDestination) {
         voxels.extract()
@@ -185,7 +185,7 @@ public class VoxelsUntyped {
      * @param destination the voxels we copy into.
      * @param boxDestination the bounding-box relative to the destination voxels.
      */
-    @SuppressWarnings({"rawtypes", "unchecked"})
+    @SuppressWarnings({"unchecked"})
     public void copyVoxelsTo(
             ObjectMask objectSource, VoxelsUntyped destination, BoundingBox boxDestination) {
         voxels.extract()
@@ -278,7 +278,7 @@ public class VoxelsUntyped {
      * 
      * <p>Otherwise throws a {@link IncorrectVoxelTypeException}.
      */
-    @SuppressWarnings({"rawtypes", "unchecked"})
+    @SuppressWarnings({"rawtypes"})
     private Voxels destinationVoxelsChecked(VoxelsUntyped destination) {    // NOSONAR
         checkMatchingDataTypes(getVoxelDataType(), destination.getVoxelDataType());
         return destination.checkIdenticalDataType(voxels.dataType());

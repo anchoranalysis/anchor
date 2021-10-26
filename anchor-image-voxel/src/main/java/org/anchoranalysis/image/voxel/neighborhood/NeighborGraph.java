@@ -35,19 +35,28 @@ import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.spatial.box.Extent;
 
+/**
+ * Creates a graph where each vertex represents an {@link ObjectMask} and edges between indicate that two objects neighbor each other.
+ * 
+ * <p>The weight associated with the edge, indicates the number of neighbvoring voxels, which is always a positive integer.
+ * 
+ * @author Owen Feehan
+ *
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class NeighborGraph {
 
     /**
      * Create the graph with object-masks as vertices, where edges represent the number of
-     * intersecting voxels between objects.
+     * neighboring voxels between objects.
      *
      * @param objects objects to create a graph of neighbors for, and who become the vertices in the
-     *     graph
-     * @param sceneExtent
-     * @param do3D
-     * @return the newly created graph
-     * @throws CreateException
+     *     graph.
+     * @param sceneExtent the size of the image, the object-masks exist in.
+     * @param preventObjectIntersection iff true, objects can only be neighbors, if they have no intersecting voxels.
+     * @param do3D if true, the Z-dimension is also considered for neighbors. Otherwise, only the X and Y dimensions.
+     * @return the newly created graph.
+     * @throws CreateException if any objects are not fully contained in the scene.
      */
     public static GraphWithPayload<ObjectMask, Integer> create(
             ObjectCollection objects,
@@ -65,16 +74,17 @@ public class NeighborGraph {
 
     /**
      * Like {@link #create(ObjectCollection, Extent, boolean, boolean)} but extracts objects from a
-     * list of vertices.
+     * list of elements which form the vertices.
      *
-     * @param <V> vertex-type from which an object-mask must be derivable
-     * @param vertices vertices to construct graph from
-     * @param vertexToObject converts the vertex to an object-mask (called repeatedly so should be
-     *     low-cost)
-     * @param sceneExtent
-     * @param do3D
-     * @return the newly created graph
-     * @throws CreateException
+     * @param <V> vertex-type from which an object-mask must be derivable.
+     * @param vertices the elements to construct graph from, each which maps uniquely to an {@link ObjectMask}.
+     * @param vertexToObject converts the vertex to a unique object-mask. This function is called repeatedly so should have
+     *     low computational-cost to call.
+     * @param sceneExtent the size of the image, the object-masks exist in.
+     * @param preventObjectIntersection iff true, objects can only be neighbors, if they have no intersecting voxels.
+     * @param do3D if true, the Z-dimension is also considered for neighbors. Otherwise, only the X and Y dimensions.
+     * @return the newly created graph.
+     * @throws CreateException if any objects are not fully contained in the scene.
      */
     public static <V> GraphWithPayload<V, Integer> create(
             List<V> vertices,

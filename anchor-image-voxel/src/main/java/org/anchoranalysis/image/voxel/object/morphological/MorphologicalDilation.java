@@ -37,26 +37,34 @@ import org.anchoranalysis.image.voxel.kernel.ApplyKernel;
 import org.anchoranalysis.image.voxel.kernel.BinaryKernel;
 import org.anchoranalysis.image.voxel.kernel.OutsideKernelPolicy;
 import org.anchoranalysis.image.voxel.kernel.morphological.DilationContext;
+import org.anchoranalysis.image.voxel.neighborhood.NeighborhoodFactory;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.image.voxel.object.morphological.predicate.AcceptIterationPredicate;
 import org.anchoranalysis.spatial.box.Extent;
 import org.anchoranalysis.spatial.point.Point3i;
 
+/**
+ * Performs <a href="https://en.wikipedia.org/wiki/Dilation_(morphology)">morphological dilation</a> on an {@link ObjectMask} or {@link BinaryVoxels}.
+ * 
+ * @author Owen Feehan
+ *
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MorphologicalDilation {
 
     /**
-     * Dilates an object-mask, growing the bounding-box as necessary.
+     * Dilates an {@link ObjectMask}, growing the bounding-box as necessary.
      *
-     * @param object the object to dilate
-     * @param extent if present, restricts the object to remain within certain bounds
-     * @param useZ whether to perform dilation in 2D or 3D
-     * @param iterations number of dilations to perform
-     * @return a newly created object-mask with bounding-box grown in relevant directions by {@code
-     *     iterations}
-     * @throws CreateException
+     * @param object the object to dilate.
+     * @param extent if present, restricts the object to remain within certain bounds.
+     * @param useZ whether to perform dilation in 2D or 3D.
+     * @param iterations number of dilations to perform.
+     * @param bigNeighborhood if true, uses a big neighborhood, otherwise a small neighborhood, as defined in {@link NeighborhoodFactory}.
+     * @return a newly created object-mask with bounding-box dilated in relevant directions by {@code
+     *     iterations}.
+     * @throws CreateException if the object cannot be successfully dilated.
      */
-    public static ObjectMask createDilatedObject(
+    public static ObjectMask dilate(
             ObjectMask object,
             Optional<Extent> extent,
             boolean useZ,
@@ -89,11 +97,11 @@ public class MorphologicalDilation {
     /**
      * Performs a morphological dilation operation.
      *
-     * @param voxels input-voxels
-     * @param iterations number of dilations
+     * @param voxels input-voxels.
+     * @param iterations number of dilations.
      * @param context additional parameters for influencing how dilation occurs.
-     * @return a new buffer containing the results of the dilation-operations
-     * @throws CreateException
+     * @return a new buffer containing the results of the dilation-operations.
+     * @throws CreateException if the postcondition cannot be successfully checked.
      */
     public static BinaryVoxels<UnsignedByteBuffer> dilate(
             BinaryVoxels<UnsignedByteBuffer> voxels, int iterations, DilationContext context)

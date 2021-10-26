@@ -239,6 +239,7 @@ public class IterateVoxelsObjectMask {
      *
      * <p>The extent's of both {@code voxels1} and {@code voxels2} must be equal.
      *
+     * @param object the object-mask, with coordinates relative to both {@code voxels1} and {@code voxels2}.
      * @param voxels1 voxels that provide the element from the <i>first</i> voxel-buffer.
      * @param voxels2 voxels that provide the element from the <i>second</i> voxel-buffer.
      * @param process is called for each voxel using <i>global</i> coordinates.
@@ -284,6 +285,7 @@ public class IterateVoxelsObjectMask {
      *
      * <p>Note that a new {@link Point3i} is created for each call to {@code process}.
      *
+     * @param object the object-mask, with coordinates relative to both {@code voxels1} and {@code voxels2}.
      * @param voxels1 voxels that provide the <b>first</b> element, the voxel-buffer.
      * @param voxels2 voxels that provide the <b>second</b> element, the buffer.
      * @param process is called for each voxel using <i>global</i> coordinates.
