@@ -39,6 +39,6 @@ import org.anchoranalysis.annotation.Annotation;
 @AllArgsConstructor
 public class ImageLabelAnnotation implements Annotation {
 
-    /** The label that applies to the image */
+    /** The label that applies to the image. */
     private String label;
 }
