@@ -28,7 +28,6 @@ package org.anchoranalysis.image.voxel.kernel;
 
 import com.google.common.base.Preconditions;
 import lombok.Getter;
-import lombok.Setter;
 
 /**
  * A small matrix that is convolved with or otherwise combined across each voxel in an image.

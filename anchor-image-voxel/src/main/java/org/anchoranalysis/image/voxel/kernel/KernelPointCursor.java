@@ -185,7 +185,11 @@ public final class KernelPointCursor {
         index++;
     }
 
-    /** Whether to additionally apply the kernel along the Z dimension, as well as X and Y? */
+    /** 
+     * Whether to additionally apply the kernel along the Z dimension, as well as X and Y?
+     *
+     * @return true iff the kernel should additionally be applied along the Z dimension.
+     */
     public boolean isUseZ() {
         return params.isUseZ();
     }

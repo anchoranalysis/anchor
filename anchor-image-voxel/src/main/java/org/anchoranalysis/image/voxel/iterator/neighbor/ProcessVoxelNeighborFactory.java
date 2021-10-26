@@ -36,14 +36,14 @@ import org.anchoranalysis.spatial.box.Extent;
 public class ProcessVoxelNeighborFactory {
 
     /**
-     * Within either an object-mask or an extent (as a fallback)
+     * Within either an object-mask or an extent (as a fallback).
      *
      * @param containingMask if defined, the process is restricted to only process points within
-     *     this object-mask
+     *     this object-mask.
      * @param extentFallback if {@code containingMask} is not defined, then as a fallback, the
-     *     process is restricted to only process points in this extent
-     * @param process a process which will be wrapped inside a restriction
-     * @return a new process with a restriction on the existing process
+     *     process is restricted to only process points in this extent.
+     * @param process a process which will be wrapped inside a restriction.
+     * @return a new process with a restriction on the existing process.
      */
     public static <T> ProcessVoxelNeighbor<T> within(
             Optional<ObjectMask> containingMask,

@@ -43,20 +43,22 @@ public class IterateVoxelsNeighbors {
      *
      * <p>It also sets the source in {@code process}.
      *
-     * @param sourcePoint the point to iterate over its neighborhood
-     * @param neighborhood a definition of what constitutes the neighborhood
-     * @param do3D whether to iterate in 2D or 3D
+     * @param sourcePoint the point to iterate over its neighborhood.
+     * @param neighborhood a definition of what constitutes the neighborhood.
+     * @param do3D whether to iterate in 2D or 3D.
      * @param process is called for each voxel in the neighborhood of the source-point.
-     * @return the result after processing each point in the neighborhood
+     * @param sourceValue the value in the source buffer at {@code sourcePoint}.
+     * @param sourceOffsetXY the offset of the source buffer corresponding to {@code sourcePoint}.
+     * @return the result after processing each point in the neighborhood.
      */
     public static <T> T callEachPointInNeighborhood(
             Point3i sourcePoint,
             Neighborhood neighborhood,
             boolean do3D,
             ProcessVoxelNeighbor<T> process,
-            int sourceVal,
+            int sourceValue,
             int sourceOffsetXY) {
-        process.initSource(sourcePoint, sourceVal, sourceOffsetXY);
+        process.initSource(sourcePoint, sourceValue, sourceOffsetXY);
         neighborhood.processNeighborhoodPoints(do3D, process);
         return process.collectResult();
     }

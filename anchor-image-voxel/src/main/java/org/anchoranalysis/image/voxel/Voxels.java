@@ -166,7 +166,7 @@ public abstract class Voxels<T> {
     }
 
     /**
-     * Assigns a new buffer for a slice.
+     * Assigns a new buffer for a particular slice.
      *
      * <p>This is a <b>mutable</b> operation.
      *

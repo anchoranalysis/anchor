@@ -49,9 +49,9 @@ final class WithinExtent<T> implements ProcessVoxelNeighbor<T> {
     private Point3i point;
 
     @Override
-    public void initSource(Point3i point, int sourceVal, int sourceOffsetXY) {
+    public void initSource(Point3i point, int sourceValue, int sourceOffsetXY) {
         this.point = point;
-        this.processAbsolutePoint.initSource(sourceVal, sourceOffsetXY);
+        this.processAbsolutePoint.initSource(sourceValue, sourceOffsetXY);
     }
 
     @Override

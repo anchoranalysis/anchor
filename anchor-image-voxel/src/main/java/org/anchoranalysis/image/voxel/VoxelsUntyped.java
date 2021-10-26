@@ -47,7 +47,7 @@ import org.anchoranalysis.spatial.box.Extent;
 /**
  * Stores memory buffers representing image voxels, without explicit typing of buffers.
  * 
- * <p>This is a convenience class to avoid using a templated parameter in {@code Voxels}.
+ * <p>This is a convenience class to avoid using a templated parameter in {@link Voxels}.
  * 
  * <p>It stores the voxels in a <a href="https://en.wikipedia.org/wiki/Strong_and_weak_typing">weakly-typed manner</a>, and gives convenience methods to convert to the desired type.
  * 
@@ -83,12 +83,12 @@ public class VoxelsUntyped {
      * @param match the data-type the voxel must equal.
      * @return true iff the voxel data-type is equal.
      */
-    public Voxels<?> hasIdenticalDataType(VoxelDataType match) { // NOSONAR
+    public Voxels<?> checkIdenticalDataType(VoxelDataType match) { // NOSONAR
         if (match.equals(voxels.dataType())) {
             return voxels;
         } else {
             throw new IncorrectVoxelTypeException(
-                    String.format("User has requested %s from %s voxels", match, voxels.dataType()));
+                    String.format("Incompatible data-type %s has been requested from voxels with data-type %s", match, voxels.dataType()));
         }
     }
 
@@ -164,41 +164,72 @@ public class VoxelsUntyped {
         return voxels.dataType();
     }
 
+    /**
+     * Copies the voxels into a {@code destination}, but only those voxels inside a bounding-box.
+     * 
+     * @param boxSource the bounding-box relative to the source voxels (the current voxels - from where we copy from).
+     * @param destination the voxels we copy into.
+     * @param boxDestination the bounding-box relative to the destination voxels.
+     */
     @SuppressWarnings({"rawtypes", "unchecked"})
     public void copyVoxelsTo(
-            BoundingBox from, VoxelsUntyped voxelsDestination, BoundingBox destinationBox) {
-        checkMatchingDataTypes(voxelsDestination.getVoxelDataType());
+            BoundingBox boxSource, VoxelsUntyped destination, BoundingBox boxDestination) {
         voxels.extract()
-                .boxCopyTo(from, (Voxels) voxelsDestination.hasIdenticalDataType(voxels.dataType()), destinationBox);
+                .boxCopyTo(boxSource, destinationVoxelsChecked(destination), boxDestination);
     }
 
+    /**
+     * Copies the voxels into a {@code destination}, but only those voxels inside an {@link ObjectMask}.
+     * 
+     * @param objectSource the object-mask relative to the source voxels, from where we copy from.
+     * @param destination the voxels we copy into.
+     * @param boxDestination the bounding-box relative to the destination voxels.
+     */
     @SuppressWarnings({"rawtypes", "unchecked"})
     public void copyVoxelsTo(
-            ObjectMask from, VoxelsUntyped voxelsDestination, BoundingBox destinationBox) {
-        checkMatchingDataTypes(voxelsDestination.getVoxelDataType());
+            ObjectMask objectSource, VoxelsUntyped destination, BoundingBox boxDestination) {
         voxels.extract()
-                .objectCopyTo(from, (Voxels) voxelsDestination.hasIdenticalDataType(voxels.dataType()), destinationBox);
+                .objectCopyTo(objectSource, destinationVoxelsChecked(destination), boxDestination);
     }
-
+    
+    /**
+     * Subtracts all voxel-values from the maximum value associated with the data-type.
+     *
+     * <p>i.e. each voxel value {@code v} is updated to become {@code maxDataTypeValue - v}
+     */
     public void subtractFromMaxValue() {
-        voxels.arithmetic().subtractFrom((int) getVoxelDataType().maxValue());
+        int maxValue = (int) getVoxelDataType().maxValue();
+        voxels.arithmetic().subtractFrom(maxValue);
     }
 
+    /**
+     * Copies one particular z-slice of voxels from a source into the current voxels.
+     * 
+     * <p>The existing z-slice is replaced.
+     *
+     * @param sliceIndexToUpdate slice-index to update in the current voxels.
+     * @param sourceVoxels voxels to copy a particular z-slice from.
+     * @param sliceIndexSource the z-slice in {@code sourceVoxels} to copy from.
+     * @param duplicate if true, the source slice is duplicated before being assigned. Otherwise it is reused.
+     */
     @SuppressWarnings({"rawtypes", "unchecked"})
-    public void transferSlice(
+    public void replaceSlice(
             int sliceIndexToUpdate,
             VoxelsUntyped sourceVoxels,
             int sliceIndexSource,
             boolean duplicate) {
-        if (getVoxelDataType().equals(sourceVoxels.getVoxelDataType())) {
-            voxels.replaceSlice(
-                    sliceIndexToUpdate,
-                    sourceSlice((Voxels) sourceVoxels.any(), sliceIndexSource, duplicate));
-        } else {
-            throw new IncorrectVoxelTypeException("Voxel types are different");
-        }
+        checkMatchingDataTypes(sourceVoxels.getVoxelDataType(), getVoxelDataType());
+        voxels.replaceSlice(
+                sliceIndexToUpdate,
+                sourceSlice((Voxels) sourceVoxels.any(), sliceIndexSource, duplicate));
     }
 
+    /**
+     * A {@link VoxelBuffer} corresponding to a particular z-slice.
+     *
+     * @param z the index (beginning at 0) of all z-slices.
+     * @return the corresponding buffer for {@code z}.
+     */
     @SuppressWarnings("unchecked")
     public <T> VoxelBuffer<T> slice(int z) {
         return (VoxelBuffer<T>) voxels.slice(z);
@@ -241,20 +272,33 @@ public class VoxelsUntyped {
     public VoxelsExtracter<?> extract() { // NOSONAR
         return voxels.extract();
     }
-
-    private void checkMatchingDataTypes(VoxelDataType targetDataType) {
-        if (!targetDataType.equals(getVoxelDataType())) {
-            throw new IncorrectVoxelTypeException(
-                    String.format("Voxel data-types do not match in source (%s) and destination (%s).", voxels.dataType(), targetDataType));
-        }
+    
+    /**
+     * Converts a {@link VoxelsUntyped} to a raw-type but only if it has the expected data-type.
+     * 
+     * <p>Otherwise throws a {@link IncorrectVoxelTypeException}.
+     */
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    private Voxels destinationVoxelsChecked(VoxelsUntyped destination) {    // NOSONAR
+        checkMatchingDataTypes(getVoxelDataType(), destination.getVoxelDataType());
+        return destination.checkIdenticalDataType(voxels.dataType());
     }
     
+    private static void checkMatchingDataTypes(VoxelDataType source, VoxelDataType destination) {
+        if (!destination.equals(source)) {
+            throw new IncorrectVoxelTypeException(
+                    String.format("Voxel data-types do not match in source (%s) and destination (%s).", source, destination));
+        }        
+    }
+    
+    /** A particular z-slice from {@code sourceVoxels}, maybe duplicated. */
     private static <T> VoxelBuffer<T> sourceSlice(
             Voxels<T> sourceVoxels, int sliceIndex, boolean duplicate) {
+        VoxelBuffer<T> slice = sourceVoxels.slice(sliceIndex); 
         if (duplicate) {
-            return sourceVoxels.slice(sliceIndex);
+            return slice;
         } else {
-            return sourceVoxels.slice(sliceIndex).duplicate();
+            return slice.duplicate();
         }
     }
 }

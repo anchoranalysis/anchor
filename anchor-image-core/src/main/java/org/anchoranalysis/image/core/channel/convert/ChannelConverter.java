@@ -121,7 +121,7 @@ public abstract class ChannelConverter<T> {
     private Channel convertCreateNew(Channel channel) {
         Channel out = ChannelFactory.instance().create(channel.dimensions(), targetDataType);
         @SuppressWarnings("unchecked")
-        Voxels<T> voxels = (Voxels<T>) out.voxels().hasIdenticalDataType(targetDataType);
+        Voxels<T> voxels = (Voxels<T>) out.voxels().checkIdenticalDataType(targetDataType);
         try {
             voxelsConverter.copyFrom(channel.voxels(), voxels);
         } catch (OperationFailedException e) {
