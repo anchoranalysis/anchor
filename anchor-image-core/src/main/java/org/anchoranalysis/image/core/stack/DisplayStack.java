@@ -47,7 +47,7 @@ import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.VoxelsWrapper;
+import org.anchoranalysis.image.voxel.VoxelsUntyped;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
@@ -253,7 +253,7 @@ public class DisplayStack {
                 (channel, converter) -> {
                     BoundingBox allLocalBox = destinationBox.shiftToOrigin();
 
-                    VoxelsWrapper destBoxNonByte =
+                    VoxelsUntyped destBoxNonByte =
                             VoxelsFactory.instance()
                                     .createEmpty(destinationBox.extent(), channel.getVoxelDataType());
                     channel.voxels().copyVoxelsTo(sourceBox, destBoxNonByte, allLocalBox);
@@ -346,7 +346,7 @@ public class DisplayStack {
                         converter
                                 .getVoxelsConverter()
                                 .convertFrom(
-                                        new VoxelsWrapper(voxelsUnconverted),
+                                        new VoxelsUntyped(voxelsUnconverted),
                                         VoxelsFactory.getUnsignedByte()),
                 channel -> (Voxels<UnsignedByteBuffer>) voxelsUnconverted);
     }

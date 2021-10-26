@@ -32,7 +32,7 @@ import static org.mockito.Mockito.*;
 import java.util.Optional;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.VoxelsWrapper;
+import org.anchoranalysis.image.voxel.VoxelsUntyped;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
@@ -58,7 +58,7 @@ class ThresholderGlobalTest {
 
     private static final long HALF_SCENE_EXTENT_VOLUME = SCENE_EXTENT.calculateVolume() / 2;
 
-    private VoxelsWrapper voxels;
+    private VoxelsUntyped voxels;
 
     @BeforeEach
     void setup() {
@@ -108,7 +108,7 @@ class ThresholderGlobalTest {
         return calculateLevel;
     }
 
-    private static VoxelsWrapper createVoxels() {
+    private static VoxelsUntyped createVoxels() {
 
         Extent extentHalf = new Extent(SCENE_WIDTH / 2, SCENE_HEIGHT, SCENE_DEPTH);
 
@@ -123,7 +123,7 @@ class ThresholderGlobalTest {
                 voxels, right,
                 100); // So the right half, should be 100 higher on average, and always >= 100
 
-        return new VoxelsWrapper(voxels);
+        return new VoxelsUntyped(voxels);
     }
 
     private static void writeModulo(

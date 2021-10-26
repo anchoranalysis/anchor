@@ -27,7 +27,7 @@
 package org.anchoranalysis.image.voxel.interpolator;
 
 import java.nio.FloatBuffer;
-import org.anchoranalysis.image.voxel.VoxelsWrapper;
+import org.anchoranalysis.image.voxel.VoxelsUntyped;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedShortBuffer;
@@ -52,7 +52,7 @@ public interface Interpolator {
      * @param destination the voxels to copy interpolated-values into, which may differ in size in the XY dimensions.
      */
     default void interpolate(
-            VoxelsWrapper source, VoxelsWrapper destination) {
+            VoxelsUntyped source, VoxelsUntyped destination) {
 
         Extent extentSource = source.any().extent();
         Extent extentTarget = destination.any().extent();

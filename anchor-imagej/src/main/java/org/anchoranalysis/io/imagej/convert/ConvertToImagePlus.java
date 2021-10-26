@@ -41,7 +41,7 @@ import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.VoxelsWrapper;
+import org.anchoranalysis.image.voxel.VoxelsUntyped;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 
 /**
@@ -58,7 +58,7 @@ public class ConvertToImagePlus {
     private static final int MICRONS_TO_METERS = 1000000;
 
     /**
-     * Creates an {@link ImagePlus} from a {@link VoxelsWrapper}.
+     * Creates an {@link ImagePlus} from a {@link VoxelsUntyped}.
      *
      * <p>The default image-resolution (see {@link Resolution#Resolution()} is employed.
      *
@@ -67,7 +67,7 @@ public class ConvertToImagePlus {
      * @throws ImageJConversionException if the voxels are neither unsigned byte nor unsigned short
      *     (the only two supported types)
      */
-    public static ImagePlus from(VoxelsWrapper voxels) throws ImageJConversionException {
+    public static ImagePlus from(VoxelsUntyped voxels) throws ImageJConversionException {
         Dimensions dimensions = new Dimensions(voxels.any().extent(), Optional.empty());
         ImageStack stack = ImageStackFactory.createSingleChannel(voxels);
         return createImagePlus(stack, dimensions, 1, 1, false);

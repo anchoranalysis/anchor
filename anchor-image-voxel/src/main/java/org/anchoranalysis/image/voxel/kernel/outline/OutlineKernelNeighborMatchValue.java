@@ -64,9 +64,9 @@ public class OutlineKernelNeighborMatchValue extends OutlineKernelBase {
     }
 
     @Override
-    public void notifyZChange(LocalSlices inSlices, int z) {
-        super.notifyZChange(inSlices, z);
-        localSlicesRequireHigh = new LocalSlices(z, 3, voxelsRequireHigh.voxels());
+    public void notifyBuffer(LocalSlices slices, int sliceIndex) {
+        super.notifyBuffer(slices, sliceIndex);
+        localSlicesRequireHigh = new LocalSlices(sliceIndex, 3, voxelsRequireHigh.voxels());
     }
 
     /**

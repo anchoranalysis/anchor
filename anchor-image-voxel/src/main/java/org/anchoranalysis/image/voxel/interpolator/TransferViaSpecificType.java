@@ -27,7 +27,7 @@ package org.anchoranalysis.image.voxel.interpolator;
 
 import java.util.function.Function;
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.VoxelsWrapper;
+import org.anchoranalysis.image.voxel.VoxelsUntyped;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.spatial.box.Extent;
 
@@ -55,9 +55,9 @@ class TransferViaSpecificType<T> {
     private VoxelBuffer<T> slice;
 
     public TransferViaSpecificType(
-            VoxelsWrapper source,
-            VoxelsWrapper destination,
-            Function<VoxelsWrapper, Voxels<T>> extractVoxels,
+            VoxelsUntyped source,
+            VoxelsUntyped destination,
+            Function<VoxelsUntyped, Voxels<T>> extractVoxels,
             TransferSlice<T> transferSlice) {
         this.source = extractVoxels.apply(source);
         this.destination = extractVoxels.apply(destination);

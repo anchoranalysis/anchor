@@ -52,9 +52,9 @@ public class AndKernel extends BinaryKernel {
     }
 
     @Override
-    public void notifyZChange(LocalSlices inSlices, int z) {
-        kernel1.notifyZChange(inSlices, z);
-        kernel2.notifyZChange(inSlices, z);
+    public void notifyBuffer(LocalSlices slices, int sliceIndex) {
+        kernel1.notifyBuffer(slices, sliceIndex);
+        kernel2.notifyBuffer(slices, sliceIndex);
     }
 
     @Override

@@ -84,7 +84,7 @@ public abstract class BinaryKernelMorphological extends BinaryKernel {
     }
 
     @Override
-    public void notifyZChange(LocalSlices slices, int z) {
+    public void notifyBuffer(LocalSlices slices, int sliceIndex) {
         this.slices = slices;
     }
 

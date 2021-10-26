@@ -28,7 +28,7 @@ package org.anchoranalysis.image.voxel.extracter;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.image.voxel.ExtentMatchHelper;
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.VoxelsWrapper;
+import org.anchoranalysis.image.voxel.VoxelsUntyped;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.buffer.ProjectableBuffer;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
@@ -122,7 +122,7 @@ public abstract class Base<T> implements VoxelsExtracter<T> {
         assert (bufferTarget.slice(0).capacity() == extentResized.areaXY());
 
         interpolator.interpolate(
-                new VoxelsWrapper(voxels), new VoxelsWrapper(bufferTarget));
+                new VoxelsUntyped(voxels), new VoxelsUntyped(bufferTarget));
 
         assert (bufferTarget.slice(0).capacity() == extentResized.areaXY());
         return bufferTarget;

@@ -34,7 +34,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.object.HistogramFromObjectsFactory;
-import org.anchoranalysis.image.voxel.VoxelsWrapper;
+import org.anchoranalysis.image.voxel.VoxelsUntyped;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
@@ -64,7 +64,7 @@ public class ThresholderGlobal extends Thresholder {
 
     @Override
     public BinaryVoxels<UnsignedByteBuffer> threshold(
-            VoxelsWrapper inputBuffer,
+            VoxelsUntyped inputBuffer,
             BinaryValuesByte bvOut,
             Optional<Histogram> histogram,
             Optional<ObjectMask> objectMask)
@@ -78,7 +78,7 @@ public class ThresholderGlobal extends Thresholder {
 
     private BinaryVoxels<UnsignedByteBuffer> thresholdForHistogram(
             Histogram histogram,
-            VoxelsWrapper inputBuffer,
+            VoxelsUntyped inputBuffer,
             BinaryValuesByte bvOut,
             Optional<ObjectMask> objectMask)
             throws OperationFailedException {
@@ -90,7 +90,7 @@ public class ThresholderGlobal extends Thresholder {
     }
 
     private Histogram histogramBuffer(
-            VoxelsWrapper inputBuffer,
+            VoxelsUntyped inputBuffer,
             Optional<Histogram> histogram,
             Optional<ObjectMask> objectMask) {
         return histogram.orElseGet(

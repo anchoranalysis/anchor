@@ -39,25 +39,47 @@ import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
 public class KernelApplicationParameters {
 
     /**
-     * How to handle voxels that appear in a neighbourhood that lies outside the scene boundaries.
+     * How to handle voxels that appear in a neighborhood that lies outside the scene boundaries.
      */
     private final OutsideKernelPolicy outsideKernelPolicy;
 
     /** Whether to additionally apply the kernel along the Z dimension, as well as X and Y? */
     private final boolean useZ;
 
+    /**
+     * When true, any parts of the neighborhood that lie outside the scene are not considered in
+     * kernel neighborhoods.
+     * 
+     * @return true if parts of the neighborhood that lie outside the scene should be ignored.
+     */
     public boolean isIgnoreOutside() {
         return outsideKernelPolicy.isIgnoreOutside();
     }
 
+    /**
+     * In cases where {@link #isIgnoreOutside()} is false, then whether to treat voxels that lie outside the scene
+     * as <i>on</i> (if true) or <i>off</i> (if false).
+     * 
+     * @return true if voxels lying outside the scene should be treated as <i>on</i> in the above circumstances, otherwise they are treated as <i>off</i>.
+     */
     public boolean isOutsideOn() {
         return outsideKernelPolicy.isOutsideOn();
     }
 
+    /**
+     * True only when voxels outside the scene should <b>not be ignored</i> and considered as <i>off</i>.
+     * 
+     * @return true iff both conditions above are true.
+     */
     public boolean isOutsideOffUnignored() {
         return !isIgnoreOutside() && !isOutsideOn();
     }
 
+    /**
+     * True only when voxels outside the scene should <b>not be ignored</i> and considered as <i>on</i>.
+     * 
+     * @return true iff both conditions above are true.
+     */
     public boolean isOutsideOnUnignored() {
         return !isIgnoreOutside() && isOutsideOn();
     }

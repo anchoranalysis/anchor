@@ -38,7 +38,7 @@ import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.core.object.HistogramFromObjectsFactory;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.VoxelsWrapper;
+import org.anchoranalysis.image.voxel.VoxelsUntyped;
 import org.anchoranalysis.image.voxel.arithmetic.VoxelsArithmetic;
 import org.anchoranalysis.image.voxel.assigner.VoxelsAssigner;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
@@ -111,8 +111,8 @@ public class Channel {
      *
      * @return the voxels, wrapped in a class that facilitates friendly conversion.
      */
-    public VoxelsWrapper voxels() {
-        return new VoxelsWrapper(voxels);
+    public VoxelsUntyped voxels() {
+        return new VoxelsUntyped(voxels);
     }
 
     /**

@@ -32,7 +32,7 @@ import ij.process.ShortProcessor;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
-import org.anchoranalysis.image.voxel.VoxelsWrapper;
+import org.anchoranalysis.image.voxel.VoxelsUntyped;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedShortBuffer;
@@ -54,7 +54,7 @@ public class ConvertToImageProcessor {
     private static final VoxelDataType DATA_TYPE_SHORT = UnsignedShortVoxelType.INSTANCE;
 
     /**
-     * Creates a {@link ImageProcessor} by extracting a slice from a {@link VoxelsWrapper}.
+     * Creates a {@link ImageProcessor} by extracting a slice from a {@link VoxelsUntyped}.
      *
      * @param voxels the voxels to extract a slice from.
      * @param z slice-index
@@ -62,7 +62,7 @@ public class ConvertToImageProcessor {
      * @throws ImageJConversionException if the voxels are neither unsigned byte nor unsigned short
      *     (the only two supported types)
      */
-    public static ImageProcessor from(VoxelsWrapper voxels, int z)
+    public static ImageProcessor from(VoxelsUntyped voxels, int z)
             throws ImageJConversionException {
 
         if (voxels.any().extent().areaXY() != voxels.slice(z).capacity()) {

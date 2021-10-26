@@ -113,7 +113,7 @@ public class IterateVoxelsAll {
 
                 for (point.setX(0); point.x() < extent.x(); point.incrementX()) {
                     process.process(cursor);
-                    cursor.incrementIndex();
+                    cursor.incrementIndexOnly();
                 }
             }
         }

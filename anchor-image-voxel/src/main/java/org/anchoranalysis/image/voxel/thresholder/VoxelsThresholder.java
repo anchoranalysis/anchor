@@ -33,7 +33,7 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.VoxelsWrapper;
+import org.anchoranalysis.image.voxel.VoxelsUntyped;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxelsFactory;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
@@ -57,7 +57,7 @@ public class VoxelsThresholder {
             Voxels<UnsignedByteBuffer> buffer, int level, BinaryValuesByte bvOut) {
         // We know that as the inputType is byte, it will be performed in place
         try {
-            thresholdForLevel(new VoxelsWrapper(buffer), level, bvOut, Optional.empty(), false);
+            thresholdForLevel(new VoxelsUntyped(buffer), level, bvOut, Optional.empty(), false);
         } catch (OperationFailedException e) {
             throw new AnchorImpossibleSituationException();
         }
@@ -68,7 +68,7 @@ public class VoxelsThresholder {
         // We know that as the inputType is byte, it will be performed in place
         try {
             return thresholdForLevel(
-                    new VoxelsWrapper(buffer), level, bvOut, Optional.empty(), false);
+                    new VoxelsUntyped(buffer), level, bvOut, Optional.empty(), false);
         } catch (OperationFailedException e) {
             throw new AnchorImpossibleSituationException();
         }
@@ -76,7 +76,7 @@ public class VoxelsThresholder {
 
     // Perform inplace
     public static BinaryVoxels<UnsignedByteBuffer> thresholdForLevel(
-            VoxelsWrapper voxels,
+            VoxelsUntyped voxels,
             float level,
             BinaryValuesByte bvOut,
             Optional<ObjectMask> objectMask,
@@ -109,7 +109,7 @@ public class VoxelsThresholder {
      * @param duplicate if true, an existing buffer of type {@link UnsignedByteBuffer} will not be reused directly, but duplicated.
      * @return either the current buffer (possibly duplicated if {@code duplicate} is true} or an empty buffer if the same-size.
      */
-    private static Voxels<UnsignedByteBuffer> voxelsAsByteOrEmpty(VoxelsWrapper buffer, boolean duplicate) {
+    private static Voxels<UnsignedByteBuffer> voxelsAsByteOrEmpty(VoxelsUntyped buffer, boolean duplicate) {
         Voxels<UnsignedByteBuffer> boxOut;
 
         // If the input-channel is Byte then we do it in-place

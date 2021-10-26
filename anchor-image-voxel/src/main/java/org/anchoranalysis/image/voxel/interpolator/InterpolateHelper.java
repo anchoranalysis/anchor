@@ -28,7 +28,7 @@ package org.anchoranalysis.image.voxel.interpolator;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.image.voxel.VoxelsWrapper;
+import org.anchoranalysis.image.voxel.VoxelsUntyped;
 import org.anchoranalysis.image.voxel.datatype.FloatVoxelType;
 import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelTypeException;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
@@ -51,7 +51,7 @@ public class InterpolateHelper {
      * @return an appropriately-typed implementation of {@link TransferViaSpecificType}.
      */
     static TransferViaSpecificType<?> createTransfer(   // NOSONAR
-            VoxelsWrapper source, VoxelsWrapper destination) {
+            VoxelsUntyped source, VoxelsUntyped destination) {
 
         if (!source.getVoxelDataType().equals(destination.getVoxelDataType())) {
             throw new IncorrectVoxelTypeException(
@@ -62,7 +62,7 @@ public class InterpolateHelper {
             return new TransferViaSpecificType<>(
                     source,
                     destination,
-                    VoxelsWrapper::asByte,
+                    VoxelsUntyped::asByte,
                     (interpolator,
                             voxelsSource,
                             voxelsDestination,
@@ -77,7 +77,7 @@ public class InterpolateHelper {
             return new TransferViaSpecificType<>(
                     source,
                     destination,
-                    VoxelsWrapper::asShort,
+                    VoxelsUntyped::asShort,
                     (interpolator,
                             voxelsSource,
                             voxelsDestination,
@@ -92,7 +92,7 @@ public class InterpolateHelper {
             return new TransferViaSpecificType<>(
                     source,
                     destination,
-                    VoxelsWrapper::asFloat,
+                    VoxelsUntyped::asFloat,
                     (interpolator,
                             voxelsSource,
                             voxelsDestination,

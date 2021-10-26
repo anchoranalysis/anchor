@@ -36,10 +36,21 @@ import org.anchoranalysis.image.voxel.extracter.VoxelsExtracter;
 import org.anchoranalysis.image.voxel.extracter.VoxelsExtracterFactory;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 
+/**
+ * Implementation of {@link Voxels} whose voxels are of type <i>unsigned byte</i> (8-bit).
+ * 
+ * @author Owen Feehan
+ *
+ */
 public final class VoxelsUnsignedByte extends Voxels<UnsignedByteBuffer> {
 
-    public VoxelsUnsignedByte(SliceBufferIndex<UnsignedByteBuffer> slices) {
-        super(slices, VoxelsFactory.getUnsignedByte(), createArithmetic(slices));
+    /**
+     * Create from a buffer, indexed by slice.
+     * 
+     * @param buffer the buffer.
+     */
+    public VoxelsUnsignedByte(SliceBufferIndex<UnsignedByteBuffer> buffer) {
+        super(buffer, VoxelsFactory.getUnsignedByte(), createArithmetic(buffer));
     }
 
     @Override
@@ -52,7 +63,7 @@ public final class VoxelsUnsignedByte extends Voxels<UnsignedByteBuffer> {
         return VoxelsExtracterFactory.createUnsignedByte(this);
     }
 
-    private static VoxelsArithmetic createArithmetic(SliceBufferIndex<UnsignedByteBuffer> slices) {
-        return VoxelsArithmeticFactory.createByte(slices.extent(), slices::sliceBuffer);
+    private static VoxelsArithmetic createArithmetic(SliceBufferIndex<UnsignedByteBuffer> buffer) {
+        return VoxelsArithmeticFactory.createByte(buffer.extent(), buffer::sliceBuffer);
     }
 }

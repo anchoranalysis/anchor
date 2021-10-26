@@ -30,7 +30,7 @@ import java.nio.FloatBuffer;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.VoxelsWrapper;
+import org.anchoranalysis.image.voxel.VoxelsUntyped;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedIntBuffer;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedShortBuffer;
@@ -58,7 +58,7 @@ public abstract class VoxelsConverter<T> {
      * @param factory a factory that creates {@link Voxels} of type {@code T}.
      * @return a newly created {@link Voxels} with values copied from {@code source}.
      */
-    public Voxels<T> convertFrom(VoxelsWrapper from, VoxelsFactoryTypeBound<T> factory) {
+    public Voxels<T> convertFrom(VoxelsUntyped from, VoxelsFactoryTypeBound<T> factory) {
         Voxels<T> voxelsOut = factory.createInitialized(from.any().extent());
         try {
             copyFrom(from, voxelsOut);
@@ -75,7 +75,7 @@ public abstract class VoxelsConverter<T> {
      * @param to where the voxels are copied to (the destination)
      * @throws OperationFailedException if the extents of {@code from} and {@code to} are not equal.
      */
-    public void copyFrom(VoxelsWrapper from, Voxels<T> to) throws OperationFailedException {
+    public void copyFrom(VoxelsUntyped from, Voxels<T> to) throws OperationFailedException {
 
         VoxelDataType fromType = from.getVoxelDataType();
         if (fromType.equals(UnsignedByteVoxelType.INSTANCE)) {

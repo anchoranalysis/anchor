@@ -56,11 +56,11 @@ public interface SliceBufferIndex<T> {
     }
 
     /**
-     * Calls {@code sliceConsumer} once for each slice with the respective buffer
+     * Calls {@code sliceConsumer} once for each slice with the respective buffer.
      *
-     * <p>This occurs sequentially from 0 (inclusive) to {@code z()} (exclusive)
+     * <p>This occurs sequentially from 0 (inclusive) to {@code z()} (exclusive).
      *
-     * @param sliceConsumer called for each index (z-value)
+     * @param sliceConsumer called for each index (z-value).
      */
     default void iterateOverSlices(Consumer<VoxelBuffer<T>> sliceConsumer) {
         int zMax = extent().z();
@@ -70,12 +70,12 @@ public interface SliceBufferIndex<T> {
     }
 
     /**
-     * Calls {@code process} for each offset in each slice
+     * Calls {@code process} for each offset in each slice.
      *
      * <p>This occurs sequentially from 0 (inclusive) to {@code extent.z()} (exclusive) and from 0
-     * (inclusive) to {@code extent.x() * extent.y()} (exclusive) for the offsets
+     * (inclusive) to {@code extent.x() * extent.y()} (exclusive) for the offsets.
      *
-     * @param process called for each offset on each slice
+     * @param process called for each offset on each slice.
      */
     default void iterateOverSlicesAndOffsets(ProcessVoxelBufferUnary<T> process) {
         iterateOverSlices(

@@ -49,7 +49,7 @@ public abstract class CountKernel extends Kernel {
     }
 
     @Override
-    public void notifyZChange(LocalSlices slices, int z) {
+    public void notifyBuffer(LocalSlices slices, int sliceIndex) {
         this.slices = slices;
     }
 

@@ -29,7 +29,7 @@ package org.anchoranalysis.image.voxel.statistics;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.VoxelsWrapper;
+import org.anchoranalysis.image.voxel.VoxelsUntyped;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.math.histogram.Histogram;
 
@@ -56,12 +56,12 @@ public class HistogramFactory {
     }
 
     /**
-     * Creates a {@link Histogram} of the aggregated voxel intensities in a {@link VoxelsWrapper}.
+     * Creates a {@link Histogram} of the aggregated voxel intensities in a {@link VoxelsUntyped}.
      * 
-     * @param voxels the {@link VoxelsWrapper}, whose voxel intensity values are aggregated into a {@link Histogram}.
+     * @param voxels the {@link VoxelsUntyped}, whose voxel intensity values are aggregated into a {@link Histogram}.
      * @return a newly created histogram.
      */
-    public static Histogram create(VoxelsWrapper voxels) {
+    public static Histogram create(VoxelsUntyped voxels) {
         return createFromVoxels(voxels.any());
     }
 

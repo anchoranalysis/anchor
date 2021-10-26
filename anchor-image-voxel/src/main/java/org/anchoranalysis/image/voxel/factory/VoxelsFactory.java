@@ -28,7 +28,7 @@ package org.anchoranalysis.image.voxel.factory;
 
 import java.nio.FloatBuffer;
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.VoxelsWrapper;
+import org.anchoranalysis.image.voxel.VoxelsUntyped;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedIntBuffer;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedShortBuffer;
@@ -38,7 +38,7 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeFactoryMultiplexer;
 import org.anchoranalysis.spatial.box.Extent;
 
 /**
- * Creates {@link VoxelsWrapper} and provides a singleton location for implementations of {@link VoxelsFactoryTypeBound} for different types.
+ * Creates {@link VoxelsUntyped} and provides a singleton location for implementations of {@link VoxelsFactoryTypeBound} for different types.
  * 
  * @author Owen Feehan
  *
@@ -77,28 +77,28 @@ public class VoxelsFactory extends VoxelDataTypeFactoryMultiplexer<VoxelsFactory
      * Creates voxels from a particular {@link SliceBufferIndex} with specified type.
      * 
      * @param <T> the buffer-type to use in the voxels.
-     * @param buffer the buffer to create a {@link VoxelsWrapper} from.
+     * @param buffer the buffer to create a {@link VoxelsUntyped} from.
      * @param dataType the data-type that should be compatible with {@code T}.
-     * @return a newly created {@link VoxelsWrapper} that reuses the memory in {@code buffer}.
+     * @return a newly created {@link VoxelsUntyped} that reuses the memory in {@code buffer}.
      */
-    public <T> VoxelsWrapper createFrom(SliceBufferIndex<T> buffer, VoxelDataType dataType) {
+    public <T> VoxelsUntyped createFrom(SliceBufferIndex<T> buffer, VoxelDataType dataType) {
         @SuppressWarnings("unchecked")
         VoxelsFactoryTypeBound<T> factory = (VoxelsFactoryTypeBound<T>) get(dataType);
         Voxels<T> voxels = factory.create(buffer);
-        return new VoxelsWrapper(voxels);
+        return new VoxelsUntyped(voxels);
     }
     
     /**
      * Creates empty voxels to match a particular size.
      * 
-     * @param extent the size of the {@link VoxelsWrapper} to create.
+     * @param extent the size of the {@link VoxelsUntyped} to create.
      * @param dataType the voxel data-type to create.
      * @return the created voxels.
      */
-    public VoxelsWrapper createEmpty(Extent extent, VoxelDataType dataType) {
+    public VoxelsUntyped createEmpty(Extent extent, VoxelDataType dataType) {
         VoxelsFactoryTypeBound<?> factory = get(dataType);
         Voxels<?> buffer = factory.createInitialized(extent);
-        return new VoxelsWrapper(buffer);
+        return new VoxelsUntyped(buffer);
     }
 
     /**

@@ -35,7 +35,7 @@ import net.imglib2.type.numeric.integer.UnsignedByteType;
 import net.imglib2.type.numeric.integer.UnsignedShortType;
 import net.imglib2.type.numeric.real.FloatType;
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.VoxelsWrapper;
+import org.anchoranalysis.image.voxel.VoxelsUntyped;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedShortBuffer;
@@ -56,7 +56,7 @@ import org.anchoranalysis.spatial.box.Extent;
 public class ConvertToImg {
 
     /**
-     * Converts from a {@link VoxelsWrapper} (Anchor structure) to a {@link Img} (ImgLib2
+     * Converts from a {@link VoxelsUntyped} (Anchor structure) to a {@link Img} (ImgLib2
      * structure).
      *
      * <p>The voxel buffers are reused (without duplication).
@@ -64,7 +64,7 @@ public class ConvertToImg {
      * @param voxels the voxels to convert.
      * @return an {@link Img} object reusing the buffers of {@code voxels}.
      */
-    public static Img<? extends RealType<?>> from(VoxelsWrapper voxels) { // NOSONAR
+    public static Img<? extends RealType<?>> from(VoxelsUntyped voxels) { // NOSONAR
 
         VoxelDataType dataType = voxels.getVoxelDataType();
 
@@ -81,14 +81,14 @@ public class ConvertToImg {
     }
 
     /**
-     * Creates an {@link Img} from a single z-slice of a {@link VoxelsWrapper}.
+     * Creates an {@link Img} from a single z-slice of a {@link VoxelsUntyped}.
      * 
      * @param voxels the voxels to extract z-slice from to create a {@link Img}.
      * @param sliceIndex the index of the slice in the z dimension.
      * @return a newly created {@link Img}, either reusing the memory in {@code voxels} or else a copy of it.
      */
     public static Img<? extends RealType<?>> fromSlice( // NOSONAR
-            VoxelsWrapper voxels, int sliceIndex) {
+            VoxelsUntyped voxels, int sliceIndex) {
         return fromBuffer(voxels.slice(sliceIndex), voxels.extent());
     }
 

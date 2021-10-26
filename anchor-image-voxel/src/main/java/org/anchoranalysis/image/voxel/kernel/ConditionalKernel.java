@@ -62,7 +62,7 @@ public class ConditionalKernel extends BinaryKernel {
     }
 
     @Override
-    public void notifyZChange(LocalSlices inSlices, int z) {
-        kernel.notifyZChange(inSlices, z);
+    public void notifyBuffer(LocalSlices slices, int sliceIndex) {
+        kernel.notifyBuffer(slices, sliceIndex);
     }
 }

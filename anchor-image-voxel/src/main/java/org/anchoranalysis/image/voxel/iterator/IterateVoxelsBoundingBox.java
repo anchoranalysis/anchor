@@ -409,7 +409,7 @@ public class IterateVoxelsBoundingBox {
 
                 for (point.setX(cornerMin.x()); point.x() < cornerMax.x(); point.incrementX()) {
                     process.process(cursor);
-                    cursor.incrementIndex();
+                    cursor.incrementIndexOnly();
                 }
             }
         }
@@ -455,7 +455,7 @@ public class IterateVoxelsBoundingBox {
                     if (predicate.test(cursor)) {
                         return true;
                     }
-                    cursor.incrementIndex();
+                    cursor.incrementIndexOnly();
                 }
             }
         }
