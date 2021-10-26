@@ -61,8 +61,9 @@ public class ObjectCollection implements Iterable<ObjectMask> {
     }
 
     /**
-     * Shifts the bounding-box of each object by adding to it i.e. adds a vector to the corner
-     * position.
+     * Shifts the bounding-box of each object by adding to it.
+     * 
+     * <p>i.e. adds a vector to the corner position.
      *
      * <p>This is an <b>immutable</b> operation.
      *
@@ -82,27 +83,38 @@ public class ObjectCollection implements Iterable<ObjectMask> {
         delegate.add(object);
     }
 
+    /**
+     * Adds all objects in {@code objects} to the collection.
+     * 
+     * @param objects the objects to add.
+     */
     public void addAll(ObjectCollection objects) {
         addAll(objects.delegate);
     }
 
-    public void addAll(Collection<? extends ObjectMask> c) {
-        delegate.addAll(c);
+    /**
+     * Adds all objects in {@code collection} to the collection.
+     * 
+     * @param collection the collection of objects to add.
+     */
+    public void addAll(Collection<? extends ObjectMask> collection) {
+        delegate.addAll(collection);
     }
 
     /**
      * Checks if two collections are equal in a shallow way.
      *
-     * <p>Specifically, objects are tested to be equal using their object references (i.e. they are
-     * equal iff they have the same reference).
+     * <p>Specifically, objects are tested to be equal using their object references.
+     * 
+     * <p>i.e. they are equal iff they have the same reference.
      *
      * <p>This is a cheaper equality check than with {@link #equalsDeep}.
      *
      * <p>Both collections must have identical ordering.
      */
     @Override
-    public boolean equals(Object arg0) {
-        return delegate.equals(arg0);
+    public boolean equals(Object other) {
+        return delegate.equals(other);
     }
 
     /**
@@ -115,6 +127,9 @@ public class ObjectCollection implements Iterable<ObjectMask> {
      * comparing objects that were instantiated in different places.
      *
      * <p>Both collections must have identical ordering.
+     * 
+     * @param other the collection to test equality with.
+     * @return true iff the the current collection is equal to {@code other}, as above.
      */
     public boolean equalsDeep(ObjectCollection other) {
         if (size() != other.size()) {
@@ -129,6 +144,13 @@ public class ObjectCollection implements Iterable<ObjectMask> {
         return true;
     }
 
+    /**
+     * Get an {@link ObjectMask} at a particular position in the collection.
+     * 
+     * @param index the index the object is located at.
+     * @return the object.
+     * @throws IndexOutOfBoundsException if the index is out of range.
+     */
     public ObjectMask get(int index) {
         return delegate.get(index);
     }
@@ -138,6 +160,11 @@ public class ObjectCollection implements Iterable<ObjectMask> {
         return delegate.hashCode();
     }
 
+    /**
+     * Whether the collection contains no objects.
+     *
+     * @return true iff the collection contains no objects.
+     */
     public boolean isEmpty() {
         return delegate.isEmpty();
     }
@@ -147,10 +174,20 @@ public class ObjectCollection implements Iterable<ObjectMask> {
         return delegate.iterator();
     }
 
+    /**
+     * Removes the object at the specified position in the collection.
+     * 
+     * @param index the position of the object to remove.
+     */
     public void remove(int index) {
         delegate.remove(index);
     }
 
+    /**
+     * The number of objects in the collection.
+     * 
+     * @return the number of elements.
+     */
     public int size() {
         return delegate.size();
     }
@@ -168,15 +205,15 @@ public class ObjectCollection implements Iterable<ObjectMask> {
 
         String sep = newlines ? "\n" : " ";
 
-        StringBuilder sb = new StringBuilder();
-        sb.append("( ");
+        StringBuilder builder = new StringBuilder();
+        builder.append("( ");
         for (int index = 0; index < delegate.size(); index++) {
 
-            sb.append(objectToString(delegate.get(index), index, includeIndices));
-            sb.append(sep);
+            builder.append(objectToString(delegate.get(index), index, includeIndices));
+            builder.append(sep);
         }
-        sb.append(")");
-        return sb.toString();
+        builder.append(")");
+        return builder.toString();
     }
 
     /**
@@ -216,32 +253,52 @@ public class ObjectCollection implements Iterable<ObjectMask> {
                                         .existsWith(objectToIntersectWith.boundingBox()));
     }
 
-    public boolean objectsAreAllInside(Extent e) {
+    public boolean objectsAreAllInside(Extent extent) {
         for (ObjectMask object : this) {
-            if (!e.contains(object.boundingBox().cornerMin())) {
+            if (!extent.contains(object.boundingBox().cornerMin())) {
                 return false;
             }
-            if (!e.contains(object.boundingBox().calculateCornerMax())) {
+            if (!extent.contains(object.boundingBox().calculateCornerMax())) {
                 return false;
             }
         }
         return true;
     }
 
+    /**
+     * The {@link BinaryValuesByte} associated with the first object in the collection.
+     * 
+     * @return the binary-values associated with the first object.
+     * @throws IndexOutOfBoundsException if the collection is empty.
+     */
     public BinaryValuesByte getFirstBinaryValuesByte() {
         return get(0).binaryValuesByte();
     }
 
+    /**
+     * The {@link BinaryValues} associated with the first object in the collection.
+     * 
+     * @return the binary-values associated with the first object.
+     * @throws IndexOutOfBoundsException if the collection is empty.
+     */
     public BinaryValues getFirstBinaryValues() {
         return get(0).binaryValues();
     }
 
-    /** Deep copy, including duplicating {@link ObjectMask}s. */
+    /** 
+     * Deep copy, including duplicating {@link ObjectMask}s.
+     *
+     * @return the deep-copy.
+     */
     public ObjectCollection duplicate() {
         return stream().map(ObjectMask::duplicate);
     }
 
-    /** Shallow copy of objects. */
+    /** 
+     * Shallow copy of objects.
+     * 
+     * @return the deep-copy.
+     */
     public ObjectCollection duplicateShallow() {
         return new ObjectCollection(streamStandardJava());
     }
@@ -271,7 +328,7 @@ public class ObjectCollection implements Iterable<ObjectMask> {
     }
 
     /***
-     * Provides various functional-programming operations on the object-collection
+     * Provides various functional-programming operations on the object-collection.
      *
      * @return a stream-like interface of operations.
      */
