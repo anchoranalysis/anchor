@@ -260,7 +260,7 @@ public final class KernelPointCursor {
     }
 
     /**
-     * True only when voxels outside the scene should <b>not be ignored</i> and considered as <i>off</i>.
+     * True only when voxels outside the scene should <b>not be ignored</b> and considered as <i>off</i>.
      * 
      * @return true iff both conditions above are true.
      */
