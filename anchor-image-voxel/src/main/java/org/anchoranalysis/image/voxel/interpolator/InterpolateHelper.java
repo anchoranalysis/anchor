@@ -26,21 +26,32 @@
 
 package org.anchoranalysis.image.voxel.interpolator;
 
-import com.google.common.base.Preconditions;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.image.voxel.VoxelsWrapper;
+import org.anchoranalysis.image.voxel.VoxelsUntyped;
 import org.anchoranalysis.image.voxel.datatype.FloatVoxelType;
 import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelTypeException;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
-import org.anchoranalysis.spatial.box.Extent;
 
+/**
+ * Helper utility functions for an {@link Interpolator}.
+ * 
+ * @author Owen Feehan
+ *
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class InterpolateUtilities {
+public class InterpolateHelper {
 
-    private static TransferViaSpecificType<?> createTransfer(
-            VoxelsWrapper source, VoxelsWrapper destination) {
+    /**
+     * Creates an implementation of {@link TransferViaSpecificType} of appropriate type for interpolation.
+     * 
+     * @param source the source voxels to be copied from.
+     * @param destination the destination voxels to be interpolated into.
+     * @return an appropriately-typed implementation of {@link TransferViaSpecificType}.
+     */
+    static TransferViaSpecificType<?> createTransfer(   // NOSONAR
+            VoxelsUntyped source, VoxelsUntyped destination) {
 
         if (!source.getVoxelDataType().equals(destination.getVoxelDataType())) {
             throw new IncorrectVoxelTypeException(
@@ -51,7 +62,7 @@ public class InterpolateUtilities {
             return new TransferViaSpecificType<>(
                     source,
                     destination,
-                    VoxelsWrapper::asByte,
+                    VoxelsUntyped::asByte,
                     (interpolator,
                             voxelsSource,
                             voxelsDestination,
@@ -66,7 +77,7 @@ public class InterpolateUtilities {
             return new TransferViaSpecificType<>(
                     source,
                     destination,
-                    VoxelsWrapper::asShort,
+                    VoxelsUntyped::asShort,
                     (interpolator,
                             voxelsSource,
                             voxelsDestination,
@@ -81,7 +92,7 @@ public class InterpolateUtilities {
             return new TransferViaSpecificType<>(
                     source,
                     destination,
-                    VoxelsWrapper::asFloat,
+                    VoxelsUntyped::asFloat,
                     (interpolator,
                             voxelsSource,
                             voxelsDestination,
@@ -96,32 +107,5 @@ public class InterpolateUtilities {
             throw new IncorrectVoxelTypeException(
                     "Only unsigned byte and short and float are supported");
         }
-    }
-
-    public static void transferSlicesResizeXY(
-            VoxelsWrapper src, VoxelsWrapper trgt, Interpolator interpolator) {
-
-        Extent extentSource = src.any().extent();
-        Extent extentTarget = trgt.any().extent();
-
-        TransferViaSpecificType<?> transfer = createTransfer(src, trgt);
-
-        for (int z = 0; z < extentSource.z(); z++) {
-
-            transfer.assignSlice(z);
-            if (extentSource.x() == extentTarget.x() && extentSource.y() == extentTarget.y()) {
-                transfer.transferCopyTo(z);
-            } else {
-                if (extentSource.x() != 1 && extentSource.y() != 1) {
-                    // We only bother to interpolate when we have more than a single pixel in both
-                    // directions
-                    // And in this case, some of the interpolation algorithms would crash.
-                    transfer.transferTo(z, interpolator);
-                } else {
-                    transfer.transferTo(z, InterpolatorFactory.getInstance().noInterpolation());
-                }
-            }
-        }
-        Preconditions.checkArgument(trgt.slice(0).capacity() == extentTarget.areaXY());
     }
 }

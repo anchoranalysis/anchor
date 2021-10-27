@@ -34,26 +34,31 @@ import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedIntBuffer;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedShortBuffer;
 import org.anchoranalysis.spatial.point.ReadableTuple3i;
 
+/**
+ * Creates {@link VoxelsAssigner} for buffers of different types.
+ *
+ * @author Owen Feehan
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class VoxelsAssignerFactory {
 
     /**
-     * Create voxels-assigner for {@link UnsignedByteBuffer}.
+     * Create a {@link VoxelsAssigner} for a {@link UnsignedByteBuffer}.
      *
-     * @param voxels the voxels on which arithmetic is to be performed
-     * @param valueToAssign the voxel-value to assign
-     * @return a newly created assigner
+     * @param voxels the voxels on which arithmetic is to be performed.
+     * @param valueToAssign the voxel-value to assign.
+     * @return a newly created assigner.
      */
     public static VoxelsAssigner createByte(Voxels<UnsignedByteBuffer> voxels, int valueToAssign) {
         return new ByteImplementation(voxels, valueToAssign);
     }
 
     /**
-     * Create voxels-assigner for {@link UnsignedShortBuffer}.
+     * Create a {@link VoxelsAssigner} for a {@link UnsignedShortBuffer}.
      *
-     * @param voxels the voxels on which arithmetic is to be performed
-     * @param valueToAssign the voxel-value to assign
-     * @return a newly created assigner
+     * @param voxels the voxels on which arithmetic is to be performed.
+     * @param valueToAssign the voxel-value to assign.
+     * @return a newly created assigner.
      */
     public static VoxelsAssigner createShort(
             Voxels<UnsignedShortBuffer> voxels, int valueToAssign) {
@@ -61,37 +66,37 @@ public class VoxelsAssignerFactory {
     }
 
     /**
-     * Create voxels-assigner for {@link FloatBuffer}.
+     * Create a {@link VoxelsAssigner} for a {@link FloatBuffer}.
      *
-     * @param voxels the voxels on which arithmetic is to be performed
-     * @param valueToAssign the voxel-value to assign
-     * @return a newly created assigner
+     * @param voxels the voxels on which arithmetic is to be performed.
+     * @param valueToAssign the voxel-value to assign.
+     * @return a newly created assigner.
      */
     public static VoxelsAssigner createFloat(Voxels<FloatBuffer> voxels, int valueToAssign) {
         return new FloatImplementation(voxels, valueToAssign);
     }
 
     /**
-     * Create voxels-assigner for {@link UnsignedIntBuffer}.
+     * Create a a {@link VoxelsAssigner} for a {@link UnsignedIntBuffer}.
      *
-     * @param voxels the voxels on which arithmetic is to be performed
-     * @param valueToAssign the voxel-value to assign
-     * @return a newly created assigner
+     * @param voxels the voxels on which arithmetic is to be performed.
+     * @param valueToAssign the voxel-value to assign.
+     * @return a newly created assigner.
      */
     public static VoxelsAssigner createInt(Voxels<UnsignedIntBuffer> voxels, int valueToAssign) {
         return new IntImplementation(voxels, valueToAssign);
     }
 
     /**
-     * Shifts all coordinates BACKWARDS before passing to another {@link VoxelsAssigner}.
+     * Shifts all coordinates <b>backwards</b> before passing to another {@link VoxelsAssigner}.
      *
      * <p>This is useful for translating from global coordinates to relative coordinates e.g.
      * translating the global coordinate systems used in {@code BoundedVoxels} to relative
      * coordinates for underlying voxel buffer.
      *
-     * @param voxelsAssigner the delegate where the shifted coordinates are passed to
-     * @param shift how much to shift back by
-     * @return a newly created assigner that performs a shift after calling the existing assigner
+     * @param voxelsAssigner the delegate where the shifted coordinates are passed to.
+     * @param shift how much to shift back by.
+     * @return a newly created assigner that performs a shift after calling the existing assigner.
      */
     public static VoxelsAssigner shiftBackBy(VoxelsAssigner voxelsAssigner, ReadableTuple3i shift) {
         return new ShiftBackwardsBy(voxelsAssigner, shift);

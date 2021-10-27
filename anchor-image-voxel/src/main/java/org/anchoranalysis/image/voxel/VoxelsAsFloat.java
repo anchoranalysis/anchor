@@ -36,10 +36,21 @@ import org.anchoranalysis.image.voxel.extracter.VoxelsExtracter;
 import org.anchoranalysis.image.voxel.extracter.VoxelsExtracterFactory;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 
+/**
+ * Implementation of {@link Voxels} whose voxels are of type <i>float</i>.
+ * 
+ * @author Owen Feehan
+ *
+ */
 public final class VoxelsAsFloat extends Voxels<FloatBuffer> {
 
-    public VoxelsAsFloat(SliceBufferIndex<FloatBuffer> slices) {
-        super(slices, VoxelsFactory.getFloat(), createArithmetic(slices));
+    /**
+     * Create from a buffer, indexed by slice.
+     * 
+     * @param buffer the buffer.
+     */
+    public VoxelsAsFloat(SliceBufferIndex<FloatBuffer> buffer) {
+        super(buffer, VoxelsFactory.getFloat(), createArithmetic(buffer));
     }
 
     @Override
@@ -47,8 +58,8 @@ public final class VoxelsAsFloat extends Voxels<FloatBuffer> {
         return VoxelsAssignerFactory.createFloat(this, valueToAssign);
     }
 
-    private static VoxelsArithmetic createArithmetic(SliceBufferIndex<FloatBuffer> slices) {
-        return VoxelsArithmeticFactory.createFloat(slices.extent(), slices::sliceBuffer);
+    private static VoxelsArithmetic createArithmetic(SliceBufferIndex<FloatBuffer> buffer) {
+        return VoxelsArithmeticFactory.createFloat(buffer.extent(), buffer::sliceBuffer);
     }
 
     @Override

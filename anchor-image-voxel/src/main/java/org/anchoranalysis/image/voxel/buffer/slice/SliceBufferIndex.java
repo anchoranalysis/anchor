@@ -39,22 +39,45 @@ import org.anchoranalysis.spatial.box.Extent;
  */
 public interface SliceBufferIndex<T> {
 
+    /**
+     * A {@link VoxelBuffer} corresponding to a particular z-slice.
+     *
+     * @param z the index (beginning at 0) of all z-slices.
+     * @return the corresponding buffer for {@code z}.
+     */
     VoxelBuffer<T> slice(int z);
 
-    void replaceSlice(int z, VoxelBuffer<T> pixels);
-
-    Extent extent();
-
+    /**
+     * The underlying buffer corresponding to a particular z-slice.
+     * 
+     * @param z the index (beginning at 0) of all z-slices.
+     * @return the corresponding buffer for {@code z}.
+     */
     default T sliceBuffer(int z) {
         return slice(z).buffer();
     }
+    
+    /**
+     * Replaces the voxels for a particular z-slice.
+     * 
+     * @param z the index of z-slice to replace.
+     * @param sliceToAssign the voxels for the new slice to assign.
+     */
+    void replaceSlice(int z, VoxelBuffer<T> sliceToAssign);
 
     /**
-     * Calls {@code sliceConsumer} once for each slice with the respective buffer
+     * The size of each buffer.
+     * 
+     * @return the size.
+     */
+    Extent extent();
+
+    /**
+     * Calls {@code sliceConsumer} once for each slice with the respective buffer.
      *
-     * <p>This occurs sequentially from 0 (inclusive) to {@code z()} (exclusive)
+     * <p>This occurs sequentially from 0 (inclusive) to {@code z()} (exclusive).
      *
-     * @param sliceConsumer called for each index (z-value)
+     * @param sliceConsumer called for each index (z-value).
      */
     default void iterateOverSlices(Consumer<VoxelBuffer<T>> sliceConsumer) {
         int zMax = extent().z();
@@ -64,12 +87,12 @@ public interface SliceBufferIndex<T> {
     }
 
     /**
-     * Calls {@code process} for each offset in each slice
+     * Calls {@code process} for each offset in each slice.
      *
      * <p>This occurs sequentially from 0 (inclusive) to {@code extent.z()} (exclusive) and from 0
-     * (inclusive) to {@code extent.x() * extent.y()} (exclusive) for the offsets
+     * (inclusive) to {@code extent.x() * extent.y()} (exclusive) for the offsets.
      *
-     * @param process called for each offset on each slice
+     * @param process called for each offset on each slice.
      */
     default void iterateOverSlicesAndOffsets(ProcessVoxelBufferUnary<T> process) {
         iterateOverSlices(

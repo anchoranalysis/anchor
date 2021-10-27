@@ -38,12 +38,12 @@ import org.anchoranalysis.spatial.point.Point3d;
 final class CenterOfGravityCalculator {
 
     /**
-     * Calculates the center of gravity of an object-mask treating all pixels of equal weight.
+     * Calculates the center of gravity of an object-mask treating all voxels of equal weight.
      *
-     * <p>Specifically this is the mean of the position coordinates in each dimension
+     * <p>This is the mean of the position coordinates in each dimension.
      *
-     * @param object
-     * @return the center-of-gravity or (NaN, NaN, NaN) if there are no pixels.
+     * @param object the object to calculate a center-of-gravity for.
+     * @return the center-of-gravity or {@code (NaN, NaN, NaN)} if there are no voxels.
      */
     public static Point3d centerOfGravity(ObjectMask object) {
 
@@ -83,7 +83,7 @@ final class CenterOfGravityCalculator {
      *
      * @param object the object whose center-of-gravity is to be calculated on one axis.
      * @param axis which axis
-     * @return the cog for that axis, or NaN if there are no points.
+     * @return the cog for that axis, or {@code NaN} if there are no points.
      */
     public static double centerOfGravityForAxis(ObjectMask object, Axis axis) {
 

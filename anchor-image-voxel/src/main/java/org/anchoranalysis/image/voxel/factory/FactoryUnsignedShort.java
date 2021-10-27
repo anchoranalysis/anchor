@@ -41,8 +41,8 @@ final class FactoryUnsignedShort implements VoxelsFactoryTypeBound<UnsignedShort
 
     @Override
     public Voxels<UnsignedShortBuffer> create(
-            SliceBufferIndex<UnsignedShortBuffer> pixelsForPlane) {
-        return new VoxelsAsShort(pixelsForPlane);
+            SliceBufferIndex<UnsignedShortBuffer> voxels) {
+        return new VoxelsAsShort(voxels);
     }
 
     @Override

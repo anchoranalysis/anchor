@@ -36,12 +36,20 @@ import org.anchoranalysis.spatial.point.Point3i;
  * A mutable context around determining whether a particular point should be <i>on</i> or <i>off</i>
  * with a {@link BinaryKernel}.
  *
- * <p>It can be used to efficiently iterate over the neighbours around a particular point.
+ * <p>It can be used to efficiently iterate over the neighbors around a particular point.
+ * 
+ * <p>Both a {@link Point3i} and an associated index (in a voxel buffer} are kept as mutable state,
+ * that are generally changed together in a single operation.
  *
  * @author Owen Feehan
  */
 public final class KernelPointCursor {
 
+    /** 
+     * The index in the buffer that the kernel currently is focussed on.
+     *
+     * <p>The buffer pertains to the X and Y dimensions only.
+     */
     @Getter @Setter private int index;
 
     /** The point around which the cursor may iterate. */
@@ -50,7 +58,9 @@ public final class KernelPointCursor {
     private final BinaryValuesByte binaryValues;
     private final KernelApplicationParameters params;
 
+    /** The size of the image the kernel iterates over. */
     @Getter private final Extent extent;
+    
     private final int xExtent;
     private final int yExtent;
 
@@ -60,6 +70,15 @@ public final class KernelPointCursor {
      */
     private final int xExtentTwice;
 
+    /**
+     * Creates to be focused around a particular point in the image.
+     * 
+     * @param index the index in the buffer referring to {@code point}.
+     * @param point the point in the image (in three dimensions) where current focus resides. 
+     * @param extent the size of the image.
+     * @param binaryValues what intensity values define <i>on</i> and <i>off</i> states.
+     * @param params parameters that influence how the kernel is applied.
+     */
     public KernelPointCursor(
             int index,
             Point3i point,
@@ -76,90 +95,176 @@ public final class KernelPointCursor {
         this.params = params;
     }
 
+    /**
+     * Increments the point and associated index by one in the X dimension.
+     */
     public void incrementX() {
         point.incrementX();
         index++;
     }
 
+    /**
+     * Increments the point and associated index by two in the X dimension.
+     */
     public void incrementXTwice() {
         point.incrementX(2);
         index += 2;
     }
 
+    /**
+     * Decrements the point and associated index by one in the X dimension.
+     */
     public void decrementX() {
         point.decrementX();
         index--;
     }
 
+    /**
+     * Increments the point and associated index by one in the Y dimension.
+     */
     public void incrementY() {
         point.incrementY();
         index += xExtent;
     }
 
+    /**
+     * Increments the point and associated index by two in the Y dimension.
+     */
     public void incrementYTwice() {
         point.incrementY(2);
         index += xExtentTwice;
     }
 
+    /**
+     * Decrements the point and associated index by one in the Y dimension.
+     */
     public void decrementY() {
         point.decrementY();
         index -= xExtent;
     }
 
+    /**
+     * Decrements the point and associated index by two in the Y dimension.
+     */
     public void decrementYTwice() {
         point.decrementY(2);
         index -= xExtentTwice;
     }
 
+    /**
+     * Increments the point by one in the Z dimension.
+     * 
+     * <p>The associated index remains unchanged.
+     */
     public void incrementZ() {
         point.incrementZ();
     }
 
+    /**
+     * Increments the point by two in the Z dimension.
+     * 
+     * <p>The associated index remains unchanged.
+     */
     public void incrementZTwice() {
         point.incrementZ(2);
     }
 
+    /**
+     * Decrements the point by one in the Z dimension.
+     * 
+     * <p>The associated index remains unchanged.
+     */
     public void decrementZ() {
         point.decrementZ();
     }
+    
+    /**
+     * Increments the current index state by one, <i>without</i> changing the current point state.
+     */
+    public void incrementIndexOnly() {
+        index++;
+    }
 
+    /** 
+     * Whether to additionally apply the kernel along the Z dimension, as well as X and Y?
+     *
+     * @return true iff the kernel should additionally be applied along the Z dimension.
+     */
     public boolean isUseZ() {
         return params.isUseZ();
     }
 
+    /**
+     * Whether the current point is non-negative in the X-dimension?
+     * 
+     * @return true iff the condition is fulfilled.
+     */
     public boolean nonNegativeX() {
         return point.x() >= 0;
     }
 
+    /**
+     * Whether the current point is non-negative in the Y-dimension?
+     * 
+     * @return true iff the condition is fulfilled.
+     */
     public boolean nonNegativeY() {
         return point.y() >= 0;
     }
 
+    /**
+     * Whether the current point is less than the image's extent in the X-dimension?
+     * 
+     * @return true iff the condition is fulfilled.
+     */
     public boolean lessThanMaxX() {
         return point.x() < xExtent;
     }
 
+    /**
+     * Whether the current point is less than the image's extent in the Y-dimension?
+     * 
+     * @return true iff the condition is fulfilled.
+     */
     public boolean lessThanMaxY() {
         return point.y() < yExtent;
     }
 
+    /**
+     * Is the value at the current index in this buffer corresponding to an <i>on</i> state?
+     * 
+     * @param buffer the buffer containing the value that will be tested.
+     * @return true if the value corresponds to an <i>on</i> state.
+     */
     public boolean isBufferOn(UnsignedByteBuffer buffer) {
         return binaryValues.isOn(buffer.getRaw(index));
     }
 
+    /**
+     * Is the value at the current index in this buffer corresponding to an <i>off</i> state?
+     * 
+     * @param buffer the buffer containing the value that will be tested.
+     * @return true if the value corresponds to an <i>off</i> state.
+     */
     public boolean isBufferOff(UnsignedByteBuffer buffer) {
         return binaryValues.isOff(buffer.getRaw(index));
     }
 
+    /**
+     * Whether to treat voxels that lie outside the scene as <i>on</i> (if true) or <i>off</i> (if false).
+     * 
+     * @return true if voxels lying outside the scene should be treated as <i>on</i> in the above circumstance, otherwise they are treated as <i>off</i>.
+     */
     public boolean isOutsideOn() {
         return params.isOutsideOn();
     }
 
+    /**
+     * True only when voxels outside the scene should <b>not be ignored</b> and considered as <i>off</i>.
+     * 
+     * @return true iff both conditions above are true.
+     */
     public boolean isOutsideOffUnignored() {
         return params.isOutsideOffUnignored();
-    }
-
-    public void incrementIndex() {
-        index++;
     }
 }

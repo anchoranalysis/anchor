@@ -36,10 +36,21 @@ import org.anchoranalysis.image.voxel.extracter.VoxelsExtracter;
 import org.anchoranalysis.image.voxel.extracter.VoxelsExtracterFactory;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 
+/**
+ * Implementation of {@link Voxels} whose voxels are of type <i>unsigned short</i> (16-bit).
+ * 
+ * @author Owen Feehan
+ *
+ */
 public final class VoxelsAsShort extends Voxels<UnsignedShortBuffer> {
 
-    public VoxelsAsShort(SliceBufferIndex<UnsignedShortBuffer> slices) {
-        super(slices, VoxelsFactory.getUnsignedShort(), createArithmetic(slices));
+    /**
+     * Create from a buffer, indexed by slice.
+     * 
+     * @param buffer the buffer.
+     */
+    public VoxelsAsShort(SliceBufferIndex<UnsignedShortBuffer> buffer) {
+        super(buffer, VoxelsFactory.getUnsignedShort(), createArithmetic(buffer));
     }
 
     @Override
@@ -47,8 +58,8 @@ public final class VoxelsAsShort extends Voxels<UnsignedShortBuffer> {
         return VoxelsAssignerFactory.createShort(this, valueToAssign);
     }
 
-    private static VoxelsArithmetic createArithmetic(SliceBufferIndex<UnsignedShortBuffer> slices) {
-        return VoxelsArithmeticFactory.createShort(slices.extent(), slices::sliceBuffer);
+    private static VoxelsArithmetic createArithmetic(SliceBufferIndex<UnsignedShortBuffer> buffer) {
+        return VoxelsArithmeticFactory.createShort(buffer.extent(), buffer::sliceBuffer);
     }
 
     @Override

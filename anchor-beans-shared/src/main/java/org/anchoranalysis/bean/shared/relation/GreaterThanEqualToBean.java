@@ -33,9 +33,8 @@ import org.anchoranalysis.math.relation.GreaterThanEqualTo;
 
 /**
  * A relation {@code double1 >= double2}.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 @EqualsAndHashCode(callSuper = true)
 public class GreaterThanEqualToBean extends RelationBean {

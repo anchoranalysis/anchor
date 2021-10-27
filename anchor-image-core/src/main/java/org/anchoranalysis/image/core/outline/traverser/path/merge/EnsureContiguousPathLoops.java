@@ -111,7 +111,7 @@ class EnsureContiguousPathLoops {
 
             minCostIndexes = new IndexOffsets(path.size());
 
-            // PLACES BOUNDS ON WHERE WE SEARCH
+            // PLACES BOUNDS <i>on</i> WHERE WE SEARCH
             // We will never search beyond this index, as a cost will
             //  always be greater than one we already found
             boundIndexes = new IndexOffsets(path.size(), path.size(), 0);

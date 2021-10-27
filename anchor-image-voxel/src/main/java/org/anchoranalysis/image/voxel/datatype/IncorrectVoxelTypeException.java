@@ -28,16 +28,32 @@ package org.anchoranalysis.image.voxel.datatype;
 
 import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
 
+/**
+ * When an unexpected {@link VoxelDataType} is encountered.
+ * 
+ * @author Owen Feehan
+ *
+ */
 public class IncorrectVoxelTypeException extends AnchorFriendlyRuntimeException {
 
     /** */
     private static final long serialVersionUID = 1L;
 
-    public IncorrectVoxelTypeException(String msg) {
-        super(msg);
+    /**
+     * Create with only a message.
+     * 
+     * @param message the message.
+     */
+    public IncorrectVoxelTypeException(String message) {
+        super(message);
     }
 
-    public IncorrectVoxelTypeException(Throwable exc) {
-        super(exc);
+    /**
+     * Create with only a cause.
+     * 
+     * @param cause the cause.
+     */
+    public IncorrectVoxelTypeException(Throwable cause) {
+        super(cause);
     }
 }

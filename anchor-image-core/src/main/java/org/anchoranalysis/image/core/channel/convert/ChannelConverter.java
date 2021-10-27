@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.image.core.channel.convert;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.anchoranalysis.core.exception.OperationFailedException;
@@ -40,47 +41,58 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactoryTypeBound;
 
 /**
- * Converts a channel from one type to another specific type.
+ * Base class to convert {@link Channel}s from one type to another specific type.
  *
  * @author Owen Feehan
  * @param <T> type to convert to (destination-type)
  */
-@AllArgsConstructor
+@AllArgsConstructor(access=AccessLevel.PROTECTED)
 public abstract class ChannelConverter<T> {
 
-    private VoxelDataType dataTypeTarget;
+    /** The voxel data-type to convert each {@link Channel}'s voxels to. */
+    private VoxelDataType targetDataType;
+    
+    /** A converter used to change the {@link Voxels} to {@code targetDataType}. */
     @Getter private VoxelsConverter<T> voxelsConverter;
+    
+    /** The factory used to create new {@link Voxels}. */
     private VoxelsFactoryTypeBound<T> voxelsFactory;
 
-    public Stack convert(Stack stackIn, ConversionPolicy changeExisting) {
-        Stack stackOut = new Stack();
+    /**
+     * Like {@link #convert(Channel, ConversionPolicy)} but converts every channel in a {@link Stack}.
+     * 
+     * @param stack the stack whose channels will be  converted.
+     * @param changeExisting if true, the existing channels will be changed in-place, otherwise a new channel will be created.
+     * @return a newly created {@link Stack} containing converted versions of each respective channel in {@code stack}.
+     */
+    public Stack convert(Stack stack, ConversionPolicy changeExisting) {
+        Stack out = new Stack();
 
-        for (Channel channel : stackIn) {
+        for (Channel channel : stack) {
             try {
-                stackOut.addChannel(convert(channel, changeExisting));
+                out.addChannel(convert(channel, changeExisting));
             } catch (IncorrectImageSizeException e) {
                 // Should never happen as sizes are correct in the incoming stack
                 assert false;
             }
         }
-        return stackOut;
+        return out;
     }
 
     /**
-     * Converts {@code channelIn} to have voxels with data-type {@code T}.
+     * Converts {@code channel} to have voxels with data-type {@code T}.
      *
      * <p>This can occur by either replacing the existing voxels in the channel, or creating a new
      * channel entirely.
      *
      * @param channel channel whose voxels will be converted.
-     * @param changeExisting if true, the contents of the existing channel will be changed with the
-     *     new type, if false, rather a new channel will be created.
-     * @return
+     * @param changeExisting if true, the existing channels will be changed in-place, otherwise a new channel will be created.
+     * @return the converted channel, either the existing channel, or a newly-created one, as per above.
      */
     public Channel convert(Channel channel, ConversionPolicy changeExisting) {
 
         // Nothing to do
-        if (channel.getVoxelDataType().equals(dataTypeTarget)
+        if (channel.getVoxelDataType().equals(targetDataType)
                 && changeExisting != ConversionPolicy.ALWAYS_NEW) {
             return channel;
         }
@@ -92,6 +104,7 @@ public abstract class ChannelConverter<T> {
         }
     }
 
+    /** Convert in-place. */
     private Channel convertExisting(Channel channel) {
         try {
             // We need to create a new voxel buffer
@@ -104,10 +117,11 @@ public abstract class ChannelConverter<T> {
         return channel;
     }
 
+    /** Convert, creating a new {@link Channel}. */
     private Channel convertCreateNew(Channel channel) {
-        Channel out = ChannelFactory.instance().create(channel.dimensions(), dataTypeTarget);
+        Channel out = ChannelFactory.instance().create(channel.dimensions(), targetDataType);
         @SuppressWarnings("unchecked")
-        Voxels<T> voxels = (Voxels<T>) out.voxels().match(dataTypeTarget);
+        Voxels<T> voxels = (Voxels<T>) out.voxels().checkIdenticalDataType(targetDataType);
         try {
             voxelsConverter.copyFrom(channel.voxels(), voxels);
         } catch (OperationFailedException e) {

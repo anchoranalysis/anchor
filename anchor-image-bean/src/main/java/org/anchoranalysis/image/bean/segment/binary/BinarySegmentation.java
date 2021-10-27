@@ -31,7 +31,7 @@ import org.anchoranalysis.bean.annotation.GroupingRoot;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.bean.nonbean.segment.BinarySegmentationParameters;
 import org.anchoranalysis.image.bean.segment.SegmentationBean;
-import org.anchoranalysis.image.voxel.VoxelsWrapper;
+import org.anchoranalysis.image.voxel.VoxelsUntyped;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
@@ -40,8 +40,8 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
 public abstract class BinarySegmentation extends SegmentationBean<BinarySegmentation> {
 
     /**
-     * Performs a segmentation on voxels so that each voxel has an ON or OFF state after the
-     * operation.
+     * Performs a segmentation on voxels so that each voxel has an <i>on</i> or <i>off</i> state
+     * after the operation.
      *
      * @param voxels voxels to segment
      * @param params parameters to guide the algorithm
@@ -50,7 +50,7 @@ public abstract class BinarySegmentation extends SegmentationBean<BinarySegmenta
      * @throws SegmentationFailedException
      */
     public abstract BinaryVoxels<UnsignedByteBuffer> segment(
-            VoxelsWrapper voxels,
+            VoxelsUntyped voxels,
             BinarySegmentationParameters params,
             Optional<ObjectMask> objectMask)
             throws SegmentationFailedException;

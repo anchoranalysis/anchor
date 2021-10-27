@@ -29,7 +29,6 @@ package org.anchoranalysis.image.voxel.binary;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.experimental.Accessors;
-import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.assigner.VoxelsAssigner;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValues;
@@ -39,8 +38,8 @@ import org.anchoranalysis.image.voxel.extracter.VoxelsExtracter;
 import org.anchoranalysis.spatial.box.Extent;
 
 /**
- * Like {@link Voxels} but should only contain two distinct intensity-values representing ON and OFF
- * states.
+ * Like {@link Voxels} but should only contain two distinct intensity-values representing <i>on</i>
+ * and <i>off</i>. states.
  *
  * @author Owen Feehan
  * @param <T> buffer-type
@@ -50,16 +49,16 @@ import org.anchoranalysis.spatial.box.Extent;
 public abstract class BinaryVoxels<T> implements BinaryOnOffSetter {
 
     /**
-     * Voxels that should only have two intensity-values (representing ON and OFF states). This is
-     * not checked as a precondition.
+     * Voxels that should only have two intensity-values (representing <i>on</i> and <i>off</i>
+     * states). This is not checked as a precondition.
      */
     @Getter private final Voxels<T> voxels;
 
-    /** Which two intensity values represent OFF and ON states */
+    /** Which two intensity values represent <i>off</i> and <i>on</i> states. */
     @Getter private BinaryValues binaryValues;
 
     /**
-     * Changes the OFF state to be the ON state and vice-versa.
+     * Changes the <i>off</i> state to be the <i>on</i> state and vice-versa.
      *
      * <p>Only the {@code binaryValues} (acting as an index to the intensity values) is changed; the
      * voxels remain themselves unchanged.
@@ -68,58 +67,134 @@ public abstract class BinaryVoxels<T> implements BinaryOnOffSetter {
         binaryValues = binaryValues.createInverted();
     }
 
+    /**
+     * The size of the voxels across three dimensions.
+     *
+     * @return the size.
+     */
     public Extent extent() {
         return voxels.extent();
     }
 
+    /**
+     * At least one voxel exists with an <i>on</i> value.
+     *
+     * @return true iff at least one such voxel exists.
+     */
     public boolean hasOnVoxel() {
         return voxels.extract().voxelsEqualTo(binaryValues.getOnInt()).anyExists();
     }
 
+    /**
+     * At least one voxel exists with an <i>off</i> value.
+     *
+     * @return true iff at least one such voxel exists.
+     */
     public boolean hasOffVoxel() {
         return voxels.extract().voxelsEqualTo(binaryValues.getOffInt()).anyExists();
     }
 
+    /**
+     * Deep-copy of the object, including duplicating voxel buffers in memory.
+     * 
+     * @return a deep-copy.
+     */
     public abstract BinaryVoxels<T> duplicate();
 
-    public BinaryVoxels<T> extractSlice(int z) throws CreateException {
-        return binaryVoxelsFor(extract().slice(z), binaryValues());
-    }
-
-    protected abstract BinaryVoxels<T> binaryVoxelsFor(Voxels<T> slice, BinaryValues binaryValues);
-
-    public void updateSlice(int z, VoxelBuffer<T> buffer) {
-        voxels.replaceSlice(z, buffer);
-    }
-
-    public VoxelsAssigner assignOn() {
-        return voxels.assignValue(binaryValues.getOnInt());
-    }
-
-    public VoxelsAssigner assignOff() {
-        return voxels.assignValue(binaryValues.getOffInt());
-    }
-
-    public int countOn() {
-        return voxels.extract().voxelsEqualTo(binaryValues.getOnInt()).count();
-    }
-
-    public int countOff() {
-        return voxels.extract().voxelsEqualTo(binaryValues.getOffInt()).count();
-    }
-
+    /**
+     * A buffer corresponding to a particular z-slice.
+     *
+     * <p>This buffer is either a NIO or other classes that wraps the underlying array storing voxel
+     * intensities.
+     *
+     * @param z the index (beginning at 0) of all z-slices.
+     * @return the corresponding buffer for {@code z}.
+     */
     public T sliceBuffer(int z) {
         return voxels.sliceBuffer(z);
     }
 
+    /**
+     * A {@link VoxelBuffer} corresponding to a particular z-slice.
+     *
+     * @param z the index (beginning at 0) of all z-slices.
+     * @return the corresponding buffer for {@code z}.
+     */
     public VoxelBuffer<T> slice(int z) {
         return voxels.slice(z);
     }
+    
+    /**
+     * A particular z-slice, wrapped into a {@link BinaryVoxels}.
+     *
+     * @param z the index (beginning at 0) of all z-slices.
+     * @return a newly created {@link BinaryVoxels} wrapping the single z-slice at position {@code z}.
+     */
+    public BinaryVoxels<T> sliceBinary(int z) {
+        return binaryVoxelsFor(extract().slice(z), binaryValues());
+    }
 
+    /**
+     * Creates a {@link BinaryVoxels} corresponding to a particular voxels and {@link BinaryValues}.
+     * 
+     * @param voxels the voxels.
+     * @param binaryValues the binary-values.
+     * @return the newly created {@link BinaryVoxels}.
+     */
+    protected abstract BinaryVoxels<T> binaryVoxelsFor(Voxels<T> voxels, BinaryValues binaryValues);
+
+    /**
+     * Creates an assigner that may set the <i>on</i> state in subsequently specified regions of the voxels.
+     * 
+     * @return a newly created assigner.
+     */
+    public VoxelsAssigner assignOn() {
+        return voxels.assignValue(binaryValues.getOnInt());
+    }
+
+    /**
+     * Creates an assigner that may set the <i>off</i> state in subsequently specified regions of the voxels.
+     * 
+     * @return a newly created assigner.
+     */
+    public VoxelsAssigner assignOff() {
+        return voxels.assignValue(binaryValues.getOffInt());
+    }
+
+    /**
+     * Counts the number of voxels with an <i>on</i> state.
+     * 
+     * @return the total number of voxels with an on state.
+     */
+    public int countOn() {
+        return voxels.extract().voxelsEqualTo(binaryValues.getOnInt()).count();
+    }
+
+    /**
+     * Counts the number of voxels with an <i>off</i> state.
+     * 
+     * @return the total number of voxels with an off state.
+     */
+    public int countOff() {
+        return voxels.extract().voxelsEqualTo(binaryValues.getOffInt()).count();
+    }
+
+    /**
+     * Interface that allows read/copy/duplication operations to be performed regarding the voxels
+     * intensities.
+     *
+     * @return the interface.
+     */
     public VoxelsExtracter<T> extract() {
         return voxels.extract();
     }
 
+    /**
+     * An index mapping slice of voxels (in the z dimension) to a particular buffer with the
+     * corresponding voxel intensities.
+     *
+     * @return the index.
+     */
     public SliceBufferIndex<T> slices() {
         return voxels.slices();
     }

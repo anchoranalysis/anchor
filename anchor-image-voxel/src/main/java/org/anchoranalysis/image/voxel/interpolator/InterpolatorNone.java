@@ -32,7 +32,11 @@ import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedShortBuffer;
 import org.anchoranalysis.spatial.box.Extent;
 
-/** Doesn't do any interpolation, just copies values */
+/** 
+ * Doesn't do any interpolation, just copies a single value for each voxel.
+ * 
+ * <p>Specifically, each voxel in the destination buffer is copied from the corresponding (minimal in each dimension) voxel in the source-buffer.
+ */
 public class InterpolatorNone implements Interpolator {
 
     @Override
@@ -68,6 +72,12 @@ public class InterpolatorNone implements Interpolator {
                 voxelsSource.buffer(), voxelsDestination.buffer(), extentSource, extentDestination);
         return voxelsDestination;
     }
+
+    @Override
+    public boolean canValueRangeChange() {
+        return false;
+    }
+    
 
     private static void copyByte(
             UnsignedByteBuffer bufferIn,
@@ -135,10 +145,5 @@ public class InterpolatorNone implements Interpolator {
 
     private static int intMin(double val1, int val2) {
         return (int) Math.min(Math.round(val1), val2);
-    }
-
-    @Override
-    public boolean isNewValuesPossible() {
-        return false;
     }
 }

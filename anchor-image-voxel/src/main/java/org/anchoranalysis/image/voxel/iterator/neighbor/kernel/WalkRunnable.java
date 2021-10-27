@@ -36,14 +36,14 @@ import org.anchoranalysis.image.voxel.kernel.KernelPointCursor;
 import org.anchoranalysis.spatial.point.Point3i;
 
 /**
- * Walks in X, Y and Z directions from a point, executing a {@link Runnable} if the neighbour
+ * Walks in X, Y and Z directions from a point, executing a {@link Runnable} if the neighbor
  * satisfies conditions.
  *
  * <p>The conditions are:
  *
  * <ul>
- *   <li>An associated buffer for the point must have an OFF value, <i>or</i> if its outside the
- *       scene, the {@link KernelApplicationParameters} parameters must indicate off.
+ *   <li>An associated buffer for the point must have an <i>off</i> value, <i>or</i> if its outside
+ *       the scene, the {@link KernelApplicationParameters} parameters must indicate off.
  *   <li>An additional predicate around the point.
  * </ul>
  *

@@ -44,7 +44,7 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
 public class MaskInverter {
 
     /**
-     * Creates a new object-mask where OFF voxels become ON voxels and vice versa
+     * Creates a new object-mask where <i>off</i> voxels become <i>on</i> voxels and vice versa
      *
      * @param object object to invert (unmodified)
      * @return a newly created inverted object
@@ -56,7 +56,7 @@ public class MaskInverter {
     }
 
     /**
-     * Modifies a mask so that OFF voxels become ON voxels and vice versa
+     * Modifies a mask so that <i>off</i> voxels become <i>on</i> voxels and vice versa
      *
      * <p>The modification occur inplace, so no new masks are created.
      *
@@ -65,7 +65,7 @@ public class MaskInverter {
     public static void invert(Mask mask) {
 
         BinaryValues binaryValues = mask.binaryValues();
-        BinaryValuesByte binaryValuesByte = binaryValues.createByte();
+        BinaryValuesByte binaryValuesByte = binaryValues.asByte();
         invertVoxels(mask.voxels(), binaryValuesByte);
     }
 

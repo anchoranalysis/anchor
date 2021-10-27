@@ -45,8 +45,8 @@ class SubrangeVoxelAccess<T> implements SliceBufferIndex<T> {
     private BoundedVoxels<T> voxels;
 
     @Override
-    public void replaceSlice(int sliceIndex, VoxelBuffer<T> pixels) {
-        voxels.replaceSlice(sliceIndex + zRelative, pixels);
+    public void replaceSlice(int sliceIndex, VoxelBuffer<T> sliceToAssign) {
+        voxels.replaceSlice(sliceIndex + zRelative, sliceToAssign);
     }
 
     @Override

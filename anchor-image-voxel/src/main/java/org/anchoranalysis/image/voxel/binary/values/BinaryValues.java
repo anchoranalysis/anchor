@@ -32,8 +32,9 @@ import lombok.Getter;
 import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelTypeException;
 
 /**
- * Two values representing {@code int} binary states in an unsigned-byte buffer e.g. 0 for OFF and 1
- * for ON
+ * Two values representing {@code int} binary states in an unsigned-byte buffer.
+ *
+ * <p>By default, these states are {@code 0} for <b>off</b> and {@code 255} for <b>on</b>.
  *
  * <p>This class is <i>immutable</i>.
  *
@@ -45,16 +46,24 @@ import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelTypeException;
 @AllArgsConstructor
 public final class BinaryValues {
 
-    /** Default values to use, if not otherwise specified */
+    /** Default values to use, if not otherwise specified. */
     private static final BinaryValues DEFAULT = new BinaryValues(0, 255);
 
-    /** The integer representation of the value for OFF */
+    /** The integer representation of the value for <i>off</i>. */
     @Getter private final int offInt;
 
-    /** The integer representation of the value for ON */
+    /** The integer representation of the value for <i>on</i>. */
     @Getter private final int onInt;
 
-    public BinaryValuesByte createByte() {
+    /**
+     * Derives a {@link BinaryValuesByte} representation from the current values.
+     *
+     * <p>This is a similar structure but holds <i>byte</i> values rather than <i>unsigned int</i>
+     * values.
+     *
+     * @return a newly derived {@link BinaryValuesByte}.
+     */
+    public BinaryValuesByte asByte() {
         if (offInt > 255) {
             throw new IncorrectVoxelTypeException("offInt must be <= 255");
         }
@@ -64,12 +73,22 @@ public final class BinaryValues {
         return new BinaryValuesByte(offInt, onInt);
     }
 
-    /** Default values to use, if not otherwise specified */
+    /**
+     * Default values to use, if not otherwise specified.
+     *
+     * @return a static instance {@link BinaryValues} with default values (see class description).
+     */
     public static BinaryValues getDefault() {
         return DEFAULT;
     }
 
-    /** Inverts the values so OFF becomes ON, and vice-versa */
+    /**
+     * Inverts the values so <i>off</i> becomes <i>on</i>, and vice-versa.
+     *
+     * <p>This is an <i>immutable</i> operation.
+     *
+     * @return a {@link BinaryValues} with the <i>off</i> and <i>on</i> values switched.
+     */
     public BinaryValues createInverted() {
         return new BinaryValues(onInt, offInt);
     }

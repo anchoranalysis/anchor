@@ -39,7 +39,7 @@ public class Shuffle extends ColorSchemeUnary {
 
     /**
      * Creates with a specific delegate {@link ColorScheme}.
-     * 
+     *
      * @param colorScheme the scheme to create a list of unshuffled colors.
      */
     public Shuffle(ColorScheme colorScheme) {

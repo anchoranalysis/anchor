@@ -186,8 +186,8 @@ public class ObjectMaskMerger {
     }
 
     /**
-     * Create a new {@link Voxels} to match a certain extent, whose value is the same as OFF pixels
-     * for the outputted merged object.
+     * Create a new {@link Voxels} to match a certain extent, whose value is the same as <i>off</i>
+     * pixels for the outputted merged object.
      *
      * @param extent size of the voxels
      * @param binaryValues what constiutes off and on values

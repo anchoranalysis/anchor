@@ -32,18 +32,36 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBufferFactory;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.spatial.box.Extent;
 
+/**
+ * Implementation of {@link SliceBufferIndex} with voxels of type <b>unsigned byte</b>.
+ * 
+ * @author Owen Feehan
+ *
+ */
 public class FromByte implements SliceBufferIndex<UnsignedByteBuffer> {
 
     private final VoxelBuffer<UnsignedByteBuffer>[] buffer;
     private final Extent extent;
 
     // START FACTORY METHODS
+    /**
+     * Create a buffer of a particular size, that <b>has been</b> initialized.
+     * 
+     * @param extent the size of buffer to create.
+     * @return the newly created buffer.
+     */
     public static SliceBufferIndex<UnsignedByteBuffer> createInitialized(Extent extent) {
         FromByte p = new FromByte(extent);
         p.initialize();
         return p;
     }
 
+    /**
+     * Create a buffer of a particular size, that <b>has not been</b> initialized.
+     * 
+     * @param extent the size of buffer to create.
+     * @return the newly created buffer.
+     */
     public static SliceBufferIndex<UnsignedByteBuffer> createUninitialized(Extent extent) {
         return new FromByte(extent);
     }
@@ -55,8 +73,8 @@ public class FromByte implements SliceBufferIndex<UnsignedByteBuffer> {
     }
 
     @Override
-    public void replaceSlice(int z, VoxelBuffer<UnsignedByteBuffer> pixels) {
-        buffer[z] = pixels;
+    public void replaceSlice(int z, VoxelBuffer<UnsignedByteBuffer> sliceToAssign) {
+        buffer[z] = sliceToAssign;
         buffer[z].buffer().clear();
     }
 

@@ -42,10 +42,10 @@ public class BoundingBoxUnion {
     private final BoundingBox box;
 
     /**
-     * Performs a union with another box (immutably)
+     * Performs a union with another box (immutably).
      *
-     * @param other the other bounding box
-     * @return a new bounding-box that is union of both bounding boxes
+     * @param other the other bounding box.
+     * @return a new bounding-box that is union of both bounding boxes.
      */
     public BoundingBox with(BoundingBox other) {
 

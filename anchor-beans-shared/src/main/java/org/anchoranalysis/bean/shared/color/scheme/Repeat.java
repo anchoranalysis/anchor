@@ -34,9 +34,8 @@ import org.anchoranalysis.core.functional.FunctionalIterate;
 
 /**
  * Duplicates a {@link ColorList} produced by another {@link ColorScheme} a certain number of times.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class Repeat extends ColorSchemeUnary {
 

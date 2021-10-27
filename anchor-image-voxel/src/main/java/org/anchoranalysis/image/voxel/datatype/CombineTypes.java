@@ -30,9 +30,31 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.exception.CreateException;
 
+/**
+ * Calculates which {@link VoxelDataType} to use when combining two other voxel-data types, but without losing
+ * precision.
+ * 
+ * @author Owen Feehan
+ *
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CombineTypes {
 
+    /**
+     * What data-type to use to represent voxels of both {@code type1} and {@code type2}?
+     * 
+     * <p>Only the following types are supported:
+     * 
+     * <ul>
+     * <li>{@link UnsignedByteVoxelType}
+     * <li>{@link UnsignedShortVoxelType}
+     * </ul>
+     * 
+     * @param type1 the first voxel data type.
+     * @param type2 the second voxel data type.
+     * @return the data-type to use to combine {@code type1} and {@code type2}.
+     * @throws CreateException if either {@code type1} or {@code type2} is an unsupported type.
+     */
     public static VoxelDataType combineTypes(VoxelDataType type1, VoxelDataType type2)
             throws CreateException {
         if (type1.equals(type2)) {

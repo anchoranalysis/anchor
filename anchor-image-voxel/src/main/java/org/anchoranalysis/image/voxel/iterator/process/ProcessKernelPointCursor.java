@@ -37,8 +37,17 @@ import org.anchoranalysis.spatial.point.Point3i;
 @FunctionalInterface
 public interface ProcessKernelPointCursor {
 
-    /** Notifies the processor that there has been a change in z-coordinate */
+    /** 
+     * Notifies the processor that there has been a change in z-coordinate.
+     *
+     * @param z the coordinate in the Z dimension.
+     */
     default void notifyChangeSlice(int z) {}
 
+    /**
+     * Processes a particular point.
+     * 
+     * @param point the point to process.
+     */
     void process(KernelPointCursor point);
 }

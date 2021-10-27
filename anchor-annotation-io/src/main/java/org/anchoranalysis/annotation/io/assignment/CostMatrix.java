@@ -55,7 +55,7 @@ public class CostMatrix<T> {
     /** The <i>second</i> set of elements. */
     private List<T> second;
 
-    /** A two-dimensional array mapping the costs from {@code first} to {@code second} */
+    /** A two-dimensional array mapping the costs from {@code first} to {@code second}. */
     private double[][] matrix;
 
     /**

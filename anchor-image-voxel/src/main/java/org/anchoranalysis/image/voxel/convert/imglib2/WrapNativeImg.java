@@ -41,30 +41,59 @@ import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.spatial.box.Extent;
 
+/**
+ * Wraps the memory used in {@link Voxels} or {@link VoxelBuffer} into a {@link NativeImg}.
+ * 
+ * @author Owen Feehan
+ *
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class Wrap {
+class WrapNativeImg {
 
+    /**
+     * Wraps all slices of {@link Voxels} into a ImgLib2 {@link NativeImg}.
+     * 
+     * @param <S> ImgLib2 type to describe the image.
+     * @param <T> the native-array used for the memory.
+     * @param <U> type of buffer used in {@link Voxels} for a single slice.
+     * @param voxels the voxels to wrap.
+     * @param extractArrayFromBuffer converts a buffer into a corresponding native-array.
+     * @param deriveType converts from a {@link AbstractNativeImg} to the final type used in the {@link NativeImg}.
+     * @return the {@code voxels} wrapped into a {@link NativeImg}.
+     */
     public static <S extends NativeType<S>, T extends ArrayDataAccess<T>, U>
             NativeImg<S, T> allSlices(
                     Voxels<U> voxels,
-                    Function<U, T> transform,
-                    Function<AbstractNativeImg<S, T>, S> createType) {
+                    Function<U, T> extractArrayFromBuffer,
+                    Function<AbstractNativeImg<S, T>, S> deriveType) {
 
-        long[] dim = Wrap.asArray3D(voxels.extent());
+        long[] dim = WrapNativeImg.asArray3D(voxels.extent());
 
-        PlanarImg<S, T> image = new PlanarImg<>(slicesFor(voxels, transform), dim, new Fraction());
-        return Wrap.updateType(image, createType);
+        PlanarImg<S, T> image = new PlanarImg<>(slicesFor(voxels, extractArrayFromBuffer), dim, new Fraction());
+        return WrapNativeImg.updateType(image, deriveType);
     }
-
+    
+    /**
+     * Wraps a {@link VoxelBuffer} into a ImgLib2 {@link NativeImg}.
+     * 
+     * @param <S> ImgLib2 type to describe the image.
+     * @param <T> the native-array used for the memory.
+     * @param <U> type of buffer used in {@link Voxels} for a single slice.
+     * @param buffer the buffer to wrap.
+     * @param extent the size of {@code buffer}.
+     * @param extractArrayFromBuffer converts a buffer into a corresponding native-array.
+     * @param deriveType converts from a {@link AbstractNativeImg} to the final type used in the {@link NativeImg}.
+     * @return the {@code buffer} wrapped into a {@link NativeImg}.
+     */
     public static <S extends NativeType<S>, T, U> NativeImg<S, T> buffer(
             VoxelBuffer<U> buffer,
             Extent extent,
-            Function<U, T> transform,
-            Function<AbstractNativeImg<S, T>, S> createType) {
+            Function<U, T> extractArrayFromBuffer,
+            Function<AbstractNativeImg<S, T>, S> deriveType) {
         ArrayImg<S, T> image =
                 new ArrayImg<>(
-                        transform.apply(buffer.buffer()), Wrap.asArray2D(extent), new Fraction());
-        return Wrap.updateType(image, createType);
+                        extractArrayFromBuffer.apply(buffer.buffer()), WrapNativeImg.asArray2D(extent), new Fraction());
+        return WrapNativeImg.updateType(image, deriveType);
     }
 
     private static <S extends NativeType<S>, T> NativeImg<S, T> updateType(

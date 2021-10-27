@@ -33,7 +33,7 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.VoxelsWrapper;
+import org.anchoranalysis.image.voxel.VoxelsUntyped;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelTypeException;
@@ -51,7 +51,7 @@ import org.anchoranalysis.spatial.point.ReadableTuple3i;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class HistogramFromObjectsFactory {
 
-    public static Histogram create(VoxelsWrapper inputBuffer, Optional<ObjectMask> object) {
+    public static Histogram create(VoxelsUntyped inputBuffer, Optional<ObjectMask> object) {
 
         if (!isDataTypeSupported(inputBuffer.getVoxelDataType())) {
             throw new IncorrectVoxelTypeException(
@@ -144,7 +144,7 @@ public class HistogramFromObjectsFactory {
         return histogram;
     }
 
-    private static Histogram createWithMasks(VoxelsWrapper voxels, ObjectCollection objects) {
+    private static Histogram createWithMasks(VoxelsUntyped voxels, ObjectCollection objects) {
 
         Histogram total = new Histogram((int) voxels.getVoxelDataType().maxValue());
 

@@ -72,27 +72,27 @@ public class CreateStackFromBufferedImage {
     }
 
     private static byte[][] bytesFromBufferedImage(BufferedImage image) {
-        WritableRaster wr = image.getRaster();
-        return bytesFromBufferedImage(wr, 0, 0, wr.getWidth(), wr.getHeight());
+        WritableRaster raster = image.getRaster();
+        return bytesFromBufferedImage(raster, 0, 0, raster.getWidth(), raster.getHeight());
     }
 
     private static byte[][] bytesFromBufferedImage(
-            WritableRaster wr, int x, int y, int sx, int sy) {
+            WritableRaster raster, int x, int y, int sixeX, int sizeY) {
 
         if (x == 0
                 && y == 0
-                && sx == wr.getWidth()
-                && sy == wr.getHeight()
-                && wr.getDataBuffer() instanceof DataBufferByte) {
-            return ((DataBufferByte) wr.getDataBuffer()).getBankData();
+                && sixeX == raster.getWidth()
+                && sizeY == raster.getHeight()
+                && raster.getDataBuffer() instanceof DataBufferByte) {
+            return ((DataBufferByte) raster.getDataBuffer()).getBankData();
         }
 
-        int bands = wr.getNumBands();
-        byte[][] out = new byte[bands][sx * sy];
-        int[] buf = new int[sx * sy];
+        int bands = raster.getNumBands();
+        byte[][] out = new byte[bands][sixeX * sizeY];
+        int[] buf = new int[sixeX * sizeY];
 
         for (int i = 0; i < bands; i++) {
-            wr.getSamples(x, y, sx, sy, i, buf);
+            raster.getSamples(x, y, sixeX, sizeY, i, buf);
             for (int j = 0; j < buf.length; j++) {
                 out[i][j] = (byte) buf[j];
             }

@@ -32,7 +32,7 @@ import java.util.function.Function;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.VoxelsWrapper;
+import org.anchoranalysis.image.voxel.VoxelsUntyped;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.io.bioformats.DestinationChannelForIndex;
 import org.apache.commons.logging.Log;
@@ -47,8 +47,8 @@ public abstract class ConvertTo<T> {
     private static Log log = LogFactory.getLog(ConvertTo.class);
 
     // START REQUIRED ARGUMENTS
-    /** how to convert a {@link VoxelsWrapper} to the specific destination-type */
-    private final Function<VoxelsWrapper, Voxels<T>> functionCast;
+    /** how to convert a {@link VoxelsUntyped} to the specific destination-type */
+    private final Function<VoxelsUntyped, Voxels<T>> functionCast;
     // END REQUIRED ARGUMENTS
 
     /**
@@ -108,7 +108,7 @@ public abstract class ConvertTo<T> {
 
     private static <S> void placeSliceInDestination(
             VoxelBuffer<S> voxelBuffer,
-            Function<VoxelsWrapper, Voxels<S>> functionCast,
+            Function<VoxelsUntyped, Voxels<S>> functionCast,
             DestinationChannelForIndex destination,
             int z,
             int channelIndexRelative) {

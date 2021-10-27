@@ -33,7 +33,7 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 final class VoxelBufferUnsignedByte extends VoxelBufferUnsigned<UnsignedByteBuffer> {
 
     /**
-     * Create from a {@link VoxelBufferUnsignedByte} without any underlying bytes.
+     * Create from a {@link UnsignedByteBuffer}.
      *
      * @param buffer the buffer
      */
@@ -45,8 +45,8 @@ final class VoxelBufferUnsignedByte extends VoxelBufferUnsigned<UnsignedByteBuff
         return buffer().getRaw(index);
     }
 
-    public UnsignedByteBuffer put(int index, byte b) {
-        buffer().putRaw(index, b);
+    public UnsignedByteBuffer put(int index, byte value) {
+        buffer().putRaw(index, value);
         return buffer();
     }
 
@@ -76,7 +76,7 @@ final class VoxelBufferUnsignedByte extends VoxelBufferUnsigned<UnsignedByteBuff
     }
 
     @Override
-    public void transferFrom(
+    public void copyVoxelFrom(
             int destinationIndex, VoxelBuffer<UnsignedByteBuffer> src, int sourceIndex) {
         buffer().putRaw(destinationIndex, src.buffer().getRaw(sourceIndex));
     }

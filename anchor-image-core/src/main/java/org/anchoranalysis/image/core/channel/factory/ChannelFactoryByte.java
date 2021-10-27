@@ -26,11 +26,21 @@
 
 package org.anchoranalysis.image.core.channel.factory;
 
+import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 
+/**
+ * Creates a {@link Channel} with voxel-type {@link UnsignedByteVoxelType}.
+ * 
+ * @author Owen Feehan
+ *
+ */
 public class ChannelFactoryByte extends ChannelFactorySingleType {
 
+    /**
+     * Default constructor.
+     */
     public ChannelFactoryByte() {
         super(UnsignedByteVoxelType.INSTANCE, VoxelsFactory.getUnsignedByte());
     }

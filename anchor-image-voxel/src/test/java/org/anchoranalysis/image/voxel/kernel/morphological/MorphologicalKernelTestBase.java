@@ -42,19 +42,31 @@ abstract class MorphologicalKernelTestBase extends BinaryKernelTestBase {
     /**
      * Expected values where the <b>2D object</b> is located <b>inside the scene without touching a
      * boundary</b>.
+     * 
+     * @return the expected-values.
      */
     protected abstract ExpectedValues inside2D();
 
     /**
      * Expected values where the <b>3D object</b> is located <b>inside the scene without touching a
      * boundary</b>.
+     * 
+     * @return the expected-values.
      */
     protected abstract ExpectedValues inside3D();
 
-    /** Applies a test where the <b>2D object</b> is located <b>touching the scene border</b>. */
+    /** 
+     * Applies a test where the <b>2D object</b> is located <b>touching the scene border</b>.
+     *
+     * @return the expected-values.
+     */
     protected abstract ExpectedValues boundary2D();
 
-    /** Applies a test where the <b>3D object</b> is located <b>touching the scene border</b>. */
+    /** 
+     * Applies a test where the <b>3D object</b> is located <b>touching the scene border</b>.
+     *
+     * @return the expected-values.
+     */
     protected abstract ExpectedValues boundary3D();
 
     @Override

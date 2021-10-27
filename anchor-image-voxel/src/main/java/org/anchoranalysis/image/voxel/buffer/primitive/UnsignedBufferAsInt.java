@@ -41,8 +41,13 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 public abstract class UnsignedBufferAsInt extends UnsignedBuffer {
 
-    protected UnsignedBufferAsInt(Buffer delegate) {
-        super(delegate);
+    /**
+     * Construct with a delegate buffer.
+     * 
+     * @param buffer buffer to use as a delegate.
+     */
+    protected UnsignedBufferAsInt(Buffer buffer) {
+        super(buffer);
     }
 
     /**

@@ -48,7 +48,7 @@ import org.anchoranalysis.image.voxel.convert.imglib2.ConvertToImg;
 import org.anchoranalysis.spatial.box.Extent;
 
 /**
- * Performs interpolation using ImgLib2
+ * Performs interpolation using ImgLib2.
  *
  * <p>By default, voxels at the boundaries are mirrored (i.e. voxels just after the boundary are
  * treated like the closest voxel inside the boundary), but this can be changed to an extent

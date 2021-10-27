@@ -48,16 +48,16 @@ public interface AccessObjectMask<T> {
      *
      * <p>This operation is assumed to involve negligible computational cost.
      *
-     * @param element the element
-     * @return the object-mask
+     * @param element the element.
+     * @return the object-mask.
      */
     ObjectMask objectFor(T element);
 
     /**
      * Positionally-shifts an element by a given quantity in the positive direction.
      *
-     * @param element the element to shift by
-     * @param quantity the quantity to shift by
+     * @param element the element to shift by.
+     * @param quantity the quantity to shift by.
      * @return a newly created element based on {@code element} but positionally-shifted.
      */
     T shiftBy(T element, ReadableTuple3i quantity);
@@ -65,16 +65,17 @@ public interface AccessObjectMask<T> {
     /**
      * Ensures the element lies within a certain extent.
      *
-     * @param extent the extent to clip to
-     * @return either a newly created element or the existing element (if no change needs to occur)
+     * @param element the element.
+     * @param extent the extent to clip to.
+     * @return either a newly created element or the existing element (if no change needs to occur).
      */
     T clipTo(T element, Extent extent);
 
     /**
      * Creates an element of type {@code T} from an object-representation and index.
      *
-     * @param index the index of the object-representation in terms of the original list
-     * @param object an object-representation corresponding to this index
+     * @param index the index of the object-representation in terms of the original list.
+     * @param object an object-representation corresponding to this index.
      * @return a newly created element corresponding to the object-representation.
      */
     T createFrom(int index, ObjectMask object);
@@ -84,7 +85,7 @@ public interface AccessObjectMask<T> {
      *
      * <p>This operation is assumed to involve negligible computational cost.
      *
-     * @param element the element
+     * @param element the element.
      * @return the bounding box.
      */
     default BoundingBox boundingBoxFor(T element) {

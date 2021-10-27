@@ -39,11 +39,12 @@ import org.anchoranalysis.core.system.path.SplitPath;
 
 /**
  * Defines a <b>root path</b>.
- * 
+ *
  * <p>This a directory in which files are read/written during analysis.
  *
- * <p>Analysis scripts may select different root-paths depending on how they are executed (e.g. locally writing
- * to the filesystem during debugging on a single-file, but to a server for many files).
+ * <p>Analysis scripts may select different root-paths depending on how they are executed (e.g.
+ * locally writing to the filesystem during debugging on a single-file, but to a server for many
+ * files).
  *
  * <p>The name of a root must not be unique, but the combination of all fields should be unique i.e.
  * several roots can have the same name, but should vary in their other settings.
@@ -82,7 +83,7 @@ public class RootPath extends AnchorBean<RootPath> {
 
     /**
      * Exposes the {@code path} field as a {@link Path}.
-     * 
+     *
      * @return the path.
      */
     public Path asPath() {

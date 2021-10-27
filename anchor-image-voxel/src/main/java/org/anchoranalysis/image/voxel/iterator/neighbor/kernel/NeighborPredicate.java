@@ -29,6 +29,12 @@ import java.util.function.Supplier;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.kernel.KernelPointCursor;
 
+/**
+ * A predicate on whether a neighbor satisfies a condition in relation to a particular point that it neighbors.
+ * 
+ * @author Owen Feehan
+ *
+ */
 public interface NeighborPredicate {
 
     /**
@@ -36,7 +42,7 @@ public interface NeighborPredicate {
      *
      * @param inside if true, the point is inside the image, and the buffer buffer is read. if
      *     false, the point is treated as outside the image.
-     * @param point the neighboring point
+     * @param point the neighboring point.
      * @param buffer a buffer describing the slice on which the neighbor lies.
      * @param zShift the distance in z-dimension of the neighboring point from the source-point
      *     (around which neighbors exist).

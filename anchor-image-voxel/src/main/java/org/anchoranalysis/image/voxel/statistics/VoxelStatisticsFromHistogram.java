@@ -31,9 +31,16 @@ import org.anchoranalysis.bean.shared.relation.threshold.RelationToThreshold;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.math.histogram.Histogram;
 
+/**
+ * Calculates statistics from a {@link Histogram} of voxel intensities.
+ * 
+ * @author Owen Feehan
+ *
+ */
 @AllArgsConstructor
 public class VoxelStatisticsFromHistogram implements VoxelStatistics {
 
+    /** The histogram to calculate statistics from. */
     private final Histogram histogram;
 
     @Override

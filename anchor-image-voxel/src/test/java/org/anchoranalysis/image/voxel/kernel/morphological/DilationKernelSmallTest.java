@@ -30,7 +30,7 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.spatial.box.Extent;
 
 /**
- * Tests {@link DilationKernel} with a small-neighbourhood.
+ * Tests {@link DilationKernel} with a small-neighborhood.
  *
  * @author Owen Feehan
  */

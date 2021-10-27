@@ -26,10 +26,25 @@
 
 package org.anchoranalysis.image.voxel.datatype;
 
+
+/**
+ * Base class for voxel-data-types that are <b>signed</b> and <b>integral</b>.
+ * 
+ * @author Owen Feehan
+ *
+ */
 public abstract class SignedVoxelType extends VoxelDataType {
 
-    protected SignedVoxelType(int numBits, String typeIdentifier, long maxValue, long minValue) {
-        super(numBits, typeIdentifier, maxValue, minValue);
+    /**
+     * Construct for a particular number of bits, with a unique identifier, and with bounds on the values.
+     * 
+     * @param numberBits the number of bits required to represent a voxel.
+     * @param typeIdentifier a string to uniquely and compactly describe this type.
+     * @param maxValue the maximum value this type can represent.
+     * @param minValue the minimum value this type can represent.
+     */
+    protected SignedVoxelType(int numberBits, String typeIdentifier, long maxValue, long minValue) {
+        super(numberBits, typeIdentifier, maxValue, minValue);
     }
 
     @Override

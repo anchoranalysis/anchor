@@ -39,6 +39,11 @@ public abstract class VoxelBufferUnsigned<T extends UnsignedBuffer> extends Voxe
 
     private final T buffer;
 
+    /**
+     * Creates to reuse a particular buffer.
+     * 
+     * @param buffer the buffer to reuse.
+     */
     protected VoxelBufferUnsigned(T buffer) {
         Preconditions.checkArgument(buffer.hasArray());
         this.buffer = buffer;

@@ -35,9 +35,8 @@ import org.anchoranalysis.core.color.ColorList;
 
 /**
  * Prepends a specific color to the list created by another {@link ColorScheme}.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 @NoArgsConstructor
 public class Prepend extends ColorSchemeUnary {

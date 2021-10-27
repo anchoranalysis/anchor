@@ -74,7 +74,7 @@ public class IterateVoxelsMask {
      *
      * @param voxelsIntensity the voxels whose intensity we wish to find the mean of (subject to
      *     {@code mask}
-     * @param mask only voxels who correspond to an ON voxels in the mask are included
+     * @param mask only voxels who correspond to an <i>on</i> voxels in the mask are included
      * @return the running-sum
      */
     public static RunningSum calculateRunningSum(

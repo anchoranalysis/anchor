@@ -38,7 +38,7 @@ import org.anchoranalysis.core.functional.checked.CheckedIntFunction;
 import org.anchoranalysis.image.core.stack.RGBStack;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.VoxelsWrapper;
+import org.anchoranalysis.image.voxel.VoxelsUntyped;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.spatial.box.Extent;
@@ -119,17 +119,17 @@ class ImageStackFactory {
      * @throws ImageJConversionException if the voxels are neither unsigned byte nor unsigned short
      *     (the only two supported types)
      */
-    public static ImageStack createSingleChannel(VoxelsWrapper voxels)
+    public static ImageStack createSingleChannel(VoxelsUntyped voxels)
             throws ImageJConversionException {
         return createFromVoxelsStream(voxels.extent(), z -> Stream.of(voxels));
     }
 
     /**
      * Creates a new {@link ImageStack} of a certain size with a function that creates one or more
-     * {@link VoxelsWrapper} for each slice-index
+     * {@link VoxelsUntyped} for each slice-index
      *
      * @param extent the extent of the stack to create
-     * @param createSlice creates one or more {@link VoxelsWrapper} to place into the {@link
+     * @param createSlice creates one or more {@link VoxelsUntyped} to place into the {@link
      *     ImageStack} for a given slice-index
      * @return a newly created {@link ImageStack} with slices constructed from {@code createSlice}
      *     applied to all slice-indices
@@ -137,7 +137,7 @@ class ImageStackFactory {
      *     (the only two supported types)
      */
     private static ImageStack createFromVoxelsStream(
-            Extent extent, IntFunction<Stream<VoxelsWrapper>> createSlice)
+            Extent extent, IntFunction<Stream<VoxelsUntyped>> createSlice)
             throws ImageJConversionException {
         return createFromProcessorsStream(
                 extent,

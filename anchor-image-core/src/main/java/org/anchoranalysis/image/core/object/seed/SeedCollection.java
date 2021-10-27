@@ -64,7 +64,7 @@ public class SeedCollection implements Iterable<Seed> {
         }
     }
 
-    public void growToZ(int sz) {
+    public void growToZ(int sz) throws OperationFailedException {
 
         for (Seed seed : delegate) {
             seed.growToZ(sz);

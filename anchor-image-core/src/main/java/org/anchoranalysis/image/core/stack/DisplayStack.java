@@ -47,7 +47,7 @@ import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.VoxelsWrapper;
+import org.anchoranalysis.image.voxel.VoxelsUntyped;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
@@ -57,8 +57,8 @@ import org.anchoranalysis.spatial.box.Extent;
 import org.anchoranalysis.spatial.point.Point3i;
 
 /**
- * Stack that contains 1 or 3 channels so that we and display it as either or RGB unsigned 8-bit
- * image
+ * Stack that contains 1 or 3 channels so that we and display it as either or as an RGB unsigned 8-bit
+ * image.
  *
  * <p>A converter is optionally associated with each channel, used to convert the source images into
  * unsigned 8-bit.
@@ -70,8 +70,12 @@ public class DisplayStack {
     private static final double QUANTILE_LOWER = 0.0001;
     private static final double QUANTILE_UPPER = 0.9999;
 
+    /** The underlying stack that will be displayed, possibly after conversion. */
     @Getter private final Stack stack;
 
+    /** 
+     * A list of optional converters that will be applied to the respective channel in {@code stack} if they exist.
+     */
     @Getter
     private final List<Optional<ChannelConverterAttached<Channel, UnsignedByteBuffer>>> converters;
 
@@ -149,21 +153,41 @@ public class DisplayStack {
         return stack.getNumberChannels() == 3;
     }
 
+    /**
+     * The dimensions of all channels in the stack.
+     * 
+     * @return the dimensions.
+     */
     public Dimensions dimensions() {
         return stack.dimensions();
     }
 
+    /**
+     * The width and height and depth of all channels in the {@link Stack}.
+     * 
+     * <p>i.e. the size of each of the three possible dimensions.
+     */
     public Extent extent() {
         return dimensions().extent();
     }
 
+    /**
+     * The number of channels in the stack.
+     * 
+     * @return the number of channels.
+     */
     public final int getNumberChannels() {
         return stack.getNumberChannels();
     }
-
-    // Only creates a new channel if needs be, otherwise reuses existing channel
+    
+    /**
+     * Create {@link Channel} for a particular {@code index} after applying conversion.
+     *  
+     * @param index the index of the channel in the {@link Stack} to create a converted version of.
+     * @param alwaysNew if true, a new channel is always created. Otherwise it is created, only if needs be.
+     * @return the {@link Channel} after extracting from the stack and applying conversion.
+     */
     public Channel createChannel(int index, boolean alwaysNew) {
-
         return mapper.mapChannelIfSupported(
                 index,
                 (channel, converter) -> converter.convert(channel, conversionPolicy(alwaysNew)),
@@ -229,9 +253,9 @@ public class DisplayStack {
                 (channel, converter) -> {
                     BoundingBox allLocalBox = destinationBox.shiftToOrigin();
 
-                    VoxelsWrapper destBoxNonByte =
+                    VoxelsUntyped destBoxNonByte =
                             VoxelsFactory.instance()
-                                    .create(destinationBox.extent(), channel.getVoxelDataType());
+                                    .createEmpty(destinationBox.extent(), channel.getVoxelDataType());
                     channel.voxels().copyVoxelsTo(sourceBox, destBoxNonByte, allLocalBox);
 
                     Voxels<UnsignedByteBuffer> destBoxByte =
@@ -322,7 +346,7 @@ public class DisplayStack {
                         converter
                                 .getVoxelsConverter()
                                 .convertFrom(
-                                        new VoxelsWrapper(voxelsUnconverted),
+                                        new VoxelsUntyped(voxelsUnconverted),
                                         VoxelsFactory.getUnsignedByte()),
                 channel -> (Voxels<UnsignedByteBuffer>) voxelsUnconverted);
     }

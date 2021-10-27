@@ -29,7 +29,7 @@ package org.anchoranalysis.image.bean.threshold;
 import java.util.Optional;
 import org.anchoranalysis.bean.NullParamsBean;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.image.voxel.VoxelsWrapper;
+import org.anchoranalysis.image.voxel.VoxelsUntyped;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
@@ -45,7 +45,7 @@ import org.anchoranalysis.math.histogram.Histogram;
 public abstract class Thresholder extends NullParamsBean<VoxelsThresholder> {
 
     /**
-     * Like {@link #threshold(VoxelsWrapper)} but using default binary-values.
+     * Like {@link #threshold(VoxelsUntyped)} but using default binary-values.
      *
      * <p>The default values are <i>off</i>(0) and <i>on</i>(255).
      *
@@ -55,13 +55,13 @@ public abstract class Thresholder extends NullParamsBean<VoxelsThresholder> {
      * @throws OperationFailedException
      * @throws OperationFailedException
      */
-    public BinaryVoxels<UnsignedByteBuffer> threshold(VoxelsWrapper voxels)
+    public BinaryVoxels<UnsignedByteBuffer> threshold(VoxelsUntyped voxels)
             throws OperationFailedException {
         return threshold(voxels, BinaryValuesByte.getDefault());
     }
 
     /**
-     * Like {@link #threshold(VoxelsWrapper, BinaryValuesByte, Optional, Optional)} applying the
+     * Like {@link #threshold(VoxelsUntyped, BinaryValuesByte, Optional, Optional)} applying the
      * thresholding to the entire set of voxels.
      *
      * <p>The thresholder does not accept a histogram as input.
@@ -74,13 +74,13 @@ public abstract class Thresholder extends NullParamsBean<VoxelsThresholder> {
      * @throws OperationFailedException
      */
     public BinaryVoxels<UnsignedByteBuffer> threshold(
-            VoxelsWrapper voxels, BinaryValuesByte binaryValues) throws OperationFailedException {
+            VoxelsUntyped voxels, BinaryValuesByte binaryValues) throws OperationFailedException {
         return threshold(voxels, binaryValues, Optional.empty(), Optional.empty());
     }
 
     /**
      * Thresholds voxels (across a range of values) so that they have only binary range (i.e. two
-     * voxel values representing ON and OFF)
+     * voxel values representing <i>on</i> and <i>off</i>).
      *
      * <p>If a mask is used, the voxels outside the object-mask are left unchanged. They will be
      * either identical to the input-volume or 0 if a new buffer needs to be created..
@@ -97,7 +97,7 @@ public abstract class Thresholder extends NullParamsBean<VoxelsThresholder> {
      * @throws OperationFailedException
      */
     public abstract BinaryVoxels<UnsignedByteBuffer> threshold(
-            VoxelsWrapper voxels,
+            VoxelsUntyped voxels,
             BinaryValuesByte binaryValues,
             Optional<Histogram> histogram,
             Optional<ObjectMask> objectMask)

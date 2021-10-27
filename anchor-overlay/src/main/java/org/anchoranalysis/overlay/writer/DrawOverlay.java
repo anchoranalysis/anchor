@@ -88,8 +88,7 @@ public abstract class DrawOverlay {
 
         try {
             List<PrecalculationOverlay> overlaysPreprocessed =
-                    precalculate(
-                            overlays, this, dimensions, BinaryValues.getDefault().createByte());
+                    precalculate(overlays, this, dimensions, BinaryValues.getDefault().asByte());
 
             writePrecalculatedOverlays(
                     overlaysPreprocessed,

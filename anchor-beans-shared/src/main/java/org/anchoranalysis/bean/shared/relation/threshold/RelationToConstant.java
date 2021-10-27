@@ -38,13 +38,13 @@ import org.anchoranalysis.math.relation.DoubleBiPredicate;
 
 /**
  * Defines a constant threshold, and a relation to it.
- * 
- * <p>This is useful to distinguish between different ways to threshold a range of numbers e.g. {@code >= 7} or {@code < 5}.
- * 
- * <p>The {@code threshold} will always form the second-operand in the relation.
- * 
- * @author Owen Feehan
  *
+ * <p>This is useful to distinguish between different ways to threshold a range of numbers e.g.
+ * {@code >= 7} or {@code < 5}.
+ *
+ * <p>The {@code threshold} will always form the second-operand in the relation.
+ *
+ * @author Owen Feehan
  */
 @NoArgsConstructor
 @AllArgsConstructor
@@ -54,7 +54,7 @@ public class RelationToConstant extends RelationToThreshold {
     // START BEAN PROPERTIES
     /** The relation to the threshold, where the threshold forms the second operand. */
     @BeanField @Getter @Setter private RelationBean relation;
-    
+
     /** The constant threshold. */
     @BeanField @NonNegative @Getter @Setter private double threshold = -1;
     // END BEAN PROPERTIES

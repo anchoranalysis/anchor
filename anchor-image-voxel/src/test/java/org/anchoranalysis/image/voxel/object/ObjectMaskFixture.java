@@ -49,9 +49,10 @@ import org.anchoranalysis.spatial.point.Point3i;
 @Accessors(fluent = true)
 public class ObjectMaskFixture {
 
+    /** The default size of the created {@link ObjectMask}, if not otherwise specified. */
     public static final Extent DEFAULT_EXTENT = new Extent(40, 50, 15);
 
-    public static final int VOXELS_REMOVED_CORNERS = 4;
+    private static final int VOXELS_REMOVED_CORNERS = 4;
 
     // START REQUIRED ARGUMENTS
     /** Whether to remove single-voxel pixels from corners or not? */
@@ -62,7 +63,7 @@ public class ObjectMaskFixture {
     // END REQUIRED ARGUMENTS
 
     /**
-     * Creates with a default {@link Extent}.
+     * Creates with a default size of {@link #DEFAULT_EXTENT}.
      *
      * @param removeCorners whether to remove single-voxel pixels from corners or not?
      * @param do3D whether to include a Z axis or not?
@@ -84,7 +85,7 @@ public class ObjectMaskFixture {
     /**
      * Creates an object-mask whose bounding-box corner exists at a particular point.
      *
-     * @param corner the corner (minimal corner in all dimensions)
+     * @param corner the corner (minimal corner in all dimensions).
      * @return a newly created object-mask (with a shape as described in the class comment) and with
      *     a bounding box starting at {@code corner}.
      */
@@ -95,7 +96,7 @@ public class ObjectMaskFixture {
     /**
      * Creates an object-mask whose bounding-box corner exists at a particular point.
      *
-     * @param corner the corner (minimal corner in all dimensions)
+     * @param corner the corner (minimal corner in all dimensions).
      * @return a newly created object-mask (with a shape as described in the class comment) and with
      *     a bounding box starting at {@code corner}.
      */
@@ -106,8 +107,8 @@ public class ObjectMaskFixture {
     /**
      * Creates an object-mask whose bounding-box corner exists at a particular point.
      *
-     * @param cornerX the corner in X dimension (minimal value of X)
-     * @param cornerY the corner in Y dimension (minimal value of Y)
+     * @param cornerX the corner in X dimension (minimal value of X).
+     * @param cornerY the corner in Y dimension (minimal value of Y).
      * @return a newly created object-mask (with a shape as described in the class comment) and with
      *     a bounding box starting at {@code corner}.
      */
@@ -118,9 +119,9 @@ public class ObjectMaskFixture {
     /**
      * Creates an object-mask whose bounding-box corner exists at a particular point.
      *
-     * @param cornerX the corner in X dimension (minimal value of X)
-     * @param cornerY the corner in Y dimension (minimal value of Y)
-     * @param cornerZ the corner in Z dimension (minimal value of Z)
+     * @param cornerX the corner in X dimension (minimal value of X).
+     * @param cornerY the corner in Y dimension (minimal value of Y).
+     * @param cornerZ the corner in Z dimension (minimal value of Z).
      * @return a newly created object-mask (with a shape as described in the class comment) and with
      *     a bounding box starting at {@code corner}.
      */
@@ -134,7 +135,11 @@ public class ObjectMaskFixture {
         return object;
     }
 
-    /** The expected number of voxels in the object-mask. */
+    /** 
+     * The expected number of voxels in the object-mask.
+     * 
+     * @return the volume.
+     */
     public int expectedVolume() {
         return (int) (extent.calculateVolume() - (removedPerSlice(removeCorners) * extent.z()));
     }
@@ -144,7 +149,7 @@ public class ObjectMaskFixture {
      *
      * @param useZ if true, z is also treated as a dimension in which a surface is indicated. If
      *     false, only surfaces in X and Y dimensions are considered.
-     * @return the number of voxels that are expected to appear on the surface
+     * @return the number of voxels that are expected to appear on the surface.
      */
     public int sizeSurface(boolean useZ) {
         checkNoRemoveCorners();
@@ -160,22 +165,22 @@ public class ObjectMaskFixture {
     }
 
     /**
-     * The total number of neighbours voxels.
+     * The total number of neighbors voxels.
      *
      * @param useZ if true, z is also treated as a dimension in which neighbors are considered. If
-     *     false, only neighbours in X and Y dimensions are considered.
-     * @return the number of voxels that are expected to appear on the surface
+     *     false, only neighbors in X and Y dimensions are considered.
+     * @return the number of voxels that are expected to appear on the surface.
      */
     public int numberNeighbors(boolean useZ) {
         checkNoRemoveCorners();
 
         // The top and bottom lines in x
-        int neighbours2D = 2 * (extent.x() + extent.y()) * extent.z();
+        int neighbors2D = 2 * (extent.x() + extent.y()) * extent.z();
 
         if (useZ) {
-            return neighbours2D + (2 * extent.areaXY());
+            return neighbors2D + (2 * extent.areaXY());
         } else {
-            return neighbours2D;
+            return neighbors2D;
         }
     }
 
@@ -190,7 +195,7 @@ public class ObjectMaskFixture {
      * A special <i>multiplication</i> that uses a different multiplicand for the first two values
      * (if they exist) and another multiplicand for the remainder.
      *
-     * @param number a positive number to be multiplied
+     * @param number a positive number to be multiplied.
      * @param multiplicandFirstTwo the multiplicand to be applied for the first two "times" of
      *     {@code number}.
      * @param multiplicandRest the multiplicand to be applied for any other "times" of {@code

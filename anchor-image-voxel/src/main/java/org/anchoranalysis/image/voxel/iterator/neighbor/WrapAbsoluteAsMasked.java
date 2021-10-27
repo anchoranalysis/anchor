@@ -27,24 +27,21 @@
 package org.anchoranalysis.image.voxel.iterator.neighbor;
 
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
+import lombok.AllArgsConstructor;
 
 /**
- * Wraps a {@link ProcessVoxelNeighborAbsolute} as a {@link ProcessChangedPointAbsoluteMasked}
+ * Wraps a {@link ProcessVoxelNeighborAbsolute} as a {@link ProcessChangedPointAbsoluteMasked}.
  *
  * @param <T> result-type that can be collected after processing
  */
-public final class WrapAbsoluteAsMasked<T> implements ProcessChangedPointAbsoluteMasked<T> {
+@AllArgsConstructor
+final class WrapAbsoluteAsMasked<T> implements ProcessChangedPointAbsoluteMasked<T> {
 
     private final ProcessVoxelNeighborAbsolute<T> delegate;
 
-    public WrapAbsoluteAsMasked(ProcessVoxelNeighborAbsolute<T> delegate) {
-        super();
-        this.delegate = delegate;
-    }
-
     @Override
-    public void initSource(int sourceVal, int sourceOffsetXY) {
-        delegate.initSource(sourceVal, sourceOffsetXY);
+    public void initSource(int sourceValue, int sourceOffsetXY) {
+        delegate.initSource(sourceValue, sourceOffsetXY);
     }
 
     @Override
@@ -53,8 +50,8 @@ public final class WrapAbsoluteAsMasked<T> implements ProcessChangedPointAbsolut
     }
 
     @Override
-    public boolean processPoint(int xChange, int yChange, int x1, int y1, int objectMaskOffset) {
-        return delegate.processPoint(xChange, yChange, x1, y1);
+    public void processPoint(int xChange, int yChange, int x, int y, int objectMaskOffset) {
+        delegate.processPoint(xChange, yChange, x, y);
     }
 
     @Override

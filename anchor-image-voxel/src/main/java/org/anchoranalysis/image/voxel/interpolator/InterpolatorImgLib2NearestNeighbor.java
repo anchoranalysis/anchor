@@ -28,8 +28,18 @@ package org.anchoranalysis.image.voxel.interpolator;
 
 import net.imglib2.interpolation.randomaccess.NearestNeighborInterpolatorFactory;
 
+/**
+ * An interpolator that uses <a href="https://en.wikipedia.org/wiki/Nearest-neighbor_interpolation">nearest neighbor interpolation</a> as implemented in Imglib2.
+ * 
+ * @see NearestNeighborInterpolatorFactory
+ * @author Owen Feehan
+ *
+ */
 public class InterpolatorImgLib2NearestNeighbor extends InterpolatorImgLib2 {
 
+    /**
+     * Default constructor.
+     */
     public InterpolatorImgLib2NearestNeighbor() {
         super(
                 new NearestNeighborInterpolatorFactory<>(),
@@ -38,7 +48,7 @@ public class InterpolatorImgLib2NearestNeighbor extends InterpolatorImgLib2 {
     }
 
     @Override
-    public boolean isNewValuesPossible() {
+    public boolean canValueRangeChange() {
         return false;
     }
 }

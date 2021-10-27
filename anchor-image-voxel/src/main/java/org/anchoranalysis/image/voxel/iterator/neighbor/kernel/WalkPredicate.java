@@ -34,7 +34,7 @@ import org.anchoranalysis.image.voxel.kernel.KernelPointCursor;
 
 /**
  * Walks in X, Y and Z directions from a point, test a {@link NeighborPredicate} to determine if a
- * neighbour satisfies conditions.
+ * neighbor satisfies conditions.
  *
  * <p>As soon as any neighbor matches the predicate, a true value is returned for the voxel. A false
  * is returned only if no neighbors match the predicate.
@@ -59,20 +59,21 @@ public class WalkPredicate {
     private final boolean bigNeighborhood;
 
     /**
-     * Walks in X and Y direction, and Z direction if enabled.
+     * Do any neighboring voxels in <i>any</i> direction satisfy the predicate?
      *
      * @param buffer the buffer associated with the current slice
      * @param bufferRetriever a means of retrieving buffers for other slices, accepting a relative
      *     shift compared to current slice (e.g. -1, +1) etc.
+     * @return true iff at least one neighbor voxel in <i>any</i> direction satisfies the predicate.
      */
     public boolean walk(UnsignedByteBuffer buffer, BufferRetriever bufferRetriever) {
         return walkX(buffer)
                 || walkY(buffer)
                 || walkZ(bufferRetriever)
-                || maybeQualifyFromBigNeighbourhood(buffer);
+                || maybeQualifyFromBigNeighborhood(buffer);
     }
 
-    /** Do any neighbor voxels in X direction qualify the voxel? */
+    /** Do any neighboring voxels in X direction qualify the voxel? */
     private boolean walkX(UnsignedByteBuffer buffer) {
         // We walk up and down in x
         point.decrementX();
@@ -95,7 +96,7 @@ public class WalkPredicate {
         return false;
     }
 
-    /** Do any neighbor voxels in Y direction qualify the voxel? */
+    /** Do any neighboring voxels in Y direction qualify the voxel? */
     private boolean walkY(UnsignedByteBuffer buffer) {
         point.decrementY();
 
@@ -117,7 +118,7 @@ public class WalkPredicate {
         return false;
     }
 
-    /** Do any neighbor voxels in Z direction qualify the voxel? */
+    /** Do any neighboring voxels in Z direction qualify the voxel? */
     private boolean walkZ(BufferRetriever bufferRetriever) {
         if (point.isUseZ()) {
             return qualifyFromZDirection(bufferRetriever, -1)
@@ -131,12 +132,12 @@ public class WalkPredicate {
      * If big-neighbor is enabled, do any voxels from the big neighborhood (not already covered)
      * qualify the voxel?
      */
-    private boolean maybeQualifyFromBigNeighbourhood(UnsignedByteBuffer buffer) {
-        return bigNeighborhood && qualifyFromBigNeighbourhood(buffer);
+    private boolean maybeQualifyFromBigNeighborhood(UnsignedByteBuffer buffer) {
+        return bigNeighborhood && qualifyFromBigNeighborhood(buffer);
     }
 
     /** Do any voxels from the big neighborhood (not already covered) qualify the voxel? */
-    private boolean qualifyFromBigNeighbourhood(UnsignedByteBuffer buffer) {
+    private boolean qualifyFromBigNeighborhood(UnsignedByteBuffer buffer) {
 
         // x-1, y-1
         point.decrementX();

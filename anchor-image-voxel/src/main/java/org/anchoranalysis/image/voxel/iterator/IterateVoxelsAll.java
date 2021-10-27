@@ -100,11 +100,7 @@ public class IterateVoxelsAll {
 
         KernelPointCursor cursor =
                 new KernelPointCursor(
-                        0,
-                        new Point3i(),
-                        voxels.extent(),
-                        voxels.binaryValues().createByte(),
-                        params);
+                        0, new Point3i(), voxels.extent(), voxels.binaryValues().asByte(), params);
 
         Extent extent = voxels.extent();
         Point3i point = cursor.getPoint();
@@ -117,7 +113,7 @@ public class IterateVoxelsAll {
 
                 for (point.setX(0); point.x() < extent.x(); point.incrementX()) {
                     process.process(cursor);
-                    cursor.incrementIndex();
+                    cursor.incrementIndexOnly();
                 }
             }
         }

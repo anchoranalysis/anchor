@@ -35,7 +35,7 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.VoxelsWrapper;
+import org.anchoranalysis.image.voxel.VoxelsUntyped;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelTypeException;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
@@ -65,12 +65,12 @@ public class ConvertFromImagePlus {
     }
 
     /**
-     * Converts an {@link ImagePlus} to a {@link VoxelsWrapper}.
+     * Converts an {@link ImagePlus} to a {@link VoxelsUntyped}.
      *
      * @param image the image-plus to convert
      * @return newly created voxels-buffer (copied from image-plus)
      */
-    public static VoxelsWrapper toVoxels(ImagePlus image) {
+    public static VoxelsUntyped toVoxels(ImagePlus image) {
 
         if (image.getType() == ImagePlus.GRAY8) {
             return deriveCopiedVoxels(
@@ -83,13 +83,13 @@ public class ConvertFromImagePlus {
         }
     }
 
-    private static <T> VoxelsWrapper deriveCopiedVoxels(
+    private static <T> VoxelsUntyped deriveCopiedVoxels(
             ImagePlus image,
             VoxelsFactoryTypeBound<T> factory,
             Function<ImageProcessor, VoxelBuffer<T>> convertProcessor) {
         Voxels<T> voxels = factory.createInitialized(deriveExtent(image));
         copyStackIntoVoxels(image.getImageStack(), voxels, convertProcessor);
-        return new VoxelsWrapper(voxels);
+        return new VoxelsUntyped(voxels);
     }
 
     private static <T> void copyStackIntoVoxels(

@@ -44,7 +44,7 @@ import org.anchoranalysis.spatial.point.ReadableTuple3i;
  * <p>The voxels must be:
  *
  * <ul>
- *   <li>Be ON on a mask
+ *   <li>Be <i>on</i> on a mask
  *   <li>Lie inside a bounding-box
  *   <li>Exist on certain slices
  * </ul>
@@ -77,7 +77,7 @@ class ConsumePointsFromMaskSliced {
         this.cornerMin = box.cornerMin();
         this.cornerMax = box.calculateCornerMax();
         this.voxels = mask.channel().voxels().asByte();
-        this.binaryValues = mask.binaryValues().createByte();
+        this.binaryValues = mask.binaryValues().asByte();
         this.startZ = startZ;
         this.consumer = consumer;
         this.extent = voxels.extent();

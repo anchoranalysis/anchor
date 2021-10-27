@@ -37,7 +37,7 @@ import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactoryTypeBound;
 
-/** Creates a channel for a specific data-type */
+/** Creates a {@link Channel} for a specific data-type. */
 @AllArgsConstructor
 @Accessors(fluent = true)
 public abstract class ChannelFactorySingleType {
@@ -45,15 +45,34 @@ public abstract class ChannelFactorySingleType {
     @Getter private final VoxelDataType dataType;
     private final VoxelsFactoryTypeBound<?> factory;
 
+    /**
+     * Create a {@link Channel} initialized with zero-valued voxel-buffers.
+     * 
+     * @param dimensions the size of the channel.
+     * @return the created channel.
+     */
     public Channel createEmptyInitialised(Dimensions dimensions) {
         return create(factory.createInitialized(dimensions.extent()), dimensions.resolution());
     }
 
+    /**
+     * Create a {@link Channel} without initialization with voxel-buffers.
+     * 
+     * @param dimensions the size of the channel.
+     * @return the created channel.
+     */
     public Channel createEmptyUninitialised(Dimensions dimensions) {
         return create(factory.createUninitialized(dimensions.extent()), dimensions.resolution());
     }
 
-    public Channel create(Voxels<?> bufferAccess, Optional<Resolution> resolution) {
-        return new Channel(bufferAccess, resolution);
+    /**
+     * Create a {@link Channel} from voxels and a resolution.
+     * 
+     * @param voxels the voxels, that will be used internally in the created {@link Channel} (without duplication).
+     * @param resolution the resolution, if it exists.
+     * @return the created channel.
+     */
+    public Channel create(Voxels<?> voxels, Optional<Resolution> resolution) {
+        return new Channel(voxels, resolution);
     }
 }

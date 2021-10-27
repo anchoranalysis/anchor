@@ -41,9 +41,9 @@ import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 public class MaskFactory {
 
     /**
-     * Creates a binary-mask for specific dimensions with all voxels set to OFF
+     * Creates a binary-mask for specific dimensions with all voxels set to <i>off</i>.
      *
-     * <p>The mask uses default binary-values of OFF (0) and ON (255)
+     * <p>The mask uses default binary-values of <i>off</i> (0) and <i>on</i> (255)
      *
      * @param dimensions the dimensions to create the mask for
      * @return a newly created binary-mask with newly-created buffers
@@ -53,7 +53,7 @@ public class MaskFactory {
     }
 
     /**
-     * Creates a binary-mask for specific dimensions with all voxels set to OFF
+     * Creates a binary-mask for specific dimensions with all voxels set to <i>off</i>.
      *
      * @param dimensions the dimensions to create the mask for
      * @param binaryValues binary-values
@@ -65,7 +65,8 @@ public class MaskFactory {
                         ChannelFactory.instance()
                                 .create(dimensions, UnsignedByteVoxelType.INSTANCE),
                         binaryValues);
-        // By default the voxels are 0. If OFF value is not 0, it needs to be explicitly assigned.
+        // By default the voxels are 0. If <i>off</i> value is not 0, it needs to be explicitly
+        // assigned.
         if (binaryValues.getOffInt() != 0) {
             mask.assignOff().toAll();
         }
@@ -73,9 +74,9 @@ public class MaskFactory {
     }
 
     /**
-     * Creates a binary-mask for specific dimensions with all voxels set to ON
+     * Creates a binary-mask for specific dimensions with all voxels set to <i>on</i>.
      *
-     * <p>The mask uses default binary-values of OFF (0) and ON (255)
+     * <p>The mask uses default binary-values of <i>off</i> (0) and <i>on</i> (255)
      *
      * @param dimensions the dimensions to create the mask for
      * @return a newly created binary-mask with newly-created buffers

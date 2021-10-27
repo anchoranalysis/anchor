@@ -32,12 +32,23 @@ import org.anchoranalysis.bean.shared.relation.threshold.RelationToThreshold;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.math.histogram.Histogram;
 
+/**
+ * Aggregates statistics of a list of {@link VoxelStatistics} as if they were one.
+ * 
+ * @author Owen Feehan
+ *
+ */
 public class VoxelStatisticsCombined implements VoxelStatistics {
 
     private List<VoxelStatistics> list = new ArrayList<>();
 
-    public void add(VoxelStatistics stats) {
-        list.add(stats);
+    /**
+     * Adds an element.
+     * 
+     * @param element an element to add.
+     */
+    public void add(VoxelStatistics element) {
+        list.add(element);
     }
 
     @Override
@@ -71,8 +82,8 @@ public class VoxelStatisticsCombined implements VoxelStatistics {
     public VoxelStatistics threshold(RelationToThreshold relationToThreshold) {
 
         VoxelStatisticsCombined out = new VoxelStatisticsCombined();
-        for (VoxelStatistics stats : list) {
-            out.add(stats.threshold(relationToThreshold));
+        for (VoxelStatistics element : list) {
+            out.add(element.threshold(relationToThreshold));
         }
         return out;
     }
@@ -80,8 +91,8 @@ public class VoxelStatisticsCombined implements VoxelStatistics {
     @Override
     public long countThreshold(RelationToThreshold relationToThreshold) {
         long count = 0;
-        for (VoxelStatistics stats : list) {
-            count += stats.countThreshold(relationToThreshold);
+        for (VoxelStatistics element : list) {
+            count += element.countThreshold(relationToThreshold);
         }
         return count;
     }
@@ -95,8 +106,8 @@ public class VoxelStatisticsCombined implements VoxelStatistics {
     public Histogram histogram() throws OperationFailedException {
 
         Histogram out = new Histogram(255);
-        for (VoxelStatistics stats : list) {
-            out.addHistogram(stats.histogram());
+        for (VoxelStatistics element : list) {
+            out.addHistogram(element.histogram());
         }
         return out;
     }

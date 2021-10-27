@@ -28,7 +28,7 @@ package org.anchoranalysis.io.bioformats.copyconvert.tobyte;
 
 import java.nio.ByteBuffer;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
-import org.anchoranalysis.image.voxel.VoxelsWrapper;
+import org.anchoranalysis.image.voxel.VoxelsUntyped;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferWrap;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
@@ -41,7 +41,7 @@ public abstract class ToUnsignedByte extends ConvertTo<UnsignedByteBuffer> {
     protected int sizeBytes;
 
     protected ToUnsignedByte() {
-        super(VoxelsWrapper::asByte);
+        super(VoxelsUntyped::asByte);
     }
 
     @Override

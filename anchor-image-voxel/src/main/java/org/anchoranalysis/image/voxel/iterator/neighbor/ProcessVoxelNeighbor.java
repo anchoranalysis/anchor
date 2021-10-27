@@ -39,38 +39,42 @@ import org.anchoranalysis.spatial.point.Point3i;
 public interface ProcessVoxelNeighbor<T> {
 
     /**
-     * Specify the source-point (of which all the processed points are neighbors)
+     * Specify the source-point (of which all the processed points are neighbors).
      *
      * <p>This must be called before any calls to {@link #processPoint}.
      *
-     * @param pointSource the source point in global coordinates
-     * @param sourceVal the value of the source pixel (in the associated sliding buffer)
-     * @param sourceOffsetXY the offset of the source pixel in XY (in the associated sliding buffer)
+     * @param pointSource the source point in global coordinates.
+     * @param sourceValue the value of the source pixel (in the associated sliding buffer).
+     * @param sourceOffsetXY the offset of the source pixel in XY (in the associated sliding buffer).
      */
-    void initSource(Point3i pointSource, int sourceVal, int sourceOffsetXY);
+    void initSource(Point3i pointSource, int sourceValue, int sourceOffsetXY);
 
     /**
-     * Notifies the processor that there has been a change in z-coordinate
+     * Notifies the processor that there has been a change in z-coordinate.
      *
      * @param zChange the change in the Z-dimension to reach this neighbor relative to the source
-     *     coordinate
+     *     coordinate.
      * @return true if processing should continue on this slice, or false if processing should stop
-     *     for this slice
+     *     for this slice.
      */
     default boolean notifyChangeZ(int zChange) {
         return true;
     }
 
     /**
-     * Processes a particular point
+     * Processes a particular point.
      *
      * @param xChange the change in x-dimension to reach this neighbor relative to the source
-     *     coordinate
+     *     coordinate.
      * @param yChange the change in y-dimension to reach this neighbor relative to the source
-     *     coordinate
+     *     coordinate.
      */
     void processPoint(int xChange, int yChange);
 
-    /** Collects the result of the operation after processing neighbor pixels */
+    /** 
+     * Collects the result of the operation after processing neighbor pixels.
+     * 
+     * @return the result.
+     */
     public abstract T collectResult();
 }

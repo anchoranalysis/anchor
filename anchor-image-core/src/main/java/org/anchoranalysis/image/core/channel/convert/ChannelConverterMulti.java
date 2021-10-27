@@ -35,7 +35,7 @@ import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 
 /**
- * Converts a channel from one type to multiple other types.
+ * Converts a channel from one voxel data-type to one of multiple other types.
  *
  * @author Owen Feehan
  */
@@ -44,24 +44,31 @@ public class ChannelConverterMulti {
 
     private static final ConversionPolicy POLICY = ConversionPolicy.DO_NOT_CHANGE_EXISTING;
 
-    public Channel convert(Channel channel, VoxelDataType outputType) {
+    /**
+     * Converts a {@link Channel}'s voxels to another type.
+     * 
+     * @param channel the channel to convert.
+     * @param outputVoxelType the data-type to convert to.
+     * @return a {@link Channel} with voxel's of type {@code outputVoxelType}. 
+     */
+    public Channel convert(Channel channel, VoxelDataType outputVoxelType) {
 
-        if (channel.getVoxelDataType().equals(outputType)) {
+        if (channel.getVoxelDataType().equals(outputVoxelType)) {
             return channel;
         } else {
-            return converterFor(outputType).convert(channel, POLICY);
+            return converterFor(outputVoxelType).convert(channel, POLICY);
         }
     }
 
-    private ChannelConverter<?> converterFor(VoxelDataType outputType) {
+    private ChannelConverter<?> converterFor(VoxelDataType outputVoxelType) {
 
-        if (outputType.equals(UnsignedByteVoxelType.INSTANCE)) {
+        if (outputVoxelType.equals(UnsignedByteVoxelType.INSTANCE)) {
             return new ToUnsignedByte();
-        } else if (outputType.equals(UnsignedShortVoxelType.INSTANCE)) {
+        } else if (outputVoxelType.equals(UnsignedShortVoxelType.INSTANCE)) {
             return new ToUnsignedShort();
-        } else if (outputType.equals(FloatVoxelType.INSTANCE)) {
+        } else if (outputVoxelType.equals(FloatVoxelType.INSTANCE)) {
             return new ToFloat();
-        } else if (outputType.equals(UnsignedIntVoxelType.INSTANCE)) {
+        } else if (outputVoxelType.equals(UnsignedIntVoxelType.INSTANCE)) {
             throw new UnsupportedOperationException(
                     "UnsignedInt is not yet supported for this operation");
         } else {

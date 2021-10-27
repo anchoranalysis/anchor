@@ -49,17 +49,35 @@ import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedShortBuffer;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ConvertToNativeImg {
 
+    /**
+     * Creates an {@link NativeImg} from {@link Voxels} with an <i>unsigned byte</i> data-type.
+     * 
+     * @param voxels the voxels to use in the {@link NativeImg}.
+     * @return the newly created {@link NativeImg}, either reusing the memory in {@code voxels} or else a copy of it.
+     */
     public static NativeImg<UnsignedByteType, ByteArray> fromByte(
             Voxels<UnsignedByteBuffer> voxels) {
-        return Wrap.allSlices(voxels, ArrayFactory::fromByte, UnsignedByteType::new);
+        return WrapNativeImg.allSlices(voxels, ArrayFactory::fromByte, UnsignedByteType::new);
     }
 
+    /**
+     * Creates an {@link NativeImg} from {@link Voxels} with an <i>unsigned short</i> data-type.
+     * 
+     * @param voxels the voxels to use in the {@link NativeImg}.
+     * @return the newly created {@link NativeImg}, either reusing the memory in {@code voxels} or else a copy of it.
+     */
     public static NativeImg<UnsignedShortType, ShortArray> fromShort(
             Voxels<UnsignedShortBuffer> voxels) {
-        return Wrap.allSlices(voxels, ArrayFactory::fromShort, UnsignedShortType::new);
+        return WrapNativeImg.allSlices(voxels, ArrayFactory::fromShort, UnsignedShortType::new);
     }
 
+    /**
+     * Creates an {@link NativeImg} from {@link Voxels} with a <i>float</i> data-type.
+     * 
+     * @param voxels the voxels to use in the {@link NativeImg}.
+     * @return the newly created {@link NativeImg}, either reusing the memory in {@code voxels} or else a copy of it.
+     */
     public static NativeImg<FloatType, FloatArray> fromFloat(Voxels<FloatBuffer> voxels) {
-        return Wrap.allSlices(voxels, ArrayFactory::fromFloat, FloatType::new);
+        return WrapNativeImg.allSlices(voxels, ArrayFactory::fromFloat, FloatType::new);
     }
 }

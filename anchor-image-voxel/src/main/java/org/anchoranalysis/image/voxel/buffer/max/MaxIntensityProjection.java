@@ -44,18 +44,42 @@ import org.anchoranalysis.spatial.box.Extent;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MaxIntensityProjection {
 
+    /**
+     * Creates a buffer for a <i>max-intensity projection</i> for <b>unsigned byte</b> voxels.
+     *  
+     * @param extent the size of the projected image. The z-dimension is ignored.
+     * @return a newly created buffer that can be used for projection.
+     */
     public static ProjectableBuffer<UnsignedByteBuffer> createUnsignedByte(Extent extent) {
         return new UnsignedByteImplementation(extent);
     }
 
+    /**
+     * Creates a buffer for a <i>max-intensity projection</i> for <b>unsigned short</b> voxels.
+     *  
+     * @param extent the size of the projected image. The z-dimension is ignored.
+     * @return a newly created buffer that can be used for projection.
+     */
     public static ProjectableBuffer<UnsignedShortBuffer> createUnsignedShort(Extent extent) {
         return new UnsignedShortImplementation(extent);
     }
 
+    /**
+     * Creates a buffer for a <i>max-intensity projection</i> for <b>unsigned int</b> voxels.
+     *  
+     * @param extent the size of the projected image. The z-dimension is ignored.
+     * @return a newly created buffer that can be used for projection.
+     */
     public static ProjectableBuffer<UnsignedIntBuffer> createUnsignedInt(Extent extent) {
         return new UnsignedIntImplementation(extent);
     }
 
+    /**
+     * Creates a buffer for a <i>max-intensity projection</i> for <b>float</b> voxels.
+     *  
+     * @param extent the size of the projected image. The z-dimension is ignored.
+     * @return a newly created buffer that can be used for projection.
+     */
     public static ProjectableBuffer<FloatBuffer> createFloat(Extent extent) {
         return new FloatImplementation(extent);
     }

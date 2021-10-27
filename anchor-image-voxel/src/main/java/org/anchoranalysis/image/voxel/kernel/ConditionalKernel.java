@@ -30,7 +30,7 @@ import java.util.function.Predicate;
 import org.anchoranalysis.spatial.point.Point3i;
 
 /**
- * Executes another {@link BinaryKernel} iff a predicated is satisfied for a particular point.
+ * Executes another {@link BinaryKernel} iff a predicate is satisfied for a particular point.
  *
  * @author Owen Feehan
  */
@@ -39,6 +39,12 @@ public class ConditionalKernel extends BinaryKernel {
     private BinaryKernel kernel;
     private Predicate<Point3i> predicate;
 
+    /**
+     * Creates with a particular delegate {@link BinaryKernel} and a predicate that tests each point.
+     * 
+     * @param kernel the kernel to execute if {@code predicate} is satisfied at a particular point.
+     * @param predicate the predicate to be applied to a point.
+     */
     public ConditionalKernel(BinaryKernel kernel, Predicate<Point3i> predicate) {
         super(kernel.getSize());
         this.kernel = kernel;
@@ -56,7 +62,7 @@ public class ConditionalKernel extends BinaryKernel {
     }
 
     @Override
-    public void notifyZChange(LocalSlices inSlices, int z) {
-        kernel.notifyZChange(inSlices, z);
+    public void notifyBuffer(LocalSlices slices, int sliceIndex) {
+        kernel.notifyBuffer(slices, sliceIndex);
     }
 }

@@ -34,16 +34,21 @@ import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedIntBuffer;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedShortBuffer;
 import org.anchoranalysis.spatial.box.Extent;
 
+/**
+ * Creates {@link VoxelsArithmetic} for buffers of different types.
+ *
+ * @author Owen Feehan
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class VoxelsArithmeticFactory {
 
     /**
-     * Create voxels-arithmethic for {@link UnsignedByteBuffer}
+     * Create a {@link VoxelsArithmetic} for {@link UnsignedByteBuffer}.
      *
-     * @param extent the extent of the voxels on which arithmetic is to be performed
+     * @param extent the extent of the voxels on which arithmetic is to be performed.
      * @param bufferForSlice a buffer for a particular slice index (set at the initial position in
-     *     the buffer)
-     * @return a newly-created voxels-arithmetic
+     *     the buffer).
+     * @return a newly-created instance.
      */
     public static VoxelsArithmetic createByte(
             Extent extent, IntFunction<UnsignedByteBuffer> bufferForSlice) {
@@ -51,12 +56,12 @@ public class VoxelsArithmeticFactory {
     }
 
     /**
-     * Create voxels-arithmethic for {@link UnsignedShortBuffer}
+     * Create a {@link VoxelsArithmetic} for {@link UnsignedShortBuffer}.
      *
-     * @param extent the extent of the voxels on which arithmetic is to be performed
+     * @param extent the extent of the voxels on which arithmetic is to be performed.
      * @param bufferForSlice a buffer for a particular slice index (set at the initial position in
-     *     the buffer)
-     * @return a newly-created voxels-arithmetic
+     *     the buffer).
+     * @return a newly-created instance.
      */
     public static VoxelsArithmetic createShort(
             Extent extent, IntFunction<UnsignedShortBuffer> bufferForSlice) {
@@ -64,12 +69,12 @@ public class VoxelsArithmeticFactory {
     }
 
     /**
-     * Create voxels-arithmethic for {@link FloatBuffer}
+     * Create a {@link VoxelsArithmetic} for {@link FloatBuffer}.
      *
-     * @param extent the extent of the voxels on which arithmetic is to be performed
+     * @param extent the extent of the voxels on which arithmetic is to be performed.
      * @param bufferForSlice a buffer for a particular slice index (set at the initial position in
-     *     the buffer)
-     * @return
+     *     the buffer).
+     * @return a newly-created instance.
      */
     public static VoxelsArithmetic createFloat(
             Extent extent, IntFunction<FloatBuffer> bufferForSlice) {
@@ -77,12 +82,12 @@ public class VoxelsArithmeticFactory {
     }
 
     /**
-     * Create voxels-arithmethic for {@link UnsignedIntBuffer}
+     * Create a {@link VoxelsArithmetic} for {@link UnsignedIntBuffer}.
      *
-     * @param extent the extent of the voxels on which arithmetic is to be performed
+     * @param extent the extent of the voxels on which arithmetic is to be performed.
      * @param bufferForSlice a buffer for a particular slice index (set at the initial position in
-     *     the buffer)
-     * @return
+     *     the buffer).
+     * @return a newly-created instance.
      */
     public static VoxelsArithmetic createInt(
             Extent extent, IntFunction<UnsignedIntBuffer> bufferForSlice) {

@@ -52,7 +52,6 @@ import org.anchoranalysis.spatial.scale.ScaleFactor;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Resolution implements Serializable {
 
-    /** */
     private static final long serialVersionUID = 1L;
 
     // Stores in meters. If we change this, do we need to update annotations?

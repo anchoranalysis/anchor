@@ -42,25 +42,29 @@ import org.anchoranalysis.spatial.point.Point3i;
 @FunctionalInterface
 public interface ProcessBufferTernary<T> {
 
-    /** Notifies the processor that there has been a change in slice (z global coordinate) */
+    /** 
+     * Notifies the processor that there has been a change in slice.
+     *
+     * @param z the slice-index (global coordinates).
+     */
     default void notifyChangeSlice(int z) {}
 
     /**
-     * Processes a voxel location in a buffer
+     * Processes a voxel location in a buffer.
      *
-     * @param point a point with global coordinates
+     * @param point a point with global coordinates.
      * @param buffer1 first buffer for the current slice for which {@code offset} refers to a
-     *     particular location
+     *     particular location.
      * @param buffer2 second buffer for the current slice for which {@code offset} refers to a
-     *     particular location
+     *     particular location.
      * @param buffer3 third buffer for the current slice for which {@code offset} refers to a
-     *     particular location
+     *     particular location.
      * @param offset1 an offset value for the current slice for {@code buffer1} (i.e. indexing XY
-     *     only, but not Z)
+     *     only, but not Z).
      * @param offset2 an offset value for the current slice for {@code buffer2} (i.e. indexing XY
-     *     only, but not Z)
+     *     only, but not Z).
      * @param offset3 an offset value for the current slice for {@code buffer3} (i.e. indexing XY
-     *     only, but not Z)
+     *     only, but not Z).
      */
     void process(
             Point3i point, T buffer1, T buffer2, T buffer3, int offset1, int offset2, int offset3);

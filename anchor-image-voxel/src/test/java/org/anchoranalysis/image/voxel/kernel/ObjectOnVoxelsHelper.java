@@ -33,6 +33,12 @@ import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.spatial.box.Extent;
 
+/**
+ * Creates {@link Voxels} showing an object on top of an otherwise empty background.
+ * 
+ * @author Owen Feehan
+ *
+ */
 @NoArgsConstructor
 public class ObjectOnVoxelsHelper {
 

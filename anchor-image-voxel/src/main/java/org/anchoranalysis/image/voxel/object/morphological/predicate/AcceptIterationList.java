@@ -32,21 +32,35 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 
+/**
+ * The condition is accepted if any one of a list of {@link AcceptIterationPredicate} fulfills the
+ * condition.
+ *
+ * <p>This is like a logical <i>or</i> operation.
+ *
+ * @author Owen Feehan
+ */
 public class AcceptIterationList implements AcceptIterationPredicate {
+
+    /** The list of predicates. */
     private List<AcceptIterationPredicate> list = new ArrayList<>();
 
     @Override
-    public boolean acceptIteration(BinaryVoxels<UnsignedByteBuffer> voxels)
-            throws OperationFailedException {
-        for (AcceptIterationPredicate ai : list) {
-            if (!ai.acceptIteration(voxels)) {
+    public boolean accept(BinaryVoxels<UnsignedByteBuffer> voxels) throws OperationFailedException {
+        for (AcceptIterationPredicate predicate : list) {
+            if (!predicate.accept(voxels)) {
                 return false;
             }
         }
         return true;
     }
 
-    public boolean add(AcceptIterationPredicate e) {
-        return list.add(e);
+    /**
+     * Adds an item to the list of predicates.
+     *
+     * @param predicate the predicate to add.
+     */
+    public void add(AcceptIterationPredicate predicate) {
+        list.add(predicate);
     }
 }

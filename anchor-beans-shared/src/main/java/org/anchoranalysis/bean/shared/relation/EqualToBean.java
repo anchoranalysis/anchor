@@ -32,9 +32,8 @@ import org.anchoranalysis.math.relation.EqualTo;
 
 /**
  * A relation {@code double1 == double2}.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 @EqualsAndHashCode(callSuper = true)
 public class EqualToBean extends RelationBean {

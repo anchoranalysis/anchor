@@ -55,7 +55,7 @@ class PopulateIndexProcessor<T> implements ProcessBufferUnary<T> {
         this.bufferReaderWriter = bufferReaderWriter;
 
         binaryValues = visited.binaryValues();
-        binaryValyesByte = binaryValues.createByte();
+        binaryValyesByte = binaryValues.asByte();
     }
 
     @Override
@@ -78,7 +78,7 @@ class PopulateIndexProcessor<T> implements ProcessBufferUnary<T> {
                 mergeWithNeighbors.addElement(count);
                 count++;
             } else {
-                bufferIndex.put(offsetSlice, neighborLabel);
+                bufferIndex.putRaw(offsetSlice, neighborLabel);
             }
         }
     }

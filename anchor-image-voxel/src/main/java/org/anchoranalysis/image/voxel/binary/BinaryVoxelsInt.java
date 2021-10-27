@@ -66,7 +66,7 @@ class BinaryVoxelsInt extends BinaryVoxels<UnsignedIntBuffer> {
 
     @Override
     protected BinaryVoxels<UnsignedIntBuffer> binaryVoxelsFor(
-            Voxels<UnsignedIntBuffer> slice, BinaryValues binaryValues) {
-        return new BinaryVoxelsInt(slice, binaryValues);
+            Voxels<UnsignedIntBuffer> voxels, BinaryValues binaryValues) {
+        return new BinaryVoxelsInt(voxels, binaryValues);
     }
 }

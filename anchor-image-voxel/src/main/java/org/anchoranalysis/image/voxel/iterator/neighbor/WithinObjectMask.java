@@ -63,13 +63,13 @@ final class WithinObjectMask<T> implements ProcessVoxelNeighbor<T> {
     }
 
     @Override
-    public void initSource(Point3i point, int sourceVal, int sourceOffsetXY) {
+    public void initSource(Point3i point, int sourceValue, int sourceOffsetXY) {
         this.point = point;
 
         updateRel(point);
         maskOffsetXYAtPoint = extent.offsetSlice(relativeToCorner);
 
-        delegate.initSource(sourceVal, sourceOffsetXY);
+        delegate.initSource(sourceValue, sourceOffsetXY);
     }
 
     @Override

@@ -48,7 +48,9 @@ import org.anchoranalysis.spatial.point.ReadableTuple3i;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 /**
- * Voxel-data that is bounded to exist in a particular bounding-box in an image.
+ * {@link Voxels} that exist at a particular bounding-box within an image.
+ *
+ * <p>The {@link Voxels} must always have identical {@link Extent} to the bounding-box.
  *
  * @author Owen Feehan
  * @param <T> buffer-type
@@ -59,7 +61,7 @@ public class BoundedVoxels<T> {
     private static final Point3i ALL_ONES_2D = new Point3i(1, 1, 0);
     private static final Point3i ALL_ONES_3D = new Point3i(1, 1, 1);
 
-    /** A bounding-box that associates voxels to a particular part of an image */
+    /** A bounding-box that associates voxels to a particular part of an image. */
     @Getter private final BoundingBox boundingBox;
 
     /**
@@ -68,25 +70,33 @@ public class BoundedVoxels<T> {
      */
     @Getter private final Voxels<T> voxels;
 
-    /** Extracts value from voxels using local coordinates */
+    /**
+     * Extracts value from voxels using local coordinates (coordinates relative to the
+     * bounding-box).
+     */
     private final VoxelsExtracter<T> extracterLocal;
 
-    /** Extracts value from voxels using local coordinates */
+    /**
+     * Extracts value from voxels using local coordinates (coordinates relative to the
+     * bounding-box).
+     */
     private final VoxelsExtracter<T> extracterGlobal;
 
     /**
      * Creates voxels bounded to match the entire voxel-data at the origin.
      *
-     * @param voxels voxel-data
+     * @param voxels voxel-data.
      */
     public BoundedVoxels(Voxels<T> voxels) {
         this(new BoundingBox(voxels.extent()), voxels);
     }
 
     /**
-     * Copy constructor
+     * Copy constructor.
+     * 
+     * <p>It is a deep copy. The voxel memory buffer is duplicated.
      *
-     * @param source where to copy from
+     * @param source where to copy from.
      */
     public BoundedVoxels(BoundedVoxels<T> source) {
         this(source.boundingBox(), source.voxels.duplicate());
@@ -95,8 +105,8 @@ public class BoundedVoxels<T> {
     /**
      * Creates voxels with a corresponding bounding box.
      *
-     * @param boundingBox bounding-box
-     * @param voxels voxels which must have the same extent as {@code boundingBox}
+     * @param boundingBox bounding-box.
+     * @param voxels voxels which must have the same extent as {@code boundingBox}.
      */
     public BoundedVoxels(BoundingBox boundingBox, Voxels<T> voxels) {
         Preconditions.checkArgument(boundingBox.extent().equals(voxels.extent()));
@@ -106,12 +116,20 @@ public class BoundedVoxels<T> {
         this.extracterGlobal = VoxelsExtracterFactory.atCorner(cornerMin(), voxels.extract());
     }
 
+    /**
+     * Performs a <i>deep</i> equality check, that includes checking that each voxel has an
+     * identical value.
+     *
+     * @param other the voxels to check with.
+     * @return true iff the two {@link BoundedVoxels} instances have identical values and
+     *     bounding-boxes.
+     */
     public boolean equalsDeep(BoundedVoxels<?> other) {
-
-        if (!boundingBox.equals(other.boundingBox)) {
+        if (boundingBox.equals(other.boundingBox)) {
+            return voxels.equalsDeep(other.voxels);
+        } else {
             return false;
         }
-        return voxels.equalsDeep(other.voxels);
     }
 
     /**
@@ -120,19 +138,34 @@ public class BoundedVoxels<T> {
      * <p>This is an <b>immutable</b> operation, and a new {@link Voxels} are created.
      *
      * @param voxelsToAssign voxels to be assigned.
-     * @return a newly created replacement voxels but with an identical bounding-box
+     * @return a newly created replacement voxels but with an identical bounding-box.
      */
     public BoundedVoxels<T> replaceVoxels(Voxels<T> voxelsToAssign) {
         Preconditions.checkArgument(voxelsToAssign.extent().equals(extent()));
         return new BoundedVoxels<>(boundingBox, voxelsToAssign);
     }
 
-    public BoundedVoxels<T> growToZ(int sz, VoxelsFactoryTypeBound<T> factory) {
-        assert (this.boundingBox.extent().z() == 1);
-        assert (this.voxels.extent().z() == 1);
+    /**
+     * Grows a single z-sliced {@link BoundedVoxels} by duplicating the slice across the z-dimension
+     * {@code sizeZ} number of times.
+     *
+     * @param sizeZ the size in the z-dimension to grow to i.e. the number of duplicated sizes.
+     * @param factory a factory to use to create the duplicated voxels.
+     * @return a new {@link BoundedVoxels} with an identical corner, but with a 3D bounding-box (and
+     *     duplicated slices) instead of the previous 2D.
+     * @throws OperationFailedException if the existing voxels aren't 2D (a single slice).
+     */
+    public BoundedVoxels<T> growToZ(int sizeZ, VoxelsFactoryTypeBound<T> factory)
+            throws OperationFailedException {
+
+        if (this.boundingBox.extent().z() != 1 && this.voxels.extent().z() != 1) {
+            throw new OperationFailedException(
+                    "This operation may only be used on a 2D voxels, but voxels are currently 3D.");
+        }
 
         BoundingBox boxNew =
-                new BoundingBox(boundingBox.cornerMin(), boundingBox.extent().duplicateChangeZ(sz));
+                new BoundingBox(
+                        boundingBox.cornerMin(), boundingBox.extent().duplicateChangeZ(sizeZ));
 
         Voxels<T> buffer = factory.createInitialized(boxNew.extent());
 
@@ -148,12 +181,12 @@ public class BoundedVoxels<T> {
     }
 
     /**
-     * Grow bounding-box by 1 pixel in all directions
+     * Grow bounding-box by 1 pixel in all directions.
      *
-     * @param do3D 3-dimensions (true) or 2-dimensions (false)
-     * @param clipRegion a region to clip to, which we can't grow beyond
-     * @return a bounding box: the crnr is the relative-position to the current bounding box, the
-     *     extent is absolute
+     * @param do3D 3-dimensions (true) or 2-dimensions (false).
+     * @param clipRegion a region to clip to, which we can't grow beyond.
+     * @return a bounding box: the corner is the relative-position to the current bounding box, the
+     *     extent is absolute.
      */
     public BoundingBox dilate(boolean do3D, Optional<Extent> clipRegion) {
         Point3i allOnes = do3D ? ALL_ONES_3D : ALL_ONES_2D;
@@ -161,15 +194,18 @@ public class BoundedVoxels<T> {
     }
 
     /**
-     * Grows buffer of the object-mask in positive and negative directions by a certain amount.
+     * Grows the voxel buffer in the positive and negative directions by a certain amount.
      *
      * <p>This operation is <i>immutable</i>.
      *
-     * @param growthNegative
-     * @param growthPositive
-     * @param clipRegion if defined, clips the buffer to this region
-     * @param factory
-     * @return the grown object-mask with newly-created buffers
+     * @param growthNegative how much to grow in the <i>negative</i> direction (i.e. downards direction on an
+     *     axis).
+     * @param growthPositive how much to grow in the <i>positive</i> direction (i.e. upwards direction on an
+     *     axis).
+     * @param clipRegion if defined, clips the buffer to this region.
+     * @param factory a factory to create {@link VoxelsFactoryTypeBound}.
+     * @return a new {@link Voxels} with grown buffers.
+     * @throws OperationFailedException if the voxels are located outside the clipping region.
      */
     public BoundedVoxels<T> growBuffer(
             Point3i growthNegative,
@@ -203,15 +239,16 @@ public class BoundedVoxels<T> {
     }
 
     /**
-     * Creates a scaled-version (in XY dimensions only) of the current bounding-box
+     * Creates a scaled-version (in XY dimensions only) of the current bounding-box.
      *
      * <p>This is an <b>immutable</b> operation.
      *
      * @param scaleFactor what to scale X and Y dimensions by?
-     * @param interpolator means of interpolating between pixels
+     * @param interpolator means of interpolating between pixels.
      * @param clipTo an extent which the object-masks should always fit inside after scaling (to
-     *     catch any rounding errors that push the bounding box outside the scene-boundary)
-     * @return a new bounded-voxels box of specified size containing scaled contents of the existing
+     *     catch any rounding errors that push the bounding box outside the scene-boundary).
+     * @return a new {@link BoundedVoxels} box of specified size containing scaled contents of the
+     *     existing.
      */
     public BoundedVoxels<T> scale(
             ScaleFactor scaleFactor, Interpolator interpolator, Optional<Extent> clipTo) {
@@ -241,30 +278,44 @@ public class BoundedVoxels<T> {
         return new BoundedVoxels<>(boundingBox.flattenZ(), extracterLocal.projectMax());
     }
 
+    /**
+     * A deep-copy of the current structure.
+     *
+     * @return a copy of the current data, including duplication of the memory buffers for the
+     *     voxels.
+     */
     public BoundedVoxels<T> duplicate() {
         return new BoundedVoxels<>(this);
     }
 
     /**
-     * A slice buffer with <i>local</i> coordinates i.e. relative to the bounding-box corner
+     * A slice buffer with <i>local</i> coordinates.
      *
-     * @param sliceIndexRelative sliceIndex (z) relative to the bounding-box of the object-mask
-     * @return the buffer
+     * @param sliceIndexRelative sliceIndex (z) relative to the associated bounding-box minimum
+     *     corner.
+     * @return the buffer.
      */
     public T sliceBufferLocal(int sliceIndexRelative) {
         return voxels.sliceBuffer(sliceIndexRelative);
     }
 
     /**
-     * A slice buffer with <i>global</i> coordinates
+     * A slice buffer with <i>global</i> coordinates.
      *
-     * @param sliceIndexGlobal sliceIndex (z) in global coordinates
-     * @return the buffer
+     * @param sliceIndexGlobal sliceIndex (z) in global coordinates (relative to the image as a
+     *     whole).
+     * @return the buffer.
      */
     public T sliceBufferGlobal(int sliceIndexGlobal) {
         return voxels.sliceBuffer(sliceIndexGlobal - boundingBox().cornerMin().z());
     }
 
+    /**
+     * The size of the voxels across three dimensions, and also the size of the associated
+     * bounding-box.
+     *
+     * @return the size.
+     */
     public Extent extent() {
         return voxels.extent();
     }
@@ -272,13 +323,13 @@ public class BoundedVoxels<T> {
     /**
      * Creates an box with a subrange of the slices.
      *
-     * <p>This will always reuse the existing voxel-buffers..
+     * <p>This will always reuse the existing voxel-buffers.
      *
      * @param zMin minimum z-slice index, inclusive.
      * @param zMax maximum z-slice index, inclusive.
      * @param factory factory to use to create new voxels.
      * @return a newly created box for the slice-range requested.
-     * @throws CreateException
+     * @throws CreateException if {@code zMin} or {@code zMax} are outside the permitted range.
      */
     public BoundedVoxels<T> regionZ(int zMin, int zMax, VoxelsFactoryTypeBound<T> factory)
             throws CreateException {
@@ -313,13 +364,13 @@ public class BoundedVoxels<T> {
      * @param reuseIfPossible if true the existing box will be reused if possible, otherwise a new
      *     box is always created.
      * @return bounded0voxels corresponding to the requested region, either newly-created or reused
-     * @throws CreateException
+     * @throws CreateException if the source box does not contain the target box.
      */
     public BoundedVoxels<T> region(BoundingBox box, boolean reuseIfPossible)
             throws CreateException {
 
         if (!boundingBox.contains().box(box)) {
-            throw new CreateException("Source box does not contain target box");
+            throw new CreateException("The source box does not contain the target box");
         }
 
         return new BoundedVoxels<>(box, extracterGlobal.region(box, reuseIfPossible));
@@ -335,7 +386,7 @@ public class BoundedVoxels<T> {
      * voxelValueForRest}.
      *
      * <p>A new voxel-buffer is always created for this operation i.e. the existing box is never
-     * reused like sometimes in {@link #region}..
+     * reused like sometimes in {@link #region}.
      *
      * @param box bounding-box in absolute coordinates, that must at least partially intersect with
      *     the current bounds.
@@ -343,7 +394,7 @@ public class BoundedVoxels<T> {
      *     intersection.
      * @return newly created voxels containing partially some parts of the existing voxels and other
      *     regions.
-     * @throws CreateException if the boxes do not intersect
+     * @throws CreateException if the boxes do not intersect.
      */
     public BoundedVoxels<T> regionIntersecting(BoundingBox box, int voxelValueForRest)
             throws CreateException {
@@ -354,7 +405,7 @@ public class BoundedVoxels<T> {
                     "Requested bounding-box does not intersect with current bounds");
         }
 
-        Voxels<T> bufNew = voxels.factory().createInitialized(box.extent());
+        Voxels<T> bufferNew = voxels.factory().createInitialized(box.extent());
 
         // We can rely on the newly created voxels being 0 by default, otherwise we must update.
         if (voxelValueForRest != 0) {
@@ -362,19 +413,21 @@ public class BoundedVoxels<T> {
         }
 
         extracterGlobal.boxCopyTo(
-                boxIntersect.get(), bufNew, boxIntersect.get().relativePositionToBox(box));
+                boxIntersect.get(), bufferNew, boxIntersect.get().relativePositionToBox(box));
 
-        return new BoundedVoxels<>(box, bufNew);
+        return new BoundedVoxels<>(box, bufferNew);
     }
 
     /**
-     * Applies a function to map the bounding-box to a new-value (whose extent should be unchanged
-     * in value)
+     * Applies a function to map the bounding-box to a new-value.
+     *
+     * <p>The {@link Extent} of the bounding-box should remain unchanged in value.
      *
      * <p>This is an <b>immutable</b> operation, but the existing voxel-buffers are reused in the
      * new object.
      *
-     * @return a new object-mask with the updated bounding box
+     * @param boundingBoxToAssign the new bounding-box to assign.
+     * @return a new object-mask with the updated bounding box.
      */
     public BoundedVoxels<T> mapBoundingBoxPreserveExtent(BoundingBox boundingBoxToAssign) {
 
@@ -391,8 +444,8 @@ public class BoundedVoxels<T> {
      *
      * <p>This is an <b>immutable</b> operation, but the voxels-buffer for the slice is reused.
      *
-     * @param sliceIndex which slice to extract (z) in global coordinates
-     * @return the extracted-slice (bounded)
+     * @param sliceIndex which slice to extract (z) in global coordinates.
+     * @return the extracted-slice (bounded).
      */
     public BoundedVoxels<T> extractSlice(int sliceIndex) {
 
@@ -404,67 +457,95 @@ public class BoundedVoxels<T> {
         return new BoundedVoxels<>(boxFlattened, slice);
     }
 
+    /**
+     * The minimum corner of the bounding box in each dimension.
+     *
+     * @return the point used internally as a corner (exposed read-only).
+     */
     public ReadableTuple3i cornerMin() {
         return boundingBox.cornerMin();
     }
 
+    /**
+     * Assigns a new buffer for a slice.
+     *
+     * <p>This is a <b>mutable</b> operation.
+     *
+     * @param sliceIndexToUpdate slice-index to update.
+     * @param bufferToAssign buffer to assign.
+     */
     public void replaceSlice(int sliceIndexToUpdate, VoxelBuffer<T> bufferToAssign) {
         voxels.replaceSlice(sliceIndexToUpdate, bufferToAssign);
     }
 
+    /**
+     * Interface that allows manipulation of voxel intensities via arithmetic operations.
+     *
+     * @return the interface.
+     */
     public VoxelsArithmetic arithmetic() {
         return voxels.arithmetic();
+    }
+
+    @Override
+    public String toString() {
+        return boundingBox.toString();
     }
 
     /**
      * Assigns a value to a bounded-voxels accepting <i>global</i> coordinates for objects, boxes
      * etc.
      *
-     * @param valueToAssign value to assign
-     * @return an assigner that expects global co-ordinates
+     * @param valueToAssign value to assign.
+     * @return an assigner that expects global coordinates.
      */
     public VoxelsAssigner assignValue(int valueToAssign) {
         return VoxelsAssignerFactory.shiftBackBy(
                 voxels.assignValue(valueToAssign), boundingBox.cornerMin());
     }
 
-    /** Extracts value from voxels using <i>global</i> coordinates */
+    /**
+     * Extracts value from voxels using <i>global</i> coordinates (relative to the image as a
+     * whole).
+     *
+     * @return an extracter instance.
+     */
     public final VoxelsExtracter<T> extract() {
         return extracterGlobal;
     }
 
     /**
-     * Creates a grown bounding-box relative to this current box (absolute coordinates)
+     * Creates a grown bounding-box relative to this current box (absolute coordinates).
      *
-     * @param neg how much to grow in the negative direction
-     * @param pos how much to grow in the negative direction
-     * @param clipRegion a region to clip to, which we can't grow beyond
-     * @return a bounding box: the crnr is the relative-position to the current bounding box, the
-     *     extent is absolute
+     * @param negative how much to grow in the negative direction.
+     * @param positive how much to grow in the negative direction.
+     * @param clipRegion a region to clip to, which we can't grow beyond.
+     * @return a bounding box: the corner is the relative-position to the current bounding box, the
+     *     extent is absolute.
      */
     private BoundingBox createGrownBoxAbsolute(
-            Point3i neg, Point3i pos, Optional<Extent> clipRegion) {
-        BoundingBox relBox = createGrownBoxRelative(neg, pos, clipRegion);
+            Point3i negative, Point3i positive, Optional<Extent> clipRegion) {
+        BoundingBox relBox = createGrownBoxRelative(negative, positive, clipRegion);
         return relBox.reflectThroughOrigin().shiftBy(boundingBox.cornerMin());
     }
 
     /**
-     * Creates a grown bounding-box relative to this current box (relative coordinates)
+     * Creates a grown bounding-box relative to this current box (relative coordinates).
      *
-     * @param neg how much to grow in the negative direction
-     * @param pos how much to grow in the negative direction
-     * @param clipRegion a region to clip to, which we can't grow beyond
+     * @param negative how much to grow in the negative direction.
+     * @param positive how much to grow in the negative direction.
+     * @param clipRegion a region to clip to, which we can't grow beyond.
      * @return a bounding box: the corner is the relative-position to the current bounding box
-     *     (multipled by -1), the extent is absolute
+     *     (multiplied by -1), the extent is absolute.
      */
     private BoundingBox createGrownBoxRelative(
-            Point3i neg, Point3i pos, Optional<Extent> clipRegion) {
+            Point3i negative, Point3i positive, Optional<Extent> clipRegion) {
 
         Point3i negClamped =
                 new Point3i(
-                        clampNegative(boundingBox.cornerMin().x(), neg.x()),
-                        clampNegative(boundingBox.cornerMin().y(), neg.y()),
-                        clampNegative(boundingBox.cornerMin().z(), neg.z()));
+                        clampNegative(boundingBox.cornerMin().x(), negative.x()),
+                        clampNegative(boundingBox.cornerMin().y(), negative.y()),
+                        clampNegative(boundingBox.cornerMin().z(), negative.z()));
 
         ReadableTuple3i boxMax = boundingBox.calculateCornerMax();
 
@@ -477,48 +558,44 @@ public class BoundedVoxels<T> {
 
         Point3i growBy =
                 new Point3i(
-                        clampPositive(boxMax.x(), pos.x(), maxPossible.x()) + negClamped.x(),
-                        clampPositive(boxMax.y(), pos.y(), maxPossible.y()) + negClamped.y(),
-                        clampPositive(boxMax.z(), pos.z(), maxPossible.z()) + negClamped.z());
+                        clampPositive(boxMax.x(), positive.x(), maxPossible.x()) + negClamped.x(),
+                        clampPositive(boxMax.y(), positive.y(), maxPossible.y()) + negClamped.y(),
+                        clampPositive(boxMax.z(), positive.z(), maxPossible.z()) + negClamped.z());
         return new BoundingBox(negClamped, this.voxels.extent().growBy(growBy));
     }
 
     /**
-     * Considers growing in the negative direction from corner by negative increments.
+     * Considers growing in the <i>negative</i> direction from corner by negative increments.
      *
-     * @param corner
-     * @param negative
+     * @param corner the value to increment.
+     * @param positiveIncrement how much to consider growing by in <i>negative</i> direction.
      * @return the maximum number of increments that are allowed without leading to a bounding box
      *     that is {@code <0}.
      */
-    private static int clampNegative(int corner, int negative) {
-        int diff = corner - negative;
+    private static int clampNegative(int corner, int negativeIncrement) {
+        int diff = corner - negativeIncrement;
         if (diff > 0) {
-            return negative;
+            return negativeIncrement;
         } else {
-            return negative + diff;
+            return negativeIncrement + diff;
         }
     }
 
     /**
-     * Considers growing in the positive direction from corner by negative increments.
+     * Considers growing in the <i>positive</i> direction from corner by negative increments.
      *
-     * @param corner
-     * @param positive
-     * @param max
+     * @param corner the value to increment.
+     * @param positiveIncrement how much to consider growing by in <i>positive</i> direction.
+     * @param max the maximum permitted value in the positive direction.
      * @return the maximum number of increments that are allowed without leading to a bounding box
      *     that is {@code >= max}.
      */
-    private static int clampPositive(int corner, int positive, int max) {
-        int sum = corner + positive;
+    private static int clampPositive(int corner, int positiveIncrement, int max) {
+        int sum = corner + positiveIncrement;
         if (sum < max) {
-            return positive;
+            return positiveIncrement;
         } else {
-            return positive - (sum - max + 1);
+            return positiveIncrement - (sum - max + 1);
         }
-    }
-
-    public String toString() {
-        return boundingBox.toString();
     }
 }

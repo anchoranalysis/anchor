@@ -73,12 +73,12 @@ public class CheckedStream {
      * <p>As a side-effect, any runtime exceptions that are thrown during the function, will be
      * rethrown wrapped inside a {@link ConvertedToRuntimeException}.
      *
-     * @param  <T> type to consume
-     * @param  <E> exception that can be thrown by {code mapFunction}
-     * @param stream the stream to apply the map on
-     * @param throwableClass the class of {@code E}
-     * @param consumer the function to call for each object in the stream
-     * @throws E if the exception is thrown during mapping
+     * @param  <T> type to consume.
+     * @param  <E> exception that can be thrown by {code mapFunction}.
+     * @param stream the stream to apply the map on.
+     * @param throwableClass the class of {@code E}.
+     * @param consumer the function to call for each object in the stream.
+     * @throws E if the exception is thrown during mapping.
      */
     public static <T, E extends Exception> void forEach(
             Stream<T> stream,

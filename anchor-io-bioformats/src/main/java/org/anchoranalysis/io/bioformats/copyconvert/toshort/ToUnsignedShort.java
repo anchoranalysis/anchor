@@ -29,7 +29,7 @@ package org.anchoranalysis.io.bioformats.copyconvert.toshort;
 import java.nio.ByteBuffer;
 import loci.common.DataTools;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
-import org.anchoranalysis.image.voxel.VoxelsWrapper;
+import org.anchoranalysis.image.voxel.VoxelsUntyped;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferFactory;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedShortBuffer;
@@ -48,7 +48,7 @@ public abstract class ToUnsignedShort extends ConvertTo<UnsignedShortBuffer> {
     private int numberChannelsPerArray;
 
     protected ToUnsignedShort(boolean littleEndian) {
-        super(VoxelsWrapper::asShort);
+        super(VoxelsUntyped::asShort);
         this.littleEndian = littleEndian;
     }
 

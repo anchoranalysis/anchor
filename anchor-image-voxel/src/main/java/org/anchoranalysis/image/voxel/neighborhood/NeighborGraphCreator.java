@@ -38,7 +38,7 @@ import org.anchoranalysis.spatial.box.Extent;
 
 /**
  * Creates an undirected graph where each vertex is an object, and edge exists if the objects
- * neighbor
+ * neighbor.
  *
  * @author Owen Feehan
  * @param <V> vertex-type
@@ -47,13 +47,13 @@ class NeighborGraphCreator<V> {
 
     private final EdgeAdderParameters edgeAdderParams;
 
-    /** iff true outputs an undirected graph, otherwise directed */
+    /** iff true outputs an undirected graph, otherwise directed. */
     private boolean undirected = true;
 
     /**
-     * Creates a graph of neighbour objects
+     * Creates a graph of neighboring objects.
      *
-     * @param preventObjectIntersection iff true, objects can only be neighbors if they have no
+     * @param preventObjectIntersection iff true, objects can only be neighbors, if they have no
      *     intersecting voxels.
      */
     public NeighborGraphCreator(boolean preventObjectIntersection) {
@@ -61,7 +61,7 @@ class NeighborGraphCreator<V> {
     }
 
     /**
-     * Creates an edge from two neighboring vertices
+     * Creates an edge from two neighboring vertices.
      *
      * @author Owen Feehan
      * @param <V> vertex-type
@@ -69,20 +69,20 @@ class NeighborGraphCreator<V> {
      */
     @FunctionalInterface
     public interface EdgeFromVertices<V, E> {
-        E createEdge(V v1, V v2, int numberNeighboringPixels);
+        E createEdge(V vertex1, V vertex2, int numberNeighboringPixels);
     }
 
     /**
      * Create the graph for a given list of vertices, where edges represent the number of
      * intersecting voxels between objects.
      *
-     * @param vertices vertices to construct graph from
+     * @param vertices vertices to construct graph from.
      * @param vertexToObject converts the vertex to an object-mask (called repeatedly so should be
-     *     low-cost)
-     * @param sceneExtent
-     * @param do3D
-     * @return the newly created graph
-     * @throws CreateException
+     *     low-cost).
+     * @param sceneExtent the size of the image, the object-masks exist in.
+     * @param do3D if true, the Z-dimension is also considered for neighbors. Otherwise, only the X and Y dimensions.
+     * @return the newly created graph.
+     * @throws CreateException if any objects are not fully contained in the scene.
      */
     public GraphWithPayload<V, Integer> createGraphIntersectingVoxels(
             List<V> vertices,
@@ -93,24 +93,24 @@ class NeighborGraphCreator<V> {
         return createGraph(
                 vertices,
                 vertexToObject,
-                (v1, v2, numberVoxels) -> numberVoxels,
+                (vertex1, vertex2, numberVoxels) -> numberVoxels,
                 sceneExtent,
                 do3D);
     }
 
     /**
-     * Create the graph for a given list of vertices
+     * Create the graph for a given list of vertices.
      *
-     * @param vertices vertices to construct graph from
+     * @param vertices vertices to construct graph from.
      * @param vertexToObject converts the vertex to an object-mask (called repeatedly so should be
-     *     low-cost)
+     *     low-cost).
      * @param edgeFromVertices creates an edge for two vertices (and the number of neighboring
-     *     pixels)
-     * @param sceneExtent
-     * @param do3D
+     *     pixels).
+     * @param sceneExtent the size of the image, the object-masks exist in.
+     * @param do3D if true, the Z-dimension is also considered for neighbors. Otherwise, only the X and Y dimensions.
      * @param <E> edge-type of graph
      * @return the newly created graph
-     * @throws CreateException
+     * @throws CreateException if any objects are not fully contained in the scene.
      */
     private <E> GraphWithPayload<V, E> createGraph(
             List<V> vertices,

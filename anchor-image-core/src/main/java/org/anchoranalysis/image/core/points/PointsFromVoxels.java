@@ -58,7 +58,7 @@ class PointsFromVoxels {
     /**
      * Creates a list of 2 dimensional integer points for each voxel
      *
-     * @param voxels binary-voxels, in each ON voxel represents a point
+     * @param voxels binary-voxels, in each <i>on</i> voxel represents a point
      * @return a newly created list
      * @throws CreateException if the voxels have three dimensions
      */
@@ -70,7 +70,7 @@ class PointsFromVoxels {
     /**
      * Creates a list of 3 dimensional integer points for each voxel
      *
-     * @param voxels binary-voxels, in each ON voxel represents a point
+     * @param voxels binary-voxels, in each <i>on</i> voxel represents a point
      * @return a newly created list
      */
     public static List<Point3i> listFrom3i(BinaryVoxels<UnsignedByteBuffer> voxels) {
@@ -80,7 +80,7 @@ class PointsFromVoxels {
     /**
      * Creates a list of 2 dimensional integer points for each voxel
      *
-     * @param voxels binary-voxels, in each ON voxel represents a point
+     * @param voxels binary-voxels, in each <i>on</i> voxel represents a point
      * @param shift adds this shift to each point
      * @return a newly created list
      * @throws CreateException if the voxels have three dimensions
@@ -102,7 +102,7 @@ class PointsFromVoxels {
     /**
      * Creates a list of 3 dimensional integer points for each voxel with an added shift
      *
-     * @param voxels binary-voxels, in each ON voxel represents a point
+     * @param voxels binary-voxels, in each <i>on</i> voxel represents a point
      * @param shift adds this shift to each point
      * @return a newly created list
      */
@@ -116,7 +116,7 @@ class PointsFromVoxels {
     /**
      * Creates a {@link TreeSet} of 3 dimensional integer points for each voxel with an added shift
      *
-     * @param voxels binary-voxels, in each ON voxel represents a point
+     * @param voxels binary-voxels, in each <i>on</i> voxel represents a point
      * @param shift adds this shift to each point
      * @return a newly created list
      */
@@ -130,7 +130,7 @@ class PointsFromVoxels {
     /**
      * Creates a list of 3 dimensional double points for each voxel with an added shift
      *
-     * @param voxels binary-voxels, in each ON voxel represents a point
+     * @param voxels binary-voxels, in each <i>on</i> voxel represents a point
      * @param shift adds this shift to each point
      * @return a newly created list
      */
@@ -142,14 +142,14 @@ class PointsFromVoxels {
     }
 
     /**
-     * Consumes a two dimensional integer point for each ON voxel (with a possible shift)
+     * Consumes a two dimensional integer point for each <i>on</i> voxel (with a possible shift)
      *
      * <p>The z-dimension is ignored for each point.
      *
      * <p>No check occurs that a stack is 2 dimensional, so it can be called on a three dimensional
      * stack possibly producing multiple identical points.
      *
-     * @param voxels binary-voxels where each ON voxel produces a point
+     * @param voxels binary-voxels where each <i>on</i> voxel produces a point
      * @param shift adds this shift to each point
      * @param consumer called for each point
      */
@@ -158,7 +158,7 @@ class PointsFromVoxels {
             ReadableTuple3i shift,
             Consumer<Point2i> consumer) {
 
-        BinaryValuesByte binaryValues = voxels.binaryValues().createByte();
+        BinaryValuesByte binaryValues = voxels.binaryValues().asByte();
         IterateVoxelsEqualTo.equalToPrimitiveSlice(
                 voxels.voxels(),
                 0,
@@ -167,9 +167,9 @@ class PointsFromVoxels {
     }
 
     /**
-     * Consumes a three dimensional integer point for each ON voxel (with a possible shift)
+     * Consumes a three dimensional integer point for each <i>on</i> voxel (with a possible shift)
      *
-     * @param voxels binary-voxels where each ON voxel produces a point
+     * @param voxels binary-voxels where each <i>on</i> voxel produces a point
      * @param shift adds this shift to each point
      * @param consumer called for each point
      */
@@ -177,7 +177,7 @@ class PointsFromVoxels {
             BinaryVoxels<UnsignedByteBuffer> voxels,
             ReadableTuple3i shift,
             Consumer<Point3i> consumer) {
-        BinaryValuesByte binaryValues = voxels.binaryValues().createByte();
+        BinaryValuesByte binaryValues = voxels.binaryValues().asByte();
         IterateVoxelsEqualTo.equalToPrimitive(
                 voxels.voxels(),
                 binaryValues.getOnByte(),
@@ -185,15 +185,15 @@ class PointsFromVoxels {
     }
 
     /**
-     * Consumes a three dimensional double point for each ON voxel (with a possible shift)
+     * Consumes a three dimensional double point for each <i>on</i> voxel (with a possible shift)
      *
-     * @param voxels binary-voxels where each ON voxel produces a point
+     * @param voxels binary-voxels where each <i>on</i> voxel produces a point
      * @param add adds this shift to each point
      * @param consumer called for each point
      */
     private static void consumePoints3d(
             BinaryVoxels<UnsignedByteBuffer> voxels, Point3d add, Consumer<Point3d> consumer) {
-        BinaryValuesByte binaryValues = voxels.binaryValues().createByte();
+        BinaryValuesByte binaryValues = voxels.binaryValues().asByte();
         IterateVoxelsEqualTo.equalToPrimitive(
                 voxels.voxels(),
                 binaryValues.getOnByte(),

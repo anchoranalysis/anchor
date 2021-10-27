@@ -28,7 +28,7 @@ package org.anchoranalysis.image.voxel.convert;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 
 /**
- * Base class for conversion to unsigned 8-bit.
+ * Base class for conversion to <b>unsigned 8-bit</b>.
  *
  * @author Owen Feehan
  */

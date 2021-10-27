@@ -35,39 +35,45 @@ package org.anchoranalysis.image.voxel.iterator.neighbor;
 public interface ProcessVoxelNeighborAbsolute<T> {
 
     /**
-     * The value and offset for the source point (around which we process neighbors)
+     * The value and offset for the source point (around which we process neighbors).
      *
-     * <p>This function should always be called before {@link #processPoint}
+     * <p>This function should always be called before {@link #processPoint}.
      *
      * <p>It can be called repeatedly for different points (resetting state each time).
      *
-     * @param sourceVal the value of the source pixel
-     * @param sourceOffsetXY the offset of the source pixel in XY
+     * @param sourceValue the intensity value of the source voxel.
+     * @param sourceOffsetXY the offset of the source voxel in XY.
      */
-    void initSource(int sourceVal, int sourceOffsetXY);
+    void initSource(int sourceValue, int sourceOffsetXY);
 
     /**
-     * Notifies the processor that there has been a change in z-coordinate
+     * Notifies the processor that there has been a change in z-coordinate.
      *
      * @param zChange the change in the Z-dimension to reach this neighbor relative to the source
-     *     coordinate
+     *     coordinate.
+     * @param z the Z-dimension coordinates for this point (the neighboring point) in global (absolute) terms
+     *     i.e. <b>not</b> relative to a bounding-box.
      */
     default void notifyChangeZ(int zChange, int z) {}
 
     /**
-     * Processes a particular point
+     * Processes a particular point.
      *
      * @param xChange the change in x-dimension to reach this neighbor relative to the source
-     *     coordinate
+     *     coordinate.
      * @param yChange the change in y-dimension to reach this neighbor relative to the source
-     *     coordinate
-     * @param x the cordinates for this point (the neighboring point) in global (absolute) terms
-     *     i.e. NOT relative to a bounding-box
-     * @param y the cordinates for this point (the neighboring point) in global (absolute) terms
-     *     i.e. NOT relative to a bounding-box
+     *     coordinate.
+     * @param x the X-dimension coordinates for this point (the neighboring point) in global (absolute) terms
+     *     i.e. <b>not</b> relative to a bounding-box.
+     * @param y the Y-dimension coordinates for this point (the neighboring point) in global (absolute) terms
+     *     i.e. <b>not</b> relative to a bounding-box.
      */
-    boolean processPoint(int xChange, int yChange, int x, int y);
+    void processPoint(int xChange, int yChange, int x, int y);
 
-    /** Collects the result of the operation after processing neighbor pixels */
+    /** 
+     * Collects the result of the operation after processing neighbor voxels.
+     *
+     * @return the result. 
+     */
     public abstract T collectResult();
 }

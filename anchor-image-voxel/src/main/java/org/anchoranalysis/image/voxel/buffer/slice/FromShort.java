@@ -31,18 +31,37 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBufferFactory;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedShortBuffer;
 import org.anchoranalysis.spatial.box.Extent;
 
+
+/**
+ * Implementation of {@link SliceBufferIndex} with voxels of type <b>unsigned short</b>.
+ * 
+ * @author Owen Feehan
+ *
+ */
 public class FromShort implements SliceBufferIndex<UnsignedShortBuffer> {
 
     private final VoxelBuffer<UnsignedShortBuffer>[] buffer;
     private final Extent extent;
 
     // START FACTORY METHODS
+    /**
+     * Create a buffer of a particular size, that <b>has been</b> initialized.
+     * 
+     * @param extent the size of buffer to create.
+     * @return the newly created buffer.
+     */
     public static SliceBufferIndex<UnsignedShortBuffer> createInitialized(Extent extent) {
         FromShort p = new FromShort(extent);
         p.initialize();
         return p;
     }
 
+    /**
+     * Create a buffer of a particular size, that <b>has not been</b> initialized.
+     * 
+     * @param extent the size of buffer to create.
+     * @return the newly created buffer.
+     */
     public static SliceBufferIndex<UnsignedShortBuffer> createUninitialized(Extent extent) {
         return new FromShort(extent);
     }
@@ -64,9 +83,9 @@ public class FromShort implements SliceBufferIndex<UnsignedShortBuffer> {
     }
 
     @Override
-    public void replaceSlice(int z, VoxelBuffer<UnsignedShortBuffer> pixels) {
-        pixels.buffer().clear();
-        buffer[z] = pixels;
+    public void replaceSlice(int z, VoxelBuffer<UnsignedShortBuffer> sliceToAssign) {
+        sliceToAssign.buffer().clear();
+        buffer[z] = sliceToAssign;
     }
 
     @Override

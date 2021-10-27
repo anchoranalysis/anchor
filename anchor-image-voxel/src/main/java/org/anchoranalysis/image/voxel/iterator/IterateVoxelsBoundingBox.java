@@ -129,7 +129,8 @@ public class IterateVoxelsBoundingBox {
      *
      * @param box the box that is used as a condition on what voxels to iterate i.e. only voxels
      *     within these bounds
-     * @param process is called for each voxel within the bounding-box using <i>global</i>
+     * @param predicate only voxels that match this predicate are processed.
+     * @param process is called for each voxel that matches {@code predicate} within the bounding-box using <i>global</i>
      *     coordinates.
      */
     public static void withMatchingPoints(
@@ -392,7 +393,7 @@ public class IterateVoxelsBoundingBox {
                         voxels.extent().offset(box.cornerMin()),
                         new Point3i(box.cornerMin()),
                         voxels.extent(),
-                        voxels.binaryValues().createByte(),
+                        voxels.binaryValues().asByte(),
                         params);
 
         Extent extent = voxels.extent();
@@ -408,7 +409,7 @@ public class IterateVoxelsBoundingBox {
 
                 for (point.setX(cornerMin.x()); point.x() < cornerMax.x(); point.incrementX()) {
                     process.process(cursor);
-                    cursor.incrementIndex();
+                    cursor.incrementIndexOnly();
                 }
             }
         }
@@ -436,7 +437,7 @@ public class IterateVoxelsBoundingBox {
                         voxels.extent().offset(box.cornerMin()),
                         new Point3i(box.cornerMin()),
                         voxels.extent(),
-                        voxels.binaryValues().createByte(),
+                        voxels.binaryValues().asByte(),
                         params);
 
         Extent extent = voxels.extent();
@@ -454,7 +455,7 @@ public class IterateVoxelsBoundingBox {
                     if (predicate.test(cursor)) {
                         return true;
                     }
-                    cursor.incrementIndex();
+                    cursor.incrementIndexOnly();
                 }
             }
         }

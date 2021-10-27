@@ -29,9 +29,15 @@ package org.anchoranalysis.image.voxel.neighborhood;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 
+/**
+ * Parameters used in {@code EdgeAdder} class.
+ * 
+ * @author Owen Feehan
+ *
+ */
 @Value
 @RequiredArgsConstructor
-public class EdgeAdderParameters {
+class EdgeAdderParameters {
 
     /**
      * Iff true, objects can only be neighbors if they have no intersecting voxels.

@@ -44,7 +44,7 @@ public interface Seed {
 
     void flattenZ();
 
-    void growToZ(int sz);
+    void growToZ(int sz) throws OperationFailedException;
 
     Seed duplicate();
 

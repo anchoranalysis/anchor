@@ -33,23 +33,24 @@ import org.anchoranalysis.bean.GenerateUniqueParameterization;
 import org.anchoranalysis.math.relation.DoubleBiPredicate;
 
 /**
- * A base class specifying threshold and a relation to it, allowing for tests of a value in relation to a threshold.
+ * A base class specifying threshold and a relation to it, allowing for tests of a value in relation
+ * to a threshold.
  *
  * @author Owen Feehan
  */
 public abstract class RelationToThreshold extends AnchorBean<RelationToThreshold>
         implements GenerateUniqueParameterization {
 
-    /** 
+    /**
      * The threshold-value.
      *
      * @return the value.
      */
     public abstract double threshold();
 
-    /** 
+    /**
      * The relation to the threshold.
-     * 
+     *
      * @return the predicate, where the threshold will form the second operand.
      */
     public abstract DoubleBiPredicate relation();

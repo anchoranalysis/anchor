@@ -33,6 +33,11 @@ package org.anchoranalysis.image.voxel.kernel;
  */
 public abstract class BinaryKernel extends Kernel {
 
+    /**
+     * Creates with a specific kernel-size.
+     *
+     * @param size the size of the kernel-matrix in one dimension, either X or Y. This size should always be an <i>odd</i> number.
+     */
     protected BinaryKernel(int size) {
         super(size);
     }
@@ -40,8 +45,8 @@ public abstract class BinaryKernel extends Kernel {
     /**
      * Calculates the boolean at a particular point.
      *
-     * @param point the point
-     * @return the boolean result at this point
+     * @param point the point.
+     * @return the boolean result at this point.
      */
     public abstract boolean calculateAt(KernelPointCursor point);
 }
