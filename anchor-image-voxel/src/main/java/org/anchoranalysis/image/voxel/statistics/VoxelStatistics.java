@@ -59,6 +59,12 @@ public interface VoxelStatistics {
      */
     long sumOfSquares();
 
+    /**
+     * Derives statistics only of the voxels that satisfy a condition, relative to a threshold.
+     * 
+     * @param relationToThreshold the condition that must be satisfied for voxels to be included in the statistics.
+     * @return a new {@link VoxelStatistics} pertaining only to the voxels that satisfy the condition.
+     */
     VoxelStatistics threshold(RelationToThreshold relationToThreshold);
 
     /**
@@ -66,7 +72,8 @@ public interface VoxelStatistics {
      * 
      * @param quantile the quantile, which should always be {@code >= 0} and {@code <= 1}.
      * @return the voxel value corresponding to the quantile.
-     * @throws OperationFailedException if this cannot be computed.
+     * @throws OperationFailedException if {@code quantile} is out-of-range.
+     * @throws UnsupportedOperationException if the operation is unsupported.
      */
     double quantile(double quantile) throws OperationFailedException;
 
@@ -77,8 +84,15 @@ public interface VoxelStatistics {
      * @throws OperationFailedException if a histogram cannot be created.
      */
     Histogram histogram() throws OperationFailedException;
-
-    // Avoids the overhead with assigning new memory if we we are just counting
+    
+    /**
+     * Counts the number of voxels that exist, relative to a threshold.
+     * 
+     * <p>This methods conveniently avoids overhead with assigning new memory when counting.
+     * 
+     * @param relationToThreshold defines the relation to a threshold e.g. above a number, or below a number.
+     * @return the total number of voxels that fulfill {@code relationToThreshold}.
+     */
     long countThreshold(RelationToThreshold relationToThreshold);
 
     /**

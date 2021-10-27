@@ -32,7 +32,7 @@ import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedIntBuffer;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedShortBuffer;
 
 /**
- * Converts voxel buffers to a unsigned 8-bit buffer without scaling any values.
+ * Converts voxel buffers to an <b>unsigned 8-bit</b> buffer without scaling any values.
  *
  * <p>Values larger than 255 are clamping.
  *

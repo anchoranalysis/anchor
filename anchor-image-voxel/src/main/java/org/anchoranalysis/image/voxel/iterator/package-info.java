@@ -36,7 +36,7 @@
  *   <li>withPoint for when only a {@link org.anchoranalysis.spatial.point.Point3i} is provided.
  *   <li>withVoxelBuffer for when additionally a {@link
  *       org.anchoranalysis.image.voxel.buffer.VoxelBuffer} for the respective-slice is provided.
- *   <li>withBuffer for when additionally a buffer (as used within @link
+ *   <li>withBuffer for when additionally a buffer (as used within {@link
  *       org.anchoranalysis.image.voxel.buffer.VoxelBuffer}) for the respective-slice is provided.
  * </ul>
  *

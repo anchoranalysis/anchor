@@ -34,9 +34,9 @@ import lombok.NoArgsConstructor;
  *
  * <p>These units can be specified by a string or an enum.
  *
- * <p>e.g. find a enum for <i>nm</i>
+ * <p>e.g. find a enum for <i>nm</i>.
  *
- * <p>e.g. find a string representation for <i>NANO</i>
+ * <p>e.g. find a string representation for <i>NANO</i>.
  *
  * @author Owen Feehan
  */

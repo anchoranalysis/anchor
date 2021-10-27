@@ -35,6 +35,14 @@ package org.anchoranalysis.image.voxel.datatype;
  */
 public abstract class SignedVoxelType extends VoxelDataType {
 
+    /**
+     * Construct for a particular number of bits, with a unique identifier, and with bounds on the values.
+     * 
+     * @param numberBits the number of bits required to represent a voxel.
+     * @param typeIdentifier a string to uniquely and compactly describe this type.
+     * @param maxValue the maximum value this type can represent.
+     * @param minValue the minimum value this type can represent.
+     */
     protected SignedVoxelType(int numberBits, String typeIdentifier, long maxValue, long minValue) {
         super(numberBits, typeIdentifier, maxValue, minValue);
     }

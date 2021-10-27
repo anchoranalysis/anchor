@@ -32,7 +32,7 @@ import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedIntBuffer;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedShortBuffer;
 
 /**
- * Converts voxel buffers to a unsigned 8-bit buffer linearly scaling against the maximum constant
+ * Converts voxel buffers to an <b>unsigned 8-bit</b> buffer linearly scaling against the maximum constant
  * value.
  * 
  * <p>The scaling occurs so that the full 8-bit range of values is supported.
