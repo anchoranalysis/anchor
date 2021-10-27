@@ -89,12 +89,19 @@ public class ObjectMask {
     private static final VoxelsFactoryTypeBound<UnsignedByteBuffer> FACTORY =
             VoxelsFactory.getUnsignedByte();
 
+    /** The voxels defining the mask. */
     private final BoundedVoxels<UnsignedByteBuffer> voxels;
 
+    /** What values constitute an <i>on</i> and <i>off</i> state in {@code voxels} - as <i>int</i>s. */
     @Getter private final BinaryValues binaryValues;
+    
+    /** What values constitute an <i>on</i> and <i>off</i> state in {@code voxels} - as <i>byte</i>s. */
     @Getter private final BinaryValuesByte binaryValuesByte;
+    
+    /** The interpolator to use when resizing. */
     private final Interpolator interpolator;
 
+    /** Provides methods to read/copy/duplicate regions of voxels. */
     @Getter private final VoxelsExtracter<UnsignedByteBuffer> extract;
 
     /**
@@ -125,12 +132,11 @@ public class ObjectMask {
     }
 
     /**
-     * Creates an {@link ObjectMask} to correspond to a {@link BoundedVoxels} with {@link
-     * UnsignedByteBuffer}.
+     * Creates from a {@link BoundedVoxels} with {@link UnsignedByteBuffer}.
      *
      * <p>The voxels are reused without duplication.
      *
-     * <p>Default {@link BinaryValues} of (off=0, on=255) are used for the mask.
+     * <p>Default {@link BinaryValues} of (off=0, on=255) are assumed, and {@code voxels} should only contain these values.
      *
      * @param voxels voxels to be used in the object-mask.
      */
@@ -138,23 +144,65 @@ public class ObjectMask {
         this(voxels, BinaryValues.getDefault());
     }
 
+    /**
+     * Creates from a {@link BinaryVoxels} to be located at the origin.
+     * 
+     * <p>The voxels are reused without duplication.
+     * 
+     * @param voxels the voxels.
+     */
     public ObjectMask(BinaryVoxels<UnsignedByteBuffer> voxels) {
         this(new BoundedVoxels<>(voxels.voxels()), voxels.binaryValues());
     }
 
+    /**
+     * Creates from {@link Voxels} and a {@link BoundingBox} with default {@link BinaryValues}.
+     * 
+     * <p>The voxels are reused without duplication.
+     * 
+     * <p>Default {@link BinaryValues} of (off=0, on=255) are assumed, and {@code voxels} should only contain these values.
+     * 
+     * @param box the bounding-box.
+     * @param voxels the voxels, which must be the same size as {@code box}.
+     */
     public ObjectMask(BoundingBox box, Voxels<UnsignedByteBuffer> voxels) {
         this(new BoundedVoxels<>(box, voxels));
     }
 
+    /**
+     * Creates from {@link Voxels} and a corresponding {@link BoundingBox} and {@link BinaryValues}.
+     * 
+     * <p>The voxels are reused without duplication.
+     * 
+     * @param box the bounding-box.
+     * @param voxels the voxels, which must be the same size as {@code box}, and should only contain values in {@code binaryValues}.
+     * @param binaryValues the binary-values to use (as {@code int}s).
+     */
     public ObjectMask(
             BoundingBox box, Voxels<UnsignedByteBuffer> voxels, BinaryValues binaryValues) {
         this(new BoundedVoxels<>(box, voxels), binaryValues);
     }
 
+    /**
+     * Creates from a {@link BinaryVoxels} and a corresponding bounding-box.
+     * 
+     * <p>The voxels are reused without duplication.
+     * 
+     * @param box the bounding-box.
+     * @param voxels the voxels, which must be the same size as {@code box}.
+     */
     public ObjectMask(BoundingBox box, BinaryVoxels<UnsignedByteBuffer> voxels) {
         this(new BoundedVoxels<>(box, voxels.voxels()), voxels.binaryValues());
     }
 
+    /**
+     * Creates from {@link BoundedVoxels} and corresponding {@link BinaryValues}.
+     * 
+     * <p>The voxels are reused without duplication.
+     * 
+     * @param voxels the voxels.
+     * @param binaryValues the binary-values to use.
+     */
     public ObjectMask(BoundedVoxels<UnsignedByteBuffer> voxels, BinaryValues binaryValues) {
         this.voxels = voxels;
         this.binaryValues = binaryValues;
@@ -163,17 +211,26 @@ public class ObjectMask {
         this.extract = voxels.extract();
     }
 
+    /**
+     * Like {@link #ObjectMask(BoundingBox, Voxels, BinaryValues)} but specifies the binary-values as bytes.
+     * 
+     * @param box the bounding-box.
+     * @param voxels the voxels, which must be the same size as {@code box}, and should only contain values in {@code binaryValues}.
+     * @param binaryValues the binary-values to use (as {@code byte}s).
+     */
     public ObjectMask(
-            BoundingBox box, Voxels<UnsignedByteBuffer> voxels, BinaryValuesByte binaryValuesByte) {
+            BoundingBox box, Voxels<UnsignedByteBuffer> voxels, BinaryValuesByte binaryValues) {
         this.voxels = new BoundedVoxels<>(box, voxels);
-        this.binaryValues = binaryValuesByte.asInt();
-        this.binaryValuesByte = binaryValuesByte;
-        this.interpolator = createInterpolator(binaryValues);
+        this.binaryValues = binaryValues.asInt();
+        this.binaryValuesByte = binaryValues;
+        this.interpolator = createInterpolator(this.binaryValues);
         this.extract = voxels.extract();
     }
 
     /**
      * Copy constructor.
+     * 
+     * <p>It is a deep copy. The voxel memory buffer is duplicated.
      *
      * @param source to copy from.
      */
@@ -192,6 +249,11 @@ public class ObjectMask {
         this.extract = voxels.extract();
     }
 
+    /**
+     * Creates a deep-copy of the current object-mask.
+     * 
+     * @return a newly created mask that is a duplicate, including duplicating the voxel memory buffers.
+     */
     public ObjectMask duplicate() {
         return new ObjectMask(this);
     }
@@ -221,11 +283,32 @@ public class ObjectMask {
         return new ObjectMask(voxels.growToZ(sizeZ, FACTORY));
     }
 
-    public ObjectMask growBuffer(Point3i neg, Point3i pos, Optional<Extent> clipRegion)
+    /**
+     * Grows the object-mask's voxel buffers in the positive and negative directions by a certain amount.
+     *
+     * <p>This operation is <i>immutable</i>.
+     *
+     * @param growthNegative how much to grow in the <i>negative</i> direction (i.e. downards direction on an
+     *     axis).
+     * @param growthPositive how much to grow in the <i>positive</i> direction (i.e. upwards direction on an
+     *     axis).
+     * @param clipRegion if defined, clips the buffer to this region.
+     * @return the grown object-mask with newly-created buffers.
+     * @throws OperationFailedException if the voxels are located outside the clipping region.
+     */
+    public ObjectMask growBuffer(Point3i growthNegative, Point3i growthPositive, Optional<Extent> clipRegion)
             throws OperationFailedException {
-        return new ObjectMask(voxels.growBuffer(neg, pos, clipRegion, FACTORY));
+        return new ObjectMask(voxels.growBuffer(growthNegative, growthPositive, clipRegion, FACTORY));
     }
 
+    /**
+     * A deep equality check with another {@link ObjectMask}.
+     * 
+     * <p>Each voxel must be identical, as well as identical binary-values and bounding-box.
+     * 
+     * @param other the other {@link ObjectMask} to compare against.
+     * @return true iff the two object-masks are identical.
+     */
     public boolean equalsDeep(ObjectMask other) {
         if (!voxels.equalsDeep(other.voxels)) {
             return false;
@@ -370,15 +453,29 @@ public class ObjectMask {
         return objects.size() <= 1;
     }
 
+    /**
+     * Provides a {@link VoxelsPredicate} that finds or counts all <i>on</i> voxels in the object-mask.
+     * 
+     * @return the predicate.
+     */
     public VoxelsPredicate voxelsOn() {
         return extract.voxelsEqualTo(binaryValues.getOnInt());
     }
 
+    /**
+     * Provides a {@link VoxelsPredicate} that finds or counts all <i>off</i> voxels in the object-mask.
+     * 
+     * @return the predicate.
+     */
     public VoxelsPredicate voxelsOff() {
         return extract.voxelsEqualTo(binaryValues.getOffInt());
     }
 
-    /** The number of <i>on</i> voxels on the object-mask */
+    /** 
+     * The number of <i>on</i> voxels on the object-mask.
+     * 
+     * @return the number of voxels that are <i>on</i>.
+     */
     public int numberVoxelsOn() {
         return voxelsOn().count();
     }

@@ -34,7 +34,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValues;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
-import org.anchoranalysis.spatial.box.Extent;
 import org.anchoranalysis.spatial.point.ReadableTuple3i;
 
 /**
@@ -223,46 +222,6 @@ public class ObjectCollection implements Iterable<ObjectMask> {
     @Override
     public String toString() {
         return toString(false, false);
-    }
-
-    public int countIntersectingVoxels(ObjectMask object) {
-
-        int count = 0;
-        for (ObjectMask other : this) {
-            count += other.countIntersectingVoxels(object);
-        }
-        return count;
-    }
-
-    public boolean hasIntersectingVoxels(ObjectMask object) {
-
-        for (ObjectMask other : this) {
-            if (other.hasIntersectingVoxels(object)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public ObjectCollection findObjectsWithIntersectingBBox(ObjectMask objectToIntersectWith) {
-        return stream()
-                .filter(
-                        object ->
-                                object.boundingBox()
-                                        .intersection()
-                                        .existsWith(objectToIntersectWith.boundingBox()));
-    }
-
-    public boolean objectsAreAllInside(Extent extent) {
-        for (ObjectMask object : this) {
-            if (!extent.contains(object.boundingBox().cornerMin())) {
-                return false;
-            }
-            if (!extent.contains(object.boundingBox().calculateCornerMax())) {
-                return false;
-            }
-        }
-        return true;
     }
 
     /**

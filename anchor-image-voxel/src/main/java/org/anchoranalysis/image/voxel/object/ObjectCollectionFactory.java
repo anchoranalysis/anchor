@@ -254,7 +254,7 @@ public class ObjectCollectionFactory {
      * @param startInclusive start index for the integer range (inclusive).
      * @param endExclusive end index for the integer range (exclusive).
      * @param mapFunction function for flat-mapping.
-     * @return a newly created ObjectCollection.
+     * @return a newly created {@link ObjectCollection}.
      */
     public static ObjectCollection flatMapFromRange(
             int startInclusive, int endExclusive, IntFunction<ObjectCollection> mapFunction) {
@@ -270,6 +270,7 @@ public class ObjectCollectionFactory {
      *
      * @param startInclusive start index for the integer range (inclusive).
      * @param endExclusive end index for the integer range (exclusive).
+     * @param throwableClass the class of the exception that might be thrown during mapping.
      * @param mapFunction function for flat-mapping.
      * @return a newly created {@link ObjectCollection}.
      * @throws E exception if it occurs during mapping.
@@ -294,6 +295,7 @@ public class ObjectCollectionFactory {
      * @param <T> type that will be mapped to {@link ObjectMask}.
      * @param <E> exception-type that may be thrown during mapping.
      * @param iterable incoming collection to be mapped.
+     * @param predicate only elements from the iterable that satisfy this predicate are added.
      * @param mapFunction function for mapping.
      * @return a newly created {@link ObjectCollection}.
      * @throws E if thrown by <code>mapFunction</code>
@@ -319,6 +321,7 @@ public class ObjectCollectionFactory {
      * @param <T> type that will be mapped to {@link ObjectCollection}.
      * @param <E> exception that be thrown during mapping.
      * @param list incoming list to be mapped.
+     * @param predicate only elements from the list that satisfy this predicate are added.
      * @param mapFunctionWithIndex function for mapping, also including an index (the original position
      *     in the bounding-box).
      * @return a newly created {@link ObjectCollection}.

@@ -59,11 +59,12 @@ public class WalkPredicate {
     private final boolean bigNeighborhood;
 
     /**
-     * Walks in X and Y direction, and Z direction if enabled.
+     * Do any neighboring voxels in <i>any</u> direction satisfy the predicate?
      *
      * @param buffer the buffer associated with the current slice
      * @param bufferRetriever a means of retrieving buffers for other slices, accepting a relative
      *     shift compared to current slice (e.g. -1, +1) etc.
+     * @return true iff at least one neighbor voxel in <i>any</i> direction satisfies the predicate.
      */
     public boolean walk(UnsignedByteBuffer buffer, BufferRetriever bufferRetriever) {
         return walkX(buffer)
@@ -72,7 +73,7 @@ public class WalkPredicate {
                 || maybeQualifyFromBigNeighbourhood(buffer);
     }
 
-    /** Do any neighbor voxels in X direction qualify the voxel? */
+    /** Do any neighboring voxels in X direction qualify the voxel? */
     private boolean walkX(UnsignedByteBuffer buffer) {
         // We walk up and down in x
         point.decrementX();
@@ -95,7 +96,7 @@ public class WalkPredicate {
         return false;
     }
 
-    /** Do any neighbor voxels in Y direction qualify the voxel? */
+    /** Do any neighboring voxels in Y direction qualify the voxel? */
     private boolean walkY(UnsignedByteBuffer buffer) {
         point.decrementY();
 
@@ -117,7 +118,7 @@ public class WalkPredicate {
         return false;
     }
 
-    /** Do any neighbor voxels in Z direction qualify the voxel? */
+    /** Do any neighboring voxels in Z direction qualify the voxel? */
     private boolean walkZ(BufferRetriever bufferRetriever) {
         if (point.isUseZ()) {
             return qualifyFromZDirection(bufferRetriever, -1)
