@@ -30,7 +30,7 @@ import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.kernel.KernelPointCursor;
 
 /**
- * A predicate on whether a neighbour satisfies a condition in relation to a particular point that it neighbors.
+ * A predicate on whether a neighbor satisfies a condition in relation to a particular point that it neighbors.
  * 
  * @author Owen Feehan
  *

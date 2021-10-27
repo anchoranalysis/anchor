@@ -73,8 +73,8 @@ public class FromByte implements SliceBufferIndex<UnsignedByteBuffer> {
     }
 
     @Override
-    public void replaceSlice(int z, VoxelBuffer<UnsignedByteBuffer> pixels) {
-        buffer[z] = pixels;
+    public void replaceSlice(int z, VoxelBuffer<UnsignedByteBuffer> sliceToAssign) {
+        buffer[z] = sliceToAssign;
         buffer[z].buffer().clear();
     }
 

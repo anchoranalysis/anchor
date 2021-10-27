@@ -47,7 +47,23 @@ public interface SliceBufferIndex<T> {
      */
     VoxelBuffer<T> slice(int z);
 
-    void replaceSlice(int z, VoxelBuffer<T> pixels);
+    /**
+     * The underlying buffer corresponding to a particular z-slice.
+     * 
+     * @param z the index (beginning at 0) of all z-slices.
+     * @return the corresponding buffer for {@code z}.
+     */
+    default T sliceBuffer(int z) {
+        return slice(z).buffer();
+    }
+    
+    /**
+     * Replaces the voxels for a particular z-slice.
+     * 
+     * @param z the index of z-slice to replace.
+     * @param sliceToAssign the voxels for the new slice to assign.
+     */
+    void replaceSlice(int z, VoxelBuffer<T> sliceToAssign);
 
     /**
      * The size of each buffer.
@@ -55,10 +71,6 @@ public interface SliceBufferIndex<T> {
      * @return the size.
      */
     Extent extent();
-
-    default T sliceBuffer(int z) {
-        return slice(z).buffer();
-    }
 
     /**
      * Calls {@code sliceConsumer} once for each slice with the respective buffer.

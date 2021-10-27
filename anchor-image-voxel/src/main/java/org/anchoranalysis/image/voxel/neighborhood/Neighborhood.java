@@ -31,7 +31,7 @@ import org.anchoranalysis.image.voxel.iterator.neighbor.ProcessVoxelNeighbor;
 /**
  * A region in proximity to a voxel, encompassing this voxel as well as others.
  *
- * <p>See <a href="https://en.wikipedia.org/wiki/Neighborhood_operation">Neighbourhood
+ * <p>See <a href="https://en.wikipedia.org/wiki/Neighborhood_operation">Neighborhood
  * operation.</a>
  *
  * @author Owen Feehan

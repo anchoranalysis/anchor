@@ -64,15 +64,15 @@ public final class ObjectMaskStream {
      * <p>This is an <i>immutable</i> operation.
      *
      * @param  <E> exception-type that can occur during mapping
-     * @param mapFunc performs mapping
+     * @param mapFunction performs mapping
      * @return a newly created object-collection
      * @throws E if an exception is thrown by the mapping function.
      */
     public <E extends Exception> ObjectCollection map(
-            CheckedFunction<ObjectMask, ObjectMask, E> mapFunc) throws E {
+            CheckedFunction<ObjectMask, ObjectMask, E> mapFunction) throws E {
         ObjectCollection out = new ObjectCollection();
         for (ObjectMask object : delegate) {
-            out.add(mapFunc.apply(object));
+            out.add(mapFunction.apply(object));
         }
         return out;
     }
@@ -86,11 +86,11 @@ public final class ObjectMaskStream {
      *
      * <p>This is an <i>immutable</i> operation.
      *
-     * @param mapFunc maps the bounding-box to a new bounding-box
+     * @param mapFunction maps the bounding-box to a new bounding-box
      * @return a newly created object-collection
      */
-    public ObjectCollection mapBoundingBoxPreserveExtent(UnaryOperator<BoundingBox> mapFunc) {
-        return map(object -> object.mapBoundingBoxPreserveExtent(mapFunc));
+    public ObjectCollection mapBoundingBoxPreserveExtent(UnaryOperator<BoundingBox> mapFunction) {
+        return map(object -> object.mapBoundingBoxPreserveExtent(mapFunction));
     }
 
     /**
@@ -118,15 +118,15 @@ public final class ObjectMaskStream {
      *
      * @param <T> destination type for the mapping
      * @param <E> exception that can be thrown during mapping
-     * @param mapFunc performs mapping
+     * @param mapFunction performs mapping
      * @return a newly created list contained the mapped objects
      * @throws E if an exception occurs during mapping
      */
-    public <T, E extends Exception> List<T> mapToList(CheckedFunction<ObjectMask, T, E> mapFunc)
+    public <T, E extends Exception> List<T> mapToList(CheckedFunction<ObjectMask, T, E> mapFunction)
             throws E {
         List<T> out = new ArrayList<>();
         for (ObjectMask obj : delegate) {
-            out.add(mapFunc.apply(obj));
+            out.add(mapFunction.apply(obj));
         }
         return out;
     }
@@ -140,15 +140,15 @@ public final class ObjectMaskStream {
      *
      * @param  <T> destination type for the mapping
      * @param  <E> exception that can be thrown during mapping
-     * @param mapFunc performs mapping
+     * @param mapFunction performs mapping
      * @return a newly created list contained the mapped objects (which aren't Optional.empty())
      * @throws E if an exception occurs during mapping
      */
     public <T, E extends Exception> List<T> mapToListOptional(
-            CheckedFunction<ObjectMask, Optional<T>, E> mapFunc) throws E {
+            CheckedFunction<ObjectMask, Optional<T>, E> mapFunction) throws E {
         List<T> out = new ArrayList<>();
         for (ObjectMask obj : delegate) {
-            Optional<T> result = mapFunc.apply(obj);
+            Optional<T> result = mapFunction.apply(obj);
             result.ifPresent(out::add);
         }
         return out;
@@ -161,15 +161,15 @@ public final class ObjectMaskStream {
      *
      * @param <T> destination type for the mapping
      * @param <E> exception that can be thrown during mapping
-     * @param mapFunc performs mapping
+     * @param mapFunction performs mapping
      * @return a newly created tree-set contained the mapped objects
      * @throws E if an exception occurs during mapping
      */
     public <T, E extends Exception> SortedSet<T> mapToSortedSet(
-            CheckedFunction<ObjectMask, T, E> mapFunc) throws E {
+            CheckedFunction<ObjectMask, T, E> mapFunction) throws E {
         SortedSet<T> out = new TreeSet<>();
         for (ObjectMask obj : delegate) {
-            out.add(mapFunc.apply(obj));
+            out.add(mapFunction.apply(obj));
         }
         return out;
     }
@@ -179,13 +179,13 @@ public final class ObjectMaskStream {
      *
      * <p>This is an <i>immutable</i> operation.
      *
-     * @param mapFunc performs flat-mapping
+     * @param mapFunction performs flat-mapping
      * @return a newly created object-collection
      */
-    public ObjectCollection flatMap(Function<ObjectMask, ObjectCollection> mapFunc) {
+    public ObjectCollection flatMap(Function<ObjectMask, ObjectCollection> mapFunction) {
         return new ObjectCollection(
                 delegate.streamStandardJava()
-                        .flatMap(element -> mapFunc.apply(element).streamStandardJava()));
+                        .flatMap(element -> mapFunction.apply(element).streamStandardJava()));
     }
 
     /**
@@ -194,20 +194,21 @@ public final class ObjectMaskStream {
      *
      * <p>This is an <i>immutable</i> operation.
      *
-     * @param  <E> exception-type that can be thrown by <code>mapFunc</code>
-     * @param mapFunc performs flat-mapping
-     * @return a newly created object-collection
-     * @throws E if its thrown by <code>mapFunc</code>
+     * @param  <E> exception-type that can be thrown by <code>mapFunction</code>.
+     * @param throwableClass the class of {@code E}.
+     * @param mapFunction performs flat-mapping.
+     * @return a newly created object-collection.
+     * @throws E if its thrown by <code>mapFunction</code>.
      */
     public <E extends Exception> ObjectCollection flatMap(
             Class<? extends Exception> throwableClass,
-            CheckedFunction<ObjectMask, ObjectCollection, E> mapFunc)
+            CheckedFunction<ObjectMask, ObjectCollection, E> mapFunction)
             throws E {
         return new ObjectCollection(
                 CheckedStream.flatMap(
                         delegate.streamStandardJava(),
                         throwableClass,
-                        element -> mapFunc.apply(element).asList()));
+                        element -> mapFunction.apply(element).asList()));
     }
 
     /**
@@ -271,13 +272,13 @@ public final class ObjectMaskStream {
      *
      * <p>This is an <i>immutable</i> operation.
      *
-     * @param mapFunc performs mapping
+     * @param mapFunction performs mapping
      * @param predicate iff true object is included, otherwise excluded
      * @return a newly created object-collection, a filtered version of all objects, then mapped
      */
     public ObjectCollection filterAndMap(
-            Predicate<ObjectMask> predicate, UnaryOperator<ObjectMask> mapFunc) {
-        return new ObjectCollection(delegate.streamStandardJava().filter(predicate).map(mapFunc));
+            Predicate<ObjectMask> predicate, UnaryOperator<ObjectMask> mapFunction) {
+        return new ObjectCollection(delegate.streamStandardJava().filter(predicate).map(mapFunction));
     }
 
     /**
@@ -318,7 +319,11 @@ public final class ObjectMaskStream {
         return delegate.streamStandardJava().anyMatch(predicate);
     }
 
-    /** Converts to a {@link HashSet} (newly-created). */
+    /** 
+     * Converts to a {@link HashSet}.
+     * 
+     * @return a newly-created set, containing the items in the stream.
+     */
     public Set<ObjectMask> toSet() {
         return delegate.streamStandardJava().collect(Collectors.toCollection(HashSet::new));
     }

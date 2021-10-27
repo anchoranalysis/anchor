@@ -38,22 +38,26 @@ import org.anchoranalysis.spatial.point.Point3i;
 @FunctionalInterface
 public interface PredicateBufferBinary<T> {
 
-    /** Notifies the processor that there has been a change in slice (z global coordinate) */
+    /** 
+     * Notifies the processor that there has been a change in slice (z global coordinate).
+     *
+     * @param z the z-index of the slices.
+     */
     default void notifyChangeSlice(int z) {}
 
     /**
-     * Tests a voxel location in two buffers
+     * Tests a voxel location in two buffers.
      *
-     * @param point a point with global coordinates
+     * @param point a point with global coordinates.
      * @param buffer1 first buffer for the current slice for which {@code offsetSlice} refers to a
-     *     particular location
+     *     particular location.
      * @param buffer2 second buffer for the current slice for which {@code offsetSlice} refers to a
-     *     particular location
+     *     particular location.
      * @param offset1 an offset value for the current slice for <b>buffer1</b> (i.e. indexing XY
-     *     only, but not Z)
+     *     only, but not Z).
      * @param offset2 an offset value for the current slice for <b>buffer2</b> (i.e. indexing XY
-     *     only, but not Z)
-     * @return true if the predicate is satisfied
+     *     only, but not Z).
+     * @return true if the predicate is satisfied.
      */
     boolean test(Point3i point, T buffer1, T buffer2, int offset1, int offset2);
 }

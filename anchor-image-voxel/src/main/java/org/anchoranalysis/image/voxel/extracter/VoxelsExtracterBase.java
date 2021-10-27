@@ -48,7 +48,7 @@ import org.anchoranalysis.spatial.point.ReadableTuple3i;
  * @param <T> buffer-type
  */
 @AllArgsConstructor
-public abstract class Base<T> implements VoxelsExtracter<T> {
+abstract class VoxelsExtracterBase<T> implements VoxelsExtracter<T> {
 
     // START REQUIRED ARGUMENTS
     /** The voxels to extract from. */
@@ -94,19 +94,19 @@ public abstract class Base<T> implements VoxelsExtracter<T> {
 
         for (int z = sourceStart.z(); z <= sourceEnd.z(); z++) {
 
-            T srcArr = voxels.sliceBuffer(z);
-            T destArr = voxelsDestination.sliceBuffer(z + relativePosition.z());
+            T sourceBuffer = voxels.sliceBuffer(z);
+            T destinationBuffer = voxelsDestination.sliceBuffer(z + relativePosition.z());
 
             for (int y = sourceStart.y(); y <= sourceEnd.y(); y++) {
                 for (int x = sourceStart.x(); x <= sourceEnd.x(); x++) {
 
-                    int srcIndex = extent.offset(x, y);
-                    int destIndex =
+                    int sourceIndex = extent.offset(x, y);
+                    int destinationIndex =
                             voxelsDestination
                                     .extent()
                                     .offset(x + relativePosition.x(), y + relativePosition.y());
 
-                    copyBufferIndexTo(srcArr, srcIndex, destArr, destIndex);
+                    copySingleVoxelTo(sourceBuffer, sourceIndex, destinationBuffer, destinationIndex);
                 }
             }
         }
@@ -165,12 +165,12 @@ public abstract class Base<T> implements VoxelsExtracter<T> {
 
         for (int z = sourceStart.z(); z <= sourceEnd.z(); z++) {
 
-            T srcArr = voxels.sliceBuffer(z);
-            T destArr = voxelsDestination.sliceBuffer(z + relativePosition.z());
+            T sourceBuffer = voxels.sliceBuffer(z);
+            T destinationBuffer = voxelsDestination.sliceBuffer(z + relativePosition.z());
 
             UnsignedByteBuffer maskBuffer = object.sliceBufferGlobal(z);
 
-            int srcIndex = 0;
+            int sourceIndex = 0;
             for (int y = sourceStart.y(); y <= sourceEnd.y(); y++) {
                 for (int x = sourceStart.x(); x <= sourceEnd.x(); x++) {
 
@@ -180,42 +180,69 @@ public abstract class Base<T> implements VoxelsExtracter<T> {
                                     .offset(x + relativePosition.x(), y + relativePosition.y());
 
                     if (maskBuffer.getRaw() == binaryValues.getOnByte()) {
-                        copyBufferIndexTo(srcArr, srcIndex, destArr, destIndex);
+                        copySingleVoxelTo(sourceBuffer, sourceIndex, destinationBuffer, destIndex);
                     }
-                    srcIndex++;
+                    sourceIndex++;
                 }
             }
         }
     }
 
+    /**
+     * Creates a {@link ProjectableBuffer} of appropriate-type that can be used for a <i>max-intensity-projection</i>.
+     * 
+     * @param extent the size of the image to project. The Z-dimension value is ignored.
+     * @return the projectable-buffer.
+     */
     protected abstract ProjectableBuffer<T> createMaxIntensityBuffer(Extent extent);
 
+    /**
+     * Creates a {@link ProjectableBuffer} of appropriate-type that can be used for a <i>mean-intensity-projection</i>.
+     * 
+     * @param extent the size of the image to project. The Z-dimension value is ignored.
+     * @return the projectable-buffer.
+     */
     protected abstract ProjectableBuffer<T> createMeanIntensityBuffer(Extent extent);
 
-    protected abstract void copyBufferIndexTo(
+    /**
+     * Copies a single voxel in a <i>source-</i>buffer to a <i>destination-</i>buffer.
+     * 
+     * @param sourceBuffer the buffer to copy a voxel from.
+     * @param sourceIndex the index in {@code sourceBuffer} where the voxel to be copied is located.
+     * @param destinationBuffer the buffer to copy a voxel into.
+     * @param destinationIndex the index in {@code destinationBuffer} where the voxel is to be copied into.
+     */
+    protected abstract void copySingleVoxelTo(
             T sourceBuffer, int sourceIndex, T destinationBuffer, int destinationIndex);
 
+    /**
+     * The voxel value at a buffer.
+     * 
+     * @param buffer the buffer where voxels are located.
+     * @param index the index in {@code buffer} where the voxel to be copied is located.
+     * @return the intensity value of the voxel.
+     */
     protected abstract int voxelAtBufferIndex(T buffer, int index);
 
     /**
-     * Checks if the current value from a buffer is <i>greater than</i> a constant value
+     * Checks if the current value from a buffer is <i>greater than</i> a constant value.
      *
-     * <p>(i.e. by calling {@code get()} on the buffer)
+     * <p>(i.e. by calling {@code get()} on the buffer).
      *
-     * @param buffer provides the value to compare
-     * @param threshold the constant threshold-value
-     * @return true iff the current value from the buffer is greater than the threshold
+     * @param buffer provides the value to compare.
+     * @param threshold the constant threshold-value.
+     * @return true iff the current value from the buffer is greater than the threshold.
      */
     protected abstract boolean bufferValueGreaterThan(T buffer, int threshold);
 
     /**
-     * Checks if the current value from a buffer is <i>equal to</i> a constant value
+     * Checks if the current value from a buffer is <i>equal to</i> a constant value.
      *
      * <p>(i.e. by calling {@code get()} on the buffer).
      *
-     * @param buffer provides the value to compare
-     * @param value the constant-value
-     * @return true iff the current value from the buffer is equal to the constant
+     * @param buffer provides the value to compare.
+     * @param value the constant-value.
+     * @return true iff the current value from the buffer is equal to the constant.
      */
     protected abstract boolean bufferValueEqualTo(T buffer, int value);
 

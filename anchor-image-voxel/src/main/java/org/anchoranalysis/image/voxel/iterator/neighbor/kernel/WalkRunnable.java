@@ -36,7 +36,7 @@ import org.anchoranalysis.image.voxel.kernel.KernelPointCursor;
 import org.anchoranalysis.spatial.point.Point3i;
 
 /**
- * Walks in X, Y and Z directions from a point, executing a {@link Runnable} if the neighbour
+ * Walks in X, Y and Z directions from a point, executing a {@link Runnable} if the neighbor
  * satisfies conditions.
  *
  * <p>The conditions are:

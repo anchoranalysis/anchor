@@ -29,14 +29,21 @@ package org.anchoranalysis.image.voxel.iterator.neighbor;
 import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.image.voxel.buffer.SlidingBuffer;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.spatial.box.Extent;
 
+/**
+ * Creates {@link ProcessVoxelNeighbor} to match certain circumstances.
+ * 
+ * @author Owen Feehan
+ *
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ProcessVoxelNeighborFactory {
 
     /**
-     * Within either an object-mask or an extent (as a fallback).
+     * Creates to process neighbors that must lie within either an object-mask or an extent (as a fallback).
      *
      * @param containingMask if defined, the process is restricted to only process points within
      *     this object-mask.
@@ -54,16 +61,38 @@ public class ProcessVoxelNeighborFactory {
                 .orElseGet(() -> withinExtent(extentFallback, process));
     }
 
+    /**
+     * Creates to process neighbors that must lie within an extent.
+     * 
+     * <p>The extent is derived from the {@link SlidingBuffer} associated with {@code process}.
+     *
+     * @param process a process which will be wrapped inside a restriction.
+     * @return a new process with a restriction on the existing process.
+     */
     public static <T> ProcessVoxelNeighbor<T> withinExtent(
             ProcessVoxelNeighborAbsoluteWithSlidingBuffer<T> process) {
         return withinExtent(process.extent(), process);
     }
 
+    /**
+     * Creates to process neighbors that must lie within an {@link ObjectMask}.
+     *
+     * @param object the object-mask voxels must lie within.
+     * @param process a process which will be wrapped inside a restriction.
+     * @return a new process with a restriction on the existing process.
+     */
     public static <T> ProcessVoxelNeighbor<T> withinMask(
             ObjectMask object, ProcessChangedPointAbsoluteMasked<T> process) {
         return new WithinObjectMask<>(process, object);
     }
 
+    /**
+     * Creates to process neighbors that must lie within an {@link ObjectMask}.
+     *
+     * @param object the object-mask voxels must lie within.
+     * @param process a process which will be wrapped inside a restriction.
+     * @return a new process with a restriction on the existing process.
+     */
     public static <T> ProcessVoxelNeighbor<T> withinMask(
             ObjectMask object, ProcessVoxelNeighborAbsolute<T> process) {
         return new WithinObjectMask<>(new WrapAbsoluteAsMasked<>(process), object);

@@ -32,36 +32,79 @@ import org.anchoranalysis.math.histogram.Histogram;
 import org.anchoranalysis.math.statistics.VarianceCalculatorLong;
 
 /**
- * Allows retrieval of statistics about voxel intensities.
+ * Allows retrieval of statistics about voxel values.
  *
  * @author Owen Feehan
  */
 public interface VoxelStatistics {
 
+    /** 
+     * The total count.
+     *
+     * @return the total number of voxels.
+     */
     long size();
 
+    /**
+     * The sum of all voxel values.
+     * 
+     * @return the sum.
+     */
     long sum();
 
+    /**
+     * The sum of the square of all voxel values.
+     * 
+     * @return the sum-of-squares.
+     */
     long sumOfSquares();
 
     VoxelStatistics threshold(RelationToThreshold relationToThreshold);
 
+    /**
+     * The voxel value corresponding to a particular quantile.
+     * 
+     * @param quantile the quantile, which should always be {@code >= 0} and {@code <= 1}.
+     * @return the voxel value corresponding to the quantile.
+     * @throws OperationFailedException if this cannot be computed.
+     */
     double quantile(double quantile) throws OperationFailedException;
 
+    /***
+     * A {@link Histogram} of all voxel values.
+     * 
+     * @return a histogram.
+     * @throws OperationFailedException if a histogram cannot be created.
+     */
     Histogram histogram() throws OperationFailedException;
 
     // Avoids the overhead with assigning new memory if we we are just counting
     long countThreshold(RelationToThreshold relationToThreshold);
 
+    /**
+     * The mean of all voxel values.
+     * 
+     * @return the mean.
+     */
+    default double mean() {
+        return ((double) sum()) / size();
+    }
+
+    /**
+     * The variance of all voxel values.
+     * 
+     * @return the variance.
+     */
     default double variance() {
         return new VarianceCalculatorLong(sum(), sumOfSquares(), size()).variance();
     }
-
+    
+    /**
+     * The standard-deviation of all voxel values.
+     * 
+     * @return the standard-deviation.
+     */
     default double stdDev() {
         return Math.sqrt(variance());
-    }
-
-    default double mean() {
-        return ((double) sum()) / size();
     }
 }

@@ -44,6 +44,11 @@ public abstract class KernelTestBase<T extends Kernel> { // NOSONAR
 
     private final ObjectTester<T> tester;
 
+    /**
+     * Creates with a specific {@link ApplyKernelForCount}.
+     * 
+     * @param kernelApplier how to apply the kernel to each voxel to create a corresponding count.
+     */
     protected KernelTestBase(ApplyKernelForCount<T> kernelApplier) {
         tester =
                 new ObjectTester<>((object, extent) -> createKernel(object, extent), kernelApplier);
@@ -137,8 +142,8 @@ public abstract class KernelTestBase<T extends Kernel> { // NOSONAR
      *
      * @param atOrigin if true, the {@link ObjectMask} is located at the origin, otherwise without
      *     touching a boundary.
-     * @param scene3D whether to create a 3D object and scene
-     * @param calculateValue the expected value for the test
+     * @param scene3D whether to create a 3D object and scene.
+     * @param calculateValue the expected value for the test.
      */
     private void test(boolean atOrigin, boolean scene3D, CalculateExpectedValue calculateValue) {
         tester.applyTest(atOrigin, scene3D, calculateValue);

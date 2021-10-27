@@ -30,30 +30,48 @@ import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 
 /**
  * Processes a point which has been translated (changed) relative to another point - and includes
- * global coordinates and includes an object-mask buffer
+ * global coordinates and includes an object-mask buffer.
  *
- * @param <T> result-type that can be collected after processing
+ * @param <T> result-type that can be collected after processing.
  */
 public interface ProcessChangedPointAbsoluteMasked<T> {
 
     /**
-     * The value and offset for the source point (around which we process neighbors)
+     * The value and offset for the source point (around which we process neighbors).
      *
-     * <p>This function should always be called before {@link #processPoint}
+     * <p>This function should always be called before {@link #processPoint}.
      *
      * <p>It can be called repeatedly for different points (resetting state each time).
      *
-     * @param sourceVal the value of the source pixel
-     * @param sourceOffsetXY the offset of the source pixel in XY
+     * @param sourceValue the value of the source pixel.
+     * @param sourceOffsetXY the offset of the source pixel in XY.
      */
-    void initSource(int sourceVal, int sourceOffsetXY);
+    void initSource(int sourceValue, int sourceOffsetXY);
 
-    /** Notifies the processor that there has been a change in z-coordinate */
+    /** 
+     * Notifies the processor that there has been a change in z-coordinate.
+     * 
+     * @param zChange the relative change in the Z-dimension (relative to the original coordinate value).
+     * @param z the absolute value in the Z-dimension of the point currently being processed.
+     * @param objectMaskBuffer the voxels for the particular z-slice of the object-mask being processed.
+     */
     default void notifyChangeZ(int zChange, int z, UnsignedByteBuffer objectMaskBuffer) {}
 
-    /** Processes a particular point */
-    boolean processPoint(int xChange, int yChange, int x1, int y1, int objectMaskOffset);
+    /** 
+     * Processes a particular point.
+     * 
+     * @param xChange the relative change in the X-dimension (relative to the original coordinate value).
+     * @param yChange the relative change in the Y-dimension (relative to the original coordinate value).
+     * @param x the absolute value in the X-dimension of the point currently being processed.
+     * @param y the absolute value in the Y-dimension of the point currently being processed.
+     * @param objectMaskOffset the offset in the respective z-slice buffer for the object-mask being processed.
+     */
+    void processPoint(int xChange, int yChange, int x, int y, int objectMaskOffset);
 
-    /** Collects the result of the operation after processing neighbor pixels */
+    /** 
+     * Collects the result of the operation after processing neighbor voxels.
+     * 
+     * @return the result.
+     */
     public abstract T collectResult();
 }

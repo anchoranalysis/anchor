@@ -33,14 +33,14 @@ import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedShortBuffer;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxelsAll;
 import org.anchoranalysis.spatial.box.Extent;
 
-class UnsignedShortImplementation extends Base<UnsignedShortBuffer> {
+class UnsignedShortImplementation extends VoxelsExtracterBase<UnsignedShortBuffer> {
 
     public UnsignedShortImplementation(Voxels<UnsignedShortBuffer> voxels) {
         super(voxels);
     }
 
     @Override
-    public void copyBufferIndexTo(
+    public void copySingleVoxelTo(
             UnsignedShortBuffer sourceBuffer,
             int sourceIndex,
             UnsignedShortBuffer destinationBuffer,

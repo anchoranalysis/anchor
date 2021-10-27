@@ -80,9 +80,9 @@ public class FromFloat implements SliceBufferIndex<FloatBuffer> {
     }
 
     @Override
-    public void replaceSlice(int z, VoxelBuffer<FloatBuffer> pixels) {
-        pixels.buffer().clear();
-        buffer[z] = pixels;
+    public void replaceSlice(int z, VoxelBuffer<FloatBuffer> sliceToAssign) {
+        sliceToAssign.buffer().clear();
+        buffer[z] = sliceToAssign;
     }
 
     @Override

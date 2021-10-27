@@ -71,6 +71,10 @@ public interface ProcessVoxelNeighbor<T> {
      */
     void processPoint(int xChange, int yChange);
 
-    /** Collects the result of the operation after processing neighbor pixels. */
+    /** 
+     * Collects the result of the operation after processing neighbor pixels.
+     * 
+     * @return the result.
+     */
     public abstract T collectResult();
 }

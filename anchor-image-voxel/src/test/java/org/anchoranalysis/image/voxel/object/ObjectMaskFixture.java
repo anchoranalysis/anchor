@@ -165,22 +165,22 @@ public class ObjectMaskFixture {
     }
 
     /**
-     * The total number of neighbours voxels.
+     * The total number of neighbors voxels.
      *
      * @param useZ if true, z is also treated as a dimension in which neighbors are considered. If
-     *     false, only neighbours in X and Y dimensions are considered.
+     *     false, only neighbors in X and Y dimensions are considered.
      * @return the number of voxels that are expected to appear on the surface.
      */
     public int numberNeighbors(boolean useZ) {
         checkNoRemoveCorners();
 
         // The top and bottom lines in x
-        int neighbours2D = 2 * (extent.x() + extent.y()) * extent.z();
+        int neighbors2D = 2 * (extent.x() + extent.y()) * extent.z();
 
         if (useZ) {
-            return neighbours2D + (2 * extent.areaXY());
+            return neighbors2D + (2 * extent.areaXY());
         } else {
-            return neighbours2D;
+            return neighbors2D;
         }
     }
 

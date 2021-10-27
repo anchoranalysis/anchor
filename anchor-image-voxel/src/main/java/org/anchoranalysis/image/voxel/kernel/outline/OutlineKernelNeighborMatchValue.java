@@ -36,10 +36,10 @@ import org.anchoranalysis.image.voxel.kernel.LocalSlices;
 import org.anchoranalysis.spatial.point.Point3i;
 
 /**
- * Outputs the outline of an object-mask, but only for voxels on the exterior which neighbour a
+ * Outputs the outline of an object-mask, but only for voxels on the exterior which neighbor a
  * binary-mask.
  *
- * <p>Specifically, voxels on the object are set only to <i>on</i> if they neighbour a <i>off</i>
+ * <p>Specifically, voxels on the object are set only to <i>on</i> if they neighbor a <i>off</i>
  * voxel <b>and</b> this neighboring voxel is <i>on</i> in the binary-mask. Otherwise a voxel is
  * <i>off</i>.
  *

@@ -79,6 +79,15 @@ import org.anchoranalysis.spatial.scale.ScaleFactor;
  * expressed relative to the image's coordinates as a whole.
  *
  * <p>The voxels in the mask are <i>mutable</i>.
+ * 
+ * <p>A point is informally referred to as belonging <i>on</i> or <i>in</i> in the object-mask, or being
+ * contained by the object-mask if it fulfills both the two conditions of:
+ * 
+ * <ul>
+ *    <li>The point exists inside the bounding-box.
+ *    <li>The corresponding voxel in {@code #voxels()} has an <i>on</i> state.
+ * </ul>
+ * 
  */
 @Accessors(fluent = true)
 public class ObjectMask {
@@ -392,7 +401,7 @@ public class ObjectMask {
                 // We threshold to make sure it's still binary
                 int thresholdVal = (binaryValues.getOnInt() + binaryValues.getOffInt()) / 2;
 
-                VoxelsThresholder.thresholdForLevelByte(
+                VoxelsThresholder.thresholdByte(
                         scaled.voxels(), thresholdVal, binaryValues.asByte());
             }
             return new ObjectMask(scaled, binaryValues);
@@ -423,7 +432,13 @@ public class ObjectMask {
         }
     }
 
-    /** Calculates center-of-gravity across all axes. */
+    /** 
+     * Calculates center-of-gravity across all axes.
+     * 
+     * <p>This is the mean of the position coordinates in each dimension.
+     * 
+     * @return the center-of-gravity or {@code (NaN, NaN, NaN)} if there are no <i>on</i> voxels.
+     */
     public Point3d centerOfGravity() {
         return CenterOfGravityCalculator.centerOfGravity(this);
     }
@@ -431,8 +446,8 @@ public class ObjectMask {
     /**
      * Calculates center-of-gravity for one specific axis only.
      *
-     * @param axis the axis
-     * @return a point on the specific axis that is the center-of-gravity.
+     * @param axis the specific axis.
+     * @return a point on the specific axis that is the center-of-gravity, or {@code NaN} if there are no <i>on</i> voxels.
      */
     public double centerOfGravity(Axis axis) {
         return CenterOfGravityCalculator.centerOfGravityForAxis(this, axis);
@@ -520,17 +535,30 @@ public class ObjectMask {
         return OptionalUtilities.createFromFlag(object.voxelsOn().anyExists(), object);
     }
 
+    /**
+     * Whether a particular point exists within the object-mask?
+     * 
+     * <p>For this to occur, two condition needs to be fulfilled for the {@code point}:
+     * <ul>
+     * <li>It exists inside the bounding-box.
+     * <li>The corresponding voxel in {@code #voxels()} has an <i>on</i> state.
+     * </ul>
+     * 
+     * @param point the point to query.
+     * @return true iff both conditions as true, as per above.
+     */
     public boolean contains(Point3i point) {
-
-        if (!voxels.boundingBox().contains().point(point)) {
+        if (voxels.boundingBox().contains().point(point)) {
+            return extract.voxel(point) == binaryValues.getOnInt();    
+        } else {
             return false;
         }
-
-        return extract.voxel(point) == binaryValues.getOnInt();
     }
 
     /**
-     * A maximum-intensity projection (flattens in z dimension)
+     * A maximum-intensity projection.
+     * 
+     * <p>This flattens across z-dimension, setting a voxel to <i>on</i> if it is <i>on</i> in any one slice.
      *
      * <p>This is an <b>immutable</b> operation.
      *
@@ -550,28 +578,62 @@ public class ObjectMask {
         return voxels.boundingBox();
     }
 
+    /**
+     * The underlying voxel memory buffers for the object-mask, exposed via a {@link BinaryVoxels}.
+     * 
+     * @return the voxels.
+     */
     public BinaryVoxels<UnsignedByteBuffer> binaryVoxels() {
         return BinaryVoxelsFactory.reuseByte(voxels.voxels(), binaryValues);
     }
 
+    /**
+     * The underlying voxel memory buffers for the object-mask, exposed via {@link Voxels}.
+     * 
+     * @return the voxels.
+     */
     public Voxels<UnsignedByteBuffer> voxels() {
         return voxels.voxels();
     }
 
+    /**
+     * The underlying voxel memory buffers for the object-mask, exposed via {@link BoundedVoxels}.
+     * 
+     * @return the voxels.
+     */
+    public BoundedVoxels<UnsignedByteBuffer> boundedVoxels() {
+        return voxels;
+    }
+    
+    /**
+     * The size of the object-mask's bounding-box across three dimensions.
+     *
+     * @return the size.
+     */
     public Extent extent() {
         return voxels.extent();
     }
 
+    /**
+     * Calculates an offset for locating a voxel inside the buffer, with <b>local</b> encoding of coordinates.
+     * 
+     * @param x the <i>X</i>-dimension value for the voxel, relative to the object-mask's bounding-box.
+     * @param y the <i>Y</i>-dimension value for the voxel, relative to the object-mask's bounding-box.
+     * @return the offset to use in the buffer specifying the location of this specific voxel.
+     */
     public int offsetRelative(int x, int y) {
         return voxels.extent().offset(x, y);
     }
 
+    /**
+     * Calculates an offset for locating a voxel inside the buffer, with <b>global</b> encoding of coordinates.
+     * 
+     * @param x the <i>X</i>-dimension value for the voxel, relative to the entire image scene.
+     * @param y the <i>Y</i>-dimension value for the voxel, relative to the entire image scene.
+     * @return the offset to use in the buffer specifying the location of this specific voxel.
+     */
     public int offsetGlobal(int x, int y) {
         return offsetRelative(x - boundingBox().cornerMin().x(), y - boundingBox().cornerMin().y());
-    }
-
-    public BoundedVoxels<UnsignedByteBuffer> boundedVoxels() {
-        return voxels;
     }
 
     /**

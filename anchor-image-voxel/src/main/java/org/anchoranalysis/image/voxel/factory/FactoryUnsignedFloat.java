@@ -40,8 +40,8 @@ final class FactoryUnsignedFloat implements VoxelsFactoryTypeBound<FloatBuffer> 
     private static final VoxelDataType DATA_TYPE = FloatVoxelType.INSTANCE;
 
     @Override
-    public Voxels<FloatBuffer> create(SliceBufferIndex<FloatBuffer> pixelsForPlane) {
-        return new VoxelsAsFloat(pixelsForPlane);
+    public Voxels<FloatBuffer> create(SliceBufferIndex<FloatBuffer> voxels) {
+        return new VoxelsAsFloat(voxels);
     }
 
     @Override

@@ -83,9 +83,9 @@ public class FromInt implements SliceBufferIndex<UnsignedIntBuffer> {
     }
 
     @Override
-    public void replaceSlice(int z, VoxelBuffer<UnsignedIntBuffer> pixels) {
-        pixels.buffer().clear();
-        buffer[z] = pixels;
+    public void replaceSlice(int z, VoxelBuffer<UnsignedIntBuffer> sliceToAssign) {
+        sliceToAssign.buffer().clear();
+        buffer[z] = sliceToAssign;
     }
 
     @Override

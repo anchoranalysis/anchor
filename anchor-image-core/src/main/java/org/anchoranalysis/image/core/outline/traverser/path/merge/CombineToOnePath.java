@@ -60,7 +60,7 @@ public class CombineToOnePath {
         // If the start and end of the path aren't neighbors we should chop
         //  off whatever is necessary to make them neighbors
         if (!areHeadTailConnected(singlePath) && !EnsureContiguousPathLoops.apply(singlePath)) {
-            throw new OperationFailedException("head() and tail() of outline are not neigbours");
+            throw new OperationFailedException("head() and tail() of outline are not neigbors");
         }
     }
 

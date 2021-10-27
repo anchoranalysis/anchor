@@ -40,8 +40,8 @@ final class FactoryUnsignedByte implements VoxelsFactoryTypeBound<UnsignedByteBu
     private static final VoxelDataType DATA_TYPE = UnsignedByteVoxelType.INSTANCE;
 
     @Override
-    public Voxels<UnsignedByteBuffer> create(SliceBufferIndex<UnsignedByteBuffer> pixelsForPlane) {
-        return new VoxelsUnsignedByte(pixelsForPlane);
+    public Voxels<UnsignedByteBuffer> create(SliceBufferIndex<UnsignedByteBuffer> voxels) {
+        return new VoxelsUnsignedByte(voxels);
     }
 
     @Override

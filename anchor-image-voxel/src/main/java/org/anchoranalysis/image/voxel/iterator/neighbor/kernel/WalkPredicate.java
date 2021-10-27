@@ -34,7 +34,7 @@ import org.anchoranalysis.image.voxel.kernel.KernelPointCursor;
 
 /**
  * Walks in X, Y and Z directions from a point, test a {@link NeighborPredicate} to determine if a
- * neighbour satisfies conditions.
+ * neighbor satisfies conditions.
  *
  * <p>As soon as any neighbor matches the predicate, a true value is returned for the voxel. A false
  * is returned only if no neighbors match the predicate.
@@ -70,7 +70,7 @@ public class WalkPredicate {
         return walkX(buffer)
                 || walkY(buffer)
                 || walkZ(bufferRetriever)
-                || maybeQualifyFromBigNeighbourhood(buffer);
+                || maybeQualifyFromBigNeighborhood(buffer);
     }
 
     /** Do any neighboring voxels in X direction qualify the voxel? */
@@ -132,12 +132,12 @@ public class WalkPredicate {
      * If big-neighbor is enabled, do any voxels from the big neighborhood (not already covered)
      * qualify the voxel?
      */
-    private boolean maybeQualifyFromBigNeighbourhood(UnsignedByteBuffer buffer) {
-        return bigNeighborhood && qualifyFromBigNeighbourhood(buffer);
+    private boolean maybeQualifyFromBigNeighborhood(UnsignedByteBuffer buffer) {
+        return bigNeighborhood && qualifyFromBigNeighborhood(buffer);
     }
 
     /** Do any voxels from the big neighborhood (not already covered) qualify the voxel? */
-    private boolean qualifyFromBigNeighbourhood(UnsignedByteBuffer buffer) {
+    private boolean qualifyFromBigNeighborhood(UnsignedByteBuffer buffer) {
 
         // x-1, y-1
         point.decrementX();

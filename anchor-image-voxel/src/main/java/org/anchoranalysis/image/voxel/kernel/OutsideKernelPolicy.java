@@ -30,7 +30,7 @@ import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
 
 /**
- * How to handle voxels whose neighbours are outside the scene.
+ * How to handle voxels whose neighbors are outside the scene.
  *
  * @author Owen Feehan
  */

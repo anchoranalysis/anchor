@@ -85,7 +85,7 @@ public class ThresholderGlobal extends Thresholder {
 
         int thresholdVal = calculateLevel.calculateLevel(histogram);
         assert (thresholdVal >= 0);
-        return VoxelsThresholder.thresholdForLevel(
+        return VoxelsThresholder.threshold(
                 inputBuffer, thresholdVal, bvOut, objectMask, false);
     }
 

@@ -32,5 +32,12 @@ package org.anchoranalysis.image.voxel.iterator.process;
  */
 @FunctionalInterface
 public interface ProcessTwoBytes {
+    
+    /**
+     * Performs the processing.
+     * 
+     * @param first the <i>first</i> byte to process.
+     * @param second the <i>second</i> byte to process.
+     */
     void process(byte first, byte second);
 }

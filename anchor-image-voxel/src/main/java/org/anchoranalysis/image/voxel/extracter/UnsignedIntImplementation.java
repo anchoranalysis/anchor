@@ -32,7 +32,7 @@ import org.anchoranalysis.image.voxel.buffer.mean.MeanIntensityProjection;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedIntBuffer;
 import org.anchoranalysis.spatial.box.Extent;
 
-class UnsignedIntImplementation extends Base<UnsignedIntBuffer> {
+class UnsignedIntImplementation extends VoxelsExtracterBase<UnsignedIntBuffer> {
 
     public UnsignedIntImplementation(Voxels<UnsignedIntBuffer> voxels) {
         super(voxels);
@@ -63,7 +63,7 @@ class UnsignedIntImplementation extends Base<UnsignedIntBuffer> {
     }
 
     @Override
-    public void copyBufferIndexTo(
+    public void copySingleVoxelTo(
             UnsignedIntBuffer sourceBuffer,
             int sourceIndex,
             UnsignedIntBuffer destinationBuffer,

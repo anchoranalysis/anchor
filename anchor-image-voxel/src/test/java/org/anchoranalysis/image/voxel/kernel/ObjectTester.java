@@ -70,7 +70,8 @@ class ObjectTester<T extends Kernel> {
      *
      * @param atOrigin if true, the {@link ObjectMask} is located at the origin, otherwise without
      *     touching a boundary.
-     * @param scene3D whether to create a 3D object and scene
+     * @param scene3D whether to create a 3D object and scene.
+     * @param calculateValue calculates the expected-value for the test.
      */
     public void applyTest(
             boolean atOrigin, boolean scene3D, CalculateExpectedValue calculateValue) {

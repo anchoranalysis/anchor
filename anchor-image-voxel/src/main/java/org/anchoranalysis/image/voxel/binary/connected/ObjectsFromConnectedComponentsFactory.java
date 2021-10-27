@@ -29,7 +29,9 @@ package org.anchoranalysis.image.voxel.binary.connected;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedIntBuffer;
+import org.anchoranalysis.image.voxel.neighborhood.NeighborhoodFactory;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 
 /**
  * Creates a {@link ObjectCollection} from the connected-components of a mask or binary-voxels.
@@ -40,28 +42,65 @@ public class ObjectsFromConnectedComponentsFactory {
 
     private final ConnectedComponentUnionFind unionFind;
 
+    /**
+     * Creates to use a <i>small</i>-neighborhood.
+     * 
+     * <p>See {@link org.anchoranalysis.image.voxel.neighborhood.NeighborhoodFactory}.
+     */
     public ObjectsFromConnectedComponentsFactory() {
         this(false);
     }
 
+    /**
+     * Creates to use a specified type of neighborhood.
+     * 
+     * @param bigNeighborhood if true, use 8-Connectivity instead of 4 in 2D, and 26-connectivity
+     *     instead of 6 in 3D, as per {@link NeighborhoodFactory}.
+     */
     public ObjectsFromConnectedComponentsFactory(boolean bigNeighborhood) {
         this(bigNeighborhood, 1);
     }
 
+    /**
+     * Creates to use a minimum number of voxels for each connected component.
+     * 
+     * @param minNumberVoxels the minimum number of voxels that must exist for an independent connected-component, otherwise the connected-component is omitted.
+     */
     public ObjectsFromConnectedComponentsFactory(int minNumberVoxels) {
         this(false, minNumberVoxels);
     }
 
+    /**
+     * Creates to use a specified type of neighborhood, and minimum number of voxels.
+     * 
+     * @param bigNeighborhood if true, use 8-Connectivity instead of 4 in 2D, and 26-connectivity
+     *     instead of 6 in 3D, as per {@link NeighborhoodFactory}.
+     * @param minNumberVoxels the minimum number of voxels that must exist for an independent connected-component, otherwise the connected-component is omitted.
+     */
     public ObjectsFromConnectedComponentsFactory(boolean bigNeighborhood, int minNumberVoxels) {
         unionFind = new ConnectedComponentUnionFind(minNumberVoxels, bigNeighborhood);
     }
-
-    // This consumes the voxel buffer 'voxels'
+    
+    /**
+     * Finds the connected-components in <i>unsigned byte</i> voxels.
+     * 
+     * <p>Connected-components are considered to be contiguous neighboring voxels with <i>on</i> states.
+     * 
+     * @param voxels the voxels to find connected-components in. Note that these voxel values are changed, as the algorithm runs.
+     * @return the connected-components, each encoded as an {@link ObjectMask}.
+     */
     public ObjectCollection createUnsignedByte(BinaryVoxels<UnsignedByteBuffer> voxels) {
         return unionFind.deriveConnectedByte(voxels);
     }
 
-    // This consumes the voxel buffer 'voxels'
+    /**
+     * Finds the connected-components in <i>unsigned int</i> voxels.
+     * 
+     * <p>Connected-components are considered to be contiguous neighboring voxels with <i>on</i> states.
+     * 
+     * @param voxels the voxels to find connected-components in. Note that these voxel values are changed, as the algorithm runs.
+     * @return the connected-components, each encoded as an {@link ObjectMask}.
+     */
     public ObjectCollection createUnsignedInt(BinaryVoxels<UnsignedIntBuffer> voxels) {
         return unionFind.deriveConnectedInt(voxels);
     }

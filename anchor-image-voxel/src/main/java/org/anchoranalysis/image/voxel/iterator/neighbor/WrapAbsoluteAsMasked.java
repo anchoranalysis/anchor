@@ -40,8 +40,8 @@ final class WrapAbsoluteAsMasked<T> implements ProcessChangedPointAbsoluteMasked
     private final ProcessVoxelNeighborAbsolute<T> delegate;
 
     @Override
-    public void initSource(int sourceVal, int sourceOffsetXY) {
-        delegate.initSource(sourceVal, sourceOffsetXY);
+    public void initSource(int sourceValue, int sourceOffsetXY) {
+        delegate.initSource(sourceValue, sourceOffsetXY);
     }
 
     @Override
@@ -50,8 +50,8 @@ final class WrapAbsoluteAsMasked<T> implements ProcessChangedPointAbsoluteMasked
     }
 
     @Override
-    public boolean processPoint(int xChange, int yChange, int x1, int y1, int objectMaskOffset) {
-        return delegate.processPoint(xChange, yChange, x1, y1);
+    public void processPoint(int xChange, int yChange, int x, int y, int objectMaskOffset) {
+        delegate.processPoint(xChange, yChange, x, y);
     }
 
     @Override

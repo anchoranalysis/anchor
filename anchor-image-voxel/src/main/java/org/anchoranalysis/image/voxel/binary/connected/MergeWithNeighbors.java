@@ -54,18 +54,18 @@ final class MergeWithNeighbors {
         }
 
         @Override
-        public void initSource(int sourceVal, int sourceOffsetXY) {
-            super.initSource(sourceVal, sourceOffsetXY);
+        public void initSource(int sourceValue, int sourceOffsetXY) {
+            super.initSource(sourceValue, sourceOffsetXY);
             minLabel = -1;
         }
 
         @Override
-        public boolean processPoint(int xChange, int yChange, int x1, int y1) {
+        public void processPoint(int xChange, int yChange, int x1, int y1) {
 
             int indexVal = getInt(xChange, yChange);
 
             if (indexVal == 0) {
-                return false;
+                return;
             }
 
             if (minLabel == -1) {
@@ -81,7 +81,6 @@ final class MergeWithNeighbors {
                     }
                 }
             }
-            return true;
         }
 
         /** The minimum label in the neighborhood */
@@ -103,7 +102,7 @@ final class MergeWithNeighbors {
      * 
      * @param voxels voxels containing indexes to labels.
      * @param unionIndex a union-find that will contain sets of disjoint indexes. It is updated as objects are merged.
-     * @param do3D if true, the neighbours in the Z dimension are also considered, alongside the X and Y dimensions that are always considered.
+     * @param do3D if true, the neighbors in the Z dimension are also considered, alongside the X and Y dimensions that are always considered.
      * @param bigNeighborhood if true, uses a big neighborhood, otherwise a small neighborhood, as defined in {@link NeighborhoodFactory}.
      */
     public MergeWithNeighbors(
@@ -128,7 +127,7 @@ final class MergeWithNeighbors {
      * @param point the point whose neighbors are iterated.
      * @param existingValue the existing (current) intensity value at {@code point}.
      * @param indexBuffer the index in the voxels corresponding to the current point.
-     * @return the minimum value across all neighbours, or -1 if no neighbor exists.
+     * @return the minimum value across all neighbors, or -1 if no neighbor exists.
      */
     public int minNeighborLabel(Point3i point, int existingValue, int indexBuffer) {
         return IterateVoxelsNeighbors.callEachPointInNeighborhood(

@@ -32,14 +32,14 @@ import org.anchoranalysis.image.voxel.buffer.max.MaxIntensityProjection;
 import org.anchoranalysis.image.voxel.buffer.mean.MeanIntensityProjection;
 import org.anchoranalysis.spatial.box.Extent;
 
-class FloatImplementation extends Base<FloatBuffer> {
+class FloatImplementation extends VoxelsExtracterBase<FloatBuffer> {
 
     public FloatImplementation(Voxels<FloatBuffer> voxels) {
         super(voxels);
     }
 
     @Override
-    public void copyBufferIndexTo(
+    public void copySingleVoxelTo(
             FloatBuffer sourceBuffer,
             int sourceIndex,
             FloatBuffer destinationBuffer,

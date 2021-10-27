@@ -49,7 +49,6 @@ final class ThresholdEachVoxelByte implements ProcessBufferUnary<UnsignedByteBuf
 
     public ThresholdEachVoxelByte(
             int level, Voxels<UnsignedByteBuffer> voxelsOut, BinaryValuesByte bvOut) {
-        super();
         this.level = level;
         this.voxelsOut = voxelsOut;
         this.byteOn = bvOut.getOnByte();

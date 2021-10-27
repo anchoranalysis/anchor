@@ -43,7 +43,9 @@ public abstract class CountKernel extends Kernel {
 
     private LocalSlices slices;
 
-    // Constructor
+    /**
+     * Creates with a kernel-size of three.
+     */
     protected CountKernel() {
         super(3);
     }
@@ -56,8 +58,8 @@ public abstract class CountKernel extends Kernel {
     /**
      * Calculates the count at a particular point.
      *
-     * @param point the point
-     * @return the count
+     * @param point the point.
+     * @return the count.
      */
     public int calculateAt(KernelPointCursor point) {
 
@@ -78,8 +80,8 @@ public abstract class CountKernel extends Kernel {
     /**
      * Whether a particular neighboring voxel is accepted or not.
      *
-     * @param point the neighboring point which is queried if it qualifies or not
-     * @return true iff the point qualifies
+     * @param point the neighboring point which is queried if it qualifies or not.
+     * @return true iff the point qualifies.
      */
     protected abstract boolean doesNeighborVoxelQualify(Point3i point);
 }

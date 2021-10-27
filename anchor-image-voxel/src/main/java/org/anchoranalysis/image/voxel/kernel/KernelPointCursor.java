@@ -36,7 +36,7 @@ import org.anchoranalysis.spatial.point.Point3i;
  * A mutable context around determining whether a particular point should be <i>on</i> or <i>off</i>
  * with a {@link BinaryKernel}.
  *
- * <p>It can be used to efficiently iterate over the neighbours around a particular point.
+ * <p>It can be used to efficiently iterate over the neighbors around a particular point.
  * 
  * <p>Both a {@link Point3i} and an associated index (in a voxel buffer} are kept as mutable state,
  * that are generally changed together in a single operation.
