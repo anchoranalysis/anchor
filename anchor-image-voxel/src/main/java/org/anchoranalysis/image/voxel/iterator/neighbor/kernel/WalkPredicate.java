@@ -59,7 +59,7 @@ public class WalkPredicate {
     private final boolean bigNeighborhood;
 
     /**
-     * Do any neighboring voxels in <i>any</u> direction satisfy the predicate?
+     * Do any neighboring voxels in <i>any</i> direction satisfy the predicate?
      *
      * @param buffer the buffer associated with the current slice
      * @param bufferRetriever a means of retrieving buffers for other slices, accepting a relative
