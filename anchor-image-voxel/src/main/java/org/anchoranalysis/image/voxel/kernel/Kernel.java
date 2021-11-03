@@ -31,41 +31,42 @@ import lombok.Getter;
 
 /**
  * A small matrix that is convolved with or otherwise combined across each voxel in an image.
- * 
- * <p>See <a href="https://en.wikipedia.org/wiki/Kernel_(image_processing)">Kernel (image processing)</a>.
- * 
- * <p>The matrix is assumed always to be 2D and <i>square</i> i.e. the same size in X and Y.
- * 
- * @author Owen Feehan
  *
+ * <p>See <a href="https://en.wikipedia.org/wiki/Kernel_(image_processing)">Kernel (image
+ * processing)</a>.
+ *
+ * <p>The matrix is assumed always to be 2D and <i>square</i> i.e. the same size in X and Y.
+ *
+ * @author Owen Feehan
  */
 public abstract class Kernel {
 
     /**
      * The size of the kernel-matrix in one dimension, either X or Y.
-     * 
+     *
      * <p>This size should always be an <i>odd</i> number.
      */
     @Getter private int size;
-    
+
     /**
      * Creates a kernel with a given size in the X and Y dimensions.
-     * 
+     *
      * @param size the number of pixels in a given dimension, which must be an <i>odd</i> number.
      */
     protected Kernel(int size) {
-        Preconditions.checkArgument((size % 2)==1);
+        Preconditions.checkArgument((size % 2) == 1);
         this.size = size;
     }
 
     /**
      * Called to inform the {@link Kernel} of buffers that are currently being processed.
-     * 
+     *
      * <p>Only a single z-slice is processed at a particular time.
-     * 
+     *
      * <p>This should be repeatedly called each time the focus changes to a different z-slice.
-     * 
-     * @param slices slices that can be processed by the kernel, localized to a current <i>local</i> area of focus.
+     *
+     * @param slices slices that can be processed by the kernel, localized to a current <i>local</i>
+     *     area of focus.
      * @param sliceIndex the global z-index of the slice that is currently the focus of the kernel.
      */
     public abstract void notifyBuffer(LocalSlices slices, int sliceIndex);

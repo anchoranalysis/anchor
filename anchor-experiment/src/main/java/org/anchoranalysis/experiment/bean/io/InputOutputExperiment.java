@@ -88,7 +88,7 @@ import org.apache.commons.io.IOCase;
 public class InputOutputExperiment<T extends InputFromManager, S> extends OutputExperiment
         implements ReplaceInputManager, ReplaceOutputManager, ReplaceTask<T, S> {
 
-    private static final String EXECUTION_TIME_COLLECTING_INPUTS = "Collecting Inputs";
+    private static final String EXECUTION_TIME_COLLECTING_INPUTS = "Collecting inputs";
 
     private static final String OUTPUT_EXPERIMENT_LOG = "experiment_log";
 

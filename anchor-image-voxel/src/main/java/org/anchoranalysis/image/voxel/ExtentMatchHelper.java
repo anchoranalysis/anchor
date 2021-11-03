@@ -32,17 +32,17 @@ import org.anchoranalysis.spatial.box.Extent;
 
 /**
  * Checks if the {@link Extent}s of two {@link BoundingBox}es are identical.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ExtentMatchHelper {
 
     /**
      * Checks that the {@link Extent}s of two bounding boxes are identical.
-     * 
+     *
      * <p>An exception is thrown if they are not identical, otherwise nothing occurs.
+     *
      * @param box1 the first box.
      * @param box2 the second box.
      */

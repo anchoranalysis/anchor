@@ -44,14 +44,14 @@ import org.anchoranalysis.image.io.channel.input.ChannelGetter;
 public interface NamedChannelsForSeries extends ChannelGetter {
 
     /**
-     * Gets a channel if it exists, returning empty if it doesn't
+     * Gets a channel if it exists, returning empty if it doesn't.
      *
-     * @param channelName name of channel
-     * @param timeIndex timepoint
-     * @param progress
-     * @return the channel if it exists, or empty otherwise
+     * @param channelName name of channel.
+     * @param timeIndex point in time-series.
+     * @param progress reporting incremental progress.
+     * @return the channel if it exists, or empty otherwise.
      * @throws GetOperationFailedException if something goes wrong getting an existing channel (but
-     *     never if a channel doesn't exist)
+     *     never if a channel doesn't exist).
      */
     Optional<Channel> getChannelOptional(String channelName, int timeIndex, Progress progress)
             throws GetOperationFailedException;
@@ -82,8 +82,8 @@ public interface NamedChannelsForSeries extends ChannelGetter {
      *
      * <p>In this case, there should be exactly three channels, named "red", "green" and "blue".
      *
-     * @return true if the channels describe an RGB image
-     * @throws ImageIOException
+     * @return true if the channels describe an RGB image.
+     * @throw ImageIOException if this cannot be successfully inferred.
      */
     boolean isRGB() throws ImageIOException;
 }

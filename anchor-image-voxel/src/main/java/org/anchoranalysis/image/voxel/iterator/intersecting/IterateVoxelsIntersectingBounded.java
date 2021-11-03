@@ -111,7 +111,8 @@ public class IterateVoxelsIntersectingBounded {
      * @param voxels1 the first bounded-voxels.
      * @param voxels2 the second bounded-voxels.
      * @param <T> voxel buffer data type.
-     * @param predicate iteration occurs until this predicate is satisfied, or no more voxels exist in the intersection.
+     * @param predicate iteration occurs until this predicate is satisfied, or no more voxels exist
+     *     in the intersection.
      * @return Point3i if intersection exists, then the first point of intersection found
      *     (newly-created), or else empty if no intersection exists.
      */

@@ -33,9 +33,8 @@ import org.anchoranalysis.math.histogram.Histogram;
 
 /**
  * Calculates statistics from a {@link Histogram} of voxel intensities.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 @AllArgsConstructor
 public class VoxelStatisticsFromHistogram implements VoxelStatistics {

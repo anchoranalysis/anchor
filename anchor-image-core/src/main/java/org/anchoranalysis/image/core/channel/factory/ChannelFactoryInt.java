@@ -32,15 +32,12 @@ import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 
 /**
  * Creates a {@link Channel} with voxel-type {@link UnsignedIntVoxelType}.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class ChannelFactoryInt extends ChannelFactorySingleType {
 
-    /**
-     * Default constructor.
-     */
+    /** Default constructor. */
     public ChannelFactoryInt() {
         super(UnsignedIntVoxelType.INSTANCE, VoxelsFactory.getUnsignedInt());
     }

@@ -44,10 +44,10 @@ import org.anchoranalysis.spatial.box.Extent;
 import org.anchoranalysis.spatial.point.Point3i;
 
 /**
- * Performs <a href="https://en.wikipedia.org/wiki/Dilation_(morphology)">morphological dilation</a> on an {@link ObjectMask} or {@link BinaryVoxels}.
- * 
- * @author Owen Feehan
+ * Performs <a href="https://en.wikipedia.org/wiki/Dilation_(morphology)">morphological dilation</a>
+ * on an {@link ObjectMask} or {@link BinaryVoxels}.
  *
+ * @author Owen Feehan
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MorphologicalDilation {
@@ -59,9 +59,10 @@ public class MorphologicalDilation {
      * @param extent if present, restricts the object to remain within certain bounds.
      * @param useZ whether to perform dilation in 2D or 3D.
      * @param iterations number of dilations to perform.
-     * @param bigNeighborhood if true, uses a big neighborhood, otherwise a small neighborhood, as defined in {@link NeighborhoodFactory}.
-     * @return a newly created object-mask with bounding-box dilated in relevant directions by {@code
-     *     iterations}.
+     * @param bigNeighborhood if true, uses a big neighborhood, otherwise a small neighborhood, as
+     *     defined in {@link NeighborhoodFactory}.
+     * @return a newly created object-mask with bounding-box dilated in relevant directions by
+     *     {@code iterations}.
      * @throws CreateException if the object cannot be successfully dilated.
      */
     public static ObjectMask dilate(

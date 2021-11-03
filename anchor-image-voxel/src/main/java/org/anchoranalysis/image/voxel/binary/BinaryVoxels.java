@@ -96,7 +96,7 @@ public abstract class BinaryVoxels<T> implements BinaryOnOffSetter {
 
     /**
      * Deep-copy of the object, including duplicating voxel buffers in memory.
-     * 
+     *
      * @return a deep-copy.
      */
     public abstract BinaryVoxels<T> duplicate();
@@ -123,12 +123,13 @@ public abstract class BinaryVoxels<T> implements BinaryOnOffSetter {
     public VoxelBuffer<T> slice(int z) {
         return voxels.slice(z);
     }
-    
+
     /**
      * A particular z-slice, wrapped into a {@link BinaryVoxels}.
      *
      * @param z the index (beginning at 0) of all z-slices.
-     * @return a newly created {@link BinaryVoxels} wrapping the single z-slice at position {@code z}.
+     * @return a newly created {@link BinaryVoxels} wrapping the single z-slice at position {@code
+     *     z}.
      */
     public BinaryVoxels<T> sliceBinary(int z) {
         return binaryVoxelsFor(extract().slice(z), binaryValues());
@@ -136,7 +137,7 @@ public abstract class BinaryVoxels<T> implements BinaryOnOffSetter {
 
     /**
      * Creates a {@link BinaryVoxels} corresponding to a particular voxels and {@link BinaryValues}.
-     * 
+     *
      * @param voxels the voxels.
      * @param binaryValues the binary-values.
      * @return the newly created {@link BinaryVoxels}.
@@ -144,8 +145,9 @@ public abstract class BinaryVoxels<T> implements BinaryOnOffSetter {
     protected abstract BinaryVoxels<T> binaryVoxelsFor(Voxels<T> voxels, BinaryValues binaryValues);
 
     /**
-     * Creates an assigner that may set the <i>on</i> state in subsequently specified regions of the voxels.
-     * 
+     * Creates an assigner that may set the <i>on</i> state in subsequently specified regions of the
+     * voxels.
+     *
      * @return a newly created assigner.
      */
     public VoxelsAssigner assignOn() {
@@ -153,8 +155,9 @@ public abstract class BinaryVoxels<T> implements BinaryOnOffSetter {
     }
 
     /**
-     * Creates an assigner that may set the <i>off</i> state in subsequently specified regions of the voxels.
-     * 
+     * Creates an assigner that may set the <i>off</i> state in subsequently specified regions of
+     * the voxels.
+     *
      * @return a newly created assigner.
      */
     public VoxelsAssigner assignOff() {
@@ -163,7 +166,7 @@ public abstract class BinaryVoxels<T> implements BinaryOnOffSetter {
 
     /**
      * Counts the number of voxels with an <i>on</i> state.
-     * 
+     *
      * @return the total number of voxels with an on state.
      */
     public int countOn() {
@@ -172,7 +175,7 @@ public abstract class BinaryVoxels<T> implements BinaryOnOffSetter {
 
     /**
      * Counts the number of voxels with an <i>off</i> state.
-     * 
+     *
      * @return the total number of voxels with an off state.
      */
     public int countOff() {

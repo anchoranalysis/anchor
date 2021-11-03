@@ -36,12 +36,13 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.spatial.box.Extent;
 
 /**
- * Creates a graph where each vertex represents an {@link ObjectMask} and edges between indicate that two objects neighbor each other.
- * 
- * <p>The weight associated with the edge, indicates the number of neighbvoring voxels, which is always a positive integer.
- * 
- * @author Owen Feehan
+ * Creates a graph where each vertex represents an {@link ObjectMask} and edges between indicate
+ * that two objects neighbor each other.
  *
+ * <p>The weight associated with the edge, indicates the number of neighbvoring voxels, which is
+ * always a positive integer.
+ *
+ * @author Owen Feehan
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class NeighborGraph {
@@ -53,8 +54,10 @@ public class NeighborGraph {
      * @param objects objects to create a graph of neighbors for, and who become the vertices in the
      *     graph.
      * @param sceneExtent the size of the image, the object-masks exist in.
-     * @param preventObjectIntersection iff true, objects can only be neighbors, if they have no intersecting voxels.
-     * @param do3D if true, the Z-dimension is also considered for neighbors. Otherwise, only the X and Y dimensions.
+     * @param preventObjectIntersection iff true, objects can only be neighbors, if they have no
+     *     intersecting voxels.
+     * @param do3D if true, the Z-dimension is also considered for neighbors. Otherwise, only the X
+     *     and Y dimensions.
      * @return the newly created graph.
      * @throws CreateException if any objects are not fully contained in the scene.
      */
@@ -77,12 +80,15 @@ public class NeighborGraph {
      * list of elements which form the vertices.
      *
      * @param <V> vertex-type from which an object-mask must be derivable.
-     * @param vertices the elements to construct graph from, each which maps uniquely to an {@link ObjectMask}.
-     * @param vertexToObject converts the vertex to a unique object-mask. This function is called repeatedly so should have
-     *     low computational-cost to call.
+     * @param vertices the elements to construct graph from, each which maps uniquely to an {@link
+     *     ObjectMask}.
+     * @param vertexToObject converts the vertex to a unique object-mask. This function is called
+     *     repeatedly so should have low computational-cost to call.
      * @param sceneExtent the size of the image, the object-masks exist in.
-     * @param preventObjectIntersection iff true, objects can only be neighbors, if they have no intersecting voxels.
-     * @param do3D if true, the Z-dimension is also considered for neighbors. Otherwise, only the X and Y dimensions.
+     * @param preventObjectIntersection iff true, objects can only be neighbors, if they have no
+     *     intersecting voxels.
+     * @param do3D if true, the Z-dimension is also considered for neighbors. Otherwise, only the X
+     *     and Y dimensions.
      * @return the newly created graph.
      * @throws CreateException if any objects are not fully contained in the scene.
      */

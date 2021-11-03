@@ -66,7 +66,7 @@ public class BioformatsReader extends StackReader {
     /** Options that influence how stack is read. */
     @BeanField @Getter @Setter private ReadOptions options = new Default();
 
-    /** If non-empty forces usage of a particular bioformats plugin */
+    /** If non-empty forces usage of a particular bioformats plugin. */
     @BeanField @AllowEmpty @Getter @Setter private String forceReader = "";
     // END BEAN PROPERTIES
 

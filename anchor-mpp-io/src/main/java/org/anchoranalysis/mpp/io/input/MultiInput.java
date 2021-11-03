@@ -36,6 +36,7 @@ import org.anchoranalysis.core.log.error.ErrorReporter;
 import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
+import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.core.stack.TimeSequence;
 import org.anchoranalysis.image.core.stack.time.WrapStackAsTimeSequenceStore;
 import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
@@ -44,6 +45,22 @@ import org.anchoranalysis.math.histogram.Histogram;
 import org.anchoranalysis.mpp.init.MarksInitialization;
 import org.anchoranalysis.mpp.mark.MarkCollection;
 
+/**
+ * An input to an experiment that combines a particular {@link Stack} with other types of entities.
+ *
+ * <p>Theses entities each have a unique name, and must be one of the following types:
+ *
+ * <ol>
+ *   <li>{@link Stack} (in addition to the primary stack that forms the input).
+ *   <li>{@link MarkCollection}.
+ *   <li>{@link ObjectCollection}.
+ *   <li>{@link Dictionary}.
+ *   <li>{@link Histogram}.
+ *   <li>{@link Path}.
+ * </ol>
+ *
+ * @author Owen Feehan
+ */
 @Accessors(fluent = true)
 public class MultiInput implements ProvidesStackInput, ExportSharedObjects {
 

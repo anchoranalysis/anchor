@@ -35,8 +35,8 @@ import org.anchoranalysis.image.voxel.datatype.UnsignedIntVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 
 /**
- * Converts voxel buffers to an <b>unsigned 16-bit buffer</b>, scaling against the maximum value in each
- * data-type.
+ * Converts voxel buffers to an <b>unsigned 16-bit buffer</b>, scaling against the maximum value in
+ * each data-type.
  *
  * <p>There is no clamping of values, but some values might become very small.
  *

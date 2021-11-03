@@ -54,8 +54,8 @@ public class BufferedImageFactory {
      * <p>The following situations are supported with the {@link Stack}:
      *
      * <ul>
-     *   <li>Three channels of type {@link UnsignedByteVoxelType}, representing the colors red, green,
-     *   blue respectively.
+     *   <li>Three channels of type {@link UnsignedByteVoxelType}, representing the colors red,
+     *       green, blue respectively.
      *   <li>A single-channel of type {@link UnsignedByteVoxelType}.
      *   <li>A single-channel of type {@link UnsignedShortVoxelType}.
      * </ul>

@@ -38,10 +38,10 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeFactoryMultiplexer;
 import org.anchoranalysis.spatial.box.Extent;
 
 /**
- * Creates {@link VoxelsUntyped} and provides a singleton location for implementations of {@link VoxelsFactoryTypeBound} for different types.
- * 
- * @author Owen Feehan
+ * Creates {@link VoxelsUntyped} and provides a singleton location for implementations of {@link
+ * VoxelsFactoryTypeBound} for different types.
  *
+ * @author Owen Feehan
  */
 public class VoxelsFactory extends VoxelDataTypeFactoryMultiplexer<VoxelsFactoryTypeBound<?>> {
 
@@ -61,7 +61,7 @@ public class VoxelsFactory extends VoxelDataTypeFactoryMultiplexer<VoxelsFactory
         super(FACTORY_UNSIGNED_BYTE, FACTORY_UNSIGNED_SHORT, FACTORY_UNSIGNED_INT, FACTORY_FLOAT);
     }
 
-    /** 
+    /**
      * Singleton instance.
      *
      * @return a single instance of this class.
@@ -75,7 +75,7 @@ public class VoxelsFactory extends VoxelDataTypeFactoryMultiplexer<VoxelsFactory
 
     /**
      * Creates voxels from a particular {@link SliceBufferIndex} with specified type.
-     * 
+     *
      * @param <T> the buffer-type to use in the voxels.
      * @param buffer the buffer to create a {@link VoxelsUntyped} from.
      * @param dataType the data-type that should be compatible with {@code T}.
@@ -87,10 +87,10 @@ public class VoxelsFactory extends VoxelDataTypeFactoryMultiplexer<VoxelsFactory
         Voxels<T> voxels = factory.create(buffer);
         return new VoxelsUntyped(voxels);
     }
-    
+
     /**
      * Creates empty voxels to match a particular size.
-     * 
+     *
      * @param extent the size of the {@link VoxelsUntyped} to create.
      * @param dataType the voxel data-type to create.
      * @return the created voxels.
@@ -103,7 +103,7 @@ public class VoxelsFactory extends VoxelDataTypeFactoryMultiplexer<VoxelsFactory
 
     /**
      * A factory that creates voxels of type <i>unsigned byte</i>.
-     * 
+     *
      * @return the corresponding factory.
      */
     public static VoxelsFactoryTypeBound<UnsignedByteBuffer> getUnsignedByte() {
@@ -112,7 +112,7 @@ public class VoxelsFactory extends VoxelDataTypeFactoryMultiplexer<VoxelsFactory
 
     /**
      * A factory that creates voxels of type <i>unsigned short</i>.
-     * 
+     *
      * @return the corresponding factory.
      */
     public static VoxelsFactoryTypeBound<UnsignedShortBuffer> getUnsignedShort() {
@@ -121,7 +121,7 @@ public class VoxelsFactory extends VoxelDataTypeFactoryMultiplexer<VoxelsFactory
 
     /**
      * A factory that creates voxels of type <i>unsigned int</i>.
-     * 
+     *
      * @return the corresponding factory.
      */
     public static VoxelsFactoryTypeBound<UnsignedIntBuffer> getUnsignedInt() {
@@ -130,7 +130,7 @@ public class VoxelsFactory extends VoxelDataTypeFactoryMultiplexer<VoxelsFactory
 
     /**
      * A factory that creates voxels of type <i>float</i>.
-     * 
+     *
      * @return the corresponding factory.
      */
     public static VoxelsFactoryTypeBound<FloatBuffer> getFloat() {

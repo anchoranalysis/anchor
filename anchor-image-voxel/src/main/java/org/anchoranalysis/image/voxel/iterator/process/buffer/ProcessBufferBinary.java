@@ -44,9 +44,9 @@ import org.anchoranalysis.spatial.point.Point3i;
 @FunctionalInterface
 public interface ProcessBufferBinary<S, T> {
 
-    /** 
+    /**
      * Notifies the processor that there has been a change in slice.
-     * 
+     *
      * @param z the slice-index (global coordinates).
      */
     default void notifyChangeSlice(int z) {}

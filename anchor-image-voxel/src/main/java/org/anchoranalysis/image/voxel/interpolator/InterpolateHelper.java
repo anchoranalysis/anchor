@@ -36,21 +36,21 @@ import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 
 /**
  * Helper utility functions for an {@link Interpolator}.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class InterpolateHelper {
 
     /**
-     * Creates an implementation of {@link TransferViaSpecificType} of appropriate type for interpolation.
-     * 
+     * Creates an implementation of {@link TransferViaSpecificType} of appropriate type for
+     * interpolation.
+     *
      * @param source the source voxels to be copied from.
      * @param destination the destination voxels to be interpolated into.
      * @return an appropriately-typed implementation of {@link TransferViaSpecificType}.
      */
-    static TransferViaSpecificType<?> createTransfer(   // NOSONAR
+    static TransferViaSpecificType<?> createTransfer( // NOSONAR
             VoxelsUntyped source, VoxelsUntyped destination) {
 
         if (!source.getVoxelDataType().equals(destination.getVoxelDataType())) {

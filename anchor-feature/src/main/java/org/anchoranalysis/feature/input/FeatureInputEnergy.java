@@ -37,8 +37,9 @@ import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.core.dimensions.UnitConverter;
 
 @AllArgsConstructor
-@EqualsAndHashCode
-public abstract class FeatureInputEnergy implements FeatureInputParams {
+@EqualsAndHashCode(callSuper = true)
+public abstract class FeatureInputEnergy extends FeatureInputDimensions
+        implements FeatureInputParams {
 
     private Optional<EnergyStack> energyStack;
 
@@ -58,6 +59,11 @@ public abstract class FeatureInputEnergy implements FeatureInputParams {
     @Override
     public Optional<Dictionary> getParamsOptional() {
         return energyStack.map(EnergyStack::getDictionary);
+    }
+
+    @Override
+    public Dimensions dimensions() throws FeatureCalculationException {
+        return dimensionsRequired();
     }
 
     public Dimensions dimensionsRequired() throws FeatureCalculationException {

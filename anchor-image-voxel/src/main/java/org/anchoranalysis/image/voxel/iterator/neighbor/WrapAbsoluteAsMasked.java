@@ -26,8 +26,8 @@
 
 package org.anchoranalysis.image.voxel.iterator.neighbor;
 
-import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import lombok.AllArgsConstructor;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 
 /**
  * Wraps a {@link ProcessVoxelNeighborAbsolute} as a {@link ProcessChangedPointAbsoluteMasked}.

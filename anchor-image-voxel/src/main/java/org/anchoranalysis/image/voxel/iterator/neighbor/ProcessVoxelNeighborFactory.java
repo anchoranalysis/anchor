@@ -35,15 +35,15 @@ import org.anchoranalysis.spatial.box.Extent;
 
 /**
  * Creates {@link ProcessVoxelNeighbor} to match certain circumstances.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ProcessVoxelNeighborFactory {
 
     /**
-     * Creates to process neighbors that must lie within either an object-mask or an extent (as a fallback).
+     * Creates to process neighbors that must lie within either an object-mask or an extent (as a
+     * fallback).
      *
      * @param containingMask if defined, the process is restricted to only process points within
      *     this object-mask.
@@ -63,7 +63,7 @@ public class ProcessVoxelNeighborFactory {
 
     /**
      * Creates to process neighbors that must lie within an extent.
-     * 
+     *
      * <p>The extent is derived from the {@link SlidingBuffer} associated with {@code process}.
      *
      * @param process a process which will be wrapped inside a restriction.

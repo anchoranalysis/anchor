@@ -74,7 +74,7 @@ public class CheckedStream {
      * rethrown wrapped inside a {@link ConvertedToRuntimeException}.
      *
      * @param  <T> type to consume.
-     * @param  <E> exception that can be thrown by {code mapFunction}.
+     * @param  <E> exception that can be thrown by {@code mapFunction}.
      * @param stream the stream to apply the map on.
      * @param throwableClass the class of {@code E}.
      * @param consumer the function to call for each object in the stream.
@@ -103,7 +103,7 @@ public class CheckedStream {
      * rethrown wrapped inside a {@link ConvertedToRuntimeException}.
      *
      * @param  <T> type to consume
-     * @param  <E> exception that can be thrown by {code mapFunction}
+     * @param  <E> exception that can be thrown by {@code mapFunction}
      * @param stream the stream to apply the map on
      * @param throwableClass the class of {@code E}
      * @param predicate the predicate to call for each object in the stream
@@ -134,7 +134,7 @@ public class CheckedStream {
      *
      * @param  <S> input-type to map
      * @param  <T> output-type of map
-     * @param  <E> exception that can be thrown by {code mapFunction}
+     * @param  <E> exception that can be thrown by {@code mapFunction}
      * @param stream the stream to apply the map on
      * @param throwableClass the class of {@code E}
      * @param mapFunction the function to use for mapping
@@ -164,7 +164,7 @@ public class CheckedStream {
      * rethrown wrapped inside a {@link ConvertedToRuntimeException}.
      *
      * @param  <S> input-type to map
-     * @param  <E> exception that can be thrown by {code mapFunction}
+     * @param  <E> exception that can be thrown by {@code mapFunction}
      * @param stream the stream to apply the map on
      * @param throwableClass the class of {@code E}
      * @param mapFunction the function to use for mapping
@@ -222,7 +222,7 @@ public class CheckedStream {
      * rethrown wrapped inside a {@link ConvertedToRuntimeException}.
      *
      * @param  <T> object-type to map-to
-     * @param  <E> exception that can be thrown by {code mapFunction}
+     * @param  <E> exception that can be thrown by {@code mapFunction}
      * @param stream the stream to apply the map on
      * @param throwableClass the class of {@code E}
      * @param mapFunction the function to use for mapping

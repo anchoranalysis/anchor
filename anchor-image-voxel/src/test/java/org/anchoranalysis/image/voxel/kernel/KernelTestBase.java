@@ -46,7 +46,7 @@ public abstract class KernelTestBase<T extends Kernel> { // NOSONAR
 
     /**
      * Creates with a specific {@link ApplyKernelForCount}.
-     * 
+     *
      * @param kernelApplier how to apply the kernel to each voxel to create a corresponding count.
      */
     protected KernelTestBase(ApplyKernelForCount<T> kernelApplier) {

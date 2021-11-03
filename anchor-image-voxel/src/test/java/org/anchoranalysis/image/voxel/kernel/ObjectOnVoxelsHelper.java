@@ -35,9 +35,8 @@ import org.anchoranalysis.spatial.box.Extent;
 
 /**
  * Creates {@link Voxels} showing an object on top of an otherwise empty background.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 @NoArgsConstructor
 public class ObjectOnVoxelsHelper {

@@ -228,7 +228,7 @@ public class FunctionalList {
      *
      * @param  <S> parameter-type for function
      * @param  <T> return-type for function
-     * @param  <E> exception that can be thrown by @{code mapFunction}
+     * @param  <E> exception that can be thrown by @{@code mapFunction}
      * @param collection the collection to be mapped
      * @param throwableClass class type of exception that may be thrown by {@code mapFunction}
      * @param mapFunction function to do the mapping
@@ -249,7 +249,7 @@ public class FunctionalList {
      *
      * @param  <S> parameter-type for function
      * @param  <T> return-type for function
-     * @param  <E> exception that can be thrown by {code mapFunction}
+     * @param  <E> exception that can be thrown by {@code mapFunction}
      * @param array the array to be mapped
      * @param throwableClass class type of exception that may be thrown by {@code mapFunction}
      * @param mapFunction function to do the mapping

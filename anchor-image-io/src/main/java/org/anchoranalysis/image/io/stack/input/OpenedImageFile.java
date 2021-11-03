@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.core.stack.ImageMetadata;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.core.stack.TimeSequence;
 import org.anchoranalysis.image.io.ImageIOException;
@@ -100,9 +101,28 @@ public interface OpenedImageFile extends AutoCloseable {
     /**
      * The {@link Dimensions} associated with a particular series.
      *
-     * @param seriesIndex the index of the series
-     * @return the corresponding dimensions
-     * @throws ImageIOException
+     * @param seriesIndex the index of the series.
+     * @return the corresponding dimensions.
+     * @throws ImageIOException if any filesystem-related input-output failure occurs.
      */
     Dimensions dimensionsForSeries(int seriesIndex) throws ImageIOException;
+
+    /**
+     * Extracts metadata about the image.
+     *
+     * <p>This may be called without later retrieving a channel from the image, so it is desirable
+     * that it is as computationally efficient as possible, for this use case.
+     *
+     * @param seriesIndex the index of the series.
+     * @return the associated image metadata.
+     * @throws ImageIOException if any filesystem-related input-output failure occurs.
+     */
+    default ImageMetadata metadata(int seriesIndex) throws ImageIOException {
+        return new ImageMetadata(
+                dimensionsForSeries(seriesIndex),
+                numberChannels(),
+                numberFrames(),
+                isRGB(),
+                bitDepth());
+    }
 }

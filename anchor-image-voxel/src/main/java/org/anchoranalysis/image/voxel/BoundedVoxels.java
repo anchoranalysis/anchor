@@ -93,7 +93,7 @@ public class BoundedVoxels<T> {
 
     /**
      * Copy constructor.
-     * 
+     *
      * <p>It is a deep copy. The voxel memory buffer is duplicated.
      *
      * @param source where to copy from.
@@ -198,10 +198,10 @@ public class BoundedVoxels<T> {
      *
      * <p>This operation is <i>immutable</i>.
      *
-     * @param growthNegative how much to grow in the <i>negative</i> direction (i.e. downards direction on an
-     *     axis).
-     * @param growthPositive how much to grow in the <i>positive</i> direction (i.e. upwards direction on an
-     *     axis).
+     * @param growthNegative how much to grow in the <i>negative</i> direction (i.e. downards
+     *     direction on an axis).
+     * @param growthPositive how much to grow in the <i>positive</i> direction (i.e. upwards
+     *     direction on an axis).
      * @param clipRegion if defined, clips the buffer to this region.
      * @param factory a factory to create {@link VoxelsFactoryTypeBound}.
      * @return a new {@link Voxels} with grown buffers.

@@ -27,8 +27,8 @@
 package org.anchoranalysis.image.voxel.kernel;
 
 /**
- * Combines two {@link BinaryKernel}s so that they only a true value exists only at a point where both
- * kernels return true.
+ * Combines two {@link BinaryKernel}s so that they only a true value exists only at a point where
+ * both kernels return true.
  *
  * <p>This implements a <i>logical and</i> operator.
  *

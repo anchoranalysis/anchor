@@ -31,11 +31,10 @@ import lombok.NoArgsConstructor;
 
 /**
  * Creates instances of {@link Interpolator} to match particular circumstances.
- * 
- * <p>This is a <i>singleton</i> class.
- * 
- * @author Owen Feehan
  *
+ * <p>This is a <i>singleton</i> class.
+ *
+ * @author Owen Feehan
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class InterpolatorFactory {
@@ -48,7 +47,7 @@ public class InterpolatorFactory {
 
     /**
      * Singleton instance of {@link InterpolatorFactory}.
-     * 
+     *
      * @return a single instance of this class.
      */
     public static InterpolatorFactory getInstance() {
@@ -59,8 +58,9 @@ public class InterpolatorFactory {
     }
 
     /**
-     * An {@link Interpolator} that is effectively disabled, and performs no interpolation, copying a single (minimal corner) value for each voxel.
-     * 
+     * An {@link Interpolator} that is effectively disabled, and performs no interpolation, copying
+     * a single (minimal corner) value for each voxel.
+     *
      * @return a corresponding interpolator.
      */
     public Interpolator noInterpolation() {
@@ -68,8 +68,9 @@ public class InterpolatorFactory {
     }
 
     /**
-     * An {@link Interpolator} that is suitable for resizing a raster-image with a <i>range of intensity values</i>.
-     * 
+     * An {@link Interpolator} that is suitable for resizing a raster-image with a <i>range of
+     * intensity values</i>.
+     *
      * @return a corresponding interpolator.
      */
     public Interpolator rasterResizing() {
@@ -77,9 +78,12 @@ public class InterpolatorFactory {
     }
 
     /**
-     * An {@link Interpolator} that is suitable for resizing a <i>binary</i> raster-image, restricted to <i>two possible intensity values only</i>.
-     * 
-     * @param outOfBoundsValue a value used to represent <i>out-of-bounds</i> voxels to provide context for the interpolation at boundaries. This should be one of the two permitted binary states.
+     * An {@link Interpolator} that is suitable for resizing a <i>binary</i> raster-image,
+     * restricted to <i>two possible intensity values only</i>.
+     *
+     * @param outOfBoundsValue a value used to represent <i>out-of-bounds</i> voxels to provide
+     *     context for the interpolation at boundaries. This should be one of the two permitted
+     *     binary states.
      * @return a corresponding interpolator.
      */
     public Interpolator binaryResizing(int outOfBoundsValue) {

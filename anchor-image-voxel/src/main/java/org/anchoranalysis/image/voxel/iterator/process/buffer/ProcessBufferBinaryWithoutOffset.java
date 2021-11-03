@@ -39,7 +39,7 @@ package org.anchoranalysis.image.voxel.iterator.process.buffer;
 @FunctionalInterface
 public interface ProcessBufferBinaryWithoutOffset<S, T> {
 
-    /** 
+    /**
      * Notifies the processor that there has been a change in slice.
      *
      * @param z the slice-index (global coordinates).

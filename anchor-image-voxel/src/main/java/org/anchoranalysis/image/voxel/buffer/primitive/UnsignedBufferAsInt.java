@@ -43,7 +43,7 @@ public abstract class UnsignedBufferAsInt extends UnsignedBuffer {
 
     /**
      * Construct with a delegate buffer.
-     * 
+     *
      * @param buffer buffer to use as a delegate.
      */
     protected UnsignedBufferAsInt(Buffer buffer) {

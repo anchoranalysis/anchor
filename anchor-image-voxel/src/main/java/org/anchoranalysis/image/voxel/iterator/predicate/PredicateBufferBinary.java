@@ -38,7 +38,7 @@ import org.anchoranalysis.spatial.point.Point3i;
 @FunctionalInterface
 public interface PredicateBufferBinary<T> {
 
-    /** 
+    /**
      * Notifies the processor that there has been a change in slice (z global coordinate).
      *
      * @param z the z-index of the slices.

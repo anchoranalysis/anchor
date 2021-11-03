@@ -34,9 +34,8 @@ import org.anchoranalysis.math.histogram.Histogram;
 
 /**
  * Aggregates statistics of a list of {@link VoxelStatistics} as if they were one.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class VoxelStatisticsCombined implements VoxelStatistics {
 
@@ -44,7 +43,7 @@ public class VoxelStatisticsCombined implements VoxelStatistics {
 
     /**
      * Adds an element.
-     * 
+     *
      * @param element an element to add.
      */
     public void add(VoxelStatistics element) {

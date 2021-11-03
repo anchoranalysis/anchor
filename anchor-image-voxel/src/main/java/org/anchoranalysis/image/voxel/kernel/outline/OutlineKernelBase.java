@@ -38,9 +38,7 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
  */
 public abstract class OutlineKernelBase extends BinaryKernelMorphological {
 
-    /**
-     * Default constructor.
-     */
+    /** Default constructor. */
     protected OutlineKernelBase() {
         super(false, false, false);
     }

@@ -45,7 +45,8 @@ import org.anchoranalysis.image.voxel.iterator.IterateVoxelsObjectMaskOptional;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 
 /**
- * Performs a <a href="https://en.wikipedia.org/wiki/Thresholding_(image_processing)">thresholding operation</a> on voxels.
+ * Performs a <a href="https://en.wikipedia.org/wiki/Thresholding_(image_processing)">thresholding
+ * operation</a> on voxels.
  *
  * <p>An <i>on</i> voxel is placed in the output-buffer if {@code voxel-value >= level} or
  * <i>off</i> otherwise.
@@ -55,10 +56,12 @@ public class VoxelsThresholder {
 
     /**
      * Applies thresholding to {@link Voxels} of <i>unsigned byte</i> data type.
-     * 
-     * @param voxels the voxels, which are consumed, and replaced with <i>on</i> and <i>off</i> values.
+     *
+     * @param voxels the voxels, which are consumed, and replaced with <i>on</i> and <i>off</i>
+     *     values.
      * @param level the level for thresholding, see the class description.
-     * @param binaryValues how to encode the <i>on</i> and <i>off</i> states for the thresholding output.
+     * @param binaryValues how to encode the <i>on</i> and <i>off</i> states for the thresholding
+     *     output.
      */
     public static void thresholdByte(
             Voxels<UnsignedByteBuffer> voxels, int level, BinaryValuesByte binaryValues) {
@@ -72,11 +75,13 @@ public class VoxelsThresholder {
 
     /**
      * Applies thresholding to {@link Voxels} of <i>float</i> data type.
-     * 
+     *
      * @param voxels the voxels, which are left unchanged.
      * @param level the level for thresholding, see the class description.
-     * @param binaryValues how to encode the <i>on</i> and <i>off</i> states for the thresholding output.
-     * @return a newly created {@link BinaryVoxels}, of identical size to {@code voxels} containing the output of the thresholding.
+     * @param binaryValues how to encode the <i>on</i> and <i>off</i> states for the thresholding
+     *     output.
+     * @return a newly created {@link BinaryVoxels}, of identical size to {@code voxels} containing
+     *     the output of the thresholding.
      */
     public static BinaryVoxels<UnsignedByteBuffer> thresholdFloat(
             Voxels<FloatBuffer> voxels, float level, BinaryValuesByte binaryValues) {
@@ -90,15 +95,20 @@ public class VoxelsThresholder {
 
     /**
      * Applies thresholding to {@link VoxelsUntyped}.
-     * 
+     *
      * <p>Only <i>unsigned byte</i> <i>float</i> data types are supported.
-     * 
-     * @param voxels the voxels, which are always unchanged if {@code alwaysDuplicate} is true, and otherwise will be changed if they are of <i>unsigned byte</i> type.
+     *
+     * @param voxels the voxels, which are always unchanged if {@code alwaysDuplicate} is true, and
+     *     otherwise will be changed if they are of <i>unsigned byte</i> type.
      * @param level the level for thresholding, see the class description.
-     * @param binaryValues how to encode the <i>on</i> and <i>off</i> states for the thresholding output.
-     * @param alwaysDuplicate if true, {@code voxels} are never reused in the output, with new buffers always created.
-     * @param objectMask if set, restricts the region where thresholding occurs to correspond to this object-mask.
-     * @return a {@link BinaryVoxels}, reusing {@code voxels} if they are of type <i>unsigned byte</i> (and {@code alwaysDuplicate} is false), otherwise created newly.
+     * @param binaryValues how to encode the <i>on</i> and <i>off</i> states for the thresholding
+     *     output.
+     * @param alwaysDuplicate if true, {@code voxels} are never reused in the output, with new
+     *     buffers always created.
+     * @param objectMask if set, restricts the region where thresholding occurs to correspond to
+     *     this object-mask.
+     * @return a {@link BinaryVoxels}, reusing {@code voxels} if they are of type <i>unsigned
+     *     byte</i> (and {@code alwaysDuplicate} is false), otherwise created newly.
      * @throws OperationFailedException if an unsupported data-type exists in {@code voxels}.
      */
     public static BinaryVoxels<UnsignedByteBuffer> threshold(
@@ -120,22 +130,30 @@ public class VoxelsThresholder {
         } else if (voxels.getVoxelDataType().equals(FloatVoxelType.INSTANCE)) {
             out = VoxelsFactory.getUnsignedByte().createInitialized(voxels.extent());
             IterateVoxelsObjectMaskOptional.withTwoBuffers(
-                    objectMask, voxels.asFloat(), out, new ThresholdEachVoxelFloat(level, binaryValues));
+                    objectMask,
+                    voxels.asFloat(),
+                    out,
+                    new ThresholdEachVoxelFloat(level, binaryValues));
         } else {
             throw new OperationFailedException(
                     "Unsupported voxel-data-type, only unsigned byte and float are supported");
         }
         return BinaryVoxelsFactory.reuseByte(out, binaryValues.asInt());
     }
-    
+
     /**
-     * Reuses the existing buffer if of type {@link UnsignedByteBuffer}, otherwise creates a new empty byte buffer.
+     * Reuses the existing buffer if of type {@link UnsignedByteBuffer}, otherwise creates a new
+     * empty byte buffer.
      *
-     * @param buffer the buffer to reuse, copy, or create a an empty buffer in it's place of different type.
-     * @param duplicate if true, an existing buffer of type {@link UnsignedByteBuffer} will not be reused directly, but duplicated.
-     * @return either the current buffer (possibly duplicated if {@code duplicate} is true} or an empty buffer if the same-size.
+     * @param buffer the buffer to reuse, copy, or create a an empty buffer in it's place of
+     *     different type.
+     * @param duplicate if true, an existing buffer of type {@link UnsignedByteBuffer} will not be
+     *     reused directly, but duplicated.
+     * @return either the current buffer (possibly duplicated if {@code duplicate} is true} or an
+     *     empty buffer if the same-size.
      */
-    private static Voxels<UnsignedByteBuffer> voxelsAsByteOrEmpty(VoxelsUntyped buffer, boolean duplicate) {
+    private static Voxels<UnsignedByteBuffer> voxelsAsByteOrEmpty(
+            VoxelsUntyped buffer, boolean duplicate) {
         Voxels<UnsignedByteBuffer> boxOut;
 
         // If the input-channel is Byte then we do it in-place

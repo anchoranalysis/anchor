@@ -31,9 +31,8 @@ import lombok.Value;
 
 /**
  * Parameters used in {@code EdgeAdder} class.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 @Value
 @RequiredArgsConstructor

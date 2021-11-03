@@ -43,9 +43,7 @@ public abstract class CountKernel extends Kernel {
 
     private LocalSlices slices;
 
-    /**
-     * Creates with a kernel-size of three.
-     */
+    /** Creates with a kernel-size of three. */
     protected CountKernel() {
         super(3);
     }

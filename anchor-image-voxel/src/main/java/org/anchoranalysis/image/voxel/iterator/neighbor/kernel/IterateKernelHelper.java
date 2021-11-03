@@ -45,7 +45,7 @@ import org.anchoranalysis.spatial.box.BoundingBox;
  *
  * <p>This ensures the appropriate methods are called on {@link Kernel} to inform it of the current
  * z-slice buffers.
- * 
+ *
  * @author Owen Feehan
  */
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
@@ -53,7 +53,7 @@ public class IterateKernelHelper {
 
     /**
      * Iterates over <b>all voxels</b>.
-     * 
+     *
      * @param kernel the kernel to apply.
      * @param voxels the voxels to apply the kernel to.
      * @param params parameters influencing how the kernel is applied.
@@ -71,10 +71,11 @@ public class IterateKernelHelper {
 
     /**
      * Iterates over <b>only voxels contained within a bounding-box</b>.
-     * 
+     *
      * @param kernel the kernel to apply.
      * @param voxels the voxels in which a bounding-box resides.
-     * @param box a bounding-box pertaining to {@code voxels} indicating which voxels are iterated over.
+     * @param box a bounding-box pertaining to {@code voxels} indicating which voxels are iterated
+     *     over.
      * @param params parameters influencing how the kernel is applied.
      * @param processor called on each voxel within the bounding-box.
      * @throws OperationFailedException if the bounding-box is not contained within {@code voxels}.
@@ -93,16 +94,18 @@ public class IterateKernelHelper {
     }
 
     /**
-     * Iterates over <b>only voxels contained within a bounding-box</b> until a predicate is matched on a voxel.
-     * 
-     * <p>The function will return at the first encountered voxel that satisfies the predicate. 
-     * 
+     * Iterates over <b>only voxels contained within a bounding-box</b> until a predicate is matched
+     * on a voxel.
+     *
+     * <p>The function will return at the first encountered voxel that satisfies the predicate.
+     *
      * @param kernel the kernel to apply.
      * @param voxels the voxels in which a bounding-box resides.
-     * @param box a bounding-box pertaining to {@code voxels} indicating which voxels are iterated over.
+     * @param box a bounding-box pertaining to {@code voxels} indicating which voxels are iterated
+     *     over.
      * @param params parameters influencing how the kernel is applied.
      * @param predicate a condition tested on each voxel until it first returns true.
-     * @return whether at least one voxel satisfied {@code predicate}. 
+     * @return whether at least one voxel satisfied {@code predicate}.
      * @throws OperationFailedException if the bounding-box is not contained within {@code voxels}.
      */
     public static boolean overBoxUntil(

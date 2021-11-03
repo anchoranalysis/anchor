@@ -32,8 +32,8 @@ import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedIntBuffer;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedShortBuffer;
 
 /**
- * Converts voxel buffers to an <b>unsigned 8-bit</b> buffer scaling against a the minimum and maximum
- * constant.
+ * Converts voxel buffers to an <b>unsigned 8-bit</b> buffer scaling against a the minimum and
+ * maximum constant.
  *
  * <p>The scaling is linear between these two boundaries.
  *
@@ -46,7 +46,7 @@ public final class ToByteScaleByMinMaxValue extends ToByte {
 
     /**
      * Creates with the minimum- and maximum-values which existing values are scaled against.
-     * 
+     *
      * @param minValue the <i>minimum</i>-value that will be represented in the scaled-values.
      * @param maxValue the <i>maximum</i>-value that will be represented in the scaled-values.
      */
@@ -56,7 +56,7 @@ public final class ToByteScaleByMinMaxValue extends ToByte {
 
     /**
      * Assigns the minimum- and maximum-values which existing values are scaled against.
-     * 
+     *
      * @param minValue the <i>minimum</i>-value that will be represented in the scaled-values.
      * @param maxValue the <i>maximum</i>-value that will be represented in the scaled-values.
      */

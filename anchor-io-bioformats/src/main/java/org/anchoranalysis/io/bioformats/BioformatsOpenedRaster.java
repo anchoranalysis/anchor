@@ -56,35 +56,42 @@ import org.anchoranalysis.io.bioformats.copyconvert.ImageFileShape;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+/**
+ * An image-file that has been opened with the Bioformats library.
+ *
+ * @author Owen Feehan
+ */
 @Accessors(fluent = true)
 public class BioformatsOpenedRaster implements OpenedImageFile {
+
+    private static final Log LOG = LogFactory.getLog(BioformatsOpenedRaster.class);
 
     private final IFormatReader reader;
     private final ReadOptions readOptions;
 
-    private final IMetadata lociMetadata;
-
-    /** A list of channel-names or null if they are not available. */
-    @Getter private final int numberChannels;
+    private final IMetadata metadata;
 
     private final int sizeT;
     private final boolean rgb;
     private final int bitsPerPixel;
 
+    /** The number of channels in the image. */
+    @Getter private final int numberChannels;
+
+    /** A list of channel-names or {@link Optional#empty()} if unavailable. */
     @Getter private final Optional<List<String>> channelNames;
 
-    private static final Log LOG = LogFactory.getLog(BioformatsOpenedRaster.class);
-
     /**
-     * @param reader
-     * @param lociMetadata
-     * @param readOptions
+     * Creates with a particular {@link IFormatReader} and associated metadata.
+     *
+     * @param reader the reader.
+     * @param metadata the metadata.
+     * @param readOptions parameters that effect how to read the image.
      */
     public BioformatsOpenedRaster(
-            IFormatReader reader, IMetadata lociMetadata, ReadOptions readOptions) {
-        super();
+            IFormatReader reader, IMetadata metadata, ReadOptions readOptions) {
         this.reader = reader;
-        this.lociMetadata = lociMetadata;
+        this.metadata = metadata;
         this.readOptions = readOptions;
 
         sizeT = readOptions.sizeT(reader);
@@ -137,13 +144,13 @@ public class BioformatsOpenedRaster implements OpenedImageFile {
     @Override
     public Dimensions dimensionsForSeries(int seriesIndex) throws ImageIOException {
         try {
-            return new DimensionsCreator(lociMetadata).apply(reader, readOptions, seriesIndex);
+            return new DimensionsCreator(metadata).apply(reader, readOptions, seriesIndex);
         } catch (CreateException e) {
             throw new ImageIOException(e);
         }
     }
 
-    /** Opens as a specific data-type */
+    /** Opens as a specific data-type. */
     private TimeSequence openAsType(int seriesIndex, Progress progress, VoxelDataType dataType)
             throws ImageIOException {
 

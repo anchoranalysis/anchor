@@ -31,13 +31,14 @@ import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
 import org.anchoranalysis.core.identifier.provider.store.StoreSupplier;
 import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.core.stack.ImageMetadata;
 import org.anchoranalysis.image.core.stack.TimeSequence;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.channel.input.series.NamedChannelsForSeries;
 import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
 
 /**
- * Provides a set of channels as an input, each of which has a name.
+ * Provides a set of channels as an input, with each channel having a name.
  *
  * <p>Only the first time-point is considered from each series.
  *
@@ -45,20 +46,45 @@ import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
  */
 public abstract class NamedChannelsInput implements ProvidesStackInput {
 
-    /** Number of series that exist. */
+    /**
+     * Number of series that exist.
+     *
+     * @return the number of series.
+     */
     public abstract int numberSeries() throws ImageIOException;
 
-    /** Dimensions of a particular series */
+    /**
+     * Dimensions of a particular series.
+     *
+     * @param seriesIndex the index of the series.
+     */
     public abstract Dimensions dimensions(int seriesIndex) throws ImageIOException;
 
-    /** Number of channels */
+    /**
+     * Number of channels.
+     *
+     * @return the number of channels.
+     */
     public abstract int numberChannels() throws ImageIOException;
 
-    /** Bit-depth of image */
+    /**
+     * Bit-depth of image.
+     *
+     * @return the bit-depth.
+     */
     public abstract int bitDepth() throws ImageIOException;
 
     public abstract NamedChannelsForSeries createChannelsForSeries(
             int seriesIndex, Progress progress) throws ImageIOException;
+
+    /**
+     * The image-metadata associated with a particular series.
+     *
+     * @param seriesIndex the index of the series.
+     * @return the metadata.
+     * @throws ImageIOException if the metadata cannot be calculated.
+     */
+    public abstract ImageMetadata metadata(int seriesIndex) throws ImageIOException;
 
     @Override
     public void addToStoreInferNames(

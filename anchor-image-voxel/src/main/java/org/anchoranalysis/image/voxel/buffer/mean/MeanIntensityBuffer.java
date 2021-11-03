@@ -46,7 +46,7 @@ class MeanIntensityBuffer<T> implements ProjectableBuffer<T> {
     private Voxels<FloatBuffer> voxelsSum;
     private int countSlices = 0;
 
-    /** 
+    /**
      * Creates with minimal parameters, as no preprocessing is necessary.
      *
      * @param flatType the voxel data-type to use for the flattened (mean-intensity) buffer.

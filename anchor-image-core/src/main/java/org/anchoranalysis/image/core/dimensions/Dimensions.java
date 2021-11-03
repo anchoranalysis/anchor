@@ -51,14 +51,14 @@ public final class Dimensions {
 
     /**
      * The width and height and depth of the image.
-     * 
+     *
      * <p>i.e. the size of each of the three possible dimensions.
      */
     @Getter private final Extent extent;
 
     /**
      * Resolution of voxels to physical measurements.
-     * 
+     *
      * <p>e.g. physical size of each voxel in a particular dimension.
      */
     @Getter private final Optional<Resolution> resolution;

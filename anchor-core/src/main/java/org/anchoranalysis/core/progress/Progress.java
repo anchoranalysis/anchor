@@ -32,6 +32,9 @@ package org.anchoranalysis.core.progress;
  * <p>Unlike {@link ProgressIncrement}, a value is explictly communicated to represent the progress
  * state.
  *
+ * <p>As a tip when writing code that expects a {@link Progress} instance, but <b>where
+ * progress-tracking is undesired</b>, call with {@link ProgressIgnore#get}.
+ *
  * @author Owen Feehan
  */
 public interface Progress extends AutoCloseable {

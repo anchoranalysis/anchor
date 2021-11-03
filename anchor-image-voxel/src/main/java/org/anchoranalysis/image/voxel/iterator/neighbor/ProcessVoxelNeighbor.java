@@ -45,7 +45,8 @@ public interface ProcessVoxelNeighbor<T> {
      *
      * @param pointSource the source point in global coordinates.
      * @param sourceValue the value of the source pixel (in the associated sliding buffer).
-     * @param sourceOffsetXY the offset of the source pixel in XY (in the associated sliding buffer).
+     * @param sourceOffsetXY the offset of the source pixel in XY (in the associated sliding
+     *     buffer).
      */
     void initSource(Point3i pointSource, int sourceValue, int sourceOffsetXY);
 
@@ -71,9 +72,9 @@ public interface ProcessVoxelNeighbor<T> {
      */
     void processPoint(int xChange, int yChange);
 
-    /** 
+    /**
      * Collects the result of the operation after processing neighbor pixels.
-     * 
+     *
      * @return the result.
      */
     public abstract T collectResult();

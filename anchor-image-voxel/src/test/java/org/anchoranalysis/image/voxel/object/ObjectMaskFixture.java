@@ -135,9 +135,9 @@ public class ObjectMaskFixture {
         return object;
     }
 
-    /** 
+    /**
      * The expected number of voxels in the object-mask.
-     * 
+     *
      * @return the volume.
      */
     public int expectedVolume() {

@@ -36,7 +36,8 @@ public abstract class BinaryKernel extends Kernel {
     /**
      * Creates with a specific kernel-size.
      *
-     * @param size the size of the kernel-matrix in one dimension, either X or Y. This size should always be an <i>odd</i> number.
+     * @param size the size of the kernel-matrix in one dimension, either X or Y. This size should
+     *     always be an <i>odd</i> number.
      */
     protected BinaryKernel(int size) {
         super(size);

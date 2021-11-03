@@ -75,18 +75,17 @@ public class Mask {
     @Getter private Channel channel;
 
     /**
-     * The two states which are permitted to be assigned to the voxels, stored as <i>unsigned int</i>s.
+     * The two states which are permitted to be assigned to the voxels, stored as <i>unsigned
+     * int</i>s.
      */
     @Getter private final BinaryValues binaryValues;
 
-    /**
-     * The two states which are permitted to be assigned to the voxels, stored as <i>byte</i>s.
-     */
+    /** The two states which are permitted to be assigned to the voxels, stored as <i>byte</i>s. */
     private final BinaryValuesByte binaryValuesByte;
 
     /**
-     * Interpolator used for resizing the mask (making sure to use an out-of-bounds strategy of <i>off</i>
-     * voxels).
+     * Interpolator used for resizing the mask (making sure to use an out-of-bounds strategy of
+     * <i>off</i> voxels).
      */
     private final Interpolator interpolator;
 
@@ -303,8 +302,7 @@ public class Mask {
     private void applyThreshold(Mask mask) {
         int thresholdVal = (binaryValues.getOnInt() + binaryValues.getOffInt()) / 2;
 
-        VoxelsThresholder.thresholdByte(
-                mask.voxels(), thresholdVal, mask.binaryValues().asByte());
+        VoxelsThresholder.thresholdByte(mask.voxels(), thresholdVal, mask.binaryValues().asByte());
     }
 
     private Interpolator createInterpolator(BinaryValues binaryValues) {

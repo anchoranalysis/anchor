@@ -43,7 +43,7 @@ public class PrimitiveConverter {
 
     /**
      * Converts an <i>unsigned-byte</i> value to a <i>signed int</i>.
-     * 
+     *
      * @param value the value to convert.
      * @return the converted value.
      */
@@ -53,7 +53,7 @@ public class PrimitiveConverter {
 
     /**
      * Converts an <i>unsigned-short</i> value to a <i>signed int</i>.
-     * 
+     *
      * @param value the value to convert.
      * @return the converted value.
      */
@@ -63,17 +63,17 @@ public class PrimitiveConverter {
 
     /**
      * Converts an <i>unsigned-int</i> value to a <i>signed int</i>.
-     * 
+     *
      * @param value the value to convert.
      * @return the converted value.
      */
     public static int unsignedIntToShort(int value) {
         return (short) value;
     }
-    
+
     /**
      * Converts an <i>unsigned-byte</i> value to a <i>signed short</i>.
-     * 
+     *
      * @param value the value to convert.
      * @return the converted value.
      */
@@ -83,7 +83,7 @@ public class PrimitiveConverter {
 
     /**
      * Converts an <i>unsigned-int</i> value to a <i>signed long</i>.
-     * 
+     *
      * @param value the value to convert.
      * @return the converted value.
      */
@@ -93,7 +93,7 @@ public class PrimitiveConverter {
 
     /**
      * Converts an <i>unsigned-int</i> value to a <i>signed int</i>.
-     * 
+     *
      * @param value the value to convert.
      * @return the converted value.
      */

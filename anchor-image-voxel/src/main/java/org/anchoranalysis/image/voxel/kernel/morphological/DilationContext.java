@@ -45,8 +45,10 @@ public class DilationContext {
     /** How the kernel is applied to the scene. */
     @Getter private final KernelApplicationParameters kernelApplication;
 
-    /** If true, a big neighborhood is used 2D-plane (8-connected instead of 4-connected), but not in
-     * Z-direction (remains always 2-connected). */
+    /**
+     * If true, a big neighborhood is used 2D-plane (8-connected instead of 4-connected), but not in
+     * Z-direction (remains always 2-connected).
+     */
     private final boolean bigNeighborhood;
 
     /**
@@ -63,13 +65,14 @@ public class DilationContext {
 
     /**
      * Create <i>without</i> a post-condition.
-     * 
+     *
      * @param outsideKernelPolicy how to handle voxels whose neighbors are outside the scene.
-     * @param useZ if true, the dilation also occurs in the Z-dimension, otherwise in the XY-dimensions only.
-     * @param bigNeighborhood if true, a big neighborhood is used 2D-plane (8-connected instead of 4-connected), but not in
-     * Z-direction (remains always 2-connected).
-     * @param precondition if defined, a condition which must be satisfied on a <i>voxel</i>, before any voxel can be
-     * dilated.
+     * @param useZ if true, the dilation also occurs in the Z-dimension, otherwise in the
+     *     XY-dimensions only.
+     * @param bigNeighborhood if true, a big neighborhood is used 2D-plane (8-connected instead of
+     *     4-connected), but not in Z-direction (remains always 2-connected).
+     * @param precondition if defined, a condition which must be satisfied on a <i>voxel</i>, before
+     *     any voxel can be dilated.
      */
     public DilationContext(
             OutsideKernelPolicy outsideKernelPolicy,
@@ -81,15 +84,16 @@ public class DilationContext {
 
     /**
      * Create <i>with</i> a post-condition.
-     * 
+     *
      * @param outsideKernelPolicy how to handle voxels whose neighbors are outside the scene.
-     * @param useZ if true, the dilation also occurs in the Z-dimension, otherwise in the XY-dimensions only.
-     * @param bigNeighborhood if true, a big neighborhood is used 2D-plane (8-connected instead of 4-connected), but not in
-     * Z-direction (remains always 2-connected).
-     * @param precondition if defined, a condition which must be satisfied on a <i>voxel</i>, before any voxel can be
-     * dilated.
-     * @param postcondition if defined, a condition which must be satisfied <i>after</i> an iteration occurs, otherwise
-     * no more iterations occur.
+     * @param useZ if true, the dilation also occurs in the Z-dimension, otherwise in the
+     *     XY-dimensions only.
+     * @param bigNeighborhood if true, a big neighborhood is used 2D-plane (8-connected instead of
+     *     4-connected), but not in Z-direction (remains always 2-connected).
+     * @param precondition if defined, a condition which must be satisfied on a <i>voxel</i>, before
+     *     any voxel can be dilated.
+     * @param postcondition if defined, a condition which must be satisfied <i>after</i> an
+     *     iteration occurs, otherwise no more iterations occur.
      */
     public DilationContext(
             OutsideKernelPolicy outsideKernelPolicy,

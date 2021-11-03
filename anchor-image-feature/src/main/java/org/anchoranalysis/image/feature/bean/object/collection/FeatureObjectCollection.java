@@ -41,11 +41,17 @@ public abstract class FeatureObjectCollection extends Feature<FeatureInputObject
     @Override
     public double calculate(SessionInput<FeatureInputObjectCollection> input)
             throws FeatureCalculationException {
-        return calc(input.get());
+        return calculate(input.get());
     }
 
-    // Calculates an Energy element for a set of pixels
-    public abstract double calc(FeatureInputObjectCollection params)
+    /**
+     * Calculates the feature-value for a given {@link FeatureInputObjectCollection}.
+     *
+     * @param input the input..
+     * @return the calculated feature-value.
+     * @throws FeatureCalculationException if the feature-value cannot be calculated.
+     */
+    public abstract double calculate(FeatureInputObjectCollection input)
             throws FeatureCalculationException;
 
     @Override

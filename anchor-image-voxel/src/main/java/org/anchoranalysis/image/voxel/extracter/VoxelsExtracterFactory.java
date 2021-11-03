@@ -36,9 +36,8 @@ import org.anchoranalysis.spatial.point.ReadableTuple3i;
 
 /**
  * Creates {@link VoxelsExtracter} corresponding to {@link Voxels} of differing data-type.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class VoxelsExtracterFactory {

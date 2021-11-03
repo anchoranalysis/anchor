@@ -38,15 +38,14 @@ import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 
 /**
  * Implementation of {@link Voxels} whose voxels are of type <i>unsigned byte</i> (8-bit).
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public final class VoxelsUnsignedByte extends Voxels<UnsignedByteBuffer> {
 
     /**
      * Create from a buffer, indexed by slice.
-     * 
+     *
      * @param buffer the buffer.
      */
     public VoxelsUnsignedByte(SliceBufferIndex<UnsignedByteBuffer> buffer) {

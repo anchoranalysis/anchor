@@ -150,7 +150,8 @@ public class ObjectCollectionFactory {
      * @throws E exception if it occurs during mapping.
      */
     public static <T, E extends Exception> ObjectCollection mapFromOptional(
-            Iterable<T> iterable, CheckedFunction<T, Optional<ObjectMask>, E> mapFunction) throws E {
+            Iterable<T> iterable, CheckedFunction<T, Optional<ObjectMask>, E> mapFunction)
+            throws E {
         return mapFromOptional(iterable.iterator(), mapFunction);
     }
 
@@ -167,7 +168,8 @@ public class ObjectCollectionFactory {
      * @throws E exception if it occurs during mapping.
      */
     public static <T, E extends Exception> ObjectCollection mapFromOptional(
-            Iterator<T> iterator, CheckedFunction<T, Optional<ObjectMask>, E> mapFunction) throws E {
+            Iterator<T> iterator, CheckedFunction<T, Optional<ObjectMask>, E> mapFunction)
+            throws E {
         ObjectCollection out = new ObjectCollection();
         while (iterator.hasNext()) {
             mapFunction.apply(iterator.next()).ifPresent(out::add);
@@ -244,7 +246,9 @@ public class ObjectCollectionFactory {
             throws E {
         return new ObjectCollection(
                 CheckedStream.mapIntStream(
-                        IntStream.range(startInclusive, endExclusive), throwableClass, mapFunction));
+                        IntStream.range(startInclusive, endExclusive),
+                        throwableClass,
+                        mapFunction));
     }
 
     /**
@@ -301,7 +305,9 @@ public class ObjectCollectionFactory {
      * @throws E if thrown by <code>mapFunction</code>
      */
     public static <T, E extends Exception> ObjectCollection filterAndMapFrom(
-            Iterable<T> iterable, Predicate<T> predicate, CheckedFunction<T, ObjectMask, E> mapFunction)
+            Iterable<T> iterable,
+            Predicate<T> predicate,
+            CheckedFunction<T, ObjectMask, E> mapFunction)
             throws E {
         ObjectCollection out = new ObjectCollection();
         for (T item : iterable) {
@@ -322,8 +328,8 @@ public class ObjectCollectionFactory {
      * @param <E> exception that be thrown during mapping.
      * @param list incoming list to be mapped.
      * @param predicate only elements from the list that satisfy this predicate are added.
-     * @param mapFunctionWithIndex function for mapping, also including an index (the original position
-     *     in the bounding-box).
+     * @param mapFunctionWithIndex function for mapping, also including an index (the original
+     *     position in the bounding-box).
      * @return a newly created {@link ObjectCollection}.
      * @throws E if an exception is thrown during mapping.
      */

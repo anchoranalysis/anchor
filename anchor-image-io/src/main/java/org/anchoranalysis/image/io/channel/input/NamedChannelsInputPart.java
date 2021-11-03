@@ -33,7 +33,7 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.io.ImageIOException;
 
 /**
- * One part of a NamedChannelsInput that can be combined with others
+ * One part of a {@link NamedChannelsInput} that can be combined with others.
  *
  * @author Owen Feehan
  */

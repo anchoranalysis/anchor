@@ -94,12 +94,16 @@ public class Channel {
     }
 
     /**
-     * Creates a {@link ObjectMask} representing all the voxels in {@code box} equal to {@code equalValue}.
-     * 
-     * <p>The equal values in the box are assigned an <i>on</i> state, and all other values an <i>off</i> state.
-     * 
-     * @param box the bounding-box to consider voxels within, and which forms the bounding-box for the created {@link ObjectMask}.
-     * @param equalValue the value voxels must be equal to, so to be assigned an <i>on</i> state in the {@link ObjectMask}.
+     * Creates a {@link ObjectMask} representing all the voxels in {@code box} equal to {@code
+     * equalValue}.
+     *
+     * <p>The equal values in the box are assigned an <i>on</i> state, and all other values an
+     * <i>off</i> state.
+     *
+     * @param box the bounding-box to consider voxels within, and which forms the bounding-box for
+     *     the created {@link ObjectMask}.
+     * @param equalValue the value voxels must be equal to, so to be assigned an <i>on</i> state in
+     *     the {@link ObjectMask}.
      * @return a newly created {@link ObjectMask} as per above.
      */
     public ObjectMask equalMask(BoundingBox box, int equalValue) {
@@ -149,15 +153,15 @@ public class Channel {
 
     /**
      * Resizes the dimensions of the channel, by scaling the existing size by a factor.
-     * 
+     *
      * <p>Existing voxel values are interpolated to match the new size.
-     * 
+     *
      * <p>This is useful for quickly downscaling or upscaling by a particular factor.
-     * 
+     *
      * <p>It is an <i>immutable</i> operation, and the existing object state remains unchanged.
-     * 
+     *
      * <p>The z-dimension remains unchanged.
-     * 
+     *
      * @param scaleFactor the factor to multiply the existing X and Y size by.
      * @return a newly created {@link Channel} containing a resized version of the current.
      */
@@ -167,7 +171,7 @@ public class Channel {
 
     /**
      * Like {@link #scaleXY(ScaleFactor)} but allows an explicit choice of {@link Interpolator}.
-     * 
+     *
      * @param scaleFactor the scaling-factor to be applied to the sizes.
      * @param interpolator the interpolator.
      * @return a newly created {@link Channel} containing a resized version of the current.
@@ -182,11 +186,11 @@ public class Channel {
 
     /**
      * Resizes the dimensions of the channel, interpolating the existing voxel values to match.
-     * 
+     *
      * <p>It is an <i>immutable</i> operation, and the existing object state remains unchanged.
-     * 
+     *
      * <p>The z-dimension remains unchanged.
-     * 
+     *
      * @param extentToAssign the new size to assign.
      * @return a newly created {@link Channel} containing a resized version of the current.
      */
@@ -196,7 +200,7 @@ public class Channel {
 
     /**
      * Like {@link #resizeXY(Extent)} but allows an explicit choice of {@link Interpolator}.
-     * 
+     *
      * @param extentToAssign the new size to assign. The z-component is ignored.
      * @param interpolator the interpolator.
      * @return a newly created {@link Channel} containing a resized version of the current.
@@ -207,7 +211,7 @@ public class Channel {
 
     /**
      * Like {@link #resizeXY(Extent)} but specifies the size via {@code int} parameters.
-     * 
+     *
      * @param x the size along the x-axis.
      * @param y the size along the y-axis.
      * @return a newly created {@link Channel} containing a resized version of the current.
@@ -217,8 +221,9 @@ public class Channel {
     }
 
     /**
-     * Like {@link #resizeXY(Extent, Interpolator)} but specifies the size via {@code int} parameters.
-     * 
+     * Like {@link #resizeXY(Extent, Interpolator)} but specifies the size via {@code int}
+     * parameters.
+     *
      * @param x the size along the x-axis.
      * @param y the size along the y-axis.
      * @param interpolator the interpolator.
@@ -235,8 +240,9 @@ public class Channel {
     }
 
     /**
-     * A <a href="https://en.wikipedia.org/wiki/Maximum_intensity_projection">maximum-intensity projection</a> across the z-slices.
-     * 
+     * A <a href="https://en.wikipedia.org/wiki/Maximum_intensity_projection">maximum-intensity
+     * projection</a> across the z-slices.
+     *
      * @return a newly created {@link Channel} with a newly created voxel-buffer.
      */
     public Channel projectMax() {
@@ -245,7 +251,7 @@ public class Channel {
 
     /**
      * A mean-intensity projection across the z-slices.
-     * 
+     *
      * @return a newly created {@link Channel} with a newly created voxel-buffer.
      */
     public Channel projectMean() {
@@ -285,9 +291,9 @@ public class Channel {
 
     /**
      * Assigns a new resolution.
-     * 
+     *
      * <p>This is a <i>mutable</i> operation that replaces existing state.
-     * 
+     *
      * @param resolution the resolution to assign.
      */
     public void assignResolution(Optional<Resolution> resolution) {

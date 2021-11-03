@@ -46,10 +46,10 @@ public class ChannelConverterMulti {
 
     /**
      * Converts a {@link Channel}'s voxels to another type.
-     * 
+     *
      * @param channel the channel to convert.
      * @param outputVoxelType the data-type to convert to.
-     * @return a {@link Channel} with voxel's of type {@code outputVoxelType}. 
+     * @return a {@link Channel} with voxel's of type {@code outputVoxelType}.
      */
     public Channel convert(Channel channel, VoxelDataType outputVoxelType) {
 

@@ -41,7 +41,7 @@ public abstract class VoxelBufferUnsigned<T extends UnsignedBuffer> extends Voxe
 
     /**
      * Creates to reuse a particular buffer.
-     * 
+     *
      * @param buffer the buffer to reuse.
      */
     protected VoxelBufferUnsigned(T buffer) {

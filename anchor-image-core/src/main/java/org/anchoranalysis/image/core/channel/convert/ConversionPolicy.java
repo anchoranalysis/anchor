@@ -27,13 +27,16 @@
 package org.anchoranalysis.image.core.channel.convert;
 
 public enum ConversionPolicy {
-    
+
     /** The old channel is converted into the new type if needed. */
     CHANGE_EXISTING_CHANNEL,
-    
-    /** Do not change the existing channel, rather make a new channel. But reuse the existing channel if it has the right data-type. */
+
+    /**
+     * Do not change the existing channel, rather make a new channel. But reuse the existing channel
+     * if it has the right data-type.
+     */
     DO_NOT_CHANGE_EXISTING,
-    
+
     /** Always make a new channel. */
     ALWAYS_NEW
 }

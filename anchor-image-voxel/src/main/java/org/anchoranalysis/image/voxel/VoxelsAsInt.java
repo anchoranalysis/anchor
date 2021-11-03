@@ -38,15 +38,14 @@ import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 
 /**
  * Implementation of {@link Voxels} whose voxels are of type <i>unsigned int</i> (32-bit).
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public final class VoxelsAsInt extends Voxels<UnsignedIntBuffer> {
 
     /**
      * Create from a buffer, indexed by slice.
-     * 
+     *
      * @param buffer the buffer.
      */
     public VoxelsAsInt(SliceBufferIndex<UnsignedIntBuffer> buffer) {

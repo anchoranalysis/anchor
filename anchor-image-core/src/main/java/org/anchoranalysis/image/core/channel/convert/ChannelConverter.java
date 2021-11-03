@@ -46,24 +46,27 @@ import org.anchoranalysis.image.voxel.factory.VoxelsFactoryTypeBound;
  * @author Owen Feehan
  * @param <T> type to convert to (destination-type)
  */
-@AllArgsConstructor(access=AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class ChannelConverter<T> {
 
     /** The voxel data-type to convert each {@link Channel}'s voxels to. */
     private VoxelDataType targetDataType;
-    
+
     /** A converter used to change the {@link Voxels} to {@code targetDataType}. */
     @Getter private VoxelsConverter<T> voxelsConverter;
-    
+
     /** The factory used to create new {@link Voxels}. */
     private VoxelsFactoryTypeBound<T> voxelsFactory;
 
     /**
-     * Like {@link #convert(Channel, ConversionPolicy)} but converts every channel in a {@link Stack}.
-     * 
-     * @param stack the stack whose channels will be  converted.
-     * @param changeExisting if true, the existing channels will be changed in-place, otherwise a new channel will be created.
-     * @return a newly created {@link Stack} containing converted versions of each respective channel in {@code stack}.
+     * Like {@link #convert(Channel, ConversionPolicy)} but converts every channel in a {@link
+     * Stack}.
+     *
+     * @param stack the stack whose channels will be converted.
+     * @param changeExisting if true, the existing channels will be changed in-place, otherwise a
+     *     new channel will be created.
+     * @return a newly created {@link Stack} containing converted versions of each respective
+     *     channel in {@code stack}.
      */
     public Stack convert(Stack stack, ConversionPolicy changeExisting) {
         Stack out = new Stack();
@@ -86,8 +89,10 @@ public abstract class ChannelConverter<T> {
      * channel entirely.
      *
      * @param channel channel whose voxels will be converted.
-     * @param changeExisting if true, the existing channels will be changed in-place, otherwise a new channel will be created.
-     * @return the converted channel, either the existing channel, or a newly-created one, as per above.
+     * @param changeExisting if true, the existing channels will be changed in-place, otherwise a
+     *     new channel will be created.
+     * @return the converted channel, either the existing channel, or a newly-created one, as per
+     *     above.
      */
     public Channel convert(Channel channel, ConversionPolicy changeExisting) {
 
