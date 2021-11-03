@@ -4,12 +4,14 @@ import java.util.Optional;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.Resolution;
+import lombok.EqualsAndHashCode;
 
 /**
  * Any {@link FeatureInput} that exposes the {@link Dimensions} of an image or scene.
  *
  * @author Owen Feehan
  */
+@EqualsAndHashCode
 public abstract class FeatureInputDimensions implements FeatureInputWithResolution { // NOSONAR
 
     /**

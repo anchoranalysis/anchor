@@ -43,10 +43,10 @@ public abstract class StackReader extends AnchorBean<StackReader> {
     /**
      * Opens a file at {@code path} that should contain only a single-stack.
      *
-     * @param path the path of the image-file to open
-     * @return the stack that has been read
+     * @param path the path of the image-file to open.
+     * @return the stack that has been read.
      * @throws ImageIOException if there is a series of stacks in the file, or if anything else goes
-     *     wrong
+     *     wrong.
      */
     public Stack readStack(Path path) throws ImageIOException {
         OpenedImageFile openedFile = openFile(path);
@@ -65,7 +65,7 @@ public abstract class StackReader extends AnchorBean<StackReader> {
     /**
      * Opens a file containing one or more images but does not read an image.
      *
-     * @param path where the file is located
+     * @param path where the file is located.
      * @return an interface to the opened file that should be closed when no longer in use.
      * @throws ImageIOException if the file cannot be read.
      */
