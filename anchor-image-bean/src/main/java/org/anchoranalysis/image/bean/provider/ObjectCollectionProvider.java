@@ -32,7 +32,7 @@ import org.anchoranalysis.image.bean.ImageBean;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 
 /**
- * Base class for beans that implement {@link Provider} to provide a {@link ObjectCollection}.
+ * Base class for beans that implement {@link Provider} to provide an {@link ObjectCollection}.
  *
  * @author Owen Feehan
  */

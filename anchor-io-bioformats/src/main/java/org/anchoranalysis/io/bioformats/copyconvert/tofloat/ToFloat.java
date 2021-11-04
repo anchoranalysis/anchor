@@ -38,7 +38,6 @@ import org.anchoranalysis.io.bioformats.copyconvert.ConvertTo;
 
 public abstract class ToFloat extends ConvertTo<FloatBuffer> {
 
-    private int sizeBytesChannel;
     private Dimensions dimensions;
 
     protected ToFloat() {
@@ -49,7 +48,6 @@ public abstract class ToFloat extends ConvertTo<FloatBuffer> {
 
     @Override
     protected void setupBefore(Dimensions dimensions, int numberChannelsPerArray) {
-        sizeBytesChannel = dimensions.x() * dimensions.y() * bytesPerPixel();
         this.dimensions = dimensions;
     }
 
@@ -57,11 +55,11 @@ public abstract class ToFloat extends ConvertTo<FloatBuffer> {
     protected VoxelBuffer<FloatBuffer> convertSliceOfSingleChannel(
             ByteBuffer source, int channelIndexRelative) throws IOException {
         Preconditions.checkArgument(
-                channelIndexRelative == 0, "interleaving not supported for int data");
-        float[] fArr = convertIntegerBytesToFloatArray(dimensions, source, sizeBytesChannel);
-        return VoxelBufferWrap.floatArray(fArr);
+                channelIndexRelative == 0, "interleaving not supported for float data");
+        float[] array = convertIntegerBytesToFloatArray(dimensions, source);
+        return VoxelBufferWrap.floatArray(array);
     }
 
     protected abstract float[] convertIntegerBytesToFloatArray(
-            Dimensions dimensions, ByteBuffer source, int offsetInSource) throws IOException;
+            Dimensions dimensions, ByteBuffer source) throws IOException;
 }

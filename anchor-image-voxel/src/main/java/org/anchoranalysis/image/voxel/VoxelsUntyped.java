@@ -46,12 +46,15 @@ import org.anchoranalysis.spatial.box.Extent;
 
 /**
  * Stores memory buffers representing image voxels, without explicit typing of buffers.
- * 
+ *
  * <p>This is a convenience class to avoid using a templated parameter in {@link Voxels}.
- * 
- * <p>It stores the voxels in a <a href="https://en.wikipedia.org/wiki/Strong_and_weak_typing">weakly-typed manner</a>, and gives convenience methods to convert to the desired type.
- * 
- * <p>An {@link IncorrectVoxelTypeException} is thrown when incorrect assumptions are made about the type.
+ *
+ * <p>It stores the voxels in a <a
+ * href="https://en.wikipedia.org/wiki/Strong_and_weak_typing">weakly-typed manner</a>, and gives
+ * convenience methods to convert to the desired type.
+ *
+ * <p>An {@link IncorrectVoxelTypeException} is thrown when incorrect assumptions are made about the
+ * type.
  *
  * @author Owen Feehan
  */
@@ -61,14 +64,14 @@ public class VoxelsUntyped {
 
     /**
      * Creates to wrap a {@link Voxels} of unspecified type.
-     * 
+     *
      * @param voxels the voxels to wrap, whose memory is reused without duplication.
      */
     public VoxelsUntyped(Voxels<?> voxels) {
         this.voxels = voxels;
     }
 
-    /** 
+    /**
      * Exposes without any specific buffer type.
      *
      * @return the current object, without typing on the buffer.
@@ -79,7 +82,7 @@ public class VoxelsUntyped {
 
     /**
      * Do the voxels have a data-type that is equal to {@code match}?
-     * 
+     *
      * @param match the data-type the voxel must equal.
      * @return true iff the voxel data-type is equal.
      */
@@ -88,13 +91,16 @@ public class VoxelsUntyped {
             return voxels;
         } else {
             throw new IncorrectVoxelTypeException(
-                    String.format("Incompatible data-type %s has been requested from voxels with data-type %s", match, voxels.dataType()));
+                    String.format(
+                            "Incompatible data-type %s has been requested from voxels with data-type %s",
+                            match, voxels.dataType()));
         }
     }
 
     /**
-     * Casts to use a {@link UnsignedByteBuffer} if the voxels contain this data-type, otherwise throws a {@link IncorrectVoxelTypeException}.
-     * 
+     * Casts to use a {@link UnsignedByteBuffer} if the voxels contain this data-type, otherwise
+     * throws a {@link IncorrectVoxelTypeException}.
+     *
      * @return the cast voxels.
      */
     @SuppressWarnings("unchecked")
@@ -109,8 +115,9 @@ public class VoxelsUntyped {
     }
 
     /**
-     * Casts to use a {@link UnsignedShortBuffer} if the voxels contain this data-type, otherwise throws a {@link IncorrectVoxelTypeException}.
-     * 
+     * Casts to use a {@link UnsignedShortBuffer} if the voxels contain this data-type, otherwise
+     * throws a {@link IncorrectVoxelTypeException}.
+     *
      * @return the cast voxels.
      */
     @SuppressWarnings("unchecked")
@@ -125,8 +132,9 @@ public class VoxelsUntyped {
     }
 
     /**
-     * Casts to use a {@link UnsignedIntBuffer} if the voxels contain this data-type, otherwise throws a {@link IncorrectVoxelTypeException}.
-     * 
+     * Casts to use a {@link UnsignedIntBuffer} if the voxels contain this data-type, otherwise
+     * throws a {@link IncorrectVoxelTypeException}.
+     *
      * @return the cast voxels.
      */
     @SuppressWarnings("unchecked")
@@ -139,10 +147,11 @@ public class VoxelsUntyped {
 
         return (Voxels<UnsignedIntBuffer>) voxels;
     }
-    
+
     /**
-     * Casts to use a {@link FloatBuffer} if the voxels contain this data-type, otherwise throws a {@link IncorrectVoxelTypeException}.
-     * 
+     * Casts to use a {@link FloatBuffer} if the voxels contain this data-type, otherwise throws a
+     * {@link IncorrectVoxelTypeException}.
+     *
      * @return the cast voxels.
      */
     @SuppressWarnings("unchecked")
@@ -166,8 +175,9 @@ public class VoxelsUntyped {
 
     /**
      * Copies the voxels into a {@code destination}, but only those voxels inside a bounding-box.
-     * 
-     * @param boxSource the bounding-box relative to the source voxels (the current voxels - from where we copy from).
+     *
+     * @param boxSource the bounding-box relative to the source voxels (the current voxels - from
+     *     where we copy from).
      * @param destination the voxels we copy into.
      * @param boxDestination the bounding-box relative to the destination voxels.
      */
@@ -179,8 +189,9 @@ public class VoxelsUntyped {
     }
 
     /**
-     * Copies the voxels into a {@code destination}, but only those voxels inside an {@link ObjectMask}.
-     * 
+     * Copies the voxels into a {@code destination}, but only those voxels inside an {@link
+     * ObjectMask}.
+     *
      * @param objectSource the object-mask relative to the source voxels, from where we copy from.
      * @param destination the voxels we copy into.
      * @param boxDestination the bounding-box relative to the destination voxels.
@@ -191,7 +202,7 @@ public class VoxelsUntyped {
         voxels.extract()
                 .objectCopyTo(objectSource, destinationVoxelsChecked(destination), boxDestination);
     }
-    
+
     /**
      * Subtracts all voxel-values from the maximum value associated with the data-type.
      *
@@ -204,13 +215,14 @@ public class VoxelsUntyped {
 
     /**
      * Copies one particular z-slice of voxels from a source into the current voxels.
-     * 
+     *
      * <p>The existing z-slice is replaced.
      *
      * @param sliceIndexToUpdate slice-index to update in the current voxels.
      * @param sourceVoxels voxels to copy a particular z-slice from.
      * @param sliceIndexSource the z-slice in {@code sourceVoxels} to copy from.
-     * @param duplicate if true, the source slice is duplicated before being assigned. Otherwise it is reused.
+     * @param duplicate if true, the source slice is duplicated before being assigned. Otherwise it
+     *     is reused.
      */
     @SuppressWarnings({"rawtypes", "unchecked"})
     public void replaceSlice(
@@ -244,7 +256,7 @@ public class VoxelsUntyped {
         return voxels.extent();
     }
 
-    /** 
+    /**
      * Interface that allows manipulation of voxel intensities via arithmetic operations.
      *
      * @return the interface.
@@ -272,29 +284,31 @@ public class VoxelsUntyped {
     public VoxelsExtracter<?> extract() { // NOSONAR
         return voxels.extract();
     }
-    
+
     /**
      * Converts a {@link VoxelsUntyped} to a raw-type but only if it has the expected data-type.
-     * 
+     *
      * <p>Otherwise throws a {@link IncorrectVoxelTypeException}.
      */
     @SuppressWarnings({"rawtypes"})
-    private Voxels destinationVoxelsChecked(VoxelsUntyped destination) {    // NOSONAR
+    private Voxels destinationVoxelsChecked(VoxelsUntyped destination) { // NOSONAR
         checkMatchingDataTypes(getVoxelDataType(), destination.getVoxelDataType());
         return destination.checkIdenticalDataType(voxels.dataType());
     }
-    
+
     private static void checkMatchingDataTypes(VoxelDataType source, VoxelDataType destination) {
         if (!destination.equals(source)) {
             throw new IncorrectVoxelTypeException(
-                    String.format("Voxel data-types do not match in source (%s) and destination (%s).", source, destination));
-        }        
+                    String.format(
+                            "Voxel data-types do not match in source (%s) and destination (%s).",
+                            source, destination));
+        }
     }
-    
+
     /** A particular z-slice from {@code sourceVoxels}, maybe duplicated. */
     private static <T> VoxelBuffer<T> sourceSlice(
             Voxels<T> sourceVoxels, int sliceIndex, boolean duplicate) {
-        VoxelBuffer<T> slice = sourceVoxels.slice(sliceIndex); 
+        VoxelBuffer<T> slice = sourceVoxels.slice(sliceIndex);
         if (duplicate) {
             return slice;
         } else {

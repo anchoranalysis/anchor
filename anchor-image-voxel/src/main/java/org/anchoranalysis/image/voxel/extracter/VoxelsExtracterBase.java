@@ -106,7 +106,8 @@ abstract class VoxelsExtracterBase<T> implements VoxelsExtracter<T> {
                                     .extent()
                                     .offset(x + relativePosition.x(), y + relativePosition.y());
 
-                    copySingleVoxelTo(sourceBuffer, sourceIndex, destinationBuffer, destinationIndex);
+                    copySingleVoxelTo(
+                            sourceBuffer, sourceIndex, destinationBuffer, destinationIndex);
                 }
             }
         }
@@ -121,8 +122,7 @@ abstract class VoxelsExtracterBase<T> implements VoxelsExtracter<T> {
 
         assert (bufferTarget.slice(0).capacity() == extentResized.areaXY());
 
-        interpolator.interpolate(
-                new VoxelsUntyped(voxels), new VoxelsUntyped(bufferTarget));
+        interpolator.interpolate(new VoxelsUntyped(voxels), new VoxelsUntyped(bufferTarget));
 
         assert (bufferTarget.slice(0).capacity() == extentResized.areaXY());
         return bufferTarget;
@@ -189,16 +189,18 @@ abstract class VoxelsExtracterBase<T> implements VoxelsExtracter<T> {
     }
 
     /**
-     * Creates a {@link ProjectableBuffer} of appropriate-type that can be used for a <i>max-intensity-projection</i>.
-     * 
+     * Creates a {@link ProjectableBuffer} of appropriate-type that can be used for a
+     * <i>max-intensity-projection</i>.
+     *
      * @param extent the size of the image to project. The Z-dimension value is ignored.
      * @return the projectable-buffer.
      */
     protected abstract ProjectableBuffer<T> createMaxIntensityBuffer(Extent extent);
 
     /**
-     * Creates a {@link ProjectableBuffer} of appropriate-type that can be used for a <i>mean-intensity-projection</i>.
-     * 
+     * Creates a {@link ProjectableBuffer} of appropriate-type that can be used for a
+     * <i>mean-intensity-projection</i>.
+     *
      * @param extent the size of the image to project. The Z-dimension value is ignored.
      * @return the projectable-buffer.
      */
@@ -206,18 +208,19 @@ abstract class VoxelsExtracterBase<T> implements VoxelsExtracter<T> {
 
     /**
      * Copies a single voxel in a <i>source-</i>buffer to a <i>destination-</i>buffer.
-     * 
+     *
      * @param sourceBuffer the buffer to copy a voxel from.
      * @param sourceIndex the index in {@code sourceBuffer} where the voxel to be copied is located.
      * @param destinationBuffer the buffer to copy a voxel into.
-     * @param destinationIndex the index in {@code destinationBuffer} where the voxel is to be copied into.
+     * @param destinationIndex the index in {@code destinationBuffer} where the voxel is to be
+     *     copied into.
      */
     protected abstract void copySingleVoxelTo(
             T sourceBuffer, int sourceIndex, T destinationBuffer, int destinationIndex);
 
     /**
      * The voxel value at a buffer.
-     * 
+     *
      * @param buffer the buffer where voxels are located.
      * @param index the index in {@code buffer} where the voxel to be copied is located.
      * @return the intensity value of the voxel.

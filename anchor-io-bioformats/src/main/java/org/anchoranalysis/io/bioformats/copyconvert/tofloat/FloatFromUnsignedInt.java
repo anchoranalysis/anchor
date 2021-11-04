@@ -31,6 +31,7 @@ import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.spatial.box.Extent;
@@ -38,13 +39,9 @@ import org.anchoranalysis.spatial.box.Extent;
 @RequiredArgsConstructor
 public class FloatFromUnsignedInt extends ToFloat {
 
-    // START REQUIRED ARGUMENTS
-    private final boolean littleEndian;
-    // END REQUIRED ARGUMENTS
-
     @Override
-    protected float[] convertIntegerBytesToFloatArray(
-            Dimensions dimensions, ByteBuffer source, int offsetInSource) throws IOException {
+    protected float[] convertIntegerBytesToFloatArray(Dimensions dimensions, ByteBuffer source)
+            throws IOException {
 
         // Note that offsetInSource is not used, and this is perhaps incorrect.
 
@@ -54,7 +51,7 @@ public class FloatFromUnsignedInt extends ToFloat {
 
         ByteArrayInputStream streamByte = new ByteArrayInputStream(sourceArray);
 
-        if (littleEndian) {
+        if (source.order() == ByteOrder.LITTLE_ENDIAN) {
             return copyLittleEndian(streamByte, out, dimensions.extent());
         } else {
             return copyBigEndian(streamByte, out, dimensions.extent());
@@ -69,7 +66,7 @@ public class FloatFromUnsignedInt extends ToFloat {
     private static float[] copyLittleEndian(
             ByteArrayInputStream streamByte, float[] out, Extent extent) throws IOException {
         try (LittleEndianDataInputStream stream = new LittleEndianDataInputStream(streamByte)) {
-            extent.iterateOverXYOffset(index -> out[index] = stream.readFloat());
+            extent.iterateOverXYOffset(index -> out[index] = stream.readInt());
             return out;
         }
     }
@@ -77,7 +74,7 @@ public class FloatFromUnsignedInt extends ToFloat {
     private static float[] copyBigEndian(
             ByteArrayInputStream streamByte, float[] out, Extent extent) throws IOException {
         try (DataInputStream stream = new DataInputStream(streamByte)) {
-            extent.iterateOverXYOffset(index -> out[index] = stream.readFloat());
+            extent.iterateOverXYOffset(index -> out[index] = stream.readInt());
             return out;
         }
     }

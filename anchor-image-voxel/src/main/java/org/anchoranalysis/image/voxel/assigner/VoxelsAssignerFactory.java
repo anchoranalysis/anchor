@@ -49,8 +49,9 @@ public class VoxelsAssignerFactory {
      * @param valueToAssign the voxel-value to assign.
      * @return a newly created assigner.
      */
-    public static VoxelsAssigner createByte(Voxels<UnsignedByteBuffer> voxels, int valueToAssign) {
-        return new ByteImplementation(voxels, valueToAssign);
+    public static VoxelsAssigner createUnsignedByte(
+            Voxels<UnsignedByteBuffer> voxels, int valueToAssign) {
+        return new UnsignedByteImplementation(voxels, valueToAssign);
     }
 
     /**
@@ -60,9 +61,21 @@ public class VoxelsAssignerFactory {
      * @param valueToAssign the voxel-value to assign.
      * @return a newly created assigner.
      */
-    public static VoxelsAssigner createShort(
+    public static VoxelsAssigner createUnsignedShort(
             Voxels<UnsignedShortBuffer> voxels, int valueToAssign) {
-        return new ShortImplementation(voxels, valueToAssign);
+        return new UnsignedShortImplementation(voxels, valueToAssign);
+    }
+
+    /**
+     * Create a a {@link VoxelsAssigner} for a {@link UnsignedIntBuffer}.
+     *
+     * @param voxels the voxels on which arithmetic is to be performed.
+     * @param valueToAssign the voxel-value to assign.
+     * @return a newly created assigner.
+     */
+    public static VoxelsAssigner createUnsignedInt(
+            Voxels<UnsignedIntBuffer> voxels, int valueToAssign) {
+        return new UnsignedIntImplementation(voxels, valueToAssign);
     }
 
     /**
@@ -74,17 +87,6 @@ public class VoxelsAssignerFactory {
      */
     public static VoxelsAssigner createFloat(Voxels<FloatBuffer> voxels, int valueToAssign) {
         return new FloatImplementation(voxels, valueToAssign);
-    }
-
-    /**
-     * Create a a {@link VoxelsAssigner} for a {@link UnsignedIntBuffer}.
-     *
-     * @param voxels the voxels on which arithmetic is to be performed.
-     * @param valueToAssign the voxel-value to assign.
-     * @return a newly created assigner.
-     */
-    public static VoxelsAssigner createInt(Voxels<UnsignedIntBuffer> voxels, int valueToAssign) {
-        return new IntImplementation(voxels, valueToAssign);
     }
 
     /**

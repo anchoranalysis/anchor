@@ -32,12 +32,11 @@ import org.anchoranalysis.image.voxel.kernel.KernelPointCursor;
 
 /**
  * Sets voxels on the <i>outline</i> of an object to be <i>on</i> and otherwise <i>off</i>.
- * 
- * <p>In other words, given a binary-mask, it retains any <i>on</i> pixel that touches an <i>off</i> pixel, and sets
- * all other voxels to <i>off</i>. 
- * 
- * @author Owen Feehan
  *
+ * <p>In other words, given a binary-mask, it retains any <i>on</i> pixel that touches an <i>off</i>
+ * pixel, and sets all other voxels to <i>off</i>.
+ *
+ * @author Owen Feehan
  */
 public class OutlineKernel extends OutlineKernelBase {
 

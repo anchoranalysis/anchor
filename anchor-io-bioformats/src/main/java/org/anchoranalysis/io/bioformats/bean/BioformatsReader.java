@@ -47,7 +47,6 @@ import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
 import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
-import org.anchoranalysis.io.bioformats.BioformatsOpenedRaster;
 import org.anchoranalysis.io.bioformats.bean.options.Default;
 import org.anchoranalysis.io.bioformats.bean.options.ReadOptions;
 
@@ -66,7 +65,7 @@ public class BioformatsReader extends StackReader {
     /** Options that influence how stack is read. */
     @BeanField @Getter @Setter private ReadOptions options = new Default();
 
-    /** If non-empty forces usage of a particular bioformats plugin */
+    /** If non-empty forces usage of a particular bioformats plugin. */
     @BeanField @AllowEmpty @Getter @Setter private String forceReader = "";
     // END BEAN PROPERTIES
 

@@ -39,7 +39,7 @@ public interface StackSequenceInput extends ProvidesStackInput {
     /**
      * Creates a supplier of a {@link TimeSequence} of stacks for a particular series number.
      *
-     * @param seriesIndex the index
+     * @param seriesIndex the index.
      */
     TimeSequenceSupplier createStackSequenceForSeries(int seriesIndex) throws ImageIOException;
 }

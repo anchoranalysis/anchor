@@ -40,8 +40,9 @@ public class ConditionalKernel extends BinaryKernel {
     private Predicate<Point3i> predicate;
 
     /**
-     * Creates with a particular delegate {@link BinaryKernel} and a predicate that tests each point.
-     * 
+     * Creates with a particular delegate {@link BinaryKernel} and a predicate that tests each
+     * point.
+     *
      * @param kernel the kernel to execute if {@code predicate} is satisfied at a particular point.
      * @param predicate the predicate to be applied to a point.
      */

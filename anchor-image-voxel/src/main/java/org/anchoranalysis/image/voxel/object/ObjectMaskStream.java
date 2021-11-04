@@ -278,7 +278,8 @@ public final class ObjectMaskStream {
      */
     public ObjectCollection filterAndMap(
             Predicate<ObjectMask> predicate, UnaryOperator<ObjectMask> mapFunction) {
-        return new ObjectCollection(delegate.streamStandardJava().filter(predicate).map(mapFunction));
+        return new ObjectCollection(
+                delegate.streamStandardJava().filter(predicate).map(mapFunction));
     }
 
     /**
@@ -319,9 +320,9 @@ public final class ObjectMaskStream {
         return delegate.streamStandardJava().anyMatch(predicate);
     }
 
-    /** 
+    /**
      * Converts to a {@link HashSet}.
-     * 
+     *
      * @return a newly-created set, containing the items in the stream.
      */
     public Set<ObjectMask> toSet() {

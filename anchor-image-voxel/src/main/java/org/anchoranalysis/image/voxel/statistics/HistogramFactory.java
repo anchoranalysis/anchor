@@ -35,17 +35,17 @@ import org.anchoranalysis.math.histogram.Histogram;
 
 /**
  * Creates a {@link Histogram} to describe the intensity values of voxels in aggregate.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class HistogramFactory {
 
     /**
      * Creates a {@link Histogram} of the aggregated voxel intensities in a {@link VoxelBuffer}.
-     * 
-     * @param buffer the buffer, whose voxel intensity values are aggregated into a {@link Histogram}.
+     *
+     * @param buffer the buffer, whose voxel intensity values are aggregated into a {@link
+     *     Histogram}.
      * @return a newly created histogram.
      */
     public static Histogram create(VoxelBuffer<?> buffer) {
@@ -57,8 +57,9 @@ public class HistogramFactory {
 
     /**
      * Creates a {@link Histogram} of the aggregated voxel intensities in a {@link VoxelsUntyped}.
-     * 
-     * @param voxels the {@link VoxelsUntyped}, whose voxel intensity values are aggregated into a {@link Histogram}.
+     *
+     * @param voxels the {@link VoxelsUntyped}, whose voxel intensity values are aggregated into a
+     *     {@link Histogram}.
      * @return a newly created histogram.
      */
     public static Histogram create(VoxelsUntyped voxels) {

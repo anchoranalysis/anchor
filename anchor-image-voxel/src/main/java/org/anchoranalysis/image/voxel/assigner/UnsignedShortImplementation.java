@@ -26,23 +26,26 @@
 package org.anchoranalysis.image.voxel.assigner;
 
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedIntBuffer;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedShortBuffer;
 
-class IntImplementation extends Base<UnsignedIntBuffer> {
+class UnsignedShortImplementation extends Base<UnsignedShortBuffer> {
 
-    public IntImplementation(Voxels<UnsignedIntBuffer> voxels, int valueToAssign) {
+    private final short valueCast;
+
+    public UnsignedShortImplementation(Voxels<UnsignedShortBuffer> voxels, int valueToAssign) {
         super(voxels, valueToAssign);
+
+        valueCast = (short) valueToAssign;
     }
 
-    @Override
-    protected void assignToEntireBuffer(UnsignedIntBuffer buffer) {
+    protected void assignToEntireBuffer(UnsignedShortBuffer buffer) {
         while (buffer.hasRemaining()) {
-            buffer.putRaw(valueToAssign);
+            buffer.putRaw(valueCast);
         }
     }
 
     @Override
-    protected void assignAtBufferPosition(UnsignedIntBuffer buffer, int index) {
-        buffer.putRaw(index, valueToAssign);
+    protected void assignAtBufferPosition(UnsignedShortBuffer buffer, int index) {
+        buffer.putRaw(index, valueCast);
     }
 }

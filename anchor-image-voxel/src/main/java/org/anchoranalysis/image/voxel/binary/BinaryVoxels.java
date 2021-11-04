@@ -31,7 +31,7 @@ import lombok.Getter;
 import lombok.experimental.Accessors;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.assigner.VoxelsAssigner;
-import org.anchoranalysis.image.voxel.binary.values.BinaryValues;
+import org.anchoranalysis.image.voxel.binary.values.BinaryValuesInt;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.slice.SliceBufferIndex;
 import org.anchoranalysis.image.voxel.extracter.VoxelsExtracter;
@@ -55,7 +55,7 @@ public abstract class BinaryVoxels<T> implements BinaryOnOffSetter {
     @Getter private final Voxels<T> voxels;
 
     /** Which two intensity values represent <i>off</i> and <i>on</i> states. */
-    @Getter private BinaryValues binaryValues;
+    @Getter private BinaryValuesInt binaryValues;
 
     /**
      * Changes the <i>off</i> state to be the <i>on</i> state and vice-versa.
@@ -96,7 +96,7 @@ public abstract class BinaryVoxels<T> implements BinaryOnOffSetter {
 
     /**
      * Deep-copy of the object, including duplicating voxel buffers in memory.
-     * 
+     *
      * @return a deep-copy.
      */
     public abstract BinaryVoxels<T> duplicate();
@@ -123,29 +123,31 @@ public abstract class BinaryVoxels<T> implements BinaryOnOffSetter {
     public VoxelBuffer<T> slice(int z) {
         return voxels.slice(z);
     }
-    
+
     /**
      * A particular z-slice, wrapped into a {@link BinaryVoxels}.
      *
      * @param z the index (beginning at 0) of all z-slices.
-     * @return a newly created {@link BinaryVoxels} wrapping the single z-slice at position {@code z}.
+     * @return a newly created {@link BinaryVoxels} wrapping the single z-slice at position {@code
+     *     z}.
      */
     public BinaryVoxels<T> sliceBinary(int z) {
         return binaryVoxelsFor(extract().slice(z), binaryValues());
     }
 
     /**
-     * Creates a {@link BinaryVoxels} corresponding to a particular voxels and {@link BinaryValues}.
-     * 
+     * Creates a {@link BinaryVoxels} corresponding to a particular voxels and {@link BinaryValuesInt}.
+     *
      * @param voxels the voxels.
      * @param binaryValues the binary-values.
      * @return the newly created {@link BinaryVoxels}.
      */
-    protected abstract BinaryVoxels<T> binaryVoxelsFor(Voxels<T> voxels, BinaryValues binaryValues);
+    protected abstract BinaryVoxels<T> binaryVoxelsFor(Voxels<T> voxels, BinaryValuesInt binaryValues);
 
     /**
-     * Creates an assigner that may set the <i>on</i> state in subsequently specified regions of the voxels.
-     * 
+     * Creates an assigner that may set the <i>on</i> state in subsequently specified regions of the
+     * voxels.
+     *
      * @return a newly created assigner.
      */
     public VoxelsAssigner assignOn() {
@@ -153,8 +155,9 @@ public abstract class BinaryVoxels<T> implements BinaryOnOffSetter {
     }
 
     /**
-     * Creates an assigner that may set the <i>off</i> state in subsequently specified regions of the voxels.
-     * 
+     * Creates an assigner that may set the <i>off</i> state in subsequently specified regions of
+     * the voxels.
+     *
      * @return a newly created assigner.
      */
     public VoxelsAssigner assignOff() {
@@ -163,7 +166,7 @@ public abstract class BinaryVoxels<T> implements BinaryOnOffSetter {
 
     /**
      * Counts the number of voxels with an <i>on</i> state.
-     * 
+     *
      * @return the total number of voxels with an on state.
      */
     public int countOn() {
@@ -172,7 +175,7 @@ public abstract class BinaryVoxels<T> implements BinaryOnOffSetter {
 
     /**
      * Counts the number of voxels with an <i>off</i> state.
-     * 
+     *
      * @return the total number of voxels with an off state.
      */
     public int countOff() {

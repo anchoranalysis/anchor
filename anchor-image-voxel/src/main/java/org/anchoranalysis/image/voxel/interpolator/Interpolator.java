@@ -26,38 +26,38 @@
 
 package org.anchoranalysis.image.voxel.interpolator;
 
+import com.google.common.base.Preconditions;
 import java.nio.FloatBuffer;
 import org.anchoranalysis.image.voxel.VoxelsUntyped;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedShortBuffer;
 import org.anchoranalysis.spatial.box.Extent;
-import com.google.common.base.Preconditions;
 
 /**
  * Copies voxels while performing interpolation.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public interface Interpolator {
 
     /**
-     * Copies voxels slice-by-slice from {@code source} to {@code destination} performing necessary interpolation.
-     * 
-     * <p>Note that interpolation only occurs in the XY plane, and the number of Z-slices should be identical for
-     * both {@code source} and {@code destination}.
-     * 
+     * Copies voxels slice-by-slice from {@code source} to {@code destination} performing necessary
+     * interpolation.
+     *
+     * <p>Note that interpolation only occurs in the XY plane, and the number of Z-slices should be
+     * identical for both {@code source} and {@code destination}.
+     *
      * @param source the voxels to copy from.
-     * @param destination the voxels to copy interpolated-values into, which may differ in size in the XY dimensions.
+     * @param destination the voxels to copy interpolated-values into, which may differ in size in
+     *     the XY dimensions.
      */
-    default void interpolate(
-            VoxelsUntyped source, VoxelsUntyped destination) {
+    default void interpolate(VoxelsUntyped source, VoxelsUntyped destination) {
 
         Extent extentSource = source.any().extent();
         Extent extentTarget = destination.any().extent();
-        
-        Preconditions.checkArgument(extentSource.z()==extentTarget.z());
+
+        Preconditions.checkArgument(extentSource.z() == extentTarget.z());
 
         TransferViaSpecificType<?> transfer = InterpolateHelper.createTransfer(source, destination);
 
@@ -79,7 +79,7 @@ public interface Interpolator {
         }
         Preconditions.checkArgument(destination.slice(0).capacity() == extentTarget.areaXY());
     }
-    
+
     /**
      * Interpolates from {@code voxelsSource} to {@code voxelsDestination} for unsigned 8-bit
      * buffers.
@@ -137,7 +137,8 @@ public interface Interpolator {
      * Returns true if it's possible for values to be created after interpolation that aren't found
      * in the input-image.
      *
-     * @return true if values can be created in the destination buffer that were not found in the source buffer.
+     * @return true if values can be created in the destination buffer that were not found in the
+     *     source buffer.
      */
     boolean canValueRangeChange();
 }

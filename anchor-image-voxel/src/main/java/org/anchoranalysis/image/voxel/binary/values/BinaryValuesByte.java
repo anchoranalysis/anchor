@@ -41,7 +41,7 @@ import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
  *
  * <p>This class is <i>immutable</i>.
  *
- * <p>See {@link BinaryValues} for an equivalent class that stores these states as {@code int}.
+ * <p>See {@link BinaryValuesInt} for an equivalent class that stores these states as {@code int}.
  *
  * @author Owen Feehan
  */
@@ -112,15 +112,15 @@ public final class BinaryValuesByte implements Serializable {
     }
 
     /**
-     * Derives a {@link BinaryValues} representation from the current values.
+     * Derives a {@link BinaryValuesInt} representation from the current values.
      *
      * <p>This is a similar structure but holds <i>unsigned int</i> values rather than <i>byte</i>
      * values.
      *
      * @return a newly derived {@link BinaryValuesByte}.
      */
-    public BinaryValues asInt() {
-        return new BinaryValues(
+    public BinaryValuesInt asInt() {
+        return new BinaryValuesInt(
                 PrimitiveConverter.unsignedByteToInt(offByte),
                 PrimitiveConverter.unsignedByteToInt(onByte));
     }

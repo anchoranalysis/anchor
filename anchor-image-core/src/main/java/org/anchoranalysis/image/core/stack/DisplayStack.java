@@ -57,8 +57,8 @@ import org.anchoranalysis.spatial.box.Extent;
 import org.anchoranalysis.spatial.point.Point3i;
 
 /**
- * Stack that contains 1 or 3 channels so that we and display it as either or as an RGB unsigned 8-bit
- * image.
+ * Stack that contains 1 or 3 channels so that we and display it as either or as an RGB unsigned
+ * 8-bit image.
  *
  * <p>A converter is optionally associated with each channel, used to convert the source images into
  * unsigned 8-bit.
@@ -73,8 +73,9 @@ public class DisplayStack {
     /** The underlying stack that will be displayed, possibly after conversion. */
     @Getter private final Stack stack;
 
-    /** 
-     * A list of optional converters that will be applied to the respective channel in {@code stack} if they exist.
+    /**
+     * A list of optional converters that will be applied to the respective channel in {@code stack}
+     * if they exist.
      */
     @Getter
     private final List<Optional<ChannelConverterAttached<Channel, UnsignedByteBuffer>>> converters;
@@ -155,7 +156,7 @@ public class DisplayStack {
 
     /**
      * The dimensions of all channels in the stack.
-     * 
+     *
      * @return the dimensions.
      */
     public Dimensions dimensions() {
@@ -164,7 +165,7 @@ public class DisplayStack {
 
     /**
      * The width and height and depth of all channels in the {@link Stack}.
-     * 
+     *
      * <p>i.e. the size of each of the three possible dimensions.
      */
     public Extent extent() {
@@ -173,18 +174,19 @@ public class DisplayStack {
 
     /**
      * The number of channels in the stack.
-     * 
+     *
      * @return the number of channels.
      */
     public final int getNumberChannels() {
         return stack.getNumberChannels();
     }
-    
+
     /**
      * Create {@link Channel} for a particular {@code index} after applying conversion.
-     *  
+     *
      * @param index the index of the channel in the {@link Stack} to create a converted version of.
-     * @param alwaysNew if true, a new channel is always created. Otherwise it is created, only if needs be.
+     * @param alwaysNew if true, a new channel is always created. Otherwise it is created, only if
+     *     needs be.
      * @return the {@link Channel} after extracting from the stack and applying conversion.
      */
     public Channel createChannel(int index, boolean alwaysNew) {
@@ -255,7 +257,8 @@ public class DisplayStack {
 
                     VoxelsUntyped destBoxNonByte =
                             VoxelsFactory.instance()
-                                    .createEmpty(destinationBox.extent(), channel.getVoxelDataType());
+                                    .createEmpty(
+                                            destinationBox.extent(), channel.getVoxelDataType());
                     channel.voxels().copyVoxelsTo(sourceBox, destBoxNonByte, allLocalBox);
 
                     Voxels<UnsignedByteBuffer> destBoxByte =

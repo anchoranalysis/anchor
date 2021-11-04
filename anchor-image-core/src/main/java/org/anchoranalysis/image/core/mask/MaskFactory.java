@@ -29,7 +29,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.core.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
-import org.anchoranalysis.image.voxel.binary.values.BinaryValues;
+import org.anchoranalysis.image.voxel.binary.values.BinaryValuesInt;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 
 /**
@@ -49,7 +49,7 @@ public class MaskFactory {
      * @return a newly created binary-mask with newly-created buffers
      */
     public static Mask createMaskOff(Dimensions dimensions) {
-        return createMaskOff(dimensions, BinaryValues.getDefault());
+        return createMaskOff(dimensions, BinaryValuesInt.getDefault());
     }
 
     /**
@@ -59,7 +59,7 @@ public class MaskFactory {
      * @param binaryValues binary-values
      * @return a newly created binary-mask with newly-created buffers
      */
-    public static Mask createMaskOff(Dimensions dimensions, BinaryValues binaryValues) {
+    public static Mask createMaskOff(Dimensions dimensions, BinaryValuesInt binaryValues) {
         Mask mask =
                 new Mask(
                         ChannelFactory.instance()
@@ -82,7 +82,7 @@ public class MaskFactory {
      * @return a newly created binary-mask with newly-created buffers
      */
     public static Mask createMaskOn(Dimensions dimensions) {
-        return createMaskOn(dimensions, BinaryValues.getDefault());
+        return createMaskOn(dimensions, BinaryValuesInt.getDefault());
     }
 
     /**
@@ -92,7 +92,7 @@ public class MaskFactory {
      * @param binaryValues binary-values
      * @return a newly created binary-mask with newly-created buffers
      */
-    public static Mask createMaskOn(Dimensions dimensions, BinaryValues binaryValues) {
+    public static Mask createMaskOn(Dimensions dimensions, BinaryValuesInt binaryValues) {
         Mask mask = createMaskOff(dimensions, binaryValues);
         mask.assignOn().toAll();
         return mask;

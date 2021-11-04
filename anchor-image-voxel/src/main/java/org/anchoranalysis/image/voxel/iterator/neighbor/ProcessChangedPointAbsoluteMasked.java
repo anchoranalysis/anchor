@@ -48,29 +48,34 @@ public interface ProcessChangedPointAbsoluteMasked<T> {
      */
     void initSource(int sourceValue, int sourceOffsetXY);
 
-    /** 
+    /**
      * Notifies the processor that there has been a change in z-coordinate.
-     * 
-     * @param zChange the relative change in the Z-dimension (relative to the original coordinate value).
+     *
+     * @param zChange the relative change in the Z-dimension (relative to the original coordinate
+     *     value).
      * @param z the absolute value in the Z-dimension of the point currently being processed.
-     * @param objectMaskBuffer the voxels for the particular z-slice of the object-mask being processed.
+     * @param objectMaskBuffer the voxels for the particular z-slice of the object-mask being
+     *     processed.
      */
     default void notifyChangeZ(int zChange, int z, UnsignedByteBuffer objectMaskBuffer) {}
 
-    /** 
+    /**
      * Processes a particular point.
-     * 
-     * @param xChange the relative change in the X-dimension (relative to the original coordinate value).
-     * @param yChange the relative change in the Y-dimension (relative to the original coordinate value).
+     *
+     * @param xChange the relative change in the X-dimension (relative to the original coordinate
+     *     value).
+     * @param yChange the relative change in the Y-dimension (relative to the original coordinate
+     *     value).
      * @param x the absolute value in the X-dimension of the point currently being processed.
      * @param y the absolute value in the Y-dimension of the point currently being processed.
-     * @param objectMaskOffset the offset in the respective z-slice buffer for the object-mask being processed.
+     * @param objectMaskOffset the offset in the respective z-slice buffer for the object-mask being
+     *     processed.
      */
     void processPoint(int xChange, int yChange, int x, int y, int objectMaskOffset);
 
-    /** 
+    /**
      * Collects the result of the operation after processing neighbor voxels.
-     * 
+     *
      * @return the result.
      */
     public abstract T collectResult();

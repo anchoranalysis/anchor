@@ -46,7 +46,7 @@ public class MaxIntensityProjection {
 
     /**
      * Creates a buffer for a <i>max-intensity projection</i> for <b>unsigned byte</b> voxels.
-     *  
+     *
      * @param extent the size of the projected image. The z-dimension is ignored.
      * @return a newly created buffer that can be used for projection.
      */
@@ -56,7 +56,7 @@ public class MaxIntensityProjection {
 
     /**
      * Creates a buffer for a <i>max-intensity projection</i> for <b>unsigned short</b> voxels.
-     *  
+     *
      * @param extent the size of the projected image. The z-dimension is ignored.
      * @return a newly created buffer that can be used for projection.
      */
@@ -66,7 +66,7 @@ public class MaxIntensityProjection {
 
     /**
      * Creates a buffer for a <i>max-intensity projection</i> for <b>unsigned int</b> voxels.
-     *  
+     *
      * @param extent the size of the projected image. The z-dimension is ignored.
      * @return a newly created buffer that can be used for projection.
      */
@@ -76,7 +76,7 @@ public class MaxIntensityProjection {
 
     /**
      * Creates a buffer for a <i>max-intensity projection</i> for <b>float</b> voxels.
-     *  
+     *
      * @param extent the size of the projected image. The z-dimension is ignored.
      * @return a newly created buffer that can be used for projection.
      */

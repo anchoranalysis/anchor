@@ -43,7 +43,7 @@ public class LocalSlices implements BufferRetriever {
 
     /**
      * Create with focus around a particular slice.
-     * 
+     *
      * @param z index of the slice in the z-dimension.
      * @param windowSize how big the windows is across the z-dimension for storing slices.
      * @param voxels the voxels whose z-dimension is traversed for slices.

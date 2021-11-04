@@ -37,9 +37,9 @@ import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.RasterArranger;
 import org.anchoranalysis.image.bean.spatial.arrange.ArrangeStackBean;
-import org.anchoranalysis.image.core.channel.factory.ChannelFactoryByte;
-import org.anchoranalysis.image.core.channel.factory.ChannelFactoryShort;
 import org.anchoranalysis.image.core.channel.factory.ChannelFactorySingleType;
+import org.anchoranalysis.image.core.channel.factory.ChannelFactoryUnsignedByte;
+import org.anchoranalysis.image.core.channel.factory.ChannelFactoryUnsignedShort;
 import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
 import org.anchoranalysis.image.core.stack.RGBStack;
 import org.anchoranalysis.image.core.stack.Stack;
@@ -103,7 +103,7 @@ public class ArrangeRaster extends StackProvider {
         }
 
         ChannelFactorySingleType factory =
-                createShort ? new ChannelFactoryShort() : new ChannelFactoryByte();
+                createShort ? new ChannelFactoryUnsignedShort() : new ChannelFactoryUnsignedByte();
 
         return rasterArranger.createStack(rasterList, factory).asStack();
     }

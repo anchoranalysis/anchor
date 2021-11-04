@@ -27,26 +27,27 @@
 package org.anchoranalysis.io.bioformats.copyconvert.tobyte;
 
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import loci.common.DataTools;
-import lombok.RequiredArgsConstructor;
-import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 
-@RequiredArgsConstructor
-public class UnsignedByteFromUnsignedShort extends ToUnsignedByte {
+/**
+ * Converts data of type <i>unsigned short</i> to <i>unsigned byte</i>.
+ *
+ * <p>If more than 8-bits are being used in the input values, scaling is applied to map the range of
+ * effective-bits (how many bits are used) to an 8-bit range.
+ *
+ * @author Owen Feehan
+ */
+public class UnsignedByteFromUnsignedShort extends ToUnsignedByteWithScaling {
 
-    // START REQUIRED ARGUMENTS
-    private final boolean littleEndian;
-    private final int maxTotalBits;
-    // END REQUIRED ARGUMENTS
-
-    private ApplyScaling applyScaling;
-
-    @Override
-    protected void setupBefore(Dimensions dimensions, int numberChannelsPerArray) {
-        super.setupBefore(dimensions, numberChannelsPerArray);
-        // we assign a default that maps from 16-bit to 8-bit
-        applyScaling = new ApplyScaling(ConvertHelper.twoToPower(8 - maxTotalBits), 0);
+    /**
+     * Create with a number of effective-bits.
+     *
+     * @param effectiveBits the number of bits that are used in the input-type e.g. 8 or 12 or 16.
+     */
+    public UnsignedByteFromUnsignedShort(int effectiveBits) {
+        super(effectiveBits);
     }
 
     @Override
@@ -60,14 +61,16 @@ public class UnsignedByteFromUnsignedShort extends ToUnsignedByte {
 
             int indexInPlus = indexIn + (channelIndexRelative * 2);
 
-            int value = DataTools.bytesToShort(sourceArray, indexInPlus, 2, littleEndian);
+            int value =
+                    DataTools.bytesToShort(
+                            sourceArray, indexInPlus, 2, source.order() == ByteOrder.LITTLE_ENDIAN);
 
             // Make unsigned
             if (value < 0) {
                 value += 65536;
             }
 
-            value = applyScaling.apply(value);
+            value = scaleValue(value);
 
             if (value > 255) {
                 value = 255;

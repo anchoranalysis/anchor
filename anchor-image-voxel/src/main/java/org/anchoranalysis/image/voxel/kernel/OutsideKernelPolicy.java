@@ -94,7 +94,7 @@ public enum OutsideKernelPolicy {
     /**
      * When true, any parts of the neighborhood that lie outside the scene are not considered in
      * kernel neighborhoods.
-     * 
+     *
      * @return true if parts of the neighborhood that lie outside the scene should be ignored.
      */
     public boolean isIgnoreOutside() {
@@ -102,10 +102,11 @@ public enum OutsideKernelPolicy {
     }
 
     /**
-     * In cases where {@link #isIgnoreOutside()} is false, then whether to treat voxels that lie outside the scene
-     * as <i>on</i> (if true) or <i>off</i> (if false).
-     * 
-     * @return true if voxels lying outside the scene should be treated as <i>on</i> in the above circumstances, otherwise they are treated as <i>off</i>.
+     * In cases where {@link #isIgnoreOutside()} is false, then whether to treat voxels that lie
+     * outside the scene as <i>on</i> (if true) or <i>off</i> (if false).
+     *
+     * @return true if voxels lying outside the scene should be treated as <i>on</i> in the above
+     *     circumstances, otherwise they are treated as <i>off</i>.
      */
     public boolean isOutsideOn() {
         return outsideOn;

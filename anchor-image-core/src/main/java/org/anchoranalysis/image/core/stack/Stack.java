@@ -53,9 +53,9 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  *
  * <p>This is one of the fundamental image data structures in Anchor.
  *
- * <p>The contained channels have a particular voxel-type, but this is deliberately not exposed as
- * a type-parameter to {@link Stack} as data-structure, relying on the user to remain aware i.e. it
- * is weakly-typed.
+ * <p>The contained channels have a particular voxel-type, but this is deliberately not exposed as a
+ * type-parameter to {@link Stack} as data-structure, relying on the user to remain aware i.e. it is
+ * weakly-typed.
  *
  * @author Owen Feehan
  */
@@ -83,7 +83,7 @@ public class Stack implements Iterable<Channel> {
 
     /**
      * Creates a new empty {@link Stack} and whether it will become an RGB image or not.
-     * 
+     *
      * @param rgb whether the stack will represent an RGB image after adding channels.
      */
     public Stack(boolean rgb) {
@@ -93,7 +93,7 @@ public class Stack implements Iterable<Channel> {
 
     /**
      * Creates a {@link Stack} with a single channel.
-     * 
+     *
      * @param channel the channel.
      */
     public Stack(Channel channel) {
@@ -121,9 +121,9 @@ public class Stack implements Iterable<Channel> {
 
     /**
      * Create a {@link Stack} from a stream of {@link Channel}s.
-     * 
+     *
      * <p>It is assumed these channels will <b>not</b> represent an RGB image.
-     * 
+     *
      * @param stream the stream of channels.
      * @throws IncorrectImageSizeException if the channels are not of uniform size.
      */
@@ -132,8 +132,9 @@ public class Stack implements Iterable<Channel> {
     }
 
     /**
-     * Like {@link #Stack(Stream)} but allows explicitly setting whether it should be interpreted as RGB or not.
-     * 
+     * Like {@link #Stack(Stream)} but allows explicitly setting whether it should be interpreted as
+     * RGB or not.
+     *
      * @param rgb whether to interpret the stream as RGB or not, when it is three channels.
      * @param stream the stream of channels.
      * @throws IncorrectImageSizeException if the channels are not of uniform size.
@@ -269,7 +270,7 @@ public class Stack implements Iterable<Channel> {
 
     /**
      * The number of channels in the stack.
-     * 
+     *
      * @return the number of channels.
      */
     public final int getNumberChannels() {
@@ -278,7 +279,7 @@ public class Stack implements Iterable<Channel> {
 
     /**
      * The dimensions of all channels in the stack.
-     * 
+     *
      * @return the dimensions.
      */
     public Dimensions dimensions() {
@@ -287,9 +288,9 @@ public class Stack implements Iterable<Channel> {
 
     /**
      * Resolution of voxels to physical measurements.
-     * 
+     *
      * <p>e.g. physical size of each voxel in a particular dimension.
-     * 
+     *
      * @return the resolution.
      */
     public Optional<Resolution> resolution() {
@@ -298,9 +299,9 @@ public class Stack implements Iterable<Channel> {
 
     /**
      * The width and height and depth of the image
-     * 
+     *
      * <p>i.e. the size of each of the three possible dimensions.
-     * 
+     *
      * @return the extent.
      */
     public Extent extent() {
@@ -466,9 +467,9 @@ public class Stack implements Iterable<Channel> {
 
     /**
      * Assigns a new resolution.
-     * 
+     *
      * <p>This is a <i>mutable</i> operation that replaces existing state.
-     * 
+     *
      * @param resolution the resolution to assign.
      */
     public void assignResolution(Resolution resolution) {
@@ -483,7 +484,7 @@ public class Stack implements Iterable<Channel> {
      *
      * <p>This is an important flag for determining how a stack is displayed visually, determining
      * whether a stack is portrayed as a color image or composite grayscale channels.
-     * 
+     *
      * @return whether the stack can be interpreted as an RGB image when it has three channels.
      */
     public boolean isRGB() {

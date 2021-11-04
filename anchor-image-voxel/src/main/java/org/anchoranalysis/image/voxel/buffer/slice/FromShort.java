@@ -31,12 +31,10 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBufferFactory;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedShortBuffer;
 import org.anchoranalysis.spatial.box.Extent;
 
-
 /**
  * Implementation of {@link SliceBufferIndex} with voxels of type <b>unsigned short</b>.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class FromShort implements SliceBufferIndex<UnsignedShortBuffer> {
 
@@ -46,7 +44,7 @@ public class FromShort implements SliceBufferIndex<UnsignedShortBuffer> {
     // START FACTORY METHODS
     /**
      * Create a buffer of a particular size, that <b>has been</b> initialized.
-     * 
+     *
      * @param extent the size of buffer to create.
      * @return the newly created buffer.
      */
@@ -58,7 +56,7 @@ public class FromShort implements SliceBufferIndex<UnsignedShortBuffer> {
 
     /**
      * Create a buffer of a particular size, that <b>has not been</b> initialized.
-     * 
+     *
      * @param extent the size of buffer to create.
      * @return the newly created buffer.
      */

@@ -87,7 +87,7 @@ public abstract class VoxelBuffer<T> {
     public abstract int getInt(int index);
 
     /**
-     * Puts an int in the buffer at a particular position, converting, if necessary, to the buffer
+     * Puts a int in the buffer at a particular position, converting, if necessary, to the buffer
      * type.
      *
      * <p>Note this can provide slower access than reading directly in the native buffer type. See

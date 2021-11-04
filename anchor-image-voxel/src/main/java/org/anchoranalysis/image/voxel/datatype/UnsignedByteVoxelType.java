@@ -28,15 +28,14 @@ package org.anchoranalysis.image.voxel.datatype;
 
 /**
  * A 8-bit voxel data-type representing <b>unsigned-byte</b> numbers.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class UnsignedByteVoxelType extends UnsignedVoxelType {
 
     /** Minimum supported value for the type, as a {@code long}. */
     public static final long MAX_VALUE = 255;
-    
+
     /** Maximum supported value for the type, as an {@code int}. */
     public static final int MAX_VALUE_INT = 255;
 

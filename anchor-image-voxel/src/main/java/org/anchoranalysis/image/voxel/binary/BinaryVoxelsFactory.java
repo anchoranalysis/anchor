@@ -31,7 +31,7 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.binary.values.BinaryValues;
+import org.anchoranalysis.image.voxel.binary.values.BinaryValuesInt;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedIntBuffer;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
@@ -95,11 +95,11 @@ public class BinaryVoxelsFactory {
         if (dataType.equals(UnsignedByteVoxelType.INSTANCE)) {
             return new BinaryVoxelsByte(
                     VoxelsFactory.getUnsignedByte().createInitialized(extent),
-                    BinaryValues.getDefault());
+                    BinaryValuesInt.getDefault());
         } else if (dataType.equals(UnsignedIntVoxelType.INSTANCE)) {
             return new BinaryVoxelsInt(
                     VoxelsFactory.getUnsignedInt().createInitialized(extent),
-                    BinaryValues.getDefault());
+                    BinaryValuesInt.getDefault());
         } else {
             throw new CreateException(
                     "Unsupported voxel-data-type, only unsigned byte and int are supported");
@@ -114,7 +114,7 @@ public class BinaryVoxelsFactory {
      * @return newly created binary-voxels reusing existing voxels internally.
      */
     public static BinaryVoxels<UnsignedByteBuffer> reuseByte(Voxels<UnsignedByteBuffer> voxels) {
-        return reuseByte(voxels, BinaryValues.getDefault());
+        return reuseByte(voxels, BinaryValuesInt.getDefault());
     }
 
     /**
@@ -128,7 +128,7 @@ public class BinaryVoxelsFactory {
      * @return newly created binary-voxels reusing existing voxels internally.
      */
     public static BinaryVoxels<UnsignedByteBuffer> reuseByte(
-            Voxels<UnsignedByteBuffer> voxels, BinaryValues binaryValues) {
+            Voxels<UnsignedByteBuffer> voxels, BinaryValuesInt binaryValues) {
         return new BinaryVoxelsByte(voxels, binaryValues);
     }
 
@@ -143,7 +143,7 @@ public class BinaryVoxelsFactory {
      * @return newly created binary-voxels reusing existing voxels internally.
      */
     public static BinaryVoxels<UnsignedIntBuffer> reuseInt(
-            Voxels<UnsignedIntBuffer> voxels, BinaryValues binaryValues) {
+            Voxels<UnsignedIntBuffer> voxels, BinaryValuesInt binaryValues) {
         return new BinaryVoxelsInt(voxels, binaryValues);
     }
 }

@@ -28,11 +28,11 @@ package org.anchoranalysis.image.voxel.assigner;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 
-class ByteImplementation extends Base<UnsignedByteBuffer> {
+class UnsignedByteImplementation extends Base<UnsignedByteBuffer> {
 
     private final byte valueCast;
 
-    public ByteImplementation(Voxels<UnsignedByteBuffer> voxels, int valueToAssign) {
+    public UnsignedByteImplementation(Voxels<UnsignedByteBuffer> voxels, int valueToAssign) {
         super(voxels, valueToAssign);
 
         valueCast = (byte) valueToAssign;

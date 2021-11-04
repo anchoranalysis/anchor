@@ -33,16 +33,16 @@ import org.anchoranalysis.image.voxel.buffer.primitive.PrimitiveConverter;
 public class FloatFromUnsignedByte extends ToFloat {
 
     @Override
-    protected float[] convertIntegerBytesToFloatArray(
-            Dimensions dimensions, ByteBuffer source, int offsetInSource) {
+    protected float[] convertIntegerBytesToFloatArray(Dimensions dimensions, ByteBuffer source) {
 
         float[] out = new float[dimensions.x() * dimensions.y()];
 
+        int indexIn = 0;
         int indexOut = 0;
         for (int y = 0; y < dimensions.y(); y++) {
             for (int x = 0; x < dimensions.x(); x++) {
-                out[indexOut++] =
-                        PrimitiveConverter.unsignedByteToInt(source.get(offsetInSource++));
+                int value = PrimitiveConverter.unsignedByteToInt(source.get(indexIn++));
+                out[indexOut++] = value;
             }
         }
         return out;

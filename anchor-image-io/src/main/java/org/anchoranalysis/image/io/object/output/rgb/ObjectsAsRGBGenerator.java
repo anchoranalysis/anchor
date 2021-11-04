@@ -34,8 +34,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.image.core.channel.factory.ChannelFactoryByte;
 import org.anchoranalysis.image.core.channel.factory.ChannelFactorySingleType;
+import org.anchoranalysis.image.core.channel.factory.ChannelFactoryUnsignedByte;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.object.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.image.core.stack.DisplayStack;
@@ -58,7 +58,8 @@ import org.anchoranalysis.overlay.writer.ObjectDrawAttributes;
 public abstract class ObjectsAsRGBGenerator
         extends RasterGeneratorSelectFormat<ObjectCollectionWithProperties> {
 
-    private static final ChannelFactorySingleType CHANNEL_FACTORY = new ChannelFactoryByte();
+    private static final ChannelFactorySingleType CHANNEL_FACTORY =
+            new ChannelFactoryUnsignedByte();
 
     private static final ManifestDescription MANIFEST_DESCRIPTION =
             new ManifestDescription("raster", "rgbObjects");

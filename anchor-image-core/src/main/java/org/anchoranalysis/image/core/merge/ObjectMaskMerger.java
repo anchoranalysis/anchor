@@ -33,7 +33,7 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.image.core.mask.MaskInverter;
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.binary.values.BinaryValues;
+import org.anchoranalysis.image.voxel.binary.values.BinaryValuesInt;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
@@ -103,7 +103,7 @@ public class ObjectMaskMerger {
                 new ObjectMask(
                         box, VoxelsFactory.getUnsignedByte().createInitialized(box.extent()));
 
-        BinaryValues binaryValues = null;
+        BinaryValuesInt binaryValues = null;
         for (ObjectMask objectMask : objects) {
 
             if (binaryValues != null) {
@@ -194,7 +194,7 @@ public class ObjectMaskMerger {
      * @return a newly created {@link Voxels} with all off values
      */
     private static Voxels<UnsignedByteBuffer> createAllOffVoxels(
-            Extent extent, BinaryValues binaryValues) {
+            Extent extent, BinaryValuesInt binaryValues) {
         Voxels<UnsignedByteBuffer> voxels =
                 VoxelsFactory.getUnsignedByte().createInitialized(extent);
         if (binaryValues.getOffInt() != 0) {

@@ -30,9 +30,8 @@ import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException
 
 /**
  * When an unexpected {@link VoxelDataType} is encountered.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class IncorrectVoxelTypeException extends AnchorFriendlyRuntimeException {
 
@@ -41,7 +40,7 @@ public class IncorrectVoxelTypeException extends AnchorFriendlyRuntimeException 
 
     /**
      * Create with only a message.
-     * 
+     *
      * @param message the message.
      */
     public IncorrectVoxelTypeException(String message) {
@@ -50,7 +49,7 @@ public class IncorrectVoxelTypeException extends AnchorFriendlyRuntimeException 
 
     /**
      * Create with only a cause.
-     * 
+     *
      * @param cause the cause.
      */
     public IncorrectVoxelTypeException(Throwable cause) {

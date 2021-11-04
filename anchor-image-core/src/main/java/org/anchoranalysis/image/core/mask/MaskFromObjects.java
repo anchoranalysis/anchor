@@ -30,7 +30,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.binary.values.BinaryValues;
+import org.anchoranalysis.image.voxel.binary.values.BinaryValuesInt;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 
@@ -44,7 +44,7 @@ public class MaskFromObjects {
 
     /** We look for space IN objects, and create channel to display it */
     public static Mask createFromObjects(
-            ObjectCollection objects, Dimensions dimensions, BinaryValues outValues) {
+            ObjectCollection objects, Dimensions dimensions, BinaryValuesInt outValues) {
         return createFromObjectsWithValues(
                 objects,
                 dimensions,
@@ -55,7 +55,7 @@ public class MaskFromObjects {
 
     /** We look for space NOT in the objects, and create channel to display it */
     public static Mask createFromNotObjects(
-            ObjectCollection objects, Dimensions dimensions, BinaryValues outValues) {
+            ObjectCollection objects, Dimensions dimensions, BinaryValuesInt outValues) {
         return createFromObjectsWithValues(
                 objects,
                 dimensions,
@@ -80,7 +80,7 @@ public class MaskFromObjects {
     private static Mask createFromObjectsWithValues(
             ObjectCollection objects,
             Dimensions dimensions,
-            BinaryValues binaryValuesToOutput,
+            BinaryValuesInt binaryValuesToOutput,
             int valueNotObjects,
             byte valueObjects) {
 

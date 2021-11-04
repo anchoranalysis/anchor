@@ -99,11 +99,14 @@ final class MergeWithNeighbors {
 
     /**
      * Creates for voxels containing indices.
-     * 
+     *
      * @param voxels voxels containing indexes to labels.
-     * @param unionIndex a union-find that will contain sets of disjoint indexes. It is updated as objects are merged.
-     * @param do3D if true, the neighbors in the Z dimension are also considered, alongside the X and Y dimensions that are always considered.
-     * @param bigNeighborhood if true, uses a big neighborhood, otherwise a small neighborhood, as defined in {@link NeighborhoodFactory}.
+     * @param unionIndex a union-find that will contain sets of disjoint indexes. It is updated as
+     *     objects are merged.
+     * @param do3D if true, the neighbors in the Z dimension are also considered, alongside the X
+     *     and Y dimensions that are always considered.
+     * @param bigNeighborhood if true, uses a big neighborhood, otherwise a small neighborhood, as
+     *     defined in {@link NeighborhoodFactory}.
      */
     public MergeWithNeighbors(
             Voxels<UnsignedIntBuffer> voxels,
@@ -123,7 +126,7 @@ final class MergeWithNeighbors {
 
     /**
      * Calculates the minimum label of the neighbors, making sure to merge any different values.
-     * 
+     *
      * @param point the point whose neighbors are iterated.
      * @param existingValue the existing (current) intensity value at {@code point}.
      * @param indexBuffer the index in the voxels corresponding to the current point.

@@ -28,15 +28,15 @@ package org.anchoranalysis.image.voxel.datatype;
 
 /**
  * Base class for voxel-data-types that are <b>unsigned</b> and <b>integral</b>.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public abstract class UnsignedVoxelType extends VoxelDataType {
 
     /**
-     * Construct for a particular number of bits, with a unique identifier, and with bounds on the values.
-     * 
+     * Construct for a particular number of bits, with a unique identifier, and with bounds on the
+     * values.
+     *
      * @param numberBits the number of bits required to represent a voxel.
      * @param typeIdentifier a string to uniquely and compactly describe this type.
      * @param maxValue the maximum value this type can represent.

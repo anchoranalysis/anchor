@@ -33,7 +33,7 @@ import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.RasterArranger;
 import org.anchoranalysis.image.bean.spatial.arrange.ArrangeStackBean;
-import org.anchoranalysis.image.core.channel.factory.ChannelFactoryByte;
+import org.anchoranalysis.image.core.channel.factory.ChannelFactoryUnsignedByte;
 import org.anchoranalysis.image.core.stack.RGBStack;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.stack.output.StackWriteAttributes;
@@ -67,7 +67,7 @@ class CombineGenerator<T> extends RasterGeneratorSelectFormat<T> {
         //
         // We assume iterable generators always produce images of the same size
         //   and base our measurements on the first call to generate
-        return rasterArranger.createStack(generated, new ChannelFactoryByte()).asStack();
+        return rasterArranger.createStack(generated, new ChannelFactoryUnsignedByte()).asStack();
     }
 
     @Override

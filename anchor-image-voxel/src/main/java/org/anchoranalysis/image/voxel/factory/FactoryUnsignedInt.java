@@ -27,7 +27,7 @@
 package org.anchoranalysis.image.voxel.factory;
 
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.VoxelsAsInt;
+import org.anchoranalysis.image.voxel.VoxelsUnsignedInt;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedIntBuffer;
 import org.anchoranalysis.image.voxel.buffer.slice.FromInt;
 import org.anchoranalysis.image.voxel.buffer.slice.SliceBufferIndex;
@@ -41,17 +41,17 @@ final class FactoryUnsignedInt implements VoxelsFactoryTypeBound<UnsignedIntBuff
 
     @Override
     public Voxels<UnsignedIntBuffer> create(SliceBufferIndex<UnsignedIntBuffer> voxels) {
-        return new VoxelsAsInt(voxels);
+        return new VoxelsUnsignedInt(voxels);
     }
 
     @Override
     public Voxels<UnsignedIntBuffer> createInitialized(Extent extent) {
-        return new VoxelsAsInt(FromInt.createInitialized(extent));
+        return new VoxelsUnsignedInt(FromInt.createInitialized(extent));
     }
 
     @Override
     public Voxels<UnsignedIntBuffer> createUninitialized(Extent extent) {
-        return new VoxelsAsInt(FromInt.createUninitialized(extent));
+        return new VoxelsUnsignedInt(FromInt.createUninitialized(extent));
     }
 
     @Override

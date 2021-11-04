@@ -50,7 +50,7 @@ public class VoxelsArithmeticFactory {
      *     the buffer).
      * @return a newly-created instance.
      */
-    public static VoxelsArithmetic createByte(
+    public static VoxelsArithmetic createUnsignedByte(
             Extent extent, IntFunction<UnsignedByteBuffer> bufferForSlice) {
         return new UnsignedByteImplementation(extent, bufferForSlice);
     }
@@ -63,9 +63,22 @@ public class VoxelsArithmeticFactory {
      *     the buffer).
      * @return a newly-created instance.
      */
-    public static VoxelsArithmetic createShort(
+    public static VoxelsArithmetic createUnsignedShort(
             Extent extent, IntFunction<UnsignedShortBuffer> bufferForSlice) {
         return new UnsignedShortImplementation(extent, bufferForSlice);
+    }
+
+    /**
+     * Create a {@link VoxelsArithmetic} for {@link UnsignedIntBuffer}.
+     *
+     * @param extent the extent of the voxels on which arithmetic is to be performed.
+     * @param bufferForSlice a buffer for a particular slice index (set at the initial position in
+     *     the buffer).
+     * @return a newly-created instance.
+     */
+    public static VoxelsArithmetic createUnsignedInt(
+            Extent extent, IntFunction<UnsignedIntBuffer> bufferForSlice) {
+        return new UnsignedIntImplementation(extent, bufferForSlice);
     }
 
     /**
@@ -79,18 +92,5 @@ public class VoxelsArithmeticFactory {
     public static VoxelsArithmetic createFloat(
             Extent extent, IntFunction<FloatBuffer> bufferForSlice) {
         return new FloatImplementation(extent, bufferForSlice);
-    }
-
-    /**
-     * Create a {@link VoxelsArithmetic} for {@link UnsignedIntBuffer}.
-     *
-     * @param extent the extent of the voxels on which arithmetic is to be performed.
-     * @param bufferForSlice a buffer for a particular slice index (set at the initial position in
-     *     the buffer).
-     * @return a newly-created instance.
-     */
-    public static VoxelsArithmetic createInt(
-            Extent extent, IntFunction<UnsignedIntBuffer> bufferForSlice) {
-        return new IntImplementation(extent, bufferForSlice);
     }
 }

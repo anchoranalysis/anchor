@@ -32,7 +32,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import org.anchoranalysis.image.voxel.binary.values.BinaryValues;
+import org.anchoranalysis.image.voxel.binary.values.BinaryValuesInt;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.spatial.point.ReadableTuple3i;
 
@@ -61,7 +61,7 @@ public class ObjectCollection implements Iterable<ObjectMask> {
 
     /**
      * Shifts the bounding-box of each object by adding to it.
-     * 
+     *
      * <p>i.e. adds a vector to the corner position.
      *
      * <p>This is an <b>immutable</b> operation.
@@ -75,7 +75,7 @@ public class ObjectCollection implements Iterable<ObjectMask> {
 
     /**
      * Adds an object to the collection.
-     * 
+     *
      * @param object the object to add.
      */
     public void add(ObjectMask object) {
@@ -84,7 +84,7 @@ public class ObjectCollection implements Iterable<ObjectMask> {
 
     /**
      * Adds all objects in {@code objects} to the collection.
-     * 
+     *
      * @param objects the objects to add.
      */
     public void addAll(ObjectCollection objects) {
@@ -93,7 +93,7 @@ public class ObjectCollection implements Iterable<ObjectMask> {
 
     /**
      * Adds all objects in {@code collection} to the collection.
-     * 
+     *
      * @param collection the collection of objects to add.
      */
     public void addAll(Collection<? extends ObjectMask> collection) {
@@ -104,7 +104,7 @@ public class ObjectCollection implements Iterable<ObjectMask> {
      * Checks if two collections are equal in a shallow way.
      *
      * <p>Specifically, objects are tested to be equal using their object references.
-     * 
+     *
      * <p>i.e. they are equal iff they have the same reference.
      *
      * <p>This is a cheaper equality check than with {@link #equalsDeep}.
@@ -126,7 +126,7 @@ public class ObjectCollection implements Iterable<ObjectMask> {
      * comparing objects that were instantiated in different places.
      *
      * <p>Both collections must have identical ordering.
-     * 
+     *
      * @param other the collection to test equality with.
      * @return true iff the the current collection is equal to {@code other}, as above.
      */
@@ -145,7 +145,7 @@ public class ObjectCollection implements Iterable<ObjectMask> {
 
     /**
      * Get an {@link ObjectMask} at a particular position in the collection.
-     * 
+     *
      * @param index the index the object is located at.
      * @return the object.
      * @throws IndexOutOfBoundsException if the index is out of range.
@@ -175,7 +175,7 @@ public class ObjectCollection implements Iterable<ObjectMask> {
 
     /**
      * Removes the object at the specified position in the collection.
-     * 
+     *
      * @param index the position of the object to remove.
      */
     public void remove(int index) {
@@ -184,7 +184,7 @@ public class ObjectCollection implements Iterable<ObjectMask> {
 
     /**
      * The number of objects in the collection.
-     * 
+     *
      * @return the number of elements.
      */
     public int size() {
@@ -226,7 +226,7 @@ public class ObjectCollection implements Iterable<ObjectMask> {
 
     /**
      * The {@link BinaryValuesByte} associated with the first object in the collection.
-     * 
+     *
      * @return the binary-values associated with the first object.
      * @throws IndexOutOfBoundsException if the collection is empty.
      */
@@ -235,16 +235,16 @@ public class ObjectCollection implements Iterable<ObjectMask> {
     }
 
     /**
-     * The {@link BinaryValues} associated with the first object in the collection.
-     * 
+     * The {@link BinaryValuesInt} associated with the first object in the collection.
+     *
      * @return the binary-values associated with the first object.
      * @throws IndexOutOfBoundsException if the collection is empty.
      */
-    public BinaryValues getFirstBinaryValues() {
+    public BinaryValuesInt getFirstBinaryValues() {
         return get(0).binaryValues();
     }
 
-    /** 
+    /**
      * Deep copy, including duplicating {@link ObjectMask}s.
      *
      * @return the deep-copy.
@@ -253,9 +253,9 @@ public class ObjectCollection implements Iterable<ObjectMask> {
         return stream().map(ObjectMask::duplicate);
     }
 
-    /** 
+    /**
      * Shallow copy of objects.
-     * 
+     *
      * @return the deep-copy.
      */
     public ObjectCollection duplicateShallow() {

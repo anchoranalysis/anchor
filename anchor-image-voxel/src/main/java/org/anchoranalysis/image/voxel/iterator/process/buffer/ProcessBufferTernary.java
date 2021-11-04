@@ -42,7 +42,7 @@ import org.anchoranalysis.spatial.point.Point3i;
 @FunctionalInterface
 public interface ProcessBufferTernary<T> {
 
-    /** 
+    /**
      * Notifies the processor that there has been a change in slice.
      *
      * @param z the slice-index (global coordinates).

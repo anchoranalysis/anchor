@@ -36,23 +36,23 @@ import org.anchoranalysis.spatial.point.Point3i;
 @FunctionalInterface
 public interface ProcessPoint {
 
-    /** 
+    /**
      * Notifies the processor that there has been a change in Y-coordinate.
-     * 
+     *
      * @param y the coordinate in the Y dimension.
      */
     default void notifyChangeY(int y) {}
 
-    /** 
+    /**
      * Notifies the processor that there has been a change in Z-coordinate.
-     * 
+     *
      * @param z the coordinate in the Z dimension.
      */
     default void notifyChangeSlice(int z) {}
 
     /**
      * Processes a particular point.
-     * 
+     *
      * @param point the point to process.
      */
     void process(Point3i point);

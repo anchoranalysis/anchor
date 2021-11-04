@@ -83,14 +83,14 @@ public abstract class VoxelDataType {
 
     /**
      * Whether the data-type represents an integer or floating-point?
-     * 
+     *
      * @return true if the data-type represents integers only, false if it is float-point.
      */
     public abstract boolean isInteger();
 
     /**
      * Whether the data-type is unsigned?
-     * 
+     *
      * @return true if the data-type is unsigned, false if it is signed.
      */
     public abstract boolean isUnsigned();

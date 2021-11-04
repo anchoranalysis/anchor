@@ -39,13 +39,13 @@ import org.anchoranalysis.image.voxel.convert.VoxelsConverter;
  *
  * @author Owen Feehan
  * @param <S> type of object to which the channel-convert is attached.
- * @param <T>  (what the voxels will be converted <b>to</b>).
+ * @param <T> (what the voxels will be converted <b>to</b>).
  */
 public interface ChannelConverterAttached<S, T> {
 
     /**
      * Associate the convert with a particular object.
-     * 
+     *
      * @param object the object to associate the converter with.
      * @throws OperationFailedException if the association cannot be completed successfully.
      */
@@ -53,16 +53,17 @@ public interface ChannelConverterAttached<S, T> {
 
     /**
      * Converts the voxel-type in a {@link Channel}.
-     * 
+     *
      * @param channel the channel whose voxels will be converted.
-     * @param changeExisting if ture, the are voxels in-place, preserving the existing {@link Channel} object. Otherwise a new {@link Channel} is created.
+     * @param changeExisting if ture, the are voxels in-place, preserving the existing {@link
+     *     Channel} object. Otherwise a new {@link Channel} is created.
      * @return the existing {@link Channel} or newly created one, as per above.
      */
     Channel convert(Channel channel, ConversionPolicy changeExisting);
 
     /**
      * Converts voxels to have type voxel-type {@code T}.
-     * 
+     *
      * @return the converter.
      */
     VoxelsConverter<T> getVoxelsConverter();

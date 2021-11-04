@@ -80,7 +80,8 @@ class NeighborGraphCreator<V> {
      * @param vertexToObject converts the vertex to an object-mask (called repeatedly so should be
      *     low-cost).
      * @param sceneExtent the size of the image, the object-masks exist in.
-     * @param do3D if true, the Z-dimension is also considered for neighbors. Otherwise, only the X and Y dimensions.
+     * @param do3D if true, the Z-dimension is also considered for neighbors. Otherwise, only the X
+     *     and Y dimensions.
      * @return the newly created graph.
      * @throws CreateException if any objects are not fully contained in the scene.
      */
@@ -107,7 +108,8 @@ class NeighborGraphCreator<V> {
      * @param edgeFromVertices creates an edge for two vertices (and the number of neighboring
      *     pixels).
      * @param sceneExtent the size of the image, the object-masks exist in.
-     * @param do3D if true, the Z-dimension is also considered for neighbors. Otherwise, only the X and Y dimensions.
+     * @param do3D if true, the Z-dimension is also considered for neighbors. Otherwise, only the X
+     *     and Y dimensions.
      * @param <E> edge-type of graph
      * @return the newly created graph
      * @throws CreateException if any objects are not fully contained in the scene.

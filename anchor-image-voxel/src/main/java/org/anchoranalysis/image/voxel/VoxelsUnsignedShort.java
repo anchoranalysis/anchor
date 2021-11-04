@@ -38,28 +38,27 @@ import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 
 /**
  * Implementation of {@link Voxels} whose voxels are of type <i>unsigned short</i> (16-bit).
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
-public final class VoxelsAsShort extends Voxels<UnsignedShortBuffer> {
+public final class VoxelsUnsignedShort extends Voxels<UnsignedShortBuffer> {
 
     /**
      * Create from a buffer, indexed by slice.
-     * 
+     *
      * @param buffer the buffer.
      */
-    public VoxelsAsShort(SliceBufferIndex<UnsignedShortBuffer> buffer) {
+    public VoxelsUnsignedShort(SliceBufferIndex<UnsignedShortBuffer> buffer) {
         super(buffer, VoxelsFactory.getUnsignedShort(), createArithmetic(buffer));
     }
 
     @Override
     public VoxelsAssigner assignValue(int valueToAssign) {
-        return VoxelsAssignerFactory.createShort(this, valueToAssign);
+        return VoxelsAssignerFactory.createUnsignedShort(this, valueToAssign);
     }
 
     private static VoxelsArithmetic createArithmetic(SliceBufferIndex<UnsignedShortBuffer> buffer) {
-        return VoxelsArithmeticFactory.createShort(buffer.extent(), buffer::sliceBuffer);
+        return VoxelsArithmeticFactory.createUnsignedShort(buffer.extent(), buffer::sliceBuffer);
     }
 
     @Override

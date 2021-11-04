@@ -28,7 +28,7 @@ package org.anchoranalysis.image.voxel.binary.connected;
 
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
-import org.anchoranalysis.image.voxel.binary.values.BinaryValues;
+import org.anchoranalysis.image.voxel.binary.values.BinaryValuesInt;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedIntBuffer;
 import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferUnary;
@@ -38,7 +38,7 @@ class PopulateIndexProcessor<T> implements ProcessBufferUnary<T> {
 
     private Voxels<UnsignedIntBuffer> indexBuffer;
     private MergeWithNeighbors mergeWithNeighbors;
-    private BinaryValues binaryValues;
+    private BinaryValuesInt binaryValues;
     private BinaryValuesByte binaryValyesByte;
     private final BufferReadWrite<T> bufferReaderWriter;
 

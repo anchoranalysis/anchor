@@ -37,17 +37,17 @@ import org.anchoranalysis.image.core.stack.time.WrapStackAsTimeSequenceStore;
 import org.anchoranalysis.io.input.InputFromManager;
 
 /**
- * Base class for inputs which somehow eventually send up providing stacks, with or without names
+ * Base class for inputs which somehow eventually send up providing stacks, with or without names.
  *
  * @author Owen Feehan
  */
 public interface ProvidesStackInput extends InputFromManager {
 
     /**
-     * Exposes the input as a set of named stacks (inferring the names)
+     * Exposes the input as a set of named stacks (inferring the names).
      *
-     * @param progress a progress-reporter
-     * @return a set of named-stacks
+     * @param progress a progress-reporter.
+     * @return a set of named-stacks.
      * @throws OperationFailedException
      */
     default NamedStacks asSet(Progress progress) throws OperationFailedException {
@@ -57,9 +57,9 @@ public interface ProvidesStackInput extends InputFromManager {
     }
 
     /**
-     * Adds the current object to a named-store of stacks (using the default series)
+     * Adds the current object to a named-store of stacks (using the default series).
      *
-     * @param store the store
+     * @param store the store.
      * @throws OperationFailedException
      */
     default void addToStoreInferNames(NamedProviderStore<Stack> store)

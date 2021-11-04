@@ -47,7 +47,7 @@ public abstract class ChannelFactorySingleType {
 
     /**
      * Create a {@link Channel} initialized with zero-valued voxel-buffers.
-     * 
+     *
      * @param dimensions the size of the channel.
      * @return the created channel.
      */
@@ -57,7 +57,7 @@ public abstract class ChannelFactorySingleType {
 
     /**
      * Create a {@link Channel} without initialization with voxel-buffers.
-     * 
+     *
      * @param dimensions the size of the channel.
      * @return the created channel.
      */
@@ -67,8 +67,9 @@ public abstract class ChannelFactorySingleType {
 
     /**
      * Create a {@link Channel} from voxels and a resolution.
-     * 
-     * @param voxels the voxels, that will be used internally in the created {@link Channel} (without duplication).
+     *
+     * @param voxels the voxels, that will be used internally in the created {@link Channel}
+     *     (without duplication).
      * @param resolution the resolution, if it exists.
      * @return the created channel.
      */

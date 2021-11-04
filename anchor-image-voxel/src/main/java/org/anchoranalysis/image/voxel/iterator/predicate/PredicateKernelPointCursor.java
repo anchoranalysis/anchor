@@ -36,7 +36,7 @@ import org.anchoranalysis.image.voxel.kernel.KernelPointCursor;
 @FunctionalInterface
 public interface PredicateKernelPointCursor {
 
-    /** 
+    /**
      * Notifies the processor that there has been a change in z-coordinate.
      *
      * @param z the index of the z-slice.
@@ -45,7 +45,7 @@ public interface PredicateKernelPointCursor {
 
     /**
      * Whether the condition is satisfied for a particular point?
-     * 
+     *
      * @param point the point to query.
      * @return true iff the condition is satisfied.
      */

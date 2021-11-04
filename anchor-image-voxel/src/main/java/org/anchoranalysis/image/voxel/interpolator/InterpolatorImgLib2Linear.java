@@ -29,17 +29,15 @@ package org.anchoranalysis.image.voxel.interpolator;
 import net.imglib2.interpolation.randomaccess.ClampingNLinearInterpolatorFactory;
 
 /**
- * An interpolator that uses <a href="https://en.wikipedia.org/wiki/Linear_interpolation">linear interpolation</a> as implemented in Imglib2.
- * 
+ * An interpolator that uses <a href="https://en.wikipedia.org/wiki/Linear_interpolation">linear
+ * interpolation</a> as implemented in Imglib2.
+ *
  * @see ClampingNLinearInterpolatorFactory
  * @author Owen Feehan
- *
  */
 public class InterpolatorImgLib2Linear extends InterpolatorImgLib2 {
 
-    /**
-     * Default constructor.
-     */
+    /** Default constructor. */
     public InterpolatorImgLib2Linear() {
         // Using a clamping interpolator as otherwise weird values can occur at 255
         // This idea comes from the following post:

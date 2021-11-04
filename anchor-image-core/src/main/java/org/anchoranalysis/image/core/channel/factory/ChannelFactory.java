@@ -38,9 +38,7 @@ import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeFactoryMultiplexer;
 
-/** 
- * Creates a {@link Channel} corresponding to one of several data-types.
- */
+/** Creates a {@link Channel} corresponding to one of several data-types. */
 public class ChannelFactory extends VoxelDataTypeFactoryMultiplexer<ChannelFactorySingleType> {
 
     // Singleton
@@ -48,15 +46,15 @@ public class ChannelFactory extends VoxelDataTypeFactoryMultiplexer<ChannelFacto
 
     private ChannelFactory() {
         super(
-                new ChannelFactoryByte(),
-                new ChannelFactoryShort(),
-                new ChannelFactoryInt(),
+                new ChannelFactoryUnsignedByte(),
+                new ChannelFactoryUnsignedShort(),
+                new ChannelFactoryUnsignedInt(),
                 new ChannelFactoryFloat());
     }
 
-    /** 
+    /**
      * Singleton instance of {@link ChannelFactory}.
-     * 
+     *
      * @return the instance.
      */
     public static ChannelFactory instance() {
@@ -79,7 +77,7 @@ public class ChannelFactory extends VoxelDataTypeFactoryMultiplexer<ChannelFacto
 
     /**
      * Create a {@link Channel} without initialization with voxel-buffers.
-     * 
+     *
      * @param dimensions the size of the channel.
      * @param channelDataType the data-type of the voxels in the channel.
      * @return the created channel.
@@ -90,7 +88,7 @@ public class ChannelFactory extends VoxelDataTypeFactoryMultiplexer<ChannelFacto
 
     /**
      * Create a {@link Channel} from particular voxels.
-     * 
+     *
      * @param voxels the voxels to create the channel from.
      * @return the {@link Channel}.
      */
@@ -100,7 +98,7 @@ public class ChannelFactory extends VoxelDataTypeFactoryMultiplexer<ChannelFacto
 
     /**
      * Create a {@link Channel} from particular voxels.
-     * 
+     *
      * @param voxels the voxels to create the channel from.
      * @param resolution the resolution to assign.
      * @return the {@link Channel}.

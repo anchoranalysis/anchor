@@ -38,18 +38,17 @@ import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 
 /**
  * Implementation of {@link Voxels} whose voxels are of type <i>float</i>.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
-public final class VoxelsAsFloat extends Voxels<FloatBuffer> {
+public final class VoxelsFloat extends Voxels<FloatBuffer> {
 
     /**
      * Create from a buffer, indexed by slice.
-     * 
+     *
      * @param buffer the buffer.
      */
-    public VoxelsAsFloat(SliceBufferIndex<FloatBuffer> buffer) {
+    public VoxelsFloat(SliceBufferIndex<FloatBuffer> buffer) {
         super(buffer, VoxelsFactory.getFloat(), createArithmetic(buffer));
     }
 

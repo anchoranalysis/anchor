@@ -29,22 +29,26 @@ package org.anchoranalysis.io.bioformats.copyconvert.tobyte;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
+/**
+ * Scales a number by a certain ratio.
+ *
+ * @author Owen Feehan
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 class ApplyScaling {
 
     private float convertRatio = 1;
-    private float sub = 0;
 
-    public float apply(float in) {
-        return (in - sub) * convertRatio;
+    public float scale(float unscaled) {
+        return unscaled * convertRatio;
     }
 
-    public short apply(short in) {
-        return (short) ((in - sub) * convertRatio);
+    public short scale(short unscaled) {
+        return (short) (unscaled * convertRatio);
     }
 
-    public int apply(int in) {
-        return (int) ((in - sub) * convertRatio);
+    public int scale(int unscaled) {
+        return (int) (unscaled * convertRatio);
     }
 }

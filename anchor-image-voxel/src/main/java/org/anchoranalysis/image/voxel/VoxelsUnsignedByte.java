@@ -38,15 +38,14 @@ import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 
 /**
  * Implementation of {@link Voxels} whose voxels are of type <i>unsigned byte</i> (8-bit).
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public final class VoxelsUnsignedByte extends Voxels<UnsignedByteBuffer> {
 
     /**
      * Create from a buffer, indexed by slice.
-     * 
+     *
      * @param buffer the buffer.
      */
     public VoxelsUnsignedByte(SliceBufferIndex<UnsignedByteBuffer> buffer) {
@@ -55,7 +54,7 @@ public final class VoxelsUnsignedByte extends Voxels<UnsignedByteBuffer> {
 
     @Override
     public VoxelsAssigner assignValue(int valueToAssign) {
-        return VoxelsAssignerFactory.createByte(this, valueToAssign);
+        return VoxelsAssignerFactory.createUnsignedByte(this, valueToAssign);
     }
 
     @Override
@@ -64,6 +63,6 @@ public final class VoxelsUnsignedByte extends Voxels<UnsignedByteBuffer> {
     }
 
     private static VoxelsArithmetic createArithmetic(SliceBufferIndex<UnsignedByteBuffer> buffer) {
-        return VoxelsArithmeticFactory.createByte(buffer.extent(), buffer::sliceBuffer);
+        return VoxelsArithmeticFactory.createUnsignedByte(buffer.extent(), buffer::sliceBuffer);
     }
 }

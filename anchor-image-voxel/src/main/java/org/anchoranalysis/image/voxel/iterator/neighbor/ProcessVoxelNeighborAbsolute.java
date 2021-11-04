@@ -51,8 +51,8 @@ public interface ProcessVoxelNeighborAbsolute<T> {
      *
      * @param zChange the change in the Z-dimension to reach this neighbor relative to the source
      *     coordinate.
-     * @param z the Z-dimension coordinates for this point (the neighboring point) in global (absolute) terms
-     *     i.e. <b>not</b> relative to a bounding-box.
+     * @param z the Z-dimension coordinates for this point (the neighboring point) in global
+     *     (absolute) terms i.e. <b>not</b> relative to a bounding-box.
      */
     default void notifyChangeZ(int zChange, int z) {}
 
@@ -63,17 +63,17 @@ public interface ProcessVoxelNeighborAbsolute<T> {
      *     coordinate.
      * @param yChange the change in y-dimension to reach this neighbor relative to the source
      *     coordinate.
-     * @param x the X-dimension coordinates for this point (the neighboring point) in global (absolute) terms
-     *     i.e. <b>not</b> relative to a bounding-box.
-     * @param y the Y-dimension coordinates for this point (the neighboring point) in global (absolute) terms
-     *     i.e. <b>not</b> relative to a bounding-box.
+     * @param x the X-dimension coordinates for this point (the neighboring point) in global
+     *     (absolute) terms i.e. <b>not</b> relative to a bounding-box.
+     * @param y the Y-dimension coordinates for this point (the neighboring point) in global
+     *     (absolute) terms i.e. <b>not</b> relative to a bounding-box.
      */
     void processPoint(int xChange, int yChange, int x, int y);
 
-    /** 
+    /**
      * Collects the result of the operation after processing neighbor voxels.
      *
-     * @return the result. 
+     * @return the result.
      */
     public abstract T collectResult();
 }

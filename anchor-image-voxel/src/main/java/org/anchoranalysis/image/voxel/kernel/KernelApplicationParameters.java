@@ -49,7 +49,7 @@ public class KernelApplicationParameters {
     /**
      * When true, any parts of the neighborhood that lie outside the scene are not considered in
      * kernel neighborhoods.
-     * 
+     *
      * @return true if parts of the neighborhood that lie outside the scene should be ignored.
      */
     public boolean isIgnoreOutside() {
@@ -57,18 +57,20 @@ public class KernelApplicationParameters {
     }
 
     /**
-     * In cases where {@link #isIgnoreOutside()} is false, then whether to treat voxels that lie outside the scene
-     * as <i>on</i> (if true) or <i>off</i> (if false).
-     * 
-     * @return true if voxels lying outside the scene should be treated as <i>on</i> in the above circumstances, otherwise they are treated as <i>off</i>.
+     * In cases where {@link #isIgnoreOutside()} is false, then whether to treat voxels that lie
+     * outside the scene as <i>on</i> (if true) or <i>off</i> (if false).
+     *
+     * @return true if voxels lying outside the scene should be treated as <i>on</i> in the above
+     *     circumstances, otherwise they are treated as <i>off</i>.
      */
     public boolean isOutsideOn() {
         return outsideKernelPolicy.isOutsideOn();
     }
 
     /**
-     * True only when voxels outside the scene should <b>not be ignored</b> and considered as <i>off</i>.
-     * 
+     * True only when voxels outside the scene should <b>not be ignored</b> and considered as
+     * <i>off</i>.
+     *
      * @return true iff both conditions above are true.
      */
     public boolean isOutsideOffUnignored() {
@@ -76,8 +78,9 @@ public class KernelApplicationParameters {
     }
 
     /**
-     * True only when voxels outside the scene should <b>not be ignored</b> and considered as <i>on</i>.
-     * 
+     * True only when voxels outside the scene should <b>not be ignored</b> and considered as
+     * <i>on</i>.
+     *
      * @return true iff both conditions above are true.
      */
     public boolean isOutsideOnUnignored() {

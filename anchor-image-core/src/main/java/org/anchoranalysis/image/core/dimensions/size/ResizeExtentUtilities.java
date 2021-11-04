@@ -31,6 +31,11 @@ import org.anchoranalysis.spatial.box.Extent;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 import org.anchoranalysis.spatial.scale.Scaler;
 
+/**
+ * TODO rename class.
+ *
+ * @author Owen Feehan
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ResizeExtentUtilities {
 
@@ -38,8 +43,8 @@ public class ResizeExtentUtilities {
      * Multiplexes between {@link #relativeScalePreserveAspectRatio(Extent, Extent)} and {@link
      * #relativeScale(Extent, Extent)}.
      *
-     * @param source source extent (only X and Y dimensions are considered)
-     * @param target target extent (only X and Y dimensions are considered)
+     * @param source source extent (only X and Y dimensions are considered).
+     * @param target target extent (only X and Y dimensions are considered).
      * @param preserveAspectRatio iff true, the aspect ratio is preserved, and {@link
      *     #relativeScalePreserveAspectRatio(Extent, Extent)} is called, otherwise {@link
      *     #relativeScale(Extent, Extent)}.
@@ -48,9 +53,9 @@ public class ResizeExtentUtilities {
     public static ScaleFactor relativeScale(
             Extent source, Extent target, boolean preserveAspectRatio) {
         if (preserveAspectRatio) {
-            return ResizeExtentUtilities.relativeScalePreserveAspectRatio(source, target);
+            return relativeScalePreserveAspectRatio(source, target);
         } else {
-            return ResizeExtentUtilities.relativeScale(source, target);
+            return relativeScale(source, target);
         }
     }
 
@@ -61,9 +66,9 @@ public class ResizeExtentUtilities {
      * <p>Either the X or Y dimension is guaranteed to have a scale-factor {@code target / source},
      * and the other will scale so as not to exceed the size of {@code target}.
      *
-     * @param source source extent (only X and Y dimensions are considered)
-     * @param target target extent (only X and Y dimensions are considered)
-     * @return the scaling-factor to scale the source to be the same size as the target
+     * @param source source extent (only X and Y dimensions are considered).
+     * @param target target extent (only X and Y dimensions are considered).
+     * @return the scaling-factor to scale the source to be the same size as the target.
      */
     public static ScaleFactor relativeScalePreserveAspectRatio(Extent source, Extent target) {
         ScaleFactor withoutPreserving = relativeScale(source, target);
@@ -76,9 +81,9 @@ public class ResizeExtentUtilities {
      *
      * <p>i.e. the scale-factor is {@code target / source} for each XY dimension.
      *
-     * @param source source extent (only X and Y dimensions are considered)
-     * @param target target extent (only X and Y dimensions are considered)
-     * @return the scaling-factor to scale the source to be the same size as the target
+     * @param source source extent (only X and Y dimensions are considered).
+     * @param target target extent (only X and Y dimensions are considered).
+     * @return the scaling-factor to scale the source to be the same size as the target.
      */
     public static ScaleFactor relativeScale(Extent source, Extent target) {
         return new ScaleFactor(

@@ -50,9 +50,9 @@ import org.anchoranalysis.spatial.point.Point3i;
  * <p>All operations that can modify the state (i.e. <i>mutable</i> operations) are provided via the
  * {@link #assignValue} or {@link #arithmetic()} or {@link #replaceSlice} or {@link #slice} or
  * {@link #sliceBuffer} methods. Other operations are all <i>immutable</i>.
- * 
- * <p>See {@link VoxelsUntyped} for a similar class that exposes the voxel-data type as a run-time accessible
- * field.
+ *
+ * <p>See {@link VoxelsUntyped} for a similar class that exposes the voxel-data type as a run-time
+ * accessible field.
  *
  * @author Owen Feehan
  * @param <T> buffer-type

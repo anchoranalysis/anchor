@@ -35,8 +35,8 @@ import org.anchoranalysis.core.identifier.provider.NamedProviderBridge;
 import org.anchoranalysis.core.identifier.provider.NamedProviderCombine;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.image.core.channel.Channel;
-import org.anchoranalysis.image.core.channel.factory.ChannelFactoryByte;
 import org.anchoranalysis.image.core.channel.factory.ChannelFactorySingleType;
+import org.anchoranalysis.image.core.channel.factory.ChannelFactoryUnsignedByte;
 import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
 import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.image.core.stack.Stack;
@@ -47,7 +47,7 @@ import org.anchoranalysis.spatial.box.BoundingBox;
 
 class CombineDiverseProvidersAsStacks implements NamedProvider<Stack> {
 
-    private static final ChannelFactorySingleType FACTORY = new ChannelFactoryByte();
+    private static final ChannelFactorySingleType FACTORY = new ChannelFactoryUnsignedByte();
 
     private final NamedProvider<Stack> stacks;
     private final NamedProvider<Channel> channels;

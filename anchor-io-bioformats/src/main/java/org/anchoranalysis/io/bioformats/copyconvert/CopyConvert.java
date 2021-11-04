@@ -28,6 +28,7 @@ package org.anchoranalysis.io.bioformats.copyconvert;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.util.List;
 import loci.formats.FormatException;
 import loci.formats.IFormatReader;
@@ -48,12 +49,12 @@ import org.anchoranalysis.io.bioformats.bean.options.ReadOptions;
 public class CopyConvert {
 
     /**
-     * Copies all frames, channels, z-slices (in a byte-array) into a destination set of Channels
-     * converting them if necessary along the way
+     * Copies all frames, channels, z-slices (in a byte-array) into a destination set of {@link
+     * Channel}s converting them if necessary along the way.
      *
-     * @param reader the source of the copy
-     * @param destination the destination of the copy
-     * @param progress
+     * @param reader the source of the copy.
+     * @param destination the destination of the copy.
+     * @param progress tracking progress.
      * @throws FormatException
      * @throws IOException
      */
@@ -91,11 +92,9 @@ public class CopyConvert {
                                                         t,
                                                         targetShape.getNumberChannels()));
 
-                        byte[] bufferArray = reader.openBytes(readerIndex);
-
                         convertTo.copyAllChannels(
                                 targetShape.getImageDimensions(),
-                                ByteBuffer.wrap(bufferArray),
+                                openByteBuffer(reader, readerIndex),
                                 destinationChannel,
                                 z,
                                 numberChannelsPerByteArray);
@@ -105,13 +104,22 @@ public class CopyConvert {
         }
     }
 
+    /** Reads bytes from a {@link IFormatReader} making sure the endianness is correct. */
+    private static ByteBuffer openByteBuffer(IFormatReader reader, int index)
+            throws FormatException, IOException {
+        byte[] bufferArray = reader.openBytes(index);
+        ByteBuffer buffer = ByteBuffer.wrap(bufferArray);
+        buffer.order(reader.isLittleEndian() ? ByteOrder.LITTLE_ENDIAN : ByteOrder.BIG_ENDIAN);
+        return buffer;
+    }
+
     private static int calculateByteArraysPerIteration(
             int numberChannels, int numberChannelsPerByteArray) throws FormatException {
 
         if ((numberChannels % numberChannelsPerByteArray) != 0) {
             throw new FormatException(
                     String.format(
-                            "numChannels(%d) mod numChannelsPerByteArray(%d) != 0",
+                            "numberChannels(%d) mod numberChannelsPerByteArray(%d) != 0",
                             numberChannels, numberChannelsPerByteArray));
         }
 

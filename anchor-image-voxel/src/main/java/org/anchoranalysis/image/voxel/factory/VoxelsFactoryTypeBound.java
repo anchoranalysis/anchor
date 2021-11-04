@@ -46,8 +46,9 @@ import org.anchoranalysis.spatial.box.Extent;
 public interface VoxelsFactoryTypeBound<T> {
 
     /**
-     * Create a new {@link Voxels} that has been <b>initialized</b> with buffers from {@link SliceBufferIndex}.
-     * 
+     * Create a new {@link Voxels} that has been <b>initialized</b> with buffers from {@link
+     * SliceBufferIndex}.
+     *
      * @param voxels the buffers to initialize with.
      * @return the newly created voxels.
      */
@@ -55,9 +56,9 @@ public interface VoxelsFactoryTypeBound<T> {
 
     /**
      * Create a new {@link Voxels} that has been <b>initialized</b> with memory buffers.
-     * 
+     *
      * <p>The voxel values in all initialized buffers are 0.
-     * 
+     *
      * @param extent the size of voxels to create.
      * @return the newly created voxels.
      */
@@ -65,7 +66,7 @@ public interface VoxelsFactoryTypeBound<T> {
 
     /**
      * Create a new {@link Voxels} that has <b>not yet been initialized</b> with memory buffers.
-     * 
+     *
      * @param extent the size of voxels to create.
      * @return the newly created voxels.
      */
@@ -73,16 +74,18 @@ public interface VoxelsFactoryTypeBound<T> {
 
     /**
      * The data-type of the voxels, as created by this factory.
-     * 
+     *
      * @return the voxel data-type.
      */
     VoxelDataType dataType();
 
     /**
-     * Create a new {@link Voxels} that has been <b>initialized</b> with a single-slice's memory buffers.
-     * 
+     * Create a new {@link Voxels} that has been <b>initialized</b> with a single-slice's memory
+     * buffers.
+     *
      * @param buffer the voxels for a single-slice.
-     * @param extent the size of voxels, that should be equal to the number of elements in {@code buffer}.
+     * @param extent the size of voxels, that should be equal to the number of elements in {@code
+     *     buffer}.
      * @return the newly created voxels, containing a single z-slice.
      */
     default Voxels<T> createForVoxelBuffer(VoxelBuffer<T> buffer, Extent extent) {

@@ -28,16 +28,23 @@ package org.anchoranalysis.io.bioformats.copyconvert.tobyte;
 
 import com.google.common.base.Preconditions;
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import loci.common.DataTools;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 
+/**
+ * Converts data of type <i>float</i> to <i>unsigned byte</i>.
+ *
+ * <p>Only values in the range {@code 0 <= value <= 255} are preserved. Any values outside this
+ * range are clamped to {@code 0} or {@code 255}.
+ *
+ * <p>Any decimal component is dropped.
+ *
+ * @author Owen Feehan
+ */
 @RequiredArgsConstructor
 public class UnsignedByteFromFloat extends ToUnsignedByte {
-
-    // START REQUIRED ARGUMENTS
-    private final boolean littleEndian;
-    // END REQUIRED ARGUMENTS
 
     @Override
     protected UnsignedByteBuffer convert(ByteBuffer source, int channelIndexRelative) {
@@ -48,7 +55,9 @@ public class UnsignedByteFromFloat extends ToUnsignedByte {
         byte[] sourceArray = source.array();
 
         for (int indexIn = 0; indexIn < sizeBytes; indexIn += bytesPerPixel) {
-            float value = DataTools.bytesToFloat(sourceArray, indexIn, littleEndian);
+            float value =
+                    DataTools.bytesToFloat(
+                            sourceArray, indexIn, source.order() == ByteOrder.LITTLE_ENDIAN);
 
             if (value > 255) {
                 value = 255;

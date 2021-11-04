@@ -27,7 +27,7 @@
 package org.anchoranalysis.image.bean.threshold.relation;
 
 import lombok.EqualsAndHashCode;
-import org.anchoranalysis.image.voxel.binary.values.BinaryValues;
+import org.anchoranalysis.image.voxel.binary.values.BinaryValuesInt;
 import org.anchoranalysis.math.relation.DoubleBiPredicate;
 import org.anchoranalysis.math.relation.GreaterThan;
 
@@ -46,7 +46,7 @@ public class BinaryNotOffVoxels extends BinaryVoxelsBase {
 
     @Override
     public double threshold() {
-        return BinaryValues.getDefault().getOffInt();
+        return BinaryValuesInt.getDefault().getOffInt();
     }
 
     @Override
