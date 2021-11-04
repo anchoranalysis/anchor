@@ -83,7 +83,7 @@ public interface NamedChannelsForSeries extends ChannelGetter {
      * <p>In this case, there should be exactly three channels, named "red", "green" and "blue".
      *
      * @return true if the channels describe an RGB image.
-     * @throw ImageIOException if this cannot be successfully inferred.
+     * @throws ImageIOException if this cannot be successfully inferred.
      */
     boolean isRGB() throws ImageIOException;
 }
