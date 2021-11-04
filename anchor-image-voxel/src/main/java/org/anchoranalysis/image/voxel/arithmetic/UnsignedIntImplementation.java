@@ -29,9 +29,9 @@ import java.util.function.IntFunction;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedIntBuffer;
 import org.anchoranalysis.spatial.box.Extent;
 
-class IntImplementation extends Base<UnsignedIntBuffer> {
+class UnsignedIntImplementation extends Base<UnsignedIntBuffer> {
 
-    public IntImplementation(Extent extent, IntFunction<UnsignedIntBuffer> bufferForSlice) {
+    public UnsignedIntImplementation(Extent extent, IntFunction<UnsignedIntBuffer> bufferForSlice) {
         super(extent, bufferForSlice);
     }
 

@@ -30,10 +30,6 @@ import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 
 public final class UnsignedShortFromUnsignedShort extends ToUnsignedShort {
 
-    public UnsignedShortFromUnsignedShort(boolean littleEndian) {
-        super(littleEndian);
-    }
-
     @Override
     protected short convertValue(short value) {
 

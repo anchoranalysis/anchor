@@ -43,7 +43,7 @@ import org.anchoranalysis.image.voxel.assigner.VoxelsAssigner;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxelsFactory;
 import org.anchoranalysis.image.voxel.binary.connected.ObjectsFromConnectedComponentsFactory;
-import org.anchoranalysis.image.voxel.binary.values.BinaryValues;
+import org.anchoranalysis.image.voxel.binary.values.BinaryValuesInt;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.extracter.VoxelsExtracter;
@@ -103,7 +103,7 @@ public class ObjectMask {
     /**
      * What values constitute an <i>on</i> and <i>off</i> state in {@code voxels} - as <i>int</i>s.
      */
-    @Getter private final BinaryValues binaryValues;
+    @Getter private final BinaryValuesInt binaryValues;
 
     /**
      * What values constitute an <i>on</i> and <i>off</i> state in {@code voxels} - as <i>byte</i>s.
@@ -121,7 +121,7 @@ public class ObjectMask {
      *
      * <p>i.e. the bounding box corner is set as <code>0,0,0</code>.
      *
-     * <p>Default {@link BinaryValues} of ({@code off=0}, {@code on=255}) are used to interpret
+     * <p>Default {@link BinaryValuesInt} of ({@code off=0}, {@code on=255}) are used to interpret
      * {@link Voxels} as a mask.
      *
      * <p>The {@link Voxels} are reused internally in memory without duplication.
@@ -135,7 +135,7 @@ public class ObjectMask {
     /**
      * Creates as a bounding-box with all corresponding mask voxels set to <i>off</i>.
      *
-     * <p>Default {@link BinaryValues} of (off=0, on=255) are used for the mask.
+     * <p>Default {@link BinaryValuesInt} of (off=0, on=255) are used for the mask.
      *
      * @param box bounding-box.
      */
@@ -148,13 +148,13 @@ public class ObjectMask {
      *
      * <p>The voxels are reused without duplication.
      *
-     * <p>Default {@link BinaryValues} of (off=0, on=255) are assumed, and {@code voxels} should
+     * <p>Default {@link BinaryValuesInt} of (off=0, on=255) are assumed, and {@code voxels} should
      * only contain these values.
      *
      * @param voxels voxels to be used in the object-mask.
      */
     public ObjectMask(BoundedVoxels<UnsignedByteBuffer> voxels) {
-        this(voxels, BinaryValues.getDefault());
+        this(voxels, BinaryValuesInt.getDefault());
     }
 
     /**
@@ -169,11 +169,11 @@ public class ObjectMask {
     }
 
     /**
-     * Creates from {@link Voxels} and a {@link BoundingBox} with default {@link BinaryValues}.
+     * Creates from {@link Voxels} and a {@link BoundingBox} with default {@link BinaryValuesInt}.
      *
      * <p>The voxels are reused without duplication.
      *
-     * <p>Default {@link BinaryValues} of (off=0, on=255) are assumed, and {@code voxels} should
+     * <p>Default {@link BinaryValuesInt} of (off=0, on=255) are assumed, and {@code voxels} should
      * only contain these values.
      *
      * @param box the bounding-box.
@@ -184,7 +184,7 @@ public class ObjectMask {
     }
 
     /**
-     * Creates from {@link Voxels} and a corresponding {@link BoundingBox} and {@link BinaryValues}.
+     * Creates from {@link Voxels} and a corresponding {@link BoundingBox} and {@link BinaryValuesInt}.
      *
      * <p>The voxels are reused without duplication.
      *
@@ -194,7 +194,7 @@ public class ObjectMask {
      * @param binaryValues the binary-values to use (as {@code int}s).
      */
     public ObjectMask(
-            BoundingBox box, Voxels<UnsignedByteBuffer> voxels, BinaryValues binaryValues) {
+            BoundingBox box, Voxels<UnsignedByteBuffer> voxels, BinaryValuesInt binaryValues) {
         this(new BoundedVoxels<>(box, voxels), binaryValues);
     }
 
@@ -211,14 +211,14 @@ public class ObjectMask {
     }
 
     /**
-     * Creates from {@link BoundedVoxels} and corresponding {@link BinaryValues}.
+     * Creates from {@link BoundedVoxels} and corresponding {@link BinaryValuesInt}.
      *
      * <p>The voxels are reused without duplication.
      *
      * @param voxels the voxels.
      * @param binaryValues the binary-values to use.
      */
-    public ObjectMask(BoundedVoxels<UnsignedByteBuffer> voxels, BinaryValues binaryValues) {
+    public ObjectMask(BoundedVoxels<UnsignedByteBuffer> voxels, BinaryValuesInt binaryValues) {
         this.voxels = voxels;
         this.binaryValues = binaryValues;
         this.binaryValuesByte = binaryValues.asByte();
@@ -227,7 +227,7 @@ public class ObjectMask {
     }
 
     /**
-     * Like {@link #ObjectMask(BoundingBox, Voxels, BinaryValues)} but specifies the binary-values
+     * Like {@link #ObjectMask(BoundingBox, Voxels, BinaryValuesInt)} but specifies the binary-values
      * as bytes.
      *
      * @param box the bounding-box.
@@ -257,7 +257,7 @@ public class ObjectMask {
 
     private ObjectMask(
             BoundedVoxels<UnsignedByteBuffer> voxels,
-            BinaryValues binaryValues,
+            BinaryValuesInt binaryValues,
             BinaryValuesByte binaryValuesByte) {
         this.voxels = voxels;
         this.binaryValues = binaryValues;
@@ -531,7 +531,7 @@ public class ObjectMask {
 
         // We calculate a bounding box, which we write into in the omDest
 
-        BinaryValues binaryValuesOut = BinaryValues.getDefault();
+        BinaryValuesInt binaryValuesOut = BinaryValuesInt.getDefault();
 
         // We initially set all pixels to ON
         BoundedVoxels<UnsignedByteBuffer> voxelsMaskOut =
@@ -939,7 +939,7 @@ public class ObjectMask {
                 super.hashCode(), centerOfGravity().toString(), numberVoxelsOn());
     }
 
-    private Interpolator createInterpolator(BinaryValues binaryValues) {
+    private Interpolator createInterpolator(BinaryValuesInt binaryValues) {
         return InterpolatorFactory.getInstance().binaryResizing(binaryValues.getOffInt());
     }
 

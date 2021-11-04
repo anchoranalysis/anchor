@@ -23,22 +23,30 @@
  * THE SOFTWARE.
  * #L%
  */
+package org.anchoranalysis.image.voxel.assigner;
 
-package org.anchoranalysis.image.core.channel.factory;
+import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 
-import org.anchoranalysis.image.core.channel.Channel;
-import org.anchoranalysis.image.voxel.datatype.UnsignedIntVoxelType;
-import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
+class UnsignedByteImplementation extends Base<UnsignedByteBuffer> {
 
-/**
- * Creates a {@link Channel} with voxel-type {@link UnsignedIntVoxelType}.
- *
- * @author Owen Feehan
- */
-public class ChannelFactoryInt extends ChannelFactorySingleType {
+    private final byte valueCast;
 
-    /** Default constructor. */
-    public ChannelFactoryInt() {
-        super(UnsignedIntVoxelType.INSTANCE, VoxelsFactory.getUnsignedInt());
+    public UnsignedByteImplementation(Voxels<UnsignedByteBuffer> voxels, int valueToAssign) {
+        super(voxels, valueToAssign);
+
+        valueCast = (byte) valueToAssign;
+    }
+
+    @Override
+    protected void assignToEntireBuffer(UnsignedByteBuffer buffer) {
+        while (buffer.hasRemaining()) {
+            buffer.putRaw(valueCast);
+        }
+    }
+
+    @Override
+    protected void assignAtBufferPosition(UnsignedByteBuffer buffer, int index) {
+        buffer.putRaw(index, valueCast);
     }
 }

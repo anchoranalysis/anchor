@@ -24,16 +24,16 @@
  * #L%
  */
 
-package org.anchoranalysis.io.bioformats;
+package org.anchoranalysis.io.bioformats.bean;
 
 import loci.formats.FormatTools;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.image.core.channel.factory.ChannelFactoryByte;
 import org.anchoranalysis.image.core.channel.factory.ChannelFactoryFloat;
-import org.anchoranalysis.image.core.channel.factory.ChannelFactoryInt;
-import org.anchoranalysis.image.core.channel.factory.ChannelFactoryShort;
 import org.anchoranalysis.image.core.channel.factory.ChannelFactorySingleType;
+import org.anchoranalysis.image.core.channel.factory.ChannelFactoryUnsignedByte;
+import org.anchoranalysis.image.core.channel.factory.ChannelFactoryUnsignedInt;
+import org.anchoranalysis.image.core.channel.factory.ChannelFactoryUnsignedShort;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.voxel.datatype.FloatVoxelType;
 import org.anchoranalysis.image.voxel.datatype.SignedShortVoxelType;
@@ -67,15 +67,15 @@ class MultiplexDataTypes {
 
     public static ChannelFactorySingleType multiplexVoxelDataType(VoxelDataType voxelDataType) {
         if (voxelDataType.equals(UnsignedByteVoxelType.INSTANCE)) {
-            return new ChannelFactoryByte();
+            return new ChannelFactoryUnsignedByte();
         } else if (voxelDataType.equals(UnsignedShortVoxelType.INSTANCE)) {
-            return new ChannelFactoryShort();
+            return new ChannelFactoryUnsignedShort();
         } else if (voxelDataType.equals(SignedShortVoxelType.INSTANCE)) {
-            return new ChannelFactoryShort();
+            return new ChannelFactoryUnsignedShort();
         } else if (voxelDataType.equals(FloatVoxelType.INSTANCE)) {
             return new ChannelFactoryFloat();
         } else if (voxelDataType.equals(UnsignedIntVoxelType.INSTANCE)) {
-            return new ChannelFactoryInt();
+            return new ChannelFactoryUnsignedInt();
         } else {
             throw new UnsupportedOperationException();
         }

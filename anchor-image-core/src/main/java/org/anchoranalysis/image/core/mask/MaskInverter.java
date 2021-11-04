@@ -30,7 +30,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
-import org.anchoranalysis.image.voxel.binary.values.BinaryValues;
+import org.anchoranalysis.image.voxel.binary.values.BinaryValuesInt;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
@@ -64,7 +64,7 @@ public class MaskInverter {
      */
     public static void invert(Mask mask) {
 
-        BinaryValues binaryValues = mask.binaryValues();
+        BinaryValuesInt binaryValues = mask.binaryValues();
         BinaryValuesByte binaryValuesByte = binaryValues.asByte();
         invertVoxels(mask.voxels(), binaryValuesByte);
     }

@@ -27,7 +27,7 @@
 package org.anchoranalysis.image.io.object.output.grayscale;
 
 import org.anchoranalysis.image.core.channel.Channel;
-import org.anchoranalysis.image.core.channel.factory.ChannelFactoryByte;
+import org.anchoranalysis.image.core.channel.factory.ChannelFactoryUnsignedByte;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.channel.output.ChannelGenerator;
@@ -45,7 +45,7 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
  */
 public class ObjectsAsUniqueValueGenerator extends ObjectsAsGrayscaleGenerator {
 
-    private static ChannelFactoryByte factory = new ChannelFactoryByte();
+    private static ChannelFactoryUnsignedByte factory = new ChannelFactoryUnsignedByte();
 
     public ObjectsAsUniqueValueGenerator(Dimensions dimensions) {
         super(dimensions);

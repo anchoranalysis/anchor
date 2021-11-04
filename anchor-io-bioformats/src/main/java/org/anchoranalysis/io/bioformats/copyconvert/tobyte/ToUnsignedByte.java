@@ -34,6 +34,11 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBufferWrap;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.io.bioformats.copyconvert.ConvertTo;
 
+/**
+ * Converts a buffer of another data-type to <i>unsigned byte</i> type.
+ *
+ * @author Owen Feehan
+ */
 public abstract class ToUnsignedByte extends ConvertTo<UnsignedByteBuffer> {
 
     protected int sizeXY;

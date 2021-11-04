@@ -28,21 +28,16 @@ package org.anchoranalysis.io.bioformats.copyconvert.toint;
 
 import com.google.common.base.Preconditions;
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import loci.common.DataTools;
-import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferFactory;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedIntBuffer;
 
-@RequiredArgsConstructor
 public class UnsignedIntFromUnsignedInt extends ToInt {
 
     private static final int BYTES_PER_PIXEL = 4;
-
-    // START REQUIRED ARGUMENTS
-    private final boolean littleEndian;
-    // END REQUIRED ARGUMENTS
 
     private int sizeXY;
     private int sizeBytes;
@@ -63,6 +58,8 @@ public class UnsignedIntFromUnsignedInt extends ToInt {
 
         VoxelBuffer<UnsignedIntBuffer> voxels = VoxelBufferFactory.allocateUnsignedInt(sizeXY);
         UnsignedIntBuffer out = voxels.buffer();
+
+        boolean littleEndian = source.order() == ByteOrder.LITTLE_ENDIAN;
 
         int indexOut = 0;
         for (int indexIn = 0; indexIn < sizeBytes; indexIn += BYTES_PER_PIXEL) {

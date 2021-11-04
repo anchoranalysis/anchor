@@ -28,25 +28,27 @@ package org.anchoranalysis.io.bioformats.copyconvert.tobyte;
 
 import com.google.common.base.Preconditions;
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import loci.common.DataTools;
-import lombok.RequiredArgsConstructor;
-import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 
-@RequiredArgsConstructor
-public class UnsignedByteFromUnsignedInt extends ToUnsignedByte {
+/**
+ * Converts data of type <i>unsigned int</i> to <i>unsigned byte</i>.
+ *
+ * <p>If more than 8-bits are being used in the input values, scaling is applied to map the range of
+ * effective-bits (how many bits are used) to an 8-bit range.
+ *
+ * @author Owen Feehan
+ */
+public class UnsignedByteFromUnsignedInt extends ToUnsignedByteWithScaling {
 
-    // START REQUIRED ARGUMENTS
-    private final int effectiveBitsPerPixel;
-    private final boolean littleEndian;
-    // END REQUIRED ARGUMENTS
-
-    private double convertRatio;
-
-    @Override
-    protected void setupBefore(Dimensions dimensions, int numberChannelsPerArray) {
-        super.setupBefore(dimensions, numberChannelsPerArray);
-        convertRatio = calculateConvertRatio();
+    /**
+     * Create with a number of effective-bits.
+     *
+     * @param effectiveBits the number of bits that are used in the input-type e.g. 8 or 12 or 16.
+     */
+    public UnsignedByteFromUnsignedInt(int effectiveBits) {
+        super(effectiveBits);
     }
 
     @Override
@@ -58,8 +60,10 @@ public class UnsignedByteFromUnsignedInt extends ToUnsignedByte {
         byte[] sourceArray = source.array();
 
         for (int indexIn = 0; indexIn < sizeBytes; indexIn += bytesPerPixel) {
-            int value = DataTools.bytesToInt(sourceArray, indexIn, littleEndian);
-            destination.putDouble(value * convertRatio);
+            int value =
+                    DataTools.bytesToInt(
+                            sourceArray, indexIn, source.order() == ByteOrder.LITTLE_ENDIAN);
+            destination.putDouble(scaleValue(value));
         }
 
         return destination;
@@ -68,13 +72,5 @@ public class UnsignedByteFromUnsignedInt extends ToUnsignedByte {
     @Override
     protected int calculateBytesPerPixel(int numberChannelsPerArray) {
         return 4;
-    }
-
-    private double calculateConvertRatio() {
-        if (effectiveBitsPerPixel == 32) {
-            return 1.0;
-        } else {
-            return ConvertHelper.twoToPower(-1 * (effectiveBitsPerPixel - 8));
-        }
     }
 }

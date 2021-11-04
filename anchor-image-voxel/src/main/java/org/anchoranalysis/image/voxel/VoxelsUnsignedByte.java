@@ -54,7 +54,7 @@ public final class VoxelsUnsignedByte extends Voxels<UnsignedByteBuffer> {
 
     @Override
     public VoxelsAssigner assignValue(int valueToAssign) {
-        return VoxelsAssignerFactory.createByte(this, valueToAssign);
+        return VoxelsAssignerFactory.createUnsignedByte(this, valueToAssign);
     }
 
     @Override
@@ -63,6 +63,6 @@ public final class VoxelsUnsignedByte extends Voxels<UnsignedByteBuffer> {
     }
 
     private static VoxelsArithmetic createArithmetic(SliceBufferIndex<UnsignedByteBuffer> buffer) {
-        return VoxelsArithmeticFactory.createByte(buffer.extent(), buffer::sliceBuffer);
+        return VoxelsArithmeticFactory.createUnsignedByte(buffer.extent(), buffer::sliceBuffer);
     }
 }

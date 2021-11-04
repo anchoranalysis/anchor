@@ -31,7 +31,7 @@ import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.image.core.mask.MaskFromObjects;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.channel.output.ChannelGenerator;
-import org.anchoranalysis.image.voxel.binary.values.BinaryValues;
+import org.anchoranalysis.image.voxel.binary.values.BinaryValuesInt;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
@@ -49,7 +49,7 @@ public class ObjectsMergedAsMaskGenerator extends ObjectsAsGrayscaleGenerator {
     @Override
     public Stack transform(ObjectCollection element) throws OutputWriteFailedException {
         Mask mask =
-                MaskFromObjects.createFromObjects(element, dimensions(), BinaryValues.getDefault());
+                MaskFromObjects.createFromObjects(element, dimensions(), BinaryValuesInt.getDefault());
         return new ChannelGenerator("maskCollection").transform(mask.channel());
     }
 }

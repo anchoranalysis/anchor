@@ -40,7 +40,7 @@ import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.assigner.VoxelsAssigner;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxelsFactory;
-import org.anchoranalysis.image.voxel.binary.values.BinaryValues;
+import org.anchoranalysis.image.voxel.binary.values.BinaryValuesInt;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelTypeException;
@@ -78,7 +78,7 @@ public class Mask {
      * The two states which are permitted to be assigned to the voxels, stored as <i>unsigned
      * int</i>s.
      */
-    @Getter private final BinaryValues binaryValues;
+    @Getter private final BinaryValuesInt binaryValues;
 
     /** The two states which are permitted to be assigned to the voxels, stored as <i>byte</i>s. */
     private final BinaryValuesByte binaryValuesByte;
@@ -103,7 +103,7 @@ public class Mask {
      *     mask
      */
     public Mask(Channel channel) {
-        this(channel, BinaryValues.getDefault());
+        this(channel, BinaryValuesInt.getDefault());
     }
 
     /**
@@ -120,7 +120,7 @@ public class Mask {
      * @param binaryValues how to identify the <i>off</i> and <i>on</i> states from intensity
      *     voxel-values
      */
-    public Mask(Channel channel, BinaryValues binaryValues) {
+    public Mask(Channel channel, BinaryValuesInt binaryValues) {
         this.channel = channel;
         this.binaryValues = binaryValues;
         this.binaryValuesByte = binaryValues.asByte();
@@ -157,14 +157,14 @@ public class Mask {
     }
 
     /**
-     * Creates a new empty mask of particular dimensions and with particular {@link BinaryValues}.
+     * Creates a new empty mask of particular dimensions and with particular {@link BinaryValuesInt}.
      *
      * <p>Default mask values for <i>off</i> (0) and <i>on</i> (255) are employed.
      *
      * @param dimensions the dimensions for the newly-created mask
      * @param binaryValues the binary-values to use for the newly created mask
      */
-    public Mask(Dimensions dimensions, BinaryValues binaryValues) {
+    public Mask(Dimensions dimensions, BinaryValuesInt binaryValues) {
         this(FACTORY.createEmptyInitialised(dimensions), binaryValues);
     }
 
@@ -279,7 +279,7 @@ public class Mask {
         return binaryValues.asByte();
     }
 
-    public BinaryValues createInverted() {
+    public BinaryValuesInt createInverted() {
         return binaryValues.createInverted();
     }
 
@@ -305,7 +305,7 @@ public class Mask {
         VoxelsThresholder.thresholdByte(mask.voxels(), thresholdVal, mask.binaryValues().asByte());
     }
 
-    private Interpolator createInterpolator(BinaryValues binaryValues) {
+    private Interpolator createInterpolator(BinaryValuesInt binaryValues) {
         return InterpolatorFactory.getInstance().binaryResizing(binaryValues.getOffInt());
     }
 }

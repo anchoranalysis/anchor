@@ -62,7 +62,7 @@ public final class UnsignedShortBuffer extends UnsignedBufferAsInt {
     /**
      * Exposes a raw short-array as a buffer with unsigned-shorts.
      *
-     * @param array the short-array
+     * @param array the short-array.
      * @return a new instance of {@link UnsignedShortBuffer} that reuses {@code array} internally.
      */
     public static UnsignedShortBuffer wrapRaw(short[] array) {

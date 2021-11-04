@@ -26,6 +26,8 @@
 
 package org.anchoranalysis.image.feature.input;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.box.Extent;
@@ -35,6 +37,7 @@ import org.anchoranalysis.spatial.box.Extent;
  *
  * <p>Currently unused, but keep as it will likely be useful in the future
  */
+@NoArgsConstructor(access = AccessLevel.NONE)
 public class ObjectFixture {
 
     public static ObjectMask createSmallCornerObject() {

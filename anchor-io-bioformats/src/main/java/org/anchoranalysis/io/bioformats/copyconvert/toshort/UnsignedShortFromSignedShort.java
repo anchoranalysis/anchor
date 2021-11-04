@@ -28,10 +28,6 @@ package org.anchoranalysis.io.bioformats.copyconvert.toshort;
 
 public final class UnsignedShortFromSignedShort extends ToUnsignedShort {
 
-    public UnsignedShortFromSignedShort(boolean littleEndian) {
-        super(littleEndian);
-    }
-
     @Override
     protected short convertValue(short value) {
         return value;

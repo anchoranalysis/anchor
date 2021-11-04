@@ -37,9 +37,9 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public abstract class VoxelDataTypeFactoryMultiplexer<T> {
 
-    private T factoryByte;
-    private T factoryShort;
-    private T factoryInt;
+    private T factoryUnsignedByte;
+    private T factoryUnsignedShort;
+    private T factoryUnsignedInt;
     private T factoryFloat;
 
     /**
@@ -51,11 +51,11 @@ public abstract class VoxelDataTypeFactoryMultiplexer<T> {
     public T get(VoxelDataType dataType) {
 
         if (dataType.equals(UnsignedByteVoxelType.INSTANCE)) {
-            return factoryByte;
+            return factoryUnsignedByte;
         } else if (dataType.equals(UnsignedShortVoxelType.INSTANCE)) {
-            return factoryShort;
+            return factoryUnsignedShort;
         } else if (dataType.equals(UnsignedIntVoxelType.INSTANCE)) {
-            return factoryInt;
+            return factoryUnsignedInt;
         } else if (dataType.equals(FloatVoxelType.INSTANCE)) {
             return factoryFloat;
         } else {

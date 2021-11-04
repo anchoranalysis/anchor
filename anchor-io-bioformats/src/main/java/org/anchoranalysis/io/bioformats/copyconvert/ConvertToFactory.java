@@ -62,9 +62,10 @@ public class ConvertToFactory {
         boolean interleaved = reader.isInterleaved();
         boolean signed = FormatTools.isSigned(reader.getPixelType());
         int bitsPerPixel = maybeCorrectBitsPerPixel(reader.getBitsPerPixel());
+        boolean littleEndian = reader.isLittleEndian();
 
         if (interleaved) {
-            return createFromInterleaved(targetDataType, bitsPerPixel);
+            return createFromInterleaved(targetDataType, bitsPerPixel, littleEndian);
         } else {
             return createFromNonInterleaved(
                     reader, targetDataType, bitsPerPixel, effectiveBitsPerPixel, signed);
@@ -72,11 +73,12 @@ public class ConvertToFactory {
     }
 
     private static ConvertTo<?> createFromInterleaved(
-            VoxelDataType targetDataType, int bitsPerPixel) throws CreateException {
+            VoxelDataType targetDataType, int bitsPerPixel, boolean littleEndian)
+            throws CreateException {
         if (targetDataType.equals(UnsignedByteVoxelType.INSTANCE) && bitsPerPixel == 8) {
             return new UnsignedByteFromUnsignedByteInterleaving();
         } else if (targetDataType.equals(UnsignedShortVoxelType.INSTANCE) && bitsPerPixel == 16) {
-            return new UnsignedShortFromUnsignedShort(false);
+            return new UnsignedShortFromUnsignedShort();
         } else {
             throw new CreateException("For interleaved formats only 8 and 16-bits are supported");
         }
@@ -90,29 +92,24 @@ public class ConvertToFactory {
             boolean signed)
             throws CreateException {
 
-        boolean littleEndian = reader.isLittleEndian();
         boolean floatingPoint = FormatTools.isFloatingPoint(reader.getPixelType());
 
         if (targetDataType.equals(UnsignedByteVoxelType.INSTANCE)) {
-            return toByte(bitsPerPixel, effectiveBitsPerPixel, littleEndian, floatingPoint, signed);
+            return toByte(bitsPerPixel, effectiveBitsPerPixel, floatingPoint, signed);
         } else if (targetDataType.equals(UnsignedShortVoxelType.INSTANCE)
                 || targetDataType.equals(SignedShortVoxelType.INSTANCE)) {
-            return toShort(bitsPerPixel, littleEndian, signed);
+            return toShort(bitsPerPixel, signed);
         } else if (targetDataType.equals(FloatVoxelType.INSTANCE)) {
-            return toFloat(bitsPerPixel, littleEndian, signed);
+            return toFloat(bitsPerPixel, signed);
         } else if (targetDataType.equals(UnsignedIntVoxelType.INSTANCE)) {
-            return toInt(bitsPerPixel, littleEndian, floatingPoint, signed);
+            return toInt(bitsPerPixel, floatingPoint, signed);
         } else {
             throw new CreateException("Unsupported voxel data-type");
         }
     }
 
     private static ToUnsignedByte toByte(
-            int bitsPerPixel,
-            int effectiveBitsPerPixel,
-            boolean littleEndian,
-            boolean floatingPoint,
-            boolean signed)
+            int bitsPerPixel, int effectiveBitsPerPixel, boolean floatingPoint, boolean signed)
             throws CreateException {
 
         if (bitsPerPixel == 8 && !signed) {
@@ -120,14 +117,14 @@ public class ConvertToFactory {
             return new UnsignedByteFromUnsignedByteNoInterleaving();
 
         } else if (bitsPerPixel == 16 && !signed) {
-            return new UnsignedByteFromUnsignedShort(littleEndian, effectiveBitsPerPixel);
+            return new UnsignedByteFromUnsignedShort(effectiveBitsPerPixel);
 
         } else if (bitsPerPixel == 32 && !signed) {
 
             if (floatingPoint) {
-                return new UnsignedByteFromFloat(littleEndian);
+                return new UnsignedByteFromFloat();
             } else {
-                return new UnsignedByteFromUnsignedInt(effectiveBitsPerPixel, littleEndian);
+                return new UnsignedByteFromUnsignedInt(effectiveBitsPerPixel);
             }
 
         } else {
@@ -136,22 +133,21 @@ public class ConvertToFactory {
         }
     }
 
-    private static ToUnsignedShort toShort(int bitsPerPixel, boolean littleEndian, boolean signed)
+    private static ToUnsignedShort toShort(int bitsPerPixel, boolean signed)
             throws CreateException {
 
         if (bitsPerPixel == 16) {
             if (signed) {
-                return new UnsignedShortFromSignedShort(littleEndian);
+                return new UnsignedShortFromSignedShort();
             } else {
-                return new UnsignedShortFromUnsignedShort(littleEndian);
+                return new UnsignedShortFromUnsignedShort();
             }
         } else {
             return throwBitsPerPixelException("float", "16 bits", bitsPerPixel);
         }
     }
 
-    private static ToInt toInt(
-            int bitsPerPixel, boolean littleEndian, boolean floatingPoint, boolean signed)
+    private static ToInt toInt(int bitsPerPixel, boolean floatingPoint, boolean signed)
             throws CreateException {
 
         if (bitsPerPixel == 32 && !signed) {
@@ -160,7 +156,7 @@ public class ConvertToFactory {
                 throw new CreateException(
                         "Conversion from floating-point to int not yet supported");
             } else {
-                return new UnsignedIntFromUnsignedInt(littleEndian);
+                return new UnsignedIntFromUnsignedInt();
             }
 
         } else {
@@ -168,14 +164,13 @@ public class ConvertToFactory {
         }
     }
 
-    private static ToFloat toFloat(int bitsPerPixel, boolean littleEndian, boolean signed)
-            throws CreateException {
+    private static ToFloat toFloat(int bitsPerPixel, boolean signed) throws CreateException {
         assert (bitsPerPixel == 8 || bitsPerPixel == 32);
 
         if (bitsPerPixel == 8 && !signed) {
             return new FloatFromUnsignedByte();
         } else if (bitsPerPixel == 32 && signed) {
-            return new FloatFromUnsignedInt(littleEndian);
+            return new FloatFromUnsignedInt();
         } else {
             return throwBitsPerPixelException(
                     "float", "either unsigned 8 bits or signed 32 bits", bitsPerPixel);

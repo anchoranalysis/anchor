@@ -32,7 +32,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import org.anchoranalysis.image.voxel.binary.values.BinaryValues;
+import org.anchoranalysis.image.voxel.binary.values.BinaryValuesInt;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.spatial.point.ReadableTuple3i;
 
@@ -235,12 +235,12 @@ public class ObjectCollection implements Iterable<ObjectMask> {
     }
 
     /**
-     * The {@link BinaryValues} associated with the first object in the collection.
+     * The {@link BinaryValuesInt} associated with the first object in the collection.
      *
      * @return the binary-values associated with the first object.
      * @throws IndexOutOfBoundsException if the collection is empty.
      */
-    public BinaryValues getFirstBinaryValues() {
+    public BinaryValuesInt getFirstBinaryValues() {
         return get(0).binaryValues();
     }
 

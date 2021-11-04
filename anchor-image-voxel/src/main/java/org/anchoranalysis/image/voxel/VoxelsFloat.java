@@ -26,43 +26,43 @@
 
 package org.anchoranalysis.image.voxel;
 
+import java.nio.FloatBuffer;
 import org.anchoranalysis.image.voxel.arithmetic.VoxelsArithmetic;
 import org.anchoranalysis.image.voxel.arithmetic.VoxelsArithmeticFactory;
 import org.anchoranalysis.image.voxel.assigner.VoxelsAssigner;
 import org.anchoranalysis.image.voxel.assigner.VoxelsAssignerFactory;
-import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedIntBuffer;
 import org.anchoranalysis.image.voxel.buffer.slice.SliceBufferIndex;
 import org.anchoranalysis.image.voxel.extracter.VoxelsExtracter;
 import org.anchoranalysis.image.voxel.extracter.VoxelsExtracterFactory;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 
 /**
- * Implementation of {@link Voxels} whose voxels are of type <i>unsigned int</i> (32-bit).
+ * Implementation of {@link Voxels} whose voxels are of type <i>float</i>.
  *
  * @author Owen Feehan
  */
-public final class VoxelsAsInt extends Voxels<UnsignedIntBuffer> {
+public final class VoxelsFloat extends Voxels<FloatBuffer> {
 
     /**
      * Create from a buffer, indexed by slice.
      *
      * @param buffer the buffer.
      */
-    public VoxelsAsInt(SliceBufferIndex<UnsignedIntBuffer> buffer) {
-        super(buffer, VoxelsFactory.getUnsignedInt(), createArithmetic(buffer));
+    public VoxelsFloat(SliceBufferIndex<FloatBuffer> buffer) {
+        super(buffer, VoxelsFactory.getFloat(), createArithmetic(buffer));
     }
 
     @Override
     public VoxelsAssigner assignValue(int valueToAssign) {
-        return VoxelsAssignerFactory.createInt(this, valueToAssign);
+        return VoxelsAssignerFactory.createFloat(this, valueToAssign);
     }
 
-    private static VoxelsArithmetic createArithmetic(SliceBufferIndex<UnsignedIntBuffer> buffer) {
-        return VoxelsArithmeticFactory.createInt(buffer.extent(), buffer::sliceBuffer);
+    private static VoxelsArithmetic createArithmetic(SliceBufferIndex<FloatBuffer> buffer) {
+        return VoxelsArithmeticFactory.createFloat(buffer.extent(), buffer::sliceBuffer);
     }
 
     @Override
-    public VoxelsExtracter<UnsignedIntBuffer> extract() {
-        return VoxelsExtracterFactory.createUnsignedInt(this);
+    public VoxelsExtracter<FloatBuffer> extract() {
+        return VoxelsExtracterFactory.createFloat(this);
     }
 }

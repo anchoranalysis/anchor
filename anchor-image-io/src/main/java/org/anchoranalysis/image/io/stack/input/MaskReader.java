@@ -33,7 +33,7 @@ import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
-import org.anchoranalysis.image.voxel.binary.values.BinaryValues;
+import org.anchoranalysis.image.voxel.binary.values.BinaryValuesInt;
 
 /**
  * Utility functions for reading a {@link Mask} from the file-system.
@@ -52,7 +52,7 @@ public class MaskReader {
      * @return a newly created {@link Mask} as read from the file-system
      * @throws ImageIOException
      */
-    public static Mask openMask(StackReader stackReader, Path path, BinaryValues binaryValues)
+    public static Mask openMask(StackReader stackReader, Path path, BinaryValuesInt binaryValues)
             throws ImageIOException {
 
         Stack stack = stackReader.readStack(path);

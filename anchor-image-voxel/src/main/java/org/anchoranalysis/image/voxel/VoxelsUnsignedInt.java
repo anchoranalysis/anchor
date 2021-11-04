@@ -30,39 +30,39 @@ import org.anchoranalysis.image.voxel.arithmetic.VoxelsArithmetic;
 import org.anchoranalysis.image.voxel.arithmetic.VoxelsArithmeticFactory;
 import org.anchoranalysis.image.voxel.assigner.VoxelsAssigner;
 import org.anchoranalysis.image.voxel.assigner.VoxelsAssignerFactory;
-import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedShortBuffer;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedIntBuffer;
 import org.anchoranalysis.image.voxel.buffer.slice.SliceBufferIndex;
 import org.anchoranalysis.image.voxel.extracter.VoxelsExtracter;
 import org.anchoranalysis.image.voxel.extracter.VoxelsExtracterFactory;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 
 /**
- * Implementation of {@link Voxels} whose voxels are of type <i>unsigned short</i> (16-bit).
+ * Implementation of {@link Voxels} whose voxels are of type <i>unsigned int</i> (32-bit).
  *
  * @author Owen Feehan
  */
-public final class VoxelsAsShort extends Voxels<UnsignedShortBuffer> {
+public final class VoxelsUnsignedInt extends Voxels<UnsignedIntBuffer> {
 
     /**
      * Create from a buffer, indexed by slice.
      *
      * @param buffer the buffer.
      */
-    public VoxelsAsShort(SliceBufferIndex<UnsignedShortBuffer> buffer) {
-        super(buffer, VoxelsFactory.getUnsignedShort(), createArithmetic(buffer));
+    public VoxelsUnsignedInt(SliceBufferIndex<UnsignedIntBuffer> buffer) {
+        super(buffer, VoxelsFactory.getUnsignedInt(), createArithmetic(buffer));
     }
 
     @Override
     public VoxelsAssigner assignValue(int valueToAssign) {
-        return VoxelsAssignerFactory.createShort(this, valueToAssign);
+        return VoxelsAssignerFactory.createUnsignedInt(this, valueToAssign);
     }
 
-    private static VoxelsArithmetic createArithmetic(SliceBufferIndex<UnsignedShortBuffer> buffer) {
-        return VoxelsArithmeticFactory.createShort(buffer.extent(), buffer::sliceBuffer);
+    private static VoxelsArithmetic createArithmetic(SliceBufferIndex<UnsignedIntBuffer> buffer) {
+        return VoxelsArithmeticFactory.createUnsignedInt(buffer.extent(), buffer::sliceBuffer);
     }
 
     @Override
-    public VoxelsExtracter<UnsignedShortBuffer> extract() {
-        return VoxelsExtracterFactory.createUnsignedShort(this);
+    public VoxelsExtracter<UnsignedIntBuffer> extract() {
+        return VoxelsExtracterFactory.createUnsignedInt(this);
     }
 }

@@ -44,10 +44,10 @@ import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelTypeException;
  */
 @EqualsAndHashCode
 @AllArgsConstructor
-public final class BinaryValues {
+public final class BinaryValuesInt {
 
     /** Default values to use, if not otherwise specified. */
-    private static final BinaryValues DEFAULT = new BinaryValues(0, 255);
+    private static final BinaryValuesInt DEFAULT = new BinaryValuesInt(0, 255);
 
     /** The integer representation of the value for <i>off</i>. */
     @Getter private final int offInt;
@@ -76,9 +76,9 @@ public final class BinaryValues {
     /**
      * Default values to use, if not otherwise specified.
      *
-     * @return a static instance {@link BinaryValues} with default values (see class description).
+     * @return a static instance {@link BinaryValuesInt} with default values (see class description).
      */
-    public static BinaryValues getDefault() {
+    public static BinaryValuesInt getDefault() {
         return DEFAULT;
     }
 
@@ -87,9 +87,9 @@ public final class BinaryValues {
      *
      * <p>This is an <i>immutable</i> operation.
      *
-     * @return a {@link BinaryValues} with the <i>off</i> and <i>on</i> values switched.
+     * @return a {@link BinaryValuesInt} with the <i>off</i> and <i>on</i> values switched.
      */
-    public BinaryValues createInverted() {
-        return new BinaryValues(onInt, offInt);
+    public BinaryValuesInt createInverted() {
+        return new BinaryValuesInt(onInt, offInt);
     }
 }

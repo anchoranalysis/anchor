@@ -42,11 +42,11 @@ class BinaryValuesTest {
         assertEquals(createHighLow(), createLowHigh().createInverted());
     }
 
-    private static BinaryValues createLowHigh() {
-        return new BinaryValues(0, 255);
+    private static BinaryValuesInt createLowHigh() {
+        return new BinaryValuesInt(0, 255);
     }
 
-    private static BinaryValues createHighLow() {
-        return new BinaryValues(255, 0);
+    private static BinaryValuesInt createHighLow() {
+        return new BinaryValuesInt(255, 0);
     }
 }

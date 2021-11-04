@@ -46,9 +46,9 @@ public class ChannelFactory extends VoxelDataTypeFactoryMultiplexer<ChannelFacto
 
     private ChannelFactory() {
         super(
-                new ChannelFactoryByte(),
-                new ChannelFactoryShort(),
-                new ChannelFactoryInt(),
+                new ChannelFactoryUnsignedByte(),
+                new ChannelFactoryUnsignedShort(),
+                new ChannelFactoryUnsignedInt(),
                 new ChannelFactoryFloat());
     }
 

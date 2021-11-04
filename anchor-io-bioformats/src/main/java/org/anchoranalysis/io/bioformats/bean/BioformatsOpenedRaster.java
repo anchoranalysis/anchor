@@ -24,9 +24,9 @@
  * #L%
  */
 
-package org.anchoranalysis.io.bioformats;
+package org.anchoranalysis.io.bioformats.bean;
 
-import static org.anchoranalysis.io.bioformats.MultiplexDataTypes.*;
+import static org.anchoranalysis.io.bioformats.bean.MultiplexDataTypes.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -48,6 +48,7 @@ import org.anchoranalysis.image.core.stack.TimeSequence;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
+import org.anchoranalysis.io.bioformats.DimensionsCreator;
 import org.anchoranalysis.io.bioformats.bean.options.ReadOptions;
 import org.anchoranalysis.io.bioformats.copyconvert.ConvertTo;
 import org.anchoranalysis.io.bioformats.copyconvert.ConvertToFactory;
@@ -62,7 +63,7 @@ import org.apache.commons.logging.LogFactory;
  * @author Owen Feehan
  */
 @Accessors(fluent = true)
-public class BioformatsOpenedRaster implements OpenedImageFile {
+class BioformatsOpenedRaster implements OpenedImageFile {
 
     private static final Log LOG = LogFactory.getLog(BioformatsOpenedRaster.class);
 

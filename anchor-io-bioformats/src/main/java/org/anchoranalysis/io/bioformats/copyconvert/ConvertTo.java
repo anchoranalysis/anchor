@@ -39,7 +39,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- * Converts a subset of raw voxel bytes in a {@code ByteBuffer} to one or more destination channels.
+ * Converts a subset of raw voxel bytes in a buffer to a possibly a buffer with different data-type.
  */
 @RequiredArgsConstructor
 public abstract class ConvertTo<T> {
@@ -55,13 +55,13 @@ public abstract class ConvertTo<T> {
      * Copies the channels in the source buffer into a particular {@link
      * DestinationChannelForIndex}.
      *
-     * @param dimensions scene-dimension
-     * @param source the buffer we copy all channels from
+     * @param dimensions scene-dimension.
+     * @param source the buffer we copy all channels from.
      * @param destination finds an appropriate destination channel for a particular
-     *     relative-channel-index
-     * @param z the current slice we are working on
+     *     relative-channel-index.
+     * @param z the current slice we are working on.
      * @param numberChannelsPerArray the total number of channels found in any one instance of
-     *     {@code source} (more than 1 if interleaving is present)
+     *     {@code source} (more than 1 if interleaving is present).
      * @throws IOException
      */
     public void copyAllChannels(
@@ -92,14 +92,14 @@ public abstract class ConvertTo<T> {
      *
      * @param dimensions dimension
      * @param numberChannelsPerArray the number of channels that are found in the byte-array that
-     *     will be passed to convertSingleChannel
+     *     will be passed to {@link #convertSliceOfSingleChannel}.
      */
     protected abstract void setupBefore(Dimensions dimensions, int numberChannelsPerArray);
 
     /**
      * Converts a slice of single-channel into a newly created {@link VoxelBuffer}.
      *
-     * @param source source buffer containing the bytes we copy from
+     * @param source source buffer containing the bytes we copy from.
      * @param channelIndexRelative 0 if the buffer is non interleaved, or otherwise the index of the
      *     channel among the interleaved channels.
      */

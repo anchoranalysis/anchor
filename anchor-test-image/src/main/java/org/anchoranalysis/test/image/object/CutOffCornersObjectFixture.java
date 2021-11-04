@@ -32,7 +32,7 @@ import java.util.Optional;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxelsFactory;
-import org.anchoranalysis.image.voxel.binary.values.BinaryValues;
+import org.anchoranalysis.image.voxel.binary.values.BinaryValuesInt;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
@@ -119,7 +119,7 @@ public class CutOffCornersObjectFixture {
 
         Voxels<UnsignedByteBuffer> voxels =
                 VoxelsFactory.getUnsignedByte().createInitialized(extent);
-        BinaryValues binaryValues = BinaryValues.getDefault();
+        BinaryValuesInt binaryValues = BinaryValuesInt.getDefault();
         BinaryValuesByte binaryValuesByte = binaryValues.asByte();
 
         boolean atLeastOneHigh = false;

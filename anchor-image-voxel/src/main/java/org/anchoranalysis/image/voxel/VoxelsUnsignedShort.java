@@ -26,43 +26,43 @@
 
 package org.anchoranalysis.image.voxel;
 
-import java.nio.FloatBuffer;
 import org.anchoranalysis.image.voxel.arithmetic.VoxelsArithmetic;
 import org.anchoranalysis.image.voxel.arithmetic.VoxelsArithmeticFactory;
 import org.anchoranalysis.image.voxel.assigner.VoxelsAssigner;
 import org.anchoranalysis.image.voxel.assigner.VoxelsAssignerFactory;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedShortBuffer;
 import org.anchoranalysis.image.voxel.buffer.slice.SliceBufferIndex;
 import org.anchoranalysis.image.voxel.extracter.VoxelsExtracter;
 import org.anchoranalysis.image.voxel.extracter.VoxelsExtracterFactory;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 
 /**
- * Implementation of {@link Voxels} whose voxels are of type <i>float</i>.
+ * Implementation of {@link Voxels} whose voxels are of type <i>unsigned short</i> (16-bit).
  *
  * @author Owen Feehan
  */
-public final class VoxelsAsFloat extends Voxels<FloatBuffer> {
+public final class VoxelsUnsignedShort extends Voxels<UnsignedShortBuffer> {
 
     /**
      * Create from a buffer, indexed by slice.
      *
      * @param buffer the buffer.
      */
-    public VoxelsAsFloat(SliceBufferIndex<FloatBuffer> buffer) {
-        super(buffer, VoxelsFactory.getFloat(), createArithmetic(buffer));
+    public VoxelsUnsignedShort(SliceBufferIndex<UnsignedShortBuffer> buffer) {
+        super(buffer, VoxelsFactory.getUnsignedShort(), createArithmetic(buffer));
     }
 
     @Override
     public VoxelsAssigner assignValue(int valueToAssign) {
-        return VoxelsAssignerFactory.createFloat(this, valueToAssign);
+        return VoxelsAssignerFactory.createUnsignedShort(this, valueToAssign);
     }
 
-    private static VoxelsArithmetic createArithmetic(SliceBufferIndex<FloatBuffer> buffer) {
-        return VoxelsArithmeticFactory.createFloat(buffer.extent(), buffer::sliceBuffer);
+    private static VoxelsArithmetic createArithmetic(SliceBufferIndex<UnsignedShortBuffer> buffer) {
+        return VoxelsArithmeticFactory.createUnsignedShort(buffer.extent(), buffer::sliceBuffer);
     }
 
     @Override
-    public VoxelsExtracter<FloatBuffer> extract() {
-        return VoxelsExtracterFactory.createFloat(this);
+    public VoxelsExtracter<UnsignedShortBuffer> extract() {
+        return VoxelsExtracterFactory.createUnsignedShort(this);
     }
 }

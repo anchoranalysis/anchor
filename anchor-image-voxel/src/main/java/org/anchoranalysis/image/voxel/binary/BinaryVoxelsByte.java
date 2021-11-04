@@ -27,7 +27,7 @@
 package org.anchoranalysis.image.voxel.binary;
 
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.binary.values.BinaryValues;
+import org.anchoranalysis.image.voxel.binary.values.BinaryValuesInt;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 
@@ -35,7 +35,7 @@ class BinaryVoxelsByte extends BinaryVoxels<UnsignedByteBuffer> {
 
     private BinaryValuesByte binaryValuesByte;
 
-    public BinaryVoxelsByte(Voxels<UnsignedByteBuffer> voxels, BinaryValues binaryValuesByte) {
+    public BinaryVoxelsByte(Voxels<UnsignedByteBuffer> voxels, BinaryValuesInt binaryValuesByte) {
         super(voxels, binaryValuesByte);
         this.binaryValuesByte = binaryValues().asByte();
     }
@@ -74,7 +74,7 @@ class BinaryVoxelsByte extends BinaryVoxels<UnsignedByteBuffer> {
 
     @Override
     protected BinaryVoxels<UnsignedByteBuffer> binaryVoxelsFor(
-            Voxels<UnsignedByteBuffer> voxels, BinaryValues binaryValues) {
+            Voxels<UnsignedByteBuffer> voxels, BinaryValuesInt binaryValues) {
         return new BinaryVoxelsByte(voxels, binaryValues);
     }
 }

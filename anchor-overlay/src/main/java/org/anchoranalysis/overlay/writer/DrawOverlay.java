@@ -38,7 +38,7 @@ import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.object.properties.IdentifierByProperty;
 import org.anchoranalysis.image.core.object.properties.ObjectWithProperties;
 import org.anchoranalysis.image.core.stack.RGBStack;
-import org.anchoranalysis.image.voxel.binary.values.BinaryValues;
+import org.anchoranalysis.image.voxel.binary.values.BinaryValuesInt;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.overlay.Overlay;
 import org.anchoranalysis.overlay.bean.DrawObject;
@@ -88,7 +88,7 @@ public abstract class DrawOverlay {
 
         try {
             List<PrecalculationOverlay> overlaysPreprocessed =
-                    precalculate(overlays, this, dimensions, BinaryValues.getDefault().asByte());
+                    precalculate(overlays, this, dimensions, BinaryValuesInt.getDefault().asByte());
 
             writePrecalculatedOverlays(
                     overlaysPreprocessed,

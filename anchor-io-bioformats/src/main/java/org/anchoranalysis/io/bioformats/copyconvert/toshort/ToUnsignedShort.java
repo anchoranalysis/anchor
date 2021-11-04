@@ -27,6 +27,7 @@
 package org.anchoranalysis.io.bioformats.copyconvert.toshort;
 
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import loci.common.DataTools;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.voxel.VoxelsUntyped;
@@ -39,17 +40,12 @@ public abstract class ToUnsignedShort extends ConvertTo<UnsignedShortBuffer> {
 
     private static final int BYTES_PER_PIXEL = 2;
 
-    // START REQUIRED ARGUMENTS
-    private final boolean littleEndian;
-    // END REQUIRED ARGUMENTS
-
     private int sizeXY;
     private int sizeBytes;
     private int numberChannelsPerArray;
 
-    protected ToUnsignedShort(boolean littleEndian) {
+    protected ToUnsignedShort() {
         super(VoxelsUntyped::asShort);
-        this.littleEndian = littleEndian;
     }
 
     @Override
@@ -69,9 +65,11 @@ public abstract class ToUnsignedShort extends ConvertTo<UnsignedShortBuffer> {
 
         int increment = numberChannelsPerArray * BYTES_PER_PIXEL;
 
+        boolean littleEndian = sourceBuffer.order() == ByteOrder.LITTLE_ENDIAN;
+
         UnsignedShortBuffer out = voxels.buffer();
         for (int indexIn = channelIndexRelative; indexIn < sizeBytes; indexIn += increment) {
-            out.putRaw(convertValue(valueFromBuffer(in, indexIn)));
+            out.putRaw(convertValue(valueFromBuffer(in, indexIn, littleEndian)));
         }
 
         return voxels;
@@ -79,7 +77,7 @@ public abstract class ToUnsignedShort extends ConvertTo<UnsignedShortBuffer> {
 
     protected abstract short convertValue(short value);
 
-    private short valueFromBuffer(byte[] buffer, int index) {
+    private short valueFromBuffer(byte[] buffer, int index, boolean littleEndian) {
         return DataTools.bytesToShort(buffer, index, BYTES_PER_PIXEL, littleEndian);
     }
 }

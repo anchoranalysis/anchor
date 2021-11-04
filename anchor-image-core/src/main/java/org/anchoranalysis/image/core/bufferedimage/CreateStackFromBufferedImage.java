@@ -34,8 +34,8 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.channel.Channel;
-import org.anchoranalysis.image.core.channel.factory.ChannelFactoryByte;
 import org.anchoranalysis.image.core.channel.factory.ChannelFactorySingleType;
+import org.anchoranalysis.image.core.channel.factory.ChannelFactoryUnsignedByte;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
 import org.anchoranalysis.image.core.stack.Stack;
@@ -44,7 +44,7 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBufferWrap;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CreateStackFromBufferedImage {
 
-    private static final ChannelFactorySingleType FACTORY = new ChannelFactoryByte();
+    private static final ChannelFactorySingleType FACTORY = new ChannelFactoryUnsignedByte();
 
     public static Stack create(BufferedImage bufferedImage) throws OperationFailedException {
 

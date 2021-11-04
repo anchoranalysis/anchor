@@ -28,7 +28,7 @@ package org.anchoranalysis.image.voxel.factory;
 
 import java.nio.FloatBuffer;
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.VoxelsAsFloat;
+import org.anchoranalysis.image.voxel.VoxelsFloat;
 import org.anchoranalysis.image.voxel.buffer.slice.FromFloat;
 import org.anchoranalysis.image.voxel.buffer.slice.SliceBufferIndex;
 import org.anchoranalysis.image.voxel.datatype.FloatVoxelType;
@@ -41,17 +41,17 @@ final class FactoryUnsignedFloat implements VoxelsFactoryTypeBound<FloatBuffer> 
 
     @Override
     public Voxels<FloatBuffer> create(SliceBufferIndex<FloatBuffer> voxels) {
-        return new VoxelsAsFloat(voxels);
+        return new VoxelsFloat(voxels);
     }
 
     @Override
     public Voxels<FloatBuffer> createInitialized(Extent extent) {
-        return new VoxelsAsFloat(FromFloat.createInitialized(extent));
+        return new VoxelsFloat(FromFloat.createInitialized(extent));
     }
 
     @Override
     public Voxels<FloatBuffer> createUninitialized(Extent extent) {
-        return new VoxelsAsFloat(FromFloat.createUninitialized(extent));
+        return new VoxelsFloat(FromFloat.createUninitialized(extent));
     }
 
     @Override

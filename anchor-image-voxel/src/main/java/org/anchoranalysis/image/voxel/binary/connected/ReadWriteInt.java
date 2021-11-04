@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.image.voxel.binary.connected;
 
-import org.anchoranalysis.image.voxel.binary.values.BinaryValues;
+import org.anchoranalysis.image.voxel.binary.values.BinaryValuesInt;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedIntBuffer;
 
@@ -36,7 +36,7 @@ final class ReadWriteInt extends BufferReadWrite<UnsignedIntBuffer> {
     protected boolean isBufferOn(
             UnsignedIntBuffer buffer,
             int offset,
-            BinaryValues binaryValues,
+            BinaryValuesInt binaryValues,
             BinaryValuesByte binaryValuesMask) {
         return buffer.getRaw(offset) == binaryValues.getOnInt();
     }
