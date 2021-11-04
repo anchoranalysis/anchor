@@ -45,8 +45,9 @@ import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.io.ImageIOException;
-import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
+import org.anchoranalysis.image.io.bean.stack.reader.StackReaderOrientationCorrection;
 import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
+import org.anchoranalysis.image.voxel.extracter.OrientationChange;
 import org.anchoranalysis.io.bioformats.bean.options.Default;
 import org.anchoranalysis.io.bioformats.bean.options.ReadOptions;
 
@@ -59,7 +60,7 @@ import org.anchoranalysis.io.bioformats.bean.options.ReadOptions;
  * @author Owen Feehan
  */
 @NoArgsConstructor
-public class BioformatsReader extends StackReader {
+public class BioformatsReader extends StackReaderOrientationCorrection {
 
     // START BEAN PROPERTIES
     /** Options that influence how stack is read. */
@@ -79,7 +80,13 @@ public class BioformatsReader extends StackReader {
     }
 
     @Override
-    public OpenedImageFile openFile(Path filePath) throws ImageIOException {
+    public OpenedImageFile openFile(Path path) throws ImageIOException {
+        return openFile(path, OrientationChange.KEEP_UNCHANGED);
+    }
+
+    @Override
+    public OpenedImageFile openFile(Path filePath, OrientationChange orientationCorrection)
+            throws ImageIOException {
 
         try {
             IFormatReader reader = selectAndInitReader();
@@ -88,7 +95,7 @@ public class BioformatsReader extends StackReader {
             reader.setMetadataStore(metadata);
             reader.setId(filePath.toString());
 
-            return new BioformatsOpenedRaster(reader, metadata, options);
+            return new BioformatsOpenedRaster(reader, metadata, options, orientationCorrection);
         } catch (UnknownFormatException e) {
             throw new ImageIOException("An unknown file format was used");
         } catch (FormatException

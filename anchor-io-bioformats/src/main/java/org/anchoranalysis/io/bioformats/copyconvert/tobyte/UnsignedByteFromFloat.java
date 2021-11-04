@@ -31,10 +31,15 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import loci.common.DataTools;
 import lombok.RequiredArgsConstructor;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
+import org.anchoranalysis.image.voxel.extracter.OrientationChange;
+import org.anchoranalysis.spatial.box.Extent;
 
 /**
- * Converts data of type <i>float</i> to <i>unsigned byte</i>.
+ * Converts a {@link ByteBuffer} encoding a <i>float</i> type to <i>unsigned byte</i> type, as
+ * expected in an Anchor {@link VoxelBuffer}.
  *
  * <p>Only values in the range {@code 0 <= value <= 255} are preserved. Any values outside this
  * range are clamped to {@code 0} or {@code 255}.
@@ -46,26 +51,28 @@ import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 @RequiredArgsConstructor
 public class UnsignedByteFromFloat extends ToUnsignedByte {
 
+    private Extent extent;
+
     @Override
-    protected UnsignedByteBuffer convert(ByteBuffer source, int channelIndexRelative) {
+    protected void setupBefore(Dimensions dimensions, int numberChannelsPerArray) {
+        super.setupBefore(dimensions, numberChannelsPerArray);
+        this.extent = dimensions.extent();
+    }
+
+    @Override
+    protected UnsignedByteBuffer convert(
+            ByteBuffer source, int channelIndexRelative, OrientationChange orientationCorrection) {
         Preconditions.checkArgument(channelIndexRelative == 0, "interleaving not supported");
 
         UnsignedByteBuffer destination = allocateBuffer();
 
         byte[] sourceArray = source.array();
+        boolean littleEndian = source.order() == ByteOrder.LITTLE_ENDIAN;
 
-        for (int indexIn = 0; indexIn < sizeBytes; indexIn += bytesPerPixel) {
-            float value =
-                    DataTools.bytesToFloat(
-                            sourceArray, indexIn, source.order() == ByteOrder.LITTLE_ENDIAN);
-
-            if (value > 255) {
-                value = 255;
-            }
-            if (value < 0) {
-                value = 0;
-            }
-            destination.putFloat(value);
+        if (orientationCorrection == OrientationChange.KEEP_UNCHANGED) {
+            copyKeepOrientation(sourceArray, littleEndian, destination);
+        } else {
+            copyChangeOrientation(sourceArray, littleEndian, destination, orientationCorrection);
         }
 
         return destination;
@@ -74,5 +81,55 @@ public class UnsignedByteFromFloat extends ToUnsignedByte {
     @Override
     protected int calculateBytesPerPixel(int numberChannelsPerArray) {
         return 4;
+    }
+
+    /**
+     * Copy the bytes, without changing orientation.
+     *
+     * <p>This is kept separate to {@link #copyChangeOrientation(byte[], boolean,
+     * UnsignedByteBuffer, OrientationChange)} as it can be done slightly more efficiently.
+     */
+    private void copyKeepOrientation(
+            byte[] sourceArray, boolean littleEndian, UnsignedByteBuffer destination) {
+        for (int index = 0; index < sizeBytes; index += bytesPerPixel) {
+            float value = extractClampedValue(sourceArray, index, littleEndian);
+            destination.putFloat(value);
+        }
+    }
+
+    /** Copy the bytes, changing orientation. */
+    private void copyChangeOrientation(
+            byte[] sourceArray,
+            boolean littleEndian,
+            UnsignedByteBuffer destination,
+            OrientationChange orientationCorrection) {
+        int x = 0;
+        int y = 0;
+
+        for (int index = 0; index < sizeBytes; index += bytesPerPixel) {
+            float value = extractClampedValue(sourceArray, index, littleEndian);
+
+            int indexOut = orientationCorrection.index(x, y, extent);
+            destination.putFloat(indexOut, value);
+
+            x++;
+            if (x == extent.x()) {
+                y++;
+                x = 0;
+            }
+        }
+    }
+
+    /** Extracts a value from the source-array, and apply any clamping. */
+    private float extractClampedValue(byte[] sourceArray, int index, boolean littleEndian) {
+        float value = DataTools.bytesToFloat(sourceArray, index, littleEndian);
+
+        if (value > 255) {
+            value = 255;
+        }
+        if (value < 0) {
+            value = 0;
+        }
+        return value;
     }
 }

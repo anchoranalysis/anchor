@@ -136,13 +136,15 @@ public abstract class BinaryVoxels<T> implements BinaryOnOffSetter {
     }
 
     /**
-     * Creates a {@link BinaryVoxels} corresponding to a particular voxels and {@link BinaryValuesInt}.
+     * Creates a {@link BinaryVoxels} corresponding to a particular voxels and {@link
+     * BinaryValuesInt}.
      *
      * @param voxels the voxels.
      * @param binaryValues the binary-values.
      * @return the newly created {@link BinaryVoxels}.
      */
-    protected abstract BinaryVoxels<T> binaryVoxelsFor(Voxels<T> voxels, BinaryValuesInt binaryValues);
+    protected abstract BinaryVoxels<T> binaryVoxelsFor(
+            Voxels<T> voxels, BinaryValuesInt binaryValues);
 
     /**
      * Creates an assigner that may set the <i>on</i> state in subsequently specified regions of the

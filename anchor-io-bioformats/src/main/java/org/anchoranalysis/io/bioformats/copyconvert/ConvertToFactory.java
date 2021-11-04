@@ -62,10 +62,9 @@ public class ConvertToFactory {
         boolean interleaved = reader.isInterleaved();
         boolean signed = FormatTools.isSigned(reader.getPixelType());
         int bitsPerPixel = maybeCorrectBitsPerPixel(reader.getBitsPerPixel());
-        boolean littleEndian = reader.isLittleEndian();
 
         if (interleaved) {
-            return createFromInterleaved(targetDataType, bitsPerPixel, littleEndian);
+            return createFromInterleaved(targetDataType, bitsPerPixel);
         } else {
             return createFromNonInterleaved(
                     reader, targetDataType, bitsPerPixel, effectiveBitsPerPixel, signed);
@@ -73,8 +72,7 @@ public class ConvertToFactory {
     }
 
     private static ConvertTo<?> createFromInterleaved(
-            VoxelDataType targetDataType, int bitsPerPixel, boolean littleEndian)
-            throws CreateException {
+            VoxelDataType targetDataType, int bitsPerPixel) throws CreateException {
         if (targetDataType.equals(UnsignedByteVoxelType.INSTANCE) && bitsPerPixel == 8) {
             return new UnsignedByteFromUnsignedByteInterleaving();
         } else if (targetDataType.equals(UnsignedShortVoxelType.INSTANCE) && bitsPerPixel == 16) {

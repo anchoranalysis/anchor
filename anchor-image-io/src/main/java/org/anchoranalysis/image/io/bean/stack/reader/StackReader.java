@@ -28,7 +28,6 @@ package org.anchoranalysis.image.io.bean.stack.reader;
 
 import java.nio.file.Path;
 import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.core.progress.ProgressIgnore;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
@@ -56,7 +55,7 @@ public abstract class StackReader extends AnchorBean<StackReader> {
                 throw new ImageIOException("there must be exactly one series");
             }
 
-            return openedFile.open(0, ProgressIgnore.get()).get(0);
+            return openedFile.open().get(0);
         } finally {
             openedFile.close();
         }

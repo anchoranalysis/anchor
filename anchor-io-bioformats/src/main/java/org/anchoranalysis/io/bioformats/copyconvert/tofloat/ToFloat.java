@@ -34,6 +34,7 @@ import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.voxel.VoxelsUntyped;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferWrap;
+import org.anchoranalysis.image.voxel.extracter.OrientationChange;
 import org.anchoranalysis.io.bioformats.copyconvert.ConvertTo;
 
 public abstract class ToFloat extends ConvertTo<FloatBuffer> {
@@ -53,13 +54,15 @@ public abstract class ToFloat extends ConvertTo<FloatBuffer> {
 
     @Override
     protected VoxelBuffer<FloatBuffer> convertSliceOfSingleChannel(
-            ByteBuffer source, int channelIndexRelative) throws IOException {
+            ByteBuffer source, int channelIndexRelative, OrientationChange orientationCorrection)
+            throws IOException {
         Preconditions.checkArgument(
                 channelIndexRelative == 0, "interleaving not supported for float data");
-        float[] array = convertIntegerBytesToFloatArray(dimensions, source);
+        float[] array = convertIntegerBytesToFloatArray(dimensions, source, orientationCorrection);
         return VoxelBufferWrap.floatArray(array);
     }
 
     protected abstract float[] convertIntegerBytesToFloatArray(
-            Dimensions dimensions, ByteBuffer source) throws IOException;
+            Dimensions dimensions, ByteBuffer source, OrientationChange orientationCorrection)
+            throws IOException;
 }

@@ -76,7 +76,8 @@ public final class BinaryValuesInt {
     /**
      * Default values to use, if not otherwise specified.
      *
-     * @return a static instance {@link BinaryValuesInt} with default values (see class description).
+     * @return a static instance {@link BinaryValuesInt} with default values (see class
+     *     description).
      */
     public static BinaryValuesInt getDefault() {
         return DEFAULT;

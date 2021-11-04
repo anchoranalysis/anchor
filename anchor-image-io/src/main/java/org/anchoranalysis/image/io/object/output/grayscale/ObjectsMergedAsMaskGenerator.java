@@ -49,7 +49,8 @@ public class ObjectsMergedAsMaskGenerator extends ObjectsAsGrayscaleGenerator {
     @Override
     public Stack transform(ObjectCollection element) throws OutputWriteFailedException {
         Mask mask =
-                MaskFromObjects.createFromObjects(element, dimensions(), BinaryValuesInt.getDefault());
+                MaskFromObjects.createFromObjects(
+                        element, dimensions(), BinaryValuesInt.getDefault());
         return new ChannelGenerator("maskCollection").transform(mask.channel());
     }
 }

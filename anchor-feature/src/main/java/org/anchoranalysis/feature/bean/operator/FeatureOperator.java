@@ -33,7 +33,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
  * Base class for features that broadly accept any type of feature-input.
  *
  * @author Owen Feehan
- * @param <T>
+ * @param <T> feature input-type.
  */
 public abstract class FeatureOperator<T extends FeatureInput> extends Feature<T> {
 

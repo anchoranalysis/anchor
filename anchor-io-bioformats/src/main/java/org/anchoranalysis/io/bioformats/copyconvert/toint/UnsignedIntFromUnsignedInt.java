@@ -34,6 +34,8 @@ import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferFactory;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedIntBuffer;
+import org.anchoranalysis.image.voxel.extracter.OrientationChange;
+import org.anchoranalysis.spatial.box.Extent;
 
 public class UnsignedIntFromUnsignedInt extends ToInt {
 
@@ -41,33 +43,77 @@ public class UnsignedIntFromUnsignedInt extends ToInt {
 
     private int sizeXY;
     private int sizeBytes;
+    private Extent extent;
 
     @Override
     protected void setupBefore(Dimensions dimensions, int numberChannelsPerArray) {
-        sizeXY = dimensions.x() * dimensions.y();
-        sizeBytes = sizeXY * BYTES_PER_PIXEL;
+        this.sizeXY = dimensions.x() * dimensions.y();
+        this.sizeBytes = sizeXY * BYTES_PER_PIXEL;
+        this.extent = dimensions.extent();
     }
 
     @Override
     protected VoxelBuffer<UnsignedIntBuffer> convertSliceOfSingleChannel(
-            ByteBuffer source, int channelIndexRelative) {
+            ByteBuffer source, int channelIndexRelative, OrientationChange orientationCorrection) {
         Preconditions.checkArgument(
                 channelIndexRelative == 0, "interleaving not supported for int data");
 
         byte[] sourceArray = source.array();
 
         VoxelBuffer<UnsignedIntBuffer> voxels = VoxelBufferFactory.allocateUnsignedInt(sizeXY);
-        UnsignedIntBuffer out = voxels.buffer();
+        UnsignedIntBuffer destination = voxels.buffer();
 
         boolean littleEndian = source.order() == ByteOrder.LITTLE_ENDIAN;
 
-        int indexOut = 0;
-        for (int indexIn = 0; indexIn < sizeBytes; indexIn += BYTES_PER_PIXEL) {
-            out.putRaw(
-                    indexOut++,
-                    DataTools.bytesToInt(sourceArray, indexIn, BYTES_PER_PIXEL, littleEndian));
+        if (orientationCorrection == OrientationChange.KEEP_UNCHANGED) {
+            copyKeepOrientation(sourceArray, littleEndian, destination);
+        } else {
+            copyChangeOrientation(sourceArray, littleEndian, destination, orientationCorrection);
         }
 
         return voxels;
+    }
+
+    /**
+     * Copy the bytes, without changing orientation.
+     *
+     * <p>This is kept separate to {@link #copyChangeOrientation(byte[], boolean, UnsignedIntBuffer,
+     * OrientationChange)} as it can be done slightly more efficiently.
+     */
+    private void copyKeepOrientation(
+            byte[] sourceArray, boolean littleEndian, UnsignedIntBuffer destination) {
+        int indexOut = 0;
+        for (int index = 0; index < sizeBytes; index += BYTES_PER_PIXEL) {
+            int value = extractInt(sourceArray, index, littleEndian);
+            destination.putRaw(indexOut++, value);
+        }
+    }
+
+    /** Copy the bytes, changing orientation. */
+    private void copyChangeOrientation(
+            byte[] sourceArray,
+            boolean littleEndian,
+            UnsignedIntBuffer destination,
+            OrientationChange orientationCorrection) {
+        int x = 0;
+        int y = 0;
+
+        for (int index = 0; index < sizeBytes; index += BYTES_PER_PIXEL) {
+            int value = extractInt(sourceArray, index, littleEndian);
+
+            int indexOut = orientationCorrection.index(x, y, extent);
+
+            destination.putRaw(indexOut, value);
+
+            x++;
+            if (x == extent.x()) {
+                y++;
+                x = 0;
+            }
+        }
+    }
+
+    private int extractInt(byte[] sourceArray, int index, boolean littleEndian) {
+        return DataTools.bytesToInt(sourceArray, index, BYTES_PER_PIXEL, littleEndian);
     }
 }

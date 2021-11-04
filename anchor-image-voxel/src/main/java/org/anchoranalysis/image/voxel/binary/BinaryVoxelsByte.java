@@ -27,8 +27,8 @@
 package org.anchoranalysis.image.voxel.binary;
 
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.binary.values.BinaryValuesInt;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
+import org.anchoranalysis.image.voxel.binary.values.BinaryValuesInt;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 
 class BinaryVoxelsByte extends BinaryVoxels<UnsignedByteBuffer> {

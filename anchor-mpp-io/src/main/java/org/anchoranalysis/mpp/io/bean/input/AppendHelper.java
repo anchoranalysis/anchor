@@ -31,7 +31,6 @@ import java.util.List;
 import java.util.function.Function;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.core.progress.ProgressIgnore;
 import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.image.core.stack.TimeSequence;
 import org.anchoranalysis.image.io.ImageIOException;
@@ -171,7 +170,7 @@ class AppendHelper {
     private static TimeSequence openRaster(Path path, StackReader stackReader)
             throws ImageIOException {
         try (OpenedImageFile openedFile = stackReader.openFile(path)) {
-            return openedFile.open(0, ProgressIgnore.get());
+            return openedFile.open();
         }
     }
 }

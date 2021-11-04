@@ -26,8 +26,8 @@
 
 package org.anchoranalysis.image.voxel.binary.connected;
 
-import org.anchoranalysis.image.voxel.binary.values.BinaryValuesInt;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
+import org.anchoranalysis.image.voxel.binary.values.BinaryValuesInt;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 
 final class ReadWriteByte extends BufferReadWrite<UnsignedByteBuffer> {

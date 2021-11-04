@@ -32,10 +32,12 @@ import org.anchoranalysis.image.voxel.VoxelsUntyped;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferWrap;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
+import org.anchoranalysis.image.voxel.extracter.OrientationChange;
 import org.anchoranalysis.io.bioformats.copyconvert.ConvertTo;
 
 /**
- * Converts a buffer of another data-type to <i>unsigned byte</i> type.
+ * Converts a {@link ByteBuffer} encoding some data-type to a buffer of <i>unsigned byte</i> type,
+ * as expected in an Anchor {@link VoxelBuffer}.
  *
  * @author Owen Feehan
  */
@@ -58,15 +60,17 @@ public abstract class ToUnsignedByte extends ConvertTo<UnsignedByteBuffer> {
 
     @Override
     protected VoxelBuffer<UnsignedByteBuffer> convertSliceOfSingleChannel(
-            ByteBuffer source, int channelIndexRelative) {
-        return VoxelBufferWrap.unsignedByteBuffer(convert(source, channelIndexRelative));
+            ByteBuffer source, int channelIndexRelative, OrientationChange orientationCorrection) {
+        return VoxelBufferWrap.unsignedByteBuffer(
+                convert(source, channelIndexRelative, orientationCorrection));
     }
 
     protected UnsignedByteBuffer allocateBuffer() {
         return UnsignedByteBuffer.allocate(sizeXY);
     }
 
-    protected abstract UnsignedByteBuffer convert(ByteBuffer source, int channelIndexRelative);
+    protected abstract UnsignedByteBuffer convert(
+            ByteBuffer source, int channelIndexRelative, OrientationChange orientationCorrection);
 
     protected abstract int calculateBytesPerPixel(int numberChannelsPerArray);
 }

@@ -34,16 +34,20 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.voxel.extracter.OrientationChange;
 import org.anchoranalysis.spatial.box.Extent;
 
 @RequiredArgsConstructor
 public class FloatFromUnsignedInt extends ToFloat {
 
     @Override
-    protected float[] convertIntegerBytesToFloatArray(Dimensions dimensions, ByteBuffer source)
+    protected float[] convertIntegerBytesToFloatArray(
+            Dimensions dimensions, ByteBuffer source, OrientationChange orientationCorrection)
             throws IOException {
 
-        // Note that offsetInSource is not used, and this is perhaps incorrect.
+        if (orientationCorrection != OrientationChange.KEEP_UNCHANGED) {
+            throw new IOException("Orientation-correction is not supported");
+        }
 
         byte[] sourceArray = source.array();
 

@@ -30,7 +30,10 @@ import com.google.common.base.Preconditions;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import loci.common.DataTools;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
+import org.anchoranalysis.image.voxel.extracter.OrientationChange;
+import org.anchoranalysis.spatial.box.Extent;
 
 /**
  * Converts data of type <i>unsigned int</i> to <i>unsigned byte</i>.
@@ -42,6 +45,8 @@ import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
  */
 public class UnsignedByteFromUnsignedInt extends ToUnsignedByteWithScaling {
 
+    private Extent extent;
+
     /**
      * Create with a number of effective-bits.
      *
@@ -52,18 +57,25 @@ public class UnsignedByteFromUnsignedInt extends ToUnsignedByteWithScaling {
     }
 
     @Override
-    protected UnsignedByteBuffer convert(ByteBuffer source, int channelIndexRelative) {
+    protected void setupBefore(Dimensions dimensions, int numberChannelsPerArray) {
+        super.setupBefore(dimensions, numberChannelsPerArray);
+        this.extent = dimensions.extent();
+    }
+
+    @Override
+    protected UnsignedByteBuffer convert(
+            ByteBuffer source, int channelIndexRelative, OrientationChange orientationCorrection) {
         Preconditions.checkArgument(channelIndexRelative == 0, "interleaving not supported");
 
         UnsignedByteBuffer destination = allocateBuffer();
 
         byte[] sourceArray = source.array();
+        boolean littleEndian = source.order() == ByteOrder.LITTLE_ENDIAN;
 
-        for (int indexIn = 0; indexIn < sizeBytes; indexIn += bytesPerPixel) {
-            int value =
-                    DataTools.bytesToInt(
-                            sourceArray, indexIn, source.order() == ByteOrder.LITTLE_ENDIAN);
-            destination.putDouble(scaleValue(value));
+        if (orientationCorrection == OrientationChange.KEEP_UNCHANGED) {
+            copyKeepOrientation(sourceArray, littleEndian, destination);
+        } else {
+            copyChangeOrientation(sourceArray, littleEndian, destination, orientationCorrection);
         }
 
         return destination;
@@ -72,5 +84,48 @@ public class UnsignedByteFromUnsignedInt extends ToUnsignedByteWithScaling {
     @Override
     protected int calculateBytesPerPixel(int numberChannelsPerArray) {
         return 4;
+    }
+
+    /**
+     * Copy the bytes, without changing orientation.
+     *
+     * <p>This is kept separate to {@link #copyChangeOrientation(byte[], boolean,
+     * UnsignedByteBuffer, OrientationChange)} as it can be done slightly more efficiently.
+     */
+    private void copyKeepOrientation(
+            byte[] sourceArray, boolean littleEndian, UnsignedByteBuffer destination) {
+        for (int index = 0; index < sizeBytes; index += bytesPerPixel) {
+            int value = extractScaledValue(sourceArray, index, littleEndian);
+            destination.putDouble(value);
+        }
+    }
+
+    /** Copy the bytes, changing orientation. */
+    private void copyChangeOrientation(
+            byte[] sourceArray,
+            boolean littleEndian,
+            UnsignedByteBuffer destination,
+            OrientationChange orientationCorrection) {
+        int x = 0;
+        int y = 0;
+
+        for (int index = 0; index < sizeBytes; index += bytesPerPixel) {
+            int value = extractScaledValue(sourceArray, index, littleEndian);
+
+            int indexOut = orientationCorrection.index(x, y, extent);
+            destination.putDouble(indexOut, value);
+
+            x++;
+            if (x == extent.x()) {
+                y++;
+                x = 0;
+            }
+        }
+    }
+
+    /** Extracts a value from the source-array, and apply any scaling and clamping. */
+    private int extractScaledValue(byte[] sourceArray, int index, boolean littleEndian) {
+        int value = DataTools.bytesToInt(sourceArray, index, littleEndian);
+        return scaleValue(value);
     }
 }
