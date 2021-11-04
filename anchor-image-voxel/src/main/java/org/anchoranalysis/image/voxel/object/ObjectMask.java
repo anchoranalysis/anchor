@@ -43,8 +43,8 @@ import org.anchoranalysis.image.voxel.assigner.VoxelsAssigner;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxelsFactory;
 import org.anchoranalysis.image.voxel.binary.connected.ObjectsFromConnectedComponentsFactory;
-import org.anchoranalysis.image.voxel.binary.values.BinaryValuesInt;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
+import org.anchoranalysis.image.voxel.binary.values.BinaryValuesInt;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.extracter.VoxelsExtracter;
 import org.anchoranalysis.image.voxel.extracter.predicate.VoxelsPredicate;
@@ -184,7 +184,8 @@ public class ObjectMask {
     }
 
     /**
-     * Creates from {@link Voxels} and a corresponding {@link BoundingBox} and {@link BinaryValuesInt}.
+     * Creates from {@link Voxels} and a corresponding {@link BoundingBox} and {@link
+     * BinaryValuesInt}.
      *
      * <p>The voxels are reused without duplication.
      *
@@ -227,8 +228,8 @@ public class ObjectMask {
     }
 
     /**
-     * Like {@link #ObjectMask(BoundingBox, Voxels, BinaryValuesInt)} but specifies the binary-values
-     * as bytes.
+     * Like {@link #ObjectMask(BoundingBox, Voxels, BinaryValuesInt)} but specifies the
+     * binary-values as bytes.
      *
      * @param box the bounding-box.
      * @param voxels the voxels, which must be the same size as {@code box}, and should only contain

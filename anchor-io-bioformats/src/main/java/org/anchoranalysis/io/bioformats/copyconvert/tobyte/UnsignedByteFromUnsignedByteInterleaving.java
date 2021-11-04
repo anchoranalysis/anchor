@@ -28,23 +28,37 @@ package org.anchoranalysis.io.bioformats.copyconvert.tobyte;
 
 import java.nio.ByteBuffer;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
+import org.anchoranalysis.image.voxel.extracter.OrientationChange;
+import org.anchoranalysis.spatial.box.Extent;
 
+/**
+ * Converts a {@link ByteBuffer} encoding <i>unsigned byte</i>s (<i>with interleaving</i>) to
+ * <i>unsigned byte</i> type, as expected in an Anchor {@link VoxelBuffer}.
+ *
+ * @author Owen Feehan
+ */
 public class UnsignedByteFromUnsignedByteInterleaving extends ToUnsignedByte {
 
     private int numberChannelsPerArray;
+    private Extent extent;
 
     @Override
     protected void setupBefore(Dimensions dimensions, int numberChannelsPerArray) {
         super.setupBefore(dimensions, numberChannelsPerArray);
         this.numberChannelsPerArray = numberChannelsPerArray;
+        this.extent = dimensions.extent();
     }
 
     @Override
-    protected UnsignedByteBuffer convert(ByteBuffer source, int channelIndexRelative) {
+    protected UnsignedByteBuffer convert(
+            ByteBuffer source, int channelIndexRelative, OrientationChange orientationCorrection) {
 
-        if (source.capacity() == sizeXY && channelIndexRelative == 0) {
-            // Reuse the existing buffer, if it's single channeled
+        if (source.capacity() == sizeXY
+                && channelIndexRelative == 0
+                && orientationCorrection == OrientationChange.KEEP_UNCHANGED) {
+            // Reuse the existing buffer, if it's single channeled, and has no orientation change.
             return UnsignedByteBuffer.wrapRaw(source);
         } else {
             UnsignedByteBuffer destination = allocateBuffer();
@@ -52,10 +66,15 @@ public class UnsignedByteFromUnsignedByteInterleaving extends ToUnsignedByte {
             // Loop through the relevant positions
             int totalBytesSource = sizeXY * numberChannelsPerArray;
 
-            for (int indexIn = channelIndexRelative;
-                    indexIn < totalBytesSource;
-                    indexIn += numberChannelsPerArray) {
-                destination.putRaw(source.get(indexIn));
+            if (orientationCorrection == OrientationChange.KEEP_UNCHANGED) {
+                copyKeepOrientation(source, channelIndexRelative, destination, totalBytesSource);
+            } else {
+                copyChangeOrientation(
+                        source,
+                        channelIndexRelative,
+                        destination,
+                        totalBytesSource,
+                        orientationCorrection);
             }
 
             return destination;
@@ -65,5 +84,51 @@ public class UnsignedByteFromUnsignedByteInterleaving extends ToUnsignedByte {
     @Override
     protected int calculateBytesPerPixel(int numberChannelsPerArray) {
         return 1;
+    }
+
+    /**
+     * Copy the bytes, without changing orientation.
+     *
+     * <p>This is kept separate to {@link #copyChangeOrientation(ByteBuffer, int,
+     * UnsignedByteBuffer, int, OrientationChange)} as it can be done slightly more efficiently.
+     */
+    private void copyKeepOrientation(
+            ByteBuffer source,
+            int channelIndexRelative,
+            UnsignedByteBuffer destination,
+            int totalBytesSource) {
+        for (int indexIn = channelIndexRelative;
+                indexIn < totalBytesSource;
+                indexIn += numberChannelsPerArray) {
+            byte value = source.get(indexIn);
+
+            destination.putRaw(value);
+        }
+    }
+
+    /** Copy the bytes, changing orientation. */
+    private void copyChangeOrientation(
+            ByteBuffer source,
+            int channelIndexRelative,
+            UnsignedByteBuffer destination,
+            int totalBytesSource,
+            OrientationChange orientationCorrection) {
+        int x = 0;
+        int y = 0;
+
+        for (int indexIn = channelIndexRelative;
+                indexIn < totalBytesSource;
+                indexIn += numberChannelsPerArray) {
+            byte value = source.get(indexIn);
+
+            int indexChanged = orientationCorrection.index(x, y, extent);
+            destination.putRaw(indexChanged, value);
+
+            x++;
+            if (x == extent.x()) {
+                y++;
+                x = 0;
+            }
+        }
     }
 }

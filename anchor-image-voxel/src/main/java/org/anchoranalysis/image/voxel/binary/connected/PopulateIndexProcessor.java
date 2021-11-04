@@ -28,8 +28,8 @@ package org.anchoranalysis.image.voxel.binary.connected;
 
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
-import org.anchoranalysis.image.voxel.binary.values.BinaryValuesInt;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
+import org.anchoranalysis.image.voxel.binary.values.BinaryValuesInt;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedIntBuffer;
 import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferUnary;
 import org.anchoranalysis.spatial.point.Point3i;

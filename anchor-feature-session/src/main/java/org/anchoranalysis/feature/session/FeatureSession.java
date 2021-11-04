@@ -48,7 +48,7 @@ import org.anchoranalysis.feature.shared.SharedFeatureMulti;
  * A single-point in the code for creating feature-sessions (a factory).
  *
  * <p>A feature session is a context needed to calculate one or more parameters (inptus to features)
- * on one or more features
+ * on one or more features.
  *
  * <p>Within this context, caching of intermediate results and other efficiencies are implemented
  * beneath the hood.
@@ -59,11 +59,11 @@ import org.anchoranalysis.feature.shared.SharedFeatureMulti;
 public class FeatureSession {
 
     /**
-     * Starts a feature-session for a single feature
+     * Starts a feature-session for a single feature.
      *
      * @param <T> type of parameters
-     * @param feature the feature
-     * @param logger a logger
+     * @param feature the feature.
+     * @param logger a logger.
      * @return a calculator that will calculate just this feature for each parameter.
      * @throws InitializeException
      */
@@ -73,12 +73,12 @@ public class FeatureSession {
     }
 
     /**
-     * Starts a feature-session for a single feature
+     * Starts a feature-session for a single feature.
      *
      * @param <T> type of parameters
-     * @param feature the feature
+     * @param feature the feature.
      * @param sharedFeatures
-     * @param logger a logger
+     * @param logger a logger.
      * @return a calculator that will calculate just this feature for each parameter.
      */
     public static <T extends FeatureInput> FeatureCalculatorSingle<T> with(
@@ -99,11 +99,11 @@ public class FeatureSession {
     }
 
     /**
-     * Starts a feature-session for a list of features
+     * Starts a feature-session for a list of features.
      *
-     * @param <T> type of parameters for all features
-     * @param features a list of features accepting uniform type
-     * @param logger a logger
+     * @param <T> type of parameters for all features.
+     * @param features a list of features accepting uniform type.
+     * @param logger a logger.
      * @return a calculator that will call calculate all the features in the list for each
      *     parameter.
      */
@@ -140,15 +140,15 @@ public class FeatureSession {
     }
 
     /**
-     * Starts a feature-session for a single feature - and performs a calculation
+     * Starts a feature-session for a single feature - and performs a calculation.
      *
      * @param <T> type of input
-     * @param feature the feature
-     * @param input for features
-     * @param logger a logger
-     * @return the calculated result
+     * @param feature the feature.
+     * @param input for features.
+     * @param logger a logger.
+     * @return the calculated result.
      * @throws FeatureCalculationException if the feature cannot be initialized or cannot be
-     *     calculated
+     *     calculated.
      */
     public static <T extends FeatureInput> double calculateWith(
             Feature<T> feature, T input, Logger logger) throws FeatureCalculationException {

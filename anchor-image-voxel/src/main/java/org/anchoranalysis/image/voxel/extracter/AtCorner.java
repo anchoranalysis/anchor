@@ -36,7 +36,7 @@ import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.point.ReadableTuple3i;
 
 /**
- * Projects a {@link VoxelsExtracter} to a corner in a larger global space
+ * Projects a {@link VoxelsExtracter} to a corner in a larger global space.
  *
  * <p>Coordinates are translated appropriately for any calls from the larger global space to the
  * space on which {@code delegate} is defined.

@@ -62,10 +62,11 @@ class ExecutionTimeStatisticsReport {
         builder.append(System.lineSeparator());
         builder.append(
                 DescribeExecutionTimes.individual(
-                        "Entire job",
+                        "* Entire Job *",
                         taskTotal.mean() / 1000,
                         taskTotal.getSum() / 1000,
                         (int) task.numberCompletedTotal()));
+        builder.append(System.lineSeparator());
         builder.append(DescribeExecutionTimes.allOperations(operation));
         builder.append(DIVIDER.withoutLabel());
         return builder.toString();

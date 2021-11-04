@@ -30,6 +30,7 @@ import org.anchoranalysis.image.voxel.extracter.predicate.VoxelsPredicate;
 import org.anchoranalysis.image.voxel.interpolator.Interpolator;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.spatial.box.BoundingBox;
+import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.point.ReadableTuple3i;
 
 /**
@@ -41,23 +42,54 @@ import org.anchoranalysis.spatial.point.ReadableTuple3i;
 public interface VoxelsExtracter<T> {
 
     /**
-     * Gets the value of one particular value
+     * Gets the value of one particular voxel.
      *
      * <p>Note that this provides <b>very slow access</b>, compared to iterating through slice
      * buffers, so <b>use sparingly</b>.
      *
-     * @param point coordinates
-     * @return the value of a voxel (converted into an {@code int})
+     * <p>The <i>Z</i>-coordinate is assumed to be 0.
+     *
+     * @param x coordinate of voxel in <i>X</i>-dimension.
+     * @param y coordinate of voxel in <i>Y</i>-dimension.
+     * @return the value of a voxel (converted into an {@code int}).
+     */
+    default int voxel(int x, int y) {
+        return voxel(x, y, 0);
+    }
+
+    /**
+     * Gets the value of one particular voxel.
+     *
+     * <p>Note that this provides <b>very slow access</b>, compared to iterating through slice
+     * buffers, so <b>use sparingly</b>.
+     *
+     * @param x coordinate of voxel in <i>X</i>-dimension.
+     * @param y coordinate of voxel in <i>Y</i>-dimension.
+     * @param z coordinate of voxel in <i>Z</i>-dimension.
+     * @return the value of a voxel (converted into an {@code int}).
+     */
+    default int voxel(int x, int y, int z) {
+        return voxel(new Point3i(x, y, z));
+    }
+
+    /**
+     * Gets the value of one particular voxel.
+     *
+     * <p>Note that this provides <b>very slow access</b>, compared to iterating through slice
+     * buffers, so <b>use sparingly</b>.
+     *
+     * @param point coordinates.
+     * @return the value of a voxel (converted into an {@code int}).
      */
     int voxel(ReadableTuple3i point);
 
     /**
-     * Creates a new {@link Voxels} with only particular slice
+     * Creates a new {@link Voxels} with only particular slice.
      *
      * <p>This is an <i>immutable</i> operation.
      *
-     * @param sliceIndex index of slice in z-dimension
-     * @return a channel containing the slice (reusing the existing voxel buffers)
+     * @param sliceIndex index of slice in z-dimension.
+     * @return a channel containing the slice (reusing the existing voxel buffers).
      */
     Voxels<T> slice(int sliceIndex);
 
@@ -82,18 +114,18 @@ public interface VoxelsExtracter<T> {
     Voxels<T> region(BoundingBox box, boolean reuseIfPossible);
 
     /**
-     * Copies a bounding-box area to another {@link Voxels}
+     * Copies a bounding-box area to another {@link Voxels}.
      *
      * <p>{@code from} and {@code destinationBox} must have identically-sized extents.
      *
-     * @param from box to copy from (relative to the current voxels)
-     * @param voxelsDestination where to copy into
-     * @param destinationBox box to copy into (relative to {@code voxelsDestination})
+     * @param from box to copy from (relative to the current voxels).
+     * @param voxelsDestination where to copy into.
+     * @param destinationBox box to copy into (relative to {@code voxelsDestination}).
      */
     void boxCopyTo(BoundingBox from, Voxels<T> voxelsDestination, BoundingBox destinationBox);
 
     /**
-     * Copies an area corresponding to an object-mask to another {@link Voxels}
+     * Copies an area corresponding to an object-mask to another {@link Voxels}.
      *
      * <p>Only copies voxels if part of an object, otherwise voxels in the destination-buffer are
      * not changed.
@@ -101,9 +133,9 @@ public interface VoxelsExtracter<T> {
      * <p>{@code from}'s bounding-box and {@code destinationBox} must have identically-sized
      * extents.
      *
-     * @param from only copies voxels which correspond to an <i>on</i> voxels in the object-mask
-     * @param voxelsDestination where to copy into
-     * @param destinationBox box to copy into (relative to {@code voxelsDestination})
+     * @param from only copies voxels which correspond to an <i>on</i> voxels in the object-mask.
+     * @param voxelsDestination where to copy into.
+     * @param destinationBox box to copy into (relative to {@code voxelsDestination}).
      */
     void objectCopyTo(ObjectMask from, Voxels<T> voxelsDestination, BoundingBox destinationBox);
 
@@ -113,8 +145,8 @@ public interface VoxelsExtracter<T> {
      *
      * <p>This is an <i>immutable</i> operation.
      *
-     * @param sizeX new size in X dimension
-     * @param sizeY new size in Y dimension
+     * @param sizeX new size in X dimension.
+     * @param sizeY new size in Y dimension.
      * @param interpolator means to interpolate voxels as they are resized.
      * @return newly created voxels of specified size containing interpolated voxels from the
      *     current voxels.
@@ -125,38 +157,38 @@ public interface VoxelsExtracter<T> {
      * A <i>maximum</i> intensity projection of all slices
      *
      * @return voxels with newly-created buffers containing projection (identical in XY dimensions
-     *     but with a single slice)
+     *     but with a single slice).
      */
     Voxels<T> projectMax();
 
     /**
-     * A <i>mean</i> intensity projection of all slices
+     * A <i>mean</i> intensity projection of all slices.
      *
      * @return voxels with newly-created buffers containing projection (identical in XY dimensions
-     *     but with a single slice)
+     *     but with a single slice).
      */
     Voxels<T> projectMean();
 
     /**
-     * Operations on whether particular voxels are equal to a particular value
+     * Operations on whether particular voxels are equal to a particular value.
      *
      * @param equalToValue
      * @return a newly instantiated object to perform queries to this voxels object as described
-     *     above
+     *     above.
      */
     VoxelsPredicate voxelsEqualTo(int equalToValue);
 
     /**
-     * Operations on whether particular voxels are greater than a treshold (but not equal to)
+     * Operations on whether particular voxels are greater than a threshold (but not equal to).
      *
-     * @param threshold voxel-values greater than this threshold are included
+     * @param threshold voxel-values greater than this threshold are included.
      * @return a newly instantiated object to perform queries to this voxels object as described
-     *     above
+     *     above.
      */
     VoxelsPredicate voxelsGreaterThan(int threshold);
 
     /**
-     * Finds the maximum-value of any voxel and rounds up (ceiling) to nearest long
+     * Finds the maximum-value of any voxel and rounds up (ceiling) to nearest long.
      *
      * @return the maximum-value
      */

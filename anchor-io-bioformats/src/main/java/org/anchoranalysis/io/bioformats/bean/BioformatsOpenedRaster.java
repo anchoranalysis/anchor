@@ -48,12 +48,14 @@ import org.anchoranalysis.image.core.stack.TimeSequence;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
+import org.anchoranalysis.image.voxel.extracter.OrientationChange;
 import org.anchoranalysis.io.bioformats.DimensionsCreator;
 import org.anchoranalysis.io.bioformats.bean.options.ReadOptions;
 import org.anchoranalysis.io.bioformats.copyconvert.ConvertTo;
 import org.anchoranalysis.io.bioformats.copyconvert.ConvertToFactory;
 import org.anchoranalysis.io.bioformats.copyconvert.CopyConvert;
 import org.anchoranalysis.io.bioformats.copyconvert.ImageFileShape;
+import org.anchoranalysis.spatial.box.Extent;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -75,6 +77,7 @@ class BioformatsOpenedRaster implements OpenedImageFile {
     private final int sizeT;
     private final boolean rgb;
     private final int bitsPerPixel;
+    private final OrientationChange orientationCorrection;
 
     /** The number of channels in the image. */
     @Getter private final int numberChannels;
@@ -88,12 +91,18 @@ class BioformatsOpenedRaster implements OpenedImageFile {
      * @param reader the reader.
      * @param metadata the metadata.
      * @param readOptions parameters that effect how to read the image.
+     * @param orientationCorrection any correction of orientation to be applied as bytes are
+     *     converted.
      */
     public BioformatsOpenedRaster(
-            IFormatReader reader, IMetadata metadata, ReadOptions readOptions) {
+            IFormatReader reader,
+            IMetadata metadata,
+            ReadOptions readOptions,
+            OrientationChange orientationCorrection) {
         this.reader = reader;
         this.metadata = metadata;
         this.readOptions = readOptions;
+        this.orientationCorrection = orientationCorrection;
 
         sizeT = readOptions.sizeT(reader);
         rgb = readOptions.isRGB(reader);
@@ -144,10 +153,27 @@ class BioformatsOpenedRaster implements OpenedImageFile {
 
     @Override
     public Dimensions dimensionsForSeries(int seriesIndex) throws ImageIOException {
+        Dimensions dimensions = dimensionsForSeriesWithoutOrientationChange(seriesIndex);
+        return orientDimensions(dimensions, orientationCorrection);
+    }
+
+    private Dimensions dimensionsForSeriesWithoutOrientationChange(int seriesIndex)
+            throws ImageIOException {
         try {
             return new DimensionsCreator(metadata).apply(reader, readOptions, seriesIndex);
         } catch (CreateException e) {
             throw new ImageIOException(e);
+        }
+    }
+
+    /** Creates a new {@link Dimensions}, if necessary, to reflect an orientation change. */
+    private static Dimensions orientDimensions(
+            Dimensions dimensions, OrientationChange orientation) {
+        if (orientation == OrientationChange.KEEP_UNCHANGED) {
+            return dimensions;
+        } else {
+            Extent extent = orientation.extent(dimensions.extent());
+            return new Dimensions(extent, dimensions.resolution());
         }
     }
 
@@ -164,7 +190,7 @@ class BioformatsOpenedRaster implements OpenedImageFile {
 
             TimeSequence timeSequence = new TimeSequence();
 
-            Dimensions dimensions = dimensionsForSeries(seriesIndex);
+            Dimensions dimensions = dimensionsForSeriesWithoutOrientationChange(seriesIndex);
 
             // Assumes order of time first, and then channels
             List<Channel> listAllChannels =
@@ -188,6 +214,8 @@ class BioformatsOpenedRaster implements OpenedImageFile {
     private List<Channel> createUninitialisedChannels(
             Dimensions dimensions, TimeSequence timeSequence, ChannelFactorySingleType factory)
             throws IncorrectImageSizeException {
+
+        dimensions = orientDimensions(dimensions, orientationCorrection);
 
         /** A list of all channels i.e. aggregating the channels associated with each stack */
         List<Channel> listAllChannels = new ArrayList<>();
@@ -226,6 +254,7 @@ class BioformatsOpenedRaster implements OpenedImageFile {
                 progress,
                 new ImageFileShape(dimensions, numberChannels, sizeT),
                 convertTo,
-                readOptions);
+                readOptions,
+                orientationCorrection);
     }
 }

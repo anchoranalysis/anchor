@@ -37,6 +37,7 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.core.progress.ProgressIncrement;
 import org.anchoranalysis.image.core.channel.Channel;
+import org.anchoranalysis.image.voxel.extracter.OrientationChange;
 import org.anchoranalysis.io.bioformats.DestinationChannelForIndex;
 import org.anchoranalysis.io.bioformats.bean.options.ReadOptions;
 
@@ -55,6 +56,11 @@ public class CopyConvert {
      * @param reader the source of the copy.
      * @param destination the destination of the copy.
      * @param progress tracking progress.
+     * @param targetShape the shape of the image-file to convert to (before any orientation
+     *     correction).
+     * @param readOptions Options that influence how stack is read.
+     * @param orientationCorrection any correction of orientation to be applied as bytes are
+     *     converted.
      * @throws FormatException
      * @throws IOException
      */
@@ -64,7 +70,8 @@ public class CopyConvert {
             Progress progress,
             ImageFileShape targetShape,
             ConvertTo<?> convertTo,
-            ReadOptions readOptions)
+            ReadOptions readOptions,
+            OrientationChange orientationCorrection)
             throws FormatException, IOException {
         int numberChannelsPerByteArray = readOptions.channelsPerByteArray(reader);
 
@@ -97,7 +104,8 @@ public class CopyConvert {
                                 openByteBuffer(reader, readerIndex),
                                 destinationChannel,
                                 z,
-                                numberChannelsPerByteArray);
+                                numberChannelsPerByteArray,
+                                orientationCorrection);
 
                         progressIncrement.update();
                     });

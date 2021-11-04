@@ -40,8 +40,8 @@ import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.assigner.VoxelsAssigner;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxelsFactory;
-import org.anchoranalysis.image.voxel.binary.values.BinaryValuesInt;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
+import org.anchoranalysis.image.voxel.binary.values.BinaryValuesInt;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelTypeException;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
@@ -157,7 +157,8 @@ public class Mask {
     }
 
     /**
-     * Creates a new empty mask of particular dimensions and with particular {@link BinaryValuesInt}.
+     * Creates a new empty mask of particular dimensions and with particular {@link
+     * BinaryValuesInt}.
      *
      * <p>Default mask values for <i>off</i> (0) and <i>on</i> (255) are employed.
      *

@@ -29,6 +29,7 @@ package org.anchoranalysis.image.io.stack.input;
 import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.core.progress.Progress;
+import org.anchoranalysis.core.progress.ProgressIgnore;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.stack.ImageMetadata;
 import org.anchoranalysis.image.core.stack.Stack;
@@ -69,7 +70,32 @@ public interface OpenedImageFile extends AutoCloseable {
         return sequence;
     }
 
-    /** Open when we don't have a specific-type. */
+    /**
+     * Open the first series when we don't have a specific-type.
+     *
+     * @return a time-sequence of images.
+     */
+    default TimeSequence open() throws ImageIOException {
+        return open(0);
+    }
+
+    /**
+     * Open when we don't have a specific-type.
+     *
+     * @param seriesIndex the index of the series of the open, zero-indexed.
+     * @return a time-sequence of images.
+     */
+    default TimeSequence open(int seriesIndex) throws ImageIOException {
+        return open(seriesIndex, ProgressIgnore.get());
+    }
+
+    /**
+     * Like {@link #open(int)} but additionally tracks progress of the opening.
+     *
+     * @param seriesIndex the index of the series of the open, zero-indexed.
+     * @param progress tracks progress.
+     * @return a time-sequence of images.
+     */
     TimeSequence open(int seriesIndex, Progress progress) throws ImageIOException;
 
     /** The number of series (distinct sets of images) in the image-file. */

@@ -34,7 +34,9 @@ import org.anchoranalysis.image.voxel.VoxelsUntyped;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferFactory;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedShortBuffer;
+import org.anchoranalysis.image.voxel.extracter.OrientationChange;
 import org.anchoranalysis.io.bioformats.copyconvert.ConvertTo;
+import org.anchoranalysis.spatial.box.Extent;
 
 public abstract class ToUnsignedShort extends ConvertTo<UnsignedShortBuffer> {
 
@@ -43,6 +45,7 @@ public abstract class ToUnsignedShort extends ConvertTo<UnsignedShortBuffer> {
     private int sizeXY;
     private int sizeBytes;
     private int numberChannelsPerArray;
+    private Extent extent;
 
     protected ToUnsignedShort() {
         super(VoxelsUntyped::asShort);
@@ -51,31 +54,93 @@ public abstract class ToUnsignedShort extends ConvertTo<UnsignedShortBuffer> {
     @Override
     protected void setupBefore(Dimensions dimensions, int numberChannelsPerArray) {
         this.sizeXY = dimensions.x() * dimensions.y();
+        this.extent = dimensions.extent();
         this.sizeBytes = sizeXY * BYTES_PER_PIXEL * numberChannelsPerArray;
         this.numberChannelsPerArray = numberChannelsPerArray;
     }
 
     @Override
     protected VoxelBuffer<UnsignedShortBuffer> convertSliceOfSingleChannel(
-            ByteBuffer sourceBuffer, int channelIndexRelative) {
+            ByteBuffer sourceBuffer,
+            int channelIndexRelative,
+            OrientationChange orientationCorrection) {
 
-        byte[] in = sourceBuffer.array();
+        byte[] sourceArray = sourceBuffer.array();
+        boolean littleEndian = sourceBuffer.order() == ByteOrder.LITTLE_ENDIAN;
 
         VoxelBuffer<UnsignedShortBuffer> voxels = VoxelBufferFactory.allocateUnsignedShort(sizeXY);
 
         int increment = numberChannelsPerArray * BYTES_PER_PIXEL;
 
-        boolean littleEndian = sourceBuffer.order() == ByteOrder.LITTLE_ENDIAN;
+        UnsignedShortBuffer destination = voxels.buffer();
 
-        UnsignedShortBuffer out = voxels.buffer();
-        for (int indexIn = channelIndexRelative; indexIn < sizeBytes; indexIn += increment) {
-            out.putRaw(convertValue(valueFromBuffer(in, indexIn, littleEndian)));
+        if (orientationCorrection == OrientationChange.KEEP_UNCHANGED) {
+            copyKeepOrientation(
+                    sourceArray, littleEndian, channelIndexRelative, increment, destination);
+        } else {
+            copyChangeOrientation(
+                    sourceArray,
+                    littleEndian,
+                    channelIndexRelative,
+                    increment,
+                    destination,
+                    orientationCorrection);
         }
 
         return voxels;
     }
 
     protected abstract short convertValue(short value);
+
+    /**
+     * Copy the bytes, without changing orientation.
+     *
+     * <p>This is kept separate to {@link #copyChangeOrientation(byte[], boolean, int, int,
+     * UnsignedShortBuffer, OrientationChange)} as it can be done slightly more efficiently.
+     */
+    private void copyKeepOrientation(
+            byte[] sourceArray,
+            boolean littleEndian,
+            int channelIndexRelative,
+            int increment,
+            UnsignedShortBuffer destination) {
+        for (int index = channelIndexRelative; index < sizeBytes; index += increment) {
+            short value = extractConvertedValue(sourceArray, index, littleEndian);
+            destination.putRaw(value);
+        }
+    }
+
+    /** Copy the bytes, changing orientation. */
+    private void copyChangeOrientation(
+            byte[] sourceArray,
+            boolean littleEndian,
+            int channelIndexRelative,
+            int increment,
+            UnsignedShortBuffer destination,
+            OrientationChange orientationCorrection) {
+
+        int x = 0;
+        int y = 0;
+
+        for (int index = channelIndexRelative; index < sizeBytes; index += increment) {
+            short value = extractConvertedValue(sourceArray, index, littleEndian);
+
+            int indexOut = orientationCorrection.index(x, y, extent);
+
+            destination.putRaw(indexOut, value);
+
+            x++;
+            if (x == extent.x()) {
+                y++;
+                x = 0;
+            }
+        }
+    }
+
+    private short extractConvertedValue(byte[] sourceArray, int index, boolean littleEndian) {
+        short value = valueFromBuffer(sourceArray, index, littleEndian);
+        return convertValue(value);
+    }
 
     private short valueFromBuffer(byte[] buffer, int index, boolean littleEndian) {
         return DataTools.bytesToShort(buffer, index, BYTES_PER_PIXEL, littleEndian);

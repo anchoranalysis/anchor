@@ -14,6 +14,7 @@ import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedIntVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
+import org.anchoranalysis.image.voxel.extracter.OrientationChange;
 import org.anchoranalysis.io.bioformats.copyconvert.tobyte.UnsignedByteFromFloat;
 import org.anchoranalysis.io.bioformats.copyconvert.tobyte.UnsignedByteFromUnsignedByteInterleaving;
 import org.anchoranalysis.io.bioformats.copyconvert.tobyte.UnsignedByteFromUnsignedByteNoInterleaving;
@@ -54,7 +55,8 @@ class ConvertToTest {
                 new UnsignedByteFromUnsignedByteInterleaving(),
                 UnsignedByteVoxelType.INSTANCE,
                 UnsignedByteVoxelType.INSTANCE,
-                1.0f);
+                1.0f,
+                true);
     }
 
     @Test
@@ -63,7 +65,8 @@ class ConvertToTest {
                 new UnsignedByteFromUnsignedByteNoInterleaving(),
                 UnsignedByteVoxelType.INSTANCE,
                 UnsignedByteVoxelType.INSTANCE,
-                1.0f);
+                1.0f,
+                true);
     }
 
     @Test
@@ -72,12 +75,14 @@ class ConvertToTest {
                 new UnsignedByteFromUnsignedShort(8),
                 UnsignedShortVoxelType.INSTANCE,
                 UnsignedByteVoxelType.INSTANCE,
-                1.0f);
+                1.0f,
+                true);
         testSequential(
                 new UnsignedByteFromUnsignedShort(10),
                 UnsignedShortVoxelType.INSTANCE,
                 UnsignedByteVoxelType.INSTANCE,
-                0.25f);
+                0.25f,
+                true);
     }
 
     @Test
@@ -86,12 +91,14 @@ class ConvertToTest {
                 new UnsignedByteFromUnsignedInt(8),
                 UnsignedIntVoxelType.INSTANCE,
                 UnsignedByteVoxelType.INSTANCE,
-                1.0f);
+                1.0f,
+                true);
         testSequential(
                 new UnsignedByteFromUnsignedInt(9),
                 UnsignedIntVoxelType.INSTANCE,
                 UnsignedByteVoxelType.INSTANCE,
-                0.5f);
+                0.5f,
+                true);
     }
 
     @Test
@@ -100,7 +107,8 @@ class ConvertToTest {
                 new UnsignedByteFromFloat(),
                 FloatVoxelType.INSTANCE,
                 UnsignedByteVoxelType.INSTANCE,
-                1.0f);
+                1.0f,
+                true);
     }
 
     @Test
@@ -109,7 +117,8 @@ class ConvertToTest {
                 new UnsignedShortFromUnsignedShort(),
                 UnsignedShortVoxelType.INSTANCE,
                 UnsignedShortVoxelType.INSTANCE,
-                1.0f);
+                1.0f,
+                true);
     }
 
     @Test
@@ -118,7 +127,8 @@ class ConvertToTest {
                 new UnsignedIntFromUnsignedInt(),
                 UnsignedIntVoxelType.INSTANCE,
                 UnsignedIntVoxelType.INSTANCE,
-                1.0f);
+                1.0f,
+                true);
     }
 
     @Test
@@ -127,7 +137,8 @@ class ConvertToTest {
                 new FloatFromUnsignedByte(),
                 UnsignedByteVoxelType.INSTANCE,
                 FloatVoxelType.INSTANCE,
-                1.0f);
+                1.0f,
+                true);
     }
 
     @Test
@@ -136,7 +147,8 @@ class ConvertToTest {
                 new FloatFromUnsignedInt(),
                 UnsignedIntVoxelType.INSTANCE,
                 FloatVoxelType.INSTANCE,
-                1.0f);
+                1.0f,
+                false);
     }
 
     /**
@@ -149,14 +161,39 @@ class ConvertToTest {
             ConvertTo<T> converter,
             VoxelDataType inputDataType,
             VoxelDataType outputDataType,
-            float expectedOutputScaleRatio)
+            float expectedOutputScaleRatio,
+            boolean checkOrientationChange)
             throws IOException {
+
+        // With no orientation-change.
         testSequential(
                 converter,
                 inputDataType,
                 outputDataType,
-                createSequentialBuffer(inputDataType, 1.0f),
-                createSequentialBuffer(outputDataType, expectedOutputScaleRatio));
+                createSequentialBuffer(
+                        inputDataType, DIMENSIONS, 1.0f, OrientationChange.KEEP_UNCHANGED),
+                createSequentialBuffer(
+                        outputDataType,
+                        DIMENSIONS,
+                        expectedOutputScaleRatio,
+                        OrientationChange.KEEP_UNCHANGED),
+                OrientationChange.KEEP_UNCHANGED);
+
+        if (checkOrientationChange) {
+            // With 90 degrees clockwise orientation-change.
+            testSequential(
+                    converter,
+                    inputDataType,
+                    outputDataType,
+                    createSequentialBuffer(
+                            inputDataType, DIMENSIONS, 1.0f, OrientationChange.KEEP_UNCHANGED),
+                    createSequentialBuffer(
+                            outputDataType,
+                            DIMENSIONS,
+                            expectedOutputScaleRatio,
+                            OrientationChange.ROTATE_90_CLOCKWISE),
+                    OrientationChange.ROTATE_90_CLOCKWISE);
+        }
     }
 
     private static <S, T> void testSequential(
@@ -164,15 +201,19 @@ class ConvertToTest {
             VoxelDataType inputDataType,
             VoxelDataType outputDataType,
             VoxelBuffer<S> inputBuffer,
-            VoxelBuffer<T> expectedOutputBuffer)
+            VoxelBuffer<T> expectedOutputBuffer,
+            OrientationChange orientationChange)
             throws IOException {
         ByteBuffer underlyingBytes = ByteBuffer.wrap(inputBuffer.underlyingBytes());
         Channel channel = ChannelFactory.instance().create(DIMENSIONS, outputDataType);
-        converter.copyAllChannels(DIMENSIONS, underlyingBytes, index -> channel, 0, 1);
+        converter.copyAllChannels(
+                DIMENSIONS, underlyingBytes, index -> channel, 0, 1, orientationChange);
+        VoxelBuffer<T> outputSlice = channel.voxels().slice(0);
+
+        // Check the arrays have exactly the same bytes.
         assertTrue(
                 Arrays.equals(
-                        expectedOutputBuffer.underlyingBytes(),
-                        channel.voxels().slice(0).underlyingBytes()));
+                        expectedOutputBuffer.underlyingBytes(), outputSlice.underlyingBytes()));
     }
 
     /**
@@ -180,15 +221,32 @@ class ConvertToTest {
      * 255) * scaleRatio}.
      */
     private static <T> VoxelBuffer<T> createSequentialBuffer(
-            VoxelDataType dataType, float scaleRatio) {
-        Channel channel = ChannelFactory.instance().create(DIMENSIONS, dataType);
-        int volume = DIMENSIONS.volumeXY();
+            VoxelDataType dataType,
+            Dimensions dimensions,
+            float scaleRatio,
+            OrientationChange orientationChange) {
+
+        Extent extent = dimensions.extent();
+
+        Dimensions dimensionsReoriented = maybeReorientDimensions(dimensions, orientationChange);
+
+        Channel channel = ChannelFactory.instance().create(dimensionsReoriented, dataType);
+
         VoxelBuffer<T> buffer = channel.voxels().slice(0);
-        for (int index = 0; index < volume; index++) {
-            int valueUnscaled = index + INTENSITY_SHIFT;
-            int valueScaled = (int) (scaleRatio * valueUnscaled);
-            buffer.putInt(index, valueScaled);
+        for (int y = 0; y < extent.y(); y++) {
+            for (int x = 0; x < extent.x(); x++) {
+                int valueUnscaled = extent.offset(x, y) + INTENSITY_SHIFT;
+                int valueScaled = (int) (scaleRatio * valueUnscaled);
+                int indexReoriented = orientationChange.index(x, y, extent);
+                buffer.putInt(indexReoriented, valueScaled);
+            }
         }
         return buffer;
+    }
+
+    /** Creates a new {@link Dimensions} with changed orientation. The resolution is ignored. */
+    private static Dimensions maybeReorientDimensions(
+            Dimensions dimensions, OrientationChange orientationChange) {
+        return new Dimensions(orientationChange.extent(dimensions.extent()));
     }
 }

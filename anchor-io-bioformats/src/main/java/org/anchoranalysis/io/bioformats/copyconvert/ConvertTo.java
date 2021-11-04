@@ -34,6 +34,7 @@ import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.VoxelsUntyped;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
+import org.anchoranalysis.image.voxel.extracter.OrientationChange;
 import org.anchoranalysis.io.bioformats.DestinationChannelForIndex;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -47,7 +48,7 @@ public abstract class ConvertTo<T> {
     private static Log log = LogFactory.getLog(ConvertTo.class);
 
     // START REQUIRED ARGUMENTS
-    /** how to convert a {@link VoxelsUntyped} to the specific destination-type */
+    /** How to convert a {@link VoxelsUntyped} to the specific destination-type. */
     private final Function<VoxelsUntyped, Voxels<T>> functionCast;
     // END REQUIRED ARGUMENTS
 
@@ -62,14 +63,17 @@ public abstract class ConvertTo<T> {
      * @param z the current slice we are working on.
      * @param numberChannelsPerArray the total number of channels found in any one instance of
      *     {@code source} (more than 1 if interleaving is present).
-     * @throws IOException
+     * @param orientationCorrection any correction of orientation to be applied as bytes are
+     *     converted.
+     * @throws IOException if any error occurs when copying channels.
      */
     public void copyAllChannels(
             Dimensions dimensions,
             ByteBuffer source,
             DestinationChannelForIndex destination,
             int z,
-            int numberChannelsPerArray)
+            int numberChannelsPerArray,
+            OrientationChange orientationCorrection)
             throws IOException {
 
         log.debug(String.format("copy to %d start", z));
@@ -80,7 +84,9 @@ public abstract class ConvertTo<T> {
                 channelIndexRelative < numberChannelsPerArray;
                 channelIndexRelative++) {
 
-            VoxelBuffer<T> converted = convertSliceOfSingleChannel(source, channelIndexRelative);
+            VoxelBuffer<T> converted =
+                    convertSliceOfSingleChannel(
+                            source, channelIndexRelative, orientationCorrection);
             placeSliceInDestination(converted, functionCast, destination, z, channelIndexRelative);
         }
 
@@ -90,7 +96,7 @@ public abstract class ConvertTo<T> {
     /**
      * Always called before any batch of calls to {@link #convertSliceOfSingleChannel}.
      *
-     * @param dimensions dimension
+     * @param dimensions the final dimensions of the image.
      * @param numberChannelsPerArray the number of channels that are found in the byte-array that
      *     will be passed to {@link #convertSliceOfSingleChannel}.
      */
@@ -102,9 +108,12 @@ public abstract class ConvertTo<T> {
      * @param source source buffer containing the bytes we copy from.
      * @param channelIndexRelative 0 if the buffer is non interleaved, or otherwise the index of the
      *     channel among the interleaved channels.
+     * @param orientationCorrection any correction of orientation to be applied as bytes are
+     *     converted.
      */
     protected abstract VoxelBuffer<T> convertSliceOfSingleChannel(
-            ByteBuffer source, int channelIndexRelative) throws IOException;
+            ByteBuffer source, int channelIndexRelative, OrientationChange orientationCorrection)
+            throws IOException;
 
     private static <S> void placeSliceInDestination(
             VoxelBuffer<S> voxelBuffer,

@@ -29,20 +29,25 @@ package org.anchoranalysis.io.bioformats.copyconvert.tofloat;
 import java.nio.ByteBuffer;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.voxel.buffer.primitive.PrimitiveConverter;
+import org.anchoranalysis.image.voxel.extracter.OrientationChange;
+import org.anchoranalysis.spatial.box.Extent;
 
 public class FloatFromUnsignedByte extends ToFloat {
 
     @Override
-    protected float[] convertIntegerBytesToFloatArray(Dimensions dimensions, ByteBuffer source) {
+    protected float[] convertIntegerBytesToFloatArray(
+            Dimensions dimensions, ByteBuffer source, OrientationChange orientationCorrection) {
 
         float[] out = new float[dimensions.x() * dimensions.y()];
 
         int indexIn = 0;
         int indexOut = 0;
+        Extent extent = dimensions.extent();
         for (int y = 0; y < dimensions.y(); y++) {
             for (int x = 0; x < dimensions.x(); x++) {
                 int value = PrimitiveConverter.unsignedByteToInt(source.get(indexIn++));
-                out[indexOut++] = value;
+                int outputIndex = orientationCorrection.index(indexOut++, x, y, extent);
+                out[outputIndex] = value;
             }
         }
         return out;

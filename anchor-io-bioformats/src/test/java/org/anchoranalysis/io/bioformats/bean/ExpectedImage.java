@@ -31,7 +31,6 @@ import java.io.File;
 import java.nio.file.Path;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
-import org.anchoranalysis.core.progress.ProgressIgnore;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.core.stack.TimeSequence;
@@ -104,7 +103,7 @@ class ExpectedImage {
         Path path = loader.resolveTestPath(relativePath());
 
         OpenedImageFile openedFile = reader.openFile(path);
-        TimeSequence timeSequence = openedFile.open(0, ProgressIgnore.get());
+        TimeSequence timeSequence = openedFile.open();
         return timeSequence.get(0);
     }
 

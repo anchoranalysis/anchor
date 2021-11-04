@@ -90,7 +90,9 @@ public abstract class Feature<T extends FeatureInput>
     }
 
     /**
-     * The class corresponding to feature input-type i.e. the {@code T} template parameter.
+     * The class corresponding to feature input-type.
+     *
+     * <p>i.e. corresponding to the {@code T} template parameter.
      *
      * @return the class.
      */
@@ -111,11 +113,11 @@ public abstract class Feature<T extends FeatureInput>
     }
 
     /**
-     * Duplicates the feature as per {@link #duplicateBean} but sets a particular custom-name
+     * Duplicates the feature as per {@link #duplicateBean} but sets a particular custom-name.
      *
-     * @param customName the custom-name to set
+     * @param customName the custom-name to set.
      * @return a duplicated (deep copy of bean attributes) feature, identical to current feature,
-     *     but with the specified custom-name
+     *     but with the specified custom-name.
      */
     public Feature<T> duplicateChangeName(String customName) {
         Preconditions.checkNotNull(customName);
@@ -158,8 +160,8 @@ public abstract class Feature<T extends FeatureInput>
      *
      * <p>It ignores features that are referenced from elsewhere.
      *
-     * @return
-     * @throws BeanMisconfiguredException
+     * @return the list of features.
+     * @throws BeanMisconfiguredException if the feature-beans are not structured as expected.
      */
     public final FeatureList<FeatureInput> createListChildFeatures()
             throws BeanMisconfiguredException {
@@ -182,9 +184,9 @@ public abstract class Feature<T extends FeatureInput>
     }
 
     /**
-     * Dummy method, that children can optionally override
+     * Dummy method, that children can optionally override.
      *
-     * @param initialization initialization parameters
+     * @param initialization initialization parameters.
      */
     protected void beforeCalc(FeatureInitialization initialization) throws InitializeException {
         // Does nothing. To be overridden in children if needed.

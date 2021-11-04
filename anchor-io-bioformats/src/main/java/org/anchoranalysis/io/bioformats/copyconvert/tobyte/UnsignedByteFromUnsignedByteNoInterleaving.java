@@ -27,20 +27,45 @@
 package org.anchoranalysis.io.bioformats.copyconvert.tobyte;
 
 import java.nio.ByteBuffer;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
+import org.anchoranalysis.image.voxel.extracter.OrientationChange;
+import org.anchoranalysis.spatial.box.Extent;
 
+/**
+ * Converts a {@link ByteBuffer} encoding <i>unsigned byte</i>s (<i>no interleaving</i>) to
+ * <i>unsigned byte</i> type, as expected in an Anchor {@link VoxelBuffer}.
+ *
+ * @author Owen Feehan
+ */
 public class UnsignedByteFromUnsignedByteNoInterleaving extends ToUnsignedByte {
 
+    private Extent extent;
+
     @Override
-    protected UnsignedByteBuffer convert(ByteBuffer source, int channelIndexRelative) {
-        if (source.capacity() == sizeXY && channelIndexRelative == 0) {
+    protected void setupBefore(Dimensions dimensions, int numberChannelsPerArray) {
+        super.setupBefore(dimensions, numberChannelsPerArray);
+        this.extent = dimensions.extent();
+    }
+
+    @Override
+    protected UnsignedByteBuffer convert(
+            ByteBuffer source, int channelIndexRelative, OrientationChange orientationCorrection) {
+        if (source.capacity() == sizeXY
+                && channelIndexRelative == 0
+                && orientationCorrection == OrientationChange.KEEP_UNCHANGED) {
             // Reuse the existing buffer, if it's single channeled
             return UnsignedByteBuffer.wrapRaw(source);
         } else {
             UnsignedByteBuffer destination = allocateBuffer();
-            source.position(sizeBytes * channelIndexRelative);
-            source.limit(source.position() + sizeBytes);
-            destination.put(source);
+
+            if (orientationCorrection == OrientationChange.KEEP_UNCHANGED) {
+                copyKeepOrientation(source, channelIndexRelative, destination);
+            } else {
+                copyChangeOrientation(
+                        source, channelIndexRelative, destination, orientationCorrection);
+            }
             return destination;
         }
     }
@@ -48,5 +73,37 @@ public class UnsignedByteFromUnsignedByteNoInterleaving extends ToUnsignedByte {
     @Override
     protected int calculateBytesPerPixel(int numberChannelsPerArray) {
         return 1;
+    }
+
+    /**
+     * Copy the bytes, without changing orientation.
+     *
+     * <p>This is kept separate to {@link #copyChangeOrientation(ByteBuffer, int,
+     * UnsignedByteBuffer, OrientationChange)} as it can be done slightly more efficiently.
+     */
+    private void copyKeepOrientation(
+            ByteBuffer source, int channelIndexRelative, UnsignedByteBuffer destination) {
+        source.position(sizeBytes * channelIndexRelative);
+        source.limit(source.position() + sizeBytes);
+        destination.put(source);
+    }
+
+    /** Copy the bytes, changing orientation. */
+    private void copyChangeOrientation(
+            ByteBuffer source,
+            int channelIndexRelative,
+            UnsignedByteBuffer destination,
+            OrientationChange orientationCorrection) {
+        int sourceOffset = sizeBytes * channelIndexRelative;
+        for (int y = 0; y < extent.y(); y++) {
+            for (int x = 0; x < extent.x(); x++) {
+
+                byte value = source.get(sourceOffset);
+
+                int destinationOffset = orientationCorrection.index(sourceOffset, x, y, extent);
+                destination.putRaw(destinationOffset, value);
+                sourceOffset++;
+            }
+        }
     }
 }
