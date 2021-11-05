@@ -8,13 +8,13 @@ import java.util.Arrays;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.core.dimensions.OrientationChange;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.datatype.FloatVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedIntVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import org.anchoranalysis.image.voxel.extracter.OrientationChange;
 import org.anchoranalysis.io.bioformats.copyconvert.tobyte.UnsignedByteFromFloat;
 import org.anchoranalysis.io.bioformats.copyconvert.tobyte.UnsignedByteFromUnsignedByteInterleaving;
 import org.anchoranalysis.io.bioformats.copyconvert.tobyte.UnsignedByteFromUnsignedByteNoInterleaving;
@@ -191,8 +191,8 @@ class ConvertToTest {
                             outputDataType,
                             DIMENSIONS,
                             expectedOutputScaleRatio,
-                            OrientationChange.ROTATE_90_CLOCKWISE),
-                    OrientationChange.ROTATE_90_CLOCKWISE);
+                            OrientationChange.ROTATE_90_ANTICLOCKWISE),
+                    OrientationChange.ROTATE_90_ANTICLOCKWISE);
         }
     }
 

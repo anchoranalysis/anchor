@@ -43,19 +43,18 @@ import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.channel.factory.ChannelFactorySingleType;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
+import org.anchoranalysis.image.core.dimensions.OrientationChange;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.core.stack.TimeSequence;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import org.anchoranalysis.image.voxel.extracter.OrientationChange;
 import org.anchoranalysis.io.bioformats.DimensionsCreator;
 import org.anchoranalysis.io.bioformats.bean.options.ReadOptions;
 import org.anchoranalysis.io.bioformats.copyconvert.ConvertTo;
 import org.anchoranalysis.io.bioformats.copyconvert.ConvertToFactory;
 import org.anchoranalysis.io.bioformats.copyconvert.CopyConvert;
 import org.anchoranalysis.io.bioformats.copyconvert.ImageFileShape;
-import org.anchoranalysis.spatial.box.Extent;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -154,7 +153,7 @@ class BioformatsOpenedRaster implements OpenedImageFile {
     @Override
     public Dimensions dimensionsForSeries(int seriesIndex) throws ImageIOException {
         Dimensions dimensions = dimensionsForSeriesWithoutOrientationChange(seriesIndex);
-        return orientDimensions(dimensions, orientationCorrection);
+        return orientationCorrection.dimensions(dimensions);
     }
 
     private Dimensions dimensionsForSeriesWithoutOrientationChange(int seriesIndex)
@@ -163,17 +162,6 @@ class BioformatsOpenedRaster implements OpenedImageFile {
             return new DimensionsCreator(metadata).apply(reader, readOptions, seriesIndex);
         } catch (CreateException e) {
             throw new ImageIOException(e);
-        }
-    }
-
-    /** Creates a new {@link Dimensions}, if necessary, to reflect an orientation change. */
-    private static Dimensions orientDimensions(
-            Dimensions dimensions, OrientationChange orientation) {
-        if (orientation == OrientationChange.KEEP_UNCHANGED) {
-            return dimensions;
-        } else {
-            Extent extent = orientation.extent(dimensions.extent());
-            return new Dimensions(extent, dimensions.resolution());
         }
     }
 
@@ -215,7 +203,7 @@ class BioformatsOpenedRaster implements OpenedImageFile {
             Dimensions dimensions, TimeSequence timeSequence, ChannelFactorySingleType factory)
             throws IncorrectImageSizeException {
 
-        dimensions = orientDimensions(dimensions, orientationCorrection);
+        dimensions = orientationCorrection.dimensions(dimensions);
 
         /** A list of all channels i.e. aggregating the channels associated with each stack */
         List<Channel> listAllChannels = new ArrayList<>();

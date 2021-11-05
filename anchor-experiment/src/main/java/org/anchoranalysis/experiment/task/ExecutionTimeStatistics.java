@@ -60,7 +60,7 @@ public class ExecutionTimeStatistics implements ExecutionTimeRecorder {
     /**
      * Calculate the mean of each item and reset to zero.
      *
-     * @return an array with a mean corresponding to each item in the collection
+     * @return an array with a mean corresponding to each item in the collection.
      */
     public Map<String, Double> meanAndReset() {
         return map.meanAndReset();

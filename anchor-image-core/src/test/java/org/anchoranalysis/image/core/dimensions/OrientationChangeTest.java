@@ -1,8 +1,6 @@
-package org.anchoranalysis.image.io.channel.input;
+package org.anchoranalysis.image.core.dimensions;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import org.anchoranalysis.image.voxel.extracter.OrientationChange;
 import org.anchoranalysis.spatial.box.Extent;
 import org.anchoranalysis.spatial.point.Point2i;
 import org.junit.jupiter.api.Test;
@@ -12,7 +10,7 @@ import org.junit.jupiter.api.Test;
  *
  * @author Owen Feehan
  */
-class OrientationCorrectionTest {
+class OrientationChangeTest {
 
     private static final Extent EXTENT = new Extent(10, 12, 1);
 
@@ -35,7 +33,7 @@ class OrientationCorrectionTest {
     void rotate90Clockwise() {
         assertCorrectedIndex(
                 POINT,
-                OrientationChange.ROTATE_90_CLOCKWISE,
+                OrientationChange.ROTATE_90_ANTICLOCKWISE,
                 EXTENT_ROTATED_90.offset(POINT_ROTATED_90_CLOCKWISE));
     }
 
@@ -48,7 +46,7 @@ class OrientationCorrectionTest {
     void rotate270Clockwise() {
         assertCorrectedIndex(
                 POINT,
-                OrientationChange.ROTATE_270_CLOCKWISE,
+                OrientationChange.ROTATE_90_CLOCKWISE,
                 EXTENT_ROTATED_90.offset(POINT_ROTATED_270_CLOCKWISE));
     }
 

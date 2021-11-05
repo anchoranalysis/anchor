@@ -49,7 +49,7 @@ class DescribeExecutionTimes {
     /**
      * Describes all operations recorded in a {@link ExecutionTimeStatistics}.
      *
-     * @param operationStatistics the operations
+     * @param operationStatistics the operations.
      * @return a String describing the operations.
      */
     public static String allOperations(ExecutionTimeStatistics operationStatistics) {
@@ -73,10 +73,10 @@ class DescribeExecutionTimes {
     /**
      * Describes an individual execution time.
      *
-     * @param identifier the identifier describing the execution time
-     * @param averageExecutionTime the <b>average execution time</b> in seconds
-     * @param totalExecutionTime the <b>total execution time</b> in seconds
-     * @param count the number of entities the executionTime refers to
+     * @param identifier the identifier describing the execution time.
+     * @param averageExecutionTime the <b>average execution time</b> in seconds.
+     * @param totalExecutionTime the <b>total execution time</b> in seconds.
+     * @param count the number of entities the executionTime refers to.
      * @return a String describing the individual execution time, with a newline at the end.
      */
     public static String individual(

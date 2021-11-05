@@ -37,7 +37,7 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.core.progress.ProgressIncrement;
 import org.anchoranalysis.image.core.channel.Channel;
-import org.anchoranalysis.image.voxel.extracter.OrientationChange;
+import org.anchoranalysis.image.core.dimensions.OrientationChange;
 import org.anchoranalysis.io.bioformats.DestinationChannelForIndex;
 import org.anchoranalysis.io.bioformats.bean.options.ReadOptions;
 

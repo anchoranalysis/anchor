@@ -1,9 +1,9 @@
 package org.anchoranalysis.image.io.bean.stack.reader;
 
 import java.nio.file.Path;
+import org.anchoranalysis.image.core.dimensions.OrientationChange;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
-import org.anchoranalysis.image.voxel.extracter.OrientationChange;
 
 /**
  * A {@link StackReader} that supports the correction of orientation as images are read from the
