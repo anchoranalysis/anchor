@@ -103,7 +103,8 @@ public final class Resolution implements Serializable {
      * @param x the resolution for the X-dimension.
      * @param y the resolution for the Y-dimension.
      * @param z the resolution for the Z-dimension.
-     * @throws CreateException if a non-positive value is passed, or a NaN for the X or Y components.
+     * @throws CreateException if a non-positive value is passed, or a NaN for the X or Y
+     *     components.
      */
     public Resolution(double x, double y, double z) throws CreateException {
         this(new Point3d(x, y, z));
@@ -117,7 +118,8 @@ public final class Resolution implements Serializable {
      * <p>X and Y are not allowed have NaN but this is acceptable for the Z-value.
      *
      * @param tuple the resolution for X, Y and Z.
-     * @throws CreateException if a non-positive value is passed, or a NaN for the X or Y components.
+     * @throws CreateException if a non-positive value is passed, or a NaN for the X or Y
+     *     components.
      */
     public Resolution(Tuple3d tuple) throws CreateException {
         checkPositive(tuple.x(), "x");

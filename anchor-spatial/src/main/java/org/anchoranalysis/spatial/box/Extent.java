@@ -127,7 +127,7 @@ public final class Extent implements Serializable, Comparable<Extent> {
 
         if (size.x() == 0 || size.y() == 0 || size.z() == 0) {
             throw new AnchorFriendlyRuntimeException(
-                    "An extent must have at least one voxel in every dimension");
+                    "An extent must have at least one voxel in every dimension.");
         }
 
         if (size.x() < 0 || size.y() < 0 || size.z() < 0) {

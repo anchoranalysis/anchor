@@ -118,7 +118,7 @@ public enum ImageFileFormat implements FileFormat {
     }
 
     @Override
-    public boolean matchesEnd(String filePath) {
+    public boolean matches(String filePath) {
         if (FormatExtensions.matches(filePath, defaultExtension)) {
             return true;
         }

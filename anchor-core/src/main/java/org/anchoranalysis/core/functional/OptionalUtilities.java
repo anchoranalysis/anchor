@@ -26,7 +26,9 @@ package org.anchoranalysis.core.functional;
  * #L%
  */
 
+import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -250,7 +252,8 @@ public class OptionalUtilities {
      */
     @SafeVarargs
     public static <T> Optional<T> orFlat(Optional<T>... optional) {
-        return orFlat(optional);
+        List<Optional<T>> list = Arrays.asList(optional);
+        return orFlat(list);
     }
 
     /**
@@ -268,7 +271,8 @@ public class OptionalUtilities {
     @SafeVarargs
     public static <T, E extends Exception> Optional<T> orFlatSupplier(
             CheckedSupplier<Optional<T>, E>... optional) throws E {
-        return orFlatSupplier(optional);
+        List<CheckedSupplier<Optional<T>, E>> list = Arrays.asList(optional);
+        return orFlatSupplier(list);
     }
 
     /**

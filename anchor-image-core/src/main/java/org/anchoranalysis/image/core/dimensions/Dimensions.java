@@ -41,7 +41,7 @@ import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 /**
  * The size of an image (in voxels), together with the image resolution.
- * 
+ *
  * <p>The <i>image resolution</i> is the <i>physical size</i> of each voxel, if known.
  *
  * <p>This class is <b>immutable</b>.

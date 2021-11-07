@@ -44,7 +44,7 @@ public interface FileFormat {
      * @return true if the path ends with any of the expected extensions for this format.
      */
     default boolean matches(Path filePath) {
-        return matchesEnd(filePath.toString());
+        return matches(filePath.toString());
     }
 
     /**
@@ -57,7 +57,7 @@ public interface FileFormat {
      * @param filePath the path
      * @return true if the path ends with any of the expected extensions for this format.
      */
-    boolean matchesEnd(String filePath);
+    boolean matches(String filePath);
 
     /**
      * Does an identifier <b>equal</b> the extension expected by this format?

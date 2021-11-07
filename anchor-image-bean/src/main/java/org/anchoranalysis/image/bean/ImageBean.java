@@ -37,9 +37,8 @@ import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 
 /**
  * A bean that must be initialized with {@link ImageInitialization} before usage.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  * @param <T> bean-family type
  */
 public abstract class ImageBean<T> extends InitializableBean<T, ImageInitialization> {
