@@ -61,15 +61,15 @@ public class FindOutline {
 
     /**
      * Finds the outline of a mask, guessing whether to do this in 2D or 3D depending on if the mask
-     * has 3-dimensions
+     * has 3-dimensions.
      *
-     * @param mask the mask to find an outline for
+     * @param mask the mask to find an outline for.
      * @param numberErosions the number of erosions, effectively determining how thick the outline
-     *     is
-     * @param force2D if true, 2D will ALWAYS be used irrespective of the guessing
+     *     is.
+     * @param force2D if true, 2D will <i>always</i> be used irrespective of the guessing.
      * @param outlineAtBoundary if true, an edge is shown also for the boundary of the scene. if
      *     false, this is not shown.
-     * @return a newly-created mask showing only the outline
+     * @return a newly-created mask showing only the outline.
      */
     public static Mask outlineGuess3D(
             Mask mask, int numberErosions, boolean force2D, boolean outlineAtBoundary) {
@@ -78,17 +78,17 @@ public class FindOutline {
     }
 
     /**
-     * Creates an outline of depth 1 from a mask
+     * Creates an outline of depth {@code 1} pixel from a mask.
      *
-     * @param mask the mask
+     * @param mask the mask.
      * @param numberErosions the number of erosions, effectively determining how thick the outline
-     *     is
+     *     is.
      * @param do3D whether to also perform the outline in the third dimension. This is typically
      *     unwanted for 2 dimensional images, as every voxel inside the object is treated as on the
      *     boundary and a filled in object is produced.
      * @param outlineAtBoundary if true, an edge is shown also for the boundary of the scene. if
      *     false, this is not shown.
-     * @return
+     * @return a newly-created mask showing only the outline.
      */
     public static Mask outline(
             Mask mask, int numberErosions, boolean do3D, boolean outlineAtBoundary) {
@@ -191,9 +191,11 @@ public class FindOutline {
             boolean outlineAtBoundary,
             boolean do3D) {
 
+        KernelApplicationParameters params =
+                new KernelApplicationParameters(OutsideKernelPolicy.as(outlineAtBoundary), do3D);
+
         // Otherwise if > 1
-        BinaryVoxels<UnsignedByteBuffer> eroded =
-                multipleErode(voxels, numberErosions, outlineAtBoundary, do3D);
+        BinaryVoxels<UnsignedByteBuffer> eroded = multipleErode(voxels, numberErosions, params);
 
         // Binary and between the original version and the eroded version
         MaskXor.apply(voxels, eroded);
@@ -203,13 +205,9 @@ public class FindOutline {
     private static BinaryVoxels<UnsignedByteBuffer> multipleErode(
             BinaryVoxels<UnsignedByteBuffer> voxels,
             int numberErosions,
-            boolean erodeAtBoundary,
-            boolean do3D) {
+            KernelApplicationParameters params) {
 
         BinaryKernel kernelErosion = new ErosionKernel();
-
-        KernelApplicationParameters params =
-                new KernelApplicationParameters(OutsideKernelPolicy.as(erodeAtBoundary), do3D);
 
         BinaryVoxels<UnsignedByteBuffer> eroded = ApplyKernel.apply(kernelErosion, voxels, params);
         for (int i = 1; i < numberErosions; i++) {

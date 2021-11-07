@@ -26,7 +26,9 @@ package org.anchoranalysis.core.functional;
  * #L%
  */
 
+import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -50,10 +52,10 @@ public class OptionalUtilities {
      * immediately thrown.
      *
      * @param <S> optional-type
-     * @param <E> exception that may be thrown during mapping
-     * @param optional incoming optional
-     * @param consumerFunction the function that is called if an optional contains a vlaue
-     * @throws E an exception if {@code consumerFunction} throws it
+     * @param <E> exception that may be thrown during mapping.
+     * @param optional incoming optional.
+     * @param consumerFunction the function that is called if an optional contains a value.
+     * @throws E an exception if {@code consumerFunction} throws it.
      */
     public static <S, E extends Exception> void ifPresent(
             Optional<S> optional, CheckedConsumer<S, E> consumerFunction) throws E {
@@ -69,10 +71,10 @@ public class OptionalUtilities {
      * @param <S> incoming optional-type for map
      * @param <T> outgoing optional-type for map
      * @param <E> exception that may be thrown during mapping
-     * @param optional incoming optional
-     * @param mapFunction the function that does the mapping from incoming to outgoing
-     * @return the outgoing "mapped" optional
-     * @throws E an exception if the mapping function throws it
+     * @param optional incoming optional.
+     * @param mapFunction the function that does the mapping from incoming to outgoing.
+     * @return the outgoing "mapped" optional.
+     * @throws E an exception if the mapping function throws it.
      */
     public static <S, T, E extends Exception> Optional<T> map(
             Optional<S> optional, CheckedFunction<S, T, E> mapFunction) throws E {
@@ -90,10 +92,10 @@ public class OptionalUtilities {
      *
      * @param <T> optional-type
      * @param <E> exception that may be thrown during mapping
-     * @param optional incoming optional
-     * @param supplier supplies a value if the optional is empty
-     * @return the outgoing optional
-     * @throws E an exception if the supplier throws it
+     * @param optional incoming optional.
+     * @param supplier supplies a value if the optional is empty.
+     * @return the outgoing optional.
+     * @throws E an exception if the supplier throws it.
      */
     public static <T, E extends Exception> T orElseGet(
             Optional<T> optional, CheckedSupplier<T, E> supplier) throws E {
@@ -137,10 +139,10 @@ public class OptionalUtilities {
      * @param <S> incoming optional-type for map
      * @param <T> outgoing optional-type for map
      * @param <E> exception that may be thrown during mapping
-     * @param optional incoming optional
-     * @param mapFunction the function that does the mapping from incoming to outgoing
-     * @return the outgoing "mapped" optional
-     * @throws E an exception if the mapping function throws it
+     * @param optional incoming optional.
+     * @param mapFunction the function that does the mapping from incoming to outgoing.
+     * @return the outgoing "mapped" optional.
+     * @throws E an exception if the mapping function throws it.
      */
     public static <S, T, E extends Exception> Optional<T> flatMap(
             Optional<S> optional, CheckedFunction<S, Optional<T>, E> mapFunction) throws E {
@@ -152,17 +154,17 @@ public class OptionalUtilities {
     }
 
     /**
-     * Mapping only occurs if both Optionals are non-empty (equivalent to a logical AND on the
+     * Mapping only occurs if both {@link Optional}s are non-empty (equivalent to a logical <b>and</b> on the
      * optionals)
      *
      * @param <U> first incoming optional-type for map
      * @param <V> second incoming optional-type for map
      * @param <T> outgoing optional-type for map
      * @param <E> an exception that may be thrown by an {@code mapFunction}.
-     * @param optional1 first incoming optional
-     * @param optional2 second incoming optional
-     * @param mapFunction the function that does the mapping from both incoming objects to outgoing
-     * @return the outgoing "mapped" optional (empty() if either incoming optional is empty)
+     * @param optional1 first incoming optional.
+     * @param optional2 second incoming optional.
+     * @param mapFunction the function that does the mapping from both incoming objects to outgoing.
+     * @return the outgoing "mapped" optional (empty() if either incoming optional is empty).
      * @throws E if {@code mapFunction} throws it.
      */
     public static <T, U, V, E extends Exception> Optional<T> mapBoth(
@@ -225,7 +227,7 @@ public class OptionalUtilities {
      *     OR {@code optionals[2]} etc.
      * @return a new optional that is {@code optionals[0]} OR {@code optionals[1]} OR {@code
      *     optionals[2]} etc.
-     * @throws E if any {@code optional} throws it
+     * @throws E if any {@code optional} throws it.
      */
     public static <T, E extends Exception> Optional<T> orFlatSupplier(
             Iterable<CheckedSupplier<Optional<T>, E>> optionals) throws E {
@@ -250,7 +252,8 @@ public class OptionalUtilities {
      */
     @SafeVarargs
     public static <T> Optional<T> orFlat(Optional<T>... optional) {
-        return orFlat(optional);
+        List<Optional<T>> list = Arrays.asList(optional);
+        return orFlat(list);
     }
 
     /**
@@ -263,12 +266,13 @@ public class OptionalUtilities {
      *     operation.
      * @return a new optional that is {@code optionals[0]} OR {@code optionals[1]} OR {@code
      *     optionals[2]} etc.
-     * @throws E if any {@code optional} throws it
+     * @throws E if any {@code optional} throws it.
      */
     @SafeVarargs
     public static <T, E extends Exception> Optional<T> orFlatSupplier(
             CheckedSupplier<Optional<T>, E>... optional) throws E {
-        return orFlatSupplier(optional);
+        List<CheckedSupplier<Optional<T>, E>> list = Arrays.asList(optional);
+        return orFlatSupplier(list);
     }
 
     /**
@@ -288,10 +292,10 @@ public class OptionalUtilities {
     /**
      * Creates an {@link Optional} from a boolean flag.
      *
-     * @param <T> type in Optional
-     * @param flag iff true an populated optional is returned, otherwise empty().
-     * @param valueIfFlagTrue a positive value to use if fla gis true
-     * @return a filled or empty optional depending on flag
+     * @param <T> type in the optional
+     * @param flag iff true an populated optional is returned, otherwise {@link Optional#empty()}.
+     * @param valueIfFlagTrue a positive value to use if flag is true.
+     * @return a filled or empty optional depending on flag.
      */
     public static <T> Optional<T> createFromFlag(boolean flag, T valueIfFlagTrue) {
         if (flag) {
@@ -341,7 +345,7 @@ public class OptionalUtilities {
      * Optional}.
      *
      * @param <T> type in optional.
-     * @param flag iff true an populated optional is returned, otherwise empty().
+     * @param flag iff true an populated optional is returned, otherwise {@link Optional#empty()}.
      * @param valueIfFlagTrue used to generate a positive value.
      * @return a filled or empty optional depending on flag.
      */

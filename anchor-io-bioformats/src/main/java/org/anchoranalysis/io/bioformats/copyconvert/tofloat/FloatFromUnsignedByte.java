@@ -28,8 +28,8 @@ package org.anchoranalysis.io.bioformats.copyconvert.tofloat;
 
 import java.nio.ByteBuffer;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.core.dimensions.OrientationChange;
 import org.anchoranalysis.image.voxel.buffer.primitive.PrimitiveConverter;
-import org.anchoranalysis.image.voxel.extracter.OrientationChange;
 import org.anchoranalysis.spatial.box.Extent;
 
 public class FloatFromUnsignedByte extends ToFloat {

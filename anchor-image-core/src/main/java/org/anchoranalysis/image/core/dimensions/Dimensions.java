@@ -40,7 +40,9 @@ import org.anchoranalysis.spatial.point.ReadableTuple3i;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 /**
- * The dimensions of an image (in voxels), together with the image resolution.
+ * The size of an image (in voxels), together with the image resolution.
+ *
+ * <p>The <i>image resolution</i> is the <i>physical size</i> of each voxel, if known.
  *
  * <p>This class is <b>immutable</b>.
  */
@@ -124,10 +126,22 @@ public final class Dimensions {
         return extent.offset(x, y);
     }
 
+    /**
+     * Is a point of type {@link Point3d} contained within the extent?
+     *
+     * @param point the point to check.
+     * @return true iff the point exists within the extent, considering all axes.
+     */
     public boolean contains(Point3d point) {
         return extent.contains(point);
     }
 
+    /**
+     * Is a point of type {@link ReadableTuple3i} contained within the {@link Extent}?
+     *
+     * @param point the point to check.
+     * @return true iff the point exists within the {@link Extent}, considering all axes.
+     */
     public boolean contains(Point3i point) {
         return extent.contains(point);
     }

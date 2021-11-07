@@ -127,7 +127,7 @@ public final class Extent implements Serializable, Comparable<Extent> {
 
         if (size.x() == 0 || size.y() == 0 || size.z() == 0) {
             throw new AnchorFriendlyRuntimeException(
-                    "An extent must have at least one voxel in every dimension");
+                    "An extent must have at least one voxel in every dimension.");
         }
 
         if (size.x() < 0 || size.y() < 0 || size.z() < 0) {
@@ -412,7 +412,7 @@ public final class Extent implements Serializable, Comparable<Extent> {
      * Is a point of type {@link Point3d} contained within the extent?
      *
      * @param point the point to check.
-     * @return true iff the point exists within the extent, considering all dimensions.
+     * @return true iff the point exists within the extent, considering all axes.
      */
     public boolean contains(Point3d point) {
         return containsX(point.x()) && containsY(point.y()) && containsZ(point.z());
@@ -422,7 +422,7 @@ public final class Extent implements Serializable, Comparable<Extent> {
      * Is a point of type {@link ReadableTuple3i} contained within the extent?
      *
      * @param point the point to check.
-     * @return true iff the point exists within the extent, considering all dimensions.
+     * @return true iff the point exists within the extent, considering all axes.
      */
     public boolean contains(ReadableTuple3i point) {
         return containsX(point.x()) && containsY(point.y()) && containsZ(point.z());
@@ -434,7 +434,7 @@ public final class Extent implements Serializable, Comparable<Extent> {
      * @param x the value of the point on the x-axis.
      * @param y the value of the point on the y-axis.
      * @param z the value of the point on the z-axis.
-     * @return true iff the point exists within the extent, considering all dimensions.
+     * @return true iff the point exists within the extent, considering all axes.
      */
     public boolean contains(int x, int y, int z) {
 

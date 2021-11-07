@@ -64,7 +64,7 @@ public enum NonImageFileFormat implements FileFormat {
     }
 
     @Override
-    public boolean matchesEnd(String filePath) {
+    public boolean matches(String filePath) {
         return FormatExtensions.matches(filePath, extension);
     }
 

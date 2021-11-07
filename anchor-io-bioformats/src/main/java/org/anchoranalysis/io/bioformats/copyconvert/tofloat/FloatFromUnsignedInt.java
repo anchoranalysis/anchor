@@ -34,7 +34,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
-import org.anchoranalysis.image.voxel.extracter.OrientationChange;
+import org.anchoranalysis.image.core.dimensions.OrientationChange;
 import org.anchoranalysis.spatial.box.Extent;
 
 @RequiredArgsConstructor
