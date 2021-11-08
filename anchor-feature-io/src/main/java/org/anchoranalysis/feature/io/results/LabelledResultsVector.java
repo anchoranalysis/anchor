@@ -30,7 +30,7 @@ public class LabelledResultsVector {
     public LabelledResultsVector(ResultsVector results) {
         this(Optional.empty(), results);
     }
-    
+
     /**
      * Creates with no additional labels other than a group.
      *
@@ -40,12 +40,13 @@ public class LabelledResultsVector {
     public LabelledResultsVector(Optional<MultiName> group, ResultsVector results) {
         this(new RowLabels(Optional.empty(), group), results);
     }
-    
+
     /**
      * The result of a feature-calculation stored at a particular {@code index}.
-     * 
+     *
      * @param index the index (zero-indexed). It should be {@code >= 0} and {@code < size()}.
-     * @return the value corresponding to the feature-calculation or {@link Double#NaN} if an exception occurred during calculation.
+     * @return the value corresponding to the feature-calculation or {@link Double#NaN} if an
+     *     exception occurred during calculation.
      */
     public double get(int index) {
         return results.get(index);
@@ -53,7 +54,7 @@ public class LabelledResultsVector {
 
     /**
      * The number of calculations stored in the vector.
-     * 
+     *
      * @return the total number of calculations in the vector.
      */
     public int size() {

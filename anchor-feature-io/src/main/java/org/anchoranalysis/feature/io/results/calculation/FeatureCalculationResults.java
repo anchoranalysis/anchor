@@ -34,7 +34,7 @@ public interface FeatureCalculationResults {
      * @param featuresAggregate aggregate-features.
      * @param includeGroups iff true a group-column is included in the CSV file and the group
      *     exports occur, otherwise not.
-     * @param csvWriterCreator creates a CSV writer for a particular IO-context.     
+     * @param csvWriterCreator creates a CSV writer for a particular IO-context.
      * @param context input-output context.
      * @throws OutputWriteFailedException if writing fails.
      */

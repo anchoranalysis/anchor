@@ -68,7 +68,8 @@ abstract class WriteWithGroups implements FeatureCalculationResults {
             Optional<NamedFeatureStore<FeatureInputResults>> featuresAggregate,
             boolean includeGroups,
             Function<InputOutputContext, FeatureCSVWriterCreator> csvWriterCreator,
-            InputOutputContext context) throws OutputWriteFailedException {
+            InputOutputContext context)
+            throws OutputWriteFailedException {
 
         InputOutputContextSubdirectoryCache contextGroups =
                 new InputOutputContextSubdirectoryCache(
@@ -81,15 +82,14 @@ abstract class WriteWithGroups implements FeatureCalculationResults {
                 includeGroups,
                 outputMetadataForGroups(),
                 metadata -> csvWriterCreator.apply(context).create(metadata),
-                contextGroups
-        );
+                contextGroups);
 
         singleWriter.ifPresent(FeatureCSVWriter::close);
     }
-    
+
     /**
      * Metadata needed for determining output-names and CSV headers.
-     *  
+     *
      * @return the needed metadata.
      */
     protected abstract FeatureOutputMetadata outputMetadataForGroups();

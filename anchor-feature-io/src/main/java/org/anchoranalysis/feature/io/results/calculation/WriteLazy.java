@@ -24,12 +24,13 @@ abstract class WriteLazy extends WriteWithGroups {
 
     private FeatureOutputMetadata outputMetadata;
     private FeatureCSVWriterCreator writerCreator;
-    
+
     /**
      * Creates with appropriate support classes for outputting.
      *
      * @param outputMetadata metadata needed for determining output-names and CSV headers.
-     * @param writerCreator creates a {@link FeatureCSVWriter} for writing the non-aggregated feature results.
+     * @param writerCreator creates a {@link FeatureCSVWriter} for writing the non-aggregated
+     *     feature results.
      * @throws OutputWriteFailedException if a CSV for (non-aggregated) features fails to be
      *     created.
      */
@@ -59,7 +60,7 @@ abstract class WriteLazy extends WriteWithGroups {
 
         // Where non-group results are outputted
         singleWriter = writerCreator.create(outputMetadata.metadataNonAggregated());
-        
+
         for (LabelledResultsVector results : storedResults) {
             groupedResults.addResultsFor(results);
 
@@ -72,19 +73,19 @@ abstract class WriteLazy extends WriteWithGroups {
 
         super.flushAndClose(featuresAggregate, includeGroups, csvWriterCreator, context);
     }
-    
+
     @Override
     protected FeatureOutputMetadata outputMetadataForGroups() {
         return outputMetadata;
-    }    
-    
-    
+    }
+
     /**
      * Optionally changes {#code results} and derives a changed {@link FeatureCSVMetadata}.
-     * 
+     *
      * @param metadata the metadata for non-aggregated features, before any changes.
      * @param results the results of non-aggregated features, which may be changed inplace.
      * @return the metadata for non-aggregated features, after any changes.
      */
-    protected abstract FeatureOutputMetadata processBeforeWriting(FeatureOutputMetadata metadata, List<LabelledResultsVector> results);
+    protected abstract FeatureOutputMetadata processBeforeWriting(
+            FeatureOutputMetadata metadata, List<LabelledResultsVector> results);
 }

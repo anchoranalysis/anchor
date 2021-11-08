@@ -7,19 +7,19 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /**
  * To facilitate delayed creation of a {@link FeatureCSVWriter}.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 @FunctionalInterface
 public interface FeatureCSVWriterCreator {
 
     /**
      * Maybe creates a {@link FeatureCSVWriter} corresponding to particular metadata.
-     * 
+     *
      * @param metadata the metadata.
      * @return the writer, if created.
      * @throws OutputWriteFailedException if the operation cannot be successfully created.
      */
-    Optional<FeatureCSVWriter> create(FeatureCSVMetadata metadata) throws OutputWriteFailedException;
+    Optional<FeatureCSVWriter> create(FeatureCSVMetadata metadata)
+            throws OutputWriteFailedException;
 }

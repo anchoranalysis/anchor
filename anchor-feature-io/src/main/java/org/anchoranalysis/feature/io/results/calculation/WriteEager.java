@@ -13,12 +13,13 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 class WriteEager extends WriteWithGroups {
 
     private final FeatureOutputMetadata outputMetadata;
-    
+
     /**
      * Creates with appropriate support classes for outputting.
      *
      * @param outputMetadata metadata needed for determining output-names and CSV headers.
-     * @param writerCreator creates a {@link FeatureCSVWriter} for writing the non-aggregated feature results.
+     * @param writerCreator creates a {@link FeatureCSVWriter} for writing the non-aggregated
+     *     feature results.
      * @throws OutputWriteFailedException if a CSV for (non-aggregated) features fails to be
      *     created.
      */

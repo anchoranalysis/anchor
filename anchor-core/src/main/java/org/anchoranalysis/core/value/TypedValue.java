@@ -45,7 +45,7 @@ public class TypedValue {
 
     /** The value. */
     private final String value;
-    
+
     /** Whether the value is numeric or not. */
     private final boolean isNumeric;
 
@@ -76,7 +76,7 @@ public class TypedValue {
     public TypedValue(double value, int numberDecimalPlaces) {
         this(decimalValueOrNaN(value, numberDecimalPlaces), true);
     }
-    
+
     /**
      * Creates for an {@code double} value.
      *
@@ -85,7 +85,7 @@ public class TypedValue {
     public TypedValue(double value) {
         this(decimalValueOrNaNVisuallyShortened(value), true);
     }
-    
+
     private static String decimalValueOrNaN(double value, int numberDecimalPlaces) {
         if (Double.isNaN(value)) {
             return "NaN";
@@ -93,7 +93,7 @@ public class TypedValue {
             return createDecimalFormat(numberDecimalPlaces).format(value);
         }
     }
-    
+
     private static String decimalValueOrNaNVisuallyShortened(double value) {
         if (Double.isNaN(value)) {
             return "NaN";
@@ -105,11 +105,11 @@ public class TypedValue {
             }
         }
     }
-    
+
     /** Is a double-value an integer? */
     private static boolean isDoubleInteger(double value) {
         int valInt = (int) value;
-        return value==valInt;
+        return value == valInt;
     }
 
     private static DecimalFormat createDecimalFormat(int numberDecimalPlaces) {

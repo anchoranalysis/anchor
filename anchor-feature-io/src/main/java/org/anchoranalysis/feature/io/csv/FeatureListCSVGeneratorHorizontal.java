@@ -41,7 +41,7 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
  * @author Owen Feehan
  */
 public class FeatureListCSVGeneratorHorizontal extends FeatureTableCSVGenerator<ResultsVectorList> {
-    
+
     /**
      * Creates without setting any <i>results</i> (i.e. row-data).
      *

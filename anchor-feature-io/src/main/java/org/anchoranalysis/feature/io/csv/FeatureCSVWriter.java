@@ -43,36 +43,42 @@ import org.anchoranalysis.io.output.outputter.Outputter;
  */
 public class FeatureCSVWriter {
 
-    /** The number of decimal places to use for {@code double} values, unless {@code visuallyShortened==true}. */
+    /**
+     * The number of decimal places to use for {@code double} values, unless {@code
+     * visuallyShortened==true}.
+     */
     public static final int NUMBER_DECIMAL_PLACES = 10;
-    
+
     /** Underlying CSV writer, which if null, it means the writer is disabled */
     private final CSVWriter writer;
-    
+
     private final int numberDecimalPlaces;
-    
+
     /**
      * Creates for a {@link CSVWriter}.
-     * 
+     *
      * @param writer underlying CSV writer, which if null, it means the writer is disabled.
-     * @param visuallyShortenedDecimals when true {@code double} values are printed to be as short as possible without losing precision, otherwse with {@link #NUMBER_DECIMAL_PLACES}. 
+     * @param visuallyShortenedDecimals when true {@code double} values are printed to be as short
+     *     as possible without losing precision, otherwse with {@link #NUMBER_DECIMAL_PLACES}.
      */
     public FeatureCSVWriter(CSVWriter writer, boolean visuallyShortenedDecimals) {
         this.writer = writer;
         this.numberDecimalPlaces = visuallyShortenedDecimals ? -1 : NUMBER_DECIMAL_PLACES;
     }
-    
+
     /**
      * Maybe creates a {@link FeatureCSVWriter} depending if the output is allowed.
      *
      * @param metadata metadata needed for writing the feature-results.
      * @param outputter determines if the output is allowed.
-     * @param visuallyShortenedDecimals when true {@code double} values are printed to be as short as possible without losing precision.
+     * @param visuallyShortenedDecimals when true {@code double} values are printed to be as short
+     *     as possible without losing precision.
      * @return a write, if it is allowed.
      * @throws OutputWriteFailedException if outputting fails
      */
     public static Optional<FeatureCSVWriter> create(
-            FeatureCSVMetadata metadata, Outputter outputter, boolean visuallyShortenedDecimals) throws OutputWriteFailedException {
+            FeatureCSVMetadata metadata, Outputter outputter, boolean visuallyShortenedDecimals)
+            throws OutputWriteFailedException {
 
         if (!outputter.outputsEnabled().isOutputEnabled(metadata.getOutputName())) {
             return Optional.of(new FeatureCSVWriter(null, visuallyShortenedDecimals));
@@ -133,8 +139,7 @@ public class FeatureCSVWriter {
      * @param resultsFromFeatures results to include in row
      * @return a list of typed-values as forms a row in a CSV file.
      */
-    private List<TypedValue> buildCSVRow(
-            RowLabels identifier, ResultsVector resultsFromFeatures) {
+    private List<TypedValue> buildCSVRow(RowLabels identifier, ResultsVector resultsFromFeatures) {
 
         List<TypedValue> csvRow = new ArrayList<>();
         identifier.addToRow(csvRow);

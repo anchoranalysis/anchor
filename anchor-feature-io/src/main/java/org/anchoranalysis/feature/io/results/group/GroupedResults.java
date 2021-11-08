@@ -73,7 +73,8 @@ public class GroupedResults {
      *
      * @param featuresAggregate features for aggregating existing results-calculations, if enabled.
      * @param includeGroups whether to output "groups".
-     * @param outputMetadata additional information needed for the outputs in {@link FeatureCalculationResults}.
+     * @param outputMetadata additional information needed for the outputs in {@link
+     *     FeatureCalculationResults}.
      * @param createAggregatedCSVWriter creating a CSVWriter for the aggregated outputs.
      * @param contextGroups input-output context for the group outputs.
      * @throws OutputWriteFailedException if any Writing fails.
@@ -90,11 +91,17 @@ public class GroupedResults {
         }
 
         if (featuresAggregate.isPresent()) {
-            writeAggregated(featuresAggregate.get(), outputMetadata, createAggregatedCSVWriter, contextGroups);
+            writeAggregated(
+                    featuresAggregate.get(),
+                    outputMetadata,
+                    createAggregatedCSVWriter,
+                    contextGroups);
         }
     }
 
-    private void writeGroupXMLAndIntoCSV(FeatureOutputMetadata outputMetadata, InputOutputContextSubdirectoryCache contextGroups) {
+    private void writeGroupXMLAndIntoCSV(
+            FeatureOutputMetadata outputMetadata,
+            InputOutputContextSubdirectoryCache contextGroups) {
         outputMetadata
                 .outputNames()
                 .getCsvFeaturesGroup()
