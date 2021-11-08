@@ -154,8 +154,8 @@ public class OptionalUtilities {
     }
 
     /**
-     * Mapping only occurs if both {@link Optional}s are non-empty (equivalent to a logical <b>and</b> on the
-     * optionals)
+     * Mapping only occurs if both {@link Optional}s are non-empty (equivalent to a logical
+     * <b>and</b> on the optionals)
      *
      * @param <U> first incoming optional-type for map
      * @param <V> second incoming optional-type for map

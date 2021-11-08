@@ -26,20 +26,21 @@
 package org.anchoranalysis.feature.io.results.group;
 
 import java.util.Optional;
-import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.feature.input.FeatureInputResults;
 import org.anchoranalysis.feature.io.csv.FeatureCSVMetadata;
 import org.anchoranalysis.feature.io.csv.FeatureCSVWriter;
-import org.anchoranalysis.feature.io.csv.RowLabels;
-import org.anchoranalysis.feature.io.results.ResultsWriterMetadata;
-import org.anchoranalysis.feature.results.ResultsVector;
+import org.anchoranalysis.feature.io.results.FeatureOutputMetadata;
+import org.anchoranalysis.feature.io.results.LabelledResultsVector;
+import org.anchoranalysis.feature.io.results.calculation.FeatureCSVWriterCreator;
+import org.anchoranalysis.feature.io.results.calculation.FeatureCalculationResults;
 import org.anchoranalysis.feature.store.NamedFeatureStore;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
-import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.InputOutputContextSubdirectoryCache;
 
 /**
- * Writes outputs pertaining to groups to the filesystem.
+ * Stores feature-calculation results, indexing by their group.
+ *
+ * <p>Outputs various files pertaining to the grouped-features to the filesystem.
  *
  * <p>Two categories of outputs occur:
  *
@@ -50,12 +51,7 @@ import org.anchoranalysis.io.output.outputter.InputOutputContextSubdirectoryCach
  *
  * @author Owen Feehan
  */
-@RequiredArgsConstructor
-public class GroupWriter {
-
-    // START REQUIRED ARGUMENTS
-    private final ResultsWriterMetadata outputMetadata;
-    // END REQUIRED ARGUMENTS
+public class GroupedResults {
 
     /**
      * A map which stores an aggregate structure for all entries (based on their unique names) and
@@ -66,38 +62,39 @@ public class GroupWriter {
     /**
      * Adds a result to the group-writer, but doesn't write yet.
      *
-     * @param labels labels for the result
-     * @param results the results
+     * @param results the results.
      */
-    public void addResultsFor(RowLabels labels, ResultsVector results) {
-        map.addResultsFor(labels, results);
+    public void addResultsFor(LabelledResultsVector results) {
+        map.addResultsFor(results);
     }
 
     /**
      * Writes outputs for groups that have been previously added with {@link #addResultsFor}.
      *
-     * @param featuresAggregate features for aggregating existing results-calculations, if enabled
-     * @param includeGroups whether to output "groups"
-     * @param contextAggregated input-output context for the aggregage outputs
-     * @param contextGroups input-output context for the group outputs
-     * @throws OutputWriteFailedException if any Writing fails
+     * @param featuresAggregate features for aggregating existing results-calculations, if enabled.
+     * @param includeGroups whether to output "groups".
+     * @param outputMetadata additional information needed for the outputs in {@link FeatureCalculationResults}.
+     * @param createAggregatedCSVWriter creating a CSVWriter for the aggregated outputs.
+     * @param contextGroups input-output context for the group outputs.
+     * @throws OutputWriteFailedException if any Writing fails.
      */
     public void writeGroupResults(
             Optional<NamedFeatureStore<FeatureInputResults>> featuresAggregate,
             boolean includeGroups,
-            InputOutputContext contextAggregated,
+            FeatureOutputMetadata outputMetadata,
+            FeatureCSVWriterCreator createAggregatedCSVWriter,
             InputOutputContextSubdirectoryCache contextGroups)
             throws OutputWriteFailedException {
         if (includeGroups) {
-            writeGroupXMLAndIntoCSV(contextGroups);
+            writeGroupXMLAndIntoCSV(outputMetadata, contextGroups);
         }
 
         if (featuresAggregate.isPresent()) {
-            writeAggregated(featuresAggregate.get(), contextAggregated, contextGroups);
+            writeAggregated(featuresAggregate.get(), outputMetadata, createAggregatedCSVWriter, contextGroups);
         }
     }
 
-    private void writeGroupXMLAndIntoCSV(InputOutputContextSubdirectoryCache contextGroups) {
+    private void writeGroupXMLAndIntoCSV(FeatureOutputMetadata outputMetadata, InputOutputContextSubdirectoryCache contextGroups) {
         outputMetadata
                 .outputNames()
                 .getCsvFeaturesGroup()
@@ -114,7 +111,8 @@ public class GroupWriter {
 
     private void writeAggregated(
             NamedFeatureStore<FeatureInputResults> featuresAggregate,
-            InputOutputContext contextAggregated,
+            FeatureOutputMetadata outputMetadata,
+            FeatureCSVWriterCreator aggregatedCSVWriterCreator,
             InputOutputContextSubdirectoryCache contextGroups)
             throws OutputWriteFailedException {
 
@@ -131,8 +129,7 @@ public class GroupWriter {
             return;
         }
 
-        Optional<FeatureCSVWriter> csvWriter =
-                FeatureCSVWriter.create(csvMetadata.get(), contextAggregated.getOutputter());
+        Optional<FeatureCSVWriter> csvWriter = aggregatedCSVWriterCreator.create(csvMetadata.get());
 
         try {
             map.iterateResults(

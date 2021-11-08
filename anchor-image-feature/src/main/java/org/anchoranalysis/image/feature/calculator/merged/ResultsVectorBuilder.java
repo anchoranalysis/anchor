@@ -81,7 +81,7 @@ class ResultsVectorBuilder {
                         ? calculator.calculateSuppressErrors(input, errorReporter.get())
                         : calculator.calculate(input);
         out.set(count, rvImage);
-        count += rvImage.length();
+        count += rvImage.size();
     }
 
     public ResultsVector getResultsVector() {

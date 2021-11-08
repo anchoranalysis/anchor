@@ -32,7 +32,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.functional.FunctionalIterate;
 import org.anchoranalysis.feature.bean.Feature;
@@ -43,31 +42,30 @@ import org.anchoranalysis.feature.bean.list.FeatureList;
  *
  * @author Owen Feehan
  */
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor
 public class FeatureNameList implements Iterable<String> {
 
-    private List<String> delegate;
+    private List<String> list;
 
     public FeatureNameList() {
-        delegate = new ArrayList<>();
+        list = new ArrayList<>();
     }
 
     public FeatureNameList(Stream<String> stream) {
-        delegate = stream.collect(Collectors.toList());
+        list = stream.collect(Collectors.toList());
     }
 
     public FeatureNameList(String firstValue) {
         this();
-        delegate.add(firstValue);
+        list.add(firstValue);
     }
 
-    // We wrap an existing list
     public FeatureNameList(Set<String> set) {
-        delegate = new ArrayList<>(set);
+        list = new ArrayList<>(set);
     }
 
     public List<String> asList() {
-        return delegate;
+        return list;
     }
 
     /**
@@ -77,24 +75,24 @@ public class FeatureNameList implements Iterable<String> {
      */
     public FeatureNameMapToIndex createMapToIndex() {
         FeatureNameMapToIndex out = new FeatureNameMapToIndex();
-        for (int i = 0; i < delegate.size(); i++) {
-            out.add(delegate.get(i), i);
+        for (int i = 0; i < list.size(); i++) {
+            out.add(list.get(i), i);
         }
         return out;
     }
 
     public FeatureNameList shallowCopy() {
-        return new FeatureNameList(delegate.stream());
+        return new FeatureNameList(list.stream());
     }
 
     public FeatureNameList createUniqueNamesSorted() {
-        return new FeatureNameList(delegate.stream().distinct().sorted());
+        return new FeatureNameList(list.stream().distinct().sorted());
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        for (String s : delegate) {
+        for (String s : list) {
             sb.append(s);
             sb.append(System.lineSeparator());
         }
@@ -107,28 +105,28 @@ public class FeatureNameList implements Iterable<String> {
      * @param name
      */
     public void add(String name) {
-        delegate.add(name);
+        list.add(name);
     }
 
     /**
-     * Add the customNames of a feature
+     * Add the custom-names of {@link Feature}s.
      *
-     * @param list
+     * @param features the features to add custom-names from.
      */
-    public void addCustomNames(FeatureList<?> list) {
-        for (Feature<?> f : list) {
-            delegate.add(f.getCustomName());
+    public void addCustomNames(FeatureList<?> features) {
+        for (Feature<?> feature : features) {
+            list.add(feature.getCustomName());
         }
     }
 
     /**
      * Add the customNames of a feature with a Prefix
      *
-     * @param list
+     * @param toAdd
      */
-    public void addCustomNamesWithPrefix(String prefix, FeatureList<?> list) {
-        for (Feature<?> f : list) {
-            delegate.add(prefix + f.getCustomName());
+    public void addCustomNamesWithPrefix(String prefix, FeatureList<?> toAdd) {
+        for (Feature<?> feature : toAdd) {
+            list.add(prefix + feature.getCustomName());
         }
     }
 
@@ -138,7 +136,7 @@ public class FeatureNameList implements Iterable<String> {
      * @param name feature-name
      */
     public void insertBeginning(String name) {
-        delegate.add(0, name);
+        list.add(0, name);
     }
 
     /**
@@ -152,14 +150,14 @@ public class FeatureNameList implements Iterable<String> {
 
     @Override
     public Iterator<String> iterator() {
-        return delegate.iterator();
+        return list.iterator();
     }
 
     public String get(int index) {
-        return delegate.get(index);
+        return list.get(index);
     }
 
     public int size() {
-        return delegate.size();
+        return list.size();
     }
 }

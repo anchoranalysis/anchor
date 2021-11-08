@@ -41,7 +41,7 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
  * @author Owen Feehan
  */
 public class FeatureListCSVGeneratorHorizontal extends FeatureTableCSVGenerator<ResultsVectorList> {
-
+    
     /**
      * Creates without setting any <i>results</i> (i.e. row-data).
      *
@@ -67,7 +67,7 @@ public class FeatureListCSVGeneratorHorizontal extends FeatureTableCSVGenerator<
         for (ResultsVector results : allFeatureResults) {
 
             List<TypedValue> csvRow = new ArrayList<>();
-            results.addToTypeValueCollection(csvRow, 10);
+            results.addTypedValuesTo(csvRow, FeatureCSVWriter.NUMBER_DECIMAL_PLACES);
             writer.writeRow(csvRow);
         }
     }

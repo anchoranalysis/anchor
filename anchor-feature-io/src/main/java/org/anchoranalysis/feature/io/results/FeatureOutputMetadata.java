@@ -31,11 +31,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 import org.anchoranalysis.feature.input.FeatureInputResults;
 import org.anchoranalysis.feature.io.csv.FeatureCSVMetadata;
+import org.anchoranalysis.feature.io.results.calculation.FeatureCalculationResults;
 import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.feature.store.NamedFeatureStore;
 
 /**
- * Additional information needed for the outputs in {@link ResultsWriter}.
+ * Additional information needed for the outputs in {@link FeatureCalculationResults}.
  *
  * <p>i.e. headers, the output-name etc.
  *
@@ -43,16 +44,16 @@ import org.anchoranalysis.feature.store.NamedFeatureStore;
  */
 @RequiredArgsConstructor
 @Accessors(fluent = true)
-public class ResultsWriterMetadata {
+public class FeatureOutputMetadata {
 
     /** Headers for the CSV File */
-    private final LabelHeaders labelHeaders;
+    @Getter private final LabelHeaders labelHeaders;
 
     /** Names of each feature in the feature columns. */
     @Getter private final FeatureNameList featureNamesNonAggregate;
 
-    /** Names for any outputs produced by {@link ResultsWriter}. */
-    @Getter private final ResultsWriterOutputNames outputNames;
+    /** Names for any outputs produced by {@link FeatureCalculationResults}. */
+    @Getter private final FeatureOutputNames outputNames;
 
     /**
      * Derives metadata for the non-aggregated CSV output.
