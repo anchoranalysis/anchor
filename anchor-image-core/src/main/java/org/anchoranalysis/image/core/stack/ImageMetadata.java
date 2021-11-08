@@ -40,4 +40,7 @@ public class ImageMetadata {
 
     /** The number of bits in memory to describe each voxel's intensity. */
     @Getter private int bitDepth;
+    
+    /** Timestamps associated with the image. */
+    @Getter private ImageFileTimestamps timestamps;
 }

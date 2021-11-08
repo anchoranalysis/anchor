@@ -37,13 +37,16 @@ import loci.formats.IFormatReader;
 import loci.formats.meta.IMetadata;
 import lombok.Getter;
 import lombok.experimental.Accessors;
+import org.anchoranalysis.core.cache.CachedSupplier;
 import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.functional.checked.CheckedSupplier;
 import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.channel.factory.ChannelFactorySingleType;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
 import org.anchoranalysis.image.core.dimensions.OrientationChange;
+import org.anchoranalysis.image.core.stack.ImageFileTimestamps;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.core.stack.TimeSequence;
 import org.anchoranalysis.image.io.ImageIOException;
@@ -77,6 +80,7 @@ class BioformatsOpenedRaster implements OpenedImageFile {
     private final boolean rgb;
     private final int bitsPerPixel;
     private final OrientationChange orientationCorrection;
+    private final CheckedSupplier<ImageFileTimestamps, IOException> timestamps;
 
     /** The number of channels in the image. */
     @Getter private final int numberChannels;
@@ -97,11 +101,12 @@ class BioformatsOpenedRaster implements OpenedImageFile {
             IFormatReader reader,
             IMetadata metadata,
             ReadOptions readOptions,
-            OrientationChange orientationCorrection) {
+            OrientationChange orientationCorrection, CheckedSupplier<ImageFileTimestamps, IOException> timestamps) {
         this.reader = reader;
         this.metadata = metadata;
         this.readOptions = readOptions;
         this.orientationCorrection = orientationCorrection;
+        this.timestamps = CachedSupplier.cache(timestamps);
 
         sizeT = readOptions.sizeT(reader);
         rgb = readOptions.isRGB(reader);
@@ -244,5 +249,14 @@ class BioformatsOpenedRaster implements OpenedImageFile {
                 convertTo,
                 readOptions,
                 orientationCorrection);
+    }
+
+    @Override
+    public ImageFileTimestamps timestamps() throws ImageIOException {
+        try {
+            return timestamps.get();
+        } catch (IOException e) {
+            throw new ImageIOException(e);
+        }
     }
 }

@@ -45,6 +45,7 @@ import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.core.dimensions.OrientationChange;
+import org.anchoranalysis.image.core.stack.ImageFileTimestamps;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.reader.StackReaderOrientationCorrection;
 import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
@@ -95,7 +96,7 @@ public class BioformatsReader extends StackReaderOrientationCorrection {
             reader.setMetadataStore(metadata);
             reader.setId(filePath.toString());
 
-            return new BioformatsOpenedRaster(reader, metadata, options, orientationCorrection);
+            return new BioformatsOpenedRaster(reader, metadata, options, orientationCorrection, () -> ImageFileTimestamps.fromPath(filePath) );
         } catch (UnknownFormatException e) {
             throw new ImageIOException("An unknown file format was used");
         } catch (FormatException
