@@ -6,40 +6,46 @@ import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.FileTime;
 import java.util.Date;
+import java.util.Optional;
+import org.anchoranalysis.core.system.path.ExtensionUtilities;
 import lombok.Getter;
 import lombok.Value;
 
 /**
- * Timestamps associated with an image.
+ * Timestamps and other metadata associated with an image file-path, but not with the file's contents.
  * 
  * @author Owen Feehan
  *
  */
 @Value
-public class ImageFileTimestamps {
+public class ImageFileAttributes {
     
     /** The <i>creation</i> timestamp on the file the image was loaded from. */
-    @Getter private Date fileCreationTime;
+    @Getter private Date creationTime;
     
     /** The <i>last modified</i> timestamp on the file the image was loaded from. */
-    @Getter private Date fileModificationTime;
+    @Getter private Date modificationTime;
     
     /** The <i>last access</i> timestamp on the file the image was loaded from. */
-    @Getter private Date fileAccessTime;
+    @Getter private Date accessTime;
+    
+    /** The extension on the file-path. */
+    @Getter private Optional<String> extension;
     
     /**
-     * Reads {@link ImageFileTimestamps} from a path.
+     * Reads {@link ImageFileAttributes} from a path.
      * 
      * @param path the path.
-     * @return newly created {@link ImageFileTimestamps}.
+     * @return newly created {@link ImageFileAttributes}.
      * @throws IOException if the timestamps cannot be read.
      */
-    public static ImageFileTimestamps fromPath(Path path) throws IOException {
+    public static ImageFileAttributes fromPath(Path path) throws IOException {
         BasicFileAttributes attr = Files.readAttributes(path, BasicFileAttributes.class);
-        return new ImageFileTimestamps(
+        return new ImageFileAttributes(
             convertToDate(attr.creationTime()),
             convertToDate(attr.lastModifiedTime()),
-            convertToDate(attr.lastAccessTime())
+            convertToDate(attr.lastAccessTime()),
+            ExtensionUtilities.extractExtension(path)
        );
     }
     

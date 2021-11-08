@@ -46,7 +46,7 @@ import org.anchoranalysis.image.core.channel.factory.ChannelFactorySingleType;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
 import org.anchoranalysis.image.core.dimensions.OrientationChange;
-import org.anchoranalysis.image.core.stack.ImageFileTimestamps;
+import org.anchoranalysis.image.core.stack.ImageFileAttributes;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.core.stack.TimeSequence;
 import org.anchoranalysis.image.io.ImageIOException;
@@ -80,7 +80,7 @@ class BioformatsOpenedRaster implements OpenedImageFile {
     private final boolean rgb;
     private final int bitsPerPixel;
     private final OrientationChange orientationCorrection;
-    private final CheckedSupplier<ImageFileTimestamps, IOException> timestamps;
+    private final CheckedSupplier<ImageFileAttributes, IOException> timestamps;
 
     /** The number of channels in the image. */
     @Getter private final int numberChannels;
@@ -101,7 +101,7 @@ class BioformatsOpenedRaster implements OpenedImageFile {
             IFormatReader reader,
             IMetadata metadata,
             ReadOptions readOptions,
-            OrientationChange orientationCorrection, CheckedSupplier<ImageFileTimestamps, IOException> timestamps) {
+            OrientationChange orientationCorrection, CheckedSupplier<ImageFileAttributes, IOException> timestamps) {
         this.reader = reader;
         this.metadata = metadata;
         this.readOptions = readOptions;
@@ -252,7 +252,7 @@ class BioformatsOpenedRaster implements OpenedImageFile {
     }
 
     @Override
-    public ImageFileTimestamps timestamps() throws ImageIOException {
+    public ImageFileAttributes fileAttributes() throws ImageIOException {
         try {
             return timestamps.get();
         } catch (IOException e) {

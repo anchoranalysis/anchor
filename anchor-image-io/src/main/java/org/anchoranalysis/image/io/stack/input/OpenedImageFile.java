@@ -32,7 +32,7 @@ import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.core.progress.ProgressIgnore;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.stack.ImageMetadata;
-import org.anchoranalysis.image.core.stack.ImageFileTimestamps;
+import org.anchoranalysis.image.core.stack.ImageFileAttributes;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.core.stack.TimeSequence;
 import org.anchoranalysis.image.io.ImageIOException;
@@ -120,9 +120,9 @@ public interface OpenedImageFile extends AutoCloseable {
     int bitDepth() throws ImageIOException;
     
     /**
-     * The timestamps associated with the image.
+     * The file-attributes associated with the image.
      */
-    ImageFileTimestamps timestamps() throws ImageIOException;
+    ImageFileAttributes fileAttributes() throws ImageIOException;
 
     /** Whether the image-file has RGB encoded voxels. */
     boolean isRGB() throws ImageIOException;
@@ -155,6 +155,6 @@ public interface OpenedImageFile extends AutoCloseable {
                 numberChannels(),
                 numberFrames(),
                 isRGB(),
-                bitDepth(), timestamps());
+                bitDepth(), fileAttributes());
     }
 }
