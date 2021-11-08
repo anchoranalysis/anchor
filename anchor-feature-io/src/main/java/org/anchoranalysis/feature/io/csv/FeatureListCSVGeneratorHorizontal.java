@@ -67,7 +67,7 @@ public class FeatureListCSVGeneratorHorizontal extends FeatureTableCSVGenerator<
         for (ResultsVector results : allFeatureResults) {
 
             List<TypedValue> csvRow = new ArrayList<>();
-            results.addToTypeValueCollection(csvRow, 10);
+            results.addTypedValuesTo(csvRow, FeatureCSVWriter.NUMBER_DECIMAL_PLACES);
             writer.writeRow(csvRow);
         }
     }

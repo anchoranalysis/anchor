@@ -17,7 +17,8 @@ public abstract class ImageMetadataReader extends AnchorBean<ImageMetadataReader
      * Opens a file containing one or more images but does not read an image.
      *
      * @param path where the file is located.
-     * @param defaultStackReader TODO
+     * @param defaultStackReader the default {@link StackReader} to use, if needed, and if not
+     *     otherwise specified, for reading metadata.
      * @return an interface to the opened file that should be closed when no longer in use.
      * @throws ImageIOException if the file cannot be read.
      */

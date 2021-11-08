@@ -80,11 +80,11 @@ public class FeatureListCSVGeneratorVertical extends FeatureTableCSVGenerator<Re
 
         for (ResultsVector results : allFeatureResults) {
 
-            if (results.length() != size) {
+            if (results.size() != size) {
                 throw new OutputWriteFailedException(
                         String.format(
                                 "ResultsVector has size (%d) != featureNames vector (%d)",
-                                results.length(), size));
+                                results.size(), size));
             }
 
             csvRow.add(replaceNaN(results.get(featureIndex)));

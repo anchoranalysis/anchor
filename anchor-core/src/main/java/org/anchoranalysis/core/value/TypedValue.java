@@ -43,7 +43,10 @@ import lombok.Value;
 @Value
 public class TypedValue {
 
+    /** The value. */
     private final String value;
+
+    /** Whether the value is numeric or not. */
     private final boolean isNumeric;
 
     /**
@@ -74,12 +77,39 @@ public class TypedValue {
         this(decimalValueOrNaN(value, numberDecimalPlaces), true);
     }
 
+    /**
+     * Creates for an {@code double} value.
+     *
+     * @param value the value
+     */
+    public TypedValue(double value) {
+        this(decimalValueOrNaNVisuallyShortened(value), true);
+    }
+
     private static String decimalValueOrNaN(double value, int numberDecimalPlaces) {
         if (Double.isNaN(value)) {
             return "NaN";
         } else {
             return createDecimalFormat(numberDecimalPlaces).format(value);
         }
+    }
+
+    private static String decimalValueOrNaNVisuallyShortened(double value) {
+        if (Double.isNaN(value)) {
+            return "NaN";
+        } else {
+            if (isDoubleInteger(value)) {
+                return createDecimalFormat(0).format(value);
+            } else {
+                return Double.toString(value);
+            }
+        }
+    }
+
+    /** Is a double-value an integer? */
+    private static boolean isDoubleInteger(double value) {
+        int valInt = (int) value;
+        return value == valInt;
     }
 
     private static DecimalFormat createDecimalFormat(int numberDecimalPlaces) {

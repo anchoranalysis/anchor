@@ -40,10 +40,9 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.input.FeatureInputResults;
 import org.anchoranalysis.feature.io.csv.FeatureCSVWriter;
-import org.anchoranalysis.feature.io.csv.RowLabels;
 import org.anchoranalysis.feature.io.name.MultiName;
-import org.anchoranalysis.feature.io.results.ResultsWriter;
-import org.anchoranalysis.feature.io.results.ResultsWriterMetadata;
+import org.anchoranalysis.feature.io.results.FeatureOutputMetadata;
+import org.anchoranalysis.feature.io.results.LabelledResultsVector;
 import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.feature.results.ResultsVector;
 import org.anchoranalysis.feature.results.ResultsVectorList;
@@ -82,7 +81,7 @@ class WriteXMLForGroup {
      */
     public void maybeWrite(
             Optional<MultiName> groupName,
-            ResultsWriterMetadata metadata,
+            FeatureOutputMetadata metadata,
             Optional<FeatureCSVWriter> csvWriter,
             InputOutputContextSubdirectoryCache context)
             throws OutputWriteFailedException {
@@ -114,8 +113,7 @@ class WriteXMLForGroup {
 
             // Write the aggregated-features into the csv file
             csvWriterAggregate.ifPresent(
-                    writer ->
-                            writer.addRow(new RowLabels(Optional.empty(), groupName), aggregated));
+                    writer -> writer.addRow(new LabelledResultsVector(groupName, aggregated)));
         }
     }
 
@@ -129,7 +127,7 @@ class WriteXMLForGroup {
             calculator = FeatureSession.with(featuresAggregate.listFeatures(), logger);
 
         } catch (InitializeException e1) {
-            logger.errorReporter().recordError(ResultsWriter.class, e1);
+            logger.errorReporter().recordError(WriteXMLForGroup.class, e1);
             throw new OutputWriteFailedException("Cannot start feature-session", e1);
         }
 
@@ -167,7 +165,7 @@ class WriteXMLForGroup {
                 dictionary.writeToFile(fileOutPath.get());
             }
         } catch (IOException e) {
-            context.getLogger().errorReporter().recordError(ResultsWriter.class, e);
+            context.getLogger().errorReporter().recordError(WriteXMLForGroup.class, e);
         }
     }
 }

@@ -28,16 +28,17 @@ package org.anchoranalysis.feature.io.results;
 import java.util.Optional;
 import lombok.Getter;
 import org.anchoranalysis.core.functional.OptionalUtilities;
+import org.anchoranalysis.feature.io.results.calculation.FeatureCalculationResults;
 
 /**
- * The customizable output names used by {@link ResultsWriter}, which all follow a pattern based on
- * a prefix.
+ * The customizable output names used by {@link FeatureCalculationResults}, which all follow a
+ * pattern based on a prefix.
  *
  * <p>The group and aggregated outputs can be toggled on and off.
  *
  * @author Owen Feehan
  */
-public class ResultsWriterOutputNames {
+public class FeatureOutputNames {
 
     /** If not otherwise specified, the output name for a non-aggregated CSV of the results. */
     public static final String OUTPUT_DEFAULT_NON_AGGREGATED = "features";
@@ -59,7 +60,7 @@ public class ResultsWriterOutputNames {
      *
      * <p>All outputs are enabled.
      */
-    public ResultsWriterOutputNames() {
+    public FeatureOutputNames() {
         this(OUTPUT_DEFAULT_NON_AGGREGATED, true, true);
     }
 
@@ -70,7 +71,7 @@ public class ResultsWriterOutputNames {
      * @param enableAggregated whether to enable the aggregated outputs
      * @param enableGroup whether to enable the group outputs
      */
-    public ResultsWriterOutputNames(String prefix, boolean enableAggregated, boolean enableGroup) {
+    public FeatureOutputNames(String prefix, boolean enableAggregated, boolean enableGroup) {
         csvFeaturesNonAggregated = prefix; // No suffix
         csvFeaturesAggregated = joinIfEnabled(enableAggregated, prefix, "Aggregated");
         csvFeaturesGroup = joinIfEnabled(enableGroup, prefix, "Group");

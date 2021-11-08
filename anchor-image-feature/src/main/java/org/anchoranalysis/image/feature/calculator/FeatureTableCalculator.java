@@ -37,7 +37,7 @@ import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 
 /**
  * A feature-calculator with additional functions for encoding the output in in a tabular-format
- * with column-names
+ * with column-names.
  *
  * @author Owen Feehan
  * @param <T>

@@ -63,7 +63,7 @@ public class ResultsVector {
     }
 
     public void set(int start, ResultsVector rv) {
-        for (int i = 0; i < rv.length(); i++) {
+        for (int i = 0; i < rv.size(); i++) {
             Object val = rv.arr[i];
             arr[start + i] = val;
         }
@@ -95,10 +95,16 @@ public class ResultsVector {
         return Optional.of((Double) obj);
     }
 
-    // Value is replaced with NaN if it's an exception
-    public double get(int i) {
+    /**
+     * The result of a feature-calculation stored at a particular {@code index}.
+     *
+     * @param index the index (zero-indexed). It should be {@code >= 0} and {@code < size()}.
+     * @return the value corresponding to the feature-calculation or {@link Double#NaN} if an
+     *     exception occurred during calculation.
+     */
+    public double get(int index) {
 
-        Object obj = arr[i];
+        Object obj = arr[index];
 
         if (obj instanceof Exception) {
             return Double.NaN;
@@ -127,14 +133,31 @@ public class ResultsVector {
         }
     }
 
-    public void addToTypeValueCollection(Collection<TypedValue> listOut, int numDecimalPlaces) {
+    /**
+     * Adds {@link TypedValue} representations of the results to a {@link Collection}.
+     *
+     * @param addTo the collection to add the representations to.
+     * @param numberDecimalPlaces the number of decimal places to use, or -1 to visually shorten as
+     *     much as possible
+     */
+    public void addTypedValuesTo(Collection<TypedValue> addTo, int numberDecimalPlaces) {
 
         for (int i = 0; i < arr.length; i++) {
-            listOut.add(new TypedValue(get(i), numDecimalPlaces));
+            double value = get(i);
+            TypedValue representation =
+                    numberDecimalPlaces == -1
+                            ? new TypedValue(value)
+                            : new TypedValue(value, numberDecimalPlaces);
+            addTo.add(representation);
         }
     }
 
-    public int length() {
+    /**
+     * The number of calculations stored in the vector.
+     *
+     * @return the total number of calculations in the vector.
+     */
+    public int size() {
         return arr.length;
     }
 
