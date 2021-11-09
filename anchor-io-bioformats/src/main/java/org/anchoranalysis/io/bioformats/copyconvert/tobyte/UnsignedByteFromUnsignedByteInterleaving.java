@@ -26,12 +26,12 @@
 
 package org.anchoranalysis.io.bioformats.copyconvert.tobyte;
 
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.OrientationChange;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
-import org.anchoranalysis.spatial.box.Extent;
 
 /**
  * Converts a {@link ByteBuffer} encoding <i>unsigned byte</i>s (<i>with interleaving</i>) to
@@ -42,7 +42,6 @@ import org.anchoranalysis.spatial.box.Extent;
 public class UnsignedByteFromUnsignedByteInterleaving extends ToUnsignedByte {
 
     private int numberChannelsPerArray;
-    private Extent extent;
 
     // Loop through the relevant positions
     private int totalBytesSource = sizeXY * numberChannelsPerArray;
@@ -51,13 +50,21 @@ public class UnsignedByteFromUnsignedByteInterleaving extends ToUnsignedByte {
     protected void setupBefore(Dimensions dimensions, int numberChannelsPerArray) {
         super.setupBefore(dimensions, numberChannelsPerArray);
         this.numberChannelsPerArray = numberChannelsPerArray;
-        this.extent = dimensions.extent();
         this.totalBytesSource = sizeXY * numberChannelsPerArray;
     }
 
     @Override
+    protected boolean supportsInterleaving() {
+        return true;
+    }
+
+    @Override
     protected UnsignedByteBuffer convert(
-            ByteBuffer source, int channelIndexRelative, OrientationChange orientationCorrection) {
+            ByteBuffer source,
+            int channelIndexRelative,
+            OrientationChange orientationCorrection,
+            boolean littleEndian)
+            throws IOException {
 
         if (source.capacity() == sizeXY
                 && channelIndexRelative == 0
@@ -65,12 +72,12 @@ public class UnsignedByteFromUnsignedByteInterleaving extends ToUnsignedByte {
             // Reuse the existing buffer, if it's single channeled, and has no orientation change.
             return UnsignedByteBuffer.wrapRaw(source);
         } else {
-            return super.convert(source, channelIndexRelative, orientationCorrection);
+            return super.convert(source, channelIndexRelative, orientationCorrection, littleEndian);
         }
     }
 
     @Override
-    protected int calculateBytesPerPixel(int numberChannelsPerArray) {
+    protected int bytesPerVoxel(int numberChannelsPerArray) {
         return 1;
     }
 

@@ -26,15 +26,12 @@
 
 package org.anchoranalysis.io.bioformats.copyconvert.tobyte;
 
-import com.google.common.base.Preconditions;
 import java.nio.ByteBuffer;
 import loci.common.DataTools;
 import lombok.RequiredArgsConstructor;
-import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.OrientationChange;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
-import org.anchoranalysis.spatial.box.Extent;
 
 /**
  * Converts a {@link ByteBuffer} encoding a <i>float</i> type to <i>unsigned byte</i> type, as
@@ -50,24 +47,14 @@ import org.anchoranalysis.spatial.box.Extent;
 @RequiredArgsConstructor
 public class UnsignedByteFromFloat extends ToUnsignedByte {
 
-    private Extent extent;
-
     @Override
-    protected void setupBefore(Dimensions dimensions, int numberChannelsPerArray) {
-        super.setupBefore(dimensions, numberChannelsPerArray);
-        this.extent = dimensions.extent();
-    }
-
-    @Override
-    protected UnsignedByteBuffer convert(
-            ByteBuffer source, int channelIndexRelative, OrientationChange orientationCorrection) {
-        Preconditions.checkArgument(channelIndexRelative == 0, "interleaving not supported");
-        return super.convert(source, channelIndexRelative, orientationCorrection);
-    }
-
-    @Override
-    protected int calculateBytesPerPixel(int numberChannelsPerArray) {
+    protected int bytesPerVoxel(int numberChannelsPerArray) {
         return 4;
+    }
+
+    @Override
+    protected boolean supportsInterleaving() {
+        return false;
     }
 
     @Override

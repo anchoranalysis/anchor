@@ -28,58 +28,54 @@ package org.anchoranalysis.io.bioformats.copyconvert.tofloat;
 
 import com.google.common.io.LittleEndianDataInputStream;
 import java.io.ByteArrayInputStream;
+import java.io.DataInput;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
+import java.nio.FloatBuffer;
 import lombok.RequiredArgsConstructor;
-import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.OrientationChange;
-import org.anchoranalysis.spatial.box.Extent;
 
 @RequiredArgsConstructor
 public class FloatFromUnsignedInt extends ToFloat {
-
-    @Override
-    protected float[] convertIntegerBytesToFloatArray(
-            Dimensions dimensions, ByteBuffer source, OrientationChange orientationCorrection)
-            throws IOException {
-
-        if (orientationCorrection != OrientationChange.KEEP_UNCHANGED) {
-            throw new IOException("Orientation-correction is not supported");
-        }
-
-        byte[] sourceArray = source.array();
-
-        float[] out = new float[dimensions.volumeXY()];
-
-        ByteArrayInputStream streamByte = new ByteArrayInputStream(sourceArray);
-
-        if (source.order() == ByteOrder.LITTLE_ENDIAN) {
-            return copyLittleEndian(streamByte, out, dimensions.extent());
-        } else {
-            return copyBigEndian(streamByte, out, dimensions.extent());
-        }
-    }
 
     @Override
     protected int bytesPerPixel() {
         return 4;
     }
 
-    private static float[] copyLittleEndian(
-            ByteArrayInputStream streamByte, float[] out, Extent extent) throws IOException {
-        try (LittleEndianDataInputStream stream = new LittleEndianDataInputStream(streamByte)) {
-            extent.iterateOverXYOffset(index -> out[index] = stream.readInt());
-            return out;
+    @Override
+    protected void copyKeepOrientation(
+            ByteBuffer source,
+            boolean littleEndian,
+            int channelIndexRelative,
+            FloatBuffer destination)
+            throws IOException {
+        byte[] sourceArray = source.array();
+
+        try (ByteArrayInputStream streamByte = new ByteArrayInputStream(sourceArray)) {
+
+            DataInput stream = dataStream(streamByte, littleEndian);
+            extent.iterateOverXYOffset(index -> destination.put(index, stream.readInt()));
         }
     }
 
-    private static float[] copyBigEndian(
-            ByteArrayInputStream streamByte, float[] out, Extent extent) throws IOException {
-        try (DataInputStream stream = new DataInputStream(streamByte)) {
-            extent.iterateOverXYOffset(index -> out[index] = stream.readInt());
-            return out;
+    @Override
+    protected void copyChangeOrientation(
+            ByteBuffer source,
+            boolean littleEndian,
+            int channelIndexRelative,
+            FloatBuffer destination,
+            OrientationChange orientationCorrection)
+            throws IOException {
+        throw new IOException("Orientation-correction is not supported");
+    }
+
+    private static DataInput dataStream(ByteArrayInputStream streamByte, boolean littleEndian) {
+        if (littleEndian) {
+            return new LittleEndianDataInputStream(streamByte);
+        } else {
+            return new DataInputStream(streamByte);
         }
     }
 }

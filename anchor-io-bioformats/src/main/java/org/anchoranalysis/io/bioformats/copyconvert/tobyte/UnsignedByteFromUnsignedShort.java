@@ -55,13 +55,18 @@ public class UnsignedByteFromUnsignedShort extends ToUnsignedByteWithScaling {
     }
 
     @Override
+    protected boolean supportsInterleaving() {
+        return false;
+    }
+
+    @Override
     protected void setupBefore(Dimensions dimensions, int numberChannelsPerArray) {
         super.setupBefore(dimensions, numberChannelsPerArray);
         this.extent = dimensions.extent();
     }
 
     @Override
-    protected int calculateBytesPerPixel(int numberChannelsPerArray) {
+    protected int bytesPerVoxel(int numberChannelsPerArray) {
         return 2 * numberChannelsPerArray;
     }
 

@@ -26,35 +26,48 @@
 
 package org.anchoranalysis.io.bioformats.copyconvert.tofloat;
 
+import java.io.IOException;
 import java.nio.ByteBuffer;
-import org.anchoranalysis.image.core.dimensions.Dimensions;
+import java.nio.FloatBuffer;
 import org.anchoranalysis.image.core.dimensions.OrientationChange;
 import org.anchoranalysis.image.voxel.buffer.primitive.PrimitiveConverter;
-import org.anchoranalysis.spatial.box.Extent;
 
 public class FloatFromUnsignedByte extends ToFloat {
 
     @Override
-    protected float[] convertIntegerBytesToFloatArray(
-            Dimensions dimensions, ByteBuffer source, OrientationChange orientationCorrection) {
-
-        float[] out = new float[dimensions.x() * dimensions.y()];
-
-        int indexIn = 0;
-        int indexOut = 0;
-        Extent extent = dimensions.extent();
-        for (int y = 0; y < dimensions.y(); y++) {
-            for (int x = 0; x < dimensions.x(); x++) {
-                int value = PrimitiveConverter.unsignedByteToInt(source.get(indexIn++));
-                int outputIndex = orientationCorrection.index(indexOut++, x, y, extent);
-                out[outputIndex] = value;
-            }
-        }
-        return out;
+    protected int bytesPerPixel() {
+        return 1;
     }
 
     @Override
-    protected int bytesPerPixel() {
-        return 1;
+    protected void copyKeepOrientation(
+            ByteBuffer source,
+            boolean littleEndian,
+            int channelIndexRelative,
+            FloatBuffer destination)
+            throws IOException {
+        int area = extent.areaXY();
+        for (int index = 0; index < area; index++) {
+            int value = PrimitiveConverter.unsignedByteToInt(source.get(index));
+            destination.put(index, value);
+        }
+    }
+
+    @Override
+    protected void copyChangeOrientation(
+            ByteBuffer source,
+            boolean littleEndian,
+            int channelIndexRelative,
+            FloatBuffer destination,
+            OrientationChange orientationCorrection)
+            throws IOException {
+        int index = 0;
+        for (int y = 0; y < extent.y(); y++) {
+            for (int x = 0; x < extent.x(); x++) {
+                int value = PrimitiveConverter.unsignedByteToInt(source.get(index++));
+                int outputIndex = orientationCorrection.index(x, y, extent);
+                destination.put(outputIndex, value);
+            }
+        }
     }
 }

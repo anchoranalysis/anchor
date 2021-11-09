@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.io.bioformats.copyconvert.tobyte;
 
-import com.google.common.base.Preconditions;
 import java.nio.ByteBuffer;
 import loci.common.DataTools;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
@@ -62,14 +61,12 @@ public class UnsignedByteFromUnsignedInt extends ToUnsignedByteWithScaling {
     }
 
     @Override
-    protected UnsignedByteBuffer convert(
-            ByteBuffer source, int channelIndexRelative, OrientationChange orientationCorrection) {
-        Preconditions.checkArgument(channelIndexRelative == 0, "interleaving not supported");
-        return super.convert(source, channelIndexRelative, orientationCorrection);
+    protected boolean supportsInterleaving() {
+        return false;
     }
 
     @Override
-    protected int calculateBytesPerPixel(int numberChannelsPerArray) {
+    protected int bytesPerVoxel(int numberChannelsPerArray) {
         return 4;
     }
 

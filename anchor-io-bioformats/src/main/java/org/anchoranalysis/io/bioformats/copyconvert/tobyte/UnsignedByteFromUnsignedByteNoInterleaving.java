@@ -26,12 +26,11 @@
 
 package org.anchoranalysis.io.bioformats.copyconvert.tobyte;
 
+import java.io.IOException;
 import java.nio.ByteBuffer;
-import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.OrientationChange;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
-import org.anchoranalysis.spatial.box.Extent;
 
 /**
  * Converts a {@link ByteBuffer} encoding <i>unsigned byte</i>s (<i>no interleaving</i>) to
@@ -41,29 +40,30 @@ import org.anchoranalysis.spatial.box.Extent;
  */
 public class UnsignedByteFromUnsignedByteNoInterleaving extends ToUnsignedByte {
 
-    private Extent extent;
-
     @Override
-    protected void setupBefore(Dimensions dimensions, int numberChannelsPerArray) {
-        super.setupBefore(dimensions, numberChannelsPerArray);
-        this.extent = dimensions.extent();
+    protected boolean supportsInterleaving() {
+        return false;
     }
 
     @Override
     protected UnsignedByteBuffer convert(
-            ByteBuffer source, int channelIndexRelative, OrientationChange orientationCorrection) {
+            ByteBuffer source,
+            int channelIndexRelative,
+            OrientationChange orientationCorrection,
+            boolean littleEndian)
+            throws IOException {
         if (source.capacity() == sizeXY
                 && channelIndexRelative == 0
                 && orientationCorrection == OrientationChange.KEEP_UNCHANGED) {
             // Reuse the existing buffer, if it's single channeled
             return UnsignedByteBuffer.wrapRaw(source);
         } else {
-            return super.convert(source, channelIndexRelative, orientationCorrection);
+            return super.convert(source, channelIndexRelative, orientationCorrection, littleEndian);
         }
     }
 
     @Override
-    protected int calculateBytesPerPixel(int numberChannelsPerArray) {
+    protected int bytesPerVoxel(int numberChannelsPerArray) {
         return 1;
     }
 

@@ -27,9 +27,7 @@
 package org.anchoranalysis.io.bioformats.copyconvert.tobyte;
 
 import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
-import org.anchoranalysis.image.core.dimensions.OrientationChange;
 import org.anchoranalysis.image.voxel.VoxelsUntyped;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferWrap;
@@ -44,66 +42,28 @@ import org.anchoranalysis.io.bioformats.copyconvert.ConvertTo;
  */
 public abstract class ToUnsignedByte extends ConvertTo<UnsignedByteBuffer> {
 
-    protected int sizeXY;
     protected int bytesPerPixel;
     protected int sizeBytes;
 
     protected ToUnsignedByte() {
-        super(VoxelsUntyped::asByte);
+        super(
+                VoxelsUntyped::asByte,
+                UnsignedByteBuffer::allocate,
+                VoxelBufferWrap::unsignedByteBuffer);
     }
 
     @Override
     protected void setupBefore(Dimensions dimensions, int numberChannelsPerArray) {
-        sizeXY = dimensions.volumeXY();
-        bytesPerPixel = calculateBytesPerPixel(numberChannelsPerArray);
-        sizeBytes = sizeXY * bytesPerPixel;
-    }
-
-    @Override
-    protected VoxelBuffer<UnsignedByteBuffer> convertSliceOfSingleChannel(
-            ByteBuffer source, int channelIndexRelative, OrientationChange orientationCorrection) {
-        return VoxelBufferWrap.unsignedByteBuffer(
-                convert(source, channelIndexRelative, orientationCorrection));
-    }
-
-    protected UnsignedByteBuffer allocateBuffer() {
-        return UnsignedByteBuffer.allocate(sizeXY);
-    }
-
-    protected abstract int calculateBytesPerPixel(int numberChannelsPerArray);
-
-    protected UnsignedByteBuffer convert(
-            ByteBuffer source, int channelIndexRelative, OrientationChange orientationCorrection) {
-        UnsignedByteBuffer destination = allocateBuffer();
-        boolean littleEndian = source.order() == ByteOrder.LITTLE_ENDIAN;
-
-        if (orientationCorrection == OrientationChange.KEEP_UNCHANGED) {
-            copyKeepOrientation(source, littleEndian, channelIndexRelative, destination);
-        } else {
-            copyChangeOrientation(
-                    source, littleEndian, channelIndexRelative, destination, orientationCorrection);
-        }
-
-        return destination;
+        super.setupBefore(dimensions, numberChannelsPerArray);
+        this.bytesPerPixel = bytesPerVoxel(numberChannelsPerArray);
+        this.sizeBytes = sizeXY * bytesPerPixel;
     }
 
     /**
-     * Copy the bytes, without changing orientation.
+     * How many bytes for each voxel for each channel in the source array.
      *
-     * <p>This is kept separate to {@link #copyChangeOrientation(ByteBuffer, boolean, int,
-     * UnsignedByteBuffer, OrientationChange)} as it can be done slightly more efficiently.
+     * @param numberChannelsPerArray
+     * @return
      */
-    protected abstract void copyKeepOrientation(
-            ByteBuffer source,
-            boolean littleEndian,
-            int channelIndexRelative,
-            UnsignedByteBuffer destination);
-
-    /** Copy the bytes, changing orientation. */
-    protected abstract void copyChangeOrientation(
-            ByteBuffer source,
-            boolean littleEndian,
-            int channelIndexRelative,
-            UnsignedByteBuffer destination,
-            OrientationChange orientationCorrection);
+    protected abstract int bytesPerVoxel(int numberChannelsPerArray);
 }
