@@ -11,7 +11,7 @@ import org.anchoranalysis.core.format.ImageFileFormat;
 import org.anchoranalysis.image.io.ImageIOException;
 
 /**
- * Reads the <b>image acquisition-date</b. from EXIF metadata, if specified in an image-file.
+ * Reads the <b>image acquisition-date</b>. from EXIF metadata, if specified in an image-file.
  *
  * @author Owen Feehan
  */

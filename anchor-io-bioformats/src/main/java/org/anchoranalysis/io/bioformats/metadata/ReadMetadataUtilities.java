@@ -176,6 +176,7 @@ public class ReadMetadataUtilities {
      * @param tagHeight a unique identifier from the metadata-extractor library identifying the
      *     <i>height</i> tag.
      * @return the value of the tag, or {@link Optional#empty()} if it does not exist.
+     * @throws ImageIOException if the metadata is errored (but not if it is absent).
      */
     public static <T extends Directory> Optional<Extent> readFromWidthHeightTags(
             Metadata metadata, Class<T> directoryType, int tagWidth, int tagHeight)
@@ -202,6 +203,7 @@ public class ReadMetadataUtilities {
      * @param tagHeight a unique identifier from the metadata-extractor library identifying the
      *     <i>height</i> tag.
      * @return the value of the tag, or {@link Optional#empty()} if it does not exist.
+     * @throws ImageIOException if the metadata is errored (but not if it is absent).
      */
     public static Optional<Extent> readFromWidthHeightTags(
             Directory directory, int tagWidth, int tagHeight) throws ImageIOException {
