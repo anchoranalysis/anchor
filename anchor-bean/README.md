@@ -17,8 +17,10 @@ Anchor is a platform for image analysis, developed by [Owen Feehan](http://www.o
 
 Please consider:
 
-* the [user guide](https://www.anchoranalysis.org/user_guide.html)
-* the [developer guide](https://www.anchoranalysis.org/developer_guide.html), especially [anchor](https://www.anchoranalysis.org/developer_guide_repositories_anchor.html) for an overview of all modules in this repository.
+* [BeanXML](https://www.anchoranalysis.org/user_guide_bean_xml.html)
+* [Anchor beans](https://www.anchoranalysis.org/developer_guide_anchor_beans.html)
+* the [Anchor user guide](https://www.anchoranalysis.org/user_guide.html)
+* the [Anchor developer guide](https://www.anchoranalysis.org/developer_guide.html), especially [anchor](https://www.anchoranalysis.org/developer_guide_repositories_anchor.html) for an overview of all modules in this repository.
 
 Before reading the source code, please:
 

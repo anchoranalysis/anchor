@@ -40,11 +40,11 @@ public class ImageFileAttributes {
      * @throws IOException if the timestamps cannot be read.
      */
     public static ImageFileAttributes fromPath(Path path) throws IOException {
-        BasicFileAttributes attr = Files.readAttributes(path, BasicFileAttributes.class);
+        BasicFileAttributes attributes = Files.readAttributes(path, BasicFileAttributes.class);
         return new ImageFileAttributes(
-            convertToDate(attr.creationTime()),
-            convertToDate(attr.lastModifiedTime()),
-            convertToDate(attr.lastAccessTime()),
+            convertToDate(attributes.creationTime()),
+            convertToDate(attributes.lastModifiedTime()),
+            convertToDate(attributes.lastAccessTime()),
             ExtensionUtilities.extractExtension(path)
        );
     }
