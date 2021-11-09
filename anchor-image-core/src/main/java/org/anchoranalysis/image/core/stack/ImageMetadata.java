@@ -7,15 +7,7 @@ import lombok.Getter;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 
 /**
- * Information about an image, but without image voxels.
- *
- * <p>The information should contain:
- *
- * <ol>
- *   <li>Size
- *   <li>Number of channels
- *   <li>Physical voxel size
- * </ol>
+ * Information about an image, but not about the intensity or content of image voxels.
  *
  * <p>The metadata always assumes a single batch of identically-sized images. If more than one
  * series of images exist, these are considered as having separate metadata.
