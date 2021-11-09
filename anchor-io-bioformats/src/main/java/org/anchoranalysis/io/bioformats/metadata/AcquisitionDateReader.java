@@ -31,18 +31,18 @@ public class AcquisitionDateReader {
                 ExifIFD0Directory.TAG_DATETIME_ORIGINAL,
                 ExifIFD0Directory.TAG_DATETIME_DIGITIZED
             };
-    
-    
+
     /**
      * The tags tried in order in the EXIF data to read the acqusition-time zone.
      *
-     * <p>A timezone is not specified, by default, with EXIF data for times. But some quasi-unofficial tags apparently
-     * specify it.
+     * <p>A timezone is not specified, by default, with EXIF data for times. But some
+     * quasi-unofficial tags apparently specify it.
      */
     private static final int[] TIMEZONE_TAGS =
             new int[] {
                 ExifIFD0Directory.TAG_TIME_ZONE_OFFSET,
-                ExifIFD0Directory.TAG_TIME_ZONE_OFFSET_TIFF_EP};
+                ExifIFD0Directory.TAG_TIME_ZONE_OFFSET_TIFF_EP
+            };
 
     /**
      * Reads an image acquisition-date from a file identified by path, based on the present of EXIF
@@ -81,6 +81,7 @@ public class AcquisitionDateReader {
      * @return the acquisition date, if it exists.
      */
     public static Optional<ZonedDateTime> readAcquisitionDate(Metadata metadata) {
-        return ReadMetadataUtilities.readDate(metadata, ExifIFD0Directory.class, ACQUSITION_TIME_TAGS, TIMEZONE_TAGS);
+        return ReadMetadataUtilities.readDate(
+                metadata, ExifIFD0Directory.class, ACQUSITION_TIME_TAGS, TIMEZONE_TAGS);
     }
 }

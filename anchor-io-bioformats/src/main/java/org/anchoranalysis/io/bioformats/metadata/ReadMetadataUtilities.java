@@ -85,27 +85,38 @@ public class ReadMetadataUtilities {
      * directoryType}.
      *
      * <p>If no timezone offset is specified in the metadata, the current time-zone is used.
-     * 
+     *
      * @param <T> directory-type to find
      * @param metadata the metadata to read from.
      * @param directoryType class corresponding to {@code T}.
-     * @param tagsAcqusitionDate unique identifiers from the metadata-extractor library identifying which tag(s)
-     *     to read (in order). Once a single tag is found, no further tags are tried.
-     * @param tagsTimezoneOffset similar to {@code tagsAcqusitionDate} but instead identifies a time-zone offset.
+     * @param tagsAcqusitionDate unique identifiers from the metadata-extractor library identifying
+     *     which tag(s) to read (in order). Once a single tag is found, no further tags are tried.
+     * @param tagsTimezoneOffset similar to {@code tagsAcqusitionDate} but instead identifies a
+     *     time-zone offset.
      * @return the value of the tag, or {@link Optional#empty()} if it does not exist.
      */
     public static <T extends Directory> Optional<ZonedDateTime> readDate(
-            Metadata metadata, Class<T> directoryType, int[] tagsAcqusitionDate, int[] tagsTimezoneOffset) {
+            Metadata metadata,
+            Class<T> directoryType,
+            int[] tagsAcqusitionDate,
+            int[] tagsTimezoneOffset) {
         Directory directory = metadata.getFirstDirectoryOfType(directoryType);
-        
-        Optional<Date> date = readTagsUntilPresent(directory, tagsAcqusitionDate, ReadMetadataUtilities::readDate);
+
+        Optional<Date> date =
+                readTagsUntilPresent(
+                        directory, tagsAcqusitionDate, ReadMetadataUtilities::readDate);
 
         // Map to a time-zone
-        return date.map( dateUnzoned -> ZonedDateTime.ofInstant(dateUnzoned.toInstant(), timeZoneOffset(directory, tagsTimezoneOffset)) );
+        return date.map(
+                dateUnzoned ->
+                        ZonedDateTime.ofInstant(
+                                dateUnzoned.toInstant(),
+                                timeZoneOffset(directory, tagsTimezoneOffset)));
     }
-    
+
     private static ZoneId timeZoneOffset(Directory directory, int[] tagsTimezoneOffset) {
-        Optional<Integer> zoneOffset = readTagsUntilPresent(directory, tagsTimezoneOffset, ReadMetadataUtilities::readInt);
+        Optional<Integer> zoneOffset =
+                readTagsUntilPresent(directory, tagsTimezoneOffset, ReadMetadataUtilities::readInt);
         if (zoneOffset.isPresent()) {
             return ZoneId.ofOffset("UTC", ZoneOffset.ofHours(zoneOffset.get()));
         } else {
@@ -215,15 +226,16 @@ public class ReadMetadataUtilities {
             return Optional.empty();
         }
     }
-    
+
     /** Iteratively reads tags until the first present value is encountered. */
-    private static <T> Optional<T> readTagsUntilPresent(Directory directory, int[] tags, BiFunction<Directory,Integer,Optional<T>> extract) {
+    private static <T> Optional<T> readTagsUntilPresent(
+            Directory directory, int[] tags, BiFunction<Directory, Integer, Optional<T>> extract) {
         for (int tag : tags) {
             Optional<T> extractedValue = extract.apply(directory, tag);
             if (extractedValue.isPresent()) {
                 return extractedValue;
             }
         }
-        return Optional.empty(); 
+        return Optional.empty();
     }
 }
