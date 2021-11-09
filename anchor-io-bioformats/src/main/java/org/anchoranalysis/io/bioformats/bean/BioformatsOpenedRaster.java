@@ -46,10 +46,10 @@ import org.anchoranalysis.image.core.channel.factory.ChannelFactorySingleType;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
 import org.anchoranalysis.image.core.dimensions.OrientationChange;
-import org.anchoranalysis.image.core.stack.ImageFileAttributes;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.core.stack.TimeSequence;
 import org.anchoranalysis.image.io.ImageIOException;
+import org.anchoranalysis.image.io.stack.input.ImageTimestampsAttributes;
 import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.io.bioformats.DimensionsCreator;
@@ -80,7 +80,7 @@ class BioformatsOpenedRaster implements OpenedImageFile {
     private final boolean rgb;
     private final int bitsPerPixel;
     private final OrientationChange orientationCorrection;
-    private final CheckedSupplier<ImageFileAttributes, IOException> timestamps;
+    private final CheckedSupplier<ImageTimestampsAttributes, ImageIOException> timestamps;
 
     /** The number of channels in the image. */
     @Getter private final int numberChannels;
@@ -101,7 +101,8 @@ class BioformatsOpenedRaster implements OpenedImageFile {
             IFormatReader reader,
             IMetadata metadata,
             ReadOptions readOptions,
-            OrientationChange orientationCorrection, CheckedSupplier<ImageFileAttributes, IOException> timestamps) {
+            OrientationChange orientationCorrection,
+            CheckedSupplier<ImageTimestampsAttributes, ImageIOException> timestamps) {
         this.reader = reader;
         this.metadata = metadata;
         this.readOptions = readOptions;
@@ -252,11 +253,7 @@ class BioformatsOpenedRaster implements OpenedImageFile {
     }
 
     @Override
-    public ImageFileAttributes fileAttributes() throws ImageIOException {
-        try {
-            return timestamps.get();
-        } catch (IOException e) {
-            throw new ImageIOException(e);
-        }
+    public ImageTimestampsAttributes timestamps() throws ImageIOException {
+        return timestamps.get();
     }
 }

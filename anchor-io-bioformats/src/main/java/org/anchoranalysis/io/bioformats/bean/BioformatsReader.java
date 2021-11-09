@@ -45,12 +45,12 @@ import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.core.dimensions.OrientationChange;
-import org.anchoranalysis.image.core.stack.ImageFileAttributes;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.reader.StackReaderOrientationCorrection;
 import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
 import org.anchoranalysis.io.bioformats.bean.options.Default;
 import org.anchoranalysis.io.bioformats.bean.options.ReadOptions;
+import org.anchoranalysis.io.bioformats.metadata.ImageTimestampsAttributesFactory;
 
 /**
  * Reads a stack using the <a href="https://www.openmicroscopy.org/bio-formats/">Bioformats</a>
@@ -96,7 +96,12 @@ public class BioformatsReader extends StackReaderOrientationCorrection {
             reader.setMetadataStore(metadata);
             reader.setId(filePath.toString());
 
-            return new BioformatsOpenedRaster(reader, metadata, options, orientationCorrection, () -> ImageFileAttributes.fromPath(filePath) );
+            return new BioformatsOpenedRaster(
+                    reader,
+                    metadata,
+                    options,
+                    orientationCorrection,
+                    () -> ImageTimestampsAttributesFactory.fromPath(filePath));
         } catch (UnknownFormatException e) {
             throw new ImageIOException("An unknown file format was used");
         } catch (FormatException
