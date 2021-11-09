@@ -27,6 +27,7 @@
 package org.anchoranalysis.io.bioformats.copyconvert.tobyte;
 
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.OrientationChange;
 import org.anchoranalysis.image.voxel.VoxelsUntyped;
@@ -69,8 +70,40 @@ public abstract class ToUnsignedByte extends ConvertTo<UnsignedByteBuffer> {
         return UnsignedByteBuffer.allocate(sizeXY);
     }
 
-    protected abstract UnsignedByteBuffer convert(
-            ByteBuffer source, int channelIndexRelative, OrientationChange orientationCorrection);
-
     protected abstract int calculateBytesPerPixel(int numberChannelsPerArray);
+
+    protected UnsignedByteBuffer convert(
+            ByteBuffer source, int channelIndexRelative, OrientationChange orientationCorrection) {
+        UnsignedByteBuffer destination = allocateBuffer();
+        boolean littleEndian = source.order() == ByteOrder.LITTLE_ENDIAN;
+
+        if (orientationCorrection == OrientationChange.KEEP_UNCHANGED) {
+            copyKeepOrientation(source, littleEndian, channelIndexRelative, destination);
+        } else {
+            copyChangeOrientation(
+                    source, littleEndian, channelIndexRelative, destination, orientationCorrection);
+        }
+
+        return destination;
+    }
+
+    /**
+     * Copy the bytes, without changing orientation.
+     *
+     * <p>This is kept separate to {@link #copyChangeOrientation(ByteBuffer, boolean, int,
+     * UnsignedByteBuffer, OrientationChange)} as it can be done slightly more efficiently.
+     */
+    protected abstract void copyKeepOrientation(
+            ByteBuffer source,
+            boolean littleEndian,
+            int channelIndexRelative,
+            UnsignedByteBuffer destination);
+
+    /** Copy the bytes, changing orientation. */
+    protected abstract void copyChangeOrientation(
+            ByteBuffer source,
+            boolean littleEndian,
+            int channelIndexRelative,
+            UnsignedByteBuffer destination,
+            OrientationChange orientationCorrection);
 }

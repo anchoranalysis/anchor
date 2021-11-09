@@ -28,7 +28,6 @@ package org.anchoranalysis.io.bioformats.copyconvert.tobyte;
 
 import com.google.common.base.Preconditions;
 import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import loci.common.DataTools;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
@@ -63,19 +62,7 @@ public class UnsignedByteFromFloat extends ToUnsignedByte {
     protected UnsignedByteBuffer convert(
             ByteBuffer source, int channelIndexRelative, OrientationChange orientationCorrection) {
         Preconditions.checkArgument(channelIndexRelative == 0, "interleaving not supported");
-
-        UnsignedByteBuffer destination = allocateBuffer();
-
-        byte[] sourceArray = source.array();
-        boolean littleEndian = source.order() == ByteOrder.LITTLE_ENDIAN;
-
-        if (orientationCorrection == OrientationChange.KEEP_UNCHANGED) {
-            copyKeepOrientation(sourceArray, littleEndian, destination);
-        } else {
-            copyChangeOrientation(sourceArray, littleEndian, destination, orientationCorrection);
-        }
-
-        return destination;
+        return super.convert(source, channelIndexRelative, orientationCorrection);
     }
 
     @Override
@@ -83,26 +70,27 @@ public class UnsignedByteFromFloat extends ToUnsignedByte {
         return 4;
     }
 
-    /**
-     * Copy the bytes, without changing orientation.
-     *
-     * <p>This is kept separate to {@link #copyChangeOrientation(byte[], boolean,
-     * UnsignedByteBuffer, OrientationChange)} as it can be done slightly more efficiently.
-     */
-    private void copyKeepOrientation(
-            byte[] sourceArray, boolean littleEndian, UnsignedByteBuffer destination) {
+    @Override
+    protected void copyKeepOrientation(
+            ByteBuffer source,
+            boolean littleEndian,
+            int channelIndexRelative,
+            UnsignedByteBuffer destination) {
+        byte[] sourceArray = source.array();
         for (int index = 0; index < sizeBytes; index += bytesPerPixel) {
             float value = extractClampedValue(sourceArray, index, littleEndian);
             destination.putFloat(value);
         }
     }
 
-    /** Copy the bytes, changing orientation. */
-    private void copyChangeOrientation(
-            byte[] sourceArray,
+    @Override
+    protected void copyChangeOrientation(
+            ByteBuffer source,
             boolean littleEndian,
+            int channelIndexRelative,
             UnsignedByteBuffer destination,
             OrientationChange orientationCorrection) {
+        byte[] sourceArray = source.array();
         int x = 0;
         int y = 0;
 

@@ -34,7 +34,7 @@ abstract class WriteLazy extends WriteWithGroups {
      * @throws OutputWriteFailedException if a CSV for (non-aggregated) features fails to be
      *     created.
      */
-    public WriteLazy(FeatureOutputMetadata outputMetadata, FeatureCSVWriterCreator writerCreator)
+    protected WriteLazy(FeatureOutputMetadata outputMetadata, FeatureCSVWriterCreator writerCreator)
             throws OutputWriteFailedException {
         this.outputMetadata = outputMetadata;
         this.writerCreator = writerCreator;

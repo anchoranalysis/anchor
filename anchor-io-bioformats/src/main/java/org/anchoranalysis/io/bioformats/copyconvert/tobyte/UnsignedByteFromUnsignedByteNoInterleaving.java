@@ -58,15 +58,7 @@ public class UnsignedByteFromUnsignedByteNoInterleaving extends ToUnsignedByte {
             // Reuse the existing buffer, if it's single channeled
             return UnsignedByteBuffer.wrapRaw(source);
         } else {
-            UnsignedByteBuffer destination = allocateBuffer();
-
-            if (orientationCorrection == OrientationChange.KEEP_UNCHANGED) {
-                copyKeepOrientation(source, channelIndexRelative, destination);
-            } else {
-                copyChangeOrientation(
-                        source, channelIndexRelative, destination, orientationCorrection);
-            }
-            return destination;
+            return super.convert(source, channelIndexRelative, orientationCorrection);
         }
     }
 
@@ -75,22 +67,21 @@ public class UnsignedByteFromUnsignedByteNoInterleaving extends ToUnsignedByte {
         return 1;
     }
 
-    /**
-     * Copy the bytes, without changing orientation.
-     *
-     * <p>This is kept separate to {@link #copyChangeOrientation(ByteBuffer, int,
-     * UnsignedByteBuffer, OrientationChange)} as it can be done slightly more efficiently.
-     */
-    private void copyKeepOrientation(
-            ByteBuffer source, int channelIndexRelative, UnsignedByteBuffer destination) {
+    @Override
+    protected void copyKeepOrientation(
+            ByteBuffer source,
+            boolean littleEndian,
+            int channelIndexRelative,
+            UnsignedByteBuffer destination) {
         source.position(sizeBytes * channelIndexRelative);
         source.limit(source.position() + sizeBytes);
         destination.put(source);
     }
 
-    /** Copy the bytes, changing orientation. */
-    private void copyChangeOrientation(
+    @Override
+    protected void copyChangeOrientation(
             ByteBuffer source,
+            boolean littleEndian,
             int channelIndexRelative,
             UnsignedByteBuffer destination,
             OrientationChange orientationCorrection) {

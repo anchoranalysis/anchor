@@ -59,7 +59,7 @@ abstract class WriteWithGroups implements FeatureCalculationResults {
      * @throws OutputWriteFailedException if a CSV for (non-aggregated) features fails to be
      *     created.
      */
-    public WriteWithGroups() throws OutputWriteFailedException {
+    protected WriteWithGroups() throws OutputWriteFailedException {
         groupedResults = new GroupedResults();
     }
 

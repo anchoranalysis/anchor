@@ -44,11 +44,15 @@ public class UnsignedByteFromUnsignedByteInterleaving extends ToUnsignedByte {
     private int numberChannelsPerArray;
     private Extent extent;
 
+    // Loop through the relevant positions
+    private int totalBytesSource = sizeXY * numberChannelsPerArray;
+
     @Override
     protected void setupBefore(Dimensions dimensions, int numberChannelsPerArray) {
         super.setupBefore(dimensions, numberChannelsPerArray);
         this.numberChannelsPerArray = numberChannelsPerArray;
         this.extent = dimensions.extent();
+        this.totalBytesSource = sizeXY * numberChannelsPerArray;
     }
 
     @Override
@@ -61,23 +65,7 @@ public class UnsignedByteFromUnsignedByteInterleaving extends ToUnsignedByte {
             // Reuse the existing buffer, if it's single channeled, and has no orientation change.
             return UnsignedByteBuffer.wrapRaw(source);
         } else {
-            UnsignedByteBuffer destination = allocateBuffer();
-
-            // Loop through the relevant positions
-            int totalBytesSource = sizeXY * numberChannelsPerArray;
-
-            if (orientationCorrection == OrientationChange.KEEP_UNCHANGED) {
-                copyKeepOrientation(source, channelIndexRelative, destination, totalBytesSource);
-            } else {
-                copyChangeOrientation(
-                        source,
-                        channelIndexRelative,
-                        destination,
-                        totalBytesSource,
-                        orientationCorrection);
-            }
-
-            return destination;
+            return super.convert(source, channelIndexRelative, orientationCorrection);
         }
     }
 
@@ -86,17 +74,12 @@ public class UnsignedByteFromUnsignedByteInterleaving extends ToUnsignedByte {
         return 1;
     }
 
-    /**
-     * Copy the bytes, without changing orientation.
-     *
-     * <p>This is kept separate to {@link #copyChangeOrientation(ByteBuffer, int,
-     * UnsignedByteBuffer, int, OrientationChange)} as it can be done slightly more efficiently.
-     */
-    private void copyKeepOrientation(
+    @Override
+    protected void copyKeepOrientation(
             ByteBuffer source,
+            boolean littleEndian,
             int channelIndexRelative,
-            UnsignedByteBuffer destination,
-            int totalBytesSource) {
+            UnsignedByteBuffer destination) {
         for (int indexIn = channelIndexRelative;
                 indexIn < totalBytesSource;
                 indexIn += numberChannelsPerArray) {
@@ -106,12 +89,12 @@ public class UnsignedByteFromUnsignedByteInterleaving extends ToUnsignedByte {
         }
     }
 
-    /** Copy the bytes, changing orientation. */
-    private void copyChangeOrientation(
+    @Override
+    protected void copyChangeOrientation(
             ByteBuffer source,
+            boolean littleEndian,
             int channelIndexRelative,
             UnsignedByteBuffer destination,
-            int totalBytesSource,
             OrientationChange orientationCorrection) {
         int x = 0;
         int y = 0;

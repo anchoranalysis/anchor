@@ -27,7 +27,6 @@
 package org.anchoranalysis.io.bioformats.copyconvert.tobyte;
 
 import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import loci.common.DataTools;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.OrientationChange;
@@ -62,43 +61,19 @@ public class UnsignedByteFromUnsignedShort extends ToUnsignedByteWithScaling {
     }
 
     @Override
-    protected UnsignedByteBuffer convert(
-            ByteBuffer source, int channelIndexRelative, OrientationChange orientationCorrection) {
-
-        UnsignedByteBuffer destination = allocateBuffer();
-
-        byte[] sourceArray = source.array();
-        boolean littleEndian = source.order() == ByteOrder.LITTLE_ENDIAN;
-
-        if (orientationCorrection == OrientationChange.KEEP_UNCHANGED) {
-            copyKeepOrientation(sourceArray, littleEndian, channelIndexRelative, destination);
-        } else {
-            copyChangeOrientation(
-                    sourceArray,
-                    littleEndian,
-                    channelIndexRelative,
-                    destination,
-                    orientationCorrection);
-        }
-        return destination;
-    }
-
-    @Override
     protected int calculateBytesPerPixel(int numberChannelsPerArray) {
         return 2 * numberChannelsPerArray;
     }
 
-    /**
-     * Copy the bytes, without changing orientation.
-     *
-     * <p>This is kept separate to {@link #copyChangeOrientation(byte[], boolean, int,
-     * UnsignedByteBuffer, OrientationChange)} as it can be done slightly more efficiently.
-     */
-    private void copyKeepOrientation(
-            byte[] sourceArray,
+    @Override
+    protected void copyKeepOrientation(
+            ByteBuffer source,
             boolean littleEndian,
             int channelIndexRelative,
             UnsignedByteBuffer destination) {
+
+        byte[] sourceArray = source.array();
+
         for (int index = 0; index < sizeBytes; index += bytesPerPixel) {
 
             int value = extractScaledValue(sourceArray, index, channelIndexRelative, littleEndian);
@@ -107,13 +82,16 @@ public class UnsignedByteFromUnsignedShort extends ToUnsignedByteWithScaling {
         }
     }
 
-    /** Copy the bytes, changing orientation. */
-    private void copyChangeOrientation(
-            byte[] sourceArray,
+    @Override
+    protected void copyChangeOrientation(
+            ByteBuffer source,
             boolean littleEndian,
             int channelIndexRelative,
             UnsignedByteBuffer destination,
             OrientationChange orientationCorrection) {
+
+        byte[] sourceArray = source.array();
+
         int x = 0;
         int y = 0;
 
