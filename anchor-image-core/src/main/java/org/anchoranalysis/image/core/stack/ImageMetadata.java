@@ -1,6 +1,6 @@
 package org.anchoranalysis.image.core.stack;
 
-import java.util.Date;
+import java.time.ZonedDateTime;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -42,5 +42,5 @@ public class ImageMetadata {
      * A timestamp, if available, of when the image was first physically created by the
      * camera/device.
      */
-    @Getter private Optional<Date> acqusitionTime;
+    @Getter private Optional<ZonedDateTime> acqusitionTime;
 }

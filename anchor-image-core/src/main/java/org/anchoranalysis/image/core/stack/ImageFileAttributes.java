@@ -5,6 +5,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.FileTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
@@ -24,10 +26,10 @@ public class ImageFileAttributes {
     private Path path;
 
     /** The <i>creation</i> timestamp on the file the image was loaded from. */
-    @Getter private Date creationTime;
+    @Getter private ZonedDateTime creationTime;
 
     /** The <i>last modified</i> timestamp on the file the image was loaded from. */
-    @Getter private Date modificationTime;
+    @Getter private ZonedDateTime modificationTime;
 
     /**
      * Reads {@link ImageFileAttributes} from a path.
@@ -54,7 +56,7 @@ public class ImageFileAttributes {
     }
 
     /** Converts from a {@link FileTime} to a {@link Date}. */
-    private static Date convertToDate(FileTime time) {
-        return new Date(time.toMillis());
+    private static ZonedDateTime convertToDate(FileTime time) {
+        return ZonedDateTime.ofInstant(time.toInstant(), ZoneId.systemDefault());
     }
 }
