@@ -32,7 +32,6 @@ import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.core.progress.ProgressIgnore;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.stack.ImageMetadata;
-import org.anchoranalysis.image.core.stack.ImageFileAttributes;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.core.stack.TimeSequence;
 import org.anchoranalysis.image.io.ImageIOException;
@@ -118,11 +117,9 @@ public interface OpenedImageFile extends AutoCloseable {
 
     /** The bit-depth of the image voxels e.g. 8 for 8-bit, 16 for 16-bit etc. */
     int bitDepth() throws ImageIOException;
-    
-    /**
-     * The file-attributes associated with the image.
-     */
-    ImageFileAttributes fileAttributes() throws ImageIOException;
+
+    /** The timestamps and file-attributes associated with the image. */
+    ImageTimestampsAttributes timestamps() throws ImageIOException;
 
     /** Whether the image-file has RGB encoded voxels. */
     boolean isRGB() throws ImageIOException;
@@ -150,11 +147,14 @@ public interface OpenedImageFile extends AutoCloseable {
      * @throws ImageIOException if any filesystem-related input-output failure occurs.
      */
     default ImageMetadata metadata(int seriesIndex) throws ImageIOException {
+        ImageTimestampsAttributes timestamps = timestamps();
         return new ImageMetadata(
                 dimensionsForSeries(seriesIndex),
                 numberChannels(),
                 numberFrames(),
                 isRGB(),
-                bitDepth(), fileAttributes());
+                bitDepth(),
+                timestamps.getAttributes(),
+                timestamps.getAcqusitionTime());
     }
 }
