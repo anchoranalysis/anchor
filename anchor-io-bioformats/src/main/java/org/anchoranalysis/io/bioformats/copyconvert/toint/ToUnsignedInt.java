@@ -31,9 +31,15 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBufferWrap;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedIntBuffer;
 import org.anchoranalysis.io.bioformats.copyconvert.ConvertTo;
 
-public abstract class ToInt extends ConvertTo<UnsignedIntBuffer> {
+/**
+ * Base class for implementations of {@link ConvertTo} that convert to <i>unsigned int</> buffers.
+ * 
+ * @author Owen Feehan
+ *
+ */
+public abstract class ToUnsignedInt extends ConvertTo<UnsignedIntBuffer> {
 
-    protected ToInt() {
+    protected ToUnsignedInt() {
         super(
                 VoxelsUntyped::asInt,
                 UnsignedIntBuffer::allocate,

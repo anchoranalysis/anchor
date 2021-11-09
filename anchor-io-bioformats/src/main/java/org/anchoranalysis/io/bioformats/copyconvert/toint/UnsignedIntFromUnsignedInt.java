@@ -32,7 +32,7 @@ import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.OrientationChange;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedIntBuffer;
 
-public class UnsignedIntFromUnsignedInt extends ToInt {
+public class UnsignedIntFromUnsignedInt extends ToUnsignedInt {
 
     private static final int BYTES_PER_PIXEL = 4;
 
