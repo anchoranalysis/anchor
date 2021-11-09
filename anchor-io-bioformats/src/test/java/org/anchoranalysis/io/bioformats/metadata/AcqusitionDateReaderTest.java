@@ -26,8 +26,9 @@ class AcqusitionDateReaderTest {
 
     private TestLoader loader = TestLoader.createFromMavenWorkingDirectory();
 
+    // As the image doesn't have a time zone offset set, it will use the system-default.
     private static final ZonedDateTime EXPECTED_DATE =
-            ZonedDateTime.of(2021, 07, 10, 10, 20, 34, 0, ZoneId.of("Europe/Berlin"));
+            ZonedDateTime.of(2021, 07, 10, 10, 20, 34, 0, ZoneId.systemDefault());
 
     @Test
     void testWithoutExif() throws ImageIOException {
