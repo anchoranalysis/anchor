@@ -134,7 +134,7 @@ public abstract class ConvertTo<T> {
     protected VoxelBuffer<T> convertSliceOfSingleChannel(
             ByteBuffer source, int channelIndexRelative, OrientationChange orientationCorrection)
             throws IOException {
-        if (!supportsInterleaving() && channelIndexRelative != 0) {
+        if (!supportsMultipleChannelsPerSourceBuffer() && channelIndexRelative != 0) {
             throw new IOException("interleaving not supported");
         }
         boolean littleEndian = source.order() == ByteOrder.LITTLE_ENDIAN;
@@ -181,11 +181,12 @@ public abstract class ConvertTo<T> {
             throws IOException;
 
     /**
-     * Whether interleaving of z-slices is supported.
+     * Whether the source buffer can encode more than one channel?
      *
-     * @return true if interleaving is supported, false otherwise.
+     * @return true if this possible (either with interleaving or with RGB-encoded voxels), false if
+     *     a buffer will always describe one channel only.
      */
-    protected abstract boolean supportsInterleaving();
+    protected abstract boolean supportsMultipleChannelsPerSourceBuffer();
 
     private static <S> void placeSliceInDestination(
             VoxelBuffer<S> voxelBuffer,

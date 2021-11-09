@@ -40,7 +40,7 @@ public abstract class ToFloat extends ConvertTo<FloatBuffer> {
     protected abstract int bytesPerPixel();
 
     @Override
-    protected boolean supportsInterleaving() {
+    protected boolean supportsMultipleChannelsPerSourceBuffer() {
         return false;
     }
 }

@@ -55,7 +55,7 @@ public class UnsignedByteFromUnsignedShort extends ToUnsignedByteWithScaling {
     }
 
     @Override
-    protected boolean supportsInterleaving() {
+    protected boolean supportsMultipleChannelsPerSourceBuffer() {
         return false;
     }
 

@@ -54,7 +54,7 @@ public class UnsignedByteFromUnsignedByteInterleaving extends ToUnsignedByte {
     }
 
     @Override
-    protected boolean supportsInterleaving() {
+    protected boolean supportsMultipleChannelsPerSourceBuffer() {
         return true;
     }
 

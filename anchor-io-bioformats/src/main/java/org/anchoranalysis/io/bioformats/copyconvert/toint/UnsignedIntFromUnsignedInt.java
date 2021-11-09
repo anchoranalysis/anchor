@@ -45,7 +45,7 @@ public class UnsignedIntFromUnsignedInt extends ToInt {
     }
 
     @Override
-    protected boolean supportsInterleaving() {
+    protected boolean supportsMultipleChannelsPerSourceBuffer() {
         return false;
     }
 

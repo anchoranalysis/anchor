@@ -36,13 +36,16 @@ import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
  * Converts a {@link ByteBuffer} encoding <i>unsigned byte</i>s (<i>no interleaving</i>) to
  * <i>unsigned byte</i> type, as expected in an Anchor {@link VoxelBuffer}.
  *
+ * <p>This also supports RGB-encoded bytes, where multiple channels are encoded into each voxel, but
+ * without interleaving.
+ *
  * @author Owen Feehan
  */
 public class UnsignedByteFromUnsignedByteNoInterleaving extends ToUnsignedByte {
 
     @Override
-    protected boolean supportsInterleaving() {
-        return false;
+    protected boolean supportsMultipleChannelsPerSourceBuffer() {
+        return true;
     }
 
     @Override

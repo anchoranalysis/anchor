@@ -57,7 +57,7 @@ public abstract class ToUnsignedShort extends ConvertTo<UnsignedShortBuffer> {
     }
 
     @Override
-    protected boolean supportsInterleaving() {
+    protected boolean supportsMultipleChannelsPerSourceBuffer() {
         return true;
     }
 

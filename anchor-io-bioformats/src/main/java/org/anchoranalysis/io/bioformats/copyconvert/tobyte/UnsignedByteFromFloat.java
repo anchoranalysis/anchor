@@ -53,7 +53,7 @@ public class UnsignedByteFromFloat extends ToUnsignedByte {
     }
 
     @Override
-    protected boolean supportsInterleaving() {
+    protected boolean supportsMultipleChannelsPerSourceBuffer() {
         return false;
     }
 
