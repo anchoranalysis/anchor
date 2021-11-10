@@ -32,6 +32,7 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.format.FormatExtensions;
 import org.anchoranalysis.core.format.ImageFileFormat;
 import org.anchoranalysis.core.format.NonImageFileFormat;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.progress.ProgressIgnore;
 import org.anchoranalysis.core.serialize.DeserializationFailedException;
 import org.anchoranalysis.core.serialize.Deserializer;
@@ -65,24 +66,25 @@ class ObjectDualDeserializer implements Deserializer<ObjectMask> {
     private final StackReader stackReader;
 
     @Override
-    public ObjectMask deserialize(Path filePath) throws DeserializationFailedException {
+    public ObjectMask deserialize(Path filePath, Logger logger)
+            throws DeserializationFailedException {
         try {
             Path tiffFilename =
                     FormatExtensions.changeExtension(
                             filePath.toAbsolutePath(),
                             NonImageFileFormat.SERIALIZED_BINARY,
                             ImageFileFormat.TIFF);
-            return createFromPaths(filePath, tiffFilename);
+            return createFromPaths(filePath, tiffFilename, logger);
         } catch (OperationFailedException e) {
             throw new DeserializationFailedException(e);
         }
     }
 
-    private ObjectMask createFromPaths(Path pathSerializedBox, Path pathTiff)
+    private ObjectMask createFromPaths(Path pathSerializedBox, Path pathTiff, Logger logger)
             throws DeserializationFailedException {
-        BoundingBox box = BOUNDING_BOX_DESERIALIZER.deserialize(pathSerializedBox);
+        BoundingBox box = BOUNDING_BOX_DESERIALIZER.deserialize(pathSerializedBox, logger);
 
-        try (OpenedImageFile openedFile = stackReader.openFile(pathTiff)) {
+        try (OpenedImageFile openedFile = stackReader.openFile(pathTiff, logger)) {
             Stack stack =
                     openedFile
                             .openCheckType(0, ProgressIgnore.get(), UnsignedByteVoxelType.INSTANCE)

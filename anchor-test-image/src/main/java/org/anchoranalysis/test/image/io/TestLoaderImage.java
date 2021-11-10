@@ -28,9 +28,10 @@ package org.anchoranalysis.test.image.io;
 
 import java.io.FileNotFoundException;
 import java.nio.file.Path;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.serialize.DeserializationFailedException;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.stack.Stack;
@@ -40,17 +41,22 @@ import org.anchoranalysis.image.io.object.input.ObjectCollectionReader;
 import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.io.bioformats.ConfigureBioformatsLogging;
+import org.anchoranalysis.test.LoggingFixture;
 import org.anchoranalysis.test.TestDataLoadException;
 import org.anchoranalysis.test.TestLoader;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class TestLoaderImage {
 
+    // START REQUIRED ARGUMENTS
     /** Delegate loader (for non image-related loading) */
     @Getter private final TestLoader loader;
 
     /** Reads rasters from filesystem */
     private final StackReader stackReader;
+    // END REQUIRED ARGUMENTS
+
+    private final Logger logger = LoggingFixture.suppressedLogger();
 
     public TestLoaderImage(TestLoader loader) {
         TestReaderWriterUtilities.ensureStackReader();
@@ -80,7 +86,7 @@ public class TestLoaderImage {
 
         ConfigureBioformatsLogging.instance().makeSureConfigured();
 
-        try (OpenedImageFile openedFile = stackReader.openFile(filePath)) {
+        try (OpenedImageFile openedFile = stackReader.openFile(filePath, logger)) {
             return openedFile.open().get(0);
         } catch (ImageIOException e) {
             throw new TestDataLoadException(e);
@@ -152,7 +158,8 @@ public class TestLoaderImage {
         TestReaderWriterUtilities.ensureStackReader();
 
         try {
-            return ObjectCollectionReader.createFromPath(folderPath);
+            return ObjectCollectionReader.createFromPath(
+                    folderPath, LoggingFixture.suppressedLogger());
         } catch (DeserializationFailedException e) {
             throw new TestDataLoadException(e);
         }

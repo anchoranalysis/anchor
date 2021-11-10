@@ -28,6 +28,7 @@ package org.anchoranalysis.io.manifest.directory.sequenced;
 
 import java.nio.file.Path;
 import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.serialize.DeserializationFailedException;
 import org.anchoranalysis.core.serialize.Deserializer;
 
@@ -40,6 +41,7 @@ import org.anchoranalysis.core.serialize.Deserializer;
 public class SequencedDirectoryDeserializer<T> extends DeriveElementsFromSequencedDirectory<T> {
 
     private Deserializer<T> deserializer;
+    private Logger logger;
 
     /**
      * Creates from a manifest-directory entry.
@@ -49,15 +51,16 @@ public class SequencedDirectoryDeserializer<T> extends DeriveElementsFromSequenc
      * @param deserializer the deserializer to use on each file in the sequence
      */
     public SequencedDirectoryDeserializer(
-            SequencedDirectory directory, Deserializer<T> deserializer) {
+            SequencedDirectory directory, Deserializer<T> deserializer, Logger logger) {
         super(directory);
         this.deserializer = deserializer;
+        this.logger = logger;
     }
 
     @Override
     protected T createFromFile(Path path) throws CreateException {
         try {
-            return deserializer.deserialize(path);
+            return deserializer.deserialize(path, logger);
         } catch (DeserializationFailedException e) {
             throw new CreateException(e);
         }

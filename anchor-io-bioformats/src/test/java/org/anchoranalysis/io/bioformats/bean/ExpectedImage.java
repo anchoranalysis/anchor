@@ -30,7 +30,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.io.File;
 import java.nio.file.Path;
 import java.util.Optional;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.core.stack.TimeSequence;
@@ -38,6 +39,7 @@ import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
 import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
+import org.anchoranalysis.test.LoggingFixture;
 import org.anchoranalysis.test.TestLoader;
 
 /**
@@ -56,34 +58,38 @@ import org.anchoranalysis.test.TestLoader;
  *
  * @author Owen Feehan
  */
-@AllArgsConstructor
+@RequiredArgsConstructor
 class ExpectedImage {
 
     private static final String IMAGE_DIRECTORY = "images";
 
+    // START: REQUIRED ARGUMENTS
     /** The file extension of the iamge */
-    private String extension;
+    private final String extension;
 
     /** The filename (without extension) of the image somewhere in the images/ directory */
-    private String fileNameWithoutExtension;
+    private final String fileNameWithoutExtension;
 
     /**
      * The expected count of voxels with intensity=={@code intensityValueToCount} in the first
      * channel.
      */
-    private int expectedCount;
+    private final int expectedCount;
 
     /** The expected number of channels */
-    private int expectedNumberChannels;
+    private final int expectedNumberChannels;
 
     /** The expected data-type of voxels */
-    private VoxelDataType expectedDataType;
+    private final VoxelDataType expectedDataType;
 
     /** The expected image-resolution. */
-    private Optional<Resolution> expectedResolution;
+    private final Optional<Resolution> expectedResolution;
 
     /** Which intensity value to count */
-    private int intensityValueToCount;
+    private final int intensityValueToCount;
+    // END: REQUIRED ARGUMENTS
+
+    private Logger logger = LoggingFixture.suppressedLogger();
 
     public void openAndAssert(StackReader stackReader, TestLoader loader) throws ImageIOException {
         Stack stack = openStackFromReader(stackReader, loader);
@@ -102,7 +108,7 @@ class ExpectedImage {
 
         Path path = loader.resolveTestPath(relativePath());
 
-        OpenedImageFile openedFile = reader.openFile(path);
+        OpenedImageFile openedFile = reader.openFile(path, logger);
         TimeSequence timeSequence = openedFile.open();
         return timeSequence.get(0);
     }

@@ -32,7 +32,7 @@ import java.util.Optional;
 import lombok.Getter;
 import org.anchoranalysis.core.format.NonImageFileFormat;
 import org.anchoranalysis.core.functional.OptionalUtilities;
-import org.anchoranalysis.core.log.error.ErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.serialize.DeserializationFailedException;
 import org.anchoranalysis.core.serialize.Deserializer;
 import org.anchoranalysis.core.serialize.DictionaryDeserializer;
@@ -52,15 +52,18 @@ public class FinderSerializedObject<T> extends FinderSingleFile {
 
     private Optional<T> deserializedObject = Optional.empty();
 
+    private Logger logger;
+
     /** Provides a memoized (cached) means of access the results of the finder */
     @Getter
     private SerializedObjectSupplier<T> memoized =
             SerializedObjectSupplier.cache(
                     () -> OptionalUtilities.createFromFlagChecked(exists(), this::getInternal));
 
-    public FinderSerializedObject(String function, ErrorReporter errorReporter) {
-        super(errorReporter);
+    public FinderSerializedObject(String function, Logger logger) {
+        super(logger.errorReporter());
         this.function = function;
+        this.logger = logger;
     }
 
     public T get() throws IOException {
@@ -101,7 +104,7 @@ public class FinderSerializedObject<T> extends FinderSingleFile {
     }
 
     private T deserialize(OutputtedFile fileWrite) throws DeserializationFailedException {
-        return createDeserializer(fileWrite).deserialize(fileWrite.calculatePath());
+        return createDeserializer(fileWrite).deserialize(fileWrite.calculatePath(), logger);
     }
 
     private Deserializer<T> createDeserializer(OutputtedFile fileWrite) {

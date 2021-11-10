@@ -32,6 +32,7 @@ import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.format.NonImageFileFormat;
 import org.anchoranalysis.core.index.GetOperationFailedException;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.serialize.DeserializationFailedException;
 import org.anchoranalysis.core.serialize.Deserializer;
 import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
@@ -46,7 +47,8 @@ import org.anchoranalysis.io.manifest.sequencetype.SequenceTypeException;
 class ReadObjectsFromTIFFDirectory implements Deserializer<ObjectCollection> {
 
     @Override
-    public ObjectCollection deserialize(Path folderPath) throws DeserializationFailedException {
+    public ObjectCollection deserialize(Path folderPath, Logger logger)
+            throws DeserializationFailedException {
         StackReader stackReader =
                 RegisterBeanFactories.getDefaultInstances()
                         .getInstanceFor(StackReader.class)
@@ -54,22 +56,20 @@ class ReadObjectsFromTIFFDirectory implements Deserializer<ObjectCollection> {
                                 () ->
                                         new DeserializationFailedException(
                                                 "No default StackReader is defined, as is required."));
-        return readObjects(folderPath, stackReader);
+        return readObjects(folderPath, stackReader, logger);
     }
 
-    private ObjectCollection readObjects(Path folderPath, StackReader stackReader)
+    private ObjectCollection readObjects(Path folderPath, StackReader stackReader, Logger logger)
             throws DeserializationFailedException {
 
         try {
+            String acceptFilter = "*" + NonImageFileFormat.SERIALIZED_BINARY.extensionWithPeriod();
             BoundsFromRange<ObjectMask> container =
                     deserializeFromDirectory(
                             new SerializedObjectsFromDirectory(
-                                    folderPath,
-                                    Optional.of(
-                                            "*"
-                                                    + NonImageFileFormat.SERIALIZED_BINARY
-                                                            .extensionWithPeriod())),
-                            new ObjectDualDeserializer(stackReader));
+                                    folderPath, Optional.of(acceptFilter)),
+                            new ObjectDualDeserializer(stackReader),
+                            logger);
             return createFromContainer(container);
 
         } catch (SequenceTypeException | CreateException e) {
@@ -92,9 +92,9 @@ class ReadObjectsFromTIFFDirectory implements Deserializer<ObjectCollection> {
     }
 
     private static <T> BoundsFromRange<T> deserializeFromDirectory(
-            SequencedDirectory directory, Deserializer<T> deserializer) {
+            SequencedDirectory directory, Deserializer<T> deserializer, Logger logger) {
         SupplierAtIndex<T> container =
-                new SequencedDirectoryDeserializer<>(directory, deserializer);
+                new SequencedDirectoryDeserializer<>(directory, deserializer, logger);
         return new BoundsFromRange<>(container, directory.getAssociatedElementRange());
     }
 }

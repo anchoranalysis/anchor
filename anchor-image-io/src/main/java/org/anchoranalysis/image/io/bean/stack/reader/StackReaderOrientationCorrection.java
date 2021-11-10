@@ -1,6 +1,7 @@
 package org.anchoranalysis.image.io.bean.stack.reader;
 
 import java.nio.file.Path;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.core.dimensions.OrientationChange;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
@@ -18,9 +19,12 @@ public abstract class StackReaderOrientationCorrection extends StackReader {
      *
      * @param path where the file is located.
      * @param orientationCorrection correction applied to the orientation as image is loaded.
+     * @param logger where to write informative messages to, and and any non-fatal errors (fatal
+     *     errors are throw as exceptions).
      * @return an interface to the opened file that should be closed when no longer in use.
      * @throws ImageIOException if the file cannot be read.
      */
-    public abstract OpenedImageFile openFile(Path path, OrientationChange orientationCorrection)
+    public abstract OpenedImageFile openFile(
+            Path path, OrientationChange orientationCorrection, Logger logger)
             throws ImageIOException;
 }

@@ -29,6 +29,7 @@ package org.anchoranalysis.core.serialize;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.Xpp3Driver;
 import java.nio.file.Path;
+import org.anchoranalysis.core.log.Logger;
 
 /**
  * Deserializes an object using the <a href="https://x-stream.github.io/">XStream library</a>.
@@ -44,7 +45,7 @@ public class XStreamDeserializer<T> implements Deserializer<T> {
 
     @SuppressWarnings("unchecked")
     @Override
-    public T deserialize(Path filePath) throws DeserializationFailedException {
+    public T deserialize(Path filePath, Logger logger) throws DeserializationFailedException {
 
         if (!filePath.toFile().exists()) {
             throw new DeserializationFailedException(

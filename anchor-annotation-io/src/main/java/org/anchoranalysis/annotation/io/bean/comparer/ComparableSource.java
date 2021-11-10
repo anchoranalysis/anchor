@@ -29,6 +29,7 @@ package org.anchoranalysis.annotation.io.bean.comparer;
 import java.nio.file.Path;
 import org.anchoranalysis.annotation.io.image.findable.Findable;
 import org.anchoranalysis.bean.AnchorBean;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.io.input.InputReadFailedException;
@@ -55,11 +56,13 @@ public abstract class ComparableSource extends AnchorBean<ComparableSource> {
      *     usually the same as the image-size.
      * @param debugMode true if debug-mode is activated, which can influence paths on the
      *     file-system.
+     * @param logger where to write informative messages to, and and any non-fatal errors (fatal
+     *     errors are throw as exceptions).
      * @return the elements converted into a {@link ObjectCollection} and wrapped into a {@link
      *     Findable} element that indicates if they were successfully found on the file-system.
      * @throws InputReadFailedException if the objects cannot be successfully loaded.
      */
     public abstract Findable<ObjectCollection> loadAsObjects(
-            Path reference, Dimensions dimensions, boolean debugMode)
+            Path reference, Dimensions dimensions, boolean debugMode, Logger logger)
             throws InputReadFailedException;
 }

@@ -44,7 +44,7 @@ import org.anchoranalysis.core.functional.checked.CheckedToIntFunction;
 public class CheckedStream {
 
     /**
-     * An exception that wraps another exception, but exposes itself as a {@link RuntimeException}
+     * An exception that wraps another exception, but exposes itself as a {@link RuntimeException}.
      */
     public static class ConvertedToRuntimeException extends AnchorFriendlyRuntimeException {
 
@@ -65,7 +65,7 @@ public class CheckedStream {
     }
 
     /**
-     * Performs a {@link Stream#forEach} but accepts a consumer that can throw a checked-exception
+     * Performs a {@link Stream#forEach} but accepts a consumer that can throw a checked-exception.
      *
      * <p>This uses some internal reflection trickery to suppress the checked exception, and then
      * rethrow it.
@@ -94,7 +94,7 @@ public class CheckedStream {
     }
 
     /**
-     * Performs a {@link Stream#filter} but accepts a predicate that can throw a checked-exception
+     * Performs a {@link Stream#filter} but accepts a predicate that can throw a checked-exception.
      *
      * <p>This uses some internal reflection trickery to suppress the checked exception, and then
      * rethrow it.
@@ -104,11 +104,11 @@ public class CheckedStream {
      *
      * @param  <T> type to consume
      * @param  <E> exception that can be thrown by {@code mapFunction}
-     * @param stream the stream to apply the map on
-     * @param throwableClass the class of {@code E}
-     * @param predicate the predicate to call for each object in the stream
-     * @return elements from {@code stream} that match the predicate
-     * @throws E if the exception is thrown during filtering
+     * @param stream the stream to apply the map on.
+     * @param throwableClass the class of {@code E}.
+     * @param predicate the predicate to call for each object in the stream.
+     * @return elements from {@code stream} that match the predicate.
+     * @throws E if the exception is thrown during filtering.
      */
     public static <T, E extends Exception> Stream<T> filter(
             Stream<T> stream,
@@ -124,7 +124,7 @@ public class CheckedStream {
     }
 
     /**
-     * Performs a {@link Stream#map} but accepts a function that can throw a checked-exception
+     * Performs a {@link Stream#map} but accepts a function that can throw a checked-exception.
      *
      * <p>This uses some internal reflection trickery to suppress the checked exception, and then
      * rethrow it.
@@ -135,10 +135,10 @@ public class CheckedStream {
      * @param  <S> input-type to map
      * @param  <T> output-type of map
      * @param  <E> exception that can be thrown by {@code mapFunction}
-     * @param stream the stream to apply the map on
-     * @param throwableClass the class of {@code E}
-     * @param mapFunction the function to use for mapping
-     * @return the output of the flatMap
+     * @param stream the stream to apply the map on.
+     * @param throwableClass the class of {@code E}.
+     * @param mapFunction the function to use for mapping.
+     * @return the output of the flatMap.
      * @throws E if the exception is thrown during mapping
      */
     public static <S, T, E extends Exception> Stream<T> map(
@@ -165,11 +165,11 @@ public class CheckedStream {
      *
      * @param  <S> input-type to map
      * @param  <E> exception that can be thrown by {@code mapFunction}
-     * @param stream the stream to apply the map on
-     * @param throwableClass the class of {@code E}
-     * @param mapFunction the function to use for mapping
-     * @return the output of the flatMap
-     * @throws E if the exception is thrown during mapping
+     * @param stream the stream to apply the map on.
+     * @param throwableClass the class of {@code E}.
+     * @param mapFunction the function to use for mapping.
+     * @return the output of the flatMap.
+     * @throws E if the exception is thrown during mapping.
      */
     public static <S, E extends Exception> IntStream mapToInt(
             Stream<S> stream,
@@ -193,11 +193,11 @@ public class CheckedStream {
      *
      * @param <T> end-type for mapping
      * @param <E> an exception that be thrown during mapping
-     * @param stream stream of {@code int}s
-     * @param throwableClass the class of {@code E}
-     * @param mapFunc function for mapping
-     * @return the stream after the mapping
-     * @throws E if {@code mapFunc} throws it
+     * @param stream stream of {@code int}s.
+     * @param throwableClass the class of {@code E}.
+     * @param mapFunc function for mapping.
+     * @return the stream after the mapping.
+     * @throws E if {@code mapFunc} throws it.
      */
     public static <T, E extends Exception> Stream<T> mapIntStream(
             IntStream stream,
@@ -221,13 +221,13 @@ public class CheckedStream {
      * <p>As a side-effect, any runtime exceptions that are thrown during the function, will be
      * rethrown wrapped inside a {@link ConvertedToRuntimeException}.
      *
-     * @param  <T> object-type to map-to
-     * @param  <E> exception that can be thrown by {@code mapFunction}
-     * @param stream the stream to apply the map on
-     * @param throwableClass the class of {@code E}
-     * @param mapFunction the function to use for mapping
-     * @return the output of the flatMap
-     * @throws E if the exception is thrown during mapping
+     * @param  <T> object-type to map-to.
+     * @param  <E> exception that can be thrown by {@code mapFunction}.
+     * @param stream the stream to apply the map on.
+     * @param throwableClass the class of {@code E}.
+     * @param mapFunction the function to use for mapping.
+     * @return the output of the flatMap.
+     * @throws E if the exception is thrown during mapping.
      */
     public static <T, E extends Exception> Stream<T> mapToObj(
             IntStream stream,
@@ -249,16 +249,16 @@ public class CheckedStream {
      * rethrow it.
      *
      * <p>As a side-effect, any runtime exceptions that are thrown during the function, will be
-     * rethrown wrapped inside a {@link ConvertedToRuntimeException}
+     * rethrown wrapped inside a {@link ConvertedToRuntimeException}.
      *
      * @param <S> input-type to flatMap
      * @param <T> output-type of flatMap
-     * @param <E> exception that can be thrown by {@code flatMapFunction}
-     * @param stream the stream to apply the flatMap on
-     * @param throwableClass the class of {@code E}
-     * @param flatMapFunction the function to use for flatMapping
-     * @return the output of the flatMap
-     * @throws E if the exception
+     * @param <E> exception that can be thrown by {@code flatMapFunction}.
+     * @param stream the stream to apply the flatMap on.
+     * @param throwableClass the class of {@code E}.
+     * @param flatMapFunction the function to use for flatMapping.
+     * @return the output of the flatMap.
+     * @throws E if the exception.
      */
     public static <S, T, E extends Exception> Stream<T> flatMap(
             Stream<S> stream,
@@ -283,8 +283,8 @@ public class CheckedStream {
      * @param <E> the exception type that may be the "cause" of the {@link
      *     ConvertedToRuntimeException}, in which case, it would be rethrown
      * @param e the exception, which will be either rethrown as-is, or its cause will be rethrown.
-     * @param throwableClass the class of {@code E}
-     * @return nothing, as an exception will always be thrown
+     * @param throwableClass the class of {@code E}.
+     * @return nothing, as an exception will always be thrown.
      * @throws E always, rethrowing either the run-time exception or its cause.
      */
     private static <T, E extends Exception> T throwException(
@@ -302,12 +302,12 @@ public class CheckedStream {
      *
      * @param <S> parameter-type for function
      * @param <T> return-type for function
-     * @param <E> checked-exception that can be thrown by function
-     * @param param the parameter to apply to the function
-     * @param function the function
-     * @return the return-value of the function
+     * @param <E> checked-exception that can be thrown by function.
+     * @param param the parameter to apply to the function.
+     * @param function the function.
+     * @return the return-value of the function.
      * @throws ConvertedToRuntimeException a run-time exception if an exception is thrown by {@code
-     *     function}
+     *     function}.
      */
     private static <S, T, E extends Exception> T suppressCheckedException(
             S param, CheckedFunction<S, T, E> function) {
@@ -320,7 +320,7 @@ public class CheckedStream {
 
     /**
      * Like @link(#suppressCheckedException) but instead accepts {@link CheckedToIntFunction}
-     * functions
+     * functions.
      */
     private static <S, E extends Exception> int suppressCheckedException(
             S param, CheckedToIntFunction<S, E> function) {
@@ -333,7 +333,7 @@ public class CheckedStream {
 
     /**
      * Like @link(#suppressCheckedException) but instead accepts {@link CheckedIntFunction}
-     * functions
+     * functions.
      */
     private static <T, E extends Exception> T suppressCheckedException(
             int param, CheckedIntFunction<T, E> function) {
@@ -345,7 +345,7 @@ public class CheckedStream {
     }
 
     /**
-     * Like @link(#suppressCheckedException) but instead accepts {@link CheckedConsumer} functions
+     * Like @link(#suppressCheckedException) but instead accepts {@link CheckedConsumer} functions.
      */
     private static <T, E extends Exception> void suppressCheckedException(
             T param, CheckedConsumer<T, E> consumer) {
@@ -357,7 +357,7 @@ public class CheckedStream {
     }
 
     /**
-     * Like @link(#suppressCheckedException) but instead accepts {@link CheckedPredicate} functions
+     * Like @link(#suppressCheckedException) but instead accepts {@link CheckedPredicate} functions.
      */
     private static <T, E extends Exception> boolean suppressCheckedException(
             T param, CheckedPredicate<T, E> predicate) {

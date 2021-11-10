@@ -134,7 +134,8 @@ public class MultipleComparer extends AnchorBean<MultipleComparer> {
             try {
                 compareObjects =
                         source.getValue()
-                                .loadAsObjects(annotationPath, background.dimensions(), debugMode);
+                                .loadAsObjects(
+                                        annotationPath, background.dimensions(), debugMode, logger);
             } catch (InputReadFailedException e) {
                 throw new CreateException(e);
             }

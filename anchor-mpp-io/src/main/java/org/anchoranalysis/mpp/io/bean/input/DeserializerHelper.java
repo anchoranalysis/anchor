@@ -28,6 +28,7 @@ package org.anchoranalysis.mpp.io.bean.input;
 
 import java.nio.file.Path;
 import org.anchoranalysis.annotation.mark.DualMarksAnnotation;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.serialize.DeserializationFailedException;
 import org.anchoranalysis.core.serialize.XStreamDeserializer;
 import org.anchoranalysis.mpp.mark.MarkCollection;
@@ -42,14 +43,15 @@ class DeserializerHelper<T> {
     private XStreamDeserializer<DualMarksAnnotation<T>> deserializerAnnotation =
             new XStreamDeserializer<>();
 
-    public MarkCollection deserializeMarks(Path path) throws DeserializationFailedException {
-        return deserializerMarks.deserialize(path);
+    public MarkCollection deserializeMarks(Path path, Logger logger)
+            throws DeserializationFailedException {
+        return deserializerMarks.deserialize(path, logger);
     }
 
     public MarkCollection deserializeMarksFromAnnotation(
-            Path outPath, boolean includeAccepted, boolean includeRejected)
+            Path outPath, boolean includeAccepted, boolean includeRejected, Logger logger)
             throws DeserializationFailedException {
-        DualMarksAnnotation<T> ann = deserializerAnnotation.deserialize(outPath);
+        DualMarksAnnotation<T> ann = deserializerAnnotation.deserialize(outPath, logger);
         if (!ann.isFinished()) {
             throw new DeserializationFailedException("Annotation was never finished");
         }

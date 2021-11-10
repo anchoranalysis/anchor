@@ -34,6 +34,7 @@ import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
 import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
@@ -73,18 +74,20 @@ public abstract class AnnotatorStrategy extends AnchorBean<AnnotatorStrategy> {
      * label is available.
      *
      * @param input the input to find an annotation label for.
+     * @param logger where to write informative messages to, and and any non-fatal errors (fatal
+     *     errors are throw as exceptions).
      * @return the label, if available.
      * @throws OperationFailedException if a label cannot be successfully determined.
      */
-    public abstract Optional<String> annotationLabelFor(ProvidesStackInput input)
+    public abstract Optional<String> annotationLabelFor(ProvidesStackInput input, Logger logger)
             throws OperationFailedException;
 
     /**
-     * The degree as to how lengthy the labels from {@link #annotationLabelFor(ProvidesStackInput)}
-     * can be.
+     * The degree as to how lengthy the labels from {@link #annotationLabelFor(ProvidesStackInput,
+     * Logger)} can be.
      *
-     * <p>The higher the number, the lengthier {@link #annotationLabelFor(ProvidesStackInput)} can
-     * be.
+     * <p>The higher the number, the lengthier {@link #annotationLabelFor(ProvidesStackInput,
+     * Logger)} can be.
      *
      * @return the weight.
      */

@@ -1,6 +1,7 @@
 package org.anchoranalysis.io.bioformats.metadata;
 
 import com.drew.metadata.Metadata;
+import com.drew.metadata.exif.ExifDirectoryBase;
 import com.drew.metadata.exif.ExifIFD0Directory;
 import java.nio.file.Path;
 import java.time.ZonedDateTime;
@@ -27,9 +28,9 @@ public class AcquisitionDateReader {
      */
     private static final int[] ACQUSITION_TIME_TAGS =
             new int[] {
-                ExifIFD0Directory.TAG_DATETIME, // NOSONAR
-                ExifIFD0Directory.TAG_DATETIME_ORIGINAL, // NOSONAR
-                ExifIFD0Directory.TAG_DATETIME_DIGITIZED // NOSONAR
+                ExifDirectoryBase.TAG_DATETIME,
+                ExifDirectoryBase.TAG_DATETIME_ORIGINAL,
+                ExifDirectoryBase.TAG_DATETIME_DIGITIZED
             };
 
     /**
@@ -40,8 +41,8 @@ public class AcquisitionDateReader {
      */
     private static final int[] TIMEZONE_TAGS =
             new int[] {
-                ExifIFD0Directory.TAG_TIME_ZONE_OFFSET, // NOSONAR
-                ExifIFD0Directory.TAG_TIME_ZONE_OFFSET_TIFF_EP // NOSONAR
+                ExifDirectoryBase.TAG_TIME_ZONE_OFFSET,
+                ExifDirectoryBase.TAG_TIME_ZONE_OFFSET_TIFF_EP
             };
 
     /**
@@ -54,9 +55,9 @@ public class AcquisitionDateReader {
      * treated as the acqusition date:
      *
      * <ol>
-     *   <li>{@link ExifIFD0Directory#TAG_DATETIME}
-     *   <li>{@link ExifIFD0Directory#TAG_DATETIME_ORIGINAL}
-     *   <li>{@link ExifIFD0Directory#TAG_DATETIME_DIGITIZED}
+     *   <li>{@link ExifDirectoryBase#TAG_DATETIME}
+     *   <li>{@link ExifDirectoryBase#TAG_DATETIME_ORIGINAL}
+     *   <li>{@link ExifDirectoryBase#TAG_DATETIME_DIGITIZED}
      * </ol>
      *
      * @param path the path to the image.

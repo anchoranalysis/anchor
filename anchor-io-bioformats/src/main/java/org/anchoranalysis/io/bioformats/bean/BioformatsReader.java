@@ -44,6 +44,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.core.dimensions.OrientationChange;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.reader.StackReaderOrientationCorrection;
@@ -81,12 +82,13 @@ public class BioformatsReader extends StackReaderOrientationCorrection {
     }
 
     @Override
-    public OpenedImageFile openFile(Path path) throws ImageIOException {
-        return openFile(path, OrientationChange.KEEP_UNCHANGED);
+    public OpenedImageFile openFile(Path path, Logger logger) throws ImageIOException {
+        return openFile(path, OrientationChange.KEEP_UNCHANGED, logger);
     }
 
     @Override
-    public OpenedImageFile openFile(Path filePath, OrientationChange orientationCorrection)
+    public OpenedImageFile openFile(
+            Path filePath, OrientationChange orientationCorrection, Logger logger)
             throws ImageIOException {
 
         try {
