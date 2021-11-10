@@ -1,6 +1,7 @@
 package org.anchoranalysis.io.bioformats.metadata;
 
 import com.drew.metadata.Metadata;
+import com.drew.metadata.exif.ExifDirectoryBase;
 import com.drew.metadata.exif.ExifIFD0Directory;
 import java.nio.file.Path;
 import java.util.Optional;
@@ -47,7 +48,7 @@ public class OrientationReader {
             throws ImageIOException {
         Optional<Integer> orientation =
                 ReadMetadataUtilities.readInt(
-                        metadata, ExifIFD0Directory.class, ExifIFD0Directory.TAG_ORIENTATION);
+                        metadata, ExifIFD0Directory.class, ExifDirectoryBase.TAG_ORIENTATION);
         return OptionalUtilities.map(orientation, value -> decodeOrientationTag(value)); // NOSONAR
     }
 
