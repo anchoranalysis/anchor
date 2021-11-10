@@ -1,8 +1,10 @@
 package org.anchoranalysis.io.bioformats.copyconvert.tobyte;
 
+import java.io.IOException;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.io.bioformats.copyconvert.ImageFileEncoding;
 
 /**
  * Like {@link ToUnsignedByte} but applies scaling, if necessary, to map the original value to
@@ -32,8 +34,9 @@ public abstract class ToUnsignedByteWithScaling extends ToUnsignedByte {
     private Optional<ApplyScaling> applyScaling;
 
     @Override
-    protected void setupBefore(Dimensions dimensions, int numberChannelsPerArray) {
-        super.setupBefore(dimensions, numberChannelsPerArray);
+    protected void setupBefore(Dimensions dimensions, ImageFileEncoding encoding)
+            throws IOException {
+        super.setupBefore(dimensions, encoding);
         applyScaling = calculateConvertRatio();
     }
 

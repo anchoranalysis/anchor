@@ -28,21 +28,12 @@ package org.anchoranalysis.io.bioformats.copyconvert.toint;
 
 import java.nio.ByteBuffer;
 import loci.common.DataTools;
-import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.OrientationChange;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedIntBuffer;
 
 public class UnsignedIntFromUnsignedInt extends ToUnsignedInt {
 
-    private static final int BYTES_PER_PIXEL = 4;
-
-    protected int sizeBytes;
-
-    @Override
-    protected void setupBefore(Dimensions dimensions, int numberChannelsPerArray) {
-        super.setupBefore(dimensions, numberChannelsPerArray);
-        this.sizeBytes = sizeXY * BYTES_PER_PIXEL;
-    }
+    private static final int BYTES_PER_VOXEL = 4;
 
     @Override
     protected boolean supportsMultipleChannelsPerSourceBuffer() {
@@ -57,7 +48,7 @@ public class UnsignedIntFromUnsignedInt extends ToUnsignedInt {
             UnsignedIntBuffer destination) {
         byte[] sourceArray = source.array();
         int indexOut = 0;
-        for (int index = 0; index < sizeBytes; index += BYTES_PER_PIXEL) {
+        for (int index = 0; index < sourceSize; index += sourceIncrement) {
             int value = extractInt(sourceArray, index, littleEndian);
             destination.putRaw(indexOut++, value);
         }
@@ -74,7 +65,7 @@ public class UnsignedIntFromUnsignedInt extends ToUnsignedInt {
         int x = 0;
         int y = 0;
 
-        for (int index = 0; index < sizeBytes; index += BYTES_PER_PIXEL) {
+        for (int index = 0; index < sourceSize; index += sourceIncrement) {
             int value = extractInt(sourceArray, index, littleEndian);
 
             int indexOut = orientationCorrection.index(x, y, extent);
@@ -90,6 +81,11 @@ public class UnsignedIntFromUnsignedInt extends ToUnsignedInt {
     }
 
     private int extractInt(byte[] sourceArray, int index, boolean littleEndian) {
-        return DataTools.bytesToInt(sourceArray, index, BYTES_PER_PIXEL, littleEndian);
+        return DataTools.bytesToInt(sourceArray, index, BYTES_PER_VOXEL, littleEndian);
+    }
+
+    @Override
+    protected int bytesPerVoxel() {
+        return BYTES_PER_VOXEL;
     }
 }

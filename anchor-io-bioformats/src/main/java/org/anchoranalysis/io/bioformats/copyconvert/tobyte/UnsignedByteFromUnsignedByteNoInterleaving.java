@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.io.bioformats.copyconvert.tobyte;
 
-import java.io.IOException;
 import java.nio.ByteBuffer;
 import org.anchoranalysis.image.core.dimensions.OrientationChange;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
@@ -41,34 +40,7 @@ import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
  *
  * @author Owen Feehan
  */
-public class UnsignedByteFromUnsignedByteNoInterleaving extends ToUnsignedByte {
-
-    @Override
-    protected boolean supportsMultipleChannelsPerSourceBuffer() {
-        return true;
-    }
-
-    @Override
-    protected UnsignedByteBuffer convert(
-            ByteBuffer source,
-            int channelIndexRelative,
-            OrientationChange orientationCorrection,
-            boolean littleEndian)
-            throws IOException {
-        if (source.capacity() == sizeXY
-                && channelIndexRelative == 0
-                && orientationCorrection == OrientationChange.KEEP_UNCHANGED) {
-            // Reuse the existing buffer, if it's single channeled
-            return UnsignedByteBuffer.wrapRaw(source);
-        } else {
-            return super.convert(source, channelIndexRelative, orientationCorrection, littleEndian);
-        }
-    }
-
-    @Override
-    protected int bytesPerVoxel(int numberChannelsPerArray) {
-        return 1;
-    }
+public class UnsignedByteFromUnsignedByteNoInterleaving extends UnsignedByteFromUnsignedByte {
 
     @Override
     protected void copyKeepOrientation(
@@ -76,8 +48,8 @@ public class UnsignedByteFromUnsignedByteNoInterleaving extends ToUnsignedByte {
             boolean littleEndian,
             int channelIndexRelative,
             UnsignedByteBuffer destination) {
-        source.position(sizeBytes * channelIndexRelative);
-        source.limit(source.position() + sizeBytes);
+        source.position(sourceSize * channelIndexRelative);
+        source.limit(source.position() + sourceSize);
         destination.put(source);
     }
 
@@ -88,7 +60,7 @@ public class UnsignedByteFromUnsignedByteNoInterleaving extends ToUnsignedByte {
             int channelIndexRelative,
             UnsignedByteBuffer destination,
             OrientationChange orientationCorrection) {
-        int sourceOffset = sizeBytes * channelIndexRelative;
+        int sourceOffset = sourceSize * channelIndexRelative;
         for (int y = 0; y < extent.y(); y++) {
             for (int x = 0; x < extent.x(); x++) {
 

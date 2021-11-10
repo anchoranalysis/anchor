@@ -31,20 +31,16 @@ import org.anchoranalysis.image.voxel.VoxelsUntyped;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferWrap;
 import org.anchoranalysis.io.bioformats.copyconvert.ConvertTo;
 
-
 /**
- * Base class for implementations of {@link ConvertTo} that convert to <i>float</> buffers.
- * 
- * @author Owen Feehan
+ * Base class for implementations of {@link ConvertTo} that convert to <i>float</i> buffers.
  *
+ * @author Owen Feehan
  */
 public abstract class ToFloat extends ConvertTo<FloatBuffer> {
 
     protected ToFloat() {
         super(VoxelsUntyped::asFloat, FloatBuffer::allocate, VoxelBufferWrap::floatBuffer);
     }
-
-    protected abstract int bytesPerPixel();
 
     @Override
     protected boolean supportsMultipleChannelsPerSourceBuffer() {

@@ -206,8 +206,9 @@ class ConvertToTest {
             throws IOException {
         ByteBuffer underlyingBytes = ByteBuffer.wrap(inputBuffer.underlyingBytes());
         Channel channel = ChannelFactory.instance().create(DIMENSIONS, outputDataType);
+        ImageFileEncoding encoding = new ImageFileEncoding(false, false, 1);
         converter.copyAllChannels(
-                DIMENSIONS, underlyingBytes, index -> channel, 0, 1, orientationChange);
+                DIMENSIONS, underlyingBytes, index -> channel, 0, encoding, orientationChange);
         VoxelBuffer<T> outputSlice = channel.voxels().slice(0);
 
         // Check the arrays have exactly the same bytes.

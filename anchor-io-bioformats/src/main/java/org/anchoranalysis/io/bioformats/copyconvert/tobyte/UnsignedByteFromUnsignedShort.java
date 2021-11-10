@@ -28,10 +28,8 @@ package org.anchoranalysis.io.bioformats.copyconvert.tobyte;
 
 import java.nio.ByteBuffer;
 import loci.common.DataTools;
-import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.OrientationChange;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
-import org.anchoranalysis.spatial.box.Extent;
 
 /**
  * Converts data of type <i>unsigned short</i> to <i>unsigned byte</i>.
@@ -42,8 +40,6 @@ import org.anchoranalysis.spatial.box.Extent;
  * @author Owen Feehan
  */
 public class UnsignedByteFromUnsignedShort extends ToUnsignedByteWithScaling {
-
-    private Extent extent;
 
     /**
      * Create with a number of effective-bits.
@@ -60,14 +56,8 @@ public class UnsignedByteFromUnsignedShort extends ToUnsignedByteWithScaling {
     }
 
     @Override
-    protected void setupBefore(Dimensions dimensions, int numberChannelsPerArray) {
-        super.setupBefore(dimensions, numberChannelsPerArray);
-        this.extent = dimensions.extent();
-    }
-
-    @Override
-    protected int bytesPerVoxel(int numberChannelsPerArray) {
-        return 2 * numberChannelsPerArray;
+    protected int bytesPerVoxel() {
+        return 2;
     }
 
     @Override
@@ -79,7 +69,7 @@ public class UnsignedByteFromUnsignedShort extends ToUnsignedByteWithScaling {
 
         byte[] sourceArray = source.array();
 
-        for (int index = 0; index < sizeBytes; index += bytesPerPixel) {
+        for (int index = 0; index < sourceSize; index += sourceIncrement) {
 
             int value = extractScaledValue(sourceArray, index, channelIndexRelative, littleEndian);
 
@@ -100,7 +90,7 @@ public class UnsignedByteFromUnsignedShort extends ToUnsignedByteWithScaling {
         int x = 0;
         int y = 0;
 
-        for (int index = 0; index < sizeBytes; index += bytesPerPixel) {
+        for (int index = 0; index < sourceSize; index += sourceIncrement) {
 
             int value = extractScaledValue(sourceArray, index, channelIndexRelative, littleEndian);
 

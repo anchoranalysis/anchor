@@ -29,13 +29,25 @@ package org.anchoranalysis.io.bioformats.copyconvert.tofloat;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.OrientationChange;
 import org.anchoranalysis.image.voxel.buffer.primitive.PrimitiveConverter;
+import org.anchoranalysis.io.bioformats.copyconvert.ImageFileEncoding;
 
 public class FloatFromUnsignedByte extends ToFloat {
 
     @Override
-    protected int bytesPerPixel() {
+    protected void setupBefore(Dimensions dimensions, ImageFileEncoding encoding)
+            throws IOException {
+        if (encoding.isRgb()) {
+            throw new IOException("RGB is unsupported to convert to float.");
+        } else {
+            super.setupBefore(dimensions, encoding);
+        }
+    }
+
+    @Override
+    protected int bytesPerVoxel() {
         return 1;
     }
 

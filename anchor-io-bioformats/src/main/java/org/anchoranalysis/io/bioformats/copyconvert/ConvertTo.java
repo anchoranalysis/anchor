@@ -63,9 +63,22 @@ public abstract class ConvertTo<T> {
     private final Function<T, VoxelBuffer<T>> wrapBuffer;
     // END REQUIRED ARGUMENTS
 
-    protected int sizeXY;
+    /** The total number of voxels in the XY plane. */
+    protected int areaXY;
 
+    /** The size of the source and destination buffers. */
     protected Extent extent;
+
+    /** The number of elements (bytes) to increment by, when iterating through the source buffer. */
+    protected int sourceIncrement;
+
+    /** The total number of elements (always bytes) in the source buffer. */
+    protected int sourceSize;
+
+    /**
+     * The total number of elements (whatever the destination type is) in the destination buffer.
+     */
+    protected int destinationSize;
 
     /**
      * Copies the channels in the source buffer into a particular {@link
@@ -76,8 +89,7 @@ public abstract class ConvertTo<T> {
      * @param destination finds an appropriate destination channel for a particular
      *     relative-channel-index.
      * @param z the current slice we are working on.
-     * @param numberChannelsPerArray the total number of channels found in any one instance of
-     *     {@code source} (more than 1 if interleaving is present).
+     * @param sourceImageEncoding how voxels are stored in the source-image.
      * @param orientationCorrection any correction of orientation to be applied as bytes are
      *     converted.
      * @throws IOException if any error occurs when copying channels.
@@ -87,16 +99,16 @@ public abstract class ConvertTo<T> {
             ByteBuffer source,
             DestinationChannelForIndex destination,
             int z,
-            int numberChannelsPerArray,
+            ImageFileEncoding sourceImageEncoding,
             OrientationChange orientationCorrection)
             throws IOException {
 
         log.debug(String.format("copy to %d start", z));
 
-        setupBefore(dimensions, numberChannelsPerArray);
+        setupBefore(dimensions, sourceImageEncoding);
 
         for (int channelIndexRelative = 0;
-                channelIndexRelative < numberChannelsPerArray;
+                channelIndexRelative < sourceImageEncoding.getNumberChannelsPerArray();
                 channelIndexRelative++) {
 
             VoxelBuffer<T> converted =
@@ -112,12 +124,19 @@ public abstract class ConvertTo<T> {
      * Always called before any batch of calls to {@link #convertSliceOfSingleChannel}.
      *
      * @param dimensions the final dimensions of the image.
-     * @param numberChannelsPerArray the number of channels that are found in the byte-array that
-     *     will be passed to {@link #convertSliceOfSingleChannel}.
+     * @param sourceImageEncoding how voxels are stored in the source-image.
+     * @throws IOException if a particular combination of parameters is unsupported.
      */
-    protected void setupBefore(Dimensions dimensions, int numberChannelsPerArray) {
+    protected void setupBefore(Dimensions dimensions, ImageFileEncoding sourceImageEncoding)
+            throws IOException {
         this.extent = dimensions.extent();
-        this.sizeXY = dimensions.areaXY();
+        this.areaXY = dimensions.areaXY();
+
+        this.sourceIncrement = bytesPerVoxel() * sourceImageEncoding.numberDistinctChannels();
+        this.sourceSize = areaXY * sourceIncrement;
+
+        // When dealing with an RGB image, there needs to be three output elements, not one
+        this.destinationSize = areaXY * (sourceImageEncoding.isRgb() ? 3 : 1);
     }
 
     /**
@@ -149,7 +168,7 @@ public abstract class ConvertTo<T> {
             boolean littleEndian)
             throws IOException {
 
-        T destination = allocateBuffer.apply(sizeXY);
+        T destination = allocateBuffer.apply(destinationSize);
 
         if (orientationCorrection == OrientationChange.KEEP_UNCHANGED) {
             copyKeepOrientation(source, littleEndian, channelIndexRelative, destination);
@@ -187,6 +206,13 @@ public abstract class ConvertTo<T> {
      *     a buffer will always describe one channel only.
      */
     protected abstract boolean supportsMultipleChannelsPerSourceBuffer();
+
+    /**
+     * The number bytes to describe each source-voxel.
+     *
+     * @return the number of bytes.
+     */
+    protected abstract int bytesPerVoxel();
 
     private static <S> void placeSliceInDestination(
             VoxelBuffer<S> voxelBuffer,

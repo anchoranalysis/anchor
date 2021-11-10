@@ -28,39 +28,26 @@ package org.anchoranalysis.io.bioformats.copyconvert.toshort;
 
 import java.nio.ByteBuffer;
 import loci.common.DataTools;
-import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.OrientationChange;
 import org.anchoranalysis.image.voxel.VoxelsUntyped;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferWrap;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedShortBuffer;
 import org.anchoranalysis.io.bioformats.copyconvert.ConvertTo;
 
-
 /**
- * Base class for implementations of {@link ConvertTo} that convert to <i>unsigned short</> buffers.
- * 
- * @author Owen Feehan
+ * Base class for implementations of {@link ConvertTo} that convert to <i>unsigned short</i> buffers.
  *
+ * @author Owen Feehan
  */
 public abstract class ToUnsignedShort extends ConvertTo<UnsignedShortBuffer> {
 
-    private static final int BYTES_PER_PIXEL = 2;
-
-    private int sizeBytes;
-    private int increment;
+    private static final int BYTES_PER_VOXEL = 2;
 
     protected ToUnsignedShort() {
         super(
                 VoxelsUntyped::asShort,
                 UnsignedShortBuffer::allocate,
                 VoxelBufferWrap::unsignedShortBuffer);
-    }
-
-    @Override
-    protected void setupBefore(Dimensions dimensions, int numberChannelsPerArray) {
-        super.setupBefore(dimensions, numberChannelsPerArray);
-        this.sizeBytes = sizeXY * BYTES_PER_PIXEL * numberChannelsPerArray;
-        this.increment = numberChannelsPerArray * BYTES_PER_PIXEL;
     }
 
     @Override
@@ -77,7 +64,7 @@ public abstract class ToUnsignedShort extends ConvertTo<UnsignedShortBuffer> {
             int channelIndexRelative,
             UnsignedShortBuffer destination) {
         byte[] sourceArray = source.array();
-        for (int index = channelIndexRelative; index < sizeBytes; index += increment) {
+        for (int index = channelIndexRelative; index < sourceSize; index += sourceIncrement) {
             short value = extractConvertedValue(sourceArray, index, littleEndian);
             destination.putRaw(value);
         }
@@ -95,7 +82,7 @@ public abstract class ToUnsignedShort extends ConvertTo<UnsignedShortBuffer> {
         int x = 0;
         int y = 0;
 
-        for (int index = channelIndexRelative; index < sizeBytes; index += increment) {
+        for (int index = channelIndexRelative; index < sourceSize; index += sourceIncrement) {
             short value = extractConvertedValue(sourceArray, index, littleEndian);
 
             int indexOut = orientationCorrection.index(x, y, extent);
@@ -116,6 +103,11 @@ public abstract class ToUnsignedShort extends ConvertTo<UnsignedShortBuffer> {
     }
 
     private short valueFromBuffer(byte[] buffer, int index, boolean littleEndian) {
-        return DataTools.bytesToShort(buffer, index, BYTES_PER_PIXEL, littleEndian);
+        return DataTools.bytesToShort(buffer, index, BYTES_PER_VOXEL, littleEndian);
+    }
+
+    @Override
+    protected int bytesPerVoxel() {
+        return BYTES_PER_VOXEL;
     }
 }

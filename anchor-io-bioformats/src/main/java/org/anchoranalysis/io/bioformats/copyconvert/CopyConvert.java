@@ -99,12 +99,17 @@ public class CopyConvert {
                                                         t,
                                                         targetShape.getNumberChannels()));
 
+                        ImageFileEncoding encoding =
+                                new ImageFileEncoding(
+                                        reader.isRGB(),
+                                        reader.isInterleaved(),
+                                        numberChannelsPerByteArray);
                         convertTo.copyAllChannels(
                                 targetShape.getImageDimensions(),
                                 openByteBuffer(reader, readerIndex),
                                 destinationChannel,
                                 z,
-                                numberChannelsPerByteArray,
+                                encoding,
                                 orientationCorrection);
 
                         progressIncrement.update();

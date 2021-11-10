@@ -26,22 +26,17 @@
 
 package org.anchoranalysis.io.bioformats.copyconvert.tobyte;
 
-import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.voxel.VoxelsUntyped;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferWrap;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.io.bioformats.copyconvert.ConvertTo;
 
 /**
- * Base class for implementations of {@link ConvertTo} that convert to <i>unsigned byte</> buffers.
- * 
- * @author Owen Feehan
+ * Base class for implementations of {@link ConvertTo} that convert to <i>unsigned byte</i> buffers.
  *
+ * @author Owen Feehan
  */
 public abstract class ToUnsignedByte extends ConvertTo<UnsignedByteBuffer> {
-
-    protected int bytesPerPixel;
-    protected int sizeBytes;
 
     protected ToUnsignedByte() {
         super(
@@ -49,19 +44,4 @@ public abstract class ToUnsignedByte extends ConvertTo<UnsignedByteBuffer> {
                 UnsignedByteBuffer::allocate,
                 VoxelBufferWrap::unsignedByteBuffer);
     }
-
-    @Override
-    protected void setupBefore(Dimensions dimensions, int numberChannelsPerArray) {
-        super.setupBefore(dimensions, numberChannelsPerArray);
-        this.bytesPerPixel = bytesPerVoxel(numberChannelsPerArray);
-        this.sizeBytes = sizeXY * bytesPerPixel;
-    }
-
-    /**
-     * How many bytes for each voxel for each channel in the source array.
-     *
-     * @param numberChannelsPerArray
-     * @return
-     */
-    protected abstract int bytesPerVoxel(int numberChannelsPerArray);
 }

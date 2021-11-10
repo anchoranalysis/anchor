@@ -40,7 +40,7 @@ import org.anchoranalysis.image.core.dimensions.OrientationChange;
 public class FloatFromUnsignedInt extends ToFloat {
 
     @Override
-    protected int bytesPerPixel() {
+    protected int bytesPerVoxel() {
         return 4;
     }
 

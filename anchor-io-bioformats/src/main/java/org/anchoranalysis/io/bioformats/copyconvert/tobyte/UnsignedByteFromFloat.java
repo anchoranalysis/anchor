@@ -48,7 +48,7 @@ import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 public class UnsignedByteFromFloat extends ToUnsignedByte {
 
     @Override
-    protected int bytesPerVoxel(int numberChannelsPerArray) {
+    protected int bytesPerVoxel() {
         return 4;
     }
 
@@ -64,7 +64,7 @@ public class UnsignedByteFromFloat extends ToUnsignedByte {
             int channelIndexRelative,
             UnsignedByteBuffer destination) {
         byte[] sourceArray = source.array();
-        for (int index = 0; index < sizeBytes; index += bytesPerPixel) {
+        for (int index = 0; index < sourceSize; index += sourceIncrement) {
             float value = extractClampedValue(sourceArray, index, littleEndian);
             destination.putFloat(value);
         }
@@ -81,7 +81,7 @@ public class UnsignedByteFromFloat extends ToUnsignedByte {
         int x = 0;
         int y = 0;
 
-        for (int index = 0; index < sizeBytes; index += bytesPerPixel) {
+        for (int index = 0; index < sourceSize; index += sourceIncrement) {
             float value = extractClampedValue(sourceArray, index, littleEndian);
 
             int indexOut = orientationCorrection.index(x, y, extent);
