@@ -63,9 +63,6 @@ public abstract class ConvertTo<T> {
     private final Function<T, VoxelBuffer<T>> wrapBuffer;
     // END REQUIRED ARGUMENTS
 
-    /** The total number of voxels in the XY plane. */
-    protected int areaXY;
-
     /** The size of the source and destination buffers. */
     protected Extent extent;
 
@@ -130,7 +127,8 @@ public abstract class ConvertTo<T> {
     protected void setupBefore(Dimensions dimensions, ImageFileEncoding sourceImageEncoding)
             throws IOException {
         this.extent = dimensions.extent();
-        this.areaXY = dimensions.areaXY();
+        
+        int areaXY = dimensions.areaXY();
 
         this.sourceIncrement = bytesPerVoxel() * sourceImageEncoding.numberDistinctChannels();
         this.sourceSize = areaXY * sourceIncrement;
