@@ -108,7 +108,7 @@ public class VoxelBufferWrap {
      * @param array the array to wrap
      * @return a new {@link VoxelBuffer} reusing the buffer internally.
      */
-    public static VoxelBufferUnsignedInt unsignedIntArray(int[] array) {
+    public static VoxelBuffer<UnsignedIntBuffer> unsignedIntArray(int[] array) {
         return new VoxelBufferUnsignedInt(UnsignedIntBuffer.wrapRaw(array));
     }
 
@@ -118,7 +118,7 @@ public class VoxelBufferWrap {
      * @param buffer the signed-buffer to wrap as unsigned
      * @return a new {@link VoxelBuffer} reusing the buffer internally.
      */
-    public static VoxelBufferUnsignedInt unsignedIntBuffer(UnsignedIntBuffer buffer) {
+    public static VoxelBuffer<UnsignedIntBuffer> unsignedIntBuffer(UnsignedIntBuffer buffer) {
         return new VoxelBufferUnsignedInt(buffer);
     }
 
@@ -128,7 +128,7 @@ public class VoxelBufferWrap {
      * @param buffer the buffer to wrap
      * @return a new {@link VoxelBuffer} reusing the buffer internally.
      */
-    public static VoxelBufferFloat floatBuffer(FloatBuffer buffer) {
+    public static VoxelBuffer<FloatBuffer> floatBuffer(FloatBuffer buffer) {
         return new VoxelBufferFloat(buffer);
     }
 
@@ -138,7 +138,7 @@ public class VoxelBufferWrap {
      * @param array the array to wrap
      * @return a new {@link VoxelBuffer} reusing the buffer internally.
      */
-    public static VoxelBufferFloat floatArray(float[] array) {
+    public static VoxelBuffer<FloatBuffer> floatArray(float[] array) {
         return new VoxelBufferFloat(FloatBuffer.wrap(array));
     }
 }

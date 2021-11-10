@@ -26,43 +26,24 @@
 
 package org.anchoranalysis.io.bioformats.copyconvert.tofloat;
 
-import com.google.common.base.Preconditions;
-import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
-import org.anchoranalysis.image.core.dimensions.Dimensions;
-import org.anchoranalysis.image.core.dimensions.OrientationChange;
 import org.anchoranalysis.image.voxel.VoxelsUntyped;
-import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferWrap;
 import org.anchoranalysis.io.bioformats.copyconvert.ConvertTo;
 
+/**
+ * Base class for implementations of {@link ConvertTo} that convert to <i>float</i> buffers.
+ *
+ * @author Owen Feehan
+ */
 public abstract class ToFloat extends ConvertTo<FloatBuffer> {
 
-    private Dimensions dimensions;
-
     protected ToFloat() {
-        super(VoxelsUntyped::asFloat);
-    }
-
-    protected abstract int bytesPerPixel();
-
-    @Override
-    protected void setupBefore(Dimensions dimensions, int numberChannelsPerArray) {
-        this.dimensions = dimensions;
+        super(VoxelsUntyped::asFloat, FloatBuffer::allocate, VoxelBufferWrap::floatBuffer);
     }
 
     @Override
-    protected VoxelBuffer<FloatBuffer> convertSliceOfSingleChannel(
-            ByteBuffer source, int channelIndexRelative, OrientationChange orientationCorrection)
-            throws IOException {
-        Preconditions.checkArgument(
-                channelIndexRelative == 0, "interleaving not supported for float data");
-        float[] array = convertIntegerBytesToFloatArray(dimensions, source, orientationCorrection);
-        return VoxelBufferWrap.floatArray(array);
+    protected boolean supportsMultipleChannelsPerSourceBuffer() {
+        return false;
     }
-
-    protected abstract float[] convertIntegerBytesToFloatArray(
-            Dimensions dimensions, ByteBuffer source, OrientationChange orientationCorrection)
-            throws IOException;
 }

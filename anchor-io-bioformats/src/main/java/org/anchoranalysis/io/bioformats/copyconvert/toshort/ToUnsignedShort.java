@@ -27,102 +27,62 @@
 package org.anchoranalysis.io.bioformats.copyconvert.toshort;
 
 import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import loci.common.DataTools;
-import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.OrientationChange;
 import org.anchoranalysis.image.voxel.VoxelsUntyped;
-import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
-import org.anchoranalysis.image.voxel.buffer.VoxelBufferFactory;
+import org.anchoranalysis.image.voxel.buffer.VoxelBufferWrap;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedShortBuffer;
 import org.anchoranalysis.io.bioformats.copyconvert.ConvertTo;
-import org.anchoranalysis.spatial.box.Extent;
 
+/**
+ * Base class for implementations of {@link ConvertTo} that convert to <i>unsigned short</i> buffers.
+ *
+ * @author Owen Feehan
+ */
 public abstract class ToUnsignedShort extends ConvertTo<UnsignedShortBuffer> {
 
-    private static final int BYTES_PER_PIXEL = 2;
-
-    private int sizeXY;
-    private int sizeBytes;
-    private int numberChannelsPerArray;
-    private Extent extent;
+    private static final int BYTES_PER_VOXEL = 2;
 
     protected ToUnsignedShort() {
-        super(VoxelsUntyped::asShort);
+        super(
+                VoxelsUntyped::asShort,
+                UnsignedShortBuffer::allocate,
+                VoxelBufferWrap::unsignedShortBuffer);
     }
 
     @Override
-    protected void setupBefore(Dimensions dimensions, int numberChannelsPerArray) {
-        this.sizeXY = dimensions.x() * dimensions.y();
-        this.extent = dimensions.extent();
-        this.sizeBytes = sizeXY * BYTES_PER_PIXEL * numberChannelsPerArray;
-        this.numberChannelsPerArray = numberChannelsPerArray;
-    }
-
-    @Override
-    protected VoxelBuffer<UnsignedShortBuffer> convertSliceOfSingleChannel(
-            ByteBuffer sourceBuffer,
-            int channelIndexRelative,
-            OrientationChange orientationCorrection) {
-
-        byte[] sourceArray = sourceBuffer.array();
-        boolean littleEndian = sourceBuffer.order() == ByteOrder.LITTLE_ENDIAN;
-
-        VoxelBuffer<UnsignedShortBuffer> voxels = VoxelBufferFactory.allocateUnsignedShort(sizeXY);
-
-        int increment = numberChannelsPerArray * BYTES_PER_PIXEL;
-
-        UnsignedShortBuffer destination = voxels.buffer();
-
-        if (orientationCorrection == OrientationChange.KEEP_UNCHANGED) {
-            copyKeepOrientation(
-                    sourceArray, littleEndian, channelIndexRelative, increment, destination);
-        } else {
-            copyChangeOrientation(
-                    sourceArray,
-                    littleEndian,
-                    channelIndexRelative,
-                    increment,
-                    destination,
-                    orientationCorrection);
-        }
-
-        return voxels;
+    protected boolean supportsMultipleChannelsPerSourceBuffer() {
+        return true;
     }
 
     protected abstract short convertValue(short value);
 
-    /**
-     * Copy the bytes, without changing orientation.
-     *
-     * <p>This is kept separate to {@link #copyChangeOrientation(byte[], boolean, int, int,
-     * UnsignedShortBuffer, OrientationChange)} as it can be done slightly more efficiently.
-     */
-    private void copyKeepOrientation(
-            byte[] sourceArray,
+    @Override
+    protected void copyKeepOrientation(
+            ByteBuffer source,
             boolean littleEndian,
             int channelIndexRelative,
-            int increment,
             UnsignedShortBuffer destination) {
-        for (int index = channelIndexRelative; index < sizeBytes; index += increment) {
+        byte[] sourceArray = source.array();
+        for (int index = channelIndexRelative; index < sourceSize; index += sourceIncrement) {
             short value = extractConvertedValue(sourceArray, index, littleEndian);
             destination.putRaw(value);
         }
     }
 
-    /** Copy the bytes, changing orientation. */
-    private void copyChangeOrientation(
-            byte[] sourceArray,
+    @Override
+    protected void copyChangeOrientation(
+            ByteBuffer source,
             boolean littleEndian,
             int channelIndexRelative,
-            int increment,
             UnsignedShortBuffer destination,
             OrientationChange orientationCorrection) {
 
+        byte[] sourceArray = source.array();
         int x = 0;
         int y = 0;
 
-        for (int index = channelIndexRelative; index < sizeBytes; index += increment) {
+        for (int index = channelIndexRelative; index < sourceSize; index += sourceIncrement) {
             short value = extractConvertedValue(sourceArray, index, littleEndian);
 
             int indexOut = orientationCorrection.index(x, y, extent);
@@ -143,6 +103,11 @@ public abstract class ToUnsignedShort extends ConvertTo<UnsignedShortBuffer> {
     }
 
     private short valueFromBuffer(byte[] buffer, int index, boolean littleEndian) {
-        return DataTools.bytesToShort(buffer, index, BYTES_PER_PIXEL, littleEndian);
+        return DataTools.bytesToShort(buffer, index, BYTES_PER_VOXEL, littleEndian);
+    }
+
+    @Override
+    protected int bytesPerVoxel() {
+        return BYTES_PER_VOXEL;
     }
 }

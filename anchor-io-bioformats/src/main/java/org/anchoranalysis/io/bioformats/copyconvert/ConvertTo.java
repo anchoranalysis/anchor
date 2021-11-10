@@ -28,7 +28,9 @@ package org.anchoranalysis.io.bioformats.copyconvert;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.util.function.Function;
+import java.util.function.IntFunction;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.OrientationChange;
@@ -36,11 +38,14 @@ import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.VoxelsUntyped;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.io.bioformats.DestinationChannelForIndex;
+import org.anchoranalysis.spatial.box.Extent;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
  * Converts a subset of raw voxel bytes in a buffer to a possibly a buffer with different data-type.
+ *
+ * @param <T> destination buffer-type
  */
 @RequiredArgsConstructor
 public abstract class ConvertTo<T> {
@@ -50,7 +55,27 @@ public abstract class ConvertTo<T> {
     // START REQUIRED ARGUMENTS
     /** How to convert a {@link VoxelsUntyped} to the specific destination-type. */
     private final Function<VoxelsUntyped, Voxels<T>> functionCast;
+
+    /** A function that creates a new buffer of type {@code T} of a given size. */
+    private final IntFunction<T> allocateBuffer;
+
+    /** A function to wrap a buffer of type {@code T} into a {@link VoxelBuffer}. */
+    private final Function<T, VoxelBuffer<T>> wrapBuffer;
     // END REQUIRED ARGUMENTS
+
+    /** The size of the source and destination buffers. */
+    protected Extent extent;
+
+    /** The number of elements (bytes) to increment by, when iterating through the source buffer. */
+    protected int sourceIncrement;
+
+    /** The total number of elements (always bytes) in the source buffer. */
+    protected int sourceSize;
+
+    /**
+     * The total number of elements (whatever the destination type is) in the destination buffer.
+     */
+    protected int destinationSize;
 
     /**
      * Copies the channels in the source buffer into a particular {@link
@@ -61,8 +86,7 @@ public abstract class ConvertTo<T> {
      * @param destination finds an appropriate destination channel for a particular
      *     relative-channel-index.
      * @param z the current slice we are working on.
-     * @param numberChannelsPerArray the total number of channels found in any one instance of
-     *     {@code source} (more than 1 if interleaving is present).
+     * @param sourceImageEncoding how voxels are stored in the source-image.
      * @param orientationCorrection any correction of orientation to be applied as bytes are
      *     converted.
      * @throws IOException if any error occurs when copying channels.
@@ -72,16 +96,16 @@ public abstract class ConvertTo<T> {
             ByteBuffer source,
             DestinationChannelForIndex destination,
             int z,
-            int numberChannelsPerArray,
+            ImageFileEncoding sourceImageEncoding,
             OrientationChange orientationCorrection)
             throws IOException {
 
         log.debug(String.format("copy to %d start", z));
 
-        setupBefore(dimensions, numberChannelsPerArray);
+        setupBefore(dimensions, sourceImageEncoding);
 
         for (int channelIndexRelative = 0;
-                channelIndexRelative < numberChannelsPerArray;
+                channelIndexRelative < sourceImageEncoding.getNumberChannelsPerArray();
                 channelIndexRelative++) {
 
             VoxelBuffer<T> converted =
@@ -97,10 +121,21 @@ public abstract class ConvertTo<T> {
      * Always called before any batch of calls to {@link #convertSliceOfSingleChannel}.
      *
      * @param dimensions the final dimensions of the image.
-     * @param numberChannelsPerArray the number of channels that are found in the byte-array that
-     *     will be passed to {@link #convertSliceOfSingleChannel}.
+     * @param sourceImageEncoding how voxels are stored in the source-image.
+     * @throws IOException if a particular combination of parameters is unsupported.
      */
-    protected abstract void setupBefore(Dimensions dimensions, int numberChannelsPerArray);
+    protected void setupBefore(Dimensions dimensions, ImageFileEncoding sourceImageEncoding)
+            throws IOException {
+        this.extent = dimensions.extent();
+        
+        int areaXY = dimensions.areaXY();
+
+        this.sourceIncrement = bytesPerVoxel() * sourceImageEncoding.numberDistinctChannels();
+        this.sourceSize = areaXY * sourceIncrement;
+
+        // When dealing with an RGB image, there needs to be three output elements, not one
+        this.destinationSize = areaXY * (sourceImageEncoding.isRgb() ? 3 : 1);
+    }
 
     /**
      * Converts a slice of single-channel into a newly created {@link VoxelBuffer}.
@@ -110,10 +145,72 @@ public abstract class ConvertTo<T> {
      *     channel among the interleaved channels.
      * @param orientationCorrection any correction of orientation to be applied as bytes are
      *     converted.
+     * @return the converted buffer.
+     * @throws IOException when operation is unsupported, given particular parameterization.
      */
-    protected abstract VoxelBuffer<T> convertSliceOfSingleChannel(
+    protected VoxelBuffer<T> convertSliceOfSingleChannel(
             ByteBuffer source, int channelIndexRelative, OrientationChange orientationCorrection)
+            throws IOException {
+        if (!supportsMultipleChannelsPerSourceBuffer() && channelIndexRelative != 0) {
+            throw new IOException("interleaving not supported");
+        }
+        boolean littleEndian = source.order() == ByteOrder.LITTLE_ENDIAN;
+        return wrapBuffer.apply(
+                convert(source, channelIndexRelative, orientationCorrection, littleEndian));
+    }
+
+    protected T convert(
+            ByteBuffer source,
+            int channelIndexRelative,
+            OrientationChange orientationCorrection,
+            boolean littleEndian)
+            throws IOException {
+
+        T destination = allocateBuffer.apply(destinationSize);
+
+        if (orientationCorrection == OrientationChange.KEEP_UNCHANGED) {
+            copyKeepOrientation(source, littleEndian, channelIndexRelative, destination);
+        } else {
+            copyChangeOrientation(
+                    source, littleEndian, channelIndexRelative, destination, orientationCorrection);
+        }
+
+        return destination;
+    }
+
+    /**
+     * Copy the bytes, without changing orientation.
+     *
+     * <p>This is kept separate to {@link #copyChangeOrientation} as it can be done slightly more
+     * efficiently.
+     */
+    protected abstract void copyKeepOrientation(
+            ByteBuffer source, boolean littleEndian, int channelIndexRelative, T destination)
             throws IOException;
+
+    /** Copy the bytes, changing orientation. */
+    protected abstract void copyChangeOrientation(
+            ByteBuffer source,
+            boolean littleEndian,
+            int channelIndexRelative,
+            T destination,
+            OrientationChange orientationCorrection)
+            throws IOException;
+
+    /**
+     * Whether the source buffer can encode more than one channel?
+     *
+     * @return true if this possible (either with interleaving or with RGB-encoded voxels), false if
+     *     a buffer will always describe one channel only.
+     */
+    protected abstract boolean supportsMultipleChannelsPerSourceBuffer();
+
+    /**
+     * The number bytes to describe each source-voxel.
+     *
+     * @return the number of bytes.
+     */
+    protected abstract int bytesPerVoxel();
 
     private static <S> void placeSliceInDestination(
             VoxelBuffer<S> voxelBuffer,

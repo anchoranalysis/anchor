@@ -26,51 +26,22 @@
 
 package org.anchoranalysis.io.bioformats.copyconvert.tobyte;
 
-import java.nio.ByteBuffer;
-import org.anchoranalysis.image.core.dimensions.Dimensions;
-import org.anchoranalysis.image.core.dimensions.OrientationChange;
 import org.anchoranalysis.image.voxel.VoxelsUntyped;
-import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferWrap;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.io.bioformats.copyconvert.ConvertTo;
 
 /**
- * Converts a {@link ByteBuffer} encoding some data-type to a buffer of <i>unsigned byte</i> type,
- * as expected in an Anchor {@link VoxelBuffer}.
+ * Base class for implementations of {@link ConvertTo} that convert to <i>unsigned byte</i> buffers.
  *
  * @author Owen Feehan
  */
 public abstract class ToUnsignedByte extends ConvertTo<UnsignedByteBuffer> {
 
-    protected int sizeXY;
-    protected int bytesPerPixel;
-    protected int sizeBytes;
-
     protected ToUnsignedByte() {
-        super(VoxelsUntyped::asByte);
+        super(
+                VoxelsUntyped::asByte,
+                UnsignedByteBuffer::allocate,
+                VoxelBufferWrap::unsignedByteBuffer);
     }
-
-    @Override
-    protected void setupBefore(Dimensions dimensions, int numberChannelsPerArray) {
-        sizeXY = dimensions.volumeXY();
-        bytesPerPixel = calculateBytesPerPixel(numberChannelsPerArray);
-        sizeBytes = sizeXY * bytesPerPixel;
-    }
-
-    @Override
-    protected VoxelBuffer<UnsignedByteBuffer> convertSliceOfSingleChannel(
-            ByteBuffer source, int channelIndexRelative, OrientationChange orientationCorrection) {
-        return VoxelBufferWrap.unsignedByteBuffer(
-                convert(source, channelIndexRelative, orientationCorrection));
-    }
-
-    protected UnsignedByteBuffer allocateBuffer() {
-        return UnsignedByteBuffer.allocate(sizeXY);
-    }
-
-    protected abstract UnsignedByteBuffer convert(
-            ByteBuffer source, int channelIndexRelative, OrientationChange orientationCorrection);
-
-    protected abstract int calculateBytesPerPixel(int numberChannelsPerArray);
 }

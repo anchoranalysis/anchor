@@ -106,7 +106,7 @@ public final class Dimensions {
         return extent.calculateVolume();
     }
 
-    public int volumeXY() {
+    public int areaXY() {
         return extent.areaXY();
     }
 

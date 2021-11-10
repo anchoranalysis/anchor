@@ -46,7 +46,7 @@ import org.anchoranalysis.io.bioformats.copyconvert.tobyte.UnsignedByteFromUnsig
 import org.anchoranalysis.io.bioformats.copyconvert.tofloat.FloatFromUnsignedByte;
 import org.anchoranalysis.io.bioformats.copyconvert.tofloat.FloatFromUnsignedInt;
 import org.anchoranalysis.io.bioformats.copyconvert.tofloat.ToFloat;
-import org.anchoranalysis.io.bioformats.copyconvert.toint.ToInt;
+import org.anchoranalysis.io.bioformats.copyconvert.toint.ToUnsignedInt;
 import org.anchoranalysis.io.bioformats.copyconvert.toint.UnsignedIntFromUnsignedInt;
 import org.anchoranalysis.io.bioformats.copyconvert.toshort.ToUnsignedShort;
 import org.anchoranalysis.io.bioformats.copyconvert.toshort.UnsignedShortFromSignedShort;
@@ -145,7 +145,7 @@ public class ConvertToFactory {
         }
     }
 
-    private static ToInt toInt(int bitsPerPixel, boolean floatingPoint, boolean signed)
+    private static ToUnsignedInt toInt(int bitsPerPixel, boolean floatingPoint, boolean signed)
             throws CreateException {
 
         if (bitsPerPixel == 32 && !signed) {

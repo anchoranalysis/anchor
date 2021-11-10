@@ -27,7 +27,7 @@ class AcqusitionDateReaderTest {
     private TestLoader loader = TestLoader.createFromMavenWorkingDirectory();
 
     // As the image doesn't have a time zone offset set, it will use the system-default.
-    private static final ZonedDateTime EXPECTED_DATE =
+    private static final ZonedDateTime EXPECTED_ACQUISITION_TIME =
             ZonedDateTime.of(2021, 07, 10, 10, 20, 34, 0, ZoneId.systemDefault());
 
     @Test
@@ -37,9 +37,10 @@ class AcqusitionDateReaderTest {
 
     @Test
     void testWithExif() throws ImageIOException, ParseException {
-
         // We compare instants in case as the time-zone for a given offset is system-dependent.
-        test("exif_present_no_rotation_needed.jpg", Optional.of(EXPECTED_DATE.toInstant()));
+        test(
+                "exif_present_no_rotation_needed.jpg",
+                Optional.of(EXPECTED_ACQUISITION_TIME.toInstant()));
     }
 
     private void test(String filename, Optional<Instant> expectedDate) throws ImageIOException {

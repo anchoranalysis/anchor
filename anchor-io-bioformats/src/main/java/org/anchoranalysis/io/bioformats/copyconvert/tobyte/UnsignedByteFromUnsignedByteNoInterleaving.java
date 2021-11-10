@@ -27,74 +27,40 @@
 package org.anchoranalysis.io.bioformats.copyconvert.tobyte;
 
 import java.nio.ByteBuffer;
-import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.OrientationChange;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
-import org.anchoranalysis.spatial.box.Extent;
 
 /**
  * Converts a {@link ByteBuffer} encoding <i>unsigned byte</i>s (<i>no interleaving</i>) to
  * <i>unsigned byte</i> type, as expected in an Anchor {@link VoxelBuffer}.
  *
+ * <p>This also supports RGB-encoded bytes, where multiple channels are encoded into each voxel, but
+ * without interleaving.
+ *
  * @author Owen Feehan
  */
-public class UnsignedByteFromUnsignedByteNoInterleaving extends ToUnsignedByte {
-
-    private Extent extent;
+public class UnsignedByteFromUnsignedByteNoInterleaving extends UnsignedByteFromUnsignedByte {
 
     @Override
-    protected void setupBefore(Dimensions dimensions, int numberChannelsPerArray) {
-        super.setupBefore(dimensions, numberChannelsPerArray);
-        this.extent = dimensions.extent();
-    }
-
-    @Override
-    protected UnsignedByteBuffer convert(
-            ByteBuffer source, int channelIndexRelative, OrientationChange orientationCorrection) {
-        if (source.capacity() == sizeXY
-                && channelIndexRelative == 0
-                && orientationCorrection == OrientationChange.KEEP_UNCHANGED) {
-            // Reuse the existing buffer, if it's single channeled
-            return UnsignedByteBuffer.wrapRaw(source);
-        } else {
-            UnsignedByteBuffer destination = allocateBuffer();
-
-            if (orientationCorrection == OrientationChange.KEEP_UNCHANGED) {
-                copyKeepOrientation(source, channelIndexRelative, destination);
-            } else {
-                copyChangeOrientation(
-                        source, channelIndexRelative, destination, orientationCorrection);
-            }
-            return destination;
-        }
-    }
-
-    @Override
-    protected int calculateBytesPerPixel(int numberChannelsPerArray) {
-        return 1;
-    }
-
-    /**
-     * Copy the bytes, without changing orientation.
-     *
-     * <p>This is kept separate to {@link #copyChangeOrientation(ByteBuffer, int,
-     * UnsignedByteBuffer, OrientationChange)} as it can be done slightly more efficiently.
-     */
-    private void copyKeepOrientation(
-            ByteBuffer source, int channelIndexRelative, UnsignedByteBuffer destination) {
-        source.position(sizeBytes * channelIndexRelative);
-        source.limit(source.position() + sizeBytes);
+    protected void copyKeepOrientation(
+            ByteBuffer source,
+            boolean littleEndian,
+            int channelIndexRelative,
+            UnsignedByteBuffer destination) {
+        source.position(sourceSize * channelIndexRelative);
+        source.limit(source.position() + sourceSize);
         destination.put(source);
     }
 
-    /** Copy the bytes, changing orientation. */
-    private void copyChangeOrientation(
+    @Override
+    protected void copyChangeOrientation(
             ByteBuffer source,
+            boolean littleEndian,
             int channelIndexRelative,
             UnsignedByteBuffer destination,
             OrientationChange orientationCorrection) {
-        int sourceOffset = sizeBytes * channelIndexRelative;
+        int sourceOffset = sourceSize * channelIndexRelative;
         for (int y = 0; y < extent.y(); y++) {
             for (int x = 0; x < extent.x(); x++) {
 
