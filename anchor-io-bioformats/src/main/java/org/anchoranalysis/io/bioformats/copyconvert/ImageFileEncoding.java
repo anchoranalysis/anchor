@@ -38,7 +38,7 @@ public class ImageFileEncoding {
      *
      * @return the number of channels as per above.
      */
-    public int numberDistinctChannels() {
+    public int numberDistinctChannelsSource() {
         return (rgb && !interleaved) ? numberChannelsPerArray / 3 : numberChannelsPerArray;
     }
 }

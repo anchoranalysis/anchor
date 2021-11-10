@@ -130,11 +130,14 @@ public abstract class ConvertTo<T> {
         
         int areaXY = dimensions.areaXY();
 
-        this.sourceIncrement = bytesPerVoxel() * sourceImageEncoding.numberDistinctChannels();
+        // This is the number of bytes to increment by.
+        this.sourceIncrement = bytesPerVoxel() * sourceImageEncoding.numberDistinctChannelsSource();
+        
+        // This is the number of bytes (which is identical to the number of lements).
         this.sourceSize = areaXY * sourceIncrement;
 
-        // When dealing with an RGB image, there needs to be three output elements, not one
-        this.destinationSize = areaXY * (sourceImageEncoding.isRgb() ? 3 : 1);
+        // This is the number of elements, not the number of bytes.
+        this.destinationSize = areaXY;
     }
 
     /**
