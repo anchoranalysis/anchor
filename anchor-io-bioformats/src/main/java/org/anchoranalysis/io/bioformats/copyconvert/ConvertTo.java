@@ -146,7 +146,7 @@ public abstract class ConvertTo<T> {
      * @param orientationCorrection any correction of orientation to be applied as bytes are
      *     converted.
      * @return the converted buffer.
-     * @throw IOException when operation is unsupported, given particular parameterization.
+     * @throws IOException when operation is unsupported, given particular parameterization.
      */
     protected VoxelBuffer<T> convertSliceOfSingleChannel(
             ByteBuffer source, int channelIndexRelative, OrientationChange orientationCorrection)
