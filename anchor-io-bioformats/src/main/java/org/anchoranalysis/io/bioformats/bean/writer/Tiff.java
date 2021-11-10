@@ -76,7 +76,7 @@ public class Tiff extends BioformatsWriter {
             writer.setWriteSequentially(true);
             return writer;
         } catch (FormatException e) {
-            throw new ImageIOException(e);
+            throw new ImageIOException("Failed to create TiffWriter", e);
         }
     }
 }

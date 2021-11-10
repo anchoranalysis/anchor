@@ -40,8 +40,9 @@ public abstract class UnsignedByteFromUnsignedByte extends ToUnsignedByte {
             return super.convert(source, channelIndexRelative, orientationCorrection, littleEndian);
         }
     }
-    
-    private boolean isSourceIdenticalToDestination(ByteBuffer source, int channelIndexRelative, OrientationChange orientationCorrection) {
+
+    private boolean isSourceIdenticalToDestination(
+            ByteBuffer source, int channelIndexRelative, OrientationChange orientationCorrection) {
         return source.capacity() == destinationSize
                 && sourceIncrement == destinationSize
                 && channelIndexRelative == 0

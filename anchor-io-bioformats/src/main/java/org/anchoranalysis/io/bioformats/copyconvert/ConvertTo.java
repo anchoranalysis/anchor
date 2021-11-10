@@ -127,12 +127,12 @@ public abstract class ConvertTo<T> {
     protected void setupBefore(Dimensions dimensions, ImageFileEncoding sourceImageEncoding)
             throws IOException {
         this.extent = dimensions.extent();
-        
+
         int areaXY = dimensions.areaXY();
 
         // This is the number of bytes to increment by.
         this.sourceIncrement = bytesPerVoxel() * sourceImageEncoding.numberDistinctChannelsSource();
-        
+
         // This is the number of bytes (which is identical to the number of lements).
         this.sourceSize = areaXY * sourceIncrement;
 

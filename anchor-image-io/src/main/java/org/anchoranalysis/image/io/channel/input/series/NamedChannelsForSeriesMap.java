@@ -120,7 +120,7 @@ public class NamedChannelsForSeriesMap implements NamedChannelsForSeries {
         try {
             return createTimeSeries(progress).size();
         } catch (OperationFailedException e) {
-            throw new ImageIOException(e);
+            throw new ImageIOException("Cannot establish the size of the time-dimension", e);
         }
     }
 

@@ -38,7 +38,7 @@ public class ReadMetadataUtilities {
         try {
             return Optional.ofNullable(ImageMetadataReader.readMetadata(path.toFile()));
         } catch (ImageProcessingException | IOException e) {
-            throw new ImageIOException(e);
+            throw new ImageIOException("Failed to read metadata for " + path, e);
         }
     }
 

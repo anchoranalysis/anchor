@@ -29,6 +29,7 @@ package org.anchoranalysis.io.imagej.bean.stack.writer;
 import java.nio.file.Path;
 import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
 import org.anchoranalysis.image.io.ImageIOException;
+import org.anchoranalysis.image.io.bean.stack.writer.WriterErrorMessageHelper;
 import org.anchoranalysis.image.io.stack.StackSeries;
 import org.anchoranalysis.image.io.stack.output.StackWriteOptions;
 
@@ -48,7 +49,8 @@ public abstract class SupportsTimeSeries extends ImageJRasterWriter {
             writeStackTime(
                     stackSeries.createSingleStack(), filePath, options.getAttributes().isRgb());
         } catch (IncorrectImageSizeException e) {
-            throw new ImageIOException(e);
+            throw WriterErrorMessageHelper.generalWriteException(
+                    ImageJRasterWriter.class, filePath, e);
         }
     }
 }

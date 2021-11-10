@@ -114,7 +114,11 @@ public class BioformatsReader extends StackReaderOrientationCorrection {
                 | IllegalArgumentException
                 | InvocationTargetException
                 | SecurityException e) {
-            throw new ImageIOException(e);
+            throw new ImageIOException(
+                    String.format(
+                            "Failed to open image-file %s using %s",
+                            filePath, BioformatsReader.class),
+                    e);
         }
     }
 

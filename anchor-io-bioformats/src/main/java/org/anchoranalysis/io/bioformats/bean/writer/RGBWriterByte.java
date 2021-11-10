@@ -50,7 +50,7 @@ class RGBWriterByte extends RGBWriter {
         try {
             writer.saveBytes(z, merged.array());
         } catch (FormatException | IOException e) {
-            throw new ImageIOException(e);
+            throw new ImageIOException("Failed to merge-slices as RGB", e);
         }
     }
 

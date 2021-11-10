@@ -36,6 +36,15 @@ package org.anchoranalysis.core.log.error;
 public interface ErrorReporter {
 
     /**
+     * Reports an error that occurred as an exception, with a message first introducing it.
+     *
+     * @param classOriginating a class in which the error originates (where it was thrown).
+     * @param message the message explaining the error.
+     * @param exc the error that occurred.
+     */
+    void recordError(Class<?> classOriginating, String message, Throwable exc);
+
+    /**
      * Reports an error that occurred as an exception
      *
      * @param classOriginating a class in which the error originates (where it was thrown)

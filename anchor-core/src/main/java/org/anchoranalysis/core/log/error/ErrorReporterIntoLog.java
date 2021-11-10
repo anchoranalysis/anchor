@@ -26,10 +26,7 @@ package org.anchoranalysis.core.log.error;
  * #L%
  */
 
-import lombok.RequiredArgsConstructor;
-import org.anchoranalysis.core.exception.friendly.HasFriendlyErrorMessage;
 import org.anchoranalysis.core.log.MessageLogger;
-import org.apache.commons.lang.exception.ExceptionUtils;
 
 /**
  * Records errors, by writing them into a logger.
@@ -42,70 +39,14 @@ import org.apache.commons.lang.exception.ExceptionUtils;
  *
  * @author Owen Feehan
  */
-@RequiredArgsConstructor
-public class ErrorReporterIntoLog implements ErrorReporter {
+public class ErrorReporterIntoLog extends ErrorReporterBase {
 
-    // START REQUIRED ARGUMENTS
-    private final MessageLogger logger;
-    // END REQUIRED ARGUMENTS
-
-    /** True if at least one warning has been outputted. */
-    private boolean warningOccurred = false;
-
-    @Override
-    public void recordError(Class<?> classOriginating, Throwable exc) {
-
-        // Special behaviour if it's a friendly exception
-        if (exc instanceof HasFriendlyErrorMessage) {
-            HasFriendlyErrorMessage eCast = (HasFriendlyErrorMessage) exc;
-            logWithBanner(eCast.friendlyMessageHierarchy(), false);
-        } else {
-            try {
-                logWithBanner(
-                        exc.toString()
-                                + System.lineSeparator()
-                                + ExceptionUtils.getFullStackTrace(exc),
-                        classOriginating);
-            } catch (Exception e) {
-                logger.log("An error occurred while writing an error: " + e.toString());
-            }
-        }
-    }
-
-    @Override
-    public void recordError(Class<?> classOriginating, String message) {
-        try {
-            logWithBanner(message, classOriginating);
-        } catch (Exception e) {
-            logger.log("An error occurred while writing an error: " + e.toString());
-        }
-    }
-
-    @Override
-    public void recordWarning(String message) {
-        warningOccurred = true;
-        try {
-            logWithBanner(message, true);
-        } catch (Exception e) {
-            logger.log("An error occurred while writing an warning: " + e.toString());
-        }
-    }
-
-    private void logWithBanner(String logMessage, boolean warning) {
-        logger.log(DecorateMessage.decorate(logMessage, warning));
-    }
-
-    private void logWithBanner(String logMessage, Class<?> classOriginating) {
-        logger.log(DecorateMessage.decorate(logMessage + classMessage(classOriginating), false));
-    }
-
-    private static String classMessage(Class<?> c) {
-        return String.format(
-                "%nThe error occurred when executing a method in class %s", c.getName());
-    }
-
-    @Override
-    public boolean hasWarningOccurred() {
-        return warningOccurred;
+    /**
+     * Create for a message-logger.
+     *
+     * @param logger the message logger to record messages into.
+     */
+    public ErrorReporterIntoLog(MessageLogger logger) {
+        super(logger::log);
     }
 }

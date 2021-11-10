@@ -40,6 +40,7 @@ import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.writer.StackWriter;
+import org.anchoranalysis.image.io.bean.stack.writer.WriterErrorMessageHelper;
 import org.anchoranalysis.image.io.stack.StackSeries;
 import org.anchoranalysis.image.io.stack.output.StackWriteOptions;
 import org.anchoranalysis.image.voxel.datatype.FindCommonVoxelType;
@@ -149,7 +150,8 @@ public abstract class BioformatsWriter extends StackWriter {
             writeStack(writer, stack, makeRGB, voxelDataTypeToWrite);
 
         } catch (IOException | FormatException e) {
-            throw new ImageIOException(e);
+            throw WriterErrorMessageHelper.generalWriteException(
+                    BioformatsWriter.class, filePath, e);
         }
     }
 
@@ -198,25 +200,31 @@ public abstract class BioformatsWriter extends StackWriter {
                             makeRGB,
                             false));
         } catch (ServiceException | DependencyException e) {
-            throw new ImageIOException(e);
+            throw new ImageIOException(
+                    String.format(
+                            "Failed to prepare the %s for writing an image.",
+                            BioformatsWriter.class.getSimpleName()),
+                    e);
         }
     }
 
     private static void writeAsSeparateChannels(
             IFormatWriter writer, List<ByteRepresentationForChannel> channels, int numberSlices)
             throws ImageIOException {
-        try {
-            int sliceIndex = 0;
-            for (int channelIndex = 0; channelIndex < channels.size(); channelIndex++) {
-
+        int sliceIndex = 0;
+        for (int channelIndex = 0; channelIndex < channels.size(); channelIndex++) {
+            try {
                 ByteRepresentationForChannel channel = channels.get(channelIndex);
 
                 for (int z = 0; z < numberSlices; z++) {
                     writer.saveBytes(sliceIndex++, channel.bytesForSlice(z));
                 }
+            } catch (IOException | FormatException e) {
+                throw new ImageIOException(
+                        String.format(
+                                "An error occurred when writing image channel (%d)", channelIndex),
+                        e);
             }
-        } catch (IOException | FormatException e) {
-            throw new ImageIOException(e);
         }
     }
 }
