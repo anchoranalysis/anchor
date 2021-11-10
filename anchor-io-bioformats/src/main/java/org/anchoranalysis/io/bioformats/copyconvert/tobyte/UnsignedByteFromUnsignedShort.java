@@ -26,10 +26,7 @@
 
 package org.anchoranalysis.io.bioformats.copyconvert.tobyte;
 
-import java.nio.ByteBuffer;
 import loci.common.DataTools;
-import org.anchoranalysis.image.core.dimensions.OrientationChange;
-import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 
 /**
  * Converts data of type <i>unsigned short</i> to <i>unsigned byte</i>.
@@ -51,66 +48,15 @@ public class UnsignedByteFromUnsignedShort extends ToUnsignedByteWithScaling {
     }
 
     @Override
-    protected boolean supportsMultipleChannelsPerSourceBuffer() {
-        return false;
-    }
-
-    @Override
     protected int bytesPerVoxel() {
         return 2;
     }
 
     @Override
-    protected void copyKeepOrientation(
-            ByteBuffer source,
-            boolean littleEndian,
-            int channelIndexRelative,
-            UnsignedByteBuffer destination) {
+    protected int extractScaledValue(
+            byte[] sourceArray, int index, boolean littleEndian) {
 
-        byte[] sourceArray = source.array();
-
-        for (int index = 0; index < sourceSize; index += sourceIncrement) {
-
-            int value = extractScaledValue(sourceArray, index, channelIndexRelative, littleEndian);
-
-            destination.putUnsigned(value);
-        }
-    }
-
-    @Override
-    protected void copyChangeOrientation(
-            ByteBuffer source,
-            boolean littleEndian,
-            int channelIndexRelative,
-            UnsignedByteBuffer destination,
-            OrientationChange orientationCorrection) {
-
-        byte[] sourceArray = source.array();
-
-        int x = 0;
-        int y = 0;
-
-        for (int index = 0; index < sourceSize; index += sourceIncrement) {
-
-            int value = extractScaledValue(sourceArray, index, channelIndexRelative, littleEndian);
-
-            int indexOut = orientationCorrection.index(x, y, extent);
-            destination.putUnsigned(indexOut, value);
-
-            x++;
-            if (x == extent.x()) {
-                y++;
-                x = 0;
-            }
-        }
-    }
-
-    /** Extracts a value from the source-array, and apply any scaling and clamping. */
-    private int extractScaledValue(
-            byte[] sourceArray, int index, int channelIndexRelative, boolean littleEndian) {
-        int indexPlus = index + (channelIndexRelative * 2);
-
-        int value = DataTools.bytesToShort(sourceArray, indexPlus, 2, littleEndian);
+        int value = DataTools.bytesToShort(sourceArray, index, 2, littleEndian);
 
         // Make unsigned
         if (value < 0) {
