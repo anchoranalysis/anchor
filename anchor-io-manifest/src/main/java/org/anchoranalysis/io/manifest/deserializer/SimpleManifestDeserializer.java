@@ -27,6 +27,7 @@
 package org.anchoranalysis.io.manifest.deserializer;
 
 import java.io.File;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.serialize.DeserializationFailedException;
 import org.anchoranalysis.core.serialize.ObjectInputStreamDeserializer;
 import org.anchoranalysis.io.manifest.Manifest;
@@ -34,10 +35,12 @@ import org.anchoranalysis.io.manifest.Manifest;
 public class SimpleManifestDeserializer implements ManifestDeserializer {
 
     @Override
-    public Manifest deserializeManifest(File file) throws DeserializationFailedException {
+    public Manifest deserializeManifest(File file, Logger logger)
+            throws DeserializationFailedException {
         try {
             Manifest manifest =
-                    new ObjectInputStreamDeserializer<Manifest>().deserialize(file.toPath());
+                    new ObjectInputStreamDeserializer<Manifest>()
+                            .deserialize(file.toPath(), logger);
             manifest.initialize(file.toPath().getParent());
             return manifest;
         } catch (DeserializationFailedException e) {

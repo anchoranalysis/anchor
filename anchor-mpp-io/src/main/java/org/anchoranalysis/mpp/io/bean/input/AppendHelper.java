@@ -29,8 +29,10 @@ package org.anchoranalysis.mpp.io.bean.input;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.function.Function;
+import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.image.core.stack.TimeSequence;
 import org.anchoranalysis.image.io.ImageIOException;
@@ -42,9 +44,16 @@ import org.anchoranalysis.io.input.bean.path.DerivePath;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.mpp.io.input.MultiInputSubMap;
 
+@RequiredArgsConstructor
 class AppendHelper {
 
     private static final DeserializerHelper<?> DESERIALIZER = new DeserializerHelper<>();
+
+    // START: REQUIRED ARGUMENTS
+    private final MultiInput input;
+    private final boolean debugMode;
+    private final Logger logger;
+    // END: REQUIRED ARGUMENTS
 
     /** Reads an object from a path. */
     @FunctionalInterface
@@ -53,13 +62,8 @@ class AppendHelper {
     }
 
     /** It is assumed the input files are single channel images. */
-    public static void appendStack(
-            List<NamedBean<DerivePath>> listPaths,
-            MultiInput input,
-            boolean debugMode,
-            final StackReader stackReader) {
+    public void appendStack(List<NamedBean<DerivePath>> listPaths, final StackReader stackReader) {
         append(
-                input,
                 listPaths,
                 MultiInput::stack,
                 outPath -> {
@@ -68,81 +72,63 @@ class AppendHelper {
                     } catch (ImageIOException e) {
                         throw new OperationFailedException(e);
                     }
-                },
-                debugMode);
+                });
     }
 
-    public static void appendHistogram(
-            List<NamedBean<DerivePath>> listPaths, MultiInput input, boolean debugMode) {
-        append(
-                input,
-                listPaths,
-                MultiInput::histogram,
-                HistogramCSVReader::readHistogramFromFile,
-                debugMode);
+    public void appendHistogram(List<NamedBean<DerivePath>> listPaths) {
+        append(listPaths, MultiInput::histogram, HistogramCSVReader::readHistogramFromFile);
     }
 
-    public static void appendFilePath(
-            List<NamedBean<DerivePath>> listPaths, MultiInput input, boolean debugMode) {
-        append(input, listPaths, MultiInput::filePath, outPath -> outPath, debugMode);
+    public void appendFilePath(List<NamedBean<DerivePath>> listPaths) {
+        append(listPaths, MultiInput::filePath, outPath -> outPath);
     }
 
-    public static void appendDictionary(
-            List<NamedBean<DerivePath>> listPaths, MultiInput input, boolean debugMode) {
+    public void appendDictionary(List<NamedBean<DerivePath>> listPaths) {
 
         // Delayed-calculation of the appending path as it can be a bit expensive when multiplied by
         // so many items
-        append(input, listPaths, MultiInput::dictionary, Dictionary::readFromFile, debugMode);
+        append(listPaths, MultiInput::dictionary, Dictionary::readFromFile);
     }
 
-    public static void appendMarks(
-            List<NamedBean<DerivePath>> listPaths, MultiInput input, boolean debugMode) {
-        append(input, listPaths, MultiInput::marks, DESERIALIZER::deserializeMarks, debugMode);
+    public void appendMarks(List<NamedBean<DerivePath>> listPaths) {
+        append(
+                listPaths,
+                MultiInput::marks,
+                serialized -> DESERIALIZER.deserializeMarks(serialized, logger));
     }
 
-    public static void appendMarksFromAnnotation(
+    public void appendMarksFromAnnotation(
             List<NamedBean<DerivePath>> listPaths,
-            MultiInput input,
             boolean includeAccepted,
-            boolean includeRejected,
-            boolean debugMode) {
+            boolean includeRejected) {
 
         append(
-                input,
                 listPaths,
                 MultiInput::marks,
                 outPath ->
                         DESERIALIZER.deserializeMarksFromAnnotation(
-                                outPath, includeAccepted, includeRejected),
-                debugMode);
+                                outPath, includeAccepted, includeRejected, logger));
     }
 
-    public static void appendObjects(
-            List<NamedBean<DerivePath>> listPaths, MultiInput input, boolean debugMode) {
+    public void appendObjects(List<NamedBean<DerivePath>> listPaths) {
         append(
-                input,
                 listPaths,
                 MultiInput::objects,
-                ObjectCollectionReader::createFromPath,
-                debugMode);
+                path -> ObjectCollectionReader.createFromPath(path, logger));
     }
 
     /**
      * Appends new items to a particular OperationMap associated with the MultiInput by transforming
      * paths
      *
-     * @param input the input-object
      * @param list file-generations to read paths from
      * @param extractMap extracts an OperationMap from {@code input}
      * @param reader converts from a path to the object of interest
-     * @param debugMode
      */
-    private static <T> void append(
-            MultiInput input,
+    private <T> void append(
             List<NamedBean<DerivePath>> list,
             Function<MultiInput, MultiInputSubMap<T>> extractMap,
-            ReadFromPath<T> reader,
-            boolean debugMode) {
+            ReadFromPath<T> reader) {
 
         for (NamedBean<DerivePath> namedBean : list) {
 
@@ -167,9 +153,8 @@ class AppendHelper {
         }
     }
 
-    private static TimeSequence openRaster(Path path, StackReader stackReader)
-            throws ImageIOException {
-        try (OpenedImageFile openedFile = stackReader.openFile(path)) {
+    private TimeSequence openRaster(Path path, StackReader stackReader) throws ImageIOException {
+        try (OpenedImageFile openedFile = stackReader.openFile(path, logger)) {
             return openedFile.open();
         }
     }

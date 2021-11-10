@@ -27,10 +27,11 @@
 package org.anchoranalysis.io.manifest.deserializer;
 
 import java.io.File;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.serialize.DeserializationFailedException;
 import org.anchoranalysis.io.manifest.Manifest;
 
 public interface ManifestDeserializer {
 
-    Manifest deserializeManifest(File file) throws DeserializationFailedException;
+    Manifest deserializeManifest(File file, Logger logger) throws DeserializationFailedException;
 }

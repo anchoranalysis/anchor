@@ -27,6 +27,7 @@
 package org.anchoranalysis.mpp.io.marks;
 
 import java.nio.file.Path;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.serialize.DeserializationFailedException;
 import org.anchoranalysis.core.serialize.Deserializer;
 import org.anchoranalysis.core.serialize.XStreamDeserializer;
@@ -37,7 +38,8 @@ public class MarkCollectionDeserializer implements Deserializer<MarkCollection> 
     private XStreamDeserializer<MarkCollection> delegate = new XStreamDeserializer<>();
 
     @Override
-    public MarkCollection deserialize(Path filePath) throws DeserializationFailedException {
-        return delegate.deserialize(filePath);
+    public MarkCollection deserialize(Path filePath, Logger logger)
+            throws DeserializationFailedException {
+        return delegate.deserialize(filePath, logger);
     }
 }

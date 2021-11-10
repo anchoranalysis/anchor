@@ -27,6 +27,7 @@
 package org.anchoranalysis.image.io.object.input;
 
 import java.nio.file.Path;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.serialize.DeserializationFailedException;
 import org.anchoranalysis.core.serialize.Deserializer;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
@@ -37,13 +38,14 @@ class ReadObjectsFromTIFFDirectoryCorrectMissing implements Deserializer<ObjectC
     private static final String OBJECT_DIRECTORY_NAME = "objects";
 
     @Override
-    public ObjectCollection deserialize(Path path) throws DeserializationFailedException {
+    public ObjectCollection deserialize(Path path, Logger logger)
+            throws DeserializationFailedException {
         // Work around to tell the difference between a deliberately abandoned object-collection and
         // an empty set
         if (isMissingButLooksLikeCollection(path)) {
             return ObjectCollectionFactory.empty();
         } else {
-            return new ReadObjectsFromTIFFDirectory().deserialize(path);
+            return new ReadObjectsFromTIFFDirectory().deserialize(path, logger);
         }
     }
 

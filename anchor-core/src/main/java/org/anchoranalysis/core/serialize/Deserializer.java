@@ -27,6 +27,7 @@
 package org.anchoranalysis.core.serialize;
 
 import java.nio.file.Path;
+import org.anchoranalysis.core.log.Logger;
 
 /**
  * Creates an object from a serialized representation on the file-system.
@@ -40,8 +41,10 @@ public interface Deserializer<T> {
      * Deserializes a representation of an object stored on the filesystem.
      *
      * @param filePath the path on the file-system where the object is stored.
+     * @param logger where to write informative messages to, and and any non-fatal errors (fatal
+     *     errors are throw as exceptions).
      * @return the deserialized object.
      * @throws DeserializationFailedException if deserialization fails, including IO failures.
      */
-    T deserialize(Path filePath) throws DeserializationFailedException;
+    T deserialize(Path filePath, Logger logger) throws DeserializationFailedException;
 }

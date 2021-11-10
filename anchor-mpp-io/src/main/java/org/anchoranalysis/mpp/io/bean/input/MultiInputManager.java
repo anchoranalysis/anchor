@@ -26,8 +26,6 @@
 
 package org.anchoranalysis.mpp.io.bean.input;
 
-import static org.anchoranalysis.mpp.io.bean.input.AppendHelper.*;
-
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
@@ -98,26 +96,28 @@ public class MultiInputManager extends InputManagerWithStackReader<MultiInput> {
                 .map(
                         mainStack -> {
                             MultiInput inputToAdd = new MultiInput(inputName, mainStack);
-                            appendFromLists(inputToAdd, params.isDebugModeActivated());
+                            appendFromLists(
+                                    new AppendHelper(
+                                            inputToAdd,
+                                            params.isDebugModeActivated(),
+                                            params.getLogger()));
                             return inputToAdd;
                         });
     }
 
-    private void appendFromLists(MultiInput input, boolean doDebug) {
-        appendStack(appendStack, input, doDebug, getStackReader());
-        appendFromVariousMarksSources(input, doDebug);
-        appendObjects(appendObjects, input, doDebug);
-        appendDictionary(appendDictionary, input, doDebug);
-        appendHistogram(appendHistogram, input, doDebug);
-        appendFilePath(appendFilePath, input, doDebug);
+    private void appendFromLists(AppendHelper helper) {
+        helper.appendStack(appendStack, getStackReader());
+        appendFromVariousMarksSources(helper);
+        helper.appendObjects(appendObjects);
+        helper.appendDictionary(appendDictionary);
+        helper.appendHistogram(appendHistogram);
+        helper.appendFilePath(appendFilePath);
     }
 
-    private void appendFromVariousMarksSources(MultiInput input, boolean doDebug) {
-        appendMarks(appendMarks, input, doDebug);
-        appendMarksFromAnnotation(appendMarksFromAnnotation, input, true, true, doDebug);
-        appendMarksFromAnnotation(
-                appendMarksFromAnnotationAcceptedOnly, input, true, false, doDebug);
-        appendMarksFromAnnotation(
-                appendMarksFromAnnotationRejectedOnly, input, false, true, doDebug);
+    private void appendFromVariousMarksSources(AppendHelper helper) {
+        helper.appendMarks(appendMarks);
+        helper.appendMarksFromAnnotation(appendMarksFromAnnotation, true, true);
+        helper.appendMarksFromAnnotation(appendMarksFromAnnotationAcceptedOnly, true, false);
+        helper.appendMarksFromAnnotation(appendMarksFromAnnotationRejectedOnly, false, true);
     }
 }

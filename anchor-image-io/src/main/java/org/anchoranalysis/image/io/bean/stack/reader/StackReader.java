@@ -28,6 +28,7 @@ package org.anchoranalysis.image.io.bean.stack.reader;
 
 import java.nio.file.Path;
 import org.anchoranalysis.bean.AnchorBean;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
@@ -46,12 +47,14 @@ public abstract class StackReader extends AnchorBean<StackReader> {
      * be read.
      *
      * @param path the path of the image-file to open.
+     * @param logger where to write informative messages to, and and any non-fatal errors (fatal
+     *     errors are throw as exceptions).
      * @return the stack that has been read.
      * @throws ImageIOException if there is a series of stacks in the file, or if anything else goes
      *     wrong.
      */
-    public Stack readStack(Path path) throws ImageIOException {
-        OpenedImageFile openedFile = openFile(path);
+    public Stack readStack(Path path, Logger logger) throws ImageIOException {
+        OpenedImageFile openedFile = openFile(path, logger);
 
         try {
             if (openedFile.numberSeries() != 1) {
@@ -71,8 +74,10 @@ public abstract class StackReader extends AnchorBean<StackReader> {
      * be read.
      *
      * @param path where the file is located.
+     * @param logger where to write informative messages to, and and any non-fatal errors (fatal
+     *     errors are throw as exceptions).
      * @return an interface to the opened file that should be closed when no longer in use.
      * @throws ImageIOException if the file cannot be read.
      */
-    public abstract OpenedImageFile openFile(Path path) throws ImageIOException;
+    public abstract OpenedImageFile openFile(Path path, Logger logger) throws ImageIOException;
 }
