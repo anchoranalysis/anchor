@@ -32,7 +32,7 @@ public class ImageTimestampsAttributesFactory {
                     ImageFileAttributes.fromPath(path),
                     AcquisitionDateReader.readAcquisitionDate(path));
         } catch (IOException e) {
-            throw new ImageIOException(e);
+            throw new ImageIOException("Failed to read file-attributes for " + path, e);
         }
     }
 }

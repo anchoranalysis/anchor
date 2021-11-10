@@ -27,9 +27,9 @@ public class AcquisitionDateReader {
      */
     private static final int[] ACQUSITION_TIME_TAGS =
             new int[] {
-                ExifIFD0Directory.TAG_DATETIME,
-                ExifIFD0Directory.TAG_DATETIME_ORIGINAL,
-                ExifIFD0Directory.TAG_DATETIME_DIGITIZED
+                ExifIFD0Directory.TAG_DATETIME, // NOSONAR
+                ExifIFD0Directory.TAG_DATETIME_ORIGINAL, // NOSONAR
+                ExifIFD0Directory.TAG_DATETIME_DIGITIZED // NOSONAR
             };
 
     /**
@@ -40,8 +40,8 @@ public class AcquisitionDateReader {
      */
     private static final int[] TIMEZONE_TAGS =
             new int[] {
-                ExifIFD0Directory.TAG_TIME_ZONE_OFFSET,
-                ExifIFD0Directory.TAG_TIME_ZONE_OFFSET_TIFF_EP
+                ExifIFD0Directory.TAG_TIME_ZONE_OFFSET, // NOSONAR
+                ExifIFD0Directory.TAG_TIME_ZONE_OFFSET_TIFF_EP // NOSONAR
             };
 
     /**

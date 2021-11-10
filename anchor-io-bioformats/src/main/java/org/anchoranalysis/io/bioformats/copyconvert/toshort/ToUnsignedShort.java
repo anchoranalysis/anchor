@@ -35,7 +35,8 @@ import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedShortBuffer;
 import org.anchoranalysis.io.bioformats.copyconvert.ConvertTo;
 
 /**
- * Base class for implementations of {@link ConvertTo} that convert to <i>unsigned short</i> buffers.
+ * Base class for implementations of {@link ConvertTo} that convert to <i>unsigned short</i>
+ * buffers.
  *
  * @author Owen Feehan
  */

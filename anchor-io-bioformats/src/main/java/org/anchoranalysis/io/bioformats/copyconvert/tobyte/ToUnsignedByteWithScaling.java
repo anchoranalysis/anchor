@@ -35,7 +35,7 @@ public abstract class ToUnsignedByteWithScaling extends ToUnsignedByte {
     // END REQUIRED ARGUMENTS
 
     private Optional<ApplyScaling> applyScaling;
-    
+
     @Override
     protected void setupBefore(Dimensions dimensions, ImageFileEncoding encoding)
             throws IOException {
@@ -47,7 +47,7 @@ public abstract class ToUnsignedByteWithScaling extends ToUnsignedByte {
     protected boolean supportsMultipleChannelsPerSourceBuffer() {
         return false;
     }
-    
+
     @Override
     protected void copyKeepOrientation(
             ByteBuffer source,
@@ -86,10 +86,7 @@ public abstract class ToUnsignedByteWithScaling extends ToUnsignedByte {
         }
     }
 
-    
-    /** 
-     * Extracts a value from the source-array, and apply any scaling and clamping.
-     */
+    /** Extracts a value from the source-array, and apply any scaling and clamping. */
     protected abstract int extractScaledValue(byte[] sourceArray, int index, boolean littleEndian);
 
     /**
@@ -105,7 +102,7 @@ public abstract class ToUnsignedByteWithScaling extends ToUnsignedByte {
             return unscaled;
         }
     }
-    
+
     /** How much to scale each value by. */
     private Optional<ApplyScaling> calculateConvertRatio() {
         if (effectiveBits <= 8) {

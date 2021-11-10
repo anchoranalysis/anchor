@@ -60,6 +60,11 @@ public class ErrorReporterForTask implements ErrorReporter {
     }
 
     @Override
+    public void recordError(Class<?> classOriginating, String message, Throwable exc) {
+        delegate.recordError(classOriginating, message, exc);
+    }
+
+    @Override
     public void recordWarning(String message) {
         delegate.recordWarning(message);
     }

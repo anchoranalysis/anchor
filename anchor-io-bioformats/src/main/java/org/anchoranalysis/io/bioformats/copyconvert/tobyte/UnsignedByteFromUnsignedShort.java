@@ -53,8 +53,7 @@ public class UnsignedByteFromUnsignedShort extends ToUnsignedByteWithScaling {
     }
 
     @Override
-    protected int extractScaledValue(
-            byte[] sourceArray, int index, boolean littleEndian) {
+    protected int extractScaledValue(byte[] sourceArray, int index, boolean littleEndian) {
 
         int value = DataTools.bytesToShort(sourceArray, index, 2, littleEndian);
 

@@ -33,6 +33,7 @@ import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.writer.StackWriter;
+import org.anchoranalysis.image.io.bean.stack.writer.WriterErrorMessageHelper;
 import org.anchoranalysis.image.io.stack.output.StackWriteOptions;
 import org.anchoranalysis.io.imagej.convert.ConvertToImagePlus;
 import org.anchoranalysis.io.imagej.convert.ImageJConversionException;
@@ -97,7 +98,7 @@ public abstract class ImageJRasterWriter extends StackWriter {
         try {
             image = ConvertToImagePlus.from(stack, makeRGB);
         } catch (ImageJConversionException e) {
-            throw new ImageIOException(e);
+            throw WriterErrorMessageHelper.generalWriteException(ImageJRasterWriter.class, path, e);
         }
 
         try {

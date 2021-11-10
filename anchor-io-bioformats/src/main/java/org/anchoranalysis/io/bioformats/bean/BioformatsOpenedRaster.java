@@ -152,7 +152,7 @@ class BioformatsOpenedRaster implements OpenedImageFile {
         try {
             reader.close();
         } catch (IOException e) {
-            throw new ImageIOException(e);
+            throw new ImageIOException("Could not close bioformats file", e);
         }
     }
 
@@ -167,7 +167,7 @@ class BioformatsOpenedRaster implements OpenedImageFile {
         try {
             return new DimensionsCreator(metadata).apply(reader, readOptions, seriesIndex);
         } catch (CreateException e) {
-            throw new ImageIOException(e);
+            throw new ImageIOException("Failed to establish dimensions for the image", e);
         }
     }
 
@@ -201,7 +201,8 @@ class BioformatsOpenedRaster implements OpenedImageFile {
             return timeSequence;
 
         } catch (FormatException | IOException | IncorrectImageSizeException | CreateException e) {
-            throw new ImageIOException(e);
+            throw new ImageIOException(
+                    String.format("An error occurred opening series %d", seriesIndex), e);
         }
     }
 
