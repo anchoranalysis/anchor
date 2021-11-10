@@ -47,7 +47,6 @@ public class UnsignedByteFromUnsignedByteInterleaving extends UnsignedByteFromUn
             UnsignedByteBuffer destination) {
         for (int index = channelIndexRelative; index < sourceSize; index += sourceIncrement) {
             byte value = source.get(index);
-
             destination.putRaw(value);
         }
     }

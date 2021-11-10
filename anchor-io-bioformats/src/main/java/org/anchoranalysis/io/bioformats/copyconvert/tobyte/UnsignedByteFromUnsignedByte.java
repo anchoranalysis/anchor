@@ -33,14 +33,18 @@ public abstract class UnsignedByteFromUnsignedByte extends ToUnsignedByte {
             OrientationChange orientationCorrection,
             boolean littleEndian)
             throws IOException {
-        if (source.capacity() == destinationSize
-                && sourceIncrement == destinationSize
-                && channelIndexRelative == 0
-                && orientationCorrection == OrientationChange.KEEP_UNCHANGED) {
+        if (isSourceIdenticalToDestination(source, channelIndexRelative, orientationCorrection)) {
             // Reuse the existing buffer, if it's single channeled
             return UnsignedByteBuffer.wrapRaw(source);
         } else {
             return super.convert(source, channelIndexRelative, orientationCorrection, littleEndian);
         }
+    }
+    
+    private boolean isSourceIdenticalToDestination(ByteBuffer source, int channelIndexRelative, OrientationChange orientationCorrection) {
+        return source.capacity() == destinationSize
+                && sourceIncrement == destinationSize
+                && channelIndexRelative == 0
+                && orientationCorrection == OrientationChange.KEEP_UNCHANGED;
     }
 }
