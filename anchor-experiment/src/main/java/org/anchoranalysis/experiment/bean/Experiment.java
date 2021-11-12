@@ -26,6 +26,8 @@
 
 package org.anchoranalysis.experiment.bean;
 
+import java.nio.file.Path;
+import java.util.Optional;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.xml.AssociateXMLUponLoad;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
@@ -37,7 +39,14 @@ public abstract class Experiment extends AnchorBean<Experiment> implements Assoc
     // Allows to reference the xml configuration from where the experiment was defined
     private XMLConfiguration xmlConfiguration = null;
 
-    public abstract void executeExperiment(ExecutionArguments arguments)
+    /**
+     * Executes the experiment.
+     * 
+     * @param arguments arguments that may influence how the experiment is run.
+     * @return the path files written into as <i>output</i>, if such a path exists.
+     * @throws ExperimentExecutionException
+     */
+    public abstract Optional<Path> executeExperiment(ExecutionArguments arguments)
             throws ExperimentExecutionException;
 
     public XMLConfiguration getXMLConfiguration() {
