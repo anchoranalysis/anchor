@@ -112,7 +112,7 @@ public abstract class OutputExperiment extends Experiment {
             throws ExperimentExecutionException {
 
         try {
-            ParametersExperiment params = createParams(arguments); 
+            ParametersExperiment params = createParams(arguments);
             doExperimentWithParams(params);
             return Optional.of(params.getOutputter().getOutputDirectory());
 

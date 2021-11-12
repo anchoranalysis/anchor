@@ -89,8 +89,9 @@ public class ConvertToImagePlus {
      * Creates an {@link ImagePlus} from a {@link Stack}.
      *
      * @param stack the stack of channels to be converted
-     * @param makeRGB if true, the stack is assumed to have respectively red, green, blue channels exactly.
-     *     and outputted as a RGB-type image, otherwise an interleaved image-stack is created.
+     * @param makeRGB if true, the stack is assumed to have respectively red, green, blue channels
+     *     exactly. and outputted as a RGB-type image, otherwise an interleaved image-stack is
+     *     created.
      * @return a newly created image-plus, reusing the input channels's buffer without copying.
      * @throws ImageJConversionException if any RGB channel is not unsigned 8-bit
      */

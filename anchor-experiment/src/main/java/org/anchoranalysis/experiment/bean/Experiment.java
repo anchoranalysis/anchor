@@ -41,7 +41,7 @@ public abstract class Experiment extends AnchorBean<Experiment> implements Assoc
 
     /**
      * Executes the experiment.
-     * 
+     *
      * @param arguments arguments that may influence how the experiment is run.
      * @return the path files written into as <i>output</i>, if such a path exists.
      * @throws ExperimentExecutionException

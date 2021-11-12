@@ -25,8 +25,8 @@
  */
 package org.anchoranalysis.io.bioformats.bean.writer;
 
-import loci.formats.IFormatWriter;
 import java.util.Optional;
+import loci.formats.IFormatWriter;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.stack.Stack;
@@ -36,16 +36,16 @@ abstract class RGBWriter {
 
     /** The writer to eventual write the image. */
     protected final IFormatWriter writer;
-    
+
     /** The red channel. */
     protected final Channel channelRed;
-    
+
     /** The blue channel. */
     protected final Channel channelBlue;
-    
+
     /** The green channel. */
     protected final Channel channelGreen;
-    
+
     /** The alpha channel, if one is defined. */
     protected final Optional<Channel> channelAlpha;
 
@@ -63,10 +63,10 @@ abstract class RGBWriter {
 
         channelRed.extent().iterateOverZ(z -> mergeSliceAsRGB(z, capacity));
     }
-    
+
     /**
      * The total number of channels.
-     * 
+     *
      * @return 4 if an alpha channel is present, or 3 if it is not.
      */
     protected int numberChannels() {

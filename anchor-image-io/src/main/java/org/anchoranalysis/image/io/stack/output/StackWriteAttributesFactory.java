@@ -66,7 +66,8 @@ public class StackWriteAttributesFactory {
     }
 
     public static StackWriteAttributes rgbMaybe3D(boolean plusAlpha) {
-        return new StackWriteAttributes(false, false, !plusAlpha, StackRGBState.multiplexAlpha(plusAlpha), false);
+        return new StackWriteAttributes(
+                false, false, !plusAlpha, StackRGBState.multiplexAlpha(plusAlpha), false);
     }
 
     public static StackWriteAttributes binaryChannel(boolean always2D) {
@@ -86,12 +87,14 @@ public class StackWriteAttributesFactory {
     }
 
     public static StackWriteAttributes maybeRGB(boolean rgb, boolean always2D, boolean plusAlpha) {
-        return new StackWriteAttributes(always2D, false, !plusAlpha, StackRGBState.multiplex(rgb, plusAlpha), false);
+        return new StackWriteAttributes(
+                always2D, false, !plusAlpha, StackRGBState.multiplex(rgb, plusAlpha), false);
     }
 
     public static StackWriteAttributes maybeRGBWithoutAlpha(boolean rgb) {
         if (rgb) {
-            return new StackWriteAttributes(true, false, true, StackRGBState.RGB_WITHOUT_ALPHA, false);
+            return new StackWriteAttributes(
+                    true, false, true, StackRGBState.RGB_WITHOUT_ALPHA, false);
         } else {
             return new StackWriteAttributes(false, false, false, StackRGBState.NOT_RGB, false);
         }
@@ -99,7 +102,8 @@ public class StackWriteAttributesFactory {
 
     public static StackWriteAttributes rgb(boolean always2D, boolean plusAlpha) {
         if (always2D) {
-            return new StackWriteAttributes(true, false, !plusAlpha, StackRGBState.multiplexAlpha(plusAlpha), false);
+            return new StackWriteAttributes(
+                    true, false, !plusAlpha, StackRGBState.multiplexAlpha(plusAlpha), false);
         } else {
             return rgbMaybe3D(plusAlpha);
         }
@@ -125,7 +129,8 @@ public class StackWriteAttributesFactory {
         } else if (numberChannels == 1) {
             return singleChannelMaybe3D(singleSlice);
         } else {
-            return new StackWriteAttributes(singleSlice, false, false, StackRGBState.NOT_RGB, false);
+            return new StackWriteAttributes(
+                    singleSlice, false, false, StackRGBState.NOT_RGB, false);
         }
     }
 

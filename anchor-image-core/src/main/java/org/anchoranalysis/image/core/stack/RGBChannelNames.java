@@ -49,14 +49,15 @@ public class RGBChannelNames {
 
     /** Name for the <b>blue</b> channel. */
     public static final String BLUE = "blue";
-    
+
     /** Name for the <b>alpha</b> channel. */
     public static final String ALPHA = "alpha";
 
-    /** 
+    /**
      * Creates an array with all channel-names in R-G-B order.
-     * 
-     * @param includeAlpha if true, the alpha channel is also accepted as valid. if false, it is not accepted.
+     *
+     * @param includeAlpha if true, the alpha channel is also accepted as valid. if false, it is not
+     *     accepted.
      */
     public static String[] asArray(boolean includeAlpha) {
         if (includeAlpha) {
@@ -66,10 +67,11 @@ public class RGBChannelNames {
         }
     }
 
-    /** 
+    /**
      * Creates a list with all channel-names in R-G-B order.
-     * 
-     * @param includeAlpha if true, the alpha channel is also accepted as valid. if false, it is not accepted.
+     *
+     * @param includeAlpha if true, the alpha channel is also accepted as valid. if false, it is not
+     *     accepted.
      */
     public static List<String> asList(boolean includeAlpha) {
         if (includeAlpha) {
@@ -79,10 +81,11 @@ public class RGBChannelNames {
         }
     }
 
-    /** 
+    /**
      * Creates a set of the channel names.
-     * 
-     * @param includeAlpha if true, the alpha channel is also accepted as valid. if false, it is not accepted.
+     *
+     * @param includeAlpha if true, the alpha channel is also accepted as valid. if false, it is not
+     *     accepted.
      */
     public static Set<String> asSet(boolean includeAlpha) {
         return new HashSet<>(asList(includeAlpha));
@@ -106,7 +109,7 @@ public class RGBChannelNames {
             case BLUE:
                 return Optional.of(2);
             case ALPHA:
-                return Optional.of(3);                
+                return Optional.of(3);
             default:
                 return Optional.empty();
         }
@@ -118,27 +121,31 @@ public class RGBChannelNames {
      * <p>Names match only if lower-case.
      *
      * @param channelName name to check if it is valid.
-     * @param includeAlpha if true, the alpha channel is also accepted as valid. if false, it is not accepted.
+     * @param includeAlpha if true, the alpha channel is also accepted as valid. if false, it is not
+     *     accepted.
      * @return true iff {@code channelName} is red, green, or blue.
      */
     public static boolean isValidName(String channelName, boolean includeAlpha) {
-        return channelName.equals(RED) || channelName.equals(GREEN) || channelName.equals(BLUE) || (includeAlpha && channelName.equals(ALPHA));
+        return channelName.equals(RED)
+                || channelName.equals(GREEN)
+                || channelName.equals(BLUE)
+                || (includeAlpha && channelName.equals(ALPHA));
     }
-    
 
     /**
      * Do the channel-names correspond exactly to those expected for RGB or RGBA.
-     * 
+     *
      * @param channelNames the channel names to check.
      * @param includeAlpha whether to expect an <i>alpha</i> channel or not.
-     * @return true if there are exactly the expected number of channel-names, and they correspond exactly to the expected names (which are lower-case).
+     * @return true if there are exactly the expected number of channel-names, and they correspond
+     *     exactly to the expected names (which are lower-case).
      */
     public static boolean isValidNameSet(Set<String> channelNames, boolean includeAlpha) {
 
         if (includeAlpha) {
             if (channelNames.size() != 4) {
                 return false;
-            }            
+            }
         } else {
             if (channelNames.size() != 3) {
                 return false;
