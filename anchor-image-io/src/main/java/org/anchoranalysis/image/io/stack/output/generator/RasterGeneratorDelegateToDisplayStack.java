@@ -63,6 +63,6 @@ public class RasterGeneratorDelegateToDisplayStack<T> extends RasterGeneratorSel
 
     @Override
     public StackWriteAttributes guaranteedImageAttributes() {
-        return StackWriteAttributesFactory.maybeRGB(rgb);
+        return StackWriteAttributesFactory.maybeRGBWithoutAlpha(rgb);
     }
 }

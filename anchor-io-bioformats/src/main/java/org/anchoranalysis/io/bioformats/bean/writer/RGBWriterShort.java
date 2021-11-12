@@ -36,8 +36,8 @@ import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 
 class RGBWriterShort extends RGBWriter {
 
-    public RGBWriterShort(IFormatWriter writer, Stack stack) {
-        super(writer, stack);
+    public RGBWriterShort(IFormatWriter writer, Stack stack, boolean withAlpha) {
+        super(writer, stack, withAlpha);
     }
 
     @Override

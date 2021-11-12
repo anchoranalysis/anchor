@@ -61,6 +61,6 @@ public class DisplayStackGenerator extends RasterGeneratorDelegateToRaster<Stack
 
     @Override
     public StackWriteAttributes guaranteedImageAttributes() {
-        return super.guaranteedImageAttributes().rgb();
+        return super.guaranteedImageAttributes().rgb(false);
     }
 }

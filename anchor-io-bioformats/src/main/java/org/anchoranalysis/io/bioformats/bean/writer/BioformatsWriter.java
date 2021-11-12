@@ -172,17 +172,21 @@ public abstract class BioformatsWriter extends StackWriter {
     }
 
     private static void writeRGB(IFormatWriter writer, Stack stack) throws ImageIOException {
-        if (stack.getNumberChannels() != 3) {
+        if (stack.getNumberChannels() != 3 && stack.getNumberChannels() != 4) {
             throw new ImageIOException(
-                    "If makeRGB==true, then a stack must have exactly 3 channels, but it actually has: "
+                    "If makeRGB==true, then a stack must have exactly 3 or 4 channels, but it actually has: "
                             + stack.getNumberChannels());
-        } else if (stack.allChannelsHaveType(UnsignedByteVoxelType.INSTANCE)) {
-            new RGBWriterByte(writer, stack).writeAsRGB();
-        } else if (stack.allChannelsHaveType(UnsignedShortVoxelType.INSTANCE)) {
-            new RGBWriterShort(writer, stack).writeAsRGB();
         } else {
-            throw new ImageIOException(
-                    "If makeRGB==true, then only unsigned 8-bit or unsigned 16-bit voxels are supported");
+            boolean withAlpha = stack.getNumberChannels()==4;
+            
+            if (stack.allChannelsHaveType(UnsignedByteVoxelType.INSTANCE)) {
+                new RGBWriterByte(writer, stack, withAlpha).writeAsRGB();
+            } else if (stack.allChannelsHaveType(UnsignedShortVoxelType.INSTANCE)) {
+                new RGBWriterShort(writer, stack, withAlpha).writeAsRGB();
+            } else {
+                throw new ImageIOException(
+                        "If makeRGB==true, then only unsigned 8-bit or unsigned 16-bit voxels are supported");
+            }                    
         }
     }
 

@@ -127,7 +127,7 @@ public class StackTester {
 
         StackWriteOptions options =
                 new StackWriteOptions(
-                        StackWriteAttributesFactory.maybeRGB(channels.isMakeRGB()),
+                        StackWriteAttributesFactory.maybeRGBWithoutAlpha(channels.isMakeRGB()),
                         Optional.empty());
 
         Path pathWritten =

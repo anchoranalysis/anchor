@@ -99,7 +99,7 @@ public abstract class ObjectsAsRGBGenerator
 
     @Override
     public StackWriteAttributes guaranteedImageAttributes() {
-        return StackWriteAttributesFactory.rgb(isAlways2D());
+        return StackWriteAttributesFactory.rgb(isAlways2D(), false);
     }
 
     protected abstract RGBStack generateBackground(

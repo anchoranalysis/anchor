@@ -85,7 +85,7 @@ public abstract class MarksGeneratorBase
 
     @Override
     public StackWriteAttributes guaranteedImageAttributes() {
-        return StackWriteAttributesFactory.rgbMaybe3D();
+        return StackWriteAttributesFactory.rgbMaybe3D(false);
     }
 
     protected abstract DisplayStack background(DisplayStack stack) throws OperationFailedException;

@@ -34,6 +34,7 @@ import org.anchoranalysis.core.format.ImageFileFormat;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.stack.StackSeries;
+import org.anchoranalysis.image.io.stack.output.StackRGBState;
 import org.anchoranalysis.image.io.stack.output.StackWriteOptions;
 
 /**
@@ -69,7 +70,7 @@ public abstract class OneOrThreeChannelsWriter extends StackWriter {
     public void writeStack(Stack stack, Path filePath, StackWriteOptions options)
             throws ImageIOException {
 
-        if (stack.getNumberChannels() == 3 && !options.getAttributes().isRgb()) {
+        if (stack.getNumberChannels() == 3 && options.getAttributes().getRgb()!=StackRGBState.RGB_WITHOUT_ALPHA) {
             throw new ImageIOException("3-channel images can only be created as RGB");
         }
 

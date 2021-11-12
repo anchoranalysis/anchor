@@ -41,7 +41,7 @@ import org.anchoranalysis.image.core.stack.Stack;
  */
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class StackWriteAttributes {
-
+    
     /** True the output is guaranteed to only ever 2D i.e. maximally one z-slice? */
     @Getter private boolean always2D;
 
@@ -58,7 +58,7 @@ public class StackWriteAttributes {
      *
      * <p>This flag is ignored, when the number of channels is not three.
      */
-    @Getter private boolean rgb;
+    @Getter private StackRGBState rgb;
 
     /**
      * Whether all channels represent a binary image.
@@ -84,8 +84,9 @@ public class StackWriteAttributes {
      *
      * @return a newly created {@link StackWriteAttributes} derived from the existing object.
      */
-    public StackWriteAttributes rgb() {
-        return new StackWriteAttributes(always2D, false, true, true, false);
+    public StackWriteAttributes rgb(boolean plusAlpha) {
+        StackRGBState state = plusAlpha ? StackRGBState.RGB_WITH_ALPHA : StackRGBState.RGB_WITHOUT_ALPHA;
+        return new StackWriteAttributes(always2D, false, true, state, false);
     }
 
     /**
@@ -101,7 +102,7 @@ public class StackWriteAttributes {
                 always2D && other.always2D,
                 singleChannel && other.singleChannel,
                 threeChannels && other.threeChannels,
-                rgb && other.rgb,
+                rgb.min(other.rgb),
                 binary && other.binary);
     }
 
@@ -118,7 +119,7 @@ public class StackWriteAttributes {
                 always2D || other.always2D,
                 singleChannel || other.singleChannel,
                 threeChannels || other.threeChannels,
-                rgb || other.rgb,
+                rgb.max(other.rgb),
                 binary || other.binary);
     }
 
@@ -129,7 +130,7 @@ public class StackWriteAttributes {
      * @return true if the stack should be written as RGB, false otherwise.
      */
     public boolean writeAsRGB(Stack stack) {
-        return rgb && stack.getNumberChannels() == 3 && stack.isRGB();
+        return stack.isRGB() && (stack.getNumberChannels() == 3 && rgb==StackRGBState.RGB_WITHOUT_ALPHA) || (stack.getNumberChannels() == 4 && rgb==StackRGBState.RGB_WITH_ALPHA);
     }
 
     /** A user-friendly description of the stack-type to include in error and warning messages. */
@@ -153,8 +154,10 @@ public class StackWriteAttributes {
         } else if (singleChannel) {
             return "grayscale";
         } else if (threeChannels) {
-            if (rgb) {
+            if (rgb==StackRGBState.RGB_WITHOUT_ALPHA) {
                 return "rgb";
+            } else if (rgb==StackRGBState.RGB_WITH_ALPHA) {
+                return "rgba";                
             } else {
                 return "three-channel";
             }
