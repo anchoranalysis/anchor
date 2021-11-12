@@ -27,6 +27,7 @@
 package org.anchoranalysis.experiment.bean.io;
 
 import com.google.common.base.Preconditions;
+import java.nio.file.Path;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
@@ -106,11 +107,14 @@ public abstract class OutputExperiment extends Experiment {
      *
      * @param arguments additional run-time configuration/parameters that influences the experiment.
      */
-    public final void executeExperiment(ExecutionArguments arguments)
+    @Override
+    public Optional<Path> executeExperiment(ExecutionArguments arguments)
             throws ExperimentExecutionException {
 
         try {
-            doExperimentWithParams(createParams(arguments));
+            ParametersExperiment params = createParams(arguments); 
+            doExperimentWithParams(params);
+            return Optional.of(params.getOutputter().getOutputDirectory());
 
         } catch (CreateException e) {
             throw new ExperimentExecutionException(e);
@@ -217,6 +221,7 @@ public abstract class OutputExperiment extends Experiment {
                 rootOutputter, executionArguments, useDetailedLogging());
     }
 
+    /** Starts the experiment-logger, and checks the output-manager has been initialzied. */
     private void initBeforeExecution(ParametersExperiment params)
             throws ExperimentExecutionException {
         try {
