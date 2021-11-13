@@ -68,6 +68,6 @@ public class ExtractBoundingBoxAreaFromStackGenerator
 
     @Override
     public StackWriteAttributes guaranteedImageAttributes() {
-        return StackWriteAttributesFactory.maybeRGB(background.isRGB());
+        return StackWriteAttributesFactory.maybeRGBWithoutAlpha(background.isRGB());
     }
 }

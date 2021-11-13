@@ -1,13 +1,9 @@
 package org.anchoranalysis.io.bioformats.copyconvert.tobyte;
 
-import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.util.Optional;
-import lombok.RequiredArgsConstructor;
-import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.OrientationChange;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
-import org.anchoranalysis.io.bioformats.copyconvert.ImageFileEncoding;
+import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 
 /**
  * Like {@link ToUnsignedByte} but applies scaling, if necessary, to map the original value to
@@ -15,12 +11,12 @@ import org.anchoranalysis.io.bioformats.copyconvert.ImageFileEncoding;
  *
  * @author Owen Feehan
  */
-@RequiredArgsConstructor
 public abstract class ToUnsignedByteWithScaling extends ToUnsignedByte {
 
-    // START REQUIRED ARGUMENTS
+    protected final ApplyScaling scaling;
+
     /**
-     * The number of bits that are used in the input-type.
+     * Create with the number of bits that are used in the input-type.
      *
      * <p>e.g. 8 or 12 or 16.
      *
@@ -30,17 +26,12 @@ public abstract class ToUnsignedByteWithScaling extends ToUnsignedByte {
      * an <i>unsigned-byte</i>.
      *
      * <p>If {@code <= 8}, then no scaling is applied.
+     *
+     * @param effectiveBits the number of bits that are used in the input-byte, from which a scaling
+     *     factor is derived.
      */
-    private final int effectiveBits;
-    // END REQUIRED ARGUMENTS
-
-    private Optional<ApplyScaling> applyScaling;
-
-    @Override
-    protected void setupBefore(Dimensions dimensions, ImageFileEncoding encoding)
-            throws IOException {
-        super.setupBefore(dimensions, encoding);
-        applyScaling = calculateConvertRatio();
+    protected ToUnsignedByteWithScaling(int effectiveBits) {
+        scaling = new ApplyScaling(effectiveBits, UnsignedByteVoxelType.INSTANCE);
     }
 
     @Override
@@ -88,28 +79,4 @@ public abstract class ToUnsignedByteWithScaling extends ToUnsignedByte {
 
     /** Extracts a value from the source-array, and apply any scaling and clamping. */
     protected abstract int extractScaledValue(byte[] sourceArray, int index, boolean littleEndian);
-
-    /**
-     * Scales a value, if necessary, to map it to 8-bits.
-     *
-     * @param unscaled the unscaled value, which may use more than 8-bits.
-     * @return the scaledValue, should now fit inside 8-bits.
-     */
-    protected int scaleValue(int unscaled) {
-        if (applyScaling.isPresent()) {
-            return applyScaling.get().scale(unscaled);
-        } else {
-            return unscaled;
-        }
-    }
-
-    /** How much to scale each value by. */
-    private Optional<ApplyScaling> calculateConvertRatio() {
-        if (effectiveBits <= 8) {
-            return Optional.empty();
-        } else {
-            float conversionRatio = ConvertHelper.twoToPower(8 - effectiveBits);
-            return Optional.of(new ApplyScaling(conversionRatio));
-        }
-    }
 }

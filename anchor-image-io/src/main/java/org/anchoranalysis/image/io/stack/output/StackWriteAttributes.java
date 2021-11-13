@@ -42,7 +42,7 @@ import org.anchoranalysis.image.core.stack.Stack;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class StackWriteAttributes {
 
-    /** True the output is guaranteed to only ever 2D i.e. maximally one z-slice? */
+    /** Whether the output is guaranteed to only ever 2D i.e. maximally one z-slice? */
     @Getter private boolean always2D;
 
     /** The number of channels is guaranteed to be 1 in the output. */
@@ -52,13 +52,13 @@ public class StackWriteAttributes {
     @Getter private boolean threeChannels;
 
     /***
-     * Whether it's an RGB image when it has three channels (the three channels visualized jointly, rather than independently)
+     * Whether it's an RGB or RGBA image when it has three/four channels respectively.
      *
      * <p>This flag should only be set when {@code alwaysOneOrThreChannels} is true.
      *
      * <p>This flag is ignored, when the number of channels is not three.
      */
-    @Getter private boolean rgb;
+    @Getter private StackRGBState rgb;
 
     /**
      * Whether all channels represent a binary image.
@@ -67,6 +67,27 @@ public class StackWriteAttributes {
      * minimum intensity value.
      */
     @Getter private boolean binary;
+
+    /** Whether each channel is 8 bits. */
+    @Getter private boolean eightBitChannels;
+
+    /**
+     * Alternative constructor that assumes each channel is 8-bits.
+     *
+     * @param always2D whether the output is guaranteed to only ever 2D i.e. maximally one z-slice?
+     * @param singleChannel the number of channels is guaranteed to be 1 in the output.
+     * @param threeChannels the number of channels is guaranteed to be 3 in the output.
+     * @param rgb whether it's an RGB or RGBA image when it has three/four channels respectively.
+     * @param binary whether all channels represent a binary image.
+     */
+    public StackWriteAttributes(
+            boolean always2D,
+            boolean singleChannel,
+            boolean threeChannels,
+            StackRGBState rgb,
+            boolean binary) {
+        this(always2D, singleChannel, threeChannels, rgb, binary, false);
+    }
 
     /**
      * Derives a {@link StackWriteAttributes} that will always be 2D, but is otherwise unchanged.
@@ -84,8 +105,10 @@ public class StackWriteAttributes {
      *
      * @return a newly created {@link StackWriteAttributes} derived from the existing object.
      */
-    public StackWriteAttributes rgb() {
-        return new StackWriteAttributes(always2D, false, true, true, false);
+    public StackWriteAttributes rgb(boolean plusAlpha) {
+        StackRGBState state =
+                plusAlpha ? StackRGBState.RGB_WITH_ALPHA : StackRGBState.RGB_WITHOUT_ALPHA;
+        return new StackWriteAttributes(always2D, false, true, state, false);
     }
 
     /**
@@ -101,8 +124,9 @@ public class StackWriteAttributes {
                 always2D && other.always2D,
                 singleChannel && other.singleChannel,
                 threeChannels && other.threeChannels,
-                rgb && other.rgb,
-                binary && other.binary);
+                rgb.min(other.rgb),
+                binary && other.binary,
+                eightBitChannels && other.eightBitChannels);
     }
 
     /**
@@ -118,8 +142,9 @@ public class StackWriteAttributes {
                 always2D || other.always2D,
                 singleChannel || other.singleChannel,
                 threeChannels || other.threeChannels,
-                rgb || other.rgb,
-                binary || other.binary);
+                rgb.max(other.rgb),
+                binary || other.binary,
+                eightBitChannels || other.eightBitChannels);
     }
 
     /**
@@ -129,7 +154,20 @@ public class StackWriteAttributes {
      * @return true if the stack should be written as RGB, false otherwise.
      */
     public boolean writeAsRGB(Stack stack) {
-        return rgb && stack.getNumberChannels() == 3 && stack.isRGB();
+        return stack.isRGB()
+                        && (stack.getNumberChannels() == 3
+                                && rgb == StackRGBState.RGB_WITHOUT_ALPHA)
+                || (stack.getNumberChannels() == 4 && rgb == StackRGBState.RGB_WITH_ALPHA);
+    }
+
+    /**
+     * Mark the attributes to indicate that channels are no longer guaranteed to be 8-bit.
+     *
+     * @return a newly-created {@link StackWriteAttributes} that has {@code eightBit=false} but is
+     *     otherwise duplicated.
+     */
+    public StackWriteAttributes allChannelsEightBit() {
+        return new StackWriteAttributes(always2D, singleChannel, threeChannels, rgb, binary, true);
     }
 
     /** A user-friendly description of the stack-type to include in error and warning messages. */
@@ -152,12 +190,12 @@ public class StackWriteAttributes {
             return "binary";
         } else if (singleChannel) {
             return "grayscale";
+        } else if (rgb == StackRGBState.RGB_WITHOUT_ALPHA) {
+            return "rgb";
+        } else if (rgb == StackRGBState.RGB_WITH_ALPHA) {
+            return "rgba";
         } else if (threeChannels) {
-            if (rgb) {
-                return "rgb";
-            } else {
-                return "three-channel";
-            }
+            return "three-channel";
         } else {
             return "";
         }

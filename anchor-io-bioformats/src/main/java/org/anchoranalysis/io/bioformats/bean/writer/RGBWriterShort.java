@@ -36,13 +36,13 @@ import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 
 class RGBWriterShort extends RGBWriter {
 
-    public RGBWriterShort(IFormatWriter writer, Stack stack) {
-        super(writer, stack);
+    public RGBWriterShort(IFormatWriter writer, Stack stack, boolean withAlpha) {
+        super(writer, stack, withAlpha);
     }
 
     @Override
     protected void mergeSliceAsRGB(int z, int capacity) throws ImageIOException {
-        UnsignedByteBuffer merged = UnsignedByteBuffer.allocate(capacity * 3 * 2);
+        UnsignedByteBuffer merged = UnsignedByteBuffer.allocate(capacity * numberChannels() * 2);
         ShortBuffer mergedAsShort = merged.getDelegate().asShortBuffer();
         putSliceShort(mergedAsShort, channelRed, z);
         putSliceShort(mergedAsShort, channelGreen, z);

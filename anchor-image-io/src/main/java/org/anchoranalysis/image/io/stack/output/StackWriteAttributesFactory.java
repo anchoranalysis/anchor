@@ -27,6 +27,7 @@ package org.anchoranalysis.image.io.stack.output;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.stack.Stack;
 
 /**
@@ -37,29 +38,23 @@ import org.anchoranalysis.image.core.stack.Stack;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class StackWriteAttributesFactory {
 
-    private static final StackWriteAttributes RGB_ALWAYS_2D =
-            new StackWriteAttributes(true, false, true, true, false);
-
-    private static final StackWriteAttributes RGB_MAYBE_3D =
-            new StackWriteAttributes(false, false, true, true, false);
-
     private static final StackWriteAttributes THREE_CHANNELS_ALWAYS_2D =
-            new StackWriteAttributes(true, false, true, false, false);
+            new StackWriteAttributes(true, false, true, StackRGBState.NOT_RGB, false);
 
     private static final StackWriteAttributes THREE_CHANNELS_MAYBE_3D =
-            new StackWriteAttributes(false, false, true, false, false);
+            new StackWriteAttributes(false, false, true, StackRGBState.NOT_RGB, false);
 
     private static final StackWriteAttributes SINGLE_CHANNEL_ALWAYS_2D =
-            new StackWriteAttributes(true, true, false, false, false);
+            new StackWriteAttributes(true, true, false, StackRGBState.NOT_RGB, false);
 
     private static final StackWriteAttributes SINGLE_CHANNEL_MAYBE_3D =
-            new StackWriteAttributes(false, true, false, false, false);
+            new StackWriteAttributes(false, true, false, StackRGBState.NOT_RGB, false);
 
     private static final StackWriteAttributes BINARY_CHANNEL_MAYBE_3D =
-            new StackWriteAttributes(false, true, false, false, true);
+            new StackWriteAttributes(false, true, false, StackRGBState.NOT_RGB, true);
 
     private static final StackWriteAttributes BINARY_CHANNEL_ALWAYS_2D =
-            new StackWriteAttributes(true, true, false, false, true);
+            new StackWriteAttributes(true, true, false, StackRGBState.NOT_RGB, true);
 
     /**
      * Creates a {@link StackWriteAttributes} which depending on a flag will always be 2D.
@@ -68,15 +63,12 @@ public class StackWriteAttributesFactory {
      * @return a newly created {@link StackWriteAttributes}
      */
     public static StackWriteAttributes maybeAlways2D(boolean always2D) {
-        return new StackWriteAttributes(always2D, false, false, false, false);
+        return new StackWriteAttributes(always2D, false, false, StackRGBState.NOT_RGB, false);
     }
 
-    public static StackWriteAttributes rgbAlways2D() {
-        return RGB_ALWAYS_2D;
-    }
-
-    public static StackWriteAttributes rgbMaybe3D() {
-        return RGB_MAYBE_3D;
+    public static StackWriteAttributes rgbMaybe3D(boolean plusAlpha) {
+        return new StackWriteAttributes(
+                false, false, !plusAlpha, StackRGBState.multiplexAlpha(plusAlpha), false);
     }
 
     public static StackWriteAttributes binaryChannel(boolean always2D) {
@@ -95,27 +87,26 @@ public class StackWriteAttributesFactory {
         }
     }
 
-    public static StackWriteAttributes maybeRGB(boolean rgb, boolean always2D) {
-        if (always2D) {
-            return new StackWriteAttributes(true, false, rgb, rgb, false);
-        } else {
-            return maybeRGB(rgb);
-        }
+    public static StackWriteAttributes maybeRGB(boolean rgb, boolean always2D, boolean plusAlpha) {
+        return new StackWriteAttributes(
+                always2D, false, !plusAlpha, StackRGBState.multiplex(rgb, plusAlpha), false);
     }
 
-    public static StackWriteAttributes maybeRGB(boolean rgb) {
+    public static StackWriteAttributes maybeRGBWithoutAlpha(boolean rgb) {
         if (rgb) {
-            return RGB_MAYBE_3D;
+            return new StackWriteAttributes(
+                    true, false, true, StackRGBState.RGB_WITHOUT_ALPHA, false);
         } else {
-            return new StackWriteAttributes(false, false, false, false, false);
+            return new StackWriteAttributes(false, false, false, StackRGBState.NOT_RGB, false);
         }
     }
 
-    public static StackWriteAttributes rgb(boolean always2D) {
+    public static StackWriteAttributes rgb(boolean always2D, boolean plusAlpha) {
         if (always2D) {
-            return RGB_ALWAYS_2D;
+            return new StackWriteAttributes(
+                    true, false, !plusAlpha, StackRGBState.multiplexAlpha(plusAlpha), false);
         } else {
-            return RGB_MAYBE_3D;
+            return rgbMaybe3D(plusAlpha);
         }
     }
 
@@ -126,18 +117,42 @@ public class StackWriteAttributesFactory {
      * @return options that narrowly describe {@code stack}.
      */
     public static StackWriteAttributes from(Stack stack) {
+        StackWriteAttributes attributes = fromWithoutBitDepthCheck(stack);
+
+        if (hasAllEightBitChannels(stack)) {
+            return attributes.allChannelsEightBit();
+        } else {
+            return attributes;
+        }
+    }
+
+    /** Checks if each channel is 8-bit. */
+    private static boolean hasAllEightBitChannels(Stack stack) {
+        for (Channel channel : stack) {
+            if (channel.getVoxelDataType().bitDepth() != 8) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /** The options that narrowly describe a stack as possible, without checking bit-depth. */
+    private static StackWriteAttributes fromWithoutBitDepthCheck(Stack stack) {
         int numberChannels = stack.getNumberChannels();
         boolean singleSlice = !stack.hasMoreThanOneSlice();
         if (numberChannels == 3) {
             if (stack.isRGB()) {
-                return rgb(singleSlice);
+                return rgb(singleSlice, false);
             } else {
                 return threeChannels(singleSlice);
             }
+        } else if (numberChannels == 4 && stack.isRGB()) {
+            return rgb(singleSlice, true);
         } else if (numberChannels == 1) {
             return singleChannelMaybe3D(singleSlice);
         } else {
-            return new StackWriteAttributes(singleSlice, false, false, false, false);
+            return new StackWriteAttributes(
+                    singleSlice, false, false, StackRGBState.NOT_RGB, false);
         }
     }
 

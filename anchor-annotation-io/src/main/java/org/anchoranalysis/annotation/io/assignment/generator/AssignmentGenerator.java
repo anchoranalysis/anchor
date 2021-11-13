@@ -103,7 +103,7 @@ public class AssignmentGenerator extends RasterGeneratorSelectFormat<Assignment<
 
     @Override
     public StackWriteAttributes guaranteedImageAttributes() {
-        return StackWriteAttributesFactory.rgbMaybe3D();
+        return StackWriteAttributesFactory.rgbMaybe3D(false);
     }
 
     private static ArrangeRaster createTiledStackProvider(

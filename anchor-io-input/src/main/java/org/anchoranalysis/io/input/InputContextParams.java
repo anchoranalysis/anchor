@@ -41,7 +41,7 @@ import org.anchoranalysis.core.index.range.IndexRangeNegative;
 import org.anchoranalysis.io.input.bean.DebugModeParams;
 
 /**
- * Additional paramaters that offer context for many beans that provide input-functions.
+ * Additional parameters that offer context for many beans that provide input-functions.
  *
  * @author Owen Feehan
  */

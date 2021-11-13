@@ -26,13 +26,11 @@
 
 package org.anchoranalysis.io.bioformats.bean;
 
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Path;
 import loci.common.services.DependencyException;
 import loci.common.services.ServiceException;
 import loci.common.services.ServiceFactory;
-import loci.formats.FormatException;
 import loci.formats.IFormatReader;
 import loci.formats.ImageReader;
 import loci.formats.UnknownFormatException;
@@ -106,16 +104,7 @@ public class BioformatsReader extends StackReaderOrientationCorrection {
                     () -> ImageTimestampsAttributesFactory.fromPath(filePath));
         } catch (UnknownFormatException e) {
             throw new ImageIOException("An unknown file format was used");
-        } catch (FormatException
-                | IOException
-                | CreateException
-                | NoSuchMethodException
-                | ClassNotFoundException
-                | InstantiationException
-                | IllegalAccessException
-                | IllegalArgumentException
-                | InvocationTargetException
-                | SecurityException e) {
+        } catch (Exception e) {
             throw new ImageIOException(
                     String.format(
                             "Failed to open image-file %s using %s",

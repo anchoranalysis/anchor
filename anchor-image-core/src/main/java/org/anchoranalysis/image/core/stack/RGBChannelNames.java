@@ -34,7 +34,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 /**
- * Constants for referring to the channels in a RGB-stack.
+ * Constants for referring to the channels in a RGB-stack or RGBA-stack.
  *
  * @author Owen Feehan
  */
@@ -50,19 +50,45 @@ public class RGBChannelNames {
     /** Name for the <b>blue</b> channel. */
     public static final String BLUE = "blue";
 
-    /** Creates an array with all channel-names in R-G-B order. */
-    public static String[] asArray() {
-        return new String[] {RED, GREEN, BLUE};
+    /** Name for the <b>alpha</b> channel. */
+    public static final String ALPHA = "alpha";
+
+    /**
+     * Creates an array with all channel-names in R-G-B order.
+     *
+     * @param includeAlpha if true, the alpha channel is also accepted as valid. if false, it is not
+     *     accepted.
+     */
+    public static String[] asArray(boolean includeAlpha) {
+        if (includeAlpha) {
+            return new String[] {RED, GREEN, BLUE, ALPHA};
+        } else {
+            return new String[] {RED, GREEN, BLUE};
+        }
     }
 
-    /** Creates a list with all channel-names in R-G-B order. */
-    public static List<String> asList() {
-        return Arrays.asList(RED, GREEN, BLUE);
+    /**
+     * Creates a list with all channel-names in R-G-B order.
+     *
+     * @param includeAlpha if true, the alpha channel is also accepted as valid. if false, it is not
+     *     accepted.
+     */
+    public static List<String> asList(boolean includeAlpha) {
+        if (includeAlpha) {
+            return Arrays.asList(RED, GREEN, BLUE, ALPHA);
+        } else {
+            return Arrays.asList(RED, GREEN, BLUE);
+        }
     }
 
-    /** Creates a set of the channel names. */
-    public static Set<String> asSet() {
-        return new HashSet<>(asList());
+    /**
+     * Creates a set of the channel names.
+     *
+     * @param includeAlpha if true, the alpha channel is also accepted as valid. if false, it is not
+     *     accepted.
+     */
+    public static Set<String> asSet(boolean includeAlpha) {
+        return new HashSet<>(asList(includeAlpha));
     }
 
     /**
@@ -82,20 +108,68 @@ public class RGBChannelNames {
                 return Optional.of(1);
             case BLUE:
                 return Optional.of(2);
+            case ALPHA:
+                return Optional.of(3);
             default:
                 return Optional.empty();
         }
     }
 
     /**
-     * Whether the channel-name is one of red, green, or blue.
+     * Whether the channel-name is one of red, green, or blue, or alpha.
      *
      * <p>Names match only if lower-case.
      *
      * @param channelName name to check if it is valid.
+     * @param includeAlpha if true, the alpha channel is also accepted as valid. if false, it is not
+     *     accepted.
      * @return true iff {@code channelName} is red, green, or blue.
      */
-    public static boolean isValidName(String channelName) {
-        return channelName.equals(RED) || channelName.equals(GREEN) || channelName.equals(BLUE);
+    public static boolean isValidName(String channelName, boolean includeAlpha) {
+        return channelName.equals(RED)
+                || channelName.equals(GREEN)
+                || channelName.equals(BLUE)
+                || (includeAlpha && channelName.equals(ALPHA));
+    }
+
+    /**
+     * Do the channel-names correspond exactly to those expected <b>either RGB or RGBA</b>.
+     *
+     * @param channelNames the channel names to check.
+     * @return true if there are exactly the expected number of channel-names, and they correspond
+     *     exactly to the expected names (which are lower-case).
+     */
+    public static boolean isValidNameSet(Set<String> channelNames) {
+        return isValidNameSet(channelNames, true) || isValidNameSet(channelNames, false);
+    }
+
+    /**
+     * Do the channel-names correspond exactly to those expected for <b>one of RGB or RGBA</b>.
+     *
+     * @param channelNames the channel names to check.
+     * @param includeAlpha if true, expect RGBA. if false, expect RGB.
+     * @return true if there are exactly the expected number of channel-names, and they correspond
+     *     exactly to the expected names (which are lower-case).
+     */
+    public static boolean isValidNameSet(Set<String> channelNames, boolean includeAlpha) {
+
+        if (includeAlpha) {
+            if (channelNames.size() != 4) {
+                return false;
+            }
+        } else {
+            if (channelNames.size() != 3) {
+                return false;
+            }
+        }
+
+        for (String key : channelNames) {
+            // If a key doesn't match one of the expected red-green-blue names
+            if (!isValidName(key, includeAlpha)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

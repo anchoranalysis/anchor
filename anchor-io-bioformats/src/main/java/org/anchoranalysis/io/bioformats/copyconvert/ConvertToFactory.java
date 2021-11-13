@@ -41,6 +41,7 @@ import org.anchoranalysis.io.bioformats.copyconvert.tobyte.ToUnsignedByte;
 import org.anchoranalysis.io.bioformats.copyconvert.tobyte.UnsignedByteFromFloat;
 import org.anchoranalysis.io.bioformats.copyconvert.tobyte.UnsignedByteFromUnsignedByteInterleaving;
 import org.anchoranalysis.io.bioformats.copyconvert.tobyte.UnsignedByteFromUnsignedByteNoInterleaving;
+import org.anchoranalysis.io.bioformats.copyconvert.tobyte.UnsignedByteFromUnsignedByteNoInterleavingScale;
 import org.anchoranalysis.io.bioformats.copyconvert.tobyte.UnsignedByteFromUnsignedInt;
 import org.anchoranalysis.io.bioformats.copyconvert.tobyte.UnsignedByteFromUnsignedShort;
 import org.anchoranalysis.io.bioformats.copyconvert.tofloat.FloatFromUnsignedByte;
@@ -61,7 +62,7 @@ public class ConvertToFactory {
 
         boolean interleaved = reader.isInterleaved();
         boolean signed = FormatTools.isSigned(reader.getPixelType());
-        int bitsPerPixel = maybeCorrectBitsPerPixel(reader.getBitsPerPixel());
+        int bitsPerPixel = reader.getBitsPerPixel();
 
         if (interleaved) {
             return createFromInterleaved(targetDataType, bitsPerPixel);
@@ -73,12 +74,14 @@ public class ConvertToFactory {
 
     private static ConvertTo<?> createFromInterleaved(
             VoxelDataType targetDataType, int bitsPerPixel) throws CreateException {
-        if (targetDataType.equals(UnsignedByteVoxelType.INSTANCE) && bitsPerPixel == 8) {
+
+        if (targetDataType.equals(UnsignedByteVoxelType.INSTANCE) && bitsPerPixel <= 8) {
             return new UnsignedByteFromUnsignedByteInterleaving();
-        } else if (targetDataType.equals(UnsignedShortVoxelType.INSTANCE) && bitsPerPixel == 16) {
+        } else if (targetDataType.equals(UnsignedShortVoxelType.INSTANCE) && bitsPerPixel <= 16) {
             return new UnsignedShortFromUnsignedShort();
         } else {
-            throw new CreateException("For interleaved formats only 8 and 16-bits are supported");
+            throw new CreateException(
+                    "For interleaved formats only 1 <= bitDepth <= 16is supported");
         }
     }
 
@@ -110,14 +113,18 @@ public class ConvertToFactory {
             int bitsPerPixel, int effectiveBitsPerPixel, boolean floatingPoint, boolean signed)
             throws CreateException {
 
-        if (bitsPerPixel == 8 && !signed) {
-            assert (effectiveBitsPerPixel == 8);
+        if (signed) {
+            throw new CreateException(
+                    "Only unsigned input data is currently supported to open as unsigned-byte");
+        } else if (bitsPerPixel <= 7) {
+            return new UnsignedByteFromUnsignedByteNoInterleavingScale(effectiveBitsPerPixel);
+        } else if (bitsPerPixel <= 8) {
             return new UnsignedByteFromUnsignedByteNoInterleaving();
 
-        } else if (bitsPerPixel == 16 && !signed) {
+        } else if (bitsPerPixel <= 16) {
             return new UnsignedByteFromUnsignedShort(effectiveBitsPerPixel);
 
-        } else if (bitsPerPixel == 32 && !signed) {
+        } else if (bitsPerPixel <= 32) {
 
             if (floatingPoint) {
                 return new UnsignedByteFromFloat();
@@ -127,19 +134,21 @@ public class ConvertToFactory {
 
         } else {
             return throwBitsPerPixelException(
-                    "byte", "either unsigned 8 bits or 16 bits or 32 bits", bitsPerPixel);
+                    "byte",
+                    "unsigned and either in the range 1-8 bits or exactly 16 bits or exactly 32 bits",
+                    bitsPerPixel);
         }
     }
 
     private static ToUnsignedShort toShort(int bitsPerPixel, boolean signed)
             throws CreateException {
 
-        if (bitsPerPixel == 16) {
-            if (signed) {
-                return new UnsignedShortFromSignedShort();
-            } else {
-                return new UnsignedShortFromUnsignedShort();
-            }
+        if (signed && bitsPerPixel == 16) {
+            return new UnsignedShortFromSignedShort();
+        } else if (!signed && bitsPerPixel >= 9 && bitsPerPixel <= 16) {
+            // If one bitPerPixel more than what's accepted by a byte, then we assume it's encoded
+            // as a short.
+            return new UnsignedShortFromUnsignedShort();
         } else {
             return throwBitsPerPixelException("float", "16 bits", bitsPerPixel);
         }
@@ -148,7 +157,9 @@ public class ConvertToFactory {
     private static ToUnsignedInt toInt(int bitsPerPixel, boolean floatingPoint, boolean signed)
             throws CreateException {
 
-        if (bitsPerPixel == 32 && !signed) {
+        // If one bitPerPixel more than what's accepted by a short, then we assume it's encoded as a
+        // int.
+        if (bitsPerPixel >= 17 && bitsPerPixel <= 32 && !signed) {
 
             if (floatingPoint) {
                 throw new CreateException(
@@ -165,9 +176,9 @@ public class ConvertToFactory {
     private static ToFloat toFloat(int bitsPerPixel, boolean signed) throws CreateException {
         assert (bitsPerPixel == 8 || bitsPerPixel == 32);
 
-        if (bitsPerPixel == 8 && !signed) {
+        if (!signed && bitsPerPixel == 8) {
             return new FloatFromUnsignedByte();
-        } else if (bitsPerPixel == 32 && signed) {
+        } else if (signed && bitsPerPixel == 32) {
             return new FloatFromUnsignedInt();
         } else {
             return throwBitsPerPixelException(
@@ -180,15 +191,7 @@ public class ConvertToFactory {
             throws CreateException {
         throw new CreateException(
                 String.format(
-                        "Input data for %s must have %s. It currently has %d bitsPerPixel.",
+                        "Input data to open as %s must have %s. It currently has %d bitsPerPixel.",
                         dataType, correctBitsDescription, bitsPerPixel));
-    }
-
-    private static int maybeCorrectBitsPerPixel(int bitsPerPixel) {
-        if (bitsPerPixel == 12) {
-            return 16;
-        } else {
-            return bitsPerPixel;
-        }
     }
 }

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import org.anchoranalysis.image.core.dimensions.OrientationChange;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
+import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 
 /**
  * Like {@link ToUnsignedByte} and provides common functionality when converting to an <i>unsigned
@@ -23,7 +24,7 @@ public abstract class UnsignedByteFromUnsignedByte extends ToUnsignedByte {
 
     @Override
     protected int bytesPerVoxel() {
-        return 1;
+        return UnsignedByteVoxelType.INSTANCE.numberBytes();
     }
 
     @Override

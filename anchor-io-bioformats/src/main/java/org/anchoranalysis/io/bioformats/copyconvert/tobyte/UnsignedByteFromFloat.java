@@ -32,6 +32,8 @@ import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.image.core.dimensions.OrientationChange;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
+import org.anchoranalysis.image.voxel.datatype.FloatVoxelType;
+import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 
 /**
  * Converts a {@link ByteBuffer} encoding a <i>float</i> type to <i>unsigned byte</i> type, as
@@ -49,7 +51,7 @@ public class UnsignedByteFromFloat extends ToUnsignedByte {
 
     @Override
     protected int bytesPerVoxel() {
-        return 4;
+        return FloatVoxelType.INSTANCE.numberBytes();
     }
 
     @Override
@@ -99,8 +101,8 @@ public class UnsignedByteFromFloat extends ToUnsignedByte {
     private float extractClampedValue(byte[] sourceArray, int index, boolean littleEndian) {
         float value = DataTools.bytesToFloat(sourceArray, index, littleEndian);
 
-        if (value > 255) {
-            value = 255;
+        if (value > UnsignedByteVoxelType.MAX_VALUE_INT) {
+            value = UnsignedByteVoxelType.MAX_VALUE_INT;
         }
         if (value < 0) {
             value = 0;

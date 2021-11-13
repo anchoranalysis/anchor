@@ -35,17 +35,20 @@ import org.anchoranalysis.image.io.ImageIOException;
 
 class RGBWriterByte extends RGBWriter {
 
-    public RGBWriterByte(IFormatWriter writer, Stack stack) {
-        super(writer, stack);
+    public RGBWriterByte(IFormatWriter writer, Stack stack, boolean plusAlpha) {
+        super(writer, stack, plusAlpha);
     }
 
     @Override
     protected void mergeSliceAsRGB(int z, int capacity) throws ImageIOException {
 
-        ByteBuffer merged = ByteBuffer.allocate(capacity * 3);
+        ByteBuffer merged = ByteBuffer.allocate(capacity * numberChannels());
         putSlice(merged, channelRed, z);
         putSlice(merged, channelGreen, z);
         putSlice(merged, channelBlue, z);
+        if (channelAlpha.isPresent()) {
+            putSlice(merged, channelAlpha.get(), z);
+        }
 
         try {
             writer.saveBytes(z, merged.array());

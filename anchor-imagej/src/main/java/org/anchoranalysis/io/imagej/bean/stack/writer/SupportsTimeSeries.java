@@ -31,6 +31,7 @@ import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.writer.WriterErrorMessageHelper;
 import org.anchoranalysis.image.io.stack.StackSeries;
+import org.anchoranalysis.image.io.stack.output.StackRGBState;
 import org.anchoranalysis.image.io.stack.output.StackWriteOptions;
 
 /**
@@ -47,7 +48,9 @@ public abstract class SupportsTimeSeries extends ImageJRasterWriter {
 
         try {
             writeStackTime(
-                    stackSeries.createSingleStack(), filePath, options.getAttributes().isRgb());
+                    stackSeries.createSingleStack(),
+                    filePath,
+                    options.getAttributes().getRgb() == StackRGBState.RGB_WITHOUT_ALPHA);
         } catch (IncorrectImageSizeException e) {
             throw WriterErrorMessageHelper.generalWriteException(
                     ImageJRasterWriter.class, filePath, e);
