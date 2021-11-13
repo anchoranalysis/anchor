@@ -27,6 +27,7 @@
 package org.anchoranalysis.io.bioformats.copyconvert.tobyte;
 
 import org.anchoranalysis.image.voxel.buffer.primitive.PrimitiveConverter;
+import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 
 /**
  * Converts data of type <i>unsigned byte</i> to <i>unsigned byte</i>.
@@ -49,7 +50,7 @@ public class UnsignedByteFromUnsignedByteNoInterleavingScale extends ToUnsignedB
 
     @Override
     protected int bytesPerVoxel() {
-        return 1;
+        return UnsignedByteVoxelType.INSTANCE.numberBytes();
     }
 
     @Override
