@@ -27,6 +27,7 @@ package org.anchoranalysis.image.io.stack.output;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.stack.Stack;
 
 /**
@@ -116,6 +117,27 @@ public class StackWriteAttributesFactory {
      * @return options that narrowly describe {@code stack}.
      */
     public static StackWriteAttributes from(Stack stack) {
+        StackWriteAttributes attributes = fromWithoutBitDepthCheck(stack);
+
+        if (hasAllEightBitChannels(stack)) {
+            return attributes.allChannelsEightBit();
+        } else {
+            return attributes;
+        }
+    }
+
+    /** Checks if each channel is 8-bit. */
+    private static boolean hasAllEightBitChannels(Stack stack) {
+        for (Channel channel : stack) {
+            if (channel.getVoxelDataType().bitDepth() != 8) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /** The options that narrowly describe a stack as possible, without checking bit-depth. */
+    private static StackWriteAttributes fromWithoutBitDepthCheck(Stack stack) {
         int numberChannels = stack.getNumberChannels();
         boolean singleSlice = !stack.hasMoreThanOneSlice();
         if (numberChannels == 3) {

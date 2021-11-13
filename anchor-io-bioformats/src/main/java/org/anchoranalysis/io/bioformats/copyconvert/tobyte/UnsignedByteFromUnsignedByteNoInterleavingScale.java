@@ -26,43 +26,35 @@
 
 package org.anchoranalysis.io.bioformats.copyconvert.tobyte;
 
-import loci.common.DataTools;
-import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
+import org.anchoranalysis.image.voxel.buffer.primitive.PrimitiveConverter;
 
 /**
- * Converts data of type <i>unsigned short</i> to <i>unsigned byte</i>.
+ * Converts data of type <i>unsigned byte</i> to <i>unsigned byte</i>.
  *
- * <p>If more than 8-bits are being used in the input values, scaling is applied to map the range of
+ * <p>If less than 8-bits are being used in the input values, scaling is applied to map the range of
  * effective-bits (how many bits are used) to an 8-bit range.
  *
  * @author Owen Feehan
  */
-public class UnsignedByteFromUnsignedShort extends ToUnsignedByteWithScaling {
+public class UnsignedByteFromUnsignedByteNoInterleavingScale extends ToUnsignedByteWithScaling {
 
     /**
      * Create with a number of effective-bits.
      *
      * @param effectiveBits the number of bits that are used in the input-type e.g. 8 or 12 or 16.
      */
-    public UnsignedByteFromUnsignedShort(int effectiveBits) {
+    public UnsignedByteFromUnsignedByteNoInterleavingScale(int effectiveBits) {
         super(effectiveBits);
     }
 
     @Override
     protected int bytesPerVoxel() {
-        return UnsignedShortVoxelType.INSTANCE.numberBytes();
+        return 1;
     }
 
     @Override
     protected int extractScaledValue(byte[] sourceArray, int index, boolean littleEndian) {
-
-        int value = DataTools.bytesToShort(sourceArray, index, 2, littleEndian);
-
-        // Make unsigned
-        if (value < 0) {
-            value += UnsignedShortVoxelType.MAX_VALUE_INT + 1;
-        }
-
+        int value = PrimitiveConverter.unsignedByteToInt(sourceArray[index]);
         return scaling.scaleAndClamp(value);
     }
 }

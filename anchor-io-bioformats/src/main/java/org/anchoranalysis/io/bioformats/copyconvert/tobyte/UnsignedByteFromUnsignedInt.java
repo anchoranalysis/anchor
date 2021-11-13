@@ -27,6 +27,7 @@
 package org.anchoranalysis.io.bioformats.copyconvert.tobyte;
 
 import loci.common.DataTools;
+import org.anchoranalysis.image.voxel.datatype.UnsignedIntVoxelType;
 
 /**
  * Converts data of type <i>unsigned int</i> to <i>unsigned byte</i>.
@@ -49,12 +50,12 @@ public class UnsignedByteFromUnsignedInt extends ToUnsignedByteWithScaling {
 
     @Override
     protected int bytesPerVoxel() {
-        return 4;
+        return UnsignedIntVoxelType.INSTANCE.numberBytes();
     }
 
     @Override
     protected int extractScaledValue(byte[] sourceArray, int index, boolean littleEndian) {
         int value = DataTools.bytesToInt(sourceArray, index, littleEndian);
-        return scaleValue(value);
+        return scaling.scaleAndClamp(value);
     }
 }

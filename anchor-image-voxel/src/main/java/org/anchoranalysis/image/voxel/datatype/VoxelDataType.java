@@ -99,4 +99,13 @@ public abstract class VoxelDataType {
     public final String toString() {
         return typeIdentifier;
     }
+
+    /**
+     * The number of bytes needed to represent this data-type.
+     *
+     * @return the number of bytes.
+     */
+    public int numberBytes() {
+        return bitDepth / 8;
+    }
 }

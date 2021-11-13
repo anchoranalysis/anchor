@@ -42,7 +42,7 @@ import org.anchoranalysis.image.core.stack.Stack;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class StackWriteAttributes {
 
-    /** True the output is guaranteed to only ever 2D i.e. maximally one z-slice? */
+    /** Whether the output is guaranteed to only ever 2D i.e. maximally one z-slice? */
     @Getter private boolean always2D;
 
     /** The number of channels is guaranteed to be 1 in the output. */
@@ -52,7 +52,7 @@ public class StackWriteAttributes {
     @Getter private boolean threeChannels;
 
     /***
-     * Whether it's an RGB image when it has three channels (the three channels visualized jointly, rather than independently)
+     * Whether it's an RGB or RGBA image when it has three/four channels respectively.
      *
      * <p>This flag should only be set when {@code alwaysOneOrThreChannels} is true.
      *
@@ -67,6 +67,27 @@ public class StackWriteAttributes {
      * minimum intensity value.
      */
     @Getter private boolean binary;
+
+    /** Whether each channel is 8 bits. */
+    @Getter private boolean eightBitChannels;
+
+    /**
+     * Alternative constructor that assumes each channel is 8-bits.
+     *
+     * @param always2D whether the output is guaranteed to only ever 2D i.e. maximally one z-slice?
+     * @param singleChannel the number of channels is guaranteed to be 1 in the output.
+     * @param threeChannels the number of channels is guaranteed to be 3 in the output.
+     * @param rgb whether it's an RGB or RGBA image when it has three/four channels respectively.
+     * @param binary whether all channels represent a binary image.
+     */
+    public StackWriteAttributes(
+            boolean always2D,
+            boolean singleChannel,
+            boolean threeChannels,
+            StackRGBState rgb,
+            boolean binary) {
+        this(always2D, singleChannel, threeChannels, rgb, binary, false);
+    }
 
     /**
      * Derives a {@link StackWriteAttributes} that will always be 2D, but is otherwise unchanged.
@@ -104,7 +125,8 @@ public class StackWriteAttributes {
                 singleChannel && other.singleChannel,
                 threeChannels && other.threeChannels,
                 rgb.min(other.rgb),
-                binary && other.binary);
+                binary && other.binary,
+                eightBitChannels && other.eightBitChannels);
     }
 
     /**
@@ -121,7 +143,8 @@ public class StackWriteAttributes {
                 singleChannel || other.singleChannel,
                 threeChannels || other.threeChannels,
                 rgb.max(other.rgb),
-                binary || other.binary);
+                binary || other.binary,
+                eightBitChannels || other.eightBitChannels);
     }
 
     /**
@@ -135,6 +158,16 @@ public class StackWriteAttributes {
                         && (stack.getNumberChannels() == 3
                                 && rgb == StackRGBState.RGB_WITHOUT_ALPHA)
                 || (stack.getNumberChannels() == 4 && rgb == StackRGBState.RGB_WITH_ALPHA);
+    }
+
+    /**
+     * Mark the attributes to indicate that channels are no longer guaranteed to be 8-bit.
+     *
+     * @return a newly-created {@link StackWriteAttributes} that has {@code eightBit=false} but is
+     *     otherwise duplicated.
+     */
+    public StackWriteAttributes allChannelsEightBit() {
+        return new StackWriteAttributes(always2D, singleChannel, threeChannels, rgb, binary, true);
     }
 
     /** A user-friendly description of the stack-type to include in error and warning messages. */
@@ -157,14 +190,12 @@ public class StackWriteAttributes {
             return "binary";
         } else if (singleChannel) {
             return "grayscale";
+        } else if (rgb == StackRGBState.RGB_WITHOUT_ALPHA) {
+            return "rgb";
+        } else if (rgb == StackRGBState.RGB_WITH_ALPHA) {
+            return "rgba";
         } else if (threeChannels) {
-            if (rgb == StackRGBState.RGB_WITHOUT_ALPHA) {
-                return "rgb";
-            } else if (rgb == StackRGBState.RGB_WITH_ALPHA) {
-                return "rgba";
-            } else {
-                return "three-channel";
-            }
+            return "three-channel";
         } else {
             return "";
         }

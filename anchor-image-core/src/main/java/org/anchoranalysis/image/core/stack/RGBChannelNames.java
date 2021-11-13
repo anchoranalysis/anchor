@@ -133,10 +133,21 @@ public class RGBChannelNames {
     }
 
     /**
-     * Do the channel-names correspond exactly to those expected for RGB or RGBA.
+     * Do the channel-names correspond exactly to those expected <b>either RGB or RGBA</b>.
      *
      * @param channelNames the channel names to check.
-     * @param includeAlpha whether to expect an <i>alpha</i> channel or not.
+     * @return true if there are exactly the expected number of channel-names, and they correspond
+     *     exactly to the expected names (which are lower-case).
+     */
+    public static boolean isValidNameSet(Set<String> channelNames) {
+        return isValidNameSet(channelNames, true) || isValidNameSet(channelNames, false);
+    }
+
+    /**
+     * Do the channel-names correspond exactly to those expected for <b>one of RGB or RGBA</b>.
+     *
+     * @param channelNames the channel names to check.
+     * @param includeAlpha if true, expect RGBA. if false, expect RGB.
      * @return true if there are exactly the expected number of channel-names, and they correspond
      *     exactly to the expected names (which are lower-case).
      */
