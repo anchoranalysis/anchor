@@ -103,7 +103,7 @@ public class BioformatsReader extends StackReaderOrientationCorrection {
                     orientationCorrection,
                     () -> ImageTimestampsAttributesFactory.fromPath(filePath));
         } catch (UnknownFormatException e) {
-            throw new ImageIOException("An unknown file format was used");
+            throw new ImageIOException("An unknown file format was used: " + filePath);
         } catch (Exception e) {
             throw new ImageIOException(
                     String.format(

@@ -110,6 +110,7 @@ public class SearchDirectory extends FilesProviderWithDirectoryString {
                             maxDirectoryDepthOptional,
                             Optional.of(params));
             if (sort) {
+                // TODO place them into a sorted structure, while matching to save computation.
                 Collections.sort(filesUnsorted);
             }
             return filesUnsorted;
