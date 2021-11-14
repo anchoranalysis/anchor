@@ -49,8 +49,8 @@ public abstract class AnchorFriendlyCheckedException extends AnchorCheckedExcept
     /**
      * A user-friendly error message and its cause. The message is displayed to the user.
      *
-     * @param message a user-friendly error message to display to the user indicating the problem
-     * @param cause the cause of the error
+     * @param message a user-friendly error message to display to the user indicating the problem.
+     * @param cause the cause of the error.
      */
     protected AnchorFriendlyCheckedException(String message, Throwable cause) {
         super(message, cause);
@@ -60,7 +60,7 @@ public abstract class AnchorFriendlyCheckedException extends AnchorCheckedExcept
      * A user-friendly error message WITHOUT a cause. This exception is displayed to the user. There
      * are no more nested-errors possible.
      *
-     * @param message a message describing the error
+     * @param message a message describing the error.
      */
     protected AnchorFriendlyCheckedException(String message) {
         super(message);
@@ -96,9 +96,9 @@ public abstract class AnchorFriendlyCheckedException extends AnchorCheckedExcept
     }
 
     /**
-     * Prints a stack trace of the current exception to a string
+     * Prints a stack trace of the current exception to a string.
      *
-     * @return a string describing the stack trace of the exception
+     * @return a string describing the stack trace of the exception.
      */
     public String stackTrace() {
         StringWriter errors = new StringWriter();

@@ -68,14 +68,14 @@ public class SearchDirectory extends FilesProviderWithDirectoryString {
     @BeanField @Getter @Setter private int maxDirectoryDepth = -1;
 
     /**
-     * if true, case is ignored in the pattern matching. Otherwise the system-default is used i.e.
-     * Windows ignores case, Linux doesn't
+     * If true, case is ignored in the pattern matching. Otherwise the system-default is used i.e.
+     * Windows ignores case, Linux doesn't.
      */
     @BeanField @Getter @Setter private boolean ignoreHidden = true;
 
     /**
-     * if true, continues when a directory-access-error occurs (logging it), otherwise throws an
-     * exception
+     * If true, continues when a directory-access-error occurs (logging it), otherwise throws an
+     * exception.
      */
     @BeanField @Getter @Setter private boolean acceptDirectoryErrors = false;
 
@@ -117,11 +117,11 @@ public class SearchDirectory extends FilesProviderWithDirectoryString {
     }
 
     /**
-     * Sets both the fileFilter and the Directory from a combinedFileFilter string
+     * Sets both the directory and the glob from a string containing both.
      *
-     * <p>This is a glob matching e.g. {@code somefilepath/*.tif or somefilepath\*.tif}
+     * <p>e.g. {@code somefilepath/*.tif or somefilepath\*.tif}
      *
-     * @param combinedFileFilter
+     * @param combinedFileFilter a string with both a directory and a glob, as per above.
      */
     public void setFileFilterAndDirectory(Path combinedFileFilter) {
 

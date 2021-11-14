@@ -47,8 +47,8 @@ public class AnchorFriendlyRuntimeException extends AnchorRuntimeException
     /**
      * A user-friendly error message and its cause. The message is displayed to the user.
      *
-     * @param message a user-friendly error message to display to the user indicating the problem
-     * @param cause the cause of the error
+     * @param message a user-friendly error message to display to the user indicating the problem.
+     * @param cause the cause of the error.
      */
     public AnchorFriendlyRuntimeException(String message, Throwable cause) {
         super(message, cause);
@@ -58,16 +58,16 @@ public class AnchorFriendlyRuntimeException extends AnchorRuntimeException
      * A user-friendly error message WITHOUT a cause. This exception is displayed to the user. There
      * are no more nested-errors possible.
      *
-     * @param message cause the cause of the error
+     * @param message cause the cause of the error.
      */
     public AnchorFriendlyRuntimeException(String message) {
         super(message);
     }
 
     /**
-     * A wrapped exception. We skip it in error reports
+     * A wrapped exception. We skip it in error reports.
      *
-     * @param cause the cause of the error
+     * @param cause the cause of the error.
      */
     public AnchorFriendlyRuntimeException(Throwable cause) {
         // We pass an empty message, so that future error message skip it
