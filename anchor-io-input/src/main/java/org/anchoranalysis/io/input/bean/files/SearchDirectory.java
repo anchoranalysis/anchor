@@ -28,7 +28,6 @@ package org.anchoranalysis.io.input.bean.files;
 
 import java.io.File;
 import java.nio.file.Path;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -95,20 +94,19 @@ public class SearchDirectory extends FilesProviderWithDirectoryString {
 
     // Matching files
     @Override
-    public Collection<File> matchingFilesForDirectory(Path directory, InputManagerParams params)
+    public List<File> matchingFilesForDirectory(Path directory, InputManagerParams params)
             throws FilesProviderException {
 
         Optional<Integer> maxDirectoryDepthOptional =
                 OptionalUtilities.createFromFlag(maxDirectoryDepth >= 0, maxDirectoryDepth);
         try {
             List<File> filesUnsorted =
-                    matcher.matchingFiles(
-                            directory,
-                            recursive,
-                            ignoreHidden,
-                            acceptDirectoryErrors,
-                            maxDirectoryDepthOptional,
-                            Optional.of(params));
+                    params.getExecutionTimeRecorder()
+                            .recordExecutionTime(
+                                    "Searching filesystem for inputs",
+                                    () ->
+                                            searchMatchingFiles(
+                                                    directory, maxDirectoryDepthOptional, params));
             if (sort) {
                 Collections.sort(filesUnsorted);
             }
@@ -121,7 +119,7 @@ public class SearchDirectory extends FilesProviderWithDirectoryString {
     /**
      * Sets both the fileFilter and the Directory from a combinedFileFilter string
      *
-     * <p>This is a glob matching e.g. somefilepath/*.tif or somefilepath\*.tif
+     * <p>This is a glob matching e.g. {@code somefilepath/*.tif or somefilepath\*.tif}
      *
      * @param combinedFileFilter
      */
@@ -135,5 +133,17 @@ public class SearchDirectory extends FilesProviderWithDirectoryString {
         setDirectory(glob.getDirectory().orElse(""));
 
         this.matcher = matcherGlob;
+    }
+
+    private List<File> searchMatchingFiles(
+            Path directory, Optional<Integer> maxDirectoryDepthOptional, InputManagerParams params)
+            throws InputReadFailedException {
+        return matcher.matchingFiles(
+                directory,
+                recursive,
+                ignoreHidden,
+                acceptDirectoryErrors,
+                maxDirectoryDepthOptional,
+                Optional.of(params));
     }
 }

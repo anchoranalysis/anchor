@@ -31,6 +31,9 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.progress.Progress;
+import org.anchoranalysis.core.progress.ProgressIgnore;
+import org.anchoranalysis.core.system.ExecutionTimeRecorder;
+import org.anchoranalysis.core.system.ExecutionTimeRecorderIgnore;
 import org.anchoranalysis.io.input.InputContextParams;
 
 /**
@@ -45,10 +48,27 @@ public class InputManagerParams {
 
     @Getter private final Progress progress;
 
+    /** Allows for recording the execution-time of particular operations. */
+    @Getter private final ExecutionTimeRecorder executionTimeRecorder;
+
     @Getter private final Logger logger;
 
+    /**
+     * Create with only a logger, and using sensible default values for the other fields.
+     *
+     * @param logger the logger.
+     */
+    public InputManagerParams(Logger logger) {
+        this(
+                new InputContextParams(),
+                ProgressIgnore.get(),
+                new ExecutionTimeRecorderIgnore(),
+                logger);
+    }
+
     public InputManagerParams withProgressReporter(Progress progressToAssign) {
-        return new InputManagerParams(inputContext, progressToAssign, logger);
+        return new InputManagerParams(
+                inputContext, progressToAssign, executionTimeRecorder, logger);
     }
 
     public boolean isDebugModeActivated() {

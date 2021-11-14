@@ -29,7 +29,6 @@ package org.anchoranalysis.io.input.bean.namer;
 import java.io.File;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.core.exception.CreateException;
@@ -44,7 +43,7 @@ import org.anchoranalysis.io.input.file.NamedFile;
 public abstract class FileNamerIndependent extends FileNamer {
 
     @Override
-    public List<NamedFile> deriveName(Collection<File> files, FileNamerContext context) {
+    public List<NamedFile> deriveName(List<File> files, FileNamerContext context) {
 
         List<NamedFile> out = new ArrayList<>();
 

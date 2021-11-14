@@ -27,15 +27,18 @@
 package org.anchoranalysis.io.input.bean.path.matcher;
 
 import java.nio.file.Path;
-import java.util.HashSet;
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
+import org.anchoranalysis.bean.primitive.StringSet;
+import org.anchoranalysis.core.format.FormatExtensions;
 import org.anchoranalysis.core.system.path.ExtensionUtilities;
 import org.anchoranalysis.io.input.InputContextParams;
 import org.anchoranalysis.io.input.InputReadFailedException;
@@ -56,11 +59,15 @@ public class MatchExtensions extends PathMatcher {
     /**
      * A set of file-extensions (without the period), one of which must match the end of a path.
      *
-     * <p>If an empty set is passed then, no check occurs, and no extension is checked
-     *
-     * <p>If null, then a default set is populated from the inputContext
+     * <p>If an empty set is passed then, no check occurs, and no extension is checked.
      */
-    @BeanField @OptionalBean @Getter @Setter private Set<String> extensions;
+    @BeanField @Getter @Setter private StringSet extensions = allExtensionsFromFormats();
+
+    /**
+     * When true, any extensions available in the input-context are prioritized ahead of {@code
+     * extensions}.
+     */
+    @BeanField @Getter @Setter private boolean prioritizeInputContext = false;
     // END BEAN PROPERTIES
 
     /**
@@ -69,8 +76,7 @@ public class MatchExtensions extends PathMatcher {
      * @param extension the extension.
      */
     public MatchExtensions(String extension) {
-        this.extensions = new HashSet<>();
-        this.extensions.add(extension);
+        this.extensions = new StringSet(extension);
     }
 
     @Override
@@ -105,15 +111,22 @@ public class MatchExtensions extends PathMatcher {
         }
     }
 
-    private Set<String> fileExtensions(Optional<InputContextParams> inputContext)
-            throws InputReadFailedException {
-        if (extensions != null) {
-            return extensions;
-        } else if (inputContext.isPresent()) {
+    private Set<String> fileExtensions(Optional<InputContextParams> inputContext) {
+        if (prioritizeInputContext
+                && inputContext.isPresent()
+                && inputContext.get().getInputFilterExtensions() != null) {
             return inputContext.get().getInputFilterExtensions();
         } else {
-            throw new InputReadFailedException(
-                    "Either a set of extensions must be specified in the bean, or via an input-context, but neither has been specified.");
+            return extensions.set();
         }
+    }
+
+    /**
+     * If no filter extensions are provided from anywhere else, this is a convenient set of
+     * defaults, together with all formats that bioformats supports - minus some exceptions.
+     */
+    private StringSet allExtensionsFromFormats() {
+        return new StringSet(
+                Arrays.stream(FormatExtensions.allImageExtensions()).collect(Collectors.toSet()));
     }
 }

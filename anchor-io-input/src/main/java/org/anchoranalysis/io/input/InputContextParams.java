@@ -28,14 +28,11 @@ package org.anchoranalysis.io.input;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.core.format.FormatExtensions;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.index.range.IndexRangeNegative;
 import org.anchoranalysis.io.input.bean.DebugModeParams;
@@ -57,7 +54,7 @@ public class InputContextParams {
     @Getter @Setter private String inputFilterGlob = "*";
 
     /** A list of extensions that can be used filter inputs */
-    @Getter @Setter private Set<String> inputFilterExtensions = fallBackFilterExtensions();
+    @Getter @Setter private Set<String> inputFilterExtensions;
 
     /** Parameters for debug-mode (only defined if we are in debug mode) */
     @Getter @Setter private Optional<DebugModeParams> debugModeParams = Optional.empty();
@@ -94,13 +91,5 @@ public class InputContextParams {
                             "An non-absolute path was passed to setInputDirectory() of %s",
                             inputDirectory));
         }
-    }
-
-    /**
-     * If no filter extensions are provided from anywhere else, this is a convenient set of
-     * defaults.
-     */
-    private Set<String> fallBackFilterExtensions() {
-        return Arrays.stream(FormatExtensions.allImageExtensions()).collect(Collectors.toSet());
     }
 }

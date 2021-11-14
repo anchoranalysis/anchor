@@ -28,7 +28,6 @@ package org.anchoranalysis.experiment.bean.io;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.experiment.log.Divider;
-import org.anchoranalysis.experiment.task.ExecutionTimeStatistics;
 import org.anchoranalysis.experiment.task.TaskStatistics;
 import org.anchoranalysis.math.arithmetic.RunningSum;
 

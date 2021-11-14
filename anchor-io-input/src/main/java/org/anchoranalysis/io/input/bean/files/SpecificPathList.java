@@ -29,7 +29,6 @@ package org.anchoranalysis.io.input.bean.files;
 import java.io.File;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import lombok.Getter;
@@ -88,7 +87,7 @@ public class SpecificPathList extends FilesProvider {
     }
 
     @Override
-    public Collection<File> create(InputManagerParams params) throws FilesProviderException {
+    public List<File> create(InputManagerParams params) throws FilesProviderException {
 
         Optional<List<String>> selectedPaths = selectListPaths(params.getInputContext());
 
@@ -132,8 +131,7 @@ public class SpecificPathList extends FilesProvider {
         return FunctionalList.mapToList(paths, Path::toString);
     }
 
-    private static Collection<File> matchingFilesForList(
-            List<String> listPaths, Progress progress) {
+    private static List<File> matchingFilesForList(List<String> listPaths, Progress progress) {
         return FunctionalProgress.mapList(listPaths, progress, File::new);
     }
 }

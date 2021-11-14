@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.experiment.task;
+package org.anchoranalysis.experiment.bean.io;
 
 import java.util.Map;
 import java.util.Map.Entry;

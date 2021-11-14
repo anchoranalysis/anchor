@@ -29,8 +29,8 @@ package org.anchoranalysis.io.input.bean.files;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -52,7 +52,7 @@ public class SingleFile extends FilesProviderWithDirectory {
     }
 
     @Override
-    public Collection<File> matchingFilesForDirectory(Path directory, InputManagerParams params) {
+    public List<File> matchingFilesForDirectory(Path directory, InputManagerParams params) {
 
         File file = new File(path);
 

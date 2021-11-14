@@ -43,7 +43,6 @@ import org.anchoranalysis.experiment.bean.identifier.ExperimentIdentifier;
 import org.anchoranalysis.experiment.bean.log.LoggingDestination;
 import org.anchoranalysis.experiment.bean.log.ToConsole;
 import org.anchoranalysis.experiment.log.StatefulMessageLogger;
-import org.anchoranalysis.experiment.task.ExecutionTimeStatistics;
 import org.anchoranalysis.experiment.task.ExperimentFeedbackContext;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.experiment.task.TaskStatistics;

@@ -28,7 +28,6 @@ package org.anchoranalysis.io.input.bean.namer;
 
 import java.io.File;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
@@ -48,11 +47,11 @@ import org.anchoranalysis.io.input.file.NamedFile;
 public abstract class FileNamer extends AnchorBean<FileNamer> {
 
     /**
-     * A name for a file
+     * A name for a file.
      *
-     * @param file the file to extract a name for
-     * @param context additional context for naming
-     * @return the file combined with an extracted name
+     * @param file the file to extract a name for.
+     * @param context additional context for naming.
+     * @return the file combined with an extracted name.
      */
     public NamedFile deriveName(File file, FileNamerContext context) {
         return deriveName(Arrays.asList(file), context).get(0);
@@ -61,24 +60,24 @@ public abstract class FileNamer extends AnchorBean<FileNamer> {
     /**
      * Derives a list of names (associated with each file) for some files.
      *
-     * @param files the files to describe
-     * @param context additional context for naming
+     * @param files the files to describe.
+     * @param context additional context for naming.
      * @return a list of identical size and order to files, corresponding to the file the extracted
-     *     name
+     *     name.
      */
-    public abstract List<NamedFile> deriveName(Collection<File> files, FileNamerContext context);
+    public abstract List<NamedFile> deriveName(List<File> files, FileNamerContext context);
 
     /**
-     * Like {@link #deriveName(Collection, FileNamerContext)} but checks that the final list of
-     * named-files all have unique names
+     * Like {@link #deriveName(List, FileNamerContext)} but checks that the final list of
+     * named-files all have unique names.
      *
-     * @param files the files to describe
-     * @param context additional context for naming
+     * @param files the files to describe.
+     * @param context additional context for naming.
      * @return a list of identical size and order to files, corresponding to the file the extracted
-     *     name
+     *     name.
      * @throws InputReadFailedException if more than one {@link NamedFile} have the same name
      */
-    public List<NamedFile> deriveNameUnique(Collection<File> files, FileNamerContext context)
+    public List<NamedFile> deriveNameUnique(List<File> files, FileNamerContext context)
             throws InputReadFailedException {
         List<NamedFile> list = deriveName(files, context);
         checkUniqueness(list);

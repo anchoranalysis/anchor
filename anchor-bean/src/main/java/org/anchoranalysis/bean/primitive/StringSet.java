@@ -31,6 +31,7 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Stream;
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -56,6 +57,7 @@ import org.anchoranalysis.bean.AnchorBean;
  * @author Owen Feehan
  */
 @NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @Accessors(fluent = true)
 public class StringSet extends AnchorBean<StringSet> implements PrimitiveBeanCollection<String> {

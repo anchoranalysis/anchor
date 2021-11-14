@@ -27,7 +27,7 @@ package org.anchoranalysis.io.input.bean.files;
 
 import java.io.File;
 import java.nio.file.Path;
-import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
@@ -49,7 +49,7 @@ public abstract class FilesProviderUnary extends FilesProvider {
     // END BEAN PROPERTIES
 
     @Override
-    public Collection<File> create(InputManagerParams params) throws FilesProviderException {
+    public List<File> create(InputManagerParams params) throws FilesProviderException {
         return transform(files.create(params), params.isDebugModeActivated());
     }
 
@@ -69,6 +69,6 @@ public abstract class FilesProviderUnary extends FilesProvider {
      * @param debugMode whether we are executing in debug-mode or not
      * @return the transformed (outgoing) files.
      */
-    protected abstract Collection<File> transform(Collection<File> source, boolean debugMode)
+    protected abstract List<File> transform(List<File> source, boolean debugMode)
             throws FilesProviderException;
 }

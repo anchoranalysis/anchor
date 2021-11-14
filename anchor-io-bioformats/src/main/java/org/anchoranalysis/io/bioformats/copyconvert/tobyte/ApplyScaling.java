@@ -90,7 +90,7 @@ class ApplyScaling {
     }
 
     /**
-     * What value of effectiveBits to use when determing a scaling factor.
+     * What value of effectiveBits to use when determining a scaling factor.
      *
      * <p>When the value is smaller than the target, and is thus being scaled <i>up</i>, it's better
      * to ensure a max value of 256, as this let's it be larger than 255, and it will be clamped
@@ -99,10 +99,10 @@ class ApplyScaling {
      * <p>When the value is larger than the target, and is this being scaled <i>down</i>, this
      * should not be done.
      *
-     * <p>If this correction doesn't mappen, values will be mapped to 0...128 instead.
+     * <p>If this correction doesn't happen, values will be mapped to {@code 0...128} instead.
      *
      * @param effectiveBits how many bits are used by the source data.
-     * @param targetUnsignedBits how many bits (assumuing unsigned data) desired in the target data.
+     * @param targetUnsignedBits how many bits (assuming unsigned data) desired in the target data.
      * @return the number of effective bits to use for calculating a conversion ratio.
      */
     private static int effectiveBitsForScaleFactor(int effectiveBits, int targetUnsignedBits) {

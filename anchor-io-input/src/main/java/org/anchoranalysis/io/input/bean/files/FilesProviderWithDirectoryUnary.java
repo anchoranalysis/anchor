@@ -27,7 +27,7 @@ package org.anchoranalysis.io.input.bean.files;
 
 import java.io.File;
 import java.nio.file.Path;
-import java.util.Collection;
+import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -50,7 +50,7 @@ public abstract class FilesProviderWithDirectoryUnary extends FilesProviderWithD
     // END BEAN PROPERTIES
 
     @Override
-    public Collection<File> matchingFilesForDirectory(Path directory, InputManagerParams params)
+    public List<File> matchingFilesForDirectory(Path directory, InputManagerParams params)
             throws FilesProviderException {
         return transform(files.matchingFilesForDirectory(directory, params));
     }
@@ -69,6 +69,5 @@ public abstract class FilesProviderWithDirectoryUnary extends FilesProviderWithD
      * @param source the incoming files (which may be consumed and modified).
      * @return the transformed (outgoing) files.
      */
-    protected abstract Collection<File> transform(Collection<File> source)
-            throws FilesProviderException;
+    protected abstract List<File> transform(List<File> source) throws FilesProviderException;
 }
