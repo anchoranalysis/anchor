@@ -28,7 +28,7 @@ package org.anchoranalysis.io.input.bean.files;
 
 import java.io.File;
 import java.nio.file.Path;
-import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.io.input.InputContextParams;
 import org.anchoranalysis.io.input.bean.InputManagerParams;
@@ -43,7 +43,7 @@ import org.anchoranalysis.io.input.file.FilesProviderException;
 public abstract class FilesProviderWithDirectory extends FilesProvider {
 
     @Override
-    public final Collection<File> create(InputManagerParams params) throws FilesProviderException {
+    public final List<File> create(InputManagerParams params) throws FilesProviderException {
         return matchingFilesForDirectory(getDirectoryAsPath(params.getInputContext()), params);
     }
 
@@ -54,8 +54,8 @@ public abstract class FilesProviderWithDirectory extends FilesProvider {
 
     public abstract Path getDirectoryAsPath(InputContextParams inputContext);
 
-    public abstract Collection<File> matchingFilesForDirectory(
-            Path directory, InputManagerParams params) throws FilesProviderException;
+    public abstract List<File> matchingFilesForDirectory(Path directory, InputManagerParams params)
+            throws FilesProviderException;
 
     /** Like getDirectory as Path but converts any relative path to absolute one */
     public Path getDirectoryAsPathEnsureAbsolute(InputContextParams inputContext) {

@@ -30,6 +30,7 @@ import lombok.Getter;
 import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.core.log.error.ErrorReporterIntoLog;
 import org.anchoranalysis.experiment.arguments.ExecutionArguments;
+import org.anchoranalysis.experiment.bean.io.ExecutionTimeStatistics;
 import org.anchoranalysis.experiment.log.StatefulMessageLogger;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;

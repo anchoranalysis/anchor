@@ -33,8 +33,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
-import org.anchoranalysis.core.progress.ProgressIgnore;
-import org.anchoranalysis.io.input.InputContextParams;
 import org.anchoranalysis.io.input.bean.InputManagerParams;
 import org.anchoranalysis.io.input.bean.files.FilesProvider;
 import org.anchoranalysis.io.input.file.FilesProviderException;
@@ -58,10 +56,7 @@ public class FromFiles extends FilePathProvider {
 
         Collection<File> filesCreated;
         try {
-            filesCreated =
-                    files.create(
-                            new InputManagerParams(
-                                    new InputContextParams(), ProgressIgnore.get(), getLogger()));
+            filesCreated = files.create(new InputManagerParams(getLogger()));
         } catch (FilesProviderException e) {
             throw new ProvisionFailedException("Cannot find files", e);
         }

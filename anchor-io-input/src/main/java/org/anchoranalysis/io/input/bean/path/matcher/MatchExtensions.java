@@ -62,9 +62,10 @@ public class MatchExtensions extends PathMatcher {
      * <p>If an empty set is passed then, no check occurs, and no extension is checked.
      */
     @BeanField @Getter @Setter private StringSet extensions = allExtensionsFromFormats();
-    
+
     /**
-     * When true, any extensions available in the input-context are prioritized ahead of {@code extensions}.
+     * When true, any extensions available in the input-context are prioritized ahead of {@code
+     * extensions}.
      */
     @BeanField @Getter @Setter private boolean prioritizeInputContext = false;
     // END BEAN PROPERTIES
@@ -111,19 +112,21 @@ public class MatchExtensions extends PathMatcher {
     }
 
     private Set<String> fileExtensions(Optional<InputContextParams> inputContext) {
-        if (prioritizeInputContext && inputContext.isPresent() && inputContext.get().getInputFilterExtensions()!=null) {
+        if (prioritizeInputContext
+                && inputContext.isPresent()
+                && inputContext.get().getInputFilterExtensions() != null) {
             return inputContext.get().getInputFilterExtensions();
         } else {
             return extensions.set();
         }
     }
-    
 
     /**
      * If no filter extensions are provided from anywhere else, this is a convenient set of
      * defaults, together with all formats that bioformats supports - minus some exceptions.
      */
     private StringSet allExtensionsFromFormats() {
-        return new StringSet( Arrays.stream(FormatExtensions.allImageExtensions()).collect(Collectors.toSet()) );
+        return new StringSet(
+                Arrays.stream(FormatExtensions.allImageExtensions()).collect(Collectors.toSet()));
     }
 }

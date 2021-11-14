@@ -30,6 +30,7 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.experiment.arguments.ExecutionArguments;
+import org.anchoranalysis.experiment.bean.io.ExecutionTimeStatistics;
 import org.anchoranalysis.experiment.bean.log.LoggingDestination;
 import org.anchoranalysis.experiment.io.InitializationContext;
 import org.anchoranalysis.experiment.log.StatefulMessageLogger;

@@ -28,7 +28,7 @@ package org.anchoranalysis.io.input.bean.files;
 
 import java.io.File;
 import java.nio.file.Path;
-import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.io.input.InputContextParams;
@@ -38,14 +38,13 @@ import org.anchoranalysis.io.input.file.FilesProviderException;
 public abstract class FilesProvider extends AnchorBean<FilesProvider> {
 
     /**
-     * Creates or provides a collection of files.
+     * Creates or provides a list of files.
      *
      * @param params parameters influencing how input-files are obtained.
-     * @return the collection of files from the provider
+     * @return the list of files from the provider
      * @throws FilesProviderException
      */
-    public abstract Collection<File> create(InputManagerParams params)
-            throws FilesProviderException;
+    public abstract List<File> create(InputManagerParams params) throws FilesProviderException;
 
     /**
      * A root directory for these files, if it exists.

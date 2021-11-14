@@ -32,10 +32,11 @@ import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 /**
  * Converts data of type <i>unsigned byte</i> to <i>unsigned byte</i>.
  *
- * <p>Scaling is always applied to map the range of effective-bits (how many bits are used) to an 8-bit range.
- * 
- * <p>Computationally, it is preferable to use {@link UnsignedByteFromUnsignedByteNoInterleaving} if both
- * source and destination are exactly 8-bit and unsigned.
+ * <p>Scaling is always applied to map the range of effective-bits (how many bits are used) to an
+ * 8-bit range.
+ *
+ * <p>Computationally, it is preferable to use {@link UnsignedByteFromUnsignedByteNoInterleaving} if
+ * both source and destination are exactly 8-bit and unsigned.
  *
  * @author Owen Feehan
  */

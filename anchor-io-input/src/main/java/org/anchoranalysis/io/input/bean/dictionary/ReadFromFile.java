@@ -35,9 +35,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.dictionary.DictionaryProvider;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
-import org.anchoranalysis.core.progress.ProgressIgnore;
 import org.anchoranalysis.core.value.Dictionary;
-import org.anchoranalysis.io.input.InputContextParams;
 import org.anchoranalysis.io.input.bean.InputManagerParams;
 import org.anchoranalysis.io.input.bean.files.FilesProvider;
 import org.anchoranalysis.io.input.file.FilesProviderException;
@@ -59,10 +57,7 @@ public class ReadFromFile extends DictionaryProvider {
     @Override
     public Dictionary get() throws ProvisionFailedException {
         try {
-            Collection<File> providedFiles =
-                    files.create(
-                            new InputManagerParams(
-                                    new InputContextParams(), ProgressIgnore.get(), getLogger()));
+            Collection<File> providedFiles = files.create(new InputManagerParams(getLogger()));
 
             if (providedFiles.isEmpty()) {
                 throw new ProvisionFailedException("No files are provided");

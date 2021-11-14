@@ -157,6 +157,7 @@ public class InputOutputExperiment<T extends InputFromManager, S> extends Output
                     new InputManagerParams(
                             params.getExperimentArguments().createInputContext(),
                             ProgressIgnore.get(),
+                            params.getExecutionTimeStatistics(),
                             new Logger(params.getLoggerExperiment()));
 
             if (params.isDetailedLogging()) {
