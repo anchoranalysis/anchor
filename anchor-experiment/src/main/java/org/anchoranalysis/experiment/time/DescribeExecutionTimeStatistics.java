@@ -23,12 +23,12 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.experiment.bean.io;
+package org.anchoranalysis.experiment.time;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.experiment.log.Divider;
-import org.anchoranalysis.experiment.task.TaskStatistics;
+import org.anchoranalysis.core.log.Divider;
+import org.anchoranalysis.core.time.RecordedExecutionTimes;
 import org.anchoranalysis.math.arithmetic.RunningSum;
 
 /**
@@ -37,17 +37,23 @@ import org.anchoranalysis.math.arithmetic.RunningSum;
  * @author Owen Feehan
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-class ExecutionTimeStatisticsReport {
+public class DescribeExecutionTimeStatistics {
 
     private static final Divider DIVIDER = new Divider();
 
     private static final String AVERAGE_TOTAL_LINE =
             "\t\t\t\t\t\t\t\t\t\taverage       total      (ignoring any parallelism)";
 
-    public static String report(
-            TaskStatistics task, ExecutionTimeStatistics operation, long executionTimeTotal) {
-
-        RunningSum taskTotal = task.executionTimeTotal();
+    /**
+     * Describes how long operations took to complete en aggregate with related-statistics.
+     *
+     * @param taskTotal how long the task in total took.
+     * @param operations how long particular operations took to execute.
+     * @param executionTimeTotal the total execution time.
+     * @return a multi-line string which describes the operations in a human-readable way.
+     */
+    public static String describeExecutionTimes(
+            RunningSum taskTotal, RecordedExecutionTimes operations, long executionTimeTotal) {
 
         StringBuilder builder = new StringBuilder();
         builder.append(
@@ -60,13 +66,10 @@ class ExecutionTimeStatisticsReport {
         builder.append(AVERAGE_TOTAL_LINE);
         builder.append(System.lineSeparator());
         builder.append(
-                DescribeExecutionTimes.individual(
-                        "* Entire Job *",
-                        taskTotal.mean() / 1000,
-                        taskTotal.getSum() / 1000,
-                        (int) task.numberCompletedTotal()));
+                DescribeOperations.individual(
+                        RecordedOperationHelper.create("* Entire Job *", taskTotal)));
         builder.append(System.lineSeparator());
-        builder.append(DescribeExecutionTimes.allOperations(operation));
+        builder.append(DescribeOperations.allOperations(operations));
         builder.append(DIVIDER.withoutLabel());
         return builder.toString();
     }

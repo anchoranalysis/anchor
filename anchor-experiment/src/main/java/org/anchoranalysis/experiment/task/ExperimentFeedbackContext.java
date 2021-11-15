@@ -29,8 +29,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.core.log.error.ErrorReporterIntoLog;
+import org.anchoranalysis.core.time.ExecutionTimeRecorder;
 import org.anchoranalysis.experiment.arguments.ExecutionArguments;
-import org.anchoranalysis.experiment.bean.io.ExecutionTimeStatistics;
 import org.anchoranalysis.experiment.log.StatefulMessageLogger;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
@@ -53,14 +53,14 @@ public class ExperimentFeedbackContext {
     @Getter private final boolean detailedLogging;
 
     /** Allows execution-time for particular operations to be recorded. */
-    @Getter private final ExecutionTimeStatistics executionTimeStatistics;
+    @Getter private final ExecutionTimeRecorder executionTimeRecorder;
 
     public InputOutputContextStateful inputOutput(
             ExecutionArguments experimentArguments, OutputterChecked outputter) {
         return new InputOutputContextStateful(
                 experimentArguments,
                 wrapExceptions(outputter, loggerExperiment),
-                executionTimeStatistics,
+                executionTimeRecorder,
                 loggerExperiment,
                 new ErrorReporterForTask(loggerExperiment));
     }

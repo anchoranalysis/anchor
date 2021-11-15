@@ -94,7 +94,8 @@ public class RecordedOutputsWithRules {
      *
      * <p>Any user-supplied additional outputs are also added to both if they exist.
      *
-     * @param rulesHigherPrecedence output-rules defined in the experiment, if they exist.
+     * @param rulesHigherPrecedence output-rules that are applied with highest-precedence, if they
+     *     exist.
      * @return a {@link MultiLevelOutputEnabled} that combines one of the two sources of rules with
      *     user-supplied additional outputs.
      */

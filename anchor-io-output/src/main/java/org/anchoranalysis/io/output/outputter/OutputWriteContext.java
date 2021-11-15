@@ -28,8 +28,12 @@ package org.anchoranalysis.io.output.outputter;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.anchoranalysis.bean.BeanInstanceMap;
+import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
+import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.core.format.ImageFileFormat;
-import org.anchoranalysis.core.system.ExecutionTimeRecorder;
+import org.anchoranalysis.core.time.ExecutionTimeRecorder;
+import org.anchoranalysis.core.time.ExecutionTimeRecorderIgnore;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 
 /**
@@ -51,6 +55,12 @@ public class OutputWriteContext {
 
     public OutputWriteContext() {
         settings = new OutputWriteSettings();
+        try {
+            settings.initialize(new BeanInstanceMap());
+        } catch (BeanMisconfiguredException e) {
+            throw new AnchorImpossibleSituationException();
+        }
         suggestedFormatToWrite = Optional.empty();
+        executionTimeRecorder = ExecutionTimeRecorderIgnore.instance();
     }
 }

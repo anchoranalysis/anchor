@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.experiment.log;
+package org.anchoranalysis.core.log;
 
 import com.google.common.base.Strings;
 
