@@ -51,8 +51,8 @@ public interface FeatureCalculatorMulti<T extends FeatureInput> {
             throws NamedFeatureCalculateException;
 
     /**
-     * Performs one calculation recording the error to an ErrorReporter if anything goes wrong, but
-     * throwing no exception
+     * Performs one calculation recording the error to an {@link ErrorReporter} if anything goes
+     * wrong, but throwing no exception.
      */
     ResultsVector calculateSuppressErrors(T input, ErrorReporter errorReporter);
 

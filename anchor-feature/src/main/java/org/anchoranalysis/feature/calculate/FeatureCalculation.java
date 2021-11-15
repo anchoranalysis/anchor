@@ -60,8 +60,8 @@ public abstract class FeatureCalculation<S, T extends FeatureInput>
      *
      * @param input If there is no cached-value, and the calculation occurs, this input is used.
      *     Otherwise ignored.
-     * @return the result of the calculation
-     * @throws FeatureCalculationException if the calculation cannot finish for whatever reason
+     * @return the result of the calculation.
+     * @throws FeatureCalculationException if the calculation cannot finish for whatever reason.
      */
     public synchronized S getOrCalculate(T input) throws FeatureCalculationException {
         // The input should be equal to the existing input, but this is not checked

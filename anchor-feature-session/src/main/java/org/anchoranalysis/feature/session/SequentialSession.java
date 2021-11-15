@@ -35,7 +35,6 @@ import org.anchoranalysis.core.log.error.ErrorReporter;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListFactory;
-import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.FeatureInitialization;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
 import org.anchoranalysis.feature.calculate.cache.SessionInput;
@@ -148,7 +147,7 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
 
         try {
             return replaceSession.createOrReuse(params).calculate(featuresSubset);
-        } catch (CreateException e) {
+        } catch (Exception e) {
             throw new NamedFeatureCalculateException(e);
         }
     }
@@ -190,7 +189,7 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
         SessionInput<T> cacheableParams;
         try {
             cacheableParams = replaceSession.createOrReuse(params);
-        } catch (CreateException e) {
+        } catch (Exception e) {
             // Return all features as errored
             if (reportErrors) {
                 errorReporter.recordError(SequentialSession.class, e);
@@ -208,7 +207,7 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
             try {
                 results.set(i, cacheableParams.calculate(f));
 
-            } catch (FeatureCalculationException e) {
+            } catch (Exception e) {
                 if (reportErrors) {
                     errorReporter.recordError(SequentialSession.class, e);
                 }
@@ -234,7 +233,7 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
             try {
                 double val = sessionInput.calculate(feature);
                 res.set(i, val);
-            } catch (FeatureCalculationException e) {
+            } catch (Exception e) {
                 throw new NamedFeatureCalculateException(feature.getFriendlyName(), e.getMessage());
             }
         }
