@@ -29,6 +29,7 @@ package org.anchoranalysis.image.io.channel.input;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
 import org.anchoranalysis.core.identifier.provider.store.StoreSupplier;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.stack.ImageMetadata;
@@ -57,44 +58,53 @@ public abstract class NamedChannelsInput implements ProvidesStackInput {
      * Dimensions of a particular series.
      *
      * @param seriesIndex the index of the series.
+     * @param logger a logger for any non-fatal errors. Fatal errors throw an exception.
+     * @return the corresponding dimensions.
      */
-    public abstract Dimensions dimensions(int seriesIndex) throws ImageIOException;
+    public abstract Dimensions dimensions(int seriesIndex, Logger logger) throws ImageIOException;
 
     /**
      * Number of channels.
      *
+     * @param logger a logger for any non-fatal errors. Fatal errors throw an exception.
      * @return the number of channels.
      */
-    public abstract int numberChannels() throws ImageIOException;
+    public abstract int numberChannels(Logger logger) throws ImageIOException;
 
     /**
      * Bit-depth of image.
      *
+     * @param logger a logger for any non-fatal errors. Fatal errors throw an exception.
      * @return the bit-depth.
      */
-    public abstract int bitDepth() throws ImageIOException;
+    public abstract int bitDepth(Logger logger) throws ImageIOException;
 
     public abstract NamedChannelsForSeries createChannelsForSeries(
-            int seriesIndex, Progress progress) throws ImageIOException;
+            int seriesIndex, Progress progress, Logger logger) throws ImageIOException;
 
     /**
      * The image-metadata associated with a particular series.
      *
      * @param seriesIndex the index of the series.
+     * @param logger TODO
      * @return the metadata.
      * @throws ImageIOException if the metadata cannot be calculated.
      */
-    public abstract ImageMetadata metadata(int seriesIndex) throws ImageIOException;
+    public abstract ImageMetadata metadata(int seriesIndex, Logger logger) throws ImageIOException;
 
     @Override
     public void addToStoreInferNames(
-            NamedProviderStore<TimeSequence> stacks, int seriesIndex, Progress progress)
+            NamedProviderStore<TimeSequence> stacks,
+            int seriesIndex,
+            Progress progress,
+            Logger logger)
             throws OperationFailedException {
         // Adds each channel as a separate stack
         try {
-            NamedChannelsForSeries namedChannels = createChannelsForSeries(seriesIndex, progress);
+            NamedChannelsForSeries namedChannels =
+                    createChannelsForSeries(seriesIndex, progress, logger);
             // Apply it only to first time-series frame
-            namedChannels.addAsSeparateChannels(stacks, 0);
+            namedChannels.addAsSeparateChannels(stacks, 0, logger);
 
         } catch (ImageIOException e) {
             throw new OperationFailedException(e);
@@ -106,11 +116,14 @@ public abstract class NamedChannelsInput implements ProvidesStackInput {
             String name,
             NamedProviderStore<TimeSequence> stacks,
             int seriesIndex,
-            Progress progress)
+            Progress progress,
+            Logger logger)
             throws OperationFailedException {
 
         // Adds this stack (cached) under the given name
-        stacks.add(name, StoreSupplier.cache(() -> channelsAsTimeSequence(seriesIndex, progress)));
+        stacks.add(
+                name,
+                StoreSupplier.cache(() -> channelsAsTimeSequence(seriesIndex, progress, logger)));
     }
 
     @Override
@@ -118,12 +131,13 @@ public abstract class NamedChannelsInput implements ProvidesStackInput {
         return 1;
     }
 
-    private TimeSequence channelsAsTimeSequence(int seriesNum, Progress progress)
+    private TimeSequence channelsAsTimeSequence(int seriesNum, Progress progress, Logger logger)
             throws OperationFailedException {
         // Apply it only to first time-series frame
         try {
-            NamedChannelsForSeries namedChannels = createChannelsForSeries(seriesNum, progress);
-            return new TimeSequence(namedChannels.allChannelsAsStack(0).get());
+            NamedChannelsForSeries namedChannels =
+                    createChannelsForSeries(seriesNum, progress, logger);
+            return new TimeSequence(namedChannels.allChannelsAsStack(0, logger).get());
 
         } catch (ImageIOException e) {
             throw new OperationFailedException(e);

@@ -37,7 +37,7 @@ import org.anchoranalysis.core.system.ExecutionTimeRecorderIgnore;
 import org.anchoranalysis.io.input.InputContextParams;
 
 /**
- * Parameters passed to an InputManager to generate input-objects
+ * Parameters passed to an {@link InputManager} to generate input-objects
  *
  * @author Owen Feehan
  */

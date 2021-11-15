@@ -184,19 +184,19 @@ public class UnitConverter {
     private double unitDistanceForDirection(DirectionVector direction) {
         double x = direction.x() * resolution.x();
         double y = direction.y() * resolution.y();
-        
+
         // The z resolution may contain NaN, but we let it be irrelevant when the direction
         //  in the z-axis is zero. Otherwise the entire calculation becomes NaN.
         double z = multiplyNaN(direction.z(), resolution.z());
         return Math.sqrt(Math.pow(x, 2.0) + Math.pow(y, 2.0) + Math.pow(z, 2.0));
     }
-    
-    /** 
-     * Special form of multiplication which will always return 0.0 when {@code value1==0.0}, including
-     * when {@code value2} is {@link Double#NaN}.
+
+    /**
+     * Special form of multiplication which will always return 0.0 when {@code value1==0.0},
+     * including when {@code value2} is {@link Double#NaN}.
      */
     private static double multiplyNaN(double value1, double value2) {
-        if (value1==0.0) {
+        if (value1 == 0.0) {
             return 0.0;
         } else {
             return value1 * value2;

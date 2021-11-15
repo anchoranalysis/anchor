@@ -94,9 +94,10 @@ public class AnnotationWithStrategy<T extends AnnotatorStrategy>
      *
      * <p>The stacks are cached the first time they are evaluated, to avoid repeated computation.
      *
+     * @param logger a logger for any non-fatal errors. Fatal errors throw an exception.
      * @return a supplier of the stacks.
      */
-    public NamedStacksSupplier stacks() {
-        return NamedStacksSupplier.cache(getDelegate()::asSet);
+    public NamedStacksSupplier stacks(Logger logger) {
+        return NamedStacksSupplier.cache(progress -> getDelegate().asSet(progress, logger));
     }
 }

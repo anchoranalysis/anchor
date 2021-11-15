@@ -33,6 +33,7 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
 import org.anchoranalysis.core.identifier.provider.store.StoreSupplier;
 import org.anchoranalysis.core.index.GetOperationFailedException;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.core.progress.ProgressIgnore;
 import org.anchoranalysis.core.progress.ProgressMultiple;
@@ -60,12 +61,12 @@ public class NamedChannelsForSeriesMap implements NamedChannelsForSeries {
     private TimeSequence sequence;
 
     @Override
-    public Dimensions dimensions() throws ImageIOException {
-        return openedFile.dimensionsForSeries(seriesIndex);
+    public Dimensions dimensions(Logger logger) throws ImageIOException {
+        return openedFile.dimensionsForSeries(seriesIndex, logger);
     }
 
     @Override
-    public Channel getChannel(String channelName, int timeIndex, Progress progress)
+    public Channel getChannel(String channelName, int timeIndex, Progress progress, Logger logger)
             throws GetOperationFailedException {
 
         int index = channelMap.get(channelName);
@@ -75,7 +76,7 @@ public class NamedChannelsForSeriesMap implements NamedChannelsForSeries {
         }
 
         try {
-            Stack stack = createTimeSeries(progress).get(timeIndex);
+            Stack stack = createTimeSeries(progress, logger).get(timeIndex);
 
             if (index >= stack.getNumberChannels()) {
                 throw new GetOperationFailedException(
@@ -94,7 +95,7 @@ public class NamedChannelsForSeriesMap implements NamedChannelsForSeries {
 
     @Override
     public Optional<Channel> getChannelOptional(
-            String channelName, int timeIndex, Progress progress)
+            String channelName, int timeIndex, Progress progress, Logger logger)
             throws GetOperationFailedException {
 
         int index = channelMap.get(channelName);
@@ -103,7 +104,7 @@ public class NamedChannelsForSeriesMap implements NamedChannelsForSeries {
         }
 
         try {
-            Stack stack = createTimeSeries(progress).get(timeIndex);
+            Stack stack = createTimeSeries(progress, logger).get(timeIndex);
 
             if (index >= stack.getNumberChannels()) {
                 return Optional.empty();
@@ -116,9 +117,9 @@ public class NamedChannelsForSeriesMap implements NamedChannelsForSeries {
     }
 
     @Override
-    public int sizeT(Progress progress) throws ImageIOException {
+    public int sizeT(Progress progress, Logger logger) throws ImageIOException {
         try {
-            return createTimeSeries(progress).size();
+            return createTimeSeries(progress, logger).size();
         } catch (OperationFailedException e) {
             throw new ImageIOException("Cannot establish the size of the time-dimension", e);
         }
@@ -140,7 +141,8 @@ public class NamedChannelsForSeriesMap implements NamedChannelsForSeries {
     }
 
     @Override
-    public void addAsSeparateChannels(NamedStacks stacks, int timeIndex, Progress progress)
+    public void addAsSeparateChannels(
+            NamedStacks stacks, int timeIndex, Progress progress, Logger logger)
             throws OperationFailedException {
 
         try {
@@ -151,7 +153,10 @@ public class NamedChannelsForSeriesMap implements NamedChannelsForSeries {
                 for (String channelName : channelMap.keySet()) {
                     Channel image =
                             getChannel(
-                                    channelName, timeIndex, progressMultiple.trackCurrentChild());
+                                    channelName,
+                                    timeIndex,
+                                    progressMultiple.trackCurrentChild(),
+                                    logger);
                     stacks.add(channelName, new Stack(image));
                     progressMultiple.incrementChild();
                 }
@@ -166,14 +171,14 @@ public class NamedChannelsForSeriesMap implements NamedChannelsForSeries {
 
     @Override
     public void addAsSeparateChannels(
-            NamedProviderStore<TimeSequence> stackCollection, int timeIndex)
+            NamedProviderStore<TimeSequence> stackCollection, int timeIndex, Logger logger)
             throws OperationFailedException {
         // Populate our stack from all the channels
         for (String channelName : channelMap.keySet()) {
             stackCollection.add(
                     channelName,
                     StoreSupplier.cache(
-                            () -> extractChannelAsTimeSequence(channelName, timeIndex)));
+                            () -> extractChannelAsTimeSequence(channelName, timeIndex, logger)));
         }
     }
 
@@ -183,14 +188,15 @@ public class NamedChannelsForSeriesMap implements NamedChannelsForSeries {
     }
 
     @Override
-    public StoreSupplier<Stack> allChannelsAsStack(int t) {
-        return StoreSupplier.cache(() -> stackForAllChannels(t));
+    public StoreSupplier<Stack> allChannelsAsStack(int t, Logger logger) {
+        return StoreSupplier.cache(() -> stackForAllChannels(t, logger));
     }
 
-    private TimeSequence createTimeSeries(Progress progress) throws OperationFailedException {
+    private TimeSequence createTimeSeries(Progress progress, Logger logger)
+            throws OperationFailedException {
         if (sequence == null) {
             try {
-                sequence = openedFile.open(seriesIndex, progress);
+                sequence = openedFile.open(seriesIndex, progress, logger);
             } catch (ImageIOException e) {
                 throw new OperationFailedException(e);
             }
@@ -198,12 +204,14 @@ public class NamedChannelsForSeriesMap implements NamedChannelsForSeries {
         return sequence;
     }
 
-    private Stack stackForAllChannels(int timeIndex) throws OperationFailedException {
+    private Stack stackForAllChannels(int timeIndex, Logger logger)
+            throws OperationFailedException {
         Stack out = new Stack();
 
         for (ChannelEntry entry : channelMap.entryCollection()) {
             try {
-                out.addChannel(getChannel(entry.getName(), timeIndex, ProgressIgnore.get()));
+                out.addChannel(
+                        getChannel(entry.getName(), timeIndex, ProgressIgnore.get(), logger));
             } catch (IncorrectImageSizeException | GetOperationFailedException e) {
                 throw new OperationFailedException(e);
             }
@@ -212,10 +220,10 @@ public class NamedChannelsForSeriesMap implements NamedChannelsForSeries {
         return out;
     }
 
-    private TimeSequence extractChannelAsTimeSequence(String channelName, int timeIndex)
-            throws OperationFailedException {
+    private TimeSequence extractChannelAsTimeSequence(
+            String channelName, int timeIndex, Logger logger) throws OperationFailedException {
         try {
-            Channel image = getChannel(channelName, timeIndex, ProgressIgnore.get());
+            Channel image = getChannel(channelName, timeIndex, ProgressIgnore.get(), logger);
             return new TimeSequence(new Stack(image));
         } catch (GetOperationFailedException e) {
             throw new OperationFailedException(e);

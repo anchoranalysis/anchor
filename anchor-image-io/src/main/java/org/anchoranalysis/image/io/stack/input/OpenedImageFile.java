@@ -28,6 +28,7 @@ package org.anchoranalysis.image.io.stack.input;
 
 import java.util.List;
 import java.util.Optional;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.core.progress.ProgressIgnore;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
@@ -53,14 +54,15 @@ public interface OpenedImageFile extends AutoCloseable {
      * @param seriesIndex the index of the series to open.
      * @param progress tracks progress when opening.
      * @param channelDataType the expected data-type of the channels.
+     * @param logger the logger.
      * @return a newly created {@link TimeSequence} of images for the series.
      * @throws ImageIOException
      */
     default TimeSequence openCheckType(
-            int seriesIndex, Progress progress, VoxelDataType channelDataType)
+            int seriesIndex, Progress progress, VoxelDataType channelDataType, Logger logger)
             throws ImageIOException {
 
-        TimeSequence sequence = open(seriesIndex, progress);
+        TimeSequence sequence = open(seriesIndex, progress, logger);
 
         if (!sequence.allChannelsHaveType(channelDataType)) {
             throw new ImageIOException(
@@ -73,30 +75,33 @@ public interface OpenedImageFile extends AutoCloseable {
     /**
      * Open the first series when we don't have a specific-type.
      *
+     * @param logger the logger.
      * @return a time-sequence of images.
      */
-    default TimeSequence open() throws ImageIOException {
-        return open(0);
+    default TimeSequence open(Logger logger) throws ImageIOException {
+        return open(0, logger);
     }
 
     /**
      * Open when we don't have a specific-type.
      *
      * @param seriesIndex the index of the series of the open, zero-indexed.
+     * @param logger the logger.
      * @return a time-sequence of images.
      */
-    default TimeSequence open(int seriesIndex) throws ImageIOException {
-        return open(seriesIndex, ProgressIgnore.get());
+    default TimeSequence open(int seriesIndex, Logger logger) throws ImageIOException {
+        return open(seriesIndex, ProgressIgnore.get(), logger);
     }
 
     /**
-     * Like {@link #open(int)} but additionally tracks progress of the opening.
+     * Like {@link #open(int, Logger)} but additionally tracks progress of the opening.
      *
      * @param seriesIndex the index of the series of the open, zero-indexed.
      * @param progress tracks progress.
+     * @param logger the logger.
      * @return a time-sequence of images.
      */
-    TimeSequence open(int seriesIndex, Progress progress) throws ImageIOException;
+    TimeSequence open(int seriesIndex, Progress progress, Logger logger) throws ImageIOException;
 
     /** The number of series (distinct sets of images) in the image-file. */
     int numberSeries();
@@ -104,19 +109,32 @@ public interface OpenedImageFile extends AutoCloseable {
     /**
      * The names of each channel, if they are known.
      *
+     * @param logger TODO
      * @return a list of the names, which should correspond (and have the same number of items) as
-     *     {@link #numberChannels()}.
+     *     {@link #numberChannels(Logger)}.
      */
-    Optional<List<String>> channelNames() throws ImageIOException;
+    Optional<List<String>> channelNames(Logger logger) throws ImageIOException;
 
-    /** The number of channels in the image-file e.g. 1 for grayscale, 3 for RGB. */
-    int numberChannels() throws ImageIOException;
+    /**
+     * The number of channels in the image-file e.g. 1 for grayscale, 3 for RGB.
+     *
+     * @param logger TODO
+     */
+    int numberChannels(Logger logger) throws ImageIOException;
 
-    /** The number of frames in the image-file i.e. distinct images for a particular time-point. */
-    int numberFrames() throws ImageIOException;
+    /**
+     * The number of frames in the image-file i.e. distinct images for a particular time-point.
+     *
+     * @param logger TODO
+     */
+    int numberFrames(Logger logger) throws ImageIOException;
 
-    /** The bit-depth of the image voxels e.g. 8 for 8-bit, 16 for 16-bit etc. */
-    int bitDepth() throws ImageIOException;
+    /**
+     * The bit-depth of the image voxels e.g. 8 for 8-bit, 16 for 16-bit etc.
+     *
+     * @param logger TODO
+     */
+    int bitDepth(Logger logger) throws ImageIOException;
 
     /** The timestamps and file-attributes associated with the image. */
     ImageTimestampsAttributes timestamps() throws ImageIOException;
@@ -131,10 +149,11 @@ public interface OpenedImageFile extends AutoCloseable {
      * The {@link Dimensions} associated with a particular series.
      *
      * @param seriesIndex the index of the series.
+     * @param logger a logger for any non-fatal errors. Fatal errors throw an exception.
      * @return the corresponding dimensions.
      * @throws ImageIOException if any filesystem-related input-output failure occurs.
      */
-    Dimensions dimensionsForSeries(int seriesIndex) throws ImageIOException;
+    Dimensions dimensionsForSeries(int seriesIndex, Logger logger) throws ImageIOException;
 
     /**
      * Extracts metadata about the image.
@@ -143,17 +162,18 @@ public interface OpenedImageFile extends AutoCloseable {
      * that it is as computationally efficient as possible, for this use case.
      *
      * @param seriesIndex the index of the series.
+     * @param logger the logger.
      * @return the associated image metadata.
      * @throws ImageIOException if any filesystem-related input-output failure occurs.
      */
-    default ImageMetadata metadata(int seriesIndex) throws ImageIOException {
+    default ImageMetadata metadata(int seriesIndex, Logger logger) throws ImageIOException {
         ImageTimestampsAttributes timestamps = timestamps();
         return new ImageMetadata(
-                dimensionsForSeries(seriesIndex),
-                numberChannels(),
-                numberFrames(),
+                dimensionsForSeries(seriesIndex, logger),
+                numberChannels(logger),
+                numberFrames(logger),
                 isRGB(),
-                bitDepth(),
+                bitDepth(logger),
                 timestamps.getAttributes(),
                 timestamps.getAcqusitionTime());
     }

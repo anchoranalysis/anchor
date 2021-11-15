@@ -32,6 +32,7 @@ import lombok.experimental.Accessors;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
 import org.anchoranalysis.core.identifier.provider.store.SharedObjects;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.log.error.ErrorReporter;
 import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.core.value.Dictionary;
@@ -84,9 +85,12 @@ public class MultiInput implements ProvidesStackInput, ExportSharedObjects {
 
     @Override
     public void addToStoreInferNames(
-            NamedProviderStore<TimeSequence> stacks, int seriesIndex, Progress progress)
+            NamedProviderStore<TimeSequence> stacks,
+            int seriesIndex,
+            Progress progress,
+            Logger logger)
             throws OperationFailedException {
-        stack.addToStore(stacks, seriesIndex, progress);
+        stack.addToStore(stacks, seriesIndex, progress, logger);
     }
 
     @Override
@@ -94,23 +98,24 @@ public class MultiInput implements ProvidesStackInput, ExportSharedObjects {
             String name,
             NamedProviderStore<TimeSequence> stacks,
             int seriesIndex,
-            Progress progress)
+            Progress progress,
+            Logger logger)
             throws OperationFailedException {
         throw new OperationFailedException("Not supported");
     }
 
     @Override
-    public void copyTo(SharedObjects target) throws OperationFailedException {
+    public void copyTo(SharedObjects target, Logger logger) throws OperationFailedException {
 
         ImageInitialization image = new ImageInitialization(target);
 
-        stack().addToStore(new WrapStackAsTimeSequenceStore(image.stacks()));
-        objects().addToStore(image.objects());
-        dictionary().addToStore(image.dictionaries());
-        filePath().addToStore(image.filePaths());
-        histogram().addToStore(image.histograms());
+        stack().addToStore(new WrapStackAsTimeSequenceStore(image.stacks()), logger);
+        objects().addToStore(image.objects(), logger);
+        dictionary().addToStore(image.dictionaries(), logger);
+        filePath().addToStore(image.filePaths(), logger);
+        histogram().addToStore(image.histograms(), logger);
 
-        marks().addToStore(new MarksInitialization(image).marks());
+        marks().addToStore(new MarksInitialization(image).marks(), logger);
     }
 
     @Override

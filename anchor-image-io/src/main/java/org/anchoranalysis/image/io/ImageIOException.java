@@ -33,15 +33,11 @@ public class ImageIOException extends AnchorFriendlyCheckedException {
     /** */
     private static final long serialVersionUID = -2707818821166134477L;
 
-    public ImageIOException(String string) {
-        super(string);
+    public ImageIOException(String message) {
+        super(message);
     }
 
-    public ImageIOException(Throwable exc) {
-        super(exc);
-    }
-
-    public ImageIOException(String string, Throwable exc) {
-        super(string, exc);
+    public ImageIOException(String message, Throwable exc) {
+        super(message, exc);
     }
 }

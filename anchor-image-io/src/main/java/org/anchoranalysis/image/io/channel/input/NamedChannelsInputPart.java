@@ -30,6 +30,7 @@ import java.io.File;
 import java.nio.file.Path;
 import java.util.List;
 import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.io.ImageIOException;
 
 /**
@@ -39,7 +40,7 @@ import org.anchoranalysis.image.io.ImageIOException;
  */
 public abstract class NamedChannelsInputPart extends NamedChannelsInput {
 
-    public abstract boolean hasChannel(String channelName) throws ImageIOException;
+    public abstract boolean hasChannel(String channelName, Logger logger) throws ImageIOException;
 
     public abstract List<Path> pathForBindingForAllChannels() throws OperationFailedException;
 

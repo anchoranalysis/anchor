@@ -54,14 +54,14 @@ public abstract class StackReader extends AnchorBean<StackReader> {
      *     wrong.
      */
     public Stack readStack(Path path, Logger logger) throws ImageIOException {
-        OpenedImageFile openedFile = openFile(path, logger);
+        OpenedImageFile openedFile = openFile(path);
 
         try {
             if (openedFile.numberSeries() != 1) {
                 throw new ImageIOException("there must be exactly one series");
             }
 
-            return openedFile.open().get(0);
+            return openedFile.open(logger).get(0);
         } finally {
             openedFile.close();
         }
@@ -74,10 +74,8 @@ public abstract class StackReader extends AnchorBean<StackReader> {
      * be read.
      *
      * @param path where the file is located.
-     * @param logger where to write informative messages to, and and any non-fatal errors (fatal
-     *     errors are throw as exceptions).
      * @return an interface to the opened file that should be closed when no longer in use.
      * @throws ImageIOException if the file cannot be read.
      */
-    public abstract OpenedImageFile openFile(Path path, Logger logger) throws ImageIOException;
+    public abstract OpenedImageFile openFile(Path path) throws ImageIOException;
 }

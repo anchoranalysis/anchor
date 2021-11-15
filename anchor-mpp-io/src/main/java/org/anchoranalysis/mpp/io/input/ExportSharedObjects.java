@@ -28,6 +28,7 @@ package org.anchoranalysis.mpp.io.input;
 
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.identifier.provider.store.SharedObjects;
+import org.anchoranalysis.core.log.Logger;
 
 /** A method that copies certain shared-objects. */
 public interface ExportSharedObjects {
@@ -35,7 +36,8 @@ public interface ExportSharedObjects {
     /**
      * Adds any exported shared-objects to {@code sharedObjects}.
      *
-     * @param target where to add the exported objects to
+     * @param target where to add the exported objects to.
+     * @param logger a logger for any non-fatal errors. Fatal errors throw an exception.
      */
-    void copyTo(SharedObjects target) throws OperationFailedException;
+    void copyTo(SharedObjects target, Logger logger) throws OperationFailedException;
 }

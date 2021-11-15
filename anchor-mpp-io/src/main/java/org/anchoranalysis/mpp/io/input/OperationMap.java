@@ -32,6 +32,7 @@ import java.util.Map.Entry;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
 import org.anchoranalysis.core.identifier.provider.store.StoreSupplier;
+import org.anchoranalysis.core.log.Logger;
 
 /**
  * Stores objects as operations
@@ -48,7 +49,8 @@ public class OperationMap<T> implements MultiInputSubMap<T> {
     }
 
     @Override
-    public void addToStore(NamedProviderStore<T> namedStore) throws OperationFailedException {
+    public void addToStore(NamedProviderStore<T> namedStore, Logger logger)
+            throws OperationFailedException {
         for (Entry<String, StoreSupplier<T>> entry : map.entrySet()) {
             namedStore.add(entry.getKey(), entry.getValue());
         }

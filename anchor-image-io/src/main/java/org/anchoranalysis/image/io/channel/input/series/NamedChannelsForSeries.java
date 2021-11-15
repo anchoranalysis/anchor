@@ -32,6 +32,7 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
 import org.anchoranalysis.core.identifier.provider.store.StoreSupplier;
 import org.anchoranalysis.core.index.GetOperationFailedException;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
@@ -49,11 +50,13 @@ public interface NamedChannelsForSeries extends ChannelGetter {
      * @param channelName name of channel.
      * @param timeIndex point in time-series.
      * @param progress reporting incremental progress.
+     * @param logger a logger for any non-fatal errors. Fatal errors throw an exception.
      * @return the channel if it exists, or empty otherwise.
      * @throws GetOperationFailedException if something goes wrong getting an existing channel (but
      *     never if a channel doesn't exist).
      */
-    Optional<Channel> getChannelOptional(String channelName, int timeIndex, Progress progress)
+    Optional<Channel> getChannelOptional(
+            String channelName, int timeIndex, Progress progress, Logger logger)
             throws GetOperationFailedException;
 
     /**
@@ -65,17 +68,18 @@ public interface NamedChannelsForSeries extends ChannelGetter {
 
     Set<String> channelNames();
 
-    int sizeT(Progress progress) throws ImageIOException;
+    int sizeT(Progress progress, Logger logger) throws ImageIOException;
 
-    Dimensions dimensions() throws ImageIOException;
+    Dimensions dimensions(Logger logger) throws ImageIOException;
 
-    void addAsSeparateChannels(NamedStacks stacks, int timeIndex, Progress progress)
+    void addAsSeparateChannels(NamedStacks stacks, int timeIndex, Progress progress, Logger logger)
             throws OperationFailedException;
 
-    void addAsSeparateChannels(NamedProviderStore<TimeSequence> stacks, int timeIndex)
+    void addAsSeparateChannels(
+            NamedProviderStore<TimeSequence> stacks, int timeIndex, Logger logger)
             throws OperationFailedException;
 
-    StoreSupplier<Stack> allChannelsAsStack(int timeIndex);
+    StoreSupplier<Stack> allChannelsAsStack(int timeIndex, Logger logger);
 
     /**
      * Whether the channels describe an RGB image.

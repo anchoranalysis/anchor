@@ -55,7 +55,7 @@ public class MarksInitializationFactory {
 
         if (input.isPresent()) {
             try {
-                input.get().copyTo(sharedObjects);
+                input.get().copyTo(sharedObjects, context.getLogger());
             } catch (OperationFailedException e) {
                 throw new CreateException(e);
             }

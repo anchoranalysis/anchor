@@ -108,8 +108,8 @@ class ExpectedImage {
 
         Path path = loader.resolveTestPath(relativePath());
 
-        OpenedImageFile openedFile = reader.openFile(path, logger);
-        TimeSequence timeSequence = openedFile.open();
+        OpenedImageFile openedFile = reader.openFile(path);
+        TimeSequence timeSequence = openedFile.open(logger);
         return timeSequence.get(0);
     }
 

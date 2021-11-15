@@ -86,8 +86,8 @@ public class TestLoaderImage {
 
         ConfigureBioformatsLogging.instance().makeSureConfigured();
 
-        try (OpenedImageFile openedFile = stackReader.openFile(filePath, logger)) {
-            return openedFile.open().get(0);
+        try (OpenedImageFile openedFile = stackReader.openFile(filePath)) {
+            return openedFile.open(logger).get(0);
         } catch (ImageIOException e) {
             throw new TestDataLoadException(e);
         }

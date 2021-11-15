@@ -28,6 +28,7 @@ package org.anchoranalysis.image.io.stack.input;
 
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.core.progress.ProgressIgnore;
 import org.anchoranalysis.image.core.stack.Stack;
@@ -47,12 +48,13 @@ public interface ProvidesStackInput extends InputFromManager {
      * Exposes the input as a set of named stacks (inferring the names).
      *
      * @param progress a progress-reporter.
+     * @param logger a logger for any non-fatal errors. Fatal errors throw an exception.
      * @return a set of named-stacks.
      * @throws OperationFailedException
      */
-    default NamedStacks asSet(Progress progress) throws OperationFailedException {
+    default NamedStacks asSet(Progress progress, Logger logger) throws OperationFailedException {
         NamedStacks set = new NamedStacks();
-        addToStoreInferNames(new WrapStackAsTimeSequenceStore(set, 0), 0, progress);
+        addToStoreInferNames(new WrapStackAsTimeSequenceStore(set, 0), 0, progress, logger);
         return set;
     }
 
@@ -60,14 +62,16 @@ public interface ProvidesStackInput extends InputFromManager {
      * Adds the current object to a named-store of stacks (using the default series).
      *
      * @param store the store.
+     * @param logger a logger for any non-fatal errors. Fatal errors throw an exception.
      * @throws OperationFailedException
      */
-    default void addToStoreInferNames(NamedProviderStore<Stack> store)
+    default void addToStoreInferNames(NamedProviderStore<Stack> store, Logger logger)
             throws OperationFailedException {
         addToStoreInferNames(
                 new WrapStackAsTimeSequenceStore(store),
                 0, // default series-number
-                ProgressIgnore.get());
+                ProgressIgnore.get(),
+                logger);
     }
 
     /**
@@ -76,17 +80,22 @@ public interface ProvidesStackInput extends InputFromManager {
      * @param stacks
      * @param seriesIndex
      * @param progress
+     * @param logger a logger for any non-fatal errors. Fatal errors throw an exception.
      * @throws OperationFailedException
      */
     void addToStoreInferNames(
-            NamedProviderStore<TimeSequence> stacks, int seriesIndex, Progress progress)
+            NamedProviderStore<TimeSequence> stacks,
+            int seriesIndex,
+            Progress progress,
+            Logger logger)
             throws OperationFailedException;
 
     void addToStoreWithName(
             String name,
             NamedProviderStore<TimeSequence> stacks,
             int seriesIndex,
-            Progress progress)
+            Progress progress,
+            Logger logger)
             throws OperationFailedException;
 
     int numberFrames() throws OperationFailedException;
