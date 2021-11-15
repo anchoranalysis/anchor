@@ -30,7 +30,6 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.io.manifest.Manifest;
 import org.anchoranalysis.io.output.bean.OutputManager;
-import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.bean.rules.Permissive;
 import org.anchoranalysis.io.output.outputter.BindFailedException;
 import org.anchoranalysis.io.output.outputter.OutputWriteContext;
@@ -58,10 +57,7 @@ public class OutputterCheckedFixture {
                     manifest,
                     new Permissive().create(Optional.empty()),
                     Optional.empty(),
-                    new OutputWriteContext(
-                            new OutputWriteSettings(),
-                            Optional.empty(),
-                            new ExecutionTimeRecorderFixture()),
+                    new OutputWriteContext(),
                     new PathPrefixerContext(),
                     Optional.empty());
         } catch (PathPrefixerException e) {
