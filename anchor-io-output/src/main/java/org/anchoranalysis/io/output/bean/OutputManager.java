@@ -119,7 +119,7 @@ public class OutputManager extends AnchorBean<OutputManager> {
      * @param manifest where output files are store.
      * @param outputsEnabled which outputs are enabled. This is typically provided via a call to
      *     {@link #determineEnabledOutputs(RecordedOutputsWithRules)}.
-     * @parma writeContext context needed for writing. This is typically provided via a call to
+     * @param writeContext context needed for writing. This is typically provided via a call to
      *     {@link #createContextForWriting(Optional, ExecutionTimeRecorder)}.
      * @param prefixerContext parameters for the file-path prefixer.
      * @param logger logger for warning for information messages when outputting.
