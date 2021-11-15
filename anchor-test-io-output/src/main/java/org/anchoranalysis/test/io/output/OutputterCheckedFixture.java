@@ -57,7 +57,7 @@ public class OutputterCheckedFixture {
                     manifest,
                     new Permissive().create(Optional.empty()),
                     Optional.empty(),
-                    new OutputWriteContext(),
+                    new OutputWriteContext(outputManager.getOutputWriteSettings()),
                     new PathPrefixerContext(),
                     Optional.empty());
         } catch (PathPrefixerException e) {
