@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.core.system;
+package org.anchoranalysis.core.time;
 
 import java.util.Optional;
 import org.anchoranalysis.core.functional.checked.CheckedRunnable;
@@ -147,4 +147,11 @@ public interface ExecutionTimeRecorder {
         }
         return currentTimestamp;
     }
+
+    /**
+     * The execution-times that have been recorded.
+     *
+     * @return newly created {@link RecordedExecutionTimes} that describes the execution-times.
+     */
+    RecordedExecutionTimes recordedTimes();
 }

@@ -32,8 +32,8 @@ import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.core.progress.ProgressIgnore;
-import org.anchoranalysis.core.system.ExecutionTimeRecorder;
-import org.anchoranalysis.core.system.ExecutionTimeRecorderIgnore;
+import org.anchoranalysis.core.time.ExecutionTimeRecorder;
+import org.anchoranalysis.core.time.ExecutionTimeRecorderIgnore;
 import org.anchoranalysis.io.input.InputContextParams;
 
 /**

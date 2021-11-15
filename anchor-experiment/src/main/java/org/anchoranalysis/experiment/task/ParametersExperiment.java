@@ -29,8 +29,9 @@ package org.anchoranalysis.experiment.task;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
+import org.anchoranalysis.core.time.ExecutionTimeRecorder;
+import org.anchoranalysis.core.time.RecordedExecutionTimes;
 import org.anchoranalysis.experiment.arguments.ExecutionArguments;
-import org.anchoranalysis.experiment.bean.io.ExecutionTimeStatistics;
 import org.anchoranalysis.experiment.bean.log.LoggingDestination;
 import org.anchoranalysis.experiment.io.InitializationContext;
 import org.anchoranalysis.experiment.log.StatefulMessageLogger;
@@ -69,7 +70,7 @@ public class ParametersExperiment {
     @Getter private final boolean detailedLogging;
 
     /** Allows execution-time for particular operations to be recorded. */
-    @Getter private ExecutionTimeStatistics executionTimeStatistics;
+    @Getter private ExecutionTimeRecorder executionTimeRecorder;
 
     public ParametersExperiment(
             ExecutionArguments experimentArguments,
@@ -78,7 +79,7 @@ public class ParametersExperiment {
             OutputterChecked outputter,
             PathPrefixer prefixer,
             ExperimentFeedbackContext feedbackContext) {
-        this.executionTimeStatistics = feedbackContext.getExecutionTimeStatistics();
+        this.executionTimeRecorder = feedbackContext.getExecutionTimeRecorder();
         this.experimentArguments = experimentArguments;
         this.context = feedbackContext.inputOutput(experimentArguments, outputter);
         this.experimentIdentifier = experimentIdentifier;
@@ -115,5 +116,18 @@ public class ParametersExperiment {
     public InitializationContext createInitializationContext() {
         return new InitializationContext(
                 context, context.getExperimentArguments().task().getSize());
+    }
+
+    /**
+     * Allows execution-times to be recorded for particular operations.
+     *
+     * @return the recorder.
+     */
+    public ExecutionTimeRecorder executionTimeRecorder() {
+        return executionTimeRecorder;
+    }
+
+    public RecordedExecutionTimes executionTimeStatistics() {
+        return executionTimeRecorder.recordedTimes();
     }
 }

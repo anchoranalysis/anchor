@@ -32,6 +32,7 @@ import org.anchoranalysis.core.log.CommonContext;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.core.log.error.ErrorReporter;
+import org.anchoranalysis.core.time.ExecutionTimeRecorder;
 import org.anchoranalysis.io.manifest.ManifestDirectoryDescription;
 
 /**
@@ -68,6 +69,13 @@ public interface InputOutputContext {
      * @return the logger associated with input-output operations.
      */
     Logger getLogger();
+
+    /**
+     * Allows execution-times to be recorded for particular operations.
+     *
+     * @return the recorder.
+     */
+    ExecutionTimeRecorder getExecutionTimeRecorder();
 
     /**
      * Creates a {@link CommonContext} a context that contains a subset of this context.

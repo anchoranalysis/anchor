@@ -28,7 +28,7 @@ package org.anchoranalysis.experiment.bean.io;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.experiment.log.Divider;
+import org.anchoranalysis.core.log.Divider;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.io.output.recorded.MultiLevelRecordedOutputs;
 

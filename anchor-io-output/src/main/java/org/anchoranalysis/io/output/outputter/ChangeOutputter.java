@@ -29,6 +29,7 @@ package org.anchoranalysis.io.output.outputter;
 import java.nio.file.Path;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.log.Logger;
+import org.anchoranalysis.core.time.ExecutionTimeRecorder;
 
 /**
  * Reuses an existing {@link InputOutputContext} but changes the outputter.
@@ -59,5 +60,10 @@ class ChangeOutputter implements InputOutputContext {
     @Override
     public Logger getLogger() {
         return delegate.getLogger();
+    }
+
+    @Override
+    public ExecutionTimeRecorder getExecutionTimeRecorder() {
+        return delegate.getExecutionTimeRecorder();
     }
 }

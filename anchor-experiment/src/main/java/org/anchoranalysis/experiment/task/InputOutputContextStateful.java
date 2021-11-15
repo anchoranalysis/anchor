@@ -27,13 +27,11 @@
 package org.anchoranalysis.experiment.task;
 
 import java.nio.file.Path;
-import lombok.Getter;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.core.log.error.ErrorReporter;
-import org.anchoranalysis.core.system.ExecutionTimeRecorder;
+import org.anchoranalysis.core.time.ExecutionTimeRecorder;
 import org.anchoranalysis.experiment.arguments.ExecutionArguments;
-import org.anchoranalysis.experiment.bean.io.ExecutionTimeStatistics;
 import org.anchoranalysis.experiment.log.StatefulMessageLogger;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
@@ -53,18 +51,18 @@ public class InputOutputContextStateful implements InputOutputContext {
     private final Outputter outputter;
 
     private final StatefulMessageLogger messageLogger;
-    @Getter private final ExecutionTimeRecorder executionTimeRecorder;
+    private final ExecutionTimeRecorder executionTimeRecorder;
     private final Logger logger; // Always related to the above two fields
 
     public InputOutputContextStateful(
             ExecutionArguments experimentArguments,
             Outputter outputter,
-            ExecutionTimeStatistics executionTimeStatistics,
+            ExecutionTimeRecorder executionTimeProfiler,
             StatefulMessageLogger logger,
             ErrorReporter errorReporter) {
         this.experimentArguments = experimentArguments;
         this.outputter = outputter;
-        this.executionTimeRecorder = executionTimeStatistics;
+        this.executionTimeRecorder = executionTimeProfiler;
         this.messageLogger = logger;
         this.logger = new Logger(logger, errorReporter);
     }
@@ -99,5 +97,10 @@ public class InputOutputContextStateful implements InputOutputContext {
 
     public ExecutionArguments getExperimentArguments() {
         return experimentArguments;
+    }
+
+    @Override
+    public ExecutionTimeRecorder getExecutionTimeRecorder() {
+        return executionTimeRecorder;
     }
 }

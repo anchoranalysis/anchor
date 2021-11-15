@@ -207,7 +207,7 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
                 new InputOutputContextStateful(
                         paramsUnbound.getParametersExperiment().getExperimentArguments(),
                         outputterTask,
-                        paramsUnbound.getParametersExperiment().getExecutionTimeStatistics(),
+                        paramsUnbound.getParametersExperiment().getExecutionTimeRecorder(),
                         loggerJob,
                         errorReporterJob));
     }

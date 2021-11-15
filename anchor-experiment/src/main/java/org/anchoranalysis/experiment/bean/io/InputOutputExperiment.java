@@ -38,6 +38,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.FunctionalList;
+import org.anchoranalysis.core.log.Divider;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.core.progress.ProgressIgnore;
@@ -50,7 +51,6 @@ import org.anchoranalysis.experiment.bean.task.Task;
 import org.anchoranalysis.experiment.io.ReplaceInputManager;
 import org.anchoranalysis.experiment.io.ReplaceOutputManager;
 import org.anchoranalysis.experiment.io.ReplaceTask;
-import org.anchoranalysis.experiment.log.Divider;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.experiment.task.TaskStatistics;
 import org.anchoranalysis.io.input.InputFromManager;
@@ -157,7 +157,7 @@ public class InputOutputExperiment<T extends InputFromManager, S> extends Output
                     new InputManagerParams(
                             params.getExperimentArguments().createInputContext(),
                             ProgressIgnore.get(),
-                            params.getExecutionTimeStatistics(),
+                            params.executionTimeRecorder(),
                             new Logger(params.getLoggerExperiment()));
 
             if (params.isDetailedLogging()) {
@@ -165,7 +165,7 @@ public class InputOutputExperiment<T extends InputFromManager, S> extends Output
             }
 
             InputsWithDirectory<T> inputs =
-                    params.getExecutionTimeStatistics()
+                    params.executionTimeRecorder()
                             .recordExecutionTime(
                                     EXECUTION_TIME_COLLECTING_INPUTS,
                                     () -> getInput().inputs(paramsInput));

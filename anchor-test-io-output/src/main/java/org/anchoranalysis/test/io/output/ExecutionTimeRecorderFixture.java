@@ -25,7 +25,9 @@
  */
 package org.anchoranalysis.test.io.output;
 
-import org.anchoranalysis.core.system.ExecutionTimeRecorder;
+import java.util.stream.Stream;
+import org.anchoranalysis.core.time.ExecutionTimeRecorder;
+import org.anchoranalysis.core.time.RecordedExecutionTimes;
 
 /**
  * Dummy implementation of {@link ExecutionTimeRecorder} that performs no operations.
@@ -43,5 +45,10 @@ class ExecutionTimeRecorderFixture implements ExecutionTimeRecorder {
     public void recordExecutionTime(
             String operationIdentifierFirst, String operationIdentiferSubsequent, long millis) {
         // NOTHING TO DO
+    }
+
+    @Override
+    public RecordedExecutionTimes recordedTimes() {
+        return new RecordedExecutionTimes(Stream.empty());
     }
 }

@@ -30,11 +30,13 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.io.manifest.Manifest;
 import org.anchoranalysis.io.output.bean.OutputManager;
+import org.anchoranalysis.io.output.bean.OutputWriteSettings;
+import org.anchoranalysis.io.output.bean.rules.Permissive;
 import org.anchoranalysis.io.output.outputter.BindFailedException;
+import org.anchoranalysis.io.output.outputter.OutputWriteContext;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
 import org.anchoranalysis.io.output.path.prefixer.PathPrefixerContext;
 import org.anchoranalysis.io.output.path.prefixer.PathPrefixerException;
-import org.anchoranalysis.io.output.recorded.RecordedOutputsWithRules;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class OutputterCheckedFixture {
@@ -54,10 +56,13 @@ public class OutputterCheckedFixture {
             return outputManager.createExperimentOutputter(
                     Optional.of("debug"),
                     manifest,
-                    new RecordedOutputsWithRules(),
+                    new Permissive().create(Optional.empty()),
                     Optional.empty(),
+                    new OutputWriteContext(
+                            new OutputWriteSettings(),
+                            Optional.empty(),
+                            new ExecutionTimeRecorderFixture()),
                     new PathPrefixerContext(),
-                    new ExecutionTimeRecorderFixture(),
                     Optional.empty());
         } catch (PathPrefixerException e) {
             throw new BindFailedException(e);

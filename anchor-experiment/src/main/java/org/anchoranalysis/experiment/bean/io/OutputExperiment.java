@@ -36,6 +36,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.format.ImageFileFormat;
+import org.anchoranalysis.core.time.ExecutionTimeRecorder;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.arguments.ExecutionArguments;
 import org.anchoranalysis.experiment.bean.Experiment;
@@ -46,12 +47,15 @@ import org.anchoranalysis.experiment.log.StatefulMessageLogger;
 import org.anchoranalysis.experiment.task.ExperimentFeedbackContext;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.experiment.task.TaskStatistics;
+import org.anchoranalysis.experiment.time.DescribeExecutionTimeStatistics;
+import org.anchoranalysis.experiment.time.ExecutionTimeRecorderFactory;
 import org.anchoranalysis.io.generator.combined.ManifestGenerator;
 import org.anchoranalysis.io.generator.text.StringGenerator;
 import org.anchoranalysis.io.manifest.Manifest;
 import org.anchoranalysis.io.output.bean.OutputManager;
 import org.anchoranalysis.io.output.enabled.multi.MultiLevelOutputEnabled;
 import org.anchoranalysis.io.output.outputter.BindFailedException;
+import org.anchoranalysis.io.output.outputter.OutputWriteContext;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
 import org.anchoranalysis.io.output.path.prefixer.PathPrefixerException;
 import org.anchoranalysis.io.output.recorded.MultiLevelRecordedOutputs;
@@ -168,25 +172,35 @@ public abstract class OutputExperiment extends Experiment {
                 OptionalFactory.create(
                         !arguments.output().isOmitExperimentIdentifier(), () -> experimentId);
 
+        MultiLevelOutputEnabled outputsUnrecorded = defaultOutputs();
         RecordedOutputsWithRules outputs =
                 new RecordedOutputsWithRules(
                         recordedOutputs,
-                        defaultOutputs(),
+                        outputsUnrecorded,
                         arguments.output().getOutputEnabledDelta());
         Optional<ImageFileFormat> suggestedImageOutputFormat =
                 arguments.output().getPrefixer().getSuggestedImageOutputFormat();
         try {
-            ExecutionTimeStatistics executionTimeStatistics = new ExecutionTimeStatistics();
+            MultiLevelOutputEnabled enabledOutputs = getOutput().determineEnabledOutputs(outputs);
+
+            ExecutionTimeRecorder executionTimeRecorder =
+                    ExecutionTimeRecorderFactory.create(
+                            enabledOutputs.isOutputEnabled(OUTPUT_EXECUTION_TIME));
+
+            OutputWriteContext writeContext =
+                    getOutput()
+                            .createContextForWriting(
+                                    suggestedImageOutputFormat, executionTimeRecorder);
 
             OutputterChecked rootOutputter =
                     getOutput()
                             .createExperimentOutputter(
                                     experimentIdentifierForOutputPath,
                                     experimentalManifest,
-                                    outputs,
-                                    suggestedImageOutputFormat,
+                                    enabledOutputs,
+                                    outputs.getRecordedOutputs(),
+                                    writeContext,
                                     arguments.createPrefixerContext(),
-                                    executionTimeStatistics,
                                     Optional.empty());
 
             Preconditions.checkArgument(rootOutputter.getSettings().hasBeenInitialized());
@@ -195,7 +209,7 @@ public abstract class OutputExperiment extends Experiment {
                     new ExperimentFeedbackContext(
                             createLogger(rootOutputter, arguments),
                             useDetailedLogging(),
-                            executionTimeStatistics);
+                            executionTimeRecorder);
             return new ParametersExperiment(
                     arguments,
                     experimentId,
@@ -261,9 +275,9 @@ public abstract class OutputExperiment extends Experiment {
                             OUTPUT_EXECUTION_TIME,
                             StringGenerator::new,
                             () ->
-                                    ExecutionTimeStatisticsReport.report(
-                                            taskStatistics.get(),
-                                            params.getExecutionTimeStatistics(),
+                                    DescribeExecutionTimeStatistics.describeExecutionTimes(
+                                            taskStatistics.get().executionTimeTotal(),
+                                            params.executionTimeStatistics(),
                                             totalExecutionTimeSeconds));
         }
 

@@ -34,16 +34,18 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.format.ImageFileFormat;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.core.system.ExecutionTimeRecorder;
+import org.anchoranalysis.core.time.ExecutionTimeRecorder;
 import org.anchoranalysis.io.manifest.Manifest;
 import org.anchoranalysis.io.output.bean.path.prefixer.PathPrefixer;
 import org.anchoranalysis.io.output.bean.rules.OutputEnabledRules;
+import org.anchoranalysis.io.output.enabled.multi.MultiLevelOutputEnabled;
 import org.anchoranalysis.io.output.outputter.BindFailedException;
 import org.anchoranalysis.io.output.outputter.OutputWriteContext;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
 import org.anchoranalysis.io.output.path.prefixer.DirectoryWithPrefix;
 import org.anchoranalysis.io.output.path.prefixer.PathPrefixerContext;
 import org.anchoranalysis.io.output.path.prefixer.PathPrefixerException;
+import org.anchoranalysis.io.output.recorded.MultiLevelRecordedOutputs;
 import org.anchoranalysis.io.output.recorded.RecordedOutputsWithRules;
 
 /**
@@ -83,28 +85,54 @@ public class OutputManager extends AnchorBean<OutputManager> {
     // END BEAN PROPERTIES
 
     /**
+     * Determines which outputs are enabled or not.
+     *
+     * @param recordedOutputs where output-names are recorded as used/tested.
+     * @return a {@link MultiLevelOutputEnabled} which indicates which outputs are enabled or not.
+     */
+    public MultiLevelOutputEnabled determineEnabledOutputs(
+            RecordedOutputsWithRules recordedOutputs) {
+        return recordedOutputs.selectOutputEnabled(Optional.ofNullable(outputsEnabled));
+    }
+
+    /**
+     * Creates the {@link OutputWriteContext} needed for writing files.
+     *
+     * @param suggestedFormatToWrite a suggestion on what file-format to write.
+     * @param executionTimeRecorder for recording the execution-times of operations.
+     * @return newly created context.
+     */
+    public OutputWriteContext createContextForWriting(
+            Optional<ImageFileFormat> suggestedFormatToWrite,
+            ExecutionTimeRecorder executionTimeRecorder) {
+        return new OutputWriteContext(
+                getOutputWriteSettings(), suggestedFormatToWrite, executionTimeRecorder);
+    }
+
+    /**
      * Creates an outputter for the experiment in general.
      *
      * <p>i.e. this is not an outputter for a specific job.
      *
      * @param experimentIdentifier if defined, an identifier for the experiment, to be included in
      *     the directory root.
-     * @param manifest where output files are store
-     * @param recordedOutputs where output-names are recorded as used/tested
-     * @param suggestedFormatToWrite a suggestion on what file-format to write
-     * @param prefixerContext parameters for the file-path prefixer
-     * @param executionTimeRecorder records execution-times of write operations
-     * @param logger logger for warning for information messages when outputting
-     * @return a newly created outputter
+     * @param manifest where output files are store.
+     * @param outputsEnabled which outputs are enabled. This is typically provided via a call to
+     *     {@link #determineEnabledOutputs(RecordedOutputsWithRules)}.
+     * @parma writeContext context needed for writing. This is typically provided via a call to
+     *     {@link #createContextForWriting(Optional, ExecutionTimeRecorder)}.
+     * @param prefixerContext parameters for the file-path prefixer.
+     * @param logger logger for warning for information messages when outputting.
+     * @return a newly created outputter.
      * @throws BindFailedException
      */
     public OutputterChecked createExperimentOutputter(
             Optional<String> experimentIdentifier,
             Manifest manifest,
-            RecordedOutputsWithRules recordedOutputs,
-            Optional<ImageFileFormat> suggestedFormatToWrite,
+            MultiLevelOutputEnabled outputsEnabled,
+            Optional<MultiLevelRecordedOutputs> recordedOutputs,
+            OutputWriteContext writeContext,
             PathPrefixerContext prefixerContext,
-            ExecutionTimeRecorder executionTimeRecorder,
             Optional<Logger> logger)
             throws BindFailedException {
 
@@ -112,15 +140,13 @@ public class OutputManager extends AnchorBean<OutputManager> {
             DirectoryWithPrefix prefix =
                     prefixer.rootDirectoryPrefix(experimentIdentifier, prefixerContext);
             manifest.initialize(prefix.getDirectory());
+
             return OutputterChecked.createWithPrefix(
                     prefix,
-                    recordedOutputs.selectOutputEnabled(Optional.ofNullable(outputsEnabled)),
-                    new OutputWriteContext(
-                            getOutputWriteSettings(),
-                            suggestedFormatToWrite,
-                            executionTimeRecorder),
+                    outputsEnabled,
+                    writeContext,
                     Optional.of(manifest.getRootDirectory()),
-                    recordedOutputs.getRecordedOutputs(),
+                    recordedOutputs,
                     silentlyDeleteExisting,
                     logger);
 

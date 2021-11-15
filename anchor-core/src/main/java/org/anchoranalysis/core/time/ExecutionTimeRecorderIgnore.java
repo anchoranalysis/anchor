@@ -1,4 +1,6 @@
-package org.anchoranalysis.core.system;
+package org.anchoranalysis.core.time;
+
+import java.util.stream.Stream;
 
 /**
  * An implementation of {@link ExecutionTimeRecorder} that is a simple placeholder that does
@@ -31,5 +33,10 @@ public class ExecutionTimeRecorderIgnore implements ExecutionTimeRecorder {
     public void recordExecutionTime(
             String operationIdentifierFirst, String operationIdentiferSubsequent, long millis) {
         // NOTHING TO DO
+    }
+
+    @Override
+    public RecordedExecutionTimes recordedTimes() {
+        return new RecordedExecutionTimes(Stream.empty());
     }
 }

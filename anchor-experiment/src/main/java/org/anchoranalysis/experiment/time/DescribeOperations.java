@@ -23,13 +23,12 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.experiment.bean.io;
+package org.anchoranalysis.experiment.time;
 
-import java.util.Map.Entry;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.core.time.RecordedExecutionTimes;
 import org.anchoranalysis.core.value.LanguageUtilities;
-import org.anchoranalysis.math.arithmetic.RunningSum;
 
 /**
  * Describe the execution times in nicely formatted user strings.
@@ -37,7 +36,7 @@ import org.anchoranalysis.math.arithmetic.RunningSum;
  * @author Owen Feehan
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-class DescribeExecutionTimes {
+class DescribeOperations {
 
     /** The number of characters the identifier should be padded to. */
     private static final int WIDTH_IDENTIFIER = 35;
@@ -46,23 +45,15 @@ class DescribeExecutionTimes {
     private static final int WIDTH_EXECUTION_TIME = 13;
 
     /**
-     * Describes all operations recorded in a {@link ExecutionTimeStatistics}.
+     * Describes all operations whose execution-times were recorded.
      *
-     * @param operationStatistics the operations.
+     * @param operationStatistics the operations and associated execution-times.
      * @return a String describing the operations.
      */
-    public static String allOperations(ExecutionTimeStatistics operationStatistics) {
+    public static String allOperations(RecordedExecutionTimes operationStatistics) {
         if (!operationStatistics.isEmpty()) {
             StringBuilder builder = new StringBuilder();
-            for (Entry<String, RunningSum> entry : operationStatistics.entrySet()) {
-                RunningSum runningSum = entry.getValue();
-                builder.append(
-                        individual(
-                                entry.getKey(),
-                                runningSum.mean() / 1000,
-                                runningSum.getSum() / 1000,
-                                (int) runningSum.getCount()));
-            }
+            operationStatistics.forEach(recorded -> builder.append(individual(recorded)));
             return builder.toString();
         } else {
             return "";
@@ -72,23 +63,22 @@ class DescribeExecutionTimes {
     /**
      * Describes an individual execution time.
      *
-     * @param identifier the identifier describing the execution time.
-     * @param averageExecutionTime the <b>average execution time</b> in seconds.
-     * @param totalExecutionTime the <b>total execution time</b> in seconds.
-     * @param count the number of entities the executionTime refers to.
+     * @param operation the operation.
      * @return a String describing the individual execution time, with a newline at the end.
      */
-    public static String individual(
-            String identifier, double averageExecutionTime, double totalExecutionTime, int count) {
-        String paddedIdentifier = rightPadding(identifier, WIDTH_IDENTIFIER);
+    public static String individual(RecordedExecutionTimes.RecordedOperation operation) {
+        String paddedIdentifier =
+                rightPadding(operation.getOperationIdentifier(), WIDTH_IDENTIFIER);
         String suffix =
                 String.format(
-                        "across %d %s", count, LanguageUtilities.pluralizeMaybe(count, "instance"));
+                        "across %d %s",
+                        operation.getCount(),
+                        LanguageUtilities.pluralizeMaybe(operation.getCount(), "instance"));
         return String.format(
                 "%s\t = %s%s\t%s%n",
                 paddedIdentifier,
-                describeTime(averageExecutionTime),
-                describeTime(totalExecutionTime),
+                describeTime(operation.meanExecutionTimeSeconds()),
+                describeTime(operation.sumExecutionTimeSeconds()),
                 suffix);
     }
 

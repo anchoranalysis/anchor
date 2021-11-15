@@ -27,8 +27,8 @@
 package org.anchoranalysis.experiment.task.processor;
 
 import java.util.Optional;
+import org.anchoranalysis.core.log.Divider;
 import org.anchoranalysis.core.log.MessageLogger;
-import org.anchoranalysis.experiment.log.Divider;
 
 /**
  * Logs events when jobs start and stop, with or without errors.
