@@ -53,16 +53,14 @@ public class OutputWriteContext {
     /** Records the execution time of particular operations. */
     @Getter private ExecutionTimeRecorder executionTimeRecorder;
 
-    /**
-     * Create with default state, including no default beans assigned.
-     */
+    /** Create with default state, including no default beans assigned. */
     public OutputWriteContext() {
-        this( createAndInitializeSettings() );
+        this(createAndInitializeSettings());
     }
-    
+
     /**
      * Create from {@link OutputWriteSettings} and otherwise with defaults.
-     * 
+     *
      * @param settings the settings.
      */
     public OutputWriteContext(OutputWriteSettings settings) {
@@ -70,7 +68,7 @@ public class OutputWriteContext {
         suggestedFormatToWrite = Optional.empty();
         executionTimeRecorder = ExecutionTimeRecorderIgnore.instance();
     }
-    
+
     private static OutputWriteSettings createAndInitializeSettings() {
         OutputWriteSettings settings = new OutputWriteSettings();
         try {
