@@ -154,8 +154,8 @@ class AppendHelper {
     }
 
     private TimeSequence openRaster(Path path, StackReader stackReader) throws ImageIOException {
-        try (OpenedImageFile openedFile = stackReader.openFile(path, logger)) {
-            return openedFile.open();
+        try (OpenedImageFile openedFile = stackReader.openFile(path)) {
+            return openedFile.open(logger);
         }
     }
 }

@@ -29,6 +29,7 @@ package org.anchoranalysis.mpp.io.input;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
 import org.anchoranalysis.core.identifier.provider.store.StoreSupplier;
+import org.anchoranalysis.core.log.Logger;
 
 /**
  * A sub-item of a {@link MultiInput}.
@@ -47,8 +48,13 @@ public interface MultiInputSubMap<T> {
     /** Adds an entry to the map */
     void add(String name, StoreSupplier<T> supplier);
 
-    /** Copies all the existing entries into a {@link NamedProviderStore}. */
-    void addToStore(NamedProviderStore<T> namedStore) throws OperationFailedException;
+    /**
+     * Copies all the existing entries into a {@link NamedProviderStore}.
+     *
+     * @param logger a logger for any non-fatal errors. Fatal errors throw an exception.
+     */
+    void addToStore(NamedProviderStore<T> namedStore, Logger logger)
+            throws OperationFailedException;
 
     /** Returns null if non-existent */
     StoreSupplier<T> get(String name) throws OperationFailedException;

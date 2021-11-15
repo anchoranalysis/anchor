@@ -84,10 +84,11 @@ class ObjectDualDeserializer implements Deserializer<ObjectMask> {
             throws DeserializationFailedException {
         BoundingBox box = BOUNDING_BOX_DESERIALIZER.deserialize(pathSerializedBox, logger);
 
-        try (OpenedImageFile openedFile = stackReader.openFile(pathTiff, logger)) {
+        try (OpenedImageFile openedFile = stackReader.openFile(pathTiff)) {
             Stack stack =
                     openedFile
-                            .openCheckType(0, ProgressIgnore.get(), UnsignedByteVoxelType.INSTANCE)
+                            .openCheckType(
+                                    0, ProgressIgnore.get(), UnsignedByteVoxelType.INSTANCE, logger)
                             .get(0);
 
             if (stack.getNumberChannels() != 1) {

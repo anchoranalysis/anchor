@@ -28,10 +28,12 @@ package org.anchoranalysis.image.io.bean.channel;
 
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.io.channel.input.NamedEntries;
 import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
 
 public abstract class ChannelMap extends AnchorBean<ChannelMap> {
 
-    public abstract NamedEntries createMap(OpenedImageFile openedFile) throws CreateException;
+    public abstract NamedEntries createMap(OpenedImageFile openedFile, Logger logger)
+            throws CreateException;
 }

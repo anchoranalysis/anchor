@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.image.io.stack.input;
 
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.core.stack.TimeSequence;
 import org.anchoranalysis.image.io.ImageIOException;
 
@@ -40,6 +41,8 @@ public interface StackSequenceInput extends ProvidesStackInput {
      * Creates a supplier of a {@link TimeSequence} of stacks for a particular series number.
      *
      * @param seriesIndex the index.
+     * @param logger a logger for any non-fatal errors. Fatal errors throw an exception.
      */
-    TimeSequenceSupplier createStackSequenceForSeries(int seriesIndex) throws ImageIOException;
+    TimeSequenceSupplier createStackSequenceForSeries(int seriesIndex, Logger logger)
+            throws ImageIOException;
 }

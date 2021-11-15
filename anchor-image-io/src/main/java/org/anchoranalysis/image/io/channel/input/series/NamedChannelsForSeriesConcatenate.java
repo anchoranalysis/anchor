@@ -36,6 +36,7 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
 import org.anchoranalysis.core.identifier.provider.store.StoreSupplier;
 import org.anchoranalysis.core.index.GetOperationFailedException;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.core.progress.ProgressMultiple;
 import org.anchoranalysis.image.core.channel.Channel;
@@ -51,12 +52,13 @@ public class NamedChannelsForSeriesConcatenate implements NamedChannelsForSeries
     private List<NamedChannelsForSeries> list = new ArrayList<>();
 
     @Override
-    public Channel getChannel(String channelName, int timeIndex, Progress progress)
+    public Channel getChannel(String channelName, int timeIndex, Progress progress, Logger logger)
             throws GetOperationFailedException {
 
         for (NamedChannelsForSeries item : list) {
 
-            Optional<Channel> channel = item.getChannelOptional(channelName, timeIndex, progress);
+            Optional<Channel> channel =
+                    item.getChannelOptional(channelName, timeIndex, progress, logger);
             if (channel.isPresent()) {
                 return channel.get();
             }
@@ -68,12 +70,13 @@ public class NamedChannelsForSeriesConcatenate implements NamedChannelsForSeries
 
     @Override
     public Optional<Channel> getChannelOptional(
-            String channelName, int timeIndex, Progress progress)
+            String channelName, int timeIndex, Progress progress, Logger logger)
             throws GetOperationFailedException {
 
         for (NamedChannelsForSeries item : list) {
 
-            Optional<Channel> channel = item.getChannelOptional(channelName, timeIndex, progress);
+            Optional<Channel> channel =
+                    item.getChannelOptional(channelName, timeIndex, progress, logger);
             if (channel.isPresent()) {
                 return channel;
             }
@@ -82,24 +85,25 @@ public class NamedChannelsForSeriesConcatenate implements NamedChannelsForSeries
         return Optional.empty();
     }
 
-    public void addAsSeparateChannels(NamedStacks stackCollection, int t, Progress progress)
+    public void addAsSeparateChannels(
+            NamedStacks stackCollection, int t, Progress progress, Logger logger)
             throws OperationFailedException {
 
         try (ProgressMultiple progressMultiple = new ProgressMultiple(progress, list.size())) {
 
             for (NamedChannelsForSeries item : list) {
                 item.addAsSeparateChannels(
-                        stackCollection, t, progressMultiple.trackCurrentChild());
+                        stackCollection, t, progressMultiple.trackCurrentChild(), logger);
                 progressMultiple.incrementChild();
             }
         }
     }
 
     public void addAsSeparateChannels(
-            NamedProviderStore<TimeSequence> stackCollection, int timeIndex)
+            NamedProviderStore<TimeSequence> stackCollection, int timeIndex, Logger logger)
             throws OperationFailedException {
         for (NamedChannelsForSeries item : list) {
-            item.addAsSeparateChannels(stackCollection, timeIndex);
+            item.addAsSeparateChannels(stackCollection, timeIndex, logger);
         }
     }
 
@@ -120,17 +124,17 @@ public class NamedChannelsForSeriesConcatenate implements NamedChannelsForSeries
         return set;
     }
 
-    public int sizeT(Progress progress) throws ImageIOException {
+    public int sizeT(Progress progress, Logger logger) throws ImageIOException {
 
         int series = 0;
         boolean first = true;
 
         for (NamedChannelsForSeries item : list) {
             if (first) {
-                series = item.sizeT(progress);
+                series = item.sizeT(progress, logger);
                 first = false;
             } else {
-                series = Math.min(series, item.sizeT(progress));
+                series = Math.min(series, item.sizeT(progress, logger));
             }
         }
         return series;
@@ -146,9 +150,9 @@ public class NamedChannelsForSeriesConcatenate implements NamedChannelsForSeries
         return false;
     }
 
-    public Dimensions dimensions() throws ImageIOException {
+    public Dimensions dimensions(Logger logger) throws ImageIOException {
         // Assumes dimensions are the same for every item in the list
-        return list.get(0).dimensions();
+        return list.get(0).dimensions(logger);
     }
 
     public Iterator<NamedChannelsForSeries> iteratorFromRaster() {
@@ -156,8 +160,8 @@ public class NamedChannelsForSeriesConcatenate implements NamedChannelsForSeries
     }
 
     @Override
-    public StoreSupplier<Stack> allChannelsAsStack(int t) {
-        return StoreSupplier.cache(() -> stackAllChannels(t));
+    public StoreSupplier<Stack> allChannelsAsStack(int t, Logger logger) {
+        return StoreSupplier.cache(() -> stackAllChannels(t, logger));
     }
 
     @Override
@@ -166,11 +170,11 @@ public class NamedChannelsForSeriesConcatenate implements NamedChannelsForSeries
         return false;
     }
 
-    private Stack stackAllChannels(int timeIndex) throws OperationFailedException {
+    private Stack stackAllChannels(int timeIndex, Logger logger) throws OperationFailedException {
         Stack out = new Stack();
         for (NamedChannelsForSeries namedChannels : list) {
             try {
-                addAllChannelsFrom(namedChannels.allChannelsAsStack(timeIndex).get(), out);
+                addAllChannelsFrom(namedChannels.allChannelsAsStack(timeIndex, logger).get(), out);
             } catch (IncorrectImageSizeException e) {
                 throw new OperationFailedException(e);
             }

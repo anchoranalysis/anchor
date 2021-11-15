@@ -35,11 +35,12 @@ import java.util.Optional;
 import loci.formats.FormatException;
 import loci.formats.IFormatReader;
 import loci.formats.meta.IMetadata;
-import lombok.Getter;
 import lombok.experimental.Accessors;
 import org.anchoranalysis.core.cache.CachedSupplier;
 import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.core.functional.checked.CheckedSupplier;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.channel.factory.ChannelFactorySingleType;
@@ -49,6 +50,7 @@ import org.anchoranalysis.image.core.dimensions.OrientationChange;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.core.stack.TimeSequence;
 import org.anchoranalysis.image.io.ImageIOException;
+import org.anchoranalysis.image.io.stack.CalculateOrientationChange;
 import org.anchoranalysis.image.io.stack.input.ImageTimestampsAttributes;
 import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
@@ -79,14 +81,20 @@ class BioformatsOpenedRaster implements OpenedImageFile {
     private final int sizeT;
     private final boolean rgb;
     private final int bitsPerPixel;
-    private final OrientationChange orientationCorrection;
+
+    /** Calculates any change needed in orientation. */
+    private final CalculateOrientationChange calculateOrientation;
+
+    /** Stores the result of {@code calculateOrientation}, and is null until this is calculated. */
+    private OrientationChange orientation;
+
     private final CheckedSupplier<ImageTimestampsAttributes, ImageIOException> timestamps;
 
     /** The number of channels in the image. */
-    @Getter private final int numberChannels;
+    private final int numberChannels;
 
     /** A list of channel-names or {@link Optional#empty()} if unavailable. */
-    @Getter private final Optional<List<String>> channelNames;
+    private final Optional<List<String>> channelNames;
 
     /**
      * Creates with a particular {@link IFormatReader} and associated metadata.
@@ -94,19 +102,19 @@ class BioformatsOpenedRaster implements OpenedImageFile {
      * @param reader the reader.
      * @param metadata the metadata.
      * @param readOptions parameters that effect how to read the image.
-     * @param orientationCorrection any correction of orientation to be applied as bytes are
+     * @param calculateOrientation any correction of orientation to be applied as bytes are
      *     converted.
      */
     public BioformatsOpenedRaster(
             IFormatReader reader,
             IMetadata metadata,
             ReadOptions readOptions,
-            OrientationChange orientationCorrection,
+            CalculateOrientationChange calculateOrientation,
             CheckedSupplier<ImageTimestampsAttributes, ImageIOException> timestamps) {
         this.reader = reader;
         this.metadata = metadata;
         this.readOptions = readOptions;
-        this.orientationCorrection = orientationCorrection;
+        this.calculateOrientation = calculateOrientation;
         this.timestamps = CachedSupplier.cache(timestamps);
 
         sizeT = readOptions.sizeT(reader);
@@ -118,13 +126,14 @@ class BioformatsOpenedRaster implements OpenedImageFile {
     }
 
     @Override
-    public TimeSequence open(int seriesIndex, Progress progress) throws ImageIOException {
+    public TimeSequence open(int seriesIndex, Progress progress, Logger logger)
+            throws ImageIOException {
 
         int pixelType = reader.getPixelType();
 
         VoxelDataType dataType = multiplexFormat(pixelType);
 
-        return openAsType(seriesIndex, progress, dataType);
+        return openAsType(seriesIndex, progress, dataType, logger);
     }
 
     @Override
@@ -133,12 +142,17 @@ class BioformatsOpenedRaster implements OpenedImageFile {
     }
 
     @Override
-    public int numberFrames() {
+    public int numberFrames(Logger logger) {
         return sizeT;
     }
 
     @Override
-    public int bitDepth() {
+    public int numberChannels(Logger logger) throws ImageIOException {
+        return numberChannels;
+    }
+
+    @Override
+    public int bitDepth(Logger logger) {
         return bitsPerPixel;
     }
 
@@ -157,9 +171,9 @@ class BioformatsOpenedRaster implements OpenedImageFile {
     }
 
     @Override
-    public Dimensions dimensionsForSeries(int seriesIndex) throws ImageIOException {
+    public Dimensions dimensionsForSeries(int seriesIndex, Logger logger) throws ImageIOException {
         Dimensions dimensions = dimensionsForSeriesWithoutOrientationChange(seriesIndex);
-        return orientationCorrection.dimensions(dimensions);
+        return calculateOrientation(logger).dimensions(dimensions);
     }
 
     private Dimensions dimensionsForSeriesWithoutOrientationChange(int seriesIndex)
@@ -172,7 +186,8 @@ class BioformatsOpenedRaster implements OpenedImageFile {
     }
 
     /** Opens as a specific data-type. */
-    private TimeSequence openAsType(int seriesIndex, Progress progress, VoxelDataType dataType)
+    private TimeSequence openAsType(
+            int seriesIndex, Progress progress, VoxelDataType dataType, Logger logger)
             throws ImageIOException {
 
         try {
@@ -189,9 +204,10 @@ class BioformatsOpenedRaster implements OpenedImageFile {
             // Assumes order of time first, and then channels
             List<Channel> listAllChannels =
                     createUninitialisedChannels(
-                            dimensions, timeSequence, multiplexVoxelDataType(dataType));
+                            dimensions, timeSequence, multiplexVoxelDataType(dataType), logger);
 
-            copyBytesIntoChannels(listAllChannels, dimensions, progress, dataType, readOptions);
+            copyBytesIntoChannels(
+                    listAllChannels, dimensions, progress, dataType, readOptions, logger);
 
             LOG.debug(
                     String.format(
@@ -200,34 +216,41 @@ class BioformatsOpenedRaster implements OpenedImageFile {
 
             return timeSequence;
 
-        } catch (FormatException | IOException | IncorrectImageSizeException | CreateException e) {
+        } catch (ImageIOException e) {
             throw new ImageIOException(
                     String.format("An error occurred opening series %d", seriesIndex), e);
         }
     }
 
     private List<Channel> createUninitialisedChannels(
-            Dimensions dimensions, TimeSequence timeSequence, ChannelFactorySingleType factory)
-            throws IncorrectImageSizeException {
+            Dimensions dimensions,
+            TimeSequence timeSequence,
+            ChannelFactorySingleType factory,
+            Logger logger)
+            throws ImageIOException {
 
-        dimensions = orientationCorrection.dimensions(dimensions);
+        try {
+            dimensions = calculateOrientation(logger).dimensions(dimensions);
 
-        /** A list of all channels i.e. aggregating the channels associated with each stack */
-        List<Channel> listAllChannels = new ArrayList<>();
+            /** A list of all channels i.e. aggregating the channels associated with each stack */
+            List<Channel> listAllChannels = new ArrayList<>();
 
-        for (int t = 0; t < sizeT; t++) {
-            Stack stack = new Stack(isRGB());
-            for (int c = 0; c < numberChannels; c++) {
+            for (int t = 0; t < sizeT; t++) {
+                Stack stack = new Stack(isRGB());
+                for (int c = 0; c < numberChannels; c++) {
 
-                Channel channel = factory.createEmptyUninitialised(dimensions);
+                    Channel channel = factory.createEmptyUninitialised(dimensions);
 
-                stack.addChannel(channel);
-                listAllChannels.add(channel);
+                    stack.addChannel(channel);
+                    listAllChannels.add(channel);
+                }
+                timeSequence.add(stack);
             }
-            timeSequence.add(stack);
-        }
 
-        return listAllChannels;
+            return listAllChannels;
+        } catch (IncorrectImageSizeException e) {
+            throw new AnchorImpossibleSituationException();
+        }
     }
 
     private void copyBytesIntoChannels(
@@ -235,26 +258,49 @@ class BioformatsOpenedRaster implements OpenedImageFile {
             Dimensions dimensions,
             Progress progress,
             VoxelDataType dataType,
-            ReadOptions readOptions)
-            throws FormatException, IOException, CreateException {
+            ReadOptions readOptions,
+            Logger logger)
+            throws ImageIOException {
 
-        // Determine what type to convert to
-        ConvertTo<?> convertTo =
-                ConvertToFactory.create(
-                        reader, dataType, readOptions.effectiveBitsPerPixel(reader));
+        try {
+            // Determine what type to convert to
+            ConvertTo<?> convertTo =
+                    ConvertToFactory.create(
+                            reader, dataType, readOptions.effectiveBitsPerPixel(reader));
 
-        CopyConvert.copyAllFrames(
-                reader,
-                listChannels,
-                progress,
-                new ImageFileShape(dimensions, numberChannels, sizeT),
-                convertTo,
-                readOptions,
-                orientationCorrection);
+            CopyConvert.copyAllFrames(
+                    reader,
+                    listChannels,
+                    progress,
+                    new ImageFileShape(dimensions, numberChannels, sizeT),
+                    convertTo,
+                    readOptions,
+                    calculateOrientation(logger));
+        } catch (FormatException | IOException | CreateException e) {
+            throw new ImageIOException(
+                    "An error occurred while copying frames when opening with the BioformatsReader",
+                    e);
+        }
     }
 
     @Override
     public ImageTimestampsAttributes timestamps() throws ImageIOException {
         return timestamps.get();
+    }
+
+    @Override
+    public Optional<List<String>> channelNames(Logger logger) throws ImageIOException {
+        return channelNames;
+    }
+
+    /**
+     * Lazy evaluation of the orientation, using the logger associated with the job not the
+     * experiment.
+     */
+    private OrientationChange calculateOrientation(Logger logger) throws ImageIOException {
+        if (orientation == null) {
+            orientation = calculateOrientation.calculateOrientationChange(logger);
+        }
+        return orientation;
     }
 }

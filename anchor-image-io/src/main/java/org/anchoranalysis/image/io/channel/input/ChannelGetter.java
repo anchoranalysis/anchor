@@ -27,6 +27,7 @@
 package org.anchoranalysis.image.io.channel.input;
 
 import org.anchoranalysis.core.index.GetOperationFailedException;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.image.core.channel.Channel;
 
@@ -34,6 +35,6 @@ public interface ChannelGetter {
 
     boolean hasChannel(String channelName);
 
-    Channel getChannel(String channelName, int timeIndex, Progress progress)
+    Channel getChannel(String channelName, int timeIndex, Progress progress, Logger logger)
             throws GetOperationFailedException;
 }
