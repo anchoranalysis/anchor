@@ -48,7 +48,7 @@ public class InputContextParams {
     @Getter @Setter private Optional<List<Path>> inputPaths;
 
     /** If defined, a directory which can be used by beans to find input */
-    @Getter private Optional<Path> inputDirectory;
+    @Getter private Optional<Path> inputDirectory = Optional.empty();
 
     /** A glob that can be used by beans to filter input */
     @Getter @Setter private String inputFilterGlob = "*";
