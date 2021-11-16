@@ -86,9 +86,9 @@ public class DimensionsCreator {
     }
 
     /**
-     * Maybe update a particular dimension with resolution-information from metadata
+     * Maybe update a particular dimension with resolution-information from metadata.
      *
-     * @param dimensionFromMetadata gets metadata for a particular dimension
+     * @param dimensionFromMetadata gets metadata for a particular dimension.
      * @param assigner assigns this dimension's metadata to the {@link Point3d}.
      * @return true if the dimension was assigned, otherwise false.
      */
