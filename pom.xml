@@ -142,11 +142,13 @@
 		
 		<plugins>
 				<plugin>
-				    <!-- Prevent parent POM from being automatically deployed, relying instead on manually using the release plugin. -->
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-deploy-plugin</artifactId>
 					<configuration>
-						<skip>true</skip>
+						<!-- When using a release parent pom, this should be true to prevent parent POM from being automatically deployed, relying instead on manually using the release plugin. 
+						When using a snapshot parent pom, this should be false.
+						-->
+						<skip>false</skip>
 					</configuration>
 					<inherited>false</inherited>
 			  </plugin>
