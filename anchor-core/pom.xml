@@ -3,7 +3,7 @@
   <parent>
 	  <groupId>org.anchoranalysis.anchor</groupId>
 	  <artifactId>anchor-parent</artifactId>
-	  <version>0.1.2</version>
+	  <version>0.1.3-SNAPSHOT</version>
   </parent>
   <artifactId>anchor-core</artifactId>
   <version>0.1.4-SNAPSHOT</version>
