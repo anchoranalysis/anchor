@@ -57,7 +57,7 @@ final class WithinObjectMask<T> implements ProcessVoxelNeighbor<T> {
     public WithinObjectMask(ProcessChangedPointAbsoluteMasked<T> process, ObjectMask object) {
         this.delegate = process;
         this.object = object;
-        this.maskOffVal = object.binaryValuesByte().getOffByte();
+        this.maskOffVal = object.binaryValuesByte().getOff();
         this.extent = object.extent();
         this.cornerMin = object.boundingBox().cornerMin();
     }

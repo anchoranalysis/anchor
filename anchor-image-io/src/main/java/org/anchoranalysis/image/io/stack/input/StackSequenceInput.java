@@ -27,8 +27,8 @@
 package org.anchoranalysis.image.io.stack.input;
 
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.image.core.stack.TimeSequence;
 import org.anchoranalysis.image.io.ImageIOException;
+import org.anchoranalysis.image.io.stack.time.TimeSequence;
 
 /**
  * Provides a single stack (or a time series of such stacks) as an input

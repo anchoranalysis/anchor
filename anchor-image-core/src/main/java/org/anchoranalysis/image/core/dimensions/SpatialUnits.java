@@ -51,13 +51,28 @@ public class SpatialUnits {
 
     /** Suffix that describes a particular quantity of units (micron, nano, square microns etc.) */
     public enum UnitSuffix {
+        /** No suffix. */
         NONE,
+
+        /** A unit amount. */
         BASE,
+
+        /** 1e-9 cubed. */
         CUBIC_NANO,
+
+        /** 1e-9 squared. */
         SQUARE_NANO,
+
+        /** 1e-9 */
         NANO,
+
+        /** 1e-6 cubed. */
         CUBIC_MICRO,
+
+        /** 1e-6 squared. */
         SQUARE_MICRO,
+
+        /** 1e-6. */
         MICRO
     }
 

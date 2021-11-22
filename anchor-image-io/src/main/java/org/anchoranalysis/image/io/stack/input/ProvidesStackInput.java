@@ -32,9 +32,9 @@ import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.core.progress.ProgressIgnore;
 import org.anchoranalysis.image.core.stack.Stack;
-import org.anchoranalysis.image.core.stack.TimeSequence;
 import org.anchoranalysis.image.core.stack.named.NamedStacks;
-import org.anchoranalysis.image.core.stack.time.WrapStackAsTimeSequenceStore;
+import org.anchoranalysis.image.io.stack.time.TimeSequence;
+import org.anchoranalysis.image.io.stack.time.WrapStackAsTimeSequenceStore;
 import org.anchoranalysis.io.input.InputFromManager;
 
 /**
@@ -54,7 +54,7 @@ public interface ProvidesStackInput extends InputFromManager {
      */
     default NamedStacks asSet(Progress progress, Logger logger) throws OperationFailedException {
         NamedStacks set = new NamedStacks();
-        addToStoreInferNames(new WrapStackAsTimeSequenceStore(set, 0), 0, progress, logger);
+        addToStoreInferNames(new WrapStackAsTimeSequenceStore(set), 0, progress, logger);
         return set;
     }
 

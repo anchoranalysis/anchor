@@ -42,7 +42,6 @@ import org.anchoranalysis.feature.io.csv.FeatureTableCSVGenerator;
 import org.anchoranalysis.feature.results.ResultsVectorList;
 import org.anchoranalysis.feature.session.calculator.multi.FeatureCalculatorMulti;
 import org.anchoranalysis.image.core.dimensions.SpatialUnits.UnitSuffix;
-import org.anchoranalysis.image.core.orientation.DirectionVector;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureListEvaluator;
 import org.anchoranalysis.image.feature.bean.object.single.CenterOfGravity;
 import org.anchoranalysis.image.feature.bean.object.single.NumberVoxels;
@@ -55,6 +54,7 @@ import org.anchoranalysis.io.generator.tabular.CSVGenerator;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.spatial.axis.Axis;
+import org.anchoranalysis.spatial.orientation.DirectionVector;
 
 /** @author Owen Feehan */
 class ObjectFeatureListCSVGenerator extends CSVGenerator<ObjectCollection> {

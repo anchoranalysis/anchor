@@ -33,7 +33,7 @@ import org.anchoranalysis.image.voxel.binary.values.BinaryValuesInt;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 
 /**
- * Helper routines to create new instances of {@link Mask}
+ * Helper routines to create new instances of {@link Mask}.
  *
  * @author Owen Feehan
  */
@@ -43,10 +43,10 @@ public class MaskFactory {
     /**
      * Creates a binary-mask for specific dimensions with all voxels set to <i>off</i>.
      *
-     * <p>The mask uses default binary-values of <i>off</i> (0) and <i>on</i> (255)
+     * <p>The mask uses default binary-values of <i>off</i> (0) and <i>on</i> (255).
      *
-     * @param dimensions the dimensions to create the mask for
-     * @return a newly created binary-mask with newly-created buffers
+     * @param dimensions the dimensions to create the mask for.
+     * @return a newly created binary-mask with newly-created buffers.
      */
     public static Mask createMaskOff(Dimensions dimensions) {
         return createMaskOff(dimensions, BinaryValuesInt.getDefault());
@@ -55,9 +55,9 @@ public class MaskFactory {
     /**
      * Creates a binary-mask for specific dimensions with all voxels set to <i>off</i>.
      *
-     * @param dimensions the dimensions to create the mask for
-     * @param binaryValues binary-values
-     * @return a newly created binary-mask with newly-created buffers
+     * @param dimensions the dimensions to create the mask for.
+     * @param binaryValues binary-values.
+     * @return a newly created binary-mask with newly-created buffers.
      */
     public static Mask createMaskOff(Dimensions dimensions, BinaryValuesInt binaryValues) {
         Mask mask =
@@ -67,7 +67,7 @@ public class MaskFactory {
                         binaryValues);
         // By default the voxels are 0. If <i>off</i> value is not 0, it needs to be explicitly
         // assigned.
-        if (binaryValues.getOffInt() != 0) {
+        if (binaryValues.getOff() != 0) {
             mask.assignOff().toAll();
         }
         return mask;
@@ -76,21 +76,21 @@ public class MaskFactory {
     /**
      * Creates a binary-mask for specific dimensions with all voxels set to <i>on</i>.
      *
-     * <p>The mask uses default binary-values of <i>off</i> (0) and <i>on</i> (255)
+     * <p>The mask uses default binary-values of <i>off</i> (0) and <i>on</i> (255).
      *
-     * @param dimensions the dimensions to create the mask for
-     * @return a newly created binary-mask with newly-created buffers
+     * @param dimensions the dimensions to create the mask for.
+     * @return a newly created binary-mask with newly-created buffers.
      */
     public static Mask createMaskOn(Dimensions dimensions) {
         return createMaskOn(dimensions, BinaryValuesInt.getDefault());
     }
 
     /**
-     * Creates a binary-mask for specific dimensions with all voxels set to ON
+     * Creates a binary-mask for specific dimensions with all voxels set to <i>on</i>.
      *
-     * @param dimensions the dimensions to create the mask for
-     * @param binaryValues binary-values
-     * @return a newly created binary-mask with newly-created buffers
+     * @param dimensions the dimensions to create the mask for.
+     * @param binaryValues binary-values.
+     * @return a newly created binary-mask with newly-created buffers.
      */
     public static Mask createMaskOn(Dimensions dimensions, BinaryValuesInt binaryValues) {
         Mask mask = createMaskOff(dimensions, binaryValues);

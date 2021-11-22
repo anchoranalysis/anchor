@@ -38,9 +38,20 @@ import org.anchoranalysis.bean.exception.BeanStrangeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.FunctionalList;
 
+/**
+ * Routines that operation on the fields of an {@link AnchorBean}.
+ *
+ * @author Owen Feehan
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class HelperBeanFields {
 
+    /**
+     * Creates a human-readable description of all child-beans contained in {@code bean}.
+     *
+     * @param bean the bean whose children are described.
+     * @return a human-readable description.
+     */
     public static String describeChildBeans(AnchorBean<?> bean) {
         try {
             List<String> descriptions =

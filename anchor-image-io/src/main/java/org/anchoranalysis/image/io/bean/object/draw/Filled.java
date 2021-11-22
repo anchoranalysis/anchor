@@ -57,7 +57,7 @@ public class Filled extends DrawObject {
                     throws OperationFailedException {
 
                 IntersectionWriter.writeRGBMaskIntersection(
-                        object.withoutProperties(),
+                        object.asObjectMask(),
                         attributes.colorFor(object, iteration),
                         background,
                         restrictTo);

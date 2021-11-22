@@ -91,7 +91,7 @@ public class ObjectAsMaskGenerator extends RasterGeneratorSelectFormat<ObjectMas
     private static Channel createChannelFromMask(
             ObjectMask objectMask, Optional<Resolution> resolution) {
 
-        int outOnValue = BinaryValuesByte.getDefault().getOnByte();
+        int outOnValue = BinaryValuesByte.getDefault().getOn();
 
         BoundingBox box = objectMask.boundingBox();
 
@@ -102,7 +102,7 @@ public class ObjectAsMaskGenerator extends RasterGeneratorSelectFormat<ObjectMas
 
         Voxels<UnsignedByteBuffer> voxelsNew = channelNew.voxels().asByte();
 
-        byte matchValue = objectMask.binaryValuesByte().getOnByte();
+        byte matchValue = objectMask.binaryValuesByte().getOn();
         byte outOnValueByte = (byte) outOnValue;
 
         Point3i pointLocal = new Point3i();

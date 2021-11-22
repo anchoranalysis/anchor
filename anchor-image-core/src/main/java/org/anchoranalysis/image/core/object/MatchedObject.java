@@ -44,6 +44,11 @@ public final class MatchedObject {
     /** The matches associated with the source-object */
     private final ObjectCollection matches;
 
+    /**
+     * The number of objects in {@code matches}.
+     *
+     * @return the number of objects.
+     */
     public int numberMatches() {
         return this.matches.size();
     }

@@ -78,7 +78,7 @@ abstract class Base<T> implements VoxelsArithmetic {
 
         BoundingBox box = object.boundingBox();
 
-        byte maskOnByte = object.binaryValuesByte().getOnByte();
+        byte maskOnByte = object.binaryValuesByte().getOn();
 
         ReadableTuple3i pointMax = box.calculateCornerMaxExclusive();
         for (int z = box.cornerMin().z(); z < pointMax.z(); z++) {
@@ -102,7 +102,7 @@ abstract class Base<T> implements VoxelsArithmetic {
 
         BoundingBox box = object.boundingBox();
 
-        byte maskOnByte = object.binaryValuesByte().getOnByte();
+        byte maskOnByte = object.binaryValuesByte().getOn();
 
         ReadableTuple3i pointMax = box.calculateCornerMax();
         for (int z = box.cornerMin().z(); z <= pointMax.z(); z++) {

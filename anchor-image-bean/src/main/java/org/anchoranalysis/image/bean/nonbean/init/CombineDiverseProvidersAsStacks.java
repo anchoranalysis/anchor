@@ -99,7 +99,7 @@ class CombineDiverseProvidersAsStacks implements NamedProvider<Stack> {
         ObjectMask object =
                 voxels.voxels()
                         .extract()
-                        .voxelsEqualTo(voxels.binaryValues().getOnInt())
+                        .voxelsEqualTo(voxels.binaryValues().getOn())
                         .deriveObject(new BoundingBox(voxels.extent()));
         try {
             channelNew.replaceVoxels(object.voxels());

@@ -29,11 +29,11 @@ package org.anchoranalysis.mpp.bean.proposer;
 import java.util.Optional;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
-import org.anchoranalysis.image.core.orientation.Orientation;
 import org.anchoranalysis.mpp.bean.MarksBean;
 import org.anchoranalysis.mpp.mark.CompatibleWithMark;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.proposer.ProposalAbnormalFailureException;
+import org.anchoranalysis.spatial.orientation.Orientation;
 
 public abstract class OrientationProposer extends MarksBean<OrientationProposer>
         implements CompatibleWithMark {

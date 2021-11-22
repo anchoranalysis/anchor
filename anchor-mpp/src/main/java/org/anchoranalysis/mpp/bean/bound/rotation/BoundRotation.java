@@ -30,7 +30,7 @@ import java.util.Optional;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.core.dimensions.Resolution;
-import org.anchoranalysis.image.core.orientation.Orientation;
+import org.anchoranalysis.spatial.orientation.Orientation;
 
 public abstract class BoundRotation extends AnchorBean<BoundRotation> {
 

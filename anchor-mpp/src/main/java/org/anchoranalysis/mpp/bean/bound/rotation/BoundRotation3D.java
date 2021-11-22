@@ -32,10 +32,10 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.core.dimensions.Resolution;
-import org.anchoranalysis.image.core.orientation.Orientation;
-import org.anchoranalysis.image.core.orientation.Orientation3DEulerAngles;
 import org.anchoranalysis.mpp.bean.bound.Bound;
 import org.anchoranalysis.mpp.bean.bound.BoundUnitless;
+import org.anchoranalysis.spatial.orientation.Orientation;
+import org.anchoranalysis.spatial.orientation.Orientation3DEulerAngles;
 
 /**
  * Creates a randomly-generated orientation in 3D based upon Euler Angles

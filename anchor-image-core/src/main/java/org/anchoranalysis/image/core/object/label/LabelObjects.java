@@ -84,10 +84,11 @@ public class LabelObjects<T> {
      *
      * @param elements the elements to write IDs for and a bounding-box that contains them all.
      * @param mapLabels if set, an entry is added for every labelled element (unscaled) to the label
-     *     it is assigned
+     *     it is assigned.
      * @return a channel of the same-size as the containing bounding-box in {@code elements} and
-     *     with unique IDs for each element, and 0 for voxels not belonging to any element
-     * @throws CreateException
+     *     with unique IDs for each element, and 0 for voxels not belonging to any element.
+     * @throws CreateException if there are more than 255 objects, or if two objects overlap when
+     * this cannot handled gracefully.
      */
     public Channel createLabelledChannel(
             BoundedList<T> elements, Optional<Map<Integer, T>> mapLabels) throws CreateException {
@@ -118,7 +119,8 @@ public class LabelObjects<T> {
      * @param elements the element to write IDs for
      * @param mapLabels if set, an entry is added for every labelled element (unscaled) to the label
      *     it is assigned
-     * @throws CreateException
+     * @throws CreateException if there are more than 255 objects, or if two objects overlap (and
+     *     {@code overlappingObjectConsumer} is not set).
      */
     public void labelElements(
             Channel channel, List<T> elements, Optional<Map<Integer, T>> mapLabels)
@@ -145,7 +147,7 @@ public class LabelObjects<T> {
      * @param operationAfterMap an operation applied to each element after they are maybe added to
      *     {@code mapLabelsToBefore} but before their labels are written to voxels
      * @throws CreateException if there are more than 255 objects, or if two objects overlap (and
-     *     {@code overlappingObjectConsumer} is not set)
+     *     {@code overlappingObjectConsumer} is not set).
      */
     private void performLabelling(
             Channel channel,

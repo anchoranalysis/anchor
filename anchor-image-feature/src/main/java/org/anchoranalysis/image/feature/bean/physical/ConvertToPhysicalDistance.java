@@ -40,7 +40,7 @@ import org.anchoranalysis.image.bean.spatial.direction.DirectionVectorBean;
 import org.anchoranalysis.image.bean.spatial.direction.VectorInDirection;
 import org.anchoranalysis.image.core.dimensions.SpatialUnits.UnitSuffix;
 import org.anchoranalysis.image.core.dimensions.UnitConverter;
-import org.anchoranalysis.image.core.orientation.DirectionVector;
+import org.anchoranalysis.spatial.orientation.DirectionVector;
 
 //
 @NoArgsConstructor

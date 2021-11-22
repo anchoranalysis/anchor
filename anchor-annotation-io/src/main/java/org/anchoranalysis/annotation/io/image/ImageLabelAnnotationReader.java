@@ -37,7 +37,7 @@ import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.io.input.InputReadFailedException;
 
 /**
- * Reads a {@link ImageLabelAnnotation} from the file-system.
+ * Reads an {@link ImageLabelAnnotation} from the file-system.
  *
  * @author Owen Feehan
  */

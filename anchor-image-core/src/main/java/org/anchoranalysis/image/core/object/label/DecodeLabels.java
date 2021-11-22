@@ -54,7 +54,7 @@ public class DecodeLabels<T> {
     private static final int BACKGROUND_LABEL = 0;
 
     /**
-     * Creates an element from the scaled-object and its index
+     * Creates an element from the scaled-object and its index.
      *
      * @author Owen Feehan
      * @param <T> element-type (an object-mask, or some class containing an object-mask).
@@ -73,14 +73,14 @@ public class DecodeLabels<T> {
     }
 
     /**
-     * Voxels each labelled with an integer (sequentially increasing from 1) to represent an object
+     * Voxels each labelled with an integer (sequentially increasing from 1) to represent an object.
      */
     private Voxels<?> voxels;
 
-    /** Minimum label-value inclusive */
+    /** Minimum label-value inclusive. */
     private int minLabelInclusive;
 
-    /** Maximum label-value inclusive */
+    /** Maximum label-value inclusive. */
     private int maxLabelInclusive;
 
     /** Create scaled element from a scaled-object and corresponding index. */
@@ -91,12 +91,12 @@ public class DecodeLabels<T> {
      * (sequentially increasing) in voxels.
      *
      * @param labelMap a map from a label to what becomes the key in the output map (each label
-     *     should map to a unique key)
+     *     should map to a unique key).
      * @param operationAfterScaling an operation to apply after labelling, but before the element is
-     *     placed in the map
+     *     placed in the map.
      * @return a map constructed key from {@code labelMap} and value as the element is derived from
-     *     the label - for each label
-     * @throws CreateException
+     *     the label - for each label.
+     * @throws CreateException if bounding-boxes cannot be derived.
      */
     public Map<T, T> create(Map<Integer, T> labelMap, UnaryOperator<T> operationAfterScaling)
             throws CreateException {
@@ -109,11 +109,11 @@ public class DecodeLabels<T> {
 
     /**
      * Creates a list of elements from voxels that are labelled with unique integers (sequentially
-     * increasing)
+     * increasing).
      *
-     * @param smallVolumeThreshold minimum volume of bounding-box otherwise a label is ignored
-     * @return a list of respective elements, one for each label
-     * @throws CreateException if bounding-boxes cannot be derived
+     * @param smallVolumeThreshold minimum volume of bounding-box otherwise a label is ignored.
+     * @return a list of respective elements, one for each label.
+     * @throws CreateException if bounding-boxes cannot be derived.
      */
     public List<T> create(int smallVolumeThreshold) throws CreateException {
         try {
@@ -136,9 +136,9 @@ public class DecodeLabels<T> {
      * Derives bounding-boxes to minimally fit all voxels that match a label (for each label in a
      * sequence)
      *
-     * @return a list of respective bounding-boxes, one for each label
+     * @return a list of respective bounding-boxes, one for each label.
      * @throws OperationFailedException if an {@link IndexOutOfBoundsException} occurs that suggests
-     *     incorrect {@code minLabelInclusive} / {@code maxLabelInclusive} parameters were passed
+     *     incorrect {@code minLabelInclusive} / {@code maxLabelInclusive} parameters were passed.
      */
     private List<BoundingBox> deriveBoundingBoxes() throws OperationFailedException {
 
@@ -163,7 +163,7 @@ public class DecodeLabels<T> {
                     }
                 });
 
-        /** Convert to bounding-boxes after filtering any empty point-ranges */
+        /** Convert to bounding-boxes after filtering any empty point-ranges. */
         return FunctionalList.filterAndMapToList(
                 list, pointRange -> !pointRange.isEmpty(), PointRange::toBoundingBoxNoCheck);
     }

@@ -30,8 +30,8 @@ import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.core.dimensions.Resolution;
+import org.anchoranalysis.spatial.orientation.RotationMatrix;
 import org.anchoranalysis.spatial.point.Point3d;
-import org.anchoranalysis.spatial.rotation.RotationMatrix;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class EllipsoidUtilities {
@@ -41,7 +41,7 @@ public class EllipsoidUtilities {
 
         // We get the rotated points of (1,0,0)*getRadii().x() and (0,1,0)*getRadii().y() and
         // (0,1,0)*getRadii().z()
-        RotationMatrix rotMatrix = mark.getOrientation().createRotationMatrix();
+        RotationMatrix rotMatrix = mark.getOrientation().deriveRotationMatrix();
 
         Point3d xRot = rotMatrix.rotatedPoint(new Point3d(mark.getRadii().x(), 0, 0));
         Point3d yRot = rotMatrix.rotatedPoint(new Point3d(0, mark.getRadii().y(), 0));

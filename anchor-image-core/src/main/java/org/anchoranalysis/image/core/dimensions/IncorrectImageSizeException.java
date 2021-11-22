@@ -26,18 +26,24 @@
 
 package org.anchoranalysis.image.core.dimensions;
 
-import org.anchoranalysis.core.exception.AnchorCheckedException;
+import org.anchoranalysis.core.exception.friendly.AnchorFriendlyCheckedException;
 
-public class IncorrectImageSizeException extends AnchorCheckedException {
+/**
+ * When an image has incompatible image-size with expectations.
+ *
+ * @author Owen Feehan
+ */
+public class IncorrectImageSizeException extends AnchorFriendlyCheckedException {
 
     /** */
-    private static final long serialVersionUID = -7881057360315158663L;
+    private static final long serialVersionUID = 1L;
 
-    public IncorrectImageSizeException(String string) {
-        super(string);
-    }
-
-    public IncorrectImageSizeException(Exception exc) {
-        super(exc);
+    /**
+     * Create with a message.
+     *
+     * @param message the message.
+     */
+    public IncorrectImageSizeException(String message) {
+        super(message);
     }
 }

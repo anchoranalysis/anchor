@@ -26,12 +26,27 @@
 
 package org.anchoranalysis.image.core.channel.convert.attached.channel;
 
+import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.channel.convert.attached.histogram.UpperLowerQuantileIntensityFromHistogram;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 
-// Scales by a quantile of the intensity values of an image
+/**
+ * Converts a {@link Channel} to {@link UnsignedByteBuffer} by scaling against lower and upper
+ * <b>quantiles</b> of the intensity values that appear in it.
+ *
+ * <p>Specifically, the range is from {@code calculate_quantile(intensity, quantileLower)} to {@code
+ * calculate_quantile(intensity, quantileUpper)} across all voxels.
+ *
+ * @author Owen Feehan
+ */
 public class UpperLowerQuantileIntensity extends DelegateToHistogram<UnsignedByteBuffer> {
 
+    /**
+     * Scale with quantile values for the lower and upper boundaries.
+     *
+     * @param quantileLower quantile that defines the <b>lower</b> boundary.
+     * @param quantileUpper quantile that defines the <b>upper</b> boundary.
+     */
     public UpperLowerQuantileIntensity(double quantileLower, double quantileUpper) {
         super(new UpperLowerQuantileIntensityFromHistogram(quantileLower, quantileUpper));
     }

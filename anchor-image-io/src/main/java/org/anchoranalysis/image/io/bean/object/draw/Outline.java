@@ -32,9 +32,9 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.image.core.contour.FindContour;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.object.properties.ObjectWithProperties;
-import org.anchoranalysis.image.core.outline.FindOutline;
 import org.anchoranalysis.image.core.stack.RGBStack;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.overlay.bean.DrawObject;
@@ -73,8 +73,8 @@ public class Outline extends DrawObject {
             throws CreateException {
 
         ObjectMask outline =
-                FindOutline.outline(
-                        object.withoutProperties(), outlineWidth, (dim.z() > 1) && includeZ, true);
+                FindContour.createFrom(
+                        object.asObjectMask(), outlineWidth, (dim.z() > 1) && includeZ, true);
 
         ObjectWithProperties objectWithProperties =
                 new ObjectWithProperties(outline, object.getProperties());

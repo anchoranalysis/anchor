@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.image.core.channel.convert;
 
+import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.convert.ToByteNoScaling;
 import org.anchoranalysis.image.voxel.convert.VoxelsConverter;
@@ -33,7 +34,8 @@ import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 
 /**
- * Converts from other data types to {@link UnsignedByteBuffer} (unsigned 8-bit) without scaling.
+ * Converts a {@link Channel} to have a voxel data type of {@link UnsignedByteBuffer} (unsigned
+ * 8-bit) without scaling.
  *
  * <p>This implies undefined behaviour for values in the source data-type that lie outside the range
  * of {@link UnsignedByteBuffer}.
@@ -42,10 +44,16 @@ import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
  */
 public class ToUnsignedByte extends ChannelConverter<UnsignedByteBuffer> {
 
+    /** Converting without scaling any values. */
     public ToUnsignedByte() {
         this(new ToByteNoScaling());
     }
 
+    /**
+     * Convert with a particular {@link VoxelsConverter}.
+     *
+     * @param voxelsConverter the converter.
+     */
     public ToUnsignedByte(VoxelsConverter<UnsignedByteBuffer> voxelsConverter) {
         super(UnsignedByteVoxelType.INSTANCE, voxelsConverter, VoxelsFactory.getUnsignedByte());
     }

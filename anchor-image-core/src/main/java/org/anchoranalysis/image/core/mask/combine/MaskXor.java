@@ -35,12 +35,18 @@ import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxelsAll;
 
+/**
+ * Performs a logical <b>xor (exclusive or)</b> operation on corresponding voxels in two {@link
+ * Mask}s.
+ *
+ * @author Owen Feehan
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MaskXor {
 
     /**
-     * Performs a XOR (exclusive OR) operation on each voxel in two masks, writing the result onto
-     * the first mask.
+     * Performs a logical <b>xor (exclusive or)</b> operation on each voxel in two masks, writing
+     * the result onto the first mask.
      *
      * @param first the first channel for operation (and in which the result is written)
      * @param second the second channel for operation
@@ -50,8 +56,8 @@ public class MaskXor {
     }
 
     /**
-     * Performs a XOR (exclusive OR) operation on each voxel in two {@link Voxels} (considered to be
-     * masks), writing the result onto the second mask.
+     * Performs a logical <b>xor (exclusive or)</b> operation on each voxel in two {@link Voxels}
+     * (considered to be masks), writing the result onto the second mask.
      *
      * @param voxelsFirst the first voxels for operation
      * @param voxelsSecond the second voxels for operation (and in which the result is written)
@@ -62,10 +68,10 @@ public class MaskXor {
 
         BinaryValuesByte binaryValuesFirst = voxelsFirst.binaryValues().asByte();
         BinaryValuesByte binaryValuesSecond = voxelsSecond.binaryValues().asByte();
-        byte sourceOn = binaryValuesFirst.getOnByte();
-        byte sourceOff = binaryValuesFirst.getOffByte();
+        byte sourceOn = binaryValuesFirst.getOn();
+        byte sourceOff = binaryValuesFirst.getOff();
 
-        byte receiveOn = binaryValuesSecond.getOnByte();
+        byte receiveOn = binaryValuesSecond.getOn();
 
         IterateVoxelsAll.withTwoBuffersAndPoint(
                 voxelsFirst.voxels(),

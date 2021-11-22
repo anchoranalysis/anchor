@@ -118,7 +118,7 @@ public class TextStyle extends AnchorBean<TextStyle> {
             drawCenteredString(element, resolvedSize, graphics);
 
             try {
-                return CreateStackFromBufferedImage.create(bufferedImage);
+                return CreateStackFromBufferedImage.createFrom(bufferedImage);
             } catch (OperationFailedException e) {
                 throw new OutputWriteFailedException(e);
             }

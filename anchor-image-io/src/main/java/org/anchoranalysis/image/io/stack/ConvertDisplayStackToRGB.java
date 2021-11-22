@@ -43,11 +43,11 @@ public class ConvertDisplayStackToRGB {
         try {
             if (background.getNumberChannels() == 1) {
                 return new RGBStack(
-                        background.createChannelDuplicate(0),
-                        background.createChannelDuplicate(0),
-                        background.createChannelDuplicate(0));
+                        background.createChannel(0, true),
+                        background.createChannel(0, true),
+                        background.createChannel(0, true));
             } else if (background.getNumberChannels() == 3) {
-                return new RGBStack(background.deriveStackDuplicate());
+                return new RGBStack(background.deriveStack(true));
             } else {
                 throw new AnchorImpossibleSituationException();
             }
@@ -60,13 +60,13 @@ public class ConvertDisplayStackToRGB {
 
         try {
             if (background.getNumberChannels() == 1) {
-                Channel channel = background.createChannelDuplicateForBoundingBox(0, box);
+                Channel channel = background.extractChannelForBoundingBox(0, box);
                 return new RGBStack(channel, channel.duplicate(), channel.duplicate());
             } else if (background.getNumberChannels() == 3) {
                 return new RGBStack(
-                        background.createChannelDuplicateForBoundingBox(0, box),
-                        background.createChannelDuplicateForBoundingBox(1, box),
-                        background.createChannelDuplicateForBoundingBox(2, box));
+                        background.extractChannelForBoundingBox(0, box),
+                        background.extractChannelForBoundingBox(1, box),
+                        background.extractChannelForBoundingBox(2, box));
             } else {
                 throw new AnchorImpossibleSituationException();
             }

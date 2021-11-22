@@ -43,6 +43,8 @@ public interface ImageSizeSuggestion {
      * @param dimensionsToBeScaled dimensions of the source image/entity that will be scaled, if
      *     they are known.
      * @return the scaling-factor to use
+     * @throws OperationFailedException if insufficient information is available to calculation a
+     *     factor.
      */
     ScaleFactor calculateScaleFactor(Optional<Dimensions> dimensionsToBeScaled)
             throws OperationFailedException;

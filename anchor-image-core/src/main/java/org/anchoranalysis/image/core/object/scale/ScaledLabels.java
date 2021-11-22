@@ -91,9 +91,11 @@ class ScaledLabels<T> {
     }
 
     /**
-     * Constructs a map from unscaled to scaled for all objects (whether overlapping or not)
+     * Constructs a map from unscaled to scaled for all objects (whether overlapping or not).
      *
-     * @throws CreateException
+     * @param postOperation an optional operation that is applied after scaling.
+     * @return a newly created map, mapping unscaled objects to scaled objects.
+     * @throws CreateException if any object cannot be scaled.
      */
     public Map<T, T> buildMapOfAllScaledObjects(Optional<UnaryOperator<T>> postOperation)
             throws CreateException {
@@ -101,7 +103,7 @@ class ScaledLabels<T> {
         UnaryOperator<T> postOperationWithShift =
                 object -> shiftByAndMaybePost(object, cornerScaled, postOperation);
 
-        // Read the objects from the raster Ids, and create a corresponding scaled object
+        // Read the objects from the raster ids, and create a corresponding scaled object
         Map<T, T> map =
                 new DecodeLabels<>(labelsScaled.voxels().any(), 1, numberLabels, access::createFrom)
                         .create(labelMapping, postOperationWithShift);
@@ -122,7 +124,7 @@ class ScaledLabels<T> {
 
     /**
      * Creates a channel with labels for the unscaled (non-overlapping objects) and places
-     * overlapping objects in {@code objectsOverlap}
+     * overlapping objects in {@code objectsOverlap}.
      */
     private Channel createLabels(
             BoundedList<T> elementsWithBox, Optional<UnaryOperator<T>> preOperation)
@@ -137,11 +139,11 @@ class ScaledLabels<T> {
     }
 
     /**
-     * Shifts an object-backwards and maybe applies a post-operation
+     * Shifts an object-backwards and maybe applies a post-operation.
      *
-     * @param object the object to shift back (and maybe apply a post-operation after shifting)
-     * @param shift how much to shift the object by
-     * @return the object shifted and with the post-operation applied (if it's defined)
+     * @param object the object to shift back (and maybe apply a post-operation after shifting).
+     * @param shift how much to shift the object by.
+     * @return the object shifted and with the post-operation applied (if it's defined).
      */
     private T shiftByAndMaybePost(
             T object, ReadableTuple3i shift, Optional<UnaryOperator<T>> postOperation) {
@@ -153,7 +155,7 @@ class ScaledLabels<T> {
         }
     }
 
-    /** Scales an object independently of the others, and adds to the map */
+    /** Scales an object independently of the others, and adds to the map. */
     private void scaleObjectIndependently(
             OverlappingObject<T> unscaled,
             int index,
@@ -174,9 +176,9 @@ class ScaledLabels<T> {
 
     /**
      * We use a nearest neighbor interpolator as we want only distinct labels as an output,
-     * therefore no combining of intensity values
+     * therefore no combining of intensity values.
      *
-     * @return a nearest-neighbor interpolator with boundaries extended as 0
+     * @return a nearest-neighbor interpolator with boundaries extended as 0.
      */
     private static Interpolator createInterpolatorForLabels() {
         InterpolatorImgLib2NearestNeighbor interpolator = new InterpolatorImgLib2NearestNeighbor();

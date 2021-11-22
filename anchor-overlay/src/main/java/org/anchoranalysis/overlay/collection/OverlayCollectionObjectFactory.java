@@ -65,6 +65,6 @@ public class OverlayCollectionObjectFactory {
         return ObjectCollectionFactory.filterAndMapFrom(
                 overlays.asList(),
                 OverlayObjectMask.class::isInstance,
-                overlay -> ((OverlayObjectMask) overlay).getObject().withoutProperties());
+                overlay -> ((OverlayObjectMask) overlay).getObject().asObjectMask());
     }
 }

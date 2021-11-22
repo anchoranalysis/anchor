@@ -190,7 +190,7 @@ public abstract class Tuple3d implements Serializable {
     }
 
     /**
-     * A component of a tuple corresponding to a particular axis.
+     * A component of the tuple corresponding to a particular axis.
      *
      * @param axis the axis.
      * @return the component of the tuple corresponding to that axis.
@@ -210,7 +210,7 @@ public abstract class Tuple3d implements Serializable {
     }
 
     /**
-     * A component of a tuple corresponding to a particular dimension by index.
+     * A component of the tuple corresponding to a particular dimension by index.
      *
      * @param dimensionIndex the index corresponding to an axis, as per {@link AxisConverter}.
      * @return the component of the tuple corresponding to that axis.
@@ -228,7 +228,7 @@ public abstract class Tuple3d implements Serializable {
     }
 
     /**
-     * Assigns a value to a component of a tuple corresponding to a particular dimension by index.
+     * Assigns a value to a component of the tuple corresponding to a particular dimension by index.
      *
      * @param dimensionIndex the index corresponding to an axis, as per {@link AxisConverter}.
      * @param valueToAssign the value to assign.

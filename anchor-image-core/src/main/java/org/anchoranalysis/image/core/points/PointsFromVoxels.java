@@ -162,7 +162,7 @@ class PointsFromVoxels {
         IterateVoxelsEqualTo.equalToPrimitiveSlice(
                 voxels.voxels(),
                 0,
-                binaryValues.getOnByte(),
+                binaryValues.getOn(),
                 (x, y, z) -> consumer.accept(new Point2i(shift.x() + x, shift.y() + y)));
     }
 
@@ -180,7 +180,7 @@ class PointsFromVoxels {
         BinaryValuesByte binaryValues = voxels.binaryValues().asByte();
         IterateVoxelsEqualTo.equalToPrimitive(
                 voxels.voxels(),
-                binaryValues.getOnByte(),
+                binaryValues.getOn(),
                 (x, y, z) -> consumer.accept(Point3i.immutableAdd(shift, x, y, z)));
     }
 
@@ -196,7 +196,7 @@ class PointsFromVoxels {
         BinaryValuesByte binaryValues = voxels.binaryValues().asByte();
         IterateVoxelsEqualTo.equalToPrimitive(
                 voxels.voxels(),
-                binaryValues.getOnByte(),
+                binaryValues.getOn(),
                 (x, y, z) -> consumer.accept(Point3d.immutableAdd(add, x, y, z)));
     }
 }

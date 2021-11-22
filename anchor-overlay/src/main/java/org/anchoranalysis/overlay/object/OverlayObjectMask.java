@@ -93,7 +93,7 @@ public class OverlayObjectMask extends Overlay {
 
     @Override
     public boolean isPointInside(DrawOverlay overlayWriter, Point3i point) {
-        return object.withoutProperties().contains(point);
+        return object.asObjectMask().contains(point);
     }
 
     // We delegate uniqueness-check to the object-mask
@@ -101,7 +101,7 @@ public class OverlayObjectMask extends Overlay {
     public boolean equals(Object other) {
         if (other instanceof OverlayObjectMask) {
             OverlayObjectMask objCast = (OverlayObjectMask) other;
-            return this.object.withoutProperties().equals(objCast.object.withoutProperties());
+            return this.object.asObjectMask().equals(objCast.object.asObjectMask());
         } else {
             return false;
         }
@@ -109,7 +109,7 @@ public class OverlayObjectMask extends Overlay {
 
     @Override
     public int hashCode() {
-        return object.withoutProperties().hashCode();
+        return object.asObjectMask().hashCode();
     }
 
     @Override

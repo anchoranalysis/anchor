@@ -179,7 +179,7 @@ abstract class VoxelsExtracterBase<T> implements VoxelsExtracter<T> {
                                     .extent()
                                     .offset(x + relativePosition.x(), y + relativePosition.y());
 
-                    if (maskBuffer.getRaw() == binaryValues.getOnByte()) {
+                    if (maskBuffer.getRaw() == binaryValues.getOn()) {
                         copySingleVoxelTo(sourceBuffer, sourceIndex, destinationBuffer, destIndex);
                     }
                     sourceIndex++;

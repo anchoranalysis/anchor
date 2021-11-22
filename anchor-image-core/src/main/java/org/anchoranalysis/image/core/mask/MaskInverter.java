@@ -31,12 +31,11 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.voxel.binary.values.BinaryValuesInt;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 
 /**
- * Inverts masks and objects
+ * Inverts masks and objects.
  *
  * @author Owen Feehan
  */
@@ -44,10 +43,10 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
 public class MaskInverter {
 
     /**
-     * Creates a new object-mask where <i>off</i> voxels become <i>on</i> voxels and vice versa
+     * Creates a new object-mask where <i>off</i> voxels become <i>on</i> voxels and vice versa.
      *
-     * @param object object to invert (unmodified)
-     * @return a newly created inverted object
+     * @param object object to invert (unmodified).
+     * @return a newly created inverted object.
      */
     public static ObjectMask invertObjectDuplicate(ObjectMask object) {
         BinaryVoxels<UnsignedByteBuffer> voxels = object.binaryVoxels().duplicate();
@@ -56,16 +55,14 @@ public class MaskInverter {
     }
 
     /**
-     * Modifies a mask so that <i>off</i> voxels become <i>on</i> voxels and vice versa
+     * Modifies a mask so that <i>off</i> voxels become <i>on</i> voxels and vice versa.
      *
      * <p>The modification occur inplace, so no new masks are created.
      *
      * @param mask mask to invert (modified)
      */
     public static void invert(Mask mask) {
-
-        BinaryValuesInt binaryValues = mask.binaryValues();
-        BinaryValuesByte binaryValuesByte = binaryValues.asByte();
+        BinaryValuesByte binaryValuesByte = mask.binaryValuesByte();
         invertVoxels(mask.voxels(), binaryValuesByte);
     }
 
@@ -81,10 +78,10 @@ public class MaskInverter {
 
                     byte val = buffer.getRaw(offset);
 
-                    if (val == binaryValues.getOnByte()) {
-                        buffer.putRaw(offset, binaryValues.getOffByte());
+                    if (val == binaryValues.getOn()) {
+                        buffer.putRaw(offset, binaryValues.getOff());
                     } else {
-                        buffer.putRaw(offset, binaryValues.getOnByte());
+                        buffer.putRaw(offset, binaryValues.getOn());
                     }
 
                     offset++;

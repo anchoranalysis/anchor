@@ -46,11 +46,11 @@ import org.anchoranalysis.spatial.scale.ScaleFactor;
 import org.anchoranalysis.spatial.scale.Scaler;
 
 /**
- * Width, height, depth etc. of an entity in 2 or 3 dimensions.
+ * The sizes: width, height, depth etc. of an entity in 2 or 3 dimensions.
  *
  * <p>When describing a 2D entity, the depth (Z-axis value) is always {@code 1}.
  *
- * <p>The measurements corresponding to the perpendicular Cartesian axes i.e. X, Y and Z axes.
+ * <p>Each size corresponds to the perpendicular Cartesian axes i.e. X, Y and Z axes.
  *
  * <p>This class is <b>immutable</b>. No operation will modify existing state.
  */

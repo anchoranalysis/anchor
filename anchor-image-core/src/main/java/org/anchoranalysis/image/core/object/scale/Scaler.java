@@ -131,11 +131,13 @@ public class Scaler {
      * <p>This is similar to {@link #scaleObjects(ObjectCollection, ScaleFactor, Extent)} but
      * accepts a parameterized type, rather than {@link ObjectMask}.
      *
-     * @param elements objects to scale
-     * @param factor scaling-factor
-     * @param clipTo clips any objects after scaling to make sure they fit inside this extent
-     * @return a new collection with scaled elements
-     * @throws OperationFailedException
+     * @param <T> element-type.
+     * @param elements objects to scale.
+     * @param factor scaling-factor.
+     * @param clipTo clips any objects after scaling to make sure they fit inside this extent.
+     * @param access retrieves a corresponding bounding-box and {@link ObjectMask} from an element.
+     * @return a new collection with scaled elements.
+     * @throws OperationFailedException if the scaled-elements cannot be created successfully.
      */
     public static <T> ScaledElements<T> scaleElements(
             List<T> elements, ScaleFactor factor, Extent clipTo, AccessObjectMask<T> access)

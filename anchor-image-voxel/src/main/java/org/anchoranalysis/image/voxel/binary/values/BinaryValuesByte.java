@@ -55,10 +55,10 @@ public final class BinaryValuesByte implements Serializable {
     private static final BinaryValuesByte DEFAULT = new BinaryValuesByte((byte) 0, (byte) -1);
 
     /** The byte representation of the value for <i>off</i>. */
-    @Getter private final byte offByte;
+    @Getter private final byte off;
 
     /** The byte representation of the value for <i>on</i>. */
-    @Getter private final byte onByte;
+    @Getter private final byte on;
 
     /**
      * Create with {@code int} values for <i>off</i> and <i>on</i> states.
@@ -87,7 +87,7 @@ public final class BinaryValuesByte implements Serializable {
      * @return true iff it's identical to the <i>on</i> value.
      */
     public boolean isOn(byte value) {
-        return value == onByte;
+        return value == on;
     }
 
     /**
@@ -108,7 +108,7 @@ public final class BinaryValuesByte implements Serializable {
      * @return a {@link BinaryValuesByte} with the <i>off</i> and <i>on</i> values switched.
      */
     public BinaryValuesByte invert() {
-        return new BinaryValuesByte(this.offByte, this.onByte);
+        return new BinaryValuesByte(this.off, this.on);
     }
 
     /**
@@ -121,7 +121,7 @@ public final class BinaryValuesByte implements Serializable {
      */
     public BinaryValuesInt asInt() {
         return new BinaryValuesInt(
-                PrimitiveConverter.unsignedByteToInt(offByte),
-                PrimitiveConverter.unsignedByteToInt(onByte));
+                PrimitiveConverter.unsignedByteToInt(off),
+                PrimitiveConverter.unsignedByteToInt(on));
     }
 }

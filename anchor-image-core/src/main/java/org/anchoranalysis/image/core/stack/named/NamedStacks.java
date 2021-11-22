@@ -50,10 +50,21 @@ import org.anchoranalysis.image.core.stack.Stack;
  */
 public class NamedStacks implements NamedProviderStore<Stack> {
 
+    /**
+     * A map of identifiers to a supplier of the {@link Stack}.
+     *
+     * <p>This allows for delayed (lazy-evaluation) of the stacks, as some stacks may never be used.
+     */
     private HashMap<String, StoreSupplier<Stack>> map = new HashMap<>();
 
-    public void add(String identifier, Stack inputImage) {
-        map.put(identifier, () -> inputImage);
+    /**
+     * Add a stack.
+     *
+     * @param identifier a unique name for the stack.
+     * @param stack the stack to add.
+     */
+    public void add(String identifier, Stack stack) {
+        map.put(identifier, () -> stack);
     }
 
     @Override
@@ -61,15 +72,11 @@ public class NamedStacks implements NamedProviderStore<Stack> {
         map.put(identifier, supplier);
     }
 
-    public Optional<StoreSupplier<Stack>> getAsSupplier(String identifier) {
-        return Optional.ofNullable(map.get(identifier));
-    }
-
     @Override
     public Optional<Stack> getOptional(String identifier) throws NamedProviderGetException {
-        Optional<StoreSupplier<Stack>> ret = getAsSupplier(identifier);
+        Optional<StoreSupplier<Stack>> supplier = Optional.ofNullable(map.get(identifier));
         try {
-            return OptionalUtilities.map(ret, StoreSupplier::get);
+            return OptionalUtilities.map(supplier, StoreSupplier::get);
         } catch (OperationFailedException e) {
             throw new NamedProviderGetException(identifier, e);
         }
@@ -80,8 +87,20 @@ public class NamedStacks implements NamedProviderStore<Stack> {
         return map.keySet();
     }
 
-    /** Applies an operation on each stack in the collection and returns a new derived collection */
-    public NamedStacks applyOperation(Dimensions dimensions, UnaryOperator<Stack> stackOperation)
+    /**
+     * Applies an operation on each {@link Stack} in the collection and returns a new derived
+     * collection.
+     *
+     * @param operation the operation to apply to each stack.
+     * @param dimensions if set, a check occurs that all {@link Stack}s have identical dimensions to
+     *     this.
+     * @return a new {@link NamedStacks} with identical identifiers, but with each identifier
+     *     mapping to the result of applying {@code operation} on the existing stack.
+     * @throws OperationFailedException if any of the dimensions do not match {@code dimensions} (if
+     *     set) or if an error occurs when retrieving a stack.
+     */
+    public NamedStacks applyOperation(
+            UnaryOperator<Stack> operation, Optional<Dimensions> dimensions)
             throws OperationFailedException {
 
         NamedStacks out = new NamedStacks();
@@ -90,14 +109,14 @@ public class NamedStacks implements NamedProviderStore<Stack> {
             for (String key : keys()) {
                 Stack stack = getException(key);
 
-                if (!stack.dimensions().equals(dimensions)) {
+                if (dimensions.isPresent() && !stack.dimensions().equals(dimensions.get())) {
                     throw new OperationFailedException(
                             String.format(
                                     "The image-dimensions of %s (%s) does not match what is expected (%s)",
-                                    key, stack.dimensions(), dimensions));
+                                    key, stack.dimensions(), dimensions.get()));
                 }
 
-                out.add(key, () -> stackOperation.apply(stack));
+                out.add(key, () -> operation.apply(stack));
             }
             return out;
 
@@ -106,10 +125,21 @@ public class NamedStacks implements NamedProviderStore<Stack> {
         }
     }
 
+    /**
+     * Adds a {@link Stack} from a {@link NamedProvider}.
+     *
+     * @param source where to retrieve the stack and associated unique name.
+     */
     public void addFrom(NamedProvider<Stack> source) {
         addFromWithPrefix(source, "");
     }
 
+    /**
+     * Like {@link #addFrom(NamedProvider)} but additionally adds a prefix to the name when adding.
+     *
+     * @param source where to retrieve the stack and associated unique name.
+     * @param prefix the prefix to place before the name.
+     */
     public void addFromWithPrefix(NamedProvider<Stack> source, String prefix) {
 
         for (String name : source.keys()) {
@@ -126,15 +156,17 @@ public class NamedStacks implements NamedProviderStore<Stack> {
     }
 
     /**
-     * Creates a new collection containing only items whose keys exist in a particular set
+     * Creates a new collection containing only items whose keys exist in a particular set.
      *
-     * @return the new collection
+     * @param identifiersToInclude only stacks whose identifiers exist in this set are included in
+     *     the new {@link NamedStacks}.
+     * @return the new {@link NamedStacks}.
      */
-    public NamedStacks subset(StringSet keyMustBeIn) {
+    public NamedStacks subset(StringSet identifiersToInclude) {
         NamedStacks out = new NamedStacks();
 
         for (Entry<String, StoreSupplier<Stack>> entry : map.entrySet()) {
-            if (keyMustBeIn.contains(entry.getKey())) {
+            if (identifiersToInclude.contains(entry.getKey())) {
                 out.map.put(entry.getKey(), entry.getValue());
             }
         }
@@ -145,7 +177,7 @@ public class NamedStacks implements NamedProviderStore<Stack> {
      * Iterates over each entry in the map.
      *
      * @param <E> an exception that may be called by {@code consumer}.
-     * @param consumer this consumer is called the name and stack-supplier for each entry in teh
+     * @param consumer this consumer is called the name and stack-supplier for each entry in the
      *     map.
      * @throws E if the consumer throws the exception.
      */
@@ -155,7 +187,7 @@ public class NamedStacks implements NamedProviderStore<Stack> {
     }
 
     /**
-     * Number of stacks
+     * Number of stacks.
      *
      * @return the number of stacks
      */

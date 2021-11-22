@@ -39,7 +39,7 @@ import org.anchoranalysis.image.voxel.convert.VoxelsConverter;
  *
  * @author Owen Feehan
  * @param <S> type of object to which the channel-convert is attached.
- * @param <T> (what the voxels will be converted <b>to</b>).
+ * @param <T> buffer-type the voxels will be converted <b>to</b>.
  */
 public interface ChannelConverterAttached<S, T> {
 

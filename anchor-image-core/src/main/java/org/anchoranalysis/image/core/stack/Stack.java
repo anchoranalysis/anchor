@@ -33,6 +33,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.core.functional.FunctionalIterate;
@@ -101,19 +102,45 @@ public class Stack implements Iterable<Channel> {
         this.rgb = false;
     }
 
+    /**
+     * Create with a particular number of empty {@link Channel}s.
+     *
+     * @param dimensions the dimensions to use for all channels.
+     * @param factory a factory to create the empty channels.
+     * @param numberChannels how many channels to create.
+     * @param rgb whether the channels are RGB (in which case, {@code numberChannels} should be 3).
+     * @throws CreateException if {@code rgb==true} and there are not three channels.
+     */
     public Stack(
             Dimensions dimensions,
             ChannelFactorySingleType factory,
             int numberChannels,
-            boolean rgb) {
+            boolean rgb)
+            throws CreateException {
         this(rgb);
+        if (rgb && numberChannels != 3) {
+            throw rgbIncorrectNumberChannelsException(numberChannels);
+        }
         FunctionalIterate.repeat(
                 numberChannels,
                 () -> delegate.addChannel(factory.createEmptyInitialised(dimensions)));
     }
 
-    public Stack(boolean rgb, Channel... channels) throws IncorrectImageSizeException {
+    /**
+     * Creates from a varying number of channels, and a flag to indicate if they represent an RGB
+     * image or not.
+     *
+     * @param rgb true, if the channels represent an RGB image, and are in the corresponding order.
+     * @param channels the channels.
+     * @throws IncorrectImageSizeException if the channels are not of uniform size.
+     * @throws CreateException if {@code rgb==true} and there are not three channels.
+     */
+    public Stack(boolean rgb, Channel... channels)
+            throws IncorrectImageSizeException, CreateException { // NOSONAR
         this(rgb);
+        if (rgb && channels.length != 3) {
+            throw rgbIncorrectNumberChannelsException(channels.length);
+        }
         for (Channel channel : channels) {
             addChannel(channel);
         }
@@ -178,14 +205,14 @@ public class Stack implements Iterable<Channel> {
 
     /**
      * Produces a new stack with a particular mapping applied to each channel (with an index of the
-     * channel also available)
+     * channel also available).
      *
      * <p>The function applied to the channel should ensure it produces uniform sizes.
      *
      * @param mapping performs an operation on a channel and produces a modified channel (or a
-     *     different one entirely)
-     * @return a new stack (after any modification by {@code mapping}) preserving the channel order
-     * @throws OperationFailedException if the channels produced have non-uniform sizes
+     *     different one entirely).
+     * @return a new stack (after any modification by {@code mapping}) preserving the channel order.
+     * @throws OperationFailedException if the channels produced have non-uniform sizes.
      */
     public Stack mapChannelWithIndex(
             CheckedBiFunction<Channel, Integer, Channel, OperationFailedException> mapping)
@@ -202,6 +229,12 @@ public class Stack implements Iterable<Channel> {
         return out;
     }
 
+    /**
+     * Extract a particular z-slice from the {@link Stack} as a new stack.
+     *
+     * @param z the index in the Z-dimension of the slice to extract.
+     * @return the extracted slice, as a new {@link Stack} but reusing the existing voxels.
+     */
     public Stack extractSlice(int z) {
         // We know the sizes will be correct
         return new Stack(rgb, delegate.extractSlice(z));
@@ -223,11 +256,19 @@ public class Stack implements Iterable<Channel> {
         return new Stack(rgb, delegate.projectMax());
     }
 
+    /**
+     * Adds a new empty {@link Channel} in the final-most position in the list.
+     *
+     * <p>The dimensions of type of the new channel are inferred from existing channels.
+     *
+     * @throws OperationFailedException if no existing channel exists, or the existing channels lack
+     *     uniform size or type.
+     */
     public void addBlankChannel() throws OperationFailedException {
 
         if (getNumberChannels() == 0) {
             throw new OperationFailedException(
-                    "At least one channel must exist from which to guess dimensions");
+                    "At least one channel must exist from which to guess dimensions.");
         }
 
         if (!delegate.isUniformlySized()) {
@@ -244,6 +285,12 @@ public class Stack implements Iterable<Channel> {
                 ChannelFactory.instance().create(first.dimensions(), first.getVoxelDataType()));
     }
 
+    /**
+     * Appends a channel to the stack, as the new final-most channel position-wise.
+     *
+     * @param channel the channel.
+     * @throws IncorrectImageSizeException if {@code channel} has a mismatching size.
+     */
     public final void addChannel(Channel channel) throws IncorrectImageSizeException {
 
         // We ensure that this channel has the same size as the first
@@ -258,12 +305,26 @@ public class Stack implements Iterable<Channel> {
         delegate.addChannel(channel);
     }
 
+    /**
+     * Add the channels from another instance into this instance.
+     *
+     * @param stack the stack whose {@link Channel}s will be added to this instance.
+     * @throws IncorrectImageSizeException if any channel to be added has a mismatching size.
+     */
     public final void addChannelsFrom(Stack stack) throws IncorrectImageSizeException {
         for (int index = 0; index < stack.getNumberChannels(); index++) {
             addChannel(stack.getChannel(index));
         }
     }
 
+    /**
+     * Returns the channel at a particular position in the stack.
+     *
+     * @param index the index (zero-indexed).
+     * @return the respective channel.
+     * @throws IndexOutOfBoundsException if the index is out of range ({@code index < 0 || index
+     *     >= size()})
+     */
     public final Channel getChannel(int index) {
         return delegate.getChannel(index);
     }
@@ -298,7 +359,7 @@ public class Stack implements Iterable<Channel> {
     }
 
     /**
-     * The width and height and depth of the image
+     * The width and height and depth of the image.
      *
      * <p>i.e. the size of each of the three possible dimensions.
      *
@@ -336,10 +397,17 @@ public class Stack implements Iterable<Channel> {
         return out;
     }
 
+    /**
+     * Extracts the first three {@link Channel}s as a new {@link Stack}.
+     *
+     * <p>If fewer {@link Channel}s exist, only these are included, without throwing an exception.
+     *
+     * @return a newly created {@link Stack} reusing the existing {@link Channel}s in this instance.
+     */
     public Stack extractUpToThreeChannels() {
         Stack out = new Stack(rgb);
-        int maxNum = Math.min(3, delegate.getNumberChannels());
-        for (int i = 0; i < maxNum; i++) {
+        int maxNumber = Math.min(3, delegate.getNumberChannels());
+        for (int i = 0; i < maxNumber; i++) {
             try {
                 out.addChannel(delegate.getChannel(i));
             } catch (IncorrectImageSizeException e) {
@@ -363,6 +431,11 @@ public class Stack implements Iterable<Channel> {
         return delegate.iterator();
     }
 
+    /**
+     * Derives a {@link List} of {@link Channel}s from those in the {@link Stack}, preserving order.
+     *
+     * @return a newly created {@link List}, reusing the existing {@link Channel}s.
+     */
     public List<Channel> asListChannels() {
         ArrayList<Channel> out = new ArrayList<>();
         for (Channel channel : delegate) {
@@ -398,7 +471,7 @@ public class Stack implements Iterable<Channel> {
     /**
      * Determines if all channels have a specific data-type.
      *
-     * @param channelDataType the specific data-type
+     * @param channelDataType the specific data-type.
      * @return true iff all channels have {@code channelDataType} as their voxel data-type.
      */
     public boolean allChannelsHaveType(VoxelDataType channelDataType) {
@@ -412,20 +485,20 @@ public class Stack implements Iterable<Channel> {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(Object other) {
 
-        if (obj == null) {
+        if (other == null) {
             return false;
         }
-        if (obj == this) {
+        if (other == this) {
             return true;
         }
 
-        if (!(obj instanceof Stack)) {
+        if (!(other instanceof Stack)) {
             return false;
         }
 
-        return equalsDeep((Stack) obj, true);
+        return equalsDeep((Stack) other, true);
     }
 
     /**
@@ -489,5 +562,13 @@ public class Stack implements Iterable<Channel> {
      */
     public boolean isRGB() {
         return rgb;
+    }
+
+    /** An exception for when the RGB flag is true, but the number of channels it not three. */
+    private static CreateException rgbIncorrectNumberChannelsException(int numberChannels) {
+        return new CreateException(
+                String.format(
+                        "RGB is specified, but there are %d channels instead of 3",
+                        numberChannels));
     }
 }

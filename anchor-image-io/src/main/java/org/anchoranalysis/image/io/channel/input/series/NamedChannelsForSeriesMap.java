@@ -41,12 +41,12 @@ import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
 import org.anchoranalysis.image.core.stack.Stack;
-import org.anchoranalysis.image.core.stack.TimeSequence;
 import org.anchoranalysis.image.core.stack.named.NamedStacks;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.channel.ChannelEntry;
 import org.anchoranalysis.image.io.channel.input.NamedEntries;
 import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
+import org.anchoranalysis.image.io.stack.time.TimeSequence;
 
 @RequiredArgsConstructor
 public class NamedChannelsForSeriesMap implements NamedChannelsForSeries {

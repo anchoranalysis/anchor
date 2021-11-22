@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.image.core.channel.convert.attached.histogram;
 
+import com.google.common.base.Preconditions;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.channel.convert.ConversionPolicy;
@@ -37,7 +38,14 @@ import org.anchoranalysis.image.voxel.convert.VoxelsConverter;
 import org.anchoranalysis.math.histogram.Histogram;
 
 /**
- * Scales by a lower and upper quantile of the intensity values of an image
+ * Converts a {@link Channel} to {@link UnsignedByteBuffer} by scaling against lower and upper
+ * <b>quantiles</b> of the intensity values from a corresponding histogram.
+ *
+ * <p>A scaling-factor may also be applied to each limit.
+ *
+ * <p>Specifically, the range is from {@code scaleLower * calculate_quantile(intensity,
+ * quantileLower)} to {@code scaleUpper * calculate_quantile(intensity, quantileUpper)} across all
+ * voxels.
  *
  * @author Owen Feehan
  */
@@ -51,12 +59,30 @@ public class UpperLowerQuantileIntensityFromHistogram
     private double scaleUpper = 0.0;
     private ToUnsignedByte delegate;
 
+    /**
+     * Scale with quantile values for the lower and upper boundaries - without any scaling factors.
+     *
+     * @param quantileLower quantile that defines the <b>lower</b> boundary.
+     * @param quantileUpper quantile that defines the <b>upper</b> boundary.
+     */
     public UpperLowerQuantileIntensityFromHistogram(double quantileLower, double quantileUpper) {
         this(quantileLower, quantileUpper, 1.0, 1.0);
     }
 
+    /**
+     * Scale with quantile values for the lower and upper boundaries - with explicit scaling
+     * factors.
+     *
+     * @param quantileLower quantile that defines the <b>lower</b> boundary.
+     * @param quantileUpper quantile that defines the <b>upper</b> boundary.
+     * @param scaleLower scaling factor for the <b>lower</b> boundary.
+     * @param scaleUpper scaling factor for the <b>upper</b> boundary.
+     */
     public UpperLowerQuantileIntensityFromHistogram(
             double quantileLower, double quantileUpper, double scaleLower, double scaleUpper) {
+        Preconditions.checkArgument(quantileLower >= 0 && quantileLower <= 1);
+        Preconditions.checkArgument(quantileUpper >= 0 && quantileUpper <= 1);
+        Preconditions.checkArgument(quantileUpper > quantileLower);
         // Initialize with a dummy value
         voxelsConverter = new ToByteScaleByMinMaxValue(0, 1);
         this.quantileLower = quantileLower;

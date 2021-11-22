@@ -82,7 +82,7 @@ public abstract class BinaryVoxels<T> implements BinaryOnOffSetter {
      * @return true iff at least one such voxel exists.
      */
     public boolean hasOnVoxel() {
-        return voxels.extract().voxelsEqualTo(binaryValues.getOnInt()).anyExists();
+        return voxels.extract().voxelsEqualTo(binaryValues.getOn()).anyExists();
     }
 
     /**
@@ -91,7 +91,7 @@ public abstract class BinaryVoxels<T> implements BinaryOnOffSetter {
      * @return true iff at least one such voxel exists.
      */
     public boolean hasOffVoxel() {
-        return voxels.extract().voxelsEqualTo(binaryValues.getOffInt()).anyExists();
+        return voxels.extract().voxelsEqualTo(binaryValues.getOff()).anyExists();
     }
 
     /**
@@ -153,7 +153,7 @@ public abstract class BinaryVoxels<T> implements BinaryOnOffSetter {
      * @return a newly created assigner.
      */
     public VoxelsAssigner assignOn() {
-        return voxels.assignValue(binaryValues.getOnInt());
+        return voxels.assignValue(binaryValues.getOn());
     }
 
     /**
@@ -163,7 +163,7 @@ public abstract class BinaryVoxels<T> implements BinaryOnOffSetter {
      * @return a newly created assigner.
      */
     public VoxelsAssigner assignOff() {
-        return voxels.assignValue(binaryValues.getOffInt());
+        return voxels.assignValue(binaryValues.getOff());
     }
 
     /**
@@ -172,7 +172,7 @@ public abstract class BinaryVoxels<T> implements BinaryOnOffSetter {
      * @return the total number of voxels with an on state.
      */
     public int countOn() {
-        return voxels.extract().voxelsEqualTo(binaryValues.getOnInt()).count();
+        return voxels.extract().voxelsEqualTo(binaryValues.getOn()).count();
     }
 
     /**
@@ -181,7 +181,7 @@ public abstract class BinaryVoxels<T> implements BinaryOnOffSetter {
      * @return the total number of voxels with an off state.
      */
     public int countOff() {
-        return voxels.extract().voxelsEqualTo(binaryValues.getOffInt()).count();
+        return voxels.extract().voxelsEqualTo(binaryValues.getOff()).count();
     }
 
     /**

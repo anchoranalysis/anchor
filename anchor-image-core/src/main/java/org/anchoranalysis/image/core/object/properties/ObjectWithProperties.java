@@ -33,6 +33,7 @@ import java.util.function.BiConsumer;
 import java.util.function.UnaryOperator;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.anchoranalysis.image.voxel.binary.values.BinaryValuesInt;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.spatial.box.BoundingBox;
@@ -47,24 +48,64 @@ public class ObjectWithProperties {
 
     private final ObjectMask object;
 
+    /** A mapping between keys and corresponding values. */
     @Getter private final Map<String, Object> properties;
 
+    /**
+     * Creates as a bounding-box with all corresponding mask voxels set to <i>off</i>.
+     *
+     * <p>Default {@link BinaryValuesInt} of (off=0, on=255) are used for the mask.
+     *
+     * @param box bounding-box.
+     */
     public ObjectWithProperties(BoundingBox box) {
         this(new ObjectMask(box));
     }
 
+    /**
+     * Creates with an existing {@link ObjectMask} and empty properties.
+     *
+     * @param object the object.
+     */
     public ObjectWithProperties(ObjectMask object) {
         this(object, new HashMap<>());
     }
 
-    public void setProperty(String name, Object value) {
+    /**
+     * Assigns a value to a property with a particular name.
+     *
+     * <p>Any existing value with the same name is replaced.
+     *
+     * @param name the name of the property.
+     * @param value the value of the property.
+     * @param <T> type of property-value.
+     */
+    public <T> void setProperty(String name, T value) {
         properties.put(name, value);
     }
 
-    public Object getProperty(String name) {
-        return properties.get(name);
+    /**
+     * Retrieves the value of a property corresponding to a particular name.
+     *
+     * <p>Note that the user must be careful to retreieve this property with the correct-type as it
+     * is cast to {@code <T>} without any checks.
+     *
+     * @param <T> type of property-value.
+     * @param name the name of the property.
+     * @return the corresponding property-value to {@code name} or {@code null} if no such value
+     *     exists.
+     */
+    @SuppressWarnings("unchecked")
+    public <T> T getProperty(String name) {
+        return (T) properties.get(name);
     }
 
+    /**
+     * Whether a particular property exists with a particular name.
+     *
+     * @param name the name.
+     * @return true iff the property exists.
+     */
     public boolean hasProperty(String name) {
         return properties.containsKey(name);
     }
@@ -84,15 +125,20 @@ public class ObjectWithProperties {
      * <p>Note the properties are not duplicated, and the new object will reference the same
      * properties.
      *
-     * <p>This is an <b>immutable</b> operation
+     * <p>This is an <b>immutable</b> operation.
      *
-     * @param funcMap
+     * @param operator the operator that performs the mapping.
      * @return the mapped object (with identical properties) to previously.
      */
-    public ObjectWithProperties map(UnaryOperator<ObjectMask> funcMap) {
-        return new ObjectWithProperties(funcMap.apply(object), properties);
+    public ObjectWithProperties map(UnaryOperator<ObjectMask> operator) {
+        return new ObjectWithProperties(operator.apply(object), properties);
     }
 
+    /**
+     * Deep copies the current instance.
+     *
+     * @return a deep copy.
+     */
     public ObjectWithProperties duplicate() {
         ObjectWithProperties out = new ObjectWithProperties(object.duplicate());
         for (Entry<String, Object> entry : properties.entrySet()) {
@@ -101,26 +147,47 @@ public class ObjectWithProperties {
         return out;
     }
 
-    public boolean equals(Object obj) {
-        return object.equals(obj);
-    }
-
+    /**
+     * The bounding-box which gives a location for the object-mask on an image.
+     *
+     * @return the bounding-box.
+     */
     public BoundingBox boundingBox() {
         return object.boundingBox();
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        return object.equals(obj);
+    }
+
+    @Override
     public int hashCode() {
         return object.hashCode();
     }
 
+    @Override
     public String toString() {
         return object.toString();
     }
 
-    public ObjectMask withoutProperties() {
+    /**
+     * Exposes the underlying {@link ObjectMask} ignoring any properties.
+     *
+     * @return the underlying {@link ObjectMask} reusing the existing data object.
+     */
+    public ObjectMask asObjectMask() {
         return object;
     }
 
+    /**
+     * A slice buffer with <i>local</i> coordinates.
+     *
+     * <p>i.e. with coordinates relative to the bounding-box corner.
+     *
+     * @param sliceIndexRelative sliceIndex (z) relative to the bounding-box of the object-mask.
+     * @return the buffer.
+     */
     public UnsignedByteBuffer sliceBufferLocal(int sliceIndexRelative) {
         return object.sliceBufferLocal(sliceIndexRelative);
     }

@@ -26,16 +26,17 @@
 
 package org.anchoranalysis.image.core.channel;
 
+import com.google.common.base.Preconditions;
 import java.util.Optional;
 import java.util.function.Function;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.image.core.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
 import org.anchoranalysis.image.core.dimensions.Resolution;
-import org.anchoranalysis.image.core.object.HistogramFromObjectsFactory;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.VoxelsUntyped;
@@ -47,8 +48,10 @@ import org.anchoranalysis.image.voxel.extracter.predicate.VoxelsPredicate;
 import org.anchoranalysis.image.voxel.interpolator.Interpolator;
 import org.anchoranalysis.image.voxel.interpolator.InterpolatorImgLib2Lanczos;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.image.voxel.statistics.HistogramFactory;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.box.Extent;
+import org.anchoranalysis.spatial.point.Point3d;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 import org.anchoranalysis.spatial.scale.Scaler;
 
@@ -139,11 +142,11 @@ public class Channel {
     }
 
     /**
-     * Creates a new channel containing only one particular slice.
+     * Creates a new {@link Channel} containing only one particular slice.
      *
      * <p>The existing {@link Voxels} are reused, without creating new buffers.
      *
-     * @param sliceIndex the index of the slice to extract (index in z-dimension)
+     * @param sliceIndex the index of the slice to extract (index in z-dimension).
      * @return a newly created {@link Channel} consisting of the slice at {@code sliceIndex} only.
      */
     public Channel extractSlice(int sliceIndex) {
@@ -233,7 +236,7 @@ public class Channel {
 
         assert (FACTORY != null);
 
-        Dimensions dimensionsScaled = dimensions.scaleXYTo(x, y);
+        Dimensions dimensionsScaled = dimensions.resizeXY(x, y);
 
         Voxels<?> resized = voxels.extract().resizedXY(x, y, interpolator);
         return FACTORY.create(resized, dimensionsScaled.resolution());
@@ -271,8 +274,8 @@ public class Channel {
      * Operations on whether particular voxels are equal to a particular value.
      *
      * @param equalToValue the value all voxels should be equal to.
-     * @return a newly instantiated object to perform queries to this voxels object as described
-     *     above.
+     * @return a newly instantiated object to perform queries on voxels who fulfill the above
+     *     condition.
      */
     public VoxelsPredicate voxelsEqualTo(int equalToValue) {
         return voxels.extract().voxelsEqualTo(equalToValue);
@@ -282,8 +285,8 @@ public class Channel {
      * Operations on whether particular voxels are greater than a threshold (but not equal to).
      *
      * @param threshold voxel-values greater than this threshold are included.
-     * @return a newly instantiated object to perform queries to this voxels object as described
-     *     above.
+     * @return a newly instantiated object to perform queries on voxels who fulfill the above
+     *     condition.
      */
     public VoxelsPredicate voxelsGreaterThan(int threshold) {
         return voxels.extract().voxelsGreaterThan(threshold);
@@ -313,11 +316,7 @@ public class Channel {
     /** A string representation of a histogram of voxel-intensities in the channel. */
     @Override
     public String toString() {
-        try {
-            return HistogramFromObjectsFactory.create(this).toString();
-        } catch (CreateException e) {
-            return String.format("Error: %s", e);
-        }
+        return HistogramFactory.createFrom(voxels()).toString();
     }
 
     /**
@@ -347,7 +346,9 @@ public class Channel {
         if (previousZSize > 1) {
             return FACTORY.create(
                     flattener.apply(voxels.extract()),
-                    dimensions.resolution().map(res -> res.duplicateFlattenZ(previousZSize)));
+                    dimensions
+                            .resolution()
+                            .map(resolution -> flattenResolutionZ(resolution, previousZSize)));
         } else {
             return this;
         }
@@ -398,5 +399,25 @@ public class Channel {
      */
     public Optional<Resolution> resolution() {
         return dimensions.resolution();
+    }
+
+    /**
+     * Derives a new {@link Resolution} in the z-dimension, after flattening has occurred across the
+     * scene.
+     *
+     * <p>The new resolution reflects the sum of physical z-size of the existing resolution, before
+     * the flattening.
+     *
+     * @param resolution the unflattend resolution.
+     * @param unflattenedZSize the number of voxels in the Z-dimension before flattening.
+     */
+    private static Resolution flattenResolutionZ(Resolution resolution, int unflattenedZSize) {
+        Preconditions.checkArgument(unflattenedZSize > 0);
+        try {
+            return new Resolution(
+                    new Point3d(resolution.x(), resolution.y(), resolution.z() * unflattenedZSize));
+        } catch (CreateException e) {
+            throw new AnchorImpossibleSituationException();
+        }
     }
 }

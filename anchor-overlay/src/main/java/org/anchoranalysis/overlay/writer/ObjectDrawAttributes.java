@@ -31,7 +31,7 @@ import lombok.Value;
 import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.color.RGBColor;
 import org.anchoranalysis.core.identifier.getter.IdentifierGetter;
-import org.anchoranalysis.core.identifier.getter.IdentifyByIteration;
+import org.anchoranalysis.core.identifier.getter.IdentifyFromIteration;
 import org.anchoranalysis.image.core.object.properties.ObjectWithProperties;
 
 /**
@@ -58,8 +58,8 @@ public class ObjectDrawAttributes {
      */
     public ObjectDrawAttributes(ColorIndex colorIndex) {
         this.colorIndex = colorIndex;
-        this.idGetter = new IdentifyByIteration<>();
-        this.colorIDGetter = new IdentifyByIteration<>();
+        this.idGetter = new IdentifyFromIteration<>();
+        this.colorIDGetter = new IdentifyFromIteration<>();
     }
 
     /**

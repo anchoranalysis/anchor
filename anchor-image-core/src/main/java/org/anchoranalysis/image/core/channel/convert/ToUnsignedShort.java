@@ -26,19 +26,30 @@
 
 package org.anchoranalysis.image.core.channel.convert;
 
+import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedShortBuffer;
 import org.anchoranalysis.image.voxel.convert.ToShortNoScaling;
 import org.anchoranalysis.image.voxel.convert.VoxelsConverter;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 
-// Converts from other data types to Byte (unsigned 8-bit) without scaling any other data types
+/**
+ * Converts a {@link Channel} to have a voxel data type of {@link UnsignedShortBuffer}.
+ *
+ * @author Owen Feehan
+ */
 public class ToUnsignedShort extends ChannelConverter<UnsignedShortBuffer> {
 
+    /** Converting without scaling any values. */
     public ToUnsignedShort() {
         this(new ToShortNoScaling());
     }
 
+    /**
+     * Convert with a particular {@link VoxelsConverter}.
+     *
+     * @param voxelsConverter the converter.
+     */
     public ToUnsignedShort(VoxelsConverter<UnsignedShortBuffer> voxelsConverter) {
         super(UnsignedShortVoxelType.INSTANCE, voxelsConverter, VoxelsFactory.getUnsignedShort());
     }

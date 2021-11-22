@@ -63,7 +63,8 @@ public class Orientation extends DrawObject {
             return Optional.empty();
         }
 
-        return Optional.of(new Point3d((Point3d) object.getProperty(propertyName)));
+        Point3d pointFromProperty = object.getProperty(propertyName);
+        return Optional.of(new Point3d(pointFromProperty));
     }
 
     public static Optional<Double> calculateOrientation(ObjectWithProperties object) {
@@ -72,7 +73,7 @@ public class Orientation extends DrawObject {
             return Optional.empty();
         }
 
-        return Optional.of((Double) object.getProperty("orientationRadians"));
+        return Optional.of(object.getProperty("orientationRadians"));
     }
 
     @Override

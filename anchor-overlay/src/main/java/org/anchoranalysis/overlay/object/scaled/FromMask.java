@@ -50,7 +50,7 @@ public class FromMask implements ScaledOverlayCreator {
         // Then we have to create the scaled-object fresh
         // We store it for next-time
         ObjectMask scaled =
-                unscaled.withoutProperties()
+                unscaled.asObjectMask()
                         .scale(
                                 new ScaleFactor(scaleFactor),
                                 Optional.of(dimensionsScaled.extent()));

@@ -150,7 +150,7 @@ public abstract class Mark implements Serializable, Identifiable {
         // We make a new mask and populate it from out iterator
         ObjectWithProperties object = new ObjectWithProperties(box);
 
-        byte maskOn = binaryValues.getOnByte();
+        byte maskOn = binaryValues.getOn();
 
         ReadableTuple3i maxPos = box.calculateCornerMax();
 
@@ -189,7 +189,7 @@ public abstract class Mark implements Serializable, Identifiable {
         // We make a new mask and populate it from out iterator
         ObjectWithProperties object = new ObjectWithProperties(box);
 
-        byte maskOn = binaryValuesOut.getOnByte();
+        byte maskOn = binaryValuesOut.getOn();
 
         ReadableTuple3i maxPos = box.calculateCornerMax();
 

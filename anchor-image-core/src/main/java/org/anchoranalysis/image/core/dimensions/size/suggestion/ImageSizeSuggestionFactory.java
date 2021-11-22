@@ -63,9 +63,9 @@ public class ImageSizeSuggestionFactory {
      * ultimately selected.
      *
      * @param suggestion a string in the format described above.
-     * @return a newly created suggestion
+     * @return a newly created suggestion.
      * @throws SuggestionFormatException if the suggestion string does not correspond to a
-     *     recognized format
+     *     recognized format.
      */
     public static ImageSizeSuggestion create(String suggestion) throws SuggestionFormatException {
 

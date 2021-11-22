@@ -34,12 +34,21 @@ import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.convert.ToByteScaleByMaxValue;
 import org.anchoranalysis.image.voxel.convert.VoxelsConverter;
 
+/**
+ * Converts a {@link Channel} to {@link UnsignedByteBuffer} by scaling against the <b>maximum
+ * intensity value</b> that appears in it.
+ *
+ * <p>Specifically, the range is from 0 to {@code max(intensity)} across all voxels.
+ *
+ * @author Owen Feehan
+ */
 public class MaxIntensity implements ChannelConverterAttached<Channel, UnsignedByteBuffer> {
 
     private ToByteScaleByMaxValue voxelsConverter;
 
     private ToUnsignedByte delegate;
 
+    /** Default constructor. */
     public MaxIntensity() {
         // Initialize with a dummy value
         voxelsConverter = new ToByteScaleByMaxValue(1);

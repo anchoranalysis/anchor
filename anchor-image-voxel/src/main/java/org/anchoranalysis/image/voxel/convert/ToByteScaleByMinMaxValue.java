@@ -47,8 +47,10 @@ public final class ToByteScaleByMinMaxValue extends ToByte {
     /**
      * Creates with the minimum- and maximum-values which existing values are scaled against.
      *
-     * @param minValue the <i>minimum</i>-value that will be represented in the scaled-values.
-     * @param maxValue the <i>maximum</i>-value that will be represented in the scaled-values.
+     * @param minValue the <i>minimum</i>-value that will be represented in the scaled-values
+     *     (inclusive).
+     * @param maxValue the <i>maximum</i>-value that will be represented in the scaled-values
+     *     (inclusive).
      */
     public ToByteScaleByMinMaxValue(int minValue, int maxValue) {
         setMinMaxValues(minValue, maxValue);

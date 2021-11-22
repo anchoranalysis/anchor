@@ -48,7 +48,7 @@ import org.anchoranalysis.spatial.point.ReadableTuple3i;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 /**
- * {@link Voxels} that exist at a particular bounding-box within an image.
+ * {@link Voxels} that exist within a particular bounding-box in an image.
  *
  * <p>The {@link Voxels} must always have identical {@link Extent} to the bounding-box.
  *

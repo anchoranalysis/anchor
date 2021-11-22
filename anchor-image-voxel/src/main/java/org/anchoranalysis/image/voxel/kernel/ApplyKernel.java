@@ -90,8 +90,8 @@ public class ApplyKernel {
                     public void process(KernelPointCursor point) {
                         byte outValue =
                                 kernel.calculateAt(point)
-                                        ? outBinaryValues.getOnByte()
-                                        : outBinaryValues.getOffByte();
+                                        ? outBinaryValues.getOn()
+                                        : outBinaryValues.getOff();
                         outBuffer.putRaw(point.getIndex(), outValue);
                     }
                 });

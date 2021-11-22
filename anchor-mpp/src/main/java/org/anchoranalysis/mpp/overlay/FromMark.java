@@ -57,6 +57,6 @@ class FromMark implements ScaledOverlayCreator {
                 originalMark.maskScaledXY(dimensionsScaled, regionMembership, bv, scaleFactor);
 
         // We keep the properties the same
-        return new ObjectWithProperties(omScaled.withoutProperties(), unscaled.getProperties());
+        return new ObjectWithProperties(omScaled.asObjectMask(), unscaled.getProperties());
     }
 }

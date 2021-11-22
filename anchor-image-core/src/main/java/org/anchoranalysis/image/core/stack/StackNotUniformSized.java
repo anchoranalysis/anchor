@@ -34,8 +34,16 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 
+/**
+ * A list of {@link Channel}s that are permitted to vary in size.
+ *
+ * <p>This is unlike a {@link Stack} which mandates that all have identical size.
+ *
+ * @author Owen Feehan
+ */
 public class StackNotUniformSized implements Iterable<Channel> {
 
     /** The channels in the stack. */
@@ -65,8 +73,18 @@ public class StackNotUniformSized implements Iterable<Channel> {
         addChannel(channel);
     }
 
-    public StackNotUniformSized extractSlice(int z) {
-        return deriveMapped(channel -> channel.extractSlice(z));
+    /**
+     * Creates a new {@link StackNotUniformSized} containing only one particular slice for each
+     * respective channel.
+     *
+     * <p>The existing {@link Voxels} are reused, without creating new buffers.
+     *
+     * @param sliceIndex the index of the slice to extract (index in z-dimension).
+     * @return a newly created {@link StackNotUniformSized} consisting of the slice at {@code
+     *     sliceIndex} only, for each respective channel.
+     */
+    public StackNotUniformSized extractSlice(int sliceIndex) {
+        return deriveMapped(channel -> channel.extractSlice(sliceIndex));
     }
 
     /**
@@ -84,27 +102,41 @@ public class StackNotUniformSized implements Iterable<Channel> {
         return deriveMapped(Channel::projectMax);
     }
 
-    public void clear() {
-        channels.clear();
-    }
-
+    /**
+     * Appends a channel to the stack, as the new final-most channel positionwise.
+     *
+     * @param channel the channel.
+     */
     public final void addChannel(Channel channel) {
         channels.add(channel);
     }
 
+    /**
+     * Returns the channel at a particular position in the stack.
+     *
+     * @param index the index (zero-indexed).
+     * @return the respective channel.
+     * @throws IndexOutOfBoundsException if the index is out of range ({@code index < 0 || index
+     *     >= size()})
+     */
     public final Channel getChannel(int index) {
         return channels.get(index);
     }
 
+    /**
+     * The number of channels in the {@link Stack}.
+     *
+     * @return the number of channels.
+     */
     public final int getNumberChannels() {
         return channels.size();
     }
 
-    public Dimensions getFirstDimensions() {
-        assert (getNumberChannels() > 0);
-        return channels.get(0).dimensions();
-    }
-
+    /**
+     * Do all channels have identical dimensions?
+     *
+     * @return true if the {@link Dimensions} of all channels are identical.
+     */
     public boolean isUniformlySized() {
 
         if (channels.size() <= 1) {
@@ -123,6 +155,11 @@ public class StackNotUniformSized implements Iterable<Channel> {
         return true;
     }
 
+    /**
+     * Do all {@link Channel}s in the stack have identical voxel data-type?
+     *
+     * @return true if all have identical type, false if any one differs.
+     */
     public boolean isUniformTyped() {
 
         if (channels.size() <= 1) {

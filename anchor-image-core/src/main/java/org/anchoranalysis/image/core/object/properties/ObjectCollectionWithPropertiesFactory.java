@@ -30,19 +30,26 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.functional.checked.CheckedFunction;
 
+/**
+ * Creates {@link ObjectCollectionWithProperties}.
+ *
+ * @author Owen Feehan
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ObjectCollectionWithPropertiesFactory {
 
     /**
      * Creates a new collection by filtering an iterable and then mapping it to {@link
-     * ObjectWithProperties}
+     * ObjectWithProperties}.
      *
-     * @param <T> type that will be mapped to {@link ObjectWithProperties}
-     * @param <E> exception-type that may be thrown during mapping
-     * @param iterable incoming collection to be mapped
-     * @param mappingFunction function for mapping
-     * @return a newly created {@link ObjectCollectionWithProperties}
-     * @throws E if thrown by <code>mappingFunction</code>
+     * @param <T> type that will be mapped to {@link ObjectWithProperties}.
+     * @param <E> exception-type that may be thrown during mapping.
+     * @param iterable incoming collection to be mapped.
+     * @param predicate only elements that fulfill this condition are included after the
+     *     <i>filtering</i> step.
+     * @param mappingFunction function for mapping.
+     * @return a newly created {@link ObjectCollectionWithProperties}.
+     * @throws E if thrown by <code>mappingFunction</code>.
      */
     public static <T, E extends Exception> ObjectCollectionWithProperties filterAndMapFrom(
             Iterable<T> iterable,

@@ -32,7 +32,6 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.core.channel.Channel;
-import org.anchoranalysis.image.core.object.seed.SeedCollection;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 
@@ -49,7 +48,7 @@ public abstract class SegmentChannelIntoObjectsUnary extends SegmentChannelIntoO
 
     @Override
     public ObjectCollection segment(
-            Channel channel, Optional<ObjectMask> objectMask, Optional<SeedCollection> seeds)
+            Channel channel, Optional<ObjectMask> objectMask, Optional<ObjectCollection> seeds)
             throws SegmentationFailedException {
         return segment(channel, objectMask, seeds, segment);
     }
@@ -57,7 +56,7 @@ public abstract class SegmentChannelIntoObjectsUnary extends SegmentChannelIntoO
     protected abstract ObjectCollection segment(
             Channel channel,
             Optional<ObjectMask> object,
-            Optional<SeedCollection> seeds,
+            Optional<ObjectCollection> seeds,
             SegmentChannelIntoObjects upstreamSegmentation)
             throws SegmentationFailedException;
 }

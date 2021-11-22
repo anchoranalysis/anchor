@@ -39,6 +39,9 @@ import org.anchoranalysis.spatial.point.ReadableTuple3i;
 /**
  * A collection of {@link ObjectMask}s.
  *
+ * <p>It is backed internally by an {@link ArrayList}, offering add operations in constant time, and
+ * other operations in linear-time.
+ *
  * @author Owen Feehan
  */
 public class ObjectCollection implements Iterable<ObjectMask> {

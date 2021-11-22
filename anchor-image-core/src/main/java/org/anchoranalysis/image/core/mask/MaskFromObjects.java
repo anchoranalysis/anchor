@@ -33,35 +33,44 @@ import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesInt;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 
 /**
- * Creates a mask from one or more objects.
+ * Creates a {@link Mask} from one or more {@link ObjectMask}s.
  *
  * @author Owen Feehan
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MaskFromObjects {
 
-    /** We look for space IN objects, and create channel to display it */
+    /**
+     * Create a {@link Mask} corresponding to all <i>on</i> voxels in an {@link ObjectCollection}.
+     *
+     * @param objects the objects.
+     * @param dimensions the overall dimensions of the scene, in which {@code objects} should
+     *     reside, and which forms the size of the {@link Mask}.
+     * @param outValues what binary-values to use in the created {@link Mask}.
+     * @return the created {@link Mask}.
+     */
     public static Mask createFromObjects(
             ObjectCollection objects, Dimensions dimensions, BinaryValuesInt outValues) {
         return createFromObjectsWithValues(
-                objects,
-                dimensions,
-                outValues,
-                outValues.getOffInt(),
-                outValues.asByte().getOnByte());
+                objects, dimensions, outValues, outValues.getOff(), outValues.asByte().getOn());
     }
 
-    /** We look for space NOT in the objects, and create channel to display it */
+    /**
+     * Create a {@link Mask} corresponding to all <i>off</i> voxels in an {@link ObjectCollection}.
+     *
+     * @param objects the objects.
+     * @param dimensions the overall dimensions of the scene, in which {@code objects} should
+     *     reside, and which forms the size of the {@link Mask}.
+     * @param outValues what binary-values to use in the created {@link Mask}.
+     * @return the created {@link Mask}.
+     */
     public static Mask createFromNotObjects(
             ObjectCollection objects, Dimensions dimensions, BinaryValuesInt outValues) {
         return createFromObjectsWithValues(
-                objects,
-                dimensions,
-                outValues,
-                outValues.getOnInt(),
-                outValues.asByte().getOffByte());
+                objects, dimensions, outValues, outValues.getOn(), outValues.asByte().getOff());
     }
 
     /**

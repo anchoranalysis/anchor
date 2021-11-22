@@ -27,8 +27,8 @@
 package org.anchoranalysis.image.core.dimensions;
 
 import lombok.AllArgsConstructor;
-import org.anchoranalysis.image.core.orientation.DirectionVector;
 import org.anchoranalysis.spatial.axis.Axis;
+import org.anchoranalysis.spatial.orientation.DirectionVector;
 
 /**
  * Converts from voxelized units to different physical measurements of area / volume / distance.
