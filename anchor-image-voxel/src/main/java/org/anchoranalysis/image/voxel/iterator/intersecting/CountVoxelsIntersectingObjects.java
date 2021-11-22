@@ -81,8 +81,8 @@ public class CountVoxelsIntersectingObjects {
 
     /** Is a voxel <i>on</i> in both object-masks? */
     private static PredicateTwoBytes voxelInBothObjects(ObjectMask object1, ObjectMask object2) {
-        final byte byteOn1 = object1.binaryValuesByte().getOnByte();
-        final byte byteOn2 = object2.binaryValuesByte().getOnByte();
+        final byte byteOn1 = object1.binaryValuesByte().getOn();
+        final byte byteOn2 = object2.binaryValuesByte().getOn();
         return (first, second) -> first == byteOn1 && second == byteOn2;
     }
 }

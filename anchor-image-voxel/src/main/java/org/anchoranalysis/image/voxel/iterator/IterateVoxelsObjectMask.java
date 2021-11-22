@@ -121,7 +121,7 @@ public class IterateVoxelsObjectMask {
         Extent extent = voxels.extent();
 
         ReadableTuple3i cornerMin = object.boundingBox().cornerMin();
-        byte valueOn = object.binaryValuesByte().getOnByte();
+        byte valueOn = object.binaryValuesByte().getOn();
 
         Point3i cornerMax = object.boundingBox().calculateCornerMaxExclusive();
 
@@ -256,7 +256,7 @@ public class IterateVoxelsObjectMask {
         ReadableTuple3i cornerMin = object.boundingBox().cornerMin();
         ReadableTuple3i cornerMax = object.boundingBox().calculateCornerMax();
 
-        byte maskOn = object.binaryValuesByte().getOnByte();
+        byte maskOn = object.binaryValuesByte().getOn();
 
         Extent e = voxels1.extent();
         for (int z = cornerMin.z(); z <= cornerMax.z(); z++) {
@@ -303,7 +303,7 @@ public class IterateVoxelsObjectMask {
         ReadableTuple3i cornerMin = object.boundingBox().cornerMin();
         ReadableTuple3i cornerMax = object.boundingBox().calculateCornerMax();
 
-        byte maskOn = object.binaryValuesByte().getOnByte();
+        byte maskOn = object.binaryValuesByte().getOn();
 
         Extent e = voxels1.extent();
         for (int z = cornerMin.z(); z <= cornerMax.z(); z++) {
@@ -347,7 +347,7 @@ public class IterateVoxelsObjectMask {
         ReadableTuple3i cornerMin = object.boundingBox().cornerMin();
         ReadableTuple3i cornerMax = object.boundingBox().calculateCornerMaxExclusive();
 
-        byte maskMatchValue = object.binaryValuesByte().getOnByte();
+        byte maskMatchValue = object.binaryValuesByte().getOn();
 
         Extent extentVoxels = voxels.extent();
 
@@ -409,7 +409,7 @@ public class IterateVoxelsObjectMask {
         ReadableTuple3i maskShift =
                 Point3i.immutableSubtract(boxRelativeToObject.cornerMin(), cornerMin);
 
-        byte maskMatchValue = object.binaryValuesByte().getOnByte();
+        byte maskMatchValue = object.binaryValuesByte().getOn();
 
         Extent extentVoxels = voxels.extent();
         Extent extentObject = object.extent();

@@ -44,8 +44,6 @@ import org.anchoranalysis.core.exception.CheckedUnsupportedOperationException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.core.object.properties.ObjectWithProperties;
-import org.anchoranalysis.image.core.orientation.Orientation;
-import org.anchoranalysis.image.core.orientation.Orientation2D;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.mpp.mark.GlobalRegionIdentifiers;
@@ -53,9 +51,11 @@ import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.QuickOverlapCalculation;
 import org.anchoranalysis.overlay.OverlayProperties;
 import org.anchoranalysis.spatial.box.BoundingBox;
+import org.anchoranalysis.spatial.orientation.Orientation;
+import org.anchoranalysis.spatial.orientation.Orientation2D;
+import org.anchoranalysis.spatial.orientation.RotationMatrix;
 import org.anchoranalysis.spatial.point.Point2d;
 import org.anchoranalysis.spatial.point.Point3d;
-import org.anchoranalysis.spatial.rotation.RotationMatrix;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 public class Ellipse extends ConicBase implements Serializable {
@@ -225,7 +225,7 @@ public class Ellipse extends ConicBase implements Serializable {
 
         assert (shellRad > 0);
 
-        DoubleMatrix2D matRot = orientation.createRotationMatrix().getMatrix();
+        DoubleMatrix2D matRot = orientation.deriveRotationMatrix().getMatrix();
 
         double[] radiusArray = twoElementArray(this.radii.x(), this.radii.y());
         this.ellipsoidCalculator.update(radiusArray, matRot);
@@ -355,7 +355,7 @@ public class Ellipse extends ConicBase implements Serializable {
 
         ObjectWithProperties object =
                 super.deriveObject(dimensions, regionMembership, binaryValuesOut);
-        orientation.addPropertiesToMask(object);
+        orientation.describeOrientation(object::setProperty);
 
         // Axis orientation
         addAxisOrientationProperties(object, regionMembership);
@@ -369,7 +369,7 @@ public class Ellipse extends ConicBase implements Serializable {
 
         op.addDoubleAsString("Radius X (pixels)", radii.x());
         op.addDoubleAsString("Radius Y (pixels)", radii.y());
-        orientation.addProperties(op.getMap());
+        orientation.describeOrientation(op.getMap()::add);
         op.addDoubleAsString("Shell Radius (pixels)", shellRad);
 
         return op;
@@ -408,7 +408,7 @@ public class Ellipse extends ConicBase implements Serializable {
 
         double radiusProjectedX = radii.x() * radiiFactor;
 
-        RotationMatrix rotMat = orientation.createRotationMatrix();
+        RotationMatrix rotMat = orientation.deriveRotationMatrix();
         double[] endPoint1 = rotMat.rotatePoint(twoElementArray(-1 * radiusProjectedX));
         double[] endPoint2 = rotMat.rotatePoint(twoElementArray(radiusProjectedX));
 

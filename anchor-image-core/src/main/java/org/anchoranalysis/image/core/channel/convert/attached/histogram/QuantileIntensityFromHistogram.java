@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.image.core.channel.convert.attached.histogram;
 
+import com.google.common.base.Preconditions;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.channel.convert.ConversionPolicy;
@@ -37,7 +38,11 @@ import org.anchoranalysis.image.voxel.convert.VoxelsConverter;
 import org.anchoranalysis.math.histogram.Histogram;
 
 /**
- * Scales by a quantile of the intensity values of an image.
+ * Converts a {@link Channel} to {@link UnsignedByteBuffer} by scaling against a <b>quantile</b> of
+ * the intensity values from a corresponding histogram.
+ *
+ * <p>Specifically, the range is from 0 to {@code calculate_quantile(intensity, quantile)} across
+ * all voxels.
  *
  * @author Owen Feehan
  */
@@ -48,7 +53,14 @@ public class QuantileIntensityFromHistogram
     private double quantile = 1.0;
     private ToUnsignedByte delegate;
 
+    /**
+     * Scales against a particular quantile of the intensity values.
+     *
+     * @param quantile a value from 0 to 1 indicating which quantile to use, to scale against.
+     */
     public QuantileIntensityFromHistogram(double quantile) {
+        Preconditions.checkArgument(quantile >= 0);
+        Preconditions.checkArgument(quantile <= 1);
         // Initialize with a dummy value
         voxelsConverter = new ToByteScaleByMaxValue(1);
         this.quantile = quantile;

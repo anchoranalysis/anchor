@@ -29,9 +29,9 @@ package org.anchoranalysis.mpp.mark.conic;
 import com.google.common.base.Preconditions;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.image.core.orientation.Orientation2D;
-import org.anchoranalysis.image.core.orientation.Orientation3DEulerAngles;
 import org.anchoranalysis.mpp.mark.Mark;
+import org.anchoranalysis.spatial.orientation.Orientation2D;
+import org.anchoranalysis.spatial.orientation.Orientation3DEulerAngles;
 import org.anchoranalysis.spatial.point.Point2d;
 import org.anchoranalysis.spatial.point.Point3d;
 import org.anchoranalysis.spatial.point.Point3i;
@@ -51,7 +51,9 @@ public class MarkConicFactory {
         if (do3D) {
             Ellipsoid me = new Ellipsoid();
             me.setMarksExplicit(
-                    point, new Orientation3DEulerAngles(), new Point3d(size, size, size));
+                    point,
+                    new Orientation3DEulerAngles(0.0, 0.0, 0.0),
+                    new Point3d(size, size, size));
             return me;
         } else {
             Ellipse me = new Ellipse();

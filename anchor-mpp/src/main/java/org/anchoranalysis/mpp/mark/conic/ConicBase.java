@@ -29,8 +29,8 @@ package org.anchoranalysis.mpp.mark.conic;
 import java.util.Arrays;
 import java.util.Optional;
 import org.anchoranalysis.image.core.dimensions.Resolution;
-import org.anchoranalysis.image.core.orientation.Orientation;
 import org.anchoranalysis.mpp.mark.MarkWithPosition;
+import org.anchoranalysis.spatial.orientation.Orientation;
 import org.anchoranalysis.spatial.point.Point3d;
 
 public abstract class ConicBase extends MarkWithPosition {

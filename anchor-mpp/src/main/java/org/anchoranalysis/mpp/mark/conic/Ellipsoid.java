@@ -40,13 +40,13 @@ import lombok.Setter;
 import org.anchoranalysis.core.exception.CheckedUnsupportedOperationException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.Resolution;
-import org.anchoranalysis.image.core.orientation.Orientation;
-import org.anchoranalysis.image.core.orientation.Orientation3DEulerAngles;
 import org.anchoranalysis.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.QuickOverlapCalculation;
 import org.anchoranalysis.overlay.OverlayProperties;
 import org.anchoranalysis.spatial.box.BoundingBox;
+import org.anchoranalysis.spatial.orientation.Orientation;
+import org.anchoranalysis.spatial.orientation.Orientation3DEulerAngles;
 import org.anchoranalysis.spatial.point.Point3d;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 
@@ -77,7 +77,7 @@ public class Ellipsoid extends ConicBase implements Serializable {
     @Getter @Setter private double innerCoreDistance = 0.4;
 
     @Getter private Point3d radii;
-    @Getter private Orientation orientation = new Orientation3DEulerAngles();
+    @Getter private Orientation orientation = new Orientation3DEulerAngles(0.0, 0.0, 0.0);
     // END mark state
 
     // START internal objects
@@ -228,7 +228,7 @@ public class Ellipsoid extends ConicBase implements Serializable {
 
     public void updateAfterMarkChange() {
 
-        DoubleMatrix2D matRot = orientation.createRotationMatrix().getMatrix();
+        DoubleMatrix2D matRot = orientation.deriveRotationMatrix().getMatrix();
 
         double[] radiusArray = threeElementArray(this.radii.x(), this.radii.y(), this.radii.z());
         assert matRot.rows() == 3;
@@ -391,7 +391,7 @@ public class Ellipsoid extends ConicBase implements Serializable {
         op.addDoubleAsString("Normalized Radius 1 (pixels)", arr[1]);
         op.addDoubleAsString("Normalized Radius 2 (pixels)", arr[2]);
 
-        orientation.addProperties(op.getMap());
+        orientation.describeOrientation(op.getMap()::add);
         op.addDoubleAsString("Shell Radius Ratio", shellRad);
         op.addDoubleAsString("Inner Core Radius Ratio ", innerCoreDistance);
         return op;

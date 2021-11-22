@@ -33,9 +33,8 @@ import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.CheckedStream;
 import org.anchoranalysis.core.identifier.getter.IdentifierGetter;
-import org.anchoranalysis.core.identifier.getter.IdentifyByIteration;
+import org.anchoranalysis.core.identifier.getter.IdentifyFromIteration;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
-import org.anchoranalysis.image.core.object.properties.IdentifierByProperty;
 import org.anchoranalysis.image.core.object.properties.ObjectWithProperties;
 import org.anchoranalysis.image.core.stack.RGBStack;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
@@ -95,7 +94,7 @@ public abstract class DrawOverlay {
                     dimensions,
                     background,
                     ObjectDrawAttributesFactory.createFromOverlays(
-                            overlays, idGetter, new IdentifierByProperty(PROPERTY_COLOR_ID)),
+                            overlays, idGetter, new IdentifierFromProperty(PROPERTY_COLOR_ID)),
                     boxContainer);
         } catch (CreateException e) {
             throw new OperationFailedException(e);
@@ -138,7 +137,7 @@ public abstract class DrawOverlay {
             BinaryValuesByte bvOut)
             throws CreateException {
 
-        IdentifyByIteration<Overlay> colorIDGetter = new IdentifyByIteration<>();
+        IdentifyFromIteration<Overlay> colorIDGetter = new IdentifyFromIteration<>();
 
         return CheckedStream.mapToObj(
                         IntStream.range(0, coc.size()),

@@ -39,7 +39,7 @@ class BinaryVoxelsInt extends BinaryVoxels<UnsignedIntBuffer> {
     @Override
     public boolean isOn(int x, int y, int z) {
         int offset = voxels().extent().offset(x, y);
-        return voxels().sliceBuffer(z).getRaw(offset) != binaryValues().getOffInt();
+        return voxels().sliceBuffer(z).getRaw(offset) != binaryValues().getOff();
     }
 
     @Override
@@ -50,13 +50,13 @@ class BinaryVoxelsInt extends BinaryVoxels<UnsignedIntBuffer> {
     @Override
     public void setOn(int x, int y, int z) {
         int offset = voxels().extent().offset(x, y);
-        voxels().sliceBuffer(z).putRaw(offset, binaryValues().getOnInt());
+        voxels().sliceBuffer(z).putRaw(offset, binaryValues().getOn());
     }
 
     @Override
     public void setOff(int x, int y, int z) {
         int offset = voxels().extent().offset(x, y);
-        voxels().sliceBuffer(z).putRaw(offset, binaryValues().getOffInt());
+        voxels().sliceBuffer(z).putRaw(offset, binaryValues().getOff());
     }
 
     @Override

@@ -402,8 +402,8 @@ public class ObjectMask {
      */
     public ObjectMask scale(ScaleFactor factor, Optional<Extent> clipTo) {
 
-        if ((binaryValues.getOnInt() == 255 && binaryValues.getOffInt() == 0)
-                || (binaryValues.getOnInt() == 0 && binaryValues.getOffInt() == 255)) {
+        if ((binaryValues.getOn() == 255 && binaryValues.getOff() == 0)
+                || (binaryValues.getOn() == 0 && binaryValues.getOff() == 255)) {
 
             BoundedVoxels<UnsignedByteBuffer> scaled = voxels.scale(factor, interpolator, clipTo);
 
@@ -412,7 +412,7 @@ public class ObjectMask {
             if (interpolator.canValueRangeChange()) {
 
                 // We threshold to make sure it's still binary
-                int thresholdVal = (binaryValues.getOnInt() + binaryValues.getOffInt()) / 2;
+                int thresholdVal = (binaryValues.getOn() + binaryValues.getOff()) / 2;
 
                 VoxelsThresholder.thresholdByte(
                         scaled.voxels(), thresholdVal, binaryValues.asByte());
@@ -489,7 +489,7 @@ public class ObjectMask {
      * @return the predicate.
      */
     public VoxelsPredicate voxelsOn() {
-        return extract.voxelsEqualTo(binaryValues.getOnInt());
+        return extract.voxelsEqualTo(binaryValues.getOn());
     }
 
     /**
@@ -499,7 +499,7 @@ public class ObjectMask {
      * @return the predicate.
      */
     public VoxelsPredicate voxelsOff() {
-        return extract.voxelsEqualTo(binaryValues.getOffInt());
+        return extract.voxelsEqualTo(binaryValues.getOff());
     }
 
     /**
@@ -537,12 +537,12 @@ public class ObjectMask {
         // We initially set all pixels to ON
         BoundedVoxels<UnsignedByteBuffer> voxelsMaskOut =
                 VoxelsFactory.getUnsignedByte().createBounded(boxIntersect.get());
-        voxelsMaskOut.assignValue(binaryValuesOut.getOnInt()).toAll();
+        voxelsMaskOut.assignValue(binaryValuesOut.getOn()).toAll();
 
         // Then we set any pixels NOT on either object to OFF..... leaving only the intersecting
         // pixels as <i>on</i> in the output buffer
         voxelsMaskOut
-                .assignValue(binaryValuesOut.getOffInt())
+                .assignValue(binaryValuesOut.getOff())
                 .toEitherTwoObjects(invert(), other.invert(), boxIntersect.get());
 
         ObjectMask object = new ObjectMask(voxelsMaskOut, binaryValuesOut);
@@ -566,7 +566,7 @@ public class ObjectMask {
      */
     public boolean contains(Point3i point) {
         if (voxels.boundingBox().contains().point(point)) {
-            return extract.voxel(point) == binaryValues.getOnInt();
+            return extract.voxel(point) == binaryValues.getOn();
         } else {
             return false;
         }
@@ -728,7 +728,7 @@ public class ObjectMask {
      */
     public ObjectMask regionIntersecting(BoundingBox box) throws CreateException {
         return new ObjectMask(
-                voxels.regionIntersecting(box, binaryValues.getOffInt()), this.binaryValues);
+                voxels.regionIntersecting(box, binaryValues.getOff()), this.binaryValues);
     }
 
     /**
@@ -754,7 +754,7 @@ public class ObjectMask {
 
         // Second, if needed, we iterate until we find any "ON" value
         return IterateVoxelsEqualTo.untilFirstIntensityEqualTo(
-                boundedVoxels(), binaryValuesByte().getOnByte());
+                boundedVoxels(), binaryValuesByte().getOn());
     }
 
     /**
@@ -762,18 +762,18 @@ public class ObjectMask {
      *
      * <p>i.e. with coordinates relative to the bounding-box corner.
      *
-     * @param sliceIndexRelative sliceIndex (z) relative to the bounding-box of the object-mask
-     * @return the buffer
+     * @param sliceIndexRelative sliceIndex (z) relative to the bounding-box of the object-mask.
+     * @return the buffer.
      */
     public UnsignedByteBuffer sliceBufferLocal(int sliceIndexRelative) {
         return voxels.sliceBufferLocal(sliceIndexRelative);
     }
 
     /**
-     * A slice buffer with <i>global</i> coordinates
+     * A slice buffer with <i>global</i> coordinates.
      *
-     * @param sliceIndexGlobal sliceIndex (z) in global coordinates
-     * @return the buffer
+     * @param sliceIndexGlobal sliceIndex (z) in global coordinates.
+     * @return the buffer.
      */
     public UnsignedByteBuffer sliceBufferGlobal(int sliceIndexGlobal) {
         return voxels.sliceBufferGlobal(sliceIndexGlobal);
@@ -781,7 +781,7 @@ public class ObjectMask {
 
     /**
      * Creates a new object-mask with identical voxels but with the bounding-box beginning at the
-     * origin (0,0,0)
+     * origin (0,0,0).
      *
      * <p>This is an <i>immutable</i> operation: but beware the existing voxel-buffers are reused in
      * the new object.
@@ -824,7 +824,7 @@ public class ObjectMask {
 
     /**
      * Applies a function to map the bounding-box to a new-value (whose extent should be unchanged
-     * in value)
+     * in value).
      *
      * <p>This is an <i>immutable</i> operation: but beware the existing voxel-buffers are reused in
      * the new object.
@@ -838,7 +838,7 @@ public class ObjectMask {
 
     /**
      * Applies a function to map the bounding-box to a new-value (whose extent is expected to change
-     * in value)
+     * in value).
      *
      * <p>This is a almost <i>immutable</i> operation, and NEW voxel-buffers are usually created for
      * the new object, but not if the bounding-box or its extent need no change.
@@ -846,8 +846,8 @@ public class ObjectMask {
      * <p>Precondition: the new bounding-box's extent must be greater than or equal to the existing
      * extent in all dimensions.
      *
-     * @param boxToAssign bounding-box to assign
-     * @return a new object-mask with the updated bounding box (and changed voxels)
+     * @param boxToAssign bounding-box to assign.
+     * @return a new object-mask with the updated bounding box (and changed voxels).
      */
     public ObjectMask mapBoundingBoxChangeExtent(BoundingBox boxToAssign) {
 
@@ -871,7 +871,7 @@ public class ObjectMask {
         BoundingBox bbLocal = voxels.boundingBox().relativePositionToBox(boxToAssign);
 
         voxelsLarge
-                .assignValue(binaryValuesByte.getOnByte())
+                .assignValue(binaryValuesByte.getOn())
                 .toObject(new ObjectMask(bbLocal, binaryVoxels()));
 
         return new ObjectMask(boxToAssign, voxelsLarge, binaryValuesByte);
@@ -895,19 +895,19 @@ public class ObjectMask {
     /**
      * Assigns the <i>on</i> value to voxels, expecting <i>global</i> coordinates.
      *
-     * @return the assigner
+     * @return the assigner.
      */
     public VoxelsAssigner assignOn() {
-        return voxels.assignValue(binaryValues.getOnInt());
+        return voxels.assignValue(binaryValues.getOn());
     }
 
     /**
      * Assigns the <i>off</i> value to voxels, expecting <i>global</i> coordinates.
      *
-     * @return the assigner
+     * @return the assigner.
      */
     public VoxelsAssigner assignOff() {
-        return voxels.assignValue(binaryValues.getOffInt());
+        return voxels.assignValue(binaryValues.getOff());
     }
 
     /**
@@ -920,7 +920,7 @@ public class ObjectMask {
         List<Point3i> points = new ArrayList<>();
         IterateVoxelsEqualTo.equalToPrimitive(
                 voxels.voxels(),
-                binaryValuesByte().getOnByte(),
+                binaryValuesByte().getOn(),
                 (x, y, z) -> points.add(new Point3i(x, y, z)));
         return points;
     }
@@ -929,8 +929,8 @@ public class ObjectMask {
      * A string representation of the object-mask showing:
      *
      * <ol>
-     *   <li>the center-of-gravity
-     *   <li>the number of <i>on</i> voxels on the object
+     *   <li>the center-of-gravity.
+     *   <li>the number of <i>on</i> voxels on the object.
      * </ol>
      */
     @Override
@@ -941,7 +941,7 @@ public class ObjectMask {
     }
 
     private Interpolator createInterpolator(BinaryValuesInt binaryValues) {
-        return InterpolatorFactory.getInstance().binaryResizing(binaryValues.getOffInt());
+        return InterpolatorFactory.getInstance().binaryResizing(binaryValues.getOff());
     }
 
     /**

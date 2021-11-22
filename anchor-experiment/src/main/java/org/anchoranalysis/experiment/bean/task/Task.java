@@ -55,16 +55,20 @@ import org.anchoranalysis.io.output.outputter.OutputterChecked;
 import org.apache.commons.lang.time.StopWatch;
 
 /**
- * A task which performs some kind of processing on a specific input-object
+ * Encapsulates some kind of processing to be performed on a set of inputs.
  *
- * <p>{@link ParametersUnbound} which are parameters generally used for tasks in an experiment,
- * whereas {@link InputBound} is created in a further step, when several of these parameters are
- * replaced with new more specific-objects for the specific task.
+ * <p>A shared-state is created which is then available as <i>common state</i> across all inputs. We
+ * avoid remembering state on a field in {@link Task} itself, so that the {@link Task} itself can be
+ * freely duplicated across nodes when parallelizing processing.
  *
- * <p>e.g. we move from a logger and manifest for the experiment as a whole, to a logger and
- * manifest for the task itself
+ * <p>Initially {@link ParametersUnbound} are created as task-wide parameters across inputs, whereas
+ * {@link InputBound} are created in a further step, specific to each input.
  *
- * <p>The following outputs are produced:
+ * <p>e.g. we move from a logger and manifest for the experiment as a whole in {@link
+ * ParametersUnbound}, to a logger and manifest for the task itself in {@link InputBound}.
+ *
+ * <p>The following outputs are produced, and depending on parameterization, written to the
+ * file-system:
  *
  * <table>
  * <caption></caption>

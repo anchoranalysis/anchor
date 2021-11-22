@@ -50,10 +50,10 @@ public final class BinaryValuesInt {
     private static final BinaryValuesInt DEFAULT = new BinaryValuesInt(0, 255);
 
     /** The integer representation of the value for <i>off</i>. */
-    @Getter private final int offInt;
+    @Getter private final int off;
 
     /** The integer representation of the value for <i>on</i>. */
-    @Getter private final int onInt;
+    @Getter private final int on;
 
     /**
      * Derives a {@link BinaryValuesByte} representation from the current values.
@@ -64,13 +64,13 @@ public final class BinaryValuesInt {
      * @return a newly derived {@link BinaryValuesByte}.
      */
     public BinaryValuesByte asByte() {
-        if (offInt > 255) {
+        if (off > 255) {
             throw new IncorrectVoxelTypeException("offInt must be <= 255");
         }
-        if (onInt > 255) {
+        if (on > 255) {
             throw new IncorrectVoxelTypeException("onInt must be <= 255");
         }
-        return new BinaryValuesByte(offInt, onInt);
+        return new BinaryValuesByte(off, on);
     }
 
     /**
@@ -91,6 +91,6 @@ public final class BinaryValuesInt {
      * @return a {@link BinaryValuesInt} with the <i>off</i> and <i>on</i> values switched.
      */
     public BinaryValuesInt createInverted() {
-        return new BinaryValuesInt(onInt, offInt);
+        return new BinaryValuesInt(on, off);
     }
 }

@@ -173,8 +173,8 @@ public interface VoxelsExtracter<T> {
      * Operations on whether particular voxels are equal to a particular value.
      *
      * @param equalToValue
-     * @return a newly instantiated object to perform queries to this voxels object as described
-     *     above.
+     * @return a newly instantiated object to perform queries on voxels who fulfill the above
+     *     condition.
      */
     VoxelsPredicate voxelsEqualTo(int equalToValue);
 
@@ -182,8 +182,8 @@ public interface VoxelsExtracter<T> {
      * Operations on whether particular voxels are greater than a threshold (but not equal to).
      *
      * @param threshold voxel-values greater than this threshold are included.
-     * @return a newly instantiated object to perform queries to this voxels object as described
-     *     above.
+     * @return a newly instantiated object to perform queries on voxels who fulfill the above
+     *     condition.
      */
     VoxelsPredicate voxelsGreaterThan(int threshold);
 

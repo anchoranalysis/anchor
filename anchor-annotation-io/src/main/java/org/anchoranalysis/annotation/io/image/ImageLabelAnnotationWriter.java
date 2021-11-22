@@ -34,7 +34,7 @@ import org.anchoranalysis.core.system.path.DirectoryCreator;
 import org.anchoranalysis.io.generator.text.WriteStringToFile;
 
 /**
- * Writes a {@link ImageLabelAnnotation} to the file-system.
+ * Writes an {@link ImageLabelAnnotation} to the file-system.
  *
  * @author Owen Feehan
  */

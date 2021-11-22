@@ -48,42 +48,73 @@ import org.anchoranalysis.math.histogram.Histogram;
 import org.anchoranalysis.spatial.box.Extent;
 import org.anchoranalysis.spatial.point.ReadableTuple3i;
 
+/**
+ * Create a {@link Histogram} of the voxel intensity values in an image, pertaining to a region
+ * defined by a {@link ObjectMask} or a {@link Mask}.
+ *
+ * @author Owen Feehan
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class HistogramFromObjectsFactory {
 
-    public static Histogram create(VoxelsUntyped inputBuffer, Optional<ObjectMask> object) {
+    /**
+     * Creates a {@link Histogram} of voxel intensity values in {@code voxels}, all or only those in
+     * {@code object}.
+     *
+     * @param voxels the intensity values for the entire scene.
+     * @param object if defined, only intensity values corresponding to this {@code object} are
+     *     retrieved, otherwise all voxels.
+     * @return a newly created {@link Histogram}.
+     */
+    public static Histogram createFrom(VoxelsUntyped voxels, Optional<ObjectMask> object) {
 
-        if (!isDataTypeSupported(inputBuffer.getVoxelDataType())) {
+        if (!isDataTypeSupported(voxels.getVoxelDataType())) {
             throw new IncorrectVoxelTypeException(
-                    String.format("Data type %s is not supported", inputBuffer.getVoxelDataType()));
+                    String.format("Data type %s is not supported", voxels.getVoxelDataType()));
         }
 
         if (object.isPresent()) {
-            return createWithMask(inputBuffer.any(), object.get());
+            return createWithMask(voxels.any(), object.get());
         } else {
-            return HistogramFactory.create(inputBuffer);
+            return HistogramFactory.createFrom(voxels);
         }
     }
 
-    public static Histogram createHistogramIgnoreZero(
-            Channel channel, ObjectMask object, boolean ignoreZero) {
-        Histogram histogram = create(channel, object);
-        if (ignoreZero) {
-            histogram.zeroValue(0);
-        }
-        return histogram;
+    /**
+     * Creates a {@link Histogram} of voxel intensity values in {@code channel} corresponding to
+     * {@code object}.
+     *
+     * @param channel the channel with voxels.
+     * @param object only intensity values corresponding to this {@code object} are retrieved.
+     * @return a newly created {@link Histogram}.
+     */
+    public static Histogram createFrom(Channel channel, ObjectMask object) {
+        return createFrom(channel, ObjectCollectionFactory.of(object));
     }
 
-    public static Histogram create(Channel channel) throws CreateException {
-
-        try {
-            return HistogramFactory.create(channel.voxels());
-        } catch (IncorrectVoxelTypeException e) {
-            throw new CreateException("Cannot create histogram from channel", e);
-        }
+    /**
+     * Creates a {@link Histogram} of voxel intensity values in {@code channel} corresponding to
+     * {@code objects}.
+     *
+     * @param channel the channel with voxels.
+     * @param objects only intensity values corresponding to {@code objects} are retrieved.
+     * @return a newly created {@link Histogram}.
+     */
+    public static Histogram createFrom(Channel channel, ObjectCollection objects) {
+        return createWithMasks(channel.voxels(), objects);
     }
 
-    public static Histogram create(Channel channel, Mask mask) throws CreateException {
+    /**
+     * Creates a {@link Histogram} of <i>all</i> voxel intensity values in {@code channel}
+     * corresponding to {@link Mask}.
+     *
+     * @param channel the channel with voxels.
+     * @param mask the mask.
+     * @return a newly created {@link Histogram}.
+     * @throws CreateException if the size of the channel and mask do not match, or a histogram
+     *     cannot otherwise created.
+     */
+    public static Histogram createFrom(Channel channel, Mask mask) throws CreateException {
 
         if (!channel.extent().equals(mask.extent())) {
             throw new CreateException("Size of channel and mask do not match");
@@ -96,18 +127,10 @@ public class HistogramFromObjectsFactory {
         try {
             total.addHistogram(histogramForObject);
         } catch (OperationFailedException e) {
-            assert false;
+            throw new CreateException(e);
         }
 
         return total;
-    }
-
-    public static Histogram create(Channel channel, ObjectMask object) {
-        return create(channel, ObjectCollectionFactory.of(object));
-    }
-
-    public static Histogram create(Channel channel, ObjectCollection objects) {
-        return createWithMasks(channel.voxels(), objects);
     }
 
     private static Histogram createWithMask(Voxels<?> inputBuffer, ObjectMask object) {
@@ -119,7 +142,7 @@ public class HistogramFromObjectsFactory {
         ReadableTuple3i cornerMin = object.boundingBox().cornerMin();
         ReadableTuple3i cornerMax = object.boundingBox().calculateCornerMax();
 
-        byte matchValue = object.binaryValuesByte().getOnByte();
+        byte matchValue = object.binaryValuesByte().getOn();
 
         for (int z = cornerMin.z(); z <= cornerMax.z(); z++) {
 

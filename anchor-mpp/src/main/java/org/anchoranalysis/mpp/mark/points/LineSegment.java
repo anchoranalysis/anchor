@@ -78,7 +78,7 @@ public class LineSegment extends Mark {
 
     @Override
     public BoundingBox box(Dimensions dimensions, int regionID) {
-        return BoundingBoxFromPoints.forTwoPoints(
+        return BoundingBoxFromPoints.fromTwoPoints(
                 distanceCalcToLine.getStartPoint(), distanceCalcToLine.getEndPoint());
     }
 

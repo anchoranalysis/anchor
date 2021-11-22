@@ -78,10 +78,10 @@ public class Mask {
      * The two states which are permitted to be assigned to the voxels, stored as <i>unsigned
      * int</i>s.
      */
-    @Getter private final BinaryValuesInt binaryValues;
+    @Getter private final BinaryValuesInt binaryValuesInt;
 
     /** The two states which are permitted to be assigned to the voxels, stored as <i>byte</i>s. */
-    private final BinaryValuesByte binaryValuesByte;
+    @Getter private final BinaryValuesByte binaryValuesByte;
 
     /**
      * Interpolator used for resizing the mask (making sure to use an out-of-bounds strategy of
@@ -122,7 +122,7 @@ public class Mask {
      */
     public Mask(Channel channel, BinaryValuesInt binaryValues) {
         this.channel = channel;
-        this.binaryValues = binaryValues;
+        this.binaryValuesInt = binaryValues;
         this.binaryValuesByte = binaryValues.asByte();
 
         if (!channel.getVoxelDataType().equals(UnsignedByteVoxelType.INSTANCE)) {
@@ -136,7 +136,7 @@ public class Mask {
     /**
      * Creates a mask from an existing binary-voxels using default image resolution
      *
-     * @param voxels the binary-voxels to be reused as the internal buffer of the mask
+     * @param voxels the {@link BinaryVoxels} to be reused as the internal buffer of the mask
      */
     public Mask(BinaryVoxels<UnsignedByteBuffer> voxels) {
         this(voxels, Optional.empty());
@@ -150,10 +150,10 @@ public class Mask {
      */
     public Mask(BinaryVoxels<UnsignedByteBuffer> voxels, Optional<Resolution> resolution) {
         this.channel = FACTORY.create(voxels.voxels(), resolution);
-        this.binaryValues = voxels.binaryValues();
-        this.binaryValuesByte = binaryValues.asByte();
+        this.binaryValuesInt = voxels.binaryValues();
+        this.binaryValuesByte = binaryValuesInt.asByte();
 
-        this.interpolator = createInterpolator(binaryValues);
+        this.interpolator = createInterpolator(binaryValuesInt);
     }
 
     /**
@@ -169,14 +169,31 @@ public class Mask {
         this(FACTORY.createEmptyInitialised(dimensions), binaryValues);
     }
 
+    /**
+     * The size and voxel-resolution of the channel.
+     *
+     * @return the dimensions.
+     */
     public Dimensions dimensions() {
         return channel.dimensions();
     }
 
+    /**
+     * Resolution of voxels to physical measurements.
+     *
+     * <p>e.g. physical size of each voxel in a particular dimension.
+     *
+     * @return the image-resolution.
+     */
     public Optional<Resolution> resolution() {
         return dimensions().resolution();
     }
 
+    /**
+     * The underlying voxels in the mask.
+     *
+     * @return the voxels.
+     */
     public Voxels<UnsignedByteBuffer> voxels() {
         try {
             return channel.voxels().asByte();
@@ -186,42 +203,91 @@ public class Mask {
         }
     }
 
+    /**
+     * The underlying voxels in the mask, exposed as {@link BinaryVoxels}.
+     *
+     * @return the voxels, with associated binary-values.
+     */
     public BinaryVoxels<UnsignedByteBuffer> binaryVoxels() {
-        return BinaryVoxelsFactory.reuseByte(voxels(), binaryValues);
+        return BinaryVoxelsFactory.reuseByte(voxels(), binaryValuesInt);
     }
 
-    public boolean isPointOn(Point3i point) {
+    /**
+     * Does a particular voxel have the <i>on</i> state?
+     *
+     * @param point the point indicating which voxel to check.
+     * @return true if this voxel has an on state, false otherwise.
+     */
+    public boolean isVoxelOn(Point3i point) {
         UnsignedByteBuffer buffer = voxels().sliceBuffer(point.z());
 
         int offset = voxels().extent().offsetSlice(point);
 
-        return buffer.getRaw(offset) == binaryValuesByte.getOnByte();
+        return buffer.getRaw(offset) == binaryValuesByte.getOn();
     }
 
+    /**
+     * Deep-copies the object.
+     *
+     * @return a deep-copy of the current object.
+     */
     public Mask duplicate() {
-        return new Mask(channel.duplicate(), binaryValues);
+        return new Mask(channel.duplicate(), binaryValuesInt);
     }
 
+    /**
+     * Creates an {@link ObjectMask} corresponding to the on/off state in a bounding-box.
+     *
+     * @param box the bounding-box.
+     * @param reuseIfPossible if true, the existing boxels will be reused if possible (e.g. if the
+     *     box refers to the entire image). if false, new voxel memory will always be allocated.
+     * @return the derived {@link ObjectMask}.
+     */
     public ObjectMask region(BoundingBox box, boolean reuseIfPossible) {
         Preconditions.checkArgument(channel.dimensions().contains(box));
         return new ObjectMask(
                 box,
                 channel.voxels().asByte().extract().region(box, reuseIfPossible),
-                binaryValues);
+                binaryValuesInt);
     }
 
+    /**
+     * Creates an otherwise identical {@link Mask} but a maximum-intensity-projection applied to the
+     * z-dimension.
+     *
+     * @return a newly created mask, as above.
+     */
     public Mask flattenZ() {
-        return new Mask(channel.projectMax(), binaryValues);
+        return new Mask(channel.projectMax(), binaryValuesInt);
     }
 
+    /**
+     * Operations on whether particular voxels are <i>on</i>.
+     *
+     * @return a newly instantiated object to perform queries on voxels who fulfill the above
+     *     condition.
+     */
     public VoxelsPredicate voxelsOn() {
-        return channel.voxelsEqualTo(binaryValues.getOnInt());
+        return channel.voxelsEqualTo(binaryValuesInt.getOn());
     }
 
+    /**
+     * Operations on whether particular voxels are <i>off</i>.
+     *
+     * @return a newly instantiated object to perform queries on voxels who fulfill the above
+     *     condition.
+     */
     public VoxelsPredicate voxelsOff() {
-        return channel.voxelsEqualTo(binaryValues.getOffInt());
+        return channel.voxelsEqualTo(binaryValuesInt.getOff());
     }
 
+    /**
+     * Creates a new {@Mask} whose X- and Y- dimensions are scaled by {@code scaleFactor}.
+     *
+     * @param scaleFactor how to the scale the X- and Y- dimensions.
+     * @return a newly created {@Mask} as above, except if {@code scaleFactor} is effectively 1, in
+     *     which case the existing {@link Mask} is reused.
+     */
     public Mask scaleXY(ScaleFactor scaleFactor) {
 
         if (scaleFactor.isNoScale()) {
@@ -231,7 +297,7 @@ public class Mask {
 
         Channel scaled = this.channel.scaleXY(scaleFactor, interpolator);
 
-        Mask mask = new Mask(scaled, binaryValues);
+        Mask mask = new Mask(scaled, binaryValuesInt);
 
         // We threshold to make sure it's still binary
         applyThreshold(mask);
@@ -239,74 +305,89 @@ public class Mask {
         return mask;
     }
 
+    /**
+     * Creates a new {@link Mask} containing only one particular slice.
+     *
+     * <p>The existing {@link Voxels} are reused, without creating new buffers.
+     *
+     * @param z the index of the slice to extract (index in z-dimension)
+     * @return a newly created {@link Mask} consisting of the slice at {@code sliceIndex} only.
+     */
     public Mask extractSlice(int z) {
-        return new Mask(channel.extractSlice(z), binaryValues);
+        return new Mask(channel.extractSlice(z), binaryValuesInt);
     }
 
+    /**
+     * Replaces the underlying voxels in the mask with new voxels.
+     *
+     * <p>The resolution and binary-values remain unchanged.
+     *
+     * @param voxels the new voxels to assign.
+     * @throws IncorrectImageSizeException if the size of {@code voxels} is not identical to the
+     *     existing boxels.
+     */
     public void replaceBy(BinaryVoxels<UnsignedByteBuffer> voxels)
             throws IncorrectImageSizeException {
         channel.replaceVoxels(voxels.voxels());
     }
 
+    /**
+     * Interface that allows assignment of an <i>on</i> state to all or subsets of the voxels.
+     *
+     * @return the interface.
+     */
     public VoxelsAssigner assignOn() {
-        return channel.assignValue(binaryValues.getOnInt());
+        return channel.assignValue(binaryValuesInt.getOn());
     }
 
+    /**
+     * Interface that allows assignment of an <i>off</i> state to all or subsets of the voxels.
+     *
+     * @return the interface.
+     */
     public VoxelsAssigner assignOff() {
-        return channel.assignValue(binaryValues.getOffInt());
+        return channel.assignValue(binaryValuesInt.getOff());
     }
 
+    /**
+     * A buffer corresponding to a particular z-slice.
+     *
+     * <p>This buffer is either a NIO class or another class that wraps the underlying array storing
+     * voxel intensities.
+     *
+     * @param z the index (beginning at 0) of all z-slices.
+     * @return the corresponding buffer for {@code z}.
+     */
     public UnsignedByteBuffer sliceBuffer(int z) {
         return channel.voxels().asByte().sliceBuffer(z);
     }
 
-    public int getOffInt() {
-        return binaryValues.getOffInt();
+    @Override
+    public boolean equals(Object other) {
+        return binaryValuesInt.equals(other);
     }
 
-    public int getOnInt() {
-        return binaryValues.getOnInt();
-    }
-
-    public boolean equals(Object o) {
-        return binaryValues.equals(o);
-    }
-
+    @Override
     public int hashCode() {
-        return binaryValues.hashCode();
+        return binaryValuesInt.hashCode();
     }
 
-    public BinaryValuesByte createByte() {
-        return binaryValues.asByte();
-    }
-
-    public BinaryValuesInt createInverted() {
-        return binaryValues.createInverted();
-    }
-
-    public String toString() {
-        return binaryValues.toString();
-    }
-
-    public byte getOffByte() {
-        return binaryValuesByte.getOffByte();
-    }
-
-    public byte getOnByte() {
-        return binaryValuesByte.getOnByte();
-    }
-
+    /**
+     * The size of the voxels across three dimensions.
+     *
+     * @return the size.
+     */
     public Extent extent() {
         return channel.extent();
     }
 
     private void applyThreshold(Mask mask) {
-        int thresholdVal = (binaryValues.getOnInt() + binaryValues.getOffInt()) / 2;
+        int thresholdVal = (binaryValuesInt.getOn() + binaryValuesInt.getOff()) / 2;
 
-        VoxelsThresholder.thresholdByte(mask.voxels(), thresholdVal, mask.binaryValues().asByte());
+        VoxelsThresholder.thresholdByte(mask.voxels(), thresholdVal, mask.binaryValuesByte());
     }
 
     private Interpolator createInterpolator(BinaryValuesInt binaryValues) {
-        return InterpolatorFactory.getInstance().binaryResizing(binaryValues.getOffInt());
+        return InterpolatorFactory.getInstance().binaryResizing(binaryValues.getOff());
     }
 }

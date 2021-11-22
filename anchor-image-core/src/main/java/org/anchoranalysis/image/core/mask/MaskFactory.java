@@ -67,7 +67,7 @@ public class MaskFactory {
                         binaryValues);
         // By default the voxels are 0. If <i>off</i> value is not 0, it needs to be explicitly
         // assigned.
-        if (binaryValues.getOffInt() != 0) {
+        if (binaryValues.getOff() != 0) {
             mask.assignOff().toAll();
         }
         return mask;

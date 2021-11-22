@@ -152,7 +152,7 @@ public abstract class VoxelBuffer<T> {
 
     @Override
     public String toString() {
-        return HistogramFactory.create(this).toString();
+        return HistogramFactory.createFrom(this).toString();
     }
 
     /**

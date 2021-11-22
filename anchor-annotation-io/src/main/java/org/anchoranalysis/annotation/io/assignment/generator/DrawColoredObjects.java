@@ -121,7 +121,7 @@ public class DrawColoredObjects {
             List<ObjectMask> otherObjects, DrawObject writer) {
         return new IfElse(
                 (ObjectWithProperties object, RGBStack stack, int id) ->
-                        otherObjects.contains(object.withoutProperties()),
+                        otherObjects.contains(object.asObjectMask()),
                 writer,
                 new Filled());
     }

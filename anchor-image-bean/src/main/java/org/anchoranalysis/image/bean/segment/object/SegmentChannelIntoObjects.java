@@ -30,7 +30,6 @@ import java.util.Optional;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.bean.segment.SegmentationBean;
 import org.anchoranalysis.image.core.channel.Channel;
-import org.anchoranalysis.image.core.object.seed.SeedCollection;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 
@@ -57,7 +56,7 @@ public abstract class SegmentChannelIntoObjects
      * @throws SegmentationFailedException if anything goes wrong during the segmentation.
      */
     public abstract ObjectCollection segment(
-            Channel channel, Optional<ObjectMask> objectMask, Optional<SeedCollection> seeds)
+            Channel channel, Optional<ObjectMask> objectMask, Optional<ObjectCollection> seeds)
             throws SegmentationFailedException;
 
     protected static void checkUnsupportedObjectMask(Optional<ObjectMask> objectMask)
@@ -68,7 +67,7 @@ public abstract class SegmentChannelIntoObjects
         }
     }
 
-    protected static void checkUnsupportedSeeds(Optional<SeedCollection> seeds)
+    protected static void checkUnsupportedSeeds(Optional<ObjectCollection> seeds)
             throws SegmentationFailedException {
         if (seeds.isPresent()) {
             throw new SegmentationFailedException("Seeds are not supported for this operation");

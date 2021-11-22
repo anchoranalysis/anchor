@@ -38,36 +38,71 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
 /**
  * Like an {@link ObjectCollection} but each object has associated properties.
  *
+ * <p>Like a {@link ObjectCollection}, it is backed internally by an {@link ArrayList}, offering add
+ * operations in constant time, and other operations in linear-time.
+ *
  * @author Owen Feehan
  */
 public class ObjectCollectionWithProperties implements Iterable<ObjectWithProperties> {
 
     private final List<ObjectWithProperties> delegate;
 
+    /** Create with zero objects. */
     public ObjectCollectionWithProperties() {
         delegate = new ArrayList<>();
     }
 
+    /**
+     * Create with a single object.
+     *
+     * @param object the object.
+     */
     public ObjectCollectionWithProperties(ObjectMask object) {
         this(ObjectCollectionFactory.of(object));
     }
 
+    /**
+     * Create with a stream of objects with properties.
+     *
+     * @param objects the objects.
+     */
     public ObjectCollectionWithProperties(Stream<ObjectWithProperties> objects) {
         delegate = objects.collect(Collectors.toList());
     }
 
+    /**
+     * Create with a stream of objects, assign empty properties to each.
+     *
+     * @param objects the objects.
+     */
     public ObjectCollectionWithProperties(ObjectCollection objects) {
         delegate = objects.stream().mapToList(ObjectWithProperties::new);
     }
 
-    public boolean add(ObjectMask object) {
-        return delegate.add(new ObjectWithProperties(object));
+    /**
+     * Add an {@link ObjectMask} to the collection, assigning empty properties to it.
+     *
+     * @param object the object.
+     */
+    public void add(ObjectMask object) {
+        delegate.add(new ObjectWithProperties(object));
     }
 
-    public boolean add(ObjectWithProperties object) {
-        return delegate.add(object);
+    /**
+     * Add an {@link ObjectWithProperties} to the collection.
+     *
+     * @param object the object.
+     */
+    public void add(ObjectWithProperties object) {
+        delegate.add(object);
     }
 
+    /**
+     * Get an item at a particular index.
+     *
+     * @param index the index.
+     * @return the corresponding item.
+     */
     public ObjectWithProperties get(int index) {
         return delegate.get(index);
     }
@@ -83,14 +118,22 @@ public class ObjectCollectionWithProperties implements Iterable<ObjectWithProper
     }
 
     /**
-     * Returns the contained-objects without corresponding properties
+     * Returns the contained-objects without the corresponding properties.
      *
      * <p>This is an <b>immutable</b> operation.
+     *
+     * @return the a newly created {@link ObjectCollection} containing the same objects as the
+     *     current collection, but without any associated properties.
      */
     public ObjectCollection withoutProperties() {
-        return ObjectCollectionFactory.mapFrom(delegate, ObjectWithProperties::withoutProperties);
+        return ObjectCollectionFactory.mapFrom(delegate, ObjectWithProperties::asObjectMask);
     }
 
+    /**
+     * Number of elements in the collection.
+     *
+     * @return the size of the collection.
+     */
     public int size() {
         return delegate.size();
     }

@@ -31,7 +31,6 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.voxel.binary.values.BinaryValuesInt;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 
@@ -63,9 +62,7 @@ public class MaskInverter {
      * @param mask mask to invert (modified)
      */
     public static void invert(Mask mask) {
-
-        BinaryValuesInt binaryValues = mask.binaryValues();
-        BinaryValuesByte binaryValuesByte = binaryValues.asByte();
+        BinaryValuesByte binaryValuesByte = mask.binaryValuesByte();
         invertVoxels(mask.voxels(), binaryValuesByte);
     }
 
@@ -81,10 +78,10 @@ public class MaskInverter {
 
                     byte val = buffer.getRaw(offset);
 
-                    if (val == binaryValues.getOnByte()) {
-                        buffer.putRaw(offset, binaryValues.getOffByte());
+                    if (val == binaryValues.getOn()) {
+                        buffer.putRaw(offset, binaryValues.getOff());
                     } else {
-                        buffer.putRaw(offset, binaryValues.getOnByte());
+                        buffer.putRaw(offset, binaryValues.getOn());
                     }
 
                     offset++;

@@ -49,7 +49,7 @@ final class CenterOfGravityCalculator {
 
         int count = 0;
         Point3d sum = new Point3d();
-        byte onByte = object.binaryValuesByte().getOnByte();
+        byte onByte = object.binaryValuesByte().getOn();
         Extent extent = object.extent();
 
         for (int z = 0; z < extent.z(); z++) {
@@ -89,7 +89,7 @@ final class CenterOfGravityCalculator {
 
         int count = 0;
         double sum = 0.0;
-        byte onByte = object.binaryValuesByte().getOnByte();
+        byte onByte = object.binaryValuesByte().getOn();
         Extent extent = object.extent();
 
         for (int z = 0; z < extent.z(); z++) {

@@ -36,16 +36,16 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
-import org.anchoranalysis.image.core.orientation.Orientation2D;
 import org.anchoranalysis.image.core.points.BoundingBoxFromPoints;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.MarkWithPosition;
 import org.anchoranalysis.spatial.box.BoundingBox;
+import org.anchoranalysis.spatial.orientation.Orientation2D;
+import org.anchoranalysis.spatial.orientation.RotationMatrix;
 import org.anchoranalysis.spatial.point.Point2d;
 import org.anchoranalysis.spatial.point.Point3d;
 import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.point.PointConverter;
-import org.anchoranalysis.spatial.rotation.RotationMatrix;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 /**
@@ -118,7 +118,7 @@ public class RotatableBoundingBox extends MarkWithPosition {
         this.distanceToRightTop = distanceToRightTop;
         this.orientation = orientation;
 
-        this.rotMatrix = orientation.createRotationMatrix();
+        this.rotMatrix = orientation.deriveRotationMatrix();
         this.rotMatrixInv = rotMatrix.transpose();
     }
 
@@ -134,7 +134,7 @@ public class RotatableBoundingBox extends MarkWithPosition {
                 };
 
         try {
-            BoundingBox box = BoundingBoxFromPoints.forList(rotateAddPos(points));
+            BoundingBox box = BoundingBoxFromPoints.fromCollection(rotateAddPos(points));
             return box.clampTo(dimensions.extent());
         } catch (OperationFailedException e) {
             throw new AnchorImpossibleSituationException();

@@ -57,8 +57,8 @@ import org.anchoranalysis.spatial.box.Extent;
 import org.anchoranalysis.spatial.point.Point3i;
 
 /**
- * Stack that contains 1 or 3 channels so that we and display it as either or as an RGB unsigned
- * 8-bit image.
+ * Stack that contains 1 or 3 channels so that we and display it as either grayscale or as an RGB
+ * unsigned 8-bit image, respectively.
  *
  * <p>A converter is optionally associated with each channel, used to convert the source images into
  * unsigned 8-bit.
@@ -113,6 +113,13 @@ public class DisplayStack {
     // END: constructors
 
     // START: factory methods
+    /**
+     * Creates from a {@link Channel}.
+     *
+     * @param channel the stack to create from.
+     * @return a newly created {@link DisplayStack}, after applying any applicable conversion.
+     * @throws CreateException if a converter cannot be associated with a particular channel.
+     */
     public static DisplayStack create(Channel channel) throws CreateException {
         DisplayStack display = new DisplayStack(new Stack(channel));
         try {
@@ -123,6 +130,15 @@ public class DisplayStack {
         return display;
     }
 
+    /**
+     * Creates from a {@link RGBStack}.
+     *
+     * @param stack the stack to create from, which should have either 1 or 3 channels
+     *     (corresponding to RGB).
+     * @return a newly created {@link DisplayStack}, after applying any applicable conversion.
+     * @throws CreateException with an incorrect number of channels, or if a converter cannot be
+     *     associated with a particular channel.
+     */
     public static DisplayStack create(Stack stack) throws CreateException {
         DisplayStack display = new DisplayStack(stack);
         display.checkNumberChannels(stack.getNumberChannels());
@@ -134,6 +150,13 @@ public class DisplayStack {
         return display;
     }
 
+    /**
+     * Creates from a {@link RGBStack}.
+     *
+     * @param rgbStack the stack to create from.
+     * @return a newly created {@link DisplayStack}, after applying any applicable conversion.
+     * @throws CreateException if a converter cannot be associated with a particular channel.
+     */
     public static DisplayStack create(RGBStack rgbStack) throws CreateException {
         DisplayStack display = new DisplayStack(rgbStack.asStack());
         try {
@@ -146,10 +169,11 @@ public class DisplayStack {
 
     // END: factory methods
 
-    public long numberNonNullConverters() {
-        return converters.stream().filter(Optional::isPresent).count();
-    }
-
+    /**
+     * Does the display-stack contain an RGB image?
+     *
+     * @return true if the contained image is RGB, false if it is grayscale.
+     */
     public boolean isRGB() {
         return stack.getNumberChannels() == 3;
     }
@@ -167,6 +191,8 @@ public class DisplayStack {
      * The width and height and depth of all channels in the {@link Stack}.
      *
      * <p>i.e. the size of each of the three possible dimensions.
+     *
+     * @return the extent.
      */
     public Extent extent() {
         return dimensions().extent();
@@ -179,6 +205,17 @@ public class DisplayStack {
      */
     public final int getNumberChannels() {
         return stack.getNumberChannels();
+    }
+
+    /**
+     * Resolution of voxels to physical measurements.
+     *
+     * <p>e.g. physical size of each voxel in a particular dimension.
+     *
+     * @return the resolution.
+     */
+    public Optional<Resolution> resolution() {
+        return stack.resolution();
     }
 
     /**
@@ -196,26 +233,25 @@ public class DisplayStack {
                 Functions.identity());
     }
 
-    // Always creates a new channel
-    public Channel createChannelDuplicate(int index) {
-        return mapper.mapChannelIfSupported(
-                index,
-                (channel, converter) -> converter.convert(channel, ConversionPolicy.ALWAYS_NEW),
-                Channel::duplicate);
-    }
+    /**
+     * Creates a new {@link Channel} that refers to only a {@link BoundingBox} portion of the {@link
+     * DisplayStack}.
+     *
+     * <p>Existing voxels are always duplicated, and never reused.
+     *
+     * @param index the index of the channel.
+     * @param box the bounding-box portion to extract.
+     * @return a newly created {@link Channel} containing extracted voxels, corresponding to {@code
+     *     box}.
+     */
+    public Channel extractChannelForBoundingBox(int index, BoundingBox box) {
 
-    // Always creates a new channel, but just capturing a portion of the channel
-    public Channel createChannelDuplicateForBoundingBox(int index, BoundingBox box) {
-
+        Dimensions dimensionsBox =
+                stack.getChannel(index).dimensions().duplicateChangeExtent(box.extent());
         Channel out =
-                ChannelFactory.instance()
-                        .create(
-                                stack.getChannel(index)
-                                        .dimensions()
-                                        .duplicateChangeExtent(box.extent()),
-                                UnsignedByteVoxelType.INSTANCE);
+                ChannelFactory.instance().create(dimensionsBox, UnsignedByteVoxelType.INSTANCE);
 
-        mapper.callChannelIfSupported(
+        mapper.consumeChannelIfSupported(
                 index,
                 (channel, convert) ->
                         copyPixelsTo(index, box, out.voxels().asByte(), box.shiftToOrigin()),
@@ -239,18 +275,21 @@ public class DisplayStack {
         return deriveStack(index -> createChannel(index, alwaysNew));
     }
 
-    public Stack deriveStackDuplicate() {
-        return deriveStack(this::createChannelDuplicate);
-    }
-
-    /** Copies pixels on a particular channel to an output buffer */
+    /**
+     * Copies pixels from a particular channel to an output buffer.
+     *
+     * @param channelIndex the index of the <i>source</i> channel to copy <b>from</b>.
+     * @param sourceBox the bounding-box in the source channel to copy <b>from</b>.
+     * @param destinationVoxels where to copy the pixels <b>to</b>.
+     * @param destinationBox the bounding-box in the destination channel to copy <b>to</b>.
+     */
     public void copyPixelsTo(
             int channelIndex,
             BoundingBox sourceBox,
-            Voxels<UnsignedByteBuffer> voxelsDestination,
+            Voxels<UnsignedByteBuffer> destinationVoxels,
             BoundingBox destinationBox) {
 
-        mapper.callChannelIfSupported(
+        mapper.consumeChannelIfSupported(
                 channelIndex,
                 (channel, converter) -> {
                     BoundingBox allLocalBox = destinationBox.shiftToOrigin();
@@ -265,32 +304,51 @@ public class DisplayStack {
                             converter
                                     .getVoxelsConverter()
                                     .convertFrom(destBoxNonByte, VoxelsFactory.getUnsignedByte());
-                    destBoxByte.extract().boxCopyTo(allLocalBox, voxelsDestination, destinationBox);
+                    destBoxByte.extract().boxCopyTo(allLocalBox, destinationVoxels, destinationBox);
                 },
                 channel ->
                         channel.voxels()
                                 .asByte()
                                 .extract()
-                                .boxCopyTo(sourceBox, voxelsDestination, destinationBox));
+                                .boxCopyTo(sourceBox, destinationVoxels, destinationBox));
     }
 
+    /**
+     * The data-type of the underlying voxels before they are converted to 8-bit.
+     *
+     * @return the data-type if all channels have identical data-type, or {@link Optional#empty} if
+     *     they vary.
+     */
     public Optional<VoxelDataType> unconvertedDataType() {
         VoxelDataType dataType = stack.getChannel(0).getVoxelDataType();
-        // If they don't all have the same dataType we return null
+        // If they don't all have the same dataType we return Optional#empty
         if (!stack.allChannelsHaveType(dataType)) {
             return Optional.empty();
         }
         return Optional.of(dataType);
     }
 
+    /**
+     * Retrieve the intensity of a voxel at a particular point, before any conversion is applied.
+     *
+     * @param channelIndex the index of the channel in which the voxel resides.
+     * @param point the point in the channel corresponding to the voxel.
+     * @return the intensity value, before any conversion.
+     */
     public int getUnconvertedVoxelAt(int channelIndex, Point3i point) {
         return stack.getChannel(channelIndex).extract().voxel(point);
     }
 
     /**
-     * Maximum-intensity projection.
+     * Creates a <a href="https://en.wikipedia.org/wiki/Maximum_intensity_projection">Maximum
+     * Intensity Projection</a> of each channel.
      *
-     * @return
+     * <p>Note that if the channels do not need projections, the existing {@link Channel} is reused
+     * in the newly created {@link Stack}. But if a projection is needed, it is always freshly
+     * created as a new channel.
+     *
+     * @return a newly created {@link Stack}, with maximum intensity projections of each {@link
+     *     Channel}.
      */
     public DisplayStack projectMax() {
         try {
@@ -300,32 +358,40 @@ public class DisplayStack {
         }
     }
 
+    /**
+     * Extract a particular z-slice from the {@link DisplayStack} as a new stack, applying any
+     * applicable conversion.
+     *
+     * <p>The existing voxels may be reused, if no conversion needs to be applied.
+     *
+     * @param z the index in the Z-dimension of the slice to extract.
+     * @return the extracted slice, as a new {@link DisplayStack} after any applicable conversion.
+     * @throws CreateException if a channel cannot be attached to a converter.
+     */
     public DisplayStack extractSlice(int z) throws CreateException {
         return new DisplayStack(stack.extractSlice(z), converters);
     }
 
-    public BufferedImage createBufferedImage() throws CreateException {
-        if (stack.getNumberChannels() == 3) {
-            return BufferedImageFactory.createRGB(
-                    voxelsForChannel(0), voxelsForChannel(1), voxelsForChannel(2), stack.extent());
+    /**
+     * Derive a AWT {@link BufferedImage} from the {@link DisplayStack} after applying any
+     * applicable conversion.
+     *
+     * @return a newly created {@link BufferedImage} with identical voxels to the {@link
+     *     DisplayStack} after conversion.
+     */
+    public BufferedImage deriveBufferedImage() {
+        try {
+            if (stack.getNumberChannels() == 3) {
+                return BufferedImageFactory.createRGB(
+                        voxelsForChannel(0),
+                        voxelsForChannel(1),
+                        voxelsForChannel(2),
+                        stack.extent());
+            }
+            return BufferedImageFactory.createGrayscaleByte(voxelsForChannel(0));
+        } catch (CreateException e) {
+            throw new AnchorImpossibleSituationException();
         }
-        return BufferedImageFactory.createGrayscaleByte(voxelsForChannel(0));
-    }
-
-    public BufferedImage createBufferedImageBBox(BoundingBox box) throws CreateException {
-
-        if (box.extent().z() != 1) {
-            throw new CreateException("BBox must have a single pixel z-height");
-        }
-
-        if (stack.getNumberChannels() == 3) {
-            return BufferedImageFactory.createRGB(
-                    voxelsForChannelBoundingBox(0, box),
-                    voxelsForChannelBoundingBox(1, box),
-                    voxelsForChannelBoundingBox(2, box),
-                    box.extent());
-        }
-        return BufferedImageFactory.createGrayscaleByte(voxelsForChannelBoundingBox(0, box));
     }
 
     private Voxels<UnsignedByteBuffer> voxelsForChannel(int channelIndex) {
@@ -336,22 +402,6 @@ public class DisplayStack {
                                 .getVoxelsConverter()
                                 .convertFrom(channel.voxels(), VoxelsFactory.getUnsignedByte()),
                 channel -> channel.voxels().asByte());
-    }
-
-    @SuppressWarnings("unchecked")
-    private Voxels<UnsignedByteBuffer> voxelsForChannelBoundingBox(
-            int channelIndex, BoundingBox box) {
-
-        Voxels<?> voxelsUnconverted = stack.getChannel(channelIndex).extract().region(box, true);
-        return mapper.mapChannelIfSupported(
-                channelIndex,
-                (channel, converter) ->
-                        converter
-                                .getVoxelsConverter()
-                                .convertFrom(
-                                        new VoxelsUntyped(voxelsUnconverted),
-                                        VoxelsFactory.getUnsignedByte()),
-                channel -> (Voxels<UnsignedByteBuffer>) voxelsUnconverted);
     }
 
     private Stack deriveStack(IntFunction<Channel> indexToChannel) {
@@ -419,9 +469,5 @@ public class DisplayStack {
 
     private ChannelMapper createChannelMapper() {
         return new ChannelMapper(stack::getChannel, converters::get);
-    }
-
-    public Optional<Resolution> resolution() {
-        return stack.resolution();
     }
 }

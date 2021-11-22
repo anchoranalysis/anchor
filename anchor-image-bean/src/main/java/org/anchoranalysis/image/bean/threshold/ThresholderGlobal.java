@@ -93,6 +93,6 @@ public class ThresholderGlobal extends Thresholder {
             Optional<Histogram> histogram,
             Optional<ObjectMask> objectMask) {
         return histogram.orElseGet(
-                () -> HistogramFromObjectsFactory.create(inputBuffer, objectMask));
+                () -> HistogramFromObjectsFactory.createFrom(inputBuffer, objectMask));
     }
 }

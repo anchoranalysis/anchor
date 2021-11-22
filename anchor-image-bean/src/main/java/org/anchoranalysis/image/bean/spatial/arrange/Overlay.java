@@ -126,7 +126,7 @@ public class Overlay extends ArrangeStackBean {
 
         RGBStack overlayImg = rasterIterator.next();
 
-        Extent overlayE = deriveExtent(overlayImg.channelAt(0).extent(), boxSet.extent());
+        Extent overlayE = deriveExtent(overlayImg.getChannel(0).extent(), boxSet.extent());
 
         int hPos = positionHorizontal(boxSet, overlayImg.dimensions());
         int vPos = positionVertical(boxSet, overlayImg.dimensions());

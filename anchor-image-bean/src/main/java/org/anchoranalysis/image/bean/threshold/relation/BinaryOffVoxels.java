@@ -43,7 +43,7 @@ public class BinaryOffVoxels extends BinaryVoxelsBase {
 
     @Override
     public double threshold() {
-        return BinaryValuesInt.getDefault().getOffInt() + 1.0;
+        return BinaryValuesInt.getDefault().getOff() + 1.0;
     }
 
     @Override

@@ -34,7 +34,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.dimensions.SpatialUnits;
 import org.anchoranalysis.image.core.dimensions.UnitConverter;
-import org.anchoranalysis.image.core.orientation.DirectionVector;
+import org.anchoranalysis.spatial.orientation.DirectionVector;
 
 // Measures either area or volume (depending if the do3D flag is employed)
 public class DistancePhysical extends UnitValueDistance {

@@ -38,7 +38,7 @@ final class ReadWriteInt extends BufferReadWrite<UnsignedIntBuffer> {
             int offset,
             BinaryValuesInt binaryValues,
             BinaryValuesByte binaryValuesMask) {
-        return buffer.getRaw(offset) == binaryValues.getOnInt();
+        return buffer.getRaw(offset) == binaryValues.getOn();
     }
 
     @Override

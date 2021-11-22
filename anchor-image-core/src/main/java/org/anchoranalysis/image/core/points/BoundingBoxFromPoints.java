@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.image.core.points;
 
-import java.util.List;
+import java.util.Collection;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
@@ -44,13 +44,14 @@ import org.anchoranalysis.spatial.point.Point3i;
 public class BoundingBoxFromPoints {
 
     /**
-     * Create from a list of points
+     * Create from a collection of points
      *
-     * @param points the list
-     * @return a bounding-box minimally spanning all points
-     * @throws OperationFailedException if there are zero points
+     * @param points the collection.
+     * @return a bounding-box minimally spanning all points.
+     * @throws OperationFailedException if there are zero points.
      */
-    public static BoundingBox forList(List<Point3i> points) throws OperationFailedException {
+    public static BoundingBox fromCollection(Collection<Point3i> points)
+            throws OperationFailedException {
         if (points.isEmpty()) {
             throw new OperationFailedException("Points list must contain at least one item");
         }
@@ -64,13 +65,13 @@ public class BoundingBoxFromPoints {
     /**
      * Creates a bounding-box for two unordered points.
      *
-     * <p>By unordered, it means that no one point must have a value higher than another
+     * <p>By unordered, it means that no one point must have a value higher than another.
      *
-     * @param point1 first-point (arbitrary order)
-     * @param point2 second-point (arbitrary order)
-     * @return a bounding-box minally spanning the two points
+     * @param point1 first-point (arbitrary order).
+     * @param point2 second-point (arbitrary order).
+     * @return a bounding-box minimally spanning the two points.
      */
-    public static BoundingBox forTwoPoints(Point3d point1, Point3d point2) {
+    public static BoundingBox fromTwoPoints(Point3d point1, Point3d point2) {
         Point3d min = calculateMin(point1, point2);
         Point3d max = calculateMax(point1, point2);
         return new BoundingBox(min, max);

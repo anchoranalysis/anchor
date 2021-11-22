@@ -42,7 +42,15 @@ public class NamedStacksUniformSize {
 
     private NamedStacks delegate = new NamedStacks();
 
-    public void add(String name, Stack stack) throws OperationFailedException {
+    /**
+     * Adds an element to the store.
+     *
+     * @param identifier a unique identifier for the element.
+     * @param stack the stack to add.
+     * @throws OperationFailedException if the identifier already exists, or otherwise the add
+     *     operation fails.
+     */
+    public void add(String identifier, Stack stack) throws OperationFailedException {
 
         if (dimensions == null) {
             dimensions = stack.dimensions();
@@ -52,10 +60,15 @@ public class NamedStacksUniformSize {
             }
         }
 
-        delegate.add(name, () -> stack);
+        delegate.add(identifier, () -> stack);
     }
 
-    public NamedStacks withoutUniformSizeConstraint() {
+    /**
+     * Exposes the stacks as a {@link NamedStacks}.
+     *
+     * @return an interface as {@link NamedStacks}.
+     */
+    public NamedStacks asNamedStacks() {
         return delegate;
     }
 }

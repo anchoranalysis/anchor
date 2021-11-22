@@ -31,11 +31,31 @@ import org.anchoranalysis.core.progress.CachedProgressingSupplier;
 import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.image.core.stack.Stack;
 
+/**
+ * Supplies a {@link NamedProvider} of {@link Stack}s.
+ *
+ * @author Owen Feehan
+ */
 @FunctionalInterface
 public interface NamedStacksSupplier {
 
+    /**
+     * Gets the {@link NamedProvider} of {@link Stack}s.
+     *
+     * @param progress a progress-tracker which may be updated (if supported) while the stacks are
+     *     retrieved.
+     * @return the {@link NamedProvider} of {@link Stack}s.
+     * @throws OperationFailedException if the {@link Stack}s cannot be retrieved.
+     */
     NamedProvider<Stack> get(Progress progress) throws OperationFailedException;
 
+    /**
+     * Caches a {@link NamedStacksSupplier} so that its value will be remembered after first
+     * execution.
+     *
+     * @param supplier the uncached supplier.
+     * @return a new cached supplier.
+     */
     public static NamedStacksSupplier cache(NamedStacksSupplier supplier) {
         return CachedProgressingSupplier.cache(supplier::get)::get;
     }

@@ -34,19 +34,21 @@ import java.util.function.UnaryOperator;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.index.GetOperationFailedException;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.spatial.box.BoundedList;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 /**
- * A list of elements with an object-mask representation that have been scaled.
+ * A list of elements, with an {@link ObjectMask} representation, that have been scaled.
  *
- * <p>When scaling object-masks, so as to keep boundaries between objects exact, objects need to be
- * scaled collectively using a particular interpolation procedure rather than collectively.
+ * <p>When scaling {@link ObjectMask}s, so as to keep boundaries between objects exact, objects need
+ * to be scaled collectively using a particular interpolation procedure rather than independently.
  *
  * <p>If any elements overlap with other elements, they are scaled separately independently of the
  * others.
  *
  * @author Owen Feehan
+ * @param <T> element-type.
  */
 public class ScaledElements<T> {
 
@@ -55,11 +57,12 @@ public class ScaledElements<T> {
     /**
      * Creates elements to be scaled.
      *
-     * @param elements element to be scaled (after possibly a preoperation)
-     * @param scaleFactor how much to scale the elements by
-     * @param preOperation operation applied to each element before it is scaled (e.g. flattening)
-     * @param postOperation operation applied to each element after it is scaled (e.g. flattening)
-     * @throws CreateException
+     * @param elements element to be scaled (after possibly a preoperation).
+     * @param scaleFactor how much to scale the elements by.
+     * @param preOperation operation applied to each element before it is scaled (e.g. flattening).
+     * @param postOperation operation applied to each element after it is scaled (e.g. flattening).
+     * @throws CreateException if the internally needed data-structures cannot be successfully
+     *     created.
      */
     ScaledElements(
             List<T> elements,
@@ -111,19 +114,19 @@ public class ScaledElements<T> {
      * <p>The total number of objects is identical to the unscaled objects, just the order may
      * differ.
      *
-     * @return a collection with the scaled-objects
+     * @return a collection with the scaled-objects.
      */
     public Collection<T> asCollectionOrderNotPreserved() {
         return elementsScaled.values();
     }
 
     /**
-     * Returns a list of scaled-elements corresponding to a list of unscaled-elements
+     * Returns a list of scaled-elements corresponding to a list of unscaled-elements.
      *
      * @param unscaledElements the list of unscaled-elements (all items must have been previously
      *     passed to the constructor, but the order need not be identical).
      * @return a newly created list where each elements is respectively the scaled-element for the
-     *     corresponding input element
+     *     corresponding input element.
      */
     public List<T> asListOrderPreserved(List<T> unscaledElements) {
         return FunctionalList.mapToList(unscaledElements, elementsScaled::get);

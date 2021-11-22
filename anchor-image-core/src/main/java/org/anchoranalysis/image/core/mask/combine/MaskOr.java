@@ -31,19 +31,25 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxelsAll;
 
+/**
+ * Performs a logical <b>or</b> operation on corresponding voxels in two {@link Mask}s.
+ *
+ * @author Owen Feehan
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MaskOr {
 
     /**
-     * Performs a OR operation on each voxel in two masks, writing the result onto the first mask.
+     * Performs a logical <b>or</b> operation on each voxel in two masks, writing the result onto
+     * the first mask.
      *
      * @param first the first channel for operation (and in which the result is written)
      * @param second the second channel for operation
      */
     public static void apply(Mask first, Mask second) {
 
-        byte sourceOn = first.getOnByte();
-        byte receiveOn = second.getOnByte();
+        byte sourceOn = first.binaryValuesByte().getOn();
+        byte receiveOn = second.binaryValuesByte().getOn();
 
         IterateVoxelsAll.withTwoBuffersAndPoint(
                 first.voxels(),

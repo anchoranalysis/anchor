@@ -66,9 +66,18 @@ public class BoundPhysicalExtent extends BoundMinMax {
     private static double maybeDivideBy(
             double value, Optional<Resolution> resolution, boolean do3D) {
         if (resolution.isPresent()) {
-            return value / resolution.get().min(do3D);
+            return value / minResolutionComponent(resolution.get(), do3D);
         } else {
             return value;
+        }
+    }
+
+    private static double minResolutionComponent(Resolution resolution, boolean do3D) {
+        double min2D = Math.min(resolution.x(), resolution.y());
+        if (do3D) {
+            return Math.min(min2D, resolution.z());
+        } else {
+            return min2D;
         }
     }
 }

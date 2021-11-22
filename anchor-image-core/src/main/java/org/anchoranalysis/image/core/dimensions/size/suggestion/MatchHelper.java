@@ -66,29 +66,47 @@ class MatchHelper {
      */
     private static final RegEx REG_EX_SCALE_FACTOR = new RegExSimple("^([\\d.]+)$");
 
-    /** Tries matching patterns that do not contain both and a width and a height */
-    public static Optional<ImageSizeSuggestion> matchPreserveNotBoth(String suggestion)
+    /**
+     * Tries matching patterns that do not contain both and a width and a height.
+     *
+     * @param string string possibly with a suggested size.
+     * @return a {@link ImageSizeSuggestion} if it matches the format <i>that specifies either a
+     *     width or height, but not both</i>.
+     * @throws SuggestionFormatException if it matches the pattern, but otherwise is errored.
+     */
+    public static Optional<ImageSizeSuggestion> matchPreserveNotBoth(String string)
             throws SuggestionFormatException {
         return OptionalUtilities.orElseGetFlat(
-                matchRegEx(suggestion, REG_EX_WIDTH_ONLY, groups -> groups.extractOne(true)),
-                () ->
-                        matchRegEx(
-                                suggestion,
-                                REG_EX_HEIGHT_ONLY,
-                                groups -> groups.extractOne(false)));
+                matchRegEx(string, REG_EX_WIDTH_ONLY, groups -> groups.extractOne(true)),
+                () -> matchRegEx(string, REG_EX_HEIGHT_ONLY, groups -> groups.extractOne(false)));
     }
 
-    /** Tries matching patterns that contain <b>both</b> a width and a height */
+    /**
+     * Tries matching against patterns that contain <b>both</b> a width and a height.
+     *
+     * @param string string possibly with a suggested size.
+     * @param preserveAspectRatio whether to preserve the aspect-ratio
+     * @return a {@link ImageSizeSuggestion} if it matches the format <i>that specifies both width
+     *     and height</i>.
+     * @throws SuggestionFormatException if it matches the pattern, but otherwise is errored.
+     */
     public static Optional<ImageSizeSuggestion> matchBothWidthAndHeight(
-            String suggestion, boolean preserveAspectRatio) throws SuggestionFormatException {
+            String string, boolean preserveAspectRatio) throws SuggestionFormatException {
         RegEx regEx = preserveAspectRatio ? REG_EX_BOTH_PRESERVE : REG_EX_BOTH_DO_NOT_PRESERVE;
-        return matchRegEx(suggestion, regEx, groups -> groups.extractBoth(preserveAspectRatio));
+        return matchRegEx(string, regEx, groups -> groups.extractBoth(preserveAspectRatio));
     }
 
-    /** Tries matching a pattern for a constant scale-factor. */
-    public static Optional<ImageSizeSuggestion> matchScaleFactor(String suggestion)
+    /**
+     * Tries matching a pattern for a constant scale-factor.
+     *
+     * @param string string possibly with a suggested size.
+     * @return a {@link ImageSizeSuggestion} if it matches the format <i>that specifies a
+     *     scale-factor</i>.
+     * @throws SuggestionFormatException if it matches the pattern, but otherwise is errored.
+     */
+    public static Optional<ImageSizeSuggestion> matchScaleFactor(String string)
             throws SuggestionFormatException {
-        return matchRegEx(suggestion, REG_EX_SCALE_FACTOR, SuggestionFromArray::extractScaleFactor);
+        return matchRegEx(string, REG_EX_SCALE_FACTOR, SuggestionFromArray::extractScaleFactor);
     }
 
     /**
@@ -96,13 +114,13 @@ class MatchHelper {
      * a function to extract a suggestion.
      */
     private static Optional<ImageSizeSuggestion> matchRegEx(
-            String suggestion,
+            String string,
             RegEx regEx,
             CheckedFunction<SuggestionFromArray, ImageSizeSuggestion, SuggestionFormatException>
                     extractSuggestion)
             throws SuggestionFormatException {
         return OptionalUtilities.map(
-                regEx.match(suggestion),
+                regEx.match(string),
                 groups -> extractSuggestion.apply(new SuggestionFromArray(groups)));
     }
 }

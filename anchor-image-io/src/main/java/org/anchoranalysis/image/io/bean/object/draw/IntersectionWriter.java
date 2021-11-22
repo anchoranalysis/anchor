@@ -26,13 +26,18 @@
 
 package org.anchoranalysis.image.io.bean.object.draw;
 
+import com.google.common.base.Preconditions;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.color.RGBColor;
 import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.stack.RGBStack;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
+import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.spatial.box.BoundingBox;
+import org.anchoranalysis.spatial.box.Extent;
 import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.point.ReadableTuple3i;
 
@@ -80,7 +85,63 @@ class IntersectionWriter {
                 pointGlobal.z() <= maxGlobal.z();
                 pointGlobal.incrementZ()) {
             int relZ = pointGlobal.z() - object.boundingBox().cornerMin().z();
-            stack.writeRGBMaskToSlice(object, intersection, color, pointGlobal, relZ, maxGlobal);
+            writeRGBMaskToSlice(stack, object, intersection, color, pointGlobal, relZ, maxGlobal);
         }
+    }
+
+    // Only supports 8-bit
+    private static void writeRGBMaskToSlice(
+            RGBStack stack,
+            ObjectMask object,
+            BoundingBox box,
+            RGBColor color,
+            Point3i pointGlobal,
+            int zLocal,
+            ReadableTuple3i maxGlobal) {
+        Preconditions.checkArgument(pointGlobal.z() >= 0);
+        Preconditions.checkArgument(stack.allChannelsHaveType(UnsignedByteVoxelType.INSTANCE));
+
+        byte objectMaskOn = object.binaryValuesByte().getOn();
+
+        UnsignedByteBuffer inArr = object.sliceBufferLocal(zLocal);
+
+        UnsignedByteBuffer red = stack.sliceBuffer(0, pointGlobal.z());
+        UnsignedByteBuffer green = stack.sliceBuffer(1, pointGlobal.z());
+        UnsignedByteBuffer blue = stack.sliceBuffer(2, pointGlobal.z());
+
+        Extent extentMask = object.boundingBox().extent();
+
+        for (pointGlobal.setY(box.cornerMin().y());
+                pointGlobal.y() <= maxGlobal.y();
+                pointGlobal.incrementY()) {
+
+            for (pointGlobal.setX(box.cornerMin().x());
+                    pointGlobal.x() <= maxGlobal.x();
+                    pointGlobal.incrementX()) {
+
+                int objectMaskOffset =
+                        extentMask.offset(
+                                pointGlobal.x() - object.boundingBox().cornerMin().x(),
+                                pointGlobal.y() - object.boundingBox().cornerMin().y());
+
+                if (inArr.getRaw(objectMaskOffset) == objectMaskOn) {
+                    writeRGBColorToByteArray(
+                            color, pointGlobal, stack.getChannel(0).dimensions(), red, blue, green);
+                }
+            }
+        }
+    }
+
+    private static void writeRGBColorToByteArray(
+            RGBColor color,
+            Point3i point,
+            Dimensions dimensions,
+            UnsignedByteBuffer red,
+            UnsignedByteBuffer blue,
+            UnsignedByteBuffer green) {
+        int index = dimensions.offsetSlice(point);
+        red.putUnsigned(index, color.getRed());
+        green.putUnsigned(index, color.getGreen());
+        blue.putUnsigned(index, color.getBlue());
     }
 }

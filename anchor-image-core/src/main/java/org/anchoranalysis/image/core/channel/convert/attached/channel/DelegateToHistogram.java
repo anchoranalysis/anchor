@@ -27,15 +27,21 @@
 package org.anchoranalysis.image.core.channel.convert.attached.channel;
 
 import lombok.RequiredArgsConstructor;
-import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.channel.convert.ConversionPolicy;
 import org.anchoranalysis.image.core.channel.convert.attached.ChannelConverterAttached;
-import org.anchoranalysis.image.core.object.HistogramFromObjectsFactory;
 import org.anchoranalysis.image.voxel.convert.VoxelsConverter;
+import org.anchoranalysis.image.voxel.statistics.HistogramFactory;
 import org.anchoranalysis.math.histogram.Histogram;
 
+/**
+ * Implements channel conversion after first creating a {@link Histogram} of the voxels in the
+ * source channel.
+ *
+ * @author Owen Feehan
+ * @param <T> buffer-type the voxels will be converted <b>to</b>.
+ */
 @RequiredArgsConstructor
 class DelegateToHistogram<T> implements ChannelConverterAttached<Channel, T> {
 
@@ -43,13 +49,7 @@ class DelegateToHistogram<T> implements ChannelConverterAttached<Channel, T> {
 
     @Override
     public void attachObject(Channel object) throws OperationFailedException {
-
-        try {
-            delegate.attachObject(HistogramFromObjectsFactory.create(object));
-
-        } catch (CreateException e) {
-            throw new OperationFailedException(e);
-        }
+        delegate.attachObject(HistogramFactory.createFrom(object.voxels()));
     }
 
     @Override

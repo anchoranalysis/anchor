@@ -92,7 +92,7 @@ public class PredicateImplementation<T> implements VoxelsPredicate {
 
         ObjectMask object = new ObjectMask(box);
 
-        byte outOn = object.binaryValuesByte().getOnByte();
+        byte outOn = object.binaryValuesByte().getOn();
 
         ReadableTuple3i shiftForMask = Point3i.immutableScale(object.boundingBox().cornerMin(), -1);
         IterateVoxelsBoundingBox.withTwoMixedBuffers(

@@ -26,45 +26,40 @@
 
 package org.anchoranalysis.image.core.points;
 
-import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.core.mask.Mask;
-import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.Point2i;
 import org.anchoranalysis.spatial.point.Point3i;
 
+/**
+ * Extracts list of points from a {@link Mask}.
+ *
+ * @author Owen Feehan
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PointsFromMask {
 
+    /**
+     * All points that have <i>on</i> state in a {@link Mask} as a list with type {@link Point3i}.
+     *
+     * @param mask the mask.
+     * @return a newly created list with the points.
+     */
     public static List<Point3i> listFrom3i(Mask mask) {
         return PointsFromVoxels.listFrom3i(mask.binaryVoxels());
     }
 
+    /**
+     * All points that have <i>on</i> state in a {@link Mask} as a list with type {@link Point2i}.
+     *
+     * @param mask the mask.
+     * @return a newly created list with the points.
+     * @throws CreateException if any of the points in the mask are 3D i.e. have non-zero z-value.
+     */
     public static List<Point2i> listFrom2i(Mask mask) throws CreateException {
         return PointsFromVoxels.listFrom2i(mask.binaryVoxels());
-    }
-
-    public static List<Point3i> listFromSlicesInsideBox3i(
-            Mask mask, BoundingBox box, int startZ, int skipAfterSuccessiveEmptySlices) {
-
-        List<Point3i> out = new ArrayList<>();
-
-        ConsumePointsFromMaskSliced helper =
-                new ConsumePointsFromMaskSliced(
-                        skipAfterSuccessiveEmptySlices, box, mask, startZ, out::add);
-
-        helper.firstHalf();
-
-        // Exit early if we start on the first slice
-        if (startZ == 0) {
-            return out;
-        }
-
-        helper.secondHalf();
-
-        return out;
     }
 }

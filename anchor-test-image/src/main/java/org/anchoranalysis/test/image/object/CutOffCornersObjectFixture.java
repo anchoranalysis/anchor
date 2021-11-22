@@ -131,10 +131,10 @@ public class CutOffCornersObjectFixture {
                 for (int x = 0; x < extent.x(); x++) {
                     byte toPut;
                     if (pattern.isPixelOn(x, y, z)) {
-                        toPut = binaryValuesByte.getOnByte();
+                        toPut = binaryValuesByte.getOn();
                         atLeastOneHigh = true;
                     } else {
-                        toPut = binaryValuesByte.getOffByte();
+                        toPut = binaryValuesByte.getOff();
                     }
                     slice.putByte(extent.offset(x, y), toPut);
                 }

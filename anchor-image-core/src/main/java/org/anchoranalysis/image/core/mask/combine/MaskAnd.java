@@ -34,31 +34,33 @@ import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxelsAll;
 
+/**
+ * Performs a logical <b>and</b> operation on corresponding voxels in two {@link Mask}s.
+ *
+ * @author Owen Feehan
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MaskAnd {
 
     /**
-     * Performs a AND operation on each voxel in two masks, writing the result onto the second mask.
+     * Performs a logical <b>and</b> operation on each voxel in two masks, writing the result onto
+     * the second mask.
      *
-     * @param first the first channel for operation (and in which the result is written)
-     * @param second the second channel for operation
+     * @param first the first channel for operation (and in which the result is written).
+     * @param second the second channel for operation.
      */
     public static void apply(Mask first, Mask second) {
-        apply(
-                first.voxels(),
-                second.voxels(),
-                first.binaryValues().asByte(),
-                second.binaryValues().asByte());
+        apply(first.voxels(), second.voxels(), first.binaryValuesByte(), second.binaryValuesByte());
     }
 
     /**
-     * Performs a AND operation on each voxel in two {@link Voxels} (considered to be masks),
-     * writing the result onto the second mask.
+     * Performs a logical <b>and</b> operation on each voxel in two {@link Voxels} (considered to be
+     * masks), writing the result onto the second mask.
      *
-     * @param voxelsFirst the first voxels for the operation (and in which the result is written)
-     * @param voxelsSecond the second voxels for the operation
-     * @param binaryValuesFirst binary-values to mask first voxels
-     * @param binaryValuesSecond binary-values to mask second voxels
+     * @param voxelsFirst the first voxels for the operation (and in which the result is written).
+     * @param voxelsSecond the second voxels for the operation.
+     * @param binaryValuesFirst binary-values to mask first voxels.
+     * @param binaryValuesSecond binary-values to mask second voxels.
      */
     public static void apply(
             Voxels<UnsignedByteBuffer> voxelsFirst,
@@ -66,9 +68,9 @@ public class MaskAnd {
             BinaryValuesByte binaryValuesFirst,
             BinaryValuesByte binaryValuesSecond) {
 
-        byte sourceOn = binaryValuesFirst.getOnByte();
-        byte sourceOff = binaryValuesFirst.getOffByte();
-        byte receiveOff = binaryValuesSecond.getOffByte();
+        byte sourceOn = binaryValuesFirst.getOn();
+        byte sourceOff = binaryValuesFirst.getOff();
+        byte receiveOff = binaryValuesSecond.getOff();
 
         IterateVoxelsAll.withTwoBuffersAndPoint(
                 voxelsFirst,

@@ -38,6 +38,11 @@ public class SuggestionFormatException extends AnchorFriendlyCheckedException {
     /** */
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Create with a <i>message only</i>.
+     *
+     * @param message the message.
+     */
     public SuggestionFormatException(String message) {
         super(message);
     }

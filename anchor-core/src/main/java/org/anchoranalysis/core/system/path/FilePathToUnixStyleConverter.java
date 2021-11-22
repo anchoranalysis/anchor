@@ -40,22 +40,22 @@ import org.apache.commons.io.FilenameUtils;
 public class FilePathToUnixStyleConverter {
 
     /**
-     * Converts a path to a string using Unix-style separators (forward-slashes)
+     * Converts a path to a string using Unix-style separators (forward-slashes).
      *
      * @param path with either Windows-style (blackslashes) or Unix-style separators (forward
-     *     slashes)
-     * @return identical path but with Unix-style separators
+     *     slashes).
+     * @return identical path but with Unix-style separators.
      */
     public static String toStringUnixStyle(Path path) {
         return toStringUnixStyle(path.toString());
     }
 
     /**
-     * Converts a path to a string using Unix-style separators (forward-slashes)
+     * Converts a path to a string using Unix-style separators (forward-slashes).
      *
      * @param path with either Windows-style (blackslashes) or Unix-style separators (forward
-     *     slashes)
-     * @return identical path but with Unix-style separators
+     *     slashes).
+     * @return identical path but with Unix-style separators.
      */
     public static String toStringUnixStyle(String path) {
         return FilenameUtils.separatorsToUnix(path);

@@ -46,21 +46,37 @@ import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 @AllArgsConstructor
 public class ChannelMapper {
 
+    /** Gets a {@link Channel} corresponding to a particular index (zero-indexed). */
     private IntFunction<Channel> channelGetter;
+
+    /** Gets a converter corresponding to a channel at a particular index (zero-indexed). */
     private IntFunction<Optional<ChannelConverterAttached<Channel, UnsignedByteBuffer>>>
             converterGetter;
 
+    /**
+     * Maps a {@link Channel} with {@code mapFunction} if a corresponding converter exists,
+     * otherwise with {@code fallback}.
+     *
+     * @param <T> the destination type to map to.
+     * @param channelIndex the index of the channel to map, as well as the corresponding converter.
+     * @param mapFunction used for the mapping, if a corresponding converter for {@code
+     *     channelIndex} <b>exists</b>.
+     * @param fallback used for the mapping, if a corresponding converter for {@code channelIndex}
+     *     <b>does not exist</b>.
+     * @return the result of the mapping.
+     */
     public <T> T mapChannelIfSupported(
             int channelIndex,
-            BiFunction<Channel, ChannelConverterAttached<Channel, UnsignedByteBuffer>, T> mapper,
+            BiFunction<Channel, ChannelConverterAttached<Channel, UnsignedByteBuffer>, T>
+                    mapFunction,
             Function<Channel, T> fallback) {
 
         Channel channel = channelGetter.apply(channelIndex);
-        Optional<ChannelConverterAttached<Channel, UnsignedByteBuffer>> optional =
+        Optional<ChannelConverterAttached<Channel, UnsignedByteBuffer>> convertor =
                 converterGetter.apply(channelIndex);
 
-        if (optional.isPresent()) {
-            return mapper.apply(channel, optional.get());
+        if (convertor.isPresent()) {
+            return mapFunction.apply(channel, convertor.get());
         } else {
             if (!channel.getVoxelDataType().equals(UnsignedByteVoxelType.INSTANCE)) {
                 // Datatype is not supported
@@ -70,21 +86,34 @@ public class ChannelMapper {
         }
     }
 
-    public void callChannelIfSupported(
+    /**
+     * Like {@link #mapChannelIfSupported(int, BiFunction, Function)} but the mapping has no
+     * return-type.
+     *
+     * @param channelIndex the index of the channel to consume, as well as the corresponding
+     *     converter.
+     * @param consumer used for the consuming, if a corresponding converter for {@code channelIndex}
+     *     <b>exists</b>.
+     * @param fallback used for the consuming, if a corresponding converter for {@code channelIndex}
+     *     <b>does not exist</b>.
+     */
+    public void consumeChannelIfSupported(
             int channelIndex,
             BiConsumer<Channel, ChannelConverterAttached<Channel, UnsignedByteBuffer>> consumer,
             Consumer<Channel> fallback) {
         // We perform the call via a mapping that returns null
-        mapChannelIfSupported(channelIndex, convertConsumer(consumer), convertConsumer(fallback));
+        mapChannelIfSupported(channelIndex, convertBiConsumer(consumer), convertConsumer(fallback));
     }
 
-    private static <S, T> BiFunction<S, T, Void> convertConsumer(BiConsumer<S, T> consumer) {
+    /** Wraps a {@link BiConsumer} as a {@link BiFunction} that always returns a null value. */
+    private static <S, T> BiFunction<S, T, Void> convertBiConsumer(BiConsumer<S, T> consumer) {
         return (input1, input2) -> {
             consumer.accept(input1, input2);
             return null;
         };
     }
 
+    /** Wraps a {@link Consumer} as a {@link Function} that always returns a null value. */
     private static <T> Function<T, Void> convertConsumer(Consumer<T> consumer) {
         return input -> {
             consumer.accept(input);

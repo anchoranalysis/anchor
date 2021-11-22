@@ -26,6 +26,13 @@
 
 package org.anchoranalysis.image.core.channel.convert;
 
+import org.anchoranalysis.image.core.channel.Channel;
+
+/**
+ * The different ways of converting the voxel-data-type in a {@link Channel}.
+ *
+ * @author Owen Feehan
+ */
 public enum ConversionPolicy {
 
     /** The old channel is converted into the new type if needed. */

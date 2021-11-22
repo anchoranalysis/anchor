@@ -48,7 +48,7 @@ public class HistogramFactory {
      *     Histogram}.
      * @return a newly created histogram.
      */
-    public static Histogram create(VoxelBuffer<?> buffer) {
+    public static Histogram createFrom(VoxelBuffer<?> buffer) {
 
         Histogram histogram = new Histogram((int) buffer.dataType().maxValue());
         addBufferToHistogram(histogram, buffer, buffer.capacity());
@@ -62,7 +62,7 @@ public class HistogramFactory {
      *     {@link Histogram}.
      * @return a newly created histogram.
      */
-    public static Histogram create(VoxelsUntyped voxels) {
+    public static Histogram createFrom(VoxelsUntyped voxels) {
         return createFromVoxels(voxels.any());
     }
 

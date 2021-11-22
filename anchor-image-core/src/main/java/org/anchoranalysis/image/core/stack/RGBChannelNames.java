@@ -58,6 +58,7 @@ public class RGBChannelNames {
      *
      * @param includeAlpha if true, the alpha channel is also accepted as valid. if false, it is not
      *     accepted.
+     * @return the array.
      */
     public static String[] asArray(boolean includeAlpha) {
         if (includeAlpha) {
@@ -72,6 +73,7 @@ public class RGBChannelNames {
      *
      * @param includeAlpha if true, the alpha channel is also accepted as valid. if false, it is not
      *     accepted.
+     * @return the list.
      */
     public static List<String> asList(boolean includeAlpha) {
         if (includeAlpha) {
@@ -86,6 +88,7 @@ public class RGBChannelNames {
      *
      * @param includeAlpha if true, the alpha channel is also accepted as valid. if false, it is not
      *     accepted.
+     * @return the set.
      */
     public static Set<String> asSet(boolean includeAlpha) {
         return new HashSet<>(asList(includeAlpha));

@@ -36,6 +36,14 @@ import org.anchoranalysis.image.voxel.convert.ToByteScaleByMaxValue;
 import org.anchoranalysis.image.voxel.convert.VoxelsConverter;
 import org.anchoranalysis.math.histogram.Histogram;
 
+/**
+ * Converts a {@link Channel} to {@link UnsignedByteBuffer} by scaling against the <b>maximum
+ * intensity value</b> from a corresponding histogram.
+ *
+ * <p>Specifically, the range is from 0 to {@code max(intensity)} across all voxels.
+ *
+ * @author Owen Feehan
+ */
 public class MaxIntensityFromHistogram
         implements ChannelConverterAttached<Histogram, UnsignedByteBuffer> {
 
@@ -43,6 +51,7 @@ public class MaxIntensityFromHistogram
 
     private ToUnsignedByte delegate;
 
+    /** Default constructor. */
     public MaxIntensityFromHistogram() {
         // Initialize with a dummy value
         voxelsConverter = new ToByteScaleByMaxValue(1);

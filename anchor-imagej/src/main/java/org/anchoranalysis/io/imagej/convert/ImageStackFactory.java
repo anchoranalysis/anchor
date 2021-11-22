@@ -81,7 +81,7 @@ class ImageStackFactory {
             throw new ImageJConversionException(
                     "Only unsigned 8-bit channels are supported for an ImageJ RGB image");
         }
-        Extent extent = stack.channelAt(0).extent();
+        Extent extent = stack.getChannel(0).extent();
 
         int channelIndex = 0;
 
@@ -179,6 +179,6 @@ class ImageStackFactory {
     }
 
     private static Voxels<UnsignedByteBuffer> extractChannel(RGBStack stack, int channelIndex) {
-        return stack.channelAt(channelIndex).voxels().asByte();
+        return stack.getChannel(channelIndex).voxels().asByte();
     }
 }

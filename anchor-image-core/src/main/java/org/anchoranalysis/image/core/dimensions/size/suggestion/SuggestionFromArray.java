@@ -31,7 +31,7 @@ import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 
 /**
- * Extracts a {@link ScaleToSuggestion} or {@link ScaleToSuggestion} from an array of strings.
+ * Extracts a suggested-scale from an array of strings.
  *
  * @author Owen Feehan
  */
@@ -65,6 +65,13 @@ class SuggestionFromArray {
         return extract(widthPosition, heightPosition, true);
     }
 
+    /**
+     * Extracts a suggestion that is a scale-factor only.
+     *
+     * @return the created suggestion.
+     * @throws SuggestionFormatException if the suggestion string does not correspond to a
+     *     recognized format.
+     */
     public ScaleFactorSuggestion extractScaleFactor() throws SuggestionFormatException {
         return new ScaleFactorSuggestion(extractFloat(0));
     }

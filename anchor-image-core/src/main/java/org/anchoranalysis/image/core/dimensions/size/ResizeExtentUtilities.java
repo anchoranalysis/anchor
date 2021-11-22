@@ -48,7 +48,7 @@ public class ResizeExtentUtilities {
      * @param preserveAspectRatio iff true, the aspect ratio is preserved, and {@link
      *     #relativeScalePreserveAspectRatio(Extent, Extent)} is called, otherwise {@link
      *     #relativeScale(Extent, Extent)}.
-     * @return
+     * @return the scaling-factor to scale the source to be the same size as the target.
      */
     public static ScaleFactor relativeScale(
             Extent source, Extent target, boolean preserveAspectRatio) {

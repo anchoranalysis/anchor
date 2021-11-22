@@ -27,13 +27,19 @@
 package org.anchoranalysis.image.core.channel.convert;
 
 import java.nio.FloatBuffer;
+import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.voxel.convert.ToFloatNoScaling;
 import org.anchoranalysis.image.voxel.datatype.FloatVoxelType;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 
-// Converts an existing channel to a float
+/**
+ * Converts a {@link Channel} to have a voxel data type of {@link FloatBuffer} without scaling.
+ *
+ * @author Owen Feehan
+ */
 public class ToFloat extends ChannelConverter<FloatBuffer> {
 
+    /** Creates without scaling. */
     public ToFloat() {
         super(FloatVoxelType.INSTANCE, new ToFloatNoScaling(), VoxelsFactory.getFloat());
     }

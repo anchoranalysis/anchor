@@ -104,7 +104,7 @@ public abstract class Voxels<T> {
     /**
      * A {@link VoxelBuffer} corresponding to a particular z-slice.
      *
-     * @param z the index (beginning at 0) of all z-slices.
+     * @param z the index (beginning at 0) of the respective z-slice.
      * @return the corresponding buffer for {@code z}.
      */
     public VoxelBuffer<T> slice(int z) {
@@ -114,10 +114,10 @@ public abstract class Voxels<T> {
     /**
      * A buffer corresponding to a particular z-slice.
      *
-     * <p>This buffer is either a NIO or other classes that wraps the underlying array storing voxel
-     * intensities.
+     * <p>This buffer is either a NIO class or another class that wraps the underlying array storing
+     * voxel intensities.
      *
-     * @param z the index (beginning at 0) of all z-slices.
+     * @param z the index (beginning at 0) of the respective z-slice.
      * @return the corresponding buffer for {@code z}.
      */
     public T sliceBuffer(int z) {

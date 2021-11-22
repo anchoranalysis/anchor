@@ -35,7 +35,7 @@ import lombok.AllArgsConstructor;
 
 /**
  * A helper class to create a map from input-elements to output-elements (labelled-elements with an
- * operation applied)
+ * operation applied).
  *
  * @author Owen Feehan
  * @param <T> element-type
@@ -43,23 +43,23 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 class MapForLabelsCreator<T> {
 
-    /** a map from a label to the corresponding input-element */
+    /** a map from a label to the corresponding input-element. */
     private Map<Integer, T> input;
 
-    /** the labelled-elements for each label in the sequence */
+    /** the labelled-elements for each label in the sequence. */
     private List<T> labelled;
 
-    /** an operation to apply after labelling, but before the object is placed in the map */
+    /** an operation to apply after labelling, but before the object is placed in the map. */
     private UnaryOperator<T> operationAfterLabelling;
 
-    /** Minimum label-value inclusive */
+    /** Minimum label-value inclusive. */
     private int minLabelInclusive;
 
     /**
      * Creates a map from the input-elements to output-elements (their derived labelled elements
-     * with an operation applied)
+     * with an operation applied).
      *
-     * @return the newly created map
+     * @return the newly created map.
      */
     public Map<T, T> createMapForLabels() {
 

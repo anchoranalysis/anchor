@@ -31,6 +31,7 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.experimental.Accessors;
+import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.dimensions.size.ResizeExtentUtilities;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.box.Extent;
@@ -65,63 +66,154 @@ public final class Dimensions {
      */
     @Getter private final Optional<Resolution> resolution;
 
-    /** Construct with an explicit extent and default resolution (1.0 for each dimension) */
+    /**
+     * Construct with an explicit extent and no resolution.
+     *
+     * @param x the size of the <i>X</i>-dimension in voxels.
+     * @param y the size of the <i>Y</i>-dimension in voxels.
+     * @param z the size of the <i>Z</i>-dimension in voxels.
+     */
     public Dimensions(int x, int y, int z) {
         this(new Extent(x, y, z));
     }
 
-    /** Construct with an explicit extent and default resolution (1.0 for each dimension) */
+    /**
+     * Construct with an explicit extent and no resolution.
+     *
+     * @param extent the size of the image in voxels, for respectively the <i>X</i>, <i>Y</i> and
+     *     <i>Z</i> dimensions.
+     */
     public Dimensions(ReadableTuple3i extent) {
         this(new Extent(extent.x(), extent.y(), extent.z()));
     }
 
-    /** Construct with an explicit extent and default resolution (1.0 for each dimension) */
+    /**
+     * Construct with an explicit extent and no resolution.
+     *
+     * @param extent the size of the image in voxels.
+     */
     public Dimensions(Extent extent) {
         this(extent, Optional.empty());
     }
 
-    public Dimensions scaleXYTo(int x, int y) {
+    /**
+     * Resizes the dimensions to have new sizes in the X and Y dimension.
+     *
+     * <p>The z-dimension remains unchanged.
+     *
+     * <p>The resolution is also scaled accordingly, so the image refers to the same physical size,
+     * before and after scaling..
+     *
+     * @param x the new size to assign in the <i>X</i>-dimension.
+     * @param y the new size to assign in the <i>Y</i>-dimension.
+     * @return a newly created {@link Channel} containing a resized version of the current.
+     */
+    public Dimensions resizeXY(int x, int y) {
         Extent extentScaled = new Extent(x, y, extent.z());
         ScaleFactor scaleFactor = ResizeExtentUtilities.relativeScale(extent, extentScaled);
         return new Dimensions(extentScaled, scaledResolution(scaleFactor));
     }
 
+    /**
+     * Scales the X- and Y- dimensions by a scaling-factor.
+     *
+     * <p>The resolution is also scaled, so the image refers to the same physical size, before and
+     * after scaling..
+     *
+     * @param scaleFactor the scaling-factor to multiply the respective X and Y dimension values by.
+     * @return a new {@link Extent} whose X and Y values are scaled versions of the current values,
+     *     and Z value is unchanged.
+     */
     public Dimensions scaleXYBy(ScaleFactor scaleFactor) {
         return new Dimensions(extent.scaleXYBy(scaleFactor), scaledResolution(scaleFactor));
     }
 
+    /**
+     * Deep-copies the current object, but assigns a different {@link Extent}.
+     *
+     * @param extentToAssign the extent to assign.
+     * @return a copy, but with the assigned extent.
+     */
     public Dimensions duplicateChangeExtent(Extent extentToAssign) {
         return new Dimensions(extentToAssign, resolution);
     }
 
+    /**
+     * Deep-copies the current object, but assigns a different size for the Z-dimension.
+     *
+     * @param z the size in the Z-dimension.
+     * @return a copy, but with the assigned extent.
+     */
     public Dimensions duplicateChangeZ(int z) {
         return new Dimensions(extent.duplicateChangeZ(z), resolution);
     }
 
+    /**
+     * Deep-copies the current object, but assigns a different {@link Resolution}.
+     *
+     * @param resolutionToAssign the resolution to assign.
+     * @return a copy, but with the assigned resolution.
+     */
     public Dimensions duplicateChangeResolution(Optional<Resolution> resolutionToAssign) {
         return new Dimensions(extent, resolutionToAssign);
     }
 
+    /**
+     * Calculates the volume of the {@link Extent} when considered as a box.
+     *
+     * <p>This is is the size in the X, Y and Z dimensions multiplied together.
+     *
+     * @return the volume in voxels.
+     */
     public long calculateVolume() {
         return extent.calculateVolume();
     }
 
+    /**
+     * Size in X multiplied by size in Y.
+     *
+     * <p>This may be convenient for calculating offsets and for iterations.
+     *
+     * @return the area (in square voxels).
+     */
     public int areaXY() {
         return extent.areaXY();
     }
 
+    /**
+     * The size in the X dimension.
+     *
+     * @return the size.
+     */
     public int x() {
         return extent.x();
     }
 
+    /**
+     * The size in the Y dimension.
+     *
+     * @return the size.
+     */
     public int y() {
         return extent.y();
     }
 
+    /**
+     * The size in the Z dimension.
+     *
+     * @return the size.
+     */
     public int z() {
         return extent.z();
     }
 
+    /**
+     * Calculates a XY-offset of a point in a buffer whose dimensions are this extent.
+     *
+     * @param x the value in the X-dimension for the point.
+     * @param y the value in the Y-dimension for the point.
+     * @return the offset, pertaining only to all dimensions.
+     */
     public int offset(int x, int y) {
         return extent.offset(x, y);
     }
@@ -146,14 +238,32 @@ public final class Dimensions {
         return extent.contains(point);
     }
 
+    /**
+     * Calculates a XYZ-offset of a point in a buffer whose dimensions are this extent.
+     *
+     * @param point the point to calculate an offset for.
+     * @return the offset, pertaining only to all dimensions.
+     */
     public final int offset(Point3i point) {
         return extent.offset(point);
     }
 
+    /**
+     * Calculates a XY-offset of a point in a buffer whose dimensions are this extent.
+     *
+     * @param point the point to calculate an offset for.
+     * @return the offset, pertaining only to the X and Y dimensions.
+     */
     public final int offsetSlice(Point3i point) {
         return extent.offsetSlice(point);
     }
 
+    /**
+     * Is {@code box} entirely contained within the extent?
+     *
+     * @param box the bounding-box to check.
+     * @return true iff {@code} only describes space contained in the current extent.
+     */
     public boolean contains(BoundingBox box) {
         return extent.contains(box);
     }
@@ -164,7 +274,7 @@ public final class Dimensions {
     }
 
     /**
-     * Converts voxelized measurements to/from physical units.
+     * Converts voxel-scaled measurements to/from physical units.
      *
      * @return a converter that will perform conversions using current resolution.
      */
@@ -173,11 +283,12 @@ public final class Dimensions {
     }
 
     /**
-     * Checks equality betwen this object and another {@link Dimensions}, maybe not comparing
-     * image-resolution.
+     * Checks equality between this object and another {@link Dimensions}, but possibly skipping a
+     * comparison of image-resolution in the check.
      *
-     * @param other the object to compare with
-     * @param compareResolution if true image resolution is compared, otherwise it is ignored.
+     * @param other the object to compare with.
+     * @param compareResolution if true image resolution is compared, otherwise it is not
+     *     considered.
      * @return true iff the two objects are equal by the above criteria.
      */
     public boolean equals(Dimensions other, boolean compareResolution) {
@@ -188,6 +299,7 @@ public final class Dimensions {
         }
     }
 
+    /** Apply a scaling-factor to the resolution, if it exists. */
     private Optional<Resolution> scaledResolution(ScaleFactor scaleFactor) {
         return resolution.map(res -> res.scaleXY(scaleFactor));
     }

@@ -30,6 +30,11 @@ import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 /** Provides a stack */
 public interface ProviderAsStack {
 
-    /** Creates from the image-bean in the form of a stack */
+    /**
+     * Retrieves or creates a {@link Stack} representation of an entity.
+     *
+     * @return the stack.
+     * @throws ProvisionFailedException
+     */
     Stack getAsStack() throws ProvisionFailedException;
 }

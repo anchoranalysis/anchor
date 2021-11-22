@@ -38,14 +38,12 @@ import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.box.Extent;
 import org.anchoranalysis.spatial.point.Point3i;
-import org.anchoranalysis.spatial.point.ReadableTuple3i;
 
 /**
- * A stack with exactly three channels, respectively for Red, Green and Blue colors.
+ * A stack with exactly three channels, respectively for <i>red</i>, <i>green</i> and <i>blue</i>
+ * colors.
  *
  * @author Owen Feehan
  */
@@ -56,11 +54,15 @@ public class RGBStack {
     /**
      * Creates a particularly-sized stack with all channels initialized to 0.
      *
-     * @param dimensions dimensions of each channel
-     * @param factory factory to create the channel
+     * @param dimensions dimensions of each channel.
+     * @param factory factory to create the channel.
      */
     public RGBStack(Dimensions dimensions, ChannelFactorySingleType factory) {
-        stack = new Stack(dimensions, factory, 3, true);
+        try {
+            stack = new Stack(dimensions, factory, 3, true);
+        } catch (CreateException e) {
+            throw new AnchorImpossibleSituationException();
+        }
     }
 
     /**
@@ -71,7 +73,7 @@ public class RGBStack {
      * <p>A single channel is treated as grayscale, and duplicated to form red, green, blue
      * channels.
      *
-     * @param stack
+     * @param stack the stack.
      */
     public RGBStack(Stack stack) {
         int numberChannels = stack.getNumberChannels();
@@ -90,141 +92,167 @@ public class RGBStack {
     /**
      * Copy constructor, deep copies channels.
      *
-     * @param source where to copy from
+     * @param source where to copy from.
      */
     private RGBStack(RGBStack source) {
         stack = source.stack.duplicateDeep();
     }
 
+    /**
+     * Create with {@link Channel}s for each color.
+     *
+     * @param red the <b>red</b> channel.
+     * @param green the <b>green</b> channel.
+     * @param blue the <b>blue</b> channel.
+     * @throws IncorrectImageSizeException if the channels are not uniformly sized.
+     */
     public RGBStack(Channel red, Channel green, Channel blue) throws IncorrectImageSizeException {
-        stack = new Stack(true, red, green, blue);
+        try {
+            stack = new Stack(true, red, green, blue);
+        } catch (CreateException e) {
+            throw new AnchorImpossibleSituationException();
+        }
     }
 
+    /**
+     * The <i>red</i> channel.
+     *
+     * @return the red channel.
+     */
     public Channel red() {
         return stack.getChannel(0);
     }
 
+    /**
+     * The <i>green</i> channel.
+     *
+     * @return the green channel.
+     */
     public Channel green() {
         return stack.getChannel(1);
     }
 
+    /**
+     * The <i>blue</i> channel.
+     *
+     * @return the blue channel.
+     */
     public Channel blue() {
         return stack.getChannel(2);
     }
 
-    public Channel channelAt(int index) {
+    /**
+     * Returns the channel at a particular position in the stack.
+     *
+     * @param index the index (zero-indexed).
+     * @return the respective channel.
+     * @throws IndexOutOfBoundsException if the index is out of range (<tt>index &lt; 0 || index
+     *     &gt;= size()</tt>)
+     */
+    public Channel getChannel(int index) {
         return stack.getChannel(index);
     }
 
+    /**
+     * The dimensions of all channels in the stack.
+     *
+     * @return the dimensions.
+     */
     public Dimensions dimensions() {
         return stack.dimensions();
     }
 
+    /**
+     * Extract a particular z-slice from the {@link Stack} as a new stack.
+     *
+     * @param z the index in the Z-dimension of the slice to extract.
+     * @return the extracted slice, as a new {@link Stack} but reusing the existing voxels.
+     */
     public RGBStack extractSlice(int z) {
         return new RGBStack(stack.extractSlice(z));
     }
 
+    /**
+     * Exposes the underlying stack, storing the three RGB channels in respective order.
+     *
+     * @return the stack.
+     */
     public Stack asStack() {
         return stack;
     }
 
-    public DisplayStack backgroundStack() throws CreateException {
-        return DisplayStack.create(this);
-    }
-
+    /**
+     * A deep copy.
+     *
+     * @return a deep copy of the current instance.
+     */
     public RGBStack duplicate() {
         return new RGBStack(this);
     }
 
+    /**
+     * Determines if all channels have a specific data-type.
+     *
+     * @param channelDataType the specific data-type.
+     * @return true iff all channels have {@code channelDataType} as their voxel data-type.
+     */
     public boolean allChannelsHaveType(VoxelDataType channelDataType) {
         return stack.allChannelsHaveType(channelDataType);
     }
 
-    private static void writePoint(Point3i point, Channel channel, int toWrite) {
-        channel.assignValue(toWrite).toVoxel(point);
-    }
-
-    // Only supports 8-bit
-    public void writeRGBPoint(Point3i point, RGBColor color) {
-        assert (stack.allChannelsHaveType(UnsignedByteVoxelType.INSTANCE));
+    /**
+     * Assigns a {@link RGBColor} to the respective channels for a single voxel.
+     *
+     * @param point identifies which voxel to assign the color value to.
+     * @param color the color.
+     * @throws IllegalArgumentException if the stack has a channel that is not {@link
+     *     UnsignedByteVoxelType}.
+     */
+    public void assignColor(Point3i point, RGBColor color) {
+        Preconditions.checkArgument(stack.allChannelsHaveType(UnsignedByteVoxelType.INSTANCE));
         writePoint(point, stack.getChannel(0), color.getRed());
         writePoint(point, stack.getChannel(1), color.getGreen());
         writePoint(point, stack.getChannel(2), color.getBlue());
     }
 
-    // Only supports 8-bit
-    public void writeRGBMaskToSlice(
-            ObjectMask object,
-            BoundingBox box,
-            RGBColor color,
-            Point3i pointGlobal,
-            int zLocal,
-            ReadableTuple3i maxGlobal) {
-        Preconditions.checkArgument(pointGlobal.z() >= 0);
-        Preconditions.checkArgument(stack.getNumberChannels() == 3);
-        Preconditions.checkArgument(stack.allChannelsHaveType(UnsignedByteVoxelType.INSTANCE));
-
-        byte objectMaskOn = object.binaryValuesByte().getOnByte();
-
-        UnsignedByteBuffer inArr = object.sliceBufferLocal(zLocal);
-
-        UnsignedByteBuffer red = extractBuffer(0, pointGlobal.z());
-        UnsignedByteBuffer green = extractBuffer(1, pointGlobal.z());
-        UnsignedByteBuffer blue = extractBuffer(2, pointGlobal.z());
-
-        Extent eMask = object.boundingBox().extent();
-
-        for (pointGlobal.setY(box.cornerMin().y());
-                pointGlobal.y() <= maxGlobal.y();
-                pointGlobal.incrementY()) {
-
-            for (pointGlobal.setX(box.cornerMin().x());
-                    pointGlobal.x() <= maxGlobal.x();
-                    pointGlobal.incrementX()) {
-
-                int objectMaskOffset =
-                        eMask.offset(
-                                pointGlobal.x() - object.boundingBox().cornerMin().x(),
-                                pointGlobal.y() - object.boundingBox().cornerMin().y());
-
-                if (inArr.getRaw(objectMaskOffset) == objectMaskOn) {
-                    writeRGBColorToByteArray(
-                            color, pointGlobal, stack.getChannel(0).dimensions(), red, blue, green);
-                }
-            }
-        }
+    /**
+     * The width and height and depth of the image.
+     *
+     * <p>i.e. the size of each of the three possible dimensions.
+     *
+     * @return the extent.
+     */
+    public Extent extent() {
+        return stack.extent();
     }
 
-    private UnsignedByteBuffer extractBuffer(int channelIndex, int zIndex) {
+    /**
+     * A buffer corresponding to a particular z-slice of a particular channel.
+     *
+     * <p>This buffer is either a NIO class or another class that wraps the underlying array storing
+     * voxel intensities.
+     *
+     * @param channelIndex the index (beginning at 0) of the respective channel.
+     * @param zIndex the index (beginning at 0) of the respective z-slice.
+     * @return the corresponding buffer for {@code z}.
+     */
+    public UnsignedByteBuffer sliceBuffer(int channelIndex, int zIndex) {
         return stack.getChannel(channelIndex).voxels().asByte().slice(zIndex).buffer();
     }
 
     private static Stack convertGrayscaleIntoColor(Stack stack) {
-        Channel orig = stack.getChannel(0);
-        Stack out = new Stack(orig);
+        Channel source = stack.getChannel(0);
+        Stack out = new Stack(source);
         try {
-            out.addChannel(orig.duplicate());
-            out.addChannel(orig.duplicate());
+            out.addChannel(source.duplicate());
+            out.addChannel(source.duplicate());
         } catch (IncorrectImageSizeException e) {
             throw new AnchorImpossibleSituationException();
         }
         return out;
     }
 
-    public Extent extent() {
-        return stack.extent();
-    }
-
-    private static void writeRGBColorToByteArray(
-            RGBColor color,
-            Point3i point,
-            Dimensions dimensions,
-            UnsignedByteBuffer red,
-            UnsignedByteBuffer blue,
-            UnsignedByteBuffer green) {
-        int index = dimensions.offsetSlice(point);
-        red.putUnsigned(index, color.getRed());
-        green.putUnsigned(index, color.getGreen());
-        blue.putUnsigned(index, color.getBlue());
+    private static void writePoint(Point3i point, Channel channel, int toWrite) {
+        channel.assignValue(toWrite).toVoxel(point);
     }
 }

@@ -31,8 +31,8 @@ import java.util.Optional;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.dimensions.UnitConverter;
-import org.anchoranalysis.image.core.orientation.DirectionVector;
 import org.anchoranalysis.spatial.axis.Axis;
+import org.anchoranalysis.spatial.orientation.DirectionVector;
 import org.anchoranalysis.spatial.point.Point3d;
 import org.anchoranalysis.spatial.point.Point3i;
 

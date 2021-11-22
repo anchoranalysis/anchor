@@ -41,42 +41,57 @@ import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferWrap;
 
+/**
+ * Converts a {@link BufferedImage} from the AWT library to a {@link Stack}.
+ *
+ * @author Owen Feehan
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CreateStackFromBufferedImage {
 
     private static final ChannelFactorySingleType FACTORY = new ChannelFactoryUnsignedByte();
 
-    public static Stack create(BufferedImage bufferedImage) throws OperationFailedException {
+    /**
+     * Create a {@link Stack} by converting a {@link BufferedImage}.
+     *
+     * @param bufferedImage the image to convert.
+     * @return a newly created {@link Stack} with identical voxels to {@code bufferedImage}.
+     * @throws OperationFailedException if the conversaion cannot complete successfully.
+     */
+    public static Stack createFrom(BufferedImage bufferedImage) throws OperationFailedException {
 
         Dimensions dimensions =
                 new Dimensions(bufferedImage.getWidth(), bufferedImage.getHeight(), 1);
 
-        byte[][] arr = bytesFromBufferedImage(bufferedImage);
+        byte[][] pixels = bytesFromBufferedImage(bufferedImage);
 
         try {
             return new Stack(
-                    IntStream.range(0, arr.length)
+                    IntStream.range(0, pixels.length)
                             .mapToObj(
                                     channelIndex ->
-                                            createChannelFor(dimensions, arr[channelIndex])));
+                                            createChannelFor(dimensions, pixels[channelIndex])));
 
         } catch (IncorrectImageSizeException e) {
             throw new OperationFailedException(e);
         }
     }
 
-    private static Channel createChannelFor(Dimensions dimensions, byte[] arr) {
+    private static Channel createChannelFor(Dimensions dimensions, byte[] pixels) {
         Channel channel = FACTORY.createEmptyUninitialised(dimensions);
-        channel.voxels().asByte().slices().replaceSlice(0, VoxelBufferWrap.unsignedByteArray(arr));
+        channel.voxels()
+                .asByte()
+                .slices()
+                .replaceSlice(0, VoxelBufferWrap.unsignedByteArray(pixels));
         return channel;
     }
 
     private static byte[][] bytesFromBufferedImage(BufferedImage image) {
         WritableRaster raster = image.getRaster();
-        return bytesFromBufferedImage(raster, 0, 0, raster.getWidth(), raster.getHeight());
+        return bytesFromWritableRaster(raster, 0, 0, raster.getWidth(), raster.getHeight());
     }
 
-    private static byte[][] bytesFromBufferedImage(
+    private static byte[][] bytesFromWritableRaster(
             WritableRaster raster, int x, int y, int sixeX, int sizeY) {
 
         if (x == 0

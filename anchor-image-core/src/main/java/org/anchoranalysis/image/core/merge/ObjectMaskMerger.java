@@ -197,8 +197,8 @@ public class ObjectMaskMerger {
             Extent extent, BinaryValuesInt binaryValues) {
         Voxels<UnsignedByteBuffer> voxels =
                 VoxelsFactory.getUnsignedByte().createInitialized(extent);
-        if (binaryValues.getOffInt() != 0) {
-            voxels.assignValue(binaryValues.getOffInt()).toAll();
+        if (binaryValues.getOff() != 0) {
+            voxels.assignValue(binaryValues.getOff()).toAll();
         }
         return voxels;
     }

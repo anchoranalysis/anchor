@@ -57,7 +57,7 @@ final class RequireIntersectionWithObject implements ProcessPoint {
         super();
         this.process = process;
         this.objectMask = objectMask;
-        this.byteOn = objectMask.binaryValuesByte().getOnByte();
+        this.byteOn = objectMask.binaryValuesByte().getOn();
     }
 
     @Override

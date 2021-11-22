@@ -47,8 +47,8 @@ final class ThresholdEachVoxelFloat
 
     public ThresholdEachVoxelFloat(float level, BinaryValuesByte bvOut) {
         this.level = level;
-        this.byteOn = bvOut.getOnByte();
-        this.byteOff = bvOut.getOffByte();
+        this.byteOn = bvOut.getOn();
+        this.byteOff = bvOut.getOff();
     }
 
     @Override
