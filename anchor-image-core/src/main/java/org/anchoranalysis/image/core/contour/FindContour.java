@@ -38,7 +38,7 @@ import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 
 /**
- * Finds contour voxels i.e. pixels forming a continous path along the boundary of the object or
+ * Finds contour voxels, the pixels forming a continuous path along the boundary of the object or
  * mask.
  *
  * <p>Specifically, it converts a solid-object (where all voxels inside an object are <i>on</i>)

@@ -56,7 +56,7 @@ import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 /**
- * A channel whose voxel-values are restricted to two states (<i>on</i> and<i>off</i>).
+ * A channel whose voxel-values are restricted to two states (<i>on</i> and <i>off</i>).
  *
  * <p>This is one of Anchor's core data-objects.
  *
@@ -91,7 +91,7 @@ public class Mask {
 
     /**
      * Creates a mask from an existing channel using default values for <i>off</i> (0) and <i>on</i>
-     * (255)
+     * (255).
      *
      * <p>The channel should have maximally two distinct intensity values, represeting <i>off</i>
      * and <i>on</i> states.
@@ -107,7 +107,7 @@ public class Mask {
     }
 
     /**
-     * Creates a mask from an existing channel
+     * Creates a mask from an existing channel.
      *
      * <p>The channel should have maximally two distinct intensity values, represeting <i>off</i>
      * and ON states.
@@ -134,7 +134,7 @@ public class Mask {
     }
 
     /**
-     * Creates a mask from an existing binary-voxels using default image resolution
+     * Creates a mask from an existing binary-voxels using default image resolution.
      *
      * @param voxels the {@link BinaryVoxels} to be reused as the internal buffer of the mask
      */
@@ -145,8 +145,8 @@ public class Mask {
     /**
      * Creates a mask from an existing binary-voxels and a specific image resolution.
      *
-     * @param voxels the binary-voxels to be reused as the internal buffer of the mask
-     * @param resolution the image-resolution to assign
+     * @param voxels the binary-voxels to be reused as the internal buffer of the mask.
+     * @param resolution the image-resolution to assign.
      */
     public Mask(BinaryVoxels<UnsignedByteBuffer> voxels, Optional<Resolution> resolution) {
         this.channel = FACTORY.create(voxels.voxels(), resolution);
@@ -162,8 +162,8 @@ public class Mask {
      *
      * <p>Default mask values for <i>off</i> (0) and <i>on</i> (255) are employed.
      *
-     * @param dimensions the dimensions for the newly-created mask
-     * @param binaryValues the binary-values to use for the newly created mask
+     * @param dimensions the dimensions for the newly-created mask.
+     * @param binaryValues the binary-values to use for the newly created mask.
      */
     public Mask(Dimensions dimensions, BinaryValuesInt binaryValues) {
         this(FACTORY.createEmptyInitialised(dimensions), binaryValues);
@@ -282,10 +282,10 @@ public class Mask {
     }
 
     /**
-     * Creates a new {@Mask} whose X- and Y- dimensions are scaled by {@code scaleFactor}.
+     * Creates a new {@link Mask} whose X- and Y- dimensions are scaled by {@code scaleFactor}.
      *
      * @param scaleFactor how to the scale the X- and Y- dimensions.
-     * @return a newly created {@Mask} as above, except if {@code scaleFactor} is effectively 1, in
+     * @return a newly created {@link Mask} as above, except if {@code scaleFactor} is effectively 1, in
      *     which case the existing {@link Mask} is reused.
      */
     public Mask scaleXY(ScaleFactor scaleFactor) {

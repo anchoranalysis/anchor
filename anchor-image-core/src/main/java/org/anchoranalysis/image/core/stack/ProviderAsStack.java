@@ -27,14 +27,16 @@ package org.anchoranalysis.image.core.stack;
 
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 
-/** Provides a stack */
+/** 
+ * Provides a stack-representation of an entity.
+ */
 public interface ProviderAsStack {
 
     /**
      * Retrieves or creates a {@link Stack} representation of an entity.
      *
      * @return the stack.
-     * @throws ProvisionFailedException
+     * @throws ProvisionFailedException if an error occurs retrieving or getting the stack.
      */
     Stack getAsStack() throws ProvisionFailedException;
 }

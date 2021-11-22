@@ -32,12 +32,12 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import org.anchoranalysis.image.core.channel.Channel;
-import org.anchoranalysis.image.core.dimensions.size.ResizeExtentUtilities;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.box.Extent;
 import org.anchoranalysis.spatial.point.Point3d;
 import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.point.ReadableTuple3i;
+import org.anchoranalysis.spatial.scale.RelativeScaleCalculator;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 /**
@@ -110,7 +110,7 @@ public final class Dimensions {
      */
     public Dimensions resizeXY(int x, int y) {
         Extent extentScaled = new Extent(x, y, extent.z());
-        ScaleFactor scaleFactor = ResizeExtentUtilities.relativeScale(extent, extentScaled);
+        ScaleFactor scaleFactor = RelativeScaleCalculator.relativeScale(extent, extentScaled);
         return new Dimensions(extentScaled, scaledResolution(scaleFactor));
     }
 

@@ -36,7 +36,7 @@ import org.anchoranalysis.spatial.point.Point3d;
 import org.anchoranalysis.spatial.point.Point3i;
 
 /**
- * Creates a bounding-box from one or more points
+ * Creates a bounding-box from one or more points.
  *
  * @author Owen Feehan
  */
@@ -44,7 +44,7 @@ import org.anchoranalysis.spatial.point.Point3i;
 public class BoundingBoxFromPoints {
 
     /**
-     * Create from a collection of points
+     * Create from a collection of points.
      *
      * @param points the collection.
      * @return a bounding-box minimally spanning all points.

@@ -23,21 +23,19 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.image.core.dimensions.size;
+package org.anchoranalysis.spatial.scale;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.spatial.box.Extent;
-import org.anchoranalysis.spatial.scale.ScaleFactor;
-import org.anchoranalysis.spatial.scale.Scaler;
 
 /**
- * TODO rename class.
+ * Determine the scaling-factor needed to scale an {@link Extent} to become equal in size to another {@link Extent}.
  *
  * @author Owen Feehan
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class ResizeExtentUtilities {
+public class RelativeScaleCalculator {
 
     /**
      * Multiplexes between {@link #relativeScalePreserveAspectRatio(Extent, Extent)} and {@link

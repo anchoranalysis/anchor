@@ -35,7 +35,7 @@ import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 
 /**
- * Inverts masks and objects
+ * Inverts masks and objects.
  *
  * @author Owen Feehan
  */
@@ -43,10 +43,10 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
 public class MaskInverter {
 
     /**
-     * Creates a new object-mask where <i>off</i> voxels become <i>on</i> voxels and vice versa
+     * Creates a new object-mask where <i>off</i> voxels become <i>on</i> voxels and vice versa.
      *
-     * @param object object to invert (unmodified)
-     * @return a newly created inverted object
+     * @param object object to invert (unmodified).
+     * @return a newly created inverted object.
      */
     public static ObjectMask invertObjectDuplicate(ObjectMask object) {
         BinaryVoxels<UnsignedByteBuffer> voxels = object.binaryVoxels().duplicate();
@@ -55,7 +55,7 @@ public class MaskInverter {
     }
 
     /**
-     * Modifies a mask so that <i>off</i> voxels become <i>on</i> voxels and vice versa
+     * Modifies a mask so that <i>off</i> voxels become <i>on</i> voxels and vice versa.
      *
      * <p>The modification occur inplace, so no new masks are created.
      *

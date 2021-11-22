@@ -146,8 +146,8 @@ public class RGBStack {
      *
      * @param index the index (zero-indexed).
      * @return the respective channel.
-     * @throws IndexOutOfBoundsException if the index is out of range (<tt>index &lt; 0 || index
-     *     &gt;= size()</tt>)
+     * @throws IndexOutOfBoundsException if the index is out of range ({@code index < 0 || index
+     *     >= size()})
      */
     public Channel getChannel(int index) {
         return stack.getChannel(index);

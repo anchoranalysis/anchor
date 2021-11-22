@@ -116,8 +116,8 @@ public class StackNotUniformSized implements Iterable<Channel> {
      *
      * @param index the index (zero-indexed).
      * @return the respective channel.
-     * @throws IndexOutOfBoundsException if the index is out of range (<tt>index &lt; 0 || index
-     *     &gt;= size()</tt>)
+     * @throws IndexOutOfBoundsException if the index is out of range ({@code index < 0 || index
+     *     >= size()})
      */
     public final Channel getChannel(int index) {
         return channels.get(index);

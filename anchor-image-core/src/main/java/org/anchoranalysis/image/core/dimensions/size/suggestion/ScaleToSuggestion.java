@@ -31,8 +31,8 @@ import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
-import org.anchoranalysis.image.core.dimensions.size.ResizeExtentUtilities;
 import org.anchoranalysis.spatial.box.Extent;
+import org.anchoranalysis.spatial.scale.RelativeScaleCalculator;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 import org.anchoranalysis.spatial.scale.Scaler;
 
@@ -89,7 +89,7 @@ class ScaleToSuggestion implements ImageSizeSuggestion {
     private ScaleFactor calculateForExtent(Extent source) {
         if (width.isPresent() && height.isPresent()) {
             Extent target = new Extent(width.get(), height.get());
-            return ResizeExtentUtilities.relativeScale(source, target, preserveAspectRatio);
+            return RelativeScaleCalculator.relativeScale(source, target, preserveAspectRatio);
         } else if (width.isPresent()) {
             return createFactorDerived(width.get(), source.x());
         } else if (height.isPresent()) {

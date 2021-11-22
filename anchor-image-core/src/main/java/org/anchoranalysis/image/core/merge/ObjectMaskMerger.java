@@ -43,12 +43,12 @@ import org.anchoranalysis.spatial.box.BoundingBoxMerger;
 import org.anchoranalysis.spatial.box.Extent;
 import org.anchoranalysis.spatial.point.Point3i;
 
-/** Merges one or more {@link ObjectMask}s into a single object */
+/** Merges one or more {@link ObjectMask}s into a single object. */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ObjectMaskMerger {
 
     /**
-     * Merges two objects together
+     * Merges two objects together.
      *
      * <p>This is an <b>immutable</b> operation.
      *
@@ -59,11 +59,11 @@ public class ObjectMaskMerger {
      *
      * <p>It assumes that the binary-values of the merges are always 255 and 0, or 0 and 255.
      *
-     * @param first first-object to merge
-     * @param second second-object to merge
-     * @return first and second merged together
+     * @param first first-object to merge.
+     * @param second second-object to merge.
+     * @return first and second merged together.
      * @throws AnchorFriendlyRuntimeException if incompatible binary-values exist in the objects for
-     *     merging
+     *     merging.
      */
     public static ObjectMask merge(ObjectMask first, ObjectMask second) {
 
@@ -80,11 +80,11 @@ public class ObjectMaskMerger {
     }
 
     /**
-     * Merges all the objects together that are found in a collection
+     * Merges all the objects together that are found in a collection.
      *
-     * @param objects objects to be merged
+     * @param objects objects to be merged.
      * @return a newly created merged version of all the objects, with a bounding-box just big
-     *     enough to include all the existing objects' bounding-boxes
+     *     enough to include all the existing objects' bounding-boxes.
      * @throws OperationFailedException if any two objects with different binary-values are merged.
      */
     public static ObjectMask merge(ObjectCollection objects) throws OperationFailedException {
@@ -124,9 +124,9 @@ public class ObjectMaskMerger {
     /**
      * Merges all the bounding boxes of a collection of objects.
      *
-     * @param objects a stream of objects whose bounding-boxes are to be merged
-     * @return a bounding-box just large enough to include all the bounding-boxes of the objects
-     * @throws OperationFailedException if the object-collection is empty
+     * @param objects a stream of objects whose bounding-boxes are to be merged.
+     * @return a bounding-box just large enough to include all the bounding-boxes of the objects.
+     * @throws OperationFailedException if the object-collection is empty.
      */
     public static BoundingBox mergeBoundingBoxes(ObjectCollection objects)
             throws OperationFailedException {
@@ -160,14 +160,14 @@ public class ObjectMaskMerger {
     }
 
     /**
-     * Inverts the binary-values of the second object-mask if necessary to match the first
+     * Inverts the binary-values of the second object-mask if necessary to match the first.
      *
-     * @param first first-object to merge
-     * @param second second-object to merge
+     * @param first first-object to merge.
+     * @param second second-object to merge.
      * @return the second object, possibly inverted (if this gives it identical binary-values to the
-     *     first)
+     *     first).
      * @throws AnchorFriendlyRuntimeException if the binary-values aren't identical, before or after
-     *     inversion
+     *     inversion.
      */
     private static ObjectMask invertSecondIfNecessary(ObjectMask first, ObjectMask second) {
         // If we don't have identical binary values, we invert the second one
@@ -189,9 +189,9 @@ public class ObjectMaskMerger {
      * Create a new {@link Voxels} to match a certain extent, whose value is the same as <i>off</i>
      * pixels for the outputted merged object.
      *
-     * @param extent size of the voxels
-     * @param binaryValues what constiutes off and on values
-     * @return a newly created {@link Voxels} with all off values
+     * @param extent size of the voxels.
+     * @param binaryValues what constiutes off and on values.
+     * @return a newly created {@link Voxels} with all off values.
      */
     private static Voxels<UnsignedByteBuffer> createAllOffVoxels(
             Extent extent, BinaryValuesInt binaryValues) {

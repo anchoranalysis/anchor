@@ -131,6 +131,7 @@ public class Scaler {
      * <p>This is similar to {@link #scaleObjects(ObjectCollection, ScaleFactor, Extent)} but
      * accepts a parameterized type, rather than {@link ObjectMask}.
      *
+     * @param <T> element-type.
      * @param elements objects to scale.
      * @param factor scaling-factor.
      * @param clipTo clips any objects after scaling to make sure they fit inside this extent.
