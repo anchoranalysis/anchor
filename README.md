@@ -8,7 +8,7 @@ Please see:
 
 * [Javadoc](https://www.anchoranalysis.org/javadoc/) for Anchor project, as a whole.
 * The repository's [developer documentation](https://www.anchoranalysis.org/developer_guide_repositories_anchor.html).
-* The repository's [SonarCloud](https://sonarcloud.io/summary/overall?id=anchoranalysis_anchor-assembly).
+* The repository's [SonarCloud](https://sonarcloud.io/summary/overall?id=anchoranalysis_anchor).
 
 ## What is Anchor?
 

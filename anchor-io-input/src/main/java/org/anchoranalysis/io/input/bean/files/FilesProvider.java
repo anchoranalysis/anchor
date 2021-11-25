@@ -42,7 +42,7 @@ public abstract class FilesProvider extends AnchorBean<FilesProvider> {
      *
      * @param params parameters influencing how input-files are obtained.
      * @return the list of files from the provider
-     * @throws FilesProviderException
+     * @throws FilesProviderException if list of files cannot be successfully established.
      */
     public abstract List<File> create(InputManagerParams params) throws FilesProviderException;
 
@@ -52,7 +52,7 @@ public abstract class FilesProvider extends AnchorBean<FilesProvider> {
      * <p>Any file that is part of the collection returned by this provider, must exist inside this
      * directory (either directly or in any nested subdirectories).
      *
-     * @param inputContext TODO
+     * @param inputContext the input-context.
      * @return a path to this directory.
      */
     public abstract Optional<Path> rootDirectory(InputContextParams inputContext)

@@ -109,7 +109,7 @@ public interface OpenedImageFile extends AutoCloseable {
     /**
      * The names of each channel, if they are known.
      *
-     * @param logger TODO
+     * @param logger the logger.
      * @return a list of the names, which should correspond (and have the same number of items) as
      *     {@link #numberChannels(Logger)}.
      */
@@ -118,21 +118,21 @@ public interface OpenedImageFile extends AutoCloseable {
     /**
      * The number of channels in the image-file e.g. 1 for grayscale, 3 for RGB.
      *
-     * @param logger TODO
+     * @param logger the logger.
      */
     int numberChannels(Logger logger) throws ImageIOException;
 
     /**
      * The number of frames in the image-file i.e. distinct images for a particular time-point.
      *
-     * @param logger TODO
+     * @param logger the logger.
      */
     int numberFrames(Logger logger) throws ImageIOException;
 
     /**
      * The bit-depth of the image voxels e.g. 8 for 8-bit, 16 for 16-bit etc.
      *
-     * @param logger TODO
+     * @param logger the logger.
      */
     int bitDepth(Logger logger) throws ImageIOException;
 
