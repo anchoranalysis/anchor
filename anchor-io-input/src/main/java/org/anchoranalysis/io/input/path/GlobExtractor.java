@@ -52,15 +52,15 @@ public class GlobExtractor {
     }
 
     /**
-     * Extracts a glob, and a directory portion if it exists from a string with a wildcard
+     * Extracts a glob, and a directory portion if it exists from a string with a wildcard.
      *
      * <p>Note that any back-slashes will be converted to forward-slashes.
      *
-     * @param wildcardStr a string containing a wildcard
-     * @return a GlobWithDirectory where the directory is null if it doesn't exist
+     * @param wildcardString a string containing a wildcard.
+     * @return a GlobWithDirectory where the directory is null if it doesn't exist.
      */
-    public static GlobWithDirectory extract(String wildcardStr) {
-        String str = SingleFile.replaceBackslashes(wildcardStr);
+    public static GlobWithDirectory extract(String wildcardString) {
+        String str = SingleFile.replaceBackslashes(wildcardString);
 
         int finalSlash = positionFinalSlashBeforeWildcard(str);
 
@@ -73,8 +73,8 @@ public class GlobExtractor {
     }
 
     private static int positionFinalSlashBeforeWildcard(String withWildcard) {
-        int firstWildcardPos = withWildcard.indexOf('*');
-        String without = withWildcard.substring(0, firstWildcardPos);
+        int firstWildcardPosition = withWildcard.indexOf('*');
+        String without = withWildcard.substring(0, firstWildcardPosition);
         return without.lastIndexOf('/');
     }
 }
