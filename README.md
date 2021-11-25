@@ -4,6 +4,12 @@ This is part of the source-distribution for the [Anchor Image Analysis](http://w
 
 It contains the **core libraries for Anchor** (excluding plugins and graphical extensions and projects).
 
+Please see:
+
+* [Javadoc](https://www.anchoranalysis.org/javadoc/) for Anchor project, as a whole.
+* The repository's [developer documentation](https://www.anchoranalysis.org/developer_guide_repositories_anchor.html).
+* The repository's [SonarCloud](https://sonarcloud.io/summary/overall?id=anchoranalysis_anchor-assembly).
+
 ## What is Anchor?
 
 Anchor is a platform for image analysis, developed by [Owen Feehan](http://www.owenfeehan.com) at:
