@@ -88,7 +88,7 @@ public class LabelObjects<T> {
      * @return a channel of the same-size as the containing bounding-box in {@code elements} and
      *     with unique IDs for each element, and 0 for voxels not belonging to any element.
      * @throws CreateException if there are more than 255 objects, or if two objects overlap when
-     * this cannot handled gracefully.
+     *     this cannot handled gracefully.
      */
     public Channel createLabelledChannel(
             BoundedList<T> elements, Optional<Map<Integer, T>> mapLabels) throws CreateException {

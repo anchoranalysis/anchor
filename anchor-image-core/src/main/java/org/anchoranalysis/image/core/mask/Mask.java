@@ -285,8 +285,8 @@ public class Mask {
      * Creates a new {@link Mask} whose X- and Y- dimensions are scaled by {@code scaleFactor}.
      *
      * @param scaleFactor how to the scale the X- and Y- dimensions.
-     * @return a newly created {@link Mask} as above, except if {@code scaleFactor} is effectively 1, in
-     *     which case the existing {@link Mask} is reused.
+     * @return a newly created {@link Mask} as above, except if {@code scaleFactor} is effectively
+     *     1, in which case the existing {@link Mask} is reused.
      */
     public Mask scaleXY(ScaleFactor scaleFactor) {
 

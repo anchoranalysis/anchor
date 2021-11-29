@@ -67,6 +67,7 @@
         <module>anchor-mpp-segment</module>
         <module>anchor-plot</module>
 	   <module>anchor-inference</module>
+	   <module>anchor-image-inference</module>
 	<module>anchor-annotation-io</module>
 
 	   <!-- IO modules that the test routines dependent on -->

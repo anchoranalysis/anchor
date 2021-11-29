@@ -41,8 +41,8 @@ public class BoundingBoxMerger {
     /**
      * Merges all the bounding boxes in a stream.
      *
-     * @param stream a stream whose bounding-boxes are to be merged
-     * @return a bounding-box just large enough to include all the bounding-boxes of the objects
+     * @param stream a stream whose bounding-boxes are to be merged.
+     * @return a bounding-box just large enough to include all the bounding-boxes of the objects.
      */
     public static BoundingBox merge(Stream<BoundingBox> stream) {
         return stream // NOSONAR

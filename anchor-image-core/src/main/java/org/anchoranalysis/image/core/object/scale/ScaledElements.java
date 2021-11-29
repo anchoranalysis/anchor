@@ -32,10 +32,11 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.UnaryOperator;
 import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.index.GetOperationFailedException;
+import org.anchoranalysis.image.core.object.scale.method.ObjectScalingMethod;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.spatial.box.BoundedList;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 /**
@@ -59,14 +60,18 @@ public class ScaledElements<T> {
      *
      * @param elements element to be scaled (after possibly a preoperation).
      * @param scaleFactor how much to scale the elements by.
+     * @param scalingMethod how the scaling is performed.
      * @param preOperation operation applied to each element before it is scaled (e.g. flattening).
      * @param postOperation operation applied to each element after it is scaled (e.g. flattening).
+     * @param access means of retrieving the {@link ObjectMask} that is associated with {@code T}
+     *     and to create new derived elements.
      * @throws CreateException if the internally needed data-structures cannot be successfully
      *     created.
      */
-    ScaledElements(
+    public ScaledElements(
             List<T> elements,
             ScaleFactor scaleFactor,
+            ObjectScalingMethod scalingMethod,
             Optional<UnaryOperator<T>> preOperation,
             Optional<UnaryOperator<T>> postOperation,
             AccessObjectMask<T> access)
@@ -78,13 +83,14 @@ public class ScaledElements<T> {
             return;
         }
 
-        /** Creates a list of elements with a bounding-box around all elements */
-        BoundedList<T> boundedElements =
-                BoundedList.createFromList(elements, access::boundingBoxFor);
-
-        ScaledLabels<T> labels =
-                new ScaledLabels<>(boundedElements, preOperation, scaleFactor, access);
-        elementsScaled = labels.buildMapOfAllScaledObjects(postOperation);
+        try {
+            elementsScaled =
+                    scalingMethod.scaleElements(
+                            elements, scaleFactor, preOperation, postOperation, access);
+        } catch (OperationFailedException e) {
+            throw new CreateException(
+                    "Failed to scale the ObjectMasks associated with the elements", e);
+        }
     }
 
     /**
@@ -92,10 +98,10 @@ public class ScaledElements<T> {
      *
      * <p>The unscaled element must be an identical to that passed into the constructor.
      *
-     * @param unscaledElement the unscaled-element
-     * @return the corresponding scaled element
+     * @param unscaledElement the unscaled-element.
+     * @return the corresponding scaled element.
      * @throws GetOperationFailedException if the unscaled element was never passed to the
-     *     constructor
+     *     constructor.
      */
     public T scaledObjectFor(T unscaledElement) throws GetOperationFailedException {
         T scaled = elementsScaled.get(unscaledElement);
@@ -130,6 +136,15 @@ public class ScaledElements<T> {
      */
     public List<T> asListOrderPreserved(List<T> unscaledElements) {
         return FunctionalList.mapToList(unscaledElements, elementsScaled::get);
+    }
+
+    /**
+     * The underlying map used to map an unscaled object to its scaled counterpart.
+     *
+     * @return the underlying map, as used in this data-structure.
+     */
+    public Map<T, T> asMap() {
+        return elementsScaled;
     }
 
     /**

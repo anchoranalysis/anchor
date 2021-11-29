@@ -90,7 +90,7 @@ public interface ExecutionTimeRecorder {
      * @param <T> return-type of {@code operation}.
      * @param <E> type of an exception that {@code operation} may throw.
      * @return the value returned by {@code operation}.
-     * @throws E if {@code operation} throws this exception;
+     * @throws E if {@code operation} throws this exception,
      */
     default <T, E extends Exception> T recordExecutionTime(
             String operationIdentifier, CheckedSupplier<T, E> operation) throws E {
@@ -110,7 +110,7 @@ public interface ExecutionTimeRecorder {
      * @param startTimestamp a system clock timestamp (in milliseconds since the epoch) for when the
      *     operation began.
      * @return the current timestamp (millis from the epoch) used to measure the end of the
-     *     operation
+     *     operation,
      */
     default long recordTimeDifferenceFrom(String operationIdentifier, long startTimestamp) {
         long currentTimestamp = System.currentTimeMillis();
@@ -120,32 +120,46 @@ public interface ExecutionTimeRecorder {
     }
 
     /**
-     * Like {@link #recordTimeDifferenceFrom(String, long)} but uses an alternative identifier if
-     * the entry does not already exist.
+     * Records the execution-time of a particular operation by subtracting the start-time from the
+     * end time.
      *
-     * <p>The operation is presumed to end when this function is called.
+     * @param operationIdentifier a string uniquely identifying this operation
+     * @param startTimestamp a system clock timestamp (in milliseconds since the epoch) for when the
+     *     operation <b>began</b>.
+     * @param endTimestamp a system clock timestamp (in milliseconds since the epoch) for when the
+     *     operation <b>ended</b>.
+     */
+    default void recordTimeDifferenceBetween(
+            String operationIdentifier, long startTimestamp, long endTimestamp) {
+        long executionTime = endTimestamp - startTimestamp;
+        recordExecutionTime(operationIdentifier, executionTime);
+    }
+
+    /**
+     * Records exactly how long an operation took but uses an alternative identifier if the entry
+     * does not already exist.
      *
      * @param operationIdentifier the unique name of the operation to record the time against
      * @param alternativeIdentifierIfFirst an alternative unique to use if this is the first time
      *     the execution-time is recorded.
-     * @param startTimestamp the timestamp describing millis from the epoch at the start of the
-     *     operation
-     * @return the current timestamp (millis from the epoch) used to measure the end of the
-     *     operation
+     * @param startTimestamp a system clock timestamp (in milliseconds since the epoch) for when the
+     *     operation <b>began</b>.
+     * @param endTimestamp a system clock timestamp (in milliseconds since the epoch) for when the
+     *     operation <b>ended</b>.
      */
-    default long recordTimeDifferenceFrom(
+    default void recordTimeDifferenceBetween(
             String operationIdentifier,
             Optional<String> alternativeIdentifierIfFirst,
-            long startTimestamp) {
-        long currentTimestamp = System.currentTimeMillis();
+            long startTimestamp,
+            long endTimestamp) {
         if (alternativeIdentifierIfFirst.isPresent()) {
-            long executionTime = currentTimestamp - startTimestamp;
             recordExecutionTime(
-                    alternativeIdentifierIfFirst.get(), operationIdentifier, executionTime);
+                    alternativeIdentifierIfFirst.get(),
+                    operationIdentifier,
+                    endTimestamp - startTimestamp);
         } else {
-            recordTimeDifferenceFrom(operationIdentifier, startTimestamp);
+            recordTimeDifferenceBetween(operationIdentifier, startTimestamp, endTimestamp);
         }
-        return currentTimestamp;
     }
 
     /**

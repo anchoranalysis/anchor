@@ -37,7 +37,7 @@ import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.core.index.SetOperationFailedException;
-import org.anchoranalysis.image.core.bufferedimage.BufferedImageFactory;
+import org.anchoranalysis.image.core.bufferedimage.BufferedImageFromStack;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.channel.convert.ConversionPolicy;
 import org.anchoranalysis.image.core.channel.convert.attached.ChannelConverterAttached;
@@ -49,6 +49,7 @@ import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.VoxelsUntyped;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
+import org.anchoranalysis.image.voxel.convert.bufferedimage.BufferedImageFromVoxels;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
@@ -382,13 +383,13 @@ public class DisplayStack {
     public BufferedImage deriveBufferedImage() {
         try {
             if (stack.getNumberChannels() == 3) {
-                return BufferedImageFactory.createRGB(
+                return BufferedImageFromStack.createRGB(
                         voxelsForChannel(0),
                         voxelsForChannel(1),
                         voxelsForChannel(2),
                         stack.extent());
             }
-            return BufferedImageFactory.createGrayscaleByte(voxelsForChannel(0));
+            return BufferedImageFromVoxels.createGrayscaleByte(voxelsForChannel(0));
         } catch (CreateException e) {
             throw new AnchorImpossibleSituationException();
         }

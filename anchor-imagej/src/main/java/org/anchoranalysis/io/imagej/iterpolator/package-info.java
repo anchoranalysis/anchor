@@ -1,8 +1,8 @@
 /*-
  * #%L
- * anchor-image
+ * anchor-imagej
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
+ * Copyright (C) 2010 - 2021 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,36 +23,4 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.image.core.object.scale;
-
-import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.spatial.box.Extent;
-import org.anchoranalysis.spatial.point.ReadableTuple3i;
-
-/**
- * Provides access to the simple-case of a list of {@link ObjectMask}s.
- *
- * @author Owen Feehan
- */
-class AccessSimple implements AccessObjectMask<ObjectMask> {
-
-    @Override
-    public ObjectMask objectFor(ObjectMask element) {
-        return element;
-    }
-
-    @Override
-    public ObjectMask shiftBy(ObjectMask element, ReadableTuple3i quantity) {
-        return element.shiftBy(quantity);
-    }
-
-    @Override
-    public ObjectMask createFrom(int index, ObjectMask object) {
-        return object;
-    }
-
-    @Override
-    public ObjectMask clipTo(ObjectMask element, Extent extent) {
-        return element.clipTo(extent);
-    }
-}
+package org.anchoranalysis.io.imagej.iterpolator;
