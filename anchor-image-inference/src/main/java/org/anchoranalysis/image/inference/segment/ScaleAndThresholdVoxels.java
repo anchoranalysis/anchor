@@ -41,10 +41,12 @@ import org.anchoranalysis.spatial.box.Extent;
  * Scales the size of a {@code Voxels<FloatBuffer>} and then thresholds it.
  *
  * <p>Two modes are possible:
+ * <ul>
  * <li>Higher quality - performs the interpolation using ImgLib2 which is higher quality but
  *     approximately 3 times slower.
- * <li>Lower quality - performs the interpolating using ImageJ which is worse quality but much
+ * <li>Lower quality - performs the interpolation using ImageJ which is worse quality but much
  *     faster.
+ * </ul>
  *
  * @author Owen Feehan
  */

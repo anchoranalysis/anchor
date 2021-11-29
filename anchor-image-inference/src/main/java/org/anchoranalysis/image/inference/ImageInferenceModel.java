@@ -50,7 +50,7 @@ public interface ImageInferenceModel<T> extends InferenceModel {
      * @param outputIdentifiers
      * @param convertOutput converts the output to type {@code <S>}.
      * @return the converted output.
-     * @throws OperationFailedException
+     * @throws OperationFailedException if the inference cannot successfully complete.
      */
     <S> S performInference(
             T input,
