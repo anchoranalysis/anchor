@@ -852,7 +852,7 @@ public class ObjectMask {
     public ObjectMask mapBoundingBoxChangeExtent(BoundingBox boxToAssign) {
 
         Preconditions.checkArgument(
-                !voxels.extent().anyDimensionIsLargerThan(boxToAssign.extent()));
+                !boxToAssign.extent().anyDimensionIsLargerThan(voxels.extent()));
 
         if (voxels.boundingBox().equals(boxToAssign)) {
             // Nothing to do, bounding-boxes are equal, early exit

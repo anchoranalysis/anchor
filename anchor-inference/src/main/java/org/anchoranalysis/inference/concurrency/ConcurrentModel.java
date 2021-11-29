@@ -26,6 +26,7 @@
 package org.anchoranalysis.inference.concurrency;
 
 import lombok.Value;
+import org.anchoranalysis.inference.InferenceModel;
 
 /**
  * An instance of model that can be used concurrently for inference.
@@ -34,7 +35,7 @@ import lombok.Value;
  * @param <T> the type of model
  */
 @Value
-public class ConcurrentModel<T> {
+public class ConcurrentModel<T extends InferenceModel> {
 
     /** The underlying model. */
     private T model;

@@ -59,6 +59,27 @@ public class FunctionalIterate {
     }
 
     /**
+     * Repeats an operation a number of times, counting the number of times the operation returns
+     * true.
+     *
+     * @param <E> an exception that may be thrown by {@code operation}.
+     * @param numberTimes how many times to repeat the operation
+     * @param operation the operation, which returns true for success, or false for failure.
+     * @return the number of successful operations (maximally {@code numberTimes}).
+     * @throws E if {@code operation} throws it.
+     */
+    public static <E extends Exception> int repeatCountSuccessful(
+            int numberTimes, CheckedBooleanSupplier<E> operation) throws E {
+        int countSuccessful = 0;
+        for (int i = 0; i < numberTimes; i++) {
+            if (operation.getAsBoolean()) {
+                countSuccessful++;
+            }
+        }
+        return countSuccessful;
+    }
+
+    /**
      * Repeats an operation a number of times, passing an increment index to {@code operation} each
      * time.
      *

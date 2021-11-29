@@ -25,9 +25,12 @@
  */
 package org.anchoranalysis.inference.concurrency;
 
+import java.util.Optional;
 import java.util.concurrent.PriorityBlockingQueue;
 import org.anchoranalysis.core.functional.FunctionalIterate;
 import org.anchoranalysis.core.functional.checked.CheckedFunction;
+import org.anchoranalysis.core.log.Logger;
+import org.anchoranalysis.inference.InferenceModel;
 
 /**
  * Keeps concurrent copies of a model to be used by different threads.
@@ -37,25 +40,7 @@ import org.anchoranalysis.core.functional.checked.CheckedFunction;
  * @author Owen Feehan
  * @param <T> model-type
  */
-public class ConcurrentModelPool<T> {
-
-    /**
-     * Creates a model to use in the pool.
-     *
-     * @author Owen Feehan
-     * @param <T> model-type
-     */
-    public interface CreateModelForPool<T> {
-
-        /**
-         * Creates a model.
-         *
-         * @param useGPU whether to use a GPU if possible (if not possible, revert to CPU)
-         * @return the newly created model
-         * @throws CreateModelFailedException if the model cannot be successfully created.
-         */
-        public ConcurrentModel<T> create(boolean useGPU) throws CreateModelFailedException;
-    }
+public class ConcurrentModelPool<T extends InferenceModel> implements AutoCloseable {
 
     /**
      * A queue that prioritizes if {@code hasPriority==true} and blocks if {@link
@@ -71,16 +56,21 @@ public class ConcurrentModelPool<T> {
      *
      * @param plan a plan determining how many CPUs and GPUs to use for inference.
      * @param createModel called to create a new model, as needed.
+     * @param logger where feedback is written about how many GPUs or CPUs were selected.
      * @throws CreateModelFailedException if a model cannot be created.
      */
-    public ConcurrentModelPool(ConcurrencyPlan plan, CreateModelForPool<T> createModel)
+    public ConcurrentModelPool(
+            ConcurrencyPlan plan, CreateModelForPool<T> createModel, Logger logger)
             throws CreateModelFailedException {
         this.createModel = createModel;
         this.queue = new PriorityBlockingQueue<>();
 
-        addNumberModels(plan.numberGPUs(), true, createModel);
+        int gpusAdded = addNumberModels(plan.numberGPUs(), true, createModel);
 
-        addNumberModels(plan.numberCPUs() - plan.numberGPUs(), false, createModel);
+        GPUMessageLogger.maybeLog(plan.numberGPUs(), gpusAdded, logger.messageLogger());
+
+        // TODO is it necessary to always keep a CPU in reserve, in case the GPU fails?
+        addNumberModels(plan.numberCPUs() - gpusAdded, false, createModel);
     }
 
     /**
@@ -120,6 +110,18 @@ public class ConcurrentModelPool<T> {
     }
 
     /**
+     * Close all models, to indicate they are no longer in use, and to perform tidy-up.
+     *
+     * @throws Exception if a model cannot be successfully closed.
+     */
+    @Override
+    public void close() throws Exception {
+        for (WithPriority<ConcurrentModel<T>> model : queue) {
+            model.get().getModel().close();
+        }
+    }
+
+    /**
      * Gets an instantiated model to be used.
      *
      * <p>After usage, {@link #giveBack} should be called to return the model to the pool.
@@ -140,14 +142,36 @@ public class ConcurrentModelPool<T> {
         queue.put(model);
     }
 
-    private void addNumberModels(
-            int numberModels, boolean useGPU, CreateModelForPool<T> createModel)
+    private int addNumberModels(int numberModels, boolean useGPU, CreateModelForPool<T> createModel)
             throws CreateModelFailedException {
-        FunctionalIterate.repeat(numberModels, () -> queue.add(create(useGPU, createModel)));
+        return FunctionalIterate.repeatCountSuccessful(
+                numberModels, () -> addModelCatchGPUException(useGPU, createModel));
     }
 
-    private WithPriority<ConcurrentModel<T>> create(
-            boolean useGPU, CreateModelForPool<T> createModel) throws CreateModelFailedException {
-        return new WithPriority<>(createModel.create(useGPU), useGPU);
+    /** Creates a model, return a boolean indicatin if it was successful or not. */
+    private boolean addModelCatchGPUException(boolean useGPU, CreateModelForPool<T> createModel)
+            throws CreateModelFailedException {
+        if (useGPU) {
+            try {
+                return createAdd(true, createModel);
+            } catch (CreateModelFailedException e) {
+                // TODO Should this be logged somewhere, to give more information?
+                return false;
+            }
+        } else {
+            return createAdd(false, createModel);
+        }
+    }
+
+    private boolean createAdd(boolean useGPU, CreateModelForPool<T> createModel)
+            throws CreateModelFailedException {
+        Optional<ConcurrentModel<T>> model = createModel.create(useGPU);
+        if (model.isPresent()) {
+            WithPriority<ConcurrentModel<T>> priority = new WithPriority<>(model.get(), useGPU);
+            queue.add(priority);
+            return true;
+        } else {
+            return false;
+        }
     }
 }

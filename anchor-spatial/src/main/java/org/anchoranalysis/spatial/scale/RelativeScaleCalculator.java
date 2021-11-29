@@ -30,7 +30,8 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.spatial.box.Extent;
 
 /**
- * Determine the scaling-factor needed to scale an {@link Extent} to become equal in size to another {@link Extent}.
+ * Determine the scaling-factor needed to scale an {@link Extent} to become equal in size to another
+ * {@link Extent}.
  *
  * @author Owen Feehan
  */

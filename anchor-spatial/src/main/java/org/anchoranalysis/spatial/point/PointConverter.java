@@ -214,6 +214,22 @@ public class PointConverter {
             return new Point3i(ceilInt(point.x()), ceilInt(point.y()), ceilInt(point.z()));
         }
     }
+
+    /**
+     * Convert a {@link Point3d} to a {@link Point3i}, optionally rounding values.
+     *
+     * @param point the point to convert.
+     * @param round if true, each component's value is rounded to the nearest integer, otherwise the
+     *     <i>ceiling</i> operation is used.
+     * @return the newly-created converted point.
+     */
+    public static Point3i intFromDouble(Point3d point, boolean round) {
+        if (round) {
+            return new Point3i(roundInt(point.x()), roundInt(point.y()), roundInt(point.z()));
+        } else {
+            return new Point3i(ceilInt(point.x()), ceilInt(point.y()), ceilInt(point.z()));
+        }
+    }
     // END singular points
 
     // START lists of points

@@ -15,6 +15,12 @@
 		  <artifactId>anchor-test</artifactId>
 		  <version>0.1.2-SNAPSHOT</version>
 		</dependency>
+		
+		<dependency>
+		  <groupId>${project.groupId}</groupId>
+		  <artifactId>anchor-spatial</artifactId>
+		  <version>0.0.1-SNAPSHOT</version>
+		</dependency>
 
 	   	<dependency>
 		  <groupId>${project.groupId}</groupId>		
@@ -55,6 +61,12 @@
 	    <dependency>
 	      <groupId>${project.groupId}</groupId>
 	      <artifactId>anchor-imagej</artifactId>
+	      <version>0.0.1-SNAPSHOT</version>
+	    </dependency>
+	    
+	   	<dependency>
+	      <groupId>${project.groupId}</groupId>
+	      <artifactId>anchor-image-inference</artifactId>
 	      <version>0.0.1-SNAPSHOT</version>
 	    </dependency>
 		 

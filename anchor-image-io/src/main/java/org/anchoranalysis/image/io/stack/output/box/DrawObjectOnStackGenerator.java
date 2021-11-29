@@ -70,11 +70,11 @@ public class DrawObjectOnStackGenerator
 
     /**
      * Creates the generator with a stack as the background - and with default color green and
-     * flattened in Z
+     * flattened across the Z-dimension.
      *
-     * @param background stack that exists as a background for the object
-     * @param colors colors to use for outling of objects
-     * @param outlineWidth width of the outline around an object
+     * @param background stack that exists as a background for the object.
+     * @param colors colors to use for outling of objects.
+     * @param outlineWidth width of the outline around an object.
      */
     public static DrawObjectOnStackGenerator createFromStack(
             ScaleableBackground background, int outlineWidth, ColorIndex colors) {
@@ -208,7 +208,7 @@ public class DrawObjectOnStackGenerator
         }
     }
 
-    /** Changes the bounding-box to match the object rather than the global scene */
+    /** Changes the bounding-box to match the object rather than the global scene. */
     private ObjectMask relativeBoundingBoxToScene(ObjectMask object, BoundingBox containingBox) {
         Point3i relativePosition = object.boundingBox().relativePositionTo(containingBox);
         return object.mapBoundingBoxPreserveExtent(

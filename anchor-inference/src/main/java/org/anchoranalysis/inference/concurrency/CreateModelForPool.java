@@ -1,8 +1,8 @@
 /*-
  * #%L
- * anchor-test-image
+ * anchor-inference
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
+ * Copyright (C) 2010 - 2021 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,25 +23,26 @@
  * THE SOFTWARE.
  * #L%
  */
+package org.anchoranalysis.inference.concurrency;
 
-package org.anchoranalysis.test.image;
+import java.util.Optional;
+import org.anchoranalysis.inference.InferenceModel;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.exception.CreateException;
-import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
-import org.anchoranalysis.image.core.dimensions.Resolution;
+/**
+ * Creates a model to use in the pool.
+ *
+ * @author Owen Feehan
+ * @param <T> model-type
+ */
+public interface CreateModelForPool<T extends InferenceModel> {
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class ImageResFixture {
-
-    public static final Resolution INSTANCE = create();
-
-    private static Resolution create() {
-        try {
-            return new Resolution(0.01, 0.01, 0.025);
-        } catch (CreateException e) {
-            throw new AnchorImpossibleSituationException();
-        }
-    }
+    /**
+     * Creates a model.
+     *
+     * @param useGPU whether to use a GPU if possible (if not possible, revert to CPU)
+     * @return the newly created model, if possible.
+     * @throws CreateModelFailedException if something unexpected happened. If a GPU is unavailable,
+     *     prefer to return {@link Optional#empty}.
+     */
+    public Optional<ConcurrentModel<T>> create(boolean useGPU) throws CreateModelFailedException;
 }

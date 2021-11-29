@@ -55,8 +55,8 @@ public class AnchorFriendlyRuntimeException extends AnchorRuntimeException
     }
 
     /**
-     * A user-friendly error message <i>without</i> a cause. This exception is displayed to the user. There
-     * are no more nested-errors possible.
+     * A user-friendly error message <i>without</i> a cause. This exception is displayed to the
+     * user. There are no more nested-errors possible.
      *
      * @param message cause the cause of the error.
      */

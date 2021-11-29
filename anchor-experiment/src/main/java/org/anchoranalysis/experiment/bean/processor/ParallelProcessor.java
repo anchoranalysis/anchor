@@ -177,10 +177,12 @@ public class ParallelProcessor<T extends InputFromManager, S> extends JobProcess
             paramsExperiment
                     .getLoggerExperiment()
                     .logFormatted(
-                            "Preparing jobs to run with common initialization.%nUsing %s CPUs from %d, and if needed and if possible, up to %d simultaneous jobs using a GPU.",
-                            LanguageUtilities.prefixPluralizeMaybe(numberCPUs, "processor"),
+                            "Preparing jobs to run with common initialization.%nMaximally using %d simultaneous %s (from %d available), and up to %d simultaneous %s (if available).",
+                            numberCPUs,
+                            LanguageUtilities.pluralizeMaybe(numberCPUs, "CPU"),
                             availableProcessors,
-                            numberGPUProcessors);
+                            numberGPUProcessors,
+                            LanguageUtilities.pluralizeMaybe(numberGPUProcessors, "GPU"));
         }
         return ConcurrencyPlan.multipleProcessors(numberCPUs, numberGPUProcessors);
     }

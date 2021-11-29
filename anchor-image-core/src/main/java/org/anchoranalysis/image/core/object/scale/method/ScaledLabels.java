@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.image.core.object.scale;
+package org.anchoranalysis.image.core.object.scale.method;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,6 +36,7 @@ import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.object.label.DecodeLabels;
 import org.anchoranalysis.image.core.object.label.LabelObjects;
 import org.anchoranalysis.image.core.object.label.OverlappingObject;
+import org.anchoranalysis.image.core.object.scale.AccessObjectMask;
 import org.anchoranalysis.image.voxel.interpolator.Interpolator;
 import org.anchoranalysis.image.voxel.interpolator.InterpolatorImgLib2NearestNeighbor;
 import org.anchoranalysis.image.voxel.object.ObjectMask;

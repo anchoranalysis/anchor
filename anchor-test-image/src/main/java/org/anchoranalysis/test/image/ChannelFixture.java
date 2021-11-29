@@ -101,7 +101,8 @@ public class ChannelFixture {
 
     private Dimensions createDimensions(Extent extent) {
         return new Dimensions(
-                extent, OptionalFactory.create(includeResolution, () -> ImageResFixture.INSTANCE));
+                extent,
+                OptionalFactory.create(includeResolution, () -> ResolutionFixture.INSTANCE));
     }
 
     /**

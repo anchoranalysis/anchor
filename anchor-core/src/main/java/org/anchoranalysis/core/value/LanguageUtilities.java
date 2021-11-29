@@ -53,6 +53,22 @@ public class LanguageUtilities {
     }
 
     /**
+     * Returns a single or plural word depending on the number.
+     *
+     * @param number the number that determines which word to use.
+     * @param single the string to use when {@code number} is singular.
+     * @param plural the string to use when {@code number} is pural.
+     * @return {@code single} or {@code plural} depending on {@code number}.
+     */
+    public static String multiplexPlural(long number, String single, String plural) {
+        if (number == 1) {
+            return single;
+        } else {
+            return plural;
+        }
+    }
+
+    /**
      * Returns {@code 1 something} or {@code n somethings} as is appropriate.
      *
      * @param number the number n
@@ -70,9 +86,9 @@ public class LanguageUtilities {
     /**
      * Returns {@code n somethings}.
      *
-     * @param number the number n
-     * @param word the something
-     * @return the string as above
+     * @param number the number.
+     * @param word the something.
+     * @return the string as above.
      */
     public static String prefixPluralize(long number, String word) {
         return String.format("%d %s", number, pluralize(word));
@@ -81,8 +97,8 @@ public class LanguageUtilities {
     /**
      * Given {@code something}, returns {@code somethings}.
      *
-     * @param word the something
-     * @return the string as above
+     * @param word the something.
+     * @return the string as above.
      */
     public static String pluralize(String word) {
         return String.format("%ss", word);

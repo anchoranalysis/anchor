@@ -32,6 +32,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.image.core.object.scale.method.ObjectScalingMethodFactory;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.spatial.box.Extent;
@@ -49,48 +50,52 @@ import org.anchoranalysis.spatial.scale.ScaleFactor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Scaler {
 
-    private static final AccessObjectMask<ObjectMask> ACCESS_OBJECTS = new AccessSimple();
+    private static final AccessObjectMask<ObjectMask> ACCESS_OBJECTS = new AccessObjectMaskSimple();
 
     /**
-     * Scales every object-mask in a collection
+     * Scales every object-mask in a collection <i>collectively</i>.
      *
      * <p>It is desirable scale objects together, as interpolation can be done so that adjacent
      * boundaries pre-scaling remain adjacent after scaling (only if there's no overlap among them).
      *
      * <p>This is an <b>immutable</b> operation.
      *
-     * @param objects objects to scale
-     * @param factor scaling-factor
-     * @return a new collection with scaled object-masks (existing object-masks are unaltered)
-     * @throws OperationFailedException
+     * @param objects objects to scale.
+     * @param factor scaling-factor.
+     * @return a new collection with scaled object-masks (existing object-masks are unaltered).
+     * @throws OperationFailedException if objects cannot be successfully scaled.
      */
     public static ScaledElements<ObjectMask> scaleObjects(
             ObjectCollection objects, ScaleFactor factor) throws OperationFailedException {
-        return scaleObjects(objects, factor, Optional.empty(), Optional.empty());
+        return scaleObjects(objects, factor, true, Optional.empty(), Optional.empty());
     }
 
     /**
-     * Scales every object-mask in a collection, ensuring the results remain inside a particular
-     * region.
+     * Scales every object-mask in a collection <i>collectively</i>, ensuring the results remain
+     * inside a particular region.
      *
      * <p>This is an <b>immutable</b> operation.
      *
      * <p>Like {@link #scaleObjects(ObjectCollection,ScaleFactor)} but ensured the scaled-results
-     * will always be inside a particular extent (clipping if necessary)
+     * will always be inside a particular extent (clipping if necessary).
      *
-     * @param objects objects to scale
-     * @param factor scaling-factor
-     * @param clipTo clips any objects after scaling to make sure they fit inside this extent
-     * @return a new collection with scaled object-masks
-     * @throws OperationFailedException
+     * @param objects objects to scale.
+     * @param factor scaling-factor.
+     * @param overlappingObjects true if objects may overlap unscaled. false if this is never
+     *     allowed. This influences whether scaling occurs collectively (to preserve tight borders
+     *     between objects), or individually.
+     * @param clipTo clips any objects after scaling to make sure they fit inside this extent.
+     * @return a new collection with scaled object-masks.
+     * @throws OperationFailedException if objects cannot be successfully scaled.
      */
     public static ScaledElements<ObjectMask> scaleObjects(
-            ObjectCollection objects, ScaleFactor factor, Extent clipTo)
+            ObjectCollection objects, ScaleFactor factor, boolean overlappingObjects, Extent clipTo)
             throws OperationFailedException {
         try {
             return new ScaledElements<>(
                     objects.asList(),
                     factor,
+                    ObjectScalingMethodFactory.of(overlappingObjects),
                     Optional.empty(),
                     Optional.of(object -> object.clipTo(clipTo)),
                     ACCESS_OBJECTS);
@@ -100,25 +105,34 @@ public class Scaler {
     }
 
     /**
-     * Scales every object-mask in a collection, allowing for additional manipulation before and
-     * after scaling.
+     * Scales every object-mask in a collection <i>collectively</i> (if not overlappjng), allowing
+     * for additional manipulation before and after scaling.
      *
-     * @param objects objects to scale
-     * @param factor scaling-factor
-     * @param preOperation applied to each-object before it is scaled (e.g. flattening)
-     * @param postOperation applied to each-object after it is scaled (e.g. clipping to an extent)
-     * @return a new collection with scaled object-masks (existing object-masks are unaltered)
-     * @throws OperationFailedException
+     * @param objects objects to scale.
+     * @param factor scaling-factor.
+     * @param overlappingObjects true if objects may overlap unscaled. false if this is never
+     *     allowed. This influences whether scaling occurs collectively (to preserve tight borders
+     *     between objects), or individually.
+     * @param preOperation applied to each-object before it is scaled (e.g. flattening).
+     * @param postOperation applied to each-object after it is scaled (e.g. clipping to an extent).
+     * @return a new collection with scaled object-masks (existing object-masks are unaltered).
+     * @throws OperationFailedException if objects cannot be successfully scaled.
      */
     public static ScaledElements<ObjectMask> scaleObjects(
             ObjectCollection objects,
             ScaleFactor factor,
+            boolean overlappingObjects,
             Optional<UnaryOperator<ObjectMask>> preOperation,
             Optional<UnaryOperator<ObjectMask>> postOperation)
             throws OperationFailedException {
         try {
             return new ScaledElements<>(
-                    objects.asList(), factor, preOperation, postOperation, ACCESS_OBJECTS);
+                    objects.asList(),
+                    factor,
+                    ObjectScalingMethodFactory.of(overlappingObjects),
+                    preOperation,
+                    postOperation,
+                    ACCESS_OBJECTS);
         } catch (CreateException e) {
             throw new OperationFailedException(e);
         }
@@ -128,24 +142,32 @@ public class Scaler {
      * Scales every element in a list collectively, ensuring the results remain inside a particular
      * region.
      *
-     * <p>This is similar to {@link #scaleObjects(ObjectCollection, ScaleFactor, Extent)} but
-     * accepts a parameterized type, rather than {@link ObjectMask}.
+     * <p>This is similar to {@link #scaleObjects(ObjectCollection, ScaleFactor, boolean, Extent)}
+     * but accepts a parameterized type, rather than {@link ObjectMask}.
      *
      * @param <T> element-type.
      * @param elements objects to scale.
      * @param factor scaling-factor.
+     * @param overlappingObjects true if objects may overlap unscaled. false if this is never
+     *     allowed. This influences whether scaling occurs collectively (to preserve tight borders
+     *     between objects), or individually.
      * @param clipTo clips any objects after scaling to make sure they fit inside this extent.
      * @param access retrieves a corresponding bounding-box and {@link ObjectMask} from an element.
      * @return a new collection with scaled elements.
      * @throws OperationFailedException if the scaled-elements cannot be created successfully.
      */
     public static <T> ScaledElements<T> scaleElements(
-            List<T> elements, ScaleFactor factor, Extent clipTo, AccessObjectMask<T> access)
+            List<T> elements,
+            ScaleFactor factor,
+            boolean overlappingObjects,
+            Extent clipTo,
+            AccessObjectMask<T> access)
             throws OperationFailedException {
         try {
             return new ScaledElements<>(
                     elements,
                     factor,
+                    ObjectScalingMethodFactory.of(overlappingObjects),
                     Optional.empty(),
                     Optional.of(object -> access.clipTo(object, clipTo)),
                     access);

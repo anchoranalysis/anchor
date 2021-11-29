@@ -75,7 +75,7 @@ public class IntersectingObjects<T> {
     /**
      * Creates from an {@link ObjectCollection}.
      *
-     * @param objects the objects whose intersection will be checked
+     * @param objects the objects whose intersection will be checked.
      * @return a newly created {@link IntersectingObjects} for {@code objects}.
      */
     public static IntersectingObjects<ObjectMask> create(ObjectCollection objects) {
