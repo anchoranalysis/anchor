@@ -26,7 +26,6 @@
 package org.anchoranalysis.plugin.opencv.bean.object.segment.decode.instance;
 
 import java.nio.file.Path;
-import java.util.List;
 import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.time.ExecutionTimeRecorderIgnore;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
@@ -34,6 +33,7 @@ import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.inference.bean.segment.instance.SegmentStackIntoObjectsPooled;
 import org.anchoranalysis.image.inference.segment.SegmentedObjects;
 import org.anchoranalysis.image.io.ImageInitializationFactory;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.test.TestLoader;
@@ -69,12 +69,12 @@ public abstract class InstanceSegmentationTestBase {
 
     @Test
     void testRGB() throws SegmentationFailedException {
-        assertExpectedSegmentation(stackRGB(), expectedBoxesRGB(), "rgb");
+        assertExpectedSegmentation(stackRGB(), targetBox(), "rgb");
     }
 
     @Test
     void testGrayscale8Bit() throws SegmentationFailedException {
-        assertExpectedSegmentation(stackGrayscale(), expectedBoxesGrayscale(), "grayscale");
+        assertExpectedSegmentation(stackGrayscale(), targetBox(), "grayscale");
     }
 
     /** Creates the segmentation implementation to be tested. */
@@ -90,25 +90,18 @@ public abstract class InstanceSegmentationTestBase {
         return loader.carGrayscale8Bit();
     }
 
-    /**
-     * The bounding-boxes of the objects expected from the <i>RGB</i> stack as a segmentation
-     * result.
-     */
-    protected abstract List<BoundingBox> expectedBoxesRGB();
+    /** The bounding-box we use to set an area where we expect segments to reside. */
+    protected abstract BoundingBox targetBox();
 
-    /**
-     * The bounding-boxes of the objects expected from the <i>grayscale</i> stack as a segmentation
-     * result.
-     */
-    protected abstract List<BoundingBox> expectedBoxesGrayscale();
-
-    private void assertExpectedSegmentation(
-            Stack stack, List<BoundingBox> expectedBoxes, String suffix)
+    private void assertExpectedSegmentation(Stack stack, BoundingBox targetBox, String suffix)
             throws SegmentationFailedException {
         SegmentedObjects segmentResults =
                 segmenter.segment(stack, ExecutionTimeRecorderIgnore.instance());
-        writer.writeObjects("objects_" + suffix, segmentResults.asObjects(), stackRGB());
-        ExpectedBoxesChecker.assertExpectedBoxes(segmentResults.asObjects(), expectedBoxes);
+
+        ObjectCollection objects = segmentResults.asObjects();
+
+        writer.writeObjects("objects_" + suffix, objects, stackRGB());
+        ExpectedBoxesChecker.assertExpectedBoxes(objects, targetBox);
     }
 
     private static void initSegmenter(SegmentStackIntoObjectsPooled<?> segmenter)

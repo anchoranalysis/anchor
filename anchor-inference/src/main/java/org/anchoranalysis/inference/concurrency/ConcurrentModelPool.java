@@ -148,7 +148,7 @@ public class ConcurrentModelPool<T extends InferenceModel> implements AutoClosea
                 numberModels, () -> addModelCatchGPUException(useGPU, createModel));
     }
 
-    /** Creates a model, return a boolean indicatin if it was successful or not. */
+    /** Creates a model, return a boolean indicating whether it was successful or not. */
     private boolean addModelCatchGPUException(boolean useGPU, CreateModelForPool<T> createModel)
             throws CreateModelFailedException {
         if (useGPU) {

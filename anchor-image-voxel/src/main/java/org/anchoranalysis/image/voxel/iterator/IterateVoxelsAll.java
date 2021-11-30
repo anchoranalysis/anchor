@@ -31,7 +31,7 @@ import java.util.function.IntUnaryOperator;
 import java.util.function.Predicate;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.functional.checked.IntBinaryOperation;
+import org.anchoranalysis.core.functional.unchecked.IntBinaryOperation;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
