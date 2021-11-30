@@ -38,7 +38,7 @@ import org.anchoranalysis.spatial.scale.ScaleFactor;
 /**
  * Converts a confidence-associated {@link Mark} to an equivalent {@link ObjectMask}.
  *
- * <p>A {@link ScaleFactor} is also applied to scale the {@Mark} before conversion.
+ * <p>A {@link ScaleFactor} is also applied to scale the {@link Mark} before conversion.
  *
  * @author Owen Feehan
  */
