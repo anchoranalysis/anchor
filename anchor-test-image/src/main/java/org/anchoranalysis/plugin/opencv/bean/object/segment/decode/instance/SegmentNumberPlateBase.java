@@ -1,7 +1,5 @@
 package org.anchoranalysis.plugin.opencv.bean.object.segment.decode.instance;
 
-import java.util.Arrays;
-import java.util.List;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.box.BoundingBoxFactory;
 
@@ -13,19 +11,8 @@ import org.anchoranalysis.spatial.box.BoundingBoxFactory;
  */
 public abstract class SegmentNumberPlateBase extends InstanceSegmentationTestBase {
 
-    private static final BoundingBox BOX3 = BoundingBoxFactory.at(438, 310, 78, 40);
-
     @Override
-    protected List<BoundingBox> expectedBoxesRGB() {
-        BoundingBox box1 = BoundingBoxFactory.at(302, 315, 127, 42);
-        BoundingBox box2 = BoundingBoxFactory.at(393, 199, 31, 28);
-        return Arrays.asList(box1, box2, BOX3);
-    }
-
-    @Override
-    protected List<BoundingBox> expectedBoxesGrayscale() {
-        BoundingBox box1 = BoundingBoxFactory.at(316, 319, 104, 33);
-        BoundingBox box2 = BoundingBoxFactory.at(394, 199, 27, 27);
-        return Arrays.asList(box1, box2);
+    protected BoundingBox targetBox() {
+        return BoundingBoxFactory.at(307, 310, 208, 46);
     }
 }

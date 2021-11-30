@@ -27,7 +27,6 @@ package org.anchoranalysis.plugin.opencv.bean.object.segment.decode.instance;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.List;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
@@ -37,19 +36,16 @@ import org.anchoranalysis.spatial.box.IntersectionOverUnion;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class ExpectedBoxesChecker {
 
-    /** Minimum intersection-over-union score required to be considered identical to a box. */
-    private static final double THRESHOLD_SCORE = 0.70;
+    /**
+     * Minimum intersection-over-union score required to be considered a successful match to the
+     * target box.
+     */
+    private static final double THRESHOLD_SCORE = 0.40;
 
-    public static void assertExpectedBoxes(
-            ObjectCollection objects, List<BoundingBox> expectedBoxes) {
-        assertTrue(expectedBoxes.size() < 5, "number of boxes");
-        expectedBoxes.stream().forEach(box -> assertOverlap(objects, box));
-    }
-
-    private static void assertOverlap(ObjectCollection objects, BoundingBox box) {
+    public static void assertExpectedBoxes(ObjectCollection objects, BoundingBox targetBox) {
         assertTrue(
-                atLeastOneObjectOverlaps(objects, box),
-                "at least one object has box: " + box.toString());
+                atLeastOneObjectOverlaps(objects, targetBox),
+                "at least one object has box: " + targetBox.toString());
     }
 
     private static boolean atLeastOneObjectOverlaps(ObjectCollection objects, BoundingBox box) {

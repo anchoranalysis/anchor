@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.core.functional.checked;
+package org.anchoranalysis.core.functional.unchecked;
 
 /**
  * A binary operation on two int-values that produces an {@code int}.
