@@ -24,40 +24,32 @@
  * #L%
  */
 
-package org.anchoranalysis.feature.session.calculator.single;
+package org.anchoranalysis.feature.session.calculator;
 
-import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.log.error.ErrorReporter;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
+import org.anchoranalysis.feature.calculate.bound.FeatureCalculatorSingle;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.feature.session.calculator.multi.FeatureCalculatorMulti;
 
 /**
- * Exposes a {@link FeatureCalculatorMulti} as a {@link FeatureCalculatorSingle}
+ * A {@link FeatureCalculatorSingle} but calculations are cached to avoid repetition if equal {@link
+ * FeatureInput} are passed.
  *
  * @author Owen Feehan
- * @param <T> feature input-type
  */
-public class FeatureCalculatorSingleFromMulti<T extends FeatureInput>
-        implements FeatureCalculatorSingle<T> {
+class CachedSingle<T extends FeatureInput> implements FeatureCalculatorSingle<T> {
 
-    private FeatureCalculatorMulti<T> delegate;
+    private final CachedMulti<T> delegate;
 
-    public FeatureCalculatorSingleFromMulti(FeatureCalculatorMulti<T> multi)
-            throws InitializeException {
-        this.delegate = multi;
-        if (delegate.sizeFeatures() != 1) {
-            throw new InitializeException(
-                    String.format(
-                            "When creating a %s, the multi must have exactly one feature",
-                            FeatureCalculatorSingle.class.getSimpleName()));
-        }
-    }
-
-    @Override
-    public double calculateSuppressErrors(T input, ErrorReporter errorReporter) {
-        return delegate.calculateSuppressErrors(input, errorReporter).get(0);
+    /**
+     * Creates a feature-calculator with a new cache.
+     *
+     * @param source the underlying feature-calculator to use for calculating unknown results.
+     * @param cacheSize size of cache.
+     */
+    public CachedSingle(FeatureCalculatorSingle<T> source, int cacheSize) {
+        delegate = new CachedMulti<>(new MultiFromSingle<>(source), cacheSize);
     }
 
     @Override
@@ -67,5 +59,10 @@ public class FeatureCalculatorSingleFromMulti<T extends FeatureInput>
         } catch (NamedFeatureCalculateException e) {
             throw e.dropKey();
         }
+    }
+
+    @Override
+    public double calculateSuppressErrors(T input, ErrorReporter errorReporter) {
+        return delegate.calculateSuppressErrors(input, errorReporter).get(0);
     }
 }

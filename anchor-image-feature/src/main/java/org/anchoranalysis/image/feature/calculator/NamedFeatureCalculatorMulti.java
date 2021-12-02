@@ -28,9 +28,9 @@ package org.anchoranalysis.image.feature.calculator;
 import java.util.function.UnaryOperator;
 import lombok.AllArgsConstructor;
 import lombok.Value;
+import org.anchoranalysis.feature.calculate.bound.FeatureCalculatorMulti;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.name.FeatureNameList;
-import org.anchoranalysis.feature.session.calculator.multi.FeatureCalculatorMulti;
 
 /**
  * A {@link FeatureCalculatorMulti} with associated feature-names

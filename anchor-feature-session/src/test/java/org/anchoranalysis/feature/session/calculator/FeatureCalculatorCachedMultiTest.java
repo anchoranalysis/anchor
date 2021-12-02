@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.feature.session.calculator.multi;
+package org.anchoranalysis.feature.session.calculator;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -40,15 +40,16 @@ class FeatureCalculatorCachedMultiTest {
     private static final MockFeatureInput INPUT_2 = new MockFeatureInput("2");
     private static final MockFeatureInput INPUT_1_REPEATED = new MockFeatureInput("1");
 
-    private FeatureCalculatorCachedMulti<MockFeatureInput> cached;
+    private CachedMulti<MockFeatureInput> cached;
 
     @BeforeEach
     void setup() throws FeatureCalculationException {
         cached =
-                new FeatureCalculatorCachedMulti<>(
+                new CachedMulti<>(
                         FeatureCalculatorMultiFixture.createFeatureCalculator(
                                 new ResultsVector(1) // Result is irrelevant
-                                ));
+                                ),
+                        1000);
     }
 
     /**

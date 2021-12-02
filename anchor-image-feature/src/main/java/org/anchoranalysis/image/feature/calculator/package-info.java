@@ -24,8 +24,7 @@
  * #L%
  */
 /**
- * Implementations of {@link
- * org.anchoranalysis.feature.session.calculator.multi.FeatureCalculatorMulti} related to images,
- * especially to create tables of feature-calculations.
+ * Implementations of {@link org.anchoranalysis.feature.calculate.bound.FeatureCalculatorMulti}
+ * related to images, especially to create tables of feature-calculations.
  */
 package org.anchoranalysis.image.feature.calculator;

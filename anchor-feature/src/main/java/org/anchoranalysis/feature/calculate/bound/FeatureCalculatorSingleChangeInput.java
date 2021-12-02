@@ -24,52 +24,39 @@
  * #L%
  */
 
-package org.anchoranalysis.feature.session.calculator.multi;
+package org.anchoranalysis.feature.calculate.bound;
 
 import java.util.function.Consumer;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.log.error.ErrorReporter;
-import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.feature.results.ResultsVector;
-import org.anchoranalysis.feature.session.SequentialSession;
 
 /**
- * Likes a {@link SequentialSession} but automatically changes parameters before calculation
+ * A {@link FeatureCalculatorSingle} but changes the input before calculation.
  *
  * @author Owen Feehan
  * @param <T> feature-input-type
  */
 @AllArgsConstructor
-public class FeatureCalculatorMultiChangeInput<T extends FeatureInput>
-        implements FeatureCalculatorMulti<T> {
+public class FeatureCalculatorSingleChangeInput<T extends FeatureInput>
+        implements FeatureCalculatorSingle<T> {
 
-    /** Delegate that is called after an input is changed. */
-    private FeatureCalculatorMulti<T> calculator;
+    /** Delegate which is called after an input is changed. */
+    private FeatureCalculatorSingle<T> calculator;
 
-    /** A function that is applied to change the input before being passed to the delegate. */
+    /** A function that is applied to change the input before being passed to {@code calculator}. */
     private Consumer<T> change;
 
-    public ResultsVector calculate(T input) throws NamedFeatureCalculateException {
+    @Override
+    public double calculate(T input) throws FeatureCalculationException {
         change.accept(input);
         return calculator.calculate(input);
     }
 
     @Override
-    public ResultsVector calculate(T input, FeatureList<T> featuresSubset)
-            throws NamedFeatureCalculateException {
-        change.accept(input);
-        return calculator.calculate(input, featuresSubset);
-    }
-
-    public ResultsVector calculateSuppressErrors(T input, ErrorReporter errorReporter) {
+    public double calculateSuppressErrors(T input, ErrorReporter errorReporter) {
         change.accept(input);
         return calculator.calculateSuppressErrors(input, errorReporter);
-    }
-
-    @Override
-    public int sizeFeatures() {
-        return calculator.sizeFeatures();
     }
 }

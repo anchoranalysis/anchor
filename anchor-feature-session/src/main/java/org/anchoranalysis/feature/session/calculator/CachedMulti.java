@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.feature.session.calculator.multi;
+package org.anchoranalysis.feature.session.calculator;
 
 import java.util.Optional;
 import org.anchoranalysis.core.cache.LRUCache;
@@ -32,6 +32,7 @@ import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.log.error.ErrorReporter;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
+import org.anchoranalysis.feature.calculate.bound.FeatureCalculatorMulti;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.results.ResultsVector;
 
@@ -41,10 +42,7 @@ import org.anchoranalysis.feature.results.ResultsVector;
  *
  * @author Owen Feehan
  */
-public class FeatureCalculatorCachedMulti<T extends FeatureInput>
-        implements FeatureCalculatorMulti<T> {
-
-    private static final int DEFAULT_CACHE_SIZE = 1000;
+class CachedMulti<T extends FeatureInput> implements FeatureCalculatorMulti<T> {
 
     private final FeatureCalculatorMulti<T> source;
     private final LRUCache<T, ResultsVector> cacheResults;
@@ -56,21 +54,12 @@ public class FeatureCalculatorCachedMulti<T extends FeatureInput>
     private Optional<ErrorReporter> errorReporter = Optional.empty();
 
     /**
-     * Creates a feature-calculator with a new cache
+     * Creates a feature-calculator with a new cache.
      *
-     * @param source the underlying feature-calculator to use for calculating unknown results
+     * @param source the underlying feature-calculator to use for calculating unknown results.
+     * @param cacheSize size of cache to use.
      */
-    public FeatureCalculatorCachedMulti(FeatureCalculatorMulti<T> source) {
-        this(source, DEFAULT_CACHE_SIZE);
-    }
-
-    /**
-     * Creates a feature-calculator with a new cache
-     *
-     * @param source the underlying feature-calculator to use for calculating unknown results
-     * @param cacheSize size of cache to use
-     */
-    public FeatureCalculatorCachedMulti(FeatureCalculatorMulti<T> source, int cacheSize) {
+    public CachedMulti(FeatureCalculatorMulti<T> source, int cacheSize) {
         this.source = source;
         this.cacheResults = new LRUCache<>(cacheSize, this::calculateInsideCache);
     }
@@ -81,7 +70,7 @@ public class FeatureCalculatorCachedMulti<T extends FeatureInput>
         try {
             return cacheResults.get(input);
         } catch (GetOperationFailedException e) {
-            errorReporter.recordError(FeatureCalculatorCachedMulti.class, e.getCause());
+            errorReporter.recordError(CachedMulti.class, e.getCause());
             return createNaNVector(e);
         }
     }

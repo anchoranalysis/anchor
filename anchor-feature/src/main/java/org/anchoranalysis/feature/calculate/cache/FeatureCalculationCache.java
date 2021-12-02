@@ -48,7 +48,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
  * are being calculated, and need separate space in the cache.
  *
  * <p>A call to {{@link #invalidate()} removes any existing caching (also in the children) and
- * guarantees the next calculation will be fresh/
+ * guarantees the next calculation will be fresh.
  *
  * @author Owen Feehan
  * @param <T> feature-input
@@ -82,15 +82,15 @@ public interface FeatureCalculationCache<T extends FeatureInput> {
     FeatureCalculator<T> calculator();
 
     /**
-     * Gets/creates a child-cache for a given name
+     * Gets/creates a child-cache for a given name.
      *
      * <p>This function trusts the caller to use the correct type for the child-cache.
      *
      * @param <V> parameters-type of the child cache to found
-     * @param childName name of the child-cache
-     * @param inputType the type of V
-     * @param cacheCreator factory for creating a cache
-     * @return the existing or new child cache of the given name
+     * @param childName name of the child-cache.
+     * @param inputType the type of {@code V}.
+     * @param cacheCreator factory for creating a cache.
+     * @return the existing or new child cache of the given name.
      */
     <V extends FeatureInput> FeatureCalculationCache<V> childCacheFor(
             ChildCacheName childName,

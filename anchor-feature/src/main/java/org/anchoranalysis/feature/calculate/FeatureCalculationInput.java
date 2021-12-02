@@ -31,7 +31,7 @@ import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.calculate.cache.CalculateForChild;
 import org.anchoranalysis.feature.calculate.cache.FeatureCalculationCache;
 import org.anchoranalysis.feature.calculate.cache.FeatureSymbolCalculator;
-import org.anchoranalysis.feature.calculate.cache.ResolvedCalculation;
+import org.anchoranalysis.feature.calculate.cache.part.ResolvedPart;
 import org.anchoranalysis.feature.calculate.part.CalculationPart;
 import org.anchoranalysis.feature.calculate.part.CalculationPartResolver;
 import org.anchoranalysis.feature.input.FeatureInput;
@@ -89,7 +89,7 @@ public interface FeatureCalculationInput<T extends FeatureInput> {
      * @return the result of the calculation.
      * @throws FeatureCalculationException if a feature cannot be successfully calculated.
      */
-    <S> S calculate(ResolvedCalculation<S, T> calculation) throws FeatureCalculationException;
+    <S> S calculate(ResolvedPart<S, T> calculation) throws FeatureCalculationException;
 
     /**
      * A resolver for calculations.
@@ -117,5 +117,5 @@ public interface FeatureCalculationInput<T extends FeatureInput> {
      *
      * @return the associated cache.
      */
-    public abstract FeatureCalculationCache<T> getCache();
+    FeatureCalculationCache<T> getCache();
 }

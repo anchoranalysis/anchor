@@ -23,5 +23,33 @@
  * THE SOFTWARE.
  * #L%
  */
-/** Calculates results for <i>one or more features</i> for a given input. */
-package org.anchoranalysis.feature.session.calculator.multi;
+
+package org.anchoranalysis.feature.session.calculator;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
+import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
+import org.anchoranalysis.feature.calculate.bound.FeatureCalculatorMulti;
+import org.anchoranalysis.feature.input.FeatureInput;
+import org.anchoranalysis.feature.results.ResultsVector;
+
+class FeatureCalculatorMultiFixture {
+
+    /** Creates a feature-calculator than returns a constant result */
+    public static <T extends FeatureInput> FeatureCalculatorMulti<T> createFeatureCalculator(
+            ResultsVector rv) {
+
+        try {
+            @SuppressWarnings("unchecked")
+            FeatureCalculatorMulti<T> calculator = mock(FeatureCalculatorMulti.class);
+            when(calculator.calculate(any())).thenReturn(rv);
+            when(calculator.calculateSuppressErrors(any(), any())).thenReturn(rv);
+            return calculator;
+        } catch (NamedFeatureCalculateException e) {
+            throw new AnchorFriendlyRuntimeException(e);
+        }
+    }
+}

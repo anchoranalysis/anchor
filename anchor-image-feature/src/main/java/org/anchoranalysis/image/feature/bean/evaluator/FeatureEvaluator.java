@@ -43,11 +43,11 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.FeatureRelatedBean;
 import org.anchoranalysis.feature.bean.provider.FeatureProvider;
+import org.anchoranalysis.feature.calculate.bound.FeatureCalculatorSingle;
+import org.anchoranalysis.feature.calculate.bound.FeatureCalculatorSingleChangeInput;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.session.FeatureSession;
-import org.anchoranalysis.feature.session.calculator.single.FeatureCalculatorSingle;
-import org.anchoranalysis.feature.session.calculator.single.FeatureCalculatorSingleChangeInput;
 import org.anchoranalysis.image.core.stack.Stack;
 
 /**

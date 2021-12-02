@@ -24,40 +24,38 @@
  * #L%
  */
 
-package org.anchoranalysis.feature.session.calculator.single;
+package org.anchoranalysis.feature.calculate.bound;
 
-import java.util.function.Consumer;
-import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.log.error.ErrorReporter;
+import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculator;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.feature.session.SequentialSession;
 
 /**
- * Like a {@link SequentialSession} but automatically changes parameters before calculation.
+ * Like a {@link FeatureCalculator} but is permanently associated with a single {@link Feature}.
  *
  * @author Owen Feehan
- * @param <T> feature-input
+ * @param <T> feature input-type
  */
-@AllArgsConstructor
-public class FeatureCalculatorSingleChangeInput<T extends FeatureInput>
-        implements FeatureCalculatorSingle<T> {
+public interface FeatureCalculatorSingle<T extends FeatureInput> {
 
-    /** Delegate which is called after an input is changed */
-    private FeatureCalculatorSingle<T> calculator;
+    /**
+     * Calculate the results of the feature with a particular input.
+     *
+     * @param input the input to calculate.
+     * @return the results of the calculation.
+     * @throws FeatureCalculationException if the feature cannot be successfully calculated.
+     */
+    double calculate(T input) throws FeatureCalculationException;
 
-    /** A function that is applied to change the input before being passed to {@code calculator} */
-    private Consumer<T> change;
-
-    @Override
-    public double calculate(T input) throws FeatureCalculationException {
-        change.accept(input);
-        return calculator.calculate(input);
-    }
-
-    @Override
-    public double calculateSuppressErrors(T input, ErrorReporter errorReporter) {
-        change.accept(input);
-        return calculator.calculateSuppressErrors(input, errorReporter);
-    }
+    /**
+     * Calculates the result for an {@code input} recording the error to an {@link ErrorReporter} if
+     * anything goes wrong, but throwing no exception.
+     *
+     * @param input the input to calculate.
+     * @param errorReporter where errors are recorded.
+     * @return the result of the calculation.
+     */
+    double calculateSuppressErrors(T input, ErrorReporter errorReporter);
 }

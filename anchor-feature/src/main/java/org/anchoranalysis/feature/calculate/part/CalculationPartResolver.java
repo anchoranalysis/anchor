@@ -27,8 +27,8 @@
 package org.anchoranalysis.feature.calculate.part;
 
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.cache.ResolvedCalculation;
-import org.anchoranalysis.feature.calculate.cache.ResolvedCalculationMap;
+import org.anchoranalysis.feature.calculate.cache.part.ResolvedPart;
+import org.anchoranalysis.feature.calculate.cache.part.ResolvedPartMap;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
@@ -48,7 +48,7 @@ public interface CalculationPartResolver<T extends FeatureInput> {
      * @param calculation the feature-calculation to find an equivalent for.
      * @return the corresponding resolved-calculation.
      */
-    <S> ResolvedCalculation<S, T> search(CalculationPart<S, T> calculation);
+    <S> ResolvedPart<S, T> search(CalculationPart<S, T> calculation);
 
     /**
      * Searches for an equivalent calculation to {@code calculation}.
@@ -56,6 +56,6 @@ public interface CalculationPartResolver<T extends FeatureInput> {
      * @param calculation the {@link CalculationPartMap} to find an equivalent for.
      * @return the corresponding resolved-calculation.
      */
-    <S, U> ResolvedCalculationMap<S, T, U> search(
+    <S, U> ResolvedPartMap<S, T, U> search(
             CalculationPartMap<S, T, U, FeatureCalculationException> calculation);
 }

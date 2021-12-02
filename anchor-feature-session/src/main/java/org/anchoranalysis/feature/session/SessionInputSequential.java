@@ -40,7 +40,7 @@ import org.anchoranalysis.feature.calculate.cache.CalculateForChild;
 import org.anchoranalysis.feature.calculate.cache.ChildCacheName;
 import org.anchoranalysis.feature.calculate.cache.FeatureCalculationCache;
 import org.anchoranalysis.feature.calculate.cache.FeatureSymbolCalculator;
-import org.anchoranalysis.feature.calculate.cache.ResolvedCalculation;
+import org.anchoranalysis.feature.calculate.cache.part.ResolvedPart;
 import org.anchoranalysis.feature.calculate.part.CalculationPart;
 import org.anchoranalysis.feature.calculate.part.CalculationPartResolver;
 import org.anchoranalysis.feature.input.FeatureInput;
@@ -89,12 +89,12 @@ public class SessionInputSequential<T extends FeatureInput> implements FeatureCa
         public <V extends FeatureInput, U> U calculate(
                 ChildCacheName childCacheName,
                 V input,
-                Function<CalculationPartResolver<V>, ResolvedCalculation<U, V>> funcCalc)
+                Function<CalculationPartResolver<V>, ResolvedPart<U, V>> funcCalc)
                 throws FeatureCalculationException {
 
             CalculationPartResolver<V> childResolver =
                     childCacheFor(childCacheName, input).calculator();
-            ResolvedCalculation<U, V> resolvedCalc = funcCalc.apply(childResolver);
+            ResolvedPart<U, V> resolvedCalc = funcCalc.apply(childResolver);
             return resolvedCalc.getOrCalculate(input);
         }
 
@@ -201,8 +201,7 @@ public class SessionInputSequential<T extends FeatureInput> implements FeatureCa
     }
 
     @Override
-    public <S> S calculate(ResolvedCalculation<S, T> calculation)
-            throws FeatureCalculationException {
+    public <S> S calculate(ResolvedPart<S, T> calculation) throws FeatureCalculationException {
         return calculation.getOrCalculate(input);
     }
 

@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.feature.session.calculator.multi;
+package org.anchoranalysis.feature.calculate.bound;
 
 import org.anchoranalysis.core.log.error.ErrorReporter;
 import org.anchoranalysis.feature.bean.Feature;
@@ -55,6 +55,9 @@ public interface FeatureCalculatorMulti<T extends FeatureInput> {
     /**
      * Calculates the results of a subset of the features with a particular input.
      *
+     * @param input the input to calculate.
+     * @param featuresSubset the subset of features (from those bound to the current instance) to
+     *     calculate with.
      * @return the results of the calculation.
      * @throws NamedFeatureCalculateException if any feature cannot be successfully calculated.
      */
@@ -62,17 +65,26 @@ public interface FeatureCalculatorMulti<T extends FeatureInput> {
             throws NamedFeatureCalculateException;
 
     /**
-     * Performs one calculation recording the error to an {@link ErrorReporter} if anything goes
-     * wrong, but throwing no exception.
+     * Calculates the results for an {@code input} recording the error to an {@link ErrorReporter}
+     * if anything goes wrong, but throwing no exception.
+     *
+     * @param input the input to calculate.
+     * @param errorReporter where errors are recorded.
+     * @return the results of the calculation.
      */
     ResultsVector calculateSuppressErrors(T input, ErrorReporter errorReporter);
 
     /**
-     * Performs one calculation, either calling {@link #calculate} or {@link
+     * Calculates the results for an {@code input}, either calling {@link #calculate} or {@link
      * #calculateSuppressErrors} depending on a flag.
      *
-     * @throws NamedFeatureCalculateException if suppress errors is false and an error occurs during
-     *     calculation.
+     * @param input the input to calculate.
+     * @param errorReporter where errors are recorded.
+     * @param suppressErrors if true, errors are recorded via the {@code errorReporter}. if false,
+     *     they are thrown as exceptions.
+     * @return the results of the calculation.
+     * @throws NamedFeatureCalculateException if {@code suppressErrors==false} and an error occurs
+     *     during calculation.
      */
     default ResultsVector calculate(T input, ErrorReporter errorReporter, boolean suppressErrors)
             throws NamedFeatureCalculateException {
@@ -86,6 +98,8 @@ public interface FeatureCalculatorMulti<T extends FeatureInput> {
     /**
      * The number of features that is calculated on each call to {@link #calculate}, and therefore
      * the size of the returned {@link ResultsVector}.
+     *
+     * @return the number of features.
      */
     int sizeFeatures();
 }

@@ -33,8 +33,8 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.feature.calculate.FeatureCalculator;
-import org.anchoranalysis.feature.calculate.cache.ResolvedCalculation;
-import org.anchoranalysis.feature.calculate.cache.ResolvedCalculationMap;
+import org.anchoranalysis.feature.calculate.cache.part.ResolvedPart;
+import org.anchoranalysis.feature.calculate.cache.part.ResolvedPartMap;
 import org.anchoranalysis.feature.calculate.part.CalculationPart;
 import org.anchoranalysis.feature.calculate.part.CalculationPartMap;
 import org.anchoranalysis.feature.input.FeatureInput;
@@ -77,16 +77,16 @@ class ResettableCalculator<T extends FeatureInput> implements FeatureCalculator<
 
     @SuppressWarnings("unchecked")
     @Override
-    public <U> ResolvedCalculation<U, T> search(CalculationPart<U, T> calculation) {
-        return new ResolvedCalculation<>(
+    public <U> ResolvedPart<U, T> search(CalculationPart<U, T> calculation) {
+        return new ResolvedPart<>(
                 (CalculationPart<U, T>) setCalculation.findOrAdd(calculation, null));
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public <S, U> ResolvedCalculationMap<S, T, U> search(
+    public <S, U> ResolvedPartMap<S, T, U> search(
             CalculationPartMap<S, T, U, FeatureCalculationException> calculation) {
-        return new ResolvedCalculationMap<>(
+        return new ResolvedPartMap<>(
                 (CalculationPartMap<S, T, U, FeatureCalculationException>)
                         setCalculationMap.findOrAdd(calculation, null));
     }

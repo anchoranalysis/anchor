@@ -28,8 +28,8 @@ package org.anchoranalysis.mpp.feature.addcriteria;
 
 import java.util.Optional;
 import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.feature.calculate.bound.FeatureCalculatorMulti;
 import org.anchoranalysis.feature.energy.EnergyStack;
-import org.anchoranalysis.feature.session.calculator.multi.FeatureCalculatorMulti;
 import org.anchoranalysis.mpp.feature.input.FeatureInputPairMemo;
 import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 
