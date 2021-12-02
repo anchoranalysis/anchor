@@ -32,7 +32,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.feature.calculate.cache.CacheCreator;
 import org.anchoranalysis.feature.calculate.cache.ChildCacheName;
-import org.anchoranalysis.feature.calculate.cache.FeatureSessionCache;
+import org.anchoranalysis.feature.calculate.cache.FeatureCalculationCache;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
@@ -45,8 +45,8 @@ public class DefaultChildCacheFinder implements ChildCacheFinder {
     private static final ChildCacheFinder INSTANCE = new DefaultChildCacheFinder();
 
     @Override
-    public <V extends FeatureInput> FeatureSessionCache<V> childCacheFor(
-            FeatureSessionCache<?> parentCache,
+    public <V extends FeatureInput> FeatureCalculationCache<V> childCacheFor(
+            FeatureCalculationCache<?> parentCache,
             CacheCreator factory,
             ChildCacheName childName,
             V input) {

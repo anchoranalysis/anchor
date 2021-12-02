@@ -41,7 +41,7 @@ import org.anchoranalysis.feature.shared.FeaturesInitialization;
  * created elsewhere.
  *
  * @author Owen Feehan
- * @param <T> feature input-type.
+ * @param <T> feature input-type
  */
 public abstract class ReferencingFeatureListProvider<T extends FeatureInput>
         extends FeatureListProvider<T> {

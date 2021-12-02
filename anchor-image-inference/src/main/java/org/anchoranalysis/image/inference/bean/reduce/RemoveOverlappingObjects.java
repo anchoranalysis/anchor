@@ -58,7 +58,7 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
 public class RemoveOverlappingObjects extends ReduceElementsGreedy {
 
     // START BEAN FIELDS
-    /** Bounding boxes with scores above this threshold are removed */
+    /** Bounding boxes with scores above this threshold are removed. */
     @BeanField @Getter @Setter private double scoreThreshold = 0.3;
     // END BEAN FIELDS
 

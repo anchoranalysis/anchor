@@ -42,7 +42,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
  * <p>This class represents one such bunch of calculations. Different implementations provide
  * different strategies.
  *
- * <p>Each session-cache may contain "child" caches for particular string identifiers. This provides
+ * <p>Each calculation-cache may contain "child" caches for particular string identifiers. This provides
  * a hierarchy of caches and sub-caches as many features change the underlying objects that are
  * being calculated, and need separate space in the cache.
  *
@@ -52,7 +52,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
  * @author Owen Feehan
  * @param <T> feature-input
  */
-public interface FeatureSessionCache<T extends FeatureInput> {
+public interface FeatureCalculationCache<T extends FeatureInput> {
 
     /**
      * Initializes the cache. Should always be called once before any calculations occur
@@ -76,9 +76,9 @@ public interface FeatureSessionCache<T extends FeatureInput> {
     /**
      * A means of calculating feature values using this cache.
      *
-     * @return a {@link FeatureSessionCalculator} bound to this instance.
+     * @return a {@link FeatureCalculator} bound to this instance.
      */
-    FeatureSessionCalculator<T> calculator();
+    FeatureCalculator<T> calculator();
 
     /**
      * Gets/creates a child-cache for a given name
@@ -91,7 +91,7 @@ public interface FeatureSessionCache<T extends FeatureInput> {
      * @param cacheCreator factory for creating a cache
      * @return the existing or new child cache of the given name
      */
-    <V extends FeatureInput> FeatureSessionCache<V> childCacheFor(
+    <V extends FeatureInput> FeatureCalculationCache<V> childCacheFor(
             ChildCacheName childName,
             Class<? extends FeatureInput> inputType,
             CacheCreator cacheCreator);

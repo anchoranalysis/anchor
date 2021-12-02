@@ -41,11 +41,11 @@ public interface FeatureSymbolCalculator<T extends FeatureInput> {
 
     /**
      * Resolves an identifier to a unique-string, suitable for {@link
-     * #calculateFeatureByIdentifier(String, SessionInput)}.
+     * #calculateFeatureByIdentifier(String, FeatureCalculationInput)}.
      *
      * <p>Due to scoping (different prefixes that can exist), an ID needs to be resolved to a
      * unique-string before it can be passed to {@link #calculateFeatureByIdentifier(String,
-     * SessionInput)}.
+     * FeatureCalculationInput)}.
      *
      * @param identifier the identifier to resolve.
      * @return the resolved identifier.
@@ -56,10 +56,10 @@ public interface FeatureSymbolCalculator<T extends FeatureInput> {
      * Searches for a feature that matches a particular identifier.
      *
      * @param resolvedIdentifier the identifier.
-     * @param input the feature-input in context of a session.
+     * @param input the feature-input to be calculated.
      * @return the result of the calculation.
      * @throws FeatureCalculationException if the feature cannot be successfully calculated.
      */
-    double calculateFeatureByIdentifier(String resolvedIdentifier, SessionInput<T> input)
+    double calculateFeatureByIdentifier(String resolvedIdentifier, FeatureCalculationInput<T> input)
             throws FeatureCalculationException;
 }

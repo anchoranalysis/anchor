@@ -39,7 +39,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
  * Specifies a single feature directly without assigning any custom-naming.
  *
  * @author Owen Feehan
- * @param <T> the feature input-type.
+ * @param <T> the feature input-type
  */
 @NoArgsConstructor
 @AllArgsConstructor

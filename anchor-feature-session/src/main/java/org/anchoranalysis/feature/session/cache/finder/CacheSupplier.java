@@ -28,11 +28,11 @@ package org.anchoranalysis.feature.session.cache.finder;
 
 import java.util.Optional;
 import org.anchoranalysis.core.cache.LRUCache;
-import org.anchoranalysis.feature.calculate.cache.SessionInput;
+import org.anchoranalysis.feature.calculate.cache.FeatureCalculationInput;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 @FunctionalInterface
 public interface CacheSupplier<T extends FeatureInput, E extends Exception> {
 
-    Optional<LRUCache<T, SessionInput<T>>> get() throws E;
+    Optional<LRUCache<T, FeatureCalculationInput<T>>> get() throws E;
 }

@@ -34,12 +34,12 @@ import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.results.ResultsVector;
 
 /**
- * Calculates features in the context of a particular feature-session.
+ * Calculates {@link FeatureCalculationInput}.
  *
  * @author Owen Feehan
  * @param <T> feature-input type that the cache supports
  */
-public interface FeatureSessionCalculator<T extends FeatureInput>
+public interface FeatureCalculator<T extends FeatureInput>
         extends CalculationResolver<T>, FeatureSymbolCalculator<T> {
 
     /**
@@ -50,7 +50,7 @@ public interface FeatureSessionCalculator<T extends FeatureInput>
      * @return the feature-value
      * @throws FeatureCalculationException
      */
-    double calculate(Feature<T> feature, SessionInput<T> input) throws FeatureCalculationException;
+    double calculate(Feature<T> feature, FeatureCalculationInput<T> input) throws FeatureCalculationException;
 
     /**
      * Calculates a feature-list throwing an exception if there is an error.
@@ -61,18 +61,18 @@ public interface FeatureSessionCalculator<T extends FeatureInput>
      *     error occurs.
      * @throws NamedFeatureCalculateException if any feature cannot be successfully calculated.
      */
-    default ResultsVector calc(FeatureList<T> features, SessionInput<T> input)
+    default ResultsVector calculate(FeatureList<T> features, FeatureCalculationInput<T> input)
             throws NamedFeatureCalculateException {
         ResultsVector out = new ResultsVector(features.size());
-        for (int i = 0; i < features.size(); i++) {
+        for (int index = 0; index < features.size(); index++) {
 
-            Feature<T> f = features.get(i);
+            Feature<T> feature = features.get(index);
 
             try {
-                double val = calculate(f, input);
-                out.set(i, val);
+                double val = calculate(feature, input);
+                out.set(index, val);
             } catch (FeatureCalculationException e) {
-                throw new NamedFeatureCalculateException(f.getFriendlyName(), e.getMessage());
+                throw new NamedFeatureCalculateException(feature.getFriendlyName(), e.getMessage());
             }
         }
         return out;

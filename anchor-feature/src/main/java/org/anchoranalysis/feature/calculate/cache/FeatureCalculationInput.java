@@ -35,17 +35,17 @@ import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.results.ResultsVector;
 
 /**
- * Encapsulates a feature-input in the context of a particular session.
+ * Gives a {@link FeatureInput} the necessary context for feature-calculation, including associating it with a cache.
  *
  * @param <T> underlying feature-input type.
  * @author Owen Feehan
  */
-public interface SessionInput<T extends FeatureInput> {
+public interface FeatureCalculationInput<T extends FeatureInput> {
 
     /**
      * The underlying feature-input.
      *
-     * @return the feature-input, independent of the session.
+     * @return the feature-input.
      */
     T get();
 
@@ -109,9 +109,9 @@ public interface SessionInput<T extends FeatureInput> {
     FeatureSymbolCalculator<T> bySymbol();
 
     /**
-     * Get the {@link FeatureSessionCache} associated with this session.
+     * Get the associated {@link FeatureCalculationCache}.
      *
      * @return the associated cache.
      */
-    public abstract FeatureSessionCache<T> getCache();
+    public abstract FeatureCalculationCache<T> getCache();
 }

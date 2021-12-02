@@ -34,8 +34,8 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.cache.CacheCreator;
 import org.anchoranalysis.feature.calculate.cache.ChildCacheName;
-import org.anchoranalysis.feature.calculate.cache.FeatureSessionCache;
-import org.anchoranalysis.feature.calculate.cache.SessionInput;
+import org.anchoranalysis.feature.calculate.cache.FeatureCalculationCache;
+import org.anchoranalysis.feature.calculate.cache.FeatureCalculationInput;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.session.replace.CacheAndReuseStrategy;
 
@@ -60,8 +60,8 @@ public class CheckCacheForSpecificChildren implements ChildCacheFinder {
     private CacheAndReuseStrategy<FeatureInput> fallbackCache = null;
 
     @Override
-    public <V extends FeatureInput> FeatureSessionCache<V> childCacheFor(
-            FeatureSessionCache<?> parentCache,
+    public <V extends FeatureInput> FeatureCalculationCache<V> childCacheFor(
+            FeatureCalculationCache<?> parentCache,
             CacheCreator factory,
             ChildCacheName childName,
             V input)
@@ -74,7 +74,7 @@ public class CheckCacheForSpecificChildren implements ChildCacheFinder {
         return parentCache.childCacheFor(childName, input.getClass(), factory);
     }
 
-    private <V extends FeatureInput> FeatureSessionCache<V> useSessionFromSource(
+    private <V extends FeatureInput> FeatureCalculationCache<V> useSessionFromSource(
             ChildCacheName childName, V input, CacheCreator factory)
             throws FeatureCalculationException {
 
@@ -85,7 +85,7 @@ public class CheckCacheForSpecificChildren implements ChildCacheFinder {
                 try {
                     // Check cache if has a session input to match, and if so, reuse it
                     @SuppressWarnings("unchecked")
-                    Optional<SessionInput<V>> opt =
+                    Optional<FeatureCalculationInput<V>> opt =
                             ((CacheTransferSource<V>) src).getInputIfPresent(input);
                     if (opt.isPresent()) {
                         return opt.get().getCache();
@@ -106,12 +106,12 @@ public class CheckCacheForSpecificChildren implements ChildCacheFinder {
     }
 
     @SuppressWarnings("unchecked")
-    private <V extends FeatureInput> FeatureSessionCache<V> useFallbackCache(
+    private <V extends FeatureInput> FeatureCalculationCache<V> useFallbackCache(
             V input, CacheCreator factory) throws CreateException {
         if (fallbackCache == null) {
             fallbackCache = new CacheAndReuseStrategy<>(factory);
         }
-        return (FeatureSessionCache<V>) fallbackCache.createOrReuse(input).getCache();
+        return (FeatureCalculationCache<V>) fallbackCache.createOrReuse(input).getCache();
     }
 
     @Override

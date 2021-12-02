@@ -32,21 +32,21 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calculate.FeatureCalculation;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationMap;
-import org.anchoranalysis.feature.calculate.cache.FeatureSessionCalculator;
+import org.anchoranalysis.feature.calculate.cache.FeatureCalculator;
 import org.anchoranalysis.feature.calculate.cache.ResolvedCalculation;
 import org.anchoranalysis.feature.calculate.cache.ResolvedCalculationMap;
-import org.anchoranalysis.feature.calculate.cache.SessionInput;
+import org.anchoranalysis.feature.calculate.cache.FeatureCalculationInput;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 @AllArgsConstructor
-class HorizontalFeatureCalculator<T extends FeatureInput> implements FeatureSessionCalculator<T> {
+class HorizontalFeatureCalculator<T extends FeatureInput> implements FeatureCalculator<T> {
 
-    private FeatureSessionCalculator<T> delegate;
+    private FeatureCalculator<T> delegate;
     private FeatureResultMap<T> map;
     private Collection<String> ignorePrefixes;
 
     @Override
-    public double calculate(Feature<T> feature, SessionInput<T> input)
+    public double calculate(Feature<T> feature, FeatureCalculationInput<T> input)
             throws FeatureCalculationException {
 
         // if there's no custom name, then we don't consider caching
@@ -87,7 +87,7 @@ class HorizontalFeatureCalculator<T extends FeatureInput> implements FeatureSess
     }
 
     @Override
-    public double calculateFeatureByIdentifier(String id, SessionInput<T> input)
+    public double calculateFeatureByIdentifier(String id, FeatureCalculationInput<T> input)
             throws FeatureCalculationException {
 
         // Let's first check if it's in our cache
@@ -108,7 +108,7 @@ class HorizontalFeatureCalculator<T extends FeatureInput> implements FeatureSess
         }
     }
 
-    private Double calculateAndAdd(Feature<T> feature, SessionInput<T> input)
+    private Double calculateAndAdd(Feature<T> feature, FeatureCalculationInput<T> input)
             throws FeatureCalculationException {
         Double result = delegate.calculate(feature, input);
         map.add(feature, resolveNameFeature(feature), result);

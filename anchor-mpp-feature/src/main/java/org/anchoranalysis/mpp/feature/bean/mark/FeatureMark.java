@@ -28,13 +28,13 @@ package org.anchoranalysis.mpp.feature.bean.mark;
 
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.cache.SessionInput;
+import org.anchoranalysis.feature.calculate.cache.FeatureCalculationInput;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 public abstract class FeatureMark extends Feature<FeatureInputMark> {
 
     @Override
-    public abstract double calculate(SessionInput<FeatureInputMark> input)
+    public abstract double calculate(FeatureCalculationInput<FeatureInputMark> input)
             throws FeatureCalculationException;
 
     @Override

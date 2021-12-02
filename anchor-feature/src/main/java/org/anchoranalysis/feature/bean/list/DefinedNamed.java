@@ -47,7 +47,7 @@ import org.anchoranalysis.feature.store.NamedFeatureStoreFactory;
  * identical custom-name.
  *
  * @author Owen Feehan
- * @param <T> the feature input-type.
+ * @param <T> the feature input-type
  */
 public class DefinedNamed<T extends FeatureInput> extends ReferencingFeatureListProvider<T> {
 

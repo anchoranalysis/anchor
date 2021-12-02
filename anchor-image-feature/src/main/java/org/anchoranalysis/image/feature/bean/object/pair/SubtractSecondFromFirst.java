@@ -27,7 +27,7 @@
 package org.anchoranalysis.image.feature.bean.object.pair;
 
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.cache.SessionInput;
+import org.anchoranalysis.feature.calculate.cache.FeatureCalculationInput;
 import org.anchoranalysis.image.feature.input.FeatureInputPairObjects;
 
 /**
@@ -38,7 +38,7 @@ import org.anchoranalysis.image.feature.input.FeatureInputPairObjects;
 public class SubtractSecondFromFirst extends FeatureDeriveFromPair {
 
     @Override
-    public double calculate(SessionInput<FeatureInputPairObjects> input)
+    public double calculate(FeatureCalculationInput<FeatureInputPairObjects> input)
             throws FeatureCalculationException {
         return valueFromFirst(input) - valueFromSecond(input);
     }

@@ -33,15 +33,15 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calculate.FeatureCalculation;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationMap;
-import org.anchoranalysis.feature.calculate.cache.FeatureSessionCalculator;
+import org.anchoranalysis.feature.calculate.cache.FeatureCalculator;
 import org.anchoranalysis.feature.calculate.cache.ResolvedCalculation;
 import org.anchoranalysis.feature.calculate.cache.ResolvedCalculationMap;
-import org.anchoranalysis.feature.calculate.cache.SessionInput;
+import org.anchoranalysis.feature.calculate.cache.FeatureCalculationInput;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.shared.SharedFeaturesSubset;
 
 @RequiredArgsConstructor
-class ResettableCalculator<T extends FeatureInput> implements FeatureSessionCalculator<T> {
+class ResettableCalculator<T extends FeatureInput> implements FeatureCalculator<T> {
 
     // START REQUIRED ARGUMENTS
     private final SharedFeaturesSubset<T> sharedFeatures;
@@ -64,7 +64,7 @@ class ResettableCalculator<T extends FeatureInput> implements FeatureSessionCalc
     }
 
     @Override
-    public double calculate(Feature<T> feature, SessionInput<T> input)
+    public double calculate(Feature<T> feature, FeatureCalculationInput<T> input)
             throws FeatureCalculationException {
         double val = feature.calculateCheckInitialized(input);
         if (Double.isNaN(val)) {
@@ -92,7 +92,7 @@ class ResettableCalculator<T extends FeatureInput> implements FeatureSessionCalc
     }
 
     @Override
-    public double calculateFeatureByIdentifier(String id, SessionInput<T> input)
+    public double calculateFeatureByIdentifier(String id, FeatureCalculationInput<T> input)
             throws FeatureCalculationException {
         try {
             Feature<T> feature = sharedFeatures.getException(id);

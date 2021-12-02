@@ -30,7 +30,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.cache.SessionInput;
+import org.anchoranalysis.feature.calculate.cache.FeatureCalculationInput;
 import org.anchoranalysis.image.feature.calculation.CalculateNumberVoxels;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 
@@ -41,7 +41,7 @@ public class NumberVoxels extends FeatureSingleObject {
     // END BEAN PROPERTIES
 
     @Override
-    public double calculate(SessionInput<FeatureInputSingleObject> input)
+    public double calculate(FeatureCalculationInput<FeatureInputSingleObject> input)
             throws FeatureCalculationException {
         return input.calculate(new CalculateNumberVoxels(mip));
     }
