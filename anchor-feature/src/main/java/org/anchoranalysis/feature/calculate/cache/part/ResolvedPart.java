@@ -42,7 +42,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
 @AllArgsConstructor
 public class ResolvedPart<S, T extends FeatureInput> {
 
-    /** The cacheable-calculation that is now considered resolved */
+    /** The calculation-part that is now considered resolved. */
     private CalculationPart<S, T> calculation;
 
     /**
@@ -51,8 +51,8 @@ public class ResolvedPart<S, T extends FeatureInput> {
      *
      * @param input If there is no existing cached-value, and the calculation occurs, these
      *     parameters are used. Otherwise ignored.
-     * @return the result of the calculation
-     * @throws FeatureCalculationException if the calculation cannot finish, for whatever reason
+     * @return the result of the calculation.
+     * @throws FeatureCalculationException if the calculation cannot finish, for whatever reason.
      */
     public S getOrCalculate(T input) throws FeatureCalculationException {
         return calculation.getOrCalculate(input);

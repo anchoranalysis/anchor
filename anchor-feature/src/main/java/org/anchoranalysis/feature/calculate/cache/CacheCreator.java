@@ -40,7 +40,7 @@ public interface CacheCreator {
      * Creates a {@link FeatureCalculationCache} that accepts a particular input type.
      *
      * @param <T> the input-type.
-     * @param inputType the class corresponding to {@code <T>}
+     * @param inputType the class corresponding to {@code <T>}.
      * @return a newly created instantiation of {@link FeatureCalculationCache}.
      */
     <T extends FeatureInput> FeatureCalculationCache<T> create(

@@ -29,7 +29,7 @@ package org.anchoranalysis.image.bean.segment;
 import org.anchoranalysis.image.bean.ImageBean;
 
 /**
- * Performs some kind of segmentation
+ * Performs some kind of segmentation on an image.
  *
  * @author Owen Feehan
  * @param <T> bean-type

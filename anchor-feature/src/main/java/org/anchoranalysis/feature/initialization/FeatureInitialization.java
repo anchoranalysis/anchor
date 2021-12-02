@@ -115,6 +115,6 @@ public class FeatureInitialization implements BeanInitialization {
         return sharedObjects.orElseThrow(
                 () ->
                         new InitializeException(
-                                "Shared-objects are required for this bean, but are not available"));
+                                "Shared-objects are required for this bean, but are not available."));
     }
 }
