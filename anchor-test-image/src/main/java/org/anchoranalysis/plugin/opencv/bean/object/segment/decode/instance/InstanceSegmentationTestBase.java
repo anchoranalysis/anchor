@@ -78,7 +78,7 @@ public abstract class InstanceSegmentationTestBase {
     }
 
     /** Creates the segmentation implementation to be tested. */
-    protected abstract SegmentStackIntoObjectsPooled<?> createSegmenter();
+    protected abstract SegmentStackIntoObjectsPooled<?> createSegmenter();  // NOSONAR
 
     /** The RGB stack that is tested. */
     protected Stack stackRGB() {

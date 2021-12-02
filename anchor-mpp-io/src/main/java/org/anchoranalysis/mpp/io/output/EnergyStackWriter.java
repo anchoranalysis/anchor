@@ -50,7 +50,7 @@ import org.anchoranalysis.io.output.outputter.Outputter;
  * </thead>
  * <tbody>
  * <tr><td>energyStack</td><td>no</td><td>Each channel of the energy-stack as a seperate image.</td></tr>
- * <tr><td>energyStackParameters</td><td>no</td><td>XML serialization of the key-value parameters associated with the energy stack.</td></tr>
+ * <tr><td>energyStackDictionary</td><td>no</td><td>XML serialization of the key-value parameters associated with the energy stack.</td></tr>
  * </tbody>
  * </table>
  *
@@ -59,11 +59,12 @@ import org.anchoranalysis.io.output.outputter.Outputter;
 @AllArgsConstructor
 public class EnergyStackWriter {
 
-    private static final String OUTPUT_ENERGY_STACK_DIRECTORY = "energyStack";
-    private static final String OUTPUT_PARAMS = "energyStackParameters";
+    public static final String OUTPUT_ENERGY_STACK_DIRECTORY = "energyStack";
+    private static final String OUTPUT_ENERGY_STACK_DICTIONARY = "energyStackDictionary";
 
     private static final String MANIFEST_FUNCTION_CHANNEL = "energyStackChannel";
-    private static final String MANIFEST_FUNCTION_PARAMS = "energyStackParameters";
+    public static final String MANIFEST_FUNCTION_DICTIONARY = OUTPUT_ENERGY_STACK_DICTIONARY;
+    public static final String MANIFEST_FUNCTION_STACK = OUTPUT_ENERGY_STACK_DIRECTORY;
 
     private final EnergyStack energyStack;
     private final Outputter outputter;
@@ -77,7 +78,7 @@ public class EnergyStackWriter {
                         2,
                         true,
                         Optional.of(
-                                new ManifestDescription("raster", OUTPUT_ENERGY_STACK_DIRECTORY)));
+                                new ManifestDescription("raster", MANIFEST_FUNCTION_DICTIONARY)));
 
         createSequenceFactory()
                 .incrementingByOneStream(
@@ -88,8 +89,8 @@ public class EnergyStackWriter {
             outputter
                     .writerSelective()
                     .write(
-                            OUTPUT_PARAMS,
-                            () -> new DictionaryGenerator(MANIFEST_FUNCTION_PARAMS),
+                            OUTPUT_ENERGY_STACK_DICTIONARY,
+                            () -> new DictionaryGenerator(MANIFEST_FUNCTION_DICTIONARY),
                             energyStack::getParameters);
         }
     }

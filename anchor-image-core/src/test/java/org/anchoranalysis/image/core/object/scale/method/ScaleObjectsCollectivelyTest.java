@@ -1,6 +1,6 @@
 package org.anchoranalysis.image.core.object.scale.method;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Map;
 import org.anchoranalysis.core.exception.OperationFailedException;
@@ -26,8 +26,8 @@ class ScaleObjectsCollectivelyTest {
 
     /** Check that the two scaled objects have identical volumes after scaling. */
     private static void checkIdenticalObjects(Map<ObjectMask, ObjectMask> scaled) {
-        assertTrue(
-                scaled.get(ObjectFixture.OBJECT_LEFT).numberVoxelsOn()
-                        == scaled.get(ObjectFixture.OBJECT_RIGHT_ADJACENT).numberVoxelsOn());
+        assertEquals(
+                scaled.get(ObjectFixture.OBJECT_LEFT).numberVoxelsOn(),
+                        scaled.get(ObjectFixture.OBJECT_RIGHT_ADJACENT).numberVoxelsOn());
     }
 }

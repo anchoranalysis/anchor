@@ -86,7 +86,7 @@ public abstract class NamedChannelsInput implements ProvidesStackInput {
      * The image-metadata associated with a particular series.
      *
      * @param seriesIndex the index of the series.
-     * @param logger TODO
+     * @param logger the logger.
      * @return the metadata.
      * @throws ImageIOException if the metadata cannot be calculated.
      */
