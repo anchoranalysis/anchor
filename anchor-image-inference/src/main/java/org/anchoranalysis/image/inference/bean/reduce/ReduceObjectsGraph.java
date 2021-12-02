@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.plugin.image.bean.object.segment.reduce;
+package org.anchoranalysis.image.inference.bean.reduce;
 
 import java.util.List;
 import java.util.PriorityQueue;

@@ -39,7 +39,7 @@ public interface CreateModelForPool<T extends InferenceModel> {
     /**
      * Creates a model.
      *
-     * @param useGPU whether to use a GPU if possible (if not possible, revert to CPU)
+     * @param useGPU whether to use a GPU if possible (if not possible, revert to CPU).
      * @return the newly created model, if possible.
      * @throws CreateModelFailedException if something unexpected happened. If a GPU is unavailable,
      *     prefer to return {@link Optional#empty}.

@@ -29,7 +29,7 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 
 /**
- * Wraps an element of type {@code T} to ensure priority is given when the flag {@code gpu} is true.
+ * Wraps an element of type {@code T} to ensure priority is given when the flag {@code gpu==true}.
  *
  * <p>The priority exists via an ordering of elements, where elements with flag {@code gpu==true}
  * always precede those with {@code gpu==false}.
@@ -41,7 +41,10 @@ import lombok.EqualsAndHashCode;
 @AllArgsConstructor
 public class WithPriority<T> implements Comparable<WithPriority<T>> {
 
+    /** The element to assign priority to. */
     private T element;
+    
+    /** Whether the element is associated with a GPU, in which case, it is given priority. */
     private boolean gpu;
 
     /**
