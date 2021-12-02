@@ -35,6 +35,7 @@ import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.time.ExecutionTimeRecorder;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.core.stack.Stack;
+import org.anchoranalysis.image.inference.bean.reduce.RemoveOverlappingObjects;
 import org.anchoranalysis.image.inference.bean.segment.reduce.ReduceElements;
 import org.anchoranalysis.image.inference.segment.SegmentedObjects;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
@@ -42,7 +43,6 @@ import org.anchoranalysis.inference.InferenceModel;
 import org.anchoranalysis.inference.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.inference.concurrency.ConcurrentModelPool;
 import org.anchoranalysis.inference.concurrency.CreateModelFailedException;
-import org.anchoranalysis.plugin.image.bean.object.segment.reduce.RemoveOverlappingObjects;
 
 /**
  * Applies a segmentation procedure followed by non-maxima suppression.

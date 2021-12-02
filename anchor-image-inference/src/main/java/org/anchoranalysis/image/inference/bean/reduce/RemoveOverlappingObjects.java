@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.image.bean.object.segment.reduce;
+package org.anchoranalysis.image.inference.bean.reduce;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -35,7 +35,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
  * Provides a list of {@link Feature}s with identical input-type.
  *
  * @author Owen Feehan
- * @param <T> input type for feature list
+ * @param <T> input type for the feature list
  */
 @GroupingRoot
 public abstract class FeatureListProvider<T extends FeatureInput>
