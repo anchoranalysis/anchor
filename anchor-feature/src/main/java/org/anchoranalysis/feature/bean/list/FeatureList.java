@@ -58,24 +58,42 @@ public class FeatureList<T extends FeatureInput> extends AnchorBean<FeatureList<
         implements Iterable<Feature<T>> {
 
     // START BEAN PARAMETERS
+    /** The list of features. */
     @BeanField @Getter @Setter private List<Feature<T>> list;
     // END BEAN PARAMETERS
 
-    /** Standard Bean Constructor. Creates with an empty list */
+    /** Creates with an empty list. */
     public FeatureList() {
         this(new ArrayList<>());
     }
 
-    /** Creates a list from a stream */
+    /**
+     * Creates a list from a stream.
+     *
+     * @param stream the stream of features.
+     */
     public FeatureList(Stream<Feature<T>> stream) {
         this.list = stream.collect(Collectors.toList());
     }
 
-    /** Wraps an existing list */
+    /**
+     * Wraps an existing list.
+     *
+     * @param list the list to wrap.
+     */
     public FeatureList(List<Feature<T>> list) {
         this.list = list;
     }
 
+    /**
+     * Initializes all features in the list, and recursively any features they contain.
+     *
+     * <p>A feature must be <i>initialized</i> before being used for calculation.
+     *
+     * @param initialization the initialization parameters.
+     * @param logger the logger.
+     * @throws InitializeException if any feature cannot be successfully initialized.
+     */
     public void initializeRecursive(FeatureInitialization initialization, Logger logger)
             throws InitializeException {
         for (Feature<T> feature : list) {
@@ -85,14 +103,14 @@ public class FeatureList<T extends FeatureInput> extends AnchorBean<FeatureList<
 
     /**
      * Creates a new feature-list where each feature is the result of applying a map-function to an
-     * existing feature
+     * existing feature.
      *
      * @param <S> input-type of feature to be created as result of mapping
      * @param <E> exception that can be thrown during mapping
-     * @param mapFunc function to perform the mapping of each item
+     * @param mapFunc function to perform the mapping of each item.
      * @return a newly created feature-list (with the same number of items) containing the mapped
      *     features.
-     * @throws E if the mapping-function throws this exception
+     * @throws E if the mapping-function throws this exception.
      */
     public <S extends FeatureInput, E extends Exception> FeatureList<S> map(
             CheckedFunction<Feature<T>, Feature<S>, E> mapFunc) throws E {
@@ -104,37 +122,38 @@ public class FeatureList<T extends FeatureInput> extends AnchorBean<FeatureList<
     }
 
     /**
-     * Filters inputs and then performs a {@link #map}
+     * Filters inputs and then performs a {@link #map}.
      *
      * <p>This is an <b>immutable</b> operation.
      *
      * @param <S> input-type of feature to be created as result of mapping
      * @param <E> exception that can be thrown during mapping
-     * @param mapFunc performs mapping
-     * @param predicate iff true object is included, otherwise excluded
-     * @return a newly created feature-list, a filtered version of all features, then mapped
-     * @throws E if the mapping-function throws this exception
+     * @param mappingFunction the function that performs the mapping.
+     * @param predicate iff true object is included, otherwise excluded.
+     * @return a newly created feature-list, a filtered version of all features, then mapped.
+     * @throws E if the mapping-function throws this exception.
      */
     public <S extends FeatureInput, E extends Exception> FeatureList<S> filterAndMap(
-            Predicate<Feature<T>> predicate, CheckedFunction<Feature<T>, Feature<S>, E> mapFunc)
+            Predicate<Feature<T>> predicate,
+            CheckedFunction<Feature<T>, Feature<S>, E> mappingFunction)
             throws E {
         FeatureList<S> out = new FeatureList<>();
         for (Feature<T> feature : list) {
             if (predicate.test(feature)) {
-                out.add(mapFunc.apply(feature));
+                out.add(mappingFunction.apply(feature));
             }
         }
         return out;
     }
 
     /**
-     * Appends one or more additional (optional) feature-lists
+     * Appends the features one or more (optional) feature-lists to the existing list.
      *
      * <p>This is an <b>immutable</b> operation and the existing list is not altered.
      *
-     * @param featureList the optional feature-lists to append
+     * @param featureList the optional feature-lists to append.
      * @return a newly-created list with all the existing features, as well as any optional
-     *     additional features
+     *     additional features.
      */
     public FeatureList<T> append(Optional<FeatureList<T>> featureList) {
         FeatureList<T> out = new FeatureList<>();
@@ -143,23 +162,19 @@ public class FeatureList<T extends FeatureInput> extends AnchorBean<FeatureList<
         return out;
     }
 
-    public FeatureNameList createNames() {
+    /**
+     * Derives the names of the features.
+     *
+     * @return the names.
+     */
+    public FeatureNameList deriveNames() {
         return new FeatureNameList(list.stream().map(Feature::getFriendlyName));
-    }
-
-    public int findIndex(String customName) {
-        for (int i = 0; i < list.size(); i++) {
-            Feature<T> feature = list.get(i);
-            if (feature.getCustomName().equals(customName)) {
-                return i;
-            }
-        }
-        return -1;
     }
 
     /**
      * Creates a new feature-list sorted in a particular order.
      *
+     * @param comparator used to determine the order of elements when sorting.
      * @return a newly-created list with the same elements in sorted order.
      */
     public FeatureList<T> sort(Comparator<Feature<T>> comparator) {
@@ -170,19 +185,29 @@ public class FeatureList<T extends FeatureInput> extends AnchorBean<FeatureList<
     }
 
     /**
-     * Creates a new feature-list which contains identical elements
+     * Creates a new feature-list which contains identical elements.
      *
-     * @return a newly-created list with the same elements in the same order
+     * @return a newly-created list with the same elements in the same order.
      */
     public FeatureList<T> shallowDuplicate() {
         return new FeatureList<>(this.list.stream());
     }
 
+    /**
+     * Adds a feature to the current list.
+     *
+     * @param feature the feature to add.
+     */
     @SuppressWarnings("unchecked")
-    public boolean add(Feature<? extends T> feature) {
-        return list.add((Feature<T>) feature);
+    public void add(Feature<? extends T> feature) {
+        list.add((Feature<T>) feature);
     }
 
+    /**
+     * Returns {@code true} if this list contains no elements.
+     *
+     * @return {@code true} if this list contains no elements.
+     */
     public boolean isEmpty() {
         return list.isEmpty();
     }
@@ -192,10 +217,22 @@ public class FeatureList<T extends FeatureInput> extends AnchorBean<FeatureList<
         return list.iterator();
     }
 
+    /**
+     * Returns the number of elements in this list.
+     *
+     * @return the number of elements in this list.
+     */
     public int size() {
         return list.size();
     }
 
+    /**
+     * Exposes the underlying list of features in this data-structure.
+     *
+     * <p>Changing this list, will change the current instance.
+     *
+     * @return the internal list used to store features.
+     */
     public List<Feature<T>> asList() {
         return list;
     }
@@ -205,16 +242,32 @@ public class FeatureList<T extends FeatureInput> extends AnchorBean<FeatureList<
         return String.format("%s with %d items", super.describeBean(), list.size());
     }
 
+    /**
+     * Returns the element at the specified position in this list.
+     *
+     * @param index the index.
+     * @return the feature at position {@code index} in the list.
+     */
     public Feature<T> get(int index) {
         return list.get(index);
     }
 
+    /**
+     * Removes all of the elements from this list.
+     *
+     * <p>The list will be empty after this call returns.
+     */
     public void clear() {
         list.clear();
     }
 
-    public void addAll(FeatureList<? extends T> other) {
-        for (Feature<? extends T> feature : other) {
+    /**
+     * Add all the features in {@code other} to the current list.
+     *
+     * @param toAdd the features to add.
+     */
+    public void addAll(FeatureList<? extends T> toAdd) {
+        for (Feature<? extends T> feature : toAdd) {
             add(feature);
         }
     }

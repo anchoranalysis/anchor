@@ -35,9 +35,9 @@ import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.progress.Progress;
-import org.anchoranalysis.io.input.InputContextParams;
+import org.anchoranalysis.io.input.InputContextParameters;
 import org.anchoranalysis.io.input.InputReadFailedException;
-import org.anchoranalysis.io.input.bean.InputManagerParams;
+import org.anchoranalysis.io.input.bean.InputManagerParameters;
 import org.anchoranalysis.io.input.path.matcher.DualPathPredicates;
 import org.anchoranalysis.io.input.path.matcher.FindFilesException;
 import org.anchoranalysis.io.input.path.matcher.FindMatchingFiles;
@@ -53,16 +53,16 @@ public abstract class PathMatcher extends AnchorBean<PathMatcher> {
     /**
      * Finds a collection of files that match particular conditions on their paths.
      *
-     * @param directory root directory to search
-     * @param recursive whether to recursively search
-     * @param ignoreHidden whether to ignore hidden files/directories or not
-     * @param params parameters providing input-context
+     * @param directory root directory to search.
+     * @param recursive whether to recursively search.
+     * @param ignoreHidden whether to ignore hidden files/directories or not.
+     * @param parameters parameters providing input-context.
      * @param acceptDirectoryErrors if true, continues when a directory-access-error occurs (logging
-     *     it), otherwise throws an exception
-     * @param maxDirectoryDepth a maximum depth in directories to search
-     * @return a collection of files matching the conditions
+     *     it), otherwise throws an exception.
+     * @param maxDirectoryDepth a maximum depth in directories to search.
+     * @return a collection of files matching the conditions.
      * @throws InputReadFailedException if an error occurrs reading/writing or interacting with the
-     *     filesystem
+     *     filesystem.
      */
     public List<File> matchingFiles(
             Path directory,
@@ -70,7 +70,7 @@ public abstract class PathMatcher extends AnchorBean<PathMatcher> {
             boolean ignoreHidden,
             boolean acceptDirectoryErrors,
             Optional<Integer> maxDirectoryDepth,
-            Optional<InputManagerParams> params)
+            Optional<InputManagerParameters> parameters)
             throws InputReadFailedException {
 
         if (directory.toString().isEmpty()) {
@@ -87,12 +87,14 @@ public abstract class PathMatcher extends AnchorBean<PathMatcher> {
 
         DualPathPredicates predicates =
                 createPredicates(
-                        directory, ignoreHidden, params.map(InputManagerParams::getInputContext));
+                        directory,
+                        ignoreHidden,
+                        parameters.map(InputManagerParameters::getInputContext));
         Optional<Logger> logger =
                 OptionalUtilities.createFromFlag(
-                        acceptDirectoryErrors && params.isPresent(),
-                        () -> params.get().getLogger()); // NOSONAR
-        Optional<Progress> progress = params.map(InputManagerParams::getProgress);
+                        acceptDirectoryErrors && parameters.isPresent(),
+                        () -> parameters.get().getLogger()); // NOSONAR
+        Optional<Progress> progress = parameters.map(InputManagerParameters::getProgress);
         return runMatch(predicates, maxDirectoryDepth, directory, true, progress, logger);
     }
 
@@ -117,12 +119,12 @@ public abstract class PathMatcher extends AnchorBean<PathMatcher> {
     }
 
     private DualPathPredicates createPredicates(
-            Path directory, boolean ignoreHidden, Optional<InputContextParams> params)
+            Path directory, boolean ignoreHidden, Optional<InputContextParameters> parameters)
             throws InputReadFailedException {
 
         // Many checks are possible on a file, including whether it is hidden or not
         Predicate<Path> fileMatcher =
-                maybeAddIgnoreHidden(ignoreHidden, createMatcherFile(directory, params));
+                maybeAddIgnoreHidden(ignoreHidden, createMatcherFile(directory, parameters));
 
         // The only check on a directory is (maybe) whether it is hidden or not
         Predicate<Path> directoryMatcher = maybeAddIgnoreHidden(ignoreHidden, path -> true);
@@ -131,7 +133,7 @@ public abstract class PathMatcher extends AnchorBean<PathMatcher> {
     }
 
     protected abstract Predicate<Path> createMatcherFile(
-            Path directory, Optional<InputContextParams> inputContext)
+            Path directory, Optional<InputContextParameters> inputContext)
             throws InputReadFailedException;
 
     private Predicate<Path> maybeAddIgnoreHidden(boolean ignoreHidden, Predicate<Path> predicate) {

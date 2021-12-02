@@ -32,10 +32,10 @@ import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
 import org.anchoranalysis.feature.energy.EnergyStack;
-import org.anchoranalysis.feature.energy.EnergyTotal;
 import org.anchoranalysis.feature.results.ResultsVector;
 import org.anchoranalysis.feature.session.calculator.multi.FeatureCalculatorMulti;
 import org.anchoranalysis.mpp.feature.energy.EnergyPair;
+import org.anchoranalysis.mpp.feature.energy.EnergyTotal;
 import org.anchoranalysis.mpp.feature.input.FeatureInputPairMemo;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
@@ -87,7 +87,7 @@ public class AddCriteriaEnergyPair implements AddCriteria<EnergyPair> {
         //   and some features for energyPairs
 
         // If any of the add criteria indicate an edge, then we calculate the features
-        //  This will also ensure the params collection is fully populated with
+        //  This will also ensure the input collection is fully populated with
         //  necessary calculations from the addCriteria calculations to be used later
         boolean calculate = false;
         try {
@@ -101,17 +101,17 @@ public class AddCriteriaEnergyPair implements AddCriteria<EnergyPair> {
 
         if (calculate) {
             try {
-                FeatureInputPairMemo params = new FeatureInputPairMemo(mark1, mark2, energyStack);
-                ResultsVector rv =
+                FeatureInputPairMemo input = new FeatureInputPairMemo(mark1, mark2, energyStack);
+                ResultsVector results =
                         session.orElseThrow(
                                         () ->
                                                 new NamedFeatureCalculateException(
                                                         "No feature-evaluator exists"))
-                                .calculate(params, energyPairs);
+                                .calculate(input, energyPairs);
 
                 IdentifiablePair<Mark> pair =
                         new IdentifiablePair<>(mark1.getMark(), mark2.getMark());
-                return Optional.of(new EnergyPair(pair, new EnergyTotal(rv.total())));
+                return Optional.of(new EnergyPair(pair, new EnergyTotal(results.total())));
             } catch (NamedFeatureCalculateException e) {
                 throw new CreateException(e);
             }

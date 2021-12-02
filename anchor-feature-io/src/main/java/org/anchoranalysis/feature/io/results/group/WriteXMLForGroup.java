@@ -65,7 +65,7 @@ import org.anchoranalysis.io.output.outputter.InputOutputContextSubdirectoryCach
 class WriteXMLForGroup {
 
     private static final ManifestDescription MANIFEST_DESCRIPTION =
-            new ManifestDescription("paramsXML", "aggregateObjects");
+            new ManifestDescription("parametersXML", "aggregateObjects");
 
     private NamedFeatureStore<FeatureInputResults> featuresAggregate;
     private ResultsVectorList results;
@@ -106,9 +106,10 @@ class WriteXMLForGroup {
         if (csvWriterAggregate.isPresent() || groupName.isPresent()) {
             ResultsVector aggregated = aggregateResults(featureNames, contextGroup.getLogger());
 
-            // Write aggregate-feature-results to a params XML file
+            // Write aggregate-feature-results to a parameters XML file
             if (groupName.isPresent()) {
-                writeAggregatedAsParams(outputName, featuresAggregate, aggregated, contextGroup);
+                writeAggregatedAsParameters(
+                        outputName, featuresAggregate, aggregated, contextGroup);
             }
 
             // Write the aggregated-features into the csv file
@@ -124,7 +125,7 @@ class WriteXMLForGroup {
         FeatureCalculatorMulti<FeatureInputResults> calculator;
 
         try {
-            calculator = FeatureSession.with(featuresAggregate.listFeatures(), logger);
+            calculator = FeatureSession.with(featuresAggregate.features(), logger);
 
         } catch (InitializeException e1) {
             logger.errorReporter().recordError(WriteXMLForGroup.class, e1);
@@ -137,7 +138,7 @@ class WriteXMLForGroup {
         return calculator.calculateSuppressErrors(input, logger.errorReporter());
     }
 
-    private static <T extends FeatureInput> void writeAggregatedAsParams(
+    private static <T extends FeatureInput> void writeAggregatedAsParameters(
             String outputName,
             NamedFeatureStore<T> featuresAggregate,
             ResultsVector results,

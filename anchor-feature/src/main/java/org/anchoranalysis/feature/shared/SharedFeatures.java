@@ -45,20 +45,24 @@ import org.apache.commons.collections.MultiMap;
 import org.apache.commons.collections.map.MultiValueMap;
 
 /**
- * A group of features (of possibly heterogeneous type) made available to other features to
- * reference
+ * A group of features made available to other features to reference.
+ *
+ * <p>The features may have heterogeneous feature input-type, and are therefore stored with {@link
+ * FeatureInput} input-type, as this is the parent type for all feature-inputs.
+ *
+ * <p>This is the principle class for storing <i>all</i> available shared-features.
  *
  * @author Owen Feehan
  */
-public class SharedFeatureMulti
+public class SharedFeatures
         implements NamedProvider<Feature<FeatureInput>>,
                 Iterable<NameValue<Feature<FeatureInput>>> {
 
-    /** For searching by key */
+    /** For searching by key. */
     private NameValueMap<Feature<FeatureInput>> mapByKey;
 
     /**
-     * For subsetting by descriptor-type
+     * For subsetting by descriptor-type.
      *
      * <pre>Key=<FeatureInputDescriptor</pre>
      *
@@ -66,18 +70,25 @@ public class SharedFeatureMulti
      */
     private MultiMap mapByDescriptor;
 
-    /** For checking if a feature already exists */
+    /** For checking if a feature already exists. */
     private Set<Feature<FeatureInput>> setFeatures;
 
-    public SharedFeatureMulti() {
+    /** Create empty, without any features. */
+    public SharedFeatures() {
         mapByKey = new NameValueMap<>();
         mapByDescriptor = new MultiValueMap();
         setFeatures = new HashSet<>();
     }
 
-    /** Extracts the subset of inputs that are compatible with a particular input-type */
+    /**
+     * Extracts the subset of inputs that are compatible with a particular input-type.
+     *
+     * @param inputType the class of input-type which we search for features to be compatible with.
+     * @return a new {@link SharedFeaturesSubset} containing only the features considered compatible
+     *     with {@code inputType}.
+     */
     @SuppressWarnings("unchecked")
-    public <S extends FeatureInput> SharedFeatureSet<S> subsetCompatibleWith(
+    public <S extends FeatureInput> SharedFeaturesSubset<S> subsetCompatibleWith(
             Class<? extends FeatureInput> inputType) {
 
         NameValueMap<Feature<S>> out = new NameValueMap<>();
@@ -90,7 +101,7 @@ public class SharedFeatureMulti
             }
         }
 
-        return new SharedFeatureSet<>(out);
+        return new SharedFeaturesSubset<>(out);
     }
 
     @Override
@@ -98,40 +109,72 @@ public class SharedFeatureMulti
         return mapByKey.keys().toString();
     }
 
+    /**
+     * Whether a particular feature is contained in this instance.
+     *
+     * <p>This is checked in constant average-case lookup time.
+     *
+     * @param feature the feature to check.
+     * @return true if the feature is contained, false otherwise.
+     */
     public boolean contains(Feature<FeatureInput> feature) {
         return setFeatures.contains(feature);
     }
 
-    public SharedFeatureMulti duplicate() {
-        SharedFeatureMulti out = new SharedFeatureMulti();
+    /**
+     * A deep copy of the current instance.
+     *
+     * @return a deep copy.
+     */
+    public SharedFeatures duplicate() {
+        SharedFeatures out = new SharedFeatures();
 
-        for (NameValue<Feature<FeatureInput>> nv : mapByKey) {
-            out.addNoDuplicate(nv);
+        for (NameValue<Feature<FeatureInput>> nameValue : mapByKey) {
+            out.addNoDuplicate(nameValue);
         }
         return out;
     }
 
-    public void addFromProviders(NamedProvider<FeatureList<FeatureInput>> featureListProvider) {
-        for (String key : featureListProvider.keys()) {
+    /**
+     * Add features from a {@link NamedProvider} of feature-lists.
+     *
+     * <p>Each {@link Feature} is added directly (without duplication).
+     *
+     * @param provider the provider to add features from.
+     */
+    public void addFromProviders(NamedProvider<FeatureList<FeatureInput>> provider) {
+        for (String key : provider.keys()) {
             try {
-                addNoDuplicate(featureListProvider.getException(key));
+                addFromList(provider.getException(key));
             } catch (NamedProviderGetException e) {
                 throw new AnchorImpossibleSituationException();
             }
         }
     }
 
-    public void addNoDuplicate(FeatureList<FeatureInput> features) {
+    /**
+     * Add features from a feature-list.
+     *
+     * <p>Each {@link Feature} is added directly (without duplication).
+     *
+     * @param list the list to add features from.
+     */
+    public void addFromList(FeatureList<FeatureInput> list) {
 
         // We loop over all features in the ni, and call them all the same thing with a number
-        for (Feature<FeatureInput> f : features) {
+        for (Feature<FeatureInput> feature : list) {
 
-            addNoDuplicate(new SimpleNameValue<>(f.getFriendlyName(), f));
+            addNoDuplicate(new SimpleNameValue<>(feature.getFriendlyName(), feature));
         }
     }
 
-    public void removeIfExists(FeatureList<FeatureInput> features) {
-        features.forEach(mapByKey::removeIfExists);
+    /**
+     * Remove all features, if they currently exist, from {@code features}.
+     *
+     * @param featuresToRemove a list of features to remove.
+     */
+    public void removeIfExists(FeatureList<FeatureInput> featuresToRemove) {
+        featuresToRemove.forEach(mapByKey::removeIfExists);
     }
 
     @Override
@@ -149,13 +192,14 @@ public class SharedFeatureMulti
         return mapByKey.keys();
     }
 
+    /** Adds a feature - without duplicating it. */
     private void addNoDuplicate(NameValue<Feature<FeatureInput>> feature) {
         mapByKey.add(feature);
         mapByDescriptor.put(feature.getValue().inputType(), feature);
         setFeatures.add(feature.getValue());
     }
 
-    /** Transfers from a collection of name-values into a {@link NameValueMap} */
+    /** Transfers from a collection of name-values into a {@link NameValueMap}. */
     private static <S extends FeatureInput> void transferToSet(
             Collection<NameValue<Feature<S>>> in, NameValueMap<Feature<S>> out) {
         for (NameValue<Feature<S>> nv : in) {

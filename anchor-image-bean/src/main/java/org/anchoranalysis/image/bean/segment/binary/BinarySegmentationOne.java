@@ -46,15 +46,15 @@ public abstract class BinarySegmentationOne extends BinarySegmentation {
     @Override
     public BinaryVoxels<UnsignedByteBuffer> segment(
             VoxelsUntyped voxels,
-            BinarySegmentationParameters params,
+            BinarySegmentationParameters parameters,
             Optional<ObjectMask> objectMask)
             throws SegmentationFailedException {
-        return segmentFromExistingSegmentation(voxels, params, objectMask, segment);
+        return segmentFromExistingSegmentation(voxels, parameters, objectMask, segment);
     }
 
     protected abstract BinaryVoxels<UnsignedByteBuffer> segmentFromExistingSegmentation(
             VoxelsUntyped voxels,
-            BinarySegmentationParameters params,
+            BinarySegmentationParameters parameters,
             Optional<ObjectMask> object,
             BinarySegmentation sgmn)
             throws SegmentationFailedException;

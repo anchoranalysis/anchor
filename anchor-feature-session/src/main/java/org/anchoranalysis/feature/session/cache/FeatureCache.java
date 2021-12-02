@@ -28,7 +28,6 @@ package org.anchoranalysis.feature.session.cache;
 
 import java.util.Collection;
 import java.util.Set;
-import org.anchoranalysis.core.identifier.name.NameValue;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.calculate.FeatureInitialization;
@@ -37,7 +36,7 @@ import org.anchoranalysis.feature.calculate.cache.ChildCacheName;
 import org.anchoranalysis.feature.calculate.cache.FeatureSessionCache;
 import org.anchoranalysis.feature.calculate.cache.FeatureSessionCalculator;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.feature.shared.SharedFeatureSet;
+import org.anchoranalysis.feature.shared.SharedFeaturesSubset;
 
 /**
  * Caches repeated-calls to the same feature, or references to a feature by an ID-value
@@ -58,12 +57,12 @@ class FeatureCache<T extends FeatureInput> implements FeatureSessionCache<T> {
     public FeatureCache(
             FeatureSessionCache<T> cache,
             FeatureList<T> namedFeatures,
-            SharedFeatureSet<T> sharedFeatures,
+            SharedFeaturesSubset<T> sharedFeatures,
             Collection<String> ignorePrefixes) {
         this.cache = cache;
 
         namedFeatures.forEach(map::add);
-        sharedFeatures.getSet().stream().map(NameValue::getValue).forEach(map::add);
+        sharedFeatures.forEach(map::add);
 
         calculator = new HorizontalFeatureCalculator<>(cache.calculator(), map, ignorePrefixes);
     }
@@ -88,9 +87,9 @@ class FeatureCache<T extends FeatureInput> implements FeatureSessionCache<T> {
     @Override
     public <V extends FeatureInput> FeatureSessionCache<V> childCacheFor(
             ChildCacheName childName,
-            Class<? extends FeatureInput> paramsType,
+            Class<? extends FeatureInput> inputType,
             CacheCreator cacheCreator) {
-        return cache.childCacheFor(childName, paramsType, cacheCreator);
+        return cache.childCacheFor(childName, inputType, cacheCreator);
     }
 
     @Override

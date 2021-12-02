@@ -40,7 +40,7 @@ import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.primitive.StringSet;
 import org.anchoranalysis.core.format.FormatExtensions;
 import org.anchoranalysis.core.system.path.ExtensionUtilities;
-import org.anchoranalysis.io.input.InputContextParams;
+import org.anchoranalysis.io.input.InputContextParameters;
 import org.anchoranalysis.io.input.InputReadFailedException;
 
 /**
@@ -81,7 +81,7 @@ public class MatchExtensions extends PathMatcher {
 
     @Override
     protected Predicate<Path> createMatcherFile(
-            Path directory, Optional<InputContextParams> inputContext)
+            Path directory, Optional<InputContextParameters> inputContext)
             throws InputReadFailedException {
 
         Set<String> fileExtensions = fileExtensions(inputContext);
@@ -111,7 +111,7 @@ public class MatchExtensions extends PathMatcher {
         }
     }
 
-    private Set<String> fileExtensions(Optional<InputContextParams> inputContext) {
+    private Set<String> fileExtensions(Optional<InputContextParameters> inputContext) {
         if (prioritizeInputContext
                 && inputContext.isPresent()
                 && inputContext.get().getInputFilterExtensions() != null) {

@@ -49,10 +49,10 @@ public abstract class InputManager<T extends InputFromManager> extends AnchorBea
     /**
      * Creates a list of inputs given particular parameters.
      *
-     * @param params the parameters.
+     * @param parameters the parameters.
      * @return the list of inputs, together with any associated parent directory.
      * @throws InputReadFailedException if inputs cannot be successfully read from the file-system.
      */
-    public abstract InputsWithDirectory<T> inputs(InputManagerParams params)
+    public abstract InputsWithDirectory<T> inputs(InputManagerParameters parameters)
             throws InputReadFailedException;
 }

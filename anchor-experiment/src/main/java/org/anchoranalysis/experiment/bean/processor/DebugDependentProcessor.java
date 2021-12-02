@@ -70,13 +70,14 @@ public class DebugDependentProcessor<T extends InputFromManager, S> extends JobP
 
     @Override
     protected TaskStatistics execute(
-            Outputter rootOutputter, List<T> inputs, ParametersExperiment paramsExperiment)
+            Outputter rootOutputter, List<T> inputs, ParametersExperiment parametersExperiment)
             throws ExperimentExecutionException {
 
         Preconditions.checkArgument(rootOutputter.getChecked().getSettings().hasBeenInitialized());
 
-        JobProcessor<T, S> processor = createProcessor(paramsExperiment.getExperimentArguments());
-        return processor.execute(rootOutputter, inputs, paramsExperiment);
+        JobProcessor<T, S> processor =
+                createProcessor(parametersExperiment.getExperimentArguments());
+        return processor.execute(rootOutputter, inputs, parametersExperiment);
     }
 
     private JobProcessor<T, S> createProcessor(ExecutionArguments arguments) {

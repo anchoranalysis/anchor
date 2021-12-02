@@ -59,9 +59,7 @@ public class CenterOfGravity extends FeatureSingleObject {
     public double calculate(SessionInput<FeatureInputSingleObject> input)
             throws FeatureCalculationException {
 
-        FeatureInputSingleObject params = input.get();
-
-        double val = params.getObject().centerOfGravity(axis());
+        double val = input.get().getObject().centerOfGravity(axis());
 
         if (Double.isNaN(val)) {
             return emptyValue;

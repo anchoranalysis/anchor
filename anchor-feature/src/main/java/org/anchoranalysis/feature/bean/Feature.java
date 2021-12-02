@@ -71,17 +71,24 @@ public abstract class Feature<T extends FeatureInput>
     @BeanField @AllowEmpty @Getter @Setter private String customName = "";
     // END BEAN PROPERTIES
 
+    /** Creates with the default initializer. */
     protected Feature() {
         super(new BeanInitializer<>(FeatureInitialization.class), new FeatureAssigner<>());
     }
 
+    /**
+     * Creates with a custom initializer.
+     *
+     * @param propertyInitializer the custom initializer.
+     */
     protected Feature(BeanInitializer<FeatureInitialization> propertyInitializer) {
         super(propertyInitializer, new FeatureAssigner<>());
     }
 
     /**
-     * Called after initialization. An empty implementation is provided, to be overridden as needed
-     * in the sub-classes.
+     * Called after initialization.
+     *
+     * <p>An empty implementation is provided, to be overridden as needed in the sub-classes.
      */
     @Override
     public void onInitialization(FeatureInitialization initialization) throws InitializeException {
@@ -100,7 +107,7 @@ public abstract class Feature<T extends FeatureInput>
 
     @Override
     public final String describeBean() {
-        String paramDscr = describeParams();
+        String paramDscr = describeParameters();
         if (!paramDscr.isEmpty()) {
             return String.format("%s(%s)", getBeanName(), paramDscr);
         } else {
@@ -108,6 +115,11 @@ public abstract class Feature<T extends FeatureInput>
         }
     }
 
+    /**
+     * A long human-readable description of the feature and some or all of its parameterization.
+     *
+     * @return the description.
+     */
     public String descriptionLong() {
         return describeBean();
     }
@@ -126,30 +138,20 @@ public abstract class Feature<T extends FeatureInput>
         return duplicated;
     }
 
+    /**
+     * A user-friendly human-readable name for the {@link Feature}.
+     *
+     * <p>If a custom-name has been assigned, this is returned, otherwise the {@link
+     * #descriptionLong()}.
+     *
+     * @return the user-friendly human-readable name.
+     */
     public String getFriendlyName() {
         if (!getCustomName().isEmpty()) {
             return getCustomName();
         } else {
             return descriptionLong();
         }
-    }
-
-    public String descriptionWithCustomName() {
-        if (!getCustomName().isEmpty()) {
-            return String.format("%s: %s", getCustomName(), describeBean());
-        } else {
-            return describeBean();
-        }
-    }
-
-    public double calculateCheckInitialized(SessionInput<T> input)
-            throws FeatureCalculationException {
-        if (!isInitialized()) {
-            throw new FeatureCalculationException(
-                    String.format("The feature (%s) has not been initialized", this.toString()));
-        }
-
-        return calculate(input);
     }
 
     /**
@@ -168,7 +170,12 @@ public abstract class Feature<T extends FeatureInput>
         return FeatureListFactory.wrapReuse(findFieldsOfClass(Feature.class));
     }
 
-    public String describeParams() {
+    /**
+     * A human-readable description of the parameterization of the bean.
+     *
+     * @return the description.
+     */
+    public String describeParameters() {
         return describeChildren();
     }
 
@@ -177,22 +184,55 @@ public abstract class Feature<T extends FeatureInput>
         return getFriendlyName();
     }
 
-    /** Downcasts the feature */
+    /**
+     * Casts the feature to having a different input-type.
+     *
+     * <p>Note that no active compile-type check occurs, so be careful that this is used
+     * appropriately.
+     *
+     * @param <S> the type to cast to, which should be a sub-type of the existing-type.
+     * @return the same instance, cast as having a different input-type.
+     */
     @SuppressWarnings("unchecked")
-    public <S extends T> Feature<S> downcast() {
+    public <S extends T> Feature<S> castAs() {
         return (Feature<S>) this;
+    }
+
+    /**
+     * Calculates the result of a feature and throws an exception if the feature has not been
+     * initialized.
+     *
+     * @param input the input to the calculation.
+     * @return the feature-value corresponding to {@code input} for this feature.
+     * @throws FeatureCalculationException if the feature has not been initialized.
+     */
+    public double calculateCheckInitialized(SessionInput<T> input)
+            throws FeatureCalculationException {
+        if (!isInitialized()) {
+            throw new FeatureCalculationException(
+                    String.format("The feature (%s) has not been initialized", this.toString()));
+        }
+
+        return calculate(input);
     }
 
     /**
      * Dummy method, that children can optionally override.
      *
      * @param initialization initialization parameters.
+     * @throws InitializeException if initialization cannot complete successfully.
      */
     protected void beforeCalc(FeatureInitialization initialization) throws InitializeException {
         // Does nothing. To be overridden in children if needed.
     }
 
-    // Calculates a value for some parameters
+    /**
+     * Calculates a value for some input.
+     *
+     * @param input the input.
+     * @return the result of the calculation.
+     * @throws FeatureCalculationException if the calculation cannot successfully complete.
+     */
     protected abstract double calculate(SessionInput<T> input) throws FeatureCalculationException;
 
     /**

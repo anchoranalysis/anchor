@@ -38,13 +38,13 @@ import org.anchoranalysis.feature.calculate.cache.ResolvedCalculation;
 import org.anchoranalysis.feature.calculate.cache.ResolvedCalculationMap;
 import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.feature.shared.SharedFeatureSet;
+import org.anchoranalysis.feature.shared.SharedFeaturesSubset;
 
 @RequiredArgsConstructor
 class ResettableCalculator<T extends FeatureInput> implements FeatureSessionCalculator<T> {
 
     // START REQUIRED ARGUMENTS
-    private final SharedFeatureSet<T> sharedFeatures;
+    private final SharedFeaturesSubset<T> sharedFeatures;
     // END REQUIRED ARGUMENTS
 
     private ResettableSet<FeatureCalculation<?, T>> setCalculation = new ResettableSet<>(false);

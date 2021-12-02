@@ -31,8 +31,8 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.io.input.InputContextParams;
-import org.anchoranalysis.io.input.bean.InputManagerParams;
+import org.anchoranalysis.io.input.InputContextParameters;
+import org.anchoranalysis.io.input.bean.InputManagerParameters;
 import org.anchoranalysis.io.input.file.FilesProviderException;
 
 public abstract class FilesProvider extends AnchorBean<FilesProvider> {
@@ -40,11 +40,12 @@ public abstract class FilesProvider extends AnchorBean<FilesProvider> {
     /**
      * Creates or provides a list of files.
      *
-     * @param params parameters influencing how input-files are obtained.
+     * @param parameters parameters influencing how input-files are obtained.
      * @return the list of files from the provider
      * @throws FilesProviderException if list of files cannot be successfully established.
      */
-    public abstract List<File> create(InputManagerParams params) throws FilesProviderException;
+    public abstract List<File> create(InputManagerParameters parameters)
+            throws FilesProviderException;
 
     /**
      * A root directory for these files, if it exists.
@@ -55,6 +56,6 @@ public abstract class FilesProvider extends AnchorBean<FilesProvider> {
      * @param inputContext the input-context.
      * @return a path to this directory.
      */
-    public abstract Optional<Path> rootDirectory(InputContextParams inputContext)
+    public abstract Optional<Path> rootDirectory(InputContextParameters inputContext)
             throws FilesProviderException;
 }

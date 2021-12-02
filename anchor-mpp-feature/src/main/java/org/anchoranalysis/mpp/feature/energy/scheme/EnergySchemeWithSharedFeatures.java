@@ -38,14 +38,14 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.FeatureInitialization;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
 import org.anchoranalysis.feature.energy.EnergyStack;
-import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
-import org.anchoranalysis.feature.energy.EnergyTotal;
+import org.anchoranalysis.feature.energy.EnergyStackWithoutParameters;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.multi.FeatureCalculatorMulti;
-import org.anchoranalysis.feature.shared.SharedFeatureMulti;
+import org.anchoranalysis.feature.shared.SharedFeatures;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.mpp.feature.addcriteria.AddCriteriaEnergyPair;
 import org.anchoranalysis.mpp.feature.addcriteria.AddCriteriaPair;
+import org.anchoranalysis.mpp.feature.energy.EnergyTotal;
 import org.anchoranalysis.mpp.feature.input.FeatureInputAllMemo;
 import org.anchoranalysis.mpp.feature.input.FeatureInputSingleMemo;
 import org.anchoranalysis.mpp.feature.mark.EnergyMemoList;
@@ -54,7 +54,7 @@ import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 public class EnergySchemeWithSharedFeatures {
 
     @Getter private EnergyScheme energyScheme;
-    @Getter private SharedFeatureMulti sharedFeatures;
+    @Getter private SharedFeatures sharedFeatures;
 
     private CalculateIndividualTotalOperation calculateTotalIndividual;
     private Logger logger;
@@ -64,10 +64,10 @@ public class EnergySchemeWithSharedFeatures {
             implements CheckedFunction<Integer, EnergyTotal, NamedFeatureCalculateException> {
 
         private VoxelizedMarkMemo mark;
-        private EnergyStackWithoutParams raster;
+        private EnergyStackWithoutParameters raster;
         private Dictionary dictionary;
 
-        public void update(VoxelizedMarkMemo mark, EnergyStackWithoutParams raster)
+        public void update(VoxelizedMarkMemo mark, EnergyStackWithoutParameters raster)
                 throws OperationFailedException {
             this.mark = mark;
             this.raster = raster;
@@ -95,10 +95,10 @@ public class EnergySchemeWithSharedFeatures {
                                 sharedFeatures,
                                 logger);
 
-                FeatureInputSingleMemo params =
+                FeatureInputSingleMemo input =
                         new FeatureInputSingleMemo(mark, new EnergyStack(raster, dictionary));
 
-                return new EnergyTotal(session.calculate(params).total());
+                return new EnergyTotal(session.calculate(input).total());
             } catch (InitializeException e) {
                 throw new NamedFeatureCalculateException(e);
             }
@@ -106,7 +106,7 @@ public class EnergySchemeWithSharedFeatures {
     }
 
     public EnergySchemeWithSharedFeatures(
-            EnergyScheme energyScheme, SharedFeatureMulti sharedFeatures, Logger logger) {
+            EnergyScheme energyScheme, SharedFeatures sharedFeatures, Logger logger) {
         super();
         this.energyScheme = energyScheme;
         this.sharedFeatures = sharedFeatures;
@@ -115,7 +115,7 @@ public class EnergySchemeWithSharedFeatures {
         calculateTotalIndividual = new CalculateIndividualTotalOperation();
     }
 
-    public EnergyTotal totalAll(EnergyMemoList pxlMarkMemoList, EnergyStackWithoutParams raster)
+    public EnergyTotal totalAll(EnergyMemoList pxlMarkMemoList, EnergyStackWithoutParameters raster)
             throws NamedFeatureCalculateException {
 
         try {
@@ -124,20 +124,20 @@ public class EnergySchemeWithSharedFeatures {
             FeatureCalculatorMulti<FeatureInputAllMemo> session =
                     FeatureSession.with(
                             energyScheme.getElemAllAsFeatureList(),
-                            new FeatureInitialization(energyStack.getDictionary()),
+                            new FeatureInitialization(energyStack.getParameters()),
                             sharedFeatures,
                             logger);
 
-            FeatureInputAllMemo params = new FeatureInputAllMemo(pxlMarkMemoList, energyStack);
+            FeatureInputAllMemo input = new FeatureInputAllMemo(pxlMarkMemoList, energyStack);
 
-            return new EnergyTotal(session.calculate(params).total());
+            return new EnergyTotal(session.calculate(input).total());
 
         } catch (InitializeException | FeatureCalculationException e) {
             throw new NamedFeatureCalculateException(e);
         }
     }
 
-    public EnergyTotal totalIndividual(VoxelizedMarkMemo pmm, EnergyStackWithoutParams raster)
+    public EnergyTotal totalIndividual(VoxelizedMarkMemo pmm, EnergyStackWithoutParameters raster)
             throws NamedFeatureCalculateException {
         try {
             calculateTotalIndividual.update(pmm, raster);
@@ -161,7 +161,7 @@ public class EnergySchemeWithSharedFeatures {
         return energyScheme.getRegionMap();
     }
 
-    private EnergyStack createEnergyStack(EnergyStackWithoutParams raster)
+    private EnergyStack createEnergyStack(EnergyStackWithoutParameters raster)
             throws FeatureCalculationException {
 
         try {

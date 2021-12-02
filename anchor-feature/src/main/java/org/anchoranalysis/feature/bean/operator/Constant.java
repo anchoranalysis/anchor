@@ -33,27 +33,35 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.feature.input.FeatureInput;
 
+/**
+ * A constant value that is entirely invariant to the feature-input.
+ *
+ * @author Owen Feehan
+ * @param <T> the input-type (even though it is irrelevant and ignored, but it keeps the class
+ *     hierarchy consistent).
+ */
 @NoArgsConstructor
-public class Constant<T extends FeatureInput> extends FeatureOperator<T> {
+public class Constant<T extends FeatureInput> extends FeatureGeneric<T> {
 
     // START BEAN PARAMETERS
+    /** The constant value. */
     @BeanField @Getter @Setter private double value;
     // END BEAN PARAMETERS
 
     /**
-     * Constructor with a particular value
+     * Constructor with a particular value.
      *
-     * @param value value
+     * @param value the value.
      */
     public Constant(double value) {
         this.value = value;
     }
 
     /**
-     * Constructor with a particular value and a custom-name
+     * Constructor with a particular value and a custom-name.
      *
-     * @param customName custom-name for feature
-     * @param value value
+     * @param customName a custom-name for feature.
+     * @param value the value.
      */
     public Constant(String customName, double value) {
         this.value = value;
@@ -66,12 +74,12 @@ public class Constant<T extends FeatureInput> extends FeatureOperator<T> {
     }
 
     @Override
-    public String describeParams() {
+    public String describeParameters() {
         return String.format("%2.2f", value);
     }
 
     @Override
     public String descriptionLong() {
-        return describeParams();
+        return describeParameters();
     }
 }

@@ -88,7 +88,7 @@ public class FeatureListEvaluator<T extends FeatureInput>
                             getInitialization().getSharedFeatures(),
                             getLogger());
 
-            return new NamedFeatureCalculatorMulti<>(calculator, featuresCreated.createNames());
+            return new NamedFeatureCalculatorMulti<>(calculator, featuresCreated.deriveNames());
 
         } catch (ProvisionFailedException | InitializeException e) {
             throw new OperationFailedException(e);

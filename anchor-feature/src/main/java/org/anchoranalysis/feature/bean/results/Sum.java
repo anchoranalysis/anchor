@@ -34,10 +34,10 @@ import cern.jet.stat.Descriptive;
  *
  * @author Owen Feehan
  */
-public class Sum extends StatisticForFeature {
+public class Sum extends FeatureResultsStatistic {
 
     @Override
-    protected double statisticFromFeatureValue(DoubleArrayList featureVals) {
-        return Descriptive.sum(featureVals);
+    protected double statisticFromFeatureValue(DoubleArrayList values) {
+        return Descriptive.sum(values);
     }
 }

@@ -27,7 +27,7 @@
 package org.anchoranalysis.mpp.mark.voxelized;
 
 import java.util.ArrayList;
-import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
+import org.anchoranalysis.feature.energy.EnergyStackWithoutParameters;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 
 class BufferArrayList {
@@ -38,7 +38,7 @@ class BufferArrayList {
         return delegate.add(e);
     }
 
-    public void initialize(EnergyStackWithoutParams stack, int z) {
+    public void initialize(EnergyStackWithoutParameters stack, int z) {
 
         for (int c = 0; c < stack.getNumberChannels(); c++) {
             delegate.add(stack.getChannel(c).voxels().asByte().slices().slice(z).buffer());

@@ -42,22 +42,23 @@ public interface InitializationParameterAssigner {
     /**
      * Whether a particular type of initialization parameters is accepted?
      *
-     * @param paramType the class of initialization parameters to be checked, whether it is accepted
-     *     or not.
+     * @param initializationType the class of initialization parameters to be checked, whether it is
+     *     accepted or not.
      * @return true iff {@code paramType} is an acceptable type for initialization parameters.
      */
-    boolean accepts(Class<?> paramType);
+    boolean accepts(Class<?> initializationType);
 
     /**
      * Assigns the parameter to the bean.
      *
-     * @param bean the bean
-     * @param parameter the parameter to assign
-     * @param parent any parent bean of {@code bean}
-     * @param logger the logger
+     * @param bean the bean.
+     * @param initialization the parameter to assign.
+     * @param parent any parent bean of {@code bean}.
+     * @param logger the logger.
      * @throws InitializeException if the initialization cannot successfully complete.
      */
-    void assignParameterToProperties(Object bean, Object parameter, Object parent, Logger logger)
+    void assignInitializationToProperties(
+            Object bean, Object initialization, Object parent, Logger logger)
             throws InitializeException;
 
     /**

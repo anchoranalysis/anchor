@@ -37,14 +37,14 @@ import org.anchoranalysis.feature.calculate.cache.CacheCreator;
 import org.anchoranalysis.feature.calculate.cache.FeatureSessionCache;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.input.FeatureInputType;
-import org.anchoranalysis.feature.shared.SharedFeatureMulti;
-import org.anchoranalysis.feature.shared.SharedFeatureSet;
+import org.anchoranalysis.feature.shared.SharedFeatures;
+import org.anchoranalysis.feature.shared.SharedFeaturesSubset;
 
 @AllArgsConstructor
 public class HorizontalCacheCreator implements CacheCreator {
 
     private FeatureList<? extends FeatureInput> namedFeatures;
-    private SharedFeatureMulti sharedFeatures;
+    private SharedFeatures sharedFeatures;
     private FeatureInitialization initialization;
     private Logger logger;
 
@@ -75,7 +75,7 @@ public class HorizontalCacheCreator implements CacheCreator {
             Class<? extends FeatureInput> inputType,
             FeatureInitialization initialization,
             Logger logger) {
-        SharedFeatureSet<T> sharedFeaturesSet = sharedFeatures.subsetCompatibleWith(inputType);
+        SharedFeaturesSubset<T> sharedFeaturesSet = sharedFeatures.subsetCompatibleWith(inputType);
 
         try {
             sharedFeaturesSet.initializeRecursive(initialization, logger);
@@ -93,7 +93,7 @@ public class HorizontalCacheCreator implements CacheCreator {
     }
 
     private static <S extends FeatureInput> FeatureSessionCache<S> createCache(
-            FeatureList<S> namedFeatures, SharedFeatureSet<S> sharedFeatures) {
+            FeatureList<S> namedFeatures, SharedFeaturesSubset<S> sharedFeatures) {
 
         FeatureSessionCache<S> cacheCalculation = new CalculationCache<>(sharedFeatures);
 

@@ -83,10 +83,10 @@ public class FeedbackReceiverList<T> extends FeedbackReceiverBean<T> {
     }
 
     @Override
-    public void reportEnd(FeedbackEndParameters<T> params) throws ReporterException {
+    public void reportEnd(FeedbackEndParameters<T> parameters) throws ReporterException {
 
         for (FeedbackReceiver<T> fr : list) {
-            fr.reportEnd(params);
+            fr.reportEnd(parameters);
         }
     }
 

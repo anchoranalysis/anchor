@@ -37,7 +37,7 @@ import org.anchoranalysis.feature.calculate.cache.ChildCacheName;
 import org.anchoranalysis.feature.calculate.cache.FeatureSessionCache;
 import org.anchoranalysis.feature.calculate.cache.FeatureSessionCalculator;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.feature.shared.SharedFeatureSet;
+import org.anchoranalysis.feature.shared.SharedFeaturesSubset;
 
 /**
  * Caches calculations that occur repeatedly across many features, and store similar child caches.
@@ -52,12 +52,12 @@ class CalculationCache<T extends FeatureInput> implements FeatureSessionCache<T>
     private ResettableCalculator<T> calculator;
 
     @SuppressWarnings("unused")
-    private SharedFeatureSet<T> sharedFeatures;
+    private SharedFeaturesSubset<T> sharedFeatures;
 
     private Map<ChildCacheName, FeatureSessionCache<? extends FeatureInput>> children =
             new HashMap<>();
 
-    public CalculationCache(SharedFeatureSet<T> sharedFeatures) {
+    public CalculationCache(SharedFeaturesSubset<T> sharedFeatures) {
         this.sharedFeatures = sharedFeatures;
         this.calculator = new ResettableCalculator<>(sharedFeatures);
     }

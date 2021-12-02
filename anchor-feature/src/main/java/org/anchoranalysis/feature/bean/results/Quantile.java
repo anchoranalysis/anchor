@@ -37,7 +37,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
  *
  * @author Owen Feehan
  */
-public class Quantile extends StatisticForFeature {
+public class Quantile extends FeatureResultsStatistic {
 
     // START BEAN PROPERTIES
     /** The quantile. */
@@ -48,10 +48,10 @@ public class Quantile extends StatisticForFeature {
     // END BEAN PROPERTIES
 
     @Override
-    protected double statisticFromFeatureValue(DoubleArrayList featureVals) {
-        featureVals.sort();
+    protected double statisticFromFeatureValue(DoubleArrayList values) {
+        values.sort();
 
         double quantileFinal = asPercentage ? quantile / 100 : quantile;
-        return Descriptive.quantile(featureVals, quantileFinal);
+        return Descriptive.quantile(values, quantileFinal);
     }
 }

@@ -36,15 +36,24 @@ import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.shared.FeaturesInitialization;
 
-public abstract class ReferencedFeatures<T extends FeatureInput> extends FeatureListProvider<T> {
+/**
+ * A base class for implementations of {@link FeatureListProvider} that may reference features
+ * created elsewhere.
+ *
+ * @author Owen Feehan
+ * @param <T> feature input-type.
+ */
+public abstract class ReferencingFeatureListProvider<T extends FeatureInput>
+        extends FeatureListProvider<T> {
 
     // START BEAN PROPERTIES
     /**
-     * Ensures any feature-lists mentioned here are evaluated, before this list is created.
+     * The names of other feature-lists, whose features may be referenced by this feature.
      *
-     * <p>Useful for when this list references another list.
+     * <p>This ensures these feature-lists are evaluated, before this features in this list are
+     * created.
      */
-    @BeanField @OptionalBean @Getter @Setter private StringSet referencesFeatureListCreator;
+    @BeanField @OptionalBean @Getter @Setter private StringSet references;
     // END BEAN PROPERITES
 
     @Override
@@ -55,11 +64,11 @@ public abstract class ReferencedFeatures<T extends FeatureInput> extends Feature
 
     private void ensureReferencedFeaturesCalled(FeaturesInitialization so)
             throws InitializeException {
-        if (referencesFeatureListCreator != null && so != null) {
-            for (String featureListReference : referencesFeatureListCreator.set()) {
+        if (references != null && so != null) {
+            for (String featureListReference : references.set()) {
 
                 try {
-                    so.getFeatureListSet().getException(featureListReference);
+                    so.getFeatureLists().getException(featureListReference);
                 } catch (NamedProviderGetException e) {
                     throw new InitializeException(e.summarize());
                 }

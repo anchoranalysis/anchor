@@ -35,11 +35,18 @@ import org.anchoranalysis.bean.annotation.SkipInit;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.input.FeatureInput;
 
+/**
+ * Defines a single {@link Feature} to provide via a bean property.
+ *
+ * @author Owen Feehan
+ * @param <T> feature input-type.
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 public class FeatureProviderDefine<T extends FeatureInput> extends FeatureProvider<T> {
 
     // START BEAN PROPERTIES
+    /** The feature to provide. */
     @BeanField @SkipInit @Getter @Setter private Feature<T> feature;
     // END BEAN PROPERTIES
 

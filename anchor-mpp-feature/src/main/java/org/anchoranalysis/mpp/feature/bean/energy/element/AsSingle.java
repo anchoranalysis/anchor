@@ -64,15 +64,15 @@ public class AsSingle extends FeatureUnary<FeatureInputPairMemo, FeatureInputSin
                         first ? CACHE_NAME_FIRST : CACHE_NAME_SECOND);
     }
 
-    // We change the default behaviour, as we don't want to give the same paramsFactory
-    //   as the item we pass to
+    // We change the default behaviour, as we don't want to give the same input-type as the item we
+    // pass to.
     @Override
     public Class<? extends FeatureInput> inputType() {
         return FeatureInputPairMemo.class;
     }
 
     @Override
-    public String describeParams() {
-        return getItem().describeParams();
+    public String describeParameters() {
+        return getItem().describeParameters();
     }
 }

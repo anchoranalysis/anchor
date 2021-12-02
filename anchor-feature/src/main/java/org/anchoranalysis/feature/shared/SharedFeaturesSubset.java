@@ -26,8 +26,8 @@
 
 package org.anchoranalysis.feature.shared;
 
+import java.util.function.Consumer;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.identifier.name.NameValue;
 import org.anchoranalysis.core.identifier.provider.NameValueMap;
@@ -37,19 +37,50 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calculate.FeatureInitialization;
 import org.anchoranalysis.feature.input.FeatureInput;
 
+/**
+ * A subset of features from {@link SharedFeatures} that share a common feature input-type.
+ *
+ * @author Owen Feehan
+ * @param <T> the feature input-type
+ */
 @AllArgsConstructor
-public class SharedFeatureSet<T extends FeatureInput> {
+public class SharedFeaturesSubset<T extends FeatureInput> {
 
-    @Getter private NameValueMap<Feature<T>> set;
+    /** A map from the name of a feature to the feature-instance. */
+    private NameValueMap<Feature<T>> map;
 
+    /**
+     * Initialize all features in this instance, recursively also initializating any child-features.
+     *
+     * @param initialization the parameters for initialization.
+     * @param logger a logger that becomes associated with each {@link Feature} for messages or
+     *     errors.
+     * @throws InitializeException if any feature cannot be successfully initialized.
+     */
     public void initializeRecursive(FeatureInitialization initialization, Logger logger)
             throws InitializeException {
-        for (NameValue<Feature<T>> nv : set) {
-            nv.getValue().initializeRecursive(initialization, logger);
+        for (NameValue<Feature<T>> namedFeature : map) {
+            namedFeature.getValue().initializeRecursive(initialization, logger);
         }
     }
 
+    /**
+     * Iterates over each feature in the instance.
+     *
+     * @param consumer called on each feature in the instance.
+     */
+    public void forEach(Consumer<Feature<T>> consumer) {
+        map.stream().map(NameValue::getValue).forEach(consumer);
+    }
+
+    /**
+     * Gets a feature by name, throwing an exception if it doesn't exist.
+     *
+     * @param name the name of the feature.
+     * @return the feature.
+     * @throws NamedProviderGetException if no feature with {@code name} exists in this instance.
+     */
     public Feature<T> getException(String name) throws NamedProviderGetException {
-        return set.getException(name);
+        return map.getException(name);
     }
 }

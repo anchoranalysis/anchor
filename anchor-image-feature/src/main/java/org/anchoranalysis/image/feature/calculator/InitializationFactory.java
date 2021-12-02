@@ -40,9 +40,9 @@ public class InitializationFactory {
     public static FeatureInitialization create(
             Optional<SharedObjects> sharedObjects, Optional<EnergyStack> energyStack) {
 
-        Optional<Dictionary> dictionary = energyStack.map(EnergyStack::getDictionary);
+        Optional<Dictionary> dictionary = energyStack.map(EnergyStack::getParameters);
 
         return new FeatureInitialization(
-                dictionary, energyStack.map(EnergyStack::withoutParams), sharedObjects);
+                dictionary, energyStack.map(EnergyStack::withoutParameters), sharedObjects);
     }
 }

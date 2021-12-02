@@ -31,7 +31,7 @@ import java.util.Iterator;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.identifier.name.SimpleNameValue;
-import org.anchoranalysis.feature.shared.SharedFeatureMulti;
+import org.anchoranalysis.feature.shared.SharedFeatures;
 
 /**
  * A set of EnergySchemes each with a name.
@@ -44,7 +44,7 @@ import org.anchoranalysis.feature.shared.SharedFeatureMulti;
 public class EnergySchemeSet implements Iterable<SimpleNameValue<EnergyScheme>> {
 
     // START REQUIRED ARGUMENTS
-    @Getter private final SharedFeatureMulti sharedFeatures;
+    @Getter private final SharedFeatures sharedFeatures;
     // END REQUIRED ARGUMENTS
 
     private HashMap<String, SimpleNameValue<EnergyScheme>> delegate = new HashMap<>();

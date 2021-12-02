@@ -32,7 +32,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.io.input.InputContextParams;
+import org.anchoranalysis.io.input.InputContextParameters;
 
 /**
  * A {@link FilesProviderWithDirectory} where the directory is optionally specified as a string
@@ -65,7 +65,7 @@ public abstract class FilesProviderWithDirectoryString extends FilesProviderWith
     // END BEAN FIELDS
 
     @Override
-    public Path getDirectoryAsPath(InputContextParams inputContext) {
+    public Path getDirectoryAsPath(InputContextParameters inputContext) {
 
         if (!directory.isEmpty()) {
             Path directoryAsPath = Paths.get(directory);
@@ -80,7 +80,7 @@ public abstract class FilesProviderWithDirectoryString extends FilesProviderWith
         }
     }
 
-    private Path inferDirectory(InputContextParams inputContext) {
+    private Path inferDirectory(InputContextParameters inputContext) {
         if (localized) {
             return localRoot();
         } else {

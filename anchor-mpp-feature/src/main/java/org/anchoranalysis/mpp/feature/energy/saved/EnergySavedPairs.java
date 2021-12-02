@@ -32,7 +32,7 @@ import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.graph.TypedEdge;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.energy.EnergyStack;
-import org.anchoranalysis.feature.shared.SharedFeatureMulti;
+import org.anchoranalysis.feature.shared.SharedFeatures;
 import org.anchoranalysis.mpp.feature.addcriteria.AddCriteria;
 import org.anchoranalysis.mpp.feature.addcriteria.RandomCollectionWithAddCriteria;
 import org.anchoranalysis.mpp.feature.energy.EnergyPair;
@@ -74,7 +74,7 @@ public class EnergySavedPairs implements UpdatableMarks {
             MemoForIndex pxlMarkMemoList,
             EnergyStack stack,
             Logger logger,
-            SharedFeatureMulti sharedFeatures)
+            SharedFeatures sharedFeatures)
             throws InitializeException {
 
         this.pairCollection.initUpdatableMarks(pxlMarkMemoList, stack, logger, sharedFeatures);

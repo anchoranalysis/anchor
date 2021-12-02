@@ -58,21 +58,22 @@ class CopyNonInputs {
      * the experiment.
      *
      * @param inputs the inputs for the experiment
-     * @param params the parameters for the experiment
+     * @param parameters the parameters for the experiment
      * @param <T> input-type
      * @return if enabled, the collection of non-input files to copy (with the relative-path to the
      *     input-directory as an identifier), otherwise {@link Optional#empty}.
      * @throws ExperimentExecutionException if the input-directory is unknown
      */
     public static <T extends InputFromManager> Optional<Collection<NamedFile>> prepare(
-            InputsWithDirectory<T> inputs, ParametersExperiment params)
+            InputsWithDirectory<T> inputs, ParametersExperiment parameters)
             throws ExperimentExecutionException {
-        if (params.getExperimentArguments().input().isCopyNonInputs()) {
+        if (parameters.getExperimentArguments().input().isCopyNonInputs()) {
 
             if (inputs.directory().isPresent()) {
                 try {
                     Collection<NamedFile> files = inputs.findAllNonInputFiles();
-                    params.getLoggerExperiment()
+                    parameters
+                            .getLoggerExperiment()
                             .logFormatted(
                                     "Preparing %d non-input files to copy to the output directory at end of experiment.",
                                     files.size());
@@ -98,21 +99,23 @@ class CopyNonInputs {
      *
      * @param nonInputs the files to copy to the output directory (where the identifier is a
      *     relative-path to use for copying into the output-directory)
-     * @param params the parameters for the experiment
+     * @param parameters the parameters for the experiment
      * @throws ExperimentExecutionException if any IO errors occurs copying a file.
      */
-    public static void copy(Collection<NamedFile> nonInputs, ParametersExperiment params)
+    public static void copy(Collection<NamedFile> nonInputs, ParametersExperiment parameters)
             throws ExperimentExecutionException {
-        params.getLoggerExperiment()
+        parameters
+                .getLoggerExperiment()
                 .logFormatted(
                         "Copying %d non-input files to the output directory.", nonInputs.size());
 
-        Path outputDirectory = params.getOutputter().getOutputDirectory();
+        Path outputDirectory = parameters.getOutputter().getOutputDirectory();
 
         for (NamedFile toCopy : nonInputs) {
             try {
                 Path source = toCopy.getFile().toPath();
-                Path destination = destinationPath(outputDirectory, toCopy.getIdentifier(), params);
+                Path destination =
+                        destinationPath(outputDirectory, toCopy.getIdentifier(), parameters);
                 copyMakeDirectories(source, destination);
             } catch (IOException e) {
                 throw new ExperimentExecutionException(
@@ -122,9 +125,10 @@ class CopyNonInputs {
     }
 
     private static Path destinationPath(
-            Path outputDirectory, String identifier, ParametersExperiment params) {
+            Path outputDirectory, String identifier, ParametersExperiment parameters) {
         return outputDirectory.resolve(
-                params.getExperimentArguments()
+                parameters
+                        .getExperimentArguments()
                         .output()
                         .getPrefixer()
                         .maybeSuppressDirectories(identifier, false));

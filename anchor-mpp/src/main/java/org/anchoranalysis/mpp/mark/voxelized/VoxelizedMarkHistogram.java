@@ -30,7 +30,7 @@ import java.util.List;
 import lombok.Getter;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
-import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
+import org.anchoranalysis.feature.energy.EnergyStackWithoutParameters;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.voxel.BoundedVoxels;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
@@ -61,7 +61,8 @@ class VoxelizedMarkHistogram implements VoxelizedMark {
 
     @Getter private ObjectMask objectFlattened; // null until we need it
 
-    public VoxelizedMarkHistogram(Mark mark, EnergyStackWithoutParams stack, RegionMap regionMap) {
+    public VoxelizedMarkHistogram(
+            Mark mark, EnergyStackWithoutParameters stack, RegionMap regionMap) {
         partitions = new IndexByChannel<>();
         initForMark(mark, stack, regionMap);
     }
@@ -138,7 +139,7 @@ class VoxelizedMarkHistogram implements VoxelizedMark {
     }
 
     // Calculates the pixels for a mark
-    private void initForMark(Mark mark, EnergyStackWithoutParams stack, RegionMap regionMap) {
+    private void initForMark(Mark mark, EnergyStackWithoutParameters stack, RegionMap regionMap) {
 
         Dimensions dimensions = stack.dimensions();
         BoundingBox box = mark.boxAllRegions(dimensions);

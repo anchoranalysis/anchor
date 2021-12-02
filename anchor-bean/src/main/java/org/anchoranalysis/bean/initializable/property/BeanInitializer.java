@@ -32,7 +32,7 @@ import java.util.Optional;
 import lombok.Getter;
 import org.anchoranalysis.bean.OptionalFactory;
 import org.anchoranalysis.bean.initializable.InitializableBean;
-import org.anchoranalysis.bean.initializable.params.NullInitialization;
+import org.anchoranalysis.bean.initializable.parameters.NullInitialization;
 import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.log.Logger;
 
@@ -133,7 +133,7 @@ public class BeanInitializer<P> {
 
         // Properties with other property-types (whose parameters can be extracted from the current
         // parameters)
-        return initializeExtractedParams(bean, parent, logger);
+        return initializeExtractedParameters(bean, parent, logger);
     }
 
     /**
@@ -155,7 +155,7 @@ public class BeanInitializer<P> {
      * <p>The {{@link #extracters} defines what other property-types can be extracted and how to do
      * it.
      */
-    private boolean initializeExtractedParams(Object bean, Object parent, Logger logger)
+    private boolean initializeExtractedParameters(Object bean, Object parent, Logger logger)
             throws InitializeException {
 
         for (ExtractDerivedParameter<P, ?> extract : extracters) {
@@ -184,7 +184,7 @@ public class BeanInitializer<P> {
         Optional<InitializationParameterAssigner> property =
                 areParametersAccepted(bean, propertyClassToMatch);
         if (property.isPresent()) {
-            property.get().assignParameterToProperties(bean, paramToInitWith, parent, logger);
+            property.get().assignInitializationToProperties(bean, paramToInitWith, parent, logger);
             return true;
         } else {
             return false;
@@ -226,6 +226,6 @@ public class BeanInitializer<P> {
      */
     private ExtractDerivedParameter<P, NullInitialization> nullExtracter() {
         return new ExtractDerivedParameter<>(
-                NullInitialization.class, params -> NullInitialization.instance());
+                NullInitialization.class, parameters -> NullInitialization.instance());
     }
 }

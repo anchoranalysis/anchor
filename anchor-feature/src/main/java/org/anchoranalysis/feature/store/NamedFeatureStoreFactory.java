@@ -36,30 +36,46 @@ import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.input.FeatureInput;
 
+/**
+ * Creates a {@link NamedFeatureStore}.
+ *
+ * @author Owen Feehan
+ */
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class NamedFeatureStoreFactory {
 
     /**
-     * iff true, only describe the parameters of the features, but not the name. Otherwise both are
+     * Iff true, only describe the parameters of the features, but not the name. Otherwise both are
      * described.
      */
-    private boolean paramsOnlyInDescription = false;
+    private boolean parametersOnlyInDescription = false;
 
-    public static NamedFeatureStoreFactory factoryParamsOnly() {
+    /**
+     * The custom-names of the features are derived only from their parameters, but not their name.
+     *
+     * @return a newly-created factory, that creates features as above.
+     */
+    public static NamedFeatureStoreFactory parametersOnly() {
         return new NamedFeatureStoreFactory(true);
     }
 
-    public static NamedFeatureStoreFactory bothNameAndParams() {
+    /**
+     * The custom-names of the features are derived from both their name and their parameters.
+     *
+     * @return a newly-created factory, that creates features as above.
+     */
+    public static NamedFeatureStoreFactory bothNameAndParameters() {
         return new NamedFeatureStoreFactory(false);
     }
 
     /**
-     * Create a list of na
+     * Create a {@link NamedFeatureStore} from a list of beans.
      *
-     * @param <T>
-     * @param namedFeatures
-     * @return
-     * @throws ProvisionFailedException
+     * @param <T> feature input-type.
+     * @param namedFeatures the beans that provide lists of features.
+     * @return a newly created store, with the name of features derived from the beans and the
+     *     parameterization of this factory instance.
+     * @throws ProvisionFailedException if any feature-list cannot be created from the bean.
      */
     public <T extends FeatureInput> NamedFeatureStore<T> createNamedFeatureList(
             List<NamedBean<FeatureListProvider<T>>> namedFeatures) throws ProvisionFailedException {
@@ -75,7 +91,7 @@ public class NamedFeatureStoreFactory {
 
                 if (featureList.size() > 0) {
                     AddFeaturesHelper.addFeaturesToStore(
-                            featureList, namedProvider.getName(), paramsOnlyInDescription, out);
+                            featureList, namedProvider.getName(), parametersOnlyInDescription, out);
                 }
 
             } catch (BeanDuplicateException | ProvisionFailedException e) {

@@ -27,7 +27,7 @@ package org.anchoranalysis.io.input.bean.files;
 
 import java.nio.file.Path;
 import java.util.Optional;
-import org.anchoranalysis.io.input.InputContextParams;
+import org.anchoranalysis.io.input.InputContextParameters;
 
 /**
  * Base class for implementations of {@link FilesProvider} which <b>do not</b> have an associated
@@ -38,7 +38,7 @@ import org.anchoranalysis.io.input.InputContextParams;
 public abstract class FilesProviderWithoutDirectory extends FilesProvider {
 
     @Override
-    public Optional<Path> rootDirectory(InputContextParams inputContext) {
+    public Optional<Path> rootDirectory(InputContextParameters inputContext) {
         return Optional.empty();
     }
 }

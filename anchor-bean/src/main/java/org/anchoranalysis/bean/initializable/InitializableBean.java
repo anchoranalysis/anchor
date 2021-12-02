@@ -31,7 +31,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.bean.initializable.params.BeanInitialization;
+import org.anchoranalysis.bean.initializable.parameters.BeanInitialization;
 import org.anchoranalysis.bean.initializable.property.BeanInitializer;
 import org.anchoranalysis.bean.initializable.property.InitializationParameterAssigner;
 import org.anchoranalysis.core.exception.InitializeException;
@@ -65,14 +65,14 @@ public abstract class InitializableBean<B, P extends BeanInitialization> extends
      * <p>This method should always be called <b>once</b> before using the other methods of the
      * bean.
      *
-     * @param params parameters to initialize with.
+     * @param parameters parameters to initialize with.
      * @param logger a logger for events.
      * @throws InitializeException if initialization cannot complete successfully.
      */
-    public void initialize(P params, Logger logger) throws InitializeException {
-        this.initialization = Optional.of(params);
+    public void initialize(P parameters, Logger logger) throws InitializeException {
+        this.initialization = Optional.of(parameters);
         this.logger = logger;
-        onInitialization(params);
+        onInitialization(parameters);
     }
 
     /**
@@ -104,12 +104,12 @@ public abstract class InitializableBean<B, P extends BeanInitialization> extends
      * Initializes this object, and all children objects, so long as they have {@code P} once a Bean
      * doesn't have {@code P}, the children are not evaluated.
      *
-     * @param params the parameters to initialize with.
+     * @param parameters the parameters to initialize with.
      * @param logger logger.
      * @throws InitializeException if the initialization fails.
      */
-    public void initializeRecursive(P params, Logger logger) throws InitializeException {
-        beanInitializer.setParam(params);
+    public void initializeRecursive(P parameters, Logger logger) throws InitializeException {
+        beanInitializer.setParam(parameters);
         HelperInit.initializeRecursive(this, beanInitializer, logger);
     }
 
@@ -142,6 +142,6 @@ public abstract class InitializableBean<B, P extends BeanInitialization> extends
         return initialization.orElseThrow(
                 () ->
                         new InitializeException(
-                                "No initialization-params as the been has not been initialized"));
+                                "No initialization-parameters exist as the been has not been initialized"));
     }
 }

@@ -29,13 +29,13 @@ package org.anchoranalysis.image.io.bean.stack.combine;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.anchoranalysis.bean.NullParamsBean;
+import org.anchoranalysis.bean.NullParametersBean;
 import org.anchoranalysis.bean.Provider;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.core.stack.Stack;
 
 @NoArgsConstructor
-public class StackProviderWithLabel extends NullParamsBean<StackProviderWithLabel> {
+public class StackProviderWithLabel extends NullParametersBean<StackProviderWithLabel> {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private Provider<Stack> stack;

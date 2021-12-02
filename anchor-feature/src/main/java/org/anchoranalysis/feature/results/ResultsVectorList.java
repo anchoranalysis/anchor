@@ -42,19 +42,39 @@ public class ResultsVectorList implements Iterable<ResultsVector> {
 
     private List<ResultsVector> list = new ArrayList<>();
 
+    /**
+     * Creates with the list containing a single item.
+     *
+     * @param results the single item for the list.
+     */
     public ResultsVectorList(ResultsVector results) {
-        super();
         list.add(results);
     }
 
-    public boolean add(ResultsVector results) {
-        return list.add(results);
+    /**
+     * Add a {@link ResultsVector} to the list in the final position.
+     *
+     * @param results the results to add.
+     */
+    public void add(ResultsVector results) {
+        list.add(results);
     }
 
+    /**
+     * The number of {@link ResultsVector}s in the list.
+     *
+     * @return the total number.
+     */
     public int size() {
         return list.size();
     }
 
+    /**
+     * Gets a {@link ResultsVector} at a particular position i nthe list.
+     *
+     * @param index the position (zero-indexed).
+     * @return the vector at the position.
+     */
     public ResultsVector get(int index) {
         return list.get(index);
     }
@@ -64,10 +84,20 @@ public class ResultsVectorList implements Iterable<ResultsVector> {
         return list.iterator();
     }
 
+    /**
+     * A stream of {@link ResultsVector}s.
+     *
+     * @return the stream.
+     */
     public Stream<ResultsVector> stream() {
         return list.stream();
     }
 
+    /**
+     * Returns {@code true} if the list contains no elements.
+     *
+     * @return {@code true} if the list contains no elements
+     */
     public boolean isEmpty() {
         return list.isEmpty();
     }

@@ -27,10 +27,13 @@
 package org.anchoranalysis.feature.bean.list;
 
 import org.anchoranalysis.bean.annotation.GroupingRoot;
+import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.provider.FeatureProviderBean;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
+ * Provides a list of {@link Feature}s with identical input-type.
+ *
  * @author Owen Feehan
  * @param <T> input type for feature list
  */

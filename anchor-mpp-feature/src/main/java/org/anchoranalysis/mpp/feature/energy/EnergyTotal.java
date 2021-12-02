@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.feature.energy;
+package org.anchoranalysis.mpp.feature.energy;
 
 import java.io.Serializable;
 import lombok.AllArgsConstructor;

@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-feature
+ * anchor-io
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -24,21 +24,38 @@
  * #L%
  */
 
-package org.anchoranalysis.feature.bean.operator;
+package org.anchoranalysis.io.input.bean;
 
-import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.input.FeatureInput;
+import java.util.Optional;
+import lombok.AllArgsConstructor;
 
 /**
- * Base class for features that broadly accept any type of feature-input.
+ * An alternative mode of option where behaviours change.
+ *
+ * <p><div>e.g.
+ *
+ * <ul>
+ *   <li>A single-file is executed only.
+ *   <li>Output paths may change.
+ *   <li>Logging output may change.
+ * </ul>
+ *
+ * </div>
  *
  * @author Owen Feehan
- * @param <T> feature input-type.
  */
-public abstract class FeatureOperator<T extends FeatureInput> extends Feature<T> {
+@AllArgsConstructor
+public class DebugModeParameters {
 
-    @Override
-    public Class<? extends FeatureInput> inputType() {
-        return FeatureInput.class;
+    /** An optional string used to filter inputs. If null, then disabled. */
+    private Optional<String> contains;
+
+    /** @return contains, or an empty string if null. */
+    public String containsOrEmpty() {
+        if (contains.isPresent()) {
+            return contains.get();
+        } else {
+            return "";
+        }
     }
 }

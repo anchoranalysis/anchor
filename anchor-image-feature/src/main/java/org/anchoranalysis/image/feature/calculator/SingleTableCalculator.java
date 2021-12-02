@@ -58,7 +58,7 @@ public class SingleTableCalculator implements FeatureTableCalculator<FeatureInpu
 
         calculator =
                 FeatureSession.with(
-                        namedFeatureStore.listFeatures(),
+                        namedFeatureStore.features(),
                         InitializationFactory.create(
                                 Optional.of(initialization.getSharedObjects()), energyStack),
                         initialization.featuresInitialization().getSharedFeatures(),
@@ -67,7 +67,7 @@ public class SingleTableCalculator implements FeatureTableCalculator<FeatureInpu
 
     @Override
     public FeatureTableCalculator<FeatureInputSingleObject> duplicateForNewThread() {
-        return new SingleTableCalculator(namedFeatureStore.deepCopy());
+        return new SingleTableCalculator(namedFeatureStore.duplicate());
     }
 
     @Override
@@ -96,6 +96,6 @@ public class SingleTableCalculator implements FeatureTableCalculator<FeatureInpu
 
     @Override
     public FeatureNameList createFeatureNames() {
-        return namedFeatureStore.createFeatureNames();
+        return namedFeatureStore.featureNames();
     }
 }

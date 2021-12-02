@@ -89,18 +89,22 @@ public class IterateVoxelsAll {
      * Iterate over each voxel using a {@link KernelPointCursor}.
      *
      * @param voxels the voxels to iterator over
-     * @param params to use when applying a kernel
+     * @param parameters to use when applying a kernel
      * @param process process is called for each voxel inside the extent using the same coordinates
      *     as the extent.
      */
     public static void withCursor(
             BinaryVoxels<UnsignedByteBuffer> voxels,
-            KernelApplicationParameters params,
+            KernelApplicationParameters parameters,
             ProcessKernelPointCursor process) {
 
         KernelPointCursor cursor =
                 new KernelPointCursor(
-                        0, new Point3i(), voxels.extent(), voxels.binaryValues().asByte(), params);
+                        0,
+                        new Point3i(),
+                        voxels.extent(),
+                        voxels.binaryValues().asByte(),
+                        parameters);
 
         Extent extent = voxels.extent();
         Point3i point = cursor.getPoint();

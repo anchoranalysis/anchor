@@ -29,5 +29,11 @@ package org.anchoranalysis.feature.bean.provider;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.input.FeatureInput;
 
+/**
+ * Provides a single {@link Feature}.
+ *
+ * @author Owen Feehan
+ * @param <T> input type for feature list
+ */
 public abstract class FeatureProvider<T extends FeatureInput>
         extends FeatureProviderBean<FeatureProvider<T>, Feature<T>> {}

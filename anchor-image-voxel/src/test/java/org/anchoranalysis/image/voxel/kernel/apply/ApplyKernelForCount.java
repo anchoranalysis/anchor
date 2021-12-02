@@ -48,19 +48,19 @@ public abstract class ApplyKernelForCount<T extends Kernel> {
      *
      * @param object the object to impose on the {@link BinaryVoxels}
      * @param extentScene the size of the {@link BinaryVoxels}
-     * @param params parameters to use when applying.
+     * @param parameters parameters to use when applying.
      * @param createKernel a function to create the {@link Kernel}.
      * @return the count.
      */
     public int apply(
             ObjectMask object,
             Extent extentScene,
-            KernelApplicationParameters params,
+            KernelApplicationParameters parameters,
             BiFunction<ObjectMask, Extent, T> createKernel) {
         return applyToVoxelsAndCount(
                 createKernel.apply(object, extentScene),
                 createBinaryVoxels(object, extentScene),
-                params);
+                parameters);
     }
 
     /**
@@ -68,11 +68,13 @@ public abstract class ApplyKernelForCount<T extends Kernel> {
      *
      * @param kernel the kernel to apply
      * @param voxels the binary-voxels
-     * @param params parameters to use when applying.
+     * @param parameters parameters to use when applying.
      * @return the count.
      */
     protected abstract int applyToVoxelsAndCount(
-            T kernel, BinaryVoxels<UnsignedByteBuffer> voxels, KernelApplicationParameters params);
+            T kernel,
+            BinaryVoxels<UnsignedByteBuffer> voxels,
+            KernelApplicationParameters parameters);
 
     private static BinaryVoxels<UnsignedByteBuffer> createBinaryVoxels(
             ObjectMask object, Extent extentScene) {

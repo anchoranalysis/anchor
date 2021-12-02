@@ -42,7 +42,7 @@ public class ApplyCountKernel extends ApplyKernelForCount<CountKernel> {
     protected int applyToVoxelsAndCount(
             CountKernel kernel,
             BinaryVoxels<UnsignedByteBuffer> voxels,
-            KernelApplicationParameters params) {
-        return ApplyKernel.applyForCount(kernel, voxels, params);
+            KernelApplicationParameters parameters) {
+        return ApplyKernel.applyForCount(kernel, voxels, parameters);
     }
 }

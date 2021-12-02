@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.mpp.mark.voxelized.memo;
 
-import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
+import org.anchoranalysis.feature.energy.EnergyStackWithoutParameters;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.mpp.mark.Mark;
 
@@ -39,7 +39,7 @@ public class PxlMarkMemoFactory {
     }
 
     public static VoxelizedMarkMemo create(
-            Mark mark, EnergyStackWithoutParams stack, RegionMap regionMap) {
+            Mark mark, EnergyStackWithoutParameters stack, RegionMap regionMap) {
         return new VoxelizedMarkMemo(mark, stack, regionMap);
     }
 }

@@ -40,8 +40,8 @@ import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.functional.FunctionalProgress;
 import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.core.system.path.CommonPath;
-import org.anchoranalysis.io.input.InputContextParams;
-import org.anchoranalysis.io.input.bean.InputManagerParams;
+import org.anchoranalysis.io.input.InputContextParameters;
+import org.anchoranalysis.io.input.bean.InputManagerParameters;
 import org.anchoranalysis.io.input.file.FilesProviderException;
 
 /**
@@ -87,21 +87,21 @@ public class SpecificPathList extends FilesProvider {
     }
 
     @Override
-    public List<File> create(InputManagerParams params) throws FilesProviderException {
+    public List<File> create(InputManagerParameters parameters) throws FilesProviderException {
 
-        Optional<List<String>> selectedPaths = selectListPaths(params.getInputContext());
+        Optional<List<String>> selectedPaths = selectListPaths(parameters.getInputContext());
 
         if (selectedPaths.isPresent()) {
-            return matchingFilesForList(selectedPaths.get(), params.getProgress());
+            return matchingFilesForList(selectedPaths.get(), parameters.getProgress());
         } else if (fallback != null) {
-            return fallback.create(params);
+            return fallback.create(parameters);
         } else {
             throw exceptionIfUnspecified();
         }
     }
 
     @Override
-    public Optional<Path> rootDirectory(InputContextParams inputContext)
+    public Optional<Path> rootDirectory(InputContextParameters inputContext)
             throws FilesProviderException {
 
         Optional<List<String>> selectedPaths = selectListPaths(inputContext);
@@ -115,7 +115,7 @@ public class SpecificPathList extends FilesProvider {
         }
     }
 
-    private Optional<List<String>> selectListPaths(InputContextParams inputContext) {
+    private Optional<List<String>> selectListPaths(InputContextParameters inputContext) {
         if (listPaths != null) {
             return Optional.of(listPaths);
         } else {

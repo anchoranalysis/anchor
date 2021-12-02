@@ -37,7 +37,7 @@ import org.anchoranalysis.feature.input.FeatureInputResults;
 public class Count extends FeatureResults {
 
     @Override
-    public double calculate(FeatureInputResults params) throws FeatureCalculationException {
-        return params.getResults().size();
+    public double calculate(FeatureInputResults input) throws FeatureCalculationException {
+        return input.getResults().size();
     }
 }

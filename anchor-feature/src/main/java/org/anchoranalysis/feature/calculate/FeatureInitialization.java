@@ -29,15 +29,16 @@ package org.anchoranalysis.feature.calculate;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.Value;
-import org.anchoranalysis.bean.initializable.params.BeanInitialization;
+import org.anchoranalysis.bean.initializable.parameters.BeanInitialization;
 import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.identifier.provider.store.SharedObjects;
 import org.anchoranalysis.core.value.Dictionary;
+import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.energy.EnergyStack;
-import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
+import org.anchoranalysis.feature.energy.EnergyStackWithoutParameters;
 
 /**
- * Parameters used to initialize a feature before any calculations
+ * Parameters used to initialize a {@link Feature} before any calculation occurs.
  *
  * @author Owen Feehan
  */
@@ -45,41 +46,71 @@ import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
 @AllArgsConstructor
 public class FeatureInitialization implements BeanInitialization {
 
+    /** A dictionary of key-value pairs. */
     private final Optional<Dictionary> dictionary;
 
-    private final Optional<EnergyStackWithoutParams> energyStack;
+    /** An energy-stack, which may form an input to the feature for calculation. */
+    private final Optional<EnergyStackWithoutParameters> energyStack;
 
+    /** Shared-objects, which can be referenced by the feature to influence calculation. */
     private final Optional<SharedObjects> sharedObjects;
 
+    /** Create without any dictionary, energy-stack or shared-objects. */
     public FeatureInitialization() {
         this.dictionary = Optional.empty();
         this.energyStack = Optional.empty();
         this.sharedObjects = Optional.empty();
     }
 
+    /**
+     * Create only with shared-objects.
+     *
+     * @param sharedObjects the shared objects.
+     */
     public FeatureInitialization(SharedObjects sharedObjects) {
         this.dictionary = Optional.empty();
         this.energyStack = Optional.empty();
         this.sharedObjects = Optional.of(sharedObjects);
     }
 
+    /**
+     * Create only with a dictionary.
+     *
+     * @param dictionary the dictionary.
+     */
     public FeatureInitialization(Dictionary dictionary) {
         this.dictionary = Optional.of(dictionary);
         this.energyStack = Optional.empty();
         this.sharedObjects = Optional.empty();
     }
 
+    /**
+     * Create only with an energy-stack.
+     *
+     * @param energyStack the energy-stack.
+     */
     public FeatureInitialization(EnergyStack energyStack) {
-        this.energyStack = Optional.of(energyStack.withoutParams());
-        this.dictionary = Optional.of(energyStack.getDictionary());
+        this.energyStack = Optional.of(energyStack.withoutParameters());
+        this.dictionary = Optional.of(energyStack.getParameters());
         this.sharedObjects = Optional.empty();
     }
 
-    // Shallow-copy
-    public FeatureInitialization duplicate() {
+    /**
+     * A shallow-copy of the current initialization.
+     *
+     * @return a new {@link FeatureInitialization} which reuses the existing state.
+     */
+    public FeatureInitialization duplicateShallow() {
         return new FeatureInitialization(dictionary, energyStack, sharedObjects);
     }
 
+    /**
+     * Retrieves the shared-objects associated with the initialization, or throws an an exception if
+     * they do not exist.
+     *
+     * @return the shared-objects.
+     * @throws InitializeException if no shared-objects exist.
+     */
     public SharedObjects sharedObjectsRequired() throws InitializeException {
         return sharedObjects.orElseThrow(
                 () ->

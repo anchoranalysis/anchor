@@ -51,6 +51,13 @@ public abstract class FeatureResults extends Feature<FeatureInputResults> {
         return calculate(input.get());
     }
 
+    /**
+     * Calculates the feature-result given a {@link FeatureInputResults}.
+     *
+     * @param input the input.
+     * @return the calculated value.
+     * @throws FeatureCalculationException if the result cannot be successfully calculated.
+     */
     public abstract double calculate(FeatureInputResults input) throws FeatureCalculationException;
 
     @Override

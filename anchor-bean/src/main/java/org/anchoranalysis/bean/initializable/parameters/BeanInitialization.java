@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-io
+ * anchor-bean
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -24,38 +24,13 @@
  * #L%
  */
 
-package org.anchoranalysis.io.input.bean;
+package org.anchoranalysis.bean.initializable.parameters;
 
-import java.util.Optional;
-import lombok.AllArgsConstructor;
+import org.anchoranalysis.bean.initializable.InitializableBean;
 
 /**
- * An alternative mode of option where behaviours change.
- *
- * <p><div>e.g.
- *
- * <ul>
- *   <li>A single-file is executed only.
- *   <li>Output paths may change.
- *   <li>Logging output may change.
- * </ul>
- *
- * </div>
+ * Parent class for all state used to initialise beans in {@link InitializableBean}.
  *
  * @author Owen Feehan
  */
-@AllArgsConstructor
-public class DebugModeParams {
-
-    /** An optional string used to filter inputs. If null, then disabled. */
-    private Optional<String> contains;
-
-    /** @return contains, or an empty string if null. */
-    public String containsOrEmpty() {
-        if (contains.isPresent()) {
-            return contains.get();
-        } else {
-            return "";
-        }
-    }
-}
+public interface BeanInitialization {}

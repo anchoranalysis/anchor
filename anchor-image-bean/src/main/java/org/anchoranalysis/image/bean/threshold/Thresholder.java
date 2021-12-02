@@ -27,7 +27,7 @@
 package org.anchoranalysis.image.bean.threshold;
 
 import java.util.Optional;
-import org.anchoranalysis.bean.NullParamsBean;
+import org.anchoranalysis.bean.NullParametersBean;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.voxel.VoxelsUntyped;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
@@ -42,7 +42,7 @@ import org.anchoranalysis.math.histogram.Histogram;
  *
  * @author Owen Feehan
  */
-public abstract class Thresholder extends NullParamsBean<VoxelsThresholder> {
+public abstract class Thresholder extends NullParametersBean<VoxelsThresholder> {
 
     /**
      * Like {@link #threshold(VoxelsUntyped)} but using default binary-values.

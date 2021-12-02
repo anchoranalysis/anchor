@@ -42,8 +42,9 @@ class CountKernelNeighborhoodTest extends CountKernelTestBase {
     }
 
     @Override
-    protected int boundaryFromInside(int expectationForInside, KernelApplicationParameters params) {
-        if (params.isOutsideOffUnignored()) {
+    protected int boundaryFromInside(
+            int expectationForInside, KernelApplicationParameters parameters) {
+        if (parameters.isOutsideOffUnignored()) {
             return expectationForInside;
         } else {
             return expectationForInside / 2;
@@ -51,7 +52,7 @@ class CountKernelNeighborhoodTest extends CountKernelTestBase {
     }
 
     @Override
-    protected boolean useZForExpectedInside(KernelApplicationParameters params) {
-        return params.isUseZ() && params.isOutsideOffUnignored();
+    protected boolean useZForExpectedInside(KernelApplicationParameters parameters) {
+        return parameters.isUseZ() && parameters.isOutsideOffUnignored();
     }
 }

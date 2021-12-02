@@ -29,9 +29,9 @@ package org.anchoranalysis.mpp.feature.mark;
 import java.io.Serializable;
 import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
-import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
-import org.anchoranalysis.feature.energy.EnergyTotal;
+import org.anchoranalysis.feature.energy.EnergyStackWithoutParameters;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMap;
+import org.anchoranalysis.mpp.feature.energy.EnergyTotal;
 import org.anchoranalysis.mpp.feature.energy.saved.EnergySavedInd;
 import org.anchoranalysis.mpp.feature.energy.scheme.EnergySchemeWithSharedFeatures;
 import org.anchoranalysis.mpp.mark.Mark;
@@ -62,7 +62,7 @@ public class EnergyMemoList implements Serializable, MemoForIndex {
 
     public EnergyMemoList(
             EnergySavedInd savedInd,
-            EnergyStackWithoutParams energyStack,
+            EnergyStackWithoutParameters energyStack,
             MarkCollection marks,
             EnergySchemeWithSharedFeatures energySchemeTotal)
             throws NamedFeatureCalculateException {
@@ -119,7 +119,7 @@ public class EnergyMemoList implements Serializable, MemoForIndex {
     // calculate fresh ind
     private void calculateFreshInd(
             EnergySavedInd energySavedInd,
-            EnergyStackWithoutParams energyStack,
+            EnergyStackWithoutParameters energyStack,
             MarkCollection marks,
             EnergySchemeWithSharedFeatures energySchemeTotal)
             throws NamedFeatureCalculateException {
@@ -148,7 +148,7 @@ public class EnergyMemoList implements Serializable, MemoForIndex {
             EnergySavedInd energySavedInd,
             int index,
             VoxelizedMarkMemo newMark,
-            EnergyStackWithoutParams stack,
+            EnergyStackWithoutParameters stack,
             EnergySchemeWithSharedFeatures energySchemeTotal)
             throws NamedFeatureCalculateException {
         // We calculate energy for individual components
@@ -163,7 +163,7 @@ public class EnergyMemoList implements Serializable, MemoForIndex {
     public VoxelizedMarkMemo add(
             EnergySavedInd energySavedInd,
             VoxelizedMarkMemo memo,
-            EnergyStackWithoutParams stack,
+            EnergyStackWithoutParameters stack,
             EnergySchemeWithSharedFeatures energyScheme)
             throws NamedFeatureCalculateException {
         EnergyTotal energy = energyScheme.totalIndividual(memo, stack);

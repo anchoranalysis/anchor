@@ -44,13 +44,13 @@ import org.anchoranalysis.feature.session.calculator.multi.FeatureCalculatorMult
 import org.anchoranalysis.feature.session.replace.BoundReplaceStrategy;
 import org.anchoranalysis.feature.session.replace.ReplaceStrategy;
 import org.anchoranalysis.feature.session.replace.ReuseSingletonStrategy;
-import org.anchoranalysis.feature.shared.SharedFeatureMulti;
+import org.anchoranalysis.feature.shared.SharedFeatures;
 
 /**
  * Calculates features with successively different parameters, taking care of caching etc.
  * appropriately.
  *
- * <p>All feature use the same initialization, but successively different {#FeatureCalcParams}
+ * <p>All feature use the same initialization, but successively different {#FeatureCalculation}
  * sequentially.
  *
  * <p>Caching is applied only within each call to {{@link #calculate(FeatureInput)} but among
@@ -115,7 +115,7 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
      * @throws InitializeException
      */
     public void start(
-            FeatureInitialization initialization, SharedFeatureMulti sharedFeatures, Logger logger)
+            FeatureInitialization initialization, SharedFeatures sharedFeatures, Logger logger)
             throws InitializeException {
 
         if (isStarted) {
@@ -128,25 +128,19 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
         isStarted = true;
     }
 
-    /**
-     * Calculates one params for each feature.
-     *
-     * @param params
-     * @return
-     */
     @Override
-    public ResultsVector calculate(T params) throws NamedFeatureCalculateException {
+    public ResultsVector calculate(T input) throws NamedFeatureCalculateException {
         checkIsStarted();
-        return calculateCommonExceptionAsVector(params);
+        return calculateCommonExceptionAsVector(input);
     }
 
     @Override
-    public ResultsVector calculate(T params, FeatureList<T> featuresSubset)
+    public ResultsVector calculate(T input, FeatureList<T> featuresSubset)
             throws NamedFeatureCalculateException {
         checkIsStarted();
 
         try {
-            return replaceSession.createOrReuse(params).calculate(featuresSubset);
+            return replaceSession.createOrReuse(input).calculate(featuresSubset);
         } catch (Exception e) {
             throw new NamedFeatureCalculateException(e);
         }
@@ -156,10 +150,10 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
      * Calculates the next-object in our sequential series, reporting any exceptions into a reporter
      * log
      *
-     * @param params
+     * @param input
      * @return
      */
-    public ResultsVector calculateSuppressErrors(T params, ErrorReporter errorReporter) {
+    public ResultsVector calculateSuppressErrors(T input, ErrorReporter errorReporter) {
 
         ResultsVector results = new ResultsVector(listFeatures.size());
 
@@ -167,7 +161,7 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
             errorReporter.recordError(SequentialSession.class, ERROR_NOT_STARTED);
             results.setErrorAll(new OperationFailedException(ERROR_NOT_STARTED));
         } else {
-            calculateCommonSuppressErrors(results, params, errorReporter);
+            calculateCommonSuppressErrors(results, input, errorReporter);
         }
 
         return results;
@@ -183,12 +177,12 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
     }
 
     private void calculateCommonSuppressErrors(
-            ResultsVector results, T params, ErrorReporter errorReporter) {
+            ResultsVector results, T input, ErrorReporter errorReporter) {
 
-        // Create cacheable params, and record any errors for all features
-        SessionInput<T> cacheableParams;
+        // Create cacheable inputs, and record any errors for all features
+        SessionInput<T> sessionInput;
         try {
-            cacheableParams = replaceSession.createOrReuse(params);
+            sessionInput = replaceSession.createOrReuse(input);
         } catch (Exception e) {
             // Return all features as errored
             if (reportErrors) {
@@ -205,7 +199,7 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
             Feature<T> f = listFeatures.get(i);
 
             try {
-                results.set(i, cacheableParams.calculate(f));
+                results.set(i, sessionInput.calculate(f));
 
             } catch (Exception e) {
                 if (reportErrors) {
@@ -248,7 +242,7 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
      * @param sharedFeatures
      * @throws InitializeException
      */
-    private void checkNoIntersectionWithSharedFeatures(SharedFeatureMulti sharedFeatures)
+    private void checkNoIntersectionWithSharedFeatures(SharedFeatures sharedFeatures)
             throws InitializeException {
         assert (listFeatures != null);
         try {
@@ -273,10 +267,10 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
     }
 
     private void setupCacheAndInit(
-            FeatureInitialization initialization, SharedFeatureMulti sharedFeatures, Logger logger)
+            FeatureInitialization initialization, SharedFeatures sharedFeatures, Logger logger)
             throws InitializeException {
         assert (initialization != null);
-        FeatureInitialization initializationDup = initialization.duplicate();
+        FeatureInitialization initializationDup = initialization.duplicateShallow();
         listFeatures.initializeRecursive(initializationDup, logger);
 
         replaceSession =

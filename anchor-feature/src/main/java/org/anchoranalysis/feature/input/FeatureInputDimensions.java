@@ -32,7 +32,7 @@ import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 
 /**
- * Any {@link FeatureInput} that exposes the {@link Dimensions} of an image or scene.
+ * A {@link FeatureInput} that exposes the {@link Dimensions} of an image or scene.
  *
  * @author Owen Feehan
  */

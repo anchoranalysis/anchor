@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.feature.bean.list;
 
-import java.util.Arrays;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -37,17 +36,20 @@ import org.anchoranalysis.bean.annotation.SkipInit;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.input.FeatureInput;
 
+/**
+ * Specifies a list of features directly without assigning any custom-naming.
+ *
+ * @author Owen Feehan
+ * @param <T> the feature input-type.
+ */
 @AllArgsConstructor
 @NoArgsConstructor
-public class Define<T extends FeatureInput> extends ReferencedFeatures<T> {
+public class Define<T extends FeatureInput> extends ReferencingFeatureListProvider<T> {
 
     // START BEAN PROPERTIES
+    /** The list that specifies features. */
     @BeanField @SkipInit @Getter @Setter private List<Feature<T>> list;
     // END BEAN PROPERTIES
-
-    public Define(Feature<T> feature) {
-        this(Arrays.asList(feature));
-    }
 
     @Override
     public FeatureList<T> get() {

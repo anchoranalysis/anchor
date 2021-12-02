@@ -53,7 +53,7 @@ public class SequentialProcessor<T extends InputFromManager, S> extends JobProce
 
     @Override
     protected TaskStatistics execute(
-            Outputter rootOutputter, List<T> inputs, ParametersExperiment paramsExperiment)
+            Outputter rootOutputter, List<T> inputs, ParametersExperiment parametersExperiment)
             throws ExperimentExecutionException {
 
         ProcessorChecker.checkAtLeastOneInput(inputs);
@@ -63,13 +63,16 @@ public class SequentialProcessor<T extends InputFromManager, S> extends JobProce
         S sharedState =
                 getTask()
                         .beforeAnyJobIsExecuted(
-                                rootOutputter, concurrencyPlan, inputs, paramsExperiment);
+                                rootOutputter, concurrencyPlan, inputs, parametersExperiment);
 
         TaskStatistics stats =
                 executeAllJobs(
-                        inputs, sharedState, paramsExperiment, loggerForMonitor(paramsExperiment));
+                        inputs,
+                        sharedState,
+                        parametersExperiment,
+                        loggerForMonitor(parametersExperiment));
 
-        getTask().afterAllJobsAreExecuted(sharedState, paramsExperiment.getContext());
+        getTask().afterAllJobsAreExecuted(sharedState, parametersExperiment.getContext());
 
         return stats;
     }
@@ -77,12 +80,12 @@ public class SequentialProcessor<T extends InputFromManager, S> extends JobProce
     private TaskStatistics executeAllJobs(
             List<T> inputs,
             S sharedState,
-            ParametersExperiment paramsExperiment,
+            ParametersExperiment parametersExperiment,
             Optional<MessageLogger> loggerMonitor) {
 
         MonitoredSequentialExecutor<T> seqExecutor =
                 new MonitoredSequentialExecutor<>(
-                        object -> executeJobAndLog(object, sharedState, paramsExperiment),
+                        object -> executeJobAndLog(object, sharedState, parametersExperiment),
                         T::identifier,
                         loggerMonitor,
                         false);
@@ -91,16 +94,16 @@ public class SequentialProcessor<T extends InputFromManager, S> extends JobProce
     }
 
     private boolean executeJobAndLog(
-            T input, S sharedState, ParametersExperiment paramsExperiment) {
+            T input, S sharedState, ParametersExperiment parametersExperiment) {
 
-        StatefulMessageLogger logger = paramsExperiment.getLoggerExperiment();
+        StatefulMessageLogger logger = parametersExperiment.getLoggerExperiment();
         ErrorReporter errorReporter = new ErrorReporterForTask(logger);
 
         try {
-            ParametersUnbound<T, S> paramsUnbound =
+            ParametersUnbound<T, S> parametersUnbound =
                     new ParametersUnbound<>(
-                            paramsExperiment, input, sharedState, isSuppressExceptions());
-            return getTask().executeJob(paramsUnbound);
+                            parametersExperiment, input, sharedState, isSuppressExceptions());
+            return getTask().executeJob(parametersUnbound);
 
         } catch (JobExecutionException e) {
             errorReporter.recordError(SequentialProcessor.class, e);

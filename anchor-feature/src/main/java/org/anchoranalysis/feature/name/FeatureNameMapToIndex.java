@@ -30,9 +30,9 @@ import java.util.HashMap;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 
 /**
- * A map of Feature-Names (Strings) to indexes (Int)
+ * A map of feature-names (strings) to indexes (int).
  *
- * <p>Implemented as a {@link HashMap}.
+ * <p>It is implemented as a {@link HashMap}.
  *
  * @author Owen Feehan
  */

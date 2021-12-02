@@ -26,18 +26,29 @@
 
 package org.anchoranalysis.feature.bean.list;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.SkipInit;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.input.FeatureInput;
 
-public class DefineSingle<T extends FeatureInput> extends ReferencedFeatures<T> {
+/**
+ * Specifies a single feature directly without assigning any custom-naming.
+ *
+ * @author Owen Feehan
+ * @param <T> the feature input-type.
+ */
+@NoArgsConstructor
+@AllArgsConstructor
+public class DefineSingle<T extends FeatureInput> extends ReferencingFeatureListProvider<T> {
 
     /** */
 
     // START BEAN PROPERTIES
+    /** The sole feature that forms the list. */
     @Getter @Setter @BeanField @SkipInit private Feature<T> item;
     // END BEAN PROPERTIES
 

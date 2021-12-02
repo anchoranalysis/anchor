@@ -41,8 +41,8 @@ public interface CalculateExpectedValue {
      * Calculates the value expected for a a particular test.
      *
      * @param fixture the fixture used to create the {@link ObjectMask} used in the test.
-     * @param params the particular {@link KernelApplicationParameters} used in the test.
+     * @param parameters the particular {@link KernelApplicationParameters} used in the test.
      * @return the value expected to be returned by the test
      */
-    int calculate(ObjectMaskFixture fixture, KernelApplicationParameters params);
+    int calculate(ObjectMaskFixture fixture, KernelApplicationParameters parameters);
 }

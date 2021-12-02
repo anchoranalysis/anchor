@@ -29,7 +29,7 @@ package org.anchoranalysis.image.feature.input;
 import java.util.Optional;
 import lombok.EqualsAndHashCode;
 import org.anchoranalysis.feature.energy.EnergyStack;
-import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
+import org.anchoranalysis.feature.energy.EnergyStackWithoutParameters;
 import org.anchoranalysis.feature.input.FeatureInputEnergy;
 
 @EqualsAndHashCode(callSuper = true)
@@ -43,11 +43,11 @@ public class FeatureInputStack extends FeatureInputEnergy {
         this.setEnergyStack(Optional.empty());
     }
 
-    public FeatureInputStack(EnergyStackWithoutParams energyStack) {
+    public FeatureInputStack(EnergyStackWithoutParameters energyStack) {
         this.setEnergyStack(new EnergyStack(energyStack));
     }
 
-    public FeatureInputStack(Optional<EnergyStackWithoutParams> energyStack) {
+    public FeatureInputStack(Optional<EnergyStackWithoutParameters> energyStack) {
         if (energyStack.isPresent()) {
             this.setEnergyStack(new EnergyStack(energyStack.get()));
         }

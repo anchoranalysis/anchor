@@ -24,26 +24,21 @@
  * #L%
  */
 
-package org.anchoranalysis.feature.input;
+package org.anchoranalysis.feature.bean.operator;
 
-import java.util.Optional;
-import org.anchoranalysis.core.value.Dictionary;
-import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
- * A feature-input that is associated with particular key-value parameters
+ * Base class for features that broadly accept any type of feature-input.
  *
  * @author Owen Feehan
+ * @param <T> feature input-type.
  */
-public interface FeatureInputParams extends FeatureInputWithResolution {
+public abstract class FeatureGeneric<T extends FeatureInput> extends Feature<T> {
 
-    Optional<Dictionary> getParamsOptional();
-
-    default Dictionary getParamsRequired() throws FeatureCalculationException {
-        return getParamsOptional()
-                .orElseThrow(
-                        () ->
-                                new FeatureCalculationException(
-                                        "Params are required for this input"));
+    @Override
+    public Class<? extends FeatureInput> inputType() {
+        return FeatureInput.class;
     }
 }

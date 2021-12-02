@@ -67,22 +67,22 @@ public abstract class JobProcessor<T extends InputFromManager, S>
      *
      * @param rootOutputter
      * @param inputs
-     * @param paramsExperiment
+     * @param parametersExperiment
      * @return task statistics
      * @throws ExperimentExecutionException
      */
     public TaskStatistics executeLogStats(
-            Outputter rootOutputter, List<T> inputs, ParametersExperiment paramsExperiment)
+            Outputter rootOutputter, List<T> inputs, ParametersExperiment parametersExperiment)
             throws ExperimentExecutionException {
 
-        if (paramsExperiment.isDetailedLogging()) {
-            paramsExperiment.getLoggerExperiment().log(DIVIDER.withLabel("Processing"));
+        if (parametersExperiment.isDetailedLogging()) {
+            parametersExperiment.getLoggerExperiment().log(DIVIDER.withLabel("Processing"));
         }
 
-        TaskStatistics stats = execute(rootOutputter, inputs, paramsExperiment);
+        TaskStatistics stats = execute(rootOutputter, inputs, parametersExperiment);
 
-        if (paramsExperiment.isDetailedLogging()) {
-            logStats(stats, paramsExperiment);
+        if (parametersExperiment.isDetailedLogging()) {
+            logStats(stats, parametersExperiment);
         }
 
         return stats;
@@ -121,22 +121,23 @@ public abstract class JobProcessor<T extends InputFromManager, S>
      *
      * @param rootOutputter
      * @param inputs
-     * @param paramsExperiment
+     * @param parametersExperiment
      * @return
      * @throws ExperimentExecutionException
      */
     protected abstract TaskStatistics execute(
-            Outputter rootOutputter, List<T> inputs, ParametersExperiment paramsExperiment)
+            Outputter rootOutputter, List<T> inputs, ParametersExperiment parametersExperiment)
             throws ExperimentExecutionException;
 
-    protected Optional<MessageLogger> loggerForMonitor(ParametersExperiment paramsExperiment) {
+    protected Optional<MessageLogger> loggerForMonitor(ParametersExperiment parametersExperiment) {
         return OptionalUtilities.createFromFlag(
-                paramsExperiment.isDetailedLogging(), paramsExperiment::getLoggerExperiment);
+                parametersExperiment.isDetailedLogging(),
+                parametersExperiment::getLoggerExperiment);
     }
 
-    private static void logStats(TaskStatistics stats, ParametersExperiment paramsExperiment) {
+    private static void logStats(TaskStatistics stats, ParametersExperiment parametersExperiment) {
         StatisticsLogger statisticsLogger =
-                new StatisticsLogger(paramsExperiment.getLoggerExperiment());
+                new StatisticsLogger(parametersExperiment.getLoggerExperiment());
         statisticsLogger.logTextualMessage(stats);
     }
 }

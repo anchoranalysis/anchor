@@ -28,7 +28,7 @@ package org.anchoranalysis.mpp.bean.proposer;
 
 import java.util.List;
 import java.util.Optional;
-import org.anchoranalysis.bean.NullParamsBean;
+import org.anchoranalysis.bean.NullParametersBean;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.mpp.mark.CompatibleWithMark;
@@ -38,7 +38,7 @@ import org.anchoranalysis.mpp.proposer.error.ErrorNode;
 import org.anchoranalysis.spatial.point.Point3d;
 import org.anchoranalysis.spatial.point.Point3i;
 
-public abstract class PointsProposer extends NullParamsBean<PointsProposer>
+public abstract class PointsProposer extends NullParametersBean<PointsProposer>
         implements CompatibleWithMark {
 
     public abstract Optional<List<Point3i>> propose(

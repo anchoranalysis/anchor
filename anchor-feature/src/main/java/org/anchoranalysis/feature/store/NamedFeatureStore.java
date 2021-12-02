@@ -32,14 +32,26 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import org.anchoranalysis.bean.NamedBean;
-import org.anchoranalysis.core.identifier.provider.NameValueMap;
-import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListFactory;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.name.FeatureNameList;
 
+/**
+ * Stores {@link Feature}s, each with an associated name, with list-like access and map-like access.
+ *
+ * <p>Each feature is stored in an ordered manner, and zero-indexed.
+ *
+ * <p>A map between the name of each feature, and the feature's index position is simultaneously
+ * maintained.
+ *
+ * <p>If the names of two or more {@link Feature}s are identical, only a single {@link Feature} will
+ * be retrieved by name. The list-access remains unaffected.
+ *
+ * @author Owen Feehan
+ * @param <T> the feature-input type for all features in the store.
+ */
 public class NamedFeatureStore<T extends FeatureInput> implements Iterable<NamedBean<Feature<T>>> {
 
     private List<NamedBean<Feature<T>>> list = new ArrayList<>();
@@ -48,8 +60,8 @@ public class NamedFeatureStore<T extends FeatureInput> implements Iterable<Named
     /**
      * Adds a named-feature to the store. The customName() of the feature is replaced with the name.
      *
-     * @param name name of the feature
-     * @param feature the feature to add (whose customName will be overridden with the name)
+     * @param name name of the feature.
+     * @param feature the feature to add (whose customName will be overridden with the name).
      */
     public void add(String name, Feature<T> feature) {
         mapIndex.put(name, list.size());
@@ -57,26 +69,52 @@ public class NamedFeatureStore<T extends FeatureInput> implements Iterable<Named
         list.add(new NamedBean<>(name, feature));
     }
 
-    public int getIndex(String name) throws GetOperationFailedException {
-        Integer index = mapIndex.get(name);
-        if (index == null) {
-            throw new GetOperationFailedException(
-                    name, String.format("The key '%s' is not found in the featureStore", name));
-        }
-        return index;
-    }
-
+    /**
+     * Gets a feature at a particular position.
+     *
+     * @param index the position to retrieve (zero-indexed).
+     * @return the feature, encapsulated in the {@link NamedBean} that contains it.
+     */
     public NamedBean<Feature<T>> get(int index) {
         return list.get(index);
     }
 
-    public FeatureNameList createFeatureNames() {
-        return new FeatureNameList(list.stream().map(NamedBean::getName));
-    }
-
+    /**
+     * Gets a feature corresponding to a particular name.
+     *
+     * @param name the name of the feature.
+     * @return the feature, encapsulated in the {@link NamedBean} that contains it.
+     */
     public NamedBean<Feature<T>> get(String name) {
         int index = mapIndex.get(name);
         return list.get(index);
+    }
+
+    /**
+     * All {@link Feature}s in the store, in identical order.
+     *
+     * @return a newly-created list, that reuses the existing {@link Feature} instances.
+     */
+    public FeatureList<T> features() {
+        return FeatureListFactory.mapFrom(list, NamedBean::getValue);
+    }
+
+    /**
+     * The names of all {@link Feature}s in the store, in identical order to the store.
+     *
+     * @return a newly created {@link FeatureNameList} corresponding to the names of the features.
+     */
+    public FeatureNameList featureNames() {
+        return new FeatureNameList(list.stream().map(NamedBean::getName));
+    }
+
+    /**
+     * The total number of {@link Feature}s in the store.
+     *
+     * @return the total number.
+     */
+    public int size() {
+        return list.size();
     }
 
     @Override
@@ -84,36 +122,16 @@ public class NamedFeatureStore<T extends FeatureInput> implements Iterable<Named
         return list.iterator();
     }
 
-    public NamedFeatureStore<T> deepCopy() {
+    /**
+     * Deep-copies the store, including duplicating each feature.
+     *
+     * @return a deep-copy of the current instance.
+     */
+    public NamedFeatureStore<T> duplicate() {
         NamedFeatureStore<T> out = new NamedFeatureStore<>();
-        for (NamedBean<Feature<T>> ni : list) {
-            out.add(ni.getName(), ni.getValue().duplicateBean());
+        for (NamedBean<Feature<T>> namedBean : list) {
+            out.add(namedBean.getName(), namedBean.getValue().duplicateBean());
         }
         return out;
-    }
-
-    public FeatureList<T> listFeatures() {
-        return FeatureListFactory.mapFrom(list, NamedBean::getValue);
-    }
-
-    public FeatureList<T> listFeaturesSubset(int start, int size) {
-        return FeatureListFactory.mapFromRange(
-                start, start + size, index -> list.get(index).getValue());
-    }
-
-    public void copyTo(NameValueMap<Feature<T>> out) {
-        for (NamedBean<Feature<T>> ni : list) {
-            out.add(ni.getName(), ni.getValue());
-        }
-    }
-
-    public void copyToDuplicate(NameValueMap<Feature<T>> out) {
-        for (NamedBean<Feature<T>> ni : list) {
-            out.add(ni.getName(), ni.getValue().duplicateBean());
-        }
-    }
-
-    public int size() {
-        return list.size();
     }
 }

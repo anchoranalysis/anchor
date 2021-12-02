@@ -35,14 +35,15 @@ import org.anchoranalysis.feature.input.FeatureInput;
 class FeatureAssigner<T extends FeatureInput> implements InitializationParameterAssigner {
 
     @Override
-    public boolean accepts(Class<?> paramType) {
-        return FeatureInitialization.class.isAssignableFrom(paramType);
+    public boolean accepts(Class<?> initializationType) {
+        return FeatureInitialization.class.isAssignableFrom(initializationType);
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public void assignParameterToProperties(
-            Object bean, Object params, Object parent, Logger logger) throws InitializeException {
+    public void assignInitializationToProperties(
+            Object bean, Object initialization, Object parent, Logger logger)
+            throws InitializeException {
 
         if (parent != null && !(parent instanceof Feature)) {
             throw new InitializeException(
@@ -51,7 +52,7 @@ class FeatureAssigner<T extends FeatureInput> implements InitializationParameter
 
         if (bean instanceof Feature) {
             Feature<T> propertyValueCast = (Feature<T>) bean;
-            propertyValueCast.initialize((FeatureInitialization) params, logger);
+            propertyValueCast.initialize((FeatureInitialization) initialization, logger);
         }
     }
 

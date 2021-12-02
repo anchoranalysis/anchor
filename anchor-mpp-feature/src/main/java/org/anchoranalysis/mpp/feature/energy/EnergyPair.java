@@ -28,7 +28,6 @@ package org.anchoranalysis.mpp.feature.energy;
 
 import lombok.AllArgsConstructor;
 import lombok.Value;
-import org.anchoranalysis.feature.energy.EnergyTotal;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.pair.IdentifiablePair;
 

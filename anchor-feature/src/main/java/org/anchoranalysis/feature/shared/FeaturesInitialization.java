@@ -26,11 +26,12 @@
 
 package org.anchoranalysis.feature.shared;
 
+import com.github.davidmoten.guavamini.Preconditions;
 import java.nio.file.Path;
 import java.util.List;
 import lombok.Getter;
 import org.anchoranalysis.bean.NamedBean;
-import org.anchoranalysis.bean.initializable.params.BeanInitialization;
+import org.anchoranalysis.bean.initializable.parameters.BeanInitialization;
 import org.anchoranalysis.bean.shared.dictionary.DictionaryInitialization;
 import org.anchoranalysis.bean.shared.path.FilePathInitialization;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
@@ -40,20 +41,35 @@ import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
 import org.anchoranalysis.core.identifier.provider.store.SharedObjects;
 import org.anchoranalysis.core.log.CommonContext;
 import org.anchoranalysis.core.log.Logger;
+import org.anchoranalysis.core.value.Dictionary;
+import org.anchoranalysis.feature.bean.FeatureRelatedBean;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.input.FeatureInput;
 
+/**
+ * Parameters for initializing a {@link FeatureRelatedBean}.
+ *
+ * @author Owen Feehan
+ */
 public class FeaturesInitialization implements BeanInitialization {
 
+    /** A named-mapping to {@link Dictionary}s. */
     @Getter private DictionaryInitialization dictionary;
 
+    /** A named-set of file-paths. */
     @Getter private FilePathInitialization filePaths;
 
-    @Getter private SharedFeatureMulti sharedFeatures;
+    /** Shared features available for reference during calculation. */
+    @Getter private SharedFeatures sharedFeatures;
 
     private NamedProviderStore<FeatureList<FeatureInput>> featuresStore;
 
+    /**
+     * Creates with shared-objects.
+     *
+     * @param sharedObjects the shared-objects.
+     */
     private FeaturesInitialization(SharedObjects sharedObjects) {
         this.dictionary = new DictionaryInitialization(sharedObjects);
         this.filePaths = new FilePathInitialization(sharedObjects);
@@ -61,36 +77,55 @@ public class FeaturesInitialization implements BeanInitialization {
         featuresStore = sharedObjects.getOrCreate(FeatureList.class);
 
         // We populate our shared features from our storeFeatureList
-        sharedFeatures = new SharedFeatureMulti();
+        sharedFeatures = new SharedFeatures();
         sharedFeatures.addFromProviders(featuresStore);
     }
 
+    /**
+     * Creates with shared-objects, and otherwise empty initialization.
+     *
+     * @param sharedObjects the shared-objects.
+     * @return an initialization containing shared-objects, but otherwise unpopulated.
+     */
     public static FeaturesInitialization create(SharedObjects sharedObjects) {
         return new FeaturesInitialization(sharedObjects);
     }
 
     /**
-     * Creates empty params
+     * Creates a log and a model-directory, and otherwise empty initialization.
      *
-     * @param logger
-     * @return
+     * @param logger the logger.
+     * @param modelDirectory the path to the directory contains models.
+     * @return an initialization containing the above two aspects, but otherwise unpopulated.
      */
     public static FeaturesInitialization create(Logger logger, Path modelDirectory) {
         return create(new SharedObjects(new CommonContext(logger, modelDirectory)));
     }
 
-    public NamedProviderStore<FeatureList<FeatureInput>> getFeatureListSet() {
+    /**
+     * Gets the underlying {@link NamedProviderStore} that provides shared-features.
+     *
+     * @return the underlying store, which if changed, will also change this instance.
+     */
+    public NamedProviderStore<FeatureList<FeatureInput>> getFeatureLists() {
         return featuresStore;
     }
 
+    /**
+     * Populates features into the shared-feature storage from a list of named-beans.
+     *
+     * <p>Additionally the features are initialized, with the current instance.
+     *
+     * @param namedProviders providers of feature-lists, each list with an associated name.
+     * @param logger the logger to supply to features to report messages and errors with.
+     * @throws OperationFailedException if any feature provided by the lists fails to initialize.
+     */
     public void populate(
-            List<NamedBean<FeatureListProvider<FeatureInput>>> namedFeatureListCreator,
-            Logger logger)
+            List<NamedBean<FeatureListProvider<FeatureInput>>> namedProviders, Logger logger)
             throws OperationFailedException {
-
-        assert (getFeatureListSet() != null);
+        Preconditions.checkArgument(getFeatureLists() != null);
         try {
-            for (NamedBean<FeatureListProvider<FeatureInput>> namedBean : namedFeatureListCreator) {
+            for (NamedBean<FeatureListProvider<FeatureInput>> namedBean : namedProviders) {
                 namedBean.getItem().initializeRecursive(this, logger);
                 addFeatureList(namedBean);
             }
@@ -113,7 +148,7 @@ public class FeaturesInitialization implements BeanInitialization {
             }
 
             featuresStore.add(name, () -> featureList);
-            sharedFeatures.addNoDuplicate(featureList);
+            sharedFeatures.addFromList(featureList);
 
         } catch (ProvisionFailedException e) {
             throw new OperationFailedException(e);

@@ -31,7 +31,7 @@ import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.Provider;
 import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.bean.initializable.InitializableBean;
-import org.anchoranalysis.bean.initializable.params.BeanInitialization;
+import org.anchoranalysis.bean.initializable.parameters.BeanInitialization;
 import org.anchoranalysis.bean.initializable.property.BeanInitializer;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.checked.CheckedFunction;

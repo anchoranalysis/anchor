@@ -47,12 +47,13 @@ class CountKernelNeighborhoodMaskTest extends CountKernelTestBase {
     }
 
     @Override
-    protected int boundaryFromInside(int expectationForInside, KernelApplicationParameters params) {
+    protected int boundaryFromInside(
+            int expectationForInside, KernelApplicationParameters parameters) {
         return expectationForInside / 2;
     }
 
     @Override
-    protected boolean useZForExpectedInside(KernelApplicationParameters params) {
+    protected boolean useZForExpectedInside(KernelApplicationParameters parameters) {
         return false;
     }
 }

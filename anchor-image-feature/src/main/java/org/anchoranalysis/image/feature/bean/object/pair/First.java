@@ -46,8 +46,8 @@ public class First extends FeatureDeriveFromPair {
     }
 
     @Override
-    public double calculate(SessionInput<FeatureInputPairObjects> params)
+    public double calculate(SessionInput<FeatureInputPairObjects> input)
             throws FeatureCalculationException {
-        return valueFromFirst(params);
+        return valueFromFirst(input);
     }
 }

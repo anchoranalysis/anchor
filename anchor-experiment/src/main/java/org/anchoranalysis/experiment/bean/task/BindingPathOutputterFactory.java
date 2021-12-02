@@ -42,29 +42,30 @@ import org.anchoranalysis.io.output.path.prefixer.PathPrefixerException;
 class BindingPathOutputterFactory {
 
     public static OutputterChecked createWithBindingPath(
-            NamedPath path, Optional<Manifest> manifestTask, ParametersExperiment params)
+            NamedPath path, Optional<Manifest> manifestTask, ParametersExperiment parameters)
             throws BindFailedException, JobExecutionException {
         try {
             DirectoryWithPrefix prefixToAssign =
                     new PrefixForInput(
-                                    params.getPrefixer(),
-                                    params.getExperimentArguments().createPrefixerContext())
+                                    parameters.getPrefixer(),
+                                    parameters.getExperimentArguments().createPrefixerContext())
                             .prefixForFile(
                                     path,
-                                    params.experimentIdentifierForOutputPath(),
-                                    params.getExperimentalManifest());
+                                    parameters.experimentIdentifierForOutputPath(),
+                                    parameters.getExperimentalManifest());
 
             // Initializes the manifest to be written
             manifestTask.ifPresent(recorder -> recorder.initialize(prefixToAssign.getDirectory()));
 
             OutputterChecked boundOutput =
-                    params.getOutputter()
+                    parameters
+                            .getOutputter()
                             .getChecked()
                             .changePrefix(prefixToAssign, writeRecorder(manifestTask));
 
-            if (params.getExperimentalManifest().isPresent()) {
+            if (parameters.getExperimentalManifest().isPresent()) {
                 ManifestClashChecker.throwExceptionIfClashes(
-                        params.getExperimentalManifest().get(), // NOSONAR
+                        parameters.getExperimentalManifest().get(), // NOSONAR
                         boundOutput,
                         path.getPath());
             }

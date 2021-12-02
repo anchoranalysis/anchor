@@ -30,14 +30,25 @@ import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-// When we don't care about parameters
-
+/**
+ * A {@link FeatureInput} with no associated parameterization.
+ *
+ * <p>This can be used as an input-type for feature's which are indifferent to input, as they are
+ * permanently invariant (constant).
+ *
+ * @author Owen Feehan
+ */
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class FeatureInputNull implements FeatureInput {
 
     private static final FeatureInputNull INSTANCE = new FeatureInputNull();
 
+    /**
+     * A singleton instance.
+     *
+     * @return the singleton instance.
+     */
     public static FeatureInputNull instance() {
         return INSTANCE;
     }

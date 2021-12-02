@@ -32,7 +32,8 @@ import org.anchoranalysis.feature.calculate.cache.ResettableCalculation;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
- * Similar to a {@link FeatureCalculation} but stores several evaluations parameterised by a key.
+ * Similar to a {@link FeatureCalculation} but stores several evaluation results, differentiated by
+ * a key.
  *
  * @author Owen Feehan
  * @param <S> result-type
@@ -43,13 +44,13 @@ import org.anchoranalysis.feature.input.FeatureInput;
 public abstract class FeatureCalculationMap<S, T extends FeatureInput, U, E extends Exception>
         implements ResettableCalculation {
 
-    /** Caches our results for different Keys */
+    /** Caches results for different keys. */
     private Map<U, S> cache;
 
     /**
      * Creates for a particular cache-size.
      *
-     * @param cacheSize cache-size to use for the keys
+     * @param cacheSize cache-size to use for the keys.
      */
     protected FeatureCalculationMap(int cacheSize) {
         cache = new HashMap<>();
@@ -57,12 +58,13 @@ public abstract class FeatureCalculationMap<S, T extends FeatureInput, U, E exte
 
     /**
      * Executes the operation and returns a result, either by doing the calculation, or retrieving a
-     * cached-result from previously.
+     * cached-result from a previous execution.
      *
-     * @param input if there is no cached-value, and the calculation occurs, these parameters are
-     *     used. Otherwise ignored..
-     * @return the result of the calculation
-     * @throws E if the calculation cannot finish, for whatever reason
+     * @param input used to calculate a result, if there is no value already cached. Ignored if a
+     *     result already exists.
+     * @param key the key, which determines if a result already exists or not.
+     * @return the result of the calculation.
+     * @throws E if the calculation cannot finish, for whatever reason.
      */
     public S getOrCalculate(T input, U key) throws E {
 
@@ -74,7 +76,11 @@ public abstract class FeatureCalculationMap<S, T extends FeatureInput, U, E exte
         return obj;
     }
 
-    /** Number of items currently stored in cache */
+    /**
+     * Number of items currently stored in cache.
+     *
+     * @return then number of items.
+     */
     public int numberItemsCurrentlyStored() {
         return cache.size();
     }
@@ -92,22 +98,42 @@ public abstract class FeatureCalculationMap<S, T extends FeatureInput, U, E exte
     public abstract int hashCode();
 
     /**
-     * Gets an existing result for the current params from the cache.
+     * Gets an existing result for the current input from the cache.
      *
-     * @param key
-     * @return a cached-result, or null if it doesn't exist
+     * @param key the key that identifies the existing result.
+     * @return a cached-result, or null if it doesn't exist.
      */
     protected S getOrNull(U key) {
         return cache.get(key);
     }
 
+    /**
+     * Does a result exist for the current input, and a particular key?
+     *
+     * @param key the key.
+     * @return true iff a result exists.
+     */
     protected boolean hasKey(U key) {
         return cache.get(key) != null;
     }
 
-    protected void put(U index, S item) {
-        cache.put(index, item);
+    /**
+     * Assigns a evaluation result to the cache for a particular key.
+     *
+     * @param key the key.
+     * @param result the result to assign.
+     */
+    protected void put(U key, S result) {
+        cache.put(key, result);
     }
 
+    /**
+     * Calculates a result for a particular input and key.
+     *
+     * @param input the input.
+     * @param key the key.
+     * @return the evaluated result.
+     * @throws E if something goes wrong during calculation.
+     */
     protected abstract S execute(T input, U key) throws E;
 }

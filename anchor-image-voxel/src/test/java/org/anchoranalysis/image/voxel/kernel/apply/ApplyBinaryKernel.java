@@ -43,8 +43,8 @@ public class ApplyBinaryKernel extends ApplyKernelForCount<BinaryKernel> {
     protected int applyToVoxelsAndCount(
             BinaryKernel kernel,
             BinaryVoxels<UnsignedByteBuffer> voxels,
-            KernelApplicationParameters params) {
-        BinaryVoxels<UnsignedByteBuffer> out = ApplyKernel.apply(kernel, voxels, params);
+            KernelApplicationParameters parameters) {
+        BinaryVoxels<UnsignedByteBuffer> out = ApplyKernel.apply(kernel, voxels, parameters);
         return out.extract().voxelsEqualTo(voxels.binaryValues().getOn()).count();
     }
 }

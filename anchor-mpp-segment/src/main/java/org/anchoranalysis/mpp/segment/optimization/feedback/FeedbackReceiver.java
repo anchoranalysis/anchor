@@ -38,7 +38,7 @@ public interface FeedbackReceiver<T> {
 
     void reportNewBest(Reporting<T> reporting) throws ReporterException;
 
-    void reportEnd(FeedbackEndParameters<T> params) throws ReporterException;
+    void reportEnd(FeedbackEndParameters<T> parameters) throws ReporterException;
 
     // ! Checks that a mark's initial parameters are correct
     void checkMisconfigured(BeanInstanceMap defaultInstances) throws BeanMisconfiguredException;

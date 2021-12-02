@@ -28,7 +28,7 @@ package org.anchoranalysis.mpp.init;
 
 import lombok.Getter;
 import org.anchoranalysis.bean.define.Define;
-import org.anchoranalysis.bean.initializable.params.BeanInitialization;
+import org.anchoranalysis.bean.initializable.parameters.BeanInitialization;
 import org.anchoranalysis.bean.initializable.property.BeanInitializer;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;

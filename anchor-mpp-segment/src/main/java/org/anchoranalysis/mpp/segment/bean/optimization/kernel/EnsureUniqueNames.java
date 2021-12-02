@@ -37,11 +37,11 @@ import org.anchoranalysis.mpp.segment.optimization.kernel.WeightedKernel;
 class EnsureUniqueNames {
 
     public static <T, S> void apply(List<WeightedKernel<T, S>> listKernelFactories) {
-        Map<String, Integer> hashName = cntUniqueNames(listKernelFactories);
+        Map<String, Integer> hashName = countUniqueNames(listKernelFactories);
         appendIntegerIfNecessary(listKernelFactories, hashName);
     }
 
-    private static <T, S> Map<String, Integer> cntUniqueNames(
+    private static <T, S> Map<String, Integer> countUniqueNames(
             List<WeightedKernel<T, S>> listKernelFactories) {
 
         HashMap<String, Integer> hashName = new HashMap<>();

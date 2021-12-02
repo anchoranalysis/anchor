@@ -50,6 +50,6 @@ public class DualStack {
      * @throws CreateException if a display-stack cannot be derived
      */
     public DualStack(EnergyStack energyStack) throws CreateException {
-        this(energyStack, DisplayStack.create(energyStack.withoutParams().asStack()));
+        this(energyStack, DisplayStack.create(energyStack.withoutParameters().asStack()));
     }
 }

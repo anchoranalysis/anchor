@@ -46,8 +46,8 @@ public class Minimum extends FeatureDeriveFromPair {
     }
 
     @Override
-    public double calculate(SessionInput<FeatureInputPairObjects> params)
+    public double calculate(SessionInput<FeatureInputPairObjects> input)
             throws FeatureCalculationException {
-        return Math.min(valueFromFirst(params), valueFromSecond(params));
+        return Math.min(valueFromFirst(input), valueFromSecond(input));
     }
 }

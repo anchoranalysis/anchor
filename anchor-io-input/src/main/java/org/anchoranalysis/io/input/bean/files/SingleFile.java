@@ -34,8 +34,8 @@ import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.io.input.InputContextParams;
-import org.anchoranalysis.io.input.bean.InputManagerParams;
+import org.anchoranalysis.io.input.InputContextParameters;
+import org.anchoranalysis.io.input.bean.InputManagerParameters;
 
 @NoArgsConstructor
 public class SingleFile extends FilesProviderWithDirectory {
@@ -52,7 +52,7 @@ public class SingleFile extends FilesProviderWithDirectory {
     }
 
     @Override
-    public List<File> matchingFilesForDirectory(Path directory, InputManagerParams params) {
+    public List<File> matchingFilesForDirectory(Path directory, InputManagerParameters parameters) {
 
         File file = new File(path);
 
@@ -77,7 +77,7 @@ public class SingleFile extends FilesProviderWithDirectory {
     }
 
     @Override
-    public Path getDirectoryAsPath(InputContextParams inputContext) {
+    public Path getDirectoryAsPath(InputContextParameters inputContext) {
 
         if (hasDirectory()) {
             return directory;

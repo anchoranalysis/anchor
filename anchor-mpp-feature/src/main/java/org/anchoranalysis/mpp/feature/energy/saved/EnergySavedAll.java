@@ -28,7 +28,7 @@ package org.anchoranalysis.mpp.feature.energy.saved;
 
 import java.io.Serializable;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
-import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
+import org.anchoranalysis.feature.energy.EnergyStackWithoutParameters;
 import org.anchoranalysis.mpp.feature.energy.scheme.EnergySchemeWithSharedFeatures;
 import org.anchoranalysis.mpp.feature.mark.EnergyMemoList;
 
@@ -43,7 +43,7 @@ public class EnergySavedAll implements Serializable {
     public void calc(
             EnergyMemoList pxlMarkMemoList,
             EnergySchemeWithSharedFeatures energyScheme,
-            EnergyStackWithoutParams energyStack)
+            EnergyStackWithoutParameters energyStack)
             throws NamedFeatureCalculateException {
         energyTotal = energyScheme.totalAll(pxlMarkMemoList, energyStack).getTotal();
     }

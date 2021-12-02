@@ -35,7 +35,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.io.input.InputContextParams;
+import org.anchoranalysis.io.input.InputContextParameters;
 import org.anchoranalysis.io.input.InputReadFailedException;
 
 @NoArgsConstructor
@@ -52,12 +52,12 @@ public class MatchGlob extends PathMatcher {
 
     @Override
     protected Predicate<Path> createMatcherFile(
-            Path directory, Optional<InputContextParams> inputContext)
+            Path directory, Optional<InputContextParameters> inputContext)
             throws InputReadFailedException {
         return FilterPathHelper.createPredicate(directory, "glob", globString(inputContext));
     }
 
-    private String globString(Optional<InputContextParams> inputContext)
+    private String globString(Optional<InputContextParameters> inputContext)
             throws InputReadFailedException {
         if (!glob.isEmpty()) {
             return glob;
@@ -65,7 +65,7 @@ public class MatchGlob extends PathMatcher {
             return inputContext.get().getInputFilterGlob();
         } else {
             throw new InputReadFailedException(
-                    "Neither a glob is defined as a bean-field, nor as part of the input-context params. At least one must be defined.");
+                    "Neither a glob is defined as a bean-field, nor as part of the input-context parameters. At least one must be defined.");
         }
     }
 }

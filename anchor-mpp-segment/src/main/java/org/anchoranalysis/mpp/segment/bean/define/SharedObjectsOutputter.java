@@ -81,8 +81,7 @@ class SharedObjectsOutputter {
     }
 
     /**
-     * Writes (a selection of) entities from {@code params} to the filesystem in particular
-     * directories.
+     * Writes (a selection of) entities from to the filesystem in particular directories.
      *
      * @throws OutputWriteFailedException
      */

@@ -31,6 +31,7 @@ import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.log.error.ErrorReporter;
+import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
 import org.anchoranalysis.feature.energy.EnergyStack;
@@ -136,21 +137,21 @@ public class PairsTableCalculator implements FeatureTableCalculator<FeatureInput
     public FeatureNameList createFeatureNames() {
         FeatureNameList out = new FeatureNameList();
 
-        out.addCustomNamesWithPrefix("image.", features.getImage());
+        addCustomNamesWithPrefix("image.", features.getImage(), out);
 
         if (include.includeFirst()) {
-            out.addCustomNamesWithPrefix("first.", features.getSingle());
+            addCustomNamesWithPrefix("first.", features.getSingle(), out);
         }
 
         if (include.includeSecond()) {
-            out.addCustomNamesWithPrefix("second.", features.getSingle());
+            addCustomNamesWithPrefix("second.", features.getSingle(), out);
         }
 
         if (include.includeMerged()) {
-            out.addCustomNamesWithPrefix("merged.", features.getSingle());
+            addCustomNamesWithPrefix("merged.", features.getSingle(), out);
         }
 
-        out.addCustomNamesWithPrefix("pair.", features.getPair());
+        addCustomNamesWithPrefix("pair.", features.getPair(), out);
 
         return out;
     }
@@ -163,5 +164,18 @@ public class PairsTableCalculator implements FeatureTableCalculator<FeatureInput
     @Override
     public FeatureTableCalculator<FeatureInputPairObjects> duplicateForNewThread() {
         return new PairsTableCalculator(features.duplicate(), include, suppressErrors);
+    }
+
+    /**
+     * Add the custom-names of each {@link Feature}, also with a prefix.
+     *
+     * @param prefix the prefix.
+     * @param featuresWithCustomNames the features whose names are added.
+     */
+    private static void addCustomNamesWithPrefix(
+            String prefix, FeatureList<?> featuresWithCustomNames, FeatureNameList list) {
+        for (Feature<?> feature : featuresWithCustomNames) {
+            list.add(prefix + feature.getCustomName());
+        }
     }
 }

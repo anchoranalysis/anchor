@@ -24,37 +24,34 @@
  * #L%
  */
 
-package org.anchoranalysis.feature.bean.list;
+package org.anchoranalysis.feature.bean.operator;
 
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.OptionalBean;
-import org.anchoranalysis.bean.shared.regex.RegEx;
-import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
-import org.anchoranalysis.core.exception.AnchorCheckedException;
+import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.input.FeatureInput;
+import org.anchoranalysis.feature.input.FeatureInputType;
 
 /**
- * Selects a number of features of shared-features matching against a regular-expression
+ * A base class for a {@link Feature} that is a binary-function of the results from two other
+ * features.
  *
  * @author Owen Feehan
+ * @param <T> feature input-type of all features.
  */
-public class SelectFromShared<T extends FeatureInput> extends ReferencedFeatures<T> {
+public abstract class FeatureBinary<T extends FeatureInput> extends Feature<T> {
 
-    // START BEAN PROPERTIES
-    @BeanField @OptionalBean @Getter @Setter private RegEx match;
-    // END BEAN PROPERTIES
+    // START BEAN PARAMETERS
+    /** Provides the <i>first</i> value for the binary-function. */
+    @BeanField @Getter @Setter private Feature<T> item1;
+
+    /** Provides the <i>second</i> value for the binary-function. */
+    @BeanField @Getter @Setter private Feature<T> item2;
+    // END BEAN PARAMETERS
 
     @Override
-    public FeatureList<T> get() throws ProvisionFailedException {
-        try {
-            return FeatureListFactory.mapFromFiltered(
-                    getInitialization().getFeatureListSet().keys(),
-                    key -> match == null || match.hasMatch(key),
-                    key -> getInitialization().getSharedFeatures().getException(key).downcast());
-        } catch (AnchorCheckedException e) {
-            throw new ProvisionFailedException(e);
-        }
+    public Class<? extends FeatureInput> inputType() {
+        return FeatureInputType.prefer(item1, item2);
     }
 }

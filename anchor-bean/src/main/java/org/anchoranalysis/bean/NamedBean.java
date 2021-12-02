@@ -41,7 +41,7 @@ import org.anchoranalysis.core.identifier.name.NameValue;
  */
 @AllArgsConstructor
 @NoArgsConstructor
-public class NamedBean<T extends AnchorBean<?>> extends NullParamsBean<NamedBean<T>>
+public class NamedBean<T extends AnchorBean<?>> extends NullParametersBean<NamedBean<T>>
         implements NameValue<T> {
 
     // START BEAN PROPERTIES

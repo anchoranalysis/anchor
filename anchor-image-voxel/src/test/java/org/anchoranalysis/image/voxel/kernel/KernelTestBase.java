@@ -98,44 +98,44 @@ public abstract class KernelTestBase<T extends Kernel> { // NOSONAR
      * (doesn't touch a boundary) and lies in a <b>2D scene</b>.
      *
      * @param fixture the fixture used to the create the {@link ObjectMask}.
-     * @param params the parameters applied on the kernel.
+     * @param parameters the parameters applied on the kernel.
      * @return the expected value.
      */
     protected abstract int expectedInside2D(
-            ObjectMaskFixture fixture, KernelApplicationParameters params);
+            ObjectMaskFixture fixture, KernelApplicationParameters parameters);
 
     /**
      * The expected value to be returned by a test when the {@link ObjectMask} is <b>inside</b>
      * (doesn't touch a boundary) and lies in a <b>3D scene</b>.
      *
      * @param fixture the fixture used to the create the {@link ObjectMask}.
-     * @param params the parameters applied on the kernel.
+     * @param parameters the parameters applied on the kernel.
      * @return the expected value.
      */
     protected abstract int expectedInside3D(
-            ObjectMaskFixture fixture, KernelApplicationParameters params);
+            ObjectMaskFixture fixture, KernelApplicationParameters parameters);
 
     /**
      * The expected value to be returned by a test when the {@link ObjectMask} is adjacent to
      * <b>boundaries</b> and lies in a <b>2D scene</b>.
      *
      * @param fixture the fixture used to the create the {@link ObjectMask}.
-     * @param params the parameters applied on the kernel.
+     * @param parameters the parameters applied on the kernel.
      * @return the expected value.
      */
     protected abstract int expectedBoundary2D(
-            ObjectMaskFixture fixture, KernelApplicationParameters params);
+            ObjectMaskFixture fixture, KernelApplicationParameters parameters);
 
     /**
      * The expected value to be returned by a test when the {@link ObjectMask} is adjacent to
      * <b>boundaries</b> and lies in a <b>3D scene</b>.
      *
      * @param fixture the fixture used to the create the {@link ObjectMask}.
-     * @param params the parameters applied on the kernel.
+     * @param parameters the parameters applied on the kernel.
      * @return the expected value.
      */
     protected abstract int expectedBoundary3D(
-            ObjectMaskFixture fixture, KernelApplicationParameters params);
+            ObjectMaskFixture fixture, KernelApplicationParameters parameters);
 
     /**
      * Runs the tests across all possible values of {@link KernelApplicationParameters}.

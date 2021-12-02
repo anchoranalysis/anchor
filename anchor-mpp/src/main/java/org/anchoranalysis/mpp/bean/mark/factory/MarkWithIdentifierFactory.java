@@ -29,13 +29,13 @@ package org.anchoranalysis.mpp.bean.mark.factory;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.anchoranalysis.bean.NullParamsBean;
+import org.anchoranalysis.bean.NullParametersBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.mpp.mark.Mark;
 
 @NoArgsConstructor
-public class MarkWithIdentifierFactory extends NullParamsBean<MarkWithIdentifierFactory> {
+public class MarkWithIdentifierFactory extends NullParametersBean<MarkWithIdentifierFactory> {
 
     // START BEAN PARAMETERS
     @BeanField @Getter @Setter private double referencePoissonIntensity = 1e-5;

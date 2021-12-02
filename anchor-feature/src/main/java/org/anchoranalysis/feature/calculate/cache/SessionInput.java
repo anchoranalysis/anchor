@@ -42,7 +42,11 @@ import org.anchoranalysis.feature.results.ResultsVector;
  */
 public interface SessionInput<T extends FeatureInput> {
 
-    /** The underlying feature-input (independent of the session). */
+    /**
+     * The underlying feature-input.
+     *
+     * @return the feature-input, independent of the session.
+     */
     T get();
 
     /**
@@ -50,34 +54,36 @@ public interface SessionInput<T extends FeatureInput> {
      *
      * @param feature the feature to calculate with.
      * @return the result of the calculation.
+     * @throws FeatureCalculationException if a feature cannot be successfully calculated.
      */
     double calculate(Feature<T> feature) throws FeatureCalculationException;
 
     /**
      * Calculates the results of several features using this input.
      *
-     * @param features features to calculate with
-     * @return the results of each feature's calculation respectively
+     * @param features features to calculate with.
+     * @return the results of each feature's calculation respectively.
+     * @throws NamedFeatureCalculateException if any feature cannot be successfully calculated.
      */
     ResultsVector calculate(FeatureList<T> features) throws NamedFeatureCalculateException;
 
     /**
-     * Calculates a feature-calculation after resolving it against the main cache
+     * Calculates a feature-calculation after resolving it against the main cache.
      *
-     * @param <S> return-type of the calculation
-     * @param calculation the feature-calculation to resolve
-     * @return the result of the calculation
-     * @throws FeatureCalculationException
+     * @param <S> return-type of the calculation.
+     * @param calculation the feature-calculation to resolve.
+     * @return the result of the calculation.
+     * @throws FeatureCalculationException if a feature cannot be successfully calculated.
      */
     <S> S calculate(FeatureCalculation<S, T> calculation) throws FeatureCalculationException;
 
     /**
-     * Calculates a resolved Feature-calculation
+     * Calculates a resolved Feature-calculation.
      *
-     * @param <S> return-type of the calculation
-     * @param calculation the feature-calculation to resolve
-     * @return the result of the calculation
-     * @throws FeatureCalculationException
+     * @param <S> return-type of the calculation.
+     * @param calculation the feature-calculation to resolve.
+     * @return the result of the calculation.
+     * @throws FeatureCalculationException if a feature cannot be successfully calculated.
      */
     <S> S calculate(ResolvedCalculation<S, T> calculation) throws FeatureCalculationException;
 
@@ -89,7 +95,7 @@ public interface SessionInput<T extends FeatureInput> {
     CalculationResolver<T> resolver();
 
     /**
-     * Performs calculations not on the main cache, but on a child cache
+     * Performs calculations not on the main cache, but on a child cache.
      *
      * @return the calculator.
      */
@@ -102,5 +108,10 @@ public interface SessionInput<T extends FeatureInput> {
      */
     FeatureSymbolCalculator<T> bySymbol();
 
+    /**
+     * Get the {@link FeatureSessionCache} associated with this session.
+     *
+     * @return the associated cache.
+     */
     public abstract FeatureSessionCache<T> getCache();
 }

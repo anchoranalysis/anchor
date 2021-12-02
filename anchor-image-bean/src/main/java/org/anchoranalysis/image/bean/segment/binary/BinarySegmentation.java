@@ -44,14 +44,14 @@ public abstract class BinarySegmentation extends SegmentationBean<BinarySegmenta
      * after the operation.
      *
      * @param voxels voxels to segment
-     * @param params parameters to guide the algorithm
+     * @param parameters parameters to guide the algorithm
      * @param objectMask if present, segmentation only occurs inside this object
      * @return voxels for a mask on the input-buffer (reused or newly created as deemed appropriate)
      * @throws SegmentationFailedException
      */
     public abstract BinaryVoxels<UnsignedByteBuffer> segment(
             VoxelsUntyped voxels,
-            BinarySegmentationParameters params,
+            BinarySegmentationParameters parameters,
             Optional<ObjectMask> objectMask)
             throws SegmentationFailedException;
 }

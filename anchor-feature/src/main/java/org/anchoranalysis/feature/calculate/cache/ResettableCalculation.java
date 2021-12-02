@@ -37,8 +37,8 @@ package org.anchoranalysis.feature.calculate.cache;
 public interface ResettableCalculation {
 
     /**
-     * Resets the cached-calculation, so the next call to doOperationWithParams() is guaranteed to
-     * calculation the operation, and store the value in the cache.
+     * Resets the cached-calculation, so the next call to doOperationWithParameters() is guaranteed
+     * to calculation the operation, and store the value in the cache.
      */
     abstract void invalidate();
 }

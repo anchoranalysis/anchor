@@ -64,7 +64,7 @@ public class FeatureOutputMetadata {
         return createMetadata(
                 outputNames.getCsvFeaturesNonAggregated(),
                 labelHeaders.allHeaders(),
-                featureNamesNonAggregate.shallowCopy());
+                featureNamesNonAggregate.duplicateShallow());
     }
 
     /**
@@ -82,7 +82,7 @@ public class FeatureOutputMetadata {
                                 createMetadata(
                                         outputName,
                                         labelHeaders.getGroupHeaders(),
-                                        featuresAggregate.createFeatureNames()));
+                                        featuresAggregate.featureNames()));
     }
 
     private static FeatureCSVMetadata createMetadata(

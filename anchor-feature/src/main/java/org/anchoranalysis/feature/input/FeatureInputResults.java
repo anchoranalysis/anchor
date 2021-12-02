@@ -31,9 +31,21 @@ import lombok.Value;
 import org.anchoranalysis.feature.name.FeatureNameMapToIndex;
 import org.anchoranalysis.feature.results.ResultsVectorList;
 
+/**
+ * A {@link FeatureInput} with the stored results from a prior feature-calculation.
+ *
+ * @author Owen Feehan
+ */
 @Value
 @EqualsAndHashCode(callSuper = false)
 public class FeatureInputResults implements FeatureInput {
+
+    /** The results of a prior feature-calculation, corresponding to a list of features. */
     ResultsVectorList results;
+
+    /**
+     * A mapping from the name of the feature that produced a result, to its index position in
+     * {@code results}.
+     */
     FeatureNameMapToIndex featureNameIndex;
 }
