@@ -27,6 +27,7 @@
 package org.anchoranalysis.feature.calculate.cache;
 
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**

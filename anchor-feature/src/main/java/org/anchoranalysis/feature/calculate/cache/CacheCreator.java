@@ -43,5 +43,6 @@ public interface CacheCreator {
      * @param inputType the class corresponding to {@code <T>}
      * @return a newly created instantiation of {@link FeatureCalculationCache}.
      */
-    <T extends FeatureInput> FeatureCalculationCache<T> create(Class<? extends FeatureInput> inputType);
+    <T extends FeatureInput> FeatureCalculationCache<T> create(
+            Class<? extends FeatureInput> inputType);
 }

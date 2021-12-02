@@ -43,7 +43,7 @@ public class WithPriority<T> implements Comparable<WithPriority<T>> {
 
     /** The element to assign priority to. */
     private T element;
-    
+
     /** Whether the element is associated with a GPU, in which case, it is given priority. */
     private boolean gpu;
 

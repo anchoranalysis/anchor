@@ -27,11 +27,11 @@
 package org.anchoranalysis.feature.calculate.cache;
 
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.FeatureCalculationMap;
+import org.anchoranalysis.feature.calculate.part.CalculationPartMap;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
- * A {@link FeatureCalculationMap} that has been resolved against a cache.
+ * A {@link CalculationPartMap} that has been resolved against a cache.
  *
  * @author Owen Feehan
  * @param <S> result-type
@@ -40,14 +40,14 @@ import org.anchoranalysis.feature.input.FeatureInput;
  */
 public class ResolvedCalculationMap<S, T extends FeatureInput, U> {
 
-    private FeatureCalculationMap<S, T, U, FeatureCalculationException> map;
+    private CalculationPartMap<S, T, U, FeatureCalculationException> map;
 
     /**
      * Creates with a map.
      *
      * @param map the calculation map that is now considered resolved.
      */
-    public ResolvedCalculationMap(FeatureCalculationMap<S, T, U, FeatureCalculationException> map) {
+    public ResolvedCalculationMap(CalculationPartMap<S, T, U, FeatureCalculationException> map) {
         this.map = map;
     }
 

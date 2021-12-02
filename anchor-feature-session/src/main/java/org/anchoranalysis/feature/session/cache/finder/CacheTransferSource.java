@@ -31,8 +31,8 @@ import java.util.Set;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.cache.LRUCache;
 import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.feature.calculate.cache.ChildCacheName;
-import org.anchoranalysis.feature.calculate.cache.FeatureCalculationInput;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
@@ -51,7 +51,8 @@ public class CacheTransferSource<T extends FeatureInput> {
         return specificChildren.contains(name);
     }
 
-    public Optional<FeatureCalculationInput<T>> getInputIfPresent(T input) throws OperationFailedException {
+    public Optional<FeatureCalculationInput<T>> getInputIfPresent(T input)
+            throws OperationFailedException {
         Optional<LRUCache<T, FeatureCalculationInput<T>>> cache = cacheToSearch.get();
         return cache.flatMap(cacheInternal -> cacheInternal.getIfPresent(input));
     }

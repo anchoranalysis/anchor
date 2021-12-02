@@ -28,7 +28,8 @@ package org.anchoranalysis.feature.calculate.cache;
 
 import java.util.Set;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.feature.calculate.FeatureInitialization;
+import org.anchoranalysis.feature.calculate.FeatureCalculator;
+import org.anchoranalysis.feature.initialization.FeatureInitialization;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
@@ -42,9 +43,9 @@ import org.anchoranalysis.feature.input.FeatureInput;
  * <p>This class represents one such bunch of calculations. Different implementations provide
  * different strategies.
  *
- * <p>Each calculation-cache may contain "child" caches for particular string identifiers. This provides
- * a hierarchy of caches and sub-caches as many features change the underlying objects that are
- * being calculated, and need separate space in the cache.
+ * <p>Each calculation-cache may contain "child" caches for particular string identifiers. This
+ * provides a hierarchy of caches and sub-caches as many features change the underlying objects that
+ * are being calculated, and need separate space in the cache.
  *
  * <p>A call to {{@link #invalidate()} removes any existing caching (also in the children) and
  * guarantees the next calculation will be fresh/

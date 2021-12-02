@@ -54,7 +54,7 @@ public class ReduceObjectsGraph {
 
     /**
      * Create with a list of elements.
-     * 
+     *
      * @param elements the elements.
      */
     public ReduceObjectsGraph(List<LabelledWithConfidence<ObjectMask>> elements) {

@@ -28,7 +28,7 @@ package org.anchoranalysis.mpp.feature.bean.mark.collection;
 
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.cache.FeatureCalculationInput;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 public abstract class FeatureMarkCollection extends Feature<FeatureInputMarkCollection> {

@@ -24,7 +24,7 @@
  * #L%
  */
 /**
- * Reusable implementations of {@link org.anchoranalysis.feature.calculate.FeatureCalculation}
+ * Reusable implementations of {@link org.anchoranalysis.feature.calculate.part.CalculationPart}
  * related to images.
  */
 package org.anchoranalysis.image.feature.calculation;

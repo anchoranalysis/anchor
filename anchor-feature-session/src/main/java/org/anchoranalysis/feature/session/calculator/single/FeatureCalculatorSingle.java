@@ -27,11 +27,13 @@
 package org.anchoranalysis.feature.session.calculator.single;
 
 import org.anchoranalysis.core.log.error.ErrorReporter;
+import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculator;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
- * Calculates results for <i>a single feature</i> for a given input.
+ * Like a {@link FeatureCalculator} but is permanently associated with a single {@link Feature}.
  *
  * @author Owen Feehan
  * @param <T> feature input-type

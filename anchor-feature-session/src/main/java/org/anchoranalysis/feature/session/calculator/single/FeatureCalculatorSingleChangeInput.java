@@ -31,9 +31,10 @@ import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.log.error.ErrorReporter;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
+import org.anchoranalysis.feature.session.SequentialSession;
 
 /**
- * Likes a SequentialSession but automatically changes parameters before calculation
+ * Like a {@link SequentialSession} but automatically changes parameters before calculation.
  *
  * @author Owen Feehan
  * @param <T> feature-input

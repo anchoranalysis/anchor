@@ -24,7 +24,7 @@
  * #L%
  */
 /**
- * Creates a {@link org.anchoranalysis.feature.calculate.cache.FeatureCalculationCache} to use during
- * feature-calculations.
+ * Creates a {@link org.anchoranalysis.feature.calculate.cache.FeatureCalculationCache} to use
+ * during feature-calculations.
  */
 package org.anchoranalysis.feature.session.cache;

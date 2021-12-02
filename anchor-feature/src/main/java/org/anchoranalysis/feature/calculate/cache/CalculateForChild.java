@@ -28,8 +28,9 @@ package org.anchoranalysis.feature.calculate.cache;
 
 import java.util.function.Function;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.calculate.FeatureCalculation;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.part.CalculationPart;
+import org.anchoranalysis.feature.calculate.part.CalculationPartResolver;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
@@ -56,7 +57,7 @@ public interface CalculateForChild<T extends FeatureInput> {
 
     /**
      * Calculates a feature in a child-cache using a new input created from a {@link
-     * FeatureCalculation}
+     * CalculationPart}
      *
      * @param <S> input-type for feature to calculate
      * @param feature feature to calculate with
@@ -66,11 +67,11 @@ public interface CalculateForChild<T extends FeatureInput> {
      * @throws FeatureCalculationException
      */
     <S extends FeatureInput> double calculate(
-            Feature<S> feature, FeatureCalculation<S, T> calculation, ChildCacheName childCacheName)
+            Feature<S> feature, CalculationPart<S, T> calculation, ChildCacheName childCacheName)
             throws FeatureCalculationException;
 
     /**
-     * Calculates a {@link FeatureCalculation} in a child-cache
+     * Calculates a {@link CalculationPart} in a child-cache
      *
      * @param <S> input-type for feature to calculate
      * @param <U> return-type of Feature-Calculation
@@ -83,6 +84,6 @@ public interface CalculateForChild<T extends FeatureInput> {
     <S extends FeatureInput, U> U calculate(
             ChildCacheName childCacheName,
             S input,
-            Function<CalculationResolver<S>, ResolvedCalculation<U, S>> funcResolve)
+            Function<CalculationPartResolver<S>, ResolvedCalculation<U, S>> funcResolve)
             throws FeatureCalculationException;
 }

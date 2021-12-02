@@ -36,7 +36,7 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
 import org.anchoranalysis.core.identifier.provider.store.SharedObjects;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.feature.shared.FeaturesInitialization;
+import org.anchoranalysis.feature.initialization.FeatureRelatedInitialization;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.bean.nonbean.init.PopulateStoreFromDefine;
 import org.anchoranalysis.mpp.bean.bound.MarkBounds;
@@ -82,7 +82,7 @@ public class MarksInitialization implements BeanInitialization {
         markPairs = sharedObjects.getOrCreate(RandomCollection.class);
     }
 
-    public FeaturesInitialization feature() {
+    public FeatureRelatedInitialization feature() {
         return image.featuresInitialization();
     }
 

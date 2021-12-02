@@ -33,8 +33,8 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.feature.calculate.cache.ChildCacheName;
-import org.anchoranalysis.feature.calculate.cache.FeatureCalculationInput;
 import org.anchoranalysis.image.feature.calculation.CalculateInputFromPair;
 import org.anchoranalysis.image.feature.calculation.CalculateInputFromPair.Extract;
 import org.anchoranalysis.image.feature.input.FeatureInputPairObjects;
@@ -77,7 +77,9 @@ public abstract class FeatureDeriveFromPair extends FeaturePairObjects {
     }
 
     private double featureValFrom(
-            FeatureCalculationInput<FeatureInputPairObjects> input, Extract extract, ChildCacheName cacheName)
+            FeatureCalculationInput<FeatureInputPairObjects> input,
+            Extract extract,
+            ChildCacheName cacheName)
             throws FeatureCalculationException {
 
         return input.forChild().calculate(item, new CalculateInputFromPair(extract), cacheName);

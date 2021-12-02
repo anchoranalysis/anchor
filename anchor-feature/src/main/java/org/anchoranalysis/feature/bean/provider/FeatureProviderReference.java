@@ -33,8 +33,8 @@ import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.initialization.FeatureRelatedInitialization;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.feature.shared.FeaturesInitialization;
 
 /**
  * Provides an existing {@link Feature} identified by its name and optionally a feature-list in
@@ -67,7 +67,7 @@ public class FeatureProviderReference extends FeatureProvider<FeatureInput> {
         }
     }
 
-    private Feature<FeatureInput> createFeature(FeaturesInitialization initialization)
+    private Feature<FeatureInput> createFeature(FeatureRelatedInitialization initialization)
             throws ProvisionFailedException {
         if (initialization.getSharedFeatures() == null) {
             throw new ProvisionFailedException("shared-features are not defined.");

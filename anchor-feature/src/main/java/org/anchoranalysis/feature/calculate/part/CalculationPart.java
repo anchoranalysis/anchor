@@ -24,35 +24,41 @@
  * #L%
  */
 
-package org.anchoranalysis.feature.calculate;
+package org.anchoranalysis.feature.calculate.part;
 
 import org.anchoranalysis.core.cache.CachedSupplier;
 import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
+import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.cache.ResettableCalculation;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
- * Caches the result of a feature, until {@link #invalidate()} is called.
+ * A sub-part of the calculation of a feature, that can be cached, and reused by other features.
  *
- * <p>Implements an equivalence-relation via {@code equals()} that checks if two
- * feature-calculations are identical. This allows the user to search through a collection of {@link
- * FeatureCalculation} to find one with identical parameters and re-use it.
+ * <p>As many features repeat the same calculation partially to determine a result, this provides a
+ * mechanism to avoid repeating the same calculation, internally within a {@link Feature}.
  *
- * <p><b>Important note:</b> It is therefore important to make sure every class has a well-defined
- * {@code equals()} and {@code hashCode()}.
+ * <p>The result value is cached, until {@link #invalidate()} is called.
+ *
+ * <p>All sub-classes must implements an equivalence-relation via {@code equals()} that checks if
+ * two feature-calculations are identical. This allows the user to search through a collection of
+ * {@link CalculationPart}s to find one with identical parameters and re-use it.
+ *
+ * <p><b>Important note:</b> It is therefore absolutely necessary to make sure every class has a
+ * well-defined {@code equals()} and {@code hashCode()} that covers all relevant parameterization.
  *
  * @author Owen Feehan
  * @param <S> result-type of the calculation
  * @param <T> feature input-type
  */
-public abstract class FeatureCalculation<S, T extends FeatureInput>
-        implements ResettableCalculation {
+public abstract class CalculationPart<S, T extends FeatureInput> implements ResettableCalculation {
 
     private T input;
 
-    // We delegate the actualy execution of the cache
+    // We delegate the actually execution of the cache
     private CachedSupplier<S, FeatureCalculationException> delegate =
-            CachedSupplier.cache(() -> FeatureCalculation.this.execute(input));
+            CachedSupplier.cache(() -> CalculationPart.this.execute(input));
 
     /**
      * Executes the operation and returns a result, either by doing the calculation, or retrieving a

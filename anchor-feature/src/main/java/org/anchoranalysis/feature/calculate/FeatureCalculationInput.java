@@ -24,18 +24,22 @@
  * #L%
  */
 
-package org.anchoranalysis.feature.calculate.cache;
+package org.anchoranalysis.feature.calculate;
 
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.feature.calculate.FeatureCalculation;
-import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
+import org.anchoranalysis.feature.calculate.cache.CalculateForChild;
+import org.anchoranalysis.feature.calculate.cache.FeatureCalculationCache;
+import org.anchoranalysis.feature.calculate.cache.FeatureSymbolCalculator;
+import org.anchoranalysis.feature.calculate.cache.ResolvedCalculation;
+import org.anchoranalysis.feature.calculate.part.CalculationPart;
+import org.anchoranalysis.feature.calculate.part.CalculationPartResolver;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.results.ResultsVector;
 
 /**
- * Gives a {@link FeatureInput} the necessary context for feature-calculation, including associating it with a cache.
+ * Gives a {@link FeatureInput} the necessary context for feature-calculation, including associating
+ * it with a cache.
  *
  * @param <T> underlying feature-input type.
  * @author Owen Feehan
@@ -75,7 +79,7 @@ public interface FeatureCalculationInput<T extends FeatureInput> {
      * @return the result of the calculation.
      * @throws FeatureCalculationException if a feature cannot be successfully calculated.
      */
-    <S> S calculate(FeatureCalculation<S, T> calculation) throws FeatureCalculationException;
+    <S> S calculate(CalculationPart<S, T> calculation) throws FeatureCalculationException;
 
     /**
      * Calculates a resolved Feature-calculation.
@@ -92,7 +96,7 @@ public interface FeatureCalculationInput<T extends FeatureInput> {
      *
      * @return the resolver.
      */
-    CalculationResolver<T> resolver();
+    CalculationPartResolver<T> resolver();
 
     /**
      * Performs calculations not on the main cache, but on a child cache.

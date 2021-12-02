@@ -30,13 +30,13 @@ import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.calculate.FeatureCalculation;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.FeatureCalculationMap;
-import org.anchoranalysis.feature.calculate.cache.FeatureCalculator;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
+import org.anchoranalysis.feature.calculate.FeatureCalculator;
 import org.anchoranalysis.feature.calculate.cache.ResolvedCalculation;
 import org.anchoranalysis.feature.calculate.cache.ResolvedCalculationMap;
-import org.anchoranalysis.feature.calculate.cache.FeatureCalculationInput;
+import org.anchoranalysis.feature.calculate.part.CalculationPart;
+import org.anchoranalysis.feature.calculate.part.CalculationPartMap;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.shared.SharedFeaturesSubset;
 
@@ -47,8 +47,8 @@ class ResettableCalculator<T extends FeatureInput> implements FeatureCalculator<
     private final SharedFeaturesSubset<T> sharedFeatures;
     // END REQUIRED ARGUMENTS
 
-    private ResettableSet<FeatureCalculation<?, T>> setCalculation = new ResettableSet<>(false);
-    private ResettableSet<FeatureCalculationMap<?, T, ?, FeatureCalculationException>>
+    private ResettableSet<CalculationPart<?, T>> setCalculation = new ResettableSet<>(false);
+    private ResettableSet<CalculationPartMap<?, T, ?, FeatureCalculationException>>
             setCalculationMap = new ResettableSet<>(false);
 
     private Logger logger;
@@ -77,17 +77,17 @@ class ResettableCalculator<T extends FeatureInput> implements FeatureCalculator<
 
     @SuppressWarnings("unchecked")
     @Override
-    public <U> ResolvedCalculation<U, T> search(FeatureCalculation<U, T> calculation) {
+    public <U> ResolvedCalculation<U, T> search(CalculationPart<U, T> calculation) {
         return new ResolvedCalculation<>(
-                (FeatureCalculation<U, T>) setCalculation.findOrAdd(calculation, null));
+                (CalculationPart<U, T>) setCalculation.findOrAdd(calculation, null));
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public <S, U> ResolvedCalculationMap<S, T, U> search(
-            FeatureCalculationMap<S, T, U, FeatureCalculationException> calculation) {
+            CalculationPartMap<S, T, U, FeatureCalculationException> calculation) {
         return new ResolvedCalculationMap<>(
-                (FeatureCalculationMap<S, T, U, FeatureCalculationException>)
+                (CalculationPartMap<S, T, U, FeatureCalculationException>)
                         setCalculationMap.findOrAdd(calculation, null));
     }
 

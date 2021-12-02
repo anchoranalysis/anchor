@@ -29,13 +29,13 @@ package org.anchoranalysis.feature.session.cache;
 import java.util.Collection;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.calculate.FeatureCalculation;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.FeatureCalculationMap;
-import org.anchoranalysis.feature.calculate.cache.FeatureCalculator;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
+import org.anchoranalysis.feature.calculate.FeatureCalculator;
 import org.anchoranalysis.feature.calculate.cache.ResolvedCalculation;
 import org.anchoranalysis.feature.calculate.cache.ResolvedCalculationMap;
-import org.anchoranalysis.feature.calculate.cache.FeatureCalculationInput;
+import org.anchoranalysis.feature.calculate.part.CalculationPart;
+import org.anchoranalysis.feature.calculate.part.CalculationPartMap;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 @AllArgsConstructor
@@ -63,13 +63,13 @@ class HorizontalFeatureCalculator<T extends FeatureInput> implements FeatureCalc
     }
 
     @Override
-    public <U> ResolvedCalculation<U, T> search(FeatureCalculation<U, T> cc) {
+    public <U> ResolvedCalculation<U, T> search(CalculationPart<U, T> cc) {
         return delegate.search(cc);
     }
 
     @Override
     public <S, U> ResolvedCalculationMap<S, T, U> search(
-            FeatureCalculationMap<S, T, U, FeatureCalculationException> cc) {
+            CalculationPartMap<S, T, U, FeatureCalculationException> cc) {
         return delegate.search(cc);
     }
 

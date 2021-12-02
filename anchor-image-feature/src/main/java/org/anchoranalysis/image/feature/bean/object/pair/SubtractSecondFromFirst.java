@@ -27,7 +27,7 @@
 package org.anchoranalysis.image.feature.bean.object.pair;
 
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.cache.FeatureCalculationInput;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.image.feature.input.FeatureInputPairObjects;
 
 /**

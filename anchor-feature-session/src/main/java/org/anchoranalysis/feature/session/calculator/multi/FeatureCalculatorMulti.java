@@ -27,25 +27,36 @@
 package org.anchoranalysis.feature.session.calculator.multi;
 
 import org.anchoranalysis.core.log.error.ErrorReporter;
+import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
+import org.anchoranalysis.feature.calculate.FeatureCalculator;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.results.ResultsVector;
 
 /**
- * Calculates results for <i>one or more features</i> for a given input.
+ * Like a {@link FeatureCalculator} but is permanently associated with <i>one or more</i> {@link
+ * Feature}s.
  *
  * @author Owen Feehan
  * @param <T> feature input-type
  */
 public interface FeatureCalculatorMulti<T extends FeatureInput> {
 
-    /** Performs one calculation throwing an exception if something goes wrong */
+    /**
+     * Calculate the results of the features with a particular input.
+     *
+     * @param input the input to calculate.
+     * @return the results of the calculation.
+     * @throws NamedFeatureCalculateException if any feature cannot be successfully calculated.
+     */
     ResultsVector calculate(T input) throws NamedFeatureCalculateException;
 
     /**
-     * Performs one calculation on a sub-set of the feature list throwing an exception if something
-     * goes wrong
+     * Calculates the results of a subset of the features with a particular input.
+     *
+     * @return the results of the calculation.
+     * @throws NamedFeatureCalculateException if any feature cannot be successfully calculated.
      */
     ResultsVector calculate(T input, FeatureList<T> featuresSubset)
             throws NamedFeatureCalculateException;
@@ -58,10 +69,10 @@ public interface FeatureCalculatorMulti<T extends FeatureInput> {
 
     /**
      * Performs one calculation, either calling {@link #calculate} or {@link
-     * #calculateSuppressErrors} depending on a flag
+     * #calculateSuppressErrors} depending on a flag.
      *
      * @throws NamedFeatureCalculateException if suppress errors is false and an error occurs during
-     *     calculation
+     *     calculation.
      */
     default ResultsVector calculate(T input, ErrorReporter errorReporter, boolean suppressErrors)
             throws NamedFeatureCalculateException {
@@ -73,8 +84,8 @@ public interface FeatureCalculatorMulti<T extends FeatureInput> {
     }
 
     /**
-     * The number of features that is calculated on each call to calc(), and therefore the size of
-     * the ResultsVector returned
+     * The number of features that is calculated on each call to {@link #calculate}, and therefore
+     * the size of the returned {@link ResultsVector}.
      */
     int sizeFeatures();
 }

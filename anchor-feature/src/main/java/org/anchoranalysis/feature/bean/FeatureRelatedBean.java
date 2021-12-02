@@ -33,27 +33,31 @@ import org.anchoranalysis.bean.initializable.property.AssignerMatchClass;
 import org.anchoranalysis.bean.initializable.property.BeanInitializer;
 import org.anchoranalysis.bean.initializable.property.ExtractDerivedParameter;
 import org.anchoranalysis.bean.shared.dictionary.DictionaryInitialization;
-import org.anchoranalysis.feature.shared.FeaturesInitialization;
+import org.anchoranalysis.feature.initialization.FeatureRelatedInitialization;
 
 /**
  * Beans-related to {@link Feature}s, and which require initialization with {@link
- * FeaturesInitialization}.
+ * FeatureRelatedInitialization}.
  *
  * @author Owen Feehan
  * @param <T> bean-type
  */
-public abstract class FeatureRelatedBean<T> extends InitializableBean<T, FeaturesInitialization> {
+public abstract class FeatureRelatedBean<T>
+        extends InitializableBean<T, FeatureRelatedInitialization> {
 
     /** Create with default initializers. */
     protected FeatureRelatedBean() {
         super(
-                new BeanInitializer<>(FeaturesInitialization.class, paramExtracters()),
-                new AssignerMatchClass<FeaturesInitialization>(FeaturesInitialization.class));
+                new BeanInitializer<>(FeatureRelatedInitialization.class, paramExtracters()),
+                new AssignerMatchClass<FeatureRelatedInitialization>(
+                        FeatureRelatedInitialization.class));
     }
 
-    private static List<ExtractDerivedParameter<FeaturesInitialization, ?>> paramExtracters() {
+    private static List<ExtractDerivedParameter<FeatureRelatedInitialization, ?>>
+            paramExtracters() {
         return Arrays.asList(
                 new ExtractDerivedParameter<>(
-                        DictionaryInitialization.class, FeaturesInitialization::getDictionary));
+                        DictionaryInitialization.class,
+                        FeatureRelatedInitialization::getDictionary));
     }
 }

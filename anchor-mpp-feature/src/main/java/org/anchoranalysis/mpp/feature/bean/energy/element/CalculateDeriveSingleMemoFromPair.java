@@ -28,14 +28,14 @@ package org.anchoranalysis.mpp.feature.bean.energy.element;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
-import org.anchoranalysis.feature.calculate.FeatureCalculation;
+import org.anchoranalysis.feature.calculate.part.CalculationPart;
 import org.anchoranalysis.mpp.feature.input.FeatureInputPairMemo;
 import org.anchoranalysis.mpp.feature.input.FeatureInputSingleMemo;
 
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 public class CalculateDeriveSingleMemoFromPair
-        extends FeatureCalculation<FeatureInputSingleMemo, FeatureInputPairMemo> {
+        extends CalculationPart<FeatureInputSingleMemo, FeatureInputPairMemo> {
 
     /** Iff true, first object is used, otherwise the second */
     private final boolean first;

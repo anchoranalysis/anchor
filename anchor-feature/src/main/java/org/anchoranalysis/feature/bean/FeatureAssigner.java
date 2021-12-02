@@ -29,7 +29,7 @@ package org.anchoranalysis.feature.bean;
 import org.anchoranalysis.bean.initializable.property.InitializationParameterAssigner;
 import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.feature.calculate.FeatureInitialization;
+import org.anchoranalysis.feature.initialization.FeatureInitialization;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 class FeatureAssigner<T extends FeatureInput> implements InitializationParameterAssigner {

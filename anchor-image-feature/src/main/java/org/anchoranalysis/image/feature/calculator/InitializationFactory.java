@@ -31,8 +31,8 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.identifier.provider.store.SharedObjects;
 import org.anchoranalysis.core.value.Dictionary;
-import org.anchoranalysis.feature.calculate.FeatureInitialization;
 import org.anchoranalysis.feature.energy.EnergyStack;
+import org.anchoranalysis.feature.initialization.FeatureInitialization;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class InitializationFactory {

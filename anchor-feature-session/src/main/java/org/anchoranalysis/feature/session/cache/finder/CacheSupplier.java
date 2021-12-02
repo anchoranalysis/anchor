@@ -28,7 +28,7 @@ package org.anchoranalysis.feature.session.cache.finder;
 
 import java.util.Optional;
 import org.anchoranalysis.core.cache.LRUCache;
-import org.anchoranalysis.feature.calculate.cache.FeatureCalculationInput;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 @FunctionalInterface

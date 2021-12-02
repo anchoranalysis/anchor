@@ -38,8 +38,8 @@ import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListFactory;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.FeatureInitialization;
-import org.anchoranalysis.feature.calculate.cache.FeatureCalculationInput;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
+import org.anchoranalysis.feature.initialization.FeatureInitialization;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
@@ -230,7 +230,8 @@ public abstract class Feature<T extends FeatureInput>
      * @return the result of the calculation.
      * @throws FeatureCalculationException if the calculation cannot successfully complete.
      */
-    protected abstract double calculate(FeatureCalculationInput<T> input) throws FeatureCalculationException;
+    protected abstract double calculate(FeatureCalculationInput<T> input)
+            throws FeatureCalculationException;
 
     /**
      * Copies fields in this (base) class to {@code target}.

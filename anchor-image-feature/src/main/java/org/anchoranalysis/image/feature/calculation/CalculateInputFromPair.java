@@ -28,7 +28,7 @@ package org.anchoranalysis.image.feature.calculation;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
-import org.anchoranalysis.feature.calculate.FeatureCalculation;
+import org.anchoranalysis.feature.calculate.part.CalculationPart;
 import org.anchoranalysis.image.feature.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
@@ -49,7 +49,7 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 public class CalculateInputFromPair
-        extends FeatureCalculation<FeatureInputSingleObject, FeatureInputPairObjects> {
+        extends CalculationPart<FeatureInputSingleObject, FeatureInputPairObjects> {
 
     public enum Extract {
         FIRST,
