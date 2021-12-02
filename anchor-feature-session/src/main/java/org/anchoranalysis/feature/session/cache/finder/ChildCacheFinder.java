@@ -31,7 +31,7 @@ import java.util.Set;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.cache.CacheCreator;
 import org.anchoranalysis.feature.calculate.cache.ChildCacheName;
-import org.anchoranalysis.feature.calculate.cache.FeatureSessionCache;
+import org.anchoranalysis.feature.calculate.cache.FeatureCalculationCache;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
@@ -53,8 +53,8 @@ public interface ChildCacheFinder {
      * @param input input to be used for calculations on the child-cache
      * @return an existing or newly created child-cache depending on the strategy.
      */
-    <V extends FeatureInput> FeatureSessionCache<V> childCacheFor(
-            FeatureSessionCache<?> parentCache,
+    <V extends FeatureInput> FeatureCalculationCache<V> childCacheFor(
+            FeatureCalculationCache<?> parentCache,
             CacheCreator factory,
             ChildCacheName childCacheName,
             V input)

@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.feature.calculate;
+package org.anchoranalysis.feature.calculate.part;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,8 +32,8 @@ import org.anchoranalysis.feature.calculate.cache.ResettableCalculation;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
- * Similar to a {@link FeatureCalculation} but stores several evaluation results, differentiated by
- * a key.
+ * Similar to a {@link CalculationPart} but stores several evaluation results, differentiated by a
+ * key.
  *
  * @author Owen Feehan
  * @param <S> result-type
@@ -41,7 +41,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
  * @param <U> key-type
  * @param <E> an exception thrown if something goes wrong during the calculation
  */
-public abstract class FeatureCalculationMap<S, T extends FeatureInput, U, E extends Exception>
+public abstract class CalculationPartMap<S, T extends FeatureInput, U, E extends Exception>
         implements ResettableCalculation {
 
     /** Caches results for different keys. */
@@ -52,7 +52,7 @@ public abstract class FeatureCalculationMap<S, T extends FeatureInput, U, E exte
      *
      * @param cacheSize cache-size to use for the keys.
      */
-    protected FeatureCalculationMap(int cacheSize) {
+    protected CalculationPartMap(int cacheSize) {
         cache = new HashMap<>();
     }
 

@@ -31,8 +31,8 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.operator.FeatureUnary;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.feature.calculate.cache.ChildCacheName;
-import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.mpp.feature.input.FeatureInputPairMemo;
 import org.anchoranalysis.mpp.feature.input.FeatureInputSingleMemo;
@@ -55,7 +55,7 @@ public class AsSingle extends FeatureUnary<FeatureInputPairMemo, FeatureInputSin
             new ChildCacheName(AsSingle.class, "second");
 
     @Override
-    public double calculate(SessionInput<FeatureInputPairMemo> input)
+    public double calculate(FeatureCalculationInput<FeatureInputPairMemo> input)
             throws FeatureCalculationException {
         return input.forChild()
                 .calculate(

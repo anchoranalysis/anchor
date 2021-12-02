@@ -34,7 +34,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.operator.FeatureUnaryGeneric;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.cache.SessionInput;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.feature.input.FeatureInputWithResolution;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 
@@ -61,7 +61,8 @@ public abstract class WithResolutionBase<T extends FeatureInputWithResolution>
     }
 
     @Override
-    public final double calculate(SessionInput<T> input) throws FeatureCalculationException {
+    public final double calculate(FeatureCalculationInput<T> input)
+            throws FeatureCalculationException {
 
         double value = input.calculate(getItem());
 

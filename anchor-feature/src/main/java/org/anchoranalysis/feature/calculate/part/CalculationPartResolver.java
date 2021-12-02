@@ -24,15 +24,15 @@
  * #L%
  */
 
-package org.anchoranalysis.feature.calculate.cache;
+package org.anchoranalysis.feature.calculate.part;
 
-import org.anchoranalysis.feature.calculate.FeatureCalculation;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.FeatureCalculationMap;
+import org.anchoranalysis.feature.calculate.cache.part.ResolvedPart;
+import org.anchoranalysis.feature.calculate.cache.part.ResolvedPartMap;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
- * Searches a cache to reuses a {@link FeatureCalculation} if it already exists.
+ * Searches a cache to reuses a {@link CalculationPart} if it already exists.
  *
  * <p>The purpose is to avoid repeating calculations that may be shared by more than one feature, or
  * more than one parameterization of a feature
@@ -40,22 +40,22 @@ import org.anchoranalysis.feature.input.FeatureInput;
  * @author Owen Feehan
  * @param <T> feature input-type that also provides an input to the calculation
  */
-public interface CalculationResolver<T extends FeatureInput> {
+public interface CalculationPartResolver<T extends FeatureInput> {
 
     /**
-     * Searches for an equivalent calculation to {@code calculation}
+     * Searches for an equivalent calculation to {@code calculation}.
      *
-     * @param calculation the feature-calculation to find an equivalent for
-     * @return the corresponding resolved-calculation
+     * @param calculation the feature-calculation to find an equivalent for.
+     * @return the corresponding resolved-calculation.
      */
-    <S> ResolvedCalculation<S, T> search(FeatureCalculation<S, T> calculation);
+    <S> ResolvedPart<S, T> search(CalculationPart<S, T> calculation);
 
     /**
-     * Searches for an equivalent calculation to {@code calculation}
+     * Searches for an equivalent calculation to {@code calculation}.
      *
-     * @param calculation the {@link FeatureCalculationMap} to find an equivalent for
-     * @return the corresponding resolved-calculation
+     * @param calculation the {@link CalculationPartMap} to find an equivalent for.
+     * @return the corresponding resolved-calculation.
      */
-    <S, U> ResolvedCalculationMap<S, T, U> search(
-            FeatureCalculationMap<S, T, U, FeatureCalculationException> calculation);
+    <S, U> ResolvedPartMap<S, T, U> search(
+            CalculationPartMap<S, T, U, FeatureCalculationException> calculation);
 }

@@ -28,7 +28,7 @@ package org.anchoranalysis.feature.bean.results;
 
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.cache.SessionInput;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.input.FeatureInputResults;
 import org.anchoranalysis.feature.results.ResultsVectorList;
@@ -46,7 +46,7 @@ import org.anchoranalysis.feature.results.ResultsVectorList;
 public abstract class FeatureResults extends Feature<FeatureInputResults> {
 
     @Override
-    public double calculate(SessionInput<FeatureInputResults> input)
+    public double calculate(FeatureCalculationInput<FeatureInputResults> input)
             throws FeatureCalculationException {
         return calculate(input.get());
     }

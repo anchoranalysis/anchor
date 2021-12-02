@@ -40,10 +40,10 @@ import org.anchoranalysis.feature.bean.FeatureRelatedBean;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListFactory;
 import org.anchoranalysis.feature.bean.provider.FeatureProvider;
-import org.anchoranalysis.feature.calculate.FeatureInitialization;
+import org.anchoranalysis.feature.calculate.bound.FeatureCalculatorMulti;
+import org.anchoranalysis.feature.initialization.FeatureInitialization;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.session.FeatureSession;
-import org.anchoranalysis.feature.session.calculator.multi.FeatureCalculatorMulti;
 import org.anchoranalysis.image.feature.calculator.NamedFeatureCalculatorMulti;
 
 /**

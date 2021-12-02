@@ -24,51 +24,51 @@
  * #L%
  */
 
-package org.anchoranalysis.feature.session.calculator.single;
+package org.anchoranalysis.feature.calculate.bound;
 
+import java.util.function.Consumer;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.log.error.ErrorReporter;
 import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.results.ResultsVector;
-import org.anchoranalysis.feature.session.calculator.multi.FeatureCalculatorMulti;
 
+/**
+ * A {@link FeatureCalculatorMulti} but changes the input before calculation.
+ *
+ * @author Owen Feehan
+ * @param <T> feature-input-type
+ */
 @AllArgsConstructor
-class MultiFromSingle<T extends FeatureInput> implements FeatureCalculatorMulti<T> {
+public class FeatureCalculatorMultiChangeInput<T extends FeatureInput>
+        implements FeatureCalculatorMulti<T> {
 
-    private final FeatureCalculatorSingle<T> delegate;
+    /** Delegate that is called after an input is changed. */
+    private FeatureCalculatorMulti<T> calculator;
 
-    @Override
+    /** A function that is applied to change the input before being passed to the delegate. */
+    private Consumer<T> change;
+
     public ResultsVector calculate(T input) throws NamedFeatureCalculateException {
-        try {
-            return vectorFor(delegate.calculate(input));
-        } catch (FeatureCalculationException e) {
-            throw new NamedFeatureCalculateException(e);
-        }
+        change.accept(input);
+        return calculator.calculate(input);
     }
 
     @Override
     public ResultsVector calculate(T input, FeatureList<T> featuresSubset)
             throws NamedFeatureCalculateException {
-        throw new NamedFeatureCalculateException(
-                "The calculation on feature-subsets operation is not supported");
+        change.accept(input);
+        return calculator.calculate(input, featuresSubset);
     }
 
-    @Override
     public ResultsVector calculateSuppressErrors(T input, ErrorReporter errorReporter) {
-        return vectorFor(delegate.calculateSuppressErrors(input, errorReporter));
+        change.accept(input);
+        return calculator.calculateSuppressErrors(input, errorReporter);
     }
 
     @Override
     public int sizeFeatures() {
-        return 1;
-    }
-
-    private static ResultsVector vectorFor(double result) {
-        ResultsVector out = new ResultsVector(1);
-        out.set(0, result);
-        return out;
+        return calculator.sizeFeatures();
     }
 }

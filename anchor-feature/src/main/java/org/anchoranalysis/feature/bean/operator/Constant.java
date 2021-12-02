@@ -30,7 +30,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.calculate.cache.SessionInput;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
@@ -69,7 +69,7 @@ public class Constant<T extends FeatureInput> extends FeatureGeneric<T> {
     }
 
     @Override
-    public double calculate(SessionInput<T> input) {
+    public double calculate(FeatureCalculationInput<T> input) {
         return value;
     }
 

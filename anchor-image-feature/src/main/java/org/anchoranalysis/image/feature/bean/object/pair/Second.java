@@ -29,7 +29,7 @@ package org.anchoranalysis.image.feature.bean.object.pair;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.cache.SessionInput;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.image.feature.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 
@@ -46,7 +46,7 @@ public class Second extends FeatureDeriveFromPair {
     }
 
     @Override
-    public double calculate(SessionInput<FeatureInputPairObjects> input)
+    public double calculate(FeatureCalculationInput<FeatureInputPairObjects> input)
             throws FeatureCalculationException {
         return valueFromSecond(input);
     }

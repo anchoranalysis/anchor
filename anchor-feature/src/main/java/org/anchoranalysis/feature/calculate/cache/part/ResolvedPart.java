@@ -24,15 +24,15 @@
  * #L%
  */
 
-package org.anchoranalysis.feature.calculate.cache;
+package org.anchoranalysis.feature.calculate.cache.part;
 
 import lombok.AllArgsConstructor;
-import org.anchoranalysis.feature.calculate.FeatureCalculation;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.part.CalculationPart;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
- * Like a {@link FeatureCalculation} but has been resolved against a cache to reuse any existing
+ * Like a {@link CalculationPart} but has been resolved against a cache to reuse any existing
  * identical instance.
  *
  * @author Owen Feehan
@@ -40,10 +40,10 @@ import org.anchoranalysis.feature.input.FeatureInput;
  * @param <T> feature input-type
  */
 @AllArgsConstructor
-public class ResolvedCalculation<S, T extends FeatureInput> {
+public class ResolvedPart<S, T extends FeatureInput> {
 
     /** The cacheable-calculation that is now considered resolved */
-    private FeatureCalculation<S, T> calculation;
+    private CalculationPart<S, T> calculation;
 
     /**
      * Executes the operation and returns a result, either by doing the calculation, or retrieving a
@@ -62,8 +62,8 @@ public class ResolvedCalculation<S, T extends FeatureInput> {
     @SuppressWarnings("unchecked")
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof ResolvedCalculation) {
-            return ((ResolvedCalculation<S, T>) obj).calculation.equals(calculation);
+        if (obj instanceof ResolvedPart) {
+            return ((ResolvedPart<S, T>) obj).calculation.equals(calculation);
         } else {
             return false;
         }

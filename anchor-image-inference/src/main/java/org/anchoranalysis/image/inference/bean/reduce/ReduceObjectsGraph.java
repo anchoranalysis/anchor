@@ -44,7 +44,7 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
  *
  * @author Owen Feehan
  */
-class ReduceObjectsGraph {
+public class ReduceObjectsGraph {
 
     /** The priority queue that always gives priority to the highest-confidence object. */
     private final PriorityQueue<LabelledWithConfidence<ObjectMask>> queue;
@@ -52,6 +52,11 @@ class ReduceObjectsGraph {
     /** The graph with objects as vertices, and with an edge between any objects that intersect. */
     private final GraphWithoutPayload<LabelledWithConfidence<ObjectMask>> graph;
 
+    /**
+     * Create with a list of elements.
+     *
+     * @param elements the elements.
+     */
     public ReduceObjectsGraph(List<LabelledWithConfidence<ObjectMask>> elements) {
 
         /** Tracks which objects overlap with other objects, updated as merges/deletions occur. */

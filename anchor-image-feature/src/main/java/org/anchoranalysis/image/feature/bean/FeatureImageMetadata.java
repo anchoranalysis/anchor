@@ -27,7 +27,7 @@ package org.anchoranalysis.image.feature.bean;
 
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.cache.SessionInput;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.image.core.stack.ImageMetadata;
 import org.anchoranalysis.image.feature.input.FeatureInputImageMetadata;
@@ -36,7 +36,7 @@ import org.anchoranalysis.image.feature.input.FeatureInputImageMetadata;
 public abstract class FeatureImageMetadata extends Feature<FeatureInputImageMetadata> {
 
     @Override
-    public double calculate(SessionInput<FeatureInputImageMetadata> input)
+    public double calculate(FeatureCalculationInput<FeatureInputImageMetadata> input)
             throws FeatureCalculationException {
         return calculate(input.get().getMetadata());
     }

@@ -52,7 +52,7 @@ import org.anchoranalysis.core.identifier.name.NameValue;
 import org.anchoranalysis.core.identifier.name.SimpleNameValue;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.shared.FeaturesInitialization;
+import org.anchoranalysis.feature.initialization.FeatureRelatedInitialization;
 import org.anchoranalysis.image.core.stack.DisplayStack;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
@@ -115,8 +115,8 @@ public class MultipleComparer extends AnchorBean<MultipleComparer> {
             boolean debugMode)
             throws CreateException {
 
-        FeaturesInitialization initialization =
-                FeaturesInitialization.create(logger, modelDirectory);
+        FeatureRelatedInitialization initialization =
+                FeatureRelatedInitialization.create(logger, modelDirectory);
         try {
             featureEvaluator.initializeRecursive(initialization, logger);
         } catch (InitializeException e) {

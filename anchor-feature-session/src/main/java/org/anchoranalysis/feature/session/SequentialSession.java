@@ -35,12 +35,12 @@ import org.anchoranalysis.core.log.error.ErrorReporter;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListFactory;
-import org.anchoranalysis.feature.calculate.FeatureInitialization;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
-import org.anchoranalysis.feature.calculate.cache.SessionInput;
+import org.anchoranalysis.feature.calculate.bound.FeatureCalculatorMulti;
+import org.anchoranalysis.feature.initialization.FeatureInitialization;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.results.ResultsVector;
-import org.anchoranalysis.feature.session.calculator.multi.FeatureCalculatorMulti;
 import org.anchoranalysis.feature.session.replace.BoundReplaceStrategy;
 import org.anchoranalysis.feature.session.replace.ReplaceStrategy;
 import org.anchoranalysis.feature.session.replace.ReuseSingletonStrategy;
@@ -180,7 +180,7 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
             ResultsVector results, T input, ErrorReporter errorReporter) {
 
         // Create cacheable inputs, and record any errors for all features
-        SessionInput<T> sessionInput;
+        FeatureCalculationInput<T> sessionInput;
         try {
             sessionInput = replaceSession.createOrReuse(input);
         } catch (Exception e) {
@@ -213,7 +213,7 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
     private ResultsVector calculateCommonExceptionAsVector(T input)
             throws NamedFeatureCalculateException {
 
-        SessionInput<T> sessionInput;
+        FeatureCalculationInput<T> sessionInput;
         try {
             sessionInput = replaceSession.createOrReuse(input);
         } catch (CreateException e) {

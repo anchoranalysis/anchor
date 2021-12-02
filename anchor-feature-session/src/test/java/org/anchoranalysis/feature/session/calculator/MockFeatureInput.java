@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.feature.session.calculator.multi;
+package org.anchoranalysis.feature.session.calculator;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;

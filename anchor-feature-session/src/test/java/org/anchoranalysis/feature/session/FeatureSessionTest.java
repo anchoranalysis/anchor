@@ -27,8 +27,8 @@
 package org.anchoranalysis.feature.session;
 
 import org.anchoranalysis.core.exception.InitializeException;
-import org.anchoranalysis.feature.calculate.FeatureInitialization;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
+import org.anchoranalysis.feature.initialization.FeatureInitialization;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.input.FeatureInputNull;
 import org.anchoranalysis.feature.results.ResultsVector;

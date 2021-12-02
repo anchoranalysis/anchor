@@ -24,30 +24,30 @@
  * #L%
  */
 
-package org.anchoranalysis.feature.calculate.cache;
+package org.anchoranalysis.feature.calculate.cache.part;
 
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.FeatureCalculationMap;
+import org.anchoranalysis.feature.calculate.part.CalculationPartMap;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
- * A {@link FeatureCalculationMap} that has been resolved against a cache.
+ * A {@link CalculationPartMap} that has been resolved against a cache.
  *
  * @author Owen Feehan
  * @param <S> result-type
  * @param <T> feature input-type
  * @param <U> key-type
  */
-public class ResolvedCalculationMap<S, T extends FeatureInput, U> {
+public class ResolvedPartMap<S, T extends FeatureInput, U> {
 
-    private FeatureCalculationMap<S, T, U, FeatureCalculationException> map;
+    private CalculationPartMap<S, T, U, FeatureCalculationException> map;
 
     /**
      * Creates with a map.
      *
-     * @param map the calculation map that is now considered resolved.
+     * @param map the {@link CalculationPartMap} that is now considered resolved.
      */
-    public ResolvedCalculationMap(FeatureCalculationMap<S, T, U, FeatureCalculationException> map) {
+    public ResolvedPartMap(CalculationPartMap<S, T, U, FeatureCalculationException> map) {
         this.map = map;
     }
 
@@ -69,8 +69,8 @@ public class ResolvedCalculationMap<S, T extends FeatureInput, U> {
     @SuppressWarnings("unchecked")
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof ResolvedCalculationMap) {
-            return ((ResolvedCalculationMap<S, T, U>) obj).map.equals(map);
+        if (obj instanceof ResolvedPartMap) {
+            return ((ResolvedPartMap<S, T, U>) obj).map.equals(map);
         } else {
             return false;
         }

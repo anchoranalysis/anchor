@@ -47,7 +47,7 @@ import org.anchoranalysis.feature.bean.provider.FeatureProvider;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
- * Factory for creating {@link FeatureList} in different ways
+ * Factory for creating {@link FeatureList} in different ways.
  *
  * @author Owen Feehan
  */

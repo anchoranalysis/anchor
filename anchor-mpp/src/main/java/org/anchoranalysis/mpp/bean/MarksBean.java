@@ -33,7 +33,7 @@ import org.anchoranalysis.bean.initializable.property.AssignerMatchClass;
 import org.anchoranalysis.bean.initializable.property.BeanInitializer;
 import org.anchoranalysis.bean.initializable.property.ExtractDerivedParameter;
 import org.anchoranalysis.bean.shared.dictionary.DictionaryInitialization;
-import org.anchoranalysis.feature.shared.FeaturesInitialization;
+import org.anchoranalysis.feature.initialization.FeatureRelatedInitialization;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.mpp.init.MarksInitialization;
 import org.anchoranalysis.mpp.init.PointsInitialization;
@@ -62,7 +62,7 @@ public abstract class MarksBean<T> extends InitializableBean<T, MarksInitializat
                 new ExtractDerivedParameter<>(
                         PointsInitialization.class, MarksInitialization::points),
                 new ExtractDerivedParameter<>(
-                        FeaturesInitialization.class, MarksInitialization::feature),
+                        FeatureRelatedInitialization.class, MarksInitialization::feature),
                 new ExtractDerivedParameter<>(
                         DictionaryInitialization.class, MarksInitialization::dictionary),
                 new ExtractDerivedParameter<>(

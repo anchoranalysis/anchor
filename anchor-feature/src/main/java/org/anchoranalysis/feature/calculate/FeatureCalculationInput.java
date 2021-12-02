@@ -24,28 +24,32 @@
  * #L%
  */
 
-package org.anchoranalysis.feature.calculate.cache;
+package org.anchoranalysis.feature.calculate;
 
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.feature.calculate.FeatureCalculation;
-import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
+import org.anchoranalysis.feature.calculate.cache.CalculateForChild;
+import org.anchoranalysis.feature.calculate.cache.FeatureCalculationCache;
+import org.anchoranalysis.feature.calculate.cache.FeatureSymbolCalculator;
+import org.anchoranalysis.feature.calculate.cache.part.ResolvedPart;
+import org.anchoranalysis.feature.calculate.part.CalculationPart;
+import org.anchoranalysis.feature.calculate.part.CalculationPartResolver;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.results.ResultsVector;
 
 /**
- * Encapsulates a feature-input in the context of a particular session.
+ * Gives a {@link FeatureInput} the necessary context for feature-calculation, including associating
+ * it with a cache.
  *
  * @param <T> underlying feature-input type.
  * @author Owen Feehan
  */
-public interface SessionInput<T extends FeatureInput> {
+public interface FeatureCalculationInput<T extends FeatureInput> {
 
     /**
      * The underlying feature-input.
      *
-     * @return the feature-input, independent of the session.
+     * @return the feature-input.
      */
     T get();
 
@@ -75,7 +79,7 @@ public interface SessionInput<T extends FeatureInput> {
      * @return the result of the calculation.
      * @throws FeatureCalculationException if a feature cannot be successfully calculated.
      */
-    <S> S calculate(FeatureCalculation<S, T> calculation) throws FeatureCalculationException;
+    <S> S calculate(CalculationPart<S, T> calculation) throws FeatureCalculationException;
 
     /**
      * Calculates a resolved Feature-calculation.
@@ -85,14 +89,14 @@ public interface SessionInput<T extends FeatureInput> {
      * @return the result of the calculation.
      * @throws FeatureCalculationException if a feature cannot be successfully calculated.
      */
-    <S> S calculate(ResolvedCalculation<S, T> calculation) throws FeatureCalculationException;
+    <S> S calculate(ResolvedPart<S, T> calculation) throws FeatureCalculationException;
 
     /**
      * A resolver for calculations.
      *
      * @return the resolver.
      */
-    CalculationResolver<T> resolver();
+    CalculationPartResolver<T> resolver();
 
     /**
      * Performs calculations not on the main cache, but on a child cache.
@@ -109,9 +113,9 @@ public interface SessionInput<T extends FeatureInput> {
     FeatureSymbolCalculator<T> bySymbol();
 
     /**
-     * Get the {@link FeatureSessionCache} associated with this session.
+     * Get the associated {@link FeatureCalculationCache}.
      *
      * @return the associated cache.
      */
-    public abstract FeatureSessionCache<T> getCache();
+    FeatureCalculationCache<T> getCache();
 }

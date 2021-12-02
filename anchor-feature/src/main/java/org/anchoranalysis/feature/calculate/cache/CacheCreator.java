@@ -29,7 +29,7 @@ package org.anchoranalysis.feature.calculate.cache;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
- * Creates a {@link FeatureSessionCache} that accepts a particular input type.
+ * Creates a {@link FeatureCalculationCache} that accepts a particular input type.
  *
  * @author Owen Feehan
  */
@@ -37,11 +37,12 @@ import org.anchoranalysis.feature.input.FeatureInput;
 public interface CacheCreator {
 
     /**
-     * Creates a {@link FeatureSessionCache} that accepts a particular input type.
+     * Creates a {@link FeatureCalculationCache} that accepts a particular input type.
      *
      * @param <T> the input-type.
      * @param inputType the class corresponding to {@code <T>}
-     * @return a newly created instantiation of {@link FeatureSessionCache}.
+     * @return a newly created instantiation of {@link FeatureCalculationCache}.
      */
-    <T extends FeatureInput> FeatureSessionCache<T> create(Class<? extends FeatureInput> inputType);
+    <T extends FeatureInput> FeatureCalculationCache<T> create(
+            Class<? extends FeatureInput> inputType);
 }

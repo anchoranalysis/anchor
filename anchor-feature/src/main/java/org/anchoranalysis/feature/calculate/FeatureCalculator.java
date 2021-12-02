@@ -24,55 +24,58 @@
  * #L%
  */
 
-package org.anchoranalysis.feature.calculate.cache;
+package org.anchoranalysis.feature.calculate;
 
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
+import org.anchoranalysis.feature.calculate.cache.FeatureSymbolCalculator;
+import org.anchoranalysis.feature.calculate.part.CalculationPartResolver;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.results.ResultsVector;
 
 /**
- * Calculates features in the context of a particular feature-session.
+ * Calculates {@link FeatureCalculationInput} when passed a particular {@link Feature} and
+ * corresponding {@link FeatureCalculationInput}.
  *
  * @author Owen Feehan
- * @param <T> feature-input type that the cache supports
+ * @param <T> feature-input type
  */
-public interface FeatureSessionCalculator<T extends FeatureInput>
-        extends CalculationResolver<T>, FeatureSymbolCalculator<T> {
+public interface FeatureCalculator<T extends FeatureInput>
+        extends CalculationPartResolver<T>, FeatureSymbolCalculator<T> {
 
     /**
-     * Calculate a feature with particular values
+     * Calculate the result of feature with a particular input.
      *
-     * @param feature feature
-     * @param input feature-input
-     * @return the feature-value
-     * @throws FeatureCalculationException
+     * @param feature the feature to calculate.
+     * @param input the input to calculate.
+     * @return the result of the calculation.
+     * @throws FeatureCalculationException if the feature cannot be successfully calculated.
      */
-    double calculate(Feature<T> feature, SessionInput<T> input) throws FeatureCalculationException;
+    double calculate(Feature<T> feature, FeatureCalculationInput<T> input)
+            throws FeatureCalculationException;
 
     /**
-     * Calculates a feature-list throwing an exception if there is an error.
+     * Calculates results for a list of features with a particular input, throwing an exception if a
+     * calculation fails.
      *
      * @param features list of features.
-     * @param input the input parameterization.
-     * @return the results of each feature, with {@link Double#NaN} (and the stored exception) if an
-     *     error occurs.
+     * @param input the input to calculate.
+     * @return the results of the calculation for each respective feature, with {@link Double#NaN}
+     *     (and the stored exception) if an error occurs.
      * @throws NamedFeatureCalculateException if any feature cannot be successfully calculated.
      */
-    default ResultsVector calc(FeatureList<T> features, SessionInput<T> input)
+    default ResultsVector calculate(FeatureList<T> features, FeatureCalculationInput<T> input)
             throws NamedFeatureCalculateException {
         ResultsVector out = new ResultsVector(features.size());
-        for (int i = 0; i < features.size(); i++) {
+        for (int index = 0; index < features.size(); index++) {
 
-            Feature<T> f = features.get(i);
+            Feature<T> feature = features.get(index);
 
             try {
-                double val = calculate(f, input);
-                out.set(i, val);
+                double val = calculate(feature, input);
+                out.set(index, val);
             } catch (FeatureCalculationException e) {
-                throw new NamedFeatureCalculateException(f.getFriendlyName(), e.getMessage());
+                throw new NamedFeatureCalculateException(feature.getFriendlyName(), e.getMessage());
             }
         }
         return out;

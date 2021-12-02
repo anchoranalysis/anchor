@@ -24,39 +24,53 @@
  * #L%
  */
 
-package org.anchoranalysis.feature.session.calculator.single;
+package org.anchoranalysis.feature.calculate.bound;
 
-import java.util.function.Consumer;
-import lombok.AllArgsConstructor;
+import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.log.error.ErrorReporter;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
- * Likes a SequentialSession but automatically changes parameters before calculation
+ * Exposes a {@link FeatureCalculatorMulti} as a {@link FeatureCalculatorSingle}.
  *
  * @author Owen Feehan
- * @param <T> feature-input
+ * @param <T> feature input-type
  */
-@AllArgsConstructor
-public class FeatureCalculatorSingleChangeInput<T extends FeatureInput>
+public class FeatureCalculatorSingleFromMulti<T extends FeatureInput>
         implements FeatureCalculatorSingle<T> {
 
-    /** Delegate which is called after an input is changed */
-    private FeatureCalculatorSingle<T> calculator;
+    private FeatureCalculatorMulti<T> delegate;
 
-    /** A function that is applied to change the input before being passed to {@code calculator} */
-    private Consumer<T> change;
-
-    @Override
-    public double calculate(T input) throws FeatureCalculationException {
-        change.accept(input);
-        return calculator.calculate(input);
+    /**
+     * Creates from a {@link FeatureCalculatorMulti}.
+     *
+     * @param multi the calculator to expose as a {@link FeatureCalculatorSingle}.
+     * @throws InitializeException if {@code multi} has more than one feature.
+     */
+    public FeatureCalculatorSingleFromMulti(FeatureCalculatorMulti<T> multi)
+            throws InitializeException {
+        this.delegate = multi;
+        if (delegate.sizeFeatures() != 1) {
+            throw new InitializeException(
+                    String.format(
+                            "When creating a %s, the multi must have exactly one feature",
+                            FeatureCalculatorSingle.class.getSimpleName()));
+        }
     }
 
     @Override
     public double calculateSuppressErrors(T input, ErrorReporter errorReporter) {
-        change.accept(input);
-        return calculator.calculateSuppressErrors(input, errorReporter);
+        return delegate.calculateSuppressErrors(input, errorReporter).get(0);
+    }
+
+    @Override
+    public double calculate(T input) throws FeatureCalculationException {
+        try {
+            return delegate.calculate(input).get(0);
+        } catch (NamedFeatureCalculateException e) {
+            throw e.dropKey();
+        }
     }
 }

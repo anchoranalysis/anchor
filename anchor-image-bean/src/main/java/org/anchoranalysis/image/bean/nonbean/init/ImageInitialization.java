@@ -44,7 +44,7 @@ import org.anchoranalysis.core.identifier.provider.store.StoreSupplier;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
-import org.anchoranalysis.feature.shared.FeaturesInitialization;
+import org.anchoranalysis.feature.initialization.FeatureRelatedInitialization;
 import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.bean.provider.HistogramProvider;
 import org.anchoranalysis.image.bean.provider.MaskProvider;
@@ -67,7 +67,7 @@ public class ImageInitialization implements BeanInitialization {
     @Getter private final Optional<ImageSizeSuggestion> suggestedResize;
 
     // START: Initialization
-    private final FeaturesInitialization features;
+    private final FeatureRelatedInitialization features;
     // END: Initialization
 
     // START: Stores
@@ -89,7 +89,7 @@ public class ImageInitialization implements BeanInitialization {
             SharedObjects sharedObjects, Optional<ImageSizeSuggestion> suggestedResize) {
         this.sharedObjects = sharedObjects;
         this.suggestedResize = suggestedResize;
-        this.features = FeaturesInitialization.create(sharedObjects);
+        this.features = FeatureRelatedInitialization.create(sharedObjects);
 
         storeStack = sharedObjects.getOrCreate(Stack.class);
         storeHistogram = sharedObjects.getOrCreate(Histogram.class);
@@ -135,7 +135,7 @@ public class ImageInitialization implements BeanInitialization {
         return features.getDictionary();
     }
 
-    public FeaturesInitialization featuresInitialization() {
+    public FeatureRelatedInitialization featuresInitialization() {
         return features;
     }
 

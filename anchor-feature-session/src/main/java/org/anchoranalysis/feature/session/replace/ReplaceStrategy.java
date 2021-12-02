@@ -27,10 +27,10 @@
 package org.anchoranalysis.feature.session.replace;
 
 import org.anchoranalysis.core.exception.CreateException;
-import org.anchoranalysis.feature.calculate.cache.SessionInput;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 public interface ReplaceStrategy<T extends FeatureInput> {
 
-    SessionInput<T> createOrReuse(T input) throws CreateException;
+    FeatureCalculationInput<T> createOrReuse(T input) throws CreateException;
 }

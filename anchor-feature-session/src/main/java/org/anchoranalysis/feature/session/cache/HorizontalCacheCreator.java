@@ -32,9 +32,9 @@ import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.feature.calculate.FeatureInitialization;
 import org.anchoranalysis.feature.calculate.cache.CacheCreator;
-import org.anchoranalysis.feature.calculate.cache.FeatureSessionCache;
+import org.anchoranalysis.feature.calculate.cache.FeatureCalculationCache;
+import org.anchoranalysis.feature.initialization.FeatureInitialization;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.input.FeatureInputType;
 import org.anchoranalysis.feature.shared.SharedFeatures;
@@ -49,7 +49,7 @@ public class HorizontalCacheCreator implements CacheCreator {
     private Logger logger;
 
     @Override
-    public <T extends FeatureInput> FeatureSessionCache<T> create(
+    public <T extends FeatureInput> FeatureCalculationCache<T> create(
             Class<? extends FeatureInput> inputType) {
         FeatureList<T> featureList = filterFeatureList(inputType);
         return createCache(featureList, inputType, initialization, logger);
@@ -70,7 +70,7 @@ public class HorizontalCacheCreator implements CacheCreator {
                 feature -> (Feature<T>) feature); // NOSONAR
     }
 
-    private <T extends FeatureInput> FeatureSessionCache<T> createCache(
+    private <T extends FeatureInput> FeatureCalculationCache<T> createCache(
             FeatureList<T> namedFeatures,
             Class<? extends FeatureInput> inputType,
             FeatureInitialization initialization,
@@ -87,15 +87,15 @@ public class HorizontalCacheCreator implements CacheCreator {
             logger.errorReporter().recordError(HorizontalCacheCreator.class, e);
         }
 
-        FeatureSessionCache<T> cache = createCache(namedFeatures, sharedFeaturesSet);
+        FeatureCalculationCache<T> cache = createCache(namedFeatures, sharedFeaturesSet);
         cache.initialize(initialization, logger);
         return cache;
     }
 
-    private static <S extends FeatureInput> FeatureSessionCache<S> createCache(
+    private static <S extends FeatureInput> FeatureCalculationCache<S> createCache(
             FeatureList<S> namedFeatures, SharedFeaturesSubset<S> sharedFeatures) {
 
-        FeatureSessionCache<S> cacheCalculation = new CalculationCache<>(sharedFeatures);
+        FeatureCalculationCache<S> cacheCalculation = new CalculationCache<>(sharedFeatures);
 
         return new FeatureCache<>(
                 cacheCalculation, namedFeatures, sharedFeatures, new ArrayList<>());

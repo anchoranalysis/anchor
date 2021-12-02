@@ -31,11 +31,11 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.feature.calculate.FeatureInitialization;
+import org.anchoranalysis.feature.calculate.FeatureCalculator;
 import org.anchoranalysis.feature.calculate.cache.CacheCreator;
 import org.anchoranalysis.feature.calculate.cache.ChildCacheName;
-import org.anchoranalysis.feature.calculate.cache.FeatureSessionCache;
-import org.anchoranalysis.feature.calculate.cache.FeatureSessionCalculator;
+import org.anchoranalysis.feature.calculate.cache.FeatureCalculationCache;
+import org.anchoranalysis.feature.initialization.FeatureInitialization;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.shared.SharedFeaturesSubset;
 
@@ -47,14 +47,14 @@ import org.anchoranalysis.feature.shared.SharedFeaturesSubset;
  * @author Owen Feehan
  * @param <T> feature-input type
  */
-class CalculationCache<T extends FeatureInput> implements FeatureSessionCache<T> {
+class CalculationCache<T extends FeatureInput> implements FeatureCalculationCache<T> {
 
     private ResettableCalculator<T> calculator;
 
     @SuppressWarnings("unused")
     private SharedFeaturesSubset<T> sharedFeatures;
 
-    private Map<ChildCacheName, FeatureSessionCache<? extends FeatureInput>> children =
+    private Map<ChildCacheName, FeatureCalculationCache<? extends FeatureInput>> children =
             new HashMap<>();
 
     public CalculationCache(SharedFeaturesSubset<T> sharedFeatures) {
@@ -73,7 +73,7 @@ class CalculationCache<T extends FeatureInput> implements FeatureSessionCache<T>
         calculator.invalidate();
 
         // Invalidate each of the child caches
-        for (FeatureSessionCache<? extends FeatureInput> childCache : children.values()) {
+        for (FeatureCalculationCache<? extends FeatureInput> childCache : children.values()) {
             childCache.invalidate();
         }
     }
@@ -83,7 +83,7 @@ class CalculationCache<T extends FeatureInput> implements FeatureSessionCache<T>
 
         calculator.invalidate();
 
-        for (Entry<ChildCacheName, FeatureSessionCache<? extends FeatureInput>> entry :
+        for (Entry<ChildCacheName, FeatureCalculationCache<? extends FeatureInput>> entry :
                 children.entrySet()) {
             if (!childCacheNames.contains(entry.getKey())) {
                 entry.getValue().invalidate();
@@ -92,18 +92,18 @@ class CalculationCache<T extends FeatureInput> implements FeatureSessionCache<T>
     }
 
     @Override
-    public FeatureSessionCalculator<T> calculator() {
+    public FeatureCalculator<T> calculator() {
         return calculator;
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public <V extends FeatureInput> FeatureSessionCache<V> childCacheFor(
+    public <V extends FeatureInput> FeatureCalculationCache<V> childCacheFor(
             ChildCacheName childName,
             Class<? extends FeatureInput> inputType,
             CacheCreator cacheCreator) {
         // Creates a new child-cache if it doesn't already exist for a particular name
-        return (FeatureSessionCache<V>)
+        return (FeatureCalculationCache<V>)
                 children.computeIfAbsent(childName, s -> cacheCreator.create(inputType));
     }
 }

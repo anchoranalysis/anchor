@@ -24,26 +24,38 @@
  * #L%
  */
 
-package org.anchoranalysis.feature.session.calculator.single;
+package org.anchoranalysis.feature.calculate.bound;
 
 import org.anchoranalysis.core.log.error.ErrorReporter;
+import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculator;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
- * Calculates results for <i>a single feature</i> for a given input.
+ * Like a {@link FeatureCalculator} but is permanently associated with a single {@link Feature}.
  *
  * @author Owen Feehan
  * @param <T> feature input-type
  */
 public interface FeatureCalculatorSingle<T extends FeatureInput> {
 
-    /** Performs one calculation throwing an exception if something goes wrong */
+    /**
+     * Calculate the results of the feature with a particular input.
+     *
+     * @param input the input to calculate.
+     * @return the results of the calculation.
+     * @throws FeatureCalculationException if the feature cannot be successfully calculated.
+     */
     double calculate(T input) throws FeatureCalculationException;
 
     /**
-     * Performs one calculation recording the error to an ErrorReporter if anything goes wrong, but
-     * throwing no exception
+     * Calculates the result for an {@code input} recording the error to an {@link ErrorReporter} if
+     * anything goes wrong, but throwing no exception.
+     *
+     * @param input the input to calculate.
+     * @param errorReporter where errors are recorded.
+     * @return the result of the calculation.
      */
     double calculateSuppressErrors(T input, ErrorReporter errorReporter);
 }

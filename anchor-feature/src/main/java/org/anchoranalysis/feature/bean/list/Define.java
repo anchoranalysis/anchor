@@ -40,7 +40,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
  * Specifies a list of features directly without assigning any custom-naming.
  *
  * @author Owen Feehan
- * @param <T> the feature input-type.
+ * @param <T> the feature input-type
  */
 @AllArgsConstructor
 @NoArgsConstructor

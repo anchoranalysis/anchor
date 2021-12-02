@@ -31,7 +31,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.cache.SessionInput;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
@@ -60,7 +60,7 @@ public class Reference<T extends FeatureInput> extends FeatureGeneric<T> {
     }
 
     @Override
-    public double calculate(SessionInput<T> input) throws FeatureCalculationException {
+    public double calculate(FeatureCalculationInput<T> input) throws FeatureCalculationException {
         // We resolve the ID before its calculated
         String resolvedID = input.bySymbol().resolveFeatureIdentifier(id);
         return input.bySymbol().calculateFeatureByIdentifier(resolvedID, input);

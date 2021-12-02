@@ -29,10 +29,10 @@ package org.anchoranalysis.image.feature.calculator;
 import java.util.Optional;
 import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.log.Logger;
+import org.anchoranalysis.feature.calculate.bound.FeatureCalculatorMulti;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.name.FeatureNameList;
-import org.anchoranalysis.feature.session.calculator.multi.FeatureCalculatorMulti;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 
 /**

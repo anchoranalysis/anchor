@@ -32,17 +32,17 @@ import java.util.function.Function;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.feature.calculate.FeatureCalculation;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
 import org.anchoranalysis.feature.calculate.cache.CacheCreator;
 import org.anchoranalysis.feature.calculate.cache.CalculateForChild;
-import org.anchoranalysis.feature.calculate.cache.CalculationResolver;
 import org.anchoranalysis.feature.calculate.cache.ChildCacheName;
-import org.anchoranalysis.feature.calculate.cache.FeatureSessionCache;
+import org.anchoranalysis.feature.calculate.cache.FeatureCalculationCache;
 import org.anchoranalysis.feature.calculate.cache.FeatureSymbolCalculator;
-import org.anchoranalysis.feature.calculate.cache.ResolvedCalculation;
-import org.anchoranalysis.feature.calculate.cache.SessionInput;
+import org.anchoranalysis.feature.calculate.cache.part.ResolvedPart;
+import org.anchoranalysis.feature.calculate.part.CalculationPart;
+import org.anchoranalysis.feature.calculate.part.CalculationPartResolver;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.results.ResultsVector;
 import org.anchoranalysis.feature.session.cache.finder.ChildCacheFinder;
@@ -54,7 +54,7 @@ import org.anchoranalysis.feature.session.cache.finder.DefaultChildCacheFinder;
  * @author Owen Feehan
  * @param <T> feature-type
  */
-public class SessionInputSequential<T extends FeatureInput> implements SessionInput<T> {
+public class SessionInputSequential<T extends FeatureInput> implements FeatureCalculationInput<T> {
 
     /** Implements operations which should occur using child-caches rather than in the main cache */
     @AllArgsConstructor
@@ -65,7 +65,7 @@ public class SessionInputSequential<T extends FeatureInput> implements SessionIn
         @Override
         public <S extends FeatureInput> double calculate(
                 Feature<S> feature,
-                FeatureCalculation<S, T> calculation,
+                CalculationPart<S, T> calculation,
                 ChildCacheName childCacheName)
                 throws FeatureCalculationException {
             return calculate(
@@ -77,7 +77,7 @@ public class SessionInputSequential<T extends FeatureInput> implements SessionIn
                 Feature<S> feature, S input, ChildCacheName childCacheName)
                 throws FeatureCalculationException {
 
-            FeatureSessionCache<S> child = childCacheFor(childCacheName, input);
+            FeatureCalculationCache<S> child = childCacheFor(childCacheName, input);
             return child.calculator()
                     .calculate(
                             feature,
@@ -89,12 +89,12 @@ public class SessionInputSequential<T extends FeatureInput> implements SessionIn
         public <V extends FeatureInput, U> U calculate(
                 ChildCacheName childCacheName,
                 V input,
-                Function<CalculationResolver<V>, ResolvedCalculation<U, V>> funcCalc)
+                Function<CalculationPartResolver<V>, ResolvedPart<U, V>> funcCalc)
                 throws FeatureCalculationException {
 
-            CalculationResolver<V> childResolver =
+            CalculationPartResolver<V> childResolver =
                     childCacheFor(childCacheName, input).calculator();
-            ResolvedCalculation<U, V> resolvedCalc = funcCalc.apply(childResolver);
+            ResolvedPart<U, V> resolvedCalc = funcCalc.apply(childResolver);
             return resolvedCalc.getOrCalculate(input);
         }
 
@@ -103,13 +103,13 @@ public class SessionInputSequential<T extends FeatureInput> implements SessionIn
          *
          * @throws FeatureCalculationException
          */
-        private <V extends FeatureInput> FeatureSessionCache<V> childCacheFor(
+        private <V extends FeatureInput> FeatureCalculationCache<V> childCacheFor(
                 ChildCacheName childName, V input) throws FeatureCalculationException {
             return findChild.childCacheFor(cache, cacheFactory, childName, input);
         }
     }
 
-    private FeatureSessionCache<T> cache;
+    private FeatureCalculationCache<T> cache;
 
     private T input;
     private CacheCreator cacheFactory;
@@ -153,7 +153,7 @@ public class SessionInputSequential<T extends FeatureInput> implements SessionIn
      */
     SessionInputSequential(
             T input,
-            FeatureSessionCache<T> cache,
+            FeatureCalculationCache<T> cache,
             CacheCreator cacheFactory,
             ChildCacheFinder findChild) {
         this.input = input;
@@ -192,22 +192,21 @@ public class SessionInputSequential<T extends FeatureInput> implements SessionIn
 
     @Override
     public ResultsVector calculate(FeatureList<T> features) throws NamedFeatureCalculateException {
-        return cache.calculator().calc(features, this);
+        return cache.calculator().calculate(features, this);
     }
 
     @Override
-    public <S> S calculate(FeatureCalculation<S, T> cc) throws FeatureCalculationException {
+    public <S> S calculate(CalculationPart<S, T> cc) throws FeatureCalculationException {
         return resolver().search(cc).getOrCalculate(input);
     }
 
     @Override
-    public <S> S calculate(ResolvedCalculation<S, T> calculation)
-            throws FeatureCalculationException {
+    public <S> S calculate(ResolvedPart<S, T> calculation) throws FeatureCalculationException {
         return calculation.getOrCalculate(input);
     }
 
     @Override
-    public CalculationResolver<T> resolver() {
+    public CalculationPartResolver<T> resolver() {
         return cache.calculator();
     }
 
@@ -222,7 +221,7 @@ public class SessionInputSequential<T extends FeatureInput> implements SessionIn
     }
 
     @Override
-    public FeatureSessionCache<T> getCache() {
+    public FeatureCalculationCache<T> getCache() {
         return cache;
     }
 }

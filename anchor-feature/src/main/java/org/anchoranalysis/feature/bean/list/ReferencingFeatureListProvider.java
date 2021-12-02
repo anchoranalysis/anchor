@@ -33,15 +33,15 @@ import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.primitive.StringSet;
 import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
+import org.anchoranalysis.feature.initialization.FeatureRelatedInitialization;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.feature.shared.FeaturesInitialization;
 
 /**
  * A base class for implementations of {@link FeatureListProvider} that may reference features
  * created elsewhere.
  *
  * @author Owen Feehan
- * @param <T> feature input-type.
+ * @param <T> feature input-type
  */
 public abstract class ReferencingFeatureListProvider<T extends FeatureInput>
         extends FeatureListProvider<T> {
@@ -57,12 +57,13 @@ public abstract class ReferencingFeatureListProvider<T extends FeatureInput>
     // END BEAN PROPERITES
 
     @Override
-    public void onInitialization(FeaturesInitialization soFeature) throws InitializeException {
+    public void onInitialization(FeatureRelatedInitialization soFeature)
+            throws InitializeException {
         super.onInitialization(soFeature);
         ensureReferencedFeaturesCalled(soFeature);
     }
 
-    private void ensureReferencedFeaturesCalled(FeaturesInitialization so)
+    private void ensureReferencedFeaturesCalled(FeatureRelatedInitialization so)
             throws InitializeException {
         if (references != null && so != null) {
             for (String featureListReference : references.set()) {

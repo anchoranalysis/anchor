@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.feature.shared;
+package org.anchoranalysis.feature.initialization;
 
 import com.github.davidmoten.guavamini.Preconditions;
 import java.nio.file.Path;
@@ -46,13 +46,14 @@ import org.anchoranalysis.feature.bean.FeatureRelatedBean;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.input.FeatureInput;
+import org.anchoranalysis.feature.shared.SharedFeatures;
 
 /**
  * Parameters for initializing a {@link FeatureRelatedBean}.
  *
  * @author Owen Feehan
  */
-public class FeaturesInitialization implements BeanInitialization {
+public class FeatureRelatedInitialization implements BeanInitialization {
 
     /** A named-mapping to {@link Dictionary}s. */
     @Getter private DictionaryInitialization dictionary;
@@ -70,7 +71,7 @@ public class FeaturesInitialization implements BeanInitialization {
      *
      * @param sharedObjects the shared-objects.
      */
-    private FeaturesInitialization(SharedObjects sharedObjects) {
+    private FeatureRelatedInitialization(SharedObjects sharedObjects) {
         this.dictionary = new DictionaryInitialization(sharedObjects);
         this.filePaths = new FilePathInitialization(sharedObjects);
 
@@ -87,8 +88,8 @@ public class FeaturesInitialization implements BeanInitialization {
      * @param sharedObjects the shared-objects.
      * @return an initialization containing shared-objects, but otherwise unpopulated.
      */
-    public static FeaturesInitialization create(SharedObjects sharedObjects) {
-        return new FeaturesInitialization(sharedObjects);
+    public static FeatureRelatedInitialization create(SharedObjects sharedObjects) {
+        return new FeatureRelatedInitialization(sharedObjects);
     }
 
     /**
@@ -98,7 +99,7 @@ public class FeaturesInitialization implements BeanInitialization {
      * @param modelDirectory the path to the directory contains models.
      * @return an initialization containing the above two aspects, but otherwise unpopulated.
      */
-    public static FeaturesInitialization create(Logger logger, Path modelDirectory) {
+    public static FeatureRelatedInitialization create(Logger logger, Path modelDirectory) {
         return create(new SharedObjects(new CommonContext(logger, modelDirectory)));
     }
 

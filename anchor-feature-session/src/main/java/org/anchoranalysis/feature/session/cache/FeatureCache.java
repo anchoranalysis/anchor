@@ -30,11 +30,11 @@ import java.util.Collection;
 import java.util.Set;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.feature.calculate.FeatureInitialization;
+import org.anchoranalysis.feature.calculate.FeatureCalculator;
 import org.anchoranalysis.feature.calculate.cache.CacheCreator;
 import org.anchoranalysis.feature.calculate.cache.ChildCacheName;
-import org.anchoranalysis.feature.calculate.cache.FeatureSessionCache;
-import org.anchoranalysis.feature.calculate.cache.FeatureSessionCalculator;
+import org.anchoranalysis.feature.calculate.cache.FeatureCalculationCache;
+import org.anchoranalysis.feature.initialization.FeatureInitialization;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.shared.SharedFeaturesSubset;
 
@@ -46,16 +46,16 @@ import org.anchoranalysis.feature.shared.SharedFeaturesSubset;
  *
  * @author Owen Feehan
  */
-class FeatureCache<T extends FeatureInput> implements FeatureSessionCache<T> {
+class FeatureCache<T extends FeatureInput> implements FeatureCalculationCache<T> {
 
-    private FeatureSessionCache<T> cache;
+    private FeatureCalculationCache<T> cache;
 
     private HorizontalFeatureCalculator<T> calculator;
 
     private FeatureResultMap<T> map = new FeatureResultMap<>();
 
     public FeatureCache(
-            FeatureSessionCache<T> cache,
+            FeatureCalculationCache<T> cache,
             FeatureList<T> namedFeatures,
             SharedFeaturesSubset<T> sharedFeatures,
             Collection<String> ignorePrefixes) {
@@ -85,7 +85,7 @@ class FeatureCache<T extends FeatureInput> implements FeatureSessionCache<T> {
     }
 
     @Override
-    public <V extends FeatureInput> FeatureSessionCache<V> childCacheFor(
+    public <V extends FeatureInput> FeatureCalculationCache<V> childCacheFor(
             ChildCacheName childName,
             Class<? extends FeatureInput> inputType,
             CacheCreator cacheCreator) {
@@ -93,7 +93,7 @@ class FeatureCache<T extends FeatureInput> implements FeatureSessionCache<T> {
     }
 
     @Override
-    public FeatureSessionCalculator<T> calculator() {
+    public FeatureCalculator<T> calculator() {
         return calculator;
     }
 }

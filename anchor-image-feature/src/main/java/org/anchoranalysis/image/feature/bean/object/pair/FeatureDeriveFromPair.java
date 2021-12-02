@@ -33,8 +33,8 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.feature.calculate.cache.ChildCacheName;
-import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.image.feature.calculation.CalculateInputFromPair;
 import org.anchoranalysis.image.feature.calculation.CalculateInputFromPair.Extract;
 import org.anchoranalysis.image.feature.input.FeatureInputPairObjects;
@@ -61,23 +61,25 @@ public abstract class FeatureDeriveFromPair extends FeaturePairObjects {
     public static final ChildCacheName CACHE_NAME_MERGED =
             new ChildCacheName(FeatureDeriveFromPair.class, "merged");
 
-    protected double valueFromFirst(SessionInput<FeatureInputPairObjects> input)
+    protected double valueFromFirst(FeatureCalculationInput<FeatureInputPairObjects> input)
             throws FeatureCalculationException {
         return featureValFrom(input, Extract.FIRST, CACHE_NAME_FIRST);
     }
 
-    protected double valueFromSecond(SessionInput<FeatureInputPairObjects> input)
+    protected double valueFromSecond(FeatureCalculationInput<FeatureInputPairObjects> input)
             throws FeatureCalculationException {
         return featureValFrom(input, Extract.SECOND, CACHE_NAME_SECOND);
     }
 
-    protected double valueFromMerged(SessionInput<FeatureInputPairObjects> input)
+    protected double valueFromMerged(FeatureCalculationInput<FeatureInputPairObjects> input)
             throws FeatureCalculationException {
         return featureValFrom(input, Extract.MERGED, CACHE_NAME_MERGED);
     }
 
     private double featureValFrom(
-            SessionInput<FeatureInputPairObjects> input, Extract extract, ChildCacheName cacheName)
+            FeatureCalculationInput<FeatureInputPairObjects> input,
+            Extract extract,
+            ChildCacheName cacheName)
             throws FeatureCalculationException {
 
         return input.forChild().calculate(item, new CalculateInputFromPair(extract), cacheName);

@@ -31,15 +31,15 @@ import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.feature.calculate.FeatureInitialization;
+import org.anchoranalysis.feature.calculate.bound.FeatureCalculatorMulti;
+import org.anchoranalysis.feature.calculate.bound.FeatureCalculatorMultiChangeInput;
 import org.anchoranalysis.feature.energy.EnergyStack;
+import org.anchoranalysis.feature.initialization.FeatureInitialization;
 import org.anchoranalysis.feature.input.FeatureInputEnergy;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.cache.finder.CacheTransferSourceCollection;
 import org.anchoranalysis.feature.session.cache.finder.CheckCacheForSpecificChildren;
-import org.anchoranalysis.feature.session.calculator.multi.FeatureCalculatorCachedMulti;
-import org.anchoranalysis.feature.session.calculator.multi.FeatureCalculatorMulti;
-import org.anchoranalysis.feature.session.calculator.multi.FeatureCalculatorMultiChangeInput;
+import org.anchoranalysis.feature.session.calculator.FeatureCalculatorCache;
 import org.anchoranalysis.feature.session.replace.BoundReplaceStrategy;
 import org.anchoranalysis.feature.session.replace.ReplaceStrategy;
 import org.anchoranalysis.feature.session.replace.ReuseSingletonStrategy;
@@ -54,21 +54,13 @@ class CreateCalculatorHelper {
     private final Optional<EnergyStack> energyStack;
     private final Logger logger;
 
-    public <T extends FeatureInputEnergy> FeatureCalculatorMulti<T> create(
-            FeatureList<T> features,
-            ImageInitialization initialization,
-            BoundReplaceStrategy<T, ? extends ReplaceStrategy<T>> replacePolicyFactory)
-            throws InitializeException {
-        return wrapWithEnergy(createWithoutEnergy(features, initialization, replacePolicyFactory));
-    }
-
     public <T extends FeatureInputEnergy> FeatureCalculatorMulti<T> createCached(
             FeatureList<T> features,
             ImageInitialization initialization,
             BoundReplaceStrategy<T, ? extends ReplaceStrategy<T>> replacePolicyFactory)
             throws InitializeException {
         return wrapWithEnergy(
-                new FeatureCalculatorCachedMulti<>(
+                FeatureCalculatorCache.cache(
                         createWithoutEnergy(features, initialization, replacePolicyFactory)));
     }
 

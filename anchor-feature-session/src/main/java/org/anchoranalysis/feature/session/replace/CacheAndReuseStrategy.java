@@ -30,8 +30,8 @@ import lombok.Getter;
 import org.anchoranalysis.core.cache.LRUCache;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.feature.calculate.cache.CacheCreator;
-import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
@@ -45,7 +45,7 @@ public class CacheAndReuseStrategy<T extends FeatureInput> implements ReplaceStr
 
     private static final int CACHE_SIZE = 200;
 
-    @Getter private LRUCache<T, SessionInput<T>> cache;
+    @Getter private LRUCache<T, FeatureCalculationInput<T>> cache;
 
     public CacheAndReuseStrategy(CacheCreator cacheCreator) {
         ReplaceStrategy<T> delegate = new AlwaysNew<>(cacheCreator);
@@ -53,7 +53,7 @@ public class CacheAndReuseStrategy<T extends FeatureInput> implements ReplaceStr
     }
 
     @Override
-    public SessionInput<T> createOrReuse(T input) throws CreateException {
+    public FeatureCalculationInput<T> createOrReuse(T input) throws CreateException {
         try {
             return cache.get(input);
         } catch (GetOperationFailedException e) {

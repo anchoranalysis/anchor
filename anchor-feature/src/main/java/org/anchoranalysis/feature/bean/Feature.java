@@ -38,8 +38,8 @@ import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListFactory;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.FeatureInitialization;
-import org.anchoranalysis.feature.calculate.cache.SessionInput;
+import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
+import org.anchoranalysis.feature.initialization.FeatureInitialization;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
@@ -53,9 +53,6 @@ import org.anchoranalysis.feature.input.FeatureInput;
  * <p>See <a href="https://en.wikipedia.org/wiki/Feature_(machine_learning)">Feature (Machine
  * learning) on Wikipedia</a> for general background on the concept of a <i>feature</i> in Machine
  * Learning.
- *
- * <p>It should always be called in a context of a <i>session</i>, which first initializes the
- * feature before doing calculations.
  *
  * @author Owen Feehan
  * @param <T> input-type from which a measurement is calculated.
@@ -206,7 +203,7 @@ public abstract class Feature<T extends FeatureInput>
      * @return the feature-value corresponding to {@code input} for this feature.
      * @throws FeatureCalculationException if the feature has not been initialized.
      */
-    public double calculateCheckInitialized(SessionInput<T> input)
+    public double calculateCheckInitialized(FeatureCalculationInput<T> input)
             throws FeatureCalculationException {
         if (!isInitialized()) {
             throw new FeatureCalculationException(
@@ -229,11 +226,12 @@ public abstract class Feature<T extends FeatureInput>
     /**
      * Calculates a value for some input.
      *
-     * @param input the input.
+     * @param input the input to the calculation.
      * @return the result of the calculation.
      * @throws FeatureCalculationException if the calculation cannot successfully complete.
      */
-    protected abstract double calculate(SessionInput<T> input) throws FeatureCalculationException;
+    protected abstract double calculate(FeatureCalculationInput<T> input)
+            throws FeatureCalculationException;
 
     /**
      * Copies fields in this (base) class to {@code target}.
