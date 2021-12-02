@@ -41,21 +41,23 @@ class OutputExperimentLogHelper {
 
     private static final Divider DIVIDER = new Divider();
 
-    public static void maybeLogStart(ParametersExperiment params) {
-        if (params.isDetailedLogging()) {
-            params.getLoggerExperiment()
+    public static void maybeLogStart(ParametersExperiment parameters) {
+        if (parameters.isDetailedLogging()) {
+            parameters
+                    .getLoggerExperiment()
                     .logFormatted(
                             "Experiment %s started writing to %s",
-                            params.getExperimentIdentifier(),
-                            params.getOutputter().getOutputDirectory());
+                            parameters.getExperimentIdentifier(),
+                            parameters.getOutputter().getOutputDirectory());
         }
     }
 
     public static void maybeRecordedOutputs(
-            MultiLevelRecordedOutputs recordedOutputs, ParametersExperiment params) {
-        if (params.isDetailedLogging()) {
+            MultiLevelRecordedOutputs recordedOutputs, ParametersExperiment parameters) {
+        if (parameters.isDetailedLogging()) {
 
-            params.getLoggerExperiment()
+            parameters
+                    .getLoggerExperiment()
                     .logFormatted(
                             "%s%n%s%n%s",
                             DIVIDER.withLabel("Outputs"),
@@ -64,15 +66,17 @@ class OutputExperimentLogHelper {
         }
     }
 
-    public static void maybeLogCompleted(ParametersExperiment params, long executionTimeSeconds) {
-        if (params.isDetailedLogging()) {
+    public static void maybeLogCompleted(
+            ParametersExperiment parameters, long executionTimeSeconds) {
+        if (parameters.isDetailedLogging()) {
 
-            params.getLoggerExperiment()
+            parameters
+                    .getLoggerExperiment()
                     .logFormatted(
                             "Experiment %s completed (%ds) writing to %s",
-                            params.getExperimentIdentifier(),
+                            parameters.getExperimentIdentifier(),
                             executionTimeSeconds,
-                            params.getOutputter().getOutputDirectory());
+                            parameters.getOutputter().getOutputDirectory());
         }
     }
 }

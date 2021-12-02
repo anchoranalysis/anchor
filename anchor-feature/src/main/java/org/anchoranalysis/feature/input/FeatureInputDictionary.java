@@ -1,8 +1,6 @@
-/** Some kinds of parameters used when initializing beans. */
-package org.anchoranalysis.bean.initializable.params;
 /*-
  * #%L
- * anchor-bean
+ * anchor-feature
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -25,3 +23,38 @@ package org.anchoranalysis.bean.initializable.params;
  * THE SOFTWARE.
  * #L%
  */
+
+package org.anchoranalysis.feature.input;
+
+import java.util.Optional;
+import org.anchoranalysis.core.value.Dictionary;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+
+/**
+ * A {@link FeatureInputWithResolution} that has an optional associated {@link Dictionary}.
+ *
+ * @author Owen Feehan
+ */
+public interface FeatureInputDictionary extends FeatureInputWithResolution {
+
+    /**
+     * The associated dictionary, if it exists.
+     *
+     * @return the dictionary, if it exists.
+     */
+    Optional<Dictionary> getDictionaryOptional();
+
+    /**
+     * The associated dictionary, or an exception if it doesn't exist.
+     *
+     * @return the dictionary.
+     * @throws FeatureCalculationException if the dictionary doesn't exist.
+     */
+    default Dictionary getDictionaryRequired() throws FeatureCalculationException {
+        return getDictionaryOptional()
+                .orElseThrow(
+                        () ->
+                                new FeatureCalculationException(
+                                        "A dictionary is required for this input."));
+    }
+}

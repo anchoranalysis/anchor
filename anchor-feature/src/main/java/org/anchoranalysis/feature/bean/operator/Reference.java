@@ -34,15 +34,28 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.feature.input.FeatureInput;
 
+/**
+ * Uses another feature to calculate the value.
+ *
+ * <p>The other feature is identified by it's name, or a string that otherwise resolves to its name.
+ *
+ * @author Owen Feehan
+ * @param <T> the feature input-type
+ */
 @NoArgsConstructor
-public class Reference<T extends FeatureInput> extends FeatureOperator<T> {
+public class Reference<T extends FeatureInput> extends FeatureGeneric<T> {
 
     // START BEAN
+    /** The identifier that uniquely determines the other feature to reference. */
     @BeanField @Getter @Setter private String id;
     // END BEAN
 
+    /**
+     * Create with a specific identifier.
+     *
+     * @param id the identifier.
+     */
     public Reference(String id) {
-        super();
         this.id = id;
     }
 

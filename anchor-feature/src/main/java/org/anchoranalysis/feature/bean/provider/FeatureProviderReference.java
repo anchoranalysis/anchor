@@ -36,19 +36,27 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.shared.FeaturesInitialization;
 
+/**
+ * Provides an existing {@link Feature} identified by its name and optionally a feature-list in
+ * which is resides.
+ *
+ * @author Owen Feehan
+ */
 public class FeatureProviderReference extends FeatureProvider<FeatureInput> {
 
     // START BEAN PROPERTIES
+    /** The name of the feature to reference. */
     @BeanField @Getter @Setter private String id = "";
 
-    @BeanField @Getter @Setter private String featureListRef = "";
+    /** The name of the list in which the feature referenced by {@code id} resides. */
+    @BeanField @Getter @Setter private String referencesList = "";
     // END BEAN PROPERTIES
 
+    // The memoized feature, once it is first retrieved.
     private Feature<FeatureInput> feature;
 
     @Override
     public Feature<FeatureInput> get() throws ProvisionFailedException {
-
         try {
             if (feature == null) {
                 feature = createFeature(getInitialization());
@@ -65,11 +73,11 @@ public class FeatureProviderReference extends FeatureProvider<FeatureInput> {
             throw new ProvisionFailedException("shared-features are not defined.");
         }
 
-        if (featureListRef != null && !featureListRef.isEmpty()) {
+        if (referencesList != null && !referencesList.isEmpty()) {
             // We request this to make sure it's evaluated and added to the
             // pso.getSharedFeatureSet()
             try {
-                initialization.getFeatureListSet().getException(featureListRef);
+                initialization.getFeatureLists().getException(referencesList);
             } catch (NamedProviderGetException e) {
                 throw new ProvisionFailedException(e.summarize());
             }

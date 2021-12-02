@@ -70,15 +70,15 @@ public class ReadByLine implements AutoCloseable {
             Optional<String[]> line;
             boolean firstLine = true;
 
-            int cnt = 0;
+            int count = 0;
 
             while ((line = openedFile.readLine()).isPresent()) {
                 lineProcessor.processLine(line.get(), firstLine);
                 firstLine = false;
-                cnt++;
+                count++;
             }
 
-            return cnt;
+            return count;
 
         } catch (IOException | OperationFailedException e) {
             throw new CSVReaderException(e);

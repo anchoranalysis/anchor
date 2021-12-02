@@ -38,37 +38,56 @@ import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.input.FeatureInputType;
 
+/**
+ * A base class for a {@link Feature} that is a function of the results from a list of other
+ * features.
+ *
+ * @author Owen Feehan
+ * @param <T> feature input-type of all features in the list, as well as the returned result.
+ */
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public abstract class FeatureListElem<T extends FeatureInput> extends Feature<T> {
+public abstract class FeatureFromList<T extends FeatureInput> extends Feature<T> {
 
     // START BEAN PARAMETERS
+    /** The features whose results will be somehow combined, to form the result of this class. */
     @BeanField @Getter private List<Feature<T>> list = new ArrayList<>();
     // END BEAN PARAMETERS
 
     /**
-     * Constructor
+     * Create from a list of features.
      *
-     * @param featureList feature-list
+     * @param featureList the list of features.
      */
-    protected FeatureListElem(FeatureList<T> featureList) {
+    protected FeatureFromList(FeatureList<T> featureList) {
         this.list = featureList.asList();
     }
 
     /**
-     * A string description of all the items of the list concatenated together with a character in
-     * between
+     * Derive a string description of all the items of the list concatenated together.
      *
-     * @param operatorDscr
-     * @return
+     * <p>Each feature's individual description is separated from the next by {@code joinCharacter}.
+     *
+     * @param join the character to separate items in the list.
+     * @return the description, as above.
      */
-    protected String descriptionForList(String operatorDscr) {
-        return String.join(operatorDscr, FunctionalList.mapToList(list, Feature::descriptionLong));
+    protected String descriptionForList(String join) {
+        return String.join(join, FunctionalList.mapToList(list, Feature::descriptionLong));
     }
 
+    /**
+     * Assigns the list of features to use.
+     *
+     * @param list the list to assign.
+     */
     public void setList(List<Feature<T>> list) {
         this.list = list;
     }
 
+    /**
+     * Assigns the list of features to use.
+     *
+     * @param list the list to assign.
+     */
     public void setList(FeatureList<T> list) {
         this.list = list.asList();
     }

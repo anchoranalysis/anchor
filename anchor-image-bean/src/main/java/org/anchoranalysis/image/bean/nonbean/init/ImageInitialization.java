@@ -30,7 +30,7 @@ import java.nio.file.Path;
 import java.util.Optional;
 import lombok.Getter;
 import org.anchoranalysis.bean.define.Define;
-import org.anchoranalysis.bean.initializable.params.BeanInitialization;
+import org.anchoranalysis.bean.initializable.parameters.BeanInitialization;
 import org.anchoranalysis.bean.initializable.property.BeanInitializer;
 import org.anchoranalysis.bean.shared.dictionary.DictionaryInitialization;
 import org.anchoranalysis.core.exception.CreateException;
@@ -60,7 +60,7 @@ import org.anchoranalysis.math.histogram.Histogram;
 
 public class ImageInitialization implements BeanInitialization {
 
-    private static final String KEY_VALUE_PARAMS_IDENTIFIER = "input_params";
+    public static final String DICTIONARY_IDENTIFIER = "input_dictionary";
 
     @Getter private final SharedObjects sharedObjects;
 
@@ -214,7 +214,7 @@ public class ImageInitialization implements BeanInitialization {
             }
 
             if (dictionary.isPresent()) {
-                addDictionary(KEY_VALUE_PARAMS_IDENTIFIER, dictionary.get());
+                addDictionary(DICTIONARY_IDENTIFIER, dictionary.get());
             }
         } catch (OperationFailedException e) {
             throw new CreateException(e);

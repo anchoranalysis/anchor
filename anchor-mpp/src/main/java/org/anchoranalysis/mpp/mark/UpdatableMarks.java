@@ -29,7 +29,7 @@ package org.anchoranalysis.mpp.mark;
 import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.energy.EnergyStack;
-import org.anchoranalysis.feature.shared.SharedFeatureMulti;
+import org.anchoranalysis.feature.shared.SharedFeatures;
 import org.anchoranalysis.mpp.mark.voxelized.memo.MemoForIndex;
 import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 
@@ -39,7 +39,7 @@ public interface UpdatableMarks {
             MemoForIndex memo,
             EnergyStack energyStack,
             Logger logger,
-            SharedFeatureMulti sharedFeatures)
+            SharedFeatures sharedFeatures)
             throws InitializeException;
 
     void add(MemoForIndex marksExisting, VoxelizedMarkMemo newMark) throws UpdateMarkSetException;

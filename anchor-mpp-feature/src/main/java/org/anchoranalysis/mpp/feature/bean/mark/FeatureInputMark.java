@@ -32,14 +32,14 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.input.FeatureInputParams;
+import org.anchoranalysis.feature.input.FeatureInputDictionary;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.mpp.mark.Mark;
 
 @AllArgsConstructor
 @EqualsAndHashCode
-public class FeatureInputMark implements FeatureInputParams {
+public class FeatureInputMark implements FeatureInputDictionary {
 
     @Getter private final Mark mark;
     private final Optional<Dimensions> dimensions;
@@ -59,7 +59,7 @@ public class FeatureInputMark implements FeatureInputParams {
     }
 
     @Override
-    public Optional<Dictionary> getParamsOptional() {
+    public Optional<Dictionary> getDictionaryOptional() {
         return dictionary;
     }
 

@@ -34,37 +34,41 @@ import org.anchoranalysis.image.voxel.object.ObjectMaskFixture;
 abstract class OutlineTestBase extends BinaryKernelTestBase {
 
     @Override
-    protected int expectedInside2D(ObjectMaskFixture fixture, KernelApplicationParameters params) {
-        return fixture.sizeSurface(useZFor2D(params));
+    protected int expectedInside2D(
+            ObjectMaskFixture fixture, KernelApplicationParameters parameters) {
+        return fixture.sizeSurface(useZFor2D(parameters));
     }
 
     @Override
-    protected int expectedInside3D(ObjectMaskFixture fixture, KernelApplicationParameters params) {
-        return fixture.sizeSurface(params.isUseZ());
+    protected int expectedInside3D(
+            ObjectMaskFixture fixture, KernelApplicationParameters parameters) {
+        return fixture.sizeSurface(parameters.isUseZ());
     }
 
     @Override
     protected int expectedBoundary2D(
-            ObjectMaskFixture fixture, KernelApplicationParameters params) {
-        return whenOutsideOff(params, fixture, () -> 8);
+            ObjectMaskFixture fixture, KernelApplicationParameters parameters) {
+        return whenOutsideOff(parameters, fixture, () -> 8);
     }
 
     @Override
     protected int expectedBoundary3D(
-            ObjectMaskFixture fixture, KernelApplicationParameters params) {
-        return whenOutsideOff(params, fixture, () -> params.isUseZ() ? 36 : 24);
+            ObjectMaskFixture fixture, KernelApplicationParameters parameters) {
+        return whenOutsideOff(parameters, fixture, () -> parameters.isUseZ() ? 36 : 24);
     }
 
     private static int whenOutsideOff(
-            KernelApplicationParameters params, ObjectMaskFixture fixture, IntSupplier otherwise) {
-        if (params.getOutsideKernelPolicy() == OutsideKernelPolicy.AS_OFF) {
-            return fixture.sizeSurface(params.isUseZ());
+            KernelApplicationParameters parameters,
+            ObjectMaskFixture fixture,
+            IntSupplier otherwise) {
+        if (parameters.getOutsideKernelPolicy() == OutsideKernelPolicy.AS_OFF) {
+            return fixture.sizeSurface(parameters.isUseZ());
         } else {
             return otherwise.getAsInt();
         }
     }
 
-    private static boolean useZFor2D(KernelApplicationParameters params) {
-        return params.isUseZ() && (!params.isIgnoreOutside() && !params.isOutsideOn());
+    private static boolean useZFor2D(KernelApplicationParameters parameters) {
+        return parameters.isUseZ() && (!parameters.isIgnoreOutside() && !parameters.isOutsideOn());
     }
 }

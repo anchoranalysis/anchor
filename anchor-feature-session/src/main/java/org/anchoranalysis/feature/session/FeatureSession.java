@@ -42,7 +42,7 @@ import org.anchoranalysis.feature.session.calculator.single.FeatureCalculatorSin
 import org.anchoranalysis.feature.session.replace.BoundReplaceStrategy;
 import org.anchoranalysis.feature.session.replace.ReplaceStrategy;
 import org.anchoranalysis.feature.session.replace.ReuseSingletonStrategy;
-import org.anchoranalysis.feature.shared.SharedFeatureMulti;
+import org.anchoranalysis.feature.shared.SharedFeatures;
 
 /**
  * A single-point in the code for creating feature-sessions (a factory).
@@ -69,7 +69,7 @@ public class FeatureSession {
      */
     public static <T extends FeatureInput> FeatureCalculatorSingle<T> with(
             Feature<T> feature, Logger logger) throws InitializeException {
-        return with(feature, new FeatureInitialization(), new SharedFeatureMulti(), logger);
+        return with(feature, new FeatureInitialization(), new SharedFeatures(), logger);
     }
 
     /**
@@ -82,7 +82,7 @@ public class FeatureSession {
      * @return a calculator that will calculate just this feature for each parameter.
      */
     public static <T extends FeatureInput> FeatureCalculatorSingle<T> with(
-            Feature<T> feature, SharedFeatureMulti sharedFeatures, Logger logger)
+            Feature<T> feature, SharedFeatures sharedFeatures, Logger logger)
             throws InitializeException {
         return with(feature, new FeatureInitialization(), sharedFeatures, logger);
     }
@@ -90,7 +90,7 @@ public class FeatureSession {
     public static <T extends FeatureInput> FeatureCalculatorSingle<T> with(
             Feature<T> feature,
             FeatureInitialization initialization,
-            SharedFeatureMulti sharedFeatures,
+            SharedFeatures sharedFeatures,
             Logger logger)
             throws InitializeException {
         SequentialSession<T> session = new SequentialSession<>(feature);
@@ -109,13 +109,13 @@ public class FeatureSession {
      */
     public static <T extends FeatureInput> FeatureCalculatorMulti<T> with(
             FeatureList<T> features, Logger logger) throws InitializeException {
-        return with(features, new FeatureInitialization(), new SharedFeatureMulti(), logger);
+        return with(features, new FeatureInitialization(), new SharedFeatures(), logger);
     }
 
     public static <T extends FeatureInput> FeatureCalculatorMulti<T> with(
             FeatureList<T> features,
             FeatureInitialization initialization,
-            SharedFeatureMulti sharedFeatures,
+            SharedFeatures sharedFeatures,
             Logger logger)
             throws InitializeException {
         return with(
@@ -129,13 +129,12 @@ public class FeatureSession {
     public static <T extends FeatureInput> FeatureCalculatorMulti<T> with(
             FeatureList<T> features,
             FeatureInitialization initialization,
-            Optional<SharedFeatureMulti> sharedFeatures,
+            Optional<SharedFeatures> sharedFeatures,
             Logger logger,
             BoundReplaceStrategy<T, ? extends ReplaceStrategy<T>> replacePolicyFactory)
             throws InitializeException {
         SequentialSession<T> session = new SequentialSession<>(features, replacePolicyFactory);
-        startSession(
-                session, initialization, sharedFeatures.orElse(new SharedFeatureMulti()), logger);
+        startSession(session, initialization, sharedFeatures.orElse(new SharedFeatures()), logger);
         return session;
     }
 
@@ -163,7 +162,7 @@ public class FeatureSession {
     private static <T extends FeatureInput> void startSession(
             SequentialSession<T> session,
             FeatureInitialization initialization,
-            SharedFeatureMulti sharedFeatures,
+            SharedFeatures sharedFeatures,
             Logger logger)
             throws InitializeException {
         try {

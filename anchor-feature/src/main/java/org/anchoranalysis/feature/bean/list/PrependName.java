@@ -32,33 +32,30 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.input.FeatureInput;
+import org.anchoranalysis.feature.name.AssignFeatureNameUtilities;
 
 /**
- * Prepends a string to each feature in the list
+ * Prepends a string to the custom-name of each feature in a list.
  *
  * @author Owen Feehan
  */
 public class PrependName extends FeatureListProvider<FeatureInput> {
 
     // START BEAN PROPERTIES
+    /** Provides the features and names before any prepending. */
     @BeanField @Getter @Setter private FeatureListProvider<FeatureInput> item;
 
-    @BeanField @Getter @Setter private String prependString;
+    /** The string to prepend to the custom-name of each feature. */
+    @BeanField @Getter @Setter private String prefix;
     // END BEAN PROPERTIES
-
-    public static void setNewNameOnFeature(
-            Feature<? extends FeatureInput> f, String existingName, String prependString) {
-        f.setCustomName(String.format("%s%s", prependString, existingName));
-    }
 
     @Override
     public FeatureList<FeatureInput> get() throws ProvisionFailedException {
 
         FeatureList<FeatureInput> features = item.get();
 
-        for (Feature<FeatureInput> f : features) {
-            String existingName = f.getFriendlyName();
-            setNewNameOnFeature(f, existingName, prependString);
+        for (Feature<FeatureInput> feature : features) {
+            AssignFeatureNameUtilities.assignWithPrefix(feature, feature.getFriendlyName(), prefix);
         }
 
         return features;

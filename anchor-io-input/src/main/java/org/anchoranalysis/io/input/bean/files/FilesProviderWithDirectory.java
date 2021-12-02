@@ -30,8 +30,8 @@ import java.io.File;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
-import org.anchoranalysis.io.input.InputContextParams;
-import org.anchoranalysis.io.input.bean.InputManagerParams;
+import org.anchoranalysis.io.input.InputContextParameters;
+import org.anchoranalysis.io.input.bean.InputManagerParameters;
 import org.anchoranalysis.io.input.file.FilesProviderException;
 
 /**
@@ -43,22 +43,24 @@ import org.anchoranalysis.io.input.file.FilesProviderException;
 public abstract class FilesProviderWithDirectory extends FilesProvider {
 
     @Override
-    public final List<File> create(InputManagerParams params) throws FilesProviderException {
-        return matchingFilesForDirectory(getDirectoryAsPath(params.getInputContext()), params);
+    public final List<File> create(InputManagerParameters parameters)
+            throws FilesProviderException {
+        return matchingFilesForDirectory(
+                getDirectoryAsPath(parameters.getInputContext()), parameters);
     }
 
     @Override
-    public Optional<Path> rootDirectory(InputContextParams inputContext) {
+    public Optional<Path> rootDirectory(InputContextParameters inputContext) {
         return Optional.of(getDirectoryAsPath(inputContext));
     }
 
-    public abstract Path getDirectoryAsPath(InputContextParams inputContext);
+    public abstract Path getDirectoryAsPath(InputContextParameters inputContext);
 
-    public abstract List<File> matchingFilesForDirectory(Path directory, InputManagerParams params)
-            throws FilesProviderException;
+    public abstract List<File> matchingFilesForDirectory(
+            Path directory, InputManagerParameters parameters) throws FilesProviderException;
 
     /** Like getDirectory as Path but converts any relative path to absolute one */
-    public Path getDirectoryAsPathEnsureAbsolute(InputContextParams inputContext) {
+    public Path getDirectoryAsPathEnsureAbsolute(InputContextParameters inputContext) {
         return makeAbsolutePathIfNecessary(getDirectoryAsPath(inputContext));
     }
 

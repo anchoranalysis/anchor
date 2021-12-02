@@ -38,7 +38,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.format.ImageFileFormat;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.io.input.InputReadFailedException;
-import org.anchoranalysis.io.input.bean.InputManagerParams;
+import org.anchoranalysis.io.input.bean.InputManagerParameters;
 import org.anchoranalysis.io.input.bean.path.matcher.MatchExtensions;
 import org.anchoranalysis.io.input.bean.path.matcher.MatchGlob;
 import org.anchoranalysis.io.input.bean.path.matcher.PathMatcher;
@@ -94,19 +94,22 @@ public class SearchDirectory extends FilesProviderWithDirectoryString {
 
     // Matching files
     @Override
-    public List<File> matchingFilesForDirectory(Path directory, InputManagerParams params)
+    public List<File> matchingFilesForDirectory(Path directory, InputManagerParameters parameters)
             throws FilesProviderException {
 
         Optional<Integer> maxDirectoryDepthOptional =
                 OptionalUtilities.createFromFlag(maxDirectoryDepth >= 0, maxDirectoryDepth);
         try {
             List<File> filesUnsorted =
-                    params.getExecutionTimeRecorder()
+                    parameters
+                            .getExecutionTimeRecorder()
                             .recordExecutionTime(
                                     "Searching filesystem for inputs",
                                     () ->
                                             searchMatchingFiles(
-                                                    directory, maxDirectoryDepthOptional, params));
+                                                    directory,
+                                                    maxDirectoryDepthOptional,
+                                                    parameters));
             if (sort) {
                 Collections.sort(filesUnsorted);
             }
@@ -136,7 +139,9 @@ public class SearchDirectory extends FilesProviderWithDirectoryString {
     }
 
     private List<File> searchMatchingFiles(
-            Path directory, Optional<Integer> maxDirectoryDepthOptional, InputManagerParams params)
+            Path directory,
+            Optional<Integer> maxDirectoryDepthOptional,
+            InputManagerParameters parameters)
             throws InputReadFailedException {
         return matcher.matchingFiles(
                 directory,
@@ -144,6 +149,6 @@ public class SearchDirectory extends FilesProviderWithDirectoryString {
                 ignoreHidden,
                 acceptDirectoryErrors,
                 maxDirectoryDepthOptional,
-                Optional.of(params));
+                Optional.of(parameters));
     }
 }

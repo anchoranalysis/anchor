@@ -46,8 +46,8 @@ public class Merged extends FeatureDeriveFromPair {
     }
 
     @Override
-    public double calculate(SessionInput<FeatureInputPairObjects> params)
+    public double calculate(SessionInput<FeatureInputPairObjects> input)
             throws FeatureCalculationException {
-        return valueFromMerged(params);
+        return valueFromMerged(input);
     }
 }

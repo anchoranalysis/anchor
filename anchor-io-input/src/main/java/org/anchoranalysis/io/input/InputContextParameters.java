@@ -35,14 +35,14 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.index.range.IndexRangeNegative;
-import org.anchoranalysis.io.input.bean.DebugModeParams;
+import org.anchoranalysis.io.input.bean.DebugModeParameters;
 
 /**
  * Additional parameters that offer context for many beans that provide input-functions.
  *
  * @author Owen Feehan
  */
-public class InputContextParams {
+public class InputContextParameters {
 
     /** A list of paths referring to specific inputs */
     @Getter @Setter private Optional<List<Path>> inputPaths;
@@ -57,7 +57,7 @@ public class InputContextParams {
     @Getter @Setter private Set<String> inputFilterExtensions;
 
     /** Parameters for debug-mode (only defined if we are in debug mode) */
-    @Getter @Setter private Optional<DebugModeParams> debugModeParams = Optional.empty();
+    @Getter @Setter private Optional<DebugModeParameters> debugModeParameters = Optional.empty();
 
     /**
      * If true, the entire filename or relative path (excluding extension) is used to determine a
@@ -80,7 +80,7 @@ public class InputContextParams {
      * @throws IOException
      */
     public void setInputDirectory(Optional<Path> inputDirectory) throws IOException {
-        OptionalUtilities.ifPresent(inputDirectory, InputContextParams::checkAbsolutePath);
+        OptionalUtilities.ifPresent(inputDirectory, InputContextParameters::checkAbsolutePath);
         this.inputDirectory = inputDirectory;
     }
 

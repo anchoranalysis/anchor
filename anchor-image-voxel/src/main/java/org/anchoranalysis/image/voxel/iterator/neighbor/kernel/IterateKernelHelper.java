@@ -56,17 +56,17 @@ public class IterateKernelHelper {
      *
      * @param kernel the kernel to apply.
      * @param voxels the voxels to apply the kernel to.
-     * @param params parameters influencing how the kernel is applied.
+     * @param parameters parameters influencing how the kernel is applied.
      * @param processor called on each voxel.
      */
     public static void overAll(
             Kernel kernel,
             BinaryVoxels<UnsignedByteBuffer> voxels,
-            KernelApplicationParameters params,
+            KernelApplicationParameters parameters,
             ProcessKernelPointCursor processor) {
         AddLocalSlicesProcessor process =
-                new AddLocalSlicesProcessor(kernel, voxels, processor, params.isUseZ());
-        IterateVoxelsAll.withCursor(voxels, params, process);
+                new AddLocalSlicesProcessor(kernel, voxels, processor, parameters.isUseZ());
+        IterateVoxelsAll.withCursor(voxels, parameters, process);
     }
 
     /**
@@ -76,7 +76,7 @@ public class IterateKernelHelper {
      * @param voxels the voxels in which a bounding-box resides.
      * @param box a bounding-box pertaining to {@code voxels} indicating which voxels are iterated
      *     over.
-     * @param params parameters influencing how the kernel is applied.
+     * @param parameters parameters influencing how the kernel is applied.
      * @param processor called on each voxel within the bounding-box.
      * @throws OperationFailedException if the bounding-box is not contained within {@code voxels}.
      */
@@ -84,13 +84,13 @@ public class IterateKernelHelper {
             Kernel kernel,
             BinaryVoxels<UnsignedByteBuffer> voxels,
             BoundingBox box,
-            KernelApplicationParameters params,
+            KernelApplicationParameters parameters,
             ProcessKernelPointCursor processor)
             throws OperationFailedException {
         checkBoxInsideVoxels(voxels, box);
         AddLocalSlicesProcessor processorWithSlices =
-                new AddLocalSlicesProcessor(kernel, voxels, processor, params.isUseZ());
-        IterateVoxelsBoundingBox.withCursor(voxels, box, params, processorWithSlices);
+                new AddLocalSlicesProcessor(kernel, voxels, processor, parameters.isUseZ());
+        IterateVoxelsBoundingBox.withCursor(voxels, box, parameters, processorWithSlices);
     }
 
     /**
@@ -103,7 +103,7 @@ public class IterateKernelHelper {
      * @param voxels the voxels in which a bounding-box resides.
      * @param box a bounding-box pertaining to {@code voxels} indicating which voxels are iterated
      *     over.
-     * @param params parameters influencing how the kernel is applied.
+     * @param parameters parameters influencing how the kernel is applied.
      * @param predicate a condition tested on each voxel until it first returns true.
      * @return whether at least one voxel satisfied {@code predicate}.
      * @throws OperationFailedException if the bounding-box is not contained within {@code voxels}.
@@ -112,13 +112,14 @@ public class IterateKernelHelper {
             Kernel kernel,
             BinaryVoxels<UnsignedByteBuffer> voxels,
             BoundingBox box,
-            KernelApplicationParameters params,
+            KernelApplicationParameters parameters,
             PredicateKernelPointCursor predicate)
             throws OperationFailedException {
         checkBoxInsideVoxels(voxels, box);
         AddLocalSlicesPredicate predicateWithSlices =
-                new AddLocalSlicesPredicate(kernel, voxels, predicate, params.isUseZ());
-        return IterateVoxelsBoundingBox.withCursorUntil(voxels, box, params, predicateWithSlices);
+                new AddLocalSlicesPredicate(kernel, voxels, predicate, parameters.isUseZ());
+        return IterateVoxelsBoundingBox.withCursorUntil(
+                voxels, box, parameters, predicateWithSlices);
     }
 
     /** Throws an exception if the bounding-box does not fit inside the extent of the voxels. */

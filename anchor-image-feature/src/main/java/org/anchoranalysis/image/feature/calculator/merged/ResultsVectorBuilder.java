@@ -57,7 +57,7 @@ class ResultsVectorBuilder {
         this.count = 0;
     }
 
-    /** Calculates and inserts a derived obj-mask params from a merged. */
+    /** Calculates and inserts a derived {@link ObjectMask} input from a merged input. */
     public void calculateAndInsert(
             FeatureInputPairObjects inputPair,
             Function<FeatureInputPairObjects, ObjectMask> extractObj,

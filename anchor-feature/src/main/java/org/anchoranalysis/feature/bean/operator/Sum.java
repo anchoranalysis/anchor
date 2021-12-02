@@ -36,16 +36,27 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.feature.input.FeatureInput;
 
+/**
+ * Sums the results after calculating a list of {@link Feature}s.
+ *
+ * @author Owen Feehan
+ * @param <T> feature input-type of all features in the list, as well as the returned result.
+ */
 @NoArgsConstructor
-public class Sum<T extends FeatureInput> extends FeatureListElem<T> {
+public class Sum<T extends FeatureInput> extends FeatureFromList<T> {
 
     // START BEAN PROPERTIES
     /** If true, we ignore any NaN values. Otherwise the sum becomes NaN */
     @BeanField @Getter @Setter private boolean ignoreNaN;
     // END BEAN PROPERTIES
 
-    public Sum(FeatureList<T> list) {
-        super(list);
+    /**
+     * Create with a list of {@link Feature}s which become summed.
+     *
+     * @param features the features.
+     */
+    public Sum(FeatureList<T> features) {
+        super(features);
     }
 
     @Override

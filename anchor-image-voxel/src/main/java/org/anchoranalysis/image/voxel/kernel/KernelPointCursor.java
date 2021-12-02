@@ -56,7 +56,7 @@ public final class KernelPointCursor {
     @Getter private Point3i point;
 
     private final BinaryValuesByte binaryValues;
-    private final KernelApplicationParameters params;
+    private final KernelApplicationParameters parameters;
 
     /** The size of the image the kernel iterates over. */
     @Getter private final Extent extent;
@@ -77,14 +77,14 @@ public final class KernelPointCursor {
      * @param point the point in the image (in three dimensions) where current focus resides.
      * @param extent the size of the image.
      * @param binaryValues what intensity values define <i>on</i> and <i>off</i> states.
-     * @param params parameters that influence how the kernel is applied.
+     * @param parameters parameters that influence how the kernel is applied.
      */
     public KernelPointCursor(
             int index,
             Point3i point,
             Extent extent,
             BinaryValuesByte binaryValues,
-            KernelApplicationParameters params) {
+            KernelApplicationParameters parameters) {
         this.index = index;
         this.point = point;
         this.extent = extent;
@@ -92,7 +92,7 @@ public final class KernelPointCursor {
         this.yExtent = extent.y();
         this.xExtentTwice = xExtent * 2;
         this.binaryValues = binaryValues;
-        this.params = params;
+        this.parameters = parameters;
     }
 
     /** Increments the point and associated index by one in the X dimension. */
@@ -177,7 +177,7 @@ public final class KernelPointCursor {
      * @return true iff the kernel should additionally be applied along the Z dimension.
      */
     public boolean isUseZ() {
-        return params.isUseZ();
+        return parameters.isUseZ();
     }
 
     /**
@@ -244,7 +244,7 @@ public final class KernelPointCursor {
      *     circumstance, otherwise they are treated as <i>off</i>.
      */
     public boolean isOutsideOn() {
-        return params.isOutsideOn();
+        return parameters.isOutsideOn();
     }
 
     /**
@@ -254,6 +254,6 @@ public final class KernelPointCursor {
      * @return true iff both conditions above are true.
      */
     public boolean isOutsideOffUnignored() {
-        return params.isOutsideOffUnignored();
+        return parameters.isOutsideOffUnignored();
     }
 }

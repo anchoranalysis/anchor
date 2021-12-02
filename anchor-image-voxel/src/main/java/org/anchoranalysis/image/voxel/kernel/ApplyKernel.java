@@ -60,14 +60,14 @@ public class ApplyKernel {
      *
      * @param kernel the kernel to apply.
      * @param voxels the voxels to apply the kernel on.
-     * @param params parameters influencing how the kernel is applied.
+     * @param parameters parameters influencing how the kernel is applied.
      * @return a newly created {@code BinaryVoxels<UnsignedByteBuffer>} that is the result of
      *     applying the kernel, and using the same binary-values as {@code voxels}.
      */
     public static BinaryVoxels<UnsignedByteBuffer> apply(
             BinaryKernel kernel,
             BinaryVoxels<UnsignedByteBuffer> voxels,
-            KernelApplicationParameters params) {
+            KernelApplicationParameters parameters) {
 
         Voxels<UnsignedByteBuffer> out = FACTORY.createInitialized(voxels.extent());
 
@@ -76,7 +76,7 @@ public class ApplyKernel {
         IterateKernelHelper.overAll(
                 kernel,
                 voxels,
-                params,
+                parameters,
                 new ProcessKernelPointCursor() {
 
                     private UnsignedByteBuffer outBuffer;
@@ -104,15 +104,15 @@ public class ApplyKernel {
      *
      * @param kernel the kernel to be applied.
      * @param voxels the voxels to iterate over.
-     * @param params parameters that affect how the kernel is applied.
+     * @param parameters parameters that affect how the kernel is applied.
      * @return the sum of the count value returned by the kernel over all iterated voxels.
      */
     public static int applyForCount(
             CountKernel kernel,
             BinaryVoxels<UnsignedByteBuffer> voxels,
-            KernelApplicationParameters params) {
+            KernelApplicationParameters parameters) {
         try {
-            return applyForCount(kernel, voxels, new BoundingBox(voxels.extent()), params);
+            return applyForCount(kernel, voxels, new BoundingBox(voxels.extent()), parameters);
         } catch (OperationFailedException e) {
             throw new AnchorImpossibleSituationException();
         }
@@ -125,7 +125,7 @@ public class ApplyKernel {
      * @param voxels the voxels to iterate over.
      * @param box a bounding-box (coordinates relative to voxels) that restricts where iteration
      *     occurs. Must be contained within voxels.
-     * @param params parameters that affect how the kernel is applied.
+     * @param parameters parameters that affect how the kernel is applied.
      * @return the sum of the count value returned by the kernel over all iterated voxels.
      * @throws OperationFailedException if the operation cannot complete successfully.
      */
@@ -133,7 +133,7 @@ public class ApplyKernel {
             CountKernel kernel,
             BinaryVoxels<UnsignedByteBuffer> voxels,
             BoundingBox box,
-            KernelApplicationParameters params)
+            KernelApplicationParameters parameters)
             throws OperationFailedException {
 
         Counter counter = new Counter();
@@ -142,7 +142,7 @@ public class ApplyKernel {
                 kernel,
                 voxels,
                 box,
-                params,
+                parameters,
                 point -> counter.incrementBy(kernel.calculateAt(point)));
 
         return counter.getCount();
@@ -155,7 +155,7 @@ public class ApplyKernel {
      * @param voxels the voxels to iterate over.
      * @param box a bounding-box (coordinates relative to voxels) that restricts where iteration
      *     occurs. Must be contained within voxels.
-     * @param params parameters that affect how the kernel is applied.
+     * @param parameters parameters that affect how the kernel is applied.
      * @return true if a positive-value is encountered, 0 if it never is encountered.
      * @throws OperationFailedException if the operation cannot complete successfully.
      */
@@ -163,11 +163,11 @@ public class ApplyKernel {
             CountKernel kernel,
             BinaryVoxels<UnsignedByteBuffer> voxels,
             BoundingBox box,
-            KernelApplicationParameters params)
+            KernelApplicationParameters parameters)
             throws OperationFailedException {
 
         return IterateKernelHelper.overBoxUntil(
-                kernel, voxels, box, params, point -> kernel.calculateAt(point) > 0);
+                kernel, voxels, box, parameters, point -> kernel.calculateAt(point) > 0);
     }
 
     /**
@@ -175,20 +175,20 @@ public class ApplyKernel {
      *
      * @param kernel the kernel to be applied.
      * @param voxels the voxels to iterate over.
-     * @param params parameters that affect how the kernel is applied.
+     * @param parameters parameters that affect how the kernel is applied.
      * @return the total number of true values, after the kernel is applied to every voxel.
      */
     public static int applyForCount(
             BinaryKernel kernel,
             BinaryVoxels<UnsignedByteBuffer> voxels,
-            KernelApplicationParameters params) {
+            KernelApplicationParameters parameters) {
 
         Counter counter = new Counter();
 
         IterateKernelHelper.overAll(
                 kernel,
                 voxels,
-                params,
+                parameters,
                 point -> {
                     if (kernel.calculateAt(point)) {
                         counter.increment();

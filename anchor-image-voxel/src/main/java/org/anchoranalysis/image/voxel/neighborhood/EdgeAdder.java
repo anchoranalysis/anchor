@@ -55,7 +55,7 @@ class EdgeAdder<V> {
     private final AddEdge<V> addEdge;
 
     /** Avoids any edge if any two objects have a common pixel. */
-    private final EdgeAdderParameters params;
+    private final EdgeAdderParameters parameters;
     // END REQUIRED ARGUMENTS
 
     /** The r-tree underpinning the vertices (or rather their derived object-masks) */
@@ -68,18 +68,18 @@ class EdgeAdder<V> {
      * @param vertexToObject how to convert a individual vertex to an object-mask.
      * @param objects the objects represented in the graph.
      * @param addEdge
-     * @param params avoids any edge if any two objects have a common pixel.
+     * @param parameters avoids any edge if any two objects have a common pixel.
      */
     public EdgeAdder(
             List<V> verticesAsList,
             Function<V, ObjectMask> vertexToObject,
             ObjectCollection objects,
             AddEdge<V> addEdge,
-            EdgeAdderParameters params) {
+            EdgeAdderParameters parameters) {
         this.verticesAsList = verticesAsList;
         this.vertexToObject = vertexToObject;
         this.addEdge = addEdge;
-        this.params = params;
+        this.parameters = parameters;
         this.rTree = createIndicesRTree(objects);
     }
 
@@ -98,7 +98,7 @@ class EdgeAdder<V> {
                         Optional.of(sceneExtent),
                         do3D && sceneExtent.z() > 1,
                         1,
-                        params.isBigNeighborhood());
+                        parameters.isBigNeighborhood());
 
         addWithDilatedMask(ignoreIndex, object, vertexWith, dilated);
     }
@@ -125,7 +125,7 @@ class EdgeAdder<V> {
     }
 
     private boolean doSkipIndex(int index, int ignoreIndex) {
-        if (params.isTestBothDirections()) {
+        if (parameters.isTestBothDirections()) {
             if (index == ignoreIndex) {
                 return true;
             }
@@ -140,7 +140,7 @@ class EdgeAdder<V> {
     private void maybeAddEdge(
             ObjectMask object, ObjectMask dilated, ObjectMask other, V vertexWith, V vertexOther) {
         // Check that they don't overlap
-        if (params.isPreventObjectIntersection() && object.hasIntersectingVoxels(other)) {
+        if (parameters.isPreventObjectIntersection() && object.hasIntersectingVoxels(other)) {
             return;
         }
 

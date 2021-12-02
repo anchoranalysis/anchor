@@ -26,15 +26,14 @@
 
 package org.anchoranalysis.feature.results;
 
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.math3.util.Precision;
 
+@RequiredArgsConstructor
 class ArrayComparerPrecision extends ArrayComparer {
 
-    private double eps;
-
-    public ArrayComparerPrecision(double eps) {
-        this.eps = eps;
-    }
+    /** Amount of allowed absolute error. */
+    private final double eps;
 
     @Override
     protected boolean compareItem(Object obj1, Object obj2) {

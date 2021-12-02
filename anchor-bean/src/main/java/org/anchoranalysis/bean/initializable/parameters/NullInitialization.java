@@ -24,13 +24,27 @@
  * #L%
  */
 
-package org.anchoranalysis.bean.initializable.params;
+package org.anchoranalysis.bean.initializable.parameters;
 
-import org.anchoranalysis.bean.initializable.InitializableBean;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 /**
- * Parent class for all state used to initialise beans in {@link InitializableBean}.
+ * When initialization should occur of a bean, but no parameters (containing data) are required.
  *
  * @author Owen Feehan
  */
-public interface BeanInitialization {}
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public class NullInitialization implements BeanInitialization {
+
+    private static final NullInitialization INSTANCE = new NullInitialization();
+
+    /**
+     * Singleton instance of {@link NullInitialization}.
+     *
+     * @return the singleton instance.
+     */
+    public static NullInitialization instance() {
+        return INSTANCE;
+    }
+}

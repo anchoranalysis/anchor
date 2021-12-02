@@ -199,10 +199,10 @@ public class Dictionary {
     }
 
     /**
-     * Serializes the key-value params to a file
+     * Serializes the key-value parameters to a file.
      *
-     * @param path path to write to
-     * @throws IOException if something goes wrong
+     * @param path path to write to.
+     * @throws IOException if something goes wrong.
      */
     public void writeToFile(Path path) throws IOException {
 

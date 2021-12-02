@@ -27,7 +27,7 @@ package org.anchoranalysis.bean.shared.path;
 
 import java.nio.file.Path;
 import lombok.Getter;
-import org.anchoranalysis.bean.initializable.params.BeanInitialization;
+import org.anchoranalysis.bean.initializable.parameters.BeanInitialization;
 import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
 import org.anchoranalysis.core.identifier.provider.store.SharedObjects;
 

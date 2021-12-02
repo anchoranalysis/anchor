@@ -36,7 +36,7 @@ import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
 import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.input.InputsWithDirectory;
 import org.anchoranalysis.io.input.bean.InputManager;
-import org.anchoranalysis.io.input.bean.InputManagerParams;
+import org.anchoranalysis.io.input.bean.InputManagerParameters;
 
 /**
  * An {@link InputManager} that provides annotations corresponding to images.
@@ -57,12 +57,12 @@ public class AnnotationInputManager<T extends ProvidesStackInput, S extends Anno
     // END BEAN PROPERTIES
 
     @Override
-    public InputsWithDirectory<AnnotationWithStrategy<S>> inputs(InputManagerParams params)
+    public InputsWithDirectory<AnnotationWithStrategy<S>> inputs(InputManagerParameters parameters)
             throws InputReadFailedException {
 
-        try (ProgressMultiple progress = new ProgressMultiple(params.getProgress(), 2)) {
+        try (ProgressMultiple progress = new ProgressMultiple(parameters.getProgress(), 2)) {
 
-            InputsWithDirectory<T> inputs = input.inputs(params);
+            InputsWithDirectory<T> inputs = input.inputs(parameters);
 
             progress.incrementChild();
 

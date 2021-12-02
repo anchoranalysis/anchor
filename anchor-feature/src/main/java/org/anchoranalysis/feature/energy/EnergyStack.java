@@ -39,44 +39,80 @@ import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.spatial.box.Extent;
 
 /**
- * A {@link EnergyStackWithoutParams} with associated {@link Dictionary}.
+ * A {@link EnergyStackWithoutParameters} with associated parameters in a {@link Dictionary}.
  *
  * @author Owen Feehan
  */
 @AllArgsConstructor
 public class EnergyStack {
 
-    private final EnergyStackWithoutParams delegate;
-    @Getter @Setter private Dictionary dictionary;
+    private final EnergyStackWithoutParameters delegate;
 
+    /** The associated parameters. */
+    @Getter @Setter private Dictionary parameters;
+
+    /**
+     * Create from a single {@link Channel}.
+     *
+     * @param channel the channel.
+     */
     public EnergyStack(Channel channel) {
-        this(new EnergyStackWithoutParams(channel));
+        this(new EnergyStackWithoutParameters(channel));
     }
 
-    public EnergyStack(EnergyStackWithoutParams energyStack) {
+    /**
+     * Create from a {@link EnergyStackWithoutParameters} without any additional parameters.
+     *
+     * @param energyStack the energy-stack.
+     */
+    public EnergyStack(EnergyStackWithoutParameters energyStack) {
         this(energyStack, new Dictionary());
     }
 
+    /**
+     * Create from a {@link Stack} with associated parameters in a {@link Dictionary}.
+     *
+     * @param stack the stack.
+     * @param dictionary the associated parameters.
+     */
     public EnergyStack(Stack stack, Dictionary dictionary) {
-        this(new EnergyStackWithoutParams(stack), dictionary);
+        this(new EnergyStackWithoutParameters(stack), dictionary);
     }
 
+    /**
+     * Create from a {@link EnergyStack} without any additional parameters.
+     *
+     * @param stack the stack.
+     */
     public EnergyStack(Stack stack) {
-        this(new EnergyStackWithoutParams(stack));
+        this(new EnergyStackWithoutParameters(stack));
     }
 
+    /**
+     * Create a new stack of {@code Dimensions} with zero-voxel values, without any additional
+     * parameters.
+     *
+     * @param dimensions the dimensions.
+     */
     public EnergyStack(Dimensions dimensions) {
-        this(new EnergyStackWithoutParams(dimensions));
+        this(new EnergyStackWithoutParameters(dimensions));
     }
 
+    /**
+     * Extract a particular z-slice from the {@link EnergyStack} as a new stack.
+     *
+     * @param z the index in the Z-dimension of the slice to extract.
+     * @return the extracted slice, as a new {@link EnergyStack} but reusing the existing voxels.
+     * @throws OperationFailedException if no channels exist in the energy-stack.
+     */
     public EnergyStack extractSlice(int z) throws OperationFailedException {
-        return new EnergyStack(delegate.extractSlice(z), dictionary);
+        return new EnergyStack(delegate.extractSlice(z), parameters);
     }
 
     /**
      * Does exactly one z-slice exist in the energy stack?
      *
-     * @return true iff the number of z-slices is 1
+     * @return true iff the number of z-slices is 1.
      */
     public boolean hasOneSlice() {
         return dimensions().extent().z() == 1;
@@ -92,7 +128,7 @@ public class EnergyStack {
     }
 
     /**
-     * The image-resolution asssociated with the energy-stack.
+     * The image-resolution associated with the energy-stack.
      *
      * @return the image-resolution.
      */
@@ -100,18 +136,44 @@ public class EnergyStack {
         return dimensions().resolution();
     }
 
-    public EnergyStack copyChangeParams(Dictionary dictionaryToAssign) {
+    /**
+     * Makes a copy of the {@link EnergyStack} but assigns a new {@link Dictionary}.
+     *
+     * @param dictionaryToAssign the dictionary.
+     * @return a copy of the existing instance, that is otherwise identical, but contains {@code
+     *     dictionaryToAssign}.
+     */
+    public EnergyStack copyChangeDictionary(Dictionary dictionaryToAssign) {
         return new EnergyStack(delegate, dictionaryToAssign);
     }
 
+    /**
+     * Returns the channel at a particular position in the stack.
+     *
+     * @param index the index (zero-indexed).
+     * @return the respective channel.
+     * @throws IndexOutOfBoundsException if the index is out of range ({@code index < 0 || index >=
+     *     size()}).
+     */
     public Channel getChannel(int index) {
         return delegate.getChannel(index);
     }
 
+    /**
+     * Derive a {@link Stack} representation containing the identical channels to the current
+     * instance.
+     *
+     * @return a newly created {@link Stack}, but reusing the current {@link Channel}s.
+     */
     public Stack asStack() {
         return delegate.asStack();
     }
 
+    /**
+     * The width and height and depth of all {@link Channel}s in the stack.
+     *
+     * @return the size, in three dimensions.
+     */
     public Extent extent() {
         return delegate.extent();
     }
@@ -119,12 +181,17 @@ public class EnergyStack {
     /**
      * The energy-stack without associated parameters.
      *
-     * @return a representation of the energy-stack without params (not newly created).
+     * @return a representation of the energy-stack without parameters (not newly created).
      */
-    public EnergyStackWithoutParams withoutParams() {
+    public EnergyStackWithoutParameters withoutParameters() {
         return delegate;
     }
 
+    /**
+     * The number of channels in the stack.
+     *
+     * @return the number of channels.
+     */
     public final int getNumberChannels() {
         return delegate.getNumberChannels();
     }

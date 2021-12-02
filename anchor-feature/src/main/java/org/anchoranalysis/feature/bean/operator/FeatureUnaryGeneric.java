@@ -39,6 +39,11 @@ import org.anchoranalysis.feature.input.FeatureInput;
 @NoArgsConstructor
 public abstract class FeatureUnaryGeneric<T extends FeatureInput> extends FeatureUnary<T, T> {
 
+    /**
+     * Create with a specific feature, that provides the input to the unary function.
+     *
+     * @param feature the feature.
+     */
     protected FeatureUnaryGeneric(Feature<T> feature) {
         super(feature);
     }

@@ -33,8 +33,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import org.anchoranalysis.bean.OptionalFactory;
-import org.anchoranalysis.io.input.InputContextParams;
-import org.anchoranalysis.io.input.bean.DebugModeParams;
+import org.anchoranalysis.io.input.InputContextParameters;
+import org.anchoranalysis.io.input.bean.DebugModeParameters;
 import org.anchoranalysis.io.output.path.prefixer.PathPrefixerContext;
 import org.anchoranalysis.io.output.path.prefixer.PathPrefixerException;
 
@@ -61,7 +61,7 @@ public class ExecutionArguments {
     @Getter private final TaskArguments task = new TaskArguments();
 
     /** If defined, parameters for debug-mode. */
-    private Optional<DebugModeParams> debugModeParams = Optional.empty();
+    private Optional<DebugModeParameters> debugModeParameters = Optional.empty();
 
     public ExecutionArguments(Path modelDirectory) {
         input.assignModelDirectory(modelDirectory);
@@ -72,9 +72,9 @@ public class ExecutionArguments {
      *
      * @throws IOException
      */
-    public InputContextParams createInputContext() throws IOException {
-        InputContextParams out = new InputContextParams();
-        out.setDebugModeParams(debugModeParams);
+    public InputContextParameters createInputContext() throws IOException {
+        InputContextParameters out = new InputContextParameters();
+        out.setDebugModeParameters(debugModeParameters);
         out.setInputDirectory(input.getDirectory());
         out.setInputPaths(input.getPaths());
         input.getFilterGlob().ifPresent(out::setInputFilterGlob);
@@ -90,18 +90,18 @@ public class ExecutionArguments {
     }
 
     /**
-     * Activates debug-mode
+     * Activates debug-mode.
      *
      * @param debugContains maybe a string used for filtering inputs during debugging, or an
-     *     empty-string if this isn't enabled
+     *     empty-string if this isn't enabled.
      */
     public void activateDebugMode(String debugContains) {
         Optional<String> debugContainsAsOptional =
                 OptionalFactory.create(!debugContains.isEmpty(), () -> debugContains);
-        debugModeParams = Optional.of(new DebugModeParams(debugContainsAsOptional));
+        debugModeParameters = Optional.of(new DebugModeParameters(debugContainsAsOptional));
     }
 
     public boolean isDebugModeEnabled() {
-        return debugModeParams.isPresent();
+        return debugModeParameters.isPresent();
     }
 }

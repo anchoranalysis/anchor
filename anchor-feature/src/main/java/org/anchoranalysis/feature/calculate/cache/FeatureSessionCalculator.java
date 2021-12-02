@@ -53,12 +53,13 @@ public interface FeatureSessionCalculator<T extends FeatureInput>
     double calculate(Feature<T> feature, SessionInput<T> input) throws FeatureCalculationException;
 
     /**
-     * Calculates a feature-list throwing an exception if there is an error
+     * Calculates a feature-list throwing an exception if there is an error.
      *
-     * @param features list of features
-     * @param input params
-     * @return the results of each feature, with Double.NaN (and the stored exception) if an error
-     *     occurs
+     * @param features list of features.
+     * @param input the input parameterization.
+     * @return the results of each feature, with {@link Double#NaN} (and the stored exception) if an
+     *     error occurs.
+     * @throws NamedFeatureCalculateException if any feature cannot be successfully calculated.
      */
     default ResultsVector calc(FeatureList<T> features, SessionInput<T> input)
             throws NamedFeatureCalculateException {

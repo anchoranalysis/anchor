@@ -99,10 +99,10 @@ public class MonitoredSequentialExecutor<T> {
 
         List<InputAfterSubmission> out = new ArrayList<>();
 
-        int cnt = 1;
+        int count = 1;
 
         for (T input : allInputs) {
-            JobDescription desc = new JobDescription(dscrFunc.apply(input), cnt++);
+            JobDescription desc = new JobDescription(dscrFunc.apply(input), count++);
             JobState state = new JobState();
 
             SubmittedJob submittedJob = new SubmittedJob(desc, state);

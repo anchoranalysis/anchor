@@ -99,7 +99,7 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
      * @param concurrencyPlan available numbers of processors that can call {@link #executeJob}
      * @param inputs a list of inputs, each will result in at least one call to {@link
      *     #executeJob(ParametersUnbound)}.
-     * @param params the experiment-parameters
+     * @param parameters the experiment-parameters.
      * @return the shared-state that is passed to each call to {@link #executeJob} and to {@link
      *     #afterAllJobsAreExecuted}.
      * @throws ExperimentExecutionException
@@ -108,17 +108,18 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
             Outputter outputter,
             ConcurrencyPlan concurrencyPlan,
             List<T> inputs,
-            ParametersExperiment params)
+            ParametersExperiment parameters)
             throws ExperimentExecutionException;
 
     /**
      * Runs the task on one particular input (a job).
      *
-     * @param paramsUnbound parameters for the input (unbound to any output location)
-     * @return whether the job finished successfully or not
+     * @param parametersUnbound parameters for the input (unbound to any output location).
+     * @return whether the job finished successfully or not.
      * @throws JobExecutionException if anything goes wrong with the job which is <b>not</b> logged.
      */
-    public boolean executeJob(ParametersUnbound<T, S> paramsUnbound) throws JobExecutionException {
+    public boolean executeJob(ParametersUnbound<T, S> parametersUnbound)
+            throws JobExecutionException {
 
         Manifest manifestTask = new Manifest();
 
@@ -126,17 +127,18 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
         // The outputter is initially created any log and this is attached later.
         OutputterChecked outputterTask =
                 TaskOutputterFactory.createOutputterForTask(
-                        paramsUnbound.getInput(),
+                        parametersUnbound.getInput(),
                         Optional.of(manifestTask),
-                        paramsUnbound.getParametersExperiment());
+                        parametersUnbound.getParametersExperiment());
         Preconditions.checkArgument(outputterTask.getSettings().hasBeenInitialized());
 
         // Create bound parameters
-        InputBound<T, S> paramsBound = bindOtherParams(paramsUnbound, outputterTask, manifestTask);
+        InputBound<T, S> parametersBound =
+                bindOtherParameters(parametersUnbound, outputterTask, manifestTask);
 
-        outputterTask.assignLogger(paramsBound.getLogger());
+        outputterTask.assignLogger(parametersBound.getLogger());
 
-        return executeJobLogExceptions(paramsBound, paramsUnbound.isSuppressExceptions());
+        return executeJobLogExceptions(parametersBound, parametersUnbound.isSuppressExceptions());
     }
 
     /**
@@ -179,22 +181,22 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
     }
 
     /**
-     * Creates other objects needed to have a fully bound set of parameters for the task
+     * Creates other objects needed to have a fully bound set of parameters for the task.
      *
-     * @param paramsUnbound parameters before being bound for a specific task
-     * @param outputterTaskChecked a bound output manager for the task
-     * @param manifestTask a bound manifest for the task
+     * @param parametersUnbound parameters before being bound for a specific task.
+     * @param outputterTaskChecked a bound output manager for the task.
+     * @param manifestTask a bound manifest for the task.
      * @return a complete {@link InputBound} with all parameters set to objects bound for the
-     *     specific task
+     *     specific task.
      */
-    private InputBound<T, S> bindOtherParams(
-            ParametersUnbound<T, S> paramsUnbound,
+    private InputBound<T, S> bindOtherParameters(
+            ParametersUnbound<T, S> parametersUnbound,
             OutputterChecked outputterTaskChecked,
             Manifest manifestTask) {
 
         // We create a new log reporter for this job only
         StatefulMessageLogger loggerJob =
-                createJobLog(paramsUnbound.getParametersExperiment(), outputterTaskChecked);
+                createJobLog(parametersUnbound.getParametersExperiment(), outputterTaskChecked);
 
         ErrorReporter errorReporterJob = new ErrorReporterForTask(loggerJob);
 
@@ -203,33 +205,34 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
 
         // We create new parameters bound specifically to the job
         return new InputBound<>(
-                paramsUnbound.getInput(),
-                paramsUnbound.getSharedState(),
+                parametersUnbound.getInput(),
+                parametersUnbound.getSharedState(),
                 manifestTask,
-                paramsUnbound.getParametersExperiment().isDetailedLogging(),
-                paramsUnbound.getParametersExperiment().getContext(),
+                parametersUnbound.getParametersExperiment().isDetailedLogging(),
+                parametersUnbound.getParametersExperiment().getContext(),
                 new InputOutputContextStateful(
-                        paramsUnbound.getParametersExperiment().getExperimentArguments(),
+                        parametersUnbound.getParametersExperiment().getExperimentArguments(),
                         outputterTask,
-                        paramsUnbound.getParametersExperiment().getExecutionTimeRecorder(),
+                        parametersUnbound.getParametersExperiment().getExecutionTimeRecorder(),
                         loggerJob,
                         errorReporterJob));
     }
 
     private StatefulMessageLogger createJobLog(
-            ParametersExperiment params, OutputterChecked outputterTask) {
-        return params.getLoggerTaskCreator()
+            ParametersExperiment parameters, OutputterChecked outputterTask) {
+        return parameters
+                .getLoggerTaskCreator()
                 .createWithLogFallback(
                         outputterTask,
-                        params.getLoggerExperiment(),
-                        params.getExperimentArguments(),
-                        params.isDetailedLogging());
+                        parameters.getLoggerExperiment(),
+                        parameters.getExperimentArguments(),
+                        parameters.isDetailedLogging());
     }
 
-    private boolean executeJobLogExceptions(InputBound<T, S> params, boolean suppressExceptions)
+    private boolean executeJobLogExceptions(InputBound<T, S> parameters, boolean suppressExceptions)
             throws JobExecutionException {
 
-        StatefulMessageLogger loggerJob = params.getLogReporterJob();
+        StatefulMessageLogger loggerJob = parameters.getLogReporterJob();
 
         StopWatch stopWatchFile = new StopWatch();
         stopWatchFile.start();
@@ -238,38 +241,40 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
         try {
             loggerJob.start();
 
-            if (params.isDetailedLogging()) {
+            if (parameters.isDetailedLogging()) {
 
                 loggerJob.logFormatted(
-                        "File processing started: %s", params.getInput().identifier());
+                        "File processing started: %s", parameters.getInput().identifier());
             }
 
-            executeJobAdditionalOutputs(params);
+            executeJobAdditionalOutputs(parameters);
 
             successfullyFinished = true;
         } catch (AnchorFriendlyCheckedException e) {
-            params.getLogger()
+            parameters
+                    .getLogger()
                     .errorReporter()
                     .recordError(Task.class, e.friendlyMessageHierarchy());
             processExceptionAfterRecordingError(loggerJob, suppressExceptions, e);
         } catch (Throwable e) { // NOSONAR
             // We need to catch both exceptions and errors in order to recover from failure in
             // the specific task. Other tasks will continue executing.
-            params.getLogger().errorReporter().recordError(Task.class, e);
+            parameters.getLogger().errorReporter().recordError(Task.class, e);
             processExceptionAfterRecordingError(loggerJob, suppressExceptions, e);
         } finally {
 
             stopWatchFile.stop();
 
-            if (params.isDetailedLogging()) {
+            if (parameters.isDetailedLogging()) {
                 loggerJob.logFormatted(
                         "File processing ended:   %s (time taken = %ds)",
-                        params.getInput().identifier(), stopWatchFile.getTime() / 1000);
+                        parameters.getInput().identifier(), stopWatchFile.getTime() / 1000);
                 MemoryUtilities.logMemoryUsage("End file processing", loggerJob);
             }
 
             loggerJob.close(
-                    successfullyFinished, params.getLogger().errorReporter().hasWarningOccurred());
+                    successfullyFinished,
+                    parameters.getLogger().errorReporter().hasWarningOccurred());
         }
         return successfullyFinished;
     }
@@ -284,10 +289,11 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
         }
     }
 
-    private void executeJobAdditionalOutputs(InputBound<T, S> params) throws JobExecutionException {
+    private void executeJobAdditionalOutputs(InputBound<T, S> parameters)
+            throws JobExecutionException {
 
         try {
-            doJobOnInput(params);
+            doJobOnInput(parameters);
         } catch (ClassCastException e) {
             throw new JobExecutionException(
                     "Could not cast one class to another. Have you used a compatible input-manager for the task?",
@@ -297,11 +303,12 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
             // handles
             // NB Deal with this in the future... if a task is never called, then close() might
             // never be called on the input-object
-            params.getInput().close(params.getLogger().errorReporter());
+            parameters.getInput().close(parameters.getLogger().errorReporter());
         }
 
-        params.getOutputter()
+        parameters
+                .getOutputter()
                 .writerSelective()
-                .write(OUTPUT_MANIFEST, ManifestGenerator::new, params::getManifest);
+                .write(OUTPUT_MANIFEST, ManifestGenerator::new, parameters::getManifest);
     }
 }

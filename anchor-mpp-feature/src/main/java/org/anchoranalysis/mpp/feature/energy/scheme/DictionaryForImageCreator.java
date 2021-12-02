@@ -38,10 +38,10 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.FeatureInitialization;
 import org.anchoranalysis.feature.energy.EnergyStack;
-import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
+import org.anchoranalysis.feature.energy.EnergyStackWithoutParameters;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.single.FeatureCalculatorSingle;
-import org.anchoranalysis.feature.shared.SharedFeatureMulti;
+import org.anchoranalysis.feature.shared.SharedFeatures;
 import org.anchoranalysis.image.feature.input.FeatureInputStack;
 
 /**
@@ -54,13 +54,13 @@ import org.anchoranalysis.image.feature.input.FeatureInputStack;
 public class DictionaryForImageCreator {
 
     private EnergyScheme energyScheme;
-    private SharedFeatureMulti sharedFeatures;
+    private SharedFeatures sharedFeatures;
     private Logger logger;
 
-    public Dictionary create(EnergyStackWithoutParams energyStack) throws CreateException {
+    public Dictionary create(EnergyStackWithoutParameters energyStack) throws CreateException {
         try {
             Dictionary dictionary = energyScheme.createDictionary();
-            addParamsForImage(energyStack, dictionary);
+            addParametersForImage(energyStack, dictionary);
             return dictionary;
 
         } catch (OperationFailedException e) {
@@ -68,10 +68,11 @@ public class DictionaryForImageCreator {
         }
     }
 
-    private void addParamsForImage(EnergyStackWithoutParams energyStack, Dictionary dictionary)
+    private void addParametersForImage(
+            EnergyStackWithoutParameters energyStack, Dictionary dictionary)
             throws OperationFailedException {
 
-        FeatureInputStack params = new FeatureInputStack(energyStack);
+        FeatureInputStack parameters = new FeatureInputStack(energyStack);
 
         FeatureInitialization initialization =
                 new FeatureInitialization(
@@ -81,21 +82,21 @@ public class DictionaryForImageCreator {
 
             dictionary.putCheck(
                     feature.getName(),
-                    calculateImageFeature(feature.getItem(), initialization, params));
+                    calculateImageFeature(feature.getItem(), initialization, parameters));
         }
     }
 
     private double calculateImageFeature(
             Feature<FeatureInputStack> feature,
             FeatureInitialization initialization,
-            FeatureInputStack params)
+            FeatureInputStack parameters)
             throws OperationFailedException {
 
         try {
             FeatureCalculatorSingle<FeatureInputStack> session =
                     FeatureSession.with(feature, initialization, sharedFeatures, logger);
 
-            return session.calculate(params);
+            return session.calculate(parameters);
 
         } catch (FeatureCalculationException | InitializeException e) {
             throw new OperationFailedException(e);

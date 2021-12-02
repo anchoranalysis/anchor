@@ -36,41 +36,50 @@ import org.anchoranalysis.feature.input.FeatureInputResults;
 import org.anchoranalysis.feature.results.ResultsVectorList;
 
 /**
- * Base class for calculating a statistic across all results in a {@link ResultsVectorList} for a
- * particular feature.
+ * Base class for an instance of {@link FeatureResults} that calculating a statistic across all
+ * results in the {@link ResultsVectorList} for a particular feature-value.
  *
  * @author Owen Feehan
  */
-public abstract class StatisticForFeature extends FeatureResults {
+public abstract class FeatureResultsStatistic extends FeatureResults {
 
     // START BEAN PROPERTIES
+    /** The name of the feature, whose results will provide the statistic. */
     @BeanField @Getter @Setter private String id = "";
     // END BEAN PROPERTIES
 
     @Override
-    public double calculate(FeatureInputResults params) throws FeatureCalculationException {
+    public double calculate(FeatureInputResults input) throws FeatureCalculationException {
 
         try {
-            int index = params.getFeatureNameIndex().indexOf(id);
+            int index = input.getFeatureNameIndex().indexOf(id);
 
-            ResultsVectorList results = params.getResults();
+            ResultsVectorList results = input.getResults();
 
             if (results.isEmpty()) {
                 throw new FeatureCalculationException(
                         "No feature-values exist, so this operation is undefined");
             }
 
-            return statisticFromFeatureValue(arrayListFrom(results, index));
+            return statisticFromFeatureValue(extractResultsForFeature(results, index));
 
         } catch (GetOperationFailedException e) {
             throw new FeatureCalculationException(e);
         }
     }
 
-    protected abstract double statisticFromFeatureValue(DoubleArrayList featureVals)
+    /**
+     * Calculates the statistic for a given list of result-value.
+     *
+     * @param values the values to calculate the statistic for.
+     * @return the calculated statistic.
+     * @throws FeatureCalculationException if the calculation cannot complete successfully.
+     */
+    protected abstract double statisticFromFeatureValue(DoubleArrayList values)
             throws FeatureCalculationException;
 
-    private static DoubleArrayList arrayListFrom(ResultsVectorList results, int index) {
+    /** Extracts the results from a {@link ResultsVectorList} for one particular feature. */
+    private static DoubleArrayList extractResultsForFeature(ResultsVectorList results, int index) {
         DoubleArrayList featureValues = new DoubleArrayList();
         results.stream().forEach(resultSingle -> featureValues.add(resultSingle.get(index)));
         return featureValues;

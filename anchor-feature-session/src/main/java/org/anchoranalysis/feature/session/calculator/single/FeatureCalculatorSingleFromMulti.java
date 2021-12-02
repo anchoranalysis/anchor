@@ -61,9 +61,9 @@ public class FeatureCalculatorSingleFromMulti<T extends FeatureInput>
     }
 
     @Override
-    public double calculate(T params) throws FeatureCalculationException {
+    public double calculate(T input) throws FeatureCalculationException {
         try {
-            return delegate.calculate(params).get(0);
+            return delegate.calculate(input).get(0);
         } catch (NamedFeatureCalculateException e) {
             throw e.dropKey();
         }

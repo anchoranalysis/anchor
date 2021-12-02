@@ -33,8 +33,8 @@ import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
 import org.anchoranalysis.feature.energy.EnergyStack;
-import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
-import org.anchoranalysis.feature.shared.SharedFeatureMulti;
+import org.anchoranalysis.feature.energy.EnergyStackWithoutParameters;
+import org.anchoranalysis.feature.shared.SharedFeatures;
 import org.anchoranalysis.mpp.feature.energy.scheme.EnergyScheme;
 import org.anchoranalysis.mpp.feature.energy.scheme.EnergySchemeWithSharedFeatures;
 import org.anchoranalysis.mpp.feature.mark.EnergyMemoList;
@@ -67,7 +67,7 @@ public final class VoxelizedMarksWithEnergy {
     public VoxelizedMarksWithEnergy(
             MarksWithEnergyBreakdown marks,
             EnergyStack energyStack,
-            SharedFeatureMulti sharedFeatures,
+            SharedFeatures sharedFeatures,
             Logger logger)
             throws NamedFeatureCalculateException {
         this(marks, createMemoCollection(marks, energyStack, sharedFeatures, logger), logger);
@@ -97,23 +97,23 @@ public final class VoxelizedMarksWithEnergy {
         return marks.getEnergyScheme();
     }
 
-    public void add(VoxelizedMarkMemo newPxlMark, EnergyStackWithoutParams stack)
+    public void add(VoxelizedMarkMemo newPxlMark, EnergyStackWithoutParameters stack)
             throws NamedFeatureCalculateException {
         marks.add(memoMarks, newPxlMark, stack);
     }
 
-    public void remove(int index, EnergyStackWithoutParams stack)
+    public void remove(int index, EnergyStackWithoutParameters stack)
             throws NamedFeatureCalculateException {
         VoxelizedMarkMemo memoRmv = getMemoForIndex(index);
         marks.remove(memoMarks, index, memoRmv, stack);
     }
 
-    public void remove(VoxelizedMarkMemo memoToRemove, EnergyStackWithoutParams stack)
+    public void remove(VoxelizedMarkMemo memoToRemove, EnergyStackWithoutParameters stack)
             throws NamedFeatureCalculateException {
         marks.remove(memoMarks, memoToRemove, stack);
     }
 
-    public void removeTwo(int index1, int index2, EnergyStackWithoutParams stack)
+    public void removeTwo(int index1, int index2, EnergyStackWithoutParameters stack)
             throws NamedFeatureCalculateException {
         marks.removeTwo(memoMarks, index1, index2, stack);
     }
@@ -203,7 +203,7 @@ public final class VoxelizedMarksWithEnergy {
     private static EnergyMemoList createMemoCollection(
             MarksWithEnergyBreakdown marks,
             EnergyStack energyStack,
-            SharedFeatureMulti sharedFeatures,
+            SharedFeatures sharedFeatures,
             Logger logger)
             throws NamedFeatureCalculateException {
         try {
@@ -212,7 +212,7 @@ public final class VoxelizedMarksWithEnergy {
             EnergyMemoList memo =
                     new EnergyMemoList(
                             marks.getIndividual(),
-                            energyStack.withoutParams(),
+                            energyStack.withoutParameters(),
                             marks.getMarks(),
                             marks.getEnergyScheme());
 
@@ -220,7 +220,7 @@ public final class VoxelizedMarksWithEnergy {
 
             // Some energy components need to be calculated in terms of interactions
             //  this we need to track in an intelligent way
-            marks.updateTotal(memo, energyStack.withoutParams());
+            marks.updateTotal(memo, energyStack.withoutParameters());
 
             return memo;
         } catch (InitializeException e) {

@@ -50,7 +50,7 @@ import org.anchoranalysis.io.output.outputter.Outputter;
  * </thead>
  * <tbody>
  * <tr><td>energyStack</td><td>no</td><td>Each channel of the energy-stack as a seperate image.</td></tr>
- * <tr><td>energyStackParams</td><td>no</td><td>XML serialization of the key-value parameters associated with the energy stack.</td></tr>
+ * <tr><td>energyStackParameters</td><td>no</td><td>XML serialization of the key-value parameters associated with the energy stack.</td></tr>
  * </tbody>
  * </table>
  *
@@ -60,10 +60,10 @@ import org.anchoranalysis.io.output.outputter.Outputter;
 public class EnergyStackWriter {
 
     private static final String OUTPUT_ENERGY_STACK_DIRECTORY = "energyStack";
-    private static final String OUTPUT_PARAMS = "energyStackParams";
+    private static final String OUTPUT_PARAMS = "energyStackParameters";
 
     private static final String MANIFEST_FUNCTION_CHANNEL = "energyStackChannel";
-    private static final String MANIFEST_FUNCTION_PARAMS = "energyStackParams";
+    private static final String MANIFEST_FUNCTION_PARAMS = "energyStackParameters";
 
     private final EnergyStack energyStack;
     private final Outputter outputter;
@@ -81,15 +81,16 @@ public class EnergyStackWriter {
 
         createSequenceFactory()
                 .incrementingByOneStream(
-                        directory, energyStack.withoutParams().asStack().asListChannels().stream());
+                        directory,
+                        energyStack.withoutParameters().asStack().asListChannels().stream());
 
-        if (energyStack.getDictionary() != null) {
+        if (energyStack.getParameters() != null) {
             outputter
                     .writerSelective()
                     .write(
                             OUTPUT_PARAMS,
                             () -> new DictionaryGenerator(MANIFEST_FUNCTION_PARAMS),
-                            energyStack::getDictionary);
+                            energyStack::getParameters);
         }
     }
 

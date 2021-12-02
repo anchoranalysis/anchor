@@ -48,16 +48,16 @@ public class CallableJob<T extends InputFromManager, S>
         implements Callable<Optional<JobExecutionException>> {
 
     private Task<T, S> task;
-    private ParametersUnbound<T, S> paramsUnbound;
+    private ParametersUnbound<T, S> parametersUnbound;
     private JobState jobState;
     private JobDescription jobDescription;
     private JobStartStopLogger logger;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param task
-     * @param paramsUnbound
+     * @param parametersUnbound
      * @param taskState
      * @param jobDescription
      * @param monitor
@@ -65,7 +65,7 @@ public class CallableJob<T extends InputFromManager, S>
      */
     public CallableJob(
             Task<T, S> task,
-            ParametersUnbound<T, S> paramsUnbound,
+            ParametersUnbound<T, S> parametersUnbound,
             JobState taskState,
             JobDescription jobDescription,
             ConcurrentJobMonitor monitor,
@@ -73,7 +73,7 @@ public class CallableJob<T extends InputFromManager, S>
             int showOngoingJobsLessThan) {
         super();
         this.task = task;
-        this.paramsUnbound = paramsUnbound;
+        this.parametersUnbound = parametersUnbound;
         this.jobState = taskState;
         this.jobDescription = jobDescription;
         this.logger =
@@ -91,7 +91,7 @@ public class CallableJob<T extends InputFromManager, S>
 
             logger.logStart(jobDescription);
 
-            boolean success = taskDup.executeJob(paramsUnbound);
+            boolean success = taskDup.executeJob(parametersUnbound);
 
             closeJobStateAndLog(success);
 
@@ -111,7 +111,7 @@ public class CallableJob<T extends InputFromManager, S>
             //  in case, even though it's probably already in the task log.
             ErrorReporter errorReporter =
                     new ErrorReporterForTask(
-                            paramsUnbound.getParametersExperiment().getLoggerExperiment());
+                            parametersUnbound.getParametersExperiment().getLoggerExperiment());
             errorReporter.recordError(CallableJob.class, e);
 
             closeJobStateAndLog(false);

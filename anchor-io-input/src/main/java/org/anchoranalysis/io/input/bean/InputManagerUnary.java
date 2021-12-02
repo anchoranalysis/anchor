@@ -50,19 +50,19 @@ public abstract class InputManagerUnary<T extends InputFromManager> extends Inpu
     // END BEAN PROPERITES
 
     @Override
-    public InputsWithDirectory<T> inputs(InputManagerParams params)
+    public InputsWithDirectory<T> inputs(InputManagerParameters parameters)
             throws InputReadFailedException {
-        return inputsFromDelegate(input.inputs(params), params);
+        return inputsFromDelegate(input.inputs(parameters), parameters);
     }
 
     /**
      * Calculates the inputs to return given the inputs from the delegate.
      *
      * @param fromDelegate the inputs from the delegate.
-     * @param params parameters for determining inputs.
+     * @param parameters parameters for determining inputs.
      * @return inputs to return after any further processing.
      */
     protected abstract InputsWithDirectory<T> inputsFromDelegate(
-            InputsWithDirectory<T> fromDelegate, InputManagerParams params)
+            InputsWithDirectory<T> fromDelegate, InputManagerParameters parameters)
             throws InputReadFailedException;
 }

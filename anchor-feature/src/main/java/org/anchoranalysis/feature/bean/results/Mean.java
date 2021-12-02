@@ -35,11 +35,11 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationException;
  *
  * @author Owen Feehan
  */
-public class Mean extends StatisticForFeature {
+public class Mean extends FeatureResultsStatistic {
 
     @Override
-    protected double statisticFromFeatureValue(DoubleArrayList featureVals)
+    protected double statisticFromFeatureValue(DoubleArrayList values)
             throws FeatureCalculationException {
-        return Descriptive.mean(featureVals);
+        return Descriptive.mean(values);
     }
 }

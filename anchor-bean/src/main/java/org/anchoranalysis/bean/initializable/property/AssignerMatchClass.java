@@ -28,7 +28,7 @@ package org.anchoranalysis.bean.initializable.property;
 
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.bean.initializable.InitializableBean;
-import org.anchoranalysis.bean.initializable.params.BeanInitialization;
+import org.anchoranalysis.bean.initializable.parameters.BeanInitialization;
 import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.log.Logger;
 
@@ -51,8 +51,8 @@ public class AssignerMatchClass<P extends BeanInitialization>
 
     @SuppressWarnings("unchecked")
     @Override
-    public void assignParameterToProperties(
-            Object bean, Object parameter, Object parent, Logger logger)
+    public void assignInitializationToProperties(
+            Object bean, Object initialization, Object parent, Logger logger)
             throws InitializeException {
 
         if (!(bean instanceof InitializableBean)) {
@@ -62,7 +62,7 @@ public class AssignerMatchClass<P extends BeanInitialization>
                             InitializableBean.class.getSimpleName()));
         }
 
-        if (!paramTypeMatch.isAssignableFrom(parameter.getClass())) {
+        if (!paramTypeMatch.isAssignableFrom(initialization.getClass())) {
             throw new InitializeException(
                     String.format(
                             "param is not the same class or a subclass of %s, as is required for this property-definer",
@@ -70,7 +70,7 @@ public class AssignerMatchClass<P extends BeanInitialization>
         }
 
         InitializableBean<?, P> propertyValueCast = (InitializableBean<?, P>) bean;
-        propertyValueCast.initialize((P) parameter, logger);
+        propertyValueCast.initialize((P) initialization, logger);
     }
 
     @Override

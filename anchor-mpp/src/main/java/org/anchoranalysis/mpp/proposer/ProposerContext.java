@@ -63,6 +63,6 @@ public class ProposerContext {
     }
 
     public VoxelizedMarkMemo create(Mark mark) {
-        return PxlMarkMemoFactory.create(mark, energyStack.withoutParams(), regionMap);
+        return PxlMarkMemoFactory.create(mark, energyStack.withoutParameters(), regionMap);
     }
 }

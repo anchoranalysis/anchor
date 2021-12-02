@@ -34,7 +34,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.system.path.FilePathToUnixStyleConverter;
-import org.anchoranalysis.io.input.InputContextParams;
+import org.anchoranalysis.io.input.InputContextParameters;
 
 /**
  * Predicates that matches a file-path against a regular expression.
@@ -55,7 +55,7 @@ public class MatchRegularExpression extends PathMatcher {
 
     @Override
     protected Predicate<Path> createMatcherFile(
-            Path directory, Optional<InputContextParams> inputContext) {
+            Path directory, Optional<InputContextParameters> inputContext) {
         if (applyToPath) {
             Pattern pattern = Pattern.compile(expression);
             return path -> acceptPathViaRegEx(path, pattern);

@@ -41,14 +41,14 @@ class AddFeaturesHelper {
      * @param <T> feature-type
      * @param featureList feature-list
      * @param nameParent the parent-name of the list
-     * @param paramsOnlyInDescription iff true, only describe the parameters of the features, but
-     *     not the name. Otherwise both are described.
+     * @param parametersOnlyInDescription iff true, only describe the parameters of the features,
+     *     but not the name. Otherwise both are described.
      * @param store store features are added to
      */
     public static <T extends FeatureInput> void addFeaturesToStore(
             FeatureList<T> featureList,
             String nameParent,
-            boolean paramsOnlyInDescription,
+            boolean parametersOnlyInDescription,
             NamedFeatureStore<T> store) {
 
         // We loop over all features in the ni, and call them all the same thing with a number
@@ -56,7 +56,10 @@ class AddFeaturesHelper {
 
             String chosenName =
                     determineFeatureName(
-                            features, nameParent, featureList.size() == 1, paramsOnlyInDescription);
+                            features,
+                            nameParent,
+                            featureList.size() == 1,
+                            parametersOnlyInDescription);
 
             // We duplicate so that when run in parallel each thread has its own local state
             // for each feature and uses separate cached calculation lists.
@@ -72,24 +75,25 @@ class AddFeaturesHelper {
             Feature<T> feature,
             String nameParent,
             boolean useOnlyParentName,
-            boolean paramsOnlyInDescription) {
+            boolean parametersOnlyInDescription) {
         if (useOnlyParentName) {
             return nameParent;
         } else {
             return String.format(
-                    "%s.%s", nameParent, featureDescription(feature, paramsOnlyInDescription));
+                    "%s.%s", nameParent, featureDescription(feature, parametersOnlyInDescription));
         }
     }
 
-    private static String featureDescription(Feature<?> feature, boolean paramsOnlyInDescription) {
+    private static String featureDescription(
+            Feature<?> feature, boolean parametersOnlyInDescription) {
 
         // If there's a custom-name on the feature this always takes precedence over the description
         if (!feature.getCustomName().isEmpty()) {
             return feature.getCustomName();
         }
 
-        if (paramsOnlyInDescription) {
-            return feature.describeParams();
+        if (parametersOnlyInDescription) {
+            return feature.describeParameters();
         } else {
             return feature.getFriendlyName();
         }

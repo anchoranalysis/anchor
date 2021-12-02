@@ -28,20 +28,41 @@ package org.anchoranalysis.feature.calculate;
 
 import org.anchoranalysis.core.exception.AnchorCheckedException;
 
+/**
+ * When the calculation of a feature cannot complete successfully.
+ *
+ * @author Owen Feehan
+ */
 public class FeatureCalculationException extends AnchorCheckedException {
 
     /** */
     private static final long serialVersionUID = -907417952940489366L;
 
-    public FeatureCalculationException(String string) {
-        super(string);
+    /**
+     * Creates with <i>a message only</i>.
+     *
+     * @param message the message.
+     */
+    public FeatureCalculationException(String message) {
+        super(message);
     }
 
-    public FeatureCalculationException(Throwable exc) {
-        super(exc);
+    /**
+     * Creates with <i>a cause only</i>.
+     *
+     * @param cause the cause.
+     */
+    public FeatureCalculationException(Throwable cause) {
+        super(cause);
     }
 
-    public FeatureCalculationException(String string, Throwable exc) {
-        super(string, exc);
+    /**
+     * Creates with <i>both a message and a cause</i>.
+     *
+     * @param message the message.
+     * @param cause the cause.
+     */
+    public FeatureCalculationException(String message, Throwable cause) {
+        super(message, cause);
     }
 }

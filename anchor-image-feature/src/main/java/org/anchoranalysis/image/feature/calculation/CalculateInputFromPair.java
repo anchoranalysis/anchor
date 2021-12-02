@@ -61,12 +61,12 @@ public class CalculateInputFromPair
 
     @Override
     protected FeatureInputSingleObject execute(FeatureInputPairObjects input) {
-        FeatureInputSingleObject paramsNew = new FeatureInputSingleObject(extractObj(input));
-        paramsNew.setEnergyStack(input.getEnergyStackOptional());
-        return paramsNew;
+        FeatureInputSingleObject inputNew = new FeatureInputSingleObject(extractObject(input));
+        inputNew.setEnergyStack(input.getEnergyStackOptional());
+        return inputNew;
     }
 
-    private ObjectMask extractObj(FeatureInputPairObjects input) {
+    private ObjectMask extractObject(FeatureInputPairObjects input) {
 
         if (extract == Extract.MERGED) {
             return input.getMerged();

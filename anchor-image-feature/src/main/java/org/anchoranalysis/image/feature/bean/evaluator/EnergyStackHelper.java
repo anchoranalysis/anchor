@@ -48,7 +48,7 @@ class EnergyStackHelper {
             if (stackEnergy != null) {
 
                 EnergyStack energyStack = new EnergyStack(stackEnergy.get());
-                energyStack.setDictionary(
+                energyStack.setParameters(
                         OptionalFactory.create(dictionary).orElseGet(Dictionary::new));
                 return Optional.of(energyStack);
             } else {
@@ -60,7 +60,7 @@ class EnergyStackHelper {
     }
 
     public static <T> void maybeSetEnergyStackOnInput(T input, Optional<EnergyStack> energyStack) {
-        // Use reflection, to only set the energyStack on params that supports them
+        // Use reflection, to only set the energyStack on inputs that support them.
         if (input instanceof FeatureInputEnergy && energyStack.isPresent()) {
             ((FeatureInputEnergy) input).setEnergyStack(energyStack.get());
         }

@@ -31,15 +31,15 @@ import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.image.feature.input.FeatureInputPairObjects;
 
 /**
- * Ratio of first-object to second-object in a pair
+ * Ratio of first-object to second-object in a pair.
  *
  * @author Owen Feehan
  */
 public class RatioFirstToSecond extends FeatureDeriveFromPair {
 
     @Override
-    public double calculate(SessionInput<FeatureInputPairObjects> params)
+    public double calculate(SessionInput<FeatureInputPairObjects> input)
             throws FeatureCalculationException {
-        return valueFromFirst(params) / valueFromSecond(params);
+        return valueFromFirst(input) / valueFromSecond(input);
     }
 }

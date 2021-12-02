@@ -34,14 +34,13 @@ import cern.jet.stat.Descriptive;
  *
  * @author Owen Feehan
  */
-public class StandardDeviation extends StatisticForFeature {
+public class StandardDeviation extends FeatureResultsStatistic {
 
     @Override
-    protected double statisticFromFeatureValue(DoubleArrayList featureVals) {
-        double sum = Descriptive.sum(featureVals);
+    protected double statisticFromFeatureValue(DoubleArrayList values) {
+        double sum = Descriptive.sum(values);
         double variance =
-                Descriptive.variance(
-                        featureVals.size(), sum, Descriptive.sumOfSquares(featureVals));
+                Descriptive.variance(values.size(), sum, Descriptive.sumOfSquares(values));
         return Descriptive.standardDeviation(variance);
     }
 }

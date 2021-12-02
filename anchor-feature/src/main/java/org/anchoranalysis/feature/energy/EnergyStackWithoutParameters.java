@@ -43,7 +43,7 @@ import org.anchoranalysis.spatial.box.Extent;
  *
  * @author Owen Feehan
  */
-public class EnergyStackWithoutParams {
+public class EnergyStackWithoutParameters {
 
     /** Either stack to delegate or dimensions (as they cannot be inferred from a stack) */
     private final Either<Dimensions, Stack> container;
@@ -53,7 +53,7 @@ public class EnergyStackWithoutParams {
      *
      * @param channel
      */
-    public EnergyStackWithoutParams(Channel channel) {
+    public EnergyStackWithoutParameters(Channel channel) {
         this.container = Either.right(new Stack(channel));
     }
 
@@ -62,31 +62,54 @@ public class EnergyStackWithoutParams {
      *
      * @param stack the stack which is reused as the energy-stack (i.e. it is not duplicated)
      */
-    public EnergyStackWithoutParams(Stack stack) {
+    public EnergyStackWithoutParameters(Stack stack) {
         this.container = Either.right(stack);
     }
 
     /**
-     * Create a energy-stack with no channels - but with dimensions associated
+     * Create a energy-stack with no channels - but with associated dimensions.
      *
-     * @param dimensions
+     * @param dimensions the dimensions.
      */
-    public EnergyStackWithoutParams(Dimensions dimensions) {
+    public EnergyStackWithoutParameters(Dimensions dimensions) {
         this.container = Either.left(dimensions);
     }
 
+    /**
+     * The number of channels in the stack.
+     *
+     * @return the number of channels.
+     */
     public final int getNumberChannels() {
         return container.map(Stack::getNumberChannels).getOrElseGet(dimensions -> 0);
     }
 
+    /**
+     * The dimensions of all channels in the stack.
+     *
+     * @return the dimensions.
+     */
     public Dimensions dimensions() {
         return container.map(Stack::dimensions).getOrElseGet(Functions.identity());
     }
 
+    /**
+     * The width and height and depth of all {@link Channel}s in the stack.
+     *
+     * @return the size, in three dimensions.
+     */
     public Extent extent() {
         return dimensions().extent();
     }
 
+    /**
+     * Returns the channel at a particular position in the stack.
+     *
+     * @param index the index (zero-indexed).
+     * @return the respective channel.
+     * @throws IndexOutOfBoundsException if the index is out of range ({@code index < 0 || index >=
+     *     size()})
+     */
     public final Channel getChannel(int index) {
 
         if (container.isLeft()) {
@@ -100,18 +123,32 @@ public class EnergyStackWithoutParams {
         return container.get().getChannel(index);
     }
 
+    /**
+     * Derive a {@link Stack} representation containing the identical channels to the current
+     * instance.
+     *
+     * @return a newly created {@link Stack}, but reusing the current {@link Channel}s.
+     */
     public Stack asStack() {
         return container.getOrElse(Stack::new);
     }
 
-    public EnergyStackWithoutParams extractSlice(int z) throws OperationFailedException {
+    /**
+     * Extract a particular z-slice from the {@link EnergyStackWithoutParameters} as a new stack.
+     *
+     * @param z the index in the Z-dimension of the slice to extract.
+     * @return the extracted slice, as a new {@link EnergyStackWithoutParameters} but reusing the
+     *     existing voxels.
+     * @throws OperationFailedException if no channels exist in the energy-stack.
+     */
+    public EnergyStackWithoutParameters extractSlice(int z) throws OperationFailedException {
 
         if (container.isLeft()) {
             throw new OperationFailedException(
                     "No slice can be extracted, as no channels existing in the energy-stack");
         }
 
-        return new EnergyStackWithoutParams(container.get().extractSlice(z));
+        return new EnergyStackWithoutParameters(container.get().extractSlice(z));
     }
 
     private void throwInvalidIndexException(int numberChannels, int index) {

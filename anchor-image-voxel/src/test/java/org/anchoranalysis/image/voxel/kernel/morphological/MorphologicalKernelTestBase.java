@@ -70,42 +70,45 @@ abstract class MorphologicalKernelTestBase extends BinaryKernelTestBase {
     protected abstract ExpectedValues boundary3D();
 
     @Override
-    protected int expectedInside2D(ObjectMaskFixture fixture, KernelApplicationParameters params) {
-        return whenOutsideOn(params, inside2D());
+    protected int expectedInside2D(
+            ObjectMaskFixture fixture, KernelApplicationParameters parameters) {
+        return whenOutsideOn(parameters, inside2D());
     }
 
     @Override
-    protected int expectedInside3D(ObjectMaskFixture fixture, KernelApplicationParameters params) {
-        return whenOutsideOn(params, inside3D());
+    protected int expectedInside3D(
+            ObjectMaskFixture fixture, KernelApplicationParameters parameters) {
+        return whenOutsideOn(parameters, inside3D());
     }
 
     @Override
     protected int expectedBoundary2D(
-            ObjectMaskFixture fixture, KernelApplicationParameters params) {
-        return whenOutsideOn(params, boundary2D());
+            ObjectMaskFixture fixture, KernelApplicationParameters parameters) {
+        return whenOutsideOn(parameters, boundary2D());
     }
 
     @Override
     protected int expectedBoundary3D(
-            ObjectMaskFixture fixture, KernelApplicationParameters params) {
-        return whenOutsideOn(params, boundary3D());
+            ObjectMaskFixture fixture, KernelApplicationParameters parameters) {
+        return whenOutsideOn(parameters, boundary3D());
     }
 
     /**
      * Specifying values for combinations of useZ (termed 3D or 2D) for when policy is {@link
      * OutsideKernelPolicy#AS_ON}).
      */
-    private static int whenOutsideOn(KernelApplicationParameters params, ExpectedValues values) {
-        if (params.isUseZ()) {
-            return whenOutsideOn(params, values.on3D(), values.otherwise3D());
+    private static int whenOutsideOn(
+            KernelApplicationParameters parameters, ExpectedValues values) {
+        if (parameters.isUseZ()) {
+            return whenOutsideOn(parameters, values.on3D(), values.otherwise3D());
         } else {
-            return whenOutsideOn(params, values.on2D(), values.otherwise2D());
+            return whenOutsideOn(parameters, values.on2D(), values.otherwise2D());
         }
     }
 
     private static int whenOutsideOn(
-            KernelApplicationParameters params, int valueIfOn, int valueOtherwise) {
-        if (params.getOutsideKernelPolicy() == OutsideKernelPolicy.AS_ON) {
+            KernelApplicationParameters parameters, int valueIfOn, int valueOtherwise) {
+        if (parameters.getOutsideKernelPolicy() == OutsideKernelPolicy.AS_ON) {
             return valueIfOn;
         } else {
             return valueOtherwise;

@@ -37,12 +37,25 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.store.NamedFeatureStoreFactory;
 
-public class DefinedNamed<T extends FeatureInput> extends ReferencedFeatures<T> {
+/**
+ * Specifies features via a list of names and associated with features.
+ *
+ * <p>The associated name is assigned to each feature it is associated with.
+ *
+ * <p>Note that if multiple features are associated with the same name (i.e. multiple entries in the
+ * list in {@code NamedBean<FeatureListProvider<T>>} this can result with multiple features with an
+ * identical custom-name.
+ *
+ * @author Owen Feehan
+ * @param <T> the feature input-type.
+ */
+public class DefinedNamed<T extends FeatureInput> extends ReferencingFeatureListProvider<T> {
 
     private static final NamedFeatureStoreFactory STORE_FACTORY =
-            NamedFeatureStoreFactory.bothNameAndParams();
+            NamedFeatureStoreFactory.bothNameAndParameters();
 
     // START BEAN PROPERTIES
+    /** A list of {@link FeatureListProvider}s with an associated name. */
     @BeanField @SkipInit @Getter @Setter private List<NamedBean<FeatureListProvider<T>>> list;
     // END BEAN PROPERTIES
 

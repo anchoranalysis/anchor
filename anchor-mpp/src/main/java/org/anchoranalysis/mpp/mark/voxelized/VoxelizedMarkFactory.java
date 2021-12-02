@@ -28,7 +28,7 @@ package org.anchoranalysis.mpp.mark.voxelized;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
+import org.anchoranalysis.feature.energy.EnergyStackWithoutParameters;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.mpp.mark.Mark;
 
@@ -36,7 +36,7 @@ import org.anchoranalysis.mpp.mark.Mark;
 public class VoxelizedMarkFactory {
 
     public static VoxelizedMarkHistogram create(
-            Mark mark, EnergyStackWithoutParams stack, RegionMap regionMap) {
+            Mark mark, EnergyStackWithoutParameters stack, RegionMap regionMap) {
         return new VoxelizedMarkHistogram(mark, stack, regionMap);
     }
 }

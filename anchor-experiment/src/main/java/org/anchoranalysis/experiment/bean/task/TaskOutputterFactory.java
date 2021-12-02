@@ -43,22 +43,24 @@ class TaskOutputterFactory {
 
     // If pathForBinding is null, we bind to the root folder instead
     public static OutputterChecked createOutputterForTask(
-            InputFromManager input, Optional<Manifest> manifestTask, ParametersExperiment params)
+            InputFromManager input,
+            Optional<Manifest> manifestTask,
+            ParametersExperiment parameters)
             throws JobExecutionException {
         try {
             Optional<Path> pathForBinding = input.pathForBinding();
             if (pathForBinding.isPresent()) {
                 return BindingPathOutputterFactory.createWithBindingPath(
-                        derivePathWithDescription(input), manifestTask, params);
+                        derivePathWithDescription(input), manifestTask, parameters);
             } else {
                 return WithoutBindingPathOutputterFactory.createWithoutBindingPath(
-                        manifestTask, params.getOutputter());
+                        manifestTask, parameters.getOutputter());
             }
         } catch (BindFailedException e) {
             throw new JobExecutionException(
                     String.format(
                             "Cannot bind an outputter for the specific task with pathForBinding=%s and experimentIdentifier='%s'",
-                            describeInputForBinding(input), params.getExperimentIdentifier()),
+                            describeInputForBinding(input), parameters.getExperimentIdentifier()),
                     e);
         }
     }

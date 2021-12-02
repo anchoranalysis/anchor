@@ -29,7 +29,7 @@ package org.anchoranalysis.mpp.mark.voxelized.memo;
 import lombok.Getter;
 import org.anchoranalysis.core.cache.CachedSupplier;
 import org.anchoranalysis.core.exception.AnchorNeverOccursException;
-import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
+import org.anchoranalysis.feature.energy.EnergyStackWithoutParameters;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.voxelized.VoxelizedMark;
@@ -42,14 +42,14 @@ public class VoxelizedMarkMemo {
     /** The associated mark */
     @Getter private Mark mark;
 
-    private EnergyStackWithoutParams stack;
+    private EnergyStackWithoutParameters stack;
 
     @Getter private final RegionMap regionMap;
     // END REQUIRED ARGUMENTS
 
     private CachedSupplier<VoxelizedMark, AnchorNeverOccursException> cachedMark;
 
-    public VoxelizedMarkMemo(Mark mark, EnergyStackWithoutParams stack, RegionMap regionMap) {
+    public VoxelizedMarkMemo(Mark mark, EnergyStackWithoutParameters stack, RegionMap regionMap) {
         this.mark = mark;
         this.stack = stack;
         this.regionMap = regionMap;

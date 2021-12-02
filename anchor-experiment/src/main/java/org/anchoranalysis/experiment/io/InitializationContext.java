@@ -35,7 +35,7 @@ import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 
 /**
- * Context for creating initialization-params.
+ * Context for creating initialization-parameters.
  *
  * @author Owen Feehan
  */

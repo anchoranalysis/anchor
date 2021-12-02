@@ -39,7 +39,7 @@ import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
 import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.input.InputsWithDirectory;
 import org.anchoranalysis.io.input.bean.InputManager;
-import org.anchoranalysis.io.input.bean.InputManagerParams;
+import org.anchoranalysis.io.input.bean.InputManagerParameters;
 import org.anchoranalysis.io.input.bean.path.DerivePath;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 
@@ -90,17 +90,17 @@ public class MultiInputManager extends InputManagerWithStackReader<MultiInput> {
     }
 
     @Override
-    public InputsWithDirectory<MultiInput> inputs(InputManagerParams params)
+    public InputsWithDirectory<MultiInput> inputs(InputManagerParameters parameters)
             throws InputReadFailedException {
-        return input.inputs(params)
+        return input.inputs(parameters)
                 .map(
                         mainStack -> {
                             MultiInput inputToAdd = new MultiInput(inputName, mainStack);
                             appendFromLists(
                                     new AppendHelper(
                                             inputToAdd,
-                                            params.isDebugModeActivated(),
-                                            params.getLogger()));
+                                            parameters.isDebugModeActivated(),
+                                            parameters.getLogger()));
                             return inputToAdd;
                         });
     }

@@ -27,7 +27,7 @@
 package org.anchoranalysis.bean;
 
 import org.anchoranalysis.bean.initializable.InitializableBean;
-import org.anchoranalysis.bean.initializable.params.NullInitialization;
+import org.anchoranalysis.bean.initializable.parameters.NullInitialization;
 import org.anchoranalysis.bean.initializable.property.AssignerMatchClass;
 import org.anchoranalysis.bean.initializable.property.BeanInitializer;
 import org.anchoranalysis.core.exception.InitializeException;
@@ -39,10 +39,10 @@ import org.anchoranalysis.core.log.Logger;
  * @author Owen Feehan
  * @param <T> bean family-type
  */
-public abstract class NullParamsBean<T> extends InitializableBean<T, NullInitialization> {
+public abstract class NullParametersBean<T> extends InitializableBean<T, NullInitialization> {
 
     /** Default constructor. */
-    protected NullParamsBean() {
+    protected NullParametersBean() {
         super(
                 new BeanInitializer<>(NullInitialization.class),
                 new AssignerMatchClass<NullInitialization>(NullInitialization.class));

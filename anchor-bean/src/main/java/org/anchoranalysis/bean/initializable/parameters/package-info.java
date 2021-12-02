@@ -1,3 +1,5 @@
+/** Some parameterization used when initializing beans. */
+package org.anchoranalysis.bean.initializable.parameters;
 /*-
  * #%L
  * anchor-bean
@@ -23,28 +25,3 @@
  * THE SOFTWARE.
  * #L%
  */
-
-package org.anchoranalysis.bean.initializable.params;
-
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-
-/**
- * When initialization should occur of a bean, but no parameters (containing data) are required.
- *
- * @author Owen Feehan
- */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class NullInitialization implements BeanInitialization {
-
-    private static final NullInitialization INSTANCE = new NullInitialization();
-
-    /**
-     * Singleton instance of {@link NullInitialization}.
-     *
-     * @return the singleton instance.
-     */
-    public static NullInitialization instance() {
-        return INSTANCE;
-    }
-}

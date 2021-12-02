@@ -95,11 +95,11 @@ class ContourFromBinaryVoxels {
             boolean atImageBoundary,
             boolean do3D) {
 
-        KernelApplicationParameters params =
+        KernelApplicationParameters parameters =
                 new KernelApplicationParameters(OutsideKernelPolicy.as(atImageBoundary), do3D);
 
         // Otherwise if > 1
-        BinaryVoxels<UnsignedByteBuffer> eroded = multipleErode(voxels, numberErosions, params);
+        BinaryVoxels<UnsignedByteBuffer> eroded = multipleErode(voxels, numberErosions, parameters);
 
         // Binary and between the original version and the eroded version
         MaskXor.apply(voxels, eroded);
@@ -109,13 +109,14 @@ class ContourFromBinaryVoxels {
     private static BinaryVoxels<UnsignedByteBuffer> multipleErode(
             BinaryVoxels<UnsignedByteBuffer> voxels,
             int numberErosions,
-            KernelApplicationParameters params) {
+            KernelApplicationParameters parameters) {
 
         BinaryKernel kernelErosion = new ErosionKernel();
 
-        BinaryVoxels<UnsignedByteBuffer> eroded = ApplyKernel.apply(kernelErosion, voxels, params);
+        BinaryVoxels<UnsignedByteBuffer> eroded =
+                ApplyKernel.apply(kernelErosion, voxels, parameters);
         for (int i = 1; i < numberErosions; i++) {
-            eroded = ApplyKernel.apply(kernelErosion, eroded, params);
+            eroded = ApplyKernel.apply(kernelErosion, eroded, parameters);
         }
         return eroded;
     }

@@ -57,7 +57,7 @@ import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.input.InputsWithDirectory;
 import org.anchoranalysis.io.input.bean.InputManager;
-import org.anchoranalysis.io.input.bean.InputManagerParams;
+import org.anchoranalysis.io.input.bean.InputManagerParameters;
 import org.anchoranalysis.io.input.file.NamedFile;
 import org.anchoranalysis.io.output.bean.OutputManager;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
@@ -150,32 +150,33 @@ public class InputOutputExperiment<T extends InputFromManager, S> extends Output
     }
 
     @Override
-    protected Optional<TaskStatistics> executeExperimentWithParams(ParametersExperiment params)
-            throws ExperimentExecutionException {
+    protected Optional<TaskStatistics> executeExperimentWithParameters(
+            ParametersExperiment parameters) throws ExperimentExecutionException {
         try {
-            InputManagerParams paramsInput =
-                    new InputManagerParams(
-                            params.getExperimentArguments().createInputContext(),
+            InputManagerParameters parametersInput =
+                    new InputManagerParameters(
+                            parameters.getExperimentArguments().createInputContext(),
                             ProgressIgnore.get(),
-                            params.executionTimeRecorder(),
-                            new Logger(params.getLoggerExperiment()));
+                            parameters.executionTimeRecorder(),
+                            new Logger(parameters.getLoggerExperiment()));
 
-            if (params.isDetailedLogging()) {
-                params.getLoggerExperiment().log(DIVIDER.withLabel("Inputs"));
+            if (parameters.isDetailedLogging()) {
+                parameters.getLoggerExperiment().log(DIVIDER.withLabel("Inputs"));
             }
 
             InputsWithDirectory<T> inputs =
-                    params.executionTimeRecorder()
+                    parameters
+                            .executionTimeRecorder()
                             .recordExecutionTime(
                                     EXECUTION_TIME_COLLECTING_INPUTS,
-                                    () -> getInput().inputs(paramsInput));
+                                    () -> getInput().inputs(parametersInput));
             checkCompabilityInputs(inputs.inputs());
 
             if (!inputs.isEmpty()) {
-                return Optional.of(executeExperimentWithInputs(inputs, params));
+                return Optional.of(executeExperimentWithInputs(inputs, parameters));
             } else {
-                params.getLoggerExperiment().log(messageNoInputs);
-                params.getLoggerExperiment().logEmptyLine();
+                parameters.getLoggerExperiment().log(messageNoInputs);
+                parameters.getLoggerExperiment().logEmptyLine();
                 return Optional.empty();
             }
 
@@ -193,21 +194,22 @@ public class InputOutputExperiment<T extends InputFromManager, S> extends Output
     }
 
     private TaskStatistics executeExperimentWithInputs(
-            InputsWithDirectory<T> inputs, ParametersExperiment params)
+            InputsWithDirectory<T> inputs, ParametersExperiment parameters)
             throws ExperimentExecutionException {
-        params.setLoggerTaskCreator(logTask);
+        parameters.setLoggerTaskCreator(logTask);
 
-        if (params.isDetailedLogging()) {
-            describeInputs(params.getLoggerExperiment(), inputs.inputs());
+        if (parameters.isDetailedLogging()) {
+            describeInputs(parameters.getLoggerExperiment(), inputs.inputs());
         }
 
-        Optional<Collection<NamedFile>> nonInputs = CopyNonInputs.prepare(inputs, params);
+        Optional<Collection<NamedFile>> nonInputs = CopyNonInputs.prepare(inputs, parameters);
 
         TaskStatistics statistics =
-                taskProcessor.executeLogStats(params.getOutputter(), inputs.inputs(), params);
+                taskProcessor.executeLogStats(
+                        parameters.getOutputter(), inputs.inputs(), parameters);
 
         if (nonInputs.isPresent()) {
-            CopyNonInputs.copy(nonInputs.get(), params);
+            CopyNonInputs.copy(nonInputs.get(), parameters);
         }
 
         return statistics;

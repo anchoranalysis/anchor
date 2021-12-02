@@ -56,7 +56,7 @@ public abstract class ReporterAggregate<T> extends ReporterInterval<T> {
     }
 
     @Override
-    public void reportEnd(FeedbackEndParameters<T> params) {}
+    public void reportEnd(FeedbackEndParameters<T> parameters) {}
 
     protected abstract AggregateReceiver<T> getAggregateReceiver();
 

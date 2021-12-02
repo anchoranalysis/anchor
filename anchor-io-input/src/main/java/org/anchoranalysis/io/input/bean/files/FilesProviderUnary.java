@@ -32,8 +32,8 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.io.input.InputContextParams;
-import org.anchoranalysis.io.input.bean.InputManagerParams;
+import org.anchoranalysis.io.input.InputContextParameters;
+import org.anchoranalysis.io.input.bean.InputManagerParameters;
 import org.anchoranalysis.io.input.file.FilesProviderException;
 
 /**
@@ -49,12 +49,12 @@ public abstract class FilesProviderUnary extends FilesProvider {
     // END BEAN PROPERTIES
 
     @Override
-    public List<File> create(InputManagerParams params) throws FilesProviderException {
-        return transform(files.create(params), params.isDebugModeActivated());
+    public List<File> create(InputManagerParameters parameters) throws FilesProviderException {
+        return transform(files.create(parameters), parameters.isDebugModeActivated());
     }
 
     @Override
-    public Optional<Path> rootDirectory(InputContextParams inputContext)
+    public Optional<Path> rootDirectory(InputContextParameters inputContext)
             throws FilesProviderException {
         return files.rootDirectory(inputContext);
     }

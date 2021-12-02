@@ -107,7 +107,7 @@ public class EnergyScheme {
         checkAtLeastOneEnergyElement();
     }
 
-    /*** returns the associated {@link Dictionary} or an empty set, if no params are associated with the energyScheme */
+    /*** returns the associated {@link Dictionary} or an empty set, if no dictionary is associated with the energy-scheme. */
     public Dictionary createDictionary() throws CreateException {
         if (dictionary.isPresent()) {
             try {

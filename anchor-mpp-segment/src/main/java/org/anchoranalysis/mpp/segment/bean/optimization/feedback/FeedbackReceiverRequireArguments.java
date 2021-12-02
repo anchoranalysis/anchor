@@ -80,12 +80,12 @@ public class FeedbackReceiverRequireArguments<T> extends FeedbackReceiverBean<T>
     }
 
     @Override
-    public void reportEnd(FeedbackEndParameters<T> params) throws ReporterException {
+    public void reportEnd(FeedbackEndParameters<T> parameters) throws ReporterException {
 
         if (!doFeedback) {
             return;
         }
 
-        feedbackReceiver.reportEnd(params);
+        feedbackReceiver.reportEnd(parameters);
     }
 }

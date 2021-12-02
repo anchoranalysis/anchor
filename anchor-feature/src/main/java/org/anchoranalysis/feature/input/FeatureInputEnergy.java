@@ -36,17 +36,28 @@ import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.core.dimensions.UnitConverter;
 
+/**
+ * A {@link FeatureInputDimensions} that has an optional {@link EnergyStack} associated with it.
+ *
+ * @author Owen Feehan
+ */
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public abstract class FeatureInputEnergy extends FeatureInputDimensions
-        implements FeatureInputParams {
+        implements FeatureInputDictionary {
 
     private Optional<EnergyStack> energyStack;
 
+    /** Creates without an associated energy-stack. */
     protected FeatureInputEnergy() {
         this(Optional.empty());
     }
 
+    /**
+     * Converts voxelized measurements to/from physical units.
+     *
+     * @return a converter that will perform conversions using current resolution, if it exists.
+     */
     public Optional<UnitConverter> getUnitConverterOptional() {
         return getResolutionOptional().map(Resolution::unitConvert);
     }
@@ -57,8 +68,8 @@ public abstract class FeatureInputEnergy extends FeatureInputDimensions
     }
 
     @Override
-    public Optional<Dictionary> getParamsOptional() {
-        return energyStack.map(EnergyStack::getDictionary);
+    public Optional<Dictionary> getDictionaryOptional() {
+        return energyStack.map(EnergyStack::getParameters);
     }
 
     @Override
@@ -66,6 +77,13 @@ public abstract class FeatureInputEnergy extends FeatureInputDimensions
         return dimensionsRequired();
     }
 
+    /**
+     * The image-dimensions associated with the energy-stack, or an exception if no energy-stack
+     * exists.
+     *
+     * @return the image-dimensions.
+     * @throws FeatureCalculationException if the dimensions are not known.
+     */
     public Dimensions dimensionsRequired() throws FeatureCalculationException {
         return dimensionsOptional()
                 .orElseThrow(
@@ -74,13 +92,19 @@ public abstract class FeatureInputEnergy extends FeatureInputDimensions
                                         "Dimensions are required in the input for this operation"));
     }
 
+    /**
+     * The image-dimensions associated with the energy-stack, if it exists.
+     *
+     * @return the image-dimensions, if it exists.
+     */
     public Optional<Dimensions> dimensionsOptional() {
         return energyStack.map(EnergyStack::dimensions);
     }
 
     /**
-     * Returns the energy-stack or throws an exception if it's not set as it's required.
+     * The associated energy-stack or throws an exception if it isn't present.
      *
+     * @return the associated energy-stack.
      * @throws FeatureCalculationException if the energy-stack isn't present
      */
     public EnergyStack getEnergyStackRequired() throws FeatureCalculationException {
@@ -90,15 +114,33 @@ public abstract class FeatureInputEnergy extends FeatureInputDimensions
                                 "An energy-stack is required in the input for this operation"));
     }
 
-    /** Returns the energy-stack which may or not be present */
+    /**
+     * The associated energy-stack.
+     *
+     * @return the energy-stack, if present.
+     */
     public Optional<EnergyStack> getEnergyStackOptional() {
         return energyStack;
     }
 
+    /**
+     * Assigns an {@link EnergyStack} to be associated with the input.
+     *
+     * <p>Any existing energy-stack is replaced.
+     *
+     * @param energyStack the energy-stack to assign.
+     */
     public void setEnergyStack(EnergyStack energyStack) {
         this.energyStack = Optional.of(energyStack);
     }
 
+    /**
+     * Assigns an optional {@link EnergyStack} to be associated with the input.
+     *
+     * <p>Any existing energy-stack state is replaced.
+     *
+     * @param energyStack the optional energy-stack to assign.
+     */
     public void setEnergyStack(Optional<EnergyStack> energyStack) {
         this.energyStack = energyStack;
     }

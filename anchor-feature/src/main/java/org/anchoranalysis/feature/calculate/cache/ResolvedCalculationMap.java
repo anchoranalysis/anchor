@@ -43,20 +43,29 @@ public class ResolvedCalculationMap<S, T extends FeatureInput, U> {
     private FeatureCalculationMap<S, T, U, FeatureCalculationException> map;
 
     /**
-     * Constructor
+     * Creates with a map.
      *
-     * @param map the cacheable-calculation map that is now considered resolved
+     * @param map the calculation map that is now considered resolved.
      */
     public ResolvedCalculationMap(FeatureCalculationMap<S, T, U, FeatureCalculationException> map) {
-        super();
         this.map = map;
     }
 
-    public S getOrCalculate(T params, U key) throws FeatureCalculationException {
-        return map.getOrCalculate(params, key);
+    /**
+     * Executes the operation and returns a result, either by doing the calculation, or retrieving a
+     * cached-result from a previous execution.
+     *
+     * @param input used to calculate a result, if there is no value already cached. Ignored if a
+     *     result already exists.
+     * @param key the key, which determines if a result already exists or not.
+     * @return the result of the calculation.
+     * @throws FeatureCalculationException if the calculation cannot successfully complete.
+     */
+    public S getOrCalculate(T input, U key) throws FeatureCalculationException {
+        return map.getOrCalculate(input, key);
     }
 
-    // We delegate to the CachedCalculationMap to check equality. Needed for the search.
+    // We delegate to the map to check equality. Needed for the search.
     @SuppressWarnings("unchecked")
     @Override
     public boolean equals(Object obj) {
@@ -67,7 +76,7 @@ public class ResolvedCalculationMap<S, T extends FeatureInput, U> {
         }
     }
 
-    // We delegate to the CachedCalculationMap to check hashCode. Needed for the search.
+    // We delegate to the map to check the hash-code. Needed for the search.
     @Override
     public int hashCode() {
         return map.hashCode();

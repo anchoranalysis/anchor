@@ -62,19 +62,21 @@ public interface FeatureSessionCache<T extends FeatureInput> {
      */
     public abstract void initialize(FeatureInitialization initialization, Logger logger);
 
-    /** Invalidates existing caches so all calculations occur freshly */
+    /** Invalidates existing caches so the next calculation occurs freshly. */
     void invalidate();
 
     /**
-     * Invalidates existing caches so all calculations occur freshly - except some particular
-     * child-caches who are not invalidated
+     * Invalidates existing caches so the next calculations occur freshly - except some particular
+     * child-caches who are not invalidated.
+     *
+     * @param childCacheNames the names of the child-caches who are <b>not</b> invalidated.
      */
     void invalidateExcept(Set<ChildCacheName> childCacheNames);
 
     /**
      * A means of calculating feature values using this cache.
      *
-     * @return
+     * @return a {@link FeatureSessionCalculator} bound to this instance.
      */
     FeatureSessionCalculator<T> calculator();
 
@@ -83,7 +85,7 @@ public interface FeatureSessionCache<T extends FeatureInput> {
      *
      * <p>This function trusts the caller to use the correct type for the child-cache.
      *
-     * @param <V> params-type of the child cache to found
+     * @param <V> parameters-type of the child cache to found
      * @param childName name of the child-cache
      * @param inputType the type of V
      * @param cacheCreator factory for creating a cache

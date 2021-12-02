@@ -29,12 +29,13 @@ package org.anchoranalysis.feature.calculate.cache;
 import lombok.EqualsAndHashCode;
 
 /**
- * A unique identifier for a child-cache name, that uses a class and optionally additionally a
- * part-name
+ * A unique identifier for a child-cache's name commposed potentially of two elements.
+ *
+ * <p>The elements are:
  *
  * <ul>
- *   <li>a class: guaranteed to be unique for the class
- *   <li>an optional part-name (string): a further division of the class into different caches
+ *   <li>the class object: guaranteed to be unique for the class.
+ *   <li>an optional part-name (string): a further division of the class into different caches.
  * </ul>
  */
 @EqualsAndHashCode
@@ -44,31 +45,33 @@ public class ChildCacheName {
     private String part;
 
     /**
-     * Uses only the class as an identifier - and a blank part-name
+     * Uses only the class as an identifier.
      *
-     * @param cls class
+     * <p>i.e. it uses no part-name.
+     *
+     * @param cls the class.
      */
     public ChildCacheName(Class<?> cls) {
         this(cls, "");
     }
 
     /**
-     * Uses only the class as an identifier - and a integer part-name
+     * Uses only the class combines with an integer part-name.
      *
-     * @param cls class
+     * @param cls the class.
+     * @param part the integer identifier.
      */
-    public ChildCacheName(Class<?> cls, int id) {
-        this(cls, String.valueOf(id));
+    public ChildCacheName(Class<?> cls, int part) {
+        this(cls, String.valueOf(part));
     }
 
     /**
-     * Uses both the class and a part-name as an identifier
+     * Uses both the class and a part-name as an identifier.
      *
-     * @param cls class
-     * @param part part-name
+     * @param cls the class.
+     * @param part the part-name.
      */
     public ChildCacheName(Class<?> cls, String part) {
-        super();
         this.cls = cls;
         this.part = part;
     }

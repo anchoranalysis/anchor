@@ -34,7 +34,7 @@ import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.core.progress.ProgressIgnore;
 import org.anchoranalysis.core.time.ExecutionTimeRecorder;
 import org.anchoranalysis.core.time.ExecutionTimeRecorderIgnore;
-import org.anchoranalysis.io.input.InputContextParams;
+import org.anchoranalysis.io.input.InputContextParameters;
 
 /**
  * Parameters passed to an {@link InputManager} to generate input-objects
@@ -42,9 +42,9 @@ import org.anchoranalysis.io.input.InputContextParams;
  * @author Owen Feehan
  */
 @RequiredArgsConstructor
-public class InputManagerParams {
+public class InputManagerParameters {
 
-    @Getter private final InputContextParams inputContext;
+    @Getter private final InputContextParameters inputContext;
 
     @Getter private final Progress progress;
 
@@ -58,24 +58,24 @@ public class InputManagerParams {
      *
      * @param logger the logger.
      */
-    public InputManagerParams(Logger logger) {
+    public InputManagerParameters(Logger logger) {
         this(
-                new InputContextParams(),
+                new InputContextParameters(),
                 ProgressIgnore.get(),
                 new ExecutionTimeRecorderIgnore(),
                 logger);
     }
 
-    public InputManagerParams withProgressReporter(Progress progressToAssign) {
-        return new InputManagerParams(
+    public InputManagerParameters withProgressReporter(Progress progressToAssign) {
+        return new InputManagerParameters(
                 inputContext, progressToAssign, executionTimeRecorder, logger);
     }
 
     public boolean isDebugModeActivated() {
-        return inputContext.getDebugModeParams().isPresent();
+        return inputContext.getDebugModeParameters().isPresent();
     }
 
-    public Optional<DebugModeParams> getDebugModeParams() {
-        return inputContext.getDebugModeParams();
+    public Optional<DebugModeParameters> getDebugModeParameters() {
+        return inputContext.getDebugModeParameters();
     }
 }

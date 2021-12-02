@@ -33,7 +33,7 @@ import lombok.Setter;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
 import org.anchoranalysis.feature.energy.EnergyStack;
-import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
+import org.anchoranalysis.feature.energy.EnergyStackWithoutParameters;
 import org.anchoranalysis.mpp.feature.energy.saved.EnergySavedAll;
 import org.anchoranalysis.mpp.feature.energy.saved.EnergySavedInd;
 import org.anchoranalysis.mpp.feature.energy.saved.EnergySavedPairs;
@@ -103,7 +103,7 @@ public class MarksWithEnergyBreakdown implements Serializable {
         return marks;
     }
 
-    public void updateTotal(EnergyMemoList pxlMarkMemoList, EnergyStackWithoutParams stack)
+    public void updateTotal(EnergyMemoList pxlMarkMemoList, EnergyStackWithoutParameters stack)
             throws NamedFeatureCalculateException {
 
         // We calculate an all value
@@ -145,7 +145,7 @@ public class MarksWithEnergyBreakdown implements Serializable {
     public void add(
             EnergyMemoList wrapperInd,
             VoxelizedMarkMemo newPxlMarkMemo,
-            EnergyStackWithoutParams stack)
+            EnergyStackWithoutParameters stack)
             throws NamedFeatureCalculateException {
 
         marks.add(newPxlMarkMemo);
@@ -166,7 +166,7 @@ public class MarksWithEnergyBreakdown implements Serializable {
     public void remove(
             EnergyMemoList wrapperInd,
             VoxelizedMarkMemo markToRemove,
-            EnergyStackWithoutParams stack)
+            EnergyStackWithoutParameters stack)
             throws NamedFeatureCalculateException {
 
         int index = wrapperInd.getIndexForMemo(markToRemove);
@@ -178,7 +178,7 @@ public class MarksWithEnergyBreakdown implements Serializable {
             EnergyMemoList wrapperInd,
             int index,
             VoxelizedMarkMemo markToRemove,
-            EnergyStackWithoutParams stack)
+            EnergyStackWithoutParameters stack)
             throws NamedFeatureCalculateException {
         try {
             getPair().remove(wrapperInd, markToRemove);
@@ -193,7 +193,10 @@ public class MarksWithEnergyBreakdown implements Serializable {
     }
 
     public void removeTwo(
-            EnergyMemoList wrapperInd, int index1, int index2, EnergyStackWithoutParams energyStack)
+            EnergyMemoList wrapperInd,
+            int index1,
+            int index2,
+            EnergyStackWithoutParameters energyStack)
             throws NamedFeatureCalculateException {
 
         VoxelizedMarkMemo memoRmv1 = wrapperInd.getMemoForIndex(index1);
@@ -241,7 +244,7 @@ public class MarksWithEnergyBreakdown implements Serializable {
                         getIndividual(),
                         index,
                         newMark,
-                        energyStack.withoutParams(),
+                        energyStack.withoutParameters(),
                         marks.getEnergyScheme());
         try {
             VoxelizedMarkMemo oldPxlMarkMemo = wrapperInd.getMemoForMark(getMarks(), oldMark);
@@ -253,7 +256,7 @@ public class MarksWithEnergyBreakdown implements Serializable {
         assert (getPair().isMarksSpan(marks.getMarks()));
 
         // we can also calculate both afresh, but slower
-        updateTotal(wrapperInd, energyStack.withoutParams());
+        updateTotal(wrapperInd, energyStack.withoutParameters());
 
         assert ((marks.getEnergyTotal()
                         - getIndividual().getEnergyTotal()

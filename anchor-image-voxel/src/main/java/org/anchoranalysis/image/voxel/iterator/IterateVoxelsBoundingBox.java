@@ -378,14 +378,14 @@ public class IterateVoxelsBoundingBox {
      *
      * @param voxels the voxels to iterator over
      * @param box the box to iterate over (with coordinates referring to {@code voxels}.
-     * @param params to use when applying a kernel
+     * @param parameters to use when applying a kernel
      * @param process process is called for each voxel inside the extent using the same coordinates
      *     as the extent.
      */
     public static void withCursor(
             BinaryVoxels<UnsignedByteBuffer> voxels,
             BoundingBox box,
-            KernelApplicationParameters params,
+            KernelApplicationParameters parameters,
             ProcessKernelPointCursor process) {
 
         KernelPointCursor cursor =
@@ -394,7 +394,7 @@ public class IterateVoxelsBoundingBox {
                         new Point3i(box.cornerMin()),
                         voxels.extent(),
                         voxels.binaryValues().asByte(),
-                        params);
+                        parameters);
 
         Extent extent = voxels.extent();
         Point3i point = cursor.getPoint();
@@ -421,7 +421,7 @@ public class IterateVoxelsBoundingBox {
      *
      * @param voxels the voxels to iterator over
      * @param box the box to iterate over (with coordinates referring to {@code voxels}.
-     * @param params to use when applying a kernel
+     * @param parameters to use when applying a kernel
      * @param predicate evaluates each position of the cursor.
      * @return true as soon as any voxel evaluates true with the {@code predicate}, false if it
      *     never happens.
@@ -429,7 +429,7 @@ public class IterateVoxelsBoundingBox {
     public static boolean withCursorUntil(
             BinaryVoxels<UnsignedByteBuffer> voxels,
             BoundingBox box,
-            KernelApplicationParameters params,
+            KernelApplicationParameters parameters,
             PredicateKernelPointCursor predicate) {
 
         KernelPointCursor cursor =
@@ -438,7 +438,7 @@ public class IterateVoxelsBoundingBox {
                         new Point3i(box.cornerMin()),
                         voxels.extent(),
                         voxels.binaryValues().asByte(),
-                        params);
+                        parameters);
 
         Extent extent = voxels.extent();
         Point3i point = cursor.getPoint();

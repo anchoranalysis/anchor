@@ -66,7 +66,7 @@ public abstract class FeatureCalculation<S, T extends FeatureInput>
     public synchronized S getOrCalculate(T input) throws FeatureCalculationException {
         // The input should be equal to the existing input, but this is not checked
         // as it would add computional cost. Consider an assert with the
-        // checkParamsMatchesInput(input)
+        // checkParametersMatchesInput(input)
         // function for debugging.
         assignInitialization(input);
         return delegate.get();
@@ -78,7 +78,12 @@ public abstract class FeatureCalculation<S, T extends FeatureInput>
     @Override
     public abstract int hashCode();
 
-    public boolean hasCachedCalculation() {
+    /**
+     * Has the calculation already been executed, with a cached result existing?
+     *
+     * @return true iff a cached-result exists.
+     */
+    public boolean hasCachedResult() {
         return delegate.isEvaluated();
     }
 
@@ -89,8 +94,12 @@ public abstract class FeatureCalculation<S, T extends FeatureInput>
     }
 
     /**
-     * This performs the actual calculation when needed. It should only be called once, until
-     * invalidate() is called.
+     * This performs the actual calculation when needed. It should only be called once, until {@link
+     * #invalidate()} is called.
+     *
+     * @param input the input to the calculation.
+     * @return the result of the calculation.
+     * @throws FeatureCalculationException if the calculation cannot be successfully completed.
      */
     protected abstract S execute(T input) throws FeatureCalculationException;
 
@@ -99,15 +108,15 @@ public abstract class FeatureCalculation<S, T extends FeatureInput>
     }
 
     /**
-     * A check that if params are already set, any new inputs must be identical.
+     * A check that if the input is already set, any new inputs must be identical.
      *
      * <p>This method is unused, but delibiberately left for debugging in {@link #getOrCalculate}.
      */
     @SuppressWarnings("unused")
-    private boolean checkParamsMatchesInput(T input) {
-        if (hasCachedCalculation() && input != null && !input.equals(this.input)) {
+    private boolean checkParametersMatchesInput(T input) {
+        if (hasCachedResult() && input != null && !input.equals(this.input)) {
             throw new AnchorFriendlyRuntimeException(
-                    "This feature already has been used, its cache is already set to different params");
+                    "This feature already has been used, its cache is already set to a different input.");
         }
         return true;
     }

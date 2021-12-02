@@ -35,8 +35,8 @@ import java.util.Map;
 import java.util.Optional;
 import org.anchoranalysis.core.progress.ProgressIgnore;
 import org.anchoranalysis.core.time.ExecutionTimeRecorderIgnore;
-import org.anchoranalysis.io.input.InputContextParams;
-import org.anchoranalysis.io.input.bean.InputManagerParams;
+import org.anchoranalysis.io.input.InputContextParameters;
+import org.anchoranalysis.io.input.bean.InputManagerParameters;
 import org.anchoranalysis.io.input.bean.files.SearchDirectory;
 import org.anchoranalysis.io.input.bean.path.matcher.MatchGlob;
 import org.anchoranalysis.io.input.file.FilesProviderException;
@@ -66,8 +66,8 @@ class SerializedObjectsFromDirectory implements SequencedDirectory {
         try {
             Collection<File> files =
                     fileSet.create(
-                            new InputManagerParams(
-                                    new InputContextParams(),
+                            new InputManagerParameters(
+                                    new InputContextParameters(),
                                     ProgressIgnore.get(),
                                     new ExecutionTimeRecorderIgnore(),
                                     null // HACK: Can be safely set to null as

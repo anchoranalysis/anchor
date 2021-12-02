@@ -93,13 +93,13 @@ class ObjectTester<T extends Kernel> {
             boolean atOrigin,
             CalculateExpectedValue calculateValue) {
         for (OutsideKernelPolicy policy : OutsideKernelPolicy.values()) {
-            KernelApplicationParameters params = new KernelApplicationParameters(policy, useZ);
+            KernelApplicationParameters parameters = new KernelApplicationParameters(policy, useZ);
             String message =
                     policy.name()
                             + stringOrEmpty("_atOrigin", atOrigin)
                             + stringOrEmpty("_useZ", useZ)
                             + stringOrEmpty("_scene3D", scene3D);
-            testAndCountOn(scene3D, atOrigin, params, calculateValue, message);
+            testAndCountOn(scene3D, atOrigin, parameters, calculateValue, message);
         }
     }
 
@@ -109,14 +109,14 @@ class ObjectTester<T extends Kernel> {
      * @param scene3D whether to create a 3D object and scene
      * @param atOrigin if true the object is created with its corner at point (0,0,0) in the scene.
      *     Otherwise at a point that isn't adjacent to an XY border, nor a Z border (if 3D).
-     * @param params the parameters to use when applying the kernel.
+     * @param parameters the parameters to use when applying the kernel.
      * @param assertMessage a message to uniquely identify the call to the method for debugging
      *     purposes.
      */
     private void testAndCountOn(
             boolean scene3D,
             boolean atOrigin,
-            KernelApplicationParameters params,
+            KernelApplicationParameters parameters,
             CalculateExpectedValue calculateValue,
             String assertMessage) {
 
@@ -128,8 +128,8 @@ class ObjectTester<T extends Kernel> {
                 CorneredObjectHelper.createObjectFromFixture(fixture, scene3D, atOrigin);
 
         assertEquals(
-                calculateValue.calculate(fixture, params),
-                kernelApplier.apply(object, extentScene, params, createKernel),
+                calculateValue.calculate(fixture, parameters),
+                kernelApplier.apply(object, extentScene, parameters, createKernel),
                 assertMessage);
     }
 

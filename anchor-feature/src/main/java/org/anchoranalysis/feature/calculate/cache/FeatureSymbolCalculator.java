@@ -30,7 +30,9 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
- * Resolves and calculates a feature by a symbol (an ID/variable-name referring to another feature)
+ * Resolves and calculates a feature by a symbol.
+ *
+ * <p>A symbol is an ID/variable-name referring to another feature.
  *
  * @author Owen Feehan
  * @param <T> feature-input type
@@ -38,20 +40,25 @@ import org.anchoranalysis.feature.input.FeatureInput;
 public interface FeatureSymbolCalculator<T extends FeatureInput> {
 
     /**
-     * Due to scoping (different prefixes that can exist), an ID needs to be resolved to a
-     * unique-string before it can be passed to {@code calculateFeatureByIdentifier}
+     * Resolves an identifier to a unique-string, suitable for {@link
+     * #calculateFeatureByIdentifier(String, SessionInput)}.
      *
-     * @param identifier
-     * @return
+     * <p>Due to scoping (different prefixes that can exist), an ID needs to be resolved to a
+     * unique-string before it can be passed to {@link #calculateFeatureByIdentifier(String,
+     * SessionInput)}.
+     *
+     * @param identifier the identifier to resolve.
+     * @return the resolved identifier.
      */
     String resolveFeatureIdentifier(String identifier);
 
     /**
-     * Searches for a feature that matches a particular identifier
+     * Searches for a feature that matches a particular identifier.
      *
-     * @param resolvedIdentifier the identifier
-     * @param input
-     * @throws FeatureCalculationException
+     * @param resolvedIdentifier the identifier.
+     * @param input the feature-input in context of a session.
+     * @return the result of the calculation.
+     * @throws FeatureCalculationException if the feature cannot be successfully calculated.
      */
     double calculateFeatureByIdentifier(String resolvedIdentifier, SessionInput<T> input)
             throws FeatureCalculationException;

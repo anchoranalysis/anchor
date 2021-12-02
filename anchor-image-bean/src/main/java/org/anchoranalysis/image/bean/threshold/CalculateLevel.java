@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.image.bean.threshold;
 
-import org.anchoranalysis.bean.NullParamsBean;
+import org.anchoranalysis.bean.NullParametersBean;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.math.histogram.Histogram;
 
@@ -38,7 +38,7 @@ import org.anchoranalysis.math.histogram.Histogram;
  *
  * @author Owen Feehan
  */
-public abstract class CalculateLevel extends NullParamsBean<CalculateLevel> {
+public abstract class CalculateLevel extends NullParametersBean<CalculateLevel> {
 
     /**
      * Determines a voxel intensity that can be used for thresholding.

@@ -115,9 +115,9 @@ public abstract class OutputExperiment extends Experiment {
             throws ExperimentExecutionException {
 
         try {
-            ParametersExperiment params = createParams(arguments);
-            doExperimentWithParams(params);
-            return Optional.of(params.getOutputter().getOutputDirectory());
+            ParametersExperiment parameters = createParameters(arguments);
+            doExperimentWithParameters(parameters);
+            return Optional.of(parameters.getOutputter().getOutputDirectory());
 
         } catch (CreateException e) {
             throw new ExperimentExecutionException(e);
@@ -132,14 +132,14 @@ public abstract class OutputExperiment extends Experiment {
     /**
      * Executes the experiment for parameters.
      *
-     * @param params a combination of run-time and bean-time specified elements used in the
+     * @param parameters a combination of run-time and bean-time specified elements used in the
      *     experiment.
      * @return statistics of the tasks, if they exist.
      * @throws ExperimentExecutionException if anything occurs stop the experiment finishing its
      *     execution
      */
-    protected abstract Optional<TaskStatistics> executeExperimentWithParams(
-            ParametersExperiment params) throws ExperimentExecutionException;
+    protected abstract Optional<TaskStatistics> executeExperimentWithParameters(
+            ParametersExperiment parameters) throws ExperimentExecutionException;
 
     /**
      * If specified, default rules for determine which outputs are enabled or not.
@@ -148,22 +148,23 @@ public abstract class OutputExperiment extends Experiment {
      */
     protected abstract MultiLevelOutputEnabled defaultOutputs();
 
-    private void doExperimentWithParams(ParametersExperiment params)
+    private void doExperimentWithParameters(ParametersExperiment parameters)
             throws ExperimentExecutionException {
         try {
             StopWatch stopWatchExperiment = new StopWatch();
             stopWatchExperiment.start();
 
-            initBeforeExecution(params);
-            Optional<TaskStatistics> taskStatistics = executeExperimentWithParams(params);
-            tidyUpAfterExecution(params, stopWatchExperiment, taskStatistics);
+            initBeforeExecution(parameters);
+            Optional<TaskStatistics> taskStatistics = executeExperimentWithParameters(parameters);
+            tidyUpAfterExecution(parameters, stopWatchExperiment, taskStatistics);
         } finally {
             // An experiment is considered always successful
-            params.getLoggerExperiment().close(true, false);
+            parameters.getLoggerExperiment().close(true, false);
         }
     }
 
-    private ParametersExperiment createParams(ExecutionArguments arguments) throws CreateException {
+    private ParametersExperiment createParameters(ExecutionArguments arguments)
+            throws CreateException {
 
         Manifest experimentalManifest = new Manifest();
 
@@ -218,7 +219,7 @@ public abstract class OutputExperiment extends Experiment {
                     getOutput().getPrefixer(),
                     feedbackContext);
         } catch (PathPrefixerException e) {
-            throw new CreateException("Cannot create params-context", e);
+            throw new CreateException("Cannot create parameters-context", e);
         } catch (BindFailedException e) {
             throw new CreateException("Bind failed", e);
         }
@@ -235,29 +236,31 @@ public abstract class OutputExperiment extends Experiment {
     }
 
     /** Starts the experiment-logger, and checks the output-manager has been initialzied. */
-    private void initBeforeExecution(ParametersExperiment params)
+    private void initBeforeExecution(ParametersExperiment parameters)
             throws ExperimentExecutionException {
         try {
-            params.getLoggerExperiment().start();
+            parameters.getLoggerExperiment().start();
         } catch (OperationFailedException e) {
             throw new ExperimentExecutionException(e);
         }
-        OutputExperimentLogHelper.maybeLogStart(params);
+        OutputExperimentLogHelper.maybeLogStart(parameters);
 
-        if (!params.getOutputter().getChecked().getSettings().hasBeenInitialized()) {
+        if (!parameters.getOutputter().getChecked().getSettings().hasBeenInitialized()) {
             throw new ExperimentExecutionException("Experiment has not been initialized");
         }
     }
 
     private void tidyUpAfterExecution(
-            ParametersExperiment params,
+            ParametersExperiment parameters,
             StopWatch stopWatchExperiment,
             Optional<TaskStatistics> taskStatistics) {
 
-        params.getExperimentalManifest()
+        parameters
+                .getExperimentalManifest()
                 .ifPresent(
                         manifest ->
-                                params.getOutputter()
+                                parameters
+                                        .getOutputter()
                                         .writerSelective()
                                         .write(
                                                 OUTPUT_MANIFEST,
@@ -269,7 +272,8 @@ public abstract class OutputExperiment extends Experiment {
         long totalExecutionTimeSeconds = stopWatchExperiment.getTime() / 1000;
 
         if (taskStatistics.isPresent()) {
-            params.getOutputter()
+            parameters
+                    .getOutputter()
                     .writerSelective()
                     .write(
                             OUTPUT_EXECUTION_TIME,
@@ -277,12 +281,12 @@ public abstract class OutputExperiment extends Experiment {
                             () ->
                                     DescribeExecutionTimeStatistics.describeExecutionTimes(
                                             taskStatistics.get().executionTimeTotal(),
-                                            params.executionTimeStatistics(),
+                                            parameters.executionTimeStatistics(),
                                             totalExecutionTimeSeconds));
         }
 
-        OutputExperimentLogHelper.maybeRecordedOutputs(recordedOutputs, params);
+        OutputExperimentLogHelper.maybeRecordedOutputs(recordedOutputs, parameters);
 
-        OutputExperimentLogHelper.maybeLogCompleted(params, totalExecutionTimeSeconds);
+        OutputExperimentLogHelper.maybeLogCompleted(parameters, totalExecutionTimeSeconds);
     }
 }

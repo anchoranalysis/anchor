@@ -47,7 +47,7 @@ import org.anchoranalysis.feature.calculate.FeatureInitialization;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.multi.FeatureCalculatorMulti;
-import org.anchoranalysis.feature.shared.SharedFeatureMulti;
+import org.anchoranalysis.feature.shared.SharedFeatures;
 import org.anchoranalysis.mpp.feature.input.FeatureInputPairMemo;
 import org.anchoranalysis.mpp.feature.mark.MemoList;
 import org.anchoranalysis.mpp.mark.Mark;
@@ -83,7 +83,7 @@ public class RandomCollectionWithAddCriteria<T> extends RandomCollection<T> {
     private boolean hasInit = false;
     private EnergyStack energyStack;
     private Logger logger;
-    private SharedFeatureMulti sharedFeatures;
+    private SharedFeatures sharedFeatures;
 
     public RandomCollectionWithAddCriteria(Class<?> pairTypeClass) {
         this.pairTypeClass = pairTypeClass;
@@ -116,7 +116,7 @@ public class RandomCollectionWithAddCriteria<T> extends RandomCollection<T> {
 
     @Override
     public void initUpdatableMarks(
-            MemoForIndex marks, EnergyStack stack, Logger logger, SharedFeatureMulti sharedFeatures)
+            MemoForIndex marks, EnergyStack stack, Logger logger, SharedFeatures sharedFeatures)
             throws InitializeException {
         this.logger = logger;
         this.sharedFeatures = sharedFeatures;
@@ -138,7 +138,7 @@ public class RandomCollectionWithAddCriteria<T> extends RandomCollection<T> {
                             f ->
                                     FeatureSession.with(
                                             f,
-                                            new FeatureInitialization(stack.getDictionary()),
+                                            new FeatureInitialization(stack.getParameters()),
                                             sharedFeatures,
                                             logger));
 
@@ -297,7 +297,7 @@ public class RandomCollectionWithAddCriteria<T> extends RandomCollection<T> {
                             f ->
                                     FeatureSession.with(
                                             f,
-                                            new FeatureInitialization(energyStack.getDictionary()),
+                                            new FeatureInitialization(energyStack.getParameters()),
                                             sharedFeatures,
                                             logger));
         } catch (InitializeException e) {

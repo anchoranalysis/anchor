@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.feature.energy.EnergyTotal;
+import org.anchoranalysis.mpp.feature.energy.EnergyTotal;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.MarkCollection;
 

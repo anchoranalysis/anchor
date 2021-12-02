@@ -49,14 +49,14 @@ public class BinarySegmentationThreshold extends BinarySegmentation {
     @Override
     public BinaryVoxels<UnsignedByteBuffer> segment(
             VoxelsUntyped voxels,
-            BinarySegmentationParameters params,
+            BinarySegmentationParameters parameters,
             Optional<ObjectMask> objectMask)
             throws SegmentationFailedException {
         try {
             return thresholder.threshold(
                     voxels,
                     BinaryValuesByte.getDefault(),
-                    objectMask.isPresent() ? Optional.empty() : params.getIntensityHistogram(),
+                    objectMask.isPresent() ? Optional.empty() : parameters.getIntensityHistogram(),
                     objectMask);
         } catch (OperationFailedException e) {
             throw new SegmentationFailedException(e);

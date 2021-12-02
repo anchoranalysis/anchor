@@ -110,7 +110,7 @@ class HelperInit {
             InitializableBean<?, ?> beanCast = (InitializableBean<?, ?>) bean;
             throw new InitializeException(
                     String.format(
-                            "Could not find matching params to initialize %s (%s) (recursively following from %s). Requires %s. Provider is %s.",
+                            "Could not find matching parameters to initialize %s (%s) (recursively following from %s). Requires %s. Provider is %s.",
                             beanCast.getBeanName(),
                             beanCast.getClass().getName(),
                             beanNameFollowingFrom,

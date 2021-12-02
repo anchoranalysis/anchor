@@ -45,7 +45,7 @@ import org.anchoranalysis.spatial.box.Extent;
  */
 class NeighborGraphCreator<V> {
 
-    private final EdgeAdderParameters edgeAdderParams;
+    private final EdgeAdderParameters edgeAdderParameters;
 
     /** iff true outputs an undirected graph, otherwise directed. */
     private boolean undirected = true;
@@ -57,7 +57,7 @@ class NeighborGraphCreator<V> {
      *     intersecting voxels.
      */
     public NeighborGraphCreator(boolean preventObjectIntersection) {
-        edgeAdderParams = new EdgeAdderParameters(preventObjectIntersection);
+        edgeAdderParameters = new EdgeAdderParameters(preventObjectIntersection);
     }
 
     /**
@@ -135,7 +135,7 @@ class NeighborGraphCreator<V> {
                         vertexToObject,
                         objects,
                         createAndAddEdge(graph, edgeFromVertices),
-                        edgeAdderParams);
+                        edgeAdderParameters);
 
         for (int i = 0; i < objects.size(); i++) {
 

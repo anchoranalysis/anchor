@@ -58,7 +58,7 @@ public abstract class TaskWithoutSharedState<T extends InputFromManager>
             Outputter outputter,
             ConcurrencyPlan concurrencyPlan,
             List<T> inputs,
-            ParametersExperiment params)
+            ParametersExperiment parameters)
             throws ExperimentExecutionException {
         // No shared-state by default, so we use a placeholder shared-state type
         return NoSharedState.INSTANCE;

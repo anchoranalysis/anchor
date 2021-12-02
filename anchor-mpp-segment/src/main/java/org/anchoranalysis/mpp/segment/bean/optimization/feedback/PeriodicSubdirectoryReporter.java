@@ -117,7 +117,7 @@ public abstract class PeriodicSubdirectoryReporter<T>
     }
 
     @Override
-    public void reportEnd(FeedbackEndParameters<VoxelizedMarksWithEnergy> params)
+    public void reportEnd(FeedbackEndParameters<VoxelizedMarksWithEnergy> parameters)
             throws ReporterException {}
 
     protected abstract Optional<T> generateIterableElement(

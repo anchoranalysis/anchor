@@ -30,10 +30,26 @@ import java.util.Optional;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 
+/**
+ * A {@link FeatureInput} that exposes the {@link Resolution} of an image or scene.
+ *
+ * @author Owen Feehan
+ */
 public interface FeatureInputWithResolution extends FeatureInput {
 
+    /**
+     * The resolution of the associated image, if it is available.
+     *
+     * @return the resolution, if it is available.
+     */
     Optional<Resolution> getResolutionOptional();
 
+    /**
+     * The resolution of the associated image, or an exception if it is not available.
+     *
+     * @return the resolution.
+     * @throws FeatureCalculationException if the resolution is not available.
+     */
     default Resolution getResolutionRequired() throws FeatureCalculationException {
         return getResolutionOptional()
                 .orElseThrow(

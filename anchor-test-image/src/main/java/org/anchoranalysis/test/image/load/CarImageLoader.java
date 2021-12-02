@@ -27,7 +27,7 @@ package org.anchoranalysis.test.image.load;
 
 import java.io.File;
 import java.nio.file.Path;
-import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
+import org.anchoranalysis.feature.energy.EnergyStackWithoutParameters;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.image.io.TestLoaderImage;
@@ -71,16 +71,16 @@ public class CarImageLoader {
         return loadFromSubdirectory(PATH_CAR_GRAYSCALE_16_BIT);
     }
 
-    public EnergyStackWithoutParams carRGBAsEnergy() {
-        return new EnergyStackWithoutParams(carRGB());
+    public EnergyStackWithoutParameters carRGBAsEnergy() {
+        return new EnergyStackWithoutParameters(carRGB());
     }
 
-    public EnergyStackWithoutParams carGrayscale8BitAsEnergy() {
-        return new EnergyStackWithoutParams(carGrayscale8Bit());
+    public EnergyStackWithoutParameters carGrayscale8BitAsEnergy() {
+        return new EnergyStackWithoutParameters(carGrayscale8Bit());
     }
 
-    public EnergyStackWithoutParams carGrayscale16BitAsEnergy() {
-        return new EnergyStackWithoutParams(carGrayscale16Bit());
+    public EnergyStackWithoutParameters carGrayscale16BitAsEnergy() {
+        return new EnergyStackWithoutParameters(carGrayscale16Bit());
     }
 
     public Path modelDirectory() {

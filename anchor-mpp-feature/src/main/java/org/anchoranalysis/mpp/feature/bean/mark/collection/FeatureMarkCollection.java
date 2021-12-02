@@ -40,7 +40,7 @@ public abstract class FeatureMarkCollection extends Feature<FeatureInputMarkColl
     }
 
     // Calculates an Energy element for a set of pixels
-    public abstract double calc(FeatureInputMarkCollection params)
+    public abstract double calc(FeatureInputMarkCollection input)
             throws FeatureCalculationException;
 
     @Override

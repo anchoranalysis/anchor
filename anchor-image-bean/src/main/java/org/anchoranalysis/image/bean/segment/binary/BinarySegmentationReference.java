@@ -61,9 +61,9 @@ public class BinarySegmentationReference extends BinarySegmentation {
     @Override
     public BinaryVoxels<UnsignedByteBuffer> segment(
             VoxelsUntyped voxels,
-            BinarySegmentationParameters params,
+            BinarySegmentationParameters parameters,
             Optional<ObjectMask> objectMask)
             throws SegmentationFailedException {
-        return proxy.segment(voxels, params, objectMask);
+        return proxy.segment(voxels, parameters, objectMask);
     }
 }

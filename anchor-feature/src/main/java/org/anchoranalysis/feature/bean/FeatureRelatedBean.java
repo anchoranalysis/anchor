@@ -36,13 +36,15 @@ import org.anchoranalysis.bean.shared.dictionary.DictionaryInitialization;
 import org.anchoranalysis.feature.shared.FeaturesInitialization;
 
 /**
- * Beans-related to features that require initialization with {@link FeaturesInitialization}
+ * Beans-related to {@link Feature}s, and which require initialization with {@link
+ * FeaturesInitialization}.
  *
  * @author Owen Feehan
  * @param <T> bean-type
  */
 public abstract class FeatureRelatedBean<T> extends InitializableBean<T, FeaturesInitialization> {
 
+    /** Create with default initializers. */
     protected FeatureRelatedBean() {
         super(
                 new BeanInitializer<>(FeaturesInitialization.class, paramExtracters()),

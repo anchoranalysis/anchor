@@ -32,10 +32,13 @@ import org.anchoranalysis.core.value.TypedValue;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 /**
- * A vector of results from feature-calculations. A result is either a pointer to a Double or an
- * exception (indicating an error).
+ * A vector of results of applying a feature-calculations to many entities.
  *
- * <p>Optionally, contains an identifier for the vector.
+ * <p>Each position in the vector describes the result for a single entity. The result is either a
+ * {@link Double} or an {@link Exception}.
+ *
+ * <p>An {@link Exception} indicates that the feature-calculation ended in failure, producing the
+ * exception.
  *
  * @author Owen Feehan
  */
@@ -43,50 +46,96 @@ public class ResultsVector {
 
     private static final ArrayComparer DEFAULT_COMPARER = new ArrayComparer();
 
-    // Each object is either a Double or an Exception
-    private Object[] arr;
+    /** Each object is either a {@link Double} or an {@link Exception}. */
+    private Object[] vector;
 
+    /**
+     * Creates with a particular size.
+     *
+     * @param size the number of results the vector can store.
+     */
     public ResultsVector(int size) {
-        arr = new Object[size];
+        vector = new Object[size];
     }
 
+    /**
+     * The total value of all results.
+     *
+     * @return the sum of all results, or {@link Double#NaN} if any are errored.
+     */
     public double total() {
         double sum = 0.0;
-        for (int i = 0; i < arr.length; i++) {
+        for (int i = 0; i < vector.length; i++) {
             sum += get(i);
         }
         return sum;
     }
 
-    public void set(int i, double val) {
-        arr[i] = val;
+    /**
+     * Assigns a result at a particular position.
+     *
+     * @param index the index of the position (zero-valued).
+     * @param value the value to assign as a result.
+     */
+    public void set(int index, double value) {
+        vector[index] = value;
     }
 
-    public void set(int start, ResultsVector rv) {
-        for (int i = 0; i < rv.size(); i++) {
-            Object val = rv.arr[i];
-            arr[start + i] = val;
+    /**
+     * Assigns many results, starting at a particular position, and incrementing thereafter.
+     *
+     * @param startIndex the index of the initial position (zero-valued) for the first result.
+     * @param resultsToAssign the values to assign in {@code startIndex} and subsequent positions.
+     */
+    public void set(int startIndex, ResultsVector resultsToAssign) {
+        for (int index = 0; index < resultsToAssign.size(); index++) {
+            Object value = resultsToAssign.vector[index];
+            vector[startIndex + index] = value;
         }
     }
 
-    public void setError(int i, Exception e) {
-        arr[i] = e;
+    /**
+     * Set an error state at a particular position.
+     *
+     * @param index the index of the position (zero-valued).
+     * @param exception the error state.
+     */
+    public void setError(int index, Exception exception) {
+        vector[index] = exception;
     }
 
-    public void setErrorAll(Exception e) {
-        for (int i = 0; i < arr.length; i++) {
-            setError(i, e);
+    /**
+     * Set an error state at all positions.
+     *
+     * @param exception the error state.
+     */
+    public void setErrorAll(Exception exception) {
+        for (int index = 0; index < vector.length; index++) {
+            setError(index, exception);
         }
     }
 
-    public Exception getException(int i) {
-        return (Exception) arr[i];
+    /**
+     * Gets an error state at a particular position.
+     *
+     * <p>This should <b>only</b> be called at positions which for sure are errored.
+     *
+     * @param index the position (zero-indexed).
+     * @return the exception for the error.
+     */
+    public Exception getError(int index) {
+        return (Exception) vector[index];
     }
 
-    // Returns a double, or null if the object is an exception
-    public Optional<Double> getDoubleOrNull(int i) {
+    /**
+     * Gets a result value at a particular position.
+     *
+     * @param index the position (zero-indexed).
+     * @return the result-value if unerrored, or {@link Optional#empty} if the position is errored.
+     */
+    public Optional<Double> getResult(int index) {
 
-        Object obj = arr[i];
+        Object obj = vector[index];
 
         if (obj instanceof Exception) {
             return Optional.empty();
@@ -104,7 +153,7 @@ public class ResultsVector {
      */
     public double get(int index) {
 
-        Object obj = arr[index];
+        Object obj = vector[index];
 
         if (obj instanceof Exception) {
             return Double.NaN;
@@ -116,12 +165,12 @@ public class ResultsVector {
     }
 
     /**
-     * Copies a contiguous subset of results from another vector
+     * Copies a contiguous subset of results from another vector.
      *
-     * @param index start-index to start copying into
-     * @param length number of items to copy
-     * @param source vector to copy from
-     * @param sourceIndex index in the source away to start from
+     * @param index start-position to start copying into (zero-indexed).
+     * @param length number of items to copy.
+     * @param source vector to copy from.
+     * @param sourceIndex index in the source away to start from.
      */
     public void copyFrom(int index, int length, ResultsVector source, int sourceIndex) {
 
@@ -129,7 +178,7 @@ public class ResultsVector {
             int indexIn = sourceIndex + i;
             int indexOut = index + i;
 
-            arr[indexOut] = source.arr[indexIn];
+            vector[indexOut] = source.vector[indexIn];
         }
     }
 
@@ -138,12 +187,12 @@ public class ResultsVector {
      *
      * @param addTo the collection to add the representations to.
      * @param numberDecimalPlaces the number of decimal places to use, or -1 to visually shorten as
-     *     much as possible
+     *     much as possible.
      */
     public void addTypedValuesTo(Collection<TypedValue> addTo, int numberDecimalPlaces) {
 
-        for (int i = 0; i < arr.length; i++) {
-            double value = get(i);
+        for (int index = 0; index < vector.length; index++) {
+            double value = get(index);
             TypedValue representation =
                     numberDecimalPlaces == -1
                             ? new TypedValue(value)
@@ -158,26 +207,29 @@ public class ResultsVector {
      * @return the total number of calculations in the vector.
      */
     public int size() {
-        return arr.length;
+        return vector.length;
     }
 
-    public boolean hasNoNulls() {
-        for (int i = 0; i < arr.length; i++) {
-            if (arr[i] == null) {
-                return false;
-            }
-        }
-        return true;
+    /**
+     * Does the instance have exactly these values?
+     *
+     * @param values the values to check for equality.
+     * @return true, if the results in this object are exactly the same as {@code values}.
+     */
+    public boolean equals(Object... values) {
+        return DEFAULT_COMPARER.compareArrays(vector, values);
     }
 
-    // Checks if the ResultsVector has exactly the values passed
-    public boolean equals(Object... vals) {
-        return DEFAULT_COMPARER.compareArrays(arr, vals);
-    }
-
-    // Checks if the ResultsVector has exactly the values passed to a particular precision
-    public boolean equalsPrecision(double eps, Object... vals) {
-        return new ArrayComparerPrecision(eps).compareArrays(arr, vals);
+    /**
+     * Like {@link #equals(Object)} but includes a tolerance for checking equality of the doubles.
+     *
+     * @param eps amount of allowed absolute error.
+     * @param values the values to check for equality.
+     * @return true, if the results in this object are the same as {@code values}, within the
+     *     tolerance.
+     */
+    public boolean equalsPrecision(double eps, Object... values) {
+        return new ArrayComparerPrecision(eps).compareArrays(vector, values);
     }
 
     @Override
@@ -192,30 +244,30 @@ public class ResultsVector {
 
         ResultsVector other = (ResultsVector) obj;
 
-        return DEFAULT_COMPARER.compareArrays(arr, other.arr);
+        return DEFAULT_COMPARER.compareArrays(vector, other.vector);
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(arr).toHashCode();
+        return new HashCodeBuilder().append(vector).toHashCode();
     }
 
     // Exceptions are shown as NA
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        for (int i = 0; i < arr.length; i++) {
-            if (i != 0) {
+        for (int index = 0; index < vector.length; index++) {
+            if (index != 0) {
                 builder.append(", ");
             }
-            builder.append(getString(i));
+            builder.append(getString(index));
         }
         return builder.toString();
     }
 
-    // A string description of what is contained at an index
-    private String getString(int i) {
-        Object obj = arr[i];
+    /** A textual description of what is contained in the vector at a particular position. */
+    private String getString(int index) {
+        Object obj = vector[index];
         return obj.toString();
     }
 }

@@ -87,18 +87,18 @@ public class ParallelProcessor<T extends InputFromManager, S> extends JobProcess
 
     @Override
     protected TaskStatistics execute(
-            Outputter rootOutputter, List<T> inputs, ParametersExperiment paramsExperiment)
+            Outputter rootOutputter, List<T> inputs, ParametersExperiment parametersExperiment)
             throws ExperimentExecutionException {
         int numberInputs = inputs.size();
 
         ProcessorChecker.checkAtLeastOneInput(inputs);
 
-        ConcurrencyPlan concurrencyPlan = createConcurrencyPlan(paramsExperiment);
+        ConcurrencyPlan concurrencyPlan = createConcurrencyPlan(parametersExperiment);
 
         S sharedState =
                 getTask()
                         .beforeAnyJobIsExecuted(
-                                rootOutputter, concurrencyPlan, inputs, paramsExperiment);
+                                rootOutputter, concurrencyPlan, inputs, parametersExperiment);
 
         ExecutorService executorService =
                 Executors.newFixedThreadPool(concurrencyPlan.numberCPUs());
@@ -111,7 +111,8 @@ public class ParallelProcessor<T extends InputFromManager, S> extends JobProcess
         while (iterator.hasNext()) {
             T input = iterator.next();
             try {
-                submitJob(executorService, input, count, sharedState, paramsExperiment, monitor);
+                submitJob(
+                        executorService, input, count, sharedState, parametersExperiment, monitor);
                 count++;
             } finally {
                 iterator.remove();
@@ -129,12 +130,12 @@ public class ParallelProcessor<T extends InputFromManager, S> extends JobProcess
         if (monitor.numberExecutingJobs() != 0
                 || monitor.numberOngoingJobs() != 0
                 || monitor.numberCompletedJobs() != numberInputs) {
-            paramsExperiment
+            parametersExperiment
                     .getLoggerExperiment()
                     .log("At least one experiment ended irregularly!");
         }
 
-        getTask().afterAllJobsAreExecuted(sharedState, paramsExperiment.getContext());
+        getTask().afterAllJobsAreExecuted(sharedState, parametersExperiment.getContext());
         return monitor.createStatistics();
     }
 
@@ -143,38 +144,38 @@ public class ParallelProcessor<T extends InputFromManager, S> extends JobProcess
             T input,
             int index,
             S sharedState,
-            ParametersExperiment paramsExperiment,
+            ParametersExperiment parametersExperiment,
             ConcurrentJobMonitor monitor) {
 
         JobDescription description = new JobDescription(input.identifier(), index);
 
-        ParametersUnbound<T, S> paramsUnbound =
+        ParametersUnbound<T, S> parametersUnbound =
                 new ParametersUnbound<>(
-                        paramsExperiment, input, sharedState, isSuppressExceptions());
+                        parametersExperiment, input, sharedState, isSuppressExceptions());
 
         // Task always gets duplicated when it's called
         JobState state = new JobState();
         executorService.submit(
                 new CallableJob<>(
                         getTask(),
-                        paramsUnbound,
+                        parametersUnbound,
                         state,
                         description,
                         monitor,
-                        loggerForMonitor(paramsExperiment),
+                        loggerForMonitor(parametersExperiment),
                         showOngoingJobsLessThan));
 
         monitor.add(new SubmittedJob(description, state));
     }
 
-    private ConcurrencyPlan createConcurrencyPlan(ParametersExperiment paramsExperiment) {
+    private ConcurrencyPlan createConcurrencyPlan(ParametersExperiment parametersExperiment) {
 
         int availableProcessors = Runtime.getRuntime().availableProcessors();
 
         int numberCPUs = selectNumberCPUs(availableProcessors);
 
-        if (paramsExperiment.isDetailedLogging()) {
-            paramsExperiment
+        if (parametersExperiment.isDetailedLogging()) {
+            parametersExperiment
                     .getLoggerExperiment()
                     .logFormatted(
                             "Preparing jobs to run with common initialization.%nMaximally using %d simultaneous %s (from %d available), and up to %d simultaneous %s (if available).",
