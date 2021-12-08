@@ -25,7 +25,7 @@
  */
 package org.anchoranalysis.core.time;
 
-import java.util.Set;
+import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -80,7 +80,7 @@ public class RecordedExecutionTimes {
      * <p>This set is considered non-mutable within this class, so its state should never changed by
      * this class.
      */
-    private final Set<RecordedOperation> runningTimes;
+    private final List<RecordedOperation> runningTimes;
 
     /**
      * Create with the running-times.
@@ -88,7 +88,7 @@ public class RecordedExecutionTimes {
      * @param runningTimes a set of each operation-identifiers and corresponding execution-times.
      */
     public RecordedExecutionTimes(Stream<RecordedOperation> runningTimes) {
-        this.runningTimes = runningTimes.collect(Collectors.toSet());
+        this.runningTimes = runningTimes.collect(Collectors.toList());
     }
 
     /**

@@ -54,7 +54,8 @@ public class VoxelizedMarkMemo {
         this.stack = stack;
         this.regionMap = regionMap;
         this.cachedMark =
-                CachedSupplier.cache(() -> VoxelizedMarkFactory.create(mark, stack, regionMap));
+                CachedSupplier.cacheChecked(
+                        () -> VoxelizedMarkFactory.create(mark, stack, regionMap));
     }
 
     /**

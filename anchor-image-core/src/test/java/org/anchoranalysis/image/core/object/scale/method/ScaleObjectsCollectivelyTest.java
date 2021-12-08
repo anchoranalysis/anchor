@@ -28,6 +28,6 @@ class ScaleObjectsCollectivelyTest {
     private static void checkIdenticalObjects(Map<ObjectMask, ObjectMask> scaled) {
         assertEquals(
                 scaled.get(ObjectFixture.OBJECT_LEFT).numberVoxelsOn(),
-                        scaled.get(ObjectFixture.OBJECT_RIGHT_ADJACENT).numberVoxelsOn());
+                scaled.get(ObjectFixture.OBJECT_RIGHT_ADJACENT).numberVoxelsOn());
     }
 }

@@ -41,6 +41,10 @@ import org.anchoranalysis.feature.results.ResultsVector;
  * Gives a {@link FeatureInput} the necessary context for feature-calculation, including associating
  * it with a cache.
  *
+ * <p>This is the recommended method for calculating the value of a {@link Feature} as it allows
+ * sensible caching / memoization to occur of subcomponents of the feature's computation (known as
+ * {@link CalculationPart}s.
+ *
  * @param <T> underlying feature-input type.
  * @author Owen Feehan
  */

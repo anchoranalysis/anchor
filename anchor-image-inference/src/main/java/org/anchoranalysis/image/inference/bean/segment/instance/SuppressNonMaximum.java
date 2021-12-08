@@ -45,17 +45,17 @@ import org.anchoranalysis.inference.concurrency.ConcurrentModelPool;
 import org.anchoranalysis.inference.concurrency.CreateModelFailedException;
 
 /**
- * Applies a segmentation procedure followed by non-maxima suppression.
+ * Applies a segmentation procedure followed by non-maximum suppression.
  *
  * @author Owen Feehan
  * @param <T> model-type
  */
 @NoArgsConstructor
 @AllArgsConstructor
-public class SuppressNonMaxima<T extends InferenceModel> extends SegmentStackIntoObjectsPooled<T> {
+public class SuppressNonMaximum<T extends InferenceModel> extends SegmentStackIntoObjectsPooled<T> {
 
     // START BEAN PROPERTIES
-    /** The segmentation algorithm that is applied as an input to non-maxima suppression. */
+    /** The segmentation algorithm that is applied as an input to non-maximum suppression. */
     @BeanField @Getter @Setter private SegmentStackIntoObjectsPooled<T> segment;
 
     /** The algorithm for reducing the number of object-masks. */
@@ -69,9 +69,9 @@ public class SuppressNonMaxima<T extends InferenceModel> extends SegmentStackInt
     /**
      * Creates with a particular segmentation algorithm as an input.
      *
-     * @param segment the segmentation algorithm to use, before applying non-maxima suppression.
+     * @param segment the segmentation algorithm to use, before applying non-maximum suppression.
      */
-    public SuppressNonMaxima(SegmentStackIntoObjectsPooled<T> segment) {
+    public SuppressNonMaximum(SegmentStackIntoObjectsPooled<T> segment) {
         this.segment = segment;
     }
 
@@ -90,7 +90,8 @@ public class SuppressNonMaxima<T extends InferenceModel> extends SegmentStackInt
         SegmentedObjects objects = segment.segment(stack, modelPool, executionTimeRecorder);
 
         try {
-            return objects.reduce(reduce, separateEachLabel);
+            return executionTimeRecorder.recordExecutionTime(
+                    "Non-maximum suppression", () -> objects.reduce(reduce, separateEachLabel));
         } catch (OperationFailedException e) {
             throw new SegmentationFailedException(e);
         }

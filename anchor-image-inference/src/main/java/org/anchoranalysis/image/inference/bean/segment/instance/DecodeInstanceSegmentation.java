@@ -30,6 +30,7 @@ import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.inference.ImageInferenceContext;
 import org.anchoranalysis.image.inference.segment.LabelledWithConfidence;
+import org.anchoranalysis.image.inference.segment.MultiScaleObject;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 
 /**
@@ -53,7 +54,7 @@ public abstract class DecodeInstanceSegmentation<T>
      *     {@code unscaledDimensions} in size.
      * @throws OperationFailedException if it cannot be decoded successfully.
      */
-    public abstract List<LabelledWithConfidence<ObjectMask>> decode(
+    public abstract List<LabelledWithConfidence<MultiScaleObject>> decode(
             List<T> inferenceOutput, ImageInferenceContext context) throws OperationFailedException;
 
     /**

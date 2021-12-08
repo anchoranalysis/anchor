@@ -32,13 +32,12 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.image.core.merge.ObjectMaskMerger;
-import org.anchoranalysis.image.inference.segment.LabelledWithConfidence;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 
 /**
  * Intersecting objects are removed if they have sufficient overlap.
  *
- * <p>This involves non-maxima suppression for object-masks using an <a
+ * <p>This involves non-maximum suppression for object-masks using an <a
  * href="https://en.wikipedia.org/wiki/Jaccard_index">Intersection over Union</a> score.
  *
  * <p>A strategy for reducing elements that greedily removes any element with a strong overlap with
@@ -70,9 +69,7 @@ public class RemoveOverlappingObjects extends ReduceElementsGreedy {
 
     @Override
     protected boolean processObjects(
-            LabelledWithConfidence<ObjectMask> source,
-            LabelledWithConfidence<ObjectMask> overlapping,
-            ReduceObjectsGraph graph) {
+            ObjectForReduction source, ObjectForReduction overlapping, ReduceObjectsGraph graph) {
         // This removes the overlapping object from the current iteration
         try {
             graph.removeVertex(overlapping);

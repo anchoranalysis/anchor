@@ -83,11 +83,11 @@ class GPUMessageLogger {
     /** The first part of the log message about GPU allocation. */
     private static String prefixGPUAllocation(int numberPlanned, boolean includeSuccessful) {
         return String.format(
-                "%d GPU %s %s %s requested using the ONNX Runtime (CUDA Version %s)",
+                "%d GPU %s %s %srequested using the ONNX Runtime (CUDA Version %s)",
                 numberPlanned,
                 LanguageUtilities.pluralizeMaybe(numberPlanned, "processor"),
                 LanguageUtilities.multiplexPlural(numberPlanned, "was", "were"),
-                includeSuccessful ? "successfully" : "",
+                includeSuccessful ? "successfully " : "",
                 CUDA_VERSION);
     }
 }

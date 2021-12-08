@@ -60,8 +60,8 @@ public class OutputSequenceIndexed<T, S> implements OutputSequence {
      * Creates a non-incremental sequence of outputs, passing the index to the {@code sequenceType}
      * without combination with the file extension.
      *
-     * @param outputter parameters for the output-sequence
-     * @param sequenceType sequenceType the indexes are expected to follow
+     * @param outputter parameters for the output-sequence.
+     * @param sequenceType sequenceType the indexes are expected to follow.
      * @throws OutputWriteFailedException
      */
     OutputSequenceIndexed(BoundOutputter<T> outputter, SequenceType<S> sequenceType)

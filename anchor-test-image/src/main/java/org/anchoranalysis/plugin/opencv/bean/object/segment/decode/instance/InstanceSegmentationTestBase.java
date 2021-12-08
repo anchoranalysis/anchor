@@ -78,7 +78,7 @@ public abstract class InstanceSegmentationTestBase {
     }
 
     /** Creates the segmentation implementation to be tested. */
-    protected abstract SegmentStackIntoObjectsPooled<?> createSegmenter();  // NOSONAR
+    protected abstract SegmentStackIntoObjectsPooled<?> createSegmenter(); // NOSONAR
 
     /** The RGB stack that is tested. */
     protected Stack stackRGB() {
@@ -98,7 +98,7 @@ public abstract class InstanceSegmentationTestBase {
         SegmentedObjects segmentResults =
                 segmenter.segment(stack, ExecutionTimeRecorderIgnore.instance());
 
-        ObjectCollection objects = segmentResults.asObjects();
+        ObjectCollection objects = segmentResults.getObjects().atInputScale().objects();
 
         writer.writeObjects("objects_" + suffix, objects, stackRGB());
         ExpectedBoxesChecker.assertExpectedBoxes(objects, targetBox);

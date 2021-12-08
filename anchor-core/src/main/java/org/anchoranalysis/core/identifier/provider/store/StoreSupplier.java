@@ -68,6 +68,6 @@ public interface StoreSupplier<T> {
      */
     public static <T> CachedSupplier<T, OperationFailedException> cacheResettable(
             StoreSupplier<T> supplier) {
-        return CachedSupplier.cache(supplier::get);
+        return CachedSupplier.cacheChecked(supplier::get);
     }
 }

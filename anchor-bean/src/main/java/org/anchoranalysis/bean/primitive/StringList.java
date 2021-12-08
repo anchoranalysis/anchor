@@ -54,15 +54,30 @@ import org.anchoranalysis.bean.AnchorBean;
 public class StringList extends AnchorBean<StringList> implements PrimitiveBeanCollection<String> {
 
     /** The internal list storing the elements. */
-    private List<String> list = new ArrayList<>();
+    private List<String> list;
+
+    /** Constructs with an empty list. */
+    public StringList() {
+        list = new ArrayList<>();
+    }
 
     /**
-     * Constructs with one or more values added to the list.
+     * Constructs, populated with one or more values.
      *
-     * @param values the values
+     * @param values the values.
      */
     public StringList(String... values) {
+        this();
         Arrays.stream(values).forEach(list::add);
+    }
+
+    /**
+     * Constructs, populated with a list of strings.
+     *
+     * @param list the list.
+     */
+    public StringList(List<String> list) {
+        this.list = list;
     }
 
     @Override
@@ -97,5 +112,14 @@ public class StringList extends AnchorBean<StringList> implements PrimitiveBeanC
         StringList out = new StringList();
         out.list.addAll(list);
         return out;
+    }
+
+    /**
+     * Exposes the underlying list of values.
+     *
+     * @return the underlying list, which if modified, also modifies this instance.
+     */
+    public List<String> asList() {
+        return list;
     }
 }

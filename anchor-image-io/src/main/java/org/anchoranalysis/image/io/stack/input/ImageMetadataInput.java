@@ -51,7 +51,7 @@ public class ImageMetadataInput extends SingleFileInputBase {
     public ImageMetadataInput(
             NamedFile file, CheckedSupplier<ImageMetadata, ImageIOException> metadata) {
         super(file);
-        this.metadata = CachedSupplier.cache(metadata);
+        this.metadata = CachedSupplier.cacheChecked(metadata);
     }
 
     /**

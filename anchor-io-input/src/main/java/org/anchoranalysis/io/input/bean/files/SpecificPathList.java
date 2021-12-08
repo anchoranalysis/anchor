@@ -28,7 +28,6 @@ package org.anchoranalysis.io.input.bean.files;
 
 import java.io.File;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import lombok.Getter;
@@ -36,6 +35,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
+import org.anchoranalysis.bean.primitive.StringList;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.functional.FunctionalProgress;
 import org.anchoranalysis.core.progress.Progress;
@@ -66,7 +66,7 @@ public class SpecificPathList extends FilesProvider {
      * <p>If a list is specified, than the input-directory is derived from the maximally common root
      * of all the files, if it exists.
      */
-    @BeanField @OptionalBean @Getter @Setter private List<String> listPaths;
+    @BeanField @OptionalBean @Getter @Setter private StringList listPaths;
 
     /**
      * If no paths can be found either from listPaths or the input-context, then the fallback is
@@ -76,13 +76,17 @@ public class SpecificPathList extends FilesProvider {
     // END BEAN PROPERTIES
 
     public SpecificPathList(List<String> listPaths) {
+        this.listPaths = new StringList(listPaths);
+    }
+
+    public SpecificPathList(StringList listPaths) {
         this.listPaths = listPaths;
     }
 
     /** Factory method for creating the class with an empty list of paths */
     public static SpecificPathList createWithEmptyList() {
         SpecificPathList out = new SpecificPathList();
-        out.listPaths = new ArrayList<>();
+        out.listPaths = new StringList();
         return out;
     }
 
@@ -117,7 +121,7 @@ public class SpecificPathList extends FilesProvider {
 
     private Optional<List<String>> selectListPaths(InputContextParameters inputContext) {
         if (listPaths != null) {
-            return Optional.of(listPaths);
+            return Optional.of(listPaths.asList());
         } else {
             return inputContext.getInputPaths().map(SpecificPathList::stringFromPaths);
         }
