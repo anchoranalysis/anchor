@@ -101,7 +101,12 @@ public abstract class RasterGenerator<T> implements TransformingGenerator<T, Sta
             throws OutputWriteFailedException {
 
         try {
-            Stack transformedElement = transform(elementUntransformed);
+            Stack transformedElement =
+                    outputter
+                            .getExecutionTimeRecorder()
+                            .recordExecutionTime(
+                                    "Preparing a raster to write",
+                                    () -> transform(elementUntransformed));
 
             StackWriteOptions options =
                     new StackWriteOptions(
@@ -115,8 +120,19 @@ public abstract class RasterGenerator<T> implements TransformingGenerator<T, Sta
             Path pathToWriteTo =
                     outputter.makeOutputPath(filenameWithoutExtension, extension, outputName);
 
-            // First write to the file system, and then write to the operation-recorder.
-            writeToFile(elementUntransformed, transformedElement, options, settings, pathToWriteTo);
+            outputter
+                    .getExecutionTimeRecorder()
+                    .recordExecutionTime(
+                            "Writing raster to file-system",
+                            () ->
+                                    // First write to the file system, and then write to the
+                                    // operation-recorder.
+                                    writeToFile(
+                                            elementUntransformed,
+                                            transformedElement,
+                                            options,
+                                            settings,
+                                            pathToWriteTo));
 
             return writeToManifest(outputName, index, outputter, pathToWriteTo, extension);
 

@@ -56,13 +56,11 @@ public class StringList extends AnchorBean<StringList> implements PrimitiveBeanC
     /** The internal list storing the elements. */
     private List<String> list;
 
-    /**
-     * Constructs with an empty list.
-     */
+    /** Constructs with an empty list. */
     public StringList() {
         list = new ArrayList<>();
     }
-    
+
     /**
      * Constructs, populated with one or more values.
      *
@@ -72,7 +70,7 @@ public class StringList extends AnchorBean<StringList> implements PrimitiveBeanC
         this();
         Arrays.stream(values).forEach(list::add);
     }
-    
+
     /**
      * Constructs, populated with a list of strings.
      *
@@ -115,10 +113,10 @@ public class StringList extends AnchorBean<StringList> implements PrimitiveBeanC
         out.list.addAll(list);
         return out;
     }
-    
+
     /**
      * Exposes the underlying list of values.
-     * 
+     *
      * @return the underlying list, which if modified, also modifies this instance.
      */
     public List<String> asList() {

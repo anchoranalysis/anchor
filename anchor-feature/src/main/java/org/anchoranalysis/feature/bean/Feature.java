@@ -199,6 +199,18 @@ public abstract class Feature<T extends FeatureInput>
      * Calculates the result of a feature and throws an exception if the feature has not been
      * initialized.
      *
+     * <p>It is not recommended to directly use this method to calculate a feature's value, but
+     * rather to:
+     *
+     * <ul>
+     *   <li><b>Externally</b>, for code outside a {@link Feature}'s implementation, please use the
+     *       <b>feature-session</b> classes, who will perform the calculation using caching to
+     *       reduce redundant computation.
+     *   <li><b>Internally</b>, for code inside a {@link Feature}'s implementation, please call
+     *       {@link FeatureCalculationInput#calculate(Feature)} and similar methods, who will
+     *       back-reference the session above, to take advantage of the caching.
+     * </ul>
+     *
      * @param input the input to the calculation.
      * @return the feature-value corresponding to {@code input} for this feature.
      * @throws FeatureCalculationException if the feature has not been initialized.

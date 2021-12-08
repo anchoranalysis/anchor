@@ -110,7 +110,7 @@ public class ObjectCollectionReader {
 
     public static CheckedSupplier<ObjectCollection, OperationFailedException> createFromPathCached(
             CheckedSupplier<Path, OperationFailedException> path, Logger logger) {
-        return CachedSupplier.cache(
+        return CachedSupplier.cacheChecked(
                 () -> {
                     try {
                         return createFromPath(path.get(), logger);

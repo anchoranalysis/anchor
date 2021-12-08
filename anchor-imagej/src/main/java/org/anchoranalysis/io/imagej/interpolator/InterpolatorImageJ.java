@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.io.imagej.iterpolator;
+package org.anchoranalysis.io.imagej.interpolator;
 
 import ij.process.ImageProcessor;
 import java.nio.FloatBuffer;

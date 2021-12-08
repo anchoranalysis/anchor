@@ -25,27 +25,29 @@
  */
 package org.anchoranalysis.math.arithmetic;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.stream.Collectors;
 
 /**
  * A map of unique identifiers to {@link RunningSum} instances.
  *
- * <p>The map is initially empty, and when an unrecognised identifier is passed to the {@link #get}
+ * <p>The map is initially empty, and when an unrecognized identifier is passed to the {@link #get}
  * function, then it is added to the map.
+ *
+ * <p>It is sorted according to the natural order of {@code T}.
+ *
+ * <p>It is not thread-safe.
  *
  * @param <T> unique identifier.
  * @author Owen Feehan
  */
 public class RunningSumMap<T> {
 
-    /**
-     * The underlying map, that should be thread-safe, as different tasks can access in parallel.
-     */
-    private Map<T, RunningSum> map = new ConcurrentSkipListMap<>();
+    /** The underlying map, that preserves insertion order. */
+    private Map<T, RunningSum> map = new LinkedHashMap<>();
 
     /**
      * Whether the map contains the key {@code key}?

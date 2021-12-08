@@ -31,8 +31,7 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.inference.ImageInferenceContext;
 import org.anchoranalysis.image.inference.ImageInferenceModel;
 import org.anchoranalysis.image.inference.segment.LabelledWithConfidence;
-import org.anchoranalysis.image.inference.segment.SegmentedObjects;
-import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.image.inference.segment.MultiScaleObject;
 import org.anchoranalysis.inference.concurrency.ConcurrentModel;
 import org.anchoranalysis.inference.concurrency.ConcurrentModelException;
 import org.anchoranalysis.inference.concurrency.ConcurrentModelPool;
@@ -62,16 +61,14 @@ class InferenceHelper<T, S extends ImageInferenceModel<T>> {
      * @throws Throwable if thrown by the inference while executing on a CPU. It is suppressed if
      *     thrown on a GPU.
      */
-    public SegmentedObjects queueInference(
+    public List<LabelledWithConfidence<MultiScaleObject>> queueInference(
             T inputTensor, ConcurrentModelPool<S> modelPool, ImageInferenceContext context)
             throws Throwable {
-        List<LabelledWithConfidence<ObjectMask>> objects =
-                modelPool.executeOrWait(model -> performInference(model, inputTensor, context));
-        return new SegmentedObjects(objects.stream());
+        return modelPool.executeOrWait(model -> performInference(model, inputTensor, context));
     }
 
     /** Performs inference on an {@code image} using {@code model}. */
-    private List<LabelledWithConfidence<ObjectMask>> performInference(
+    private List<LabelledWithConfidence<MultiScaleObject>> performInference(
             ConcurrentModel<S> model, T inputTensor, ImageInferenceContext context)
             throws ConcurrentModelException {
         try {
@@ -97,7 +94,7 @@ class InferenceHelper<T, S extends ImageInferenceModel<T>> {
         }
     }
 
-    private List<LabelledWithConfidence<ObjectMask>> decodeOutputs(
+    private List<LabelledWithConfidence<MultiScaleObject>> decodeOutputs(
             List<T> outputsToDecode,
             InferenceExecutionTimeRecorder recorder,
             ImageInferenceContext context)

@@ -78,7 +78,7 @@ public class SpecificPathList extends FilesProvider {
     public SpecificPathList(List<String> listPaths) {
         this.listPaths = new StringList(listPaths);
     }
-    
+
     public SpecificPathList(StringList listPaths) {
         this.listPaths = listPaths;
     }

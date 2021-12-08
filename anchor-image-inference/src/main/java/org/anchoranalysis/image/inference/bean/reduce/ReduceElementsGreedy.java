@@ -25,10 +25,10 @@
  */
 package org.anchoranalysis.image.inference.bean.reduce;
 
-import java.util.ArrayList;
 import java.util.List;
 import org.anchoranalysis.image.inference.bean.segment.reduce.ReduceElements;
 import org.anchoranalysis.image.inference.segment.LabelledWithConfidence;
+import org.anchoranalysis.image.inference.segment.ReductionOutcome;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 
 /**
@@ -50,24 +50,25 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
 public abstract class ReduceElementsGreedy extends ReduceElements<ObjectMask> {
 
     @Override
-    public List<LabelledWithConfidence<ObjectMask>> reduceLabelled(
+    public ReductionOutcome<LabelledWithConfidence<ObjectMask>> reduce(
             List<LabelledWithConfidence<ObjectMask>> elements) {
 
         /** Tracks which objects overlap with other objects, updated as merges/deletions occur. */
         ReduceObjectsGraph graph = new ReduceObjectsGraph(elements);
 
-        List<LabelledWithConfidence<ObjectMask>> out = new ArrayList<>();
+        ReductionOutcome<LabelledWithConfidence<ObjectMask>> outcome = new ReductionOutcome<>();
 
         while (!graph.isEmpty()) {
 
-            LabelledWithConfidence<ObjectMask> highestConfidence = graph.peek();
+            ObjectForReduction highestConfidence = graph.peek();
 
             if (!findIntersectionsAndProcess(highestConfidence, graph)) {
-                out.add(graph.poll());
+                // Then no intersections exist, so we can remove the element fron te graph
+                addVertexToOutcome(graph.poll(), outcome);
             }
         }
 
-        return out;
+        return outcome;
     }
 
     /**
@@ -93,9 +94,7 @@ public abstract class ReduceElementsGreedy extends ReduceElements<ObjectMask> {
      * @return true if the {@code source} object was altered during processing, false if it was not.
      */
     protected abstract boolean processObjects(
-            LabelledWithConfidence<ObjectMask> source,
-            LabelledWithConfidence<ObjectMask> overlapping,
-            ReduceObjectsGraph graph);
+            ObjectForReduction source, ObjectForReduction overlapping, ReduceObjectsGraph graph);
 
     /**
      * Finds any overlapping objects and processes them accordingly (possibly removing or merging
@@ -104,20 +103,32 @@ public abstract class ReduceElementsGreedy extends ReduceElements<ObjectMask> {
      * @return true if the proposal was altered during processing, false otherwise.
      */
     private boolean findIntersectionsAndProcess(
-            LabelledWithConfidence<ObjectMask> proposal, ReduceObjectsGraph graph) {
+            ObjectForReduction proposal, ReduceObjectsGraph graph) {
 
-        List<LabelledWithConfidence<ObjectMask>> intersecting =
-                graph.adjacentVerticesOutgoing(proposal);
-        for (LabelledWithConfidence<ObjectMask> other : intersecting) {
+        List<ObjectForReduction> intersecting = graph.adjacentVerticesOutgoing(proposal);
+        for (ObjectForReduction other : intersecting) {
 
             if (shouldObjectsBeProcessed(proposal.getElement(), other.getElement())
                     && processObjects(proposal, other, graph)) {
                 // When a change has occurred to the proposal, then we abandon processing of
-                // overlaps
-                //  and requery the priority-queue (in case things have changed)
+                // overlaps and requery the priority-queue (in case things have changed).
                 return true;
             }
         }
         return false;
+    }
+
+    /**
+     * Adds a vertex so that it exists in the {@link ReductionOutcome}, either retained, or
+     * newly-added.
+     */
+    private static void addVertexToOutcome(
+            ObjectForReduction vertex,
+            ReductionOutcome<LabelledWithConfidence<ObjectMask>> outcome) {
+        if (vertex.getIndex() == ObjectForReduction.NEWLY_ADDED) {
+            outcome.addNewlyAdded(vertex.getLabelled());
+        } else {
+            outcome.addIndexToRetain(vertex.getIndex());
+        }
     }
 }

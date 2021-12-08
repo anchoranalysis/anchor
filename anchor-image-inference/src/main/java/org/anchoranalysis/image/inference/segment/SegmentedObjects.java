@@ -25,22 +25,17 @@
  */
 package org.anchoranalysis.image.inference.segment;
 
-import com.google.common.collect.Multimap;
-import com.google.common.collect.MultimapBuilder;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.core.functional.checked.CheckedUnaryOperator;
-import org.anchoranalysis.image.core.object.scale.Scaler;
+import org.anchoranalysis.core.functional.FunctionalList;
+import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.inference.bean.segment.reduce.ReduceElements;
-import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.spatial.box.Extent;
+import org.anchoranalysis.spatial.scale.RelativeScaleCalculator;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 /**
@@ -52,85 +47,91 @@ import org.anchoranalysis.spatial.scale.ScaleFactor;
  *
  * @author Owen Feehan
  */
-@NoArgsConstructor
 public class SegmentedObjects {
 
     /**
      * Tree-keys and list-values are selected in the multi-map to preserve ordering after
      * transformations.
      */
-    private final Multimap<String, WithConfidence<ObjectMask>> map =
-            MultimapBuilder.treeKeys().arrayListValues().build();
+    private final List<LabelledWithConfidence<MultiScaleObject>> list;
+
+    /** The segmented-objects, at two different scales. */
+    @Getter private final DualScale<SegmentedObjectsAtScale> objects;
+
+    /** The background image to use for segmentation, when visualizing segmentations. */
+    private final DualScale<Stack> background;
 
     /**
      * Create for a collection of objects with an <b>identical label</b>.
      *
      * @param classLabel the label that applies to each object in {@code objects}.
      * @param objects the objects with label {@code classLabel}.
+     * @param background background-images used for visualizing the segmentation, at two respective
+     *     scales.
      */
-    public SegmentedObjects(String classLabel, Collection<WithConfidence<ObjectMask>> objects) {
-        add(classLabel, objects);
+    public SegmentedObjects(
+            String classLabel,
+            Collection<WithConfidence<MultiScaleObject>> objects,
+            DualScale<Stack> background) {
+        this(addLabel(classLabel, objects), background);
     }
 
     /**
      * Create for a collection of objects with <b>potentially differing labels</b>.
      *
-     * @param objects
+     * @param objects the objects that are the result of the segmentation, with associated
+     *     confidence and labels.
+     * @param background background-images used for visualizing the segmentation, at two respective
+     *     scales.
      */
-    public SegmentedObjects(Stream<LabelledWithConfidence<ObjectMask>> objects) {
-        objects.forEach(this::add);
-    }
-
-    /**
-     * Adds one or more objects with an identical class-label.
-     *
-     * @param classLabel the label that applies to each object in {@code objects}.
-     * @param objects the objects with label {@code classLabel}.
-     */
-    public void add(String classLabel, Collection<WithConfidence<ObjectMask>> objects) {
-        this.map.putAll(classLabel, objects);
-    }
-
-    /**
-     * Scales the segmented-objects.
-     *
-     * @param scaleFactor how much to scale by
-     * @param extent an extent all objects are clipped to remain inside.
-     * @return a segmented-objects with identical order, confidence-values etc. but with
-     *     corresponding object-masks scaled.
-     * @throws OperationFailedException
-     */
-    public SegmentedObjects scale(ScaleFactor scaleFactor, Extent extent)
-            throws OperationFailedException {
-        return mapValues(
-                list ->
-                        Scaler.scaleElements(
-                                        list,
-                                        scaleFactor,
-                                        false,
-                                        extent,
-                                        new AccessSegmentedObjects(list))
-                                .asListOrderPreserved(list));
+    public SegmentedObjects(
+            List<LabelledWithConfidence<MultiScaleObject>> objects, DualScale<Stack> background) {
+        this.list = objects;
+        this.background = background;
+        this.objects =
+                new DualScale<>(
+                        new SegmentedObjectsAtScale(
+                                list, MultiScaleObject::getInputScale, background.atInputScale()),
+                        new SegmentedObjectsAtScale(
+                                list, MultiScaleObject::getModelScale, background.atModelScale()));
     }
 
     /**
      * Reduces the segmented-objects, applying a reduction algorithm separately to each
      * object-class.
      *
-     * @param reduce the algorithm used to reduce each object-class
+     * @param reduce the algorithm used to reduce each object-class.
      * @param separateEachLabel if true, each label is reduced separately. if false, all labels are
      *     reduced together.
      * @return a new {@link SegmentedObjects} with the {@code reduce} algorithm applied to each
      *     object-class, reusing the existing objects.
-     * @throws OperationFailedException if the reduction fails on any object-class
+     * @throws OperationFailedException if the reduction fails on any object-class.
      */
     public SegmentedObjects reduce(ReduceElements<ObjectMask> reduce, boolean separateEachLabel)
             throws OperationFailedException {
-        if (separateEachLabel) {
-            return mapValues(reduce::reduceUnlabelled);
-        } else {
-            return new SegmentedObjects(reduce.reduceLabelled(allLabelledObjects()).stream());
-        }
+
+        DualScale<Extent> extent = objects.map(SegmentedObjectsAtScale::extent);
+
+        // What's needed to scale a model-scale object to input-scale.
+        ScaleFactor scaleFactor =
+                extent.apply(
+                        (input, model) ->
+                                RelativeScaleCalculator.relativeScale(model, input, false));
+
+        SegmentedObjectsReducer reducer =
+                new SegmentedObjectsReducer(
+                        list,
+                        objects.atModelScale().listWithLabels(),
+                        reduce,
+                        background,
+                        element ->
+                                new MultiScaleObject(
+                                        () -> element,
+                                        () ->
+                                                element.scale(
+                                                        scaleFactor,
+                                                        Optional.of(extent.atInputScale()))));
+        return reducer.reduce(separateEachLabel);
     }
 
     /***
@@ -138,40 +139,19 @@ public class SegmentedObjects {
      *
      * @return the highest-confidence object-mask or {@link Optional#empty} if no objects exist.
      */
-    public Optional<WithConfidence<ObjectMask>> highestConfidence() {
-        return streamAllObjects()
+    public Optional<WithConfidence<MultiScaleObject>> highestConfidence() {
+        return list.stream()
+                .map(LabelledWithConfidence::getWithConfidence)
                 .max((a, b) -> Double.compare(a.getConfidence(), b.getConfidence()));
     }
 
     /**
-     * Create a {@link ObjectCollection} of <i>all</i> contained objects, <i>excluding</i>
-     * confidence.
+     * The total number of segmented objects.
      *
-     * @return a newly created {@link ObjectCollection} that reuses the existing {@link ObjectMask}
-     *     stored in the structure.
+     * @return the total number.
      */
-    public ObjectCollection asObjects() {
-        return new ObjectCollection(asList().stream().map(WithConfidence::getElement));
-    }
-
-    /**
-     * Create a {@link List} of <i>all</i> contained objects, <i>including</i> confidence.
-     *
-     * @return a newly created {@link List} that reuses the existing {@link ObjectMask} stored in
-     *     the structure.
-     */
-    public List<WithConfidence<ObjectMask>> asList() {
-        return streamAllObjects().collect(Collectors.toList());
-    }
-
-    /**
-     * Create a {@link Stream} of <i>all</i> contained objects, <i>including</i> confidence.
-     *
-     * @return a newly created {@link Stream} that reuses the existing {@link ObjectMask} stored in
-     *     the structure.
-     */
-    public Stream<WithConfidence<ObjectMask>> streamAllObjects() {
-        return map.entries().stream().map(Entry::getValue);
+    public int size() {
+        return list.size();
     }
 
     /**
@@ -180,40 +160,14 @@ public class SegmentedObjects {
      * @return true if no segmented objects exist, false otherwise.
      */
     public boolean isEmpty() {
-        return map.isEmpty();
+        return list.isEmpty();
     }
 
-    /**
-     * Adds a single object.
-     *
-     * @param object the labelled-object to add
-     */
-    private void add(LabelledWithConfidence<ObjectMask> object) {
-        this.map.put(object.getLabel(), object.getWithConfidence());
-    }
-
-    /** Creates a list of all labelled objects. */
-    private List<LabelledWithConfidence<ObjectMask>> allLabelledObjects() {
-        return map.entries().stream()
-                .map(entry -> new LabelledWithConfidence<>(entry.getKey(), entry.getValue()))
-                .collect(Collectors.toList());
-    }
-
-    /**
-     * Maps the objects associated with each object-class via a list.
-     *
-     * @param operator transforms the list of objects in a particular object-class to a new list
-     * @return a new {@link SegmentedObjects} with a mapping applied to each object-class, reusing
-     *     the existing objects.
-     */
-    private <E extends Exception> SegmentedObjects mapValues(
-            CheckedUnaryOperator<List<WithConfidence<ObjectMask>>, E> operator) throws E {
-        SegmentedObjects out = new SegmentedObjects();
-        for (String key : this.map.keySet()) {
-            List<WithConfidence<ObjectMask>> list =
-                    this.map.get(key).stream().collect(Collectors.toList());
-            out.map.putAll(key, operator.apply(list));
-        }
-        return out;
+    /** Converts a collection from {@link WithConfidence} to {@link LabelledWithConfidence}. */
+    private static List<LabelledWithConfidence<MultiScaleObject>> addLabel(
+            String label, Collection<WithConfidence<MultiScaleObject>> objects) {
+        return FunctionalList.mapToList(
+                objects.stream(),
+                withConfidence -> new LabelledWithConfidence<>(label, withConfidence));
     }
 }

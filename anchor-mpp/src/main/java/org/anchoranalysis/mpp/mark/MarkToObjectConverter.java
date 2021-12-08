@@ -25,6 +25,7 @@
  */
 package org.anchoranalysis.mpp.mark;
 
+import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.exception.CheckedUnsupportedOperationException;
 import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
@@ -50,14 +51,38 @@ public class MarkToObjectConverter {
             RegionMapSingleton.instance()
                     .membershipWithFlagsForIndex(GlobalRegionIdentifiers.SUBMARK_INSIDE);
 
-    /** The scaling factor to apply. */
-    private final ScaleFactor scaleFactor;
+    /**
+     * An optional scaling factor to apply to the mark, before converting to an {@link ObjectMask}.
+     */
+    private final Optional<ScaleFactor> scaleFactor;
 
     /**
      * The dimensions of the final scaled-up scene, to ensure the {@link ObjectMask} is contained
      * within.
      */
     private final Dimensions dimensions;
+
+    /**
+     * Create for particular {@link Dimensions} without a scaling-factor.
+     *
+     * @param dimensions the dimensions of the final scaled-up scene, to ensure the {@link
+     *     ObjectMask} is contained within.
+     */
+    public MarkToObjectConverter(Dimensions dimensions) {
+        this.scaleFactor = Optional.empty();
+        this.dimensions = dimensions;
+    }
+
+    /**
+     * Create for particular {@link Dimensions} without a scaling-factor.
+     *
+     * @param dimensions the dimensions of the final scaled-up scene, to ensure the {@link
+     *     ObjectMask} is contained within.
+     */
+    public MarkToObjectConverter(ScaleFactor scaleFactor, Dimensions dimensions) {
+        this.scaleFactor = Optional.of(scaleFactor);
+        this.dimensions = dimensions;
+    }
 
     /**
      * Converts a {@link Mark} to an equivalent {@link ObjectMask}.
@@ -68,7 +93,9 @@ public class MarkToObjectConverter {
     public ObjectMask convert(Mark mark) {
         // Scale the marks up
         try {
-            mark.scale(scaleFactor);
+            if (scaleFactor.isPresent() && !scaleFactor.get().isNoScale()) {
+                mark.scale(scaleFactor.get());
+            }
         } catch (CheckedUnsupportedOperationException e) {
             throw new AnchorImpossibleSituationException();
         }

@@ -41,6 +41,6 @@ public interface SerializedObjectSupplier<T> {
     Optional<T> get() throws IOException;
 
     public static <T> SerializedObjectSupplier<T> cache(SerializedObjectSupplier<T> supplier) {
-        return CachedSupplier.cache(supplier::get)::get;
+        return CachedSupplier.cacheChecked(supplier::get)::get;
     }
 }

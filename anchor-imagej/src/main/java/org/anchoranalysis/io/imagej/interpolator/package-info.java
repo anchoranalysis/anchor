@@ -23,4 +23,5 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.io.imagej.iterpolator;
+/** Image interpolation when scaling using ImageJ. */
+package org.anchoranalysis.io.imagej.interpolator;

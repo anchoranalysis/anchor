@@ -29,6 +29,7 @@ import java.util.Optional;
 import lombok.Getter;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.feature.io.results.calculation.FeatureCalculationResults;
+import org.anchoranalysis.io.output.enabled.multi.MultiLevelOutputEnabled;
 
 /**
  * The customizable output names used by {@link FeatureCalculationResults}, which all follow a
@@ -42,6 +43,9 @@ public class FeatureOutputNames {
 
     /** If not otherwise specified, the output name for a non-aggregated CSV of the results. */
     public static final String OUTPUT_DEFAULT_NON_AGGREGATED = "features";
+
+    /** The XML with non-aggregated feature values. */
+    public static final String OUTPUT_DICTIONARY = "dictionary";
 
     /** The CSV of non-aggregated feature-results. */
     @Getter private String csvFeaturesNonAggregated;
@@ -76,6 +80,39 @@ public class FeatureOutputNames {
         csvFeaturesAggregated = joinIfEnabled(enableAggregated, prefix, "Aggregated");
         csvFeaturesGroup = joinIfEnabled(enableGroup, prefix, "Group");
         xmlAggregatedGroup = joinIfEnabled(enableGroup, prefix, "AggregatedGroup");
+    }
+
+    /**
+     * If any output is enabled that requires calculation of feature results?
+     *
+     * @param outputEnabled which outputs are enabled or not.
+     * @return true if at least one output is enabled that requires calculation of results, false if
+     *     none do.
+     */
+    public boolean calculationResultsNeeded(MultiLevelOutputEnabled outputEnabled) {
+        if (outputEnabled.isOutputEnabled(csvFeaturesNonAggregated)) {
+            return true;
+        }
+
+        if (outputEnabled.isOutputEnabled(OUTPUT_DICTIONARY)) {
+            return true;
+        }
+
+        if (outputPresentAndEnabled(csvFeaturesAggregated, outputEnabled)) {
+            return true;
+        }
+
+        if (outputPresentAndEnabled(csvFeaturesGroup, outputEnabled)) {
+            return true;
+        }
+
+        return outputPresentAndEnabled(xmlAggregatedGroup, outputEnabled);
+    }
+
+    /** If a particular output-name is present and enabled for output. */
+    private static boolean outputPresentAndEnabled(
+            Optional<String> outputName, MultiLevelOutputEnabled outputEnabled) {
+        return outputName.isPresent() && outputEnabled.isOutputEnabled(outputName.get());
     }
 
     private static Optional<String> joinIfEnabled(boolean enabled, String prefix, String suffix) {

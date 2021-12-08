@@ -1,5 +1,6 @@
 package org.anchoranalysis.core.cache;
 
+import java.util.function.Supplier;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.functional.checked.CheckedSupplier;
@@ -47,6 +48,20 @@ public class CachedSupplier<T, E extends Exception> extends CachedSupplierBase<T
     // END: REQUIRED ARGUMENTS
 
     /**
+     * Creates a cached-version of a {@link Supplier}.
+     *
+     * @param <T> return-type
+     * @param <E> exception that will never be thrown, but is parameterized to match the
+     *     destination-type..
+     * @param suppplier supplies the value to be calculated and cached.
+     * @return a cached version, with the same interface, and additional functions to monitor
+     *     progress, reset etc.
+     */
+    public static <T, E extends Exception> CachedSupplier<T, E> cache(Supplier<T> suppplier) {
+        return new CachedSupplier<>(suppplier::get);
+    }
+
+    /**
      * Creates a cached-version of a {@link CheckedSupplier}.
      *
      * @param <T> return-type
@@ -55,7 +70,7 @@ public class CachedSupplier<T, E extends Exception> extends CachedSupplierBase<T
      * @return a cached version, with the same interface, and additional functions to monitor
      *     progress, reset etc.
      */
-    public static <T, E extends Exception> CachedSupplier<T, E> cache(
+    public static <T, E extends Exception> CachedSupplier<T, E> cacheChecked(
             CheckedSupplier<T, E> suppplier) {
         return new CachedSupplier<>(suppplier);
     }

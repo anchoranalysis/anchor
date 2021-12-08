@@ -47,10 +47,10 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
 public class ReduceObjectsGraph {
 
     /** The priority queue that always gives priority to the highest-confidence object. */
-    private final PriorityQueue<LabelledWithConfidence<ObjectMask>> queue;
+    private final PriorityQueue<ObjectForReduction> queue;
 
     /** The graph with objects as vertices, and with an edge between any objects that intersect. */
-    private final GraphWithoutPayload<LabelledWithConfidence<ObjectMask>> graph;
+    private final GraphWithoutPayload<ObjectForReduction> graph;
 
     /**
      * Create with a list of elements.
@@ -58,11 +58,12 @@ public class ReduceObjectsGraph {
      * @param elements the elements.
      */
     public ReduceObjectsGraph(List<LabelledWithConfidence<ObjectMask>> elements) {
+        List<ObjectForReduction> vertices = ObjectForReductionFactory.populateFromList(elements);
 
         /** Tracks which objects overlap with other objects, updated as merges/deletions occur. */
-        graph = new IntersectingObjects<>(elements, LabelledWithConfidence::getElement).asGraph();
+        graph = new IntersectingObjects<>(vertices, ObjectForReduction::getElement).asGraph();
 
-        queue = new PriorityQueue<>(elements);
+        queue = new PriorityQueue<>(vertices);
     }
 
     /**
@@ -79,17 +80,17 @@ public class ReduceObjectsGraph {
      *
      * @return the highest-priority element
      */
-    public LabelledWithConfidence<ObjectMask> peek() {
+    public ObjectForReduction peek() {
         return queue.peek();
     }
 
     /**
      * The element at the top of the queue, returned removing it from the queue and graph.
      *
-     * @return the highest-priority element
+     * @return the highest-priority element.
      */
-    public LabelledWithConfidence<ObjectMask> poll() {
-        LabelledWithConfidence<ObjectMask> element = queue.poll();
+    public ObjectForReduction poll() {
+        ObjectForReduction element = queue.poll();
         try {
             graph.removeVertex(element);
         } catch (OperationFailedException e) {
@@ -104,8 +105,7 @@ public class ReduceObjectsGraph {
      * @param vertex the vertex to find adjacent vertices for.
      * @return all vertices to which an outgoing edge exists from {@code vertex}.
      */
-    public List<LabelledWithConfidence<ObjectMask>> adjacentVerticesOutgoing(
-            LabelledWithConfidence<ObjectMask> vertex) {
+    public List<ObjectForReduction> adjacentVerticesOutgoing(ObjectForReduction vertex) {
         return graph.adjacentVerticesOutgoing(vertex);
     }
 
@@ -115,8 +115,7 @@ public class ReduceObjectsGraph {
      * @param vertex the vertex to find adjacent vertices for.
      * @return all vertices to which an outgoing edge exists from {@code vertex}.
      */
-    public Stream<LabelledWithConfidence<ObjectMask>> adjacentVerticesOutgoingStream(
-            LabelledWithConfidence<ObjectMask> vertex) {
+    public Stream<ObjectForReduction> adjacentVerticesOutgoingStream(ObjectForReduction vertex) {
         return graph.adjacentVerticesOutgoingStream(vertex);
     }
 
@@ -129,8 +128,7 @@ public class ReduceObjectsGraph {
      * @param from the vertex the edge joins <i>from</i>.
      * @param to the vertex the edge joins <i>to</i>.
      */
-    public void removeEdge(
-            LabelledWithConfidence<ObjectMask> from, LabelledWithConfidence<ObjectMask> to) {
+    public void removeEdge(ObjectForReduction from, ObjectForReduction to) {
         graph.removeEdge(from, to);
     }
 
@@ -140,8 +138,7 @@ public class ReduceObjectsGraph {
      * @param vertex the vertex to remove
      * @throws OperationFailedException if the vertex doesn't exist in the graph.
      */
-    public void removeVertex(LabelledWithConfidence<ObjectMask> vertex)
-            throws OperationFailedException {
+    public void removeVertex(ObjectForReduction vertex) throws OperationFailedException {
         // This involves a linear search
         queue.remove(vertex);
 
@@ -161,9 +158,7 @@ public class ReduceObjectsGraph {
      * @param merged the merged element that replaces {@code element1} and {@code element2}.
      */
     public void mergeVertices(
-            LabelledWithConfidence<ObjectMask> element1,
-            LabelledWithConfidence<ObjectMask> element2,
-            LabelledWithConfidence<ObjectMask> merged) {
+            ObjectForReduction element1, ObjectForReduction element2, ObjectForReduction merged) {
         graph.mergeVertices(element1, element2, merged);
 
         // This involves two linear searches

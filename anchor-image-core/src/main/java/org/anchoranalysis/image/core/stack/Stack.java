@@ -45,6 +45,7 @@ import org.anchoranalysis.image.core.channel.factory.ChannelFactorySingleType;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
 import org.anchoranalysis.image.core.dimensions.Resolution;
+import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.spatial.box.Extent;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -100,6 +101,17 @@ public class Stack implements Iterable<Channel> {
     public Stack(Channel channel) {
         this.delegate = new StackNotUniformSized(channel);
         this.rgb = false;
+    }
+
+    /**
+     * Creates a {@link Stack} with a single <i>unsigned-byte</i> channel of size {@code channel}.
+     *
+     * @param extent the size of the channel to create.
+     */
+    public Stack(Extent extent) {
+        this(
+                ChannelFactory.instance()
+                        .create(new Dimensions(extent), UnsignedByteVoxelType.INSTANCE));
     }
 
     /**
@@ -175,9 +187,9 @@ public class Stack implements Iterable<Channel> {
     }
 
     /** Copy constructor (deep-copies channels) */
-    private Stack(Stack src) {
-        this.delegate = src.delegate.duplicate();
-        this.rgb = src.rgb;
+    private Stack(Stack source) {
+        this.delegate = source.delegate.duplicate();
+        this.rgb = source.rgb;
     }
 
     /**

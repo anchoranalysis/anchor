@@ -31,6 +31,7 @@ import lombok.Value;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.time.ExecutionTimeRecorder;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.inference.segment.DualScale;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 /**
@@ -44,16 +45,28 @@ import org.anchoranalysis.spatial.scale.ScaleFactor;
 public class ImageInferenceContext {
 
     /**
-     * The size of the image for which we wish to segment, before any scaling was applied to input
-     * the model for inference.
+     * The size of the image for which we wish to segment, before and after any scaling for model
+     * inference.
      */
-    private final Dimensions dimensions;
+    private final DualScale<Dimensions> dimensions;
 
     /**
      * The inverse of the scaling-factor applied to reduce {@code unscaledDimensions} to the
      * input-matrix used for inference.
      */
     private final ScaleFactor scaleFactor;
+
+    /**
+     * The scaling-factors needed to upscale respectively each scale to be equivalent to the
+     * input-image size.
+     *
+     * @return each scaling-factor (if required) to scale an image (at the respective scale in
+     *     {@link DualScale} by, so they become identically sized to the {@link
+     *     DualScale#atInputScale}.
+     */
+    public final DualScale<Optional<ScaleFactor>> scaleFactorUpscale() {
+        return new DualScale<>(Optional.of(scaleFactor), Optional.empty());
+    }
 
     /** If available, labels of classes loaded from a text file at {@code classLabelsPath}. */
     private final Optional<List<String>> classLabels;

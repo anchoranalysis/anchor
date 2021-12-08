@@ -58,10 +58,10 @@ public class DrawObjectsGenerator extends ObjectsAsRGBGenerator {
     /**
      * A generator that draws an object in a particular way with particular colors and background.
      *
-     * @param drawObject how to draw the object
-     * @param background the background
-     * @param colorIndex the colors
-     * @return the generator
+     * @param drawObject how to draw the object.
+     * @param background the background.
+     * @param colorIndex the colors.
+     * @return the generator.
      */
     public static DrawObjectsGenerator withBackgroundAndColors(
             DrawObject drawObject, DisplayStack background, ColorIndex colorIndex) {
@@ -72,9 +72,9 @@ public class DrawObjectsGenerator extends ObjectsAsRGBGenerator {
      * A generator that draws an outline around objects on a background using varied colors for the
      * objects.
      *
-     * @param outlineWidth the width of the outline
-     * @param background the background
-     * @return the generator
+     * @param outlineWidth the width of the outline.
+     * @param background the background.
+     * @return the generator.
      */
     public static DrawObjectsGenerator outlineVariedColors(
             int numberColors, int outlineWidth, DisplayStack background) {
@@ -84,9 +84,9 @@ public class DrawObjectsGenerator extends ObjectsAsRGBGenerator {
     /**
      * A generator that draws an outline around objects using a particular color-index.
      *
-     * @param outlineWidth the width of the outline
-     * @param colorIndex the color-index
-     * @return the generator
+     * @param outlineWidth the width of the outline.
+     * @param colorIndex the color-index.
+     * @return the generator.
      */
     public static DrawObjectsGenerator outlineWithColorIndex(
             int outlineWidth, ColorIndex colorIndex) {
@@ -97,9 +97,9 @@ public class DrawObjectsGenerator extends ObjectsAsRGBGenerator {
      * A generator that draws an outline around objects on a background using varied colors for the
      * objects.
      *
-     * @param outlineWidth the width of the outline
-     * @param background the background or dimensions for a background (drawn as all black)
-     * @return the generator
+     * @param outlineWidth the width of the outline.
+     * @param background the background or dimensions for a background (drawn as all black).
+     * @return the generator.
      */
     public static DrawObjectsGenerator outlineVariedColors(
             int numberColors, int outlineWidth, Either<Dimensions, DisplayStack> background) {
@@ -109,12 +109,12 @@ public class DrawObjectsGenerator extends ObjectsAsRGBGenerator {
 
     /**
      * A generator that draws an outline around objects on a background using a single color for all
-     * objects
+     * objects.
      *
-     * @param outlineWidth the width of the outline
-     * @param background the background or dimensions for a background (drawn as all black)
-     * @param color the single color to use for all objects
-     * @return the generator
+     * @param outlineWidth the width of the outline.
+     * @param background the background or dimensions for a background (drawn as all black).
+     * @param color the single color to use for all objects.
+     * @return the generator.
      */
     public static DrawObjectsGenerator outlineSingleColor(
             int outlineWidth, DisplayStack background, RGBColor color) {

@@ -34,7 +34,7 @@ import org.anchoranalysis.image.voxel.interpolator.Interpolator;
 import org.anchoranalysis.image.voxel.interpolator.InterpolatorImgLib2;
 import org.anchoranalysis.image.voxel.interpolator.InterpolatorImgLib2Linear;
 import org.anchoranalysis.image.voxel.thresholder.VoxelsThresholder;
-import org.anchoranalysis.io.imagej.iterpolator.InterpolatorImageJ;
+import org.anchoranalysis.io.imagej.interpolator.InterpolatorImageJ;
 import org.anchoranalysis.spatial.box.Extent;
 
 /**

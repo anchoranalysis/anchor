@@ -42,17 +42,21 @@ class RunningSumRecorder implements ExecutionTimeRecorder {
 
     @Override
     public void recordExecutionTime(String operationIdentifier, long millis) {
-        map.get(operationIdentifier).increment(millis);
+        synchronized (map) {
+            map.get(operationIdentifier).increment(millis);
+        }
     }
 
     @Override
     public void recordExecutionTime(
             String operationIdentifierFirst, String operationIdentiferSubsequent, long millis) {
-        String identifier =
-                map.containsKey(operationIdentifierFirst)
-                        ? operationIdentiferSubsequent
-                        : operationIdentifierFirst;
-        map.get(identifier).increment(millis);
+        synchronized (map) {
+            String identifier =
+                    map.containsKey(operationIdentifierFirst)
+                            ? operationIdentiferSubsequent
+                            : operationIdentifierFirst;
+            map.get(identifier).increment(millis);
+        }
     }
 
     /**
@@ -61,7 +65,9 @@ class RunningSumRecorder implements ExecutionTimeRecorder {
      * @return an array with a mean corresponding to each item in the collection.
      */
     public Map<String, Double> meanAndReset() {
-        return map.meanAndReset();
+        synchronized (map) {
+            return map.meanAndReset();
+        }
     }
 
     /**
@@ -70,16 +76,20 @@ class RunningSumRecorder implements ExecutionTimeRecorder {
      * @return true if the map has no entries, false otherwise.
      */
     public boolean isEmpty() {
-        return map.isEmpty();
+        synchronized (map) {
+            return map.isEmpty();
+        }
     }
 
     @Override
     public RecordedExecutionTimes recordedTimes() {
-        return new RecordedExecutionTimes(
-                map.entrySet().stream()
-                        .map(
-                                entry ->
-                                        RecordedOperationHelper.create(
-                                                entry.getKey(), entry.getValue())));
+        synchronized (map) {
+            return new RecordedExecutionTimes(
+                    map.entrySet().stream()
+                            .map(
+                                    entry ->
+                                            RecordedOperationHelper.create(
+                                                    entry.getKey(), entry.getValue())));
+        }
     }
 }

@@ -115,7 +115,7 @@ class BioformatsOpenedRaster implements OpenedImageFile {
         this.metadata = metadata;
         this.readOptions = readOptions;
         this.calculateOrientation = calculateOrientation;
-        this.timestamps = CachedSupplier.cache(timestamps);
+        this.timestamps = CachedSupplier.cacheChecked(timestamps);
 
         sizeT = readOptions.sizeT(reader);
         rgb = readOptions.isRGB(reader);

@@ -47,8 +47,13 @@ import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.inference.ImageInferenceContext;
 import org.anchoranalysis.image.inference.ImageInferenceModel;
+import org.anchoranalysis.image.inference.segment.DualScale;
+import org.anchoranalysis.image.inference.segment.LabelledWithConfidence;
+import org.anchoranalysis.image.inference.segment.MultiScaleObject;
 import org.anchoranalysis.image.inference.segment.SegmentedObjects;
+import org.anchoranalysis.image.voxel.interpolator.Interpolator;
 import org.anchoranalysis.inference.concurrency.ConcurrentModelPool;
+import org.anchoranalysis.io.imagej.interpolator.InterpolatorImageJ;
 import org.anchoranalysis.io.manifest.file.TextFileReader;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 import org.apache.commons.collections.IteratorUtils;
@@ -63,6 +68,9 @@ import org.apache.commons.collections.IteratorUtils;
  */
 public abstract class SegmentStackIntoObjectsScaleDecode<T, S extends ImageInferenceModel<T>>
         extends SegmentStackIntoObjectsPooled<S> {
+
+    // This is used for downscaling as it's fast.
+    private static final Interpolator INTERPOLATOR = new InterpolatorImageJ();
 
     private static final String FALLBACK_INPUT_NAME = "no_name_defined";
 
@@ -110,19 +118,30 @@ public abstract class SegmentStackIntoObjectsScaleDecode<T, S extends ImageInfer
 
             Optional<double[]> subtractMeans = subtractMeanArray(stack.getNumberChannels());
 
-            T input = deriveInput(stack, downfactor, subtractMeans);
+            Stack stackDownscaled =
+                    stack.mapChannel(channel -> channel.scaleXY(downfactor, INTERPOLATOR));
+
+            T input = deriveInput(stackDownscaled, downfactor, subtractMeans);
 
             InferenceHelper<T, S> helper =
                     new InferenceHelper<>(decode, inputName().orElse(FALLBACK_INPUT_NAME));
-            return helper.queueInference(
-                    input,
-                    modelPool,
-                    new ImageInferenceContext(
-                            stack.dimensions(),
-                            upfactor,
-                            classLabels(),
-                            executionTimeRecorder,
-                            getInitialization().getSharedObjects().getContext().getLogger()));
+
+            List<LabelledWithConfidence<MultiScaleObject>> objects =
+                    helper.queueInference(
+                            input,
+                            modelPool,
+                            new ImageInferenceContext(
+                                    new DualScale<>(
+                                            stack.dimensions(), stackDownscaled.dimensions()),
+                                    upfactor,
+                                    classLabels(),
+                                    executionTimeRecorder,
+                                    getInitialization()
+                                            .getSharedObjects()
+                                            .getContext()
+                                            .getLogger()));
+
+            return new SegmentedObjects(objects, new DualScale<>(stack, stackDownscaled));
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             throw new SegmentationFailedException(e);

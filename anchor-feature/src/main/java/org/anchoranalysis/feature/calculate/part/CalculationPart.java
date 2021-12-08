@@ -58,7 +58,7 @@ public abstract class CalculationPart<S, T extends FeatureInput> implements Rese
 
     // We delegate the actually execution of the cache
     private CachedSupplier<S, FeatureCalculationException> delegate =
-            CachedSupplier.cache(() -> CalculationPart.this.execute(input));
+            CachedSupplier.cacheChecked(() -> CalculationPart.this.execute(input));
 
     /**
      * Executes the operation and returns a result, either by doing the calculation, or retrieving a
