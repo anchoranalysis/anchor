@@ -126,11 +126,11 @@ public class SegmentedObjects {
                         background,
                         element ->
                                 new MultiScaleObject(
-                                        () -> element,
                                         () ->
                                                 element.scale(
                                                         scaleFactor,
-                                                        Optional.of(extent.atInputScale()))));
+                                                        Optional.of(extent.atInputScale())),
+                                        () -> element));
         return reducer.reduce(separateEachLabel);
     }
 

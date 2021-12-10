@@ -28,6 +28,7 @@ package org.anchoranalysis.image.core.dimensions.size.suggestion;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.functional.OptionalFactory;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 
 /**
@@ -60,8 +61,8 @@ class SuggestionFromArray {
      * @throws SuggestionFormatException if any array elements is not a positive integer
      */
     public ScaleToSuggestion extractOne(boolean multiplexWidth) throws SuggestionFormatException {
-        Optional<Integer> widthPosition = OptionalUtilities.createFromFlag(multiplexWidth, 0);
-        Optional<Integer> heightPosition = OptionalUtilities.createFromFlag(!multiplexWidth, 0);
+        Optional<Integer> widthPosition = OptionalFactory.create(multiplexWidth, 0);
+        Optional<Integer> heightPosition = OptionalFactory.create(!multiplexWidth, 0);
         return extract(widthPosition, heightPosition, true);
     }
 

@@ -36,7 +36,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.format.ImageFileFormat;
-import org.anchoranalysis.core.functional.OptionalUtilities;
+import org.anchoranalysis.core.functional.OptionalFactory;
 import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.input.bean.InputManagerParameters;
 import org.anchoranalysis.io.input.bean.path.matcher.MatchExtensions;
@@ -98,7 +98,7 @@ public class SearchDirectory extends FilesProviderWithDirectoryString {
             throws FilesProviderException {
 
         Optional<Integer> maxDirectoryDepthOptional =
-                OptionalUtilities.createFromFlag(maxDirectoryDepth >= 0, maxDirectoryDepth);
+                OptionalFactory.create(maxDirectoryDepth >= 0, maxDirectoryDepth);
         try {
             List<File> filesUnsorted =
                     parameters

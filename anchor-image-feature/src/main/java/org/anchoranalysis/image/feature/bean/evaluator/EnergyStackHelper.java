@@ -28,7 +28,7 @@ package org.anchoranalysis.image.feature.bean.evaluator;
 import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.bean.OptionalFactory;
+import org.anchoranalysis.bean.OptionalProviderFactory;
 import org.anchoranalysis.bean.Provider;
 import org.anchoranalysis.bean.shared.dictionary.DictionaryProvider;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
@@ -49,7 +49,7 @@ class EnergyStackHelper {
 
                 EnergyStack energyStack = new EnergyStack(stackEnergy.get());
                 energyStack.setParameters(
-                        OptionalFactory.create(dictionary).orElseGet(Dictionary::new));
+                        OptionalProviderFactory.create(dictionary).orElseGet(Dictionary::new));
                 return Optional.of(energyStack);
             } else {
                 return Optional.empty();

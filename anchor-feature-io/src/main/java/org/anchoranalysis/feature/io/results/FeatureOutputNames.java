@@ -27,7 +27,7 @@ package org.anchoranalysis.feature.io.results;
 
 import java.util.Optional;
 import lombok.Getter;
-import org.anchoranalysis.core.functional.OptionalUtilities;
+import org.anchoranalysis.core.functional.OptionalFactory;
 import org.anchoranalysis.feature.io.results.calculation.FeatureCalculationResults;
 import org.anchoranalysis.io.output.enabled.multi.MultiLevelOutputEnabled;
 
@@ -116,6 +116,6 @@ public class FeatureOutputNames {
     }
 
     private static Optional<String> joinIfEnabled(boolean enabled, String prefix, String suffix) {
-        return OptionalUtilities.createFromFlag(enabled, () -> prefix + suffix);
+        return OptionalFactory.create(enabled, () -> prefix + suffix);
     }
 }

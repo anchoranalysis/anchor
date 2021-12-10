@@ -31,7 +31,7 @@ import java.util.List;
 import java.util.Optional;
 import lombok.Getter;
 import org.anchoranalysis.core.format.NonImageFileFormat;
-import org.anchoranalysis.core.functional.OptionalUtilities;
+import org.anchoranalysis.core.functional.OptionalFactory;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.serialize.DeserializationFailedException;
 import org.anchoranalysis.core.serialize.Deserializer;
@@ -58,7 +58,7 @@ public class FinderSerializedObject<T> extends FinderSingleFile {
     @Getter
     private SerializedObjectSupplier<T> memoized =
             SerializedObjectSupplier.cache(
-                    () -> OptionalUtilities.createFromFlagChecked(exists(), this::getInternal));
+                    () -> OptionalFactory.createChecked(exists(), this::getInternal));
 
     public FinderSerializedObject(String function, Logger logger) {
         super(logger.errorReporter());

@@ -30,10 +30,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import lombok.Getter;
-import org.anchoranalysis.bean.OptionalFactory;
 import org.anchoranalysis.bean.initializable.InitializableBean;
 import org.anchoranalysis.bean.initializable.parameters.NullInitialization;
 import org.anchoranalysis.core.exception.InitializeException;
+import org.anchoranalysis.core.functional.OptionalFactory;
 import org.anchoranalysis.core.log.Logger;
 
 /**

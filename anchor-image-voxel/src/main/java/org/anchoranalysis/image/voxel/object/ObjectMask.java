@@ -36,7 +36,7 @@ import lombok.experimental.Accessors;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
-import org.anchoranalysis.core.functional.OptionalUtilities;
+import org.anchoranalysis.core.functional.OptionalFactory;
 import org.anchoranalysis.image.voxel.BoundedVoxels;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.assigner.VoxelsAssigner;
@@ -548,7 +548,7 @@ public class ObjectMask {
         ObjectMask object = new ObjectMask(voxelsMaskOut, binaryValuesOut);
 
         // If there no pixels left that haven't been set, then the intersection object-mask is zero
-        return OptionalUtilities.createFromFlag(object.voxelsOn().anyExists(), object);
+        return OptionalFactory.create(object.voxelsOn().anyExists(), object);
     }
 
     /**

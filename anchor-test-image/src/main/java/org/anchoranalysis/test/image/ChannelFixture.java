@@ -28,7 +28,7 @@ package org.anchoranalysis.test.image;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.bean.OptionalFactory;
+import org.anchoranalysis.core.functional.OptionalFactory;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.core.dimensions.Dimensions;

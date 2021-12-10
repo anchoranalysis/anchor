@@ -34,7 +34,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.functional.OptionalUtilities;
+import org.anchoranalysis.core.functional.OptionalFactory;
 
 /**
  * Matches a Java-style regular expression against the string.
@@ -70,7 +70,7 @@ public class RegExSimple extends RegEx {
         createPatternIfNeeded();
 
         Matcher matcher = pattern.matcher(string);
-        return OptionalUtilities.createFromFlag(matcher.matches(), () -> arrayFromMatcher(matcher));
+        return OptionalFactory.create(matcher.matches(), () -> arrayFromMatcher(matcher));
     }
 
     @Override

@@ -33,7 +33,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.core.functional.OptionalUtilities;
+import org.anchoranalysis.core.functional.OptionalFactory;
 import org.anchoranalysis.core.log.Divider;
 import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
@@ -130,7 +130,7 @@ public abstract class JobProcessor<T extends InputFromManager, S>
             throws ExperimentExecutionException;
 
     protected Optional<MessageLogger> loggerForMonitor(ParametersExperiment parametersExperiment) {
-        return OptionalUtilities.createFromFlag(
+        return OptionalFactory.create(
                 parametersExperiment.isDetailedLogging(),
                 parametersExperiment::getLoggerExperiment);
     }

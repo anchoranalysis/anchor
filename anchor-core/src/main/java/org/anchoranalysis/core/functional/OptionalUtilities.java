@@ -30,7 +30,6 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Supplier;
 import java.util.stream.Stream;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -41,6 +40,8 @@ import org.anchoranalysis.core.functional.checked.CheckedSupplier;
 
 /**
  * Additional utility functions for {@link Optional} and exceptions.
+ *
+ * <p>See {@link OptionalFactory} for utility functions to create {@link Optional}s.
  *
  * @author Owen Feehan
  */
@@ -273,88 +274,5 @@ public class OptionalUtilities {
             CheckedSupplier<Optional<T>, E>... optional) throws E {
         List<CheckedSupplier<Optional<T>, E>> list = Arrays.asList(optional);
         return orFlatSupplier(list);
-    }
-
-    /**
-     * Creates an {@link Optional} from a string that might be empty or null.
-     *
-     * @param possiblyEmptyString a string that might be empty or null.
-     * @return the string, or {@link Optional#empty} if the string is empty or null.
-     */
-    public static Optional<String> create(String possiblyEmptyString) {
-        if (possiblyEmptyString == null || possiblyEmptyString.isEmpty()) {
-            return Optional.empty();
-        } else {
-            return Optional.of(possiblyEmptyString);
-        }
-    }
-
-    /**
-     * Creates an {@link Optional} from a boolean flag.
-     *
-     * @param <T> type in the optional
-     * @param flag iff true an populated optional is returned, otherwise {@link Optional#empty()}.
-     * @param valueIfFlagTrue a positive value to use if flag is true.
-     * @return a filled or empty optional depending on flag.
-     */
-    public static <T> Optional<T> createFromFlag(boolean flag, T valueIfFlagTrue) {
-        if (flag) {
-            return Optional.of(valueIfFlagTrue);
-        } else {
-            return Optional.empty();
-        }
-    }
-
-    /**
-     * Creates an {@link Optional} from a boolean flag.
-     *
-     * @param <T> type in the optional.
-     * @param flag iff true an populated optional is returned, otherwise {@link Optional#empty()}.
-     * @param valueIfFlagTrue used to generate a positive value.
-     * @return a filled or empty optional depending on flag.
-     */
-    public static <T> Optional<T> createFromFlag(boolean flag, Supplier<T> valueIfFlagTrue) {
-        if (flag) {
-            return Optional.of(valueIfFlagTrue.get());
-        } else {
-            return Optional.empty();
-        }
-    }
-
-    /**
-     * Creates an {@link Optional} from a boolean flag - where the supplier can thrown an exception.
-     *
-     * @param <T> type in optional.
-     * @param <E> an exception that may be thrown by an {@code valueIfFlagTrue}.
-     * @param flag iff true an populated optional is returned, otherwise {@link Optional#empty()}.
-     * @param valueIfFlagTrue used to generate a positive value.
-     * @return a filled or empty optional depending on flag.
-     * @throws E if the supplier throws an exception.
-     */
-    public static <T, E extends Exception> Optional<T> createFromFlagChecked(
-            boolean flag, CheckedSupplier<T, E> valueIfFlagTrue) throws E {
-        if (flag) {
-            return Optional.of(valueIfFlagTrue.get());
-        } else {
-            return Optional.empty();
-        }
-    }
-
-    /**
-     * Creates an {@link Optional} from a boolean flag and a supplier that returns an {@link
-     * Optional}.
-     *
-     * @param <T> type in optional.
-     * @param flag iff true an populated optional is returned, otherwise {@link Optional#empty()}.
-     * @param valueIfFlagTrue used to generate a positive value.
-     * @return a filled or empty optional depending on flag.
-     */
-    public static <T> Optional<T> createFromFlagOptional(
-            boolean flag, Supplier<Optional<T>> valueIfFlagTrue) {
-        if (flag) {
-            return valueIfFlagTrue.get();
-        } else {
-            return Optional.empty();
-        }
     }
 }
