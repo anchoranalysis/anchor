@@ -54,13 +54,24 @@ public class ScaleFactorInt {
     }
 
     /**
+     * Multiplies a point by the respective scaling-factor in each dimension.
+     *
+     * @param x the point to be scaled in the X-dimension.
+     * @param y the point to be scaled in the Y-dimension.
+     * @return a newly created scaled {@link Point2i}.
+     */
+    public Point2i scale(int x, int y) {
+        return new Point2i(scaledX(x), scaledY(y));
+    }
+
+    /**
      * Multiplies a {@link Point2i} by the respective scaling-factor in each dimension.
      *
      * @param point the point to be scaled.
      * @return a newly created scaled {@link Point2i}.
      */
     public Point2i scale(Point2i point) {
-        return new Point2i(scaledX(point.x()), scaledY(point.y()));
+        return scale(point.x(), point.y());
     }
 
     /**
