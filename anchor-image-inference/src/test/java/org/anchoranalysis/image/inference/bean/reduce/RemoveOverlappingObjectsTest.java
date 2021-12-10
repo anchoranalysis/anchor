@@ -29,10 +29,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Arrays;
 import java.util.List;
+import org.anchoranalysis.core.time.ExecutionTimeRecorderIgnore;
 import org.anchoranalysis.image.inference.segment.LabelledWithConfidence;
 import org.anchoranalysis.image.inference.segment.ReductionOutcome;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.spatial.box.BoundingBoxFactory;
+import org.anchoranalysis.spatial.box.Extent;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -41,6 +43,8 @@ import org.junit.jupiter.api.Test;
  * @author Owen Feehan
  */
 class RemoveOverlappingObjectsTest {
+
+    private static final Extent EXTENT = new Extent(100, 100, 100);
 
     @Test
     void testWithoutInvert() {
@@ -55,7 +59,7 @@ class RemoveOverlappingObjectsTest {
     private void doTest(boolean invert) {
         RemoveOverlappingObjects remove = new RemoveOverlappingObjects();
         ReductionOutcome<LabelledWithConfidence<ObjectMask>> outcome =
-                remove.reduce(allObjects(invert));
+                remove.reduce(allObjects(invert), EXTENT, ExecutionTimeRecorderIgnore.instance());
         assertEquals(3, outcome.sizeAfter());
     }
 

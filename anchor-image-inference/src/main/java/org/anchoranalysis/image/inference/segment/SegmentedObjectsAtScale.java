@@ -8,6 +8,7 @@ import lombok.experimental.Accessors;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.core.functional.FunctionalList;
+import org.anchoranalysis.core.time.ExecutionTimeRecorder;
 import org.anchoranalysis.image.core.object.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.image.core.stack.DisplayStack;
 import org.anchoranalysis.image.core.stack.Stack;
@@ -39,6 +40,9 @@ public class SegmentedObjectsAtScale {
 
     /** The background image associated with this particular scale. */
     @Getter private final Stack background;
+
+    /** Records the execution-time of particular operations. */
+    private final ExecutionTimeRecorder executionTimeRecorder;
     /** END: REQUIRED ARGUMENTS. */
 
     // START: memoized alternative representations of source at at specific scale.
@@ -61,13 +65,11 @@ public class SegmentedObjectsAtScale {
     public List<LabelledWithConfidence<ObjectMask>> listWithLabels() {
         if (listWithLabels == null) {
             this.listWithLabels =
-                    FunctionalList.mapToList(
-                            source,
-                            multi ->
-                                    new LabelledWithConfidence<>(
-                                            extractObject.apply(multi.getElement()),
-                                            multi.getConfidence(),
-                                            multi.getLabel()));
+                    executionTimeRecorder.recordExecutionTime(
+                            "Segmented-objects listWith",
+                            () ->
+                                    FunctionalList.mapToList(
+                                            source, multi -> multi.map(extractObject)));
         }
         return listWithLabels;
     }
@@ -81,12 +83,12 @@ public class SegmentedObjectsAtScale {
     public List<WithConfidence<ObjectMask>> listWithoutLabels() {
         if (listWithoutLabels == null) {
             this.listWithoutLabels =
-                    FunctionalList.mapToList(
-                            source,
-                            multi ->
-                                    new WithConfidence<>(
-                                            extractObject.apply(multi.getElement()),
-                                            multi.getConfidence()));
+                    executionTimeRecorder.recordExecutionTime(
+                            "Segmented-objects listWithout",
+                            () ->
+                                    FunctionalList.mapToList(
+                                            source,
+                                            multi -> multi.getWithConfidence().map(extractObject)));
         }
         return listWithoutLabels;
     }
@@ -99,7 +101,10 @@ public class SegmentedObjectsAtScale {
      */
     public ObjectCollection objects() {
         if (objects == null) {
-            objects = objectsFromList(listWithoutLabels());
+            objects =
+                    executionTimeRecorder.recordExecutionTime(
+                            "Segmented-objects ObjectCollection",
+                            () -> objectsFromList(listWithoutLabels()));
         }
         return objects;
     }

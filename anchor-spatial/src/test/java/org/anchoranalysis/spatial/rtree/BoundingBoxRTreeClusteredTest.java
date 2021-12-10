@@ -23,29 +23,42 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.image.extent.rtree;
+package org.anchoranalysis.spatial.rtree;
 
+import static org.anchoranalysis.spatial.rtree.ClusteredBoxFixture.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import com.google.common.base.Functions;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 import org.anchoranalysis.spatial.box.BoundingBox;
-import org.anchoranalysis.spatial.rtree.BoundingBoxRTree;
-import org.anchoranalysis.spatial.rtree.SpatiallySeparate;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class SpatiallySeparateTest {
+class BoundingBoxRTreeClusteredTest {
 
+    private BoundingBoxRTree<BoundingBox> tree;
+
+    @BeforeEach
+    public void before() {
+        tree = new BoundingBoxRTree<>(7);
+        ClusteredBoxFixture.addFirstCluster(tree);
+    }
+
+    /**
+     * Tests that the boxes intersect as expected when bounding-boxes intersect, but not when they
+     * are exactly adjacent.
+     */
     @Test
     void testIntersectsWith() {
+        assertIntersectsWith("box1", BOX1, Arrays.asList(BOX1, BOX3));
+        assertIntersectsWith("box2", BOX2, Arrays.asList(BOX2, BOX3));
+        assertIntersectsWith("box3", BOX3, Arrays.asList(BOX1, BOX2, BOX3));
+    }
 
-        BoundingBoxRTree<BoundingBox> tree = new BoundingBoxRTree<>(12);
-        BoxFixture.addAllClusters(tree);
-
-        SpatiallySeparate<BoundingBox> spatiallySeparate =
-                new SpatiallySeparate<>(Functions.identity());
-
-        Set<Set<BoundingBox>> clusters = spatiallySeparate.separateConsume(BoxFixture.allFlat());
-        assertEquals(BoxFixture.allNested(), clusters);
+    private void assertIntersectsWith(String message, BoundingBox box, List<BoundingBox> boxes) {
+        Set<BoundingBox> boxesAsSet = boxes.stream().collect(Collectors.toSet());
+        assertEquals(boxesAsSet, tree.intersectsWith(box), message);
     }
 }

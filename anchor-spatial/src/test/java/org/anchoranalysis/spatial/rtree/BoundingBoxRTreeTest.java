@@ -25,10 +25,11 @@
  */
 package org.anchoranalysis.spatial.rtree;
 
+import static org.anchoranalysis.spatial.rtree.SpecificBoxFixture.*;
+
 import java.util.Arrays;
 import java.util.List;
 import org.anchoranalysis.spatial.box.BoundingBox;
-import org.anchoranalysis.spatial.box.BoundingBoxFactory;
 import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.point.ReadableTuple3i;
 import org.junit.jupiter.api.BeforeEach;
@@ -40,25 +41,6 @@ import org.junit.jupiter.api.Test;
  * @author Owen Feehan
  */
 class BoundingBoxRTreeTest {
-
-    /** First bounding box that doesn't intersect with any other. */
-    private static final BoundingBox BOX1 = BoundingBoxFactory.at(3, 4, 5, 6, 7, 8);
-
-    /** Second bounding box that intersects with {@code BOX3}. */
-    private static final BoundingBox BOX2 = BoundingBoxFactory.at(13, 14, 15, 6, 7, 8);
-
-    /** Third bounding box that intersects with {@code BOX2} */
-    private static final BoundingBox BOX3 = BoundingBoxFactory.at(15, 16, 17, 6, 7, 8);
-
-    /**
-     * An additional box that may be queried or added, and which intersects with {@code BOX2} and
-     * {@code BOX3}.
-     */
-    private static final BoundingBox BOX_ADDITIONAL = BoundingBoxFactory.at(14, 15, 17, 6, 7, 8);
-
-    /** A bounding box that intersects with no other. */
-    private static final BoundingBox BOX_WITHOUT_INTERSECTION =
-            BoundingBoxFactory.at(1, 1, 1, 1, 1, 1);
 
     /** The r-tree freshly created and intialized for each test. */
     private BoundingBoxRTree<Integer> tree;

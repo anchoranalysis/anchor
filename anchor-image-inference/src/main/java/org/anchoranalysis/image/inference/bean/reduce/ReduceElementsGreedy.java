@@ -26,10 +26,12 @@
 package org.anchoranalysis.image.inference.bean.reduce;
 
 import java.util.List;
+import org.anchoranalysis.core.time.ExecutionTimeRecorder;
 import org.anchoranalysis.image.inference.bean.segment.reduce.ReduceElements;
 import org.anchoranalysis.image.inference.segment.LabelledWithConfidence;
 import org.anchoranalysis.image.inference.segment.ReductionOutcome;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.spatial.box.Extent;
 
 /**
  * Reduces the number or spatial-extent of elements by favouring higher-confidence elements over
@@ -51,7 +53,9 @@ public abstract class ReduceElementsGreedy extends ReduceElements<ObjectMask> {
 
     @Override
     public ReductionOutcome<LabelledWithConfidence<ObjectMask>> reduce(
-            List<LabelledWithConfidence<ObjectMask>> elements) {
+            List<LabelledWithConfidence<ObjectMask>> elements,
+            Extent extent,
+            ExecutionTimeRecorder executionTimeRecorder) {
 
         /** Tracks which objects overlap with other objects, updated as merges/deletions occur. */
         ReduceObjectsGraph graph = new ReduceObjectsGraph(elements);

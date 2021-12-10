@@ -141,7 +141,8 @@ public abstract class SegmentStackIntoObjectsScaleDecode<T, S extends ImageInfer
                                             .getContext()
                                             .getLogger()));
 
-            return new SegmentedObjects(objects, new DualScale<>(stack, stackDownscaled));
+            return new SegmentedObjects(
+                    objects, new DualScale<>(stack, stackDownscaled), executionTimeRecorder);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             throw new SegmentationFailedException(e);

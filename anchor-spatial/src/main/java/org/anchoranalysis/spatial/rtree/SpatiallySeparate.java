@@ -27,13 +27,13 @@ package org.anchoranalysis.spatial.rtree;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Deque;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
 import lombok.AllArgsConstructor;
-import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.spatial.box.BoundingBox;
 
 /**
@@ -67,39 +67,27 @@ public class SpatiallySeparate<T> {
      * @return a list of object-collections, each object-collection is guaranteed to be spatially
      *     separate from the others.
      */
-    public Set<Set<T>> separate(Collection<T> elements) {
-        return separateConsume(new HashSet<>(elements));
-    }
+    public List<Set<T>> separate(Collection<T> elements) {
+        List<Set<T>> out = new ArrayList<>();
 
-    /**
-     * Splits the collection of element into spatially separate <i>clusters</i>, <b>consuming all
-     * elements</b> in {@code elements}.
-     *
-     * <p>Upon completion of the algorithm, {@code elements} will be empty.
-     *
-     * @param elements the collection of elements to separate.
-     * @return a list of object-collections, each object-collection is guaranteed to be spatially
-     *     separate from the others.
-     */
-    public Set<Set<T>> separateConsume(Set<T> elements) {
-
-        Set<Set<T>> out = new HashSet<>();
-
-        BoundingBoxRTreeWithSet<T> tree = createTree(elements);
+        BoundingBoxRTree<T> tree = createTree(elements);
 
         while (!tree.isEmpty()) {
-            out.add(findArbitrarySpatiallyConnected(tree));
+            Set<T> cluster = new HashSet<>();
+            findArbitrarySpatiallyConnected(tree, cluster);
+            out.add(cluster);
         }
 
         return out;
     }
 
-    private BoundingBoxRTreeWithSet<T> createTree(Set<T> elements) {
+    /** Creates a {@link BoundingBoxRTree} from all elements. */
+    private BoundingBoxRTree<T> createTree(Collection<T> elements) {
         BoundingBoxRTree<T> tree = new BoundingBoxRTree<>(elements.size());
         for (T element : elements) {
             tree.add(extractBoundingBox.apply(element), element);
         }
-        return new BoundingBoxRTreeWithSet<>(tree, elements);
+        return tree;
     }
 
     /**
@@ -112,29 +100,26 @@ public class SpatiallySeparate<T> {
      * @param tree the tree containing elements (which are removed if added to the outputted set)
      *     whose bounding-box intersects with an existing element) are recursively added.
      */
-    private Set<T> findArbitrarySpatiallyConnected(BoundingBoxRTreeWithSet<T> tree) {
-        Set<T> out = new HashSet<>();
+    private void findArbitrarySpatiallyConnected(BoundingBoxRTree<T> tree, Set<T> out) {
 
-        List<T> intersecting = new ArrayList<>();
+        Deque<T> intersecting = new LinkedList<>();
         intersecting.add(tree.arbitraryElement());
 
         while (!intersecting.isEmpty()) {
-            T current = intersecting.remove(0);
 
-            if (tree.contains(current)) {
+            T current = intersecting.pop();
 
-                BoundingBox boxCurrent = extractBoundingBox.apply(current);
+            out.add(current);
 
-                try {
-                    tree.remove(current, boxCurrent);
-                } catch (OperationFailedException e) {
-                    throw new AnchorImpossibleSituationException();
+            BoundingBox boxCurrent = extractBoundingBox.apply(current);
+
+            for (T neighbor : tree.intersectsWith(boxCurrent)) {
+                if (!out.contains(neighbor)) {
+                    intersecting.add(neighbor);
                 }
-                out.add(current);
-
-                intersecting.addAll(tree.intersectsWith(boxCurrent));
             }
+
+            tree.remove(boxCurrent, current);
         }
-        return out;
     }
 }

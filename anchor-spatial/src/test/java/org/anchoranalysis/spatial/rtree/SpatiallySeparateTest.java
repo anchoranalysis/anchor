@@ -23,43 +23,49 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.image.extent.rtree;
+package org.anchoranalysis.spatial.rtree;
 
-import static org.anchoranalysis.image.extent.rtree.BoxFixture.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.util.Arrays;
+import com.google.common.base.Functions;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 import org.anchoranalysis.spatial.box.BoundingBox;
-import org.anchoranalysis.spatial.rtree.BoundingBoxRTree;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class BoundingBoxRTreeTest {
+/**
+ * Tests {@link SpatiallySeparate}.
+ *
+ * @author Owen Feehan
+ */
+class SpatiallySeparateTest {
 
-    private BoundingBoxRTree<BoundingBox> tree;
-
-    @BeforeEach
-    public void before() {
-        tree = new BoundingBoxRTree<>(7);
-        BoxFixture.addFirstCluster(tree);
-    }
-
-    /**
-     * Tests that the boxes intersect as expected when bounding-boxes intersect, but not when they
-     * are exactly adjacent.
-     */
+    /** Tests on a small number of objects, whether they form the exact expected clusters. */
     @Test
-    void testIntersectsWith() {
-        assertIntersectsWith("box1", BOX1, Arrays.asList(BOX1, BOX3));
-        assertIntersectsWith("box2", BOX2, Arrays.asList(BOX2, BOX3));
-        assertIntersectsWith("box3", BOX3, Arrays.asList(BOX1, BOX2, BOX3));
+    void testSmallClustered() {
+        List<Set<BoundingBox>> clusters = doTest(ClusteredBoxFixture.allFlat());
+        assertEquals(ClusteredBoxFixture.allNested(), new HashSet<>(clusters));
     }
 
-    private void assertIntersectsWith(String message, BoundingBox box, List<BoundingBox> boxes) {
-        Set<BoundingBox> boxesAsSet = boxes.stream().collect(Collectors.toSet());
-        assertEquals(boxesAsSet, tree.intersectsWith(box), message);
+    /** Tests on a small number of objects, whether they form the exact expected clusters. */
+    @Test
+    void testLargeClustered() {
+
+        // Make a large amount of overlapping bounding boxes, and another set which are disjoint
+        List<BoundingBox> boxes = IncrementingBoxFixture.createDisjointIncrementing(100, 20);
+
+        // Add some identical boxes to those that were there previously.
+        boxes.addAll(IncrementingBoxFixture.createIncrementingBoxes(5, 0));
+
+        List<Set<BoundingBox>> clusters = doTest(boxes);
+        assertEquals(2, clusters.size());
+    }
+
+    private List<Set<BoundingBox>> doTest(Collection<BoundingBox> boxes) {
+        SpatiallySeparate<BoundingBox> spatiallySeparate =
+                new SpatiallySeparate<>(Functions.identity());
+        return spatiallySeparate.separate(boxes);
     }
 }
