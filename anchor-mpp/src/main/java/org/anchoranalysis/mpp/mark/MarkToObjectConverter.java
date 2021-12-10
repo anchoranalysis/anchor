@@ -87,13 +87,15 @@ public class MarkToObjectConverter {
     /**
      * Converts a {@link Mark} to an equivalent {@link ObjectMask}.
      *
-     * @param mark the {@link Mark} to convert.
+     * @param mark the {@link Mark} to convert (whose state will be internally modified if a
+     *     scale-factor is applied).
      * @return an {@link ObjectMask} with scaling applied.
      */
     public ObjectMask convert(Mark mark) {
         // Scale the marks up
         try {
             if (scaleFactor.isPresent() && !scaleFactor.get().isNoScale()) {
+                // We duplicate so avoid changing the state in the original mark.
                 mark.scale(scaleFactor.get());
             }
         } catch (CheckedUnsupportedOperationException e) {

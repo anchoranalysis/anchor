@@ -57,8 +57,7 @@ public class ImageInferenceContext {
     private final ScaleFactor scaleFactor;
 
     /**
-     * The scaling-factors needed to upscale respectively each scale to be equivalent to the
-     * input-image size.
+     * The scaling-factors needed to upscale the model output to match the desired scale.
      *
      * @return each scaling-factor (if required) to scale an image (at the respective scale in
      *     {@link DualScale} by, so they become identically sized to the {@link

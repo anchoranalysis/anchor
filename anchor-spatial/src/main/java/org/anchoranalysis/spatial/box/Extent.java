@@ -650,6 +650,24 @@ public final class Extent implements Serializable, Comparable<Extent> {
     }
 
     /**
+     * Calls processor once for each x and y-values in the range.
+     *
+     * <p>This occurs in ascending order (x-dimension increments first, y-dimension increments
+     * second).
+     *
+     * @param pointConsumer called for each point.
+     */
+    public void iterateOverYXOffset(OffsettedPointTwoDimensionalConsumer pointConsumer) {
+        int offset = 0;
+        Point2i point = new Point2i();
+        for (point.setX(0); point.x() < size.x(); point.incrementX()) {
+            for (point.setY(0); point.y() < size.y(); point.incrementY()) {
+                pointConsumer.accept(point, offset++);
+            }
+        }
+    }
+
+    /**
      * Calls processor once for each z-value in the range.
      *
      * <p>This occurs sequentially from 0 (inclusive) to {@code z()} (exclusive).
