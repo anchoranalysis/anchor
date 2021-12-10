@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-io-generator
+ * anchor-bean
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -23,18 +23,38 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.io.generator.sequence.pattern;
+
+package org.anchoranalysis.bean;
 
 import java.util.Optional;
+import javax.annotation.Nullable;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.functional.OptionalFactory;
+import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 
+/**
+ * Utility functions to create {@link Optional} from nullable {@link Provider}s.
+ *
+ * @author Owen Feehan
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-class OutputPatternUtilities {
+public class OptionalProviderFactory {
 
-    public static Optional<String> maybeSubdirectory(
-            String outputName, boolean suppressSubdirectory) {
-        return OptionalFactory.create(!suppressSubdirectory, outputName);
+    /**
+     * Creates from a provider if non-null.
+     *
+     * @param <T> type of optional as created by the provider
+     * @param provider a provider or null (if it doesn't exist).
+     * @return the result of the create() option if provider is non-null, otherwise {@link
+     *     Optional}.
+     * @throws ProvisionFailedException if this is thrown during the call to {@link Provider#get}.
+     */
+    public static <T> Optional<T> create(@Nullable Provider<T> provider)
+            throws ProvisionFailedException {
+        if (provider != null) {
+            return Optional.of(provider.get());
+        } else {
+            return Optional.empty();
+        }
     }
 }

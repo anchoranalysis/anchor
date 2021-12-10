@@ -29,7 +29,7 @@ package org.anchoranalysis.io.manifest.finder;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
-import org.anchoranalysis.core.functional.OptionalUtilities;
+import org.anchoranalysis.core.functional.OptionalFactory;
 import org.anchoranalysis.io.manifest.Manifest;
 import org.anchoranalysis.io.manifest.directory.MutableDirectory;
 
@@ -59,6 +59,6 @@ public abstract class FinderSingleDirectory implements Finder {
     private final Optional<MutableDirectory> findDirectory(Manifest manifestRecorder) {
         List<MutableDirectory> list =
                 FinderUtilities.findListDirectory(manifestRecorder, matchDirectories());
-        return OptionalUtilities.createFromFlag(!list.isEmpty(), () -> list.get(0));
+        return OptionalFactory.create(!list.isEmpty(), () -> list.get(0));
     }
 }

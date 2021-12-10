@@ -26,7 +26,7 @@
 package org.anchoranalysis.image.inference.bean.segment.instance;
 
 import java.util.Optional;
-import org.anchoranalysis.bean.OptionalFactory;
+import org.anchoranalysis.core.functional.OptionalFactory;
 import org.anchoranalysis.core.time.ExecutionTimeRecorder;
 
 /**

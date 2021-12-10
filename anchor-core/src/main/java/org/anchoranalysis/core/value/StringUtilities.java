@@ -31,7 +31,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.functional.OptionalUtilities;
+import org.anchoranalysis.core.functional.OptionalFactory;
 
 /**
  * Utility functions for manipualting strings.
@@ -52,7 +52,7 @@ public class StringUtilities {
      */
     public static Optional<String> joinNonEmpty(String delimeter, String... stringMaybeEmpty) {
         List<String> components = listOfNonEmptyStrings(stringMaybeEmpty);
-        return OptionalUtilities.createFromFlag(
+        return OptionalFactory.create(
                 !components.isEmpty(), () -> String.join(delimeter, components));
     }
 

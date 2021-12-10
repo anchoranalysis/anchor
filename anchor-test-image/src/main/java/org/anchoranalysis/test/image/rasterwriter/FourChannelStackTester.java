@@ -27,7 +27,7 @@ package org.anchoranalysis.test.image.rasterwriter;
 
 import java.io.IOException;
 import java.util.Optional;
-import org.anchoranalysis.core.functional.OptionalUtilities;
+import org.anchoranalysis.core.functional.OptionalFactory;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
@@ -68,7 +68,7 @@ public class FourChannelStackTester {
             StackTester tester, ImageComparer comparer, boolean skipComparisonForRGB) {
         this.tester = tester;
         this.comparer = Optional.of(comparer);
-        this.comparerRGB = OptionalUtilities.createFromFlag(!skipComparisonForRGB, () -> comparer);
+        this.comparerRGB = OptionalFactory.create(!skipComparisonForRGB, () -> comparer);
     }
 
     /**

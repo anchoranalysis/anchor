@@ -27,7 +27,7 @@ package org.anchoranalysis.io.bioformats.bean.writer;
 
 import java.util.Optional;
 import loci.formats.IFormatWriter;
-import org.anchoranalysis.core.functional.OptionalUtilities;
+import org.anchoranalysis.core.functional.OptionalFactory;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.ImageIOException;
@@ -54,7 +54,7 @@ abstract class RGBWriter {
         this.channelRed = stack.getChannel(0);
         this.channelGreen = stack.getChannel(1);
         this.channelBlue = stack.getChannel(2);
-        this.channelAlpha = OptionalUtilities.createFromFlag(plusAlpha, () -> stack.getChannel(3));
+        this.channelAlpha = OptionalFactory.create(plusAlpha, () -> stack.getChannel(3));
     }
 
     public void writeAsRGB() throws ImageIOException {

@@ -33,6 +33,7 @@ import java.util.List;
 import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.core.functional.OptionalFactory;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.apache.commons.io.FilenameUtils;
 
@@ -112,8 +113,7 @@ public class ExtensionUtilities {
 
         Optional<String> matchesSpecial = endsWithDoubleExtension(filename);
         return OptionalUtilities.orElseGetFlat(
-                matchesSpecial,
-                () -> OptionalUtilities.create(FilenameUtils.getExtension(filename)));
+                matchesSpecial, () -> OptionalFactory.create(FilenameUtils.getExtension(filename)));
     }
 
     /**

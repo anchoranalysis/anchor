@@ -32,7 +32,7 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
-import org.anchoranalysis.bean.OptionalFactory;
+import org.anchoranalysis.core.functional.OptionalFactory;
 import org.anchoranalysis.io.input.InputContextParameters;
 import org.anchoranalysis.io.input.bean.DebugModeParameters;
 import org.anchoranalysis.io.output.path.prefixer.PathPrefixerContext;

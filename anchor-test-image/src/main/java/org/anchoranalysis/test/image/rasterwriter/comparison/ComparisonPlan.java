@@ -32,7 +32,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Value;
 import org.anchoranalysis.core.format.ImageFileFormat;
-import org.anchoranalysis.core.functional.OptionalUtilities;
+import org.anchoranalysis.core.functional.OptionalFactory;
 import org.anchoranalysis.test.image.DualComparer;
 import org.anchoranalysis.test.image.rasterwriter.SavedFiles;
 
@@ -124,7 +124,7 @@ public class ComparisonPlan {
     }
 
     private Optional<ImageComparer> maybeCreateBytewiseComparer(Path directory, String extension) {
-        return OptionalUtilities.createFromFlag(
+        return OptionalFactory.create(
                 bytewiseCompare, () -> new CompareBytes(createComparer(extension, directory)));
     }
 

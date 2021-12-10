@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.core.functional.OptionalUtilities;
+import org.anchoranalysis.core.functional.OptionalFactory;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.io.input.InputContextParameters;
@@ -91,7 +91,7 @@ public abstract class PathMatcher extends AnchorBean<PathMatcher> {
                         ignoreHidden,
                         parameters.map(InputManagerParameters::getInputContext));
         Optional<Logger> logger =
-                OptionalUtilities.createFromFlag(
+                OptionalFactory.create(
                         acceptDirectoryErrors && parameters.isPresent(),
                         () -> parameters.get().getLogger()); // NOSONAR
         Optional<Progress> progress = parameters.map(InputManagerParameters::getProgress);
