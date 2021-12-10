@@ -109,17 +109,19 @@ public class SpatiallySeparate<T> {
 
             T current = intersecting.pop();
 
-            out.add(current);
-
-            BoundingBox boxCurrent = extractBoundingBox.apply(current);
-
-            for (T neighbor : tree.intersectsWith(boxCurrent)) {
-                if (!out.contains(neighbor)) {
-                    intersecting.add(neighbor);
+            if (!out.contains(current)) {
+                out.add(current);
+    
+                BoundingBox boxCurrent = extractBoundingBox.apply(current);
+    
+                for (T neighbor : tree.intersectsWith(boxCurrent)) {
+                    if (!out.contains(neighbor)) {
+                        intersecting.add(neighbor);
+                    }
                 }
+    
+                tree.remove(boxCurrent, current);
             }
-
-            tree.remove(boxCurrent, current);
         }
     }
 }
