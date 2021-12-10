@@ -29,8 +29,10 @@ package org.anchoranalysis.image.inference.bean.segment.reduce;
 import java.util.List;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.time.ExecutionTimeRecorder;
 import org.anchoranalysis.image.inference.segment.LabelledWithConfidence;
 import org.anchoranalysis.image.inference.segment.ReductionOutcome;
+import org.anchoranalysis.spatial.box.Extent;
 
 /**
  * Reduces the number or spatial-extent of elements by favoring higher-confidence elements over
@@ -49,10 +51,15 @@ public abstract class ReduceElements<T> extends AnchorBean<ReduceElements<T>> {
      * but never more.
      *
      * @param elements proposed bounding-boxes with scores.
+     * @param extent an area in which all {@code elements} must exclusively reside.
+     * @param executionTimeRecorder records the execution time of particular operations.
      * @return the outcome of the operation, indicating which elements are retained / removed /
      *     added.
      * @throws OperationFailedException if anything goes wrong.
      */
     public abstract ReductionOutcome<LabelledWithConfidence<T>> reduce(
-            List<LabelledWithConfidence<T>> elements) throws OperationFailedException;
+            List<LabelledWithConfidence<T>> elements,
+            Extent extent,
+            ExecutionTimeRecorder executionTimeRecorder)
+            throws OperationFailedException;
 }

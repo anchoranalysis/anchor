@@ -91,7 +91,8 @@ public class SuppressNonMaximum<T extends InferenceModel> extends SegmentStackIn
 
         try {
             return executionTimeRecorder.recordExecutionTime(
-                    "Non-maximum suppression", () -> objects.reduce(reduce, separateEachLabel));
+                    "Non-maximum suppression",
+                    () -> objects.reduce(reduce, separateEachLabel, executionTimeRecorder));
         } catch (OperationFailedException e) {
             throw new SegmentationFailedException(e);
         }

@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.image.extent.rtree;
+package org.anchoranalysis.spatial.rtree;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -32,7 +32,6 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.box.BoundingBoxFactory;
-import org.anchoranalysis.spatial.rtree.BoundingBoxRTree;
 
 /**
  * Six bounding-boxes distributed over three spatially-overlapping clusters.
@@ -40,7 +39,7 @@ import org.anchoranalysis.spatial.rtree.BoundingBoxRTree;
  * @author Owen Feehan
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-class BoxFixture {
+class ClusteredBoxFixture {
 
     // START FIRST CLUSTER
     public static final BoundingBox BOX1 = BoundingBoxFactory.uniform3D(10, 10);

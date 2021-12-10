@@ -92,6 +92,27 @@ public abstract class RTree<T> {
     }
 
     /**
+     * Any arbitrary element from the tree.
+     *
+     * <p>This method should never be called on an empty tree. Consider checking first with {@link
+     * #isEmpty()}.
+     *
+     * @return the element.
+     */
+    public T arbitraryElement() {
+        return tree.entries().iterator().next().value();
+    }
+
+    /**
+     * Returns true if and only if the R-tree is empty of entries.
+     *
+     * @return is R-tree empty
+     */
+    public boolean isEmpty() {
+        return tree.isEmpty();
+    }
+
+    /**
      * Adds a {@link Rectangle} with a corresponding payload.
      *
      * <p>Note that the payload must not be unique, and multiple identical elements can exist with

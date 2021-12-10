@@ -31,6 +31,7 @@ import java.util.Optional;
 import lombok.Getter;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.FunctionalList;
+import org.anchoranalysis.core.time.ExecutionTimeRecorder;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.inference.bean.segment.reduce.ReduceElements;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
@@ -68,12 +69,14 @@ public class SegmentedObjects {
      * @param objects the objects with label {@code classLabel}.
      * @param background background-images used for visualizing the segmentation, at two respective
      *     scales.
+     * @param executionTimeRecorder records the execution-time of particular operations.
      */
     public SegmentedObjects(
             String classLabel,
             Collection<WithConfidence<MultiScaleObject>> objects,
-            DualScale<Stack> background) {
-        this(addLabel(classLabel, objects), background);
+            DualScale<Stack> background,
+            ExecutionTimeRecorder executionTimeRecorder) {
+        this(addLabel(classLabel, objects), background, executionTimeRecorder);
     }
 
     /**
@@ -83,17 +86,26 @@ public class SegmentedObjects {
      *     confidence and labels.
      * @param background background-images used for visualizing the segmentation, at two respective
      *     scales.
+     * @param executionTimeRecorder records the execution-time of particular operations.
      */
     public SegmentedObjects(
-            List<LabelledWithConfidence<MultiScaleObject>> objects, DualScale<Stack> background) {
+            List<LabelledWithConfidence<MultiScaleObject>> objects,
+            DualScale<Stack> background,
+            ExecutionTimeRecorder executionTimeRecorder) {
         this.list = objects;
         this.background = background;
         this.objects =
                 new DualScale<>(
                         new SegmentedObjectsAtScale(
-                                list, MultiScaleObject::getInputScale, background.atInputScale()),
+                                list,
+                                MultiScaleObject::getInputScale,
+                                background.atInputScale(),
+                                executionTimeRecorder),
                         new SegmentedObjectsAtScale(
-                                list, MultiScaleObject::getModelScale, background.atModelScale()));
+                                list,
+                                MultiScaleObject::getModelScale,
+                                background.atModelScale(),
+                                executionTimeRecorder));
     }
 
     /**
@@ -103,11 +115,15 @@ public class SegmentedObjects {
      * @param reduce the algorithm used to reduce each object-class.
      * @param separateEachLabel if true, each label is reduced separately. if false, all labels are
      *     reduced together.
+     * @param executionTimeRecorder records the execution-time of particular operations.
      * @return a new {@link SegmentedObjects} with the {@code reduce} algorithm applied to each
      *     object-class, reusing the existing objects.
      * @throws OperationFailedException if the reduction fails on any object-class.
      */
-    public SegmentedObjects reduce(ReduceElements<ObjectMask> reduce, boolean separateEachLabel)
+    public SegmentedObjects reduce(
+            ReduceElements<ObjectMask> reduce,
+            boolean separateEachLabel,
+            ExecutionTimeRecorder executionTimeRecorder)
             throws OperationFailedException {
 
         DualScale<Extent> extent = objects.map(SegmentedObjectsAtScale::extent);
@@ -122,8 +138,10 @@ public class SegmentedObjects {
                 new SegmentedObjectsReducer(
                         list,
                         objects.atModelScale().listWithLabels(),
+                        objects.atModelScale().extent(),
                         reduce,
                         background,
+                        executionTimeRecorder,
                         element ->
                                 new MultiScaleObject(
                                         () ->

@@ -9,11 +9,13 @@ import java.util.function.UnaryOperator;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.FunctionalList;
+import org.anchoranalysis.core.time.ExecutionTimeRecorder;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.inference.bean.reduce.ObjectForReduction;
 import org.anchoranalysis.image.inference.bean.reduce.ObjectForReductionFactory;
 import org.anchoranalysis.image.inference.bean.segment.reduce.ReduceElements;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.spatial.box.Extent;
 
 /**
  * Reduces the number of objects in a {@link SegmentedObjects}.
@@ -32,11 +34,17 @@ class SegmentedObjectsReducer {
     /** The segmented-objects used for the reduction operation. */
     private final List<LabelledWithConfidence<ObjectMask>> objects;
 
+    /** A containing-space in which all {@code objects} should reside. */
+    private final Extent extent;
+
     /** The algorithm used to reduce a list of {@link ObjectMask}s. */
     private final ReduceElements<ObjectMask> reduce;
 
     /** The background image to use for segmentation, when visualizing segmentations. */
     private final DualScale<Stack> background;
+
+    /** Records the execution-time of particular operations. */
+    private final ExecutionTimeRecorder executionTimeRecorder;
 
     /** Converts a newly-created {@link ObjectMask} to a {@link MultiScaleObject}. */
     private final Function<ObjectMask, MultiScaleObject> convertToScale;
@@ -54,10 +62,12 @@ class SegmentedObjectsReducer {
     public SegmentedObjects reduce(boolean separateEachLabel) throws OperationFailedException {
         if (separateEachLabel) {
             // Apply the reduction algorithm on each label's objects separately.
-            return new SegmentedObjects(reducedObjectsSeparate(), background);
+            return new SegmentedObjects(
+                    reducedObjectsSeparate(), background, executionTimeRecorder);
         } else {
             // Apply the reduction algorithm on all object, irrespective of label.
-            return new SegmentedObjects(reduceList(objects, index -> index), background);
+            return new SegmentedObjects(
+                    reduceList(objects, extent, index -> index), background, executionTimeRecorder);
         }
     }
 
@@ -73,7 +83,9 @@ class SegmentedObjectsReducer {
             List<LabelledWithConfidence<ObjectMask>> listForReduction =
                     FunctionalList.mapToList(
                             forReduction.stream(), ObjectForReduction::getLabelled);
-            out.addAll(reduceList(listForReduction, index -> forReduction.get(index).getIndex()));
+            out.addAll(
+                    reduceList(
+                            listForReduction, extent, index -> forReduction.get(index).getIndex()));
         }
         return out;
     }
@@ -89,9 +101,12 @@ class SegmentedObjectsReducer {
 
     /** Reduces a particular {@link List} of elements, mapping the indices of the retain items. */
     private List<LabelledWithConfidence<MultiScaleObject>> reduceList(
-            List<LabelledWithConfidence<ObjectMask>> elements, UnaryOperator<Integer> mapIndex)
+            List<LabelledWithConfidence<ObjectMask>> elements,
+            Extent extent,
+            UnaryOperator<Integer> mapIndex)
             throws OperationFailedException {
-        ReductionOutcome<LabelledWithConfidence<ObjectMask>> outcome = reduce.reduce(elements);
+        ReductionOutcome<LabelledWithConfidence<ObjectMask>> outcome =
+                reduce.reduce(elements, extent, executionTimeRecorder);
         ReductionOutcome<LabelledWithConfidence<MultiScaleObject>> outcomeMapped =
                 outcome.map(mapIndex, this::convertToMultiScale);
         return outcomeMapped.listAfter(list);

@@ -24,13 +24,11 @@
  * #L%
  */
 
-package org.anchoranalysis.image.extent;
+package org.anchoranalysis.spatial.box;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.anchoranalysis.spatial.box.BoundingBox;
-import org.anchoranalysis.spatial.box.BoundingBoxFactory;
 import org.junit.jupiter.api.Test;
 
 class BoundingBoxTest {
