@@ -78,41 +78,66 @@ class InferenceExecutionTimeRecorder {
         this.recorder = recorder;
         this.identifierInferenceWarmUp =
                 OptionalFactory.create(gpu, "Model inference (GPU with Warm Up)");
-        this.identifierInferenceSubsequent = addSuffix("Model inference", gpu);
+        this.identifierInferenceSubsequent = identifierSubsequent(gpu);
     }
 
     /** Record the current time as the <b>start of inference</b>. */
     public void recordStartInference() {
-        this.timestampStartInference = currentTime();
+        this.timestampStartInference =
+                recorder.measureTime(true, allPossibleInferenceIdentifiers());
     }
 
     /** Record the current time as the <b>end of inference</b>, and the start of post-processing. */
     public void recordStartPost() {
-        this.timestampStartPostProcessing = currentTime();
+        this.timestampStartPostProcessing = recorder.measureTime(true, IDENTIFIER_POST);
     }
 
     /** Record the current time as the end of post-processing. */
     public void recordEndPost() {
-        this.timestampEndPostProcessing = currentTime();
+        this.timestampEndPostProcessing = recorder.measureTime(false, IDENTIFIER_POST);
     }
 
     /** Called after recording all timestamps, to record appropriate entries in {@code recorder}. */
     public void flush() {
         recorder.recordTimeDifferenceBetween(
-                identifierInferenceSubsequent,
-                identifierInferenceWarmUp,
-                timestampStartInference,
-                timestampStartPostProcessing);
+                inferenceIdentifier(), timestampStartInference, timestampStartPostProcessing);
         recorder.recordTimeDifferenceBetween(
                 IDENTIFIER_POST, timestampStartPostProcessing, timestampEndPostProcessing);
+    }
+
+    /**
+     * The identifier to use for measuring inference, which may toggle between a GPU (warm up) or
+     * not.
+     */
+    private String inferenceIdentifier() {
+        if (identifierInferenceWarmUp.isPresent()
+                && !recorder.isOperationAlreadyRecorded(identifierInferenceWarmUp.get())) {
+            return identifierInferenceWarmUp.get();
+        } else {
+            return identifierInferenceSubsequent;
+        }
+    }
+
+    /** All possible inference identifiers that may be used. */
+    private String[] allPossibleInferenceIdentifiers() {
+        if (identifierInferenceWarmUp.isPresent()) {
+            return new String[] {
+                identifierInferenceWarmUp.get(),
+                identifierSubsequent(true),
+                identifierSubsequent(false)
+            };
+        } else {
+            return new String[] {identifierSubsequent(false)};
+        }
+    }
+
+    /** The identifier that is used for subsequent operations. */
+    private static String identifierSubsequent(boolean gpu) {
+        return addSuffix("Model inference", gpu);
     }
 
     /** Adds a suffix indicating if a CPU or GPU was used. */
     private static String addSuffix(String string, boolean gpu) {
         return String.format("%s (%s)", string, gpu ? "GPU" : "CPU");
-    }
-
-    private static long currentTime() {
-        return System.currentTimeMillis();
     }
 }

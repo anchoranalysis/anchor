@@ -7,16 +7,18 @@ import org.junit.jupiter.api.Test;
 
 /**
  * Tests {@Ellipsoid}.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 class EllipsoidTest {
-    
+
     @Test
     void checkVolume() {
         Ellipsoid mark = new Ellipsoid();
-        mark.setMarksExplicit(new Point3d(5, 7, 4.5), new Orientation3DEulerAngles(1.5, 2.0, 0.4), new Point3d(5.6, 3.2, 4.1));
+        mark.setMarksExplicit(
+                new Point3d(5, 7, 4.5),
+                new Orientation3DEulerAngles(1.5, 2.0, 0.4),
+                new Point3d(5.6, 3.2, 4.1));
 
         VolumeTester.assertVolumeMatches(mark);
     }

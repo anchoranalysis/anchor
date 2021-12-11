@@ -8,12 +8,11 @@ import org.junit.jupiter.api.Test;
 
 /**
  * Tests {@Ellipse}.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 class EllipseTest {
-    
+
     @Test
     void checkVolume() {
         Ellipse mark = new Ellipse();

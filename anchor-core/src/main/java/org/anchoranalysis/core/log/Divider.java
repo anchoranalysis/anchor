@@ -35,27 +35,59 @@ import com.google.common.base.Strings;
  */
 public class Divider {
 
-    private static final int CHARACTERS_IN_BANNER = 80;
+    /** The default character used in the divider, if not otherwise specified in the constructor. */
+    public static final char DEFAULT_CHARACTER = '-';
 
+    /**
+     * The default total nubmer of characters to use in the divier, if not otherwise specified in
+     * the constructor.
+     */
+    public static final int DEFAULT_NUMBER_CHARACTERS_IN_BANNER = 80;
+
+    // START REQUIRED ARGUMENTS
     /** The character that is repeated, as a string. */
     private final String characterToRepeat;
 
     /** A line of repeated characters that doesn't involve a label. */
     private final String withoutLabel;
 
+    /** The number of characters in the banner. */
+    private final int numberCharactersInBanner;
+    // END REQUIRED ARGUMENTS
+
     /** A banner using dashes. */
     public Divider() {
-        this('-');
+        this(DEFAULT_CHARACTER);
+    }
+
+    /**
+     * A banner using dashes, with a particular number of characters.
+     *
+     * @param numberCharactersInBanner the number of characters in the banner.
+     */
+    public Divider(int numberCharactersInBanner) {
+        this(DEFAULT_CHARACTER, numberCharactersInBanner);
     }
 
     /**
      * A banner using a particular repeated character.
      *
-     * @param characterToRepeat the character that is repeated
+     * @param characterToRepeat the character that is repeated.
      */
     public Divider(char characterToRepeat) {
+        this(characterToRepeat, DEFAULT_NUMBER_CHARACTERS_IN_BANNER);
+    }
+
+    /**
+     * A banner using a particular repeated character.
+     *
+     * @param characterToRepeat the character that is repeated.
+     * @param numberCharactersInBanner the number of characters in the banner.
+     */
+    public Divider(char characterToRepeat, int numberCharactersInBanner) {
+        this.numberCharactersInBanner = numberCharactersInBanner;
         this.characterToRepeat = String.valueOf(characterToRepeat);
-        this.withoutLabel = repeatedCharacter(CHARACTERS_IN_BANNER);
+        this.withoutLabel = repeatedCharacter(numberCharactersInBanner);
     }
 
     /**
@@ -76,7 +108,7 @@ public class Divider {
      * @return a string of repreated dashes including a label to total 80 characters
      */
     public String withLabel(String label) {
-        int numberNeeded = CHARACTERS_IN_BANNER - label.length() - 2;
+        int numberNeeded = numberCharactersInBanner - label.length() - 2;
         int numberFirst = numberNeeded / 2;
         int numberSecond = numberNeeded - numberFirst;
 

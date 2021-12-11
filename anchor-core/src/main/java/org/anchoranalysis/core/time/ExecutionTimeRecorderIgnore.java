@@ -55,13 +55,17 @@ public class ExecutionTimeRecorderIgnore extends ExecutionTimeRecorder {
     }
 
     @Override
-    public void recordExecutionTime(
-            String operationIdentifierFirst, String operationIdentiferSubsequent, long millis) {
-        // NOTHING TO DO
+    public RecordedExecutionTimes recordedTimes() {
+        return new RecordedExecutionTimes(Stream.empty());
     }
 
     @Override
-    public RecordedExecutionTimes recordedTimes() {
-        return new RecordedExecutionTimes(Stream.empty());
+    public boolean isOperationAlreadyRecorded(String operationIdentifier) {
+        return false;
+    }
+
+    @Override
+    public long measureTime(boolean start, String... operationIdentifiers) {
+        return System.currentTimeMillis();
     }
 }

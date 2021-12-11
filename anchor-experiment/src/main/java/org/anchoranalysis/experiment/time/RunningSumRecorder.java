@@ -26,12 +26,17 @@
 package org.anchoranalysis.experiment.time;
 
 import java.util.Map;
+import java.util.Map.Entry;
 import org.anchoranalysis.core.time.ExecutionTimeRecorder;
 import org.anchoranalysis.core.time.RecordedExecutionTimes;
-import org.anchoranalysis.math.arithmetic.RunningSumMap;
+import org.anchoranalysis.core.time.RecordedExecutionTimes.RecordedOperation;
 
 /**
  * Profiles how long the execution-time of particular operations takes.
+ *
+ * <p>A thread-local variable keeps track of how many open recording-operations exist, between the
+ * call to {@link #measureTime} with {@code==true} and a subsequent call to {@link
+ * #recordExecutionTime}, indicating the end of the operation.
  *
  * @author Owen Feehan
  */
@@ -40,22 +45,51 @@ class RunningSumRecorder extends ExecutionTimeRecorder {
     /** Running sums are maintained for operations, identified uniquely by strings. */
     private RunningSumMap<String> map = new RunningSumMap<>();
 
+    /** For storing a counter on the number of ongoing operations. */
+    private ThreadLocal<Integer> threadLocal = ThreadLocal.withInitial(() -> 0);
+
     @Override
     public void recordExecutionTime(String operationIdentifier, long millis) {
         synchronized (map) {
-            map.get(operationIdentifier).increment(millis);
+            int countOngoing = threadLocal.get();
+            if (countOngoing <= 1) {
+                threadLocal.remove();
+            } else {
+                threadLocal.set(countOngoing - 1);
+            }
+            map.get(operationIdentifier, countOngoing - 1).increment(millis);
         }
     }
 
     @Override
-    public void recordExecutionTime(
-            String operationIdentifierFirst, String operationIdentiferSubsequent, long millis) {
+    public long measureTime(boolean start, String... operationIdentifiers) {
+        if (start) {
+            synchronized (map) {
+                int countOngoing = threadLocal.get();
+                // Even if multiple operation identifiers are passed, we only increment the counter
+                // by 1
+                //  assuming these are alternative identifiers
+                try {
+                    for (String identifier : operationIdentifiers) {
+                        // Just by retrieving this RunningSum, it ensures it is added to the map at
+                        // this
+                        // this timepoint. This can be important to achieve the proper ordering of
+                        // identifiers.
+                        map.get(identifier, countOngoing);
+                    }
+                } finally {
+                    threadLocal.set(countOngoing + 1);
+                }
+            }
+        }
+        return System.currentTimeMillis();
+    }
+
+    @Override
+    public boolean isOperationAlreadyRecorded(String operationIdentifier) {
         synchronized (map) {
-            String identifier =
-                    map.containsKey(operationIdentifierFirst)
-                            ? operationIdentiferSubsequent
-                            : operationIdentifierFirst;
-            map.get(identifier).increment(millis);
+            return map.containsKey(operationIdentifier)
+                    && map.get(operationIdentifier, 0).getCount() > 0;
         }
     }
 
@@ -85,11 +119,16 @@ class RunningSumRecorder extends ExecutionTimeRecorder {
     public RecordedExecutionTimes recordedTimes() {
         synchronized (map) {
             return new RecordedExecutionTimes(
-                    map.entrySet().stream()
-                            .map(
-                                    entry ->
-                                            RecordedOperationHelper.create(
-                                                    entry.getKey(), entry.getValue())));
+                    map.entrySet().stream().map(RunningSumRecorder::recordedOperationFromEntry));
         }
+    }
+
+    /** Derives a {@link RecordedOperation} from a map entry. */
+    private static RecordedOperation recordedOperationFromEntry(
+            Entry<String, RunningSumParented> entry) {
+        return RecordedOperationHelper.create(
+                entry.getKey(),
+                entry.getValue().getRunningSum(),
+                entry.getValue().getNumberParentOperations());
     }
 }

@@ -35,15 +35,12 @@ import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.primitive.DoubleList;
-import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.core.time.ExecutionTimeRecorder;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.bean.spatial.ScaleCalculator;
 import org.anchoranalysis.image.core.channel.Channel;
-import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.inference.ImageInferenceContext;
 import org.anchoranalysis.image.inference.ImageInferenceModel;
@@ -51,9 +48,7 @@ import org.anchoranalysis.image.inference.segment.DualScale;
 import org.anchoranalysis.image.inference.segment.LabelledWithConfidence;
 import org.anchoranalysis.image.inference.segment.MultiScaleObject;
 import org.anchoranalysis.image.inference.segment.SegmentedObjects;
-import org.anchoranalysis.image.voxel.interpolator.Interpolator;
 import org.anchoranalysis.inference.concurrency.ConcurrentModelPool;
-import org.anchoranalysis.io.imagej.interpolator.InterpolatorImageJ;
 import org.anchoranalysis.io.manifest.file.TextFileReader;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 import org.apache.commons.collections.IteratorUtils;
@@ -68,9 +63,6 @@ import org.apache.commons.collections.IteratorUtils;
  */
 public abstract class SegmentStackIntoObjectsScaleDecode<T, S extends ImageInferenceModel<T>>
         extends SegmentStackIntoObjectsPooled<S> {
-
-    // This is used for downscaling as it's fast.
-    private static final Interpolator INTERPOLATOR = new InterpolatorImageJ();
 
     private static final String FALLBACK_INPUT_NAME = "no_name_defined";
 
@@ -108,41 +100,45 @@ public abstract class SegmentStackIntoObjectsScaleDecode<T, S extends ImageInfer
             ExecutionTimeRecorder executionTimeRecorder)
             throws SegmentationFailedException {
 
-        stack = checkAndCorrectInput(stack);
-
         try {
-            ScaleFactor downfactor =
+            ScaleFactor scaleFactor =
                     scaleInput.calculate(Optional.of(stack.dimensions()), Optional.empty());
 
-            ScaleFactor upfactor = downfactor.invert();
+            DualScale<Stack> stacksDual =
+                    executionTimeRecorder.recordExecutionTime(
+                            "Scaling stack to model-size",
+                            () -> StackScaler.scaleToModelSize(stack, scaleFactor));
 
-            Optional<double[]> subtractMeans = subtractMeanArray(stack.getNumberChannels());
+            T input =
+                    executionTimeRecorder.recordExecutionTime(
+                            "Deriving input for segmentation",
+                            () -> deriveInputSubtractMeans(stacksDual.atModelScale()));
 
-            Stack stackDownscaled =
-                    stack.mapChannel(channel -> channel.scaleXY(downfactor, INTERPOLATOR));
+            return segmentInput(input, stacksDual, scaleFactor, modelPool, executionTimeRecorder);
+        } catch (OperationFailedException e) {
+            throw new SegmentationFailedException(e);
+        }
+    }
 
-            T input = deriveInput(stackDownscaled, downfactor, subtractMeans);
+    private SegmentedObjects segmentInput(
+            T input,
+            DualScale<Stack> stacksDual,
+            ScaleFactor scaleFactor,
+            ConcurrentModelPool<S> modelPool,
+            ExecutionTimeRecorder executionTimeRecorder)
+            throws SegmentationFailedException {
+        try {
+            ImageInferenceContext context =
+                    createContext(stacksDual, scaleFactor, executionTimeRecorder);
 
-            InferenceHelper<T, S> helper =
-                    new InferenceHelper<>(decode, inputName().orElse(FALLBACK_INPUT_NAME));
+            String inputName = inputName().orElse(FALLBACK_INPUT_NAME);
+
+            InferenceHelper<T, S> helper = new InferenceHelper<>(decode, inputName);
 
             List<LabelledWithConfidence<MultiScaleObject>> objects =
-                    helper.queueInference(
-                            input,
-                            modelPool,
-                            new ImageInferenceContext(
-                                    new DualScale<>(
-                                            stack.dimensions(), stackDownscaled.dimensions()),
-                                    upfactor,
-                                    classLabels(),
-                                    executionTimeRecorder,
-                                    getInitialization()
-                                            .getSharedObjects()
-                                            .getContext()
-                                            .getLogger()));
+                    helper.queueInference(input, modelPool, context);
 
-            return new SegmentedObjects(
-                    objects, new DualScale<>(stack, stackDownscaled), executionTimeRecorder);
+            return new SegmentedObjects(objects, stacksDual, executionTimeRecorder);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             throw new SegmentationFailedException(e);
@@ -155,15 +151,12 @@ public abstract class SegmentStackIntoObjectsScaleDecode<T, S extends ImageInfer
      * Derives the input tensor from an image.
      *
      * @param stack the image which is mapped into an input tensor.
-     * @param downfactor how much to scale the size of {@code image} down by, to form an input
-     *     tensor.
      * @param subtractMeans respective intensity values that are subtracted from the voxels before
      *     being added to the tensor (respectively for each channel).
      * @return the tensor, representing the input image.
      * @throws OperationFailedException if an input tensor cannot be created.
      */
-    protected abstract T deriveInput(
-            Stack stack, ScaleFactor downfactor, Optional<double[]> subtractMeans)
+    protected abstract T deriveInput(Stack stack, Optional<double[]> subtractMeans)
             throws OperationFailedException;
 
     /**
@@ -175,14 +168,14 @@ public abstract class SegmentStackIntoObjectsScaleDecode<T, S extends ImageInfer
 
     @SuppressWarnings("unchecked")
     private Optional<double[]> subtractMeanArray(int numberChannels)
-            throws SegmentationFailedException {
+            throws OperationFailedException {
 
         if (subtractMean != null) {
             List<Double> list =
                     (List<Double>) IteratorUtils.toList(subtractMean.iterator()); // NOSONAR
 
             if (list.size() != numberChannels) {
-                throw new SegmentationFailedException(
+                throw new OperationFailedException(
                         String.format(
                                 "There are %d channels in the input stack for inference, but %d constants were supplied for mean-subtraction.",
                                 numberChannels, list.size()));
@@ -193,30 +186,6 @@ public abstract class SegmentStackIntoObjectsScaleDecode<T, S extends ImageInfer
         } else {
             return Optional.empty();
         }
-    }
-
-    /** Checks the input-stack has the necessary number of channels, otherwise throwing an error. */
-    private Stack checkAndCorrectInput(Stack stack) throws SegmentationFailedException {
-        if (stack.getNumberChannels() == 1) {
-            return checkInput(grayscaleToRGB(stack.getChannel(0)));
-        } else {
-            return checkInput(stack);
-        }
-    }
-
-    private Stack checkInput(Stack stack) throws SegmentationFailedException {
-        if (stack.getNumberChannels() != 3) {
-            throw new SegmentationFailedException(
-                    String.format(
-                            "Non-RGB stacks are not supported by this algorithm. This stack has %d channels.",
-                            stack.getNumberChannels()));
-        }
-
-        if (stack.dimensions().z() > 1) {
-            throw new SegmentationFailedException("z-stacks are not supported by this algorithm");
-        }
-
-        return stack;
     }
 
     /** A list of ordered object-class labels, if a class-labels file is specified. */
@@ -233,11 +202,26 @@ public abstract class SegmentStackIntoObjectsScaleDecode<T, S extends ImageInfer
         }
     }
 
-    private static Stack grayscaleToRGB(Channel channel) {
-        try {
-            return new Stack(true, channel, channel.duplicate(), channel.duplicate());
-        } catch (IncorrectImageSizeException | CreateException e) {
-            throw new AnchorImpossibleSituationException();
-        }
+    /** Creates the {@link ImageInferenceContext} needed for inference. */
+    private ImageInferenceContext createContext(
+            DualScale<Stack> stacks,
+            ScaleFactor scaleFactor,
+            ExecutionTimeRecorder executionTimeRecorder)
+            throws InitializeException, IOException {
+        return new ImageInferenceContext(
+                stacks.map(Stack::dimensions),
+                scaleFactor.invert(),
+                classLabels(),
+                executionTimeRecorder,
+                getInitialization().getSharedObjects().getContext().getLogger());
+    }
+
+    /**
+     * Derive an input-tensor for the model, including performing any necessary mean-subtraction
+     * from the {@link Channel}s.
+     */
+    private T deriveInputSubtractMeans(Stack stack) throws OperationFailedException {
+        Optional<double[]> subtractMeans = subtractMeanArray(stack.getNumberChannels());
+        return deriveInput(stack, subtractMeans);
     }
 }

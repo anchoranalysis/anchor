@@ -42,12 +42,15 @@ class RecordedOperationHelper {
      * Creates the operation.
      *
      * @param operationIdentifier the identifier.
+     * @parma numberParentOperations the number of parent operations. Zero if there are no parents.
      * @param runningSum the running sum.
      * @return the operation.
      */
-    public static RecordedOperation create(String operationIdentifier, RunningSum runningSum) {
+    public static RecordedOperation create(
+            String operationIdentifier, RunningSum runningSum, int numberParentOperations) {
         return new RecordedOperation(
                 operationIdentifier,
+                numberParentOperations,
                 runningSum.mean(),
                 runningSum.getSum(),
                 (int) runningSum.getCount());
