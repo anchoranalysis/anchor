@@ -38,7 +38,7 @@ import org.anchoranalysis.spatial.box.Extent;
  * <p>Specifically, each voxel in the destination buffer is copied from the corresponding (minimal
  * in each dimension) voxel in the source-buffer.
  */
-public class InterpolatorNone implements Interpolator {
+public class InterpolatorNone extends Interpolator {
 
     @Override
     public VoxelBuffer<UnsignedByteBuffer> interpolateByte(

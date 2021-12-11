@@ -41,7 +41,7 @@ import org.anchoranalysis.spatial.box.Extent;
  *
  * @author Owen Feehan
  */
-public class InterpolatorImageJ implements Interpolator {
+public class InterpolatorImageJ extends Interpolator {
 
     @Override
     public VoxelBuffer<UnsignedByteBuffer> interpolateByte(

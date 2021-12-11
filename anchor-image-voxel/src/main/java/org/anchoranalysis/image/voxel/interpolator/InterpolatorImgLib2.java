@@ -57,7 +57,7 @@ import org.anchoranalysis.spatial.box.Extent;
  * @author Owen Feehan
  */
 @RequiredArgsConstructor
-public abstract class InterpolatorImgLib2 implements Interpolator {
+public abstract class InterpolatorImgLib2 extends Interpolator {
 
     /**
      * Added to the interpolated position as it is using the top-left interpolation scheme rather

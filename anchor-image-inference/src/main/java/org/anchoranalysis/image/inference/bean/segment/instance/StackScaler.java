@@ -5,13 +5,14 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
+import org.anchoranalysis.core.time.ExecutionTimeRecorder;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.inference.segment.DualScale;
 import org.anchoranalysis.image.voxel.interpolator.Interpolator;
-import org.anchoranalysis.io.imagej.interpolator.InterpolatorImageJ;
+import org.anchoranalysis.image.voxel.interpolator.InterpolatorRecordExecutionTime;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 /**
@@ -24,27 +25,39 @@ import org.anchoranalysis.spatial.scale.ScaleFactor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class StackScaler {
 
-    // This is used for downscaling as it's fast.
-    private static final Interpolator INTERPOLATOR = new InterpolatorImageJ();
-
     /**
      * Scales each channel in {@link Stack} to match the size expected by the model.
      *
      * @param stack the stack to scale.
      * @param scaleFactor the factor to scale by. This typically involves downscaling, but it can
      *     also be upscaling.
+     * @param interpolator the interpolator to use for scaling.
+     * @param executionTimeRecorder records the execution time of operations.
      * @return the converted stack.
      * @throws SegmentationFailedException if the stack has neither 1 nor 3 channels.
      */
-    public static DualScale<Stack> scaleToModelSize(Stack stack, ScaleFactor scaleFactor)
+    public static DualScale<Stack> scaleToModelSize(
+            Stack stack,
+            ScaleFactor scaleFactor,
+            Interpolator interpolator,
+            ExecutionTimeRecorder executionTimeRecorder)
             throws SegmentationFailedException {
         checkInput(stack);
+
+        Interpolator interpolatorRecording =
+                new InterpolatorRecordExecutionTime(
+                        interpolator, executionTimeRecorder, "As model input");
+
         if (stack.getNumberChannels() == 1) {
-            Channel channelScaled = scaleChannel(stack.getChannel(0), scaleFactor);
+            Channel channelScaled =
+                    scaleChannel(stack.getChannel(0), scaleFactor, interpolatorRecording);
             return new DualScale<>(stack, grayscaleToRGB(channelScaled));
         } else {
             try {
-                Stack stackScaled = stack.mapChannel(channel -> scaleChannel(channel, scaleFactor));
+                Stack stackScaled =
+                        stack.mapChannel(
+                                channel ->
+                                        scaleChannel(channel, scaleFactor, interpolatorRecording));
                 return new DualScale<>(stack, stackScaled);
             } catch (OperationFailedException e) {
                 throw new SegmentationFailedException(e);
@@ -53,8 +66,9 @@ class StackScaler {
     }
 
     /** Scales a single {@link Channel}. */
-    private static Channel scaleChannel(Channel channel, ScaleFactor scaleFactor) {
-        return channel.scaleXY(scaleFactor, INTERPOLATOR);
+    private static Channel scaleChannel(
+            Channel channel, ScaleFactor scaleFactor, Interpolator interpolator) {
+        return channel.scaleXY(scaleFactor, interpolator);
     }
 
     /** Checks that the {@link Stack} has the expected number of channels and z-slices. */

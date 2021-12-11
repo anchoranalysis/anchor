@@ -39,7 +39,7 @@ import org.anchoranalysis.spatial.box.Extent;
  *
  * @author Owen Feehan
  */
-public interface Interpolator {
+public abstract class Interpolator {
 
     /**
      * Copies voxels slice-by-slice from {@code source} to {@code destination} performing necessary
@@ -52,7 +52,7 @@ public interface Interpolator {
      * @param destination the voxels to copy interpolated-values into, which may differ in size in
      *     the XY dimensions.
      */
-    default void interpolate(VoxelsUntyped source, VoxelsUntyped destination) {
+    public void interpolate(VoxelsUntyped source, VoxelsUntyped destination) {
 
         Extent extentSource = source.any().extent();
         Extent extentTarget = destination.any().extent();
@@ -81,6 +81,15 @@ public interface Interpolator {
     }
 
     /**
+     * Returns true if it's possible for values to be created after interpolation that aren't found
+     * in the input-image.
+     *
+     * @return true if values can be created in the destination buffer that were not found in the
+     *     source buffer.
+     */
+    public abstract boolean canValueRangeChange();
+
+    /**
      * Interpolates from {@code voxelsSource} to {@code voxelsDestination} for unsigned 8-bit
      * buffers.
      *
@@ -92,7 +101,7 @@ public interface Interpolator {
      * @param extentDestination extent corresponding to {@code extentDestination}.
      * @return the destination buffer (either as passed, or a new one that was created).
      */
-    VoxelBuffer<UnsignedByteBuffer> interpolateByte(
+    protected abstract VoxelBuffer<UnsignedByteBuffer> interpolateByte(
             VoxelBuffer<UnsignedByteBuffer> voxelsSource,
             VoxelBuffer<UnsignedByteBuffer> voxelsDestination,
             Extent extentSource,
@@ -110,7 +119,7 @@ public interface Interpolator {
      * @param extentDestination extent corresponding to {@code extentDestination}.
      * @return the destination buffer (either as passed, or a new one that was created).
      */
-    VoxelBuffer<UnsignedShortBuffer> interpolateShort(
+    protected abstract VoxelBuffer<UnsignedShortBuffer> interpolateShort(
             VoxelBuffer<UnsignedShortBuffer> voxelsSource,
             VoxelBuffer<UnsignedShortBuffer> voxelsDestination,
             Extent extentSource,
@@ -127,18 +136,9 @@ public interface Interpolator {
      * @param extentDestination extent corresponding to {@code extentDestination}.
      * @return the destination buffer (either as passed, or a new one that was created).
      */
-    VoxelBuffer<FloatBuffer> interpolateFloat(
+    protected abstract VoxelBuffer<FloatBuffer> interpolateFloat(
             VoxelBuffer<FloatBuffer> voxelsSource,
             VoxelBuffer<FloatBuffer> voxelsDestination,
             Extent extentSource,
             Extent extentDestination);
-
-    /**
-     * Returns true if it's possible for values to be created after interpolation that aren't found
-     * in the input-image.
-     *
-     * @return true if values can be created in the destination buffer that were not found in the
-     *     source buffer.
-     */
-    boolean canValueRangeChange();
 }

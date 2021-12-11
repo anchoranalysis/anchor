@@ -38,6 +38,7 @@ import org.anchoranalysis.bean.primitive.DoubleList;
 import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.time.ExecutionTimeRecorder;
+import org.anchoranalysis.image.bean.interpolator.InterpolatorBean;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.bean.spatial.ScaleCalculator;
 import org.anchoranalysis.image.core.channel.Channel;
@@ -49,6 +50,7 @@ import org.anchoranalysis.image.inference.segment.LabelledWithConfidence;
 import org.anchoranalysis.image.inference.segment.MultiScaleObject;
 import org.anchoranalysis.image.inference.segment.SegmentedObjects;
 import org.anchoranalysis.inference.concurrency.ConcurrentModelPool;
+import org.anchoranalysis.io.imagej.bean.InterpolatorBeanImageJ;
 import org.anchoranalysis.io.manifest.file.TextFileReader;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 import org.apache.commons.collections.IteratorUtils;
@@ -91,6 +93,9 @@ public abstract class SegmentStackIntoObjectsScaleDecode<T, S extends ImageInfer
      * <p>If empty, then no such file is specified.
      */
     @BeanField @Getter @Setter @AllowEmpty private String classLabelsPath = "";
+
+    /** The interpolator to use for downscaling. */
+    @BeanField @Getter @Setter private InterpolatorBean interpolator = new InterpolatorBeanImageJ();
     // END BEAN PROPERTIES
 
     @Override
@@ -107,7 +112,12 @@ public abstract class SegmentStackIntoObjectsScaleDecode<T, S extends ImageInfer
             DualScale<Stack> stacksDual =
                     executionTimeRecorder.recordExecutionTime(
                             "Scaling stack to model-size",
-                            () -> StackScaler.scaleToModelSize(stack, scaleFactor));
+                            () ->
+                                    StackScaler.scaleToModelSize(
+                                            stack,
+                                            scaleFactor,
+                                            interpolator.create(),
+                                            executionTimeRecorder));
 
             T input =
                     executionTimeRecorder.recordExecutionTime(
