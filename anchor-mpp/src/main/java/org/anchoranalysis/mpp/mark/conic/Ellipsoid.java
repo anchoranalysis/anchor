@@ -149,10 +149,10 @@ public class Ellipsoid extends ConicBase implements Serializable {
     @Override
     public final byte isPointInside(Point3i point) {
 
-        // It is permissible to mutate the point during calculation
-        double x = point.x() - getPosition().x();
-        double y = point.y() - getPosition().y();
-        double z = point.z() - getPosition().z();
+        // Add in 0.5 to take the center-point of the voxel identified by point
+        double x = point.x() - getPosition().x() + 0.5;
+        double y = point.y() - getPosition().y() + 0.5;
+        double z = point.z() - getPosition().z() + 0.5;
 
         if (l2norm(x, y, z) > radiiShellMaxSq) {
             return FLAG_SUBMARK_NONE;
