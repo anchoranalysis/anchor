@@ -27,6 +27,7 @@ package org.anchoranalysis.experiment.time;
 
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.stream.Stream;
 import org.anchoranalysis.core.time.ExecutionTimeRecorder;
 import org.anchoranalysis.core.time.RecordedExecutionTimes;
 import org.anchoranalysis.core.time.RecordedExecutionTimes.RecordedOperation;
@@ -118,8 +119,12 @@ class RunningSumRecorder extends ExecutionTimeRecorder {
     @Override
     public RecordedExecutionTimes recordedTimes() {
         synchronized (map) {
+            // Filter away any entries where no execution-time was recorded.
+            Stream<Entry<String, RunningSumParented>> entriesFiltered =
+                    map.entrySet().stream()
+                            .filter(entry -> entry.getValue().getRunningSum().getCount() > 0);
             return new RecordedExecutionTimes(
-                    map.entrySet().stream().map(RunningSumRecorder::recordedOperationFromEntry));
+                    entriesFiltered.map(RunningSumRecorder::recordedOperationFromEntry));
         }
     }
 
