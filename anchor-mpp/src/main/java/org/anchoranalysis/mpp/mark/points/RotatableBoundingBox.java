@@ -30,16 +30,16 @@ import static org.anchoranalysis.mpp.bean.regionmap.RegionMembershipUtilities.fl
 import static org.anchoranalysis.mpp.bean.regionmap.RegionMembershipUtilities.flagForRegion;
 import static org.anchoranalysis.mpp.mark.GlobalRegionIdentifiers.SUBMARK_INSIDE;
 
-import java.util.List;
+import java.util.Arrays;
 import org.anchoranalysis.core.exception.CheckedUnsupportedOperationException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
-import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.points.BoundingBoxFromPoints;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.MarkWithPosition;
 import org.anchoranalysis.spatial.box.BoundingBox;
+import org.anchoranalysis.spatial.orientation.Orientation;
 import org.anchoranalysis.spatial.orientation.Orientation2D;
 import org.anchoranalysis.spatial.orientation.RotationMatrix;
 import org.anchoranalysis.spatial.point.Point2d;
@@ -74,7 +74,8 @@ public class RotatableBoundingBox extends MarkWithPosition {
     /** Add to orientation to get the right-point and top-point (without rotation) */
     private Point3d distanceToRightTop;
 
-    private Orientation2D orientation;
+    /** An orientation in the 2D plane to rotate the bounding box by. */
+    private Orientation orientation;
     // END mark state
 
     // START internal objects
@@ -86,19 +87,28 @@ public class RotatableBoundingBox extends MarkWithPosition {
         this.update(new Point2d(0, 0), new Point2d(0, 0), new Orientation2D());
     }
 
+    /**
+     * Repeatedly reused when evaluating points. We instantiate it here, to avoid unnecessary heap
+     * allocation.
+     */
+    private Point3d pointRelative = new Point3d();
+
     @Override
-    public byte isPointInside(Point3d point) {
+    public byte isPointInside(Point3i point) {
+        pointRelative.setX(point.x() - getPosition().x());
+        pointRelative.setY(point.y() - getPosition().y());
+        pointRelative.setZ(point.z() - getPosition().z());
 
         // See if after rotating a point back, it lies with on our box
-        Point3d pointRelative = Point3d.immutableSubtract(point, getPosition());
+        rotMatrixInv.rotatePointInplace(pointRelative);
 
-        Point3d pointRot = rotMatrixInv.rotatedPoint(pointRelative);
-
-        if (pointRot.x() < distanceToLeftBottom.x() || pointRot.x() >= distanceToRightTop.x()) {
+        if (pointRelative.x() < distanceToLeftBottom.x()
+                || pointRelative.x() >= distanceToRightTop.x()) {
             return FLAG_SUBMARK_NONE;
         }
 
-        if (pointRot.y() < distanceToLeftBottom.y() || pointRot.y() >= distanceToRightTop.y()) {
+        if (pointRelative.y() < distanceToLeftBottom.y()
+                || pointRelative.y() >= distanceToRightTop.y()) {
             return FLAG_SUBMARK_NONE;
         }
 
@@ -106,19 +116,19 @@ public class RotatableBoundingBox extends MarkWithPosition {
     }
 
     public void update(
-            Point2d distanceToLeftBottom, Point2d distanceToRightTop, Orientation2D orientation) {
+            Point2d distanceToLeftBottom, Point2d distanceToRightTop, Orientation orientation) {
 
         update(convert3d(distanceToLeftBottom), convert3d(distanceToRightTop), orientation);
     }
 
     /** Internal version with Point3d */
     private void update(
-            Point3d distanceToLeftBottom, Point3d distanceToRightTop, Orientation2D orientation) {
+            Point3d distanceToLeftBottom, Point3d distanceToRightTop, Orientation orientation) {
         this.distanceToLeftBottom = distanceToLeftBottom;
         this.distanceToRightTop = distanceToRightTop;
         this.orientation = orientation;
 
-        this.rotMatrix = orientation.deriveRotationMatrix();
+        this.rotMatrix = orientation.getRotationMatrix();
         this.rotMatrixInv = rotMatrix.transpose();
     }
 
@@ -134,7 +144,8 @@ public class RotatableBoundingBox extends MarkWithPosition {
                 };
 
         try {
-            BoundingBox box = BoundingBoxFromPoints.fromCollection(rotateAddPos(points));
+            BoundingBox box =
+                    BoundingBoxFromPoints.fromStream(Arrays.stream(points).map(this::rotateAddPos));
             return box.clampTo(dimensions.extent());
         } catch (OperationFailedException e) {
             throw new AnchorImpossibleSituationException();
@@ -157,7 +168,7 @@ public class RotatableBoundingBox extends MarkWithPosition {
     @Override
     public Mark duplicate() {
         RotatableBoundingBox out = new RotatableBoundingBox();
-        out.update(distanceToLeftBottom, distanceToRightTop, orientation.duplicate());
+        out.update(distanceToLeftBottom, distanceToRightTop, orientation);
         return out;
     }
 
@@ -192,16 +203,11 @@ public class RotatableBoundingBox extends MarkWithPosition {
                 0);
     }
 
-    private List<Point3i> rotateAddPos(Point3d[] points) {
-        return FunctionalList.mapToList(
-                points, point -> PointConverter.intFromDoubleFloor(rotateAddPos(point)));
-    }
-
     /** Rotates a position and adds the current position afterwards */
-    private Point3d rotateAddPos(Point3d point) {
-        Point3d out = rotMatrix.rotatedPoint(point);
-        out.add(getPosition());
-        return out;
+    private Point3i rotateAddPos(Point3d point) {
+        rotMatrix.rotatePointInplace(point);
+        point.add(getPosition());
+        return PointConverter.intFromDoubleFloor(point);
     }
 
     @Override

@@ -35,7 +35,7 @@ import org.anchoranalysis.math.arithmetic.RunningSumMap;
  *
  * @author Owen Feehan
  */
-class RunningSumRecorder implements ExecutionTimeRecorder {
+class RunningSumRecorder extends ExecutionTimeRecorder {
 
     /** Running sums are maintained for operations, identified uniquely by strings. */
     private RunningSumMap<String> map = new RunningSumMap<>();

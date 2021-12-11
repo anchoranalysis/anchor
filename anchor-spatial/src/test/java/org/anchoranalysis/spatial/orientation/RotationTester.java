@@ -25,10 +25,11 @@
  */
 package org.anchoranalysis.spatial.orientation;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.spatial.point.Point3d;
 
 /**
  * Tests rotating a point around an angle.
@@ -48,16 +49,9 @@ class RotationTester {
      * @param do3D if true, creates the point to rotate in 3 dimensions, otherwise in 2 dimensions.
      */
     public static void testRightAngleRotation(Orientation orientationRightAngle, boolean do3D) {
-        RotationMatrix rotationMatrix = orientationRightAngle.deriveRotationMatrix();
-        double[] rotatedPoint = rotationMatrix.rotatePoint(makePoint(1.0, 0.0, do3D));
-        assertArrayEquals(makePoint(0.0, 1.0, do3D), rotatedPoint, DELTA);
-    }
-
-    private static double[] makePoint(double x, double y, boolean do3D) {
-        if (do3D) {
-            return new double[] {x, y, 0.0};
-        } else {
-            return new double[] {x, y};
-        }
+        RotationMatrix rotationMatrix = orientationRightAngle.getRotationMatrix();
+        Point3d point = new Point3d(1.0, 0.0, 0.0);
+        rotationMatrix.rotatePointInplace(point);
+        assertTrue(point.equalsTolerance(new Point3d(0.0, 1.0, 0.0), DELTA));
     }
 }

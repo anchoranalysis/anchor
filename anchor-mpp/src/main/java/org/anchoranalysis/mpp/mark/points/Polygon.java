@@ -37,6 +37,8 @@ import org.anchoranalysis.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.Point3d;
+import org.anchoranalysis.spatial.point.Point3i;
+import org.anchoranalysis.spatial.point.PointConverter;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 public class Polygon extends PointListBase {
@@ -55,10 +57,12 @@ public class Polygon extends PointListBase {
     private Point3d centroid;
 
     @Override
-    public byte isPointInside(Point3d point) {
+    public byte isPointInside(Point3i point) {
+
+        Point3d pointDouble = PointConverter.doubleFromInt(point);
 
         // FOR NOW WE IGNORE THE SHELL RADIUS
-        if (containsPixel(point.x(), point.y()) || getPoints().contains(point)) {
+        if (containsPixel(point.x(), point.y()) || getPoints().contains(pointDouble)) {
             return FLAG_SUBMARK_INSIDE;
         }
 

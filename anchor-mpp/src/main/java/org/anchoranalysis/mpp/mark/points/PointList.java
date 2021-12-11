@@ -36,6 +36,8 @@ import org.anchoranalysis.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.Point3d;
+import org.anchoranalysis.spatial.point.Point3i;
+import org.anchoranalysis.spatial.point.PointConverter;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 public class PointList extends PointListBase {
@@ -58,10 +60,10 @@ public class PointList extends PointListBase {
     }
 
     @Override
-    public byte isPointInside(Point3d pointIsInside) {
+    public byte isPointInside(Point3i pointIsInside) {
 
         // FOR NOW WE IGNORE THE SHELL RADIUS
-        if (PointInSetQuery.anyCrnrInSet(pointIsInside, set)) {
+        if (set.contains(PointConverter.doubleFromInt(pointIsInside))) {
             return FLAG_SUBMARK_INSIDE;
         } else {
             return FLAG_SUBMARK_NONE;

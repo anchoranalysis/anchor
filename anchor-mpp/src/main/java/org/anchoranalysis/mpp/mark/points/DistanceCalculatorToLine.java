@@ -30,6 +30,7 @@ import java.io.Serializable;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.spatial.point.Point3d;
+import org.anchoranalysis.spatial.point.Point3i;
 
 @NoArgsConstructor
 class DistanceCalculatorToLine implements Serializable {
@@ -63,7 +64,7 @@ class DistanceCalculatorToLine implements Serializable {
         this.directionVector.subtract(startPoint);
     }
 
-    public double distanceToLine(Point3d point) {
+    public double distanceToLine(Point3i point) {
         // http://mathworld.wolfram.com/Point-LineDistance3-Dimensional.html
 
         double distanceSquared2to1 = endPoint.distanceSquared(startPoint);

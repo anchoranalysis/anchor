@@ -111,11 +111,11 @@ public class FunctionalList {
      * @param  <S> parameter-type for function
      * @param  <T> return-type for function
      * @param  <U> type of second argument for function
-     * @param collection the collection to be mapped
-     * @param arguments the argument to use together with element in {@code collection}
-     * @param mapFunction function to do the mapping
+     * @param collection the collection to be mapped.
+     * @param arguments the argument to use together with element in {@code collection}.
+     * @param mapFunction function to do the mapping.
      * @return a list with the same size and same order, but using derived elements that are a
-     *     result of the mapping
+     *     result of the mapping.
      */
     public static <S, T, U> List<T> mapToList(
             Collection<S> collection, Collection<U> arguments, BiFunction<S, U, T> mapFunction) {
@@ -130,10 +130,10 @@ public class FunctionalList {
      *
      * @param <S> parameter-type for function
      * @param <T> return-type for function
-     * @param list the list to be mapped
-     * @param mapFunction function to do the mapping
+     * @param list the list to be mapped.
+     * @param mapFunction function to do the mapping.
      * @return a list with the same size and same order, but using derived elements that are a
-     *     result of the mapping
+     *     result of the mapping.
      */
     public static <S, T> List<T> mapToListWithIndex(
             List<S> list, BiFunction<S, Integer, T> mapFunction) {
@@ -148,11 +148,11 @@ public class FunctionalList {
      *
      * @param  <S> parameter-type for function
      * @param  <T> return-type for function
-     * @param collection the collection to be mapped
+     * @param collection the collection to be mapped.
      * @param mapFunction function to do the mapping to an Optional (the item is included in the
-     *     output if the optional is defined)
+     *     output if the optional is defined).
      * @return a list with the same size and same order, but using derived elements that are a
-     *     result of the mapping
+     *     result of the mapping.
      */
     public static <S, T> List<T> mapToListOptional(
             Collection<S> collection, Function<S, Optional<T>> mapFunction) {
@@ -170,12 +170,12 @@ public class FunctionalList {
      * @param  <S> parameter-type for function
      * @param  <T> return-type for function
      * @param  <E> an exception that may be thrown by an {@code mapFunction}
-     * @param collection the collection to be mapped
-     * @param throwableClass class type of exception that may be thrown by {@code mapFunction}
+     * @param collection the collection to be mapped.
+     * @param throwableClass class type of exception that may be thrown by {@code mapFunction}.
      * @param mapFunction function to do the mapping to an Optional (the item is included in the
-     *     output if the optional is defined)
+     *     output if the optional is defined).
      * @return a list with the same size and same order, but using derived elements that are a
-     *     result of the mapping
+     *     result of the mapping.
      * @throws E if it is thrown by any call to {@code mapFunction}
      */
     public static <S, T, E extends Exception> List<T> mapToListOptional(
@@ -214,10 +214,10 @@ public class FunctionalList {
      *
      * @param  <S> parameter-type for function
      * @param  <T> return-type for function
-     * @param array the array to be mapped
-     * @param mapFunction function to do the mapping
+     * @param array the array to be mapped.
+     * @param mapFunction function to do the mapping.
      * @return a list with the same size and same order, but using derived elements that are a
-     *     result of the mapping
+     *     result of the mapping.
      */
     public static <S, T> List<T> mapToList(S[] array, Function<S, T> mapFunction) {
         return Arrays.stream(array).map(mapFunction).collect(Collectors.toList());
@@ -251,11 +251,11 @@ public class FunctionalList {
      * @param  <T> return-type for function
      * @param  <E> exception that can be thrown by {@code mapFunction}
      * @param array the array to be mapped
-     * @param throwableClass class type of exception that may be thrown by {@code mapFunction}
-     * @param mapFunction function to do the mapping
+     * @param throwableClass class type of exception that may be thrown by {@code mapFunction}.
+     * @param mapFunction function to do the mapping.
      * @return a list with the same size and same order, but using derived elements that are a
-     *     result of the mapping
-     * @throws E if the exception is thrown during mapping
+     *     result of the mapping.
+     * @throws E if the exception is thrown during mapping.
      */
     public static <S, T, E extends Exception> List<T> mapToList(
             S[] array,
@@ -269,10 +269,10 @@ public class FunctionalList {
      * Creates a list of elements, where each element corresponds to an index in a range.
      *
      * @param <T> element-type in the list
-     * @param startInclusive minimum-element in range (inclusive)
-     * @param endExclusive maximum-element in range (exclusive)
-     * @param mapFunction function to do the mapping
-     * @return a list with an element for every item in the range
+     * @param startInclusive minimum-element in range (inclusive).
+     * @param endExclusive maximum-element in range (exclusive).
+     * @param mapFunction function to do the mapping.
+     * @return a list with an element for every item in the range.
      */
     public static <T> List<T> mapRangeToList(
             int startInclusive, int endExclusive, IntFunction<T> mapFunction) {
@@ -285,9 +285,9 @@ public class FunctionalList {
      * Creates a list of elements, by repeatedly calling the same operation.
      *
      * @param <T> element-type in the list
-     * @param numberRepeats the number of repeats
-     * @param mapFunction function to create each element
-     * @return a list with an element for every iteration
+     * @param numberRepeats the number of repeats.
+     * @param mapFunction function to create each element.
+     * @return a list with an element for every iteration.
      */
     public static <T> List<T> repeat(int numberRepeats, Supplier<T> mapFunction) {
         return IntStream.rangeClosed(0, numberRepeats)
@@ -318,11 +318,11 @@ public class FunctionalList {
      *
      * @param <T> list item-type
      * @param <E> exception that may be thrown during evaluating the predicate
-     * @param predicate predicate to first filter the input collection before mapping
-     * @param collection the collection to be filtered
-     * @param throwableClass class type of exception that may be thrown by {@code mapFunction}
-     * @return a list with only the elements that pass the filter
-     * @throws E if an exception is thrown during evaluating the predicate
+     * @param predicate predicate to first filter the input collection before mapping.
+     * @param collection the collection to be filtered.
+     * @param throwableClass class type of exception that may be thrown by {@code mapFunction}.
+     * @return a list with only the elements that pass the filter.
+     * @throws E if an exception is thrown during evaluating the predicate.
      */
     public static <T, E extends Exception> List<T> filterToList(
             Collection<T> collection,
@@ -339,12 +339,12 @@ public class FunctionalList {
      * @param <S> type that will be mapped from
      * @param <T> type that will be mapped to
      * @param <E> exception that may be thrown during mapping
-     * @param list incoming list to be mapped
+     * @param list incoming list to be mapped.
      * @param predicate a condition that must be fulfilled for elements in {@code list} to be
      *     included in the returned list.
-     * @param mapFunction function for mapping
-     * @return a newly created list
-     * @throws E if an exception is thrown during mapping
+     * @param mapFunction function for mapping.
+     * @return a newly created list.
+     * @throws E if an exception is thrown during mapping.
      */
     public static <S, T, E extends Exception> List<T> filterAndMapToList(
             List<S> list, Predicate<S> predicate, CheckedFunction<S, T, E> mapFunction) throws E {
@@ -372,9 +372,9 @@ public class FunctionalList {
      * @param predicate a condition that must be fulfilled for elements in {@code list} to be
      *     included in the returned list.
      * @param mapFuncWithIndex function for mapping, also including an index (the original position
-     *     in the bounding-box)
-     * @return a newly created list
-     * @throws E if an exception is thrown during mapping
+     *     in the bounding-box).
+     * @return a newly created list.
+     * @throws E if an exception is thrown during mapping.
      */
     public static <S, T, E extends Exception> List<T> filterAndMapWithIndexToList(
             List<S> list,
@@ -400,8 +400,8 @@ public class FunctionalList {
      *
      * @param <S> element-type in first collection
      * @param <T> element-type in second collection
-     * @param first first collection
-     * @param second second collection
+     * @param first first collection.
+     * @param second second collection.
      * @return a newly created list where each element is a pair comprising an element from {@code
      *     first} and the corresponding element from {@code second}.
      */

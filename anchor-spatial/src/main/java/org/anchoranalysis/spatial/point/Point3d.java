@@ -156,6 +156,20 @@ public final class Point3d extends Tuple3d {
     }
 
     /**
+     * Checks if this point is equal to another {@link Point3d} accepting a tolerance between double
+     * values.
+     *
+     * @param other the other point to check for equality with.
+     * @param delta the maximum difference before two double values are considered to be unequal.
+     * @return true iff all dimensions of the point are equal (within the tolerance).
+     */
+    public boolean equalsTolerance(Point3d other, double delta) {
+        return equalsTolerance(x, other.x, delta)
+                && equalsTolerance(y, other.y, delta)
+                && equalsTolerance(z, other.z, delta);
+    }
+
+    /**
      * Converts the point to an array.
      *
      * @return a newly created array with three elements, respectively for x, y and z components.
@@ -223,7 +237,7 @@ public final class Point3d extends Tuple3d {
     }
 
     /**
-     * Subtracts two tuples immutably.
+     * Subtracts a {@link Tuple3d} from a {@link Tuple3d} immutably.
      *
      * @param tuple the tuple to subtract from.
      * @param toSubtract the tuple to subtract.
@@ -237,6 +251,20 @@ public final class Point3d extends Tuple3d {
     }
 
     /**
+     * Subtracts a {@link Tuple3d} from a {@link Tuple3i} immutably.
+     *
+     * @param tuple the tuple to subtract from.
+     * @param toSubtract the tuple to subtract.
+     * @return a newly created point, where each dimension is the subtraction of the corresponding
+     *     dimensions in the points.
+     */
+    public static Point3d immutableSubtract(Tuple3i tuple, Tuple3d toSubtract) {
+        Point3d point = PointConverter.doubleFromInt(tuple);
+        point.subtract(toSubtract);
+        return point;
+    }
+
+    /**
      * Scales a tuple immutably.
      *
      * @param tuple the tuple to scale.
@@ -247,5 +275,10 @@ public final class Point3d extends Tuple3d {
         Point3d pointDup = new Point3d(tuple);
         pointDup.scale(factor);
         return pointDup;
+    }
+
+    /** Tests if {@code value1} and {@code value2} are equal within a certain tolerance. */
+    private static boolean equalsTolerance(double value1, double value2, double delta) {
+        return Math.abs(value1 - value2) < delta;
     }
 }

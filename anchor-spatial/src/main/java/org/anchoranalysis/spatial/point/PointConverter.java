@@ -107,13 +107,23 @@ public class PointConverter {
     }
 
     /**
-     * Convert a {@link Point2f} to a {@link Point3d}.
+     * Convert a {@link Point2f} to a {@link Point2d}.
      *
      * @param point the point to convert.
      * @return the newly-created converted point.
      */
     public static Point2d doubleFromFloat(Point2f point) {
         return new Point2d(point.x(), point.y());
+    }
+
+    /**
+     * Convert a {@link Point2f} to a {@link Point3d}.
+     *
+     * @param point the point to convert.
+     * @return the newly-created converted point.
+     */
+    public static Point3d double3DFromFloat(Point2f point) {
+        return new Point3d(point.x(), point.y(), 0);
     }
 
     /**

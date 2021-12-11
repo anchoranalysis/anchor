@@ -33,7 +33,7 @@ import java.util.stream.Stream;
  *
  * @author Owen Feehan
  */
-public class ExecutionTimeRecorderIgnore implements ExecutionTimeRecorder {
+public class ExecutionTimeRecorderIgnore extends ExecutionTimeRecorder {
 
     private static ExecutionTimeRecorder instance = null;
 

@@ -42,9 +42,7 @@ import org.anchoranalysis.overlay.object.scaled.FromMask;
 import org.anchoranalysis.overlay.object.scaled.ScaledOverlayCreator;
 import org.anchoranalysis.overlay.writer.DrawOverlay;
 import org.anchoranalysis.spatial.box.BoundingBox;
-import org.anchoranalysis.spatial.point.Point3d;
 import org.anchoranalysis.spatial.point.Point3i;
-import org.anchoranalysis.spatial.point.PointConverter;
 
 @EqualsAndHashCode(callSuper = false)
 public class OverlayMark extends Overlay {
@@ -95,7 +93,7 @@ public class OverlayMark extends Overlay {
     public ObjectWithProperties createObject(
             DrawOverlay overlayWriter, Dimensions dimEntireImage, BinaryValuesByte bvOut)
             throws CreateException {
-        return mark.deriveObject(dimEntireImage, regionMembership, bvOut);
+        return new ObjectWithProperties(mark.deriveObject(dimEntireImage, regionMembership, bvOut));
     }
 
     @Override
@@ -105,10 +103,7 @@ public class OverlayMark extends Overlay {
 
     @Override
     public boolean isPointInside(DrawOverlay overlayWriter, Point3i point) {
-
-        Point3d pointD = PointConverter.doubleFromInt(point);
-
-        byte membership = mark.isPointInside(pointD);
+        byte membership = mark.isPointInside(point);
         return (regionMembership.isMemberFlag(membership));
     }
 

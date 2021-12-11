@@ -34,7 +34,14 @@ import org.anchoranalysis.core.functional.checked.CheckedSupplier;
  *
  * @author Owen Feehan
  */
-public interface ExecutionTimeRecorder {
+public abstract class ExecutionTimeRecorder {
+
+    /**
+     * The execution-times that have been recorded.
+     *
+     * @return newly created {@link RecordedExecutionTimes} that describes the execution-times.
+     */
+    public abstract RecordedExecutionTimes recordedTimes();
 
     /**
      * Records the execution-time of a particular operation.
@@ -42,7 +49,7 @@ public interface ExecutionTimeRecorder {
      * @param operationIdentifier a string uniquely identifying this operation.
      * @param millis how long the operation took in milliseconds.
      */
-    void recordExecutionTime(String operationIdentifier, long millis);
+    public abstract void recordExecutionTime(String operationIdentifier, long millis);
 
     /**
      * Records the execution-time of a particular operation.
@@ -53,7 +60,7 @@ public interface ExecutionTimeRecorder {
      *     if <code>operationIdentifierFirst</code> already exists.
      * @param millis how long the operation took in milliseconds.
      */
-    void recordExecutionTime(
+    public abstract void recordExecutionTime(
             String operationIdentifierFirst, String operationIdentiferSubsequent, long millis);
 
     /**
@@ -68,7 +75,7 @@ public interface ExecutionTimeRecorder {
      * @param <E> type of an exception that {@code operation} may throw.
      * @throws E if {@code operation} throws this exception;
      */
-    default <E extends Exception> void recordExecutionTime(
+    public <E extends Exception> void recordExecutionTime(
             String writeOperationIdentifier, CheckedRunnable<E> operation) throws E {
         long startTimestamp = System.currentTimeMillis();
         try {
@@ -92,7 +99,7 @@ public interface ExecutionTimeRecorder {
      * @return the value returned by {@code operation}.
      * @throws E if {@code operation} throws this exception,
      */
-    default <T, E extends Exception> T recordExecutionTime(
+    public <T, E extends Exception> T recordExecutionTime(
             String operationIdentifier, CheckedSupplier<T, E> operation) throws E {
         long startTimestamp = System.currentTimeMillis();
         try {
@@ -100,39 +107,6 @@ public interface ExecutionTimeRecorder {
         } finally {
             recordTimeDifferenceFrom(operationIdentifier, startTimestamp);
         }
-    }
-
-    /**
-     * Records the execution-time of a particular operation by subtracting the start-time from the
-     * current clock.
-     *
-     * @param operationIdentifier a string uniquely identifying this operation
-     * @param startTimestamp a system clock timestamp (in milliseconds since the epoch) for when the
-     *     operation began.
-     * @return the current timestamp (millis from the epoch) used to measure the end of the
-     *     operation,
-     */
-    default long recordTimeDifferenceFrom(String operationIdentifier, long startTimestamp) {
-        long currentTimestamp = System.currentTimeMillis();
-        long executionTime = currentTimestamp - startTimestamp;
-        recordExecutionTime(operationIdentifier, executionTime);
-        return currentTimestamp;
-    }
-
-    /**
-     * Records the execution-time of a particular operation by subtracting the start-time from the
-     * end time.
-     *
-     * @param operationIdentifier a string uniquely identifying this operation
-     * @param startTimestamp a system clock timestamp (in milliseconds since the epoch) for when the
-     *     operation <b>began</b>.
-     * @param endTimestamp a system clock timestamp (in milliseconds since the epoch) for when the
-     *     operation <b>ended</b>.
-     */
-    default void recordTimeDifferenceBetween(
-            String operationIdentifier, long startTimestamp, long endTimestamp) {
-        long executionTime = endTimestamp - startTimestamp;
-        recordExecutionTime(operationIdentifier, executionTime);
     }
 
     /**
@@ -147,7 +121,7 @@ public interface ExecutionTimeRecorder {
      * @param endTimestamp a system clock timestamp (in milliseconds since the epoch) for when the
      *     operation <b>ended</b>.
      */
-    default void recordTimeDifferenceBetween(
+    public void recordTimeDifferenceBetween(
             String operationIdentifier,
             Optional<String> alternativeIdentifierIfFirst,
             long startTimestamp,
@@ -163,9 +137,35 @@ public interface ExecutionTimeRecorder {
     }
 
     /**
-     * The execution-times that have been recorded.
+     * Records the execution-time of a particular operation by subtracting the start-time from the
+     * end time.
      *
-     * @return newly created {@link RecordedExecutionTimes} that describes the execution-times.
+     * @param operationIdentifier a string uniquely identifying this operation
+     * @param startTimestamp a system clock timestamp (in milliseconds since the epoch) for when the
+     *     operation <b>began</b>.
+     * @param endTimestamp a system clock timestamp (in milliseconds since the epoch) for when the
+     *     operation <b>ended</b>.
      */
-    RecordedExecutionTimes recordedTimes();
+    public void recordTimeDifferenceBetween(
+            String operationIdentifier, long startTimestamp, long endTimestamp) {
+        long executionTime = endTimestamp - startTimestamp;
+        recordExecutionTime(operationIdentifier, executionTime);
+    }
+
+    /**
+     * Records the execution-time of a particular operation by subtracting the start-time from the
+     * current clock.
+     *
+     * @param operationIdentifier a string uniquely identifying this operation
+     * @param startTimestamp a system clock timestamp (in milliseconds since the epoch) for when the
+     *     operation began.
+     * @return the current timestamp (millis from the epoch) used to measure the end of the
+     *     operation,
+     */
+    private long recordTimeDifferenceFrom(String operationIdentifier, long startTimestamp) {
+        long currentTimestamp = System.currentTimeMillis();
+        long executionTime = currentTimestamp - startTimestamp;
+        recordExecutionTime(operationIdentifier, executionTime);
+        return currentTimestamp;
+    }
 }

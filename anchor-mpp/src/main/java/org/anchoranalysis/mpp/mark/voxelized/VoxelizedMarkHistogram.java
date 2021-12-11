@@ -46,7 +46,7 @@ import org.anchoranalysis.mpp.index.factory.VoxelPartitonFactoryHistogram;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.box.Extent;
-import org.anchoranalysis.spatial.point.Point3d;
+import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.point.ReadableTuple3i;
 
 class VoxelizedMarkHistogram implements VoxelizedMark {
@@ -183,8 +183,8 @@ class VoxelizedMarkHistogram implements VoxelizedMark {
             UnsignedByteBuffer bufferMIP,
             RegionMap regionMap) {
 
-        Point3d running = new Point3d();
-        running.setZ(z + 0.5);
+        Point3i running = new Point3i();
+        running.setZ(z);
 
         int zLocal = z - box.cornerMin().z();
 
@@ -194,20 +194,20 @@ class VoxelizedMarkHistogram implements VoxelizedMark {
         UnsignedByteBuffer buffer = object.sliceBufferLocal(zLocal);
 
         for (int y = box.cornerMin().y(); y <= cornerMax.y(); y++) {
-            running.setY(y + 0.5);
+            running.setY(y);
 
             int yLocal = y - box.cornerMin().y();
 
             for (int x = box.cornerMin().x(); x <= cornerMax.x(); x++) {
 
-                running.setX(x + 0.5);
+                running.setX(x);
 
                 int xLocal = x - box.cornerMin().x();
 
                 int localOffset = localExtent.offset(xLocal, yLocal);
                 int globalOffset = dimensions.offset(x, y);
 
-                byte membership = mark.isPointInside(new Point3d(running));
+                byte membership = mark.isPointInside(running);
 
                 buffer.putRaw(localOffset, membership);
                 bufferMIP.putRaw(localOffset, membershipMIP(membership, bufferMIP, localOffset));

@@ -48,8 +48,7 @@ class OrientationAxisAngleTest {
 
         OrientationAxisAngle orientation =
                 new OrientationAxisAngle(new Vector3d(-0.866, -0.5, 2.31e-014), 3.0);
-        MatrixAsserter asserter =
-                new MatrixAsserter(orientation.deriveRotationMatrix().getMatrix());
+        MatrixAsserter asserter = new MatrixAsserter(orientation.getRotationMatrix().getMatrix());
 
         // First Row
         asserter.assertValue(0.502414, 0, 0);

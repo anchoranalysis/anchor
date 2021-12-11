@@ -28,7 +28,6 @@ package org.anchoranalysis.mpp.mark.conic;
 
 import static org.anchoranalysis.mpp.bean.regionmap.RegionMembershipUtilities.*;
 import static org.anchoranalysis.mpp.mark.GlobalRegionIdentifiers.*;
-import static org.anchoranalysis.mpp.mark.conic.PropertyUtilities.*;
 import static org.anchoranalysis.mpp.mark.conic.TensorUtilities.*;
 
 import cern.colt.matrix.DoubleMatrix1D;
@@ -37,15 +36,11 @@ import cern.jet.math.Functions;
 import com.google.common.base.Preconditions;
 import java.io.Serializable;
 import java.util.Optional;
-import java.util.function.DoubleBinaryOperator;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.core.exception.CheckedUnsupportedOperationException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.Resolution;
-import org.anchoranalysis.image.core.object.properties.ObjectWithProperties;
-import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
-import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.QuickOverlapCalculation;
@@ -53,17 +48,17 @@ import org.anchoranalysis.overlay.OverlayProperties;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.orientation.Orientation;
 import org.anchoranalysis.spatial.orientation.Orientation2D;
-import org.anchoranalysis.spatial.orientation.RotationMatrix;
 import org.anchoranalysis.spatial.point.Point2d;
 import org.anchoranalysis.spatial.point.Point3d;
+import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 public class Ellipse extends ConicBase implements Serializable {
 
     /** */
-    private static final long serialVersionUID = -2678275834893266874L;
+    private static final long serialVersionUID = 1L;
 
-    private static final int NUM_DIM_MATRIX = 2;
+    private static final int NUMBER_DIMENSIONS = 2;
 
     private static final byte FLAG_SUBMARK_NONE = flagForNoRegion();
     private static final byte FLAG_SUBMARK_REGION0 = flagForRegion(SUBMARK_INSIDE, SUBMARK_CORE);
@@ -72,8 +67,31 @@ public class Ellipse extends ConicBase implements Serializable {
             flagForRegion(SUBMARK_SHELL, SUBMARK_SHELL_OUTSIDE);
     private static final byte FLAG_SUBMARK_REGION3 = flagForRegion(SUBMARK_OUTSIDE);
 
+    private transient QuickOverlapCalculation quickOverlap =
+            (Mark mark, int regionID) -> {
+                // No quick tests unless it's the same type of class
+                if (!(mark instanceof Ellipse)) {
+                    return false;
+                }
+
+                Ellipse targetMark = (Ellipse) mark;
+
+                DoubleMatrix1D relativePosition =
+                        twoElementMatrix(
+                                targetMark.getPosition().x() - getPosition().x(),
+                                targetMark.getPosition().y() - getPosition().y());
+
+                DoubleMatrix1D relativePositionSquared = relativePosition.copy();
+                relativePositionSquared.assign(Functions.square); // NOSONAR
+                double distance = relativePositionSquared.zSum();
+
+                // Definitely outside
+                return distance > Math.pow(getMaximumRadius() + targetMark.getMaximumRadius(), 2.0);
+            };
+
     // START Configurable parameters
-    @Getter @Setter private double shellRad = 0.2;
+    /** The size of the shell, expressed as a ratio of the radius. */
+    @Getter @Setter private double shell = 0.2;
     // END configurable parameters
 
     // START mark state
@@ -84,15 +102,15 @@ public class Ellipse extends ConicBase implements Serializable {
 
     // START internal objects
     private EllipsoidMatrixCalculator ellipsoidCalculator;
-    private double shellInt;
-    private double shellExt;
-    private double shellExtOut;
+    private double shellInternal;
+    private double shellExternal;
+    private double shellExternalOut;
 
-    private double shellIntSq;
-    private double shellExtSq;
-    private double shellExtOutSq;
+    private double shellInternalSquared;
+    private double shellExternalSquared;
+    private double shellExternalOutSquared;
 
-    private double radiiShellMaxSq;
+    private double radiiShellMaxSquared;
     // END internal objects
 
     // Default Constructor
@@ -101,27 +119,27 @@ public class Ellipse extends ConicBase implements Serializable {
 
         this.radii = new Point2d();
 
-        ellipsoidCalculator = new EllipsoidMatrixCalculator(NUM_DIM_MATRIX);
+        ellipsoidCalculator = new EllipsoidMatrixCalculator(NUMBER_DIMENSIONS);
     }
 
     // Copy Constructor
-    public Ellipse(Ellipse src) {
-        super(src);
-        this.radii = new Point2d(src.radii);
+    public Ellipse(Ellipse source) {
+        super(source);
+        this.radii = new Point2d(source.radii);
 
-        this.shellRad = src.shellRad;
+        this.shell = source.shell;
 
-        this.ellipsoidCalculator = new EllipsoidMatrixCalculator(src.ellipsoidCalculator);
-        this.orientation = src.orientation.duplicate();
+        this.ellipsoidCalculator = new EllipsoidMatrixCalculator(source.ellipsoidCalculator);
+        this.orientation = source.orientation;
 
-        this.shellExt = src.shellExt;
-        this.shellInt = src.shellInt;
-        this.shellExtOut = src.shellExtOut;
-        this.shellExtSq = src.shellExtSq;
-        this.shellIntSq = src.shellIntSq;
-        this.shellExtOutSq = src.shellExtOutSq;
+        this.shellExternal = source.shellExternal;
+        this.shellInternal = source.shellInternal;
+        this.shellExternalOut = source.shellExternalOut;
+        this.shellExternalSquared = source.shellExternalSquared;
+        this.shellInternalSquared = source.shellInternalSquared;
+        this.shellExternalOutSquared = source.shellExternalOutSquared;
 
-        this.radiiShellMaxSq = src.radiiShellMaxSq;
+        this.radiiShellMaxSquared = source.radiiShellMaxSquared;
     }
 
     @Override
@@ -129,16 +147,11 @@ public class Ellipse extends ConicBase implements Serializable {
         return "ellipsoid";
     }
 
-    public static double getEllipseSum(double x, double y, DoubleMatrix2D mat) {
-        return x * (x * mat.get(0, 0) + y * mat.get(1, 0))
-                + y * (x * mat.get(0, 1) + y * mat.get(1, 1));
-    }
-
     // Where is a point in relation to the current object
     @Override
-    public final byte isPointInside(Point3d point) {
+    public final byte isPointInside(Point3i point) {
 
-        if (point.distanceSquared(this.getPosition()) > radiiShellMaxSq) {
+        if (point.distanceSquared(this.getPosition()) > radiiShellMaxSquared) {
             return FLAG_SUBMARK_NONE;
         }
 
@@ -149,7 +162,7 @@ public class Ellipse extends ConicBase implements Serializable {
         // We exit early if it's inside the internal shell
         double sum = getEllipseSum(x, y, ellipsoidCalculator.getEllipsoidMatrix());
 
-        if (sum <= shellIntSq) {
+        if (sum <= shellInternalSquared) {
             return FLAG_SUBMARK_REGION0;
         }
 
@@ -157,11 +170,11 @@ public class Ellipse extends ConicBase implements Serializable {
             return FLAG_SUBMARK_REGION1;
         }
 
-        if (sum <= shellExtSq) {
+        if (sum <= shellExternalSquared) {
             return FLAG_SUBMARK_REGION2;
         }
 
-        if (sum <= shellExtOutSq) {
+        if (sum <= shellExternalOutSquared) {
             return FLAG_SUBMARK_REGION3;
         }
 
@@ -174,34 +187,21 @@ public class Ellipse extends ConicBase implements Serializable {
         if (regionID == GlobalRegionIdentifiers.SUBMARK_INSIDE) {
             return areaForShell(1);
         } else if (regionID == GlobalRegionIdentifiers.SUBMARK_SHELL) {
-            return areaForShell(shellExt) - areaForShell(shellInt);
+            return areaForShell(shellExternal) - areaForShell(shellInternal);
         } else {
             assert false;
             return 0.0;
         }
     }
 
-    private double areaForShell(double multiplier) {
-        return (Math.PI * this.radii.x() * this.radii.y() * Math.pow(multiplier, 2));
-    }
-
     // Circumference
     public double circumference(int regionID) {
         if (regionID == GlobalRegionIdentifiers.SUBMARK_SHELL) {
             return circumferenceUsingRamunjanApprox(
-                    this.radii.x() * (1.0 + shellRad), this.radii.y() * (1.0 + shellRad));
+                    this.radii.x() * (1.0 + shell), this.radii.y() * (1.0 + shell));
         } else {
             return circumferenceUsingRamunjanApprox(this.radii.x(), this.radii.y());
         }
-    }
-
-    private static double circumferenceUsingRamunjanApprox(double a, double b) {
-        // http://www.mathsisfun.com/geometry/ellipse-perimeter.html
-
-        double first = 3 * (a + b);
-        double second = ((3 * a) + b) * (a + (3 * b));
-
-        return Math.PI * (first - Math.sqrt(second));
     }
 
     @Override
@@ -212,56 +212,35 @@ public class Ellipse extends ConicBase implements Serializable {
     @Override
     public String toString() {
         return String.format(
-                "%s %s pos=%s %s vol=%e shellRad=%f",
-                "Ellpsd", identifier(), strPos(), strMarks(), volume(0), shellRad);
+                "%s %s pos=%s %s vol=%e shell=%f",
+                "Ellpsd", identifier(), strPos(), descriptionMarks(), volume(0), shell);
     }
 
-    public void updateShellRad(double shellRad) {
-        setShellRad(shellRad);
+    public void updateshell(double shell) {
+        setShell(shell);
         updateAfterMarkChange();
     }
 
-    private void updateAfterMarkChange() {
-
-        assert (shellRad > 0);
-
-        DoubleMatrix2D matRot = orientation.deriveRotationMatrix().getMatrix();
-
-        double[] radiusArray = twoElementArray(this.radii.x(), this.radii.y());
-        this.ellipsoidCalculator.update(radiusArray, matRot);
-
-        this.shellInt = 1.0 - this.shellRad;
-        this.shellExt = 1.0 + this.shellRad;
-        this.shellExtOut = 1.0 + (this.shellRad * 2);
-
-        this.shellIntSq = squared(shellInt);
-        this.shellExtSq = squared(shellExt);
-        this.shellExtOutSq = squared(shellExtOut);
-        this.radiiShellMaxSq = squared(ellipsoidCalculator.getMaximumRadius() * shellExt);
-
-        assert (!Double.isNaN(this.ellipsoidCalculator.getEllipsoidMatrix().get(0, 0)));
-    }
-
-    public void setMarksExplicit(Point3d pos, Orientation orientation, Point2d radii) {
-        Preconditions.checkArgument(pos.z() == 0, "non-zero z-value");
-        super.setPosition(pos);
+    public void setMarksExplicit(Point3d position, Orientation orientation, Point2d radii) {
+        Preconditions.checkArgument(position.z() == 0, "non-zero z-value");
+        super.setPosition(position);
         this.orientation = orientation;
         this.radii = radii;
         updateAfterMarkChange();
     }
 
     @Override
-    public void setMarksExplicit(Point3d pos) {
-        setMarksExplicit(pos, orientation, radii);
+    public void setMarksExplicit(Point3d position) {
+        setMarksExplicit(position, orientation, radii);
     }
 
     @Override
-    public void setMarksExplicit(Point3d pos, Orientation orientation) {
-        setMarksExplicit(pos, orientation, radii);
+    public void setMarksExplicit(Point3d position, Orientation orientation) {
+        setMarksExplicit(position, orientation, radii);
     }
 
-    public void setMarksExplicit(Point3d pos, Orientation orientation, Point3d radii) {
-        setMarksExplicit(pos, orientation, new Point2d(radii.x(), radii.y()));
+    public void setMarksExplicit(Point3d position, Orientation orientation, Point3d radii) {
+        setMarksExplicit(position, orientation, new Point2d(radii.x(), radii.y()));
     }
 
     @Override
@@ -270,41 +249,15 @@ public class Ellipse extends ConicBase implements Serializable {
         DoubleMatrix1D boxMatrix = ellipsoidCalculator.getBoundingBoxMatrix().copy();
 
         if (regionID == GlobalRegionIdentifiers.SUBMARK_SHELL) {
-            boxMatrix.assign(Functions.mult(shellExtOut));
+            boxMatrix.assign(Functions.mult(shellExternalOut));
         }
 
         return BoundingBoxCalculator.boxFromBounds(getPosition(), boxMatrix, false, dimensions);
     }
 
-    private transient QuickOverlapCalculation quickOverlap =
-            (Mark mark, int regionID) -> {
-                // No quick tests unless it's the same type of class
-                if (!(mark instanceof Ellipse)) {
-                    return false;
-                }
-
-                Ellipse trgtMark = (Ellipse) mark;
-
-                DoubleMatrix1D relativePosition =
-                        twoElementMatrix(
-                                trgtMark.getPosition().x() - getPosition().x(),
-                                trgtMark.getPosition().y() - getPosition().y());
-
-                DoubleMatrix1D relativePositionSquared = relativePosition.copy();
-                relativePositionSquared.assign(Functions.square); // NOSONAR
-                double distance = relativePositionSquared.zSum();
-
-                // Definitely outside
-                return distance > Math.pow(getMaximumRadius() + trgtMark.getMaximumRadius(), 2.0);
-            };
-
     @Override
     public Optional<QuickOverlapCalculation> quickOverlap() {
         return Optional.of(quickOverlap);
-    }
-
-    private double getMaximumRadius() {
-        return ellipsoidCalculator.getMaximumRadius();
     }
 
     public void setMarks(Point2d radii, Orientation orientation) {
@@ -328,51 +281,35 @@ public class Ellipse extends ConicBase implements Serializable {
     }
 
     @Override
-    public boolean equalsDeep(Mark m) {
+    public boolean equalsDeep(Mark mark) {
 
-        if (!super.equalsDeep(m)) {
+        if (!super.equalsDeep(mark)) {
             return false;
         }
 
-        if (!(m instanceof Ellipse)) {
+        if (!(mark instanceof Ellipse)) {
             return false;
         }
 
-        Ellipse trgt = (Ellipse) m;
+        Ellipse target = (Ellipse) mark;
 
-        if (!radii.equals(trgt.radii)) {
+        if (!radii.equals(target.radii)) {
             return false;
         }
 
-        return orientation.equals(trgt.orientation);
-    }
-
-    @Override
-    public ObjectWithProperties deriveObject(
-            Dimensions dimensions,
-            RegionMembershipWithFlags regionMembership,
-            BinaryValuesByte binaryValuesOut) {
-
-        ObjectWithProperties object =
-                super.deriveObject(dimensions, regionMembership, binaryValuesOut);
-        orientation.describeOrientation(object::setProperty);
-
-        // Axis orientation
-        addAxisOrientationProperties(object, regionMembership);
-
-        return object;
+        return orientation.equals(target.orientation);
     }
 
     @Override
     public OverlayProperties generateProperties(Optional<Resolution> resolution) {
-        OverlayProperties op = super.generateProperties(resolution);
+        OverlayProperties properties = super.generateProperties(resolution);
 
-        op.addDoubleAsString("Radius X (pixels)", radii.x());
-        op.addDoubleAsString("Radius Y (pixels)", radii.y());
-        orientation.describeOrientation(op.getMap()::add);
-        op.addDoubleAsString("Shell Radius (pixels)", shellRad);
+        properties.addDoubleAsString("Radius X (pixels)", radii.x());
+        properties.addDoubleAsString("Radius Y (pixels)", radii.y());
+        orientation.describeOrientation(properties.getMap()::add);
+        properties.addDoubleAsString("Shell Radius (pixels)", shell);
 
-        return op;
+        return properties;
     }
 
     @Override
@@ -400,43 +337,51 @@ public class Ellipse extends ConicBase implements Serializable {
         return box(dimensions, GlobalRegionIdentifiers.SUBMARK_SHELL);
     }
 
-    private void addAxisOrientationProperties(
-            ObjectWithProperties object, RegionMembershipWithFlags region) {
-
-        // NOTE can we do this more smartly?
-        double radiiFactor = region.getRegionID() == 0 ? 1.0 : 1.0 + shellRad;
-
-        double radiusProjectedX = radii.x() * radiiFactor;
-
-        RotationMatrix rotMat = orientation.deriveRotationMatrix();
-        double[] endPoint1 = rotMat.rotatePoint(twoElementArray(-1 * radiusProjectedX));
-        double[] endPoint2 = rotMat.rotatePoint(twoElementArray(radiusProjectedX));
-
-        double[] xMinMax = minMaxEndPoint(endPoint1, endPoint2, 0, getPosition().x());
-        double[] yMinMax = minMaxEndPoint(endPoint1, endPoint2, 1, getPosition().y());
-
-        addPoint2dProperty(object, "xAxisMin", xMinMax[0], yMinMax[0]);
-        addPoint2dProperty(object, "xAxisMax", xMinMax[1], yMinMax[1]);
-    }
-
-    private String strMarks() {
+    private String descriptionMarks() {
         return String.format(
                 "rad=[%3.3f, %3.3f] rot=%s", this.radii.x(), this.radii.y(), this.orientation);
     }
 
-    private static double[] minMaxEndPoint(
-            double[] endPoint1, double[] endPoint2, int dimensionIndex, double toAdd) {
-        return twoElementArray(
-                applyEndPoint(endPoint1, endPoint2, dimensionIndex, toAdd, Math::min),
-                applyEndPoint(endPoint1, endPoint2, dimensionIndex, toAdd, Math::max));
+    private double areaForShell(double multiplier) {
+        return (Math.PI * this.radii.x() * this.radii.y() * Math.pow(multiplier, 2));
     }
 
-    private static double applyEndPoint(
-            double[] endPoint1,
-            double[] endPoint2,
-            int dimensionIndex,
-            double toAdd,
-            DoubleBinaryOperator func) {
-        return func.applyAsDouble(endPoint1[dimensionIndex], endPoint2[dimensionIndex]) + toAdd;
+    private double getMaximumRadius() {
+        return ellipsoidCalculator.getMaximumRadius();
+    }
+
+    private void updateAfterMarkChange() {
+
+        assert (shell > 0);
+
+        DoubleMatrix2D matRot = orientation.getRotationMatrix().getMatrix();
+
+        double[] radiusArray = twoElementArray(this.radii.x(), this.radii.y());
+        this.ellipsoidCalculator.update(radiusArray, matRot);
+
+        this.shellInternal = 1.0 - this.shell;
+        this.shellExternal = 1.0 + this.shell;
+        this.shellExternalOut = 1.0 + (this.shell * 2);
+
+        this.shellInternalSquared = squared(shellInternal);
+        this.shellExternalSquared = squared(shellExternal);
+        this.shellExternalOutSquared = squared(shellExternalOut);
+        this.radiiShellMaxSquared = squared(ellipsoidCalculator.getMaximumRadius() * shellExternal);
+
+        assert (!Double.isNaN(this.ellipsoidCalculator.getEllipsoidMatrix().get(0, 0)));
+    }
+
+    private static double circumferenceUsingRamunjanApprox(double a, double b) {
+        // http://www.mathsisfun.com/geometry/ellipse-perimeter.html
+
+        double first = 3 * (a + b);
+        double second = ((3 * a) + b) * (a + (3 * b));
+
+        return Math.PI * (first - Math.sqrt(second));
+    }
+
+    private static double getEllipseSum(double x, double y, DoubleMatrix2D matrix) {
+        return x * (x * matrix.get(0, 0) + y * matrix.get(1, 0))
+                + y * (x * matrix.get(0, 1) + y * matrix.get(1, 1));
     }
 }

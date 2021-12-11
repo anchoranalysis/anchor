@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.image.core.points;
 
-import java.util.Collection;
+import java.util.stream.Stream;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
@@ -44,20 +44,20 @@ import org.anchoranalysis.spatial.point.Point3i;
 public class BoundingBoxFromPoints {
 
     /**
-     * Create from a collection of points.
+     * Create from a stream of {@link Point3i}s.
      *
      * @param points the collection.
      * @return a bounding-box minimally spanning all points.
      * @throws OperationFailedException if there are zero points.
      */
-    public static BoundingBox fromCollection(Collection<Point3i> points)
-            throws OperationFailedException {
-        if (points.isEmpty()) {
-            throw new OperationFailedException("Points list must contain at least one item");
-        }
+    public static BoundingBox fromStream(Stream<Point3i> points) throws OperationFailedException {
 
         PointRange range = new PointRange();
         points.forEach(range::add);
+
+        if (range.isEmpty()) {
+            throw new OperationFailedException("Points list must contain at least one item");
+        }
 
         return range.toBoundingBox();
     }

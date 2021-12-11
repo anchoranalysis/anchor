@@ -33,6 +33,7 @@ import org.anchoranalysis.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.Point3d;
+import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 public class PolygonCurve extends PointListBase {
@@ -50,7 +51,7 @@ public class PolygonCurve extends PointListBase {
     private transient DistanceCalculatorToLine distanceCalculator = new DistanceCalculatorToLine();
 
     @Override
-    public byte isPointInside(Point3d point) {
+    public byte isPointInside(Point3i point) {
 
         if (distanceToPolygonLocal(point) < distanceThreshold) {
             return FLAG_SUBMARK_INSIDE;
@@ -59,7 +60,7 @@ public class PolygonCurve extends PointListBase {
     }
 
     private double distanceToPolygonSegmentLocal(
-            Point3d point, Point3d pointFirst, Point3d pointSecond) {
+            Point3i point, Point3d pointFirst, Point3d pointSecond) {
 
         if (point.x() < (pointFirst.x() - distanceThreshold)) {
             return Double.POSITIVE_INFINITY;
@@ -93,7 +94,7 @@ public class PolygonCurve extends PointListBase {
     // Distance to polygon - only local (i.e. assumes that we only care about returning small values
     // in circumstances
     //  very close to the line segment in question, otherwise we don't care
-    private double distanceToPolygonLocal(Point3d point) {
+    private double distanceToPolygonLocal(Point3i point) {
 
         // If a point is inside the bounding box of two points +- the distanceThreshold, we
         // calculate the distance to

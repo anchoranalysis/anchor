@@ -41,14 +41,14 @@ import lombok.Getter;
 import org.anchoranalysis.core.exception.CheckedUnsupportedOperationException;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
-import org.anchoranalysis.image.core.object.properties.ObjectCollectionWithProperties;
-import org.anchoranalysis.image.core.object.properties.ObjectCollectionWithPropertiesFactory;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
+import org.anchoranalysis.image.voxel.object.ObjectCollectionFactory;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMembership;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.spatial.box.BoundingBox;
-import org.anchoranalysis.spatial.point.Point3d;
+import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 /**
@@ -181,10 +181,10 @@ public final class MarkCollection implements Iterable<Mark>, Serializable {
         return marks.indexOf(mark);
     }
 
-    public ObjectCollectionWithProperties deriveObjects(
+    public ObjectCollection deriveObjects(
             Dimensions dimensions, RegionMembershipWithFlags regionMembership) {
 
-        return ObjectCollectionWithPropertiesFactory.filterAndMapFrom(
+        return ObjectCollectionFactory.filterAndMapFrom(
                 marks,
                 mark -> mark.numberRegions() > regionMembership.getRegionID(),
                 mark ->
@@ -206,7 +206,7 @@ public final class MarkCollection implements Iterable<Mark>, Serializable {
         }
     }
 
-    public MarkCollection marksAt(Point3d point, RegionMap regionMap, int regionID) {
+    public MarkCollection marksAt(Point3i point, RegionMap regionMap, int regionID) {
 
         MarkCollection marksOut = new MarkCollection();
 

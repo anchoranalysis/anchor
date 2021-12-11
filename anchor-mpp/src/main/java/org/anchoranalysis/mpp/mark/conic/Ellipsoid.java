@@ -48,6 +48,7 @@ import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.orientation.Orientation;
 import org.anchoranalysis.spatial.orientation.Orientation3DEulerAngles;
 import org.anchoranalysis.spatial.point.Point3d;
+import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 //
@@ -73,7 +74,7 @@ public class Ellipsoid extends ConicBase implements Serializable {
     private static final byte FLAG_SUBMARK_REGION4 = flagForRegion(SUBMARK_OUTSIDE);
 
     // START Mark State
-    @Getter @Setter private double shellRad = 0.1;
+    @Getter @Setter private double shell = 0.1;
     @Getter @Setter private double innerCoreDistance = 0.4;
 
     @Getter private Point3d radii;
@@ -85,15 +86,15 @@ public class Ellipsoid extends ConicBase implements Serializable {
 
     // Relative distances to various shells squared (expressed as a ratio of the radii)
     private double shellInnerCore;
-    private double shellInt;
-    private double shellExt;
-    private double shellExtOut;
+    private double shellInternal;
+    private double shellExternal;
+    private double shellExternalOut;
 
     // Relative distances to various shells squared (expressed as a ratio of the radii squared)
-    private double shellInnerCoreSq;
-    private double shellIntSq;
-    private double shellExtSq;
-    private double shellExtOutSq;
+    private double shellInnerCoreSquared;
+    private double shellInternalSquared;
+    private double shellExternalSquared;
+    private double shellExternalOutSquared;
 
     private double radiiShellMaxSq;
     // END internal objects
@@ -110,23 +111,23 @@ public class Ellipsoid extends ConicBase implements Serializable {
         super(src);
         this.radii = new Point3d(src.radii);
 
-        this.shellRad = src.shellRad;
+        this.shell = src.shell;
         this.innerCoreDistance = src.innerCoreDistance;
 
         ellipsoidCalculator = new EllipsoidMatrixCalculator(src.ellipsoidCalculator);
 
-        this.orientation = src.orientation.duplicate();
+        this.orientation = src.orientation;
         this.radiiShellMaxSq = src.radiiShellMaxSq;
 
-        this.shellExt = src.shellExt;
-        this.shellExtOut = src.shellExtOut;
-        this.shellInt = src.shellInt;
+        this.shellExternal = src.shellExternal;
+        this.shellExternalOut = src.shellExternalOut;
+        this.shellInternal = src.shellInternal;
         this.shellInnerCore = src.shellInnerCore;
 
-        this.shellExtSq = src.shellExtSq;
-        this.shellExtOutSq = src.shellExtOutSq;
-        this.shellIntSq = src.shellIntSq;
-        this.shellInnerCoreSq = src.shellInnerCoreSq;
+        this.shellExternalSquared = src.shellExternalSquared;
+        this.shellExternalOutSquared = src.shellExternalOutSquared;
+        this.shellInternalSquared = src.shellInternalSquared;
+        this.shellInnerCoreSquared = src.shellInnerCoreSquared;
     }
 
     @Override
@@ -146,7 +147,7 @@ public class Ellipsoid extends ConicBase implements Serializable {
 
     // Where is a point in relation to the current object
     @Override
-    public final byte isPointInside(Point3d point) {
+    public final byte isPointInside(Point3i point) {
 
         // It is permissible to mutate the point during calculation
         double x = point.x() - getPosition().x();
@@ -159,13 +160,13 @@ public class Ellipsoid extends ConicBase implements Serializable {
 
         // We exit early if it's inside the internal shell
         double sum = getEllipsoidSum(x, y, z, ellipsoidCalculator.getEllipsoidMatrix());
-        if (sum <= shellInnerCoreSq) {
+        if (sum <= shellInnerCoreSquared) {
             return FLAG_SUBMARK_REGION0;
         }
 
         // We exit early if it's inside the internal shell
         sum = getEllipsoidSum(x, y, z, ellipsoidCalculator.getEllipsoidMatrix());
-        if (sum <= shellIntSq) {
+        if (sum <= shellInternalSquared) {
             return FLAG_SUBMARK_REGION1;
         }
 
@@ -173,11 +174,11 @@ public class Ellipsoid extends ConicBase implements Serializable {
             return FLAG_SUBMARK_REGION2;
         }
 
-        if (sum <= shellExtSq) {
+        if (sum <= shellExternalSquared) {
             return FLAG_SUBMARK_REGION3;
         }
 
-        if (sum <= shellExtOutSq) {
+        if (sum <= shellExternalOutSquared) {
             return FLAG_SUBMARK_REGION4;
         }
 
@@ -201,13 +202,13 @@ public class Ellipsoid extends ConicBase implements Serializable {
         if (regionID == GlobalRegionIdentifiers.SUBMARK_INSIDE) {
             return volumeForShell(1);
         } else if (regionID == GlobalRegionIdentifiers.SUBMARK_SHELL_OUTSIDE) {
-            return volumeForShell(shellExt) - volumeForShell(1);
+            return volumeForShell(shellExternal) - volumeForShell(1);
         } else if (regionID == GlobalRegionIdentifiers.SUBMARK_SHELL) {
-            return volumeForShell(shellExt) - volumeForShell(shellInt);
+            return volumeForShell(shellExternal) - volumeForShell(shellInternal);
         } else if (regionID == GlobalRegionIdentifiers.SUBMARK_CORE) {
-            return volumeForShell(shellInt);
+            return volumeForShell(shellInternal);
         } else if (regionID == GlobalRegionIdentifiers.SUBMARK_OUTSIDE) {
-            return volumeForShell(shellExtOut) - volumeForShell(shellExt);
+            return volumeForShell(shellExternalOut) - volumeForShell(shellExternal);
         } else if (regionID == GlobalRegionIdentifiers.SUBMARK_CORE_INNER) {
             return volumeForShell(shellInnerCore);
         } else {
@@ -228,25 +229,25 @@ public class Ellipsoid extends ConicBase implements Serializable {
 
     public void updateAfterMarkChange() {
 
-        DoubleMatrix2D matRot = orientation.deriveRotationMatrix().getMatrix();
+        DoubleMatrix2D matRot = orientation.getRotationMatrix().getMatrix();
 
         double[] radiusArray = threeElementArray(this.radii.x(), this.radii.y(), this.radii.z());
         assert matRot.rows() == 3;
         this.ellipsoidCalculator.update(radiusArray, matRot);
 
-        this.shellInt = 1.0 - this.shellRad;
-        this.shellExt = 1.0 + this.shellRad;
-        this.shellExtOut = 1.0 + (this.shellRad * 2);
+        this.shellInternal = 1.0 - this.shell;
+        this.shellExternal = 1.0 + this.shell;
+        this.shellExternalOut = 1.0 + (this.shell * 2);
         this.shellInnerCore = 1.0 - innerCoreDistance;
 
-        this.shellIntSq = squared(shellInt);
-        this.shellExtSq = squared(shellExt);
-        this.shellExtOutSq = squared(shellExtOut);
-        this.shellInnerCoreSq = squared(shellInnerCore);
+        this.shellInternalSquared = squared(shellInternal);
+        this.shellExternalSquared = squared(shellExternal);
+        this.shellExternalOutSquared = squared(shellExternalOut);
+        this.shellInnerCoreSquared = squared(shellInnerCore);
 
-        this.radiiShellMaxSq = squared(ellipsoidCalculator.getMaximumRadius() * shellExtOut);
+        this.radiiShellMaxSq = squared(ellipsoidCalculator.getMaximumRadius() * shellExternalOut);
 
-        assert shellInt > 0;
+        assert shellInternal > 0;
     }
 
     @Override
@@ -254,16 +255,16 @@ public class Ellipsoid extends ConicBase implements Serializable {
 
         DoubleMatrix1D s = ellipsoidCalculator.getBoundingBoxMatrix().copy();
 
-        assert shellInt > 0;
+        assert shellInternal > 0;
         assert shellInnerCore > 0;
 
         if (regionID == GlobalRegionIdentifiers.SUBMARK_SHELL
                 || regionID == GlobalRegionIdentifiers.SUBMARK_SHELL_OUTSIDE) {
-            s.assign(Functions.mult(shellExt));
+            s.assign(Functions.mult(shellExternal));
         } else if (regionID == GlobalRegionIdentifiers.SUBMARK_CORE) {
-            s.assign(Functions.mult(shellInt));
+            s.assign(Functions.mult(shellInternal));
         } else if (regionID == GlobalRegionIdentifiers.SUBMARK_OUTSIDE) {
-            s.assign(Functions.mult(shellExtOut));
+            s.assign(Functions.mult(shellExternalOut));
         } else if (regionID == GlobalRegionIdentifiers.SUBMARK_CORE_INNER) {
             s.assign(Functions.mult(shellInnerCore));
         }
@@ -273,12 +274,8 @@ public class Ellipsoid extends ConicBase implements Serializable {
 
     private String strMarks() {
         return String.format(
-                "rad=[%3.3f, %3.3f, %3.3f] rot=[%s] shellRad=[%f]",
-                this.radii.x(),
-                this.radii.y(),
-                this.radii.z(),
-                this.orientation.toString(),
-                shellRad);
+                "rad=[%3.3f, %3.3f, %3.3f] rot=[%s] shell=[%f]",
+                this.radii.x(), this.radii.y(), this.radii.z(), this.orientation.toString(), shell);
     }
 
     @SuppressWarnings("static-access")
@@ -319,12 +316,13 @@ public class Ellipsoid extends ConicBase implements Serializable {
         this.orientation = orientation;
         this.radii = radii;
         updateAfterMarkChange();
-        assert shellInt > 0;
+        assert shellInternal > 0;
     }
 
     @Override
-    public void setMarksExplicit(Point3d pos) {
-        setMarksExplicit(pos, orientation, radii);
+    public void setMarksExplicit(Point3d position) {
+        super.setPosition(position);
+        updateAfterMarkChange();
     }
 
     @Override
@@ -374,8 +372,8 @@ public class Ellipsoid extends ConicBase implements Serializable {
     }
 
     @Override
-    public void setMarksExplicit(Point3d pos, Orientation orientation) {
-        setMarksExplicit(pos, orientation, radii);
+    public void setMarksExplicit(Point3d position, Orientation orientation) {
+        setMarksExplicit(position, orientation, radii);
     }
 
     @Override
@@ -392,7 +390,7 @@ public class Ellipsoid extends ConicBase implements Serializable {
         op.addDoubleAsString("Normalized Radius 2 (pixels)", arr[2]);
 
         orientation.describeOrientation(op.getMap()::add);
-        op.addDoubleAsString("Shell Radius Ratio", shellRad);
+        op.addDoubleAsString("Shell Radius Ratio", shell);
         op.addDoubleAsString("Inner Core Radius Ratio ", innerCoreDistance);
         return op;
     }
@@ -412,7 +410,7 @@ public class Ellipsoid extends ConicBase implements Serializable {
         double maxRadius = ellipsoidCalculator.getMaximumRadius();
 
         if (regionID == GlobalRegionIdentifiers.SUBMARK_SHELL) {
-            maxRadius *= (1 + shellRad);
+            maxRadius *= (1 + shell);
         }
 
         return maxRadius;

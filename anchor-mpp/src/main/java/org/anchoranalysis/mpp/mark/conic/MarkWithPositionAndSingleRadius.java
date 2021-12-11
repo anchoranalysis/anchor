@@ -42,7 +42,7 @@ import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.MarkWithPosition;
 import org.anchoranalysis.mpp.mark.QuickOverlapCalculation;
 import org.anchoranalysis.spatial.box.BoundingBox;
-import org.anchoranalysis.spatial.point.Point3d;
+import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 /** Base-class for a conic that has a single radius (circle, sphere etc.) */
@@ -133,7 +133,7 @@ public abstract class MarkWithPositionAndSingleRadius extends MarkWithPosition
 
     // Where is a point in relation to the current object
     @Override
-    public final byte isPointInside(Point3d point) {
+    public final byte isPointInside(Point3i point) {
 
         double distance = getPosition().distanceSquared(point);
 
