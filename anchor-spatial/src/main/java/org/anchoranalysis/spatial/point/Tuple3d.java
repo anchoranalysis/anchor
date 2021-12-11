@@ -307,4 +307,33 @@ public abstract class Tuple3d implements Serializable {
     public void setZ(double z) {
         this.z = z;
     }
+
+    /**
+     * Computes the <a href="https://en.wikipedia.org/wiki/Dot_product">dot-product</a> of the tuple
+     * with another.
+     *
+     * @param other the other tuple to use in the dot product operation.
+     * @return the computed dot-product.
+     */
+    public final double dotProduct(Tuple3d other) {
+        return (x * other.x) + (y * other.y) + (z * other.z);
+    }
+
+    /**
+     * The magnitude of the tuple.
+     *
+     * @return the tuples's length.
+     */
+    public double length() {
+        double squared = (x * x) + (y * y) + (z * z);
+        return Math.sqrt(squared);
+    }
+
+    /** Normalizes the tuple by dividing each component's value by the overall length. */
+    public void normalize() {
+        double length = length();
+        this.x /= length;
+        this.y /= length;
+        this.z /= length;
+    }
 }

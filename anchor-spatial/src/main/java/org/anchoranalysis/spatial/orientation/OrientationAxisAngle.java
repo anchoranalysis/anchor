@@ -45,7 +45,10 @@ public class OrientationAxisAngle extends Orientation {
     /** */
     private static final long serialVersionUID = -2592680414423106545L;
 
-    /** <b>Axis</b> part of axis-angle orientation (should be normalized). */
+    /**
+     * <b>Axis</b> part of axis-angle orientation (should be normalized). Once this is passed here,
+     * it is consumed, and must not be changed elsewhere.
+     */
     private Vector3d axis;
 
     /** <b>Angle</b> part of axis-angle orientation (anti-clock in radians). */
@@ -57,12 +60,7 @@ public class OrientationAxisAngle extends Orientation {
     }
 
     @Override
-    public OrientationAxisAngle duplicate() {
-        return new OrientationAxisAngle(new Vector3d(axis), angle);
-    }
-
-    @Override
-    public RotationMatrix deriveRotationMatrix() {
+    protected RotationMatrix deriveRotationMatrix() {
 
         RotationMatrix rotationMatrix = new RotationMatrix(numberDimensions());
 

@@ -35,13 +35,13 @@ import org.anchoranalysis.mpp.mark.conic.Ellipse;
 public class MarkEllipseFactory extends MarkFactory {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private double shellRad = 0.1;
+    @BeanField @Getter @Setter private double shell = 0.1;
     // END BEAN PROPERTIES
 
     @Override
     public Mark create() {
         Ellipse mark = new Ellipse();
-        mark.setShellRad(shellRad);
+        mark.setShell(shell);
         return mark;
     }
 }

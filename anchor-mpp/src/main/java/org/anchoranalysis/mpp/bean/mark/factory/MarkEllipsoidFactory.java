@@ -35,13 +35,13 @@ import org.anchoranalysis.mpp.mark.conic.Ellipsoid;
 public class MarkEllipsoidFactory extends MarkFactory {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private double shellRad = 0.1;
+    @BeanField @Getter @Setter private double shell = 0.1;
     // END BEAN PROPERTIES
 
     @Override
     public Mark create() {
         Ellipsoid mark = new Ellipsoid();
-        mark.setShellRad(shellRad);
+        mark.setShell(shell);
         return mark;
     }
 }

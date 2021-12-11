@@ -70,17 +70,12 @@ public class Orientation3DEulerAngles extends Orientation {
     private final double rotationZ;
 
     @Override
-    public Orientation3DEulerAngles duplicate() {
-        return new Orientation3DEulerAngles(rotationX, rotationY, rotationZ);
-    }
-
-    @Override
     public String toString() {
         return String.format("%3.3f, %3.3f, %3.3f", rotationX, rotationY, rotationZ);
     }
 
     @Override
-    public RotationMatrix deriveRotationMatrix() {
+    protected RotationMatrix deriveRotationMatrix() {
 
         RotationMatrix rotationMatrix = new RotationMatrix(numberDimensions());
 

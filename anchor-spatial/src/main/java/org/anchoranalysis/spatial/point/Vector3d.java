@@ -69,35 +69,6 @@ public final class Vector3d extends Tuple3d {
     }
 
     /**
-     * The magnitude of the vector.
-     *
-     * @return the vector's length.
-     */
-    public double length() {
-        double squared = (x * x) + (y * y) + (z * z);
-        return Math.sqrt(squared);
-    }
-
-    /** Normalizes the vector by dividing each component's value by the overall length. */
-    public void normalize() {
-        double length = length();
-        this.x /= length;
-        this.y /= length;
-        this.z /= length;
-    }
-
-    /**
-     * Computes the <a href="https://en.wikipedia.org/wiki/Dot_product">dot-product</a> of the tuple
-     * with another.
-     *
-     * @param other the other tuple to use in the dot product operation.
-     * @return the computed dot-product.
-     */
-    public final double dotProduct(Tuple3d other) {
-        return (x * other.x) + (y * other.y) + (z * other.z);
-    }
-
-    /**
      * Computes the <a href="https://en.wikipedia.org/wiki/Cross_product">cross-product</a> of the
      * tuple with another.
      *

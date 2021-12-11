@@ -56,7 +56,7 @@ public class ObjectFromPointsFactory {
 
         BoundingBox box;
         try {
-            box = BoundingBoxFromPoints.fromCollection(points);
+            box = BoundingBoxFromPoints.fromStream(points.stream());
         } catch (OperationFailedException e) {
             throw new CreateException(e);
         }

@@ -35,6 +35,10 @@ import java.util.function.BiConsumer;
  *
  * <p>It presumes the existing entity has a neutral orientation along the x-axis.
  *
+ * <p>All implementations must be <b>immutable</b> classes, whose state cannot be changed.
+ *
+ * <p>As an exception, we have internal state to memoize calls to {@link #deriveRotationMatrix()}.
+ *
  * @author Owen Feehan
  */
 public abstract class Orientation implements Serializable {
@@ -42,12 +46,25 @@ public abstract class Orientation implements Serializable {
     /** */
     private static final long serialVersionUID = 1L;
 
+    /** Memoized rotation-matrix. */
+    private transient RotationMatrix rotationMatrix;
+
     /**
-     * Deep-copies the current instance.
+     * Derives a {@link RotationMatrix} that can be applied to rotate an entity
+     * <b>anti-clockwise</b> to the current orientation.
      *
-     * @return a deep copy.
+     * <p>It presumes the existing entity has a neutral orientation along the x-axis.
+     *
+     * <p>This computation is memoized, upon the first call to this method.
+     *
+     * @return the rotation-matrix.
      */
-    public abstract Orientation duplicate();
+    public RotationMatrix getRotationMatrix() {
+        if (rotationMatrix == null) {
+            rotationMatrix = deriveRotationMatrix();
+        }
+        return rotationMatrix;
+    }
 
     /**
      * Derives a {@link RotationMatrix} that can be applied to rotate an entity
@@ -57,7 +74,7 @@ public abstract class Orientation implements Serializable {
      *
      * @return the rotation-matrix.
      */
-    public abstract RotationMatrix deriveRotationMatrix();
+    protected abstract RotationMatrix deriveRotationMatrix();
 
     /**
      * The dimensionality of space the orientation is valid for.
@@ -84,7 +101,7 @@ public abstract class Orientation implements Serializable {
     public abstract Orientation negative();
 
     /**
-     * Consumers descriptive human-readable name-value pairs to describe the current orientation.
+     * Consumes descriptive human-readable name-value pairs to describe the current orientation.
      *
      * @param consumer called for each descriptive name-value pair that describes an aspect of the
      *     current orientation.

@@ -64,6 +64,6 @@ public interface AnnotationWithMarks extends Annotation {
      * @return newly created objects
      */
     default ObjectCollection convertToObjects(Dimensions dimensions) {
-        return marks().deriveObjects(dimensions, region()).withoutProperties();
+        return marks().deriveObjects(dimensions, region());
     }
 }

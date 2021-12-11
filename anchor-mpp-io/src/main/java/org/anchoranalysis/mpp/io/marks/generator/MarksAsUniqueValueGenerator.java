@@ -28,11 +28,11 @@ package org.anchoranalysis.mpp.io.marks.generator;
 
 import java.util.Optional;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
-import org.anchoranalysis.image.core.object.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.object.output.grayscale.ObjectsAsUniqueValueGenerator;
 import org.anchoranalysis.image.io.stack.output.StackWriteAttributes;
 import org.anchoranalysis.image.io.stack.output.generator.RasterGeneratorSelectFormat;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipWithFlags;
@@ -51,10 +51,9 @@ public class MarksAsUniqueValueGenerator extends RasterGeneratorSelectFormat<Mar
 
     @Override
     public Stack transform(MarkCollection element) throws OutputWriteFailedException {
-
-        ObjectCollectionWithProperties objects =
+        ObjectCollection objects =
                 element.deriveObjects(delegate.dimensions(), this.regionMembership);
-        return delegate.transform(objects.withoutProperties());
+        return delegate.transform(objects);
     }
 
     @Override

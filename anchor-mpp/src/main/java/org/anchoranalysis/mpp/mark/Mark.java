@@ -45,7 +45,6 @@ import org.anchoranalysis.overlay.identifier.Identifiable;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.Point3d;
 import org.anchoranalysis.spatial.point.Point3i;
-import org.anchoranalysis.spatial.point.PointConverter;
 import org.anchoranalysis.spatial.point.ReadableTuple3i;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 
@@ -70,7 +69,7 @@ public abstract class Mark implements Serializable, Identifiable {
     }
 
     // It is permissible to mutate the point during calculation
-    public abstract byte isPointInside(Point3d point);
+    public abstract byte isPointInside(Point3i point);
 
     public abstract Mark duplicate();
 
@@ -107,10 +106,6 @@ public abstract class Mark implements Serializable, Identifiable {
 
     public abstract BoundingBox boxAllRegions(Dimensions dimensions);
 
-    protected byte evalPointInside(Point3i point) {
-        return this.isPointInside(PointConverter.doubleFromInt(point));
-    }
-
     public boolean equalsID(Object obj) {
 
         if (obj instanceof Mark) {
@@ -140,7 +135,7 @@ public abstract class Mark implements Serializable, Identifiable {
      *     ObjectWithProperties}.
      * @return the created {@link ObjectMask} with associated properties.
      */
-    public ObjectWithProperties deriveObject(
+    public ObjectMask deriveObject(
             Dimensions dimensions,
             RegionMembershipWithFlags region,
             BinaryValuesByte binaryValues) {
@@ -148,7 +143,7 @@ public abstract class Mark implements Serializable, Identifiable {
         BoundingBox box = this.box(dimensions, region.getRegionID());
 
         // We make a new mask and populate it from out iterator
-        ObjectWithProperties object = new ObjectWithProperties(box);
+        ObjectMask object = new ObjectMask(box);
 
         byte maskOn = binaryValues.getOn();
 
@@ -164,55 +159,9 @@ public abstract class Mark implements Serializable, Identifiable {
             for (point.setY(box.cornerMin().y()); point.y() <= maxPos.y(); point.incrementY()) {
                 for (point.setX(box.cornerMin().x()); point.x() <= maxPos.x(); point.incrementX()) {
 
-                    byte membership = evalPointInside(point);
+                    byte membership = isPointInside(point);
 
                     if (region.isMemberFlag(membership)) {
-                        maskSlice.putRaw(count, maskOn);
-                    }
-                    count++;
-                }
-            }
-        }
-        return object;
-    }
-
-    // Calculates the mask of an object
-    public ObjectWithProperties maskScaledXY(
-            Dimensions dimensions,
-            RegionMembershipWithFlags regionMembership,
-            BinaryValuesByte binaryValuesOut,
-            double scaleFactor) {
-
-        BoundingBox box =
-                box(dimensions, regionMembership.getRegionID()).scale(new ScaleFactor(scaleFactor));
-
-        // We make a new mask and populate it from out iterator
-        ObjectWithProperties object = new ObjectWithProperties(box);
-
-        byte maskOn = binaryValuesOut.getOn();
-
-        ReadableTuple3i maxPos = box.calculateCornerMax();
-
-        Point3i point = new Point3i();
-        Point3d pointScaled = new Point3d();
-        for (point.setZ(box.cornerMin().z()); point.z() <= maxPos.z(); point.incrementZ()) {
-
-            int zLocal = point.z() - box.cornerMin().z();
-            UnsignedByteBuffer maskSlice = object.sliceBufferLocal(zLocal);
-
-            // Z coordinates are the same as we only scale in XY
-            pointScaled.setZ(point.z());
-
-            int count = 0;
-            for (point.setY(box.cornerMin().y()); point.y() <= maxPos.y(); point.incrementY()) {
-                for (point.setX(box.cornerMin().x()); point.x() <= maxPos.x(); point.incrementX()) {
-
-                    pointScaled.setX(point.x() / scaleFactor);
-                    pointScaled.setY(point.y() / scaleFactor);
-
-                    byte membership = isPointInside(pointScaled);
-
-                    if (regionMembership.isMemberFlag(membership)) {
                         maskSlice.putRaw(count, maskOn);
                     }
                     count++;

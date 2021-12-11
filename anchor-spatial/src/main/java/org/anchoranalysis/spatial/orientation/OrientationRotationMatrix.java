@@ -47,17 +47,14 @@ public class OrientationRotationMatrix extends Orientation {
     /** */
     private static final long serialVersionUID = -496736778234811706L;
 
+    /**
+     * The rotation-matrix. Once used here, it must be treated as immutable, and its state may not
+     * be changed elsewhere.
+     */
     @Getter private RotationMatrix rotationMatrix;
 
     @Override
-    public Orientation duplicate() {
-        OrientationRotationMatrix out = new OrientationRotationMatrix();
-        out.rotationMatrix = rotationMatrix.duplicate();
-        return out;
-    }
-
-    @Override
-    public RotationMatrix deriveRotationMatrix() {
+    protected RotationMatrix deriveRotationMatrix() {
         return rotationMatrix;
     }
 

@@ -31,16 +31,9 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.core.exception.CheckedUnsupportedOperationException;
-import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.Resolution;
-import org.anchoranalysis.image.core.object.properties.ObjectWithProperties;
-import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
-import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.overlay.OverlayProperties;
 import org.anchoranalysis.spatial.point.Point3d;
-import org.anchoranalysis.spatial.point.Point3i;
-import org.anchoranalysis.spatial.point.PointConverter;
-import org.anchoranalysis.spatial.point.ReadableTuple3i;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 public abstract class MarkWithPosition extends Mark implements Serializable {
@@ -95,40 +88,20 @@ public abstract class MarkWithPosition extends Mark implements Serializable {
     }
 
     @Override
-    public ObjectWithProperties deriveObject(
-            Dimensions dimensions,
-            RegionMembershipWithFlags regionMembership,
-            BinaryValuesByte binaryValuesOut) {
-
-        ObjectWithProperties object =
-                super.deriveObject(dimensions, regionMembership, binaryValuesOut);
-        object.setProperty(
-                "midpointInt", calculateRelativePoint(position, object.boundingBox().cornerMin()));
-        return object;
-    }
-
-    @Override
     public OverlayProperties generateProperties(Optional<Resolution> resolution) {
-        OverlayProperties op = super.generateProperties(resolution);
+        OverlayProperties properties = super.generateProperties(resolution);
 
         int dimensions = numberDimensions();
 
         if (dimensions >= 1) {
-            op.addDoubleAsString("Pos X", position.x());
+            properties.addDoubleAsString("Pos X", position.x());
         }
         if (dimensions >= 2) {
-            op.addDoubleAsString("Pos Y", position.y());
+            properties.addDoubleAsString("Pos Y", position.y());
         }
         if (dimensions >= 3) {
-            op.addDoubleAsString("Pos Z", position.z());
+            properties.addDoubleAsString("Pos Z", position.z());
         }
-        return op;
-    }
-
-    /** Calculates a relative-point from pointGlobal to pointBase */
-    private static Point3i calculateRelativePoint(Point3d pointGlobal, ReadableTuple3i pointBase) {
-        Point3i pointOut = PointConverter.intFromDoubleFloor(pointGlobal);
-        pointOut.subtract(pointBase);
-        return pointOut;
+        return properties;
     }
 }

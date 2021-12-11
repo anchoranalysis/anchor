@@ -91,7 +91,7 @@ public final class Point3i extends Tuple3i {
     }
 
     /**
-     * The square of the Euclidean distance between this point and another.
+     * The square of the Euclidean distance between this point and another {@link Point3i}.
      *
      * @param point the other point to a measure a distance to.
      * @return the distance squared.
@@ -100,6 +100,19 @@ public final class Point3i extends Tuple3i {
         int sx = this.x - point.x;
         int sy = this.y - point.y;
         int sz = this.z - point.z;
+        return (sx * sx) + (sy * sy) + (sz * sz);
+    }
+
+    /**
+     * The square of the Euclidean distance between this point and another {@link Point3d}.
+     *
+     * @param point the other point to a measure a distance to.
+     * @return the distance squared.
+     */
+    public double distanceSquared(Point3d point) {
+        double sx = -point.x + this.x;
+        double sy = -point.y + this.y;
+        double sz = -point.z + this.z;
         return (sx * sx) + (sy * sy) + (sz * sz);
     }
 

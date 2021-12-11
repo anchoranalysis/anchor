@@ -47,7 +47,7 @@ import org.anchoranalysis.spatial.scale.ScaleFactor;
 public class MarkToObjectConverter {
 
     /** The region of a {@link Mark} to extract from. */
-    private static final RegionMembershipWithFlags REGION_MEMBERSHIP =
+    private static final RegionMembershipWithFlags DEFAULT_REGION_MEMBERSHIP =
             RegionMapSingleton.instance()
                     .membershipWithFlagsForIndex(GlobalRegionIdentifiers.SUBMARK_INSIDE);
 
@@ -62,16 +62,11 @@ public class MarkToObjectConverter {
      */
     private final Dimensions dimensions;
 
-    /**
-     * Create for particular {@link Dimensions} without a scaling-factor.
-     *
-     * @param dimensions the dimensions of the final scaled-up scene, to ensure the {@link
-     *     ObjectMask} is contained within.
-     */
-    public MarkToObjectConverter(Dimensions dimensions) {
-        this.scaleFactor = Optional.empty();
-        this.dimensions = dimensions;
-    }
+    /** The region-membership to use when convering the mark. */
+    private final RegionMembershipWithFlags regionMembership;
+
+    /** The binary-values to use in the created {@link ObjectMask}'s buffers. */
+    private final BinaryValuesByte binaryValuesOut;
 
     /**
      * Create for particular {@link Dimensions} without a scaling-factor.
@@ -79,9 +74,23 @@ public class MarkToObjectConverter {
      * @param dimensions the dimensions of the final scaled-up scene, to ensure the {@link
      *     ObjectMask} is contained within.
      */
-    public MarkToObjectConverter(ScaleFactor scaleFactor, Dimensions dimensions) {
-        this.scaleFactor = Optional.of(scaleFactor);
-        this.dimensions = dimensions;
+    public MarkToObjectConverter(Dimensions dimensions) {
+        this(
+                Optional.empty(),
+                dimensions,
+                DEFAULT_REGION_MEMBERSHIP,
+                BinaryValuesByte.getDefault());
+    }
+
+    /**
+     * Create for particular {@link Dimensions} with a scaling-factor.
+     *
+     * @param scaleFactor the scaling-factor.
+     * @param dimensions the dimensions of the final scaled-up scene, to ensure the {@link
+     *     ObjectMask} is contained within.
+     */
+    public MarkToObjectConverter(Optional<ScaleFactor> scaleFactor, Dimensions dimensions) {
+        this(scaleFactor, dimensions, DEFAULT_REGION_MEMBERSHIP, BinaryValuesByte.getDefault());
     }
 
     /**
@@ -102,7 +111,6 @@ public class MarkToObjectConverter {
             throw new AnchorImpossibleSituationException();
         }
         // Then derive an {@link ObjectMask} representation.
-        return mark.deriveObject(dimensions, REGION_MEMBERSHIP, BinaryValuesByte.getDefault())
-                .asObjectMask();
+        return mark.deriveObject(dimensions, regionMembership, binaryValuesOut);
     }
 }

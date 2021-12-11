@@ -30,11 +30,10 @@ import cern.colt.matrix.DoubleFactory2D;
 import cern.colt.matrix.DoubleMatrix1D;
 import cern.colt.matrix.DoubleMatrix2D;
 import cern.jet.math.Functions;
-import com.google.common.base.Preconditions;
 import java.io.Serializable;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.spatial.point.Point3d;
+import org.anchoranalysis.spatial.point.Tuple3d;
 
 /**
  * A <a href="https://en.wikipedia.org/wiki/Rotation_matrix">matrix</a> that performs a rotation in
@@ -52,7 +51,12 @@ public class RotationMatrix implements Serializable {
      *
      * <p>This name is deliberately kept as {@code delegate} to avoid breaking serialized objects.
      */
-    private DoubleMatrix2D delegate;
+    private final DoubleMatrix2D delegate;
+
+    /**
+     * Used temporarily to store the value of a single-point, to avoid unnecessary heap allocation.
+     */
+    private final DoubleMatrix2D singlePoint;
 
     /**
      * Creates a rotation-matrix populated only with zeros.
@@ -61,6 +65,7 @@ public class RotationMatrix implements Serializable {
      */
     public RotationMatrix(int numberDimensions) {
         delegate = DoubleFactory2D.dense.make(numberDimensions, numberDimensions);
+        singlePoint = DoubleFactory2D.dense.make(numberDimensions, 1);
     }
 
     /**
@@ -70,41 +75,32 @@ public class RotationMatrix implements Serializable {
      */
     public RotationMatrix(DoubleMatrix2D matrix) {
         this.delegate = matrix;
+        singlePoint = DoubleFactory2D.dense.make(matrix.rows(), 1);
     }
 
     /**
      * Performs a rotation on a single point, encoded as a {@link Point3d}.
      *
+     * <p>The existing value of {@link Point3d} remains unmodified.
+     *
      * @param point the point to rotate.
      * @return a newly-created rotated point.
      */
-    public Point3d rotatedPoint(Point3d point) {
-
-        if (delegate.rows() == 3) {
-            double[] rotatedPoint = rotatePoint(point.toArray());
-            return new Point3d(rotatedPoint[0], rotatedPoint[1], rotatedPoint[2]);
-        } else if (delegate.rows() == 2) {
-            double[] rotatedPoint = rotatePoint(point.toArrayXY());
-            return new Point3d(rotatedPoint[0], rotatedPoint[1], 0);
-        } else {
-            throw new AnchorImpossibleSituationException();
-        }
+    public Point3d rotatePoint(Tuple3d point) {
+        Point3d copy = new Point3d(point);
+        rotatePointInplace(copy);
+        return copy;
     }
 
     /**
-     * Performs a rotation on a single point, encoded as an array.
+     * Performs a rotation on a single point, replacing the existing value of the point.
      *
-     * @param point the point encoded as an array, where the length should match the number of
-     *     dimensions of the rotation-matrix.
-     * @return a newly-created array encoding the rotated {@code point}.
+     * @param point the point to rotate, and to which the rotated point's value is assigned.
      */
-    public double[] rotatePoint(double[] point) {
-        Preconditions.checkArgument(point.length == delegate.rows());
-
+    public void rotatePointInplace(Point3d point) {
         DoubleMatrix2D matrixIn = matrixFromPoint(point);
-
-        DoubleMatrix2D matrixOut = delegate.zMult(matrixIn, null);
-        return pointFromMatrix(matrixOut);
+        delegate.zMult(matrixIn, singlePoint);
+        assignToPointFromMatrix(singlePoint, point);
     }
 
     /**
@@ -176,25 +172,24 @@ public class RotationMatrix implements Serializable {
     }
 
     /** Encodes a point into a matrix. */
-    private static DoubleMatrix2D matrixFromPoint(double[] point) {
-        int dimensions = point.length;
+    private DoubleMatrix2D matrixFromPoint(Point3d point) {
+        int dimensions = delegate.rows();
 
-        DoubleFactory2D factory = DoubleFactory2D.dense;
-        DoubleMatrix2D matrixIn = factory.make(dimensions, 1);
-
-        for (int i = 0; i < dimensions; i++) {
-            matrixIn.set(i, 0, point[i]);
+        DoubleMatrix2D matrixIn = DoubleFactory2D.dense.make(dimensions, 1);
+        matrixIn.set(0, 0, point.x());
+        matrixIn.set(1, 0, point.y());
+        if (dimensions == 3) {
+            matrixIn.set(2, 0, point.z());
         }
         return matrixIn;
     }
 
     /** Decodes a point from a matrix. */
-    private static double[] pointFromMatrix(DoubleMatrix2D matrixOut) {
-        int dimensions = matrixOut.rows();
-        double[] pointOut = new double[dimensions];
-        for (int i = 0; i < dimensions; i++) {
-            pointOut[i] = matrixOut.get(i, 0);
+    private void assignToPointFromMatrix(DoubleMatrix2D matrixOut, Point3d point) {
+        point.setX(matrixOut.get(0, 0));
+        point.setY(matrixOut.get(1, 0));
+        if (delegate.rows() == 3) {
+            point.setZ(matrixOut.get(2, 0));
         }
-        return pointOut;
     }
 }

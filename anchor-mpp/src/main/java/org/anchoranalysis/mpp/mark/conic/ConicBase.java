@@ -52,9 +52,9 @@ public abstract class ConicBase extends MarkWithPosition {
 
     public abstract void setMarksExplicit(Point3d pos, Orientation orientation, Point3d radii);
 
-    public abstract void setMarksExplicit(Point3d pos, Orientation orientation);
+    public abstract void setMarksExplicit(Point3d position, Orientation orientation);
 
-    public abstract void setMarksExplicit(Point3d pos);
+    public abstract void setMarksExplicit(Point3d position);
 
     public double[] radiiOrderedResolved(Optional<Resolution> resolution) {
         double[] radii = createRadiiArrayResolved(resolution);

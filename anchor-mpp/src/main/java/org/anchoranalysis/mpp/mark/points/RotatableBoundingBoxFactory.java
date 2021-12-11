@@ -3,6 +3,7 @@ package org.anchoranalysis.mpp.mark.points;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.functional.unchecked.IntToFloatFunction;
+import org.anchoranalysis.spatial.orientation.Orientation;
 import org.anchoranalysis.spatial.orientation.Orientation2D;
 import org.anchoranalysis.spatial.orientation.RotationMatrix;
 import org.anchoranalysis.spatial.point.Point2d;
@@ -83,9 +84,10 @@ public class RotatableBoundingBoxFactory {
             Point2f startUnrotated, Point2f endUnrotated, float angle, Point2i anchorPoint) {
 
         // Make it counter-clockwise by multiplying by -1
-        Orientation2D orientation = new Orientation2D(-1.0 * angle);
+        Orientation orientation = new Orientation2D(-1.0 * angle);
 
-        Point3d endRotated = rotatedPointWithOffset(endUnrotated, orientation, anchorPoint);
+        Point3d endRotated =
+                rotatedPointWithOffset(endUnrotated, orientation.getRotationMatrix(), anchorPoint);
 
         float width = startUnrotated.x() + endUnrotated.x();
         float height = startUnrotated.y() + endUnrotated.y();
@@ -96,17 +98,16 @@ public class RotatableBoundingBoxFactory {
     }
 
     private static Point3d rotatedPointWithOffset(
-            Point2f unrotated, Orientation2D orientation, Point2i anchorPoint) {
+            Point2f unrotated, RotationMatrix rotMatrix, Point2i anchorPoint) {
 
-        RotationMatrix rotMatrix = orientation.deriveRotationMatrix();
-
-        Point3d rotated = rotMatrix.rotatedPoint(convert3d(unrotated));
-        rotated.add(PointConverter.doubleFromInt(anchorPoint));
-        return rotated;
+        Point3d point = PointConverter.double3DFromFloat(unrotated);
+        rotMatrix.rotatePointInplace(point);
+        point.add(PointConverter.doubleFromInt(anchorPoint));
+        return point;
     }
 
     private static RotatableBoundingBox createMarkFor(
-            Point3d midpoint, float width, float height, Orientation2D orientation) {
+            Point3d midpoint, float width, float height, Orientation orientation) {
         RotatableBoundingBox mark = new RotatableBoundingBox();
         mark.setPosition(midpoint);
         mark.update(
@@ -132,9 +133,5 @@ public class RotatableBoundingBoxFactory {
 
     private static Point3d meanPoint(Point3d point1, Point3d point2) {
         return new Point3d((point1.x() + point2.x()) / 2, (point1.y() + point2.y()) / 2, 0);
-    }
-
-    public static Point3d convert3d(Point2f p) {
-        return new Point3d(p.x(), p.y(), 0);
     }
 }

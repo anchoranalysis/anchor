@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.mpp.overlay;
 
+import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
@@ -33,8 +34,10 @@ import org.anchoranalysis.image.core.object.properties.ObjectWithProperties;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.mpp.mark.Mark;
+import org.anchoranalysis.mpp.mark.MarkToObjectConverter;
 import org.anchoranalysis.overlay.object.scaled.ScaledOverlayCreator;
 import org.anchoranalysis.overlay.writer.DrawOverlay;
+import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 @AllArgsConstructor
 class FromMark implements ScaledOverlayCreator {
@@ -48,15 +51,19 @@ class FromMark implements ScaledOverlayCreator {
             double scaleFactor,
             Object originalObject,
             Dimensions dimensionsScaled,
-            BinaryValuesByte bv)
+            BinaryValuesByte binaryValues)
             throws CreateException {
 
         Mark originalMark = (Mark) originalObject;
 
-        ObjectWithProperties omScaled =
-                originalMark.maskScaledXY(dimensionsScaled, regionMembership, bv, scaleFactor);
+        MarkToObjectConverter converter =
+                new MarkToObjectConverter(
+                        Optional.of(new ScaleFactor(scaleFactor)),
+                        dimensionsScaled,
+                        regionMembership,
+                        binaryValues);
 
         // We keep the properties the same
-        return new ObjectWithProperties(omScaled.asObjectMask(), unscaled.getProperties());
+        return new ObjectWithProperties(converter.convert(originalMark), unscaled.getProperties());
     }
 }

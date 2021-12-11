@@ -30,9 +30,7 @@ import cern.colt.matrix.DoubleMatrix2D;
 import java.util.function.BiConsumer;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 /**
  * A simple angular orientation the 2D plane, relative to the x-axis.
@@ -48,7 +46,7 @@ public class Orientation2D extends Orientation {
     private static final long serialVersionUID = 1528190376087281572L;
 
     /** The angle of the rotation in the 2D plane anti-clockwise, in <b>radians</b>. */
-    @Getter @Setter private double angleRadians = 0;
+    private double angleRadians = 0;
 
     /**
      * The angle of the rotation in the 2D plane anti-clockwise, in <b>degrees</b>.
@@ -65,12 +63,7 @@ public class Orientation2D extends Orientation {
     }
 
     @Override
-    public Orientation2D duplicate() {
-        return new Orientation2D(angleRadians);
-    }
-
-    @Override
-    public RotationMatrix deriveRotationMatrix() {
+    protected RotationMatrix deriveRotationMatrix() {
 
         RotationMatrix rotationMatrix = new RotationMatrix(numberDimensions());
 
@@ -92,7 +85,7 @@ public class Orientation2D extends Orientation {
 
     @Override
     public void describeOrientation(BiConsumer<String, String> consumer) {
-        addAngleProperty(consumer, "orientationRadians", getAngleRadians());
+        addAngleProperty(consumer, "orientationRadians", angleRadians);
         addAngleProperty(consumer, "orientationDegrees", getAngleDegrees());
     }
 
