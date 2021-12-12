@@ -58,6 +58,10 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  * <p>The contained channels have a particular voxel-type, but this is deliberately not exposed as a
  * type-parameter to {@link Stack} as data-structure, relying on the user to remain aware i.e. it is
  * weakly-typed.
+ * 
+ * <p>A {@link Channel} (or any underlying voxel-buffer} should never exist more than once in
+ * a {@link Stack}. It is assumed that each {@link Channel} has independent buffers, and if
+ * this assumption is violated, iteration can not always proceed correctly.
  *
  * @author Owen Feehan
  */
