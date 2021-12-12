@@ -49,8 +49,8 @@ import org.anchoranalysis.io.output.outputter.Outputter;
  * <tr><th>Output Name</th><th>Default?</th><th>Description</th></tr>
  * </thead>
  * <tbody>
- * <tr><td>energyStack</td><td>no</td><td>Each channel of the energy-stack as a seperate image.</td></tr>
- * <tr><td>energyStackDictionary</td><td>no</td><td>XML serialization of the key-value parameters associated with the energy stack.</td></tr>
+ * <tr><td>{@value #OUTPUT_ENERGY_STACK_DIRECTORY}</td><td>no</td><td>Each channel of the energy-stack as a seperate image.</td></tr>
+ * <tr><td>{@value #OUTPUT_ENERGY_STACK_DICTIONARY}</td><td>no</td><td>XML serialization of the key-value parameters associated with the energy stack.</td></tr>
  * </tbody>
  * </table>
  *

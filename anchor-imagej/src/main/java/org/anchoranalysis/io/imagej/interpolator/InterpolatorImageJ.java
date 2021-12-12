@@ -47,7 +47,7 @@ public class InterpolatorImageJ extends Interpolator {
     public boolean canValueRangeChange() {
         return true;
     }
-    
+
     @Override
     public VoxelBuffer<UnsignedByteBuffer> interpolateByte(
             VoxelBuffer<UnsignedByteBuffer> voxelsSource,
@@ -82,9 +82,9 @@ public class InterpolatorImageJ extends Interpolator {
         ImageProcessor destination = resize(source, extentDestination);
         return ConvertToVoxelBuffer.asFloat(destination);
     }
-    
+
     private static ImageProcessor resize(ImageProcessor source, Extent extentDestination) {
         source.setInterpolate(true);
-        return source.resize(extentDestination.x(), extentDestination.y(), true);        
+        return source.resize(extentDestination.x(), extentDestination.y(), true);
     }
 }

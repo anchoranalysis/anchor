@@ -50,6 +50,7 @@ import org.anchoranalysis.mpp.io.input.MarksInitializationFactory;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.mpp.io.output.EnergyStackWriter;
 import org.anchoranalysis.mpp.mark.Mark;
+import org.anchoranalysis.mpp.segment.define.OutputterDirectories;
 
 /**
  * After using applying a {@link Define} on inputs, output produced entities (images, histograms,
@@ -63,10 +64,10 @@ import org.anchoranalysis.mpp.mark.Mark;
  * <tr><th>Output Name</th><th>Default?</th><th>Description</th></tr>
  * </thead>
  * <tbody>
- * <tr><td>stacks</td><td>yes</td><td>Image-stacks that are produced.</td></tr>
- * <tr><td>objects</td><td>yes</td><td>Collections of {@link ObjectMask}s that are produced as HDF5</td></tr>
- * <tr><td>histograms</td><td>yes</td><td>Histograms that are produced as CSV.</td></tr>
- * <tr><td>marks</td><td>yes</td><td>Collections of {@link Mark}s that are produced as serialized XML.</td></tr>
+ * <tr><td>{@value OutputterDirectories#STACKS}</td><td>yes</td><td>Image-stacks that are produced.</td></tr>
+ * <tr><td>{@value OutputterDirectories#OBJECTS}</td><td>yes</td><td>Collections of {@link ObjectMask}s that are produced as HDF5</td></tr>
+ * <tr><td>{@value OutputterDirectories#HISTOGRAMS}</td><td>yes</td><td>Histograms that are produced as CSV.</td></tr>
+ * <tr><td>{@value OutputterDirectories#MARKS}</td><td>yes</td><td>Collections of {@link Mark}s that are produced as serialized XML.</td></tr>
  * </tbody>
  * </table>
  */

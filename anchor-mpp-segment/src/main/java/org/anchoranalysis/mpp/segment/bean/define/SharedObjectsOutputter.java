@@ -51,12 +51,14 @@ import org.anchoranalysis.mpp.segment.define.OutputterDirectories;
  * <p>These outputs are:
  *
  * <ul>
- *   <li>{@link OutputterDirectories#STACKS}
- *   <li>{@link OutputterDirectories#MARKS}
- *   <li>{@link OutputterDirectories#HISTOGRAMS}
- *   <li>{@link OutputterDirectories#OBJECTS}
- *       <p>Second-level output rules determine whether particular elements in each directory are
- *       written or not.
+ *   <li>{@value OutputterDirectories#STACKS}
+ *   <li>{@value OutputterDirectories#MARKS}
+ *   <li>{@value OutputterDirectories#HISTOGRAMS}
+ *   <li>{@value OutputterDirectories#OBJECTS}
+ * </ul>
+ *
+ * <p>Second-level output rules determine whether particular elements in each directory are written
+ * or not.
  *
  * @author Owen Feehan
  */

@@ -76,8 +76,8 @@ import org.apache.commons.io.IOCase;
  * <tr><th>Output Name</th><th>Default?</th><th>Description</th></tr>
  * </thead>
  * <tbody>
- * <tr><td>experiment_log</td><td>yes</td><td>A textual log file for non-job-specific messages, one for the entire experiment.</td></tr>
- * <tr><td>job_log</td><td>yes</td><td>A textual log file for job-specific messages, one for each job.</td></tr>
+ * <tr><td>{@value #OUTPUT_EXPERIMENT_LOG}</td><td>yes</td><td>A textual log file for non-job-specific messages, one for the entire experiment.</td></tr>
+ * <tr><td>{@value #OUTPUT_JOB_LOG}</td><td>yes</td><td>A textual log file for job-specific messages, one for each job.</td></tr>
  * </tbody>
  * </table>
  *
