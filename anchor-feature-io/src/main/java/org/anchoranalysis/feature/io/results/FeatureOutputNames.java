@@ -44,8 +44,23 @@ public class FeatureOutputNames {
     /** If not otherwise specified, the output name for a non-aggregated CSV of the results. */
     public static final String OUTPUT_DEFAULT_NON_AGGREGATED = "features";
 
-    /** The XML with non-aggregated feature values. */
-    public static final String OUTPUT_DICTIONARY = "dictionary";
+    /**
+     * Suffix appended to {@link #csvFeaturesNonAggregated} to form an output-name for <i>aggregated
+     * features</i>
+     */
+    public static final String OUTPUT_SUFFIX_AGGREGATED = "_aggregated";
+
+    /**
+     * Suffix appended to {@link #csvFeaturesNonAggregated} to form an output-name for <i>grouped
+     * features</i>
+     */
+    public static final String OUTPUT_SUFFIX_GROUP = "_group";
+
+    /**
+     * Suffix appended to {@link #csvFeaturesNonAggregated} to form an output-name for <i>aggregated
+     * grouped features</i>
+     */
+    public static final String OUTPUT_SUFFIX_AGGREGATED_GROUP = "_aggregated_group";
 
     /** The CSV of non-aggregated feature-results. */
     @Getter private String csvFeaturesNonAggregated;
@@ -77,9 +92,9 @@ public class FeatureOutputNames {
      */
     public FeatureOutputNames(String prefix, boolean enableAggregated, boolean enableGroup) {
         csvFeaturesNonAggregated = prefix; // No suffix
-        csvFeaturesAggregated = joinIfEnabled(enableAggregated, prefix, "Aggregated");
-        csvFeaturesGroup = joinIfEnabled(enableGroup, prefix, "Group");
-        xmlAggregatedGroup = joinIfEnabled(enableGroup, prefix, "AggregatedGroup");
+        csvFeaturesAggregated = joinIfEnabled(enableAggregated, prefix, OUTPUT_SUFFIX_AGGREGATED);
+        csvFeaturesGroup = joinIfEnabled(enableGroup, prefix, OUTPUT_SUFFIX_GROUP);
+        xmlAggregatedGroup = joinIfEnabled(enableGroup, prefix, OUTPUT_SUFFIX_AGGREGATED_GROUP);
     }
 
     /**
@@ -91,10 +106,6 @@ public class FeatureOutputNames {
      */
     public boolean calculationResultsNeeded(MultiLevelOutputEnabled outputEnabled) {
         if (outputEnabled.isOutputEnabled(csvFeaturesNonAggregated)) {
-            return true;
-        }
-
-        if (outputEnabled.isOutputEnabled(OUTPUT_DICTIONARY)) {
             return true;
         }
 
