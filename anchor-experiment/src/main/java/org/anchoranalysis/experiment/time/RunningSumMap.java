@@ -23,13 +23,14 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.math.arithmetic;
+package org.anchoranalysis.experiment.time;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.stream.Collectors;
+import org.anchoranalysis.math.arithmetic.RunningSum;
 
 /**
  * A map of unique identifiers to {@link RunningSum} instances.
@@ -44,10 +45,10 @@ import java.util.stream.Collectors;
  * @param <T> unique identifier.
  * @author Owen Feehan
  */
-public class RunningSumMap<T> {
+class RunningSumMap<T> {
 
     /** The underlying map, that preserves insertion order. */
-    private Map<T, RunningSum> map = new LinkedHashMap<>();
+    private Map<T, RunningSumParented> map = new LinkedHashMap<>();
 
     /**
      * Whether the map contains the key {@code key}?
@@ -64,16 +65,19 @@ public class RunningSumMap<T> {
      *
      * <p>A new {@link RunningSum} is created if it does not already exist.
      *
-     * @param key index of the item
-     * @return the individual item
+     * @param key index of the item.
+     * @param numberParentOperations the number of parent operations, to be used when creating a new
+     *     {@link RunningSum}. Irrelevant if the operation already exists.
+     * @return the associated (either already existing or newly created) {@link RunningSum}.
      */
-    public RunningSum get(T key) {
-        return map.computeIfAbsent(key, value -> new RunningSum());
+    public RunningSum get(T key, int numberParentOperations) {
+        return map.computeIfAbsent(key, value -> new RunningSumParented(numberParentOperations))
+                .getRunningSum();
     }
 
     /** Resets all items to zero. */
     public void reset() {
-        map.forEach((key, value) -> value.reset());
+        map.forEach((key, value) -> value.getRunningSum().reset());
     }
 
     /**
@@ -83,7 +87,10 @@ public class RunningSumMap<T> {
      */
     public Map<T, Double> meanAndReset() {
         return map.entrySet().stream()
-                .collect(Collectors.toMap(Entry::getKey, entry -> entry.getValue().meanAndReset()));
+                .collect(
+                        Collectors.toMap(
+                                Entry::getKey,
+                                entry -> entry.getValue().getRunningSum().meanAndReset()));
     }
 
     /**
@@ -100,7 +107,7 @@ public class RunningSumMap<T> {
      *
      * @return the entries in the map.
      */
-    public Set<Entry<T, RunningSum>> entrySet() {
+    public Set<Entry<T, RunningSumParented>> entrySet() {
         return map.entrySet();
     }
 }

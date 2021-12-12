@@ -81,7 +81,7 @@ class TransferViaSpecificType<T> {
                         destinationSlice,
                         source.extent(),
                         destination.extent());
-        if (!transferredSlice.equals(destinationSlice)) {
+        if (transferredSlice != destinationSlice) {
             destination.replaceSlice(z, transferredSlice);
         }
     }

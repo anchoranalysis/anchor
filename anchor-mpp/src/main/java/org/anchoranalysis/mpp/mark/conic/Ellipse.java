@@ -155,9 +155,10 @@ public class Ellipse extends ConicBase implements Serializable {
             return FLAG_SUBMARK_NONE;
         }
 
-        // It is permissible to mutate the point during calculation
-        double x = point.x() - getPosition().x();
-        double y = point.y() - getPosition().y();
+        // We add 0.5 to use the center of the voxel as the permission.
+        // This gives the closest approximation to the true ellipse.
+        double x = point.x() - getPosition().x() + 0.5;
+        double y = point.y() - getPosition().y() + 0.5;
 
         // We exit early if it's inside the internal shell
         double sum = getEllipseSum(x, y, ellipsoidCalculator.getEllipsoidMatrix());

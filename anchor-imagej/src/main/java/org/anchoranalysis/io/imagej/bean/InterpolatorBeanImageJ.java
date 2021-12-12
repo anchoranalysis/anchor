@@ -1,8 +1,8 @@
 /*-
  * #%L
- * anchor-experiment
+ * anchor-plugin-image
  * %%
- * Copyright (C) 2010 - 2021 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,36 +23,22 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.experiment.time;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.time.RecordedExecutionTimes.RecordedOperation;
-import org.anchoranalysis.math.arithmetic.RunningSum;
+package org.anchoranalysis.io.imagej.bean;
+
+import org.anchoranalysis.image.bean.interpolator.InterpolatorBean;
+import org.anchoranalysis.image.voxel.interpolator.Interpolator;
+import org.anchoranalysis.io.imagej.interpolator.InterpolatorImageJ;
 
 /**
- * Helps create {@link RecordedOperation} from a {@link RunningSum}.
+ * Creates an {@link Interpolator} that uses ImageJ.
  *
  * @author Owen Feehan
  */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-class RecordedOperationHelper {
+public class InterpolatorBeanImageJ extends InterpolatorBean {
 
-    /**
-     * Creates the operation.
-     *
-     * @param operationIdentifier the identifier.
-     * @parma numberParentOperations the number of parent operations. Zero if there are no parents.
-     * @param runningSum the running sum.
-     * @return the operation.
-     */
-    public static RecordedOperation create(
-            String operationIdentifier, RunningSum runningSum, int numberParentOperations) {
-        return new RecordedOperation(
-                operationIdentifier,
-                numberParentOperations,
-                runningSum.mean(),
-                runningSum.getSum(),
-                (int) runningSum.getCount());
+    @Override
+    public Interpolator create() {
+        return new InterpolatorImageJ();
     }
 }

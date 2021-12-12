@@ -25,7 +25,6 @@
  */
 package org.anchoranalysis.core.time;
 
-import java.util.Optional;
 import org.anchoranalysis.core.functional.checked.CheckedRunnable;
 import org.anchoranalysis.core.functional.checked.CheckedSupplier;
 
@@ -46,22 +45,18 @@ public abstract class ExecutionTimeRecorder {
     /**
      * Records the execution-time of a particular operation.
      *
-     * @param operationIdentifier a string uniquely identifying this operation.
+     * @param operationIdentifier a string uniquely identifying the operation.
      * @param millis how long the operation took in milliseconds.
      */
     public abstract void recordExecutionTime(String operationIdentifier, long millis);
 
     /**
-     * Records the execution-time of a particular operation.
+     * Has a particular operation already been recorded?
      *
-     * @param operationIdentifierFirst a string uniquely identifying this operation, to be used if
-     *     it doesn't already exist.
-     * @param operationIdentiferSubsequent a string uniquely identifying this operation, to be used
-     *     if <code>operationIdentifierFirst</code> already exists.
-     * @param millis how long the operation took in milliseconds.
+     * @param operationIdentifier a string uniquely identifying the operation.
+     * @return true if the operation has already been recorded at least once, false otherwise.
      */
-    public abstract void recordExecutionTime(
-            String operationIdentifierFirst, String operationIdentiferSubsequent, long millis);
+    public abstract boolean isOperationAlreadyRecorded(String operationIdentifier);
 
     /**
      * Executes an {@code operation} while recording the execution-time - <b>with a return type</b>.
@@ -69,19 +64,19 @@ public abstract class ExecutionTimeRecorder {
      * <p>Operation times are always executed, even they throw an Exception or otherwise end in
      * failure.
      *
-     * @param writeOperationIdentifier an identifier for this type of write-operation, under which
+     * @param operationIdentifier an identifier for this type of write-operation, under which
      *     execution-times are aggregated.
      * @param operation the operation to execute
      * @param <E> type of an exception that {@code operation} may throw.
      * @throws E if {@code operation} throws this exception;
      */
     public <E extends Exception> void recordExecutionTime(
-            String writeOperationIdentifier, CheckedRunnable<E> operation) throws E {
-        long startTimestamp = System.currentTimeMillis();
+            String operationIdentifier, CheckedRunnable<E> operation) throws E {
+        long startTimestamp = measureTime(true, operationIdentifier);
         try {
             operation.run();
         } finally {
-            recordTimeDifferenceFrom(writeOperationIdentifier, startTimestamp);
+            recordTimeDifferenceFrom(operationIdentifier, startTimestamp);
         }
     }
 
@@ -101,7 +96,7 @@ public abstract class ExecutionTimeRecorder {
      */
     public <T, E extends Exception> T recordExecutionTime(
             String operationIdentifier, CheckedSupplier<T, E> operation) throws E {
-        long startTimestamp = System.currentTimeMillis();
+        long startTimestamp = measureTime(true, operationIdentifier);
         try {
             return operation.get();
         } finally {
@@ -110,37 +105,10 @@ public abstract class ExecutionTimeRecorder {
     }
 
     /**
-     * Records exactly how long an operation took but uses an alternative identifier if the entry
-     * does not already exist.
-     *
-     * @param operationIdentifier the unique name of the operation to record the time against
-     * @param alternativeIdentifierIfFirst an alternative unique to use if this is the first time
-     *     the execution-time is recorded.
-     * @param startTimestamp a system clock timestamp (in milliseconds since the epoch) for when the
-     *     operation <b>began</b>.
-     * @param endTimestamp a system clock timestamp (in milliseconds since the epoch) for when the
-     *     operation <b>ended</b>.
-     */
-    public void recordTimeDifferenceBetween(
-            String operationIdentifier,
-            Optional<String> alternativeIdentifierIfFirst,
-            long startTimestamp,
-            long endTimestamp) {
-        if (alternativeIdentifierIfFirst.isPresent()) {
-            recordExecutionTime(
-                    alternativeIdentifierIfFirst.get(),
-                    operationIdentifier,
-                    endTimestamp - startTimestamp);
-        } else {
-            recordTimeDifferenceBetween(operationIdentifier, startTimestamp, endTimestamp);
-        }
-    }
-
-    /**
      * Records the execution-time of a particular operation by subtracting the start-time from the
      * end time.
      *
-     * @param operationIdentifier a string uniquely identifying this operation
+     * @param operationIdentifier a string uniquely identifying the operation.
      * @param startTimestamp a system clock timestamp (in milliseconds since the epoch) for when the
      *     operation <b>began</b>.
      * @param endTimestamp a system clock timestamp (in milliseconds since the epoch) for when the
@@ -153,19 +121,29 @@ public abstract class ExecutionTimeRecorder {
     }
 
     /**
+     * Indicates {@code operationIdentifier} is being recorded, and returns the current clock
+     * timestamp.
+     *
+     * @param start true, if this time indicates the start of an operation. false, if it only
+     *     describes the end.
+     * @param operationIdentifiers all possible identifiers that may subsequently be used to record
+     *     an end-time for this operation.
+     * @return the a system clock timestamp (in milliseconds since the epoch).
+     */
+    public abstract long measureTime(boolean start, String... operationIdentifiers);
+
+    /**
      * Records the execution-time of a particular operation by subtracting the start-time from the
      * current clock.
      *
-     * @param operationIdentifier a string uniquely identifying this operation
+     * @param operationIdentifier a string uniquely identifying the operation, and which must have
+     *     been previously used in a call to {@link #measureTime} with {@code start==true}.
      * @param startTimestamp a system clock timestamp (in milliseconds since the epoch) for when the
      *     operation began.
-     * @return the current timestamp (millis from the epoch) used to measure the end of the
-     *     operation,
      */
-    private long recordTimeDifferenceFrom(String operationIdentifier, long startTimestamp) {
-        long currentTimestamp = System.currentTimeMillis();
+    private void recordTimeDifferenceFrom(String operationIdentifier, long startTimestamp) {
+        long currentTimestamp = measureTime(false, operationIdentifier);
         long executionTime = currentTimestamp - startTimestamp;
         recordExecutionTime(operationIdentifier, executionTime);
-        return currentTimestamp;
     }
 }

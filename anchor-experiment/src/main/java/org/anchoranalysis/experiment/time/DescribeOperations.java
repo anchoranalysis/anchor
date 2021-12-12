@@ -29,6 +29,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.time.RecordedExecutionTimes;
 import org.anchoranalysis.core.value.LanguageUtilities;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Describe the execution times in nicely formatted user strings.
@@ -39,7 +40,7 @@ import org.anchoranalysis.core.value.LanguageUtilities;
 class DescribeOperations {
 
     /** The number of characters the identifier should be padded to. */
-    private static final int WIDTH_IDENTIFIER = 35;
+    private static final int WIDTH_IDENTIFIER = 51;
 
     /** The number of characters the execution time should be padded to. */
     private static final int WIDTH_EXECUTION_TIME = 13;
@@ -67,8 +68,11 @@ class DescribeOperations {
      * @return a String describing the individual execution time, with a newline at the end.
      */
     public static String individual(RecordedExecutionTimes.RecordedOperation operation) {
+
+        String prefix = StringUtils.repeat("..", operation.getNumberParentOperations());
+
         String paddedIdentifier =
-                rightPadding(operation.getOperationIdentifier(), WIDTH_IDENTIFIER);
+                rightPadding(prefix + operation.getOperationIdentifier(), WIDTH_IDENTIFIER);
         String suffix =
                 String.format(
                         "across %d %s",

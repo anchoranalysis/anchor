@@ -39,10 +39,10 @@ import org.anchoranalysis.math.arithmetic.RunningSum;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class DescribeExecutionTimeStatistics {
 
-    private static final Divider DIVIDER = new Divider();
+    private static final Divider DIVIDER = new Divider(116);
 
     private static final String AVERAGE_TOTAL_LINE =
-            "\t\t\t\t\t\t\t\t\t\taverage       total      (ignoring any parallelism)";
+            "\t\t\t\t\t\t\t\t\t\t\t\t\t\taverage       total      (ignoring any parallelism)";
 
     /**
      * Describes how long operations took to complete en aggregate with related-statistics.
@@ -67,7 +67,7 @@ public class DescribeExecutionTimeStatistics {
         builder.append(System.lineSeparator());
         builder.append(
                 DescribeOperations.individual(
-                        RecordedOperationHelper.create("* Entire Job *", taskTotal)));
+                        RecordedOperationHelper.create("* Entire Job *", taskTotal, 0)));
         builder.append(System.lineSeparator());
         builder.append(DescribeOperations.allOperations(operations));
         builder.append(DIVIDER.withoutLabel());

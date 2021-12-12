@@ -46,6 +46,9 @@ public class RecordedExecutionTimes {
         /** An (unique) identifier for the operation. */
         @Getter private final String operationIdentifier;
 
+        /** The number of parent operations. Zero if there are no parents. */
+        @Getter private final int numberParentOperations;
+
         /** The mean execution time in <i>milliseconds</i> for the operation. */
         private final double meanExecutionTime;
 
