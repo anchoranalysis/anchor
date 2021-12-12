@@ -90,9 +90,7 @@ class StackScaler {
     /** Converts a single-channel into an RGB image. */
     private static Stack grayscaleToRGB(Channel channel) {
         try {
-            // We deliberately avoid duplicating the channels, as we know they will never be written
-            // to.
-            return new Stack(true, channel, channel, channel);
+            return new Stack(true, channel, channel.duplicate(), channel.duplicate());
         } catch (IncorrectImageSizeException | CreateException e) {
             throw new AnchorImpossibleSituationException();
         }
