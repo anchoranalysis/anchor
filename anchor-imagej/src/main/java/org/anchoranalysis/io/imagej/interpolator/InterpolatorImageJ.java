@@ -44,6 +44,11 @@ import org.anchoranalysis.spatial.box.Extent;
 public class InterpolatorImageJ extends Interpolator {
 
     @Override
+    public boolean canValueRangeChange() {
+        return true;
+    }
+    
+    @Override
     public VoxelBuffer<UnsignedByteBuffer> interpolateByte(
             VoxelBuffer<UnsignedByteBuffer> voxelsSource,
             VoxelBuffer<UnsignedByteBuffer> voxelsDestination,
@@ -51,9 +56,8 @@ public class InterpolatorImageJ extends Interpolator {
             Extent extentDestination) {
 
         ImageProcessor source = ConvertToImageProcessor.fromByte(voxelsSource, extentSource);
-        source.setInterpolate(true);
-        ImageProcessor out = source.resize(extentDestination.x(), extentDestination.y(), true);
-        return ConvertToVoxelBuffer.asByte(out);
+        ImageProcessor destination = resize(source, extentDestination);
+        return ConvertToVoxelBuffer.asByte(destination);
     }
 
     @Override
@@ -64,9 +68,8 @@ public class InterpolatorImageJ extends Interpolator {
             Extent extentDestination) {
 
         ImageProcessor source = ConvertToImageProcessor.fromShort(voxelsSource, extentSource);
-        source.setInterpolate(true);
-        ImageProcessor out = source.resize(extentDestination.x(), extentDestination.y(), true);
-        return ConvertToVoxelBuffer.asShort(out);
+        ImageProcessor destination = resize(source, extentDestination);
+        return ConvertToVoxelBuffer.asShort(destination);
     }
 
     @Override
@@ -76,13 +79,12 @@ public class InterpolatorImageJ extends Interpolator {
             Extent extentSource,
             Extent extentDestination) {
         ImageProcessor source = ConvertToImageProcessor.fromFloat(voxelsSource, extentSource);
-        source.setInterpolate(true);
-        ImageProcessor out = source.resize(extentDestination.x(), extentDestination.y(), true);
-        return ConvertToVoxelBuffer.asFloat(out);
+        ImageProcessor destination = resize(source, extentDestination);
+        return ConvertToVoxelBuffer.asFloat(destination);
     }
-
-    @Override
-    public boolean canValueRangeChange() {
-        return true;
+    
+    private static ImageProcessor resize(ImageProcessor source, Extent extentDestination) {
+        source.setInterpolate(true);
+        return source.resize(extentDestination.x(), extentDestination.y(), true);        
     }
 }
