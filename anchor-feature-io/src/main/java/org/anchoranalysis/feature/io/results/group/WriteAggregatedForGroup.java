@@ -40,7 +40,7 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calculate.bound.FeatureCalculatorMulti;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.input.FeatureInputResults;
-import org.anchoranalysis.feature.io.csv.FeatureCSVWriter;
+import org.anchoranalysis.feature.io.csv.results.LabelledResultsCSVWriter;
 import org.anchoranalysis.feature.io.name.MultiName;
 import org.anchoranalysis.feature.io.results.FeatureOutputMetadata;
 import org.anchoranalysis.feature.io.results.LabelledResultsVector;
@@ -55,14 +55,14 @@ import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.InputOutputContextSubdirectoryCache;
 
 /**
- * Writes the aggregated results for a single group as XML to the filesystem.
+ * Writes the aggregated results as XML to the filesystem.
  *
- * <p>The results are also added to a {@code csvWriterAggregate} if it is defined.
+ * <p>The results are also added to a {@code csvWriterAggregate}, if it is defined.
  *
  * @author Owen Feehan
  */
 @AllArgsConstructor
-class WriteXMLForGroup {
+class WriteAggregatedForGroup {
 
     private static final ManifestDescription MANIFEST_DESCRIPTION =
             new ManifestDescription("parametersXML", "aggregateObjects");
@@ -75,14 +75,14 @@ class WriteXMLForGroup {
      *
      * @param groupName a group-name, if it exists.
      * @param metadata metadata for writing results to the filesystem.
-     * @param csvWriter a CSV-writer, if it's enabled.
+     * @param aggegrateResults where aggregated-results are written to, if defined.
      * @param context a cached set of input-output contexts for directories for each group.
      * @throws OutputWriteFailedException if any writing fails
      */
     public void maybeWrite(
             Optional<MultiName> groupName,
             FeatureOutputMetadata metadata,
-            Optional<FeatureCSVWriter> csvWriter,
+            Optional<LabelledResultsCSVWriter> aggegrateResults,
             InputOutputContextSubdirectoryCache context)
             throws OutputWriteFailedException {
         OptionalUtilities.ifPresent(
@@ -91,8 +91,8 @@ class WriteXMLForGroup {
                         maybeWriteForOutput(
                                 outputName,
                                 groupName,
-                                metadata.featureNamesNonAggregate(),
-                                csvWriter,
+                                metadata.featureNamesNonAggregated(),
+                                aggegrateResults,
                                 context.get(groupName.map(MultiName::toString))));
     }
 
@@ -100,10 +100,10 @@ class WriteXMLForGroup {
             String outputName,
             Optional<MultiName> groupName,
             FeatureNameList featureNames,
-            Optional<FeatureCSVWriter> csvWriterAggregate,
+            Optional<LabelledResultsCSVWriter> aggregateResults,
             InputOutputContext contextGroup)
             throws OutputWriteFailedException {
-        if (csvWriterAggregate.isPresent() || groupName.isPresent()) {
+        if (aggregateResults.isPresent() || groupName.isPresent()) {
             ResultsVector aggregated = aggregateResults(featureNames, contextGroup.getLogger());
 
             // Write aggregate-feature-results to a parameters XML file
@@ -113,8 +113,8 @@ class WriteXMLForGroup {
             }
 
             // Write the aggregated-features into the csv file
-            csvWriterAggregate.ifPresent(
-                    writer -> writer.addRow(new LabelledResultsVector(groupName, aggregated)));
+            aggregateResults.ifPresent(
+                    writer -> writer.add(new LabelledResultsVector(groupName, aggregated)));
         }
     }
 
@@ -128,7 +128,7 @@ class WriteXMLForGroup {
             calculator = FeatureSession.with(featuresAggregate.features(), logger);
 
         } catch (InitializeException e1) {
-            logger.errorReporter().recordError(WriteXMLForGroup.class, e1);
+            logger.errorReporter().recordError(WriteAggregatedForGroup.class, e1);
             throw new OutputWriteFailedException("Cannot start feature-session", e1);
         }
 
@@ -166,7 +166,7 @@ class WriteXMLForGroup {
                 dictionary.writeToFile(fileOutPath.get());
             }
         } catch (IOException e) {
-            context.getLogger().errorReporter().recordError(WriteXMLForGroup.class, e);
+            context.getLogger().errorReporter().recordError(WriteAggregatedForGroup.class, e);
         }
     }
 }

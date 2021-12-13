@@ -23,20 +23,24 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.feature.io.results.calculation;
+package org.anchoranalysis.feature.io.csv.results;
 
+import java.util.Optional;
+import java.util.function.Consumer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.feature.io.results.FeatureOutputMetadata;
+import org.anchoranalysis.feature.io.csv.metadata.FeatureCSVMetadataForOutput;
+import org.anchoranalysis.feature.io.results.LabelledResultsCollector;
+import org.anchoranalysis.feature.io.results.LabelledResultsVector;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /**
- * Creates {@link FeatureCalculationResults}.
+ * Creates a new instance of {@link LabelledResultsCSVWriter}.
  *
  * @author Owen Feehan
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class FeatureCalculationResultsFactory {
+public class LabelledResultsCSVWriterFactory {
 
     /**
      * Creates with appropriate support classes for outputting.
@@ -44,21 +48,24 @@ public class FeatureCalculationResultsFactory {
      * @param outputMetadata metadata needed for determining output-names and CSV headers.
      * @param writerCreator when true, columns containing all {@link Double#NaN} values are removed
      *     before outputting.
+     * @param consumeAfterAdding After adding a {@link LabelledResultsVector}, this function is also
+     *     called, if it is defined.
      * @param removeNaNColumns when true, columns containing all {@link Double#NaN} values are
      *     removed before outputting.
-     * @return a newly created {@link FeatureCalculationResults}.
+     * @return a newly created {@link LabelledResultsCollector}.
      * @throws OutputWriteFailedException if a CSV for (non-aggregated) features fails to be
      *     created.
      */
-    public static FeatureCalculationResults create(
-            FeatureOutputMetadata outputMetadata,
-            FeatureCSVWriterCreator writerCreator,
+    public static LabelledResultsCSVWriter create(
+            FeatureCSVMetadataForOutput outputMetadata,
+            FeatureCSVWriterFactory writerCreator,
+            Optional<Consumer<LabelledResultsVector>> consumeAfterAdding,
             boolean removeNaNColumns)
             throws OutputWriteFailedException {
         if (removeNaNColumns) {
-            return new RemoveNaNColumns(outputMetadata, writerCreator);
+            return new RemoveNaNColumns(outputMetadata, writerCreator, consumeAfterAdding);
         } else {
-            return new WriteEager(outputMetadata, writerCreator);
+            return new WriteEager(outputMetadata, writerCreator, consumeAfterAdding);
         }
     }
 }

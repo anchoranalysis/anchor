@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.feature.bean.list;
 
+import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -50,6 +51,16 @@ public class Define<T extends FeatureInput> extends ReferencingFeatureListProvid
     /** The list that specifies features. */
     @BeanField @SkipInit @Getter @Setter private List<Feature<T>> list;
     // END BEAN PROPERTIES
+
+    /**
+     * Create from a single {@link Feature}.
+     *
+     * @param feature the feature.
+     */
+    public Define(Feature<T> feature) {
+        this.list = new ArrayList<>();
+        this.list.add(feature);
+    }
 
     @Override
     public FeatureList<T> get() {

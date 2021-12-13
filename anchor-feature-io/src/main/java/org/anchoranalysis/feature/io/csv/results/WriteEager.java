@@ -23,10 +23,12 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.feature.io.results.calculation;
+package org.anchoranalysis.feature.io.csv.results;
 
+import java.util.Optional;
+import java.util.function.Consumer;
 import org.anchoranalysis.feature.io.csv.FeatureCSVWriter;
-import org.anchoranalysis.feature.io.results.FeatureOutputMetadata;
+import org.anchoranalysis.feature.io.csv.metadata.FeatureCSVMetadataForOutput;
 import org.anchoranalysis.feature.io.results.LabelledResultsVector;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
@@ -35,30 +37,36 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
  *
  * @author Owen Feehan
  */
-class WriteEager extends WriteWithGroups {
+class WriteEager extends LabelledResultsCSVWriter {
 
-    private final FeatureOutputMetadata outputMetadata;
+    /** The writer to use for writing single results CSV. */
+    private Optional<FeatureCSVWriter> singleWriter = Optional.empty();
 
     /**
      * Creates with appropriate support classes for outputting.
      *
-     * @param outputMetadata metadata needed for determining output-names and CSV headers.
+     * @param outputMetadata metadata needed for writing the CSV file.
      * @param writerCreator creates a {@link FeatureCSVWriter} for writing the non-aggregated
      *     feature results.
-     * @throws OutputWriteFailedException if a CSV for (non-aggregated) features fails to be
-     *     created.
+     * @param consumeAfterAdding After adding a {@link LabelledResultsVector}, this function is also
+     *     called, if it is defined.
      */
-    public WriteEager(FeatureOutputMetadata outputMetadata, FeatureCSVWriterCreator writerCreator)
-            throws OutputWriteFailedException {
-        this.outputMetadata = outputMetadata;
+    protected WriteEager(
+            FeatureCSVMetadataForOutput outputMetadata,
+            FeatureCSVWriterFactory writerCreator,
+            Optional<Consumer<LabelledResultsVector>> consumeAfterAdding) {
+        super(outputMetadata, writerCreator, consumeAfterAdding);
+    }
 
-        // Where non-group results are outputted
-        singleWriter = writerCreator.create(outputMetadata.metadataNonAggregated());
+    @Override
+    public void start() throws OutputWriteFailedException {
+        singleWriter = createWriter(outputMetadata.metadata());
     }
 
     @Override
     public void add(LabelledResultsVector results) {
-        groupedResults.addResultsFor(results);
+
+        maybeConsumeResults(results);
 
         if (singleWriter.isPresent()) {
             singleWriter.get().addRow(results);
@@ -66,7 +74,7 @@ class WriteEager extends WriteWithGroups {
     }
 
     @Override
-    protected FeatureOutputMetadata outputMetadataForGroups() {
-        return outputMetadata;
+    public void end() {
+        singleWriter.ifPresent(FeatureCSVWriter::close);
     }
 }

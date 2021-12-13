@@ -38,8 +38,8 @@ import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListFactory;
 import org.anchoranalysis.feature.calculate.bound.FeatureCalculatorMulti;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.feature.io.csv.FeatureListCSVGeneratorVertical;
-import org.anchoranalysis.feature.io.csv.FeatureTableCSVGenerator;
+import org.anchoranalysis.feature.io.csv.table.FeatureTableCSVGenerator;
+import org.anchoranalysis.feature.io.csv.table.FeatureTableCSVGeneratorFactory;
 import org.anchoranalysis.feature.results.ResultsVectorList;
 import org.anchoranalysis.image.core.dimensions.SpatialUnits.UnitSuffix;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureListEvaluator;
@@ -81,7 +81,9 @@ class ObjectFeatureListCSVGenerator extends CSVGenerator<ObjectCollection> {
                             this::createFullFeatureList, sharedObjects);
             this.featureCalculator = tuple.getCalculator();
 
-            delegate = new FeatureListCSVGeneratorVertical(MANIFEST_FUNCTION, tuple.getNames());
+            delegate =
+                    FeatureTableCSVGeneratorFactory.create(
+                            MANIFEST_FUNCTION, tuple.getNames(), false);
         } catch (OperationFailedException e) {
             throw new CreateException(e);
         }

@@ -84,7 +84,7 @@ public class CSVWriter implements AutoCloseable {
      * @param outputName output-name
      * @param outputter output-manager
      * @return the csv-writer if it's allowed, or empty if it's not.
-     * @throws OutputWriteFailedException if outputting fails
+     * @throws OutputWriteFailedException if the CSV file cannot be created successfully.
      */
     public static Optional<CSVWriter> createFromOutputter(
             String outputName, OutputterChecked outputter) throws OutputWriteFailedException {

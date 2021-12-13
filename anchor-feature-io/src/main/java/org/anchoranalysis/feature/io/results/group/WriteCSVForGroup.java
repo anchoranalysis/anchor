@@ -27,7 +27,7 @@ package org.anchoranalysis.feature.io.results.group;
 
 import java.util.Optional;
 import lombok.AllArgsConstructor;
-import org.anchoranalysis.feature.io.csv.FeatureListCSVGeneratorHorizontal;
+import org.anchoranalysis.feature.io.csv.table.FeatureTableCSVGeneratorFactory;
 import org.anchoranalysis.feature.io.name.MultiName;
 import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.feature.results.ResultsVectorList;
@@ -62,8 +62,8 @@ class WriteCSVForGroup {
                 .write(
                         outputName,
                         () ->
-                                new FeatureListCSVGeneratorHorizontal(
-                                        MANIFEST_FUNCTION_FEATURES_GROUP, featureNames),
+                                FeatureTableCSVGeneratorFactory.create(
+                                        MANIFEST_FUNCTION_FEATURES_GROUP, featureNames, true),
                         () -> results);
     }
 }

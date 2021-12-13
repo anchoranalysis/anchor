@@ -68,7 +68,16 @@ public class FeatureList<T extends FeatureInput> extends AnchorBean<FeatureList<
     }
 
     /**
-     * Creates a list from a stream.
+     * Creates with a single {@link Feature}.
+     *
+     * @param feature the feature.
+     */
+    public FeatureList(Feature<T> feature) {
+        this(Stream.of(feature));
+    }
+
+    /**
+     * Creates from a stream of {@link Feature}s.
      *
      * @param stream the stream of features.
      */

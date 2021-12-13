@@ -28,7 +28,7 @@ package org.anchoranalysis.feature.io.results;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.Value;
-import org.anchoranalysis.feature.io.csv.RowLabels;
+import org.anchoranalysis.feature.io.csv.metadata.RowLabels;
 import org.anchoranalysis.feature.io.name.MultiName;
 import org.anchoranalysis.feature.results.ResultsVector;
 

@@ -23,4 +23,29 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.feature.io.results.calculation;
+package org.anchoranalysis.feature.io.csv.results;
+
+import java.util.Optional;
+import org.anchoranalysis.feature.io.csv.FeatureCSVWriter;
+import org.anchoranalysis.feature.io.csv.metadata.FeatureCSVMetadata;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+
+/**
+ * To facilitate creation of a {@link FeatureCSVWriter} from corresponding {@link
+ * FeatureCSVMetadata}.
+ *
+ * @author Owen Feehan
+ */
+@FunctionalInterface
+public interface FeatureCSVWriterFactory {
+
+    /**
+     * Maybe creates a {@link FeatureCSVWriter} corresponding to particular metadata.
+     *
+     * @param metadata the metadata.
+     * @return the writer, if created.
+     * @throws OutputWriteFailedException if the CSV file cannot be created successfully.
+     */
+    Optional<FeatureCSVWriter> create(FeatureCSVMetadata metadata)
+            throws OutputWriteFailedException;
+}

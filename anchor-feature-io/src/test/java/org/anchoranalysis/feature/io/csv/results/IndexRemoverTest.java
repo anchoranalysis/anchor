@@ -23,15 +23,12 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.feature.io.results.calculation;
+package org.anchoranalysis.feature.io.csv.results;
 
 import static org.junit.Assert.assertEquals;
 
 import java.util.Arrays;
 import java.util.List;
-import org.anchoranalysis.feature.io.results.FeatureOutputMetadata;
-import org.anchoranalysis.feature.io.results.FeatureOutputNames;
-import org.anchoranalysis.feature.io.results.LabelHeaders;
 import org.anchoranalysis.feature.io.results.LabelledResultsVector;
 import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.feature.results.ResultsVector;
@@ -64,12 +61,9 @@ class IndexRemoverTest {
     @Test
     void testMetadata() {
         FeatureNameList featureNames = new FeatureNameList(Arrays.asList("a", "b", "c", "d", "e"));
-        FeatureOutputMetadata metadata =
-                new FeatureOutputMetadata(
-                        new LabelHeaders(new String[] {}), featureNames, new FeatureOutputNames());
-        FeatureOutputMetadata result =
-                IndexRemover.removeHeadersAtIndices(metadata, Arrays.asList(1, 3));
-        assertEquals(Arrays.asList("a", "c", "e"), result.featureNamesNonAggregate().asList());
+        FeatureNameList featureNamesKept =
+                IndexRemover.removeHeadersAtIndices(featureNames, Arrays.asList(1, 3));
+        assertEquals(Arrays.asList("a", "c", "e"), featureNamesKept.asList());
     }
 
     /**

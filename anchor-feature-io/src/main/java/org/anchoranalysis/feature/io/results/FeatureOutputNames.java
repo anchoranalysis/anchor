@@ -28,11 +28,10 @@ package org.anchoranalysis.feature.io.results;
 import java.util.Optional;
 import lombok.Getter;
 import org.anchoranalysis.core.functional.OptionalFactory;
-import org.anchoranalysis.feature.io.results.calculation.FeatureCalculationResults;
 import org.anchoranalysis.io.output.enabled.multi.MultiLevelOutputEnabled;
 
 /**
- * The customizable output names used by {@link FeatureCalculationResults}, which all follow a
+ * The customizable output names used by {@link LabelledResultsCollector}, which all follow a
  * pattern based on a prefix.
  *
  * <p>The group and aggregated outputs can be toggled on and off.

@@ -106,7 +106,8 @@ public class JobStartStopLogger {
         if (disableLogMessages) {
             return;
         }
-        logEvent("start", job, "");
+        // We put some spaces instead of the time, to keep the tabulation similar
+        logEvent("start", job, "     ");
     }
 
     /**

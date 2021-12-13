@@ -27,12 +27,13 @@ package org.anchoranalysis.feature.io.results.group;
 
 import java.util.Optional;
 import org.anchoranalysis.feature.input.FeatureInputResults;
-import org.anchoranalysis.feature.io.csv.FeatureCSVMetadata;
-import org.anchoranalysis.feature.io.csv.FeatureCSVWriter;
+import org.anchoranalysis.feature.io.csv.metadata.FeatureCSVMetadataForOutput;
+import org.anchoranalysis.feature.io.csv.results.FeatureCSVWriterFactory;
+import org.anchoranalysis.feature.io.csv.results.LabelledResultsCSVWriter;
+import org.anchoranalysis.feature.io.csv.results.LabelledResultsCSVWriterFactory;
 import org.anchoranalysis.feature.io.results.FeatureOutputMetadata;
+import org.anchoranalysis.feature.io.results.LabelledResultsCollector;
 import org.anchoranalysis.feature.io.results.LabelledResultsVector;
-import org.anchoranalysis.feature.io.results.calculation.FeatureCSVWriterCreator;
-import org.anchoranalysis.feature.io.results.calculation.FeatureCalculationResults;
 import org.anchoranalysis.feature.store.NamedFeatureStore;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContextSubdirectoryCache;
@@ -74,7 +75,7 @@ public class GroupedResults {
      * @param featuresAggregate features for aggregating existing results-calculations, if enabled.
      * @param includeGroups whether to output "groups".
      * @param outputMetadata additional information needed for the outputs in {@link
-     *     FeatureCalculationResults}.
+     *     LabelledResultsCollector}.
      * @param createAggregatedCSVWriter creating a CSVWriter for the aggregated outputs.
      * @param contextGroups input-output context for the group outputs.
      * @throws OutputWriteFailedException if any Writing fails.
@@ -83,7 +84,7 @@ public class GroupedResults {
             Optional<NamedFeatureStore<FeatureInputResults>> featuresAggregate,
             boolean includeGroups,
             FeatureOutputMetadata outputMetadata,
-            FeatureCSVWriterCreator createAggregatedCSVWriter,
+            FeatureCSVWriterFactory createAggregatedCSVWriter,
             InputOutputContextSubdirectoryCache contextGroups)
             throws OutputWriteFailedException {
         if (includeGroups) {
@@ -110,7 +111,7 @@ public class GroupedResults {
                             WriteCSVForGroup groupedCSVWriter =
                                     new WriteCSVForGroup(
                                             outputName,
-                                            outputMetadata.featureNamesNonAggregate(),
+                                            outputMetadata.featureNamesNonAggregated(),
                                             contextGroups);
                             map.iterateResults(groupedCSVWriter::write);
                         });
@@ -119,7 +120,7 @@ public class GroupedResults {
     private void writeAggregated(
             NamedFeatureStore<FeatureInputResults> featuresAggregate,
             FeatureOutputMetadata outputMetadata,
-            FeatureCSVWriterCreator aggregatedCSVWriterCreator,
+            FeatureCSVWriterFactory aggregatedCSVWriterCreator,
             InputOutputContextSubdirectoryCache contextGroups)
             throws OutputWriteFailedException {
 
@@ -128,27 +129,36 @@ public class GroupedResults {
             return;
         }
 
-        Optional<FeatureCSVMetadata> csvMetadata =
-                outputMetadata.metadataAggregated(featuresAggregate);
+        Optional<FeatureCSVMetadataForOutput> metadataAggregated =
+                outputMetadata.csvAggregated(featuresAggregate.featureNames());
 
-        if (!csvMetadata.isPresent()) {
+        if (!metadataAggregated.isPresent()) {
             // NOTHING TO DO, exit early
             return;
         }
 
-        Optional<FeatureCSVWriter> csvWriter = aggregatedCSVWriterCreator.create(csvMetadata.get());
+        LabelledResultsCSVWriter aggregatedResults =
+                LabelledResultsCSVWriterFactory.create(
+                        metadataAggregated.get(),
+                        aggregatedCSVWriterCreator,
+                        Optional.empty(),
+                        true);
 
+        aggregatedResults.start();
         try {
             map.iterateResults(
                     (groupName, results) -> {
                         if (!results.isEmpty()) {
-                            new WriteXMLForGroup(featuresAggregate, results)
+                            new WriteAggregatedForGroup(featuresAggregate, results)
                                     .maybeWrite(
-                                            groupName, outputMetadata, csvWriter, contextGroups);
+                                            groupName,
+                                            outputMetadata,
+                                            Optional.of(aggregatedResults),
+                                            contextGroups);
                         }
                     });
         } finally {
-            csvWriter.ifPresent(FeatureCSVWriter::close);
+            aggregatedResults.end();
         }
     }
 }

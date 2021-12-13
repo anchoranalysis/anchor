@@ -115,6 +115,9 @@ public abstract class Feature<T extends FeatureInput>
     /**
      * A long human-readable description of the feature and some or all of its parameterization.
      *
+     * <p>This can be overwritten to create an alternative description for features. By default
+     * string returned by {@link #describeBean()} is used.
+     *
      * @return the description.
      */
     public String descriptionLong() {

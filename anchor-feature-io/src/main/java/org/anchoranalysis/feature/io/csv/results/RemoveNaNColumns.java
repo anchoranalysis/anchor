@@ -23,16 +23,20 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.feature.io.results.calculation;
+package org.anchoranalysis.feature.io.csv.results;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import org.anchoranalysis.feature.io.csv.FeatureCSVWriter;
-import org.anchoranalysis.feature.io.results.FeatureOutputMetadata;
+import org.anchoranalysis.feature.io.csv.metadata.FeatureCSVMetadata;
+import org.anchoranalysis.feature.io.csv.metadata.FeatureCSVMetadataForOutput;
 import org.anchoranalysis.feature.io.results.LabelledResultsVector;
+import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /**
@@ -58,16 +62,20 @@ class RemoveNaNColumns extends WriteLazy {
      * @param outputMetadata metadata needed for determining output-names and CSV headers.
      * @param writerCreator creates a {@link FeatureCSVWriter} for writing the non-aggregated
      *     feature results.
+     * @param consumeAfterAdding After adding a {@link LabelledResultsVector}, this function is also
+     *     called, if it is defined.
      * @throws OutputWriteFailedException if a CSV for (non-aggregated) features fails to be
      *     created.
      */
     public RemoveNaNColumns(
-            FeatureOutputMetadata outputMetadata, FeatureCSVWriterCreator writerCreator)
+            FeatureCSVMetadataForOutput outputMetadata,
+            FeatureCSVWriterFactory writerCreator,
+            Optional<Consumer<LabelledResultsVector>> consumeAfterAdding)
             throws OutputWriteFailedException {
-        super(outputMetadata, writerCreator);
+        super(outputMetadata, writerCreator, consumeAfterAdding);
 
         // Contains integers 0 to (numberFeatures-1) inclusive.
-        int numberFeatures = outputMetadata.featureNamesNonAggregate().size();
+        int numberFeatures = outputMetadata.featureNames().size();
         indicesToCheck = IntStream.range(0, numberFeatures).boxed().collect(Collectors.toList());
     }
 
@@ -86,12 +94,15 @@ class RemoveNaNColumns extends WriteLazy {
     }
 
     @Override
-    protected FeatureOutputMetadata processBeforeWriting(
-            FeatureOutputMetadata metadata, List<LabelledResultsVector> results) {
+    protected FeatureCSVMetadata processBeforeWriting(
+            FeatureCSVMetadataForOutput metadata, List<LabelledResultsVector> results) {
 
         // Remove any features represented by indicesToCheck
         IndexRemover.removeResultsAtIndices(results, indicesToCheck);
 
-        return IndexRemover.removeHeadersAtIndices(metadata, indicesToCheck);
+        FeatureNameList namesKept =
+                IndexRemover.removeHeadersAtIndices(metadata.featureNames(), indicesToCheck);
+        return new FeatureCSVMetadata(
+                metadata.outputName(), metadata.nonFeatureHeaders(), namesKept);
     }
 }

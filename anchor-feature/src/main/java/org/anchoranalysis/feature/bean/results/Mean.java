@@ -31,7 +31,7 @@ import cern.jet.stat.Descriptive;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 
 /**
- * The mean of the results from a particular feature.
+ * The <b>mean</b> of the results from a particular feature.
  *
  * @author Owen Feehan
  */

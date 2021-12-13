@@ -30,6 +30,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.core.value.TypedValue;
+import org.anchoranalysis.feature.io.csv.metadata.FeatureCSVMetadata;
+import org.anchoranalysis.feature.io.csv.metadata.RowLabels;
 import org.anchoranalysis.feature.io.results.LabelledResultsVector;
 import org.anchoranalysis.feature.results.ResultsVector;
 import org.anchoranalysis.io.generator.tabular.CSVWriter;
@@ -74,7 +76,7 @@ public class FeatureCSVWriter {
      * @param visuallyShortenedDecimals when true {@code double} values are printed to be as short
      *     as possible without losing precision.
      * @return a write, if it is allowed.
-     * @throws OutputWriteFailedException if outputting fails
+     * @throws OutputWriteFailedException if the CSV file cannot be created successfully.
      */
     public static Optional<FeatureCSVWriter> create(
             FeatureCSVMetadata metadata, Outputter outputter, boolean visuallyShortenedDecimals)

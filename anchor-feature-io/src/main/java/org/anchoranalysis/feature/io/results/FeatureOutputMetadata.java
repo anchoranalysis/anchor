@@ -29,16 +29,21 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
-import org.anchoranalysis.feature.input.FeatureInputResults;
-import org.anchoranalysis.feature.io.csv.FeatureCSVMetadata;
-import org.anchoranalysis.feature.io.results.calculation.FeatureCalculationResults;
+import org.anchoranalysis.feature.io.csv.metadata.FeatureCSVMetadataForOutput;
+import org.anchoranalysis.feature.io.csv.metadata.LabelHeaders;
 import org.anchoranalysis.feature.name.FeatureNameList;
-import org.anchoranalysis.feature.store.NamedFeatureStore;
 
 /**
- * Additional information needed for the outputs in {@link FeatureCalculationResults}.
+ * Information needed for the outputting differnt types of feature-table CSV files.
  *
  * <p>i.e. headers, the output-name etc.
+ *
+ * <p>Two types of CSV files may be written:
+ *
+ * <ul>
+ *   <li>non-aggregated (using the features directly on the underlying entities)
+ *   <li>aggregated (aggregating the results from the above)
+ * </ul>
  *
  * @author Owen Feehan
  */
@@ -49,47 +54,40 @@ public class FeatureOutputMetadata {
     /** Headers for the CSV File */
     @Getter private final LabelHeaders labelHeaders;
 
-    /** Names of each feature in the feature columns. */
-    @Getter private final FeatureNameList featureNamesNonAggregate;
+    /** Names of each feature in the feature columns, for non-aggregated features. */
+    @Getter private final FeatureNameList featureNamesNonAggregated;
 
-    /** Names for any outputs produced by {@link FeatureCalculationResults}. */
+    /** Names for any outputs produced by {@link LabelledResultsCollector}. */
     @Getter private final FeatureOutputNames outputNames;
 
     /**
-     * Derives metadata for the non-aggregated CSV output.
+     * Specific metadata for writing a <b>non-aggregated CSV file</b>.
      *
-     * @return newly created metadata
+     * @return a newly created {@link FeatureCSVMetadataForOutput}.
      */
-    public FeatureCSVMetadata metadataNonAggregated() {
-        return createMetadata(
-                outputNames.getCsvFeaturesNonAggregated(),
+    public FeatureCSVMetadataForOutput csvNonAggregated() {
+        return new FeatureCSVMetadataForOutput(
                 labelHeaders.allHeaders(),
-                featureNamesNonAggregate.duplicateShallow());
+                featureNamesNonAggregated,
+                outputNames.getCsvFeaturesNonAggregated());
     }
 
     /**
-     * Derives metadata for the aggregated CSV output, if enabled.
+     * Specific metadata for writing an <b>aggregated CSV file</b>.
      *
-     * @param featuresAggregate features to be used for aggregating existing features.
-     * @return newly created metadata, or {@code Optional.empty()} if its disabled.
+     * @param featureNamesAggregated the feature-names to use for the aggregated CSV file (which
+     *     usally differ from {@code featureNamesNonAggregate}.
+     * @return a newly created {@link FeatureCSVMetadataForOutput}.
      */
-    public Optional<FeatureCSVMetadata> metadataAggregated(
-            NamedFeatureStore<FeatureInputResults> featuresAggregate) {
+    public Optional<FeatureCSVMetadataForOutput> csvAggregated(
+            FeatureNameList featureNamesAggregated) {
         return outputNames
                 .getCsvFeaturesAggregated()
                 .map(
                         outputName ->
-                                createMetadata(
-                                        outputName,
+                                new FeatureCSVMetadataForOutput(
                                         labelHeaders.getGroupHeaders(),
-                                        featuresAggregate.featureNames()));
-    }
-
-    private static FeatureCSVMetadata createMetadata(
-            String outputName,
-            String[] nonFeatureHeaders,
-            FeatureNameList featureNamesNewlyCreated) {
-        featureNamesNewlyCreated.insertBeginning(nonFeatureHeaders);
-        return new FeatureCSVMetadata(outputName, featureNamesNewlyCreated.asList());
+                                        featureNamesAggregated,
+                                        outputName));
     }
 }
