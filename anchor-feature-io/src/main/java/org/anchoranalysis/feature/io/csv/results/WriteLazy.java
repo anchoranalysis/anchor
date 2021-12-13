@@ -23,50 +23,50 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.feature.io.results.calculation;
+package org.anchoranalysis.feature.io.csv.results;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
-import org.anchoranalysis.feature.input.FeatureInputResults;
-import org.anchoranalysis.feature.io.csv.FeatureCSVMetadata;
+import java.util.function.Consumer;
 import org.anchoranalysis.feature.io.csv.FeatureCSVWriter;
-import org.anchoranalysis.feature.io.results.FeatureOutputMetadata;
+import org.anchoranalysis.feature.io.csv.metadata.FeatureCSVMetadata;
+import org.anchoranalysis.feature.io.csv.metadata.FeatureCSVMetadataForOutput;
 import org.anchoranalysis.feature.io.results.LabelledResultsVector;
-import org.anchoranalysis.feature.store.NamedFeatureStore;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
-import org.anchoranalysis.io.output.outputter.InputOutputContext;
 
 /**
- * Delays writing feature-results until the final {{@link #flushAndClose}}.
+ * Delays writing feature-results until the call to {{@link #end}}.
  *
  * <p>Each result is stored in memory until then.
  *
  * @author Owen Feehan
  */
-abstract class WriteLazy extends WriteWithGroups {
+abstract class WriteLazy extends LabelledResultsCSVWriter {
 
-    private FeatureOutputMetadata outputMetadata;
-    private FeatureCSVWriterCreator writerCreator;
+    /** The results that have been saved to write upon completion. */
+    private List<LabelledResultsVector> storedResults;
 
     /**
      * Creates with appropriate support classes for outputting.
      *
-     * @param outputMetadata metadata needed for determining output-names and CSV headers.
+     * @param outputMetadata metadata needed for writing the CSV file.
      * @param writerCreator creates a {@link FeatureCSVWriter} for writing the non-aggregated
      *     feature results.
-     * @throws OutputWriteFailedException if a CSV for (non-aggregated) features fails to be
-     *     created.
+     * @param consumeAfterAdding After adding a {@link LabelledResultsVector}, this function is also
+     *     called, if it is defined.
      */
-    protected WriteLazy(FeatureOutputMetadata outputMetadata, FeatureCSVWriterCreator writerCreator)
-            throws OutputWriteFailedException {
-        this.outputMetadata = outputMetadata;
-        this.writerCreator = writerCreator;
+    protected WriteLazy(
+            FeatureCSVMetadataForOutput outputMetadata,
+            FeatureCSVWriterFactory writerCreator,
+            Optional<Consumer<LabelledResultsVector>> consumeAfterAdding) {
+        super(outputMetadata, writerCreator, consumeAfterAdding);
     }
 
-    /** The results that have been saved to write upon completion. */
-    private List<LabelledResultsVector> storedResults = new ArrayList<>();
+    @Override
+    public void start() {
+        storedResults = new ArrayList<>();
+    }
 
     @Override
     public void add(LabelledResultsVector results) {
@@ -74,43 +74,33 @@ abstract class WriteLazy extends WriteWithGroups {
     }
 
     @Override
-    public void flushAndClose(
-            Optional<NamedFeatureStore<FeatureInputResults>> featuresAggregate,
-            boolean includeGroups,
-            Function<InputOutputContext, FeatureCSVWriterCreator> csvWriterCreator,
-            InputOutputContext context)
-            throws OutputWriteFailedException {
+    public void end() throws OutputWriteFailedException {
 
-        outputMetadata = processBeforeWriting(outputMetadata, storedResults);
+        FeatureCSVMetadata csvMetadata = processBeforeWriting(outputMetadata, storedResults);
 
         // Where non-group results are outputted
-        singleWriter = writerCreator.create(outputMetadata.metadataNonAggregated());
+        Optional<FeatureCSVWriter> singleWriter = createWriter(csvMetadata);
 
         for (LabelledResultsVector results : storedResults) {
-            groupedResults.addResultsFor(results);
+
+            maybeConsumeResults(results);
 
             if (singleWriter.isPresent()) {
                 singleWriter.get().addRow(results); // NOSONAR
             }
         }
+        singleWriter.ifPresent(FeatureCSVWriter::close);
 
         storedResults.clear();
-
-        super.flushAndClose(featuresAggregate, includeGroups, csvWriterCreator, context);
-    }
-
-    @Override
-    protected FeatureOutputMetadata outputMetadataForGroups() {
-        return outputMetadata;
     }
 
     /**
      * Optionally changes {#code results} and derives a changed {@link FeatureCSVMetadata}.
      *
-     * @param metadata the metadata for non-aggregated features, before any changes.
+     * @param metadata the metadata for writing the CSV file, before any changes.
      * @param results the results of non-aggregated features, which may be changed inplace.
      * @return the metadata for non-aggregated features, after any changes.
      */
-    protected abstract FeatureOutputMetadata processBeforeWriting(
-            FeatureOutputMetadata metadata, List<LabelledResultsVector> results);
+    protected abstract FeatureCSVMetadata processBeforeWriting(
+            FeatureCSVMetadataForOutput metadata, List<LabelledResultsVector> results);
 }

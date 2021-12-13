@@ -90,9 +90,9 @@ public class InputOutputExperiment<T extends InputFromManager, S> extends Output
 
     private static final String EXECUTION_TIME_COLLECTING_INPUTS = "Collecting inputs";
 
-    private static final String OUTPUT_EXPERIMENT_LOG = "experiment_log";
+    private static final String OUTPUT_EXPERIMENT_LOG = "logExperiment";
 
-    private static final String OUTPUT_JOB_LOG = "job_log";
+    private static final String OUTPUT_JOB_LOG = "logJob";
 
     private static final Divider DIVIDER = new Divider();
 

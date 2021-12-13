@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.feature.io.csv;
+package org.anchoranalysis.feature.io.csv.table;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,23 +36,22 @@ import org.anchoranalysis.io.generator.tabular.CSVWriter;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /**
- * CSV file where each feature is a column (spanning horizontally).
+ * CSV file where an entity's various feature result values span across a <b>vertical</b> column.
+ *
+ * <p>The CSV file is populated with the <i>results</i> of calculations corresponding to these
+ * features.
  *
  * @author Owen Feehan
  */
-public class FeatureListCSVGeneratorHorizontal extends FeatureTableCSVGenerator<ResultsVectorList> {
+class VerticalValues extends FeatureTableCSVGenerator<ResultsVectorList> {
 
     /**
-     * Creates without setting any <i>results</i> (i.e. row-data).
-     *
-     * <p>The CSV file is populated with the <i>results</i> of calculations corresponding to these
-     * features.
+     * Creates without setting any <i>results</i> (i.e. column-data).
      *
      * @param manifestFunction identifier of function for the manifest file.
      * @param featureNames names-of-features that will appear in results.
      */
-    public FeatureListCSVGeneratorHorizontal(
-            String manifestFunction, FeatureNameList featureNames) {
+    public VerticalValues(String manifestFunction, FeatureNameList featureNames) {
         super(manifestFunction, featureNames.asList());
     }
 
@@ -61,14 +60,45 @@ public class FeatureListCSVGeneratorHorizontal extends FeatureTableCSVGenerator<
             CSVWriter writer, ResultsVectorList allFeatureResults, List<String> headerNames)
             throws OutputWriteFailedException {
 
-        // We add a header line
-        writer.writeHeaders(headerNames);
+        int size = headerNames.size();
+
+        for (int featureIndex = 0; featureIndex < size; featureIndex++) {
+            String featureName = headerNames.get(featureIndex);
+
+            writer.writeRow(generateRow(featureName, allFeatureResults, featureIndex, size));
+        }
+    }
+
+    private static List<TypedValue> generateRow(
+            String featureName, ResultsVectorList allFeatureResults, int featureIndex, int size)
+            throws OutputWriteFailedException {
+
+        List<TypedValue> csvRow = new ArrayList<>();
+
+        // The Name
+        csvRow.add(new TypedValue(featureName));
 
         for (ResultsVector results : allFeatureResults) {
 
-            List<TypedValue> csvRow = new ArrayList<>();
-            results.addTypedValuesTo(csvRow, FeatureCSVWriter.NUMBER_DECIMAL_PLACES);
-            writer.writeRow(csvRow);
+            if (results.size() != size) {
+                throw new OutputWriteFailedException(
+                        String.format(
+                                "ResultsVector has size (%d) != featureNames vector (%d)",
+                                results.size(), size));
+            }
+
+            csvRow.add(replaceNaN(results.get(featureIndex)));
+        }
+
+        return csvRow;
+    }
+
+    /** Replaces NaN with error */
+    private static TypedValue replaceNaN(double val) {
+        if (Double.isNaN(val)) {
+            return new TypedValue("Error");
+        } else {
+            return new TypedValue(val, 10);
         }
     }
 }

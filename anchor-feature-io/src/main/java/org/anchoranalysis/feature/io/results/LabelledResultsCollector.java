@@ -23,12 +23,12 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.feature.io.results.calculation;
+package org.anchoranalysis.feature.io.results;
 
 import java.util.Optional;
 import java.util.function.Function;
 import org.anchoranalysis.feature.input.FeatureInputResults;
-import org.anchoranalysis.feature.io.results.LabelledResultsVector;
+import org.anchoranalysis.feature.io.csv.results.FeatureCSVWriterFactory;
 import org.anchoranalysis.feature.store.NamedFeatureStore;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
@@ -38,7 +38,7 @@ import org.anchoranalysis.io.output.outputter.InputOutputContext;
  *
  * @author Owen Feehan
  */
-public interface FeatureCalculationResults {
+public interface LabelledResultsCollector {
 
     /**
      * Adds a results-element to be written.
@@ -60,13 +60,16 @@ public interface FeatureCalculationResults {
      * @param includeGroups iff true a group-column is included in the CSV file and the group
      *     exports occur, otherwise not.
      * @param csvWriterCreator creates a CSV writer for a particular IO-context.
+     * @param outputMetadata metadata for writing features to the file-system with CSV and other
+     *     formats.
      * @param context input-output context.
      * @throws OutputWriteFailedException if writing fails.
      */
     void flushAndClose(
             Optional<NamedFeatureStore<FeatureInputResults>> featuresAggregate,
             boolean includeGroups,
-            Function<InputOutputContext, FeatureCSVWriterCreator> csvWriterCreator,
+            Function<InputOutputContext, FeatureCSVWriterFactory> csvWriterCreator,
+            FeatureOutputMetadata outputMetadata,
             InputOutputContext context)
             throws OutputWriteFailedException;
 }

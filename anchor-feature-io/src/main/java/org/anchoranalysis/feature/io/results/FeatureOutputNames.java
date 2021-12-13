@@ -28,11 +28,10 @@ package org.anchoranalysis.feature.io.results;
 import java.util.Optional;
 import lombok.Getter;
 import org.anchoranalysis.core.functional.OptionalFactory;
-import org.anchoranalysis.feature.io.results.calculation.FeatureCalculationResults;
 import org.anchoranalysis.io.output.enabled.multi.MultiLevelOutputEnabled;
 
 /**
- * The customizable output names used by {@link FeatureCalculationResults}, which all follow a
+ * The customizable output names used by {@link LabelledResultsCollector}, which all follow a
  * pattern based on a prefix.
  *
  * <p>The group and aggregated outputs can be toggled on and off.
@@ -48,19 +47,19 @@ public class FeatureOutputNames {
      * Suffix appended to {@link #csvFeaturesNonAggregated} to form an output-name for <i>aggregated
      * features</i>
      */
-    public static final String OUTPUT_SUFFIX_AGGREGATED = "_aggregated";
+    public static final String OUTPUT_SUFFIX_AGGREGATED = "Aggregated";
 
     /**
      * Suffix appended to {@link #csvFeaturesNonAggregated} to form an output-name for <i>grouped
      * features</i>
      */
-    public static final String OUTPUT_SUFFIX_GROUP = "_group";
+    public static final String OUTPUT_SUFFIX_GROUP = "Group";
 
     /**
      * Suffix appended to {@link #csvFeaturesNonAggregated} to form an output-name for <i>aggregated
      * grouped features</i>
      */
-    public static final String OUTPUT_SUFFIX_AGGREGATED_GROUP = "_aggregated_group";
+    public static final String OUTPUT_SUFFIX_AGGREGATED_GROUP = "AggregatedGroup";
 
     /** The CSV of non-aggregated feature-results. */
     @Getter private String csvFeaturesNonAggregated;

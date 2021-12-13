@@ -41,7 +41,7 @@ class TextFileLogHelper {
             OutputterChecked outputter, String outputName) {
         return TextFileOutputter.create(
                 "txt",
-                Optional.of(new ManifestDescription("textlog", "messageLog")),
+                Optional.of(new ManifestDescription("textLog", "messageLog")),
                 outputter,
                 outputName);
     }

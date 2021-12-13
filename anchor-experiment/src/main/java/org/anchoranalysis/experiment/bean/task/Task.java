@@ -87,7 +87,7 @@ import org.apache.commons.lang.time.StopWatch;
  */
 public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Task<T, S>> {
 
-    public static final String OUTPUT_MANIFEST = "job_manifest";
+    public static final String OUTPUT_MANIFEST = "jobManifest";
 
     /** Is the execution-time of the task per-input expected to be very quick to execute? */
     public abstract boolean hasVeryQuickPerInputExecution();

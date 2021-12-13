@@ -23,5 +23,5 @@
  * THE SOFTWARE.
  * #L%
  */
-/** Writing feature calculation-results in CSV format. */
+/** Metadata for writing feature calculation-results in CSV format. */
 package org.anchoranalysis.feature.io.csv;

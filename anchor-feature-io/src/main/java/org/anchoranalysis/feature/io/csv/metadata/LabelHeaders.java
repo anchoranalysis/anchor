@@ -23,26 +23,49 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.feature.io.csv;
 
-import java.util.List;
+package org.anchoranalysis.feature.io.csv.metadata;
+
 import lombok.AllArgsConstructor;
-import lombok.Value;
+import lombok.Getter;
+import org.apache.commons.lang3.ArrayUtils;
 
 /**
- * What's needed to output a CSV other than the actual data items.
- *
- * <p>i.e. headers, the output-name etc.
+ * Headers in a CSV file for the non-results (i.e. labels) part of a feature-row
  *
  * @author Owen Feehan
  */
-@Value
 @AllArgsConstructor
-public class FeatureCSVMetadata {
+public class LabelHeaders {
 
-    /** The output name for the features CSV. */
-    private final String outputName;
+    /**
+     * Headers describing the non-feature columns outputted in the CSV related to identifying a row
+     * (but not its group)
+     */
+    private String[] nonGroupHeaders;
 
-    /** Headers for the CSV file */
-    private final List<String> headers;
+    /**
+     * Headers describing the non-feature columns outputted in the CSV related to identifying the
+     * group of a row
+     */
+    @Getter private String[] groupHeaders;
+
+    /**
+     * The non-group and group headers combined (in this order respectively)
+     *
+     * @return the combined headers in a newly created array
+     */
+    public String[] allHeaders() {
+        return ArrayUtils.addAll(nonGroupHeaders, groupHeaders);
+    }
+
+    /**
+     * Creates with only non-group headers
+     *
+     * @param nonGroupHeaders headers describing the non-feature columns outputted in the CSV
+     *     related to identifying a row
+     */
+    public LabelHeaders(String[] nonGroupHeaders) {
+        this(nonGroupHeaders, new String[] {});
+    }
 }

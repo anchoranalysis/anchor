@@ -23,14 +23,13 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.feature.io.results.calculation;
+package org.anchoranalysis.feature.io.csv.results;
 
 import java.util.Iterator;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.feature.io.csv.FeatureCSVMetadata;
-import org.anchoranalysis.feature.io.results.FeatureOutputMetadata;
+import org.anchoranalysis.feature.io.csv.metadata.FeatureCSVMetadata;
 import org.anchoranalysis.feature.io.results.LabelledResultsVector;
 import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.feature.results.ResultsVector;
@@ -63,19 +62,20 @@ class IndexRemover {
     }
 
     /**
-     * Create a duplicated {@link FeatureCSVMetadata} but with headers at specific indices removed.
+     * Create a {@link FeatureCSVMetadata} but with headers at specific indices removed.
      *
-     * @param metadata the metadata to copy from.
+     * @param featureNames the feature-names from which certain names are removed (those at {@code
+     *     indicesToRemove})
      * @param indicesToRemove the indices of header elements to remove. These <b>must be in
      *     ascending order</b>.
      * @return the metadata newly-created (if headers removed) or reused (if no headers removed).
      */
-    public static FeatureOutputMetadata removeHeadersAtIndices(
-            FeatureOutputMetadata metadata, List<Integer> indicesToRemove) {
+    public static FeatureNameList removeHeadersAtIndices(
+            FeatureNameList featureNames, List<Integer> indicesToRemove) {
 
         if (indicesToRemove.isEmpty()) {
             // Exit early as there's nothing to do
-            return metadata;
+            return featureNames;
         }
 
         FeatureNameList namesKept = new FeatureNameList();
@@ -83,18 +83,17 @@ class IndexRemover {
         Iterator<Integer> iteratorOmitIndices = indicesToRemove.iterator();
         int omitNext = nextIndexToOmit(iteratorOmitIndices);
 
-        for (int i = 0; i < metadata.featureNamesNonAggregate().size(); i++) {
+        for (int i = 0; i < featureNames.size(); i++) {
             // The indices are guaranteed to be in ascending order so we check if we match the next
             // index
             if (i == omitNext) {
                 omitNext = nextIndexToOmit(iteratorOmitIndices);
             } else {
-                namesKept.add(metadata.featureNamesNonAggregate().get(i));
+                namesKept.add(featureNames.get(i));
             }
         }
 
-        return new FeatureOutputMetadata(
-                metadata.labelHeaders(), namesKept, metadata.outputNames());
+        return namesKept;
     }
 
     /**

@@ -27,8 +27,8 @@ package org.anchoranalysis.core.exception;
  */
 
 /**
- * This is an exceotion that should never be thrown, but can be used for type-safety where an
- * exception is needed
+ * This is an exception that should never be thrown, but can be used for type-safety where an
+ * exception is needed.
  *
  * @author Owen Feehan
  */

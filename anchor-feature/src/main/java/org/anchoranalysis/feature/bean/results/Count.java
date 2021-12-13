@@ -30,7 +30,7 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInputResults;
 
 /**
- * The number of the results from a particular feature.
+ * The <b>sum</b> of the results from a particular feature.
  *
  * @author Owen Feehan
  */

@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.feature.io.csv;
+package org.anchoranalysis.feature.io.csv.table;
 
 import java.nio.file.Path;
 import java.util.List;

@@ -30,7 +30,7 @@ import cern.colt.list.DoubleArrayList;
 import cern.jet.stat.Descriptive;
 
 /**
- * The sum of the results from a particular feature.
+ * The <b>sum</b> of the results from a particular feature.
  *
  * @author Owen Feehan
  */

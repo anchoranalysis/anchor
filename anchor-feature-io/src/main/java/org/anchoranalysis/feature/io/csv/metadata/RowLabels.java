@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.feature.io.csv;
+package org.anchoranalysis.feature.io.csv.metadata;
 
 import java.util.Arrays;
 import java.util.List;

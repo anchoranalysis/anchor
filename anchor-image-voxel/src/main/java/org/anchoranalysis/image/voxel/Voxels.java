@@ -62,7 +62,7 @@ import org.anchoranalysis.spatial.point.Point3i;
 public abstract class Voxels<T> {
 
     /** The maximum number of rows/columns/slices to show in {@link #toString}. */
-    private static final Extent MAX_IN_TO_STRING = new Extent(100, 100, 5);
+    public static final Extent MAX_IN_TO_STRING = new Extent(100, 100, 5);
 
     /**
      * An index mapping slice of voxels (in the z dimension) to a particular buffer with the
@@ -178,7 +178,7 @@ public abstract class Voxels<T> {
     }
 
     /***
-     * Print a description and the the first {link #MAX_NUMBER_ROWS_COLUMNS_IN_TO_STRING} rows and columns as values.
+     * Print a description and the the first {@link #MAX_IN_TO_STRING} (if they exist) rows and columns as values.
      */
     @Override
     public String toString() {

@@ -33,7 +33,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 
 /**
- * The quantile of the results from a particular feature.
+ * A <b>quantile</b> of the results from a particular feature.
  *
  * @author Owen Feehan
  */
@@ -43,7 +43,7 @@ public class Quantile extends FeatureResultsStatistic {
     /** The quantile. */
     @BeanField @Getter @Setter private double quantile = 0; // NOSONAR
 
-    /** If true, the quantile is interpreted as a percentage rather than a decimal */
+    /** If true, the quantile is interpreted as a percentage rather than a decimal. */
     @BeanField @Getter @Setter private boolean asPercentage = false;
     // END BEAN PROPERTIES
 
