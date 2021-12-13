@@ -48,19 +48,19 @@ public class FeatureOutputNames {
      * Suffix appended to {@link #csvFeaturesNonAggregated} to form an output-name for <i>aggregated
      * features</i>
      */
-    public static final String OUTPUT_SUFFIX_AGGREGATED = "_aggregated";
+    public static final String OUTPUT_SUFFIX_AGGREGATED = "Aggregated";
 
     /**
      * Suffix appended to {@link #csvFeaturesNonAggregated} to form an output-name for <i>grouped
      * features</i>
      */
-    public static final String OUTPUT_SUFFIX_GROUP = "_group";
+    public static final String OUTPUT_SUFFIX_GROUP = "Group";
 
     /**
      * Suffix appended to {@link #csvFeaturesNonAggregated} to form an output-name for <i>aggregated
      * grouped features</i>
      */
-    public static final String OUTPUT_SUFFIX_AGGREGATED_GROUP = "_aggregated_group";
+    public static final String OUTPUT_SUFFIX_AGGREGATED_GROUP = "AggregatedGroup";
 
     /** The CSV of non-aggregated feature-results. */
     @Getter private String csvFeaturesNonAggregated;

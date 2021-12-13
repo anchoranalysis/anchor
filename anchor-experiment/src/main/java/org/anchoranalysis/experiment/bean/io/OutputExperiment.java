@@ -69,9 +69,9 @@ import org.apache.commons.lang.time.StopWatch;
  */
 public abstract class OutputExperiment extends Experiment {
 
-    public static final String OUTPUT_MANIFEST = "experiment_manifest";
+    public static final String OUTPUT_MANIFEST = "manifestExperiment";
 
-    public static final String OUTPUT_EXECUTION_TIME = "execution_time";
+    public static final String OUTPUT_EXECUTION_TIME = "executionTime";
 
     // START BEAN PROPERTIES
     /** The output-manager that specifies how/where/which elements occur duing outputting. */
