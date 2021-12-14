@@ -35,10 +35,10 @@ package org.anchoranalysis.image.voxel.datatype;
 public class FloatVoxelType extends VoxelDataType {
 
     /** Minimum supported value for the type. */
-    public static final long MAX_VALUE = (long) java.lang.Float.MAX_VALUE;
+    public static final long MAX_VALUE = VoxelDataType.VALUE_NOT_COMPATIBLE;
 
     /** Maximum supported value for the type. */
-    public static final long MIN_VALUE = (long) java.lang.Float.MIN_VALUE;
+    public static final long MIN_VALUE = VoxelDataType.VALUE_NOT_COMPATIBLE;
 
     /** A singleton instance of the type. */
     public static final FloatVoxelType INSTANCE = new FloatVoxelType();

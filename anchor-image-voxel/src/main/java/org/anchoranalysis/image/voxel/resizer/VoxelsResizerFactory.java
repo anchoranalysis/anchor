@@ -56,7 +56,7 @@ public class VoxelsResizerFactory {
     }
 
     /**
-     * An {@link VoxelsResizer} that is effectively disabled, and performs no interpolation, copying
+     * A {@link VoxelsResizer} that is effectively disabled, and performs no interpolation, copying
      * a single (minimal corner) value for each voxel.
      *
      * @return a corresponding interpolator.
@@ -66,13 +66,13 @@ public class VoxelsResizerFactory {
     }
 
     /**
-     * An {@link VoxelsResizer} that is suitable for resizing a <i>binary</i> raster-image,
+     * A {@link VoxelsResizer} that is suitable for resizing a <i>binary</i> raster-image,
      * restricted to <i>two possible intensity values only</i>.
      *
      * @param outOfBoundsValue a value used to represent <i>out-of-bounds</i> voxels to provide
      *     context for the interpolation at boundaries. This should be one of the two permitted
      *     binary states.
-     * @return a corresponding interpolator.
+     * @return a corresponding {@link VoxelsResizer}.
      */
     public VoxelsResizer binaryResizing(int outOfBoundsValue) {
         VoxelsResizerImgLib2 interpolator = new NearestNeighbor();

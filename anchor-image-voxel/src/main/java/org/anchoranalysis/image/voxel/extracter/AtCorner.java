@@ -105,6 +105,11 @@ class AtCorner<T> implements VoxelsExtracter<T> {
     }
 
     @Override
+    public long voxelWithMinIntensity() {
+        return delegate.voxelWithMinIntensity();
+    }
+
+    @Override
     public void objectCopyTo(
             ObjectMask from, Voxels<T> voxelsDestination, BoundingBox destinationBox) {
         delegate.objectCopyTo(shiftBack(from), voxelsDestination, destinationBox);

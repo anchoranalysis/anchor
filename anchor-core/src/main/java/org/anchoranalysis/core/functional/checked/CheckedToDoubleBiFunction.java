@@ -42,10 +42,10 @@ public interface CheckedToDoubleBiFunction<T, U, E extends Exception> {
     /**
      * Applies this function to the given arguments.
      *
-     * @param t the first function argument
-     * @param u the second function argument
-     * @return the function result
-     * @throws E if an error occurs
+     * @param t the first function argument.
+     * @param u the second function argument.
+     * @return the function result.
+     * @throws E if an error occurs.
      */
     double applyAsDouble(T t, U u) throws E;
 }

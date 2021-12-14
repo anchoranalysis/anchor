@@ -31,6 +31,8 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.VoxelsUntyped;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
+import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.math.histogram.Histogram;
 
 /**
@@ -58,6 +60,14 @@ public class HistogramFactory {
     /**
      * Creates a {@link Histogram} of the aggregated voxel intensities in a {@link VoxelsUntyped}.
      *
+     * <p>Irrespective of the underlying type in {@code voxels}, the maximum accepted value for bins
+     * is always {@value UnsignedShortVoxelType#MAX_VALUE_INT}.
+     *
+     * <p>The minimum accepted value is always {@code 0} (for unsigned types) or the floor of the
+     * lowest value for floating-point values.
+     *
+     * <p>Floating-point values are converted to an integer.
+     *
      * @param voxels the {@link VoxelsUntyped}, whose voxel intensity values are aggregated into a
      *     {@link Histogram}.
      * @return a newly created histogram.
@@ -68,9 +78,26 @@ public class HistogramFactory {
 
     private static Histogram createFromVoxels(Voxels<?> inputBox) {
 
-        int maxValue = (int) inputBox.dataType().maxValue();
+        long minValue = inputBox.dataType().minValue();
+        long maxValue = inputBox.dataType().maxValue();
 
-        Histogram histogram = new Histogram(maxValue);
+        if (maxValue == VoxelDataType.VALUE_NOT_COMPATIBLE) {
+            // Let's calculate the maximum value from the data
+            maxValue = inputBox.extract().voxelWithMaxIntensity();
+        }
+
+        if (maxValue > UnsignedShortVoxelType.MAX_VALUE_INT) {
+            maxValue = UnsignedShortVoxelType.MAX_VALUE_INT;
+        }
+
+        if (minValue == VoxelDataType.VALUE_NOT_COMPATIBLE) {
+            // Let's calculate the maximum value from the data
+            minValue = inputBox.extract().voxelWithMinIntensity();
+        } else {
+            minValue = 0;
+        }
+
+        Histogram histogram = new Histogram((int) minValue, (int) maxValue);
 
         int volumeXY = inputBox.extent().areaXY();
 

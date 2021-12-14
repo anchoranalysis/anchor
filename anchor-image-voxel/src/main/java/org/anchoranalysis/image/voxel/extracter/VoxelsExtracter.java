@@ -188,7 +188,14 @@ public interface VoxelsExtracter<T> {
     VoxelsPredicate voxelsGreaterThan(int threshold);
 
     /**
-     * Finds the maximum-value of any voxel and rounds up (ceiling) to nearest long.
+     * Finds the minimum-value of any voxel and rounding down (floor) to nearest long.
+     *
+     * @return the minimum-value
+     */
+    long voxelWithMinIntensity();
+
+    /**
+     * Finds the maximum-value of any voxel and rounding up (ceiling) to nearest long.
      *
      * @return the maximum-value
      */

@@ -54,6 +54,11 @@ class UnsignedShortImplementation extends VoxelsExtracterBase<UnsignedShortBuffe
     }
 
     @Override
+    public long voxelWithMinIntensity() {
+        return IterateVoxelsAll.intensityMin(voxels);
+    }
+
+    @Override
     protected int voxelAtBufferIndex(UnsignedShortBuffer buffer, int index) {
         return buffer.getUnsigned(index);
     }
