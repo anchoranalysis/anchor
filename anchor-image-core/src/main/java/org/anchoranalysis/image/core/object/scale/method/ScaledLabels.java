@@ -37,9 +37,9 @@ import org.anchoranalysis.image.core.object.label.DecodeLabels;
 import org.anchoranalysis.image.core.object.label.LabelObjects;
 import org.anchoranalysis.image.core.object.label.OverlappingObject;
 import org.anchoranalysis.image.core.object.scale.AccessObjectMask;
-import org.anchoranalysis.image.voxel.interpolator.Interpolator;
-import org.anchoranalysis.image.voxel.interpolator.InterpolatorImgLib2NearestNeighbor;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.image.voxel.resizer.VoxelsResizer;
+import org.anchoranalysis.image.voxel.resizer.VoxelsResizerFactory;
 import org.anchoranalysis.spatial.box.BoundedList;
 import org.anchoranalysis.spatial.box.Extent;
 import org.anchoranalysis.spatial.point.Point3i;
@@ -57,7 +57,7 @@ import org.anchoranalysis.spatial.scale.ScaleFactor;
  */
 class ScaledLabels<T> {
 
-    private static final Interpolator INTERPOLATOR = createInterpolatorForLabels();
+    private static final VoxelsResizer INTERPOLATOR = createInterpolatorForLabels();
 
     private Map<Integer, T> labelMapping = new HashMap<>();
 
@@ -181,9 +181,7 @@ class ScaledLabels<T> {
      *
      * @return a nearest-neighbor interpolator with boundaries extended as 0.
      */
-    private static Interpolator createInterpolatorForLabels() {
-        InterpolatorImgLib2NearestNeighbor interpolator = new InterpolatorImgLib2NearestNeighbor();
-        interpolator.extendWith(0);
-        return interpolator;
+    private static VoxelsResizer createInterpolatorForLabels() {
+        return VoxelsResizerFactory.getInstance().binaryResizing(0);
     }
 }

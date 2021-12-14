@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.image.voxel.interpolator;
+package org.anchoranalysis.image.voxel.resizer;
 
 import java.nio.FloatBuffer;
 import lombok.RequiredArgsConstructor;
@@ -48,7 +48,7 @@ import org.anchoranalysis.image.voxel.convert.imglib2.ConvertToImg;
 import org.anchoranalysis.spatial.box.Extent;
 
 /**
- * Performs interpolation using ImgLib2.
+ * Performs resizing of {@link VoxelBuffer}s using ImgLib2's interpolation.
  *
  * <p>By default, voxels at the boundaries are mirrored (i.e. voxels just after the boundary are
  * treated like the closest voxel inside the boundary), but this can be changed to an extent
@@ -57,7 +57,7 @@ import org.anchoranalysis.spatial.box.Extent;
  * @author Owen Feehan
  */
 @RequiredArgsConstructor
-public abstract class InterpolatorImgLib2 extends Interpolator {
+public abstract class VoxelsResizerImgLib2 extends VoxelsResizer {
 
     /**
      * Added to the interpolated position as it is using the top-left interpolation scheme rather
@@ -86,7 +86,7 @@ public abstract class InterpolatorImgLib2 extends Interpolator {
     private int extendValue = 0;
 
     @Override
-    public VoxelBuffer<UnsignedByteBuffer> interpolateByte(
+    public VoxelBuffer<UnsignedByteBuffer> resizeByte(
             VoxelBuffer<UnsignedByteBuffer> voxelsSource,
             VoxelBuffer<UnsignedByteBuffer> voxelsDestination,
             Extent extentSource,
@@ -104,7 +104,7 @@ public abstract class InterpolatorImgLib2 extends Interpolator {
     }
 
     @Override
-    public VoxelBuffer<UnsignedShortBuffer> interpolateShort(
+    public VoxelBuffer<UnsignedShortBuffer> resizeShort(
             VoxelBuffer<UnsignedShortBuffer> voxelsSource,
             VoxelBuffer<UnsignedShortBuffer> voxelsDestination,
             Extent extentSource,
@@ -121,7 +121,7 @@ public abstract class InterpolatorImgLib2 extends Interpolator {
     }
 
     @Override
-    public VoxelBuffer<FloatBuffer> interpolateFloat(
+    public VoxelBuffer<FloatBuffer> resizeFloat(
             VoxelBuffer<FloatBuffer> voxelsSource,
             VoxelBuffer<FloatBuffer> voxelsDestination,
             Extent extentSource,

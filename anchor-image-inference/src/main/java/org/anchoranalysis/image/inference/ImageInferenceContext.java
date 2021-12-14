@@ -32,6 +32,7 @@ import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.time.ExecutionTimeRecorder;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.inference.segment.DualScale;
+import org.anchoranalysis.image.voxel.resizer.VoxelsResizer;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 /**
@@ -69,6 +70,9 @@ public class ImageInferenceContext {
 
     /** If available, labels of classes loaded from a text file at {@code classLabelsPath}. */
     private final Optional<List<String>> classLabels;
+
+    /** How to resize images or voxel-buffers. */
+    private final VoxelsResizer resizer;
 
     /** Allows execution-time for particular operations to be recorded. */
     private final ExecutionTimeRecorder executionTimeRecorder;

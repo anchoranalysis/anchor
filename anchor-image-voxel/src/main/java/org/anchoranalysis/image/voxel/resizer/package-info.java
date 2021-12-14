@@ -24,4 +24,4 @@
  * #L%
  */
 /** Different interpolator methods to use when scaling voxels. */
-package org.anchoranalysis.image.voxel.interpolator;
+package org.anchoranalysis.image.voxel.resizer;

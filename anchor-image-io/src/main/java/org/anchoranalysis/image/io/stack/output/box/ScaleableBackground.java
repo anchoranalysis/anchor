@@ -34,7 +34,7 @@ import org.anchoranalysis.image.core.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.core.stack.DisplayStack;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.interpolator.Interpolator;
+import org.anchoranalysis.image.voxel.resizer.VoxelsResizer;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.box.Extent;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
@@ -63,7 +63,7 @@ public class ScaleableBackground {
     private final Optional<ScaleFactor> scaleFactor;
 
     /** Interpolator to use for scaling stacks, if necessary */
-    @Nullable private final Interpolator interpolator;
+    @Nullable private final VoxelsResizer resizer;
     // END REQUIRED ARGUMENTS
 
     /**
@@ -78,18 +78,18 @@ public class ScaleableBackground {
     }
 
     /**
-     * Constructor
+     * Creates from a {@link DisplayStack}.
      *
-     * @param stack the stack (unscaled and unflattened)
+     * @param stack the stack (unscaled and unflattened).
      * @param scaleFactor an optional scale-factor to apply to the stack, and the bounding-box is
-     *     extracted from this stack
-     * @param interpolator interpolator to use for scaling stacks
+     *     extracted from this stack.
+     * @param resizer interpolator to use for scaling stacks.
      */
     private ScaleableBackground(
-            DisplayStack stack, Optional<ScaleFactor> scaleFactor, Interpolator interpolator) {
+            DisplayStack stack, Optional<ScaleFactor> scaleFactor, VoxelsResizer resizer) {
         this.stack = stack.projectMax();
         this.scaleFactor = scaleFactor;
-        this.interpolator = interpolator;
+        this.resizer = resizer;
     }
 
     /**
@@ -101,7 +101,7 @@ public class ScaleableBackground {
      * @return a newly created class
      */
     public static ScaleableBackground scaleBy(
-            DisplayStack stack, ScaleFactor scaleFactor, Interpolator interpolator) {
+            DisplayStack stack, ScaleFactor scaleFactor, VoxelsResizer interpolator) {
         // The interpolator is never used, so we can safely pass a null
         return new ScaleableBackground(stack, Optional.of(scaleFactor), interpolator);
     }
@@ -170,7 +170,7 @@ public class ScaleableBackground {
         Voxels<?> voxelsScaled =
                 voxelsUnscaled
                         .extract()
-                        .resizedXY(boxScaled.extent().x(), boxScaled.extent().y(), interpolator);
+                        .resizedXY(boxScaled.extent().x(), boxScaled.extent().y(), resizer);
 
         return channelFor(voxelsScaled);
     }

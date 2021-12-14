@@ -26,13 +26,21 @@
 
 package org.anchoranalysis.image.bean.interpolator;
 
-import org.anchoranalysis.image.voxel.interpolator.Interpolator;
-import org.anchoranalysis.image.voxel.interpolator.InterpolatorImgLib2Linear;
+import org.anchoranalysis.image.voxel.resizer.Linear;
+import org.anchoranalysis.image.voxel.resizer.VoxelsResizer;
 
-public class ImgLib2Linear extends InterpolatorBean {
+/**
+ * Resizes with an interpolator that uses <a
+ * href="https://en.wikipedia.org/wiki/Linear_interpolation">linear interpolation</a> as implemented
+ * in Imglib2.
+ *
+ * @see Linear
+ * @author Owen Feehan
+ */
+public class ImgLib2Linear extends Interpolator {
 
     @Override
-    public Interpolator create() {
-        return new InterpolatorImgLib2Linear();
+    protected VoxelsResizer createVoxelsResizer() {
+        return new Linear();
     }
 }

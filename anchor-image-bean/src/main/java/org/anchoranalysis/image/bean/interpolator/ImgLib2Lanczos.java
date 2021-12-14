@@ -26,13 +26,21 @@
 
 package org.anchoranalysis.image.bean.interpolator;
 
-import org.anchoranalysis.image.voxel.interpolator.Interpolator;
-import org.anchoranalysis.image.voxel.interpolator.InterpolatorImgLib2Lanczos;
+import org.anchoranalysis.image.voxel.resizer.Lanczos;
+import org.anchoranalysis.image.voxel.resizer.VoxelsResizer;
 
-public class ImgLib2Lanczos extends InterpolatorBean {
+/**
+ * Resizes with an interpolator that uses <a
+ * href="https://en.wikipedia.org/wiki/Lanczos_resampling">Lanczos resampling</a> as implemented in
+ * Imglib2.
+ *
+ * @see Lanczos
+ * @author Owen Feehan
+ */
+public class ImgLib2Lanczos extends Interpolator {
 
     @Override
-    public Interpolator create() {
-        return new InterpolatorImgLib2Lanczos();
+    protected VoxelsResizer createVoxelsResizer() {
+        return new Lanczos();
     }
 }

@@ -45,9 +45,8 @@ import org.anchoranalysis.image.voxel.assigner.VoxelsAssigner;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.extracter.VoxelsExtracter;
 import org.anchoranalysis.image.voxel.extracter.predicate.VoxelsPredicate;
-import org.anchoranalysis.image.voxel.interpolator.Interpolator;
-import org.anchoranalysis.image.voxel.interpolator.InterpolatorImgLib2Lanczos;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.image.voxel.resizer.VoxelsResizer;
 import org.anchoranalysis.image.voxel.statistics.HistogramFactory;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.box.Extent;
@@ -72,9 +71,6 @@ import org.anchoranalysis.spatial.scale.Scaler;
  */
 @Accessors(fluent = true)
 public class Channel {
-
-    /** The interpolator used when scaling/resizing unless another is explicitly specified. */
-    private static final Interpolator DEFAULT_INTERPOLATOR = new InterpolatorImgLib2Lanczos();
 
     /** The factory to used to create any new {@link Channel}s. */
     private static final ChannelFactory FACTORY = ChannelFactory.instance();
@@ -165,21 +161,11 @@ public class Channel {
      *
      * <p>The z-dimension remains unchanged.
      *
-     * @param scaleFactor the factor to multiply the existing X and Y size by.
-     * @return a newly created {@link Channel} containing a resized version of the current.
-     */
-    public Channel scaleXY(ScaleFactor scaleFactor) {
-        return scaleXY(scaleFactor, DEFAULT_INTERPOLATOR);
-    }
-
-    /**
-     * Like {@link #scaleXY(ScaleFactor)} but allows an explicit choice of {@link Interpolator}.
-     *
      * @param scaleFactor the scaling-factor to be applied to the sizes.
      * @param interpolator the interpolator.
      * @return a newly created {@link Channel} containing a resized version of the current.
      */
-    public Channel scaleXY(ScaleFactor scaleFactor, Interpolator interpolator) {
+    public Channel scaleXY(ScaleFactor scaleFactor, VoxelsResizer interpolator) {
         // Rounding as sometimes we get values which, for example, are 7.999999, intended to be 8,
         // due to how we use our ScaleFactors
         int newSizeX = Scaler.scaleQuantity(scaleFactor.x(), dimensions().x());
@@ -194,37 +180,16 @@ public class Channel {
      *
      * <p>The z-dimension remains unchanged.
      *
-     * @param extentToAssign the new size to assign.
-     * @return a newly created {@link Channel} containing a resized version of the current.
-     */
-    public Channel resizeXY(Extent extentToAssign) {
-        return resizeXY(extentToAssign, DEFAULT_INTERPOLATOR);
-    }
-
-    /**
-     * Like {@link #resizeXY(Extent)} but allows an explicit choice of {@link Interpolator}.
-     *
      * @param extentToAssign the new size to assign. The z-component is ignored.
      * @param interpolator the interpolator.
      * @return a newly created {@link Channel} containing a resized version of the current.
      */
-    public Channel resizeXY(Extent extentToAssign, Interpolator interpolator) {
+    public Channel resizeXY(Extent extentToAssign, VoxelsResizer interpolator) {
         return resizeXY(extentToAssign.x(), extentToAssign.y(), interpolator);
     }
 
     /**
-     * Like {@link #resizeXY(Extent)} but specifies the size via {@code int} parameters.
-     *
-     * @param x the size along the x-axis.
-     * @param y the size along the y-axis.
-     * @return a newly created {@link Channel} containing a resized version of the current.
-     */
-    public Channel resizeXY(int x, int y) {
-        return resizeXY(x, y, DEFAULT_INTERPOLATOR);
-    }
-
-    /**
-     * Like {@link #resizeXY(Extent, Interpolator)} but specifies the size via {@code int}
+     * Like {@link #resizeXY(Extent, VoxelsResizer)} but specifies the size via {@code int}
      * parameters.
      *
      * @param x the size along the x-axis.
@@ -232,7 +197,7 @@ public class Channel {
      * @param interpolator the interpolator.
      * @return a newly created {@link Channel} containing a resized version of the current.
      */
-    public Channel resizeXY(int x, int y, Interpolator interpolator) {
+    public Channel resizeXY(int x, int y, VoxelsResizer interpolator) {
 
         assert (FACTORY != null);
 

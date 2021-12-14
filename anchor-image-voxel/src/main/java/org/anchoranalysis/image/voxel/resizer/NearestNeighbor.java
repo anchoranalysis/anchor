@@ -24,22 +24,22 @@
  * #L%
  */
 
-package org.anchoranalysis.image.voxel.interpolator;
+package org.anchoranalysis.image.voxel.resizer;
 
 import net.imglib2.interpolation.randomaccess.NearestNeighborInterpolatorFactory;
 
 /**
- * An interpolator that uses <a
+ * Resizes with an interpolator that uses <a
  * href="https://en.wikipedia.org/wiki/Nearest-neighbor_interpolation">nearest neighbor
  * interpolation</a> as implemented in Imglib2.
  *
  * @see NearestNeighborInterpolatorFactory
  * @author Owen Feehan
  */
-public class InterpolatorImgLib2NearestNeighbor extends InterpolatorImgLib2 {
+public class NearestNeighbor extends VoxelsResizerImgLib2 {
 
     /** Default constructor. */
-    public InterpolatorImgLib2NearestNeighbor() {
+    public NearestNeighbor() {
         super(
                 new NearestNeighborInterpolatorFactory<>(),
                 new NearestNeighborInterpolatorFactory<>(),

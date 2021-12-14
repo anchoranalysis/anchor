@@ -1,8 +1,8 @@
 /*-
  * #%L
- * anchor-plugin-image
+ * anchor-imagej
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
+ * Copyright (C) 2010 - 2021 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,22 +23,5 @@
  * THE SOFTWARE.
  * #L%
  */
-
-package org.anchoranalysis.io.imagej.bean;
-
-import org.anchoranalysis.image.bean.interpolator.InterpolatorBean;
-import org.anchoranalysis.image.voxel.interpolator.Interpolator;
-import org.anchoranalysis.io.imagej.interpolator.InterpolatorImageJ;
-
-/**
- * Creates an {@link Interpolator} that uses ImageJ.
- *
- * @author Owen Feehan
- */
-public class InterpolatorBeanImageJ extends InterpolatorBean {
-
-    @Override
-    public Interpolator create() {
-        return new InterpolatorImageJ();
-    }
-}
+/** Image interpolation when scaling using ImageJ. */
+package org.anchoranalysis.io.imagej.resizer;

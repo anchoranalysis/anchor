@@ -46,7 +46,7 @@ public abstract class FeatureHistogramStatistic extends FeatureHistogram {
     // START BEAN PROPERTIES
     /**
      * If true, then an exception is thrown if the histogram is empty, otherwise {@link
-     * #valueIfEmpty is returned}.
+     * #valueIfEmpty} is returned.
      */
     @BeanField @Getter @Setter private boolean exceptionIfEmpty = true;
 

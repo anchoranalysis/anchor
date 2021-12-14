@@ -40,7 +40,7 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.extracter.VoxelsExtracter;
 import org.anchoranalysis.image.voxel.extracter.VoxelsExtracterFactory;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactoryTypeBound;
-import org.anchoranalysis.image.voxel.interpolator.Interpolator;
+import org.anchoranalysis.image.voxel.resizer.VoxelsResizer;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.box.Extent;
 import org.anchoranalysis.spatial.point.Point3i;
@@ -251,7 +251,7 @@ public class BoundedVoxels<T> {
      *     existing.
      */
     public BoundedVoxels<T> scale(
-            ScaleFactor scaleFactor, Interpolator interpolator, Optional<Extent> clipTo) {
+            ScaleFactor scaleFactor, VoxelsResizer interpolator, Optional<Extent> clipTo) {
 
         // Construct a new bounding-box, clipping if necessary
         BoundingBox boundingBoxScaled =

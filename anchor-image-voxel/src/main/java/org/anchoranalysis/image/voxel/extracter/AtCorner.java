@@ -29,8 +29,8 @@ import lombok.AllArgsConstructor;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.extracter.predicate.PredicateAtCorner;
 import org.anchoranalysis.image.voxel.extracter.predicate.VoxelsPredicate;
-import org.anchoranalysis.image.voxel.interpolator.Interpolator;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.image.voxel.resizer.VoxelsResizer;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.point.ReadableTuple3i;
@@ -75,7 +75,7 @@ class AtCorner<T> implements VoxelsExtracter<T> {
     }
 
     @Override
-    public Voxels<T> resizedXY(int sizeX, int sizeY, Interpolator interpolator) {
+    public Voxels<T> resizedXY(int sizeX, int sizeY, VoxelsResizer interpolator) {
         return delegate.resizedXY(sizeX, sizeY, interpolator);
     }
 

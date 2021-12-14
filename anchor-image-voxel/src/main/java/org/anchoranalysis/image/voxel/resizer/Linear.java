@@ -24,25 +24,29 @@
  * #L%
  */
 
-package org.anchoranalysis.image.voxel.interpolator;
+package org.anchoranalysis.image.voxel.resizer;
 
-import net.imglib2.interpolation.randomaccess.LanczosInterpolatorFactory;
+import net.imglib2.interpolation.randomaccess.ClampingNLinearInterpolatorFactory;
 
 /**
- * An interpolator that uses <a href="https://en.wikipedia.org/wiki/Lanczos_resampling">Lanczos
- * resampling</a> as implemented in Imglib2.
+ * Resizes with an interpolator that uses <a
+ * href="https://en.wikipedia.org/wiki/Linear_interpolation">linear interpolation</a> as implemented
+ * in Imglib2.
  *
- * @see LanczosInterpolatorFactory
+ * @see ClampingNLinearInterpolatorFactory
  * @author Owen Feehan
  */
-public class InterpolatorImgLib2Lanczos extends InterpolatorImgLib2 {
+public class Linear extends VoxelsResizerImgLib2 {
 
     /** Default constructor. */
-    public InterpolatorImgLib2Lanczos() {
+    public Linear() {
+        // Using a clamping interpolator as otherwise weird values can occur at 255
+        // This idea comes from the following post:
+        // https://github.com/imglib/imglib2/issues/166
         super(
-                new LanczosInterpolatorFactory<>(),
-                new LanczosInterpolatorFactory<>(),
-                new LanczosInterpolatorFactory<>());
+                new ClampingNLinearInterpolatorFactory<>(),
+                new ClampingNLinearInterpolatorFactory<>(),
+                new ClampingNLinearInterpolatorFactory<>());
     }
 
     @Override
