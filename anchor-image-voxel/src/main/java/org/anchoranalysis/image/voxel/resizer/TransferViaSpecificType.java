@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.image.voxel.interpolator;
+package org.anchoranalysis.image.voxel.resizer;
 
 import java.util.function.Function;
 import org.anchoranalysis.image.voxel.Voxels;
@@ -42,7 +42,7 @@ class TransferViaSpecificType<T> {
     @FunctionalInterface
     public interface TransferSlice<T> {
         VoxelBuffer<T> transferSlice(
-                Interpolator interpolator,
+                VoxelsResizer interpolator,
                 VoxelBuffer<T> sourceBuffer,
                 VoxelBuffer<T> destinationBuffer,
                 Extent extentSource,
@@ -72,7 +72,7 @@ class TransferViaSpecificType<T> {
         destination.replaceSlice(z, slice.duplicate());
     }
 
-    public void transferTo(int z, Interpolator interpolator) {
+    public void transferTo(int z, VoxelsResizer interpolator) {
         VoxelBuffer<T> destinationSlice = destination.slice(z);
         VoxelBuffer<T> transferredSlice =
                 transferSlice.transferSlice(

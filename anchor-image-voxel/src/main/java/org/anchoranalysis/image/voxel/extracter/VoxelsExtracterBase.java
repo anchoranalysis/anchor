@@ -34,8 +34,8 @@ import org.anchoranalysis.image.voxel.buffer.ProjectableBuffer;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.extracter.predicate.PredicateImplementation;
 import org.anchoranalysis.image.voxel.extracter.predicate.VoxelsPredicate;
-import org.anchoranalysis.image.voxel.interpolator.Interpolator;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.image.voxel.resizer.VoxelsResizer;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.box.Extent;
 import org.anchoranalysis.spatial.point.Point3i;
@@ -114,7 +114,7 @@ abstract class VoxelsExtracterBase<T> implements VoxelsExtracter<T> {
     }
 
     @Override
-    public Voxels<T> resizedXY(int sizeX, int sizeY, Interpolator interpolator) {
+    public Voxels<T> resizedXY(int sizeX, int sizeY, VoxelsResizer interpolator) {
 
         Extent extentResized = new Extent(sizeX, sizeY, voxels.extent().z());
 
@@ -122,7 +122,7 @@ abstract class VoxelsExtracterBase<T> implements VoxelsExtracter<T> {
 
         assert (bufferTarget.slice(0).capacity() == extentResized.areaXY());
 
-        interpolator.interpolate(new VoxelsUntyped(voxels), new VoxelsUntyped(bufferTarget));
+        interpolator.resize(new VoxelsUntyped(voxels), new VoxelsUntyped(bufferTarget));
 
         assert (bufferTarget.slice(0).capacity() == extentResized.areaXY());
         return bufferTarget;

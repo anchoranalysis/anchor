@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-image
+ * anchor-image-bean
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -24,32 +24,37 @@
  * #L%
  */
 
-package org.anchoranalysis.image.voxel.interpolator;
+package org.anchoranalysis.image.bean.interpolator;
 
-import net.imglib2.interpolation.randomaccess.ClampingNLinearInterpolatorFactory;
+import org.anchoranalysis.bean.AnchorBean;
+import org.anchoranalysis.image.voxel.resizer.VoxelsResizer;
 
 /**
- * An interpolator that uses <a href="https://en.wikipedia.org/wiki/Linear_interpolation">linear
- * interpolation</a> as implemented in Imglib2.
+ * Defines a particular type of interpolation method that can be used for resizing images.
  *
- * @see ClampingNLinearInterpolatorFactory
  * @author Owen Feehan
  */
-public class InterpolatorImgLib2Linear extends InterpolatorImgLib2 {
+public abstract class Interpolator extends AnchorBean<Interpolator> {
 
-    /** Default constructor. */
-    public InterpolatorImgLib2Linear() {
-        // Using a clamping interpolator as otherwise weird values can occur at 255
-        // This idea comes from the following post:
-        // https://github.com/imglib/imglib2/issues/166
-        super(
-                new ClampingNLinearInterpolatorFactory<>(),
-                new ClampingNLinearInterpolatorFactory<>(),
-                new ClampingNLinearInterpolatorFactory<>());
+    /** A memoized instance of the {@link VoxelsResizer} that was created. */
+    private VoxelsResizer memoized;
+
+    /**
+     * Memoizes a call to {@link #createVoxelsResizer()}.
+     *
+     * @return the memoized call.
+     */
+    public VoxelsResizer voxelsResizer() {
+        if (memoized == null) {
+            memoized = createVoxelsResizer();
+        }
+        return memoized;
     }
 
-    @Override
-    public boolean canValueRangeChange() {
-        return true;
-    }
+    /**
+     * Create a {@link VoxelsResizer} that can be used for resizing voxel-buffers.
+     *
+     * @return an instance of {@link VoxelsResizer}.
+     */
+    protected abstract VoxelsResizer createVoxelsResizer();
 }

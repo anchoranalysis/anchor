@@ -1,8 +1,8 @@
 /*-
  * #%L
- * anchor-imagej
+ * anchor-plugin-image
  * %%
- * Copyright (C) 2010 - 2021 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,5 +23,24 @@
  * THE SOFTWARE.
  * #L%
  */
-/** Image interpolation when scaling using ImageJ. */
-package org.anchoranalysis.io.imagej.interpolator;
+
+package org.anchoranalysis.io.imagej.bean.interpolator;
+
+import org.anchoranalysis.image.bean.interpolator.Interpolator;
+import org.anchoranalysis.image.voxel.resizer.VoxelsResizer;
+import org.anchoranalysis.io.imagej.resizer.VoxelsResizerImageJ;
+
+/**
+ * Resizes with <a href="https://en.wikipedia.org/wiki/Linear_interpolation">linear
+ * interpolation</a> as implemented in ImageJ.
+ *
+ * @see VoxelsResizerImageJ
+ * @author Owen Feehan
+ */
+public class ImageJ extends Interpolator {
+
+    @Override
+    protected VoxelsResizer createVoxelsResizer() {
+        return new VoxelsResizerImageJ();
+    }
+}

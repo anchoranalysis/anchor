@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.image.voxel.interpolator;
+package org.anchoranalysis.image.voxel.resizer;
 
 import java.nio.FloatBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
@@ -38,10 +38,10 @@ import org.anchoranalysis.spatial.box.Extent;
  * <p>Specifically, each voxel in the destination buffer is copied from the corresponding (minimal
  * in each dimension) voxel in the source-buffer.
  */
-public class InterpolatorNone extends Interpolator {
+public class VoxelsResizerNone extends VoxelsResizer {
 
     @Override
-    public VoxelBuffer<UnsignedByteBuffer> interpolateByte(
+    public VoxelBuffer<UnsignedByteBuffer> resizeByte(
             VoxelBuffer<UnsignedByteBuffer> voxelsSource,
             VoxelBuffer<UnsignedByteBuffer> voxelsDestination,
             Extent extentSource,
@@ -53,7 +53,7 @@ public class InterpolatorNone extends Interpolator {
     }
 
     @Override
-    public VoxelBuffer<UnsignedShortBuffer> interpolateShort(
+    public VoxelBuffer<UnsignedShortBuffer> resizeShort(
             VoxelBuffer<UnsignedShortBuffer> voxelsSource,
             VoxelBuffer<UnsignedShortBuffer> voxelsDestination,
             Extent extentSource,
@@ -64,7 +64,7 @@ public class InterpolatorNone extends Interpolator {
     }
 
     @Override
-    public VoxelBuffer<FloatBuffer> interpolateFloat(
+    public VoxelBuffer<FloatBuffer> resizeFloat(
             VoxelBuffer<FloatBuffer> voxelsSource,
             VoxelBuffer<FloatBuffer> voxelsDestination,
             Extent extentSource,

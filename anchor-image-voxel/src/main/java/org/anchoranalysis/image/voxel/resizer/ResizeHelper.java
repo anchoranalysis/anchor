@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.image.voxel.interpolator;
+package org.anchoranalysis.image.voxel.resizer;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -35,12 +35,12 @@ import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 
 /**
- * Helper utility functions for an {@link Interpolator}.
+ * Helper utility functions for an {@link VoxelsResizer}.
  *
  * @author Owen Feehan
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class InterpolateHelper {
+class ResizeHelper {
 
     /**
      * Creates an implementation of {@link TransferViaSpecificType} of appropriate type for
@@ -68,7 +68,7 @@ public class InterpolateHelper {
                             voxelsDestination,
                             extentSource,
                             extentDestination) ->
-                            interpolator.interpolateByte(
+                            interpolator.resizeByte(
                                     voxelsSource,
                                     voxelsDestination,
                                     extentSource,
@@ -83,7 +83,7 @@ public class InterpolateHelper {
                             voxelsDestination,
                             extentSource,
                             extentDestination) ->
-                            interpolator.interpolateShort(
+                            interpolator.resizeShort(
                                     voxelsSource,
                                     voxelsDestination,
                                     extentSource,
@@ -98,7 +98,7 @@ public class InterpolateHelper {
                             voxelsDestination,
                             extentSource,
                             extentDestination) ->
-                            interpolator.interpolateFloat(
+                            interpolator.resizeFloat(
                                     voxelsSource,
                                     voxelsDestination,
                                     extentSource,

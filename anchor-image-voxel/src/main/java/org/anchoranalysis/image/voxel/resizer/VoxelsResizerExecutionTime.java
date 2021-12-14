@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.image.voxel.interpolator;
+package org.anchoranalysis.image.voxel.resizer;
 
 import java.nio.FloatBuffer;
 import org.anchoranalysis.core.time.ExecutionTimeRecorder;
@@ -33,16 +33,16 @@ import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedShortBuffer;
 import org.anchoranalysis.spatial.box.Extent;
 
 /**
- * Calls another {@link Interpolator} recording each interpolation call via a {@link
+ * Calls another {@link VoxelsResizer} recording each resize call via a {@link
  * ExecutionTimeRecorder}.
  *
  * @author Owen Feehan
  */
-public class InterpolatorRecordExecutionTime extends Interpolator {
+public class VoxelsResizerExecutionTime extends VoxelsResizer {
 
     // START: REQUIRED ARGUMENTS
     /** The interpolator whose activity will be recorded. */
-    private final Interpolator interpolator;
+    private final VoxelsResizer resizer;
 
     /** The recorder of the execution times. */
     private final ExecutionTimeRecorder executionTimeRecorder;
@@ -55,18 +55,18 @@ public class InterpolatorRecordExecutionTime extends Interpolator {
     // END: The identifiers used for recording time.
 
     /**
-     * Creates with an {@link Interpolator} and {@link ExecutionTimeRecorder}.
+     * Creates with an {@link VoxelsResizer} and {@link ExecutionTimeRecorder}.
      *
      * @param interpolator the interpolator whose activity will be recorded.
      * @param executionTimeRecorder the recorder of the execution times.
      * @param operationIdentifierPrefix a prefix that will be prepended to the identifiers used to
      *     record execution time (to help make them unique to a given context).
      */
-    public InterpolatorRecordExecutionTime(
-            Interpolator interpolator,
+    public VoxelsResizerExecutionTime(
+            VoxelsResizer interpolator,
             ExecutionTimeRecorder executionTimeRecorder,
             String operationIdentifierPrefix) {
-        this.interpolator = interpolator;
+        this.resizer = interpolator;
         this.executionTimeRecorder = executionTimeRecorder;
         this.identifierByte = buildIdentifier("byte", operationIdentifierPrefix);
         this.identifierShort = buildIdentifier("short", operationIdentifierPrefix);
@@ -75,11 +75,11 @@ public class InterpolatorRecordExecutionTime extends Interpolator {
 
     @Override
     public boolean canValueRangeChange() {
-        return interpolator.canValueRangeChange();
+        return resizer.canValueRangeChange();
     }
 
     @Override
-    protected VoxelBuffer<UnsignedByteBuffer> interpolateByte(
+    protected VoxelBuffer<UnsignedByteBuffer> resizeByte(
             VoxelBuffer<UnsignedByteBuffer> voxelsSource,
             VoxelBuffer<UnsignedByteBuffer> voxelsDestination,
             Extent extentSource,
@@ -87,12 +87,12 @@ public class InterpolatorRecordExecutionTime extends Interpolator {
         return executionTimeRecorder.recordExecutionTime(
                 identifierByte,
                 () ->
-                        interpolator.interpolateByte(
+                        resizer.resizeByte(
                                 voxelsSource, voxelsDestination, extentSource, extentDestination));
     }
 
     @Override
-    protected VoxelBuffer<UnsignedShortBuffer> interpolateShort(
+    protected VoxelBuffer<UnsignedShortBuffer> resizeShort(
             VoxelBuffer<UnsignedShortBuffer> voxelsSource,
             VoxelBuffer<UnsignedShortBuffer> voxelsDestination,
             Extent extentSource,
@@ -100,12 +100,12 @@ public class InterpolatorRecordExecutionTime extends Interpolator {
         return executionTimeRecorder.recordExecutionTime(
                 identifierShort,
                 () ->
-                        interpolator.interpolateShort(
+                        resizer.resizeShort(
                                 voxelsSource, voxelsDestination, extentSource, extentDestination));
     }
 
     @Override
-    protected VoxelBuffer<FloatBuffer> interpolateFloat(
+    protected VoxelBuffer<FloatBuffer> resizeFloat(
             VoxelBuffer<FloatBuffer> voxelsSource,
             VoxelBuffer<FloatBuffer> voxelsDestination,
             Extent extentSource,
@@ -113,12 +113,12 @@ public class InterpolatorRecordExecutionTime extends Interpolator {
         return executionTimeRecorder.recordExecutionTime(
                 identifierFloat,
                 () ->
-                        interpolator.interpolateFloat(
+                        resizer.resizeFloat(
                                 voxelsSource, voxelsDestination, extentSource, extentDestination));
     }
 
     /** Builds an identifier for a particular data-type, and with a particular prefix. */
     private static String buildIdentifier(String dataType, String operationIdentifierPrefix) {
-        return String.format("%s - interpolating %s voxels.", operationIdentifierPrefix, dataType);
+        return String.format("%s - resizing %s voxels", operationIdentifierPrefix, dataType);
     }
 }

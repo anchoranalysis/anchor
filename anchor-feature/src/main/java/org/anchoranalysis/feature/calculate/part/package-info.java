@@ -23,4 +23,5 @@
  * THE SOFTWARE.
  * #L%
  */
+/** A sub-part of the calculation of a feature, that can be cached, and reused by other features. */
 package org.anchoranalysis.feature.calculate.part;

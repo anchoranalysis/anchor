@@ -46,9 +46,9 @@ import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelTypeException;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.extracter.predicate.VoxelsPredicate;
-import org.anchoranalysis.image.voxel.interpolator.Interpolator;
-import org.anchoranalysis.image.voxel.interpolator.InterpolatorFactory;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.image.voxel.resizer.VoxelsResizer;
+import org.anchoranalysis.image.voxel.resizer.VoxelsResizerFactory;
 import org.anchoranalysis.image.voxel.thresholder.VoxelsThresholder;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.box.Extent;
@@ -87,7 +87,7 @@ public class Mask {
      * Interpolator used for resizing the mask (making sure to use an out-of-bounds strategy of
      * <i>off</i> voxels).
      */
-    private final Interpolator interpolator;
+    private final VoxelsResizer resizer;
 
     /**
      * Creates a mask from an existing channel using default values for <i>off</i> (0) and <i>on</i>
@@ -130,7 +130,7 @@ public class Mask {
                     "Only unsigned 8-bit data type is supported for mask");
         }
 
-        this.interpolator = createInterpolator(binaryValues);
+        this.resizer = createResizer(binaryValues);
     }
 
     /**
@@ -153,7 +153,7 @@ public class Mask {
         this.binaryValuesInt = voxels.binaryValues();
         this.binaryValuesByte = binaryValuesInt.asByte();
 
-        this.interpolator = createInterpolator(binaryValuesInt);
+        this.resizer = createResizer(binaryValuesInt);
     }
 
     /**
@@ -295,7 +295,7 @@ public class Mask {
             return this;
         }
 
-        Channel scaled = this.channel.scaleXY(scaleFactor, interpolator);
+        Channel scaled = this.channel.scaleXY(scaleFactor, resizer);
 
         Mask mask = new Mask(scaled, binaryValuesInt);
 
@@ -387,7 +387,7 @@ public class Mask {
         VoxelsThresholder.thresholdByte(mask.voxels(), thresholdVal, mask.binaryValuesByte());
     }
 
-    private Interpolator createInterpolator(BinaryValuesInt binaryValues) {
-        return InterpolatorFactory.getInstance().binaryResizing(binaryValues.getOff());
+    private VoxelsResizer createResizer(BinaryValuesInt binaryValues) {
+        return VoxelsResizerFactory.getInstance().binaryResizing(binaryValues.getOff());
     }
 }

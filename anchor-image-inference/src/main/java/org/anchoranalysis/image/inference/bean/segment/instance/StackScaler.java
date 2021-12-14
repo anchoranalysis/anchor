@@ -36,8 +36,8 @@ import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.inference.segment.DualScale;
-import org.anchoranalysis.image.voxel.interpolator.Interpolator;
-import org.anchoranalysis.image.voxel.interpolator.InterpolatorRecordExecutionTime;
+import org.anchoranalysis.image.voxel.resizer.VoxelsResizer;
+import org.anchoranalysis.image.voxel.resizer.VoxelsResizerExecutionTime;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 /**
@@ -64,13 +64,13 @@ class StackScaler {
     public static DualScale<Stack> scaleToModelSize(
             Stack stack,
             ScaleFactor scaleFactor,
-            Interpolator interpolator,
+            VoxelsResizer interpolator,
             ExecutionTimeRecorder executionTimeRecorder)
             throws SegmentationFailedException {
         checkInput(stack);
 
-        Interpolator interpolatorRecording =
-                new InterpolatorRecordExecutionTime(
+        VoxelsResizer interpolatorRecording =
+                new VoxelsResizerExecutionTime(
                         interpolator, executionTimeRecorder, "As model input");
 
         if (stack.getNumberChannels() == 1) {
@@ -92,7 +92,7 @@ class StackScaler {
 
     /** Scales a single {@link Channel}. */
     private static Channel scaleChannel(
-            Channel channel, ScaleFactor scaleFactor, Interpolator interpolator) {
+            Channel channel, ScaleFactor scaleFactor, VoxelsResizer interpolator) {
         return channel.scaleXY(scaleFactor, interpolator);
     }
 

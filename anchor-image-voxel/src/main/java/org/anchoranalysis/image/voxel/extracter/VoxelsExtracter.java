@@ -27,8 +27,8 @@ package org.anchoranalysis.image.voxel.extracter;
 
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.extracter.predicate.VoxelsPredicate;
-import org.anchoranalysis.image.voxel.interpolator.Interpolator;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.image.voxel.resizer.VoxelsResizer;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.point.ReadableTuple3i;
@@ -151,7 +151,7 @@ public interface VoxelsExtracter<T> {
      * @return newly created voxels of specified size containing interpolated voxels from the
      *     current voxels.
      */
-    Voxels<T> resizedXY(int sizeX, int sizeY, Interpolator interpolator);
+    Voxels<T> resizedXY(int sizeX, int sizeY, VoxelsResizer interpolator);
 
     /**
      * A <i>maximum</i> intensity projection of all slices

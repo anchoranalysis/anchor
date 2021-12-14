@@ -24,61 +24,49 @@
  * #L%
  */
 
-package org.anchoranalysis.image.voxel.interpolator;
+package org.anchoranalysis.image.voxel.resizer;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 /**
- * Creates instances of {@link Interpolator} to match particular circumstances.
+ * Creates instances of {@link VoxelsResizer} to match particular circumstances.
  *
  * <p>This is a <i>singleton</i> class.
  *
  * @author Owen Feehan
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class InterpolatorFactory {
+public class VoxelsResizerFactory {
 
-    private static InterpolatorFactory instance = null;
+    private static VoxelsResizerFactory instance = null;
 
-    private static final Interpolator NO_INTERPOLATOR = new InterpolatorNone();
-
-    private static final Interpolator RESIZING_INTERPOLATOR = new InterpolatorImgLib2Linear();
+    private static final VoxelsResizer NO_INTERPOLATOR = new VoxelsResizerNone();
 
     /**
-     * Singleton instance of {@link InterpolatorFactory}.
+     * Singleton instance of {@link VoxelsResizerFactory}.
      *
      * @return a single instance of this class.
      */
-    public static InterpolatorFactory getInstance() {
+    public static VoxelsResizerFactory getInstance() {
         if (instance == null) {
-            instance = new InterpolatorFactory();
+            instance = new VoxelsResizerFactory();
         }
         return instance;
     }
 
     /**
-     * An {@link Interpolator} that is effectively disabled, and performs no interpolation, copying
+     * An {@link VoxelsResizer} that is effectively disabled, and performs no interpolation, copying
      * a single (minimal corner) value for each voxel.
      *
      * @return a corresponding interpolator.
      */
-    public Interpolator noInterpolation() {
+    public VoxelsResizer noInterpolation() {
         return NO_INTERPOLATOR;
     }
 
     /**
-     * An {@link Interpolator} that is suitable for resizing a raster-image with a <i>range of
-     * intensity values</i>.
-     *
-     * @return a corresponding interpolator.
-     */
-    public Interpolator rasterResizing() {
-        return RESIZING_INTERPOLATOR;
-    }
-
-    /**
-     * An {@link Interpolator} that is suitable for resizing a <i>binary</i> raster-image,
+     * An {@link VoxelsResizer} that is suitable for resizing a <i>binary</i> raster-image,
      * restricted to <i>two possible intensity values only</i>.
      *
      * @param outOfBoundsValue a value used to represent <i>out-of-bounds</i> voxels to provide
@@ -86,8 +74,8 @@ public class InterpolatorFactory {
      *     binary states.
      * @return a corresponding interpolator.
      */
-    public Interpolator binaryResizing(int outOfBoundsValue) {
-        InterpolatorImgLib2 interpolator = new InterpolatorImgLib2NearestNeighbor();
+    public VoxelsResizer binaryResizing(int outOfBoundsValue) {
+        VoxelsResizerImgLib2 interpolator = new NearestNeighbor();
         interpolator.extendWith(outOfBoundsValue);
         return interpolator;
     }

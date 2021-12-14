@@ -24,24 +24,25 @@
  * #L%
  */
 
-package org.anchoranalysis.io.imagej.interpolator;
+package org.anchoranalysis.io.imagej.resizer;
 
 import ij.process.ImageProcessor;
 import java.nio.FloatBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedShortBuffer;
-import org.anchoranalysis.image.voxel.interpolator.Interpolator;
+import org.anchoranalysis.image.voxel.resizer.VoxelsResizer;
 import org.anchoranalysis.io.imagej.convert.ConvertToImageProcessor;
 import org.anchoranalysis.io.imagej.convert.ConvertToVoxelBuffer;
 import org.anchoranalysis.spatial.box.Extent;
 
 /**
- * An implementation of {@link Interpolator} that uses ImageJ.
+ * Resizes with <a href="https://en.wikipedia.org/wiki/Linear_interpolation">linear
+ * interpolation</a> as implemented in ImageJ.
  *
  * @author Owen Feehan
  */
-public class InterpolatorImageJ extends Interpolator {
+public class VoxelsResizerImageJ extends VoxelsResizer {
 
     @Override
     public boolean canValueRangeChange() {
@@ -49,7 +50,7 @@ public class InterpolatorImageJ extends Interpolator {
     }
 
     @Override
-    public VoxelBuffer<UnsignedByteBuffer> interpolateByte(
+    public VoxelBuffer<UnsignedByteBuffer> resizeByte(
             VoxelBuffer<UnsignedByteBuffer> voxelsSource,
             VoxelBuffer<UnsignedByteBuffer> voxelsDestination,
             Extent extentSource,
@@ -61,7 +62,7 @@ public class InterpolatorImageJ extends Interpolator {
     }
 
     @Override
-    public VoxelBuffer<UnsignedShortBuffer> interpolateShort(
+    public VoxelBuffer<UnsignedShortBuffer> resizeShort(
             VoxelBuffer<UnsignedShortBuffer> voxelsSource,
             VoxelBuffer<UnsignedShortBuffer> voxelsDestination,
             Extent extentSource,
@@ -73,7 +74,7 @@ public class InterpolatorImageJ extends Interpolator {
     }
 
     @Override
-    public VoxelBuffer<FloatBuffer> interpolateFloat(
+    public VoxelBuffer<FloatBuffer> resizeFloat(
             VoxelBuffer<FloatBuffer> voxelsSource,
             VoxelBuffer<FloatBuffer> voxelsDestination,
             Extent extentSource,

@@ -50,10 +50,10 @@ import org.anchoranalysis.image.voxel.extracter.VoxelsExtracter;
 import org.anchoranalysis.image.voxel.extracter.predicate.VoxelsPredicate;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactoryTypeBound;
-import org.anchoranalysis.image.voxel.interpolator.Interpolator;
-import org.anchoranalysis.image.voxel.interpolator.InterpolatorFactory;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxelsEqualTo;
 import org.anchoranalysis.image.voxel.iterator.intersecting.CountVoxelsIntersectingObjects;
+import org.anchoranalysis.image.voxel.resizer.VoxelsResizer;
+import org.anchoranalysis.image.voxel.resizer.VoxelsResizerFactory;
 import org.anchoranalysis.image.voxel.thresholder.VoxelsThresholder;
 import org.anchoranalysis.spatial.axis.Axis;
 import org.anchoranalysis.spatial.box.BoundingBox;
@@ -111,7 +111,7 @@ public class ObjectMask {
     @Getter private final BinaryValuesByte binaryValuesByte;
 
     /** The interpolator to use when resizing. */
-    private final Interpolator interpolator;
+    private final VoxelsResizer resizer;
 
     /** Provides methods to read/copy/duplicate regions of voxels. */
     @Getter private final VoxelsExtracter<UnsignedByteBuffer> extract;
@@ -223,7 +223,7 @@ public class ObjectMask {
         this.voxels = voxels;
         this.binaryValues = binaryValues;
         this.binaryValuesByte = binaryValues.asByte();
-        this.interpolator = createInterpolator(binaryValues);
+        this.resizer = createResizer(binaryValues);
         this.extract = voxels.extract();
     }
 
@@ -241,7 +241,7 @@ public class ObjectMask {
         this.voxels = new BoundedVoxels<>(box, voxels);
         this.binaryValues = binaryValues.asInt();
         this.binaryValuesByte = binaryValues;
-        this.interpolator = createInterpolator(this.binaryValues);
+        this.resizer = createResizer(this.binaryValues);
         this.extract = voxels.extract();
     }
 
@@ -263,7 +263,7 @@ public class ObjectMask {
         this.voxels = voxels;
         this.binaryValues = binaryValues;
         this.binaryValuesByte = binaryValuesByte;
-        this.interpolator = createInterpolator(binaryValues);
+        this.resizer = createResizer(binaryValues);
         this.extract = voxels.extract();
     }
 
@@ -405,11 +405,11 @@ public class ObjectMask {
         if ((binaryValues.getOn() == 255 && binaryValues.getOff() == 0)
                 || (binaryValues.getOn() == 0 && binaryValues.getOff() == 255)) {
 
-            BoundedVoxels<UnsignedByteBuffer> scaled = voxels.scale(factor, interpolator, clipTo);
+            BoundedVoxels<UnsignedByteBuffer> scaled = voxels.scale(factor, resizer, clipTo);
 
             // We should do a thresholding afterwards to make sure our values correspond to the two
             // binary values
-            if (interpolator.canValueRangeChange()) {
+            if (resizer.canValueRangeChange()) {
 
                 // We threshold to make sure it's still binary
                 int thresholdVal = (binaryValues.getOn() + binaryValues.getOff()) / 2;
@@ -940,8 +940,8 @@ public class ObjectMask {
                 super.hashCode(), centerOfGravity().toString(), numberVoxelsOn());
     }
 
-    private Interpolator createInterpolator(BinaryValuesInt binaryValues) {
-        return InterpolatorFactory.getInstance().binaryResizing(binaryValues.getOff());
+    private VoxelsResizer createResizer(BinaryValuesInt binaryValues) {
+        return VoxelsResizerFactory.getInstance().binaryResizing(binaryValues.getOff());
     }
 
     /**

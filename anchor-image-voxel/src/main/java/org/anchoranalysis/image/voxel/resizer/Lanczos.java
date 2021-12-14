@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-image-bean
+ * anchor-image
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -24,12 +24,30 @@
  * #L%
  */
 
-package org.anchoranalysis.image.bean.interpolator;
+package org.anchoranalysis.image.voxel.resizer;
 
-import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.image.voxel.interpolator.Interpolator;
+import net.imglib2.interpolation.randomaccess.LanczosInterpolatorFactory;
 
-public abstract class InterpolatorBean extends AnchorBean<InterpolatorBean> {
+/**
+ * Resizes with an interpolator that uses <a
+ * href="https://en.wikipedia.org/wiki/Lanczos_resampling">Lanczos resampling</a> as implemented in
+ * Imglib2.
+ *
+ * @see LanczosInterpolatorFactory
+ * @author Owen Feehan
+ */
+public class Lanczos extends VoxelsResizerImgLib2 {
 
-    public abstract Interpolator create();
+    /** Default constructor. */
+    public Lanczos() {
+        super(
+                new LanczosInterpolatorFactory<>(),
+                new LanczosInterpolatorFactory<>(),
+                new LanczosInterpolatorFactory<>());
+    }
+
+    @Override
+    public boolean canValueRangeChange() {
+        return true;
+    }
 }

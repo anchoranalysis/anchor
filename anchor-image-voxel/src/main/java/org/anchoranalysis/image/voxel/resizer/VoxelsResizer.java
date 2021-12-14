@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.image.voxel.interpolator;
+package org.anchoranalysis.image.voxel.resizer;
 
 import com.google.common.base.Preconditions;
 import java.nio.FloatBuffer;
@@ -39,7 +39,7 @@ import org.anchoranalysis.spatial.box.Extent;
  *
  * @author Owen Feehan
  */
-public abstract class Interpolator {
+public abstract class VoxelsResizer {
 
     /**
      * Copies voxels slice-by-slice from {@code source} to {@code destination} performing necessary
@@ -52,14 +52,14 @@ public abstract class Interpolator {
      * @param destination the voxels to copy interpolated-values into, which may differ in size in
      *     the XY dimensions.
      */
-    public void interpolate(VoxelsUntyped source, VoxelsUntyped destination) {
+    public void resize(VoxelsUntyped source, VoxelsUntyped destination) {
 
         Extent extentSource = source.any().extent();
         Extent extentTarget = destination.any().extent();
 
         Preconditions.checkArgument(extentSource.z() == extentTarget.z());
 
-        TransferViaSpecificType<?> transfer = InterpolateHelper.createTransfer(source, destination);
+        TransferViaSpecificType<?> transfer = ResizeHelper.createTransfer(source, destination);
 
         for (int z = 0; z < extentSource.z(); z++) {
 
@@ -73,7 +73,7 @@ public abstract class Interpolator {
                     // And in this case, some of the interpolation algorithms would crash.
                     transfer.transferTo(z, this);
                 } else {
-                    transfer.transferTo(z, InterpolatorFactory.getInstance().noInterpolation());
+                    transfer.transferTo(z, VoxelsResizerFactory.getInstance().noInterpolation());
                 }
             }
         }
@@ -101,7 +101,7 @@ public abstract class Interpolator {
      * @param extentDestination extent corresponding to {@code extentDestination}.
      * @return the destination buffer (either as passed, or a new one that was created).
      */
-    protected abstract VoxelBuffer<UnsignedByteBuffer> interpolateByte(
+    protected abstract VoxelBuffer<UnsignedByteBuffer> resizeByte(
             VoxelBuffer<UnsignedByteBuffer> voxelsSource,
             VoxelBuffer<UnsignedByteBuffer> voxelsDestination,
             Extent extentSource,
@@ -119,7 +119,7 @@ public abstract class Interpolator {
      * @param extentDestination extent corresponding to {@code extentDestination}.
      * @return the destination buffer (either as passed, or a new one that was created).
      */
-    protected abstract VoxelBuffer<UnsignedShortBuffer> interpolateShort(
+    protected abstract VoxelBuffer<UnsignedShortBuffer> resizeShort(
             VoxelBuffer<UnsignedShortBuffer> voxelsSource,
             VoxelBuffer<UnsignedShortBuffer> voxelsDestination,
             Extent extentSource,
@@ -136,7 +136,7 @@ public abstract class Interpolator {
      * @param extentDestination extent corresponding to {@code extentDestination}.
      * @return the destination buffer (either as passed, or a new one that was created).
      */
-    protected abstract VoxelBuffer<FloatBuffer> interpolateFloat(
+    protected abstract VoxelBuffer<FloatBuffer> resizeFloat(
             VoxelBuffer<FloatBuffer> voxelsSource,
             VoxelBuffer<FloatBuffer> voxelsDestination,
             Extent extentSource,

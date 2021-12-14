@@ -26,13 +26,13 @@
 
 package org.anchoranalysis.image.bean.interpolator;
 
-import org.anchoranalysis.image.voxel.interpolator.Interpolator;
-import org.anchoranalysis.image.voxel.interpolator.InterpolatorNone;
+import org.anchoranalysis.image.voxel.resizer.VoxelsResizer;
+import org.anchoranalysis.image.voxel.resizer.VoxelsResizerNone;
 
-public class None extends InterpolatorBean {
+public class None extends Interpolator {
 
     @Override
-    public Interpolator create() {
-        return new InterpolatorNone();
+    protected VoxelsResizer createVoxelsResizer() {
+        return new VoxelsResizerNone();
     }
 }
