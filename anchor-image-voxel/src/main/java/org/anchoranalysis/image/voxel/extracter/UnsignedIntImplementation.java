@@ -41,8 +41,7 @@ class UnsignedIntImplementation extends VoxelsExtracterBase<UnsignedIntBuffer> {
     @Override
     public long voxelWithMaxIntensity() {
 
-        long max = 0;
-        boolean first = true;
+        long max = Long.MIN_VALUE;
 
         Extent extent = voxels.extent();
 
@@ -53,13 +52,33 @@ class UnsignedIntImplementation extends VoxelsExtracterBase<UnsignedIntBuffer> {
             while (pixels.hasRemaining()) {
 
                 long val = pixels.getUnsigned();
-                if (first || val > max) {
+                if (val > max) {
                     max = val;
-                    first = false;
                 }
             }
         }
         return max;
+    }
+
+    @Override
+    public long voxelWithMinIntensity() {
+        long min = Long.MAX_VALUE;
+
+        Extent extent = voxels.extent();
+
+        for (int z = 0; z < extent.z(); z++) {
+
+            UnsignedIntBuffer pixels = voxels.sliceBuffer(z);
+
+            while (pixels.hasRemaining()) {
+
+                long val = pixels.getUnsigned();
+                if (val < min) {
+                    min = val;
+                }
+            }
+        }
+        return min;
     }
 
     @Override

@@ -39,11 +39,11 @@ import java.util.function.ToIntFunction;
 public interface CheckedToIntFunction<S, E extends Exception> {
 
     /**
-     * Calls the function
+     * Calls the function.
      *
-     * @param parameter parameter object
-     * @return return-value
-     * @throws E an exception that may be thrown
+     * @param parameter parameter object.
+     * @return return-value.
+     * @throws E an exception that may be thrown.
      */
     int applyAsInt(S parameter) throws E;
 }

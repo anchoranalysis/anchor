@@ -1,7 +1,6 @@
 package org.anchoranalysis.core.functional.checked;
 
-import java.util.function.Supplier;
-import org.anchoranalysis.core.progress.CheckedProgressingSupplier;
+import java.util.function.ToDoubleFunction;
 
 /*-
  * #%L
@@ -30,29 +29,21 @@ import org.anchoranalysis.core.progress.CheckedProgressingSupplier;
  */
 
 /**
- * Like {@link Supplier} but can also throw an exception.
+ * Like {@link ToDoubleFunction} but can also thrown an exception.
  *
  * @author Owen Feehan
- * @param <T> type of object to supply
- * @param <E> exception-type if supplying fails
+ * @param <T> the type of the first argument to the function
+ * @param <E> exception-type that can be thrown during {@code applyAsDouble}
  */
 @FunctionalInterface
-public interface CheckedSupplier<T, E extends Exception> {
+public interface CheckedToDoubleFunction<T, E extends Exception> {
 
     /**
-     * Applies a supplier like with {@link Supplier#get}.
+     * Applies this function to the given arguments.
      *
-     * @return the supplied object.
-     * @throws E an exception that may be thrown.
+     * @param t the function argument.
+     * @return the function result.
+     * @throws E if an error occurs.
      */
-    T get() throws E;
-
-    /**
-     * An interface to a similar supplier that monitors progress.
-     *
-     * @return a supplier that also monitors progress, but executes the same task.
-     */
-    default CheckedProgressingSupplier<T, E> progressing() {
-        return progress -> get();
-    }
+    double applyAsDouble(T t) throws E;
 }

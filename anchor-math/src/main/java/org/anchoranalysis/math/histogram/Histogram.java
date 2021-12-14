@@ -49,6 +49,11 @@ import org.apache.commons.lang.ArrayUtils;
  * <p>This can be used to record a discrete probability distribution, and is typically used in the
  * Anchor software to record the distribution of image voxel intensity values.
  *
+ * <p>Note that this is dense implementation and memory is allocated to store all values from {@code
+ * minValue} to {@code maxValue} (inclusive). This can be a lot of memory for e.g. unsigned-short
+ * value types. However, it allows for a maximally efficient incrementing through voxels in an
+ * image, without intermediate structures.
+ *
  * @author Owen Feehan
  */
 public final class Histogram {
@@ -611,7 +616,7 @@ public final class Histogram {
     /**
      * Calls {@code consumer} for every value, <i>increasing</i> from min to max.
      *
-     * @param consumer called for every bin
+     * @param consumer called for every bin.
      */
     public void iterateValues(BinConsumer consumer) {
         for (int bin = minValue; bin <= maxValue; bin++) {
@@ -624,7 +629,7 @@ public final class Histogram {
      * limit}.
      *
      * @param limit the maximum-value to consume (inclusive).
-     * @param consumer called for every bin
+     * @param consumer called for every bin.
      */
     public void iterateValuesUntil(int limit, BinConsumer consumer) {
         for (int bin = minValue; bin <= limit; bin++) {
@@ -681,11 +686,11 @@ public final class Histogram {
      * <p>Either the whole bin is transferred or only some of the bin so that {@code remaining >=
      * 0}.
      *
-     * @param destination the destination histogram
-     * @param bin the bin-value
-     * @param countForBin the count
-     * @param remaining the count remaining that can still be transferred
-     * @return an updated value for remaining after subtracting the transferred count
+     * @param destination the destination histogram.
+     * @param bin the bin-value.
+     * @param countForBin the count.
+     * @param remaining the count remaining that can still be transferred.
+     * @return an updated value for remaining after subtracting the transferred count.
      */
     private static long extractBin(
             Histogram destination, int bin, int countForBin, long remaining) {

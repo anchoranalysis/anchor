@@ -40,16 +40,28 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 @Accessors(fluent = true)
 public abstract class VoxelDataType {
 
+    /**
+     * A placeholder value for {@code maxValue} or {@code minValue} if the true maximum or minimum
+     * value cannot be expressed as a long.
+     */
+    public static final long VALUE_NOT_COMPATIBLE = -1;
+
     /** The number of bits required to represent a voxel. */
     @Getter private int bitDepth;
 
     /** A string to uniquely and compactly describe this type. */
     private String typeIdentifier;
 
-    /** The maximum value this type can represent. */
+    /**
+     * The maximum value this type can represent, or {@link #VALUE_NOT_COMPATIBLE} if it cannot be
+     * represented in a long.
+     */
     @Getter private long maxValue;
 
-    /** The minimum value this type can represent. */
+    /**
+     * The minimum value this type can represent, or {@link #VALUE_NOT_COMPATIBLE} if it cannot be
+     * represented in a long.
+     */
     @Getter private long minValue;
 
     @Override

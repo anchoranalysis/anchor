@@ -350,17 +350,16 @@ public class IterateVoxelsAll {
     }
 
     /**
-     * Finds the maximum intensity-value (as an int) among all voxels.
+     * Finds the <b>maximum</b> intensity-value (as an int) among all voxels.
      *
      * <p>Note this provides slower access than operating on the native-types.
      *
      * @param <T> the buffer-type
      * @param voxels the voxels
-     * @return whatever the maximum value is
+     * @return whatever the maximum value is.
      */
     public static <T extends UnsignedBufferAsInt> int intensityMax(Voxels<T> voxels) {
-        int max = 0;
-        boolean first = true;
+        int max = Integer.MIN_VALUE;
 
         int sizeXY = voxels.extent().areaXY();
         for (int z = 0; z < voxels.extent().z(); z++) {
@@ -370,13 +369,40 @@ public class IterateVoxelsAll {
             for (int offset = 0; offset < sizeXY; offset++) {
 
                 int val = buffer.getUnsigned(offset);
-                if (first || val > max) {
+                if (val > max) {
                     max = val;
-                    first = false;
                 }
             }
         }
         return max;
+    }
+
+    /**
+     * Finds the <b>minimum</b> intensity-value (as an int) among all voxels.
+     *
+     * <p>Note this provides slower access than operating on the native-types.
+     *
+     * @param <T> the buffer-type
+     * @param voxels the voxels
+     * @return whatever the minimum value is.
+     */
+    public static <T extends UnsignedBufferAsInt> int intensityMin(Voxels<T> voxels) {
+        int min = Integer.MAX_VALUE;
+
+        int sizeXY = voxels.extent().areaXY();
+        for (int z = 0; z < voxels.extent().z(); z++) {
+
+            T buffer = voxels.sliceBuffer(z);
+
+            for (int offset = 0; offset < sizeXY; offset++) {
+
+                int val = buffer.getUnsigned(offset);
+                if (val < min) {
+                    min = val;
+                }
+            }
+        }
+        return min;
     }
 
     /**

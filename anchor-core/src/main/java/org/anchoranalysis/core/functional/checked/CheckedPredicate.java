@@ -41,9 +41,9 @@ public interface CheckedPredicate<T, E extends Exception> {
     /**
      * Applies a predicate like with {@link Predicate#test}.
      *
-     * @param source object to be tested
-     * @return true if predicate is satisfied, false otherwise
-     * @throws E an exception that may be thrown
+     * @param source object to be tested.
+     * @return true if predicate is satisfied, false otherwise.
+     * @throws E an exception that may be thrown.
      */
     boolean test(T source) throws E;
 }

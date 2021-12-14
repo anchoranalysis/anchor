@@ -50,8 +50,7 @@ class FloatImplementation extends VoxelsExtracterBase<FloatBuffer> {
     @Override
     public long voxelWithMaxIntensity() {
 
-        float max = 0;
-        boolean first = true;
+        float max = Float.MAX_VALUE;
 
         Extent extent = voxels.extent();
 
@@ -61,14 +60,35 @@ class FloatImplementation extends VoxelsExtracterBase<FloatBuffer> {
 
             while (pixels.hasRemaining()) {
 
-                float val = pixels.get();
-                if (first || val > max) {
-                    max = val;
-                    first = false;
+                float value = pixels.get();
+                if (value > max) {
+                    max = value;
                 }
             }
         }
         return (long) Math.ceil(max);
+    }
+
+    @Override
+    public long voxelWithMinIntensity() {
+
+        float min = Float.MIN_VALUE;
+
+        Extent extent = voxels.extent();
+
+        for (int z = 0; z < extent.z(); z++) {
+
+            FloatBuffer pixels = voxels.sliceBuffer(z);
+
+            while (pixels.hasRemaining()) {
+
+                float value = pixels.get();
+                if (value < min) {
+                    min = value;
+                }
+            }
+        }
+        return (long) Math.floor(min);
     }
 
     @Override
