@@ -32,7 +32,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.core.log.Logger;
+import org.anchoranalysis.core.time.OperationContext;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.bound.FeatureCalculatorSingle;
 import org.anchoranalysis.feature.input.FeatureInput;
@@ -48,11 +48,11 @@ public abstract class ReportFeatureOnObjectsBase<T extends FeatureInput>
     // END BEAN PROPERTIES
 
     @Override
-    public String featureDescription(MarksInitialization so, Logger logger)
+    public String featureDescription(MarksInitialization initialization, OperationContext context)
             throws OperationFailedException {
         try {
-            objects.initializeRecursive(so.image(), logger);
-            super.initialize(so, logger);
+            objects.initializeRecursive(initialization.image(), context.getLogger());
+            super.initialize(initialization, context.getLogger());
         } catch (InitializeException e) {
             throw new OperationFailedException(e);
         }

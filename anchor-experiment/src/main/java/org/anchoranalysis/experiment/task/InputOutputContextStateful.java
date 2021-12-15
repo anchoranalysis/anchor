@@ -57,12 +57,12 @@ public class InputOutputContextStateful implements InputOutputContext {
     public InputOutputContextStateful(
             ExecutionArguments experimentArguments,
             Outputter outputter,
-            ExecutionTimeRecorder executionTimeProfiler,
+            ExecutionTimeRecorder executionTimeRecorder,
             StatefulMessageLogger logger,
             ErrorReporter errorReporter) {
         this.experimentArguments = experimentArguments;
         this.outputter = outputter;
-        this.executionTimeRecorder = executionTimeProfiler;
+        this.executionTimeRecorder = executionTimeRecorder;
         this.messageLogger = logger;
         this.logger = new Logger(logger, errorReporter);
     }

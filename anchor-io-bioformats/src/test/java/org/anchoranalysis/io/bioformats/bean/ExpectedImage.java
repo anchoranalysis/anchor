@@ -32,6 +32,7 @@ import java.nio.file.Path;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.log.Logger;
+import org.anchoranalysis.core.time.ExecutionTimeRecorder;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.ImageIOException;
@@ -91,8 +92,10 @@ class ExpectedImage {
 
     private Logger logger = LoggingFixture.suppressedLogger();
 
-    public void openAndAssert(StackReader stackReader, TestLoader loader) throws ImageIOException {
-        Stack stack = openStackFromReader(stackReader, loader);
+    public void openAndAssert(
+            StackReader stackReader, TestLoader loader, ExecutionTimeRecorder executionTimeRecorder)
+            throws ImageIOException {
+        Stack stack = openStackFromReader(stackReader, loader, executionTimeRecorder);
         assertEqualsPrefix(
                 "voxel data type", expectedDataType, stack.getChannel(0).getVoxelDataType());
         assertEqualsPrefix("number channels", expectedNumberChannels, stack.getNumberChannels());
@@ -103,12 +106,13 @@ class ExpectedImage {
         assertEquals(expectedResolution, stack.resolution());
     }
 
-    private Stack openStackFromReader(StackReader reader, TestLoader loader)
+    private Stack openStackFromReader(
+            StackReader reader, TestLoader loader, ExecutionTimeRecorder executionTimeRecorder)
             throws ImageIOException {
 
         Path path = loader.resolveTestPath(relativePath());
 
-        OpenedImageFile openedFile = reader.openFile(path);
+        OpenedImageFile openedFile = reader.openFile(path, executionTimeRecorder);
         TimeSequence timeSequence = openedFile.open(logger);
         return timeSequence.get(0);
     }

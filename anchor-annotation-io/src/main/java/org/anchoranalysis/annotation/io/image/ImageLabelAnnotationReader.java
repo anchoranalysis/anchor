@@ -33,7 +33,7 @@ import java.nio.file.Path;
 import java.util.Optional;
 import org.anchoranalysis.annotation.image.ImageLabelAnnotation;
 import org.anchoranalysis.annotation.io.AnnotationReader;
-import org.anchoranalysis.core.log.Logger;
+import org.anchoranalysis.core.time.OperationContext;
 import org.anchoranalysis.io.input.InputReadFailedException;
 
 /**
@@ -44,7 +44,7 @@ import org.anchoranalysis.io.input.InputReadFailedException;
 public class ImageLabelAnnotationReader implements AnnotationReader<ImageLabelAnnotation> {
 
     @Override
-    public Optional<ImageLabelAnnotation> read(Path path, Logger logger)
+    public Optional<ImageLabelAnnotation> read(Path path, OperationContext context)
             throws InputReadFailedException {
 
         try (FileReader fileReader = new FileReader(path.toFile())) {

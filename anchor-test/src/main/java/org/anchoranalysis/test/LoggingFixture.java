@@ -32,6 +32,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.log.MessageLogger;
+import org.anchoranalysis.core.time.OperationContext;
 
 /**
  * Fixtures to create loggers that don't output anything.
@@ -44,7 +45,7 @@ public class LoggingFixture {
     /**
      * A {@link MessageLogger} that doesn't output anything.
      *
-     * @return the message-logger
+     * @return the message-logger.
      */
     public static MessageLogger suppressedMessageLogger() {
         return mock(MessageLogger.class);
@@ -53,9 +54,18 @@ public class LoggingFixture {
     /**
      * A {@link Logger} that doesn't output anything.
      *
-     * @return the logger
+     * @return the logger.
      */
     public static Logger suppressedLogger() {
         return new Logger(suppressedMessageLogger());
+    }
+
+    /**
+     * An {@link OperationContext} containing a logger that doesn't output anything.
+     *
+     * @return the operation-context.
+     */
+    public static OperationContext suppressedOperationContext() {
+        return new OperationContext(suppressedLogger());
     }
 }

@@ -57,7 +57,7 @@ public class OptimizationContext {
     @Getter private final MarkWithIdentifierFactory markFactory;
 
     public MarkFactoryContext markFactoryContext() {
-        return new MarkFactoryContext(markFactory);
+        return new MarkFactoryContext(markFactory, inputOutputContext.operationContext());
     }
 
     public KernelCalculationContext calculateContext(MarkFactoryContext markFactoryContext) {

@@ -32,9 +32,9 @@ import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.format.NonImageFileFormat;
 import org.anchoranalysis.core.index.GetOperationFailedException;
-import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.serialize.DeserializationFailedException;
 import org.anchoranalysis.core.serialize.Deserializer;
+import org.anchoranalysis.core.time.OperationContext;
 import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectCollectionFactory;
@@ -47,7 +47,7 @@ import org.anchoranalysis.io.manifest.sequencetype.SequenceTypeException;
 class ReadObjectsFromTIFFDirectory implements Deserializer<ObjectCollection> {
 
     @Override
-    public ObjectCollection deserialize(Path folderPath, Logger logger)
+    public ObjectCollection deserialize(Path folderPath, OperationContext context)
             throws DeserializationFailedException {
         StackReader stackReader =
                 RegisterBeanFactories.getDefaultInstances()
@@ -56,10 +56,11 @@ class ReadObjectsFromTIFFDirectory implements Deserializer<ObjectCollection> {
                                 () ->
                                         new DeserializationFailedException(
                                                 "No default StackReader is defined, as is required."));
-        return readObjects(folderPath, stackReader, logger);
+        return readObjects(folderPath, stackReader, context);
     }
 
-    private ObjectCollection readObjects(Path folderPath, StackReader stackReader, Logger logger)
+    private ObjectCollection readObjects(
+            Path folderPath, StackReader stackReader, OperationContext context)
             throws DeserializationFailedException {
 
         try {
@@ -69,7 +70,7 @@ class ReadObjectsFromTIFFDirectory implements Deserializer<ObjectCollection> {
                             new SerializedObjectsFromDirectory(
                                     folderPath, Optional.of(acceptFilter)),
                             new ObjectDualDeserializer(stackReader),
-                            logger);
+                            context);
             return createFromContainer(container);
 
         } catch (SequenceTypeException | CreateException e) {
@@ -92,9 +93,9 @@ class ReadObjectsFromTIFFDirectory implements Deserializer<ObjectCollection> {
     }
 
     private static <T> BoundsFromRange<T> deserializeFromDirectory(
-            SequencedDirectory directory, Deserializer<T> deserializer, Logger logger) {
+            SequencedDirectory directory, Deserializer<T> deserializer, OperationContext context) {
         SupplierAtIndex<T> container =
-                new SequencedDirectoryDeserializer<>(directory, deserializer, logger);
+                new SequencedDirectoryDeserializer<>(directory, deserializer, context);
         return new BoundsFromRange<>(container, directory.getAssociatedElementRange());
     }
 }

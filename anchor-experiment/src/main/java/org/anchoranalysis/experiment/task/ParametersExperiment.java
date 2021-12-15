@@ -118,15 +118,6 @@ public class ParametersExperiment {
                 context, context.getExperimentArguments().task().getSize());
     }
 
-    /**
-     * Allows execution-times to be recorded for particular operations.
-     *
-     * @return the recorder.
-     */
-    public ExecutionTimeRecorder executionTimeRecorder() {
-        return executionTimeRecorder;
-    }
-
     public RecordedExecutionTimes executionTimeStatistics() {
         return executionTimeRecorder.recordedTimes();
     }

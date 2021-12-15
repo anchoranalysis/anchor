@@ -34,7 +34,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import org.anchoranalysis.core.progress.ProgressIgnore;
-import org.anchoranalysis.core.time.ExecutionTimeRecorderIgnore;
+import org.anchoranalysis.core.time.OperationContext;
 import org.anchoranalysis.io.input.InputContextParameters;
 import org.anchoranalysis.io.input.bean.InputManagerParameters;
 import org.anchoranalysis.io.input.bean.files.SearchDirectory;
@@ -69,8 +69,7 @@ class SerializedObjectsFromDirectory implements SequencedDirectory {
                             new InputManagerParameters(
                                     new InputContextParameters(),
                                     ProgressIgnore.get(),
-                                    new ExecutionTimeRecorderIgnore(),
-                                    null // HACK: Can be safely set to null as
+                                    new OperationContext(null) // HACK: Can be safely set to null as
                                     // fileSet.setIgnoreHidden(false);	// NOSONAR
                                     ));
 

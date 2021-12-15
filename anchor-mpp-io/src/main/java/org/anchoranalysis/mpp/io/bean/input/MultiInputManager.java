@@ -100,7 +100,7 @@ public class MultiInputManager extends InputManagerWithStackReader<MultiInput> {
                                     new AppendHelper(
                                             inputToAdd,
                                             parameters.isDebugModeActivated(),
-                                            parameters.getLogger()));
+                                            parameters.getOperationContext()));
                             return inputToAdd;
                         });
     }

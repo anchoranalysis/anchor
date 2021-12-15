@@ -33,6 +33,7 @@ import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.core.log.error.ErrorReporter;
 import org.anchoranalysis.core.time.ExecutionTimeRecorder;
+import org.anchoranalysis.core.time.OperationContext;
 import org.anchoranalysis.io.manifest.ManifestDirectoryDescription;
 
 /**
@@ -149,5 +150,9 @@ public interface InputOutputContext {
                                         manifestDirectoryDescription,
                                         inheritOutputRulesAndRecording))
                 .orElse(this);
+    }
+
+    default OperationContext operationContext() {
+        return new OperationContext(getExecutionTimeRecorder(), getLogger());
     }
 }

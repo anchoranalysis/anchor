@@ -30,7 +30,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.core.log.Logger;
+import org.anchoranalysis.core.time.OperationContext;
 import org.anchoranalysis.io.output.bean.ReportFeature;
 import org.anchoranalysis.mpp.init.MarksInitialization;
 
@@ -53,10 +53,10 @@ public class ReportFeatureWrapError extends ReportFeatureForSharedObjects {
     }
 
     @Override
-    public String featureDescription(MarksInitialization param, Logger logger)
+    public String featureDescription(MarksInitialization param, OperationContext context)
             throws OperationFailedException {
         try {
-            return item.featureDescription(param, logger);
+            return item.featureDescription(param, context);
         } catch (OperationFailedException e) {
             return message;
         }

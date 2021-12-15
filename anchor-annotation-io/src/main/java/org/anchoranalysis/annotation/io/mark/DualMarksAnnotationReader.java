@@ -32,9 +32,9 @@ import lombok.AllArgsConstructor;
 import org.anchoranalysis.annotation.io.AnnotationReader;
 import org.anchoranalysis.annotation.mark.DualMarksAnnotation;
 import org.anchoranalysis.core.functional.OptionalUtilities;
-import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.serialize.DeserializationFailedException;
 import org.anchoranalysis.core.serialize.XStreamDeserializer;
+import org.anchoranalysis.core.time.OperationContext;
 import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.mpp.io.marks.MarkCollectionDeserializer;
 import org.anchoranalysis.mpp.mark.MarkCollection;
@@ -53,13 +53,13 @@ public class DualMarksAnnotationReader<T> implements AnnotationReader<DualMarksA
     private final boolean acceptUnfinished;
 
     @Override
-    public Optional<DualMarksAnnotation<T>> read(Path path, Logger logger)
+    public Optional<DualMarksAnnotation<T>> read(Path path, OperationContext context)
             throws InputReadFailedException {
 
         Optional<Path> pathMaybeChanged = fileNameToRead(path);
         try {
             return OptionalUtilities.map(
-                    pathMaybeChanged, pathToRead -> readAnnotationFromPath(pathToRead, logger));
+                    pathMaybeChanged, pathToRead -> readAnnotationFromPath(pathToRead, context));
         } catch (DeserializationFailedException e) {
             throw new InputReadFailedException("Cannot deserialize annotation", e);
         }
@@ -79,14 +79,13 @@ public class DualMarksAnnotationReader<T> implements AnnotationReader<DualMarksA
      * Reads the annotations as a {@link MarkCollection} from the file-system.
      *
      * @param path the path where the annotations are stored.
-     * @param logger where to write informative messages to, and and any non-fatal errors (fatal
-     *     errors are throw as exceptions).
+     * @param context context for reading a stack from the file-system.
      * @return a newly created {@link MarkCollection} deserialized from {@code path}.
      * @throws DeserializationFailedException if the deserialization failed.
      */
-    public MarkCollection readDefaultMarks(Path path, Logger logger)
+    public MarkCollection readDefaultMarks(Path path, OperationContext context)
             throws DeserializationFailedException {
-        return DESERIALIZER.deserialize(path, logger);
+        return DESERIALIZER.deserialize(path, context);
     }
 
     private Optional<Path> fileNameToRead(Path annotationPath) {
@@ -109,9 +108,9 @@ public class DualMarksAnnotationReader<T> implements AnnotationReader<DualMarksA
         return Optional.empty();
     }
 
-    private DualMarksAnnotation<T> readAnnotationFromPath(Path annotationPath, Logger logger)
-            throws DeserializationFailedException {
+    private DualMarksAnnotation<T> readAnnotationFromPath(
+            Path annotationPath, OperationContext context) throws DeserializationFailedException {
         XStreamDeserializer<DualMarksAnnotation<T>> deserialized = new XStreamDeserializer<>();
-        return deserialized.deserialize(annotationPath, logger);
+        return deserialized.deserialize(annotationPath, context);
     }
 }

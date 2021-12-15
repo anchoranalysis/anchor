@@ -28,7 +28,7 @@ package org.anchoranalysis.core.serialize;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import org.anchoranalysis.core.log.Logger;
+import org.anchoranalysis.core.time.OperationContext;
 import org.anchoranalysis.core.value.Dictionary;
 
 /**
@@ -41,7 +41,8 @@ public class DictionaryDeserializer<T> implements Deserializer<T> {
 
     @SuppressWarnings("unchecked")
     @Override
-    public T deserialize(Path filePath, Logger logger) throws DeserializationFailedException {
+    public T deserialize(Path filePath, OperationContext context)
+            throws DeserializationFailedException {
         try {
             Dictionary obj = Dictionary.readFromFile(filePath);
             return (T) obj;

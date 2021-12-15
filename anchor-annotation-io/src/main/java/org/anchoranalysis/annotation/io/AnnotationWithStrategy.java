@@ -33,6 +33,7 @@ import lombok.Getter;
 import org.anchoranalysis.annotation.io.bean.AnnotatorStrategy;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
+import org.anchoranalysis.core.time.OperationContext;
 import org.anchoranalysis.image.core.stack.named.NamedStacksSupplier;
 import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
 import org.anchoranalysis.io.input.InputFromManagerDelegate;
@@ -80,13 +81,12 @@ public class AnnotationWithStrategy<T extends AnnotatorStrategy>
      * A human-friendly textual description of the annotation, or {@link Optional#empty()} if no
      * label is available.
      *
-     * @param logger where to write informative messages to, and and any non-fatal errors (fatal
-     *     errors are throw as exceptions).
+     * @param context context for reading a stack from the file-system.
      * @return the label, if available.
      * @throws OperationFailedException if a label cannot be successfully determined.
      */
-    public Optional<String> label(Logger logger) throws OperationFailedException {
-        return strategy.annotationLabelFor(getDelegate(), logger);
+    public Optional<String> label(OperationContext context) throws OperationFailedException {
+        return strategy.annotationLabelFor(getDelegate(), context);
     }
 
     /**

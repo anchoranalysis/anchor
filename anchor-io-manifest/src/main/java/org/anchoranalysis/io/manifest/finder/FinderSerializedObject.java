@@ -32,12 +32,12 @@ import java.util.Optional;
 import lombok.Getter;
 import org.anchoranalysis.core.format.NonImageFileFormat;
 import org.anchoranalysis.core.functional.OptionalFactory;
-import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.serialize.DeserializationFailedException;
 import org.anchoranalysis.core.serialize.Deserializer;
 import org.anchoranalysis.core.serialize.DictionaryDeserializer;
 import org.anchoranalysis.core.serialize.ObjectInputStreamDeserializer;
 import org.anchoranalysis.core.serialize.XStreamDeserializer;
+import org.anchoranalysis.core.time.OperationContext;
 import org.anchoranalysis.io.manifest.Manifest;
 import org.anchoranalysis.io.manifest.file.OutputtedFile;
 import org.anchoranalysis.io.manifest.finder.match.FileMatch;
@@ -52,7 +52,7 @@ public class FinderSerializedObject<T> extends FinderSingleFile {
 
     private Optional<T> deserializedObject = Optional.empty();
 
-    private Logger logger;
+    private OperationContext context;
 
     /** Provides a memoized (cached) means of access the results of the finder */
     @Getter
@@ -60,10 +60,10 @@ public class FinderSerializedObject<T> extends FinderSingleFile {
             SerializedObjectSupplier.cache(
                     () -> OptionalFactory.createChecked(exists(), this::getInternal));
 
-    public FinderSerializedObject(String function, Logger logger) {
-        super(logger.errorReporter());
+    public FinderSerializedObject(String function, OperationContext context) {
+        super(context.getLogger().errorReporter());
         this.function = function;
-        this.logger = logger;
+        this.context = context;
     }
 
     public T get() throws IOException {
@@ -104,7 +104,7 @@ public class FinderSerializedObject<T> extends FinderSingleFile {
     }
 
     private T deserialize(OutputtedFile fileWrite) throws DeserializationFailedException {
-        return createDeserializer(fileWrite).deserialize(fileWrite.calculatePath(), logger);
+        return createDeserializer(fileWrite).deserialize(fileWrite.calculatePath(), context);
     }
 
     private Deserializer<T> createDeserializer(OutputtedFile fileWrite) {

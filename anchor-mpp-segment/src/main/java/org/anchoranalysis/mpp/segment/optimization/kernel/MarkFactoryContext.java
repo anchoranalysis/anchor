@@ -28,10 +28,14 @@ package org.anchoranalysis.mpp.segment.optimization.kernel;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.anchoranalysis.core.time.OperationContext;
 import org.anchoranalysis.mpp.bean.mark.factory.MarkWithIdentifierFactory;
 
 @AllArgsConstructor
 public class MarkFactoryContext {
 
     @Getter private MarkWithIdentifierFactory markFactory;
+
+    /** Context for reading a stack from the file-system. */
+    @Getter private final OperationContext operationContext;
 }

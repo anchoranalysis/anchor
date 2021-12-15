@@ -33,9 +33,9 @@ import org.anchoranalysis.core.cache.CachedSupplier;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.format.NonImageFileFormat;
 import org.anchoranalysis.core.functional.checked.CheckedSupplier;
-import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.serialize.DeserializationFailedException;
 import org.anchoranalysis.core.serialize.Deserializer;
+import org.anchoranalysis.core.time.OperationContext;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 
 /**
@@ -74,19 +74,18 @@ public class ObjectCollectionReader {
      * @param path path or (or path missing a
      *     <pre>.h5</pre>
      *     extension) used to search for an object-collection using the rules above
-     * @param logger where to write informative messages to, and and any non-fatal errors (fatal
-     *     errors are throw as exceptions).
+     * @param context context for reading a stack from the file-system.
      * @return the object-collection read from this path.
      * @throws DeserializationFailedException if no objects are found at this path, or anything else
      *     prevents their deserialization.
      */
-    public static ObjectCollection createFromPath(Path path, Logger logger)
+    public static ObjectCollection createFromPath(Path path, OperationContext context)
             throws DeserializationFailedException {
 
         // 1. First check if has a file extension HDF5
         if (hasHdf5Extension(path)) {
             if (path.toFile().exists()) {
-                return HDF5.deserialize(path, logger);
+                return HDF5.deserialize(path, context);
             } else {
                 throw new DeserializationFailedException("File not found at " + path);
             }
@@ -95,12 +94,12 @@ public class ObjectCollectionReader {
         // 2. Suffix a .h5 and see if the file exists
         Path suffixed = addHdf5Extension(path);
         if (suffixed.toFile().exists()) {
-            return HDF5.deserialize(suffixed, logger);
+            return HDF5.deserialize(suffixed, context);
         }
 
         // 3. Treat as a folder of TIFFs
         if (path.toFile().exists()) {
-            return TIFF_CORRECT_MISSING.deserialize(path, logger);
+            return TIFF_CORRECT_MISSING.deserialize(path, context);
         } else {
             throw new DeserializationFailedException(
                     "Neither at HD5 file nor a directory of object TIFFs can be found for: "
@@ -109,11 +108,11 @@ public class ObjectCollectionReader {
     }
 
     public static CheckedSupplier<ObjectCollection, OperationFailedException> createFromPathCached(
-            CheckedSupplier<Path, OperationFailedException> path, Logger logger) {
+            CheckedSupplier<Path, OperationFailedException> path, OperationContext context) {
         return CachedSupplier.cacheChecked(
                 () -> {
                     try {
-                        return createFromPath(path.get(), logger);
+                        return createFromPath(path.get(), context);
                     } catch (DeserializationFailedException e) {
                         throw new OperationFailedException(e);
                     }

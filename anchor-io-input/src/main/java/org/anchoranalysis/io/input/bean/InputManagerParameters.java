@@ -33,7 +33,7 @@ import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.core.progress.ProgressIgnore;
 import org.anchoranalysis.core.time.ExecutionTimeRecorder;
-import org.anchoranalysis.core.time.ExecutionTimeRecorderIgnore;
+import org.anchoranalysis.core.time.OperationContext;
 import org.anchoranalysis.io.input.InputContextParameters;
 
 /**
@@ -48,10 +48,8 @@ public class InputManagerParameters {
 
     @Getter private final Progress progress;
 
-    /** Allows for recording the execution-time of particular operations. */
-    @Getter private final ExecutionTimeRecorder executionTimeRecorder;
-
-    @Getter private final Logger logger;
+    /** Allows for logging and recording the execution-time of particular operations. */
+    @Getter private final OperationContext operationContext;
 
     /**
      * Create with only a logger, and using sensible default values for the other fields.
@@ -59,16 +57,21 @@ public class InputManagerParameters {
      * @param logger the logger.
      */
     public InputManagerParameters(Logger logger) {
-        this(
-                new InputContextParameters(),
-                ProgressIgnore.get(),
-                new ExecutionTimeRecorderIgnore(),
-                logger);
+        this(new OperationContext(logger));
+    }
+
+    /**
+     * Create with only a {@link OperationContext}, and using sensible default values for the other
+     * fields.
+     *
+     * @param operationContext context for logging and recording execution times.
+     */
+    public InputManagerParameters(OperationContext operationContext) {
+        this(new InputContextParameters(), ProgressIgnore.get(), operationContext);
     }
 
     public InputManagerParameters withProgressReporter(Progress progressToAssign) {
-        return new InputManagerParameters(
-                inputContext, progressToAssign, executionTimeRecorder, logger);
+        return new InputManagerParameters(inputContext, progressToAssign, operationContext);
     }
 
     public boolean isDebugModeActivated() {
@@ -77,5 +80,13 @@ public class InputManagerParameters {
 
     public Optional<DebugModeParameters> getDebugModeParameters() {
         return inputContext.getDebugModeParameters();
+    }
+
+    public ExecutionTimeRecorder getExecutionTimeRecorder() {
+        return operationContext.getExecutionTimeRecorder();
+    }
+
+    public Logger getLogger() {
+        return operationContext.getLogger();
     }
 }

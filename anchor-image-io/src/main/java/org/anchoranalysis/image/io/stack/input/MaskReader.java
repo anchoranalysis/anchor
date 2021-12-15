@@ -29,7 +29,7 @@ package org.anchoranalysis.image.io.stack.input;
 import java.nio.file.Path;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.log.Logger;
+import org.anchoranalysis.core.time.OperationContext;
 import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.ImageIOException;
@@ -50,17 +50,19 @@ public class MaskReader {
      * @param stackReader the raster-reader for reading the stack.
      * @param path the path the raster is located at.
      * @param binaryValues what constitutes <i>on</i> and <i>off</i> voxels in the raster.
-     * @param logger where to write informative messages to, and and any non-fatal errors (fatal
-     *     errors are throw as exceptions).
+     * @param context context for reading a stack from the file-system.
      * @return a newly created {@link Mask} as read from the file-system.
      * @throws ImageIOException if the underlying image cannot be successfully read from the
      *     file-system.
      */
     public static Mask openMask(
-            StackReader stackReader, Path path, BinaryValuesInt binaryValues, Logger logger)
+            StackReader stackReader,
+            Path path,
+            BinaryValuesInt binaryValues,
+            OperationContext context)
             throws ImageIOException {
 
-        Stack stack = stackReader.readStack(path, logger);
+        Stack stack = stackReader.readStack(path, context);
 
         if (stack.getNumberChannels() != 1) {
             throw new ImageIOException(
