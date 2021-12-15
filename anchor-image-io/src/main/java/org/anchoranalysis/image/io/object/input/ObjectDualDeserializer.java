@@ -32,11 +32,11 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.format.FormatExtensions;
 import org.anchoranalysis.core.format.ImageFileFormat;
 import org.anchoranalysis.core.format.NonImageFileFormat;
-import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.progress.ProgressIgnore;
 import org.anchoranalysis.core.serialize.DeserializationFailedException;
 import org.anchoranalysis.core.serialize.Deserializer;
 import org.anchoranalysis.core.serialize.ObjectInputStreamDeserializer;
+import org.anchoranalysis.core.time.OperationContext;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.stack.Stack;
@@ -66,7 +66,7 @@ class ObjectDualDeserializer implements Deserializer<ObjectMask> {
     private final StackReader stackReader;
 
     @Override
-    public ObjectMask deserialize(Path filePath, Logger logger)
+    public ObjectMask deserialize(Path filePath, OperationContext context)
             throws DeserializationFailedException {
         try {
             Path tiffFilename =
@@ -74,21 +74,26 @@ class ObjectDualDeserializer implements Deserializer<ObjectMask> {
                             filePath.toAbsolutePath(),
                             NonImageFileFormat.SERIALIZED_BINARY,
                             ImageFileFormat.TIFF);
-            return createFromPaths(filePath, tiffFilename, logger);
+            return createFromPaths(filePath, tiffFilename, context);
         } catch (OperationFailedException e) {
             throw new DeserializationFailedException(e);
         }
     }
 
-    private ObjectMask createFromPaths(Path pathSerializedBox, Path pathTiff, Logger logger)
+    private ObjectMask createFromPaths(
+            Path pathSerializedBox, Path pathTiff, OperationContext context)
             throws DeserializationFailedException {
-        BoundingBox box = BOUNDING_BOX_DESERIALIZER.deserialize(pathSerializedBox, logger);
+        BoundingBox box = BOUNDING_BOX_DESERIALIZER.deserialize(pathSerializedBox, context);
 
-        try (OpenedImageFile openedFile = stackReader.openFile(pathTiff)) {
+        try (OpenedImageFile openedFile =
+                stackReader.openFile(pathTiff, context.getExecutionTimeRecorder())) {
             Stack stack =
                     openedFile
                             .openCheckType(
-                                    0, ProgressIgnore.get(), UnsignedByteVoxelType.INSTANCE, logger)
+                                    0,
+                                    ProgressIgnore.get(),
+                                    UnsignedByteVoxelType.INSTANCE,
+                                    context.getLogger())
                             .get(0);
 
             if (stack.getNumberChannels() != 1) {

@@ -30,7 +30,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.nio.file.Path;
-import org.anchoranalysis.core.log.Logger;
+import org.anchoranalysis.core.time.OperationContext;
 
 /**
  * Deserializes using Java's Native serialization framework.
@@ -46,7 +46,8 @@ public class ObjectInputStreamDeserializer<T> implements Deserializer<T> {
 
     @SuppressWarnings("unchecked")
     @Override
-    public T deserialize(Path filePath, Logger logger) throws DeserializationFailedException {
+    public T deserialize(Path filePath, OperationContext context)
+            throws DeserializationFailedException {
 
         if (!filePath.toFile().exists()) {
             throw new DeserializationFailedException(

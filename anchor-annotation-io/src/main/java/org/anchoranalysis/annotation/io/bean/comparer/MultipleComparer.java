@@ -50,7 +50,7 @@ import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.identifier.name.NameValue;
 import org.anchoranalysis.core.identifier.name.SimpleNameValue;
-import org.anchoranalysis.core.log.Logger;
+import org.anchoranalysis.core.time.OperationContext;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.initialization.FeatureRelatedInitialization;
 import org.anchoranalysis.image.core.stack.DisplayStack;
@@ -100,7 +100,7 @@ public class MultipleComparer extends AnchorBean<MultipleComparer> {
      *     reference.
      * @param colorScheme the color-scheme to use for unpaired objects.
      * @param modelDirectory a directory in which models reside.
-     * @param logger the logger.
+     * @param context context for reading a stack from the file-system.
      * @param debugMode whether in debug-mode or not.
      * @return a list of stacks showing the comparisons, with with a corresponding name.
      * @throws CreateException if any one of the stacks cannot be created.
@@ -111,14 +111,14 @@ public class MultipleComparer extends AnchorBean<MultipleComparer> {
             Path annotationPath,
             ColorScheme colorScheme,
             Path modelDirectory,
-            Logger logger,
+            OperationContext context,
             boolean debugMode)
             throws CreateException {
 
         FeatureRelatedInitialization initialization =
-                FeatureRelatedInitialization.create(logger, modelDirectory);
+                FeatureRelatedInitialization.create(context.getLogger(), modelDirectory);
         try {
-            featureEvaluator.initializeRecursive(initialization, logger);
+            featureEvaluator.initializeRecursive(initialization, context.getLogger());
         } catch (InitializeException e) {
             throw new CreateException(e);
         }
@@ -135,13 +135,16 @@ public class MultipleComparer extends AnchorBean<MultipleComparer> {
                 compareObjects =
                         source.getValue()
                                 .loadAsObjects(
-                                        annotationPath, background.dimensions(), debugMode, logger);
+                                        annotationPath,
+                                        background.dimensions(),
+                                        debugMode,
+                                        context);
             } catch (InputReadFailedException e) {
                 throw new CreateException(e);
             }
 
             Optional<ObjectCollection> foundObjects =
-                    compareObjects.getOrLog(source.getName(), logger);
+                    compareObjects.getOrLog(source.getName(), context.getLogger());
 
             if (foundObjects.isPresent()) {
                 out.add(

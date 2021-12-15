@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.io.bioformats.bean;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Path;
 import loci.common.services.DependencyException;
@@ -39,9 +40,10 @@ import loci.formats.services.OMEXMLService;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.time.ExecutionTimeRecorder;
 import org.anchoranalysis.image.core.dimensions.OrientationChange;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.reader.StackReaderOrientationCorrection;
@@ -65,9 +67,6 @@ public class BioformatsReader extends StackReaderOrientationCorrection {
     // START BEAN PROPERTIES
     /** Options that influence how stack is read. */
     @BeanField @Getter @Setter private ReadOptions options = new Default();
-
-    /** If non-empty forces usage of a particular bioformats plugin. */
-    @BeanField @AllowEmpty @Getter @Setter private String forceReader = "";
     // END BEAN PROPERTIES
 
     /**
@@ -80,20 +79,26 @@ public class BioformatsReader extends StackReaderOrientationCorrection {
     }
 
     @Override
-    public OpenedImageFile openFile(Path path) throws ImageIOException {
-        return openFile(path, loggerForOrientation -> OrientationChange.KEEP_UNCHANGED);
+    public OpenedImageFile openFile(Path path, ExecutionTimeRecorder executionTimeRecorder)
+            throws ImageIOException {
+        return openFile(
+                path,
+                loggerForOrientation -> OrientationChange.KEEP_UNCHANGED,
+                executionTimeRecorder);
     }
 
     @Override
-    public OpenedImageFile openFile(Path filePath, CalculateOrientationChange orientationCorrection)
+    public OpenedImageFile openFile(
+            Path filePath,
+            CalculateOrientationChange orientationCorrection,
+            ExecutionTimeRecorder executionTimeRecorder)
             throws ImageIOException {
 
         try {
-            IFormatReader reader = selectAndInitReader();
-
             OMEXMLMetadata metadata = createMetadata();
-            reader.setMetadataStore(metadata);
-            reader.setId(filePath.toString());
+
+            IFormatReader reader =
+                    selectAndInitReaderWithMetadata(filePath, metadata, executionTimeRecorder);
 
             return new BioformatsOpenedRaster(
                     reader,
@@ -112,14 +117,25 @@ public class BioformatsReader extends StackReaderOrientationCorrection {
         }
     }
 
-    private IFormatReader selectAndInitReader()
-            throws ClassNotFoundException, InstantiationException, IllegalAccessException,
-                    InvocationTargetException, NoSuchMethodException {
-
-        if (!forceReader.isEmpty()) {
-            return (IFormatReader) Class.forName(forceReader).getConstructor().newInstance();
-        } else {
-            return imageReader();
+    private IFormatReader selectAndInitReaderWithMetadata(
+            Path filePath, OMEXMLMetadata metadata, ExecutionTimeRecorder executionTimeRecorder)
+            throws Exception {
+        try {
+            IFormatReader reader =
+                    executionTimeRecorder.recordExecutionTime(
+                            "SelectAndInitReader", BioformatsReader::imageReader);
+            reader.setMetadataStore(metadata);
+            executionTimeRecorder.recordExecutionTime(
+                    "Assigning file-path to BioformatsReader",
+                    () -> reader.setId(filePath.toString()));
+            return reader;
+        } catch (NoSuchMethodException
+                | ClassNotFoundException
+                | InstantiationException
+                | IllegalAccessException
+                | InvocationTargetException
+                | IOException e) {
+            throw new OperationFailedException(e);
         }
     }
 

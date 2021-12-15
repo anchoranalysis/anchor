@@ -29,7 +29,7 @@ package org.anchoranalysis.annotation.io;
 import java.nio.file.Path;
 import java.util.Optional;
 import org.anchoranalysis.annotation.Annotation;
-import org.anchoranalysis.core.log.Logger;
+import org.anchoranalysis.core.time.OperationContext;
 import org.anchoranalysis.io.input.InputReadFailedException;
 
 /**
@@ -44,10 +44,9 @@ public interface AnnotationReader<T extends Annotation> {
      * Reads an annotation, if possible, from the file-system.
      *
      * @param path a path representing the annotation (or we derive another path from this path).
-     * @param logger where to write informative messages to, and and any non-fatal errors (fatal
-     *     errors are throw as exceptions).
+     * @param context TODO
      * @return the annotation or {@link Optional#empty()} if it can't be read.
      * @throws InputReadFailedException if the annotation cannot be read successfully.
      */
-    Optional<T> read(Path path, Logger logger) throws InputReadFailedException;
+    Optional<T> read(Path path, OperationContext context) throws InputReadFailedException;
 }

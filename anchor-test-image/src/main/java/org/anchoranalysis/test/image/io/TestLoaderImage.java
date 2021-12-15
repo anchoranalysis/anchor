@@ -33,6 +33,7 @@ import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.serialize.DeserializationFailedException;
+import org.anchoranalysis.core.time.ExecutionTimeRecorderIgnore;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.ImageIOException;
@@ -86,7 +87,8 @@ public class TestLoaderImage {
 
         ConfigureBioformatsLogging.instance().makeSureConfigured();
 
-        try (OpenedImageFile openedFile = stackReader.openFile(filePath)) {
+        try (OpenedImageFile openedFile =
+                stackReader.openFile(filePath, ExecutionTimeRecorderIgnore.instance())) {
             return openedFile.open(logger).get(0);
         } catch (ImageIOException e) {
             throw new TestDataLoadException(e);
@@ -159,7 +161,7 @@ public class TestLoaderImage {
 
         try {
             return ObjectCollectionReader.createFromPath(
-                    folderPath, LoggingFixture.suppressedLogger());
+                    folderPath, LoggingFixture.suppressedOperationContext());
         } catch (DeserializationFailedException e) {
             throw new TestDataLoadException(e);
         }

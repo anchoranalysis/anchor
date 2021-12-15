@@ -32,7 +32,7 @@ import java.util.function.Function;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.core.log.Logger;
+import org.anchoranalysis.core.time.OperationContext;
 import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
@@ -52,7 +52,7 @@ class AppendHelper {
     // START: REQUIRED ARGUMENTS
     private final MultiInput input;
     private final boolean debugMode;
-    private final Logger logger;
+    private final OperationContext context;
     // END: REQUIRED ARGUMENTS
 
     /** Reads an object from a path. */
@@ -94,7 +94,7 @@ class AppendHelper {
         append(
                 listPaths,
                 MultiInput::marks,
-                serialized -> DESERIALIZER.deserializeMarks(serialized, logger));
+                serialized -> DESERIALIZER.deserializeMarks(serialized, context));
     }
 
     public void appendMarksFromAnnotation(
@@ -107,14 +107,14 @@ class AppendHelper {
                 MultiInput::marks,
                 outPath ->
                         DESERIALIZER.deserializeMarksFromAnnotation(
-                                outPath, includeAccepted, includeRejected, logger));
+                                outPath, includeAccepted, includeRejected, context));
     }
 
     public void appendObjects(List<NamedBean<DerivePath>> listPaths) {
         append(
                 listPaths,
                 MultiInput::objects,
-                path -> ObjectCollectionReader.createFromPath(path, logger));
+                path -> ObjectCollectionReader.createFromPath(path, context));
     }
 
     /**
@@ -154,8 +154,9 @@ class AppendHelper {
     }
 
     private TimeSequence openRaster(Path path, StackReader stackReader) throws ImageIOException {
-        try (OpenedImageFile openedFile = stackReader.openFile(path)) {
-            return openedFile.open(logger);
+        try (OpenedImageFile openedFile =
+                stackReader.openFile(path, context.getExecutionTimeRecorder())) {
+            return openedFile.open(context.getLogger());
         }
     }
 }

@@ -51,7 +51,11 @@ public class KernelCalculationContext {
 
         this.proposerContext =
                 new ProposerContext(
-                        randomNumberGenerator, energyStack, energyScheme.getRegionMap(), errorNode);
+                        randomNumberGenerator,
+                        energyStack,
+                        energyScheme.getRegionMap(),
+                        markFactoryContext.getOperationContext(),
+                        errorNode);
     }
 
     public ProposerContext proposer() {

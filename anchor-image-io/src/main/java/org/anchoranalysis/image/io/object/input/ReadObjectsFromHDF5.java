@@ -31,9 +31,9 @@ import ch.systemsx.cisd.hdf5.IHDF5Reader;
 import ch.systemsx.cisd.hdf5.exceptions.HDF5FileNotFoundException;
 import java.nio.file.Path;
 import java.util.List;
-import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.serialize.DeserializationFailedException;
 import org.anchoranalysis.core.serialize.Deserializer;
+import org.anchoranalysis.core.time.OperationContext;
 import org.anchoranalysis.image.io.object.HDF5PathHelper;
 import org.anchoranalysis.image.io.object.output.hdf5.HDF5ObjectsGenerator;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
@@ -44,7 +44,7 @@ class ReadObjectsFromHDF5 implements Deserializer<ObjectCollection> {
     private static final ObjectMaskHDF5Reader OBJECT_READER = new ObjectMaskHDF5Reader();
 
     @Override
-    public ObjectCollection deserialize(Path path, Logger logger)
+    public ObjectCollection deserialize(Path path, OperationContext context)
             throws DeserializationFailedException {
 
         try (IHDF5Reader reader = HDF5Factory.openForReading(path.toString())) {

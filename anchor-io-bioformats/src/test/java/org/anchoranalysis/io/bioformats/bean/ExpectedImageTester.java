@@ -28,6 +28,7 @@ package org.anchoranalysis.io.bioformats.bean;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.time.ExecutionTimeRecorderIgnore;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
@@ -162,6 +163,6 @@ class ExpectedImageTester {
     }
 
     private void openAndAssert(ExpectedImage image) throws ImageIOException {
-        image.openAndAssert(reader, loader);
+        image.openAndAssert(reader, loader, ExecutionTimeRecorderIgnore.instance());
     }
 }

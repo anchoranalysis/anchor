@@ -176,6 +176,16 @@ class BioformatsOpenedRaster implements OpenedImageFile {
         return calculateOrientation(logger).dimensions(dimensions);
     }
 
+    @Override
+    public ImageTimestampsAttributes timestamps() throws ImageIOException {
+        return timestamps.get();
+    }
+
+    @Override
+    public Optional<List<String>> channelNames(Logger logger) throws ImageIOException {
+        return channelNames;
+    }
+
     private Dimensions dimensionsForSeriesWithoutOrientationChange(int seriesIndex)
             throws ImageIOException {
         try {
@@ -281,16 +291,6 @@ class BioformatsOpenedRaster implements OpenedImageFile {
                     "An error occurred while copying frames when opening with the BioformatsReader",
                     e);
         }
-    }
-
-    @Override
-    public ImageTimestampsAttributes timestamps() throws ImageIOException {
-        return timestamps.get();
-    }
-
-    @Override
-    public Optional<List<String>> channelNames(Logger logger) throws ImageIOException {
-        return channelNames;
     }
 
     /**

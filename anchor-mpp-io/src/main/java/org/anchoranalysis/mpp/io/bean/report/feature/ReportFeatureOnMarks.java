@@ -33,7 +33,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.core.log.Logger;
+import org.anchoranalysis.core.time.OperationContext;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.bound.FeatureCalculatorSingle;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
@@ -54,13 +54,13 @@ public class ReportFeatureOnMarks extends ReportFeatureForMarks<FeatureInputMark
     }
 
     @Override
-    public String featureDescription(MarksInitialization param, Logger logger)
+    public String featureDescription(MarksInitialization param, OperationContext context)
             throws OperationFailedException {
 
         // Maybe we should duplicate the providers?
         try {
-            initialize(param, logger);
-            marks.initializeRecursive(param, logger);
+            initialize(param, context.getLogger());
+            marks.initializeRecursive(param, context.getLogger());
         } catch (InitializeException e) {
             throw new OperationFailedException(e);
         }

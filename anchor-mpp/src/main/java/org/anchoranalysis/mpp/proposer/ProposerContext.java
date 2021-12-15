@@ -28,6 +28,7 @@ package org.anchoranalysis.mpp.proposer;
 
 import lombok.Value;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
+import org.anchoranalysis.core.time.OperationContext;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMap;
@@ -42,15 +43,21 @@ public class ProposerContext {
     private RandomNumberGenerator randomNumberGenerator;
     private EnergyStack energyStack;
     private RegionMap regionMap;
+    private OperationContext operationContext;
     private ErrorNode errorNode;
 
     public ProposerContext replaceError(ErrorNode errorNode) {
-        return new ProposerContext(randomNumberGenerator, energyStack, regionMap, errorNode);
+        return new ProposerContext(
+                randomNumberGenerator, energyStack, regionMap, operationContext, errorNode);
     }
 
     public ProposerContext addErrorLevel(String errorMessage) {
         return new ProposerContext(
-                randomNumberGenerator, energyStack, regionMap, errorNode.add(errorMessage));
+                randomNumberGenerator,
+                energyStack,
+                regionMap,
+                operationContext,
+                errorNode.add(errorMessage));
     }
 
     /** Samples an integer uniformally between [0..maxVal) */

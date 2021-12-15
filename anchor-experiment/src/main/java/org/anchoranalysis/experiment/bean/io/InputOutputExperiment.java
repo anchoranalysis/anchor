@@ -42,6 +42,7 @@ import org.anchoranalysis.core.log.Divider;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.core.progress.ProgressIgnore;
+import org.anchoranalysis.core.time.OperationContext;
 import org.anchoranalysis.core.value.LanguageUtilities;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.bean.log.LoggingDestination;
@@ -153,12 +154,15 @@ public class InputOutputExperiment<T extends InputFromManager, S> extends Output
     protected Optional<TaskStatistics> executeExperimentWithParameters(
             ParametersExperiment parameters) throws ExperimentExecutionException {
         try {
+            OperationContext operationContext =
+                    new OperationContext(
+                            parameters.getExecutionTimeRecorder(),
+                            new Logger(parameters.getLoggerExperiment()));
             InputManagerParameters parametersInput =
                     new InputManagerParameters(
                             parameters.getExperimentArguments().createInputContext(),
                             ProgressIgnore.get(),
-                            parameters.executionTimeRecorder(),
-                            new Logger(parameters.getLoggerExperiment()));
+                            operationContext);
 
             if (parameters.isDetailedLogging()) {
                 parameters.getLoggerExperiment().log(DIVIDER.withLabel("Inputs"));
@@ -166,7 +170,7 @@ public class InputOutputExperiment<T extends InputFromManager, S> extends Output
 
             InputsWithDirectory<T> inputs =
                     parameters
-                            .executionTimeRecorder()
+                            .getExecutionTimeRecorder()
                             .recordExecutionTime(
                                     EXECUTION_TIME_COLLECTING_INPUTS,
                                     () -> getInput().inputs(parametersInput));

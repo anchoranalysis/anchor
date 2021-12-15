@@ -59,7 +59,28 @@ public abstract class ExecutionTimeRecorder {
     public abstract boolean isOperationAlreadyRecorded(String operationIdentifier);
 
     /**
-     * Executes an {@code operation} while recording the execution-time - <b>with a return type</b>.
+     * Executes an {@code operation} while recording the execution-time - <b>without a return type,
+     * and without throwing an exception.</b>.
+     *
+     * <p>Operation times are always executed, even they throw an Exception or otherwise end in
+     * failure.
+     *
+     * @param operationIdentifier an identifier for this type of write-operation, under which
+     *     execution-times are aggregated.
+     * @param operation the operation to execute
+     */
+    public void recordExecutionTimeUnchecked(String operationIdentifier, Runnable operation) {
+        long startTimestamp = measureTime(true, operationIdentifier);
+        try {
+            operation.run();
+        } finally {
+            recordTimeDifferenceFrom(operationIdentifier, startTimestamp);
+        }
+    }
+
+    /**
+     * Executes an {@code operation} while recording the execution-time - <b>without a return
+     * type</b>.
      *
      * <p>Operation times are always executed, even they throw an Exception or otherwise end in
      * failure.

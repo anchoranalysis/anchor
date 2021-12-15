@@ -27,7 +27,7 @@ package org.anchoranalysis.image.io.bean.stack.metadata.reader;
 
 import java.nio.file.Path;
 import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.core.log.Logger;
+import org.anchoranalysis.core.time.OperationContext;
 import org.anchoranalysis.image.core.stack.ImageMetadata;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
@@ -45,11 +45,11 @@ public abstract class ImageMetadataReader extends AnchorBean<ImageMetadataReader
      * @param path where the file is located.
      * @param defaultStackReader the default {@link StackReader} to use, if needed, and if not
      *     otherwise specified, for reading metadata.
-     * @param logger where to write informative messages to, and and any non-fatal errors (fatal
-     *     errors are throw as exceptions).
+     * @param context context for reading a stack from the file-system.
      * @return an interface to the opened file that should be closed when no longer in use.
      * @throws ImageIOException if the file cannot be read.
      */
-    public abstract ImageMetadata openFile(Path path, StackReader defaultStackReader, Logger logger)
+    public abstract ImageMetadata openFile(
+            Path path, StackReader defaultStackReader, OperationContext context)
             throws ImageIOException;
 }

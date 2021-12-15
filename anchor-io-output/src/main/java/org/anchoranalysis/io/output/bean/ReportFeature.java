@@ -28,7 +28,7 @@ package org.anchoranalysis.io.output.bean;
 
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.core.log.Logger;
+import org.anchoranalysis.core.time.OperationContext;
 
 public abstract class ReportFeature<T> extends AnchorBean<ReportFeature<T>> {
 
@@ -36,6 +36,6 @@ public abstract class ReportFeature<T> extends AnchorBean<ReportFeature<T>> {
 
     public abstract String title();
 
-    public abstract String featureDescription(T param, Logger logger)
+    public abstract String featureDescription(T param, OperationContext context)
             throws OperationFailedException;
 }
