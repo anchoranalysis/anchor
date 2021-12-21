@@ -44,21 +44,51 @@ public class FeatureCalculatorCache {
 
     private static final int DEFAULT_CACHE_SIZE = 1000;
 
+    /**
+     * Creates a cached version of a {@link FeatureCalculatorSingle} with a default cache-size.
+     *  
+     * @param <T> feature-input type
+     * @param calculator the calculator to cache.
+     * @return a calculator that caches {@link FeatureCalculatorSingle}.
+     */
     public static <T extends FeatureInput> FeatureCalculatorSingle<T> cache(
             FeatureCalculatorSingle<T> calculator) {
         return new CachedSingle<>(calculator, DEFAULT_CACHE_SIZE);
     }
 
+    /**
+     * Creates a cached version of a {@link FeatureCalculatorSingle} with a particular cache-size.
+     *  
+     * @param <T> feature-input type
+     * @param calculator the calculator to cache.
+     * @param cacheSize how many items are retained maximally in the cache.
+     * @return a calculator that caches {@link FeatureCalculatorSingle}.
+     */
     public static <T extends FeatureInput> FeatureCalculatorSingle<T> cache(
             FeatureCalculatorSingle<T> calculator, int cacheSize) {
         return new CachedSingle<>(calculator, cacheSize);
     }
 
+    /**
+     * Creates a cached version of a {@link FeatureCalculatorMulti} with a default cache-size.
+     *  
+     * @param <T> feature-input type
+     * @param calculator the calculator to cache.
+     * @return a calculator that caches {@link FeatureCalculatorMulti}.
+     */
     public static <T extends FeatureInput> FeatureCalculatorMulti<T> cache(
             FeatureCalculatorMulti<T> calculator) {
         return new CachedMulti<>(calculator, DEFAULT_CACHE_SIZE);
     }
 
+    /**
+     * Creates a cached version of a {@link FeatureCalculatorMulti} with a particular cache-size.
+     *  
+     * @param <T> feature-input type
+     * @param calculator the calculator to cache.
+     * @param cacheSize how many items are retained maximally in the cache.
+     * @return a calculator that caches {@link FeatureCalculatorMulti}.
+     */
     public static <T extends FeatureInput> FeatureCalculatorMulti<T> cache(
             FeatureCalculatorMulti<T> calculator, int cacheSize) {
         return new CachedMulti<>(calculator, cacheSize);

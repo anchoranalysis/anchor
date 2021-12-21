@@ -46,7 +46,7 @@ public class ConstantsInListFixture {
 
     private static final double EPS = 1e-16;
 
-    /** creates a feature-list associated with the fixture */
+    /** Creates a feature-list associated with the fixture. */
     public static <T extends FeatureInput> FeatureList<T> create() {
         return FeatureListFactory.from(
                 constantFeatureFor(F1_VALUE),
@@ -55,10 +55,10 @@ public class ConstantsInListFixture {
     }
 
     /**
-     * checks that a result-vector has the results we expect from the feature-list associated with
-     * this fixture
+     * Checks that a result-vector has the results we expect from the feature-list associated with
+     * this fixture.
      */
-    public static void checkResultVector(ResultsVector resultsVector) {
+    public static void checkResultsVector(ResultsVector resultsVector) {
         assertTrue(resultsVector.equalsPrecision(EPS, F1_VALUE, F2_VALUE, F3_VALUE));
     }
 

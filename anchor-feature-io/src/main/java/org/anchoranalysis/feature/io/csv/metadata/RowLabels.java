@@ -45,7 +45,7 @@ public class RowLabels {
     /** Unique identifier for the row taking all elements together (together a primary key). */
     private final Optional<String[]> identifier;
 
-    /** an identifier for a higher-level group which the row belongs to (foreign key) */
+    /** An identifier for a higher-level group which the row belongs to (foreign key) */
     @Getter private final Optional<MultiName> group;
 
     /**

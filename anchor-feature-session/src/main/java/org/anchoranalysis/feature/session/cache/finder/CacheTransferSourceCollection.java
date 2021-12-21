@@ -34,19 +34,38 @@ import java.util.Set;
 import org.anchoranalysis.feature.calculate.cache.ChildCacheName;
 import org.anchoranalysis.feature.input.FeatureInput;
 
+/**
+ * A collection of existing caches that can <i>collectively</i> be used as sources for child-caches elsewhere.
+ *
+ * @author Owen Feehan
+ */
 public class CacheTransferSourceCollection
         implements Iterable<CacheTransferSource<? extends FeatureInput>> {
 
+	/** The names of all child-caches that are made available. */
     private Set<ChildCacheName> allCacheNames = new HashSet<>();
+    
+    /** All the sources that are searched for child-caches. */
     private List<CacheTransferSource<? extends FeatureInput>> list = new ArrayList<>();
 
+    /**
+     * Adds a source.
+     * 
+     * @param source the source to add.
+     */
     public void add(CacheTransferSource<? extends FeatureInput> source) {
         list.add(source);
         allCacheNames.addAll(source.getCacheNames());
     }
 
-    public boolean contains(ChildCacheName childName) {
-        return allCacheNames.contains(childName);
+    /**
+     * Whether a particular child-cache exists in the source?
+     * 
+     * @param name the name of the child-cache.
+     * @return true iff the child-cache exists.
+     */
+    public boolean contains(ChildCacheName name) {
+        return allCacheNames.contains(name);
     }
 
     @Override
@@ -54,6 +73,11 @@ public class CacheTransferSourceCollection
         return list.iterator();
     }
 
+    /**
+     * The names of all child-caches that are made available.
+     * 
+     * @return a set of names, which should not be modified.
+     */
     public Set<ChildCacheName> getAllCacheNames() {
         return allCacheNames;
     }

@@ -57,8 +57,8 @@ public class LRUCache<K, V> {
      * Constructor.
      *
      * @param <E> type of an exception that may be thrown by {@code calculator}.
-     * @param cacheSize maximum-size of cache
-     * @param calculator calculates the value for a given key if it's not already in the cache
+     * @param cacheSize maximum-size of cache.
+     * @param calculator calculates the value for a given key if it's not already in the cache.
      */
     public <E extends Exception> LRUCache(int cacheSize, CheckedFunction<K, V, E> calculator) {
 
@@ -81,7 +81,7 @@ public class LRUCache<K, V> {
      * @param key the key whose value will be either calculated freshly or retrieved from the cache.
      * @return the value of applying {@code calculator} (see constructor argument) on value {@code
      *     key}.
-     * @throws GetOperationFailedException if the key doesn't exist
+     * @throws GetOperationFailedException if the key doesn't exist.
      */
     public V get(K key) throws GetOperationFailedException {
         try {
@@ -94,7 +94,7 @@ public class LRUCache<K, V> {
     /**
      * Is a particular key present already in the cache?
      *
-     * @param key they key to check
+     * @param key they key to check.
      * @return true iff the key already exists in the cache.
      */
     public boolean has(K key) {
@@ -104,17 +104,17 @@ public class LRUCache<K, V> {
     /**
      * Number of items currently in the cache.
      *
-     * @return the number of items
+     * @return the number of items.
      */
     public long sizeCurrentLoad() {
         return cache.size();
     }
 
     /**
-     * Gets an value if present, but doesn't create any new entry if it's absent.
+     * Gets an value, if present, but doesn't create any new entry if it's absent.
      *
-     * @param key the key
-     * @return an existing element if present or empty() otherwise
+     * @param key the key.
+     * @return an existing element if present or {@link Optional#empty()} otherwise.
      */
     public Optional<V> getIfPresent(K key) {
         return Optional.ofNullable(cache.getIfPresent(key));
@@ -123,8 +123,8 @@ public class LRUCache<K, V> {
     /**
      * Puts a key-value pair irrespective of whether its already present or not.
      *
-     * @param key the key
-     * @param value the value
+     * @param key the key.
+     * @param value the value.
      */
     public void put(K key, V value) {
         cache.put(key, value);

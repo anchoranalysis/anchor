@@ -43,9 +43,9 @@ public class MultiNameFactory {
      *
      * <p>The first part is always a grouping key for aggregation.
      *
-     * @param groupIdentifier if present, a group identifier that becomes the first part
-     * @param nonGroupIdentifier the non-group part of the identifier that is present irrespective
-     * @return the created multi-name
+     * @param groupIdentifier if present, a group identifier that becomes the first part.
+     * @param nonGroupIdentifier the non-group part of the identifier that is present irrespective.
+     * @return the created multi-name.
      */
     public static MultiName create(Optional<String> groupIdentifier, String nonGroupIdentifier) {
         return groupIdentifier

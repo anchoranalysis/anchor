@@ -76,7 +76,7 @@ public class FeatureOutputMetadata {
      * Specific metadata for writing an <b>aggregated CSV file</b>.
      *
      * @param featureNamesAggregated the feature-names to use for the aggregated CSV file (which
-     *     usally differ from {@code featureNamesNonAggregate}.
+     *     usually differ from {@code featureNamesNonAggregate}.
      * @return a newly created {@link FeatureCSVMetadataForOutput}.
      */
     public Optional<FeatureCSVMetadataForOutput> csvAggregated(

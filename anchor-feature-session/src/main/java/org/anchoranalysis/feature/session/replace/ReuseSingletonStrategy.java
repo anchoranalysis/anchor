@@ -28,47 +28,52 @@ package org.anchoranalysis.feature.session.replace;
 
 import java.util.Optional;
 import java.util.function.Function;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.feature.calculate.cache.CacheCreator;
+import org.anchoranalysis.feature.calculate.cache.FeatureCalculationCache;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.session.SessionInputSequential;
 import org.anchoranalysis.feature.session.cache.finder.ChildCacheFinder;
 import org.anchoranalysis.feature.session.cache.finder.DefaultChildCacheFinder;
 
-/** Always re-use a singleton SessionInput, invalidating it each time a new call occurs */
+/** 
+ * Always re-use an existing {@link SessionInputSequential}, invalidating it each time a new call occurs.
+ * 
+ * @param <T> feature input-type
+ */
 public class ReuseSingletonStrategy<T extends FeatureInput> implements ReplaceStrategy<T> {
 
     private Optional<SessionInputSequential<T>> sessionInput = Optional.empty();
 
-    /** Means to create the session-input */
+    /** Means to create the {@link FeatureCalculationInput}. */
     private Function<T, SessionInputSequential<T>> createSessionInput;
 
     /**
-     * Constructor with default means of creating a session-input
+     * Constructor with default means of creating a {@link FeatureCalculationInput}.
      *
-     * @param cacheCreator
+     * @param cacheCreator creates a {@link FeatureCalculationCache}.
      */
     public ReuseSingletonStrategy(CacheCreator cacheCreator) {
         this(cacheCreator, DefaultChildCacheFinder.instance());
     }
 
     /**
-     * Constructor with custom means of creating a session-input
+     * Constructor with custom means of creating a {@link FeatureCalculationInput}
      *
-     * @param cacheCreator
+     * @param cacheCreator creates a cache.
+     * @param findChildStrategy the strategy for finding child-caches.
      */
     public ReuseSingletonStrategy(CacheCreator cacheCreator, ChildCacheFinder findChildStrategy) {
-        super();
         this.createSessionInput =
                 input -> new SessionInputSequential<T>(input, cacheCreator, findChildStrategy);
     }
 
     @Override
-    public FeatureCalculationInput<T> createOrReuse(T input) throws CreateException {
+    public FeatureCalculationInput<T> createOrReuse(T input) throws OperationFailedException {
 
         if (input == null) {
-            throw new CreateException("The input may not be null");
+            throw new OperationFailedException("The input may not be null");
         }
 
         if (sessionInput.isPresent()) {

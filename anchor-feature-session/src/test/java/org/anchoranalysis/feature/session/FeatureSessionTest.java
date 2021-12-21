@@ -50,10 +50,10 @@ class FeatureSessionTest {
                 new SharedFeatures(),
                 LoggingFixture.suppressedLogger());
 
-        ResultsVector rv1 = session.calculate(FeatureInputNull.instance());
-        ConstantsInListFixture.checkResultVector(rv1);
+        ResultsVector results1 = session.calculate(FeatureInputNull.instance());
+        ConstantsInListFixture.checkResultsVector(results1);
 
-        ResultsVector rv2 = session.calculate(FeatureInputNull.instance());
-        ConstantsInListFixture.checkResultVector(rv2);
+        ResultsVector results2 = session.calculate(FeatureInputNull.instance());
+        ConstantsInListFixture.checkResultsVector(results2);
     }
 }

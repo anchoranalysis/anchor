@@ -27,7 +27,6 @@
 package org.anchoranalysis.feature.session;
 
 import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
-import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
@@ -47,14 +46,13 @@ import org.anchoranalysis.feature.session.replace.ReuseSingletonStrategy;
 import org.anchoranalysis.feature.shared.SharedFeatures;
 
 /**
- * Calculates features with successively different parameters, taking care of caching etc.
- * appropriately.
+ * Calculates features with successively different inputs, without caching any results from one input to the next.
+ * 
+ * <p>i.e. caching is applied only within each call to {@link #calculate(FeatureInput)} not but among
+ * successive calls.
  *
  * <p>All feature use the same initialization, but successively different {#FeatureCalculation}
  * sequentially.
- *
- * <p>Caching is applied only within each call to {{@link #calculate(FeatureInput)} but among
- * successive calls.
  *
  * @author Owen Feehan
  * @param <T> input-type for feature
@@ -71,7 +69,7 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
     // Should feature calculation errors be printed to the console?
     private boolean reportErrors = false;
 
-    private ReplaceStrategy<T> replaceSession;
+    private ReplaceStrategy<T> replaceStrategy;
 
     private BoundReplaceStrategy<T, ? extends ReplaceStrategy<T>> replacePolicyFactory;
 
@@ -85,18 +83,18 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
     }
 
     /**
-     * Constructor of a session
+     * Constructor of a session.
      *
-     * @param features the features that will be calculated in this session
+     * @param features the features that will be calculated in this session.
      */
     SequentialSession(Iterable<Feature<T>> features) {
         this(features, new BoundReplaceStrategy<>(ReuseSingletonStrategy::new));
     }
 
     /**
-     * Constructor of a session
+     * Constructor of a session.
      *
-     * @param features the features that will be calculated in this session
+     * @param features the features that will be calculated in this session.
      */
     SequentialSession(
             Iterable<Feature<T>> features,
@@ -106,13 +104,12 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
     }
 
     /**
-     * Starts the session
+     * Starts the session.
      *
-     * @param initialization The parameters used to initialise the feature
-     * @param logger Logger
-     * @param sharedFeatures A list of features that are shared between the features we are
-     *     calculating (and thus also init-ed)
-     * @throws InitializeException
+     * @param initialization the parameters used to initialize the feature.
+     * @param logger the logger.
+     * @param sharedFeatures features that can be referenced by all the features being calculated in the session. They are also initialized by this session.
+     * @throws InitializeException if any initialization fails to complete successfully.
      */
     public void start(
             FeatureInitialization initialization, SharedFeatures sharedFeatures, Logger logger)
@@ -131,7 +128,7 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
     @Override
     public ResultsVector calculate(T input) throws NamedFeatureCalculateException {
         checkIsStarted();
-        return calculateCommonExceptionAsVector(input);
+        return calculateThrowException(input);
     }
 
     @Override
@@ -140,18 +137,18 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
         checkIsStarted();
 
         try {
-            return replaceSession.createOrReuse(input).calculate(featuresSubset);
+            return replaceStrategy.createOrReuse(input).calculate(featuresSubset);
         } catch (Exception e) {
             throw new NamedFeatureCalculateException(e);
         }
     }
 
     /**
-     * Calculates the next-object in our sequential series, reporting any exceptions into a reporter
-     * log
+     * Calculates the results for the next input in the session, reporting any exceptions into an {@link ErrorReporter}.
      *
-     * @param input
-     * @return
+     * @param input the input to calculate results for.
+     * @param errorReporter where to report errors to.
+     * @return the calculated results.
      */
     public ResultsVector calculateSuppressErrors(T input, ErrorReporter errorReporter) {
 
@@ -167,22 +164,19 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
         return results;
     }
 
-    public boolean hasSingleFeature() {
-        return listFeatures.size() == 1;
-    }
-
     @Override
     public int sizeFeatures() {
         return listFeatures.size();
     }
 
+    /** Calculate the results for {@code input} without throwing an exception for an error. */
     private void calculateCommonSuppressErrors(
             ResultsVector results, T input, ErrorReporter errorReporter) {
 
         // Create cacheable inputs, and record any errors for all features
         FeatureCalculationInput<T> sessionInput;
         try {
-            sessionInput = replaceSession.createOrReuse(input);
+            sessionInput = replaceStrategy.createOrReuse(input);
         } catch (Exception e) {
             // Return all features as errored
             if (reportErrors) {
@@ -210,34 +204,35 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
         }
     }
 
-    private ResultsVector calculateCommonExceptionAsVector(T input)
+    /** Calculate the results for {@code input} rethrowing any exception that occurs. */
+    private ResultsVector calculateThrowException(T input)
             throws NamedFeatureCalculateException {
 
         FeatureCalculationInput<T> sessionInput;
         try {
-            sessionInput = replaceSession.createOrReuse(input);
-        } catch (CreateException e) {
+            sessionInput = replaceStrategy.createOrReuse(input);
+        } catch (OperationFailedException e) {
             throw new NamedFeatureCalculateException(e);
         }
 
-        ResultsVector res = new ResultsVector(listFeatures.size());
+        ResultsVector results = new ResultsVector(listFeatures.size());
         for (int i = 0; i < listFeatures.size(); i++) {
             Feature<T> feature = listFeatures.get(i);
 
             try {
                 double val = sessionInput.calculate(feature);
-                res.set(i, val);
+                results.set(i, val);
             } catch (Exception e) {
                 throw new NamedFeatureCalculateException(feature.getFriendlyName(), e.getMessage());
             }
         }
 
-        return res;
+        return results;
     }
 
     /**
      * Checks that there's no common features in the featureList and the shared-features as this can
-     * create complications with initialisation of caches (recursive initializations)
+     * create complications with initialization of caches (recursive initializations).
      *
      * @param sharedFeatures
      * @throws InitializeException
@@ -273,8 +268,8 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
         FeatureInitialization initializationDup = initialization.duplicateShallow();
         listFeatures.initializeRecursive(initializationDup, logger);
 
-        replaceSession =
-                replacePolicyFactory.bind(listFeatures, initializationDup, sharedFeatures, logger);
+        replaceStrategy =
+                replacePolicyFactory.createOrReuse(listFeatures, initializationDup, sharedFeatures, logger);
     }
 
     private void checkIsStarted() throws NamedFeatureCalculateException {

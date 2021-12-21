@@ -45,19 +45,19 @@ public class FeatureOutputNames {
 
     /**
      * Suffix appended to {@link #csvFeaturesNonAggregated} to form an output-name for <i>aggregated
-     * features</i>
+     * features</i>.
      */
     public static final String OUTPUT_SUFFIX_AGGREGATED = "Aggregated";
 
     /**
      * Suffix appended to {@link #csvFeaturesNonAggregated} to form an output-name for <i>grouped
-     * features</i>
+     * features</i>.
      */
     public static final String OUTPUT_SUFFIX_GROUP = "Group";
 
     /**
      * Suffix appended to {@link #csvFeaturesNonAggregated} to form an output-name for <i>aggregated
-     * grouped features</i>
+     * grouped features</i>.
      */
     public static final String OUTPUT_SUFFIX_AGGREGATED_GROUP = "AggregatedGroup";
 
@@ -85,9 +85,9 @@ public class FeatureOutputNames {
     /**
      * Creates output-names based upon a prefix.
      *
-     * @param prefix prefix used to determine the output-names
-     * @param enableAggregated whether to enable the aggregated outputs
-     * @param enableGroup whether to enable the group outputs
+     * @param prefix prefix used to determine the output-names.
+     * @param enableAggregated whether to enable the aggregated outputs.
+     * @param enableGroup whether to enable the group outputs.
      */
     public FeatureOutputNames(String prefix, boolean enableAggregated, boolean enableGroup) {
         csvFeaturesNonAggregated = prefix; // No suffix

@@ -31,8 +31,22 @@ import org.anchoranalysis.core.cache.LRUCache;
 import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.feature.input.FeatureInput;
 
+/**
+ * Supplies a {@link LRUCache} that maps a feature input-type to a corresponding to {@link FeatureCalculationInput}.
+ *  
+ * @author Owen
+ *
+ * @param <T> feature input type
+ * @param <E> an exception the supplier may throw
+ */
 @FunctionalInterface
 public interface CacheSupplier<T extends FeatureInput, E extends Exception> {
 
+	/**
+	 * Gets the cache.
+	 * 
+	 * @return the cache.
+	 * @throws E if unable to get the cache.
+	 */
     Optional<LRUCache<T, FeatureCalculationInput<T>>> get() throws E;
 }
