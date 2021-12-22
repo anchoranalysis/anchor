@@ -31,6 +31,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.bean.nonbean.UnitValueException;
+import org.anchoranalysis.image.core.dimensions.SpatialUnits;
 import org.anchoranalysis.image.core.dimensions.UnitConverter;
 
 /**
@@ -49,7 +50,7 @@ public class AreaPhysical extends UnitValueArea {
      * 
      * <p>If unspecified, it describes meters (unsquared).
      * 
-     * <p>See {@link SpatialUnit} for acceptable string-values.
+     * <p>See {@link SpatialUnits} for acceptable string-values.
      */
     @BeanField @Getter @Setter private String unitType = "";
     // END BEAN PROPERTIES

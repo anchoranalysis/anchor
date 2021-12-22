@@ -154,16 +154,19 @@ public class SpatialUnits {
 
             case BASE:
                 return valueBaseUnits;
-
-            case CUBIC_NANO:
-                return valueBaseUnits / 1e-27;
-
-            case SQUARE_NANO:
-                return valueBaseUnits / 1e-18;
-
-            case NANO:
+                
+            // START MILLI                
+            case CUBIC_MILLI:
                 return valueBaseUnits / 1e-9;
 
+            case SQUARE_MILLI:
+                return valueBaseUnits / 1e-6;
+
+            case MILLI:
+                return valueBaseUnits / 1e-3;
+            // END MILLI
+                
+            // START MICRO
             case CUBIC_MICRO:
                 return valueBaseUnits / 1e-18;
 
@@ -172,15 +175,18 @@ public class SpatialUnits {
 
             case MICRO:
                 return valueBaseUnits / 1e-6;
-                
-            case CUBIC_MILLI:
+            // END MICRO
+
+            // START NANO
+            case CUBIC_NANO:
+                return valueBaseUnits / 1e-27;
+
+            case SQUARE_NANO:
+                return valueBaseUnits / 1e-18;
+
+            case NANO:
                 return valueBaseUnits / 1e-9;
-
-            case SQUARE_MILLI:
-                return valueBaseUnits / 1e-6;
-
-            case MILLI:
-                return valueBaseUnits / 1e-3;                
+            // END NANO
 
             default:
                 throw new IllegalArgumentException(unsupportedUnitType(unitSuffix));
@@ -247,26 +253,6 @@ public class SpatialUnits {
         if ("m".equalsIgnoreCase(suffixStr)) {
             return UnitSuffix.BASE;
         }
-
-        // Nano-metres
-        if ("nm^3".equalsIgnoreCase(suffixStr)) {
-            return UnitSuffix.CUBIC_NANO;
-
-        } else if ("nm^2".equalsIgnoreCase(suffixStr)) {
-            return UnitSuffix.SQUARE_NANO;
-
-        } else if ("nm".equalsIgnoreCase(suffixStr)) {
-            return UnitSuffix.NANO;
-        }
-
-        // Micro metres
-        if (STR_MICRO_METER_CUBED.equalsIgnoreCase(suffixStr)) {
-            return UnitSuffix.CUBIC_MICRO;
-        } else if (STR_MICRO_METER_SQUARED.equalsIgnoreCase(suffixStr)) {
-            return UnitSuffix.SQUARE_MICRO;
-        } else if (STR_MICRO_METER.equalsIgnoreCase(suffixStr)) {
-            return UnitSuffix.MICRO;
-        }
         
         // Milli-metres
         if ("mm^3".equalsIgnoreCase(suffixStr)) {
@@ -277,6 +263,26 @@ public class SpatialUnits {
 
         } else if ("mm".equalsIgnoreCase(suffixStr)) {
             return UnitSuffix.MILLI;
+        }
+
+        // Micro-metres
+        if (STR_MICRO_METER_CUBED.equalsIgnoreCase(suffixStr)) {
+            return UnitSuffix.CUBIC_MICRO;
+        } else if (STR_MICRO_METER_SQUARED.equalsIgnoreCase(suffixStr)) {
+            return UnitSuffix.SQUARE_MICRO;
+        } else if (STR_MICRO_METER.equalsIgnoreCase(suffixStr)) {
+            return UnitSuffix.MICRO;
+        }
+        
+        // Nano-metres
+        if ("nm^3".equalsIgnoreCase(suffixStr)) {
+            return UnitSuffix.CUBIC_NANO;
+
+        } else if ("nm^2".equalsIgnoreCase(suffixStr)) {
+            return UnitSuffix.SQUARE_NANO;
+
+        } else if ("nm".equalsIgnoreCase(suffixStr)) {
+            return UnitSuffix.NANO;
         }
 
         throw new IllegalArgumentException(unsupportedString(suffixStr));
