@@ -30,7 +30,6 @@ import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
 import org.anchoranalysis.core.identifier.provider.store.SharedObjects;
-import org.anchoranalysis.image.bean.nonbean.init.CreateCombinedStack;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.io.histogram.output.HistogramCSVGenerator;
 import org.anchoranalysis.image.io.object.output.hdf5.ObjectCollectionWriter;
@@ -105,7 +104,7 @@ class SharedObjectsOutputter {
 
     private void stacks(ImageInitialization initialization) throws OutputWriteFailedException {
         NamedStacksOutputter.output(
-                CreateCombinedStack.apply(initialization),
+        		initialization.combinedStacks(),
                 OutputterDirectories.STACKS,
                 suppressSubfolders,
                 outputter);

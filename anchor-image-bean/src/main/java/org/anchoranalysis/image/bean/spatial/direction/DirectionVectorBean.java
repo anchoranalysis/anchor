@@ -37,9 +37,10 @@ import org.anchoranalysis.spatial.orientation.DirectionVector;
 public abstract class DirectionVectorBean extends AnchorBean<DirectionVectorBean> {
 
     /**
-     * Creates a vector in a particular direction
+     * Creates a vector in a particular direction.
      *
-     * @return the created vector
+     * @return the created vector.
+     * @throws CreateException if the vector cannot be successfully created.
      */
     public abstract DirectionVector createVector() throws CreateException;
 }

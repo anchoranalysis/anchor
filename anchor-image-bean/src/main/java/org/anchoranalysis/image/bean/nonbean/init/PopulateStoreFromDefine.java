@@ -52,7 +52,7 @@ public class PopulateStoreFromDefine<V extends BeanInitialization> {
     /** Define source for objects. */
     private Define define;
 
-    /** Used to intitialize the properties of objects added with initialization. */
+    /** Initializes the properties of objects, where initialization is required. */
     private BeanInitializer<?> propertyInitializer;
 
     /** Passed to objects added with initialization. */
@@ -86,7 +86,7 @@ public class PopulateStoreFromDefine<V extends BeanInitialization> {
 
         // Initializes and returns the input
         CheckedFunction<S, S, OperationFailedException> bridge =
-                new InitBridge<>(propertyInitializer, logger, identity());
+                new InitializingBridge<>(propertyInitializer, logger, identity());
 
         StoreAdderHelper.addPreserveName(define, defineClass, destination, bridge);
     }
@@ -108,11 +108,11 @@ public class PopulateStoreFromDefine<V extends BeanInitialization> {
                     Class<?> defineClass, NamedProviderStore<T> destination)
                     throws OperationFailedException {
 
-        InitBridge<S, T, V> bridge =
-                new InitBridge<>(
+        InitializingBridge<S, T, V> bridge =
+                new InitializingBridge<>(
                         propertyInitializer,
                         logger,
-                        s -> s.get() // NOSONAR Initializes and then gets what's provided
+                        source -> source.get() // NOSONAR Initializes and then gets what's provided
                         );
 
         StoreAdderHelper.addPreserveName(define, defineClass, destination, bridge);

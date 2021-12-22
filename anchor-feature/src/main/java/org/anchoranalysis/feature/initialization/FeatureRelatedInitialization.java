@@ -116,7 +116,7 @@ public class FeatureRelatedInitialization implements BeanInitialization {
     }
 
     /**
-     * Populates features into the shared-feature storage from a list of named-beans.
+     * Adds features into the shared-feature storage from a list of named-beans.
      *
      * <p>Additionally the features are initialized, with the current instance.
      *

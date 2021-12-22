@@ -126,7 +126,11 @@ public class DefineOutputter extends AnchorBean<DefineOutputter> {
                 MarksInitializationFactory.create(
                                 Optional.empty(), context, Optional.ofNullable(define))
                         .image();
-        initialization.addSharedObjectsDictionary(sharedObjects, dictionary);
+        try {
+			initialization.addSharedObjectsDictionary(sharedObjects, dictionary);
+		} catch (OperationFailedException e) {
+			throw new CreateException(e);
+		}
         return initialization;
     }
 

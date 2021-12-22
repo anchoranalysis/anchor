@@ -99,7 +99,7 @@ public class ChannelFilter extends AnchorBean<ChannelFilter> implements ChannelG
             throws InitializeException {
         ImageInitialization initialization = ImageInitializationFactory.create(context);
         try {
-            initialization.addToStacks("input_channel", new Stack(channel));
+            initialization.addStack("input_channel", new Stack(channel));
         } catch (OperationFailedException e) {
             throw new InitializeException(e);
         }

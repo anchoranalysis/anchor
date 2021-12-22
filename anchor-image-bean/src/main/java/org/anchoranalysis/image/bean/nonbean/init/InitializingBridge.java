@@ -35,44 +35,35 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.checked.CheckedFunction;
 import org.anchoranalysis.core.log.Logger;
 
+import lombok.AllArgsConstructor;
+
 /**
- * A bridge that performs initialization of objects
+ * A bridge that performs initialization of objects.
  *
  * @author Owen Feehan
  * @param <S> source (bean) type
  * @param <T> destination type
  * @param <V> initialization-parameters type
  */
-class InitBridge<S extends InitializableBean<?, V>, T, V extends BeanInitialization>
+@AllArgsConstructor
+class InitializingBridge<S extends InitializableBean<?, V>, T, V extends BeanInitialization>
         implements CheckedFunction<S, T, OperationFailedException> {
 
-    private BeanInitializer<?> pi;
-    private Logger logger;
-    private CheckedFunction<S, T, ProvisionFailedException> beanBridge;
-
-    /**
-     * Constructor
-     *
-     * @param pi used to initialize properties in the source-bean
-     * @param logger passed to initialized object
-     * @param beanBridge maps the bean to another type
-     */
-    public InitBridge(
-            BeanInitializer<?> pi,
-            Logger logger,
-            CheckedFunction<S, T, ProvisionFailedException> beanBridge) {
-        super();
-        this.pi = pi;
-        this.logger = logger;
-        this.beanBridge = beanBridge;
-    }
+	/** Used to initialize properties in the source-bean. */
+    private final BeanInitializer<?> initializer;
+    
+    /** The logger passed to the beans that are initialized. */
+    private final Logger logger;
+    
+    /** Maps the source-bean to a destination-bean. */
+    private final CheckedFunction<S, T, ProvisionFailedException> beanBridge;
 
     @Override
     public T apply(S sourceObject) throws OperationFailedException {
         assert logger != null;
         try {
             // Initialize
-            sourceObject.initRecursiveWithInitializer(pi, logger);
+            sourceObject.initRecursiveWithInitializer(initializer, logger);
 
             // Bridge the source to the destination
             return beanBridge.apply(sourceObject);

@@ -29,7 +29,6 @@ package org.anchoranalysis.image.bean.nonbean.init;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
-import lombok.Getter;
 import org.anchoranalysis.core.identifier.provider.NamedProvider;
 import org.anchoranalysis.core.identifier.provider.NamedProviderBridge;
 import org.anchoranalysis.core.identifier.provider.NamedProviderCombine;
@@ -45,51 +44,58 @@ import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.spatial.box.BoundingBox;
 
-class CombineDiverseProvidersAsStacks implements NamedProvider<Stack> {
+/**
+ * An implementation of {@link NamedProvider} that combines several different entities that have natural {@link Stack} representations.
+ * 
+ * <p>If multiple sources have the same identifier, only one identifier (arbitrarily selected) will exist in the unified {@link NamedProvider}.
+ * 
+ * @author Owen
+ *
+ */
+class CombineStackProviders implements NamedProvider<Stack> {
 
     private static final ChannelFactorySingleType FACTORY = new ChannelFactoryUnsignedByte();
 
-    private final NamedProvider<Stack> stacks;
-    private final NamedProvider<Channel> channels;
-    private final NamedProvider<Mask> masks;
+    /** The combined-provider. */
+    private final NamedProvider<Stack> combined;
 
-    @Getter private final NamedProvider<Stack> combinedStackProvider;
-
-    public CombineDiverseProvidersAsStacks(
+    /**
+     * Create with the three {@link NamedProvider}s to combine.
+     * 
+     * @param stacks provides the {@link Stack}s.
+     * @param channels provides the {@link Channel}s.
+     * @param masks provides the {@link Mask}s.
+     */
+    public CombineStackProviders(
             NamedProvider<Stack> stacks,
             NamedProvider<Channel> channels,
             NamedProvider<Mask> masks) {
-        this.stacks = stacks;
-        this.channels = channels;
-        this.masks = masks;
-
-        combinedStackProvider = createCombinedStackProvider();
+        combined = new NamedProviderCombine<>(Stream.of(stacks, convertChannels(channels), convertMasks(masks)));
     }
 
     @Override
     public Optional<Stack> getOptional(String key) throws NamedProviderGetException {
-        return combinedStackProvider.getOptional(key);
+        return combined.getOptional(key);
     }
 
     @Override
     public Set<String> keys() {
-        return combinedStackProvider.keys();
+        return combined.keys();
     }
 
-    private NamedProvider<Stack> createCombinedStackProvider() {
-        return new NamedProviderCombine<>(Stream.of(stacks, channelsBridge(), masksBridge()));
-    }
-
-    private NamedProviderBridge<Channel, Stack> channelsBridge() {
+    /** Converts each {@link Channel} to a {@link Stack}. */
+    private static NamedProviderBridge<Channel, Stack> convertChannels(NamedProvider<Channel> channels) {
         return new NamedProviderBridge<>(channels, Stack::new, false);
     }
 
-    private NamedProviderBridge<Mask, Stack> masksBridge() {
+    /** Converts each {@link Mask} to a {@link Stack}. */
+    private static NamedProviderBridge<Mask, Stack> convertMasks(NamedProvider<Mask> masks) {
         return new NamedProviderBridge<>(
-                masks, CombineDiverseProvidersAsStacks::stackFromBinary, false);
+                masks, CombineStackProviders::stackFromMask, false);
     }
 
-    private static Stack stackFromBinary(Mask sourceObject) {
+    /** Converts a single {@link Mask} to a {@link Stack}. */
+    private static Stack stackFromMask(Mask sourceObject) {
 
         Channel channelNew = FACTORY.createEmptyInitialised(sourceObject.dimensions());
 
