@@ -32,6 +32,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.bean.nonbean.UnitValueException;
 import org.anchoranalysis.image.core.dimensions.UnitConverter;
+import org.anchoranalysis.image.core.dimensions.SpatialUnits;
 
 /**
  * Volume expressed in <b>cubic meters</b>, or units thereof.
@@ -50,7 +51,7 @@ public class VolumePhysical extends UnitValueVolume {
      * 
      * <p>If unspecified, it describes meters (unsquared).
      * 
-     * <p>See {@link SpatialUnit} for acceptable string-values.
+     * <p>See {@link SpatialUnits} for acceptable string-values.
      */
     @BeanField @Getter @Setter private String unitType = "";
     // END VALUE
