@@ -29,6 +29,7 @@ package org.anchoranalysis.image.bean.nonbean.spatial.arrange;
 import java.util.Iterator;
 import java.util.List;
 import org.anchoranalysis.core.exception.InitializeException;
+import org.anchoranalysis.image.bean.spatial.arrange.ArrangeStackBean;
 import org.anchoranalysis.image.core.channel.factory.ChannelFactorySingleType;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.stack.RGBStack;
@@ -38,16 +39,22 @@ import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.box.Extent;
 import org.anchoranalysis.spatial.point.ReadableTuple3i;
 
+/**
+ * Combines a list of {@link RGBStack}s into a single image, using an {@link ArrangeStackBean} to determine how each stack is positioned.
+ *  
+ * @author Owen Feehan
+ *
+ */
 public class RasterArranger {
 
     private BoundingBoxesOnPlane boundingBoxes;
     private Dimensions dimensions;
 
-    public void initialize(ArrangeStack arrange, List<RGBStack> list) throws InitializeException {
+    public void initialize(ArrangeStackBean arrange, List<RGBStack> list) throws InitializeException {
 
         Iterator<RGBStack> rasterIterator = list.iterator();
         try {
-            this.boundingBoxes = arrange.createBoundingBoxesOnPlane(rasterIterator);
+            this.boundingBoxes = arrange.arrangeStacks(rasterIterator);
         } catch (ArrangeStackException e) {
             throw new InitializeException(e);
         }
@@ -61,11 +68,11 @@ public class RasterArranger {
 
     public RGBStack createStack(List<RGBStack> list, ChannelFactorySingleType factory) {
         RGBStack stackOut = new RGBStack(dimensions, factory);
-        ppltStack(list, stackOut.asStack());
+        populateStack(list, stackOut.asStack());
         return stackOut;
     }
 
-    private void ppltStack(List<RGBStack> generatedImages, Stack out) {
+    private void populateStack(List<RGBStack> generatedImages, Stack out) {
 
         int index = 0;
         for (RGBStack image : generatedImages) {

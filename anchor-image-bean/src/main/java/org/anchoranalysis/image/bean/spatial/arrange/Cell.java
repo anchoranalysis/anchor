@@ -31,12 +31,11 @@ import lombok.Setter;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.NonNegative;
-import org.anchoranalysis.image.bean.nonbean.spatial.arrange.ArrangeStack;
 
 public class Cell extends AnchorBean<Cell> {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private ArrangeStack arrange;
+    @BeanField @Getter @Setter private ArrangeStackBean arrange;
 
     @BeanField @NonNegative @Getter @Setter private int row;
 

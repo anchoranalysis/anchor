@@ -59,53 +59,52 @@ public class PopulateStoreFromDefine<V extends BeanInitialization> {
     private Logger logger;
 
     /**
-     * Copies objects of a particular class from the define WITHOUT doing any initialization
+     * Copies objects of a particular class from the define <b>without</b> performing any initialization.
      *
      * @param <S> type of objects
-     * @param defineClass class to identify objects in Define
-     * @param destination where to copy to
-     * @throws OperationFailedException
+     * @param defineClass class to identify objects in {@code define}.
+     * @param destination where to copy to.
+     * @throws OperationFailedException if the identifier already exists, or otherwise the add operation fails.
      */
-    public <S extends AnchorBean<S>> void copyWithoutInit(
+    public <S extends AnchorBean<S>> void copyWithoutInitialize(
             Class<?> defineClass, NamedProviderStore<S> destination)
             throws OperationFailedException {
-        StoreAdderHelper.addPreserveName(define, defineClass, destination, nameUnchangedBridge());
+        StoreAdderHelper.addPreserveName(define, defineClass, destination, identity());
     }
 
     /**
-     * Copies objects of a particular class from the define AND initializes
+     * Copies objects of a particular class from the define <i>and</i> initializes.
      *
      * @param <S> type of objects
-     * @param defineClass class to identify objects in Define
-     * @param destination where to copy to
-     * @throws OperationFailedException
+     * @param defineClass class to identify objects in {@code define}.
+     * @param destination where to copy to.
+     * @throws OperationFailedException if a copied identifier already exists, or otherwise the add operation fails.
      */
-    public <S extends InitializableBean<S, V>> void copyInit(
+    public <S extends InitializableBean<S, V>> void copyInitialize(
             Class<?> defineClass, NamedProviderStore<S> destination)
             throws OperationFailedException {
 
         // Initializes and returns the input
         CheckedFunction<S, S, OperationFailedException> bridge =
-                new InitBridge<>(propertyInitializer, logger, nameUnchangedBridge());
+                new InitBridge<>(propertyInitializer, logger, identity());
 
         StoreAdderHelper.addPreserveName(define, defineClass, destination, bridge);
     }
 
     /**
-     * Copies objects of a particular class from the define AND initializes as a provider
+     * Copies objects of a particular class (which must be a {@link Provider}) from {@code define} <i>and</i> initializes each.
      *
      * <p>Specifically, each object will be lazily initialized once when first retrieved from the
      * store.
      *
      * @param <S> type of provider-objects
      * @param <T> type of objects created by the provider
-     * @param defineClass class to identify objects in Define
-     * @param destination where to copy to
-     * @return the provider-bridge created for the initialization
-     * @throws OperationFailedException
+     * @param defineClass class to identify objects in {@code define}.
+     * @param destination where to copy to.
+     * @throws OperationFailedException if a copied identifier already exists, or otherwise the add operation fails.
      */
     public <S extends InitializableBean<?, V> & Provider<T>, T>
-            CheckedFunction<S, T, OperationFailedException> copyProvider(
+            void copyProviderInitialize(
                     Class<?> defineClass, NamedProviderStore<T> destination)
                     throws OperationFailedException {
 
@@ -117,11 +116,10 @@ public class PopulateStoreFromDefine<V extends BeanInitialization> {
                         );
 
         StoreAdderHelper.addPreserveName(define, defineClass, destination, bridge);
-
-        return bridge;
     }
 
-    private static <S, E extends Exception> CheckedFunction<S, S, E> nameUnchangedBridge() {
-        return name -> name;
+    /** Maps a string to itself, but exposed as a {@link CheckedFunction}. */
+    private static <S, E extends Exception> CheckedFunction<S, S, E> identity() {
+        return str -> str;
     }
 }

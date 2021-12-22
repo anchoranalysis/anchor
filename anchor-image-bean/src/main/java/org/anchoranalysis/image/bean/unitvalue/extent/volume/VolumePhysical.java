@@ -30,15 +30,28 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.image.bean.nonbean.error.UnitValueException;
+import org.anchoranalysis.image.bean.nonbean.UnitValueException;
 import org.anchoranalysis.image.core.dimensions.UnitConverter;
 
-// Measures either area or volume (depending if the do3D flag is employed)
+/**
+ * Volume expressed in <b>cubic meters</b>, or units thereof.
+ *
+ * @author Owen
+ *
+ */
 public class VolumePhysical extends UnitValueVolume {
 
     // START VALUE
-    @BeanField @Getter @Setter private double value; // value in metres
+	/** The volume in units of meters, with the unit described by {@code unitType}. */
+    @BeanField @Getter @Setter private double value;
 
+    /** 
+     * How much each value represents e.g. cubic nanometers, cubic millimeters etc.
+     * 
+     * <p>If unspecified, it describes meters (unsquared).
+     * 
+     * <p>See {@link SpatialUnit} for acceptable string-values.
+     */
     @BeanField @Getter @Setter private String unitType = "";
     // END VALUE
 
@@ -46,7 +59,7 @@ public class VolumePhysical extends UnitValueVolume {
     public double resolveToVoxels(Optional<UnitConverter> unitConverter) throws UnitValueException {
         if (!unitConverter.isPresent()) {
             throw new UnitValueException(
-                    "An image resolution is required to calculate physical-volume but it is missing");
+                    "A unit-converter is required to calculate physical-volume but it is missing. Is the image resolution known?");
         }
 
         return unitConverter.get().fromPhysicalVolume(value, unitType);

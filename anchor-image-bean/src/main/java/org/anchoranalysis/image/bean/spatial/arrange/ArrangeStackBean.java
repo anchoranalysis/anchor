@@ -26,8 +26,28 @@
 
 package org.anchoranalysis.image.bean.spatial.arrange;
 
-import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.image.bean.nonbean.spatial.arrange.ArrangeStack;
+import java.util.Iterator;
 
-public abstract class ArrangeStackBean extends AnchorBean<ArrangeStackBean>
-        implements ArrangeStack {}
+import org.anchoranalysis.bean.AnchorBean;
+import org.anchoranalysis.image.bean.nonbean.spatial.arrange.ArrangeStackException;
+import org.anchoranalysis.image.bean.nonbean.spatial.arrange.BoundingBoxesOnPlane;
+import org.anchoranalysis.image.core.stack.RGBStack;
+
+/**
+ * Base class for a method that determines positions for {@link RGBStack}s when combined onto a single plane.
+ * 
+ * @author Owen Feehan
+ *
+ */
+public abstract class ArrangeStackBean extends AnchorBean<ArrangeStackBean> {
+	
+	/**
+	 * Arranges stacks to that they fit together in a single raster.
+	 * 
+	 * @param stacks the stacks to arrange.
+	 * @return bounding-boxes for each respective {@link RGBStack} in the unified plane.
+	 * @throws ArrangeStackException if a bounding-box cannot be determined for any stack.
+	 */
+    public abstract BoundingBoxesOnPlane arrangeStacks(Iterator<RGBStack> stacks) throws ArrangeStackException;
+	
+}

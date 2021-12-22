@@ -30,17 +30,27 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.image.bean.nonbean.error.UnitValueException;
+import org.anchoranalysis.image.bean.nonbean.UnitValueException;
 import org.anchoranalysis.image.core.dimensions.UnitConverter;
 
 /**
- * Area expressed in physical coordinates
+ * Area expressed in <b>square meters</b>, or units thereof.
  *
  * @author Owen Feehan
  */
 public class AreaPhysical extends UnitValueArea {
 
     // START BEAN PROPERTIES
+	/** The volume in units of meters, with the unit described by {@code unitType}. */
+    @BeanField @Getter @Setter private double value;
+    
+	/** 
+     * How much each value represents e.g. square nanometers, squares millimeters etc.
+     * 
+     * <p>If unspecified, it describes meters (unsquared).
+     * 
+     * <p>See {@link SpatialUnit} for acceptable string-values.
+     */
     @BeanField @Getter @Setter private String unitType = "";
     // END BEAN PROPERTIES
 
@@ -57,9 +67,9 @@ public class AreaPhysical extends UnitValueArea {
     @Override
     public String toString() {
         if (unitType != null && !unitType.isEmpty()) {
-            return String.format("%.2f%s", getValue(), unitType);
+            return String.format("%.2f%s", value, unitType);
         } else {
-            return String.format("%.2f", getValue());
+            return String.format("%.2f", value);
         }
     }
 }

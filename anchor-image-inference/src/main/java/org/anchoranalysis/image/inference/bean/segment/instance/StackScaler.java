@@ -31,7 +31,7 @@ import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.core.time.ExecutionTimeRecorder;
-import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
+import org.anchoranalysis.image.bean.nonbean.segment.SegmentationFailedException;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
 import org.anchoranalysis.image.core.stack.Stack;

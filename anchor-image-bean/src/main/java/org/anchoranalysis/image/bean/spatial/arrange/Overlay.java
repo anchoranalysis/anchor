@@ -110,21 +110,21 @@ public class Overlay extends ArrangeStackBean {
     }
 
     @Override
-    public BoundingBoxesOnPlane createBoundingBoxesOnPlane(Iterator<RGBStack> rasterIterator)
+    public BoundingBoxesOnPlane arrangeStacks(Iterator<RGBStack> stacks)
             throws ArrangeStackException {
 
-        if (!rasterIterator.hasNext()) {
+        if (!stacks.hasNext()) {
             throw new ArrangeStackException("No image in iterator for source");
         }
 
         Single sr = new Single();
-        BoundingBoxesOnPlane boxSet = sr.createBoundingBoxesOnPlane(rasterIterator);
+        BoundingBoxesOnPlane boxSet = sr.arrangeStacks(stacks);
 
-        if (!rasterIterator.hasNext()) {
+        if (!stacks.hasNext()) {
             throw new ArrangeStackException("No image in iterator for overlay");
         }
 
-        RGBStack overlayImg = rasterIterator.next();
+        RGBStack overlayImg = stacks.next();
 
         Extent overlayE = deriveExtent(overlayImg.getChannel(0).extent(), boxSet.extent());
 

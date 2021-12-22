@@ -36,14 +36,14 @@ import org.anchoranalysis.spatial.box.Extent;
 public class Single extends ArrangeStackBean {
 
     @Override
-    public BoundingBoxesOnPlane createBoundingBoxesOnPlane(Iterator<RGBStack> rasterIterator)
+    public BoundingBoxesOnPlane arrangeStacks(Iterator<RGBStack> stacks)
             throws ArrangeStackException {
 
-        if (!rasterIterator.hasNext()) {
+        if (!stacks.hasNext()) {
             throw new ArrangeStackException("iterator has no more images");
         }
 
-        RGBStack stack = rasterIterator.next();
+        RGBStack stack = stacks.next();
 
         Extent extent = stack.getChannel(0).extent();
 

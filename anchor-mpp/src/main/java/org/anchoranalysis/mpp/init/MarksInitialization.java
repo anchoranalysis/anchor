@@ -69,7 +69,7 @@ public class MarksInitialization implements BeanInitialization {
     // END: Stores
 
     public MarksInitialization(ImageInitialization image) {
-        SharedObjects sharedObjects = image.getSharedObjects();
+        SharedObjects sharedObjects = image.sharedObjects();
         this.image = image;
         this.points = PointsInitialization.create(image, sharedObjects);
 
@@ -95,14 +95,14 @@ public class MarksInitialization implements BeanInitialization {
 
         PopulateStoreFromDefine<MarksInitialization> populater =
                 new PopulateStoreFromDefine<>(define, initializer, logger);
-        populater.copyWithoutInit(MarkBounds.class, markBounds);
-        populater.copyInit(MarkProposer.class, markProposers);
-        populater.copyInit(MarkCollectionProposer.class, markCollectionProposers);
-        populater.copyInit(MarkSplitProposer.class, markSplitProposers);
-        populater.copyInit(MarkMergeProposer.class, markMergeProposers);
-        populater.copyWithoutInit(RandomCollection.class, markPairs);
+        populater.copyWithoutInitialize(MarkBounds.class, markBounds);
+        populater.copyInitialize(MarkProposer.class, markProposers);
+        populater.copyInitialize(MarkCollectionProposer.class, markCollectionProposers);
+        populater.copyInitialize(MarkSplitProposer.class, markSplitProposers);
+        populater.copyInitialize(MarkMergeProposer.class, markMergeProposers);
+        populater.copyWithoutInitialize(RandomCollection.class, markPairs);
 
-        populater.copyProvider(MarkCollectionProvider.class, marks());
+        populater.copyProviderInitialize(MarkCollectionProvider.class, marks());
 
         image.populate(initializer, define, logger);
         points.populate(initializer, define, logger);

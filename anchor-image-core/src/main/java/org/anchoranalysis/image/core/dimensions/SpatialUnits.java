@@ -37,17 +37,17 @@ import lombok.NoArgsConstructor;
  * <p>e.g. find a enum for <i>nm</i>.
  *
  * <p>e.g. find a string representation for <i>NANO</i>.
+ * 
+ * <p>Acceptable string representations are: {@code m, mm, mm^2, mm^3, nm, nm^2, nm^3, μm, μm^2, μm^3}.
  *
  * @author Owen Feehan
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class SpatialUnits {
 
-    private static final String STR_MICRO_CHAR = "\u00B5";
-
-    private static final String STR_MICRO_METER = STR_MICRO_CHAR + "m";
-    private static final String STR_MICRO_METER_SQUARED = STR_MICRO_CHAR + "m^2";
-    private static final String STR_MICRO_METER_CUBED = STR_MICRO_CHAR + "m^3";
+    private static final String STR_MICRO_METER = "μm";
+    private static final String STR_MICRO_METER_SQUARED = "μm^2";
+    private static final String STR_MICRO_METER_CUBED = "μm^3";
 
     /** Suffix that describes a particular quantity of units (micron, nano, square microns etc.) */
     public enum UnitSuffix {
@@ -73,7 +73,16 @@ public class SpatialUnits {
         SQUARE_MICRO,
 
         /** 1e-6. */
-        MICRO
+        MICRO,
+        
+        /** 1e-3 cubed. */
+        CUBIC_MILLI,
+
+        /** 1e-3 squared. */
+        SQUARE_MILLI,
+
+        /** 1e-3. */
+        MILLI
     }
 
     /**
@@ -81,11 +90,20 @@ public class SpatialUnits {
      *
      * <p>e.g. {@code m^2} or {@code nm^3} etc.
      *
-     * @param suffix the suffix to describe
+     * @param suffix the suffix to describe.
      * @return a string describing the suffix as applied to meters.
      */
     public static String suffixStringForMeters(UnitSuffix suffix) { // NOSONAR
         switch (suffix) {
+	        case CUBIC_MILLI:
+	            return "mm^3";
+	
+	        case SQUARE_MILLI:
+	            return "mm^2";
+	
+	        case MILLI:
+	            return "m";        
+        
             case CUBIC_NANO:
                 return "nm^3";
 
@@ -96,13 +114,13 @@ public class SpatialUnits {
                 return "nm";
 
             case CUBIC_MICRO:
-                return STR_MICRO_CHAR + "m^3";
+                return "μm^3";
 
             case SQUARE_MICRO:
-                return STR_MICRO_CHAR + "m^2";
+                return "μm^2";
 
             case MICRO:
-                return STR_MICRO_CHAR + "m";
+                return "μm";
 
             default:
                 throw new IllegalArgumentException(unsupportedUnitType(suffix));
@@ -112,9 +130,9 @@ public class SpatialUnits {
     /**
      * Converts a value in base-units <b>to</b> another unit-type.
      *
-     * @param valueBaseUnits the value in base units
-     * @param unitSuffix the suffix describing the desired unit
-     * @return the value in units of type @{code unitSuffix}
+     * @param valueBaseUnits the value in base units.
+     * @param unitSuffix the suffix describing the desired unit.
+     * @return the value in units of type @{code unitSuffix}.
      */
     public static double convertToUnits(double valueBaseUnits, String unitSuffix) { // NOSONAR
         SpatialUnits.UnitSuffix suffix = SpatialUnits.suffixFromMeterString(unitSuffix);
@@ -124,9 +142,9 @@ public class SpatialUnits {
     /**
      * Converts a value in base-units <b>to</b> another unit-type.
      *
-     * @param valueBaseUnits the value in base units
-     * @param unitSuffix the suffix describing the desired unit
-     * @return the value in units of type @{code unitSuffix}
+     * @param valueBaseUnits the value in base units.
+     * @param unitSuffix the suffix describing the desired unit.
+     * @return the value in units of type @{code unitSuffix}.
      */
     public static double convertToUnits(double valueBaseUnits, UnitSuffix unitSuffix) { // NOSONAR
 
@@ -154,6 +172,15 @@ public class SpatialUnits {
 
             case MICRO:
                 return valueBaseUnits / 1e-6;
+                
+            case CUBIC_MILLI:
+                return valueBaseUnits / 1e-9;
+
+            case SQUARE_MILLI:
+                return valueBaseUnits / 1e-6;
+
+            case MILLI:
+                return valueBaseUnits / 1e-3;                
 
             default:
                 throw new IllegalArgumentException(unsupportedUnitType(unitSuffix));
@@ -163,9 +190,9 @@ public class SpatialUnits {
     /**
      * Converts a value <b>from</b> another unit-type to base units.
      *
-     * @param valueUnits the value in base units
-     * @param unitSuffix the suffix associated with {@code valueUnits}
-     * @return the value in base units
+     * @param valueUnits the value in base units.
+     * @param unitSuffix the suffix associated with {@code valueUnits}.
+     * @return the value in base units.
      */
     public static double convertFromUnits(double valueUnits, String unitSuffix) { // NOSONAR
         SpatialUnits.UnitSuffix suffix = SpatialUnits.suffixFromMeterString(unitSuffix);
@@ -175,9 +202,9 @@ public class SpatialUnits {
     /**
      * Converts a value <b>from</b> another unit-type to base units.
      *
-     * @param valueUnits the value in base units
-     * @param unitSuffix the suffix associated with {@code valueUnits}
-     * @return the value in base units
+     * @param valueUnits the value in base units.
+     * @param unitSuffix the suffix associated with {@code valueUnits}.
+     * @return the value in base units.
      */
     public static double convertFromUnits(double valueUnits, UnitSuffix unitSuffix) { // NOSONAR
 
@@ -198,6 +225,12 @@ public class SpatialUnits {
                 return valueUnits * 1e-12;
             case MICRO:
                 return valueUnits * 1e-6;
+            case CUBIC_MILLI:
+                return valueUnits * 1e-9;
+            case SQUARE_MILLI:
+                return valueUnits * 1e-6;
+            case MILLI:
+                return valueUnits * 1e-3;                
             default:
                 throw new IllegalArgumentException(unsupportedUnitType(unitSuffix));
         }
@@ -233,6 +266,17 @@ public class SpatialUnits {
             return UnitSuffix.SQUARE_MICRO;
         } else if (STR_MICRO_METER.equalsIgnoreCase(suffixStr)) {
             return UnitSuffix.MICRO;
+        }
+        
+        // Milli-metres
+        if ("mm^3".equalsIgnoreCase(suffixStr)) {
+            return UnitSuffix.CUBIC_MILLI;
+
+        } else if ("mm^2".equalsIgnoreCase(suffixStr)) {
+            return UnitSuffix.SQUARE_MILLI;
+
+        } else if ("mm".equalsIgnoreCase(suffixStr)) {
+            return UnitSuffix.MILLI;
         }
 
         throw new IllegalArgumentException(unsupportedString(suffixStr));

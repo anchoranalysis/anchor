@@ -45,7 +45,11 @@ import org.anchoranalysis.image.core.stack.RGBStack;
 import org.anchoranalysis.image.core.stack.Stack;
 
 /**
- * Creates a stack that tiles (or otherwise combines) other providers
+ * Creates a stack that combines other stacks.
+ * 
+ * <p>The stacks to be combined are specified in {@code list}.
+ * 
+ * <p>Instructions on how to combine the stacks are specified in {@code arrange}, relative to the order of the elements of {@code list}. 
  *
  * @author Owen Feehan
  */
@@ -53,16 +57,25 @@ import org.anchoranalysis.image.core.stack.Stack;
 public class ArrangeRaster extends StackProvider {
 
     // START BEAN
-    @BeanField @Getter @Setter private ArrangeStackBean arrange;
-
-    /** If set, ensures every stack is converted into 3 channels */
-    @BeanField @Getter @Setter private boolean forceRGB = false;
-
+	/** The stacks that are passed in respect order into {@code arrange}. */
     @BeanField @Getter @Setter private List<Provider<Stack>> list = new ArrayList<>();
 
+    /** Determines how the stacks in {@code list} are arranged. */
+    @BeanField @Getter @Setter private ArrangeStackBean arrange;
+
+    /** Iff true, ensures every stack is converted into 3 channels. */
+    @BeanField @Getter @Setter private boolean forceRGB = false;
+
+    /** If true, the created raster has <i>unsigned short</i> voxel data type. If false, then <i>unsigned byte</i>. */
     @BeanField @Getter @Setter private boolean createShort = false;
     // END BEAN
 
+    /**
+     * Shortcut to create with some explicit parameters.
+     * 
+     * @param createShort if true, the created raster has <i>unsigned short</i> voxel data type. If false, then <i>unsigned byte</i>.
+     * @param forceRGB iff true, ensures every stack is converted into 3 channels.
+     */
     public ArrangeRaster(boolean createShort, boolean forceRGB) {
         this.createShort = createShort;
         this.forceRGB = forceRGB;
@@ -90,7 +103,7 @@ public class ArrangeRaster extends StackProvider {
             Stack stack = provider.get();
 
             if (forceRGB) {
-                copyFirstChannelUntil3(stack);
+                copyFirstChannelUntilThree(stack);
             }
             rasterList.add(new RGBStack(stack));
         }
@@ -108,7 +121,7 @@ public class ArrangeRaster extends StackProvider {
         return rasterArranger.createStack(rasterList, factory).asStack();
     }
 
-    private void copyFirstChannelUntil3(Stack stack) {
+    private void copyFirstChannelUntilThree(Stack stack) {
         while (stack.getNumberChannels() < 3) {
             try {
                 stack.addChannel(stack.getChannel(0).duplicate());

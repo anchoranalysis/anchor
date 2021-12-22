@@ -27,17 +27,36 @@
 package org.anchoranalysis.image.bean.nonbean.spatial.arrange;
 
 import org.anchoranalysis.core.exception.AnchorCheckedException;
+import org.anchoranalysis.image.core.stack.RGBStack;
 
+/**
+ * When the position of a particular {@link RGBStack} cannot be determined, when combined with others onto a single plane.
+ * 
+ * @author Owen Feehan
+ *
+ */
 public class ArrangeStackException extends AnchorCheckedException {
 
-    /** */
-    private static final long serialVersionUID = -6247544738100419019L;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
-    public ArrangeStackException(String string) {
-        super(string);
+	/**
+     * Create with a message.
+     * 
+     * @param message the message.
+     */
+    public ArrangeStackException(String message) {
+        super(message);
     }
 
-    public ArrangeStackException(Exception exc) {
-        super(exc);
+    /**
+     * Create with a cause.
+     * 
+     * @param cause the cause.
+     */
+    public ArrangeStackException(Exception cause) {
+        super(cause);
     }
 }

@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.image.bean.nonbean.error;
+package org.anchoranalysis.image.bean.nonbean.segment;
 
 import org.anchoranalysis.core.exception.friendly.AnchorFriendlyCheckedException;
 

@@ -60,7 +60,7 @@ public class SingleTableCalculator implements FeatureTableCalculator<FeatureInpu
                 FeatureSession.with(
                         namedFeatureStore.features(),
                         InitializationFactory.create(
-                                Optional.of(initialization.getSharedObjects()), energyStack),
+                                Optional.of(initialization.sharedObjects()), energyStack),
                         initialization.featuresInitialization().getSharedFeatures(),
                         logger);
     }

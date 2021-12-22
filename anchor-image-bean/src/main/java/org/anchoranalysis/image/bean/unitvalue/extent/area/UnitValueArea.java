@@ -26,18 +26,14 @@
 
 package org.anchoranalysis.image.bean.unitvalue.extent.area;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.image.bean.unitvalue.extent.UnitValueAreaOrVolume;
+import org.anchoranalysis.image.bean.unitvalue.extent.UnitValueExtent;
 
-@NoArgsConstructor
-@AllArgsConstructor
-public abstract class UnitValueArea extends UnitValueAreaOrVolume {
+/**
+ * A base class for a value that describes an <b>area</b> measurement on the image.
+ * 
+ * @author Owen
+ *
+ */
+public abstract class UnitValueArea extends UnitValueExtent {
 
-    // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private double value;
-    // END BEAN PROPERTIES
 }

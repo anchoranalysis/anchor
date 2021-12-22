@@ -103,7 +103,7 @@ public class DefineOutputter extends AnchorBean<DefineOutputter> {
             operation.process(initialization);
 
             outputSharedObjects(
-                    initialization.getSharedObjects(), Optional.empty(), context.getOutputter());
+                    initialization.sharedObjects(), Optional.empty(), context.getOutputter());
 
         } catch (CreateException | OutputWriteFailedException e) {
             throw new OperationFailedException(e);

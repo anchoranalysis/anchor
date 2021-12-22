@@ -35,7 +35,6 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.annotation.Positive;
-import org.anchoranalysis.image.bean.nonbean.spatial.arrange.ArrangeStack;
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.ArrangeStackException;
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.BoundingBoxesOnPlane;
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.TableItemArrangement;
@@ -75,7 +74,7 @@ public class Tile extends ArrangeStackBean {
         // We can make this more efficient by using a lookup table for the cells
         // But as there should be relatively few exceptions, we just always loop
         //   through the list
-        private ArrangeStack createArrangeRasterForItem(int rowPos, int colPos) {
+        private ArrangeStackBean createArrangeRasterForItem(int rowPos, int colPos) {
 
             if (cells != null) {
                 for (Cell cell : cells) {
@@ -99,7 +98,7 @@ public class Tile extends ArrangeStackBean {
         public BoundingBoxesOnPlane createNext(int rowPos, int colPos) throws TableItemException {
             try {
                 return createArrangeRasterForItem(rowPos, colPos)
-                        .createBoundingBoxesOnPlane(iterator);
+                        .arrangeStacks(iterator);
             } catch (ArrangeStackException e) {
                 throw new TableItemException(e);
             }
@@ -157,13 +156,13 @@ public class Tile extends ArrangeStackBean {
     }
 
     @Override
-    public BoundingBoxesOnPlane createBoundingBoxesOnPlane(final Iterator<RGBStack> rasterIterator)
+    public BoundingBoxesOnPlane arrangeStacks(final Iterator<RGBStack> stacks)
             throws ArrangeStackException {
 
         try {
             TableItemArrangement<BoundingBoxesOnPlane> table =
                     new TableItemArrangement<>(
-                            new CreateTable(rasterIterator), numberRows, numberColumns);
+                            new CreateTable(stacks), numberRows, numberColumns);
 
             return createSet(table, new MaxWidthHeight(table));
 
