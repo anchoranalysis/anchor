@@ -34,9 +34,8 @@ import lombok.Setter;
 import org.anchoranalysis.bean.Provider;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
-import org.anchoranalysis.core.exception.InitializeException;
-import org.anchoranalysis.image.bean.nonbean.spatial.arrange.RasterArranger;
-import org.anchoranalysis.image.bean.spatial.arrange.ArrangeStackBean;
+import org.anchoranalysis.image.bean.nonbean.spatial.arrange.ArrangeStackException;
+import org.anchoranalysis.image.bean.spatial.arrange.StackArranger;
 import org.anchoranalysis.image.core.channel.factory.ChannelFactorySingleType;
 import org.anchoranalysis.image.core.channel.factory.ChannelFactoryUnsignedByte;
 import org.anchoranalysis.image.core.channel.factory.ChannelFactoryUnsignedShort;
@@ -54,14 +53,14 @@ import org.anchoranalysis.image.core.stack.Stack;
  * @author Owen Feehan
  */
 @NoArgsConstructor
-public class ArrangeRaster extends StackProvider {
+public class Arrange extends StackProvider {
 
     // START BEAN
 	/** The stacks that are passed in respect order into {@code arrange}. */
     @BeanField @Getter @Setter private List<Provider<Stack>> list = new ArrayList<>();
 
     /** Determines how the stacks in {@code list} are arranged. */
-    @BeanField @Getter @Setter private ArrangeStackBean arrange;
+    @BeanField @Getter @Setter private StackArranger arrange;
 
     /** Iff true, ensures every stack is converted into 3 channels. */
     @BeanField @Getter @Setter private boolean forceRGB = false;
@@ -76,7 +75,7 @@ public class ArrangeRaster extends StackProvider {
      * @param createShort if true, the created raster has <i>unsigned short</i> voxel data type. If false, then <i>unsigned byte</i>.
      * @param forceRGB iff true, ensures every stack is converted into 3 channels.
      */
-    public ArrangeRaster(boolean createShort, boolean forceRGB) {
+    public Arrange(boolean createShort, boolean forceRGB) {
         this.createShort = createShort;
         this.forceRGB = forceRGB;
     }
@@ -107,18 +106,15 @@ public class ArrangeRaster extends StackProvider {
             }
             rasterList.add(new RGBStack(stack));
         }
-
-        RasterArranger rasterArranger = new RasterArranger();
+        
         try {
-            rasterArranger.initialize(arrange, rasterList);
-        } catch (InitializeException e) {
+            ChannelFactorySingleType factory =
+                    createShort ? new ChannelFactoryUnsignedShort() : new ChannelFactoryUnsignedByte();
+
+            return arrange.combine(rasterList, factory).asStack();        	
+        } catch (ArrangeStackException e) {
             throw new ProvisionFailedException(e);
         }
-
-        ChannelFactorySingleType factory =
-                createShort ? new ChannelFactoryUnsignedShort() : new ChannelFactoryUnsignedByte();
-
-        return rasterArranger.createStack(rasterList, factory).asStack();
     }
 
     private void copyFirstChannelUntilThree(Stack stack) {

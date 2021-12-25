@@ -37,9 +37,16 @@ import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 
-public abstract class BinarySegmentationOne extends BinarySegmentation {
+/**
+ * An implementation of {@link BinarySegmentation} that delegates to one other {@link BinarySegmentation}.
+ * 
+ * @author Owen Feehan
+ *
+ */
+public abstract class BinarySegmentationUnary extends BinarySegmentation {
 
     // START BEAN PROPERTIES
+	/** The delegate {@link BinarySegmentation} that may be called. */
     @BeanField @Getter @Setter private BinarySegmentation segment;
     // END BEAN PROPERTIES
 
@@ -52,10 +59,20 @@ public abstract class BinarySegmentationOne extends BinarySegmentation {
         return segmentFromExistingSegmentation(voxels, parameters, objectMask, segment);
     }
 
+    /**
+     * Performs a binary-segmentation, in a similar manner to {@link BinarySegmentation#segment} but with the delegate as additional argument.
+     * 
+     * @param voxels voxels to segment.
+     * @param parameters parameters to guide the algorithm.
+     * @param objectMask if present, segmentation only occurs inside this object.
+     * @param segment the delegate {@link BinarySegmentation}.
+     * @return voxels for a mask on the input-buffer, which may be newly-created, or may reuse the input {@code voxels}, depending on implementation.
+     * @throws SegmentationFailedException if the segmentation cannot be successfully completed.
+     */
     protected abstract BinaryVoxels<UnsignedByteBuffer> segmentFromExistingSegmentation(
             VoxelsUntyped voxels,
             BinarySegmentationParameters parameters,
-            Optional<ObjectMask> object,
-            BinarySegmentation sgmn)
+            Optional<ObjectMask> objectMask,
+            BinarySegmentation segment)
             throws SegmentationFailedException;
 }

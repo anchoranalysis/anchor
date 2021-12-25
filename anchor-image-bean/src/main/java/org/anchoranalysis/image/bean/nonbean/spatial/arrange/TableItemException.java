@@ -33,11 +33,21 @@ public class TableItemException extends AnchorCheckedException {
     /** */
     private static final long serialVersionUID = -872733425317309830L;
 
-    public TableItemException(String string) {
-        super(string);
+    /**
+     * Create with a message only.
+     * 
+     * @param message the message.
+     */
+    public TableItemException(String message) {
+        super(message);
     }
 
-    public TableItemException(Exception exc) {
-        super(exc);
+    /**
+     * Create with a cause only.
+     * 
+     * @param cause the cause.
+     */
+    public TableItemException(Exception cause) {
+        super(cause);
     }
 }

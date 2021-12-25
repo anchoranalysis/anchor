@@ -33,8 +33,9 @@ import org.anchoranalysis.bean.GenerateUniqueParameterization;
 import org.anchoranalysis.math.relation.DoubleBiPredicate;
 
 /**
- * A base class specifying threshold and a relation to it, allowing for tests of a value in relation
- * to a threshold.
+ * A base class specifying a threshold and a relation to it.
+ * 
+ * <p>Together this forms a predicate, that can be compared against a value.
  *
  * @author Owen Feehan
  */

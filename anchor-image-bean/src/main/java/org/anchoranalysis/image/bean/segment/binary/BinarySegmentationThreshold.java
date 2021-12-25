@@ -40,9 +40,16 @@ import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 
+/**
+ * Implementation of {@link BinarySegmentation} that performs <a href="https://www.quora.com/What-is-global-thresholding-in-image-processing">global thresholding</a>.
+ * 
+ * @author Owen Feehan
+ *
+ */
 public class BinarySegmentationThreshold extends BinarySegmentation {
 
     // START PARAMETERS
+	/** Performs the global thresholding. */
     @BeanField @Getter @Setter private Thresholder thresholder;
     // END PARAMETERS
 

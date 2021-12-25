@@ -44,9 +44,9 @@ public class FeatureInputType {
     /**
      * Can these parameters be used with a particular feature?
      *
-     * @param sourceType type of input
-     * @param otherType type of other
-     * @return true iff the feature-input is compatible with {@code paramTypeClass}
+     * @param sourceType type of input.
+     * @param otherType type of other.
+     * @return true iff the {@code sourceType} can be used with an input of {@code otherType}.
      */
     public static boolean isCompatibleWith(
             Class<? extends FeatureInput> sourceType, Class<? extends FeatureInput> otherType) {
@@ -54,13 +54,13 @@ public class FeatureInputType {
     }
 
     /**
-     * Prefer to keep descriptor whose input-class is a sub-class rather than a super-class
+     * Prefer to keep descriptor whose input-class is a sub-class rather than a super-class.
      *
      * <p>The order of the two {@code inputType} parameters is irrelevant.
      *
-     * @param inputType1 first input-type
-     * @param inputType2 second input-type
-     * @return the favored input-type of the two, or Optional.empty() if there is no compatibility
+     * @param inputType1 first input-type.
+     * @param inputType2 second input-type.
+     * @return the favored input-type of the two, or Optional.empty() if there is no compatibility.
      */
     public static Optional<Class<? extends FeatureInput>> prefer(
             Class<? extends FeatureInput> inputType1, Class<? extends FeatureInput> inputType2) {
@@ -85,9 +85,9 @@ public class FeatureInputType {
      *
      * <p>The order of the two {@code inputType} parameters is irrelevant.
      *
-     * @param feature1 first-feature
-     * @param feature2 second-feature
-     * @return the favored input-type of the two, or Optional.empty() if there is no compatibility
+     * @param feature1 first-feature.
+     * @param feature2 second-feature.
+     * @return the favored input-type of the two, or Optional.empty() if there is no compatibility.
      */
     public static Class<? extends FeatureInput> prefer(Feature<?> feature1, Feature<?> feature2) {
         return determineInputType(feature1.inputType(), feature2.inputType());
@@ -97,10 +97,10 @@ public class FeatureInputType {
      * Finds a common input-type for two classes, throwing an exception if the two types aren't
      * compatible.
      *
-     * @param inputType1 first input-type
-     * @param inputType2 second input-type
-     * @return the favored input-type of the two
-     * @throws AnchorFriendlyRuntimeException if they aren't compatible types
+     * @param inputType1 first input-type.
+     * @param inputType2 second input-type.
+     * @return the favored input-type of the two.
+     * @throws AnchorFriendlyRuntimeException if they aren't compatible types.
      */
     public static Class<? extends FeatureInput> determineInputType(
             Class<? extends FeatureInput> inputType1, Class<? extends FeatureInput> inputType2) {
@@ -117,10 +117,10 @@ public class FeatureInputType {
      * aren't compatible.
      *
      * @param <T> common parent input-type on the list (all elements in the list must have a
-     *     input-type that sub-classes this)
-     * @param list list of features to determine a common input-type for
-     * @return the commin input-type
-     * @throws AnchorFriendlyRuntimeException if they are any two incompatible types
+     *     input-type that sub-classes this).
+     * @param list list of features to determine a common input-type for.
+     * @return the commin input-type.
+     * @throws AnchorFriendlyRuntimeException if they are any two incompatible types.
      */
     public static <T extends FeatureInput> Class<? extends FeatureInput> determineInputType(
             List<Feature<T>> list) {
@@ -129,9 +129,9 @@ public class FeatureInputType {
         }
 
         Class<? extends FeatureInput> chosenParamType = FeatureInput.class;
-        for (Feature<?> f : list) {
+        for (Feature<?> feature : list) {
 
-            Class<? extends FeatureInput> paramType = f.inputType();
+            Class<? extends FeatureInput> paramType = feature.inputType();
             if (!chosenParamType.equals(paramType)) {
 
                 Optional<Class<? extends FeatureInput>> preferred =

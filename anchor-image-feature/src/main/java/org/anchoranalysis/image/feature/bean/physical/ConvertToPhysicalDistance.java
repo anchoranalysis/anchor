@@ -37,7 +37,7 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.initialization.FeatureInitialization;
 import org.anchoranalysis.feature.input.FeatureInputWithResolution;
 import org.anchoranalysis.image.bean.spatial.direction.DirectionVectorBean;
-import org.anchoranalysis.image.bean.spatial.direction.VectorInDirection;
+import org.anchoranalysis.image.bean.spatial.direction.SpecifyVector;
 import org.anchoranalysis.image.core.dimensions.SpatialUnits.UnitSuffix;
 import org.anchoranalysis.image.core.dimensions.UnitConverter;
 import org.anchoranalysis.spatial.orientation.DirectionVector;
@@ -50,7 +50,7 @@ public class ConvertToPhysicalDistance<T extends FeatureInputWithResolution>
     // START BEAN PROPERTIES
     /** Direction of the distance being converted, defaults to a unit vector along the X-axis */
     @BeanField @Getter @Setter
-    private DirectionVectorBean direction = new VectorInDirection(1.0, 0, 0);
+    private DirectionVectorBean direction = new SpecifyVector(1.0, 0, 0);
     // END BEAN PROPERTIES
 
     private DirectionVector vectorInDirection;
@@ -58,7 +58,7 @@ public class ConvertToPhysicalDistance<T extends FeatureInputWithResolution>
     public ConvertToPhysicalDistance(
             Feature<T> feature, UnitSuffix unitType, DirectionVector directionVector) {
         super(feature, unitType);
-        this.direction = new VectorInDirection(directionVector);
+        this.direction = new SpecifyVector(directionVector);
     }
 
     @Override

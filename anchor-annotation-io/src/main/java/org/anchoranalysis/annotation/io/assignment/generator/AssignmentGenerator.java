@@ -34,7 +34,7 @@ import java.util.function.IntFunction;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.annotation.io.assignment.Assignment;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
-import org.anchoranalysis.image.bean.provider.stack.ArrangeRaster;
+import org.anchoranalysis.image.bean.provider.stack.Arrange;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.bean.stack.combine.StackProviderWithLabel;
 import org.anchoranalysis.image.io.stack.input.TileRasters;
@@ -82,7 +82,7 @@ public class AssignmentGenerator extends RasterGeneratorSelectFormat<Assignment<
 
         AssignmentColorPool colorPool = colorPoolCreator.apply(element.numberPaired());
 
-        ArrangeRaster stackProvider =
+        Arrange stackProvider =
                 createTiledStackProvider(
                         objectDrawer.createObjectsImage(element, true, colorPool),
                         objectDrawer.createObjectsImage(element, false, colorPool),
@@ -106,7 +106,7 @@ public class AssignmentGenerator extends RasterGeneratorSelectFormat<Assignment<
         return StackWriteAttributesFactory.rgbMaybe3D(false);
     }
 
-    private static ArrangeRaster createTiledStackProvider(
+    private static Arrange createTiledStackProvider(
             Stack stackLeft, Stack stackRight, String nameLeft, String nameRight) {
         List<StackProviderWithLabel> listProvider = new ArrayList<>();
         listProvider.add(new StackProviderWithLabel(stackLeft, nameLeft));

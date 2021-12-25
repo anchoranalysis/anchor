@@ -33,7 +33,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.InitializeException;
-import org.anchoranalysis.image.bean.provider.stack.ArrangeRaster;
+import org.anchoranalysis.image.bean.provider.stack.Arrange;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.stack.input.TileRasters;
@@ -56,7 +56,7 @@ public class TileWithLabels extends StackProvider {
 
     @Override
     public Stack get() throws ProvisionFailedException {
-        ArrangeRaster arrangeRaster =
+        Arrange arrangeRaster =
                 TileRasters.createStackProvider(
                         list, numCols, createShort, scaleLabel, expandLabelZ);
         try {

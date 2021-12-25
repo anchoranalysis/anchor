@@ -30,7 +30,7 @@ import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.spatial.orientation.DirectionVector;
 
 /**
- * A bean that creates a {@link DirectionVector}
+ * A bean that creates a {@link DirectionVector}.
  *
  * @author Owen Feehan
  */

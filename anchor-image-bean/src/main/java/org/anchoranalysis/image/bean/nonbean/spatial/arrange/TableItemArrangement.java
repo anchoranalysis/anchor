@@ -36,19 +36,78 @@ import java.util.List;
 public class TableItemArrangement<T> {
 
     private List<List<T>> rows;
-    private List<List<T>> cols;
+    private List<List<T>> columns;
 
-    private int numCols;
+    private int numberColumns;
 
+    public TableItemArrangement(TableCreator<T> rasterIterator, int numberRows, int numberCols)
+            throws TableItemException {
+
+        this.numberColumns = numberCols;
+
+        rows = new ArrayList<>();
+        columns = new ArrayList<>();
+
+        for (int row = 0; row < numberRows; row++) {
+            for (int column = 0; column < numberCols; column++) {
+
+                if (!rasterIterator.hasNext()) {
+                    return;
+                }
+
+                T item = rasterIterator.createNext(row, column);
+                assert (item != null);
+
+                List<T> currentRows = getListOrAdd(rows, row);
+                List<T> currentColumns = getListOrAdd(columns, column);
+
+                currentRows.add(item);
+                currentColumns.add(item);
+            }
+        }
+    }
+    
     /**
-     * @author Owen Feehan
-     * @param <T> item-type
+     * Is a particular cell occupied by an image?
+     * 
+     * @param rowIndex the row the cell lies on (zero-indexed).
+     * @param columnIndex the column the cell lies on (zero-indexed).
+     * @return true iff an image occupies the particular cell.
      */
-    public static interface TableCreator<T> {
+    public boolean isCellUsed(int rowIndex, int columnIndex) {
+        if (rowIndex >= rows.size()) {
+            return false;
+        } else {
+        	return columnIndex < rows.get(rowIndex).size();
+        }
+    }
 
-        boolean hasNext();
+    public T get(int rowIndex, int columnIndex) {
+        return rows.get(rowIndex).get(columnIndex);
+    }
 
-        T createNext(int rowPos, int colPos) throws TableItemException;
+    public List<T> getRow(int index) {
+        return rows.get(index);
+    }
+
+    public List<T> getColumn(int index) {
+        return columns.get(index);
+    }
+
+    public int getNumberRowsUsed() {
+        return rows.size();
+    }
+
+    public int getNumberColumnsUsed() {
+        return columns.size();
+    }
+
+    public int getRowForListIndex(int index) {
+        return index / numberColumns;
+    }
+
+    public int getColForListIndex(int index) {
+        return index % numberColumns;
     }
 
     // Assumes we will only ever call get() on an index that is one more than
@@ -56,74 +115,11 @@ public class TableItemArrangement<T> {
     private List<T> getListOrAdd(List<List<T>> list, int index) {
 
         if (index >= list.size()) {
-            List<T> crntList = new ArrayList<>();
-            list.add(crntList);
-            return crntList;
+            List<T> current = new ArrayList<>();
+            list.add(current);
+            return current;
         } else {
             return list.get(index);
-        }
-    }
-
-    // Is the cell in use
-    public boolean isCellUsed(int rowIndex, int colIndex) {
-        if (rowIndex >= rows.size()) {
-            return false;
-        }
-        return colIndex < rows.get(rowIndex).size();
-    }
-
-    public T get(int rowIndex, int colIndex) {
-        return rows.get(rowIndex).get(colIndex);
-    }
-
-    public List<T> getRow(int index) {
-        return rows.get(index);
-    }
-
-    public List<T> getCol(int index) {
-        return cols.get(index);
-    }
-
-    public int getNumRowsUsed() {
-        return rows.size();
-    }
-
-    public int getNumColsUsed() {
-        return cols.size();
-    }
-
-    public int getRowForListIndex(int index) {
-        return index / numCols;
-    }
-
-    public int getColForListIndex(int index) {
-        return index % numCols;
-    }
-
-    public TableItemArrangement(TableCreator<T> rasterIterator, int numRows, int numCols)
-            throws TableItemException {
-
-        this.numCols = numCols;
-
-        rows = new ArrayList<>();
-        cols = new ArrayList<>();
-
-        for (int crntRow = 0; crntRow < numRows; crntRow++) {
-            for (int crntCol = 0; crntCol < numCols; crntCol++) {
-
-                if (!rasterIterator.hasNext()) {
-                    return;
-                }
-
-                T item = rasterIterator.createNext(crntRow, crntCol);
-                assert (item != null);
-
-                List<T> crntRowList = getListOrAdd(rows, crntRow);
-                List<T> crntColList = getListOrAdd(cols, crntCol);
-
-                crntRowList.add(item);
-                crntColList.add(item);
-            }
         }
     }
 }

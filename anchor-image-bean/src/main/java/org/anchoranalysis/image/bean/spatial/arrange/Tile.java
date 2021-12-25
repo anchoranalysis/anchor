@@ -29,14 +29,16 @@ package org.anchoranalysis.image.bean.spatial.arrange;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.ArrangeStackException;
-import org.anchoranalysis.image.bean.nonbean.spatial.arrange.BoundingBoxesOnPlane;
+import org.anchoranalysis.image.bean.nonbean.spatial.arrange.StackArrangement;
+import org.anchoranalysis.image.bean.nonbean.spatial.arrange.TableCreator;
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.TableItemArrangement;
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.TableItemException;
 import org.anchoranalysis.image.core.stack.RGBStack;
@@ -44,8 +46,55 @@ import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.box.Extent;
 import org.anchoranalysis.spatial.point.Point3i;
 
-public class Tile extends ArrangeStackBean {
+/**
+ * A higher-level aggregate structure that arranges other {@link StackArranger}s in a tabular pattern.
+ * 
+ * <p>The table is defined by a number of rows and columns.
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class Tile extends StackArranger {
 
+    @AllArgsConstructor
+    private class CreateTable implements TableCreator<StackArrangement> {
+
+        private final Iterator<RGBStack> iterator;
+
+        @Override
+        public boolean hasNext() {
+            return iterator.hasNext();
+        }
+
+        @Override
+        public StackArrangement createNext(int rowPos, int colPos) throws TableItemException {
+            try {
+                return createArrangeRasterForItem(rowPos, colPos)
+                        .arrangeStacks(iterator);
+            } catch (ArrangeStackException e) {
+                throw new TableItemException(e);
+            }
+        }
+
+        private StackArranger createArrangeRasterForItem(int row, int column) {
+
+            // This can be made more efficient by using a lookup table for the cells.
+            // But as there should be relatively few exceptions, we just always loop through the list.
+        	
+            if (cells != null) {
+            	for( Cell cell : cells) {
+            		Optional<StackArranger> arrangeStack = cell.ifPositionMatches(row, column);
+            		if (arrangeStack.isPresent()) {
+                		return arrangeStack.get();
+                	}
+            	}
+            }
+
+            // If there's no explicit cell definition
+            return cellDefault;
+        }
+    }
+    
     // START BEAN PROPERTIES
     /**
      * The number of <i>rows</i> to use in the table produced when tiling.
@@ -61,52 +110,39 @@ public class Tile extends ArrangeStackBean {
      */
     @BeanField @Positive @Getter @Setter private int numberColumns = -1;
 
-    @BeanField @OptionalBean @Getter @Setter private List<Cell> cells = new ArrayList<>();
+    /**
+     * Defines the corresponding {@link StackArranger} for each individual cell in table.
+     * 
+     * <p>Each cell should be specified zero or one times, via a reference to the corresponding row and column.
+     * 
+     * <p>If a particular cell is unspecified, {@code cellDefault} is used.
+     */
+    @BeanField @Getter @Setter private List<Cell> cells = new ArrayList<>();
 
-    @BeanField @Getter @Setter private ArrangeStackBean cellDefault = new Single();
+    /**
+     * Used to define an individual cell, if no specific entry is found in {@code cells} for a particular cell. 
+     */
+    @BeanField @Getter @Setter private StackArranger cellDefault = new Single();
     // END BEAN PROPERTIES
+    
+    @Override
+    protected StackArrangement arrangeStacks(final Iterator<RGBStack> stacks)
+            throws ArrangeStackException {
 
-    @AllArgsConstructor
-    private class CreateTable implements TableItemArrangement.TableCreator<BoundingBoxesOnPlane> {
+        try {
+            TableItemArrangement<StackArrangement> table =
+                    new TableItemArrangement<>(
+                            new CreateTable(stacks), numberRows, numberColumns);
 
-        private final Iterator<RGBStack> iterator;
+            return createSet(table, new MaxWidthHeight(table));
 
-        // We can make this more efficient by using a lookup table for the cells
-        // But as there should be relatively few exceptions, we just always loop
-        //   through the list
-        private ArrangeStackBean createArrangeRasterForItem(int rowPos, int colPos) {
-
-            if (cells != null) {
-                for (Cell cell : cells) {
-                    if (cell.getRow() == rowPos && cell.getCol() == colPos) {
-                        assert (cell.getArrange() != null);
-                        return cell.getArrange();
-                    }
-                }
-            }
-
-            // If there's no explicit cell definition
-            return cellDefault;
-        }
-
-        @Override
-        public boolean hasNext() {
-            return iterator.hasNext();
-        }
-
-        @Override
-        public BoundingBoxesOnPlane createNext(int rowPos, int colPos) throws TableItemException {
-            try {
-                return createArrangeRasterForItem(rowPos, colPos)
-                        .arrangeStacks(iterator);
-            } catch (ArrangeStackException e) {
-                throw new TableItemException(e);
-            }
+        } catch (TableItemException e) {
+            throw new ArrangeStackException(e);
         }
     }
 
     private static void addShifted(
-            Iterable<BoundingBox> src, BoundingBoxesOnPlane dest, int shiftX, int shiftY) {
+            Iterable<BoundingBox> src, StackArrangement dest, int shiftX, int shiftY) {
 
         // We now loop through each item in the cell, and add to our output set with
         //   the correct offset
@@ -120,25 +156,25 @@ public class Tile extends ArrangeStackBean {
         }
     }
 
-    private static BoundingBoxesOnPlane createSet(
-            TableItemArrangement<BoundingBoxesOnPlane> table, MaxWidthHeight maxWidthHeight) {
+    private static StackArrangement createSet(
+            TableItemArrangement<StackArrangement> table, MaxWidthHeight maxWidthHeight) {
 
-        BoundingBoxesOnPlane set =
-                new BoundingBoxesOnPlane(
+        StackArrangement set =
+                new StackArrangement(
                         new Extent(
                                 maxWidthHeight.getTotalWidth(),
                                 maxWidthHeight.getTotalHeight(),
                                 maxWidthHeight.getMaxZ()));
 
         // We iterator over every cell in the table
-        for (int rowPos = 0; rowPos < table.getNumRowsUsed(); rowPos++) {
-            for (int colPos = 0; colPos < table.getNumColsUsed(); colPos++) {
+        for (int rowPos = 0; rowPos < table.getNumberRowsUsed(); rowPos++) {
+            for (int colPos = 0; colPos < table.getNumberColumnsUsed(); colPos++) {
 
                 if (!table.isCellUsed(rowPos, colPos)) {
                     break;
                 }
 
-                BoundingBoxesOnPlane boxSet = table.get(rowPos, colPos);
+                StackArrangement boxSet = table.get(rowPos, colPos);
 
                 int rowHeight = maxWidthHeight.getMaxHeightForRow(rowPos);
                 int colWidth = maxWidthHeight.getMaxWidthForCol(colPos);
@@ -153,21 +189,5 @@ public class Tile extends ArrangeStackBean {
             }
         }
         return set;
-    }
-
-    @Override
-    public BoundingBoxesOnPlane arrangeStacks(final Iterator<RGBStack> stacks)
-            throws ArrangeStackException {
-
-        try {
-            TableItemArrangement<BoundingBoxesOnPlane> table =
-                    new TableItemArrangement<>(
-                            new CreateTable(stacks), numberRows, numberColumns);
-
-            return createSet(table, new MaxWidthHeight(table));
-
-        } catch (TableItemException e) {
-            throw new ArrangeStackException(e);
-        }
     }
 }

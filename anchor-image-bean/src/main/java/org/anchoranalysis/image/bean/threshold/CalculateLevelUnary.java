@@ -24,30 +24,38 @@
  * #L%
  */
 
-package org.anchoranalysis.image.bean.spatial.arrange;
+package org.anchoranalysis.image.bean.threshold;
 
-import java.util.Iterator;
-
-import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.image.bean.nonbean.spatial.arrange.ArrangeStackException;
-import org.anchoranalysis.image.bean.nonbean.spatial.arrange.BoundingBoxesOnPlane;
-import org.anchoranalysis.image.core.stack.RGBStack;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.math.histogram.Histogram;
 
 /**
- * Base class for a method that determines positions for {@link RGBStack}s when combined onto a single plane.
+ * Implementation of {@link CalculateLevel} that calls a single delegate {@link CalculateLevel}.
  * 
  * @author Owen Feehan
  *
  */
-public abstract class ArrangeStackBean extends AnchorBean<ArrangeStackBean> {
-	
-	/**
-	 * Arranges stacks to that they fit together in a single raster.
-	 * 
-	 * @param stacks the stacks to arrange.
-	 * @return bounding-boxes for each respective {@link RGBStack} in the unified plane.
-	 * @throws ArrangeStackException if a bounding-box cannot be determined for any stack.
-	 */
-    public abstract BoundingBoxesOnPlane arrangeStacks(Iterator<RGBStack> stacks) throws ArrangeStackException;
-	
+@EqualsAndHashCode(callSuper = false)
+public abstract class CalculateLevelUnary extends CalculateLevel {
+
+    // START BEAN PROPERTIES
+	/** The delegate {@link CalculateLevel}. */
+    @BeanField @Getter @Setter private CalculateLevel calculateLevel;
+    // END BEAN PROPERTIES
+
+    /**
+     * Determines a voxel intensity that can be used for thresholding from the delegate {@code calculateLevel}.
+     *
+     * @param histogram a histogram of voxel-intensities from which a threshold-level can be
+     *     derived.
+     * @return the threshold-level.
+     * @throws OperationFailedException if a level cannot be successfully calculated.
+     */
+    protected int calculateLevelFromDelegate(Histogram histogram) throws OperationFailedException {
+        return calculateLevel.calculateLevel(histogram);
+    }
 }

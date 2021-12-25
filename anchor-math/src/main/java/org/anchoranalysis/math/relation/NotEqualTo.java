@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-image-bean
+ * anchor-core
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -24,23 +24,21 @@
  * #L%
  */
 
-package org.anchoranalysis.image.bean.threshold;
+package org.anchoranalysis.math.relation;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.math.histogram.Histogram;
+import org.anchoranalysis.math.arithmetic.DoubleUtilities;
 
-@EqualsAndHashCode(callSuper = false)
-public abstract class CalculateLevelOne extends CalculateLevel {
+/**
+ * Returns true if two values are <b>not</b> equal, and false otherwise.
+ *
+ * <p>Equality is considered within a small epsilon, as in {@link DoubleUtilities#areEqual}.
+ *
+ * @author Owen Feehan
+ */
+public class NotEqualTo implements DoubleBiPredicate {
 
-    // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private CalculateLevel calculateLevel;
-    // END BEAN PROPERTIES
-
-    protected int calculateLevelIncoming(Histogram histogram) throws OperationFailedException {
-        return calculateLevel.calculateLevel(histogram);
+    @Override
+    public boolean test(double valueFirst, double valueSecond) {
+        return !DoubleUtilities.areEqual(valueFirst, valueSecond);
     }
 }

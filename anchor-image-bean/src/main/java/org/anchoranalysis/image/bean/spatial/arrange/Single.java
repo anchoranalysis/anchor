@@ -28,15 +28,15 @@ package org.anchoranalysis.image.bean.spatial.arrange;
 
 import java.util.Iterator;
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.ArrangeStackException;
-import org.anchoranalysis.image.bean.nonbean.spatial.arrange.BoundingBoxesOnPlane;
+import org.anchoranalysis.image.bean.nonbean.spatial.arrange.StackArrangement;
 import org.anchoranalysis.image.core.stack.RGBStack;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.box.Extent;
 
-public class Single extends ArrangeStackBean {
+public class Single extends StackArranger {
 
     @Override
-    public BoundingBoxesOnPlane arrangeStacks(Iterator<RGBStack> stacks)
+    protected StackArrangement arrangeStacks(Iterator<RGBStack> stacks)
             throws ArrangeStackException {
 
         if (!stacks.hasNext()) {
@@ -47,6 +47,6 @@ public class Single extends ArrangeStackBean {
 
         Extent extent = stack.getChannel(0).extent();
 
-        return new BoundingBoxesOnPlane(extent, new BoundingBox(extent));
+        return new StackArrangement(extent, new BoundingBox(extent));
     }
 }

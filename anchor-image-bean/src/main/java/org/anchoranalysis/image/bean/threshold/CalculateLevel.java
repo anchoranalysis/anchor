@@ -45,8 +45,8 @@ public abstract class CalculateLevel extends NullParametersBean<CalculateLevel> 
      *
      * @param histogram a histogram of voxel-intensities from which a threshold-level can be
      *     derived.
-     * @return the selected intensity
-     * @throws OperationFailedException if anything goes wrong
+     * @return the threshold-level.
+     * @throws OperationFailedException if a level cannot be successfully calculated.
      */
     public abstract int calculateLevel(Histogram histogram) throws OperationFailedException;
 

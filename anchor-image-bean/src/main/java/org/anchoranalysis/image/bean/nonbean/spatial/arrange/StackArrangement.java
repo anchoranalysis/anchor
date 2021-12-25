@@ -32,26 +32,35 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import lombok.experimental.Accessors;
+
+import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.box.Extent;
 
 /**
- * Describes a set of bounding boxes on top of a plane
+ * A list of {@link BoundingBox}es that indicate whether to locate corresponding {@link Stack}s on a unified larger image.
  *
  * @author Owen Feehan
  */
 @RequiredArgsConstructor
 @Value
 @Accessors(fluent = true)
-public class BoundingBoxesOnPlane implements Iterable<BoundingBox> {
+public class StackArrangement implements Iterable<BoundingBox> {
 
     // START REQUIRED ARGUMENTS
+	/** The size of the larger image in which all the {@link BoundingBox}es in {@code list} must fully reside. */
     private final Extent extent;
     // END REQUIRED ARGUMENTS
 
     private List<BoundingBox> list = new ArrayList<>();
 
-    public BoundingBoxesOnPlane(Extent extent, BoundingBox box) {
+    /**
+     * Create with a single {@link BoundingBox}.
+     * 
+     * @param extent the size of the larger image in which all the {@link BoundingBox}es in {@code list} must fully reside.
+     * @param box the {@link BoundingBox}.
+     */
+    public StackArrangement(Extent extent, BoundingBox box) {
         this(extent);
         add(box);
     }

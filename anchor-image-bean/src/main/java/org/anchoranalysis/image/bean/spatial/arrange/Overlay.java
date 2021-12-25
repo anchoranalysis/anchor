@@ -27,13 +27,15 @@
 package org.anchoranalysis.image.bean.spatial.arrange;
 
 import java.util.Iterator;
+import java.util.Optional;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.ArrangeStackException;
-import org.anchoranalysis.image.bean.nonbean.spatial.arrange.BoundingBoxesOnPlane;
+import org.anchoranalysis.image.bean.nonbean.spatial.arrange.StackArrangement;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.stack.RGBStack;
 import org.anchoranalysis.spatial.box.BoundingBox;
@@ -56,91 +58,78 @@ import org.anchoranalysis.spatial.point.Point3i;
  */
 @NoArgsConstructor
 @AllArgsConstructor
-public class Overlay extends ArrangeStackBean {
+public class Overlay extends StackArranger {
 
+    private static final PositionChoices CHOICES_X = new PositionChoices("left", "center", "right");
+    private static final PositionChoices CHOICES_Y = new PositionChoices("top", "center", "bottom");
+    private static final PositionChoices CHOICES_Z = new PositionChoices("bottom", "center", "top", Optional.of("repeat"));
+    
+	private static final Single SINGLE = new Single();
+	
     // START BEAN PROPERTIES
+	/** Indicates how to align the image across the <b>X-axis</b> (i.e. horizontally): one of {@code left, right, center}. */
+    @BeanField @Getter @Setter private String alignX = "left";
 
-    // left, right, center
-    @BeanField @Getter @Setter private String horizontalAlign = "left";
+	/** Indicates how to align the image across the <b>Y-axis</b> (i.e. vertically): one of {@code top, bottom, center}. */
+    @BeanField @Getter @Setter private String alignY = "top";
 
-    // top, bottom, center
-    @BeanField @Getter @Setter private String verticalAlign = "top";
-
-    // top, bottom, center
-    @BeanField @Getter @Setter private String zAlign = "top";
-
+    /** 
+     * Indicates how to align the image across the <b>Z-axis</b>: one of {@code top, bottom, center, repeat}. 
+     * 
+     * <p>{@code repeat} is a special-case where a single z-slice overlay will be duplicated across the z-dimension of the stack onto which it is overlayed.
+     */
+    @BeanField @Getter @Setter private String alignZ = "top";
     // END BEAN PROPERTIES
-
+    
     @Override
     public String describeBean() {
         return getBeanName();
     }
-
-    private int positionHorizontal(BoundingBoxesOnPlane boxSet, Dimensions dimensions) {
-
-        if (horizontalAlign.equalsIgnoreCase("left")) {
-            return 0;
-        } else if (horizontalAlign.equalsIgnoreCase("right")) {
-            return boxSet.extent().x() - dimensions.x();
-        } else {
-            return (boxSet.extent().x() - dimensions.x()) / 2;
-        }
-    }
-
-    private int positionVertical(BoundingBoxesOnPlane boxSet, Dimensions dimensions) {
-
-        if (verticalAlign.equalsIgnoreCase("top")) {
-            return 0;
-        } else if (verticalAlign.equalsIgnoreCase("bottom")) {
-            return boxSet.extent().y() - dimensions.y();
-        } else {
-            return (boxSet.extent().y() - dimensions.y()) / 2;
-        }
-    }
-
-    private int positionZ(BoundingBoxesOnPlane boxSet, Dimensions dimensions) {
-
-        if (zAlign.equalsIgnoreCase("bottom") || zAlign.equalsIgnoreCase("repeat")) {
-            return 0;
-        } else if (zAlign.equalsIgnoreCase("top")) {
-            return boxSet.extent().z() - dimensions.z();
-        } else {
-            return (boxSet.extent().z() - dimensions.z()) / 2;
-        }
-    }
-
+    
     @Override
-    public BoundingBoxesOnPlane arrangeStacks(Iterator<RGBStack> stacks)
+    protected StackArrangement arrangeStacks(Iterator<RGBStack> stacks)
             throws ArrangeStackException {
 
         if (!stacks.hasNext()) {
             throw new ArrangeStackException("No image in iterator for source");
         }
 
-        Single sr = new Single();
-        BoundingBoxesOnPlane boxSet = sr.arrangeStacks(stacks);
+        StackArrangement arrangement = SINGLE.arrangeStacks(stacks);
 
         if (!stacks.hasNext()) {
             throw new ArrangeStackException("No image in iterator for overlay");
         }
 
-        RGBStack overlayImg = stacks.next();
+        RGBStack overlay = stacks.next();
 
-        Extent overlayE = deriveExtent(overlayImg.getChannel(0).extent(), boxSet.extent());
+        Extent overlaySize = deriveExtent(overlay.getChannel(0).extent(), arrangement.extent());
 
-        int hPos = positionHorizontal(boxSet, overlayImg.dimensions());
-        int vPos = positionVertical(boxSet, overlayImg.dimensions());
-        int zPos = positionZ(boxSet, overlayImg.dimensions());
+        Point3i cornerMin = new Point3i(
+        		positionX(arrangement, overlay.dimensions()),
+        		positionY(arrangement, overlay.dimensions()),
+        		positionZ(arrangement, overlay.dimensions())
+        );
+        arrangement.add(new BoundingBox(cornerMin, overlaySize));
+        return arrangement;
+    }
 
-        boxSet.add(new BoundingBox(new Point3i(hPos, vPos, zPos), overlayE));
-        return boxSet;
+    private int positionX(StackArrangement arrangement, Dimensions dimensions) throws ArrangeStackException {
+    	return CHOICES_X.position("alignX", alignX, Extent::x, arrangement, dimensions);
+    }
+
+    private int positionY(StackArrangement arrangement, Dimensions dimensions) throws ArrangeStackException {
+    	return CHOICES_Y.position("alignY", alignY, Extent::y, arrangement, dimensions);
+    }
+
+    private int positionZ(StackArrangement arrangement, Dimensions dimensions) throws ArrangeStackException {
+    	return CHOICES_Z.position("alignZ", alignZ, Extent::z, arrangement, dimensions);
     }
 
     private Extent deriveExtent(Extent overlay, Extent box) {
         return new Extent(
                 Math.min(overlay.x(), box.x()),
                 Math.min(overlay.y(), box.y()),
-                zAlign.equalsIgnoreCase("repeat") || (overlay.z() > box.z())
+                alignZ.equalsIgnoreCase("repeat") || (overlay.z() > box.z())
                         ? box.z()
                         : overlay.z());
     }
