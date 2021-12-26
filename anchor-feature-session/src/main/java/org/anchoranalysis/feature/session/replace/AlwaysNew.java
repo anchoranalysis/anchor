@@ -29,13 +29,14 @@ package org.anchoranalysis.feature.session.replace;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.feature.calculate.cache.CacheCreator;
+import org.anchoranalysis.feature.calculate.cache.FeatureCalculationCache;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.session.SessionInputSequential;
 import org.anchoranalysis.feature.session.cache.finder.ChildCacheFinder;
 import org.anchoranalysis.feature.session.cache.finder.DefaultChildCacheFinder;
 
 /**
- * Always create a new session-input with no reuse or caching.
+ * Always create a new {@link SessionInputSequential} with no reuse or caching between calls.
  *
  * @author Owen Feehan
  * @param <T> feature-input type
@@ -47,9 +48,9 @@ public class AlwaysNew<T extends FeatureInput> implements ReplaceStrategy<T> {
     private ChildCacheFinder findChildStrategy;
 
     /**
-     * Constructor with default means of creating a session-input
+     * Constructor with default means of creating a {@link FeatureCalculationInput}.
      *
-     * @param cacheCreator
+     * @param cacheCreator creates a {@link FeatureCalculationCache}.
      */
     public AlwaysNew(CacheCreator cacheCreator) {
         this(cacheCreator, DefaultChildCacheFinder.instance());

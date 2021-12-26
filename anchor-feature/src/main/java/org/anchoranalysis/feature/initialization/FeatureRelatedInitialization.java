@@ -41,7 +41,7 @@ import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
 import org.anchoranalysis.core.identifier.provider.store.SharedObjects;
 import org.anchoranalysis.core.log.CommonContext;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.core.value.Dictionary;
+import org.anchoranalysis.bean.shared.dictionary.DictionaryBean;
 import org.anchoranalysis.feature.bean.FeatureRelatedBean;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
@@ -55,7 +55,11 @@ import org.anchoranalysis.feature.shared.SharedFeatures;
  */
 public class FeatureRelatedInitialization implements BeanInitialization {
 
-    /** A named-mapping to {@link Dictionary}s. */
+    /** 
+     * The associated initialization for a {@link DictionaryBean}.
+     * 
+     * @return the associated initialization.
+     */
     @Getter private DictionaryInitialization dictionary;
 
     /** A named-set of file-paths. */
@@ -113,7 +117,7 @@ public class FeatureRelatedInitialization implements BeanInitialization {
     }
 
     /**
-     * Populates features into the shared-feature storage from a list of named-beans.
+     * Adds features into the shared-feature storage from a list of named-beans.
      *
      * <p>Additionally the features are initialized, with the current instance.
      *

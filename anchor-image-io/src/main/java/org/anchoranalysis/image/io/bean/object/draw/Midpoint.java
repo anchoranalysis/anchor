@@ -94,7 +94,7 @@ public class Midpoint extends DrawObject {
     public static void writeRelPoint(
             Point3i point, RGBColor color, RGBStack stack, BoundingBox boxContainer) {
         if (boxContainer.contains().point(point)) {
-            stack.assignColor(Point3i.immutableSubtract(point, boxContainer.cornerMin()), color);
+            stack.assignVoxel(Point3i.immutableSubtract(point, boxContainer.cornerMin()), color);
         }
     }
 
@@ -109,7 +109,7 @@ public class Midpoint extends DrawObject {
             return;
         }
 
-        stack.assignColor(midpoint, color);
+        stack.assignVoxel(midpoint, color);
 
         // X direction
         for (int i = 0; i < extraLength; i++) {

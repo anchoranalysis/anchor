@@ -42,6 +42,12 @@
 		
 		<dependency>
 		  <groupId>${project.groupId}</groupId>
+		  <artifactId>anchor-image-bean</artifactId>
+		  <version>0.0.8-SNAPSHOT</version>
+		</dependency>	
+		
+		<dependency>
+		  <groupId>${project.groupId}</groupId>
 		  <artifactId>anchor-image-io</artifactId>
 		  <version>0.0.8-SNAPSHOT</version>
 		</dependency>

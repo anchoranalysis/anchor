@@ -32,17 +32,26 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
-import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.bean.nonbean.segment.BinarySegmentationParameters;
+import org.anchoranalysis.image.bean.nonbean.segment.SegmentationFailedException;
 import org.anchoranalysis.image.voxel.VoxelsUntyped;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 
+/**
+ * Uses an existing {@link BinarySegmentation} that is located by a unique identifier.
+ * 
+ * <p>The identifier locates an entity from the shared-objects passed during initialization in the {@link ImageInitialization}.
+ * 
+ * @author Owen Feehan
+ *
+ */
 public class BinarySegmentationReference extends BinarySegmentation {
 
     // START BEAN PROPERTIES
+	/** The identifier of the existing {@link BinarySegmentation} to use. */
     @BeanField @Getter @Setter private String id;
     // END BEAN PROPERTIES
 

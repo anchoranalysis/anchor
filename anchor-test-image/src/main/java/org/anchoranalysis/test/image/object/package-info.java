@@ -23,5 +23,5 @@
  * THE SOFTWARE.
  * #L%
  */
-/** Fixture for creating object-masks. */
+/** Fixtures for creating object-masks. */
 package org.anchoranalysis.test.image.object;

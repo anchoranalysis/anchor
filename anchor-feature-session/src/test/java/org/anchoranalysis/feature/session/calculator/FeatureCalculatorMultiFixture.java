@@ -38,15 +38,20 @@ import org.anchoranalysis.feature.results.ResultsVector;
 
 class FeatureCalculatorMultiFixture {
 
-    /** Creates a feature-calculator than returns a constant result */
-    public static <T extends FeatureInput> FeatureCalculatorMulti<T> createFeatureCalculator(
-            ResultsVector rv) {
+    /** 
+     * Creates a feature-calculator than returns a constant {@link ResultsVector}.
+     * 
+     * @param <T> feature-input type
+     * @param results the constant {@link ResultsVector} to return.
+     * @return a newly created {@link FeatureCalculatorMulti} fixture. 
+     */
+    public static <T extends FeatureInput> FeatureCalculatorMulti<T> createFeatureCalculator(ResultsVector results) {
 
         try {
             @SuppressWarnings("unchecked")
             FeatureCalculatorMulti<T> calculator = mock(FeatureCalculatorMulti.class);
-            when(calculator.calculate(any())).thenReturn(rv);
-            when(calculator.calculateSuppressErrors(any(), any())).thenReturn(rv);
+            when(calculator.calculate(any())).thenReturn(results);
+            when(calculator.calculateSuppressErrors(any(), any())).thenReturn(results);
             return calculator;
         } catch (NamedFeatureCalculateException e) {
             throw new AnchorFriendlyRuntimeException(e);

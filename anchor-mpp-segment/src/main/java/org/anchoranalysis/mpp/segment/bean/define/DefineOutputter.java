@@ -103,7 +103,7 @@ public class DefineOutputter extends AnchorBean<DefineOutputter> {
             operation.process(initialization);
 
             outputSharedObjects(
-                    initialization.getSharedObjects(), Optional.empty(), context.getOutputter());
+                    initialization.sharedObjects(), Optional.empty(), context.getOutputter());
 
         } catch (CreateException | OutputWriteFailedException e) {
             throw new OperationFailedException(e);
@@ -126,7 +126,11 @@ public class DefineOutputter extends AnchorBean<DefineOutputter> {
                 MarksInitializationFactory.create(
                                 Optional.empty(), context, Optional.ofNullable(define))
                         .image();
-        initialization.addSharedObjectsDictionary(sharedObjects, dictionary);
+        try {
+			initialization.addSharedObjectsDictionary(sharedObjects, dictionary);
+		} catch (OperationFailedException e) {
+			throw new CreateException(e);
+		}
         return initialization;
     }
 

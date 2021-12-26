@@ -28,25 +28,25 @@ package org.anchoranalysis.image.bean.spatial.arrange;
 
 import java.util.Iterator;
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.ArrangeStackException;
-import org.anchoranalysis.image.bean.nonbean.spatial.arrange.BoundingBoxesOnPlane;
+import org.anchoranalysis.image.bean.nonbean.spatial.arrange.StackArrangement;
 import org.anchoranalysis.image.core.stack.RGBStack;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.box.Extent;
 
-public class Single extends ArrangeStackBean {
+public class Single extends StackArranger {
 
     @Override
-    public BoundingBoxesOnPlane createBoundingBoxesOnPlane(Iterator<RGBStack> rasterIterator)
+    protected StackArrangement arrangeStacks(Iterator<RGBStack> stacks)
             throws ArrangeStackException {
 
-        if (!rasterIterator.hasNext()) {
+        if (!stacks.hasNext()) {
             throw new ArrangeStackException("iterator has no more images");
         }
 
-        RGBStack stack = rasterIterator.next();
+        RGBStack stack = stacks.next();
 
         Extent extent = stack.getChannel(0).extent();
 
-        return new BoundingBoxesOnPlane(extent, new BoundingBox(extent));
+        return new StackArrangement(extent, new BoundingBox(extent));
     }
 }

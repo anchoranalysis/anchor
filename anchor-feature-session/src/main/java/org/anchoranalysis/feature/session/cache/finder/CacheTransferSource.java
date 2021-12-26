@@ -44,19 +44,40 @@ import org.anchoranalysis.feature.input.FeatureInput;
 @AllArgsConstructor
 public class CacheTransferSource<T extends FeatureInput> {
 
+	/** The cache that is searched for child caches. */
     private final CacheSupplier<T, OperationFailedException> cacheToSearch;
+    
+    /** The names of the child-caches that can be used as sources. */
     private final Set<ChildCacheName> specificChildren;
 
+    /**
+     * Whether a particular child-cache exists in the source?
+     * 
+     * @param name the name of the child-cache.
+     * @return true iff the child-cache exists.
+     */
     public boolean containsChild(ChildCacheName name) {
         return specificChildren.contains(name);
     }
 
+    /**
+     * Gets corresponding {@link FeatureCalculationInput} for an {@code input}, if present, but doesn't create any new entry if it's absent.
+     *
+     * @param input the input.
+     * @return an existing element if present or {@link Optional#empty()} otherwise.
+     * @throws OperationFailedException if unable to get the cache that is searched.
+     */
     public Optional<FeatureCalculationInput<T>> getInputIfPresent(T input)
             throws OperationFailedException {
         Optional<LRUCache<T, FeatureCalculationInput<T>>> cache = cacheToSearch.get();
         return cache.flatMap(cacheInternal -> cacheInternal.getIfPresent(input));
     }
 
+    /**
+     * The names of the child-caches that can be used as sources.
+     * 
+     * @return the names, as a set, which should not be modified (i.e. treated as read-only).
+     */
     public Set<ChildCacheName> getCacheNames() {
         return specificChildren;
     }

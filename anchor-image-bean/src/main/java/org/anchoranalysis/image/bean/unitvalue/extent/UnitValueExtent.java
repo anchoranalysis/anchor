@@ -28,18 +28,24 @@ package org.anchoranalysis.image.bean.unitvalue.extent;
 
 import java.util.Optional;
 import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.image.bean.nonbean.error.UnitValueException;
+import org.anchoranalysis.image.bean.nonbean.UnitValueException;
 import org.anchoranalysis.image.core.dimensions.UnitConverter;
 
-public abstract class UnitValueAreaOrVolume extends AnchorBean<UnitValueAreaOrVolume> {
+/**
+ * A base class for a value that describes an <b>area or volume</b> measurement, which can then be resolved to a number of voxels.
+ * 
+ * @author Owen
+ *
+ */
+public abstract class UnitValueExtent extends AnchorBean<UnitValueExtent> {
 
     /**
      * Resolves a measurement of area/volume (in whatever units) to units corresponding to the image
      * pixels/voxels.
      *
-     * @param unitConverter
+     * @param unitConverter converts from voxelized units to different physical measurements of area / volume / distance.
      * @return the resolved-value (pixels for area, voxels for volume).
-     * @throws UnitValueException
+     * @throws UnitValueException if missing a {@link UnitConverter}, when needed for resolution.
      */
     public abstract double resolveToVoxels(Optional<UnitConverter> unitConverter)
             throws UnitValueException;

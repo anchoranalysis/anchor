@@ -56,7 +56,7 @@ import org.anchoranalysis.feature.session.cache.finder.DefaultChildCacheFinder;
  */
 public class SessionInputSequential<T extends FeatureInput> implements FeatureCalculationInput<T> {
 
-    /** Implements operations which should occur using child-caches rather than in the main cache */
+    /** Implements operations which should occur using child-caches rather than in the main cache. */
     @AllArgsConstructor
     private class ChildCalculator implements CalculateForChild<T> {
 
@@ -82,7 +82,7 @@ public class SessionInputSequential<T extends FeatureInput> implements FeatureCa
                     .calculate(
                             feature,
                             new SessionInputSequential<>(
-                                    input, child, cacheFactory, findChild.finderForGrandchild()));
+                                    input, child, cacheCreator, findChild.finderForGrandchild()));
         }
 
         @Override
@@ -105,40 +105,47 @@ public class SessionInputSequential<T extends FeatureInput> implements FeatureCa
          */
         private <V extends FeatureInput> FeatureCalculationCache<V> childCacheFor(
                 ChildCacheName childName, V input) throws FeatureCalculationException {
-            return findChild.childCacheFor(cache, cacheFactory, childName, input);
+            return findChild.childCacheFor(cache, cacheCreator, childName, input);
         }
     }
 
     private FeatureCalculationCache<T> cache;
 
     private T input;
-    private CacheCreator cacheFactory;
+    private CacheCreator cacheCreator;
     private ChildCalculator childCalc;
     private ChildCacheFinder findChild;
 
     /**
-     * Constructor
+     * Creates for a particular input and {@link CacheCreator}, otherwise using defaults.
      *
-     * @param input input to features
-     * @param cacheFactory
+     * @param input input for feature calculation.
+     * @param cacheCreator creates a cache.
      */
-    public SessionInputSequential(T input, CacheCreator cacheFactory) {
+    public SessionInputSequential(T input, CacheCreator cacheCreator) {
         this.input = input;
-        this.cacheFactory = cacheFactory;
+        this.cacheCreator = cacheCreator;
 
         // Deliberately two lines, as it needs an explicitly declared type for the template type
         // inference to work
-        this.cache = cacheFactory.create(input.getClass());
+        this.cache = cacheCreator.create(input.getClass());
         this.childCalc = new ChildCalculator(DefaultChildCacheFinder.instance());
     }
 
-    public SessionInputSequential(T input, CacheCreator cacheFactory, ChildCacheFinder findChild) {
+    /**
+     * Creates for a particular input, {@link CacheCreator} and {@link ChildCacheFinder}.
+     * 
+     * @param input input for feature calculation.
+     * @param cacheCreator creates a cache.
+     * @param findChild locates a particular child-cache.
+     */
+    public SessionInputSequential(T input, CacheCreator cacheCreator, ChildCacheFinder findChild) {
         this.input = input;
-        this.cacheFactory = cacheFactory;
+        this.cacheCreator = cacheCreator;
 
         // Deliberately two lines, as it needs an explicitly declared type for the template type
         // inference to work
-        this.cache = cacheFactory.create(input.getClass());
+        this.cache = cacheCreator.create(input.getClass());
         this.childCalc = new ChildCalculator(findChild);
         this.findChild = findChild;
     }
@@ -147,7 +154,7 @@ public class SessionInputSequential<T extends FeatureInput> implements FeatureCa
      * Constructor when a cache is already identified
      *
      * @param input feature-input
-     * @param cache the cache to associate with the session-input
+     * @param cache the cache to associate with the {@link FeatureCalculationInput}
      * @param cacheFactory creates new caches
      * @param findChild
      */
@@ -157,7 +164,7 @@ public class SessionInputSequential<T extends FeatureInput> implements FeatureCa
             CacheCreator cacheFactory,
             ChildCacheFinder findChild) {
         this.input = input;
-        this.cacheFactory = cacheFactory;
+        this.cacheCreator = cacheFactory;
         this.cache = cache;
         this.childCalc = new ChildCalculator(findChild);
     }

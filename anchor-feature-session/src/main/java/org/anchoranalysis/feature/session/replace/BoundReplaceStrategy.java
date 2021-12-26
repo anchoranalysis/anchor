@@ -39,29 +39,45 @@ import org.anchoranalysis.feature.session.cache.HorizontalCacheCreator;
 import org.anchoranalysis.feature.shared.SharedFeatures;
 
 /**
- * Attaches a replacement-strategy to a session lazily (i.e. when it is needed)
+ * Attaches a replacement-strategy to a session lazily.
+ * 
+ * <p>i.e. the strategy is attached only when first needed.
  *
  * <p>This is because as the relevant parameters are not available when we need to call the
  * constructor.
+ * 
+ * @param <T> feature-input type
+ * @param <S> strategy-type
  */
 @RequiredArgsConstructor
 public class BoundReplaceStrategy<T extends FeatureInput, S extends ReplaceStrategy<T>> {
 
     // START REQUIRED ARGUMENTS
-    private final Function<CacheCreator, S> funcCreateStrategy;
+	/** Creates a strategy corresponding to a particular cache. */
+    private final Function<CacheCreator, S> createStrategy;
     // END REQUIRED ARGUMENTS
 
+    /** The strategy that has been bound (if it exists). */
     @Getter private Optional<S> strategy = Optional.empty();
 
-    public ReplaceStrategy<T> bind(
-            FeatureList<T> featureList,
+    /**
+     * Creates a {@link ReplaceStrategy} for a particular {@link CacheCreator}, or reuses any previously-created {@link ReplaceStrategy} if it exists.
+     * 
+     * @param features the features to use in the {@link CacheCreator}, if created.
+     * @param initialization the initialization for the {@link CacheCreator}, if created.
+     * @param sharedFeatures the shared-features for the {@link CacheCreator}, if created.
+     * @param logger the logger.
+     * @return a {@link ReplaceStrategy}, reused if it already exists, otherwise newly created.
+     */
+    public ReplaceStrategy<T> createOrReuse(
+            FeatureList<T> features,
             FeatureInitialization initialization,
             SharedFeatures sharedFeatures,
             Logger logger) {
-        CacheCreator cacheCreator =
-                new HorizontalCacheCreator(featureList, sharedFeatures, initialization, logger);
         if (!strategy.isPresent()) {
-            strategy = Optional.of(funcCreateStrategy.apply(cacheCreator));
+            CacheCreator cacheCreator =
+                    new HorizontalCacheCreator(features, sharedFeatures, initialization, logger);
+            strategy = Optional.of(createStrategy.apply(cacheCreator));
         }
         return strategy.get();
     }

@@ -34,11 +34,18 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.core.dimensions.UnitConverter;
 
+/**
+ * Volume expressed in voxels.
+ *
+ * @author Owen
+ *
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 public class VolumeVoxels extends UnitValueVolume {
 
     // START BEAN PROPERTIES
+	/** The volume in voxels. */
     @BeanField @Getter @Setter private double value;
     // END BEAN PROPERTIES
 

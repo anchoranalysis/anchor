@@ -29,7 +29,7 @@ package org.anchoranalysis.image.io.stack.input;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.image.bean.provider.stack.ArrangeRaster;
+import org.anchoranalysis.image.bean.provider.stack.Arrange;
 import org.anchoranalysis.image.bean.spatial.arrange.Overlay;
 import org.anchoranalysis.image.bean.spatial.arrange.Tile;
 import org.anchoranalysis.image.io.bean.stack.combine.GenerateString;
@@ -39,7 +39,7 @@ import org.anchoranalysis.image.io.bean.stack.combine.TextStyle;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class TileRasters {
 
-    public static ArrangeRaster createStackProvider(
+    public static Arrange createStackProvider(
             List<StackProviderWithLabel> list,
             int numberColumns,
             boolean createShort,
@@ -47,7 +47,7 @@ public class TileRasters {
             boolean expandLabelZ) {
 
         // Makes everything an unsigned-short and using RGB output
-        ArrangeRaster arrange = new ArrangeRaster(createShort, true);
+        Arrange arrange = new Arrange(createShort, true);
 
         // Add stack providers
         for (StackProviderWithLabel provider : list) {

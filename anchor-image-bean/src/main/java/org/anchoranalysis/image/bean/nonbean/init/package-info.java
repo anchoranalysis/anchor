@@ -23,5 +23,5 @@
  * THE SOFTWARE.
  * #L%
  */
-/** Initialization of image-related beans. */
+/** Classes that aren't AnchorBeans that pertain to the initialization of image-related beans. */
 package org.anchoranalysis.image.bean.nonbean.init;

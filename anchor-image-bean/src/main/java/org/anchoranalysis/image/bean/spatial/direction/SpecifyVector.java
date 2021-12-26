@@ -33,19 +33,33 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.spatial.orientation.DirectionVector;
 
+/**
+ * Specifies each axis-component of a vector in a particular direction.
+ * 
+ * @author Owen
+ *
+ */
 @NoArgsConstructor
 @AllArgsConstructor
-public class VectorInDirection extends DirectionVectorBean {
+public class SpecifyVector extends DirectionVectorBean {
 
     // START BEAN PROPERTIES
+	/** Component of the vector along the <b>x-axis</b>. */
     @BeanField @Getter @Setter private double x = 0;
 
+    /** Component of the vector along the <b>y-axis</b>. */
     @BeanField @Getter @Setter private double y = 0;
 
+    /** Component of the vector along the <b>z-axis</b>. */
     @BeanField @Getter @Setter private double z = 0;
     // END BEAN PROPERTIES
 
-    public VectorInDirection(DirectionVector vector) {
+    /**
+     * Create from a {@link DirectionVector}.
+     * 
+     * @param vector the vector from which components are copied.
+     */
+    public SpecifyVector(DirectionVector vector) {
         this.x = vector.x();
         this.y = vector.y();
         this.z = vector.z();

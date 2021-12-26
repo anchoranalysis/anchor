@@ -33,14 +33,29 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.math.histogram.Histogram;
 
+/**
+ * Implementation of {@link CalculateLevel} that calls a single delegate {@link CalculateLevel}.
+ * 
+ * @author Owen Feehan
+ *
+ */
 @EqualsAndHashCode(callSuper = false)
-public abstract class CalculateLevelOne extends CalculateLevel {
+public abstract class CalculateLevelUnary extends CalculateLevel {
 
     // START BEAN PROPERTIES
+	/** The delegate {@link CalculateLevel}. */
     @BeanField @Getter @Setter private CalculateLevel calculateLevel;
     // END BEAN PROPERTIES
 
-    protected int calculateLevelIncoming(Histogram histogram) throws OperationFailedException {
+    /**
+     * Determines a voxel intensity that can be used for thresholding from the delegate {@code calculateLevel}.
+     *
+     * @param histogram a histogram of voxel-intensities from which a threshold-level can be
+     *     derived.
+     * @return the threshold-level.
+     * @throws OperationFailedException if a level cannot be successfully calculated.
+     */
+    protected int calculateLevelFromDelegate(Histogram histogram) throws OperationFailedException {
         return calculateLevel.calculateLevel(histogram);
     }
 }

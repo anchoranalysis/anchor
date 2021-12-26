@@ -38,7 +38,7 @@ import org.anchoranalysis.image.voxel.thresholder.VoxelsThresholder;
 import org.anchoranalysis.math.histogram.Histogram;
 
 /**
- * Thresholds a voxels to create a binary-voxels
+ * Thresholds voxels to create a binary-voxels using <a href="https://www.quora.com/What-is-global-thresholding-in-image-processing">global thresholding</a>.
  *
  * @author Owen Feehan
  */
@@ -49,11 +49,10 @@ public abstract class Thresholder extends NullParametersBean<VoxelsThresholder> 
      *
      * <p>The default values are <i>off</i>(0) and <i>on</i>(255).
      *
-     * @param voxels the voxels to be thresholded
+     * @param voxels the voxels to be thresholded.
      * @return a binary-channel as described above, which may possibly reuse the input
      *     voxel-buffers.
-     * @throws OperationFailedException
-     * @throws OperationFailedException
+     * @throws OperationFailedException if the thresholding operation cannot complete successfully.
      */
     public BinaryVoxels<UnsignedByteBuffer> threshold(VoxelsUntyped voxels)
             throws OperationFailedException {
@@ -66,12 +65,11 @@ public abstract class Thresholder extends NullParametersBean<VoxelsThresholder> 
      *
      * <p>The thresholder does not accept a histogram as input.
      *
-     * @param voxels the voxels to be thresholded
-     * @param binaryValues what binary values to be used in the output
+     * @param voxels the voxels to be thresholded.
+     * @param binaryValues what binary values to be used in the output.
      * @return a binary-channel as described above, which may possibly reuse the input
      *     voxel-buffers.
-     * @throws OperationFailedException
-     * @throws OperationFailedException
+     * @throws OperationFailedException if the thresholding operation cannot complete successfully.
      */
     public BinaryVoxels<UnsignedByteBuffer> threshold(
             VoxelsUntyped voxels, BinaryValuesByte binaryValues) throws OperationFailedException {
@@ -83,18 +81,18 @@ public abstract class Thresholder extends NullParametersBean<VoxelsThresholder> 
      * voxel values representing <i>on</i> and <i>off</i>).
      *
      * <p>If a mask is used, the voxels outside the object-mask are left unchanged. They will be
-     * either identical to the input-volume or 0 if a new buffer needs to be created..
+     * either identical to the input-volume or 0 if a new buffer needs to be created.
      *
-     * @param voxels the voxels to be thresholded
-     * @param binaryValues what binary values to be used in the output
+     * @param voxels the voxels to be thresholded.
+     * @param binaryValues what binary values to be used in the output.
      * @param histogram a histogram if it's available, which must exactly match the intensity-values
      *     of {@code voxels} after any object-mask is applied. This exists for calculation
      *     efficiency.
      * @param objectMask an object-mask to restrict thresholding to only some region(s) of the
-     *     voxels
+     *     voxels.
      * @return a binary-channel as described above, which may possibly reuse the input
      *     voxel-buffers.
-     * @throws OperationFailedException
+     * @throws OperationFailedException if the thresholding operation cannot complete successfully.
      */
     public abstract BinaryVoxels<UnsignedByteBuffer> threshold(
             VoxelsUntyped voxels,

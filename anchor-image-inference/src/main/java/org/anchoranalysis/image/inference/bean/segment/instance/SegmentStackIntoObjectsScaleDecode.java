@@ -40,7 +40,7 @@ import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.time.ExecutionTimeRecorder;
 import org.anchoranalysis.image.bean.interpolator.Interpolator;
-import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
+import org.anchoranalysis.image.bean.nonbean.segment.SegmentationFailedException;
 import org.anchoranalysis.image.bean.spatial.ScaleCalculator;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.stack.Stack;
@@ -228,7 +228,7 @@ public abstract class SegmentStackIntoObjectsScaleDecode<T, S extends ImageInfer
                         executionTimeRecorder,
                         "Resizing during inference"),
                 executionTimeRecorder,
-                getInitialization().getSharedObjects().getContext().getLogger());
+                getInitialization().sharedObjects().getContext().getLogger());
     }
 
     /**

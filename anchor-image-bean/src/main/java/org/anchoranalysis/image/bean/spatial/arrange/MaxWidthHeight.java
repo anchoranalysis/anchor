@@ -27,7 +27,7 @@
 package org.anchoranalysis.image.bean.spatial.arrange;
 
 import java.util.List;
-import org.anchoranalysis.image.bean.nonbean.spatial.arrange.BoundingBoxesOnPlane;
+import org.anchoranalysis.image.bean.nonbean.spatial.arrange.StackArrangement;
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.TableItemArrangement;
 
 class MaxWidthHeight {
@@ -38,25 +38,25 @@ class MaxWidthHeight {
     private int totalWidth;
     private int maxZ;
 
-    public MaxWidthHeight(TableItemArrangement<BoundingBoxesOnPlane> firstGeneratedTable) {
+    public MaxWidthHeight(TableItemArrangement<StackArrangement> firstGeneratedTable) {
 
         // We calculate a max width for every column
-        rowMaxHeight = new int[firstGeneratedTable.getNumRowsUsed()];
-        colMaxWidth = new int[firstGeneratedTable.getNumColsUsed()];
+        rowMaxHeight = new int[firstGeneratedTable.getNumberRowsUsed()];
+        colMaxWidth = new int[firstGeneratedTable.getNumberColumnsUsed()];
         totalHeight = 0;
         totalWidth = 0;
         maxZ = 0;
 
-        for (int i = 0; i < firstGeneratedTable.getNumRowsUsed(); i++) {
-            List<BoundingBoxesOnPlane> rowList = firstGeneratedTable.getRow(i);
+        for (int i = 0; i < firstGeneratedTable.getNumberRowsUsed(); i++) {
+            List<StackArrangement> rowList = firstGeneratedTable.getRow(i);
             int height = getMaxHeightFromList(rowList);
             rowMaxHeight[i] = height;
             totalHeight += height;
             maxZ = Math.max(maxZ, getMaxZFromList(rowList));
         }
 
-        for (int i = 0; i < firstGeneratedTable.getNumColsUsed(); i++) {
-            List<BoundingBoxesOnPlane> colList = firstGeneratedTable.getCol(i);
+        for (int i = 0; i < firstGeneratedTable.getNumberColumnsUsed(); i++) {
+            List<StackArrangement> colList = firstGeneratedTable.getColumn(i);
             int width = getMaxWidthFromList(colList);
             colMaxWidth[i] = width;
             totalWidth += width;
@@ -96,24 +96,24 @@ class MaxWidthHeight {
         return totalHeight;
     }
 
-    private static int getMaxWidthFromList(List<BoundingBoxesOnPlane> list) {
+    private static int getMaxWidthFromList(List<StackArrangement> list) {
         // Assumes dim are the same for all channels
 
         int max = -1;
 
-        for (BoundingBoxesOnPlane item : list) {
+        for (StackArrangement item : list) {
             max = Math.max(max, item.extent().x());
         }
 
         return max;
     }
 
-    private static int getMaxHeightFromList(List<BoundingBoxesOnPlane> list) {
+    private static int getMaxHeightFromList(List<StackArrangement> list) {
         // Assumes dim are the same for all channels
 
         int max = -1;
 
-        for (BoundingBoxesOnPlane item : list) {
+        for (StackArrangement item : list) {
             assert (item != null);
             max = Math.max(max, item.extent().y());
         }
@@ -121,12 +121,12 @@ class MaxWidthHeight {
         return max;
     }
 
-    private static int getMaxZFromList(List<BoundingBoxesOnPlane> list) {
+    private static int getMaxZFromList(List<StackArrangement> list) {
         // Assumes dim are the same for all channels
 
         int max = -1;
 
-        for (BoundingBoxesOnPlane item : list) {
+        for (StackArrangement item : list) {
             assert (item != null);
             max = Math.max(max, item.extent().z());
         }

@@ -30,7 +30,7 @@ import org.anchoranalysis.core.exception.friendly.AnchorFriendlyCheckedException
 
 /**
  * An exception that occurs when an experiment is executed. This should always contain a friendly
- * error message to the user
+ * error message to the user.
  *
  * @author Owen Feehan
  */
@@ -43,15 +43,15 @@ public class ExperimentExecutionException extends AnchorFriendlyCheckedException
         super(string);
     }
 
-    public ExperimentExecutionException(Throwable exc) {
-        super(exc);
+    public ExperimentExecutionException(Throwable cause) {
+        super(cause);
     }
 
     /**
-     * A string message displayed to the user as well as a stack-trace of the cause
+     * A string message displayed to the user as well as a stack-trace of the cause.
      *
-     * @param string the error message displayed to the user
-     * @param cause cause of the error, and a stack trace is displayed to theu ser
+     * @param string the error message displayed to the user.
+     * @param cause cause of the exception.
      */
     public ExperimentExecutionException(String string, Throwable cause) {
         super(string, cause);

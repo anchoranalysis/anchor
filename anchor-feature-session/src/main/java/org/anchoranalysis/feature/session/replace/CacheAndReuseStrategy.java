@@ -28,36 +28,43 @@ package org.anchoranalysis.feature.session.replace;
 
 import lombok.Getter;
 import org.anchoranalysis.core.cache.LRUCache;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.feature.calculate.cache.CacheCreator;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
- * Reuse (without needing to invalidate) an existing session-input as stored in a least-recently
- * used cache, otherwise create a new one.
+ * Reuse an existing {@link FeatureCalculationInput}, as stored in a least-recently used cache, and without invalidating it.
+ * 
+ * <p>If no existing input is already stored, create a new one.
  *
  * @author Owen Feehan
- * @param <T> feature-input
+ * @param <T> feature-input type
  */
 public class CacheAndReuseStrategy<T extends FeatureInput> implements ReplaceStrategy<T> {
 
     private static final int CACHE_SIZE = 200;
 
+    /** The cache mapping a particular input to a corresponding {@link FeatureCalculationInput}. */
     @Getter private LRUCache<T, FeatureCalculationInput<T>> cache;
 
+    /**
+     * Create with a particular {@link CacheCreator}.
+     * 
+     * @param cacheCreator the cache-creator.
+     */
     public CacheAndReuseStrategy(CacheCreator cacheCreator) {
         ReplaceStrategy<T> delegate = new AlwaysNew<>(cacheCreator);
         cache = new LRUCache<>(CACHE_SIZE, delegate::createOrReuse);
     }
 
     @Override
-    public FeatureCalculationInput<T> createOrReuse(T input) throws CreateException {
+    public FeatureCalculationInput<T> createOrReuse(T input) throws OperationFailedException {
         try {
             return cache.get(input);
         } catch (GetOperationFailedException e) {
-            throw new CreateException(e);
+            throw new OperationFailedException(e);
         }
     }
 }

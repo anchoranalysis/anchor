@@ -62,6 +62,6 @@ public class PointsInitialization implements BeanInitialization {
 
         PopulateStoreFromDefine<PointsInitialization> populater =
                 new PopulateStoreFromDefine<>(define, initializer, logger);
-        populater.copyInit(PointsFitter.class, pointFitters);
+        populater.copyInitialize(PointsFitter.class, pointFitters);
     }
 }

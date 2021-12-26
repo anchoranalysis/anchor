@@ -59,6 +59,6 @@ public class FeatureCSVMetadata {
     /** The output name for the features CSV. */
     private final String outputName;
 
-    /** Headers for the CSV file */
+    /** Headers for the CSV file. */
     private final List<String> headers;
 }

@@ -117,6 +117,6 @@ class CreateCalculatorHelper {
 
     private FeatureInitialization createInitialization(ImageInitialization initialization) {
         return InitializationFactory.create(
-                Optional.of(initialization.getSharedObjects()), energyStack);
+                Optional.of(initialization.sharedObjects()), energyStack);
     }
 }

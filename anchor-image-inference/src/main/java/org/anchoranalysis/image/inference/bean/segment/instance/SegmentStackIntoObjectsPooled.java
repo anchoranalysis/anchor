@@ -30,7 +30,7 @@ import java.nio.file.Path;
 import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.time.ExecutionTimeRecorder;
-import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
+import org.anchoranalysis.image.bean.nonbean.segment.SegmentationFailedException;
 import org.anchoranalysis.image.bean.segment.SegmentationBean;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.inference.segment.SegmentedObjects;
@@ -111,6 +111,6 @@ public abstract class SegmentStackIntoObjectsPooled<T extends InferenceModel>
      * @throws InitializeException if a bean requires initialization, but has not been initialized.
      */
     protected Path resolve(String modelFilename) throws InitializeException {
-        return getInitialization().getModelDirectory().resolve(modelFilename);
+        return getInitialization().modelDirectory().resolve(modelFilename);
     }
 }

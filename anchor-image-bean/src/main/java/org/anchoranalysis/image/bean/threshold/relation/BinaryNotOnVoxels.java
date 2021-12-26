@@ -29,15 +29,12 @@ package org.anchoranalysis.image.bean.threshold.relation;
 import lombok.EqualsAndHashCode;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesInt;
 import org.anchoranalysis.math.relation.DoubleBiPredicate;
-import org.anchoranalysis.math.relation.LessThan;
+import org.anchoranalysis.math.relation.NotEqualTo;
 
 /**
- * Selects anything that is <b>not</b> <i>on</i> voxels from a binary mask.
+ * Selects voxels that are <b>not</b> <i>on</i> voxels.
  *
- * <p>Uses the default on value of 255.
- *
- * <p>Note this is not the same as selecting <i>off</i> voxels which would only select values of 0.
- * There's fuzzy undefined space {@code > 1} and {@code < 255}.
+ * <p>Note that is the same as selecting <i>off</i> voxels, when the intensity-values are identical to the two states in a {@link BinaryValuesInt}, but otherwise they are not identical.
  *
  * @author Owen Feehan
  */
@@ -51,6 +48,6 @@ public class BinaryNotOnVoxels extends BinaryVoxelsBase {
 
     @Override
     public DoubleBiPredicate relation() {
-        return new LessThan();
+        return new NotEqualTo();
     }
 }

@@ -36,7 +36,7 @@ import org.anchoranalysis.feature.name.FeatureNameList;
 /**
  * Information needed for the outputting differnt types of feature-table CSV files.
  *
- * <p>i.e. headers, the output-name etc.
+ * <p>e.g. headers, the output-name etc.
  *
  * <p>Two types of CSV files may be written:
  *
@@ -51,7 +51,7 @@ import org.anchoranalysis.feature.name.FeatureNameList;
 @Accessors(fluent = true)
 public class FeatureOutputMetadata {
 
-    /** Headers for the CSV File */
+    /** Headers for the CSV File. */
     @Getter private final LabelHeaders labelHeaders;
 
     /** Names of each feature in the feature columns, for non-aggregated features. */
@@ -76,7 +76,7 @@ public class FeatureOutputMetadata {
      * Specific metadata for writing an <b>aggregated CSV file</b>.
      *
      * @param featureNamesAggregated the feature-names to use for the aggregated CSV file (which
-     *     usally differ from {@code featureNamesNonAggregate}.
+     *     usually differ from {@code featureNamesNonAggregate}.
      * @return a newly created {@link FeatureCSVMetadataForOutput}.
      */
     public Optional<FeatureCSVMetadataForOutput> csvAggregated(

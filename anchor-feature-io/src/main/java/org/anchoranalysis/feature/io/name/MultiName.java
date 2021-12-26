@@ -56,15 +56,15 @@ public interface MultiName extends Iterable<String>, Comparable<MultiName> {
     /**
      * The full name, including both directory and file part, as a string.
      *
-     * @return the name
+     * @return the name.
      */
     String toString();
 
     /**
-     * If another name is equal to the current name
+     * If another name is equal to the current name.
      *
-     * @param other the other name
-     * @return true iff the two objects are equal
+     * @param other the other name.
+     * @return true iff the two objects are equal.
      */
     boolean equals(Object other);
 }

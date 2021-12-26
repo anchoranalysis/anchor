@@ -29,12 +29,10 @@ package org.anchoranalysis.image.bean.threshold.relation;
 import lombok.EqualsAndHashCode;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesInt;
 import org.anchoranalysis.math.relation.DoubleBiPredicate;
-import org.anchoranalysis.math.relation.GreaterThan;
+import org.anchoranalysis.math.relation.EqualTo;
 
 /**
- * Selects only the <i>on</i> pixels from a binary mask.
- *
- * <p>Uses the default on value of 255.
+ * Selects only the <i>on</i> pixels.
  *
  * @author Owen Feehan
  */
@@ -43,11 +41,11 @@ public class BinaryOnVoxels extends BinaryVoxelsBase {
 
     @Override
     public double threshold() {
-        return BinaryValuesInt.getDefault().getOn() - 1.0;
+        return BinaryValuesInt.getDefault().getOn();
     }
 
     @Override
     public DoubleBiPredicate relation() {
-        return new GreaterThan();
+        return new EqualTo();
     }
 }

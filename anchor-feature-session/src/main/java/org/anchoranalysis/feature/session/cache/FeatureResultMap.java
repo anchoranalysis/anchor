@@ -42,7 +42,9 @@ class FeatureResultMap<T extends FeatureInput> {
      *
      * <p>Any existing entry with the same feature-name is replaced.
      *
-     * @param feature feature to add
+     * @param feature feature to add.
+     * @param featureName the name of the feature to add.
+     * @param result the result to add.
      */
     public void add(Feature<T> feature, String featureName, Double result) {
         mapFeature.put(feature, result);

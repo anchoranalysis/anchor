@@ -23,4 +23,7 @@
  * THE SOFTWARE.
  * #L%
  */
+/**
+ * Fixtures for an {@link org.anchoranalysis.io.output.bean.OutputManager} and related-classes.
+ */
 package org.anchoranalysis.test.io.output;

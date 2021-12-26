@@ -33,6 +33,12 @@ import org.anchoranalysis.spatial.axis.AxisConversionException;
 import org.anchoranalysis.spatial.axis.AxisConverter;
 import org.anchoranalysis.spatial.orientation.DirectionVector;
 
+/**
+ * Creates a {@link DirectionVector} that is a unit-vector along a particular image-axis.
+ * 
+ * @author Owen
+ *
+ */
 public class AxisAlignedUnitVector extends DirectionVectorBean {
 
     // START BEAN PROPERTIES

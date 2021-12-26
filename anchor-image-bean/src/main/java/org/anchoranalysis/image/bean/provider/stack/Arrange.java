@@ -34,9 +34,8 @@ import lombok.Setter;
 import org.anchoranalysis.bean.Provider;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
-import org.anchoranalysis.core.exception.InitializeException;
-import org.anchoranalysis.image.bean.nonbean.spatial.arrange.RasterArranger;
-import org.anchoranalysis.image.bean.spatial.arrange.ArrangeStackBean;
+import org.anchoranalysis.image.bean.nonbean.spatial.arrange.ArrangeStackException;
+import org.anchoranalysis.image.bean.spatial.arrange.StackArranger;
 import org.anchoranalysis.image.core.channel.factory.ChannelFactorySingleType;
 import org.anchoranalysis.image.core.channel.factory.ChannelFactoryUnsignedByte;
 import org.anchoranalysis.image.core.channel.factory.ChannelFactoryUnsignedShort;
@@ -45,25 +44,38 @@ import org.anchoranalysis.image.core.stack.RGBStack;
 import org.anchoranalysis.image.core.stack.Stack;
 
 /**
- * Creates a stack that tiles (or otherwise combines) other providers
+ * Creates a stack that combines other stacks.
+ * 
+ * <p>The stacks to be combined are specified in {@code list}.
+ * 
+ * <p>Instructions on how to combine the stacks are specified in {@code arrange}, relative to the order of the elements of {@code list}. 
  *
  * @author Owen Feehan
  */
 @NoArgsConstructor
-public class ArrangeRaster extends StackProvider {
+public class Arrange extends StackProvider {
 
     // START BEAN
-    @BeanField @Getter @Setter private ArrangeStackBean arrange;
-
-    /** If set, ensures every stack is converted into 3 channels */
-    @BeanField @Getter @Setter private boolean forceRGB = false;
-
+	/** The stacks that are passed in respect order into {@code arrange}. */
     @BeanField @Getter @Setter private List<Provider<Stack>> list = new ArrayList<>();
 
+    /** Determines how the stacks in {@code list} are arranged. */
+    @BeanField @Getter @Setter private StackArranger arrange;
+
+    /** Iff true, ensures every stack is converted into 3 channels. */
+    @BeanField @Getter @Setter private boolean forceRGB = false;
+
+    /** If true, the created raster has <i>unsigned short</i> voxel data type. If false, then <i>unsigned byte</i>. */
     @BeanField @Getter @Setter private boolean createShort = false;
     // END BEAN
 
-    public ArrangeRaster(boolean createShort, boolean forceRGB) {
+    /**
+     * Shortcut to create with some explicit parameters.
+     * 
+     * @param createShort if true, the created raster has <i>unsigned short</i> voxel data type. If false, then <i>unsigned byte</i>.
+     * @param forceRGB iff true, ensures every stack is converted into 3 channels.
+     */
+    public Arrange(boolean createShort, boolean forceRGB) {
         this.createShort = createShort;
         this.forceRGB = forceRGB;
     }
@@ -90,25 +102,22 @@ public class ArrangeRaster extends StackProvider {
             Stack stack = provider.get();
 
             if (forceRGB) {
-                copyFirstChannelUntil3(stack);
+                copyFirstChannelUntilThree(stack);
             }
             rasterList.add(new RGBStack(stack));
         }
-
-        RasterArranger rasterArranger = new RasterArranger();
+        
         try {
-            rasterArranger.initialize(arrange, rasterList);
-        } catch (InitializeException e) {
+            ChannelFactorySingleType factory =
+                    createShort ? new ChannelFactoryUnsignedShort() : new ChannelFactoryUnsignedByte();
+
+            return arrange.combine(rasterList, factory).asStack();        	
+        } catch (ArrangeStackException e) {
             throw new ProvisionFailedException(e);
         }
-
-        ChannelFactorySingleType factory =
-                createShort ? new ChannelFactoryUnsignedShort() : new ChannelFactoryUnsignedByte();
-
-        return rasterArranger.createStack(rasterList, factory).asStack();
     }
 
-    private void copyFirstChannelUntil3(Stack stack) {
+    private void copyFirstChannelUntilThree(Stack stack) {
         while (stack.getNumberChannels() < 3) {
             try {
                 stack.addChannel(stack.getChannel(0).duplicate());

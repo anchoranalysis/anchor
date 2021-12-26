@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-image-bean
+ * anchor-core
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -24,13 +24,21 @@
  * #L%
  */
 
-package org.anchoranalysis.image.bean.nonbean.spatial.arrange;
+package org.anchoranalysis.math.relation;
 
-import java.util.Iterator;
-import org.anchoranalysis.image.core.stack.RGBStack;
+import org.anchoranalysis.math.arithmetic.DoubleUtilities;
 
-public interface ArrangeStack {
+/**
+ * Returns true if two values are <b>not</b> equal, and false otherwise.
+ *
+ * <p>Equality is considered within a small epsilon, as in {@link DoubleUtilities#areEqual}.
+ *
+ * @author Owen Feehan
+ */
+public class NotEqualTo implements DoubleBiPredicate {
 
-    BoundingBoxesOnPlane createBoundingBoxesOnPlane(Iterator<RGBStack> rasterIterator)
-            throws ArrangeStackException;
+    @Override
+    public boolean test(double valueFirst, double valueSecond) {
+        return !DoubleUtilities.areEqual(valueFirst, valueSecond);
+    }
 }

@@ -32,7 +32,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.image.bean.spatial.arrange.ArrangeStackBean;
+import org.anchoranalysis.image.bean.spatial.arrange.StackArranger;
 import org.anchoranalysis.image.io.stack.output.generator.RasterGenerator;
 
 /**
@@ -46,7 +46,7 @@ import org.anchoranalysis.image.io.stack.output.generator.RasterGenerator;
 public class CombineRasterGenerator<T> extends AnchorBean<CombineRasterGenerator<T>> {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private ArrangeStackBean arrange;
+    @BeanField @Getter @Setter private StackArranger arrange;
 
     // A list of all generators to be tiled (left to right, then top to bottom)
     @BeanField @Getter @Setter private List<RasterGenerator<T>> generatorList = new ArrayList<>();

@@ -29,7 +29,6 @@ package org.anchoranalysis.feature.session.cache.finder;
 import java.util.Optional;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
-import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
@@ -40,7 +39,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.session.replace.CacheAndReuseStrategy;
 
 /**
- * For particular child-caches, check if a session-input is available from another LRU-cache and
+ * For particular child-caches, check if a {@link FeatureCalculationInput} is available from another LRU-cache and
  * reuse.
  *
  * <p>This is used to "redirect" certain child-caches to reuse sessions elsewhere.
@@ -96,18 +95,18 @@ public class CheckCacheForSpecificChildren implements ChildCacheFinder {
             }
         }
 
-        // If we haven't found a session-input in any of our existing caches, then we create a new
-        // session-input of our own
+        // If we haven't found a {@link FeatureCalculationInput} in any of our existing caches, then we create a new
+        // {@link FeatureCalculationInput} of our own
         try {
             return useFallbackCache(input, factory);
-        } catch (CreateException e) {
+        } catch (OperationFailedException e) {
             throw new FeatureCalculationException(e);
         }
     }
 
     @SuppressWarnings("unchecked")
     private <V extends FeatureInput> FeatureCalculationCache<V> useFallbackCache(
-            V input, CacheCreator factory) throws CreateException {
+            V input, CacheCreator factory) throws OperationFailedException {
         if (fallbackCache == null) {
             fallbackCache = new CacheAndReuseStrategy<>(factory);
         }

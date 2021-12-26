@@ -29,11 +29,9 @@ package org.anchoranalysis.image.io.bean.stack.combine;
 import java.util.List;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
-import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.functional.FunctionalList;
-import org.anchoranalysis.image.bean.nonbean.spatial.arrange.RasterArranger;
-import org.anchoranalysis.image.bean.spatial.arrange.ArrangeStackBean;
-import org.anchoranalysis.image.core.channel.factory.ChannelFactoryUnsignedByte;
+import org.anchoranalysis.image.bean.nonbean.spatial.arrange.ArrangeStackException;
+import org.anchoranalysis.image.bean.spatial.arrange.StackArranger;
 import org.anchoranalysis.image.core.stack.RGBStack;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.stack.output.StackWriteAttributes;
@@ -45,7 +43,7 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 @AllArgsConstructor
 class CombineGenerator<T> extends RasterGeneratorSelectFormat<T> {
 
-    private final ArrangeStackBean arrangeRaster;
+    private final StackArranger arrangeRaster;
     private final List<RasterGenerator<T>> generators;
 
     @Override
@@ -53,33 +51,23 @@ class CombineGenerator<T> extends RasterGeneratorSelectFormat<T> {
 
         List<RGBStack> generated = generateAll(element);
 
-        RasterArranger rasterArranger = new RasterArranger();
-
         try {
-            rasterArranger.initialize(arrangeRaster, generated);
-        } catch (InitializeException e) {
+            // We get an image-stack for each generator
+            //
+            // Then we tile them
+            //
+            // We assume iterable generators always produce images of the same size
+            //   and base our measurements on the first call to generate
+            return arrangeRaster.combine(generated).asStack();
+            
+        } catch (ArrangeStackException e) {
             throw new OutputWriteFailedException(e);
         }
-
-        // We get an image-stack for each generator
-        //
-        // Then we tile them
-        //
-        // We assume iterable generators always produce images of the same size
-        //   and base our measurements on the first call to generate
-        return rasterArranger.createStack(generated, new ChannelFactoryUnsignedByte()).asStack();
     }
 
     @Override
     public Optional<ManifestDescription> createManifestDescription() {
         return Optional.of(new ManifestDescription("raster", "combinedEnergy"));
-    }
-
-    private List<RGBStack> generateAll(T element) throws OutputWriteFailedException {
-        return FunctionalList.mapToList(
-                generators,
-                OutputWriteFailedException.class,
-                generator -> new RGBStack(generator.transform(element)));
     }
 
     @Override
@@ -89,5 +77,12 @@ class CombineGenerator<T> extends RasterGeneratorSelectFormat<T> {
                 .map(RasterGenerator::guaranteedImageAttributes)
                 .reduce(StackWriteAttributes::and)
                 .get();
+    }
+
+    private List<RGBStack> generateAll(T element) throws OutputWriteFailedException {
+        return FunctionalList.mapToList(
+                generators,
+                OutputWriteFailedException.class,
+                generator -> new RGBStack(generator.transform(element)));
     }
 }

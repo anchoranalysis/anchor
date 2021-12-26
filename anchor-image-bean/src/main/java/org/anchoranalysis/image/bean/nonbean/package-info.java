@@ -23,5 +23,5 @@
  * THE SOFTWARE.
  * #L%
  */
-/** Classes that are used elsewhere in this package but which aren't AnchorBeans. */
+/** Classes that are used elsewhere in this package but which aren't themselves AnchorBeans. */
 package org.anchoranalysis.image.bean.nonbean;

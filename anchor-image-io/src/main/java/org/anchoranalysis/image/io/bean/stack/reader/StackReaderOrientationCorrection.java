@@ -45,7 +45,7 @@ public abstract class StackReaderOrientationCorrection extends StackReader {
      * @param path where the file is located.
      * @param orientationCorrection calculates any needed correction applied to the orientation as
      *     the image is loaded.
-     * @param executionTimeRecorder TODO
+     * @param executionTimeRecorder records the execution-times of certain operations.
      * @return an interface to the opened file that should be closed when no longer in use.
      * @throws ImageIOException if the file cannot be read.
      */

@@ -31,8 +31,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.bean.nonbean.segment.BinarySegmentationParameters;
+import org.anchoranalysis.image.bean.nonbean.segment.SegmentationFailedException;
 import org.anchoranalysis.image.bean.threshold.Thresholder;
 import org.anchoranalysis.image.voxel.VoxelsUntyped;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
@@ -40,9 +40,16 @@ import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 
+/**
+ * Implementation of {@link BinarySegmentation} that performs <a href="https://www.quora.com/What-is-global-thresholding-in-image-processing">global thresholding</a>.
+ * 
+ * @author Owen Feehan
+ *
+ */
 public class BinarySegmentationThreshold extends BinarySegmentation {
 
     // START PARAMETERS
+	/** Performs the global thresholding. */
     @BeanField @Getter @Setter private Thresholder thresholder;
     // END PARAMETERS
 

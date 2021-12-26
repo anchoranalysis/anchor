@@ -47,7 +47,7 @@ import org.anchoranalysis.feature.shared.SharedFeatures;
 /**
  * A single-point in the code for creating feature-sessions (a factory).
  *
- * <p>A feature session is a context needed to calculate one or more parameters (inptus to features)
+ * <p>A feature session is a context needed to calculate one or more parameters (inputs to features)
  * on one or more features.
  *
  * <p>Within this context, caching of intermediate results and other efficiencies are implemented
@@ -73,13 +73,14 @@ public class FeatureSession {
     }
 
     /**
-     * Starts a feature-session for a single feature.
+     * Starts a feature-session for a single feature, with default initialization.
      *
      * @param <T> type of parameters
      * @param feature the feature.
-     * @param sharedFeatures
+     * @param sharedFeatures the shared-features to use for initialization.
      * @param logger a logger.
      * @return a calculator that will calculate just this feature for each parameter.
+     * @throws InitializeException if the session cannot be successfully initialized.
      */
     public static <T extends FeatureInput> FeatureCalculatorSingle<T> with(
             Feature<T> feature, SharedFeatures sharedFeatures, Logger logger)
@@ -87,6 +88,17 @@ public class FeatureSession {
         return with(feature, new FeatureInitialization(), sharedFeatures, logger);
     }
 
+    /**
+     * Starts a feature-session for a single feature, with specific initialization.
+     *
+     * @param <T> type of parameters
+     * @param feature the feature.
+     * @param initialization the initialization.
+     * @param sharedFeatures the particular shared-features to use for initialization.
+     * @param logger a logger.
+     * @return a calculator that will calculate just this feature for each parameter.
+     * @throws InitializeException if the session cannot be successfully initialized.
+     */
     public static <T extends FeatureInput> FeatureCalculatorSingle<T> with(
             Feature<T> feature,
             FeatureInitialization initialization,
@@ -99,19 +111,32 @@ public class FeatureSession {
     }
 
     /**
-     * Starts a feature-session for a list of features.
+     * Starts a feature-session for a list of features, with default initialization.
      *
      * @param <T> type of parameters for all features.
      * @param features a list of features accepting uniform type.
      * @param logger a logger.
      * @return a calculator that will call calculate all the features in the list for each
      *     parameter.
+	 * @throws InitializeException if the session cannot be successfully initialized.
      */
     public static <T extends FeatureInput> FeatureCalculatorMulti<T> with(
             FeatureList<T> features, Logger logger) throws InitializeException {
         return with(features, new FeatureInitialization(), new SharedFeatures(), logger);
     }
 
+    /**
+     * Starts a feature-session for a list of features, with particular initialization.
+     *
+     * @param <T> type of parameters for all features.
+     * @param features a list of features accepting uniform type.
+     * @param initialization the particular initialization.
+     * @param sharedFeatures the particular shared-features to use for initialization.
+     * @param logger a logger.
+     * @return a calculator that will call calculate all the features in the list for each
+     *     parameter.
+	 * @throws InitializeException if the session cannot be successfully initialized.
+     */
     public static <T extends FeatureInput> FeatureCalculatorMulti<T> with(
             FeatureList<T> features,
             FeatureInitialization initialization,
@@ -126,14 +151,27 @@ public class FeatureSession {
                 new BoundReplaceStrategy<>(ReuseSingletonStrategy::new));
     }
 
+    /**
+     * Starts a feature-session for a list of features, with particular initialization, and a {@code replaceStrategy}.
+     *
+     * @param <T> type of parameters for all features.
+     * @param features a list of features accepting uniform type.
+     * @param initialization the particular initialization.
+     * @param sharedFeatures the particular shared-features to use for initialization.
+     * @param logger a logger.
+     * @param replaceStrategy binds a specific {@link ReplaceStrategy} to newly created caches.
+     * @return a calculator that will call calculate all the features in the list for each
+     *     parameter.
+	 * @throws InitializeException if the session cannot be successfully initialized.
+     */
     public static <T extends FeatureInput> FeatureCalculatorMulti<T> with(
             FeatureList<T> features,
             FeatureInitialization initialization,
             Optional<SharedFeatures> sharedFeatures,
             Logger logger,
-            BoundReplaceStrategy<T, ? extends ReplaceStrategy<T>> replacePolicyFactory)
+            BoundReplaceStrategy<T, ? extends ReplaceStrategy<T>> replaceStrategy)
             throws InitializeException {
-        SequentialSession<T> session = new SequentialSession<>(features, replacePolicyFactory);
+        SequentialSession<T> session = new SequentialSession<>(features, replaceStrategy);
         startSession(session, initialization, sharedFeatures.orElse(new SharedFeatures()), logger);
         return session;
     }

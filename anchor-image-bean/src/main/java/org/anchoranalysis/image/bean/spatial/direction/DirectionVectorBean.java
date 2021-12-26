@@ -30,16 +30,17 @@ import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.spatial.orientation.DirectionVector;
 
 /**
- * A bean that creates a {@link DirectionVector}
+ * A bean that creates a {@link DirectionVector}.
  *
  * @author Owen Feehan
  */
 public abstract class DirectionVectorBean extends AnchorBean<DirectionVectorBean> {
 
     /**
-     * Creates a vector in a particular direction
+     * Creates a vector in a particular direction.
      *
-     * @return the created vector
+     * @return the created vector.
+     * @throws CreateException if the vector cannot be successfully created.
      */
     public abstract DirectionVector createVector() throws CreateException;
 }
