@@ -54,7 +54,7 @@ import org.anchoranalysis.io.output.outputter.InputOutputContext;
  * <tr><th>Output Name</th><th>Default?</th><th>Description</th></tr>
  * </thead>
  * <tbody>
- * <tr><td>{@value #OUTPUT_FEATURE_TABLE}</td><td>yes</td><td>A CSV of calculated-features for objects.</td></tr>
+ * <tr><td>{@value OutputFeatureTable#OUTPUT_FEATURE_TABLE}</td><td>yes</td><td>A CSV of calculated-features for objects.</td></tr>
  * </tbody>
  * </table>
  *

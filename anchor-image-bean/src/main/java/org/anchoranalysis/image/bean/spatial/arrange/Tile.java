@@ -33,6 +33,7 @@ import java.util.Optional;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
@@ -54,6 +55,7 @@ import org.anchoranalysis.spatial.point.Point3i;
  * @author Owen Feehan
  *
  */
+@NoArgsConstructor
 public class Tile extends StackArranger {
 
     @AllArgsConstructor
@@ -97,18 +99,18 @@ public class Tile extends StackArranger {
     
     // START BEAN PROPERTIES
     /**
-     * The number of <i>rows</i> to use in the table produced when tiling.
-     *
-     * <p>If this value is set to {@code -1} it is automatically set.
-     */
-    @BeanField @Positive @Getter @Setter private int numberRows = -1;
-
-    /**
      * The number of <i>columns</i> to use in the table produced when tiling.
      *
      * <p>If this value is set to {@code -1} it is automatically set.
      */
     @BeanField @Positive @Getter @Setter private int numberColumns = -1;
+    
+    /**
+     * The number of <i>rows</i> to use in the table produced when tiling.
+     *
+     * <p>If this value is set to {@code -1} it is automatically set.
+     */
+    @BeanField @Positive @Getter @Setter private int numberRows = -1;
 
     /**
      * Defines the corresponding {@link StackArranger} for each individual cell in table.
@@ -124,6 +126,17 @@ public class Tile extends StackArranger {
      */
     @BeanField @Getter @Setter private StackArranger cellDefault = new Single();
     // END BEAN PROPERTIES
+    
+    /**
+     * Creates for a particular number of columns and rows.
+     * 
+     * @param numberColumns the number of <i>columns</i> to use in the table produced when tiling (or -1 to automatically set).
+     * @param numberRows the number of <i>rows</i> to use in the table produced when tiling (or -1 to automatically set).
+     */
+    public Tile(int numberColumns, int numberRows) {
+    	this.numberColumns = numberColumns;
+    	this.numberRows = numberRows;
+    }
     
     @Override
     protected StackArrangement arrangeStacks(final Iterator<RGBStack> stacks)

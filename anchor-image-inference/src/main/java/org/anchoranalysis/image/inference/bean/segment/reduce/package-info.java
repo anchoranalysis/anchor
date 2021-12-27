@@ -24,7 +24,6 @@
  * #L%
  */
 /**
- * Algorithms to reduce the number of results that are returned from inference, by removing overlap
- * etc.
+ * Non-bean classes to reduce the number of results that are returned from inference, by removing overlapping entities etc.
  */
 package org.anchoranalysis.image.inference.bean.segment.reduce;

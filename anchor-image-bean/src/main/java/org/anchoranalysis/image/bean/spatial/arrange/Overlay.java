@@ -36,7 +36,6 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.ArrangeStackException;
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.StackArrangement;
-import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.stack.RGBStack;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.box.Extent;
@@ -60,9 +59,12 @@ import org.anchoranalysis.spatial.point.Point3i;
 @AllArgsConstructor
 public class Overlay extends StackArranger {
 
+	/** The choice which will cause a single-sliced overlay to be duplicated across the z-dimension to match the z-size onto which it is projected. */
+	private static final String REPEAT = "repeat";
+	
     private static final PositionChoices CHOICES_X = new PositionChoices("left", "center", "right");
     private static final PositionChoices CHOICES_Y = new PositionChoices("top", "center", "bottom");
-    private static final PositionChoices CHOICES_Z = new PositionChoices("bottom", "center", "top", Optional.of("repeat"));
+    private static final PositionChoices CHOICES_Z = new PositionChoices("bottom", "center", "top", Optional.of(REPEAT));
     
 	private static final Single SINGLE = new Single();
 	
@@ -102,35 +104,46 @@ public class Overlay extends StackArranger {
 
         RGBStack overlay = stacks.next();
 
-        Extent overlaySize = deriveExtent(overlay.getChannel(0).extent(), arrangement.extent());
-
-        Point3i cornerMin = new Point3i(
-        		positionX(arrangement, overlay.dimensions()),
-        		positionY(arrangement, overlay.dimensions()),
-        		positionZ(arrangement, overlay.dimensions())
-        );
-        arrangement.add(new BoundingBox(cornerMin, overlaySize));
+        BoundingBox box = boxForOverlay(arrangement.extent(), overlay.extent());
+        arrangement.add(box);
         return arrangement;
     }
-
-    private int positionX(StackArrangement arrangement, Dimensions dimensions) throws ArrangeStackException {
-    	return CHOICES_X.position("alignX", alignX, Extent::x, arrangement, dimensions);
+    
+    /** The bounding-box for the overlay, relative to the stack on which it will be projected. */
+    private BoundingBox boxForOverlay(Extent enclosing, Extent overlay) throws ArrangeStackException {
+        Extent extent = deriveExtent(enclosing, overlay);
+        Point3i cornerMin = cornerMin(enclosing, overlay);
+        return new BoundingBox(cornerMin, extent);    	
+    }
+    
+    /** The minimum corner at which the overlay should be located in the output image. */
+    private Point3i cornerMin(Extent enclosing, Extent overlay) throws ArrangeStackException {
+    	return new Point3i(
+    			CHOICES_X.position("alignX", alignX, Extent::x, enclosing, overlay),
+    			CHOICES_Y.position("alignY", alignY, Extent::y, enclosing, overlay),
+    			CHOICES_Z.position("alignZ", alignZ, Extent::z, enclosing, overlay)
+    	);
     }
 
-    private int positionY(StackArrangement arrangement, Dimensions dimensions) throws ArrangeStackException {
-    	return CHOICES_Y.position("alignY", alignY, Extent::y, arrangement, dimensions);
-    }
-
-    private int positionZ(StackArrangement arrangement, Dimensions dimensions) throws ArrangeStackException {
-    	return CHOICES_Z.position("alignZ", alignZ, Extent::z, arrangement, dimensions);
-    }
-
-    private Extent deriveExtent(Extent overlay, Extent box) {
+    /** Determines the size of the overlayed stack, as projected into the image. */
+    private Extent deriveExtent(Extent enclosing, Extent overlay) throws ArrangeStackException {
         return new Extent(
-                Math.min(overlay.x(), box.x()),
-                Math.min(overlay.y(), box.y()),
-                alignZ.equalsIgnoreCase("repeat") || (overlay.z() > box.z())
-                        ? box.z()
-                        : overlay.z());
+                Math.min(overlay.x(), enclosing.x()),
+                Math.min(overlay.y(), enclosing.y()),
+                deriveZExtent(enclosing, overlay));
+    }
+    
+    /** Determines the size of the z-dimension of the overlayed stack, as projected into the image. */
+    private int deriveZExtent(Extent enclosing, Extent overlay) throws ArrangeStackException {
+    	if (alignZ.equalsIgnoreCase(REPEAT)) {
+    		
+    		if (overlay.z()!=1) {
+    			throw new ArrangeStackException(String.format("If alignZ is `repeat` then the overlay must have a single z-slice, but it has %d slices.", overlay.z()));
+    		}
+    		
+    		return enclosing.z();
+    	} else {
+    		return Math.min(overlay.z(), enclosing.z());
+    	}
     }
 }

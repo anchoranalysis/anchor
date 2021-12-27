@@ -6,8 +6,6 @@ import java.util.Optional;
 import java.util.function.ToIntFunction;
 
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.ArrangeStackException;
-import org.anchoranalysis.image.bean.nonbean.spatial.arrange.StackArrangement;
-import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.spatial.box.Extent;
 
 import lombok.AllArgsConstructor;
@@ -40,19 +38,19 @@ import lombok.RequiredArgsConstructor;
 	 * @param fieldName the name of the field where the position was specified.
 	 * @param fieldValue the value of the field.
 	 * @param extractValue extracts a value on the particular axis from a {@link Extent}.
-	 * @param arrangement the stacks to align with.
-	 * @param overlaySize the size of the overlay (what is being aligned).
+	 * @param enclosing the total enclosing size of all stacks to align with.
+	 * @param overlay the size of the overlay (what is being aligned).
 	 * @return the minimum corner on the particular axis to locate the overlay.
 	 * @throws ArrangeStackException if an invalid value for a field was used.
 	 */
-    public int position(String fieldName, String fieldValue, ToIntFunction<Extent> extractValue, StackArrangement arrangement, Dimensions overlaySize) throws ArrangeStackException {
+    public int position(String fieldName, String fieldValue, ToIntFunction<Extent> extractValue, Extent enclosing, Extent overlay) throws ArrangeStackException {
 
         if (fieldValue.equalsIgnoreCase(textMin) || matchesAlternative(fieldValue)) {
             return 0;
         } else if (fieldValue.equalsIgnoreCase(textCenter)) {
-        	return (extractValue.applyAsInt(arrangement.extent()) - extractValue.applyAsInt(overlaySize.extent())) / 2;
+        	return (extractValue.applyAsInt(enclosing) - extractValue.applyAsInt(overlay)) / 2;
         } else if (fieldValue.equalsIgnoreCase(textMax)) {
-            return extractValue.applyAsInt(arrangement.extent()) - extractValue.applyAsInt(overlaySize.extent());
+            return extractValue.applyAsInt(enclosing) - extractValue.applyAsInt(overlay);
         } else {
         	String describeAllChoices = String.join(", ", allChoices());
             throw new ArrangeStackException( String.format("The string '%s' is an invalid value for field %s. Accept values are: %s", fieldValue, fieldName, describeAllChoices));
