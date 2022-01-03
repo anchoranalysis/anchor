@@ -37,8 +37,9 @@ import lombok.NoArgsConstructor;
  * <p>e.g. find a enum for <i>nm</i>.
  *
  * <p>e.g. find a string representation for <i>NANO</i>.
- * 
- * <p>Acceptable string representations are: {@code m, mm, mm^2, mm^3, nm, nm^2, nm^3, μm, μm^2, μm^3}.
+ *
+ * <p>Acceptable string representations are: {@code m, mm, mm^2, mm^3, nm, nm^2, nm^3, μm, μm^2,
+ * μm^3}.
  *
  * @author Owen Feehan
  */
@@ -74,7 +75,7 @@ public class SpatialUnits {
 
         /** 1e-6. */
         MICRO,
-        
+
         /** 1e-3 cubed. */
         CUBIC_MILLI,
 
@@ -95,15 +96,15 @@ public class SpatialUnits {
      */
     public static String suffixStringForMeters(UnitSuffix suffix) { // NOSONAR
         switch (suffix) {
-	        case CUBIC_MILLI:
-	            return "mm^3";
-	
-	        case SQUARE_MILLI:
-	            return "mm^2";
-	
-	        case MILLI:
-	            return "m";        
-        
+            case CUBIC_MILLI:
+                return "mm^3";
+
+            case SQUARE_MILLI:
+                return "mm^2";
+
+            case MILLI:
+                return "m";
+
             case CUBIC_NANO:
                 return "nm^3";
 
@@ -154,8 +155,8 @@ public class SpatialUnits {
 
             case BASE:
                 return valueBaseUnits;
-                
-            // START MILLI                
+
+                // START MILLI
             case CUBIC_MILLI:
                 return valueBaseUnits / 1e-9;
 
@@ -164,9 +165,9 @@ public class SpatialUnits {
 
             case MILLI:
                 return valueBaseUnits / 1e-3;
-            // END MILLI
-                
-            // START MICRO
+                // END MILLI
+
+                // START MICRO
             case CUBIC_MICRO:
                 return valueBaseUnits / 1e-18;
 
@@ -175,9 +176,9 @@ public class SpatialUnits {
 
             case MICRO:
                 return valueBaseUnits / 1e-6;
-            // END MICRO
+                // END MICRO
 
-            // START NANO
+                // START NANO
             case CUBIC_NANO:
                 return valueBaseUnits / 1e-27;
 
@@ -186,7 +187,7 @@ public class SpatialUnits {
 
             case NANO:
                 return valueBaseUnits / 1e-9;
-            // END NANO
+                // END NANO
 
             default:
                 throw new IllegalArgumentException(unsupportedUnitType(unitSuffix));
@@ -236,7 +237,7 @@ public class SpatialUnits {
             case SQUARE_MILLI:
                 return valueUnits * 1e-6;
             case MILLI:
-                return valueUnits * 1e-3;                
+                return valueUnits * 1e-3;
             default:
                 throw new IllegalArgumentException(unsupportedUnitType(unitSuffix));
         }
@@ -253,7 +254,7 @@ public class SpatialUnits {
         if ("m".equalsIgnoreCase(suffixStr)) {
             return UnitSuffix.BASE;
         }
-        
+
         // Milli-metres
         if ("mm^3".equalsIgnoreCase(suffixStr)) {
             return UnitSuffix.CUBIC_MILLI;
@@ -273,7 +274,7 @@ public class SpatialUnits {
         } else if (STR_MICRO_METER.equalsIgnoreCase(suffixStr)) {
             return UnitSuffix.MICRO;
         }
-        
+
         // Nano-metres
         if ("nm^3".equalsIgnoreCase(suffixStr)) {
             return UnitSuffix.CUBIC_NANO;

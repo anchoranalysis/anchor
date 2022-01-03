@@ -97,9 +97,9 @@ class CachedMulti<T extends FeatureInput> implements FeatureCalculatorMulti<T> {
         return source.sizeFeatures();
     }
 
-    /** 
+    /**
      * Checks whether the cache contains a particular input already.
-     * 
+     *
      * <p>This may be useful for tests.
      *
      * @param input the input to check.
@@ -109,18 +109,16 @@ class CachedMulti<T extends FeatureInput> implements FeatureCalculatorMulti<T> {
         return cacheResults.has(input);
     }
 
-    /** 
+    /**
      * Number of items currently in the cache.
-     * 
+     *
      * @return the total number of items.
      */
     public long sizeCurrentLoad() {
         return cacheResults.sizeCurrentLoad();
     }
 
-    /** 
-     * Return a vector with all {@link Double#NaN}s.
-     */
+    /** Return a vector with all {@link Double#NaN}s. */
     private ResultsVector createNaNVector(GetOperationFailedException e) {
         ResultsVector results = new ResultsVector(source.sizeFeatures());
         results.setErrorAll(e);

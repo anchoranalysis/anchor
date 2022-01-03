@@ -52,7 +52,8 @@ public interface ChildCacheFinder {
      * @param childCacheName name of child-cache
      * @param input input to be used for calculations on the child-cache
      * @return an existing or newly created child-cache depending on the strategy.
-     * @throws FeatureCalculationException if no child-cache exists or can be created for {@code childCacheName}.
+     * @throws FeatureCalculationException if no child-cache exists or can be created for {@code
+     *     childCacheName}.
      */
     <V extends FeatureInput> FeatureCalculationCache<V> childCacheFor(
             FeatureCalculationCache<?> parentCache,
@@ -71,9 +72,9 @@ public interface ChildCacheFinder {
     /**
      * If set, these particular-caches are exceptionally <b>not</b> invalidated during the typical
      * invalidation operation on their parent.
-     * 
+     *
      * <p>If not-set, there are no exceptions.
-     * 
+     *
      * @return the names of the caches that are exceptionally <b>not</b> invalidated, if any exist.
      */
     Optional<Set<ChildCacheName>> cachesToAvoidInvalidating();

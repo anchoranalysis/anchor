@@ -34,7 +34,7 @@ import org.anchoranalysis.math.relation.DoubleBiPredicate;
 
 /**
  * A base class specifying a threshold and a relation to it.
- * 
+ *
  * <p>Together this forms a predicate, that can be compared against a value.
  *
  * @author Owen Feehan

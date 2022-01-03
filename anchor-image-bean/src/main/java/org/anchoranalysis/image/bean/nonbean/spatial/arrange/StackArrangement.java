@@ -32,13 +32,13 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import lombok.experimental.Accessors;
-
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.box.Extent;
 
 /**
- * A list of {@link BoundingBox}es that indicate whether to locate corresponding {@link Stack}s on a unified larger image.
+ * A list of {@link BoundingBox}es that indicate where to locate corresponding {@link Stack}s on a
+ * unified larger image.
  *
  * @author Owen Feehan
  */
@@ -48,7 +48,10 @@ import org.anchoranalysis.spatial.box.Extent;
 public class StackArrangement implements Iterable<BoundingBox> {
 
     // START REQUIRED ARGUMENTS
-	/** The size of the larger image in which all the {@link BoundingBox}es in {@code list} must fully reside. */
+    /**
+     * The size of the larger image in which all the {@link BoundingBox}es in {@code list} must
+     * fully reside.
+     */
     private final Extent extent;
     // END REQUIRED ARGUMENTS
 
@@ -56,8 +59,9 @@ public class StackArrangement implements Iterable<BoundingBox> {
 
     /**
      * Create with a single {@link BoundingBox}.
-     * 
-     * @param extent the size of the larger image in which all the {@link BoundingBox}es in {@code list} must fully reside.
+     *
+     * @param extent the size of the larger image in which all the {@link BoundingBox}es in {@code
+     *     list} must fully reside.
      * @param box the {@link BoundingBox}.
      */
     public StackArrangement(Extent extent, BoundingBox box) {
@@ -65,20 +69,28 @@ public class StackArrangement implements Iterable<BoundingBox> {
         add(box);
     }
 
-    public void add(BoundingBox boundingBox) {
-        list.add(boundingBox);
+    /**
+     * Adds a new {@link BoundingBox} to the arrangement.
+     *
+     * @param box the {@link BoundingBox}.
+     */
+    public void add(BoundingBox box) {
+        list.add(box);
     }
 
+    /**
+     * Gets the {@link BoundingBox} corresponding to a particular index.
+     *
+     * @param index the index.
+     * @return the corresponding {@link BoundingBox} in the arrangement.
+     * @throws IndexOutOfBoundsException if the index is out of range.
+     */
     public BoundingBox get(int index) {
         return list.get(index);
     }
 
-    public Iterator<BoundingBox> boxIterator() {
-        return list.iterator();
-    }
-
     @Override
     public Iterator<BoundingBox> iterator() {
-        return boxIterator();
+        return list.iterator();
     }
 }

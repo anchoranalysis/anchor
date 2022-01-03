@@ -27,11 +27,9 @@
 package org.anchoranalysis.image.bean.unitvalue.extent.area;
 
 import java.util.Optional;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.core.dimensions.UnitConverter;
 
@@ -43,16 +41,16 @@ import org.anchoranalysis.image.core.dimensions.UnitConverter;
 @NoArgsConstructor
 public class AreaPixels extends UnitValueArea {
 
-	// START BEAN PROPERTIES
-	/** The volume in pixels. */
+    // START BEAN PROPERTIES
+    /** The volume in pixels. */
     @BeanField @Getter @Setter private double value;
     // END BEAN PROPERTIES
-    
-	/**
-	 * Creates with a particular area value.
-	 * 
-	 * @param value the area, as square pixels.
-	 */
+
+    /**
+     * Creates with a particular area value.
+     *
+     * @param value the area, as square pixels.
+     */
     public AreaPixels(double value) {
         this.value = value;
     }

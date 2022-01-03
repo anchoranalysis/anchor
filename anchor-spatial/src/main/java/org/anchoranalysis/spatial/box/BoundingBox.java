@@ -29,6 +29,7 @@ package org.anchoranalysis.spatial.box;
 import com.google.common.base.Preconditions;
 import java.io.Serializable;
 import java.util.function.ToDoubleFunction;
+import java.util.function.UnaryOperator;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.experimental.Accessors;
@@ -171,6 +172,17 @@ public final class BoundingBox implements Serializable, Comparable<BoundingBox> 
     }
 
     /**
+     * Creates a copied {@link BoundingBox} but with a different extent.
+     *
+     * @param extentOperator an operator that chantes the extent.
+     * @return a newly-created {@link BoundingBox} that has a changed extent, but is otherwise
+     *     identical.
+     */
+    public BoundingBox changeExtent(UnaryOperator<Extent> extentOperator) {
+        return changeExtent(extentOperator.apply(extent));
+    }
+
+    /**
      * Creates a copied {@link BoundingBox} but with a different corner and extent in the
      * Z-dimension.
      *
@@ -292,9 +304,10 @@ public final class BoundingBox implements Serializable, Comparable<BoundingBox> 
      *
      * <p>This means that iterators should be {@code <= calculateCornerMax()}.
      *
-     * @return the maximum point inside the box in each dimension
+     * @return a newly created {@link Point3i}, indicating the maximum point inside the box in each
+     *     dimension.
      */
-    public ReadableTuple3i calculateCornerMax() {
+    public Point3i calculateCornerMax() {
         Point3i out = new Point3i();
         out.setX(cornerMin.x() + extent.x() - 1);
         out.setY(cornerMin.y() + extent.y() - 1);

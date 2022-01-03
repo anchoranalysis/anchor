@@ -38,7 +38,9 @@ import org.anchoranalysis.image.voxel.thresholder.VoxelsThresholder;
 import org.anchoranalysis.math.histogram.Histogram;
 
 /**
- * Thresholds voxels to create a binary-voxels using <a href="https://www.quora.com/What-is-global-thresholding-in-image-processing">global thresholding</a>.
+ * Thresholds voxels to create a binary-voxels using <a
+ * href="https://www.quora.com/What-is-global-thresholding-in-image-processing">global
+ * thresholding</a>.
  *
  * @author Owen Feehan
  */

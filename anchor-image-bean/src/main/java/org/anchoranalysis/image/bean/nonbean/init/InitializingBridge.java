@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.image.bean.nonbean.init;
 
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.bean.initializable.InitializableBean;
 import org.anchoranalysis.bean.initializable.parameters.BeanInitialization;
 import org.anchoranalysis.bean.initializable.property.BeanInitializer;
@@ -34,8 +35,6 @@ import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.checked.CheckedFunction;
 import org.anchoranalysis.core.log.Logger;
-
-import lombok.AllArgsConstructor;
 
 /**
  * A bridge that performs initialization of objects.
@@ -49,12 +48,12 @@ import lombok.AllArgsConstructor;
 class InitializingBridge<S extends InitializableBean<?, V>, T, V extends BeanInitialization>
         implements CheckedFunction<S, T, OperationFailedException> {
 
-	/** Used to initialize properties in the source-bean. */
+    /** Used to initialize properties in the source-bean. */
     private final BeanInitializer<?> initializer;
-    
+
     /** The logger passed to the beans that are initialized. */
     private final Logger logger;
-    
+
     /** Maps the source-bean to a destination-bean. */
     private final CheckedFunction<S, T, ProvisionFailedException> beanBridge;
 

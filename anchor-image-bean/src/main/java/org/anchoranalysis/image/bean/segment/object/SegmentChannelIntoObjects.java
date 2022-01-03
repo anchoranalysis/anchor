@@ -27,7 +27,6 @@
 package org.anchoranalysis.image.bean.segment.object;
 
 import java.util.Optional;
-
 import org.anchoranalysis.image.bean.nonbean.segment.SegmentationFailedException;
 import org.anchoranalysis.image.bean.segment.SegmentationBean;
 import org.anchoranalysis.image.core.channel.Channel;

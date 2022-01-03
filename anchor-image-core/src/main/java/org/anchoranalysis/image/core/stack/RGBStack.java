@@ -55,16 +55,18 @@ public class RGBStack {
     private final Stack stack;
 
     /**
-     * Creates a particularly-sized stack with <i>unsigned byte</i> voxel data type,  with all voxels initialized to 0.
+     * Creates a particularly-sized stack with <i>unsigned byte</i> voxel data type, with all voxels
+     * initialized to 0.
      *
      * @param extent size of each channel.
      */
     public RGBStack(Extent extent) {
-        this( new Dimensions(extent), ChannelFactory.instance().get(UnsignedByteVoxelType.INSTANCE) );
+        this(new Dimensions(extent), ChannelFactory.instance().get(UnsignedByteVoxelType.INSTANCE));
     }
-    
+
     /**
-     * Creates a particularly-sized stack with <i>unsigned byte</i> voxel data type,  with all voxels initialized to a specific {@link Color}.
+     * Creates a particularly-sized stack with <i>unsigned byte</i> voxel data type, with all voxels
+     * initialized to a specific {@link Color}.
      *
      * @param extent size of each channel.
      * @param color the color to assign to all voxels.
@@ -72,9 +74,10 @@ public class RGBStack {
     public RGBStack(Extent extent, Color color) {
         this(extent, new RGBColor(color));
     }
-    
+
     /**
-     * Creates a particularly-sized stack with <i>unsigned byte</i> voxel data type,  with all voxels initialized to a specific {@link RGBColor}.
+     * Creates a particularly-sized stack with <i>unsigned byte</i> voxel data type, with all voxels
+     * initialized to a specific {@link RGBColor}.
      *
      * @param extent size of each channel.
      * @param color the color to assign to all voxels.
@@ -83,7 +86,7 @@ public class RGBStack {
         this(extent);
         assignAllVoxels(color);
     }
-    
+
     /**
      * Creates a particularly-sized stack with all channels initialized to 0.
      *
@@ -91,9 +94,9 @@ public class RGBStack {
      * @param factory factory to create the channel.
      */
     public RGBStack(Extent extent, ChannelFactorySingleType factory) {
-        this( new Dimensions(extent), factory );
+        this(new Dimensions(extent), factory);
     }
-    
+
     /**
      * Creates a particularly-sized stack with all channels initialized to 0.
      *
@@ -257,12 +260,13 @@ public class RGBStack {
         assignToVoxel(point, stack.getChannel(1), color.getGreen());
         assignToVoxel(point, stack.getChannel(2), color.getBlue());
     }
-    
+
     /**
      * Assigns a {@link RGBColor} to all voxels in the respective channels.
      *
      * @param color the color.
-     * @throws IllegalArgumentException if the stack has a channel that is not {@link UnsignedByteVoxelType}.
+     * @throws IllegalArgumentException if the stack has a channel that is not {@link
+     *     UnsignedByteVoxelType}.
      */
     public void assignAllVoxels(RGBColor color) {
         Preconditions.checkArgument(stack.allChannelsHaveType(UnsignedByteVoxelType.INSTANCE));
@@ -270,20 +274,23 @@ public class RGBStack {
         assignToAllVoxels(stack.getChannel(1), color.getGreen());
         assignToAllVoxels(stack.getChannel(2), color.getBlue());
     }
-    
+
     /**
      * Gets the color at a particular voxel.
-     * 
-     * <p>Note that it is inefficient to call this method on voxels <i>repeatedly</i>, as it is heavy on memory allocation on the heap, and makes inefficient usage of buffer iteration. A new {@link RGBColor} is created with each call. Prefer iterating the voxels via {@link #getChannel(int)}.
-     * 
+     *
+     * <p>Note that it is inefficient to call this method on voxels <i>repeatedly</i>, as it is
+     * heavy on memory allocation on the heap, and makes inefficient usage of buffer iteration. A
+     * new {@link RGBColor} is created with each call. Prefer iterating the voxels via {@link
+     * #getChannel(int)}.
+     *
      * @param point locates the voxel (zero-indexed) in the stack.
      * @return a newly created {@link RGBColor}, indicating the color at a particular voxel.
      */
     public RGBColor colorAtVoxel(ReadableTuple3i point) {
-    	int red = getVoxel(point, stack.getChannel(0));
-    	int green = getVoxel(point, stack.getChannel(1));
-    	int blue = getVoxel(point, stack.getChannel(2));
-    	return new RGBColor(red, green, blue);
+        int red = getVoxel(point, stack.getChannel(0));
+        int green = getVoxel(point, stack.getChannel(1));
+        int blue = getVoxel(point, stack.getChannel(2));
+        return new RGBColor(red, green, blue);
     }
 
     /**
@@ -328,12 +335,12 @@ public class RGBStack {
     private static void assignToVoxel(Point3i point, Channel channel, int toWrite) {
         channel.assignValue(toWrite).toVoxel(point);
     }
-    
+
     /** Assigns a value to all voxels in a {@link Channel}. */
     private static void assignToAllVoxels(Channel channel, int toWrite) {
         channel.assignValue(toWrite).toAll();
     }
-    
+
     /** Gets a value at a particular voxel in a {@link Channel}. */
     private static int getVoxel(ReadableTuple3i point, Channel channel) {
         return channel.extract().voxel(point);

@@ -40,12 +40,12 @@ import org.anchoranalysis.image.voxel.object.ObjectCollection;
 public abstract class ObjectMatcher extends ImageBean<ObjectMatcher> {
 
     /**
-     * Finds matches for objects
+     * Finds matches for objects.
      *
-     * @param sourceObjects a collection of objects, each of whom is searched for matches
-     * @return a list of each object from @code{sourceObjects} with its matches (element order
-     *     remains unchanged)
-     * @throws OperationFailedException
+     * @param sourceObjects a collection of objects, each of whom is considered a possible match.
+     * @return a list of each object from {@code sourceObjects} with corresponding matches (element
+     *     order remains unchanged).
+     * @throws OperationFailedException if find process cannot successfully complete.
      */
     public abstract List<MatchedObject> findMatch(ObjectCollection sourceObjects)
             throws OperationFailedException;

@@ -35,8 +35,9 @@ import org.anchoranalysis.feature.calculate.cache.CacheCreator;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
- * Reuse an existing {@link FeatureCalculationInput}, as stored in a least-recently used cache, and without invalidating it.
- * 
+ * Reuse an existing {@link FeatureCalculationInput}, as stored in a least-recently used cache, and
+ * without invalidating it.
+ *
  * <p>If no existing input is already stored, create a new one.
  *
  * @author Owen Feehan
@@ -51,7 +52,7 @@ public class CacheAndReuseStrategy<T extends FeatureInput> implements ReplaceStr
 
     /**
      * Create with a particular {@link CacheCreator}.
-     * 
+     *
      * @param cacheCreator the cache-creator.
      */
     public CacheAndReuseStrategy(CacheCreator cacheCreator) {

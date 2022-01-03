@@ -42,14 +42,14 @@ import org.anchoranalysis.image.core.dimensions.UnitConverter;
 public class AreaPhysical extends UnitValueArea {
 
     // START BEAN PROPERTIES
-	/** The volume in units of meters, with the unit described by {@code unitType}. */
+    /** The volume in units of meters, with the unit described by {@code unitType}. */
     @BeanField @Getter @Setter private double value;
-    
-	/** 
+
+    /**
      * How much each value represents e.g. square nanometers, squares millimeters etc.
-     * 
+     *
      * <p>If unspecified, it describes meters (unsquared).
-     * 
+     *
      * <p>See {@link SpatialUnits} for acceptable string-values.
      */
     @BeanField @Getter @Setter private String unitType = "";

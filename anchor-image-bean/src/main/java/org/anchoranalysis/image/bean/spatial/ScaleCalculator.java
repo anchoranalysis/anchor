@@ -45,9 +45,9 @@ public abstract class ScaleCalculator extends ImageBean<ScaleCalculator> {
      *
      * @param dimensionsToBeScaled dimensions of the source image/entity that will be scaled, if
      *     they are known.
-     * @param suggestedResize a string suggesting dimensions to resize to or a scaling-factor
-     * @return the scaling-factor to use
-     * @throws OperationFailedException
+     * @param suggestedResize a string suggesting dimensions to resize to or a scaling-factor.
+     * @return the scaling-factor to use.
+     * @throws OperationFailedException if a scale-factor cannot be successfully calculated.
      */
     public abstract ScaleFactor calculate(
             Optional<Dimensions> dimensionsToBeScaled,

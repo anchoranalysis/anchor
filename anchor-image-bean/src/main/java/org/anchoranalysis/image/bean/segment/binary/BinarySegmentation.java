@@ -37,10 +37,11 @@ import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 
 /**
- * Performs a segmentation on voxels so that each voxel has an <i>on</i> or <i>off</i> state after the operation.
- * 
+ * Performs a segmentation on voxels so that each voxel has an <i>on</i> or <i>off</i> state after
+ * the operation.
+ *
  * @author Owen Feehan
-  */
+ */
 @GroupingRoot
 public abstract class BinarySegmentation extends SegmentationBean<BinarySegmentation> {
 
@@ -51,7 +52,8 @@ public abstract class BinarySegmentation extends SegmentationBean<BinarySegmenta
      * @param voxels voxels to segment.
      * @param parameters parameters to guide the algorithm.
      * @param objectMask if present, segmentation only occurs inside this object.
-     * @return voxels for a mask on the input-buffer, which may be newly-created, or may reuse the input {@code voxels}, depending on implementation.
+     * @return voxels for a mask on the input-buffer, which may be newly-created, or may reuse the
+     *     input {@code voxels}, depending on implementation.
      * @throws SegmentationFailedException if the segmentation cannot be successfully completed.
      */
     public abstract BinaryVoxels<UnsignedByteBuffer> segment(

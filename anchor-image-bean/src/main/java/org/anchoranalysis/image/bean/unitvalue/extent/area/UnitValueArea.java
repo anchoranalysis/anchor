@@ -30,10 +30,7 @@ import org.anchoranalysis.image.bean.unitvalue.extent.UnitValueExtent;
 
 /**
  * A base class for a value that describes an <b>area</b> measurement on the image.
- * 
- * @author Owen
  *
+ * @author Owen
  */
-public abstract class UnitValueArea extends UnitValueExtent {
-
-}
+public abstract class UnitValueArea extends UnitValueExtent {}

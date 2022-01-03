@@ -30,7 +30,6 @@ import java.nio.file.Path;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.experimental.Accessors;
-
 import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.bean.initializable.parameters.BeanInitialization;
 import org.anchoranalysis.bean.initializable.property.BeanInitializer;
@@ -63,16 +62,15 @@ import org.anchoranalysis.math.histogram.Histogram;
 
 /**
  * The state used to initialize a {@link ImageBean}.
- * 
- * <p>It contains several {@link NamedProviderStore}s for particular types of entities.
- * 
- * @author Owen
  *
+ * <p>It contains several {@link NamedProviderStore}s for particular types of entities.
+ *
+ * @author Owen
  */
-@Accessors(fluent=true)
+@Accessors(fluent = true)
 public class ImageInitialization implements BeanInitialization {
 
-	/** The name of the dictionary added by {@link #addSharedObjectsDictionary}. */
+    /** The name of the dictionary added by {@link #addSharedObjectsDictionary}. */
     public static final String DICTIONARY_IDENTIFIER = "input_dictionary";
 
     /** Objects shared between different components, a form of shared memory between them. */
@@ -89,27 +87,28 @@ public class ImageInitialization implements BeanInitialization {
     // START: Stores
     /** A collection of {@link Stack}s, indexed by name. */
     @Getter private final NamedProviderStore<Stack> stacks;
-    
+
     /** A collection of {@link Histogram}s, indexed by name. */
     @Getter private final NamedProviderStore<Histogram> histograms;
-    
+
     /** A collection of {@link ObjectCollection}s, indexed by name. */
     @Getter private final NamedProviderStore<ObjectCollection> objects;
-    
+
     /** A collection of {@link Channel}s, indexed by name. */
     @Getter private final NamedProviderStore<Channel> channels;
-    
+
     /** A collection of {@link Mask}s, indexed by name. */
     @Getter private final NamedProviderStore<Mask> masks;
-    
+
     /** A collection of {@link BinarySegmentation}s, indexed by name. */
     @Getter private final NamedProviderStore<BinarySegmentation> binarySegmentations;
     // END: Stores
 
     /**
      * Create with shared-objects.
-     * 
-     * @param sharedObjects objects shared between different components, a form of shared memory between them.
+     *
+     * @param sharedObjects objects shared between different components, a form of shared memory
+     *     between them.
      */
     public ImageInitialization(SharedObjects sharedObjects) {
         this(sharedObjects, Optional.empty());
@@ -117,8 +116,9 @@ public class ImageInitialization implements BeanInitialization {
 
     /**
      * Create with shared-objects and a resizing suggestion.
-     * 
-     * @param sharedObjects objects shared between different components, a form of shared memory between them.
+     *
+     * @param sharedObjects objects shared between different components, a form of shared memory
+     *     between them.
      * @param suggestedResize a suggested input on how to resize an image, if one is provided.
      */
     public ImageInitialization(
@@ -135,45 +135,45 @@ public class ImageInitialization implements BeanInitialization {
         binarySegmentations = sharedObjects.getOrCreate(BinarySegmentation.class);
     }
 
-    /** 
+    /**
      * Named-store of file-paths.
-     * 
+     *
      * @return the store.
      */
     public NamedProviderStore<Path> filePaths() {
         return features.getFilePaths().getFilePaths();
     }
 
-    /** 
+    /**
      * Named-store of {@link Dictionary}s.
-     * 
+     *
      * @return the store.
      */
     public NamedProviderStore<Dictionary> dictionaries() {
         return dictionaryInitialization().getDictionaries();
     }
 
-    /** 
+    /**
      * Directory where machine-learning models can be found.
-     * 
+     *
      * @return the path.
      */
     public Path modelDirectory() {
         return sharedObjects.getContext().getModelDirectory();
     }
 
-    /** 
+    /**
      * The associated initialization for a {@link DictionaryBean}.
-     * 
+     *
      * @return the associated initialization.
      */
     public DictionaryInitialization dictionaryInitialization() {
         return features.getDictionary();
     }
 
-    /** 
+    /**
      * The associated initialization for a {@link FeatureRelatedBean}.
-     * 
+     *
      * @return the associated initialization.
      */
     public FeatureRelatedInitialization featuresInitialization() {
@@ -181,18 +181,20 @@ public class ImageInitialization implements BeanInitialization {
     }
 
     /**
-     * Exposes several entities that have natural {@link Stack} representations as a unified {@link NamedProvider}.
-     * 
+     * Exposes several entities that have natural {@link Stack} representations as a unified {@link
+     * NamedProvider}.
+     *
      * <p>These are the:
-     * 
+     *
      * <ul>
-     * <li>{@link #stacks()}
-     * <li>{@link #channels()}
-     * <li>{@link #masks()}  
+     *   <li>{@link #stacks()}
+     *   <li>{@link #channels()}
+     *   <li>{@link #masks()}
      * </ul>
-     * 
-     * <p>If multiple sources have the same identifier, only one identifier (arbitrarily selected) will exist in the unified {@link NamedProvider}.
-     * 
+     *
+     * <p>If multiple sources have the same identifier, only one identifier (arbitrarily selected)
+     * will exist in the unified {@link NamedProvider}.
+     *
      * @return a newly created {@link NamedProvider} combining the above entities as {@link Stack}s.
      */
     public NamedProvider<Stack> combinedStacks() {
@@ -204,28 +206,32 @@ public class ImageInitialization implements BeanInitialization {
      *
      * @param identifier the unique name of the dictionary.
      * @param toAdd the dictionary to add.
-     * @throws OperationFailedException if the identifier already exists, or otherwise the add operation fails.
+     * @throws OperationFailedException if the identifier already exists, or otherwise the add
+     *     operation fails.
      */
     public void addDictionary(String identifier, Dictionary toAdd) throws OperationFailedException {
         dictionaries().add(identifier, () -> toAdd);
     }
-    
+
     /**
      * Adds a {@link Stack} to the corresponding named-collection of stacks.
      *
      * @param identifier the unique name of the stack.
      * @param toAdd the stack to add.
-     * @throws OperationFailedException if the identifier already exists, or otherwise the add operation fails.
+     * @throws OperationFailedException if the identifier already exists, or otherwise the add
+     *     operation fails.
      */
     public void addStack(String identifier, Stack toAdd) throws OperationFailedException {
         stacks().add(identifier, () -> toAdd);
     }
 
     /**
-     * Adds all the {@link Stack}s available in a {@link NamedProvider} using the corresponding identifiers.
-     * 
+     * Adds all the {@link Stack}s available in a {@link NamedProvider} using the corresponding
+     * identifiers.
+     *
      * @param source the {@link NamedProvider} to add from.
-     * @throws OperationFailedException if an identifier already exists, or otherwise the add operation fails.
+     * @throws OperationFailedException if an identifier already exists, or otherwise the add
+     *     operation fails.
      */
     public void addStacksFrom(NamedProvider<Stack> source) throws OperationFailedException {
 
@@ -239,10 +245,12 @@ public class ImageInitialization implements BeanInitialization {
     }
 
     /**
-     * Adds all the {@link ObjectCollection}s available in a {@link NamedProvider} using the corresponding identifiers.
-     * 
+     * Adds all the {@link ObjectCollection}s available in a {@link NamedProvider} using the
+     * corresponding identifiers.
+     *
      * @param source the {@link NamedProvider} to add from.
-     * @throws OperationFailedException if an identifier already exists, or otherwise the add operation fails.
+     * @throws OperationFailedException if an identifier already exists, or otherwise the add
+     *     operation fails.
      */
     public void addObjectsFrom(NamedProvider<ObjectCollection> source)
             throws OperationFailedException {
@@ -259,14 +267,16 @@ public class ImageInitialization implements BeanInitialization {
                     });
         }
     }
-    
+
     /**
      * Adds diverse entities from a {@link Define} into the corresponding name-collections.
-     * 
-     * @param propertyInitializer initializes the properties of objects, where initialization is required.
+     *
+     * @param propertyInitializer initializes the properties of objects, where initialization is
+     *     required.
      * @param define the {@link Define} from which entities are added.
      * @param logger a logger to report messages or errors.
-     * @throws OperationFailedException if the identifier for an entity already exists, or otherwise the add operation fails.
+     * @throws OperationFailedException if the identifier for an entity already exists, or otherwise
+     *     the add operation fails.
      */
     public void populate(BeanInitializer<?> propertyInitializer, Define define, Logger logger)
             throws OperationFailedException {
@@ -283,16 +293,17 @@ public class ImageInitialization implements BeanInitialization {
         populate.copyProviderInitialize(HistogramProvider.class, histograms);
         populate.copyProviderInitialize(StackProvider.class, stacks);
     }
-    
 
     /**
-     * Adds stacks and object-collections from a {@link SharedObjects} using the respective identifiers, and also adds a {@link Dictionary}.
-     * 
+     * Adds stacks and object-collections from a {@link SharedObjects} using the respective
+     * identifiers, and also adds a {@link Dictionary}.
+     *
      * <p>The dictionary is assigned the identifier {@value #DICTIONARY_IDENTIFIER}.
-     * 
+     *
      * @param sharedObjects the shared-objects to add entities from, if it exists.
      * @param dictionary the dictionary to add, if it exists.
-     * @throws OperationFailedException if the identifier for an entity already exists, or otherwise the add operation fails.
+     * @throws OperationFailedException if the identifier for an entity already exists, or otherwise
+     *     the add operation fails.
      */
     public void addSharedObjectsDictionary(
             Optional<SharedObjects> sharedObjects, Optional<Dictionary> dictionary)
@@ -307,7 +318,7 @@ public class ImageInitialization implements BeanInitialization {
             addDictionary(DICTIONARY_IDENTIFIER, dictionary.get());
         }
     }
-    
+
     private void addToObjects(String identifier, StoreSupplier<ObjectCollection> objects)
             throws OperationFailedException {
         objects().add(identifier, objects);

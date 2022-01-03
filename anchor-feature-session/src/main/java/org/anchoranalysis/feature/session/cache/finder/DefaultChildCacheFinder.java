@@ -42,7 +42,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class DefaultChildCacheFinder implements ChildCacheFinder {
 
-	/** Singleton instance of {@link DefaultChildCacheFinder}. */
+    /** Singleton instance of {@link DefaultChildCacheFinder}. */
     private static final ChildCacheFinder INSTANCE = new DefaultChildCacheFinder();
 
     @Override
@@ -59,9 +59,9 @@ public class DefaultChildCacheFinder implements ChildCacheFinder {
         return INSTANCE;
     }
 
-    /** 
+    /**
      * Singleton instance of {@link DefaultChildCacheFinder}.
-     * 
+     *
      * @return the singleton instance.
      */
     public static ChildCacheFinder instance() {

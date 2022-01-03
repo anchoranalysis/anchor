@@ -63,12 +63,12 @@ public abstract class UnitValueDistance extends AnchorBean<UnitValueDistance>
             throws OperationFailedException;
 
     /**
-     * Resolves the distance in a direction aligned to a particular axis
+     * Resolves the distance in a direction aligned to a particular axis.
      *
-     * @param unitConverter image-resolution
-     * @param axis axis to indicate direction
-     * @return the distance in the direction of the axis
-     * @throws OperationFailedException
+     * @param unitConverter image-resolution.
+     * @param axis axis to indicate direction.
+     * @return the distance in the direction of the axis.
+     * @throws OperationFailedException if the resolution cannot successfully complete.
      */
     public double resolveForAxis(Optional<UnitConverter> unitConverter, Axis axis)
             throws OperationFailedException {

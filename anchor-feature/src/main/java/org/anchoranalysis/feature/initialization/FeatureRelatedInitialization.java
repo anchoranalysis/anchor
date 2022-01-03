@@ -32,6 +32,7 @@ import java.util.List;
 import lombok.Getter;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.initializable.parameters.BeanInitialization;
+import org.anchoranalysis.bean.shared.dictionary.DictionaryBean;
 import org.anchoranalysis.bean.shared.dictionary.DictionaryInitialization;
 import org.anchoranalysis.bean.shared.path.FilePathInitialization;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
@@ -41,7 +42,6 @@ import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
 import org.anchoranalysis.core.identifier.provider.store.SharedObjects;
 import org.anchoranalysis.core.log.CommonContext;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.bean.shared.dictionary.DictionaryBean;
 import org.anchoranalysis.feature.bean.FeatureRelatedBean;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
@@ -55,11 +55,7 @@ import org.anchoranalysis.feature.shared.SharedFeatures;
  */
 public class FeatureRelatedInitialization implements BeanInitialization {
 
-    /** 
-     * The associated initialization for a {@link DictionaryBean}.
-     * 
-     * @return the associated initialization.
-     */
+    /** The associated initialization for a {@link DictionaryBean}. */
     @Getter private DictionaryInitialization dictionary;
 
     /** A named-set of file-paths. */

@@ -34,7 +34,8 @@ import org.anchoranalysis.math.relation.NotEqualTo;
 /**
  * Selects voxels that are <b>not</b> <i>off</i> voxels.
  *
- * <p>Note that is the same as selecting <i>on</i> voxels, when the intensity-values are identical to the two states in a {@link BinaryValuesInt}, but otherwise they are not identical.
+ * <p>Note that is the same as selecting <i>on</i> voxels, when the intensity-values are identical
+ * to the two states in a {@link BinaryValuesInt}, but otherwise they are not identical.
  *
  * @author Owen Feehan
  */

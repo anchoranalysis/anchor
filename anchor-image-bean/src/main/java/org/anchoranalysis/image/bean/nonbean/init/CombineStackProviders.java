@@ -45,12 +45,13 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.spatial.box.BoundingBox;
 
 /**
- * An implementation of {@link NamedProvider} that combines several different entities that have natural {@link Stack} representations.
- * 
- * <p>If multiple sources have the same identifier, only one identifier (arbitrarily selected) will exist in the unified {@link NamedProvider}.
- * 
- * @author Owen
+ * An implementation of {@link NamedProvider} that combines several different entities that have
+ * natural {@link Stack} representations.
  *
+ * <p>If multiple sources have the same identifier, only one identifier (arbitrarily selected) will
+ * exist in the unified {@link NamedProvider}.
+ *
+ * @author Owen
  */
 class CombineStackProviders implements NamedProvider<Stack> {
 
@@ -61,7 +62,7 @@ class CombineStackProviders implements NamedProvider<Stack> {
 
     /**
      * Create with the three {@link NamedProvider}s to combine.
-     * 
+     *
      * @param stacks provides the {@link Stack}s.
      * @param channels provides the {@link Channel}s.
      * @param masks provides the {@link Mask}s.
@@ -70,7 +71,9 @@ class CombineStackProviders implements NamedProvider<Stack> {
             NamedProvider<Stack> stacks,
             NamedProvider<Channel> channels,
             NamedProvider<Mask> masks) {
-        combined = new NamedProviderCombine<>(Stream.of(stacks, convertChannels(channels), convertMasks(masks)));
+        combined =
+                new NamedProviderCombine<>(
+                        Stream.of(stacks, convertChannels(channels), convertMasks(masks)));
     }
 
     @Override
@@ -84,14 +87,14 @@ class CombineStackProviders implements NamedProvider<Stack> {
     }
 
     /** Converts each {@link Channel} to a {@link Stack}. */
-    private static NamedProviderBridge<Channel, Stack> convertChannels(NamedProvider<Channel> channels) {
+    private static NamedProviderBridge<Channel, Stack> convertChannels(
+            NamedProvider<Channel> channels) {
         return new NamedProviderBridge<>(channels, Stack::new, false);
     }
 
     /** Converts each {@link Mask} to a {@link Stack}. */
     private static NamedProviderBridge<Mask, Stack> convertMasks(NamedProvider<Mask> masks) {
-        return new NamedProviderBridge<>(
-                masks, CombineStackProviders::stackFromMask, false);
+        return new NamedProviderBridge<>(masks, CombineStackProviders::stackFromMask, false);
     }
 
     /** Converts a single {@link Mask} to a {@link Stack}. */

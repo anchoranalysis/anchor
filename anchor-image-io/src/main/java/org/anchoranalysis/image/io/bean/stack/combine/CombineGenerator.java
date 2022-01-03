@@ -59,7 +59,7 @@ class CombineGenerator<T> extends RasterGeneratorSelectFormat<T> {
             // We assume iterable generators always produce images of the same size
             //   and base our measurements on the first call to generate
             return arrangeRaster.combine(generated).asStack();
-            
+
         } catch (ArrangeStackException e) {
             throw new OutputWriteFailedException(e);
         }
