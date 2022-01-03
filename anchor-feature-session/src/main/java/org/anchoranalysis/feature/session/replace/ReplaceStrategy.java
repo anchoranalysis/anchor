@@ -31,25 +31,28 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
- * Different strategies on associating a {@link FeatureCalculationInput} with a particular {@code input}.
- * 
- * <p>A new {@link FeatureCalculationInput} may be created, or an existing one reused - with or without invalidating it.
- * 
- * <p>Depending on the relationships that may exist between successive inputs that are calculated, particular caching
- * strategies can be used to avoid repeating redundant calculation. This class provides an abstract interface for one aspect of that relationship.
- * 
- * @author Owen
+ * Different strategies on associating a {@link FeatureCalculationInput} with a particular {@code
+ * input}.
  *
+ * <p>A new {@link FeatureCalculationInput} may be created, or an existing one reused - with or
+ * without invalidating it.
+ *
+ * <p>Depending on the relationships that may exist between successive inputs that are calculated,
+ * particular caching strategies can be used to avoid repeating redundant calculation. This class
+ * provides an abstract interface for one aspect of that relationship.
+ *
+ * @author Owen
  * @param <T> the feature input-type
  */
 public interface ReplaceStrategy<T extends FeatureInput> {
 
-	/**
-	 * Find or create a {@link FeatureCalculationInput} to associate with {@code input}.
-	 * 
-	 * @param input the input that a {@link FeatureCalculationInput} will be associated with.
-	 * @return the {@link FeatureCalculationInput}, either newly created, or reused from a previous call.
-	 * @throws OperationFailedException if an error-state emerge
-	 */
+    /**
+     * Find or create a {@link FeatureCalculationInput} to associate with {@code input}.
+     *
+     * @param input the input that a {@link FeatureCalculationInput} will be associated with.
+     * @return the {@link FeatureCalculationInput}, either newly created, or reused from a previous
+     *     call.
+     * @throws OperationFailedException if an error-state emerge
+     */
     FeatureCalculationInput<T> createOrReuse(T input) throws OperationFailedException;
 }

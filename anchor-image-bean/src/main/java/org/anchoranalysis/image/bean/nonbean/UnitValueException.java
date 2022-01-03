@@ -28,16 +28,31 @@ package org.anchoranalysis.image.bean.nonbean;
 
 import org.anchoranalysis.core.exception.AnchorCheckedException;
 
+/**
+ * When a failure occurs converting from one type of units to another.
+ *
+ * @author Owen Feehan
+ */
 public class UnitValueException extends AnchorCheckedException {
 
     /** */
     private static final long serialVersionUID = 1L;
 
-    public UnitValueException(String string) {
-        super(string);
+    /**
+     * Create with a message.
+     *
+     * @param message the message.
+     */
+    public UnitValueException(String message) {
+        super(message);
     }
 
-    public UnitValueException(Exception exc) {
-        super(exc);
+    /**
+     * Create with a cause.
+     *
+     * @param cause the cause.
+     */
+    public UnitValueException(Exception cause) {
+        super(cause);
     }
 }

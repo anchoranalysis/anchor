@@ -36,44 +36,51 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.spatial.box.Extent;
 
+/**
+ * The size of an entity in the X and Y dimensions.
+ *
+ * <p>i.e. the <b>width</b> and <b>height</b> of an entity.
+ *
+ * @author Owen Feehan
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 public class SizeXY extends AnchorBean<SizeXY> {
 
     // START BEAN PROPERTIES
-    /** Size in X dimension. */
+    /** Size in X dimension. The width. */
     @BeanField @Positive @Getter @Setter private int width;
 
-    /** Size in Y dimension. */
+    /** Size in Y dimension. The height. */
     @BeanField @Positive @Getter @Setter private int height;
     // END BEAN PROPERTIES
 
     /**
-     * Constructor
+     * Create form an {@link Extent}.
      *
      * <p>Note the z-dimension in extent is ignored.
      *
-     * @param extent extent
+     * @param extent the extent.
      */
     public SizeXY(Extent extent) {
         this(extent.x(), extent.y());
     }
 
     /**
-     * Creates an extent with identical width and height and depth (z-extent) of 1
+     * Creates an extent with identical width and height and depth (z-extent) of 1.
      *
-     * @return the newly created extent
+     * @return the newly created extent.
      */
     public Extent asExtent() {
         return asExtent(1);
     }
 
     /**
-     * Creates an extent with identical width and height and a specific depth (z-extent)
+     * Creates an extent with identical width and height and a specific depth (z-extent).
      *
-     * @param depth the depth for the extent
-     * @return the newly created extent
+     * @param depth the depth for the extent.
+     * @return the newly created extent.
      */
     public Extent asExtent(int depth) {
         return new Extent(width, height, depth);

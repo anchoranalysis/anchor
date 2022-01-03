@@ -34,14 +34,15 @@ import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 
 /**
- * Base class for {@link ObjectCollectionProvider} that take a {@code objects} bean-field of same
- * type as provided.
+ * Implementation of {@link ObjectCollectionProvider} that calls a single delegate {@code
+ * Provider<ObjectCollection>}.
  *
  * @author Owen Feehan
  */
 public abstract class ObjectCollectionProviderUnary extends ObjectCollectionProvider {
 
     // START BEAN PROPERTIES
+    /** The delegate {@code Provider<ObjectCollection>} that is called. */
     @BeanField @Getter @Setter private Provider<ObjectCollection> objects;
     // END BEAN PROPERTIES
 
@@ -50,6 +51,13 @@ public abstract class ObjectCollectionProviderUnary extends ObjectCollectionProv
         return createFromObjects(objects.get());
     }
 
+    /**
+     * Creates a {@link ObjectCollection} given the entity provided by the delegate.
+     *
+     * @param objects the entity provided by the delegate.
+     * @return the created {@link ObjectCollection} that is returned by the provider.
+     * @throws ProvisionFailedException if the provider cannot complete successfully.
+     */
     protected abstract ObjectCollection createFromObjects(ObjectCollection objects)
             throws ProvisionFailedException;
 }

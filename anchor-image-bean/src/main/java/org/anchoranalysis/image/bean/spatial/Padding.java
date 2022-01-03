@@ -55,11 +55,21 @@ public class Padding extends AnchorBean<Padding> {
     @BeanField @Getter @Setter @NonNegative private int paddingZ = 0;
     // END BEAN PROPERTIES
 
+    /**
+     * Exposes the padding as a {@link Point3i}.
+     *
+     * @return a newly created {@link Point3i} with the padding in each dimension.
+     */
     public Point3i asPoint() {
         return new Point3i(paddingXY, paddingXY, paddingZ);
     }
 
-    public boolean noPadding() {
+    /**
+     * Whether no padding exists.
+     *
+     * @return true iff the padding in all dimensions is zero.
+     */
+    public boolean hasNoPadding() {
         return paddingXY == 0 && paddingZ == 0;
     }
 }

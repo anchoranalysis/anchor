@@ -35,16 +35,15 @@ import org.anchoranalysis.spatial.orientation.DirectionVector;
 
 /**
  * Specifies each axis-component of a vector in a particular direction.
- * 
- * @author Owen
  *
+ * @author Owen
  */
 @NoArgsConstructor
 @AllArgsConstructor
 public class SpecifyVector extends DirectionVectorBean {
 
     // START BEAN PROPERTIES
-	/** Component of the vector along the <b>x-axis</b>. */
+    /** Component of the vector along the <b>x-axis</b>. */
     @BeanField @Getter @Setter private double x = 0;
 
     /** Component of the vector along the <b>y-axis</b>. */
@@ -56,7 +55,7 @@ public class SpecifyVector extends DirectionVectorBean {
 
     /**
      * Create from a {@link DirectionVector}.
-     * 
+     *
      * @param vector the vector from which components are copied.
      */
     public SpecifyVector(DirectionVector vector) {

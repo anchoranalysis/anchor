@@ -27,26 +27,34 @@
 package org.anchoranalysis.image.bean.spatial.arrange;
 
 import java.util.Iterator;
+import java.util.Stack;
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.ArrangeStackException;
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.StackArrangement;
 import org.anchoranalysis.image.core.stack.RGBStack;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.box.Extent;
 
+/**
+ * A single {@link Stack} arranged as-is.
+ *
+ * <p>This is the most primitive possible arrangement of a stack. It is a placeholder for a single
+ * image.
+ *
+ * @author Owen Feehan
+ */
 public class Single extends StackArranger {
 
     @Override
-    protected StackArrangement arrangeStacks(Iterator<RGBStack> stacks)
-            throws ArrangeStackException {
+    public StackArrangement arrangeStacks(Iterator<RGBStack> stacks) throws ArrangeStackException {
 
-        if (!stacks.hasNext()) {
+        if (stacks.hasNext()) {
+            RGBStack stack = stacks.next();
+
+            Extent extent = stack.getChannel(0).extent();
+
+            return new StackArrangement(extent, new BoundingBox(extent));
+        } else {
             throw new ArrangeStackException("iterator has no more images");
         }
-
-        RGBStack stack = stacks.next();
-
-        Extent extent = stack.getChannel(0).extent();
-
-        return new StackArrangement(extent, new BoundingBox(extent));
     }
 }

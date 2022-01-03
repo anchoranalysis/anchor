@@ -88,10 +88,10 @@ public class MarksInitializationFactory {
             throws CreateException {
         MarksInitialization marks = create(Optional.empty(), context, define);
         try {
-			marks.image().addSharedObjectsDictionary(sharedObjects, dictionary);
-		} catch (OperationFailedException e) {
-			throw new CreateException(e);
-		}
+            marks.image().addSharedObjectsDictionary(sharedObjects, dictionary);
+        } catch (OperationFailedException e) {
+            throw new CreateException(e);
+        }
         return marks;
     }
 }

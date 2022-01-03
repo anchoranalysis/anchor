@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.plugin.opencv.bean.object.segment.decode.instance;
+package org.anchoranalysis.test.image.segment;
 
 import java.nio.file.Path;
 import org.anchoranalysis.core.exception.InitializeException;

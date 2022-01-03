@@ -33,15 +33,18 @@ import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.image.core.channel.Channel;
 
 /**
- * A channel-provider based-on two input channel-providers that must be of the same dimensionality
+ * Implementation of {@link ChannelProvider} that calls <b>two</b> {@link ChannelProvider}s that
+ * must provide {@link Channel}s of the same dimensions.
  *
  * @author Owen Feehan
  */
 public abstract class ChannelProviderBinary extends ChannelProvider {
 
     // START BEAN PROPERTIES
+    /** The <b>first</b> delegate {@link ChannelProvider} that is called. */
     @BeanField @Getter @Setter private ChannelProvider channel1;
 
+    /** The <b>second</b> delegate {@link ChannelProvider} that is called. */
     @BeanField @Getter @Setter private ChannelProvider channel2;
     // END BEAN PROPERTIES
 
@@ -58,6 +61,14 @@ public abstract class ChannelProviderBinary extends ChannelProvider {
         return process(channel1Created, channel2Created);
     }
 
+    /**
+     * Creates a {@link Channel} given the two entities provided by the delegates.
+     *
+     * @param channel1 the entity provided by the first delegate.
+     * @param channel2 the entity provided by the second delegate.
+     * @return the created {@link Channel} that is returned by the provider.
+     * @throws ProvisionFailedException if the provider cannot complete successfully.
+     */
     protected abstract Channel process(Channel channel1, Channel channel2)
             throws ProvisionFailedException;
 }

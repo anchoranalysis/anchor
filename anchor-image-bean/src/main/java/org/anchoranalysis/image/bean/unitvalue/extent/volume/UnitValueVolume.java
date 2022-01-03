@@ -28,13 +28,9 @@ package org.anchoranalysis.image.bean.unitvalue.extent.volume;
 
 import org.anchoranalysis.image.bean.unitvalue.extent.UnitValueExtent;
 
-
 /**
  * A base class for a value that describes a <b>volume</b> measurement on the image.
- * 
- * @author Owen
  *
+ * @author Owen
  */
-public abstract class UnitValueVolume extends UnitValueExtent {
-
-}
+public abstract class UnitValueVolume extends UnitValueExtent {}

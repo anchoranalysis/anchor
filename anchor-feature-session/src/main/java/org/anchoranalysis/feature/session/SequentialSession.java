@@ -46,10 +46,11 @@ import org.anchoranalysis.feature.session.replace.ReuseSingletonStrategy;
 import org.anchoranalysis.feature.shared.SharedFeatures;
 
 /**
- * Calculates features with successively different inputs, without caching any results from one input to the next.
- * 
- * <p>i.e. caching is applied only within each call to {@link #calculate(FeatureInput)} not but among
- * successive calls.
+ * Calculates features with successively different inputs, without caching any results from one
+ * input to the next.
+ *
+ * <p>i.e. caching is applied only within each call to {@link #calculate(FeatureInput)} not but
+ * among successive calls.
  *
  * <p>All feature use the same initialization, but successively different {#FeatureCalculation}
  * sequentially.
@@ -108,7 +109,8 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
      *
      * @param initialization the parameters used to initialize the feature.
      * @param logger the logger.
-     * @param sharedFeatures features that can be referenced by all the features being calculated in the session. They are also initialized by this session.
+     * @param sharedFeatures features that can be referenced by all the features being calculated in
+     *     the session. They are also initialized by this session.
      * @throws InitializeException if any initialization fails to complete successfully.
      */
     public void start(
@@ -144,7 +146,8 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
     }
 
     /**
-     * Calculates the results for the next input in the session, reporting any exceptions into an {@link ErrorReporter}.
+     * Calculates the results for the next input in the session, reporting any exceptions into an
+     * {@link ErrorReporter}.
      *
      * @param input the input to calculate results for.
      * @param errorReporter where to report errors to.
@@ -205,8 +208,7 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
     }
 
     /** Calculate the results for {@code input} rethrowing any exception that occurs. */
-    private ResultsVector calculateThrowException(T input)
-            throws NamedFeatureCalculateException {
+    private ResultsVector calculateThrowException(T input) throws NamedFeatureCalculateException {
 
         FeatureCalculationInput<T> sessionInput;
         try {
@@ -269,7 +271,8 @@ public class SequentialSession<T extends FeatureInput> implements FeatureCalcula
         listFeatures.initializeRecursive(initializationDup, logger);
 
         replaceStrategy =
-                replacePolicyFactory.createOrReuse(listFeatures, initializationDup, sharedFeatures, logger);
+                replacePolicyFactory.createOrReuse(
+                        listFeatures, initializationDup, sharedFeatures, logger);
     }
 
     private void checkIsStarted() throws NamedFeatureCalculateException {

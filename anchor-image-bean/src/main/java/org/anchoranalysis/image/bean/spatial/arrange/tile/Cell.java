@@ -24,30 +24,31 @@
  * #L%
  */
 
-package org.anchoranalysis.image.bean.spatial.arrange;
+package org.anchoranalysis.image.bean.spatial.arrange.tile;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.Optional;
-
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.NonNegative;
+import org.anchoranalysis.image.bean.spatial.arrange.StackArranger;
 import org.anchoranalysis.image.core.stack.RGBStack;
 
 /**
  * Indicates how to arrange one or more {@link RGBStack}s in a cell in a table.
- * 
- * <p>See {@link Tile} for the higher-level structure that uses this entity.
- * 
- * @author Owen Feehan
  *
+ * <p>See {@link Tile} for the higher-level structure that uses this entity.
+ *
+ * @author Owen Feehan
  */
+@AllArgsConstructor
+@NoArgsConstructor
 public class Cell extends AnchorBean<Cell> {
 
     // START BEAN PROPERTIES
-	/** How to arrange any {@link RGBStack}s in this particular cell. */
+    /** How to arrange any {@link RGBStack}s in this particular cell. */
     @BeanField @Getter @Setter private StackArranger arrange;
 
     /** The row in the table that the cell refers to (zero-indexed). */
@@ -56,19 +57,4 @@ public class Cell extends AnchorBean<Cell> {
     /** The column in the table that the cell refers to (zero-indexed). */
     @BeanField @NonNegative @Getter @Setter private int column;
     // END BEAN PROPERTIES
-    
-    /**
-     * Returns the object's {@code arrange} if {@code rowToMatch} and {@code columnToMatch} are identical to the current cell.
-     *  
-     * @param rowToMatch the index of the row to be matched (zero-indexed).
-     * @param columnToMatch the index of the column to be matched (zero-indexed).
-     * @return the value of {@code arrange} if the positions match, otherwise {@link Optional#empty()}.
-     */
-    public Optional<StackArranger> ifPositionMatches(int rowToMatch, int columnToMatch) {
-    	if (row == rowToMatch && column == columnToMatch) {
-            return Optional.of(arrange);
-        } else {
-        	return Optional.empty();
-        }
-    }
 }

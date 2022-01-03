@@ -36,39 +36,73 @@ import org.anchoranalysis.spatial.orientation.DirectionVector;
 import org.anchoranalysis.spatial.point.Point3d;
 import org.anchoranalysis.spatial.point.Point3i;
 
+/**
+ * Base class for methods to specify a distance along a vector in an image.
+ *
+ * @author Owen Feehan
+ */
 public abstract class UnitValueDistance extends AnchorBean<UnitValueDistance>
         implements Serializable {
 
     /** */
     private static final long serialVersionUID = 1L;
 
-    // Uses the direction between two points to resolve the distance.
-    // NB the magnitude of the distance between these two points is not considered, only the
-    // direction
+    /**
+     * Resolves the distance using the direction between two points of type {@link Point3d}.
+     *
+     * <p>The magnitude of the distance between the two points is ignored, only the direction.
+     *
+     * <p>See {@link #resolve(Optional, Point3i, Point3i)} for a {@link Point3i} equivalent.
+     *
+     * @param unitConverter converts to/from voxels to physical units.
+     * @param point1 the first point for the direction.
+     * @param point2 the second point for the direction.
+     * @return the distance in units of voxels.
+     * @throws OperationFailedException if the resolution cannot successfully complete.
+     */
     public double resolve(Optional<UnitConverter> unitConverter, Point3d point1, Point3d point2)
             throws OperationFailedException {
         return resolve(unitConverter, DirectionVector.createBetweenTwoPoints(point1, point2));
     }
 
-    // Uses the direction between two points to resolve the distance.
-    // NB the magnitude of the distance between these two points is not considered, only the
-    // direction
+    /**
+     * Resolves the distance using the direction between two points of type {@link Point3i}.
+     *
+     * <p>The magnitude of the distance between the two points is ignored, only the direction.
+     *
+     * <p>See {@link #resolve(Optional, Point3d, Point3d)} for a {@link Point3d} equivalent.
+     *
+     * @param unitConverter converts to/from voxels to physical units.
+     * @param point1 the first point for the direction.
+     * @param point2 the second point for the direction.
+     * @return the distance in units of voxels.
+     * @throws OperationFailedException if the resolution cannot successfully complete.
+     */
     public double resolve(Optional<UnitConverter> unitConverter, Point3i point1, Point3i point2)
             throws OperationFailedException {
         return resolve(unitConverter, DirectionVector.createBetweenTwoPoints(point1, point2));
     }
 
-    // Returns value in voxels
+    /**
+     * Resolves the distance using a {@link DirectionVector}.
+     *
+     * <p>The magnitude of the vector is ignored, using only the direction.
+     *
+     * @param unitConverter converts to/from voxels to physical units.
+     * @param direction the direction-vector.
+     * @return the distance in units of voxels.
+     * @throws OperationFailedException if the resolution cannot successfully complete.
+     */
     public abstract double resolve(Optional<UnitConverter> unitConverter, DirectionVector direction)
             throws OperationFailedException;
 
     /**
-     * Resolves the distance in a direction aligned to a particular axis
+     * Resolves the distance in a direction aligned to a particular axis.
      *
-     * @param unitConverter image-resolution
-     * @param axis axis to indicate direction
-     * @return the distance in the direction of the axis
-     * @throws OperationFailedException
+     * @param unitConverter converts to/from voxels to physical units.
+     * @param axis axis to indicate direction.
+     * @return the distance in the direction of the axis in units of voxels.
+     * @throws OperationFailedException if the resolution cannot successfully complete.
      */
     public double resolveForAxis(Optional<UnitConverter> unitConverter, Axis axis)
             throws OperationFailedException {

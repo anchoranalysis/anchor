@@ -40,12 +40,12 @@ import org.anchoranalysis.feature.shared.SharedFeatures;
 
 /**
  * Attaches a replacement-strategy to a session lazily.
- * 
+ *
  * <p>i.e. the strategy is attached only when first needed.
  *
  * <p>This is because as the relevant parameters are not available when we need to call the
  * constructor.
- * 
+ *
  * @param <T> feature-input type
  * @param <S> strategy-type
  */
@@ -53,7 +53,7 @@ import org.anchoranalysis.feature.shared.SharedFeatures;
 public class BoundReplaceStrategy<T extends FeatureInput, S extends ReplaceStrategy<T>> {
 
     // START REQUIRED ARGUMENTS
-	/** Creates a strategy corresponding to a particular cache. */
+    /** Creates a strategy corresponding to a particular cache. */
     private final Function<CacheCreator, S> createStrategy;
     // END REQUIRED ARGUMENTS
 
@@ -61,8 +61,9 @@ public class BoundReplaceStrategy<T extends FeatureInput, S extends ReplaceStrat
     @Getter private Optional<S> strategy = Optional.empty();
 
     /**
-     * Creates a {@link ReplaceStrategy} for a particular {@link CacheCreator}, or reuses any previously-created {@link ReplaceStrategy} if it exists.
-     * 
+     * Creates a {@link ReplaceStrategy} for a particular {@link CacheCreator}, or reuses any
+     * previously-created {@link ReplaceStrategy} if it exists.
+     *
      * @param features the features to use in the {@link CacheCreator}, if created.
      * @param initialization the initialization for the {@link CacheCreator}, if created.
      * @param sharedFeatures the shared-features for the {@link CacheCreator}, if created.

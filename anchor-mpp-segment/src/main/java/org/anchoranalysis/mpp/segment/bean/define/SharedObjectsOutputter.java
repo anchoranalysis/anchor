@@ -104,7 +104,7 @@ class SharedObjectsOutputter {
 
     private void stacks(ImageInitialization initialization) throws OutputWriteFailedException {
         NamedStacksOutputter.output(
-        		initialization.combinedStacks(),
+                initialization.combinedStacks(),
                 OutputterDirectories.STACKS,
                 suppressSubfolders,
                 outputter);

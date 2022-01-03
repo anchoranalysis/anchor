@@ -31,10 +31,10 @@ import org.anchoranalysis.bean.shared.relation.threshold.RelationToThreshold;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesInt;
 
 /**
- * A base class for implementations of {@link RelationToThreshold} where the threshold is derived from a {@link BinaryValuesInt}.
- * 
- * @author Owen
+ * A base class for implementations of {@link RelationToThreshold} where the threshold is derived
+ * from a {@link BinaryValuesInt}.
  *
+ * @author Owen
  */
 @EqualsAndHashCode(callSuper = false)
 public abstract class BinaryVoxelsBase extends RelationToThreshold {

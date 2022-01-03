@@ -38,14 +38,15 @@ import org.anchoranalysis.feature.results.ResultsVector;
 
 class FeatureCalculatorMultiFixture {
 
-    /** 
+    /**
      * Creates a feature-calculator than returns a constant {@link ResultsVector}.
-     * 
+     *
      * @param <T> feature-input type
      * @param results the constant {@link ResultsVector} to return.
-     * @return a newly created {@link FeatureCalculatorMulti} fixture. 
+     * @return a newly created {@link FeatureCalculatorMulti} fixture.
      */
-    public static <T extends FeatureInput> FeatureCalculatorMulti<T> createFeatureCalculator(ResultsVector results) {
+    public static <T extends FeatureInput> FeatureCalculatorMulti<T> createFeatureCalculator(
+            ResultsVector results) {
 
         try {
             @SuppressWarnings("unchecked")

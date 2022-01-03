@@ -46,7 +46,7 @@ public class FeatureCalculatorCache {
 
     /**
      * Creates a cached version of a {@link FeatureCalculatorSingle} with a default cache-size.
-     *  
+     *
      * @param <T> feature-input type
      * @param calculator the calculator to cache.
      * @return a calculator that caches {@link FeatureCalculatorSingle}.
@@ -58,7 +58,7 @@ public class FeatureCalculatorCache {
 
     /**
      * Creates a cached version of a {@link FeatureCalculatorSingle} with a particular cache-size.
-     *  
+     *
      * @param <T> feature-input type
      * @param calculator the calculator to cache.
      * @param cacheSize how many items are retained maximally in the cache.
@@ -71,7 +71,7 @@ public class FeatureCalculatorCache {
 
     /**
      * Creates a cached version of a {@link FeatureCalculatorMulti} with a default cache-size.
-     *  
+     *
      * @param <T> feature-input type
      * @param calculator the calculator to cache.
      * @return a calculator that caches {@link FeatureCalculatorMulti}.
@@ -83,7 +83,7 @@ public class FeatureCalculatorCache {
 
     /**
      * Creates a cached version of a {@link FeatureCalculatorMulti} with a particular cache-size.
-     *  
+     *
      * @param <T> feature-input type
      * @param calculator the calculator to cache.
      * @param cacheSize how many items are retained maximally in the cache.

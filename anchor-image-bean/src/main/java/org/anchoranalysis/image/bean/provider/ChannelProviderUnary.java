@@ -32,9 +32,16 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.image.core.channel.Channel;
 
+/**
+ * Implementation of {@link ChannelProvider} that calls a <b>single</b> delegate {@link
+ * ChannelProvider}.
+ *
+ * @author Owen Feehan
+ */
 public abstract class ChannelProviderUnary extends ChannelProvider {
 
     // START BEAN PROPERTIES
+    /** The delegate {@link ChannelProvider} that is called. */
     @BeanField @Getter @Setter private ChannelProvider channel;
     // END BEAN PROPERTIES
 
@@ -43,5 +50,12 @@ public abstract class ChannelProviderUnary extends ChannelProvider {
         return createFromChannel(channel.get());
     }
 
+    /**
+     * Creates a {@link Channel} given the entity provided by the delegate.
+     *
+     * @param channel the entity provided by the delegate.
+     * @return the created {@link Channel} that is returned by the provider.
+     * @throws ProvisionFailedException if the provider cannot complete successfully.
+     */
     protected abstract Channel createFromChannel(Channel channel) throws ProvisionFailedException;
 }

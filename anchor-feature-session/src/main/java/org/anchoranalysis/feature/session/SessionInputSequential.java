@@ -56,7 +56,9 @@ import org.anchoranalysis.feature.session.cache.finder.DefaultChildCacheFinder;
  */
 public class SessionInputSequential<T extends FeatureInput> implements FeatureCalculationInput<T> {
 
-    /** Implements operations which should occur using child-caches rather than in the main cache. */
+    /**
+     * Implements operations which should occur using child-caches rather than in the main cache.
+     */
     @AllArgsConstructor
     private class ChildCalculator implements CalculateForChild<T> {
 
@@ -134,7 +136,7 @@ public class SessionInputSequential<T extends FeatureInput> implements FeatureCa
 
     /**
      * Creates for a particular input, {@link CacheCreator} and {@link ChildCacheFinder}.
-     * 
+     *
      * @param input input for feature calculation.
      * @param cacheCreator creates a cache.
      * @param findChild locates a particular child-cache.

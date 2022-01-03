@@ -37,9 +37,10 @@ import org.anchoranalysis.feature.session.SessionInputSequential;
 import org.anchoranalysis.feature.session.cache.finder.ChildCacheFinder;
 import org.anchoranalysis.feature.session.cache.finder.DefaultChildCacheFinder;
 
-/** 
- * Always re-use an existing {@link SessionInputSequential}, invalidating it each time a new call occurs.
- * 
+/**
+ * Always re-use an existing {@link SessionInputSequential}, invalidating it each time a new call
+ * occurs.
+ *
  * @param <T> feature input-type
  */
 public class ReuseSingletonStrategy<T extends FeatureInput> implements ReplaceStrategy<T> {

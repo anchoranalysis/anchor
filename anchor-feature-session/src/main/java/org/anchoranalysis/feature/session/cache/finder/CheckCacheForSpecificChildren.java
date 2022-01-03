@@ -39,8 +39,8 @@ import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.session.replace.CacheAndReuseStrategy;
 
 /**
- * For particular child-caches, check if a {@link FeatureCalculationInput} is available from another LRU-cache and
- * reuse.
+ * For particular child-caches, check if a {@link FeatureCalculationInput} is available from another
+ * LRU-cache and reuse.
  *
  * <p>This is used to "redirect" certain child-caches to reuse sessions elsewhere.
  *
@@ -95,7 +95,8 @@ public class CheckCacheForSpecificChildren implements ChildCacheFinder {
             }
         }
 
-        // If we haven't found a {@link FeatureCalculationInput} in any of our existing caches, then we create a new
+        // If we haven't found a {@link FeatureCalculationInput} in any of our existing caches, then
+        // we create a new
         // {@link FeatureCalculationInput} of our own
         try {
             return useFallbackCache(input, factory);

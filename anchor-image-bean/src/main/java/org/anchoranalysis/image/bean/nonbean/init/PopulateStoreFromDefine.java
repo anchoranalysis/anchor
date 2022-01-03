@@ -59,12 +59,14 @@ public class PopulateStoreFromDefine<V extends BeanInitialization> {
     private Logger logger;
 
     /**
-     * Copies objects of a particular class from the define <b>without</b> performing any initialization.
+     * Copies objects of a particular class from the define <b>without</b> performing any
+     * initialization.
      *
      * @param <S> type of objects
      * @param defineClass class to identify objects in {@code define}.
      * @param destination where to copy to.
-     * @throws OperationFailedException if the identifier already exists, or otherwise the add operation fails.
+     * @throws OperationFailedException if the identifier already exists, or otherwise the add
+     *     operation fails.
      */
     public <S extends AnchorBean<S>> void copyWithoutInitialize(
             Class<?> defineClass, NamedProviderStore<S> destination)
@@ -78,7 +80,8 @@ public class PopulateStoreFromDefine<V extends BeanInitialization> {
      * @param <S> type of objects
      * @param defineClass class to identify objects in {@code define}.
      * @param destination where to copy to.
-     * @throws OperationFailedException if a copied identifier already exists, or otherwise the add operation fails.
+     * @throws OperationFailedException if a copied identifier already exists, or otherwise the add
+     *     operation fails.
      */
     public <S extends InitializableBean<S, V>> void copyInitialize(
             Class<?> defineClass, NamedProviderStore<S> destination)
@@ -92,7 +95,8 @@ public class PopulateStoreFromDefine<V extends BeanInitialization> {
     }
 
     /**
-     * Copies objects of a particular class (which must be a {@link Provider}) from {@code define} <i>and</i> initializes each.
+     * Copies objects of a particular class (which must be a {@link Provider}) from {@code define}
+     * <i>and</i> initializes each.
      *
      * <p>Specifically, each object will be lazily initialized once when first retrieved from the
      * store.
@@ -101,12 +105,12 @@ public class PopulateStoreFromDefine<V extends BeanInitialization> {
      * @param <T> type of objects created by the provider
      * @param defineClass class to identify objects in {@code define}.
      * @param destination where to copy to.
-     * @throws OperationFailedException if a copied identifier already exists, or otherwise the add operation fails.
+     * @throws OperationFailedException if a copied identifier already exists, or otherwise the add
+     *     operation fails.
      */
-    public <S extends InitializableBean<?, V> & Provider<T>, T>
-            void copyProviderInitialize(
-                    Class<?> defineClass, NamedProviderStore<T> destination)
-                    throws OperationFailedException {
+    public <S extends InitializableBean<?, V> & Provider<T>, T> void copyProviderInitialize(
+            Class<?> defineClass, NamedProviderStore<T> destination)
+            throws OperationFailedException {
 
         InitializingBridge<S, T, V> bridge =
                 new InitializingBridge<>(

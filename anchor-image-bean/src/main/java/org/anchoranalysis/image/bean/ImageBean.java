@@ -43,9 +43,7 @@ import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
  */
 public abstract class ImageBean<T> extends InitializableBean<T, ImageInitialization> {
 
-	/**
-	 * Create with default initializer and assigner.
-	 */
+    /** Create with default initializer and assigner. */
     protected ImageBean() {
         super(
                 new BeanInitializer<>(ImageInitialization.class, paramExtracters()),

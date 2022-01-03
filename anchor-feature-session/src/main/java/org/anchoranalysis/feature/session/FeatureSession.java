@@ -118,7 +118,7 @@ public class FeatureSession {
      * @param logger a logger.
      * @return a calculator that will call calculate all the features in the list for each
      *     parameter.
-	 * @throws InitializeException if the session cannot be successfully initialized.
+     * @throws InitializeException if the session cannot be successfully initialized.
      */
     public static <T extends FeatureInput> FeatureCalculatorMulti<T> with(
             FeatureList<T> features, Logger logger) throws InitializeException {
@@ -135,7 +135,7 @@ public class FeatureSession {
      * @param logger a logger.
      * @return a calculator that will call calculate all the features in the list for each
      *     parameter.
-	 * @throws InitializeException if the session cannot be successfully initialized.
+     * @throws InitializeException if the session cannot be successfully initialized.
      */
     public static <T extends FeatureInput> FeatureCalculatorMulti<T> with(
             FeatureList<T> features,
@@ -152,7 +152,8 @@ public class FeatureSession {
     }
 
     /**
-     * Starts a feature-session for a list of features, with particular initialization, and a {@code replaceStrategy}.
+     * Starts a feature-session for a list of features, with particular initialization, and a {@code
+     * replaceStrategy}.
      *
      * @param <T> type of parameters for all features.
      * @param features a list of features accepting uniform type.
@@ -162,7 +163,7 @@ public class FeatureSession {
      * @param replaceStrategy binds a specific {@link ReplaceStrategy} to newly created caches.
      * @return a calculator that will call calculate all the features in the list for each
      *     parameter.
-	 * @throws InitializeException if the session cannot be successfully initialized.
+     * @throws InitializeException if the session cannot be successfully initialized.
      */
     public static <T extends FeatureInput> FeatureCalculatorMulti<T> with(
             FeatureList<T> features,

@@ -127,10 +127,10 @@ public class DefineOutputter extends AnchorBean<DefineOutputter> {
                                 Optional.empty(), context, Optional.ofNullable(define))
                         .image();
         try {
-			initialization.addSharedObjectsDictionary(sharedObjects, dictionary);
-		} catch (OperationFailedException e) {
-			throw new CreateException(e);
-		}
+            initialization.addSharedObjectsDictionary(sharedObjects, dictionary);
+        } catch (OperationFailedException e) {
+            throw new CreateException(e);
+        }
         return initialization;
     }
 

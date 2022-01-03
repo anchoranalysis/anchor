@@ -45,10 +45,11 @@ import org.anchoranalysis.image.core.stack.Stack;
 
 /**
  * Creates a stack that combines other stacks.
- * 
+ *
  * <p>The stacks to be combined are specified in {@code list}.
- * 
- * <p>Instructions on how to combine the stacks are specified in {@code arrange}, relative to the order of the elements of {@code list}. 
+ *
+ * <p>Instructions on how to combine the stacks are specified in {@code arrange}, relative to the
+ * order of the elements of {@code list}.
  *
  * @author Owen Feehan
  */
@@ -56,7 +57,7 @@ import org.anchoranalysis.image.core.stack.Stack;
 public class Arrange extends StackProvider {
 
     // START BEAN
-	/** The stacks that are passed in respect order into {@code arrange}. */
+    /** The stacks that are passed in respect order into {@code arrange}. */
     @BeanField @Getter @Setter private List<Provider<Stack>> list = new ArrayList<>();
 
     /** Determines how the stacks in {@code list} are arranged. */
@@ -65,14 +66,18 @@ public class Arrange extends StackProvider {
     /** Iff true, ensures every stack is converted into 3 channels. */
     @BeanField @Getter @Setter private boolean forceRGB = false;
 
-    /** If true, the created raster has <i>unsigned short</i> voxel data type. If false, then <i>unsigned byte</i>. */
+    /**
+     * If true, the created raster has <i>unsigned short</i> voxel data type. If false, then
+     * <i>unsigned byte</i>.
+     */
     @BeanField @Getter @Setter private boolean createShort = false;
     // END BEAN
 
     /**
      * Shortcut to create with some explicit parameters.
-     * 
-     * @param createShort if true, the created raster has <i>unsigned short</i> voxel data type. If false, then <i>unsigned byte</i>.
+     *
+     * @param createShort if true, the created raster has <i>unsigned short</i> voxel data type. If
+     *     false, then <i>unsigned byte</i>.
      * @param forceRGB iff true, ensures every stack is converted into 3 channels.
      */
     public Arrange(boolean createShort, boolean forceRGB) {
@@ -106,12 +111,14 @@ public class Arrange extends StackProvider {
             }
             rasterList.add(new RGBStack(stack));
         }
-        
+
         try {
             ChannelFactorySingleType factory =
-                    createShort ? new ChannelFactoryUnsignedShort() : new ChannelFactoryUnsignedByte();
+                    createShort
+                            ? new ChannelFactoryUnsignedShort()
+                            : new ChannelFactoryUnsignedByte();
 
-            return arrange.combine(rasterList, factory).asStack();        	
+            return arrange.combine(rasterList, factory).asStack();
         } catch (ArrangeStackException e) {
             throw new ProvisionFailedException(e);
         }

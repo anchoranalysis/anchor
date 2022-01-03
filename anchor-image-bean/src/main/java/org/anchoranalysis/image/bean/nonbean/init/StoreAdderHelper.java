@@ -45,8 +45,8 @@ import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
 class StoreAdderHelper {
 
     /**
-     * Adds a single item to a {@link NamedProviderStore} using a bridge, explicitly specifying
-     * a new name.
+     * Adds a single item to a {@link NamedProviderStore} using a bridge, explicitly specifying a
+     * new name.
      *
      * @param <S> item-type as input
      * @param <T> item-type in the store
@@ -54,7 +54,8 @@ class StoreAdderHelper {
      * @param item item to be added.
      * @param store container the item is added to (destination).
      * @param bridge bridge applied to item so it matches the type of store.
-     * @throws OperationFailedException if the identifier already exists, or otherwise the add operation fails.
+     * @throws OperationFailedException if the identifier already exists, or otherwise the add
+     *     operation fails.
      */
     public static <S extends AnchorBean<?>, T> void add(
             String name,

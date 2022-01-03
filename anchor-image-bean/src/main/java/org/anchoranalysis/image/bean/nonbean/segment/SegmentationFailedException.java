@@ -30,20 +30,17 @@ import org.anchoranalysis.core.exception.friendly.AnchorFriendlyCheckedException
 
 /**
  * When a segmentation cannot successfully complete.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class SegmentationFailedException extends AnchorFriendlyCheckedException {
 
-    /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+    /** */
+    private static final long serialVersionUID = 1L;
 
-	/**
+    /**
      * Create with a message only.
-     * 
+     *
      * @param message the message.
      */
     public SegmentationFailedException(String message) {
@@ -52,7 +49,7 @@ public class SegmentationFailedException extends AnchorFriendlyCheckedException 
 
     /**
      * Create with a cause only.
-     * 
+     *
      * @param cause the cause.
      */
     public SegmentationFailedException(Throwable cause) {
@@ -61,7 +58,7 @@ public class SegmentationFailedException extends AnchorFriendlyCheckedException 
 
     /**
      * Create with a message and a cause.
-     * 
+     *
      * @param message the message.
      * @param cause the cause.
      */

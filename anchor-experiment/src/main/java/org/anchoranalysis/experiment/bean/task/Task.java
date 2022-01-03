@@ -76,7 +76,7 @@ import org.apache.commons.lang.time.StopWatch;
  * <tr><th>Output Name</th><th>Default?</th><th>Description</th></tr>
  * </thead>
  * <tbody>
- * <tr><td>{@value #OUTPUT_MANIFEST}</td><td>no</td><td>A XML and Java serialized <i>.ser</i> file describing all files outputted.</td></tr>
+ * <tr><td>{@value Task#OUTPUT_MANIFEST}</td><td>no</td><td>A XML and Java serialized <i>.ser</i> file describing all files outputted.</td></tr>
  * <tr><td rowspan="3">outputs from {@link InputOutputExperiment}.</td></tr>
  * </tbody>
  * </table>

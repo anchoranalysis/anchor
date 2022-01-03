@@ -85,7 +85,7 @@ import org.anchoranalysis.spatial.scale.ScaleFactor;
  *
  * <ul>
  *   <li>The point exists inside the bounding-box.
- *   <li>The corresponding voxel in {@code #voxels()} has an <i>on</i> state.
+ *   <li>The corresponding voxel in {@link #voxels()} has an <i>on</i> state.
  * </ul>
  */
 @Accessors(fluent = true)

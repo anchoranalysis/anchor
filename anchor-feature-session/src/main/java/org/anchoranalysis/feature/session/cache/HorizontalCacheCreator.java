@@ -41,29 +41,31 @@ import org.anchoranalysis.feature.shared.SharedFeatures;
 import org.anchoranalysis.feature.shared.SharedFeaturesSubset;
 
 /**
- * Creates a {@link FeatureCalculationCache} which caches the results of calls to features, even if the same feature appears
- * multiple times, directly or indirectly.
- * 
- * <p>One feature may indirectly call another feature when calculating, or explicitly by reference.
- * 
- * <p>It is termed <b>horizontal</b> as it does not cache computations between successive inputs, but rather for the same input
- * across multiple features.
- * 
- * @author Owen
+ * Creates a {@link FeatureCalculationCache} which caches the results of calls to features, even if
+ * the same feature appears multiple times, directly or indirectly.
  *
+ * <p>One feature may indirectly call another feature when calculating, or explicitly by reference.
+ *
+ * <p>It is termed <b>horizontal</b> as it does not cache computations between successive inputs,
+ * but rather for the same input across multiple features.
+ *
+ * @author Owen
  */
 @AllArgsConstructor
 public class HorizontalCacheCreator implements CacheCreator {
 
-	/** A super set of named-features, from which those compatible with the input-type are used in each created cache. */
+    /**
+     * A super set of named-features, from which those compatible with the input-type are used in
+     * each created cache.
+     */
     private FeatureList<? extends FeatureInput> namedFeatures;
-    
+
     /** The shared-features to use for initialization. */
     private SharedFeatures sharedFeatures;
-    
+
     /** What to initialize features with. */
     private FeatureInitialization initialization;
-    
+
     /** The logger for writing informative messages or errors. */
     private Logger logger;
 
@@ -89,7 +91,10 @@ public class HorizontalCacheCreator implements CacheCreator {
                 feature -> (Feature<T>) feature); // NOSONAR
     }
 
-    /** Initializes shared-features, and a newly-created {@link FeatureCalculationCache} for all named-features. */
+    /**
+     * Initializes shared-features, and a newly-created {@link FeatureCalculationCache} for all
+     * named-features.
+     */
     private <T extends FeatureInput> FeatureCalculationCache<T> createCache(
             FeatureList<T> namedFeatures,
             Class<? extends FeatureInput> inputType,
@@ -112,9 +117,9 @@ public class HorizontalCacheCreator implements CacheCreator {
         return cache;
     }
 
-    /** 
+    /**
      * Creates a {@link FeatureCalculationCache} for all features in {@code namedFeatures}.
-     * 
+     *
      * <p>This cache remembers feature-calculations, to avoid redundant new calculation.
      */
     private static <S extends FeatureInput> FeatureCalculationCache<S> createCache(

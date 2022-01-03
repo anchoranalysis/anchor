@@ -34,6 +34,12 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.core.dimensions.UnitConverter;
 import org.anchoranalysis.spatial.orientation.DirectionVector;
 
+/**
+ * Implementation of {@link UnitValueDistance} that specifies a value in voxels, ignoring any
+ * physical image resolution.
+ *
+ * @author Owen Feehan
+ */
 @NoArgsConstructor
 public class DistanceVoxels extends UnitValueDistance {
 
@@ -41,9 +47,15 @@ public class DistanceVoxels extends UnitValueDistance {
     private static final long serialVersionUID = 1L;
 
     // START BEAN PROPERTIES
+    /** The distance in units of voxels. */
     @BeanField @Getter @Setter private double value;
     // END BEAN PROPERTIES
 
+    /**
+     * Create with a particular value.
+     *
+     * @param value the distance in units of voxels.
+     */
     public DistanceVoxels(double value) {
         this.value = value;
     }

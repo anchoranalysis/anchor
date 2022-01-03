@@ -24,24 +24,24 @@
  * #L%
  */
 
-package org.anchoranalysis.image.bean;
+package org.anchoranalysis.feature.bean;
 
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
-import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureListFactory;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
- * Registers beans that needs particular factories
+ * Similar to {@link RegisterBeanFactories} but registers additional feature-related bean-factories.
  *
  * @author Owen Feehan
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class RegisterBeanFactoriesImage {
+public class RegisterFeatureBeanFactories {
 
+    /** Registers all custom feature-related beans. */
     public static void registerBeanFactories() {
         RegisterBeanFactories.register(
                 "featureList",

@@ -36,15 +36,24 @@ import org.anchoranalysis.image.core.dimensions.SpatialUnits;
 import org.anchoranalysis.image.core.dimensions.UnitConverter;
 import org.anchoranalysis.spatial.orientation.DirectionVector;
 
-// Measures either area or volume (depending if the do3D flag is employed)
+/**
+ * Implementation of {@link UnitValueDistance} that specifies a value in physical units, as
+ * described by particular recognized strings.
+ *
+ * <p>See {@link SpatialUnits} for the recognized strings.
+ *
+ * @author Owen Feehan
+ */
 public class DistancePhysical extends UnitValueDistance {
 
     /** */
     private static final long serialVersionUID = 1L;
 
     // START BEAN PROPERTIES
+    /** The value in units of type {@code unitType}. */
     @BeanField @Getter @Setter private double value;
 
+    /** A string indicating type of units to use, as per {@link SpatialUnits}. */
     @BeanField @AllowEmpty @Getter @Setter private String unitType;
     // END BEAN PROPERTIES
 
@@ -52,13 +61,14 @@ public class DistancePhysical extends UnitValueDistance {
     public double resolve(Optional<UnitConverter> unitConverter, DirectionVector direction)
             throws OperationFailedException {
 
-        if (!unitConverter.isPresent()) {
+        if (unitConverter.isPresent()) {
+
+            double valueAsBase = SpatialUnits.convertFromUnits(value, unitType);
+
+            return unitConverter.get().fromPhysicalDistance(valueAsBase, direction);
+        } else {
             throw new OperationFailedException(
-                    "An image-resolution is missing, so cannot calculate physical distances");
+                    "Image-resolution is missing, so cannot calculate physical distances");
         }
-
-        double valueAsBase = SpatialUnits.convertFromUnits(value, unitType);
-
-        return unitConverter.get().fromPhysicalDistance(valueAsBase, direction);
     }
 }

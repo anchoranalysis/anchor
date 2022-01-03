@@ -488,6 +488,23 @@ public final class Extent implements Serializable, Comparable<Extent> {
     }
 
     /**
+     * Scales <i>all</i> dimensions by a scaling-factor.
+     *
+     * @param scaleFactor the scaling-factor to multiply the respective dimension values by.
+     * @return a new {@link Extent} whose dimension values are scaled versions of the current
+     *     values, with a minimum of 1.
+     */
+    public Extent scaleBy(double scaleFactor) {
+        return new Extent(
+                immutablePointOperation(
+                        point -> {
+                            point.setX(Scaler.scaleQuantity(scaleFactor, x()));
+                            point.setY(Scaler.scaleQuantity(scaleFactor, y()));
+                            point.setY(Scaler.scaleQuantity(scaleFactor, z()));
+                        }));
+    }
+
+    /**
      * Creates a new {@link Extent} with each dimension decreased by one.
      *
      * @return the new extent.
@@ -515,6 +532,23 @@ public final class Extent implements Serializable, Comparable<Extent> {
      */
     public Extent growBy(ReadableTuple3i toAdd) {
         return new Extent(Point3i.immutableAdd(size, toAdd));
+    }
+
+    /**
+     * Creates a new {@link Extent} with {@code toSubtract} size <b>subtracted from</b> each
+     * respective dimension.
+     *
+     * @param toSubtract the number of voxels to subtract from each dimension.
+     * @return a newly created {@link Extent} shrunk as per above.
+     */
+    public Extent shrinkBy(ReadableTuple3i toSubtract) {
+        Point3i sizeToAssign = Point3i.immutableSubtract(size, toSubtract);
+        if (sizeToAssign.x() >= 1 && sizeToAssign.y() >= 1 && sizeToAssign.z() >= 1) {
+            return new Extent(sizeToAssign);
+        } else {
+            throw new AnchorFriendlyRuntimeException(
+                    String.format("Cannot shrink by %s as it is larger than %s", toSubtract, size));
+        }
     }
 
     /**

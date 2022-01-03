@@ -33,28 +33,24 @@ import org.anchoranalysis.image.bean.segment.binary.BinarySegmentation;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.math.histogram.Histogram;
 
-/** 
- * Parameters that are passed during a {@link BinarySegmentation}.
- */
+/** Parameters that are passed during a {@link BinarySegmentation}. */
 @AllArgsConstructor
 public class BinarySegmentationParameters {
 
-	/** A histogram of the intensity values of the voxels that are being segmented. */
+    /** A histogram of the intensity values of the voxels that are being segmented. */
     @Getter private final Optional<Histogram> intensityHistogram;
-    
+
     /** A {@link Resolution} associated with the image being segmented. */
     @Getter private final Optional<Resolution> resolution;
 
-    /**
-     * Creates with no intensity-histogram or resolution.
-     */
+    /** Creates with no intensity-histogram or resolution. */
     public BinarySegmentationParameters() {
         this(Optional.empty(), Optional.empty());
     }
 
     /**
      * Creates with a specific resolution, but no intensity-histogram.
-     * 
+     *
      * @param resolution a {@link Resolution} associated with the image being segmented.
      */
     public BinarySegmentationParameters(Optional<Resolution> resolution) {
@@ -65,7 +61,8 @@ public class BinarySegmentationParameters {
      * Creates with a specific resolution and intensity-histogram.
      *
      * @param resolution a {@link Resolution} associated with the image being segmented.
-     * @param intensityHistogram  a histogram of the intensity values of the voxels that are being segmented.
+     * @param intensityHistogram a histogram of the intensity values of the voxels that are being
+     *     segmented.
      */
     public BinarySegmentationParameters(
             Resolution resolution, Optional<Histogram> intensityHistogram) {
