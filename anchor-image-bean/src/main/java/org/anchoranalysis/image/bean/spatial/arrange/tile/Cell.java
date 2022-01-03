@@ -26,8 +26,9 @@
 
 package org.anchoranalysis.image.bean.spatial.arrange.tile;
 
-import java.util.Optional;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -42,6 +43,8 @@ import org.anchoranalysis.image.core.stack.RGBStack;
  *
  * @author Owen Feehan
  */
+@AllArgsConstructor
+@NoArgsConstructor
 public class Cell extends AnchorBean<Cell> {
 
     // START BEAN PROPERTIES
@@ -54,21 +57,4 @@ public class Cell extends AnchorBean<Cell> {
     /** The column in the table that the cell refers to (zero-indexed). */
     @BeanField @NonNegative @Getter @Setter private int column;
     // END BEAN PROPERTIES
-
-    /**
-     * Returns the object's {@code arrange} if {@code rowToMatch} and {@code columnToMatch} are
-     * identical to the current cell.
-     *
-     * @param rowToMatch the index of the row to be matched (zero-indexed).
-     * @param columnToMatch the index of the column to be matched (zero-indexed).
-     * @return the value of {@code arrange} if the positions match, otherwise {@link
-     *     Optional#empty()}.
-     */
-    public Optional<StackArranger> ifPositionMatches(int rowToMatch, int columnToMatch) {
-        if (row == rowToMatch && column == columnToMatch) {
-            return Optional.of(arrange);
-        } else {
-            return Optional.empty();
-        }
-    }
 }

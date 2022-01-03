@@ -131,18 +131,20 @@ public class VoxelsResizerNone extends VoxelsResizer {
         for (int y = 0; y < extentOut.y(); y++) {
             for (int x = 0; x < extentOut.x(); x++) {
 
-                int xOrig = intMin(xScale * x, extentIn.x() - 1);
-                int yOrig = intMin(yScale * y, extentIn.y() - 1);
+                int xIn = intMin(xScale * x, extentIn.x() - 1);
+                int yIn = intMin(yScale * y, extentIn.y() - 1);
 
-                bufferOut.put(bufferIn.get(extentIn.offset(xOrig, yOrig)));
+                bufferOut.put(bufferIn.get(extentIn.offset(xIn, yIn)));
             }
         }
     }
 
-    private static double intDiv(int num, int dem) {
-        return ((double) num) / dem;
+    /** Divide an integer by another, but as a floating-point operation. */
+    private static double intDiv(int numerator, int denominator) {
+        return ((double) numerator) / denominator;
     }
 
+    /** Find the minimum of an integer and a rounded double. */
     private static int intMin(double val1, int val2) {
         return (int) Math.min(Math.round(val1), val2);
     }

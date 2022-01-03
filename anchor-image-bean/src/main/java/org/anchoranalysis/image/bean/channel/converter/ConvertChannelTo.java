@@ -31,11 +31,17 @@ import org.anchoranalysis.image.bean.ImageBean;
 import org.anchoranalysis.image.core.channel.convert.ChannelConverter;
 
 /**
- * Converts a channel from one type to another.
+ * Creates a {@link ChannelConverter} for converting a channel to a particular type.
  *
  * @param <T> destination voxel type to convert to
  */
 public abstract class ConvertChannelTo<T> extends ImageBean<ConvertChannelTo<T>> {
 
+    /**
+     * Creates the converter.
+     *
+     * @return the created converter.
+     * @throws CreateException if the converter cannot be successfully created.
+     */
     public abstract ChannelConverter<T> createConverter() throws CreateException;
 }

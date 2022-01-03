@@ -36,13 +36,15 @@ import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 
 /**
- * A base-class for segmentations that takes another object-segmentation algorithm as a parameter.
+ * Implementation of {@link SegmentChannelIntoObjects} that calls a <b>single</b> delegate {@link
+ * SegmentChannelIntoObjects}.
  *
  * @author Owen Feehan
  */
 public abstract class SegmentChannelIntoObjectsUnary extends SegmentChannelIntoObjects {
 
     // START BEAN PROPERTIES
+    /** The delegate {@link SegmentChannelIntoObjects} that is called. */
     @BeanField @Getter @Setter private SegmentChannelIntoObjects segment;
     // END BEAN PROPERTIES
 
@@ -53,10 +55,20 @@ public abstract class SegmentChannelIntoObjectsUnary extends SegmentChannelIntoO
         return segment(channel, objectMask, seeds, segment);
     }
 
+    /**
+     * Creates an {@link ObjectCollection} given the segmentation-results provided by the delegate.
+     *
+     * @param channel the channel as passed to {@link #segment(Channel, Optional, Optional)}.
+     * @param object the object-mask as passed to {@link #segment(Channel, Optional, Optional)}.
+     * @param seeds the seeds as passed to {@link #segment(Channel, Optional, Optional)}.
+     * @param upstreamSegmenter the delegate segmenter.
+     * @return the created {@link ObjectCollection} that is returned by the segmentation.
+     * @throws SegmentationFailedException if segmentation cannot complete successfully.
+     */
     protected abstract ObjectCollection segment(
             Channel channel,
             Optional<ObjectMask> object,
             Optional<ObjectCollection> seeds,
-            SegmentChannelIntoObjects upstreamSegmentation)
+            SegmentChannelIntoObjects upstreamSegmenter)
             throws SegmentationFailedException;
 }

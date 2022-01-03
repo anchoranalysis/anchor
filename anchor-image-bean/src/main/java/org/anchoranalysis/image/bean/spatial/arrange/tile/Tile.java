@@ -57,22 +57,14 @@ import org.anchoranalysis.spatial.point.ReadableTuple3i;
 public class Tile extends StackArranger {
 
     // START BEAN PROPERTIES
-    /**
-     * The number of <i>columns</i> to use in the table produced when tiling.
-     *
-     * <p>If this value is set to {@code -1} it is automatically set.
-     */
-    @BeanField @Positive @Getter @Setter private int numberColumns = -1;
+    /** The number of <i>columns</i> to use in the table produced when tiling. */
+    @BeanField @Positive @Getter @Setter private int numberColumns = 1;
+
+    /** The number of <i>rows</i> to use in the table produced when tiling. */
+    @BeanField @Positive @Getter @Setter private int numberRows = 1;
 
     /**
-     * The number of <i>rows</i> to use in the table produced when tiling.
-     *
-     * <p>If this value is set to {@code -1} it is automatically set.
-     */
-    @BeanField @Positive @Getter @Setter private int numberRows = -1;
-
-    /**
-     * Defines the corresponding {@link StackArranger} for each individual cell in table.
+     * Defines the corresponding {@link StackArranger} for an individual cell in table.
      *
      * <p>Each cell should be specified zero or one times, via a reference to the corresponding row
      * and column.
@@ -104,9 +96,12 @@ public class Tile extends StackArranger {
     @Override
     public StackArrangement arrangeStacks(final Iterator<RGBStack> stacks)
             throws ArrangeStackException {
-        ArrangementIndex table =
-                new ArrangementIndex(
-                        stacks, new ArrangerIndex(cells, cellDefault), numberRows, numberColumns);
+
+        Extent tableSize = new Extent(numberColumns, numberRows, 1);
+
+        ArrangerIndex arrangers = new ArrangerIndex(cells, cellDefault, tableSize);
+
+        ArrangementIndex table = new ArrangementIndex(stacks, arrangers, tableSize);
 
         return createArrangement(table, new CellSizeCalculator(table));
     }

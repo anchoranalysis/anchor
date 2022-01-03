@@ -93,7 +93,7 @@ public class Overlay extends StackArranger {
      * <p>{@code repeat} is a special-case where a single z-slice overlay will be duplicated across
      * the z-dimension of the stack onto which it is overlayed.
      */
-    @BeanField @Getter @Setter private String alignZ = "top";
+    @BeanField @Getter @Setter private String alignZ = "bottom";
     // END BEAN PROPERTIES
 
     @Override

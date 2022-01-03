@@ -27,13 +27,14 @@
 package org.anchoranalysis.image.bean.spatial.arrange.tile;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Stream;
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.ArrangeStackException;
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.StackArrangement;
 import org.anchoranalysis.image.bean.spatial.arrange.StackArranger;
 import org.anchoranalysis.image.core.stack.RGBStack;
+import org.anchoranalysis.spatial.box.Extent;
 
 /**
  * A {@link StackArrangement} for each cell in a table.
@@ -55,27 +56,25 @@ class ArrangementIndex {
      *
      * @param stacks the stacks to arrange.
      * @param arrangers a {@link StackArranger} for each cell in the table.
-     * @param numberRows the total number of rows in the table.
-     * @param numberColumns the total number of columns in the table.
+     * @param tableSize the table size, in columns (x-dimension) and rows (y-dimension).
      * @throws ArrangeStackException if the {@code stacks} and {@code arrangers} do not match
      *     expectations, or otherwise an error occurs.
      */
-    public ArrangementIndex(
-            Iterator<RGBStack> stacks, ArrangerIndex arrangers, int numberRows, int numberColumns)
+    public ArrangementIndex(Iterator<RGBStack> stacks, ArrangerIndex arrangers, Extent tableSize)
             throws ArrangeStackException {
 
         rows = new ArrayList<>();
         columns = new ArrayList<>();
 
-        for (int row = 0; row < numberRows; row++) {
-            for (int column = 0; column < numberColumns; column++) {
+        for (int row = 0; row < tableSize.y(); row++) {
+            for (int column = 0; column < tableSize.x(); column++) {
 
                 if (!stacks.hasNext()) {
                     // Exit early if there are no more stacks to iterate.
                     return;
                 }
 
-                StackArrangement item = arrangers.getForCell(row, column).arrangeStacks(stacks);
+                StackArrangement item = arrangers.getForCell(column, row).arrangeStacks(stacks);
 
                 List<StackArrangement> currentRows = getListOrAdd(rows, row);
                 List<StackArrangement> currentColumns = getListOrAdd(columns, column);
@@ -111,8 +110,8 @@ class ArrangementIndex {
      * @param index the index of the row (zero-indexed).
      * @return all the {@link StackArrangement}s associated with the row.
      */
-    public Collection<StackArrangement> getRow(int index) {
-        return rows.get(index);
+    public Stream<StackArrangement> getRow(int index) {
+        return rows.get(index).stream();
     }
 
     /**
@@ -121,8 +120,8 @@ class ArrangementIndex {
      * @param index the index of the column (zero-indexed).
      * @return all the {@link StackArrangement}s associated with the column.
      */
-    public Collection<StackArrangement> getColumn(int index) {
-        return columns.get(index);
+    public Stream<StackArrangement> getColumn(int index) {
+        return columns.get(index).stream();
     }
 
     /**

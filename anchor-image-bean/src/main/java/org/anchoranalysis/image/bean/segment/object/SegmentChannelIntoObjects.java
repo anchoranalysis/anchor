@@ -59,6 +59,12 @@ public abstract class SegmentChannelIntoObjects
             Channel channel, Optional<ObjectMask> objectMask, Optional<ObjectCollection> seeds)
             throws SegmentationFailedException;
 
+    /**
+     * Throws an exception if {@code object} is present, as it is unsupported by the implementation.
+     *
+     * @param objectMask an optional {@link ObjectMask}.
+     * @throws SegmentationFailedException if {@code objectMask} is present.
+     */
     protected static void checkUnsupportedObjectMask(Optional<ObjectMask> objectMask)
             throws SegmentationFailedException {
         if (objectMask.isPresent()) {
@@ -67,6 +73,12 @@ public abstract class SegmentChannelIntoObjects
         }
     }
 
+    /**
+     * Throws an exception if {@code seeds} is present, as it is unsupported by the implementation.
+     *
+     * @param seeds an optional {@link ObjectMask}.
+     * @throws SegmentationFailedException if {@code seeds} is present.
+     */
     protected static void checkUnsupportedSeeds(Optional<ObjectCollection> seeds)
             throws SegmentationFailedException {
         if (seeds.isPresent()) {
@@ -74,6 +86,14 @@ public abstract class SegmentChannelIntoObjects
         }
     }
 
+    /**
+     * Throws an exception if the channel has more than one z-slice, as 3D is unsupported by the
+     * implementation.
+     *
+     * @param channel the channel that have multiple z-slices (i.e. is 3D) or a single z-slice (i.e.
+     *     is 2D).
+     * @throws SegmentationFailedException if {@code channel} is 3D.
+     */
     protected static void checkUnsupported3D(Channel channel) throws SegmentationFailedException {
         if (channel.dimensions().z() > 1) {
             throw new SegmentationFailedException(

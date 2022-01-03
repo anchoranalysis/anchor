@@ -30,23 +30,33 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
-import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.math.histogram.Histogram;
 
+/**
+ * Implementation of {@link HistogramProvider} that calls a <b>single</b> delegate {@link
+ * HistogramProvider}.
+ *
+ * @author Owen Feehan
+ */
 public abstract class HistogramProviderUnary extends HistogramProvider {
 
     // START BEAN PROPERTIES
+    /** The delegate {@link HistogramProvider} that is called. */
     @BeanField @Getter @Setter private HistogramProvider histogram;
     // END BEAN PROPERTIES
 
     @Override
     public Histogram get() throws ProvisionFailedException {
-        try {
-            return createFromHistogram(histogram.get());
-        } catch (CreateException e) {
-            throw new ProvisionFailedException(e);
-        }
+        return createFromHistogram(histogram.get());
     }
 
-    protected abstract Histogram createFromHistogram(Histogram histogram) throws CreateException;
+    /**
+     * Creates a {@link Histogram} given the entity provided by the delegate.
+     *
+     * @param histogram the entity provided by the delegate.
+     * @return the created {@link Histogram} that is returned by the provider.
+     * @throws ProvisionFailedException if the provider cannot complete successfully.
+     */
+    protected abstract Histogram createFromHistogram(Histogram histogram)
+            throws ProvisionFailedException;
 }

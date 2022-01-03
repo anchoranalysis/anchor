@@ -33,9 +33,15 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.image.core.stack.Stack;
 
+/**
+ * Implementation of {@link StackProvider} that calls a single delegate {@code Provider<Stack>}.
+ *
+ * @author Owen Feehan
+ */
 public abstract class StackProviderUnary extends StackProvider {
 
     // START BEAN FIELDS
+    /** The delegate {@code Provider<Stack>} that is called. */
     @BeanField @Getter @Setter private Provider<Stack> stack;
     // END BEAN FIELDS
 
@@ -44,5 +50,12 @@ public abstract class StackProviderUnary extends StackProvider {
         return createFromStack(stack.get());
     }
 
-    protected abstract Stack createFromStack(Stack source) throws ProvisionFailedException;
+    /**
+     * Creates a {@link Stack} given the entity provided by the delegate.
+     *
+     * @param stack the entity provided by the delegate.
+     * @return the created {@link Stack} that is returned by the provider.
+     * @throws ProvisionFailedException if the provider cannot complete successfully.
+     */
+    protected abstract Stack createFromStack(Stack stack) throws ProvisionFailedException;
 }

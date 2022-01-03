@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.image.bean.spatial.arrange.tile;
 
-import java.util.Collection;
 import java.util.function.IntFunction;
 import java.util.function.ToIntFunction;
+import java.util.stream.Stream;
 import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.StackArrangement;
 import org.anchoranalysis.spatial.box.BoundingBox;
@@ -108,34 +108,43 @@ class CellSizeCalculator {
      *
      * @param numberElements the total number of elements in the dimension (e.g. total number of
      *     rows or columns).
-     * @param elementForIndex extracts an element for a particular index.
+     * @param elementsForIndex extracts an element for a particular index.
      * @param extractSize extracts a size for the particular dimension.
      * @return a newly created {@link SizesAcrossDimension}, representing the sizes across the
      *     dimension.
      */
     private SizesAcrossDimension processDimension(
             int numberElements,
-            IntFunction<Collection<StackArrangement>> elementForIndex,
+            IntFunction<Stream<StackArrangement>> elementsForIndex,
             ToIntFunction<Extent> extractSize) {
         SizesAcrossDimension sizes = new SizesAcrossDimension(numberElements);
         for (int i = 0; i < numberElements; i++) {
-            Collection<StackArrangement> elements = elementForIndex.apply(i);
+            Stream<StackArrangement> elements = elementsForIndex.apply(i);
             sizes.add(maxSizeForDimension(elements, extractSize));
-
-            // Update the maximum size in the z-dimension
-            maxZ = Math.max(maxZ, maxSizeForDimension(elements, Extent::z));
         }
         return sizes;
     }
 
     /** Finds the maximum value of particular dimension of a cell. */
-    private static int maxSizeForDimension(
-            Collection<StackArrangement> cells, ToIntFunction<Extent> extractDimension) {
+    private int maxSizeForDimension(
+            Stream<StackArrangement> cells, ToIntFunction<Extent> extractDimension) {
         // Assumes dim are the same for all channels
-        return cells.stream()
-                .map(StackArrangement::extent)
-                .mapToInt(extractDimension)
+        return cells.map(StackArrangement::extent)
+                .mapToInt(extent -> extractDimensionAndUpdateZ(extent, extractDimension))
                 .max()
                 .getAsInt();
+    }
+
+    /**
+     * Extracts a particular dimension from an {@link Extent} and simultaneously updates {@code
+     * maxZ} if needed.
+     */
+    private int extractDimensionAndUpdateZ(Extent extent, ToIntFunction<Extent> extractDimension) {
+
+        if (extent.z() > maxZ) {
+            maxZ = extent.z();
+        }
+
+        return extractDimension.applyAsInt(extent);
     }
 }

@@ -40,5 +40,10 @@ import org.anchoranalysis.math.histogram.Histogram;
 public abstract class ConvertChannelToWithHistogram<T>
         extends AnchorBean<ConvertChannelToWithHistogram<T>> {
 
+    /**
+     * Creates the converter.
+     *
+     * @return the created converter.
+     */
     public abstract ChannelConverterAttached<Histogram, T> createConverter();
 }

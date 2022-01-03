@@ -32,13 +32,22 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.image.core.channel.Channel;
 
+/**
+ * Implementation of {@link ChannelProvider} that calls <b>three</b> {@link ChannelProvider}s that
+ * must provide {@link Channel}s of the same dimensions.
+ *
+ * @author Owen Feehan
+ */
 public abstract class ChannelProviderTernary extends ChannelProvider {
 
     // START BEAN PROPERTIES
+    /** The <b>first</b> delegate {@link ChannelProvider} that is called. */
     @BeanField @Getter @Setter private ChannelProvider channel1;
 
+    /** The <b>second</b> delegate {@link ChannelProvider} that is called. */
     @BeanField @Getter @Setter private ChannelProvider channel2;
 
+    /** The <b>third</b> delegate {@link ChannelProvider} that is called. */
     @BeanField @Getter @Setter private ChannelProvider channel3;
     // END BEAN PROPERTIES
 
@@ -48,6 +57,15 @@ public abstract class ChannelProviderTernary extends ChannelProvider {
         return process(channel1.get(), channel2.get(), channel3.get());
     }
 
+    /**
+     * Creates a {@link Channel} given the two entities provided by the delegates.
+     *
+     * @param channel1 the entity provided by the first delegate.
+     * @param channel2 the entity provided by the second delegate.
+     * @param channel3 the entity provided by the third delegate.
+     * @return the created {@link Channel} that is returned by the provider.
+     * @throws ProvisionFailedException if the provider cannot complete successfully.
+     */
     protected abstract Channel process(Channel channel1, Channel channel2, Channel channel3)
             throws ProvisionFailedException;
 }

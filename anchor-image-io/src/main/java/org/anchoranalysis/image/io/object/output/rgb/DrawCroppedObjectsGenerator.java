@@ -79,7 +79,7 @@ public class DrawCroppedObjectsGenerator extends ObjectsAsRGBGenerator {
         // Get a bounding box that contains all the objects
         this.box = ObjectMaskMerger.mergeBoundingBoxes(objects.streamStandardJava());
 
-        box = growBBBox(box, extent);
+        box = growBox(box, extent);
 
         // Extract the relevant piece of background
         return background.fold(
@@ -94,12 +94,12 @@ public class DrawCroppedObjectsGenerator extends ObjectsAsRGBGenerator {
         return relativeTo(element.withoutProperties(), box);
     }
 
-    private BoundingBox growBBBox(BoundingBox box, Extent containingExtent) {
-        if (padding.noPadding()) {
+    private BoundingBox growBox(BoundingBox box, Extent containingExtent) {
+        if (padding.hasNoPadding()) {
             return box;
+        } else {
+            return box.growBy(padding.asPoint(), containingExtent);
         }
-
-        return box.growBy(padding.asPoint(), containingExtent);
     }
 
     private static ObjectCollectionWithProperties relativeTo(

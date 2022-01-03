@@ -29,6 +29,13 @@ package org.anchoranalysis.image.bean.interpolator;
 import org.anchoranalysis.image.voxel.resizer.VoxelsResizer;
 import org.anchoranalysis.image.voxel.resizer.VoxelsResizerNone;
 
+/**
+ * An implementation of {@link Interpolator} that performs no interpolation.
+ *
+ * <p>The basic algorithm of {@link VoxelsResizerNone} is used for resizing.
+ *
+ * @author Owen Feehan
+ */
 public class None extends Interpolator {
 
     @Override

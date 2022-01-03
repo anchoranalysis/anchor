@@ -33,9 +33,15 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.image.core.mask.Mask;
 
+/**
+ * Implementation of {@link MaskProvider} that calls a single delegate {@link MaskProvider}.
+ *
+ * @author Owen Feehan
+ */
 public abstract class MaskProviderUnary extends MaskProvider {
 
     // START BEAN PROPERTIES
+    /** The delegate {@code Provider<Mask>} that is called. */
     @BeanField @Getter @Setter private Provider<Mask> mask;
     // END BEAN PROPERTIES
 
@@ -44,5 +50,12 @@ public abstract class MaskProviderUnary extends MaskProvider {
         return createFromMask(mask.get());
     }
 
+    /**
+     * Creates a {@link Mask} given the entity provided by the delegate.
+     *
+     * @param mask the entity provided by the delegate.
+     * @return the created {@link Mask} that is returned by the provider.
+     * @throws ProvisionFailedException if the provider cannot complete successfully.
+     */
     protected abstract Mask createFromMask(Mask mask) throws ProvisionFailedException;
 }

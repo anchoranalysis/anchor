@@ -74,7 +74,7 @@ public abstract class StackArranger extends AnchorBean<StackArranger> {
         StackArrangement arrangement = arrangeStacks(rasterIterator);
 
         if (rasterIterator.hasNext()) {
-            throw new ArrangeStackException("There are more stacks that can be arranged.");
+            throw new ArrangeStackException("There are more stacks than can be arranged.");
         }
 
         RGBStack stackOut = new RGBStack(arrangement.extent(), factory);
