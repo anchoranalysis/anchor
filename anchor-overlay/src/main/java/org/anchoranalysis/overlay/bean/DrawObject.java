@@ -36,6 +36,7 @@ import org.anchoranalysis.image.core.stack.RGBStack;
 import org.anchoranalysis.overlay.writer.ObjectDrawAttributes;
 import org.anchoranalysis.overlay.writer.PrecalculationOverlay;
 import org.anchoranalysis.spatial.box.BoundingBox;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 
 /**
  * Draws a representation of an {@link ObjectMask} on a {@link RGBStack}.
