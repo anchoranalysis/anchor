@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.test.image.rasterwriter;
+package org.anchoranalysis.test.image.stackwriter;
 
 import java.nio.file.Path;
 import lombok.RequiredArgsConstructor;
@@ -56,7 +56,7 @@ import org.junit.jupiter.api.io.TempDir;
  * @author Owen Feehan
  */
 @RequiredArgsConstructor
-public abstract class RasterWriterTestBase {
+public abstract class StackWriterTestBase {
 
     /** All possible voxel types that can be supported. */
     protected static final VoxelDataType[] ALL_SUPPORTED_VOXEL_TYPES = {
