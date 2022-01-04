@@ -114,39 +114,6 @@ public class OutputSequenceIndexed<T, S> implements OutputSequence {
         }
     }
 
-    /**
-     * Like {@link #add(Object, Optional)} but does not immediately execute the write operation,
-     * instead returing an operation that can be called later.
-     *
-     * <p>This is useful for separating the sequential (and therefore not thread-safe, and must be
-     * synchronized) from the actual write operation (which must not be synchronized, and is usually
-     * more expensive).
-     *
-     * <p>This is a thread-safe method.
-     *
-     * <p>TODO complete this call.
-     *
-     * @param element the element
-     * @param index index of the element to output, if it exists. if it doesn't exist, the element
-     *     will be written without any name.
-     * @throws OutputWriteFailedException if the output cannot be successfully written.
-     */
-    public void addAsynchronously(T element, Optional<S> index) throws OutputWriteFailedException {
-
-        // Then output isn't allowed and we should just exit
-        if (!sequenceWriter.isOn()) {
-            return;
-        }
-
-        if (index.isPresent()) {
-
-            this.sequenceWriter.write(() -> generator, () -> element, String.valueOf(index.get()));
-
-        } else {
-            this.sequenceWriter.writeWithoutName(() -> generator, () -> element);
-        }
-    }
-
     @Override
     public Optional<RecordingWriters> writers() {
         return sequenceWriter.writers();
