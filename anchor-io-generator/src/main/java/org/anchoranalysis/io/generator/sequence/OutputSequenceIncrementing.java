@@ -27,6 +27,7 @@
 package org.anchoranalysis.io.generator.sequence;
 
 import java.util.Optional;
+import org.anchoranalysis.core.functional.checked.CheckedRunnable;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.recorded.RecordingWriters;
 
@@ -53,7 +54,7 @@ public class OutputSequenceIncrementing<T> implements OutputSequence {
      *
      * <p>This method is <i>thread-safe</i>.
      *
-     * @param element the element
+     * @param element the element to add.
      * @throws OutputWriteFailedException if the output cannot be successfully written.
      */
     public void add(T element) throws OutputWriteFailedException {
@@ -65,6 +66,27 @@ public class OutputSequenceIncrementing<T> implements OutputSequence {
             //  2. A downstream generator has already updated its sequence-type.
             iteration++;
         }
+    }
+
+    /**
+     * Like {@link #add(T)} but does not immediately execute the underlying add operation, instead
+     * returning an operation that can be called later.
+     *
+     * <p>This is useful for separating the sequential (and therefore not thread-safe, and must be
+     * synchronized) from the actual write operation (which must not be synchronized, and is usually
+     * more expensive).
+     *
+     * <p>This method is <i>thread-safe</i>.
+     *
+     * @param element the element to add.
+     * @return a runnable, that when called, completes the remain part of the operation.
+     * @throws OutputWriteFailedException if the output cannot be successfully written.
+     */
+    public CheckedRunnable<OutputWriteFailedException> addAsynchronously(T element)
+            throws OutputWriteFailedException {
+        final int iterationBefore = iteration;
+        iteration++;
+        return () -> delegate.add(element, iterationBefore);
     }
 
     @Override
