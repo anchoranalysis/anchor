@@ -75,9 +75,9 @@ final class VoxelBufferUnsignedInt extends VoxelBufferUnsigned<UnsignedIntBuffer
     }
 
     @Override
-    public byte[] underlyingBytes() {
+    public ByteBuffer underlyingBytes() {
         ByteBuffer bufferSigned = ByteBuffer.allocate(capacity() * 4);
         bufferSigned.asIntBuffer().put(buffer().getDelegate());
-        return bufferSigned.array();
+        return bufferSigned;
     }
 }

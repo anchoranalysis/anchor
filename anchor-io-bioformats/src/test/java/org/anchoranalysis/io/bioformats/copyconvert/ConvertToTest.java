@@ -229,7 +229,7 @@ class ConvertToTest {
             VoxelBuffer<T> expectedOutputBuffer,
             OrientationChange orientationChange)
             throws IOException {
-        ByteBuffer underlyingBytes = ByteBuffer.wrap(inputBuffer.underlyingBytes());
+        ByteBuffer underlyingBytes = inputBuffer.underlyingBytes();
         Channel channel = ChannelFactory.instance().create(DIMENSIONS, outputDataType);
         ImageFileEncoding encoding = new ImageFileEncoding(false, false, 1);
         converter.copyAllChannels(
@@ -239,7 +239,8 @@ class ConvertToTest {
         // Check the arrays have exactly the same bytes.
         assertTrue(
                 Arrays.equals(
-                        expectedOutputBuffer.underlyingBytes(), outputSlice.underlyingBytes()));
+                        expectedOutputBuffer.underlyingBytes().array(),
+                        outputSlice.underlyingBytes().array()));
     }
 
     /**

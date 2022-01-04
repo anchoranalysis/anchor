@@ -66,7 +66,7 @@ class ByteRepresentationFactory {
             throws ImageIOException {
 
         if (sourceDataType.equals(destinationType)) {
-            return buffer.underlyingBytes();
+            return fromByteBuffer(buffer.underlyingBytes());
         }
 
         if (destinationType.equals(UnsignedShortVoxelType.INSTANCE)) {
@@ -109,5 +109,24 @@ class ByteRepresentationFactory {
             floatBuffer.put(in.getInt(index++));
         }
         return byteBuffer.array();
+    }
+
+    /**
+     * Extracts a byte array from a {@link ByteBuffer}, reusing the internal array if it has one,
+     * otherwise by copying.
+     */
+    private static byte[] fromByteBuffer(ByteBuffer buffer) {
+        if (buffer.hasArray()) {
+            return buffer.array();
+        } else {
+            return copyBufferIntoNewArray(buffer);
+        }
+    }
+
+    /** Copies from a {@link ByteBuffer} into a a newly allocated byte array. */
+    private static byte[] copyBufferIntoNewArray(ByteBuffer direct) {
+        ByteBuffer notDirect = ByteBuffer.allocate(direct.capacity());
+        notDirect.put(direct);
+        return notDirect.array();
     }
 }

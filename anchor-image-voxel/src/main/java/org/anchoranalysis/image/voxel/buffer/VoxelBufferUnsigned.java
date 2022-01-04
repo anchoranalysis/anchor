@@ -25,7 +25,7 @@
  */
 package org.anchoranalysis.image.voxel.buffer;
 
-import com.google.common.base.Preconditions;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedBuffer;
 
 /**
@@ -35,19 +35,11 @@ import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedBuffer;
  * @author Owen Feehan
  * @param <T> buffer-type for voxels
  */
+@AllArgsConstructor
 public abstract class VoxelBufferUnsigned<T extends UnsignedBuffer> extends VoxelBuffer<T> {
 
+    /** Buffer the buffer to use internally. */
     private final T buffer;
-
-    /**
-     * Creates to reuse a particular buffer.
-     *
-     * @param buffer the buffer to reuse.
-     */
-    protected VoxelBufferUnsigned(T buffer) {
-        Preconditions.checkArgument(buffer.hasArray());
-        this.buffer = buffer;
-    }
 
     @Override
     public T buffer() {

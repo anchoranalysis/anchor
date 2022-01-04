@@ -69,8 +69,8 @@ public class OutputSequenceIncrementing<T> implements OutputSequence {
     }
 
     /**
-     * Like {@link #add(T)} but does not immediately execute the underlying add operation, instead
-     * returning an operation that can be called later.
+     * Like {@link #add(Object)} but does not immediately execute the underlying add operation,
+     * instead returning an operation that can be called later.
      *
      * <p>This is useful for separating the sequential (and therefore not thread-safe, and must be
      * synchronized) from the actual write operation (which must not be synchronized, and is usually
