@@ -27,6 +27,7 @@
 package org.anchoranalysis.image.voxel.buffer;
 
 import java.nio.Buffer;
+import java.nio.ByteBuffer;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
@@ -144,11 +145,11 @@ public abstract class VoxelBuffer<T> {
     public abstract boolean isDirect();
 
     /**
-     * An array of bytes that underlies the buffer (and can be written into a file).
+     * THe underlying bytes that describe the voxels.
      *
-     * @return an existing or newly created byte-array.
+     * @return the associated {@link ByteBuffer} with the voxels.
      */
-    public abstract byte[] underlyingBytes();
+    public abstract ByteBuffer underlyingBytes();
 
     @Override
     public String toString() {

@@ -75,9 +75,9 @@ final class VoxelBufferUnsignedShort extends VoxelBufferUnsigned<UnsignedShortBu
     }
 
     @Override
-    public byte[] underlyingBytes() {
+    public ByteBuffer underlyingBytes() {
         ByteBuffer bufferSigned = ByteBuffer.allocate(capacity() * 2);
         bufferSigned.asShortBuffer().put(buffer().getDelegate());
-        return bufferSigned.array();
+        return bufferSigned;
     }
 }

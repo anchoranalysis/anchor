@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.image.voxel.buffer;
 
+import java.nio.ByteBuffer;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
@@ -82,7 +83,7 @@ final class VoxelBufferUnsignedByte extends VoxelBufferUnsigned<UnsignedByteBuff
     }
 
     @Override
-    public byte[] underlyingBytes() {
-        return buffer().array();
+    public ByteBuffer underlyingBytes() {
+        return buffer().getDelegate();
     }
 }
