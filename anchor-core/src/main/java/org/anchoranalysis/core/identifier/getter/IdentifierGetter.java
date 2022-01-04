@@ -32,6 +32,7 @@ package org.anchoranalysis.core.identifier.getter;
  * @author Owen Feehan
  * @param <T> the type of elements with an associated identifier
  */
+@FunctionalInterface
 public interface IdentifierGetter<T> {
 
     /**

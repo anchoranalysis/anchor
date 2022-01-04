@@ -26,33 +26,30 @@
 
 package org.anchoranalysis.overlay.object;
 
-import java.util.Optional;
 import lombok.Getter;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
-import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.core.object.properties.ObjectWithProperties;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.overlay.Overlay;
-import org.anchoranalysis.overlay.OverlayProperties;
-import org.anchoranalysis.overlay.object.scaled.FromMask;
-import org.anchoranalysis.overlay.object.scaled.ScaledOverlayCreator;
 import org.anchoranalysis.overlay.writer.DrawOverlay;
 import org.anchoranalysis.spatial.box.BoundingBox;
-import org.anchoranalysis.spatial.point.Point3i;
 
+/**
+ * An implementation of {@link Overlay} that draws an {@link ObjectMask} on an image.
+ * 
+ * @author Owen feehan
+ */
 public class OverlayObjectMask extends Overlay {
 
-    private static final ScaledOverlayCreator SCALED_MASK_CREATOR = new FromMask();
-
+	/** The {@link ObjectMask} to draw. */
     @Getter private final ObjectWithProperties object;
 
     /** ID associated with object */
     private final int id;
 
     public OverlayObjectMask(ObjectMask object, int id) {
-        super();
         this.object = new ObjectWithProperties(object);
         this.object.getProperties().put("id", id);
         this.id = id;
@@ -65,21 +62,6 @@ public class OverlayObjectMask extends Overlay {
     }
 
     @Override
-    public ObjectWithProperties createScaleObject(
-            DrawOverlay overlayWriter,
-            double zoomFactorNew,
-            ObjectWithProperties om,
-            Overlay ol,
-            Dimensions dimensionsUnscaled,
-            Dimensions dimensionsScaled,
-            BinaryValuesByte bvOut)
-            throws CreateException {
-
-        return SCALED_MASK_CREATOR.createScaledObject(
-                overlayWriter, om, zoomFactorNew, om, dimensionsScaled, bvOut);
-    }
-
-    @Override
     public ObjectWithProperties createObject(
             DrawOverlay overlayWriter, Dimensions dimEntireImage, BinaryValuesByte bvOut)
             throws CreateException {
@@ -89,11 +71,6 @@ public class OverlayObjectMask extends Overlay {
     @Override
     public int getIdentifier() {
         return id;
-    }
-
-    @Override
-    public boolean isPointInside(DrawOverlay overlayWriter, Point3i point) {
-        return object.asObjectMask().contains(point);
     }
 
     // We delegate uniqueness-check to the object-mask
@@ -110,18 +87,5 @@ public class OverlayObjectMask extends Overlay {
     @Override
     public int hashCode() {
         return object.asObjectMask().hashCode();
-    }
-
-    @Override
-    public OverlayProperties generateProperties(Optional<Resolution> resolution) {
-        OverlayProperties out = new OverlayProperties();
-        out.add("id", id);
-        object.forEachProperty(
-                (name, value) -> {
-                    if (value instanceof String) {
-                        out.add(name, (String) value);
-                    }
-                });
-        return out;
     }
 }

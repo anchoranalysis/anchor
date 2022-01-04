@@ -34,7 +34,7 @@ import org.anchoranalysis.image.core.stack.RGBStack;
 import org.anchoranalysis.spatial.box.BoundingBox;
 
 /**
- * Overlays with additional pre-calculations that make them quicker to draw onto a RGBStack
+ * Overlays with additional pre-calculations that make them quicker to draw onto a {@link RGBStack}.
  *
  * @author Owen Feehan
  */

@@ -43,7 +43,6 @@ import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.QuickOverlapCalculation;
-import org.anchoranalysis.overlay.OverlayProperties;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.orientation.Orientation;
 import org.anchoranalysis.spatial.orientation.Orientation3DEulerAngles;
@@ -374,25 +373,6 @@ public class Ellipsoid extends ConicBase implements Serializable {
     @Override
     public void setMarksExplicit(Point3d position, Orientation orientation) {
         setMarksExplicit(position, orientation, radii);
-    }
-
-    @Override
-    public OverlayProperties generateProperties(Optional<Resolution> resolution) {
-        OverlayProperties op = super.generateProperties(resolution);
-
-        op.addDoubleAsString("Radius X (pixels)", radii.x());
-        op.addDoubleAsString("Radius Y (pixels)", radii.y());
-        op.addDoubleAsString("Radius Z (pixels)", radii.z());
-
-        double[] arr = EllipsoidUtilities.normalisedRadii(this, resolution);
-        op.addDoubleAsString("Normalized Radius 0 (pixels)", arr[0]);
-        op.addDoubleAsString("Normalized Radius 1 (pixels)", arr[1]);
-        op.addDoubleAsString("Normalized Radius 2 (pixels)", arr[2]);
-
-        orientation.describeOrientation(op.getMap()::add);
-        op.addDoubleAsString("Shell Radius Ratio", shell);
-        op.addDoubleAsString("Inner Core Radius Ratio ", innerCoreDistance);
-        return op;
     }
 
     @Override

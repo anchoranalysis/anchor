@@ -26,24 +26,25 @@
 
 package org.anchoranalysis.mpp.overlay;
 
-import java.util.Optional;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
-import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.core.object.properties.ObjectWithProperties;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.overlay.Overlay;
-import org.anchoranalysis.overlay.OverlayProperties;
 import org.anchoranalysis.overlay.object.scaled.FromMask;
 import org.anchoranalysis.overlay.object.scaled.ScaledOverlayCreator;
 import org.anchoranalysis.overlay.writer.DrawOverlay;
 import org.anchoranalysis.spatial.box.BoundingBox;
-import org.anchoranalysis.spatial.point.Point3i;
 
+/**
+ * An implementation of {@link Overlay} that draws an {@link Mark} on an image.
+ * 
+ * @author Owen feehan
+ */
 @EqualsAndHashCode(callSuper = false)
 public class OverlayMark extends Overlay {
 
@@ -53,7 +54,6 @@ public class OverlayMark extends Overlay {
     @EqualsAndHashCode.Exclude private final ScaledOverlayCreator scaledMaskCreator;
 
     public OverlayMark(Mark mark, RegionMembershipWithFlags regionMembership) {
-        super();
         this.mark = mark;
         this.regionMembership = regionMembership;
 
@@ -75,21 +75,6 @@ public class OverlayMark extends Overlay {
     }
 
     @Override
-    public ObjectWithProperties createScaleObject(
-            DrawOverlay overlayWriter,
-            double zoomFactorNew,
-            ObjectWithProperties om,
-            Overlay ol,
-            Dimensions dimensionsUnscaled,
-            Dimensions dimensionsScaled,
-            BinaryValuesByte bvOut)
-            throws CreateException {
-
-        return scaledMaskCreator.createScaledObject(
-                overlayWriter, om, zoomFactorNew, mark, dimensionsUnscaled, bvOut);
-    }
-
-    @Override
     public ObjectWithProperties createObject(
             DrawOverlay overlayWriter, Dimensions dimEntireImage, BinaryValuesByte bvOut)
             throws CreateException {
@@ -99,16 +84,5 @@ public class OverlayMark extends Overlay {
     @Override
     public int getIdentifier() {
         return mark.getIdentifier();
-    }
-
-    @Override
-    public boolean isPointInside(DrawOverlay overlayWriter, Point3i point) {
-        byte membership = mark.isPointInside(point);
-        return (regionMembership.isMemberFlag(membership));
-    }
-
-    @Override
-    public OverlayProperties generateProperties(Optional<Resolution> resolution) {
-        return mark.generateProperties(resolution);
     }
 }

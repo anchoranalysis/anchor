@@ -27,12 +27,9 @@
 package org.anchoranalysis.mpp.mark;
 
 import java.io.Serializable;
-import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.core.exception.CheckedUnsupportedOperationException;
-import org.anchoranalysis.image.core.dimensions.Resolution;
-import org.anchoranalysis.overlay.OverlayProperties;
 import org.anchoranalysis.spatial.point.Point3d;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 
@@ -85,23 +82,5 @@ public abstract class MarkWithPosition extends Mark implements Serializable {
 
         MarkWithPosition trgt = (MarkWithPosition) m;
         return position.equals(trgt.position);
-    }
-
-    @Override
-    public OverlayProperties generateProperties(Optional<Resolution> resolution) {
-        OverlayProperties properties = super.generateProperties(resolution);
-
-        int dimensions = numberDimensions();
-
-        if (dimensions >= 1) {
-            properties.addDoubleAsString("Pos X", position.x());
-        }
-        if (dimensions >= 2) {
-            properties.addDoubleAsString("Pos Y", position.y());
-        }
-        if (dimensions >= 3) {
-            properties.addDoubleAsString("Pos Z", position.z());
-        }
-        return properties;
     }
 }

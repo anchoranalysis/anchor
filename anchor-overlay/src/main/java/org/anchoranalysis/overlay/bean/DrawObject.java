@@ -38,7 +38,7 @@ import org.anchoranalysis.overlay.writer.PrecalculationOverlay;
 import org.anchoranalysis.spatial.box.BoundingBox;
 
 /**
- * Draws an object-mask on a RGB-stack
+ * Draws a representation of an {@link ObjectMask} on a {@link RGBStack}.
  *
  * @author Owen Feehan
  */
@@ -47,12 +47,12 @@ public abstract class DrawObject extends AnchorBean<DrawObject> {
     /**
      * Draws a single-object on top of a RGB-stack
      *
-     * @param object the object to draw
-     * @param stack the RGB-stack to draw upon
-     * @param attributes attributes for each object when drawing
-     * @param iteration the current iteration
+     * @param object the object to draw.
+     * @param stack the image to draw on.
+     * @param attributes attributes for each object when drawing.
+     * @param iteration the current iteration.
      * @param restrictTo a restriction on which part of stack we draw onto to (considered in terms
-     *     of the possibly-zoomed pixel cooridinates)
+     *     of the possibly-zoomed pixel cooridinates).
      */
     public final void writeSingle(
             ObjectWithProperties object,

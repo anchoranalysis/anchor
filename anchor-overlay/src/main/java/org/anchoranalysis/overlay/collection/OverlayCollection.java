@@ -27,17 +27,11 @@
 package org.anchoranalysis.overlay.collection;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
-import java.util.function.IntPredicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.overlay.Overlay;
-import org.anchoranalysis.overlay.writer.DrawOverlay;
-import org.anchoranalysis.spatial.box.BoundingBox;
 
 public class OverlayCollection implements Iterable<Overlay> {
 
@@ -60,93 +54,12 @@ public class OverlayCollection implements Iterable<Overlay> {
         return delegate.get(index);
     }
 
-    public Overlay remove(int index) {
-        return delegate.remove(index);
-    }
-
     public int size() {
         return delegate.size();
     }
 
     public boolean add(Overlay e) {
         return delegate.add(e);
-    }
-
-    public boolean addAll(OverlayCollection c) {
-        return delegate.addAll(c.delegate);
-    }
-
-    public Set<Integer> integerSet() {
-        HashSet<Integer> set = new HashSet<>();
-        for (Overlay ol : delegate) {
-            set.add(ol.getIdentifier());
-        }
-        return set;
-    }
-
-    public List<BoundingBox> boxList(DrawOverlay drawOverlay, Dimensions dimensions) {
-
-        List<BoundingBox> out = new ArrayList<>();
-
-        for (Overlay ol : this) {
-            BoundingBox box = ol.box(drawOverlay, dimensions);
-            out.add(box);
-        }
-        return out;
-    }
-
-    public OverlayCollection shallowCopy() {
-
-        OverlayCollection out = new OverlayCollection();
-
-        // We copy all the marks
-        out.delegate = new ArrayList<>(this.delegate.size());
-        for (Overlay ol : this.delegate) {
-            out.delegate.add(ol);
-        }
-
-        return out;
-    }
-
-    // A hashmap of all the marks, using the Id as an index
-    public Set<Overlay> createSet() {
-
-        HashSet<Overlay> out = new HashSet<>();
-
-        for (Overlay overlay : this) {
-            out.add(overlay);
-        }
-
-        return out;
-    }
-
-    public OverlayCollection createMerged(OverlayCollection toMerge) {
-
-        OverlayCollection mergedNew = shallowCopy();
-
-        Set<Overlay> set = mergedNew.createSet();
-
-        for (Overlay m : toMerge) {
-            if (!set.contains(m)) {
-                mergedNew.add(m);
-            }
-        }
-
-        return mergedNew;
-    }
-
-    public OverlayCollection createSubset(IntPredicate predicateOnIndex) {
-
-        OverlayCollection out = new OverlayCollection();
-
-        // This our current
-        for (Overlay overlay : this) {
-            if (predicateOnIndex.test(overlay.getIdentifier())) {
-                out.add(overlay);
-            }
-        }
-
-        return out;
     }
 
     public List<Overlay> asList() {

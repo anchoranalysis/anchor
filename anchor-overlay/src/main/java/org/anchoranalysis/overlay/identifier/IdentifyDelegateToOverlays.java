@@ -48,11 +48,6 @@ public class IdentifyDelegateToOverlays implements IdentifierGetter<ObjectWithPr
      */
     private boolean moduloIteration;
 
-    public IdentifyDelegateToOverlays(
-            IdentifierGetter<Overlay> delegate, ColoredOverlayCollection overlays) {
-        this(delegate, overlays, false);
-    }
-
     @Override
     public int getIdentifier(ObjectWithProperties element, int iteration) {
 

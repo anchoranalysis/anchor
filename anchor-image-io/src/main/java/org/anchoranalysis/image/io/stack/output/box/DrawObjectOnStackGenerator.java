@@ -149,27 +149,6 @@ public class DrawObjectOnStackGenerator
         return drawObjectsGenerator.guaranteedImageAttributes();
     }
 
-    private Either<Dimensions, DisplayStack> createBackground(BoundedList<ObjectMask> element)
-            throws OutputWriteFailedException {
-
-        if (!backgroundGenerator.isPresent()) {
-            // Exit early if there's no background to be extracted
-            return Either.left(new Dimensions(element.boundingBox().extent()));
-        }
-
-        Stack channelExtracted = backgroundGenerator.get().transform(element.boundingBox());
-
-        if (flatten) {
-            channelExtracted = channelExtracted.projectMax();
-        }
-
-        try {
-            return Either.right(DisplayStack.create(channelExtracted));
-        } catch (CreateException e) {
-            throw new OutputWriteFailedException(e);
-        }
-    }
-
     /**
      * Creates an extracted-object generator that draws an outline
      *
@@ -204,5 +183,26 @@ public class DrawObjectOnStackGenerator
         Point3i relativePosition = object.boundingBox().relativePositionTo(containingBox);
         return object.mapBoundingBoxPreserveExtent(
                 boundingBox -> boundingBox.shiftTo(relativePosition));
+    }
+    
+    private Either<Dimensions, DisplayStack> createBackground(BoundedList<ObjectMask> element)
+            throws OutputWriteFailedException {
+
+        if (!backgroundGenerator.isPresent()) {
+            // Exit early if there's no background to be extracted
+            return Either.left(new Dimensions(element.boundingBox().extent()));
+        }
+
+        Stack channelExtracted = backgroundGenerator.get().transform(element.boundingBox());
+
+        if (flatten) {
+            channelExtracted = channelExtracted.projectMax();
+        }
+
+        try {
+            return Either.right(DisplayStack.create(channelExtracted));
+        } catch (CreateException e) {
+            throw new OutputWriteFailedException(e);
+        }
     }
 }

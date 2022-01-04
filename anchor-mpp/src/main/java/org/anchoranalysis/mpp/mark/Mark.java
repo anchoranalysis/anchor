@@ -28,19 +28,14 @@ package org.anchoranalysis.mpp.mark;
 
 import java.io.Serializable;
 import java.util.Optional;
-import java.util.function.DoubleUnaryOperator;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.exception.CheckedUnsupportedOperationException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
-import org.anchoranalysis.image.core.dimensions.Resolution;
-import org.anchoranalysis.image.core.dimensions.SpatialUnits.UnitSuffix;
-import org.anchoranalysis.image.core.dimensions.UnitConverter;
 import org.anchoranalysis.image.core.object.properties.ObjectWithProperties;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipWithFlags;
-import org.anchoranalysis.overlay.OverlayProperties;
 import org.anchoranalysis.overlay.identifier.Identifiable;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.Point3d;
@@ -182,39 +177,5 @@ public abstract class Mark implements Serializable, Identifiable {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public OverlayProperties generateProperties(Optional<Resolution> resolution) {
-
-        OverlayProperties properties = new OverlayProperties();
-        properties.add("Type", getName());
-        properties.add("ID", Integer.toString(getIdentifier()));
-        if (resolution.isPresent()) {
-            addPropertiesForRegions(properties, resolution.get().unitConvert());
-        }
-        return properties;
-    }
-
-    private void addPropertiesForRegions(
-            OverlayProperties properties, UnitConverter unitConverter) {
-        for (int region = 0; region < numberRegions(); region++) {
-            double regionVolume = volume(region);
-
-            String name = numberDimensions() == 3 ? "Volume" : "Area";
-
-            UnitSuffix unit =
-                    numberDimensions() == 3 ? UnitSuffix.CUBIC_MICRO : UnitSuffix.SQUARE_MICRO;
-
-            DoubleUnaryOperator conversionFunc =
-                    numberDimensions() == 3
-                            ? unitConverter::toPhysicalVolume
-                            : unitConverter::toPhysicalArea;
-
-            properties.addWithUnits(
-                    String.format("%s [geom] %d", name, region),
-                    regionVolume,
-                    conversionFunc,
-                    unit);
-        }
     }
 }
