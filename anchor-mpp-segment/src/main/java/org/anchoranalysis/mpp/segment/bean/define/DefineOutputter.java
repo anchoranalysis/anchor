@@ -50,6 +50,7 @@ import org.anchoranalysis.mpp.io.input.MarksInitializationFactory;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.mpp.io.output.EnergyStackWriter;
 import org.anchoranalysis.mpp.mark.Mark;
+import org.anchoranalysis.mpp.segment.define.OutputterDirectories;	// NOSONAR
 
 /**
  * After using applying a {@link Define} on inputs, output produced entities (images, histograms,
