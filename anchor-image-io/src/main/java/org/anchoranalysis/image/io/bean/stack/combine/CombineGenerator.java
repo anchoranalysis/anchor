@@ -27,7 +27,6 @@
 package org.anchoranalysis.image.io.bean.stack.combine;
 
 import java.util.List;
-import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.ArrangeStackException;
@@ -37,7 +36,6 @@ import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.stack.output.StackWriteAttributes;
 import org.anchoranalysis.image.io.stack.output.generator.RasterGenerator;
 import org.anchoranalysis.image.io.stack.output.generator.RasterGeneratorSelectFormat;
-import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 @AllArgsConstructor
@@ -63,11 +61,6 @@ class CombineGenerator<T> extends RasterGeneratorSelectFormat<T> {
         } catch (ArrangeStackException e) {
             throw new OutputWriteFailedException(e);
         }
-    }
-
-    @Override
-    public Optional<ManifestDescription> createManifestDescription() {
-        return Optional.of(new ManifestDescription("raster", "combinedEnergy"));
     }
 
     @Override

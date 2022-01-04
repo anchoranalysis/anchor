@@ -48,11 +48,10 @@ class VerticalValues extends FeatureTableCSVGenerator<ResultsVectorList> {
     /**
      * Creates without setting any <i>results</i> (i.e. column-data).
      *
-     * @param manifestFunction identifier of function for the manifest file.
      * @param featureNames names-of-features that will appear in results.
      */
-    public VerticalValues(String manifestFunction, FeatureNameList featureNames) {
-        super(manifestFunction, featureNames.asList());
+    public VerticalValues(FeatureNameList featureNames) {
+        super(featureNames.asList());
     }
 
     @Override

@@ -50,7 +50,6 @@ public class ObjectWithBoundingBoxGenerator extends CombinedListGenerator<Object
                 generator,
                 // We create an iterable bridge from object-mask to BoundingBox
                 GeneratorBridge.createOneToOne(
-                        new ObjectOutputStreamGenerator<>(Optional.of("BoundingBox")),
-                        ObjectMask::boundingBox));
+                        new ObjectOutputStreamGenerator<>(), ObjectMask::boundingBox));
     }
 }

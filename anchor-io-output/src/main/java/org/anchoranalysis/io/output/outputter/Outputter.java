@@ -27,13 +27,9 @@
 package org.anchoranalysis.io.output.outputter;
 
 import java.nio.file.Path;
-import java.util.Optional;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.log.error.ErrorReporter;
-import org.anchoranalysis.io.manifest.ManifestDirectoryDescription;
-import org.anchoranalysis.io.manifest.directory.Subdirectory;
-import org.anchoranalysis.io.manifest.operationrecorder.WriteOperationRecorder;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.enabled.multi.MultiLevelOutputEnabled;
 import org.anchoranalysis.io.output.path.prefixer.DirectoryWithPrefix;
@@ -56,28 +52,17 @@ public class Outputter {
      * Outputter}
      *
      * @see OutputterChecked#deriveSubdirectory
-     * @param subdirectoryName the subdirectory-name
-     * @param manifestDescription manifest-description
+     * @param subdirectoryName the subdirectory-name.
      * @param inheritOutputRulesAndRecording if true, the output rules and recording are inherited
      *     from the parent directory. if false, they are not, and all outputs are allowed and are
      *     unrecorded.
-     * @return the new output manager
+     * @return the new output manager.
      */
     public Outputter deriveSubdirectory(
-            String subdirectoryName,
-            ManifestDirectoryDescription manifestDescription,
-            boolean inheritOutputRulesAndRecording) {
+            String subdirectoryName, boolean inheritOutputRulesAndRecording) {
         return new Outputter(
-                delegate.deriveSubdirectory(
-                        subdirectoryName,
-                        manifestDescription,
-                        Optional.of(new Subdirectory()),
-                        inheritOutputRulesAndRecording),
+                delegate.deriveSubdirectory(subdirectoryName, inheritOutputRulesAndRecording),
                 errorReporter);
-    }
-
-    public void addOperationRecorder(WriteOperationRecorder toAdd) {
-        delegate.addOperationRecorder(toAdd);
     }
 
     /**

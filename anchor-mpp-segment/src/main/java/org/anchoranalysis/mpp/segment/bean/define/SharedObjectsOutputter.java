@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.mpp.segment.bean.define;
 
-import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
 import org.anchoranalysis.core.identifier.provider.store.SharedObjects;
@@ -113,7 +112,7 @@ class SharedObjectsOutputter {
     private void marks(MarksInitialization initialization) throws OutputWriteFailedException {
         output(
                 initialization.marks(),
-                new XStreamGenerator<MarkCollection>(Optional.of("marks")),
+                new XStreamGenerator<MarkCollection>(),
                 OutputterDirectories.MARKS);
     }
 

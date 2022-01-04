@@ -49,7 +49,6 @@ import org.anchoranalysis.feature.results.ResultsVector;
 import org.anchoranalysis.feature.results.ResultsVectorList;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.store.NamedFeatureStore;
-import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.InputOutputContextSubdirectoryCache;
@@ -63,9 +62,6 @@ import org.anchoranalysis.io.output.outputter.InputOutputContextSubdirectoryCach
  */
 @AllArgsConstructor
 class WriteAggregatedForGroup {
-
-    private static final ManifestDescription MANIFEST_DESCRIPTION =
-            new ManifestDescription("parametersXML", "aggregateObjects");
 
     private NamedFeatureStore<FeatureInputResults> featuresAggregate;
     private ResultsVectorList results;
@@ -159,9 +155,7 @@ class WriteAggregatedForGroup {
                     context.getOutputter()
                             .writerSelective()
                             .createFilenameForWriting(
-                                    outputName,
-                                    NonImageFileFormat.XML.extensionWithoutPeriod(),
-                                    Optional.of(MANIFEST_DESCRIPTION));
+                                    outputName, NonImageFileFormat.XML.extensionWithoutPeriod());
             if (fileOutPath.isPresent()) {
                 dictionary.writeToFile(fileOutPath.get());
             }

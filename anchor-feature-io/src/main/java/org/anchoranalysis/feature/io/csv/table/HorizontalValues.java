@@ -49,11 +49,10 @@ class HorizontalValues extends FeatureTableCSVGenerator<ResultsVectorList> {
      * <p>The CSV file is populated with the <i>results</i> of calculations corresponding to these
      * features.
      *
-     * @param manifestFunction identifier of function for the manifest file.
      * @param featureNames names-of-features that will appear in results.
      */
-    public HorizontalValues(String manifestFunction, FeatureNameList featureNames) {
-        super(manifestFunction, featureNames.asList());
+    public HorizontalValues(FeatureNameList featureNames) {
+        super(featureNames.asList());
     }
 
     @Override

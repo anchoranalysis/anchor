@@ -27,13 +27,10 @@
 package org.anchoranalysis.io.generator.collection;
 
 import java.util.Collection;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.sequence.OutputSequenceFactory;
 import org.anchoranalysis.io.generator.sequence.pattern.OutputPatternIntegerSuffix;
-import org.anchoranalysis.io.manifest.ManifestDescription;
-import org.anchoranalysis.io.manifest.file.FileType;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.output.namestyle.OutputNameStyle;
@@ -59,7 +56,7 @@ public class CollectionGenerator<T> implements Generator<Collection<T>> {
     // END REQUIRED ARGUMENTS
 
     @Override
-    public FileType[] write(
+    public void write(
             Collection<T> element, OutputNameStyle outputNameStyle, ElementOutputter outputter)
             throws OutputWriteFailedException {
         String subdirectoryName =
@@ -69,35 +66,27 @@ public class CollectionGenerator<T> implements Generator<Collection<T>> {
                                 () ->
                                         new OutputWriteFailedException(
                                                 "No name is assigned in the output, so cannot create subdirectory"));
-        return writeElementAsSubdirectory(element, outputter.getOutputter(), subdirectoryName);
+        writeElementAsSubdirectory(element, outputter.getOutputter(), subdirectoryName);
     }
 
     @Override
-    public FileType[] writeWithIndex(
+    public void writeWithIndex(
             Collection<T> element,
             String index,
             IndexableOutputNameStyle outputNameStyle,
             ElementOutputter outputter)
             throws OutputWriteFailedException {
-        return write(element, outputNameStyle, outputter);
+        write(element, outputNameStyle, outputter);
     }
 
-    private FileType[] writeElementAsSubdirectory(
+    private void writeElementAsSubdirectory(
             Collection<T> element, OutputterChecked outputter, String outputNameDirectory)
             throws OutputWriteFailedException {
 
         OutputSequenceFactory<T> factory = new OutputSequenceFactory<>(generator, outputter);
 
         OutputPatternIntegerSuffix pattern =
-                new OutputPatternIntegerSuffix(
-                        outputNameDirectory, prefix, 3, false, Optional.empty());
+                new OutputPatternIntegerSuffix(outputNameDirectory, prefix, 3, false);
         factory.incrementingByOneStream(pattern, element.stream());
-
-        // Do not report any file-types for the collection written, breaking the usual expectation.
-        return new FileType[] {};
-    }
-
-    public static ManifestDescription createManifestDescription(String type) {
-        return new ManifestDescription("subfolder", type);
     }
 }

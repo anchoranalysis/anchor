@@ -25,7 +25,6 @@
  */
 package org.anchoranalysis.image.io.stack.output;
 
-import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.identifier.provider.NamedProvider;
@@ -50,26 +49,15 @@ public class OutputSequenceStackFactory {
 
     /** A factory with no restrictions on what kind of stacks can be outputted. */
     public static final OutputSequenceStackFactory NO_RESTRICTIONS =
-            new OutputSequenceStackFactory(new StackGenerator(false, Optional.empty(), false));
+            new OutputSequenceStackFactory(new StackGenerator(false, false));
 
     /**
      * The stacks that are outputted are guaranteed to be two-dimensional.
      *
-     * @param manifestFunction the manifest-function to use when outputting.
-     * @return a newly created factory
+     * @return a newly created factory.
      */
-    public static OutputSequenceStackFactory always2D(String manifestFunction) {
-        return new OutputSequenceStackFactory(new StackGenerator(manifestFunction, true));
-    }
-
-    /**
-     * The stacks that are outputted are guaranteed to be two-dimensional.
-     *
-     * @param manifestFunction the manifest-function to use when outputting.
-     * @return a newly created factory
-     */
-    public static OutputSequenceStackFactory withManifestFunction(String manifestFunction) {
-        return new OutputSequenceStackFactory(new StackGenerator(manifestFunction, false));
+    public static OutputSequenceStackFactory always2D() {
+        return new OutputSequenceStackFactory(new StackGenerator(true));
     }
 
     /** The generator to be repeatedly called for writing each element in the sequence. */

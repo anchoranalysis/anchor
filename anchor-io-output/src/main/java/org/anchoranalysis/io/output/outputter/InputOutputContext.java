@@ -34,7 +34,6 @@ import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.core.log.error.ErrorReporter;
 import org.anchoranalysis.core.time.ExecutionTimeRecorder;
 import org.anchoranalysis.core.time.OperationContext;
-import org.anchoranalysis.io.manifest.ManifestDirectoryDescription;
 
 /**
  * A context for performing input generally and outputting to a particular output-directory.
@@ -115,16 +114,11 @@ public interface InputOutputContext {
      * @return newly created context
      */
     default InputOutputContext subdirectory(
-            String subdirectoryName,
-            ManifestDirectoryDescription manifestDirectoryDescription,
-            boolean inheritOutputRulesAndRecording) {
+            String subdirectoryName, boolean inheritOutputRulesAndRecording) {
         return new ChangeOutputter(
                 this,
                 getOutputter()
-                        .deriveSubdirectory(
-                                subdirectoryName,
-                                manifestDirectoryDescription,
-                                inheritOutputRulesAndRecording));
+                        .deriveSubdirectory(subdirectoryName, inheritOutputRulesAndRecording));
     }
 
     /**
@@ -139,16 +133,9 @@ public interface InputOutputContext {
      * @return either a newly created context, or the existing context
      */
     default InputOutputContext maybeSubdirectory(
-            Optional<String> subdirectoryName,
-            ManifestDirectoryDescription manifestDirectoryDescription,
-            boolean inheritOutputRulesAndRecording) {
+            Optional<String> subdirectoryName, boolean inheritOutputRulesAndRecording) {
         return subdirectoryName
-                .map(
-                        name ->
-                                subdirectory(
-                                        name,
-                                        manifestDirectoryDescription,
-                                        inheritOutputRulesAndRecording))
+                .map(name -> subdirectory(name, inheritOutputRulesAndRecording))
                 .orElse(this);
     }
 

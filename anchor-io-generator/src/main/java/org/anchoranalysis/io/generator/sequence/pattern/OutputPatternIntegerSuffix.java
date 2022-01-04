@@ -26,7 +26,6 @@
 package org.anchoranalysis.io.generator.sequence.pattern;
 
 import java.util.Optional;
-import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.namestyle.IntegerSuffixOutputNameStyle;
 
 /**
@@ -52,7 +51,7 @@ public class OutputPatternIntegerSuffix extends OutputPattern {
      *     will occur permissively.
      */
     public OutputPatternIntegerSuffix(String outputName, boolean selective) {
-        this(outputName, DEFAULT_NUMBER_DIGITS, selective, Optional.empty());
+        this(outputName, DEFAULT_NUMBER_DIGITS, selective);
     }
 
     /**
@@ -68,32 +67,26 @@ public class OutputPatternIntegerSuffix extends OutputPattern {
      *     underscore separating the prefix from the numeric index
      */
     public OutputPatternIntegerSuffix(String outputName, String prefix) {
-        this(outputName, false, prefix, DEFAULT_NUMBER_DIGITS, true, Optional.empty());
+        this(outputName, false, prefix, DEFAULT_NUMBER_DIGITS, true);
     }
 
     /**
-     * Like {@link #OutputPatternIntegerSuffix(String, boolean)} but with additional options on the
-     * manifest-folder description and whether to check outputs against rules.
+     * Like {@link #OutputPatternIntegerSuffix(String, boolean)} but also whether to check outputs
+     * against rules.
      *
      * @param outputName name of subdirectory to place sequence in (which is also used as the
      *     outputName and prefix)
      * @param numberDigits the number of digits in the numeric part of the output-name.
      * @param selective whether to check output-names against the rules or not. If not, all outputs
      *     will occur permissively.
-     * @param folderManifestDescription a description of the folder in the manifest
      */
-    public OutputPatternIntegerSuffix(
-            String outputName,
-            int numberDigits,
-            boolean selective,
-            Optional<ManifestDescription> folderManifestDescription) {
-        this(outputName, false, outputName, numberDigits, selective, folderManifestDescription);
+    public OutputPatternIntegerSuffix(String outputName, int numberDigits, boolean selective) {
+        this(outputName, false, outputName, numberDigits, selective);
     }
 
     /**
      * Like {@link #OutputPatternIntegerSuffix(String, String)} but with additional options about
-     * the number of digits, the manifest-folder description and whether to check outputs against
-     * rules.
+     * the number of digits, and whether to check outputs against rules.
      *
      * @param outputName name of subdirectory to place sequence in (which is also used as the
      *     outputName and prefix)
@@ -102,19 +95,13 @@ public class OutputPatternIntegerSuffix extends OutputPattern {
      * @param numberDigits the number of digits in the numeric part of the output-name.
      * @param selective whether to check output-names against the rules or not. If not, all outputs
      *     will occur permissively.
-     * @param folderManifestDescription a description of the folder in the manifest
      */
     public OutputPatternIntegerSuffix(
-            String outputName,
-            String prefix,
-            int numberDigits,
-            boolean selective,
-            Optional<ManifestDescription> folderManifestDescription) {
+            String outputName, String prefix, int numberDigits, boolean selective) {
         super(
                 Optional.of(outputName),
                 new IntegerSuffixOutputNameStyle(outputName, prefix, numberDigits),
-                selective,
-                folderManifestDescription);
+                selective);
     }
 
     /**
@@ -130,19 +117,16 @@ public class OutputPatternIntegerSuffix extends OutputPattern {
      * @param numberDigits the number of digits in the numeric part of the output-name.
      * @param selective whether to check output-names against the rules or not. If not, all outputs
      *     will occur permissively.
-     * @param folderManifestDescription a description of the folder in the manifest
      */
     public OutputPatternIntegerSuffix(
             String outputName,
             boolean suppressSubdirectory,
             String prefix,
             int numberDigits,
-            boolean selective,
-            Optional<ManifestDescription> folderManifestDescription) {
+            boolean selective) {
         super(
                 OutputPatternUtilities.maybeSubdirectory(outputName, suppressSubdirectory),
                 new IntegerSuffixOutputNameStyle(outputName, prefix, numberDigits),
-                selective,
-                folderManifestDescription);
+                selective);
     }
 }

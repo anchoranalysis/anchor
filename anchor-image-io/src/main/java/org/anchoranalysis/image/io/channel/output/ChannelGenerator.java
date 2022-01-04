@@ -26,14 +26,12 @@
 
 package org.anchoranalysis.image.io.channel.output;
 
-import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.stack.output.StackWriteAttributes;
 import org.anchoranalysis.image.io.stack.output.StackWriteAttributesFactory;
 import org.anchoranalysis.image.io.stack.output.generator.RasterGeneratorSelectFormat;
-import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /**
@@ -44,17 +42,9 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 @AllArgsConstructor
 public class ChannelGenerator extends RasterGeneratorSelectFormat<Channel> {
 
-    /** Function that is associated in the manifest with this output. */
-    private final String manifestFunction;
-
     @Override
     public Stack transform(Channel element) throws OutputWriteFailedException {
         return new Stack(element);
-    }
-
-    @Override
-    public Optional<ManifestDescription> createManifestDescription() {
-        return Optional.of(new ManifestDescription("raster", manifestFunction));
     }
 
     @Override

@@ -51,7 +51,6 @@
         <module>anchor-math</module>
         <module>anchor-overlay</module>
         <module>anchor-io-input</module>
-	<module>anchor-io-manifest</module>
 	<module>anchor-io-output</module>
 	<module>anchor-io-generator</module>
         <module>anchor-feature</module>

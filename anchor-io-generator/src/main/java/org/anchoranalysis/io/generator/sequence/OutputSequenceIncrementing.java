@@ -27,7 +27,6 @@
 package org.anchoranalysis.io.generator.sequence;
 
 import java.util.Optional;
-import org.anchoranalysis.io.manifest.sequencetype.IncrementingIntegers;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.recorded.RecordingWriters;
 
@@ -44,10 +43,9 @@ public class OutputSequenceIncrementing<T> implements OutputSequence {
 
     private int iteration = 0;
 
-    // User-specified ManifestDescription for the folder
-    public OutputSequenceIncrementing(BoundOutputter<T> parameters, int startIndex)
+    public OutputSequenceIncrementing(BoundOutputter<T> parameters)
             throws OutputWriteFailedException {
-        delegate = new OutputSequenceIndexed<>(parameters, new IncrementingIntegers(startIndex));
+        delegate = new OutputSequenceIndexed<>(parameters);
     }
 
     /**

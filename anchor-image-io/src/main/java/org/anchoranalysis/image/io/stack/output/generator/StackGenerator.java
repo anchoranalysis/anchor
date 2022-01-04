@@ -26,13 +26,11 @@
 
 package org.anchoranalysis.image.io.stack.output.generator;
 
-import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.stack.output.StackWriteAttributes;
 import org.anchoranalysis.image.io.stack.output.StackWriteAttributesFactory;
-import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /**
@@ -49,19 +47,12 @@ public class StackGenerator extends RasterGeneratorSelectFormat<Stack> {
      */
     private boolean padIfNecessary;
 
-    /** Function stored in manifest for this generator. */
-    private Optional<String> manifestFunction;
-
     /** Properties of the stack that is being written used to guide the outputting. */
     private StackWriteAttributes writeOptions;
 
-    /**
-     * Creates a generator that performs no padding.
-     *
-     * @param manifestFunction manifestFunction function stored in manifest for this generator
-     */
-    public StackGenerator(String manifestFunction, boolean always2D) {
-        this(false, Optional.of(manifestFunction), always2D);
+    /** Creates a generator that performs no padding. */
+    public StackGenerator(boolean always2D) {
+        this(false, always2D);
     }
 
     /**
@@ -70,11 +61,9 @@ public class StackGenerator extends RasterGeneratorSelectFormat<Stack> {
      *
      * @param padIfNecessary iff true, in the specific case of a 2-channel stack, an additional
      *     blank channel is added to make it 3-channels.
-     * @param manifestFunction function stored in manifest for this generator.
      */
-    public StackGenerator(
-            boolean padIfNecessary, Optional<String> manifestFunction, boolean always2D) {
-        this(padIfNecessary, manifestFunction, StackWriteAttributesFactory.maybeAlways2D(always2D));
+    public StackGenerator(boolean padIfNecessary, boolean always2D) {
+        this(padIfNecessary, StackWriteAttributesFactory.maybeAlways2D(always2D));
     }
 
     @Override
@@ -90,11 +79,6 @@ public class StackGenerator extends RasterGeneratorSelectFormat<Stack> {
         }
 
         return out;
-    }
-
-    @Override
-    public Optional<ManifestDescription> createManifestDescription() {
-        return manifestFunction.map(function -> new ManifestDescription("raster", function));
     }
 
     @Override

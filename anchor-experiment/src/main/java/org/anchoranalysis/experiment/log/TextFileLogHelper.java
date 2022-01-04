@@ -31,7 +31,6 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.io.generator.text.TextFileOutput;
 import org.anchoranalysis.io.generator.text.TextFileOutputter;
-import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -39,10 +38,6 @@ class TextFileLogHelper {
 
     public static Optional<TextFileOutput> createOutput(
             OutputterChecked outputter, String outputName) {
-        return TextFileOutputter.create(
-                "txt",
-                Optional.of(new ManifestDescription("textLog", "messageLog")),
-                outputter,
-                outputName);
+        return TextFileOutputter.create("txt", outputter, outputName);
     }
 }

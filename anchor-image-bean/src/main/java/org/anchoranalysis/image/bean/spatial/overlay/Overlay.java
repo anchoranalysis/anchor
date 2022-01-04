@@ -60,16 +60,24 @@ import org.anchoranalysis.spatial.point.Point3i;
 @AllArgsConstructor
 public class Overlay extends StackArranger {
 
+    // START: strings used for position choices
+    private static final String LEFT = "left";
+    private static final String RIGHT = "right";
+    private static final String TOP = "top";
+    private static final String CENTER = "center";
+    private static final String BOTTOM = "bottom";
+    // END: strings used for position choices
+
     /**
      * The choice which will cause a single-sliced overlay to be duplicated across the z-dimension
      * to match the z-size onto which it is projected.
      */
     private static final String REPEAT = "repeat";
 
-    private static final PositionChoices CHOICES_X = new PositionChoices("left", "center", "right");
-    private static final PositionChoices CHOICES_Y = new PositionChoices("top", "center", "bottom");
+    private static final PositionChoices CHOICES_X = new PositionChoices(LEFT, CENTER, RIGHT);
+    private static final PositionChoices CHOICES_Y = new PositionChoices(TOP, CENTER, BOTTOM);
     private static final PositionChoices CHOICES_Z =
-            new PositionChoices("bottom", "center", "top", Optional.of(REPEAT));
+            new PositionChoices(BOTTOM, CENTER, TOP, Optional.of(REPEAT));
 
     private static final Single SINGLE = new Single();
 
@@ -78,13 +86,13 @@ public class Overlay extends StackArranger {
      * Indicates how to align the image across the <b>X-axis</b> (i.e. horizontally): one of {@code
      * left, right, center}.
      */
-    @BeanField @Getter @Setter private String alignX = "left";
+    @BeanField @Getter @Setter private String alignX = LEFT;
 
     /**
      * Indicates how to align the image across the <b>Y-axis</b> (i.e. vertically): one of {@code
      * top, bottom, center}.
      */
-    @BeanField @Getter @Setter private String alignY = "top";
+    @BeanField @Getter @Setter private String alignY = TOP;
 
     /**
      * Indicates how to align the image across the <b>Z-axis</b>: one of {@code top, bottom, center,
@@ -93,7 +101,7 @@ public class Overlay extends StackArranger {
      * <p>{@code repeat} is a special-case where a single z-slice overlay will be duplicated across
      * the z-dimension of the stack onto which it is overlayed.
      */
-    @BeanField @Getter @Setter private String alignZ = "bottom";
+    @BeanField @Getter @Setter private String alignZ = BOTTOM;
     // END BEAN PROPERTIES
 
     @Override

@@ -29,7 +29,6 @@ package org.anchoranalysis.annotation.io.assignment.generator;
 import io.vavr.Tuple2;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.function.IntFunction;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.annotation.io.assignment.Assignment;
@@ -43,7 +42,6 @@ import org.anchoranalysis.image.io.stack.output.StackWriteAttributesFactory;
 import org.anchoranalysis.image.io.stack.output.generator.RasterGeneratorSelectFormat;
 import org.anchoranalysis.image.io.stack.output.generator.StackGenerator;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /**
@@ -74,8 +72,7 @@ public class AssignmentGenerator extends RasterGeneratorSelectFormat<Assignment<
     // END REQUIRED ARGUMENTS
 
     /** A delegated generator. */
-    private StackGenerator generator =
-            new StackGenerator(true, Optional.of("assignmentComparison"), false);
+    private StackGenerator generator = new StackGenerator(true, false);
 
     @Override
     public Stack transform(Assignment<ObjectMask> element) throws OutputWriteFailedException {
@@ -94,11 +91,6 @@ public class AssignmentGenerator extends RasterGeneratorSelectFormat<Assignment<
         } catch (ProvisionFailedException e) {
             throw new OutputWriteFailedException(e);
         }
-    }
-
-    @Override
-    public Optional<ManifestDescription> createManifestDescription() {
-        return Optional.of(new ManifestDescription("raster", "assignment"));
     }
 
     @Override

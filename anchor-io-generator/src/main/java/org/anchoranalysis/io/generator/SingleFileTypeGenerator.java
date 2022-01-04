@@ -29,8 +29,6 @@ import java.nio.file.Path;
 import java.util.Optional;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.io.manifest.ManifestDescription;
-import org.anchoranalysis.io.manifest.file.FileType;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
@@ -46,10 +44,6 @@ import org.anchoranalysis.io.output.writer.ElementOutputter;
  */
 public abstract class SingleFileTypeGenerator<T, S> implements TransformingGenerator<T, S> {
 
-    /** The manifest-description to use if none other is defined. */
-    private static final ManifestDescription UNDEFINED_MANIFEST_DESCRIPTION =
-            new ManifestDescription("undefined", "undefined");
-
     public abstract void writeToFile(T element, OutputWriteSettings settings, Path filePath)
             throws OutputWriteFailedException;
 
@@ -64,44 +58,34 @@ public abstract class SingleFileTypeGenerator<T, S> implements TransformingGener
     public abstract String selectFileExtension(
             OutputWriteSettings settings, Optional<Logger> logger) throws OperationFailedException;
 
-    public abstract Optional<ManifestDescription> createManifestDescription();
-
-    /**
-     * Lazy creation of the array of file-types created. This is cached here so it can be reused.
-     */
-    private FileType[] fileTypes;
-
     @Override
-    public FileType[] write(T element, OutputNameStyle outputNameStyle, ElementOutputter outputter)
+    public void write(T element, OutputNameStyle outputNameStyle, ElementOutputter outputter)
             throws OutputWriteFailedException {
-        return writeInternal(
+        writeInternal(
                 element,
                 outputNameStyle.filenameWithoutExtension(),
                 outputNameStyle.getOutputName(),
-                "",
                 outputter);
     }
 
     @Override
-    public FileType[] writeWithIndex(
+    public void writeWithIndex(
             T element,
             String index,
             IndexableOutputNameStyle outputNameStyle,
             ElementOutputter outputter)
             throws OutputWriteFailedException {
-        return writeInternal(
+        writeInternal(
                 element,
                 Optional.of(outputNameStyle.filenameWithoutExtension(index)),
                 outputNameStyle.getOutputName(),
-                index,
                 outputter);
     }
 
-    private FileType[] writeInternal(
+    private void writeInternal(
             T element,
             Optional<String> filenameWithoutExtension,
             String outputName,
-            String index,
             ElementOutputter outputter)
             throws OutputWriteFailedException {
 
@@ -116,53 +100,8 @@ public abstract class SingleFileTypeGenerator<T, S> implements TransformingGener
             // First write to the file system, and then write to the operation-recorder.
             writeToFile(element, settings, pathToWriteTo);
 
-            return writeToManifest(outputName, index, outputter, pathToWriteTo);
-
         } catch (OperationFailedException e) {
             throw new OutputWriteFailedException(e);
         }
-    }
-
-    /**
-     * Writes to the manifest, and creates an array of the file-types written.
-     *
-     * @throws OperationFailedException
-     */
-    private FileType[] writeToManifest(
-            String outputName, String index, ElementOutputter outputter, Path pathToWriteTo)
-            throws OperationFailedException {
-
-        Optional<ManifestDescription> manifestDescription = createManifestDescription();
-
-        manifestDescription.ifPresent(
-                description ->
-                        outputter.writeFileToOperationRecorder(
-                                outputName, pathToWriteTo, description, index));
-
-        if (fileTypes == null) {
-            fileTypes =
-                    buildFileTypeArray(
-                            manifestDescription, outputter.getSettings(), outputter.logger());
-        }
-        return fileTypes;
-    }
-
-    /**
-     * The types of files the generator writes to the filesystem.
-     *
-     * @param settings settings for outputting.
-     * @return an array of all file-types written, if any exist
-     * @throws OperationFailedException if anything goes wrong
-     */
-    private FileType[] buildFileTypeArray(
-            Optional<ManifestDescription> manifestDescription,
-            OutputWriteSettings settings,
-            Optional<Logger> logger)
-            throws OperationFailedException {
-        ManifestDescription selectedDescription =
-                manifestDescription.orElse(UNDEFINED_MANIFEST_DESCRIPTION);
-        return new FileType[] {
-            new FileType(selectedDescription, selectFileExtension(settings, logger))
-        };
     }
 }

@@ -28,7 +28,6 @@ package org.anchoranalysis.test.io.output;
 import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.io.manifest.Manifest;
 import org.anchoranalysis.io.output.bean.OutputManager;
 import org.anchoranalysis.io.output.bean.rules.Permissive;
 import org.anchoranalysis.io.output.outputter.BindFailedException;
@@ -40,21 +39,15 @@ import org.anchoranalysis.io.output.path.prefixer.PathPrefixerException;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class OutputterCheckedFixture {
 
-    public static OutputterChecked create(Manifest manifest) throws BindFailedException {
-        return createFrom(OutputManagerFixture.createOutputManager(Optional.empty()), manifest);
+    public static OutputterChecked create() throws BindFailedException {
+        return createFrom(OutputManagerFixture.createOutputManager(Optional.empty()));
     }
 
     public static OutputterChecked createFrom(OutputManager outputManager)
             throws BindFailedException {
-        return createFrom(outputManager, new Manifest());
-    }
-
-    public static OutputterChecked createFrom(OutputManager outputManager, Manifest manifest)
-            throws BindFailedException {
         try {
             return outputManager.createExperimentOutputter(
                     Optional.of("debug"),
-                    manifest,
                     new Permissive().create(Optional.empty()),
                     Optional.empty(),
                     new OutputWriteContext(outputManager.getOutputWriteSettings()),

@@ -26,10 +26,7 @@
 
 package org.anchoranalysis.mpp.io.marks.generator;
 
-import java.util.Optional;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.identifier.getter.IdentifierGetter;
 import org.anchoranalysis.image.core.stack.DisplayStack;
@@ -39,7 +36,6 @@ import org.anchoranalysis.image.io.stack.ConvertDisplayStackToRGB;
 import org.anchoranalysis.image.io.stack.output.StackWriteAttributes;
 import org.anchoranalysis.image.io.stack.output.StackWriteAttributesFactory;
 import org.anchoranalysis.image.io.stack.output.generator.RasterGeneratorSelectFormat;
-import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.mpp.io.marks.ColoredMarksWithDisplayStack;
@@ -58,8 +54,6 @@ public abstract class MarksGeneratorBase
     private final RegionMembershipWithFlags regionMembership;
     // START REQUIRED FIELDS
 
-    @Getter @Setter private String manifestDescriptionFunction = "marks";
-
     @Override
     public Stack transform(ColoredMarksWithDisplayStack element) throws OutputWriteFailedException {
         try {
@@ -76,11 +70,6 @@ public abstract class MarksGeneratorBase
         } catch (OperationFailedException e) {
             throw new OutputWriteFailedException(e);
         }
-    }
-
-    @Override
-    public Optional<ManifestDescription> createManifestDescription() {
-        return Optional.of(new ManifestDescription("raster", manifestDescriptionFunction));
     }
 
     @Override

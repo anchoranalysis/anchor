@@ -100,12 +100,14 @@ public class SegmentedObjects {
                                 list,
                                 MultiScaleObject::getInputScale,
                                 background.atInputScale(),
-                                executionTimeRecorder),
+                                executionTimeRecorder,
+                                " (input-scale)"),
                         new SegmentedObjectsAtScale(
                                 list,
                                 MultiScaleObject::getModelScale,
                                 background.atModelScale(),
-                                executionTimeRecorder));
+                                executionTimeRecorder,
+                                " (model-scale)"));
     }
 
     /**

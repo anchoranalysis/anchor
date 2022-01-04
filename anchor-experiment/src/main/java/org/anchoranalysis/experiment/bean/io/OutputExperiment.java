@@ -49,9 +49,7 @@ import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.experiment.task.TaskStatistics;
 import org.anchoranalysis.experiment.time.DescribeExecutionTimeStatistics;
 import org.anchoranalysis.experiment.time.ExecutionTimeRecorderFactory;
-import org.anchoranalysis.io.generator.combined.ManifestGenerator;
 import org.anchoranalysis.io.generator.text.StringGenerator;
-import org.anchoranalysis.io.manifest.Manifest;
 import org.anchoranalysis.io.output.bean.OutputManager;
 import org.anchoranalysis.io.output.enabled.multi.MultiLevelOutputEnabled;
 import org.anchoranalysis.io.output.outputter.BindFailedException;
@@ -68,8 +66,6 @@ import org.apache.commons.lang.time.StopWatch;
  * @author Owen Feehan
  */
 public abstract class OutputExperiment extends Experiment {
-
-    public static final String OUTPUT_MANIFEST = "manifestExperiment";
 
     public static final String OUTPUT_EXECUTION_TIME = "executionTime";
 
@@ -166,8 +162,6 @@ public abstract class OutputExperiment extends Experiment {
     private ParametersExperiment createParameters(ExecutionArguments arguments)
             throws CreateException {
 
-        Manifest experimentalManifest = new Manifest();
-
         String experimentId = experimentIdentifierOrOmit(arguments);
         Optional<String> experimentIdentifierForOutputPath =
                 OptionalFactory.create(
@@ -197,7 +191,6 @@ public abstract class OutputExperiment extends Experiment {
                     getOutput()
                             .createExperimentOutputter(
                                     experimentIdentifierForOutputPath,
-                                    experimentalManifest,
                                     enabledOutputs,
                                     outputs.getRecordedOutputs(),
                                     writeContext,
@@ -214,7 +207,6 @@ public abstract class OutputExperiment extends Experiment {
             return new ParametersExperiment(
                     arguments,
                     experimentId,
-                    Optional.of(experimentalManifest),
                     rootOutputter,
                     getOutput().getPrefixer(),
                     feedbackContext);
@@ -254,18 +246,6 @@ public abstract class OutputExperiment extends Experiment {
             ParametersExperiment parameters,
             StopWatch stopWatchExperiment,
             Optional<TaskStatistics> taskStatistics) {
-
-        parameters
-                .getExperimentalManifest()
-                .ifPresent(
-                        manifest ->
-                                parameters
-                                        .getOutputter()
-                                        .writerSelective()
-                                        .write(
-                                                OUTPUT_MANIFEST,
-                                                ManifestGenerator::new,
-                                                () -> manifest));
 
         stopWatchExperiment.stop();
 

@@ -51,6 +51,6 @@ public class ObjectsMergedAsMaskGenerator extends ObjectsAsGrayscaleGenerator {
         Mask mask =
                 MaskFromObjects.createFromObjects(
                         element, dimensions(), BinaryValuesInt.getDefault());
-        return new ChannelGenerator("maskCollection").transform(mask.channel());
+        return new ChannelGenerator().transform(mask.channel());
     }
 }

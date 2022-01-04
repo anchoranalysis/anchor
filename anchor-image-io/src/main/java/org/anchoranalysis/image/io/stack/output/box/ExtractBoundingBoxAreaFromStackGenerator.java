@@ -26,14 +26,12 @@
 
 package org.anchoranalysis.image.io.stack.output.box;
 
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.stack.output.StackWriteAttributes;
 import org.anchoranalysis.image.io.stack.output.StackWriteAttributesFactory;
 import org.anchoranalysis.image.io.stack.output.generator.RasterGeneratorSelectFormat;
-import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.spatial.box.BoundingBox;
 
@@ -46,8 +44,6 @@ import org.anchoranalysis.spatial.box.BoundingBox;
 public class ExtractBoundingBoxAreaFromStackGenerator
         extends RasterGeneratorSelectFormat<BoundingBox> {
 
-    private static final String MANIFEST_FUNCTION = "boundingBoxExtract";
-
     // START REQUIRED ARGUMENTS
     private final ScaleableBackground background;
     // END REQUIRED ARGUMENTS
@@ -59,11 +55,6 @@ public class ExtractBoundingBoxAreaFromStackGenerator
         } catch (CreateException e) {
             throw new OutputWriteFailedException(e);
         }
-    }
-
-    @Override
-    public Optional<ManifestDescription> createManifestDescription() {
-        return Optional.of(new ManifestDescription("raster", MANIFEST_FUNCTION));
     }
 
     @Override

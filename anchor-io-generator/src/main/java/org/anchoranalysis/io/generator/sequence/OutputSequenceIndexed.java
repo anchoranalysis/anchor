@@ -27,22 +27,16 @@
 package org.anchoranalysis.io.generator.sequence;
 
 import java.util.Optional;
-import java.util.function.BiFunction;
-import lombok.Getter;
 import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.io.generator.Generator;
-import org.anchoranalysis.io.manifest.file.FileType;
-import org.anchoranalysis.io.manifest.sequencetype.SequenceType;
-import org.anchoranalysis.io.manifest.sequencetype.SequenceTypeException;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.recorded.RecordingWriters;
 
 /**
  * A sequence of outputs that use the same generator with non-incrementing indexes for each output.
  *
- * <p>An {@code index} is associated with each output that must be unique, and must follow only the
- * order expected by {@code sequenceType}.
+ * <p>An {@code index} is associated with each output that must be unique.
  *
  * @author Owen Feehan
  * @param <T> element-type in generator
@@ -52,38 +46,14 @@ public class OutputSequenceIndexed<T, S> implements OutputSequence {
 
     private final Generator<T> generator;
     private final SequenceWriters sequenceWriter;
-    private final BiFunction<S, String, S> combineIndexWithExtension;
-
-    @Getter private SequenceType<S> sequenceType;
 
     /**
-     * Creates a non-incremental sequence of outputs, passing the index to the {@code sequenceType}
-     * without combination with the file extension.
+     * Creates a non-incremental sequence of outputs.
      *
      * @param outputter parameters for the output-sequence.
-     * @param sequenceType sequenceType the indexes are expected to follow.
      * @throws OutputWriteFailedException
      */
-    OutputSequenceIndexed(BoundOutputter<T> outputter, SequenceType<S> sequenceType)
-            throws OutputWriteFailedException {
-        this(outputter, sequenceType, (index, extension) -> index);
-    }
-
-    /**
-     * Creates a non-incremental sequence of outputs, combining the index with the {@code
-     * sequenceType} through a parameterized function.
-     *
-     * @param outputter parameters for the output-sequence
-     * @param sequenceType sequenceType the indexes are expected to follow
-     * @param combineIndexWithExtension combines both an index of type {@code S} with the
-     *     file-extension to produce the index passed to the {@link SequenceType}.
-     * @throws OutputWriteFailedException
-     */
-    OutputSequenceIndexed(
-            BoundOutputter<T> outputter,
-            SequenceType<S> sequenceType,
-            BiFunction<S, String, S> combineIndexWithExtension)
-            throws OutputWriteFailedException {
+    OutputSequenceIndexed(BoundOutputter<T> outputter) throws OutputWriteFailedException {
 
         if (!outputter.getOutputter().getSettings().hasBeenInitialized()) {
             throw new AnchorFriendlyRuntimeException("outputter has not yet been initialized");
@@ -93,11 +63,9 @@ public class OutputSequenceIndexed<T, S> implements OutputSequence {
                 new SequenceWriters(
                         outputter.getOutputter().getWriters(), outputter.getOutputPattern());
         this.generator = outputter.getGenerator();
-        this.sequenceType = sequenceType;
-        this.combineIndexWithExtension = combineIndexWithExtension;
 
         try {
-            this.sequenceWriter.initialize(this.sequenceType);
+            this.sequenceWriter.initialize();
         } catch (InitializeException e) {
             throw new OutputWriteFailedException(e);
         }
@@ -111,7 +79,7 @@ public class OutputSequenceIndexed<T, S> implements OutputSequence {
     /**
      * Outputs an additional element in the sequence.
      *
-     * <p>This method is <i>thread-safe</i>.
+     * <p>This is a thread-safe method.
      *
      * @param element the element
      * @param index index of the element to output
@@ -124,7 +92,7 @@ public class OutputSequenceIndexed<T, S> implements OutputSequence {
     /**
      * Outputs an additional element in the sequence.
      *
-     * <p>This method is <i>thread-safe</i>.
+     * <p>This is a thread-safe method.
      *
      * @param element the element
      * @param index index of the element to output, if it exists. if it doesn't exist, the element
@@ -133,36 +101,50 @@ public class OutputSequenceIndexed<T, S> implements OutputSequence {
      */
     public void add(T element, Optional<S> index) throws OutputWriteFailedException {
 
-        try {
-            // Then output isn't allowed and we should just exit
-            if (!sequenceWriter.isOn()) {
-                return;
-            }
+        // Then output isn't allowed and we should just exit
+        if (!sequenceWriter.isOn()) {
+            return;
+        }
 
-            if (index.isPresent()) {
-                Optional<FileType[]> fileTypes =
-                        this.sequenceWriter.write(
-                                () -> generator, () -> element, String.valueOf(index.get()));
-                if (fileTypes.isPresent()) {
-                    updateSequence(fileTypes.get(), index.get());
-                }
-            } else {
-                this.sequenceWriter.writeWithoutName(() -> generator, () -> element);
-            }
+        if (index.isPresent()) {
+            this.sequenceWriter.write(() -> generator, () -> element, String.valueOf(index.get()));
 
-        } catch (SequenceTypeException e) {
-            throw new OutputWriteFailedException(e);
+        } else {
+            this.sequenceWriter.writeWithoutName(() -> generator, () -> element);
         }
     }
 
-    private void updateSequence(FileType[] fileTypes, S index) throws SequenceTypeException {
-        synchronized (sequenceType) {
-            for (FileType type : fileTypes) {
-                sequenceType.update(
-                        combineIndexWithExtension.apply(index, type.getFileExtension()));
-            }
+    /**
+     * Like {@link #add(Object, Optional)} but does not immediately execute the write operation,
+     * instead returing an operation that can be called later.
+     *
+     * <p>This is useful for separating the sequential (and therefore not thread-safe, and must be
+     * synchronized) from the actual write operation (which must not be synchronized, and is usually
+     * more expensive).
+     *
+     * <p>This is a thread-safe method.
+     *
+     * <p>TODO complete this call.
+     *
+     * @param element the element
+     * @param index index of the element to output, if it exists. if it doesn't exist, the element
+     *     will be written without any name.
+     * @throws OutputWriteFailedException if the output cannot be successfully written.
+     */
+    public void addAsynchronously(T element, Optional<S> index) throws OutputWriteFailedException {
+
+        // Then output isn't allowed and we should just exit
+        if (!sequenceWriter.isOn()) {
+            return;
         }
-        sequenceWriter.addFileTypes(fileTypes);
+
+        if (index.isPresent()) {
+
+            this.sequenceWriter.write(() -> generator, () -> element, String.valueOf(index.get()));
+
+        } else {
+            this.sequenceWriter.writeWithoutName(() -> generator, () -> element);
+        }
     }
 
     @Override

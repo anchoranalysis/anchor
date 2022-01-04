@@ -41,10 +41,6 @@ import org.anchoranalysis.math.histogram.Histogram;
  */
 public class HistogramCSVGenerator extends CSVGenerator<Histogram> {
 
-    public HistogramCSVGenerator() {
-        super("histogram");
-    }
-
     /** Iff true bins in the histogram with a zero count are not written */
     @Getter @Setter private boolean ignoreZeros = false;
 

@@ -35,7 +35,6 @@ import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.format.ImageFileFormat;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.time.ExecutionTimeRecorder;
-import org.anchoranalysis.io.manifest.Manifest;
 import org.anchoranalysis.io.output.bean.path.prefixer.PathPrefixer;
 import org.anchoranalysis.io.output.bean.rules.OutputEnabledRules;
 import org.anchoranalysis.io.output.enabled.multi.MultiLevelOutputEnabled;
@@ -116,7 +115,6 @@ public class OutputManager extends AnchorBean<OutputManager> {
      *
      * @param experimentIdentifier if defined, an identifier for the experiment, to be included in
      *     the directory root.
-     * @param manifest where output files are store.
      * @param outputsEnabled which outputs are enabled. This is typically provided via a call to
      *     {@link #determineEnabledOutputs(RecordedOutputsWithRules)}.
      * @param writeContext context needed for writing. This is typically provided via a call to
@@ -128,7 +126,6 @@ public class OutputManager extends AnchorBean<OutputManager> {
      */
     public OutputterChecked createExperimentOutputter(
             Optional<String> experimentIdentifier,
-            Manifest manifest,
             MultiLevelOutputEnabled outputsEnabled,
             Optional<MultiLevelRecordedOutputs> recordedOutputs,
             OutputWriteContext writeContext,
@@ -139,13 +136,11 @@ public class OutputManager extends AnchorBean<OutputManager> {
         try {
             DirectoryWithPrefix prefix =
                     prefixer.rootDirectoryPrefix(experimentIdentifier, prefixerContext);
-            manifest.initialize(prefix.getDirectory());
 
             return OutputterChecked.createWithPrefix(
                     prefix,
                     outputsEnabled,
                     writeContext,
-                    Optional.of(manifest.getRootDirectory()),
                     recordedOutputs,
                     silentlyDeleteExisting,
                     logger);

@@ -28,10 +28,6 @@ package org.anchoranalysis.io.output.recorded;
 import java.nio.file.Path;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.anchoranalysis.io.manifest.ManifestDescription;
-import org.anchoranalysis.io.manifest.ManifestDirectoryDescription;
-import org.anchoranalysis.io.manifest.directory.SubdirectoryBase;
-import org.anchoranalysis.io.manifest.file.FileType;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
@@ -65,17 +61,10 @@ class RecordOutputNamesForWriter implements Writer {
 
     @Override
     public Optional<OutputterChecked> createSubdirectory(
-            String outputName,
-            ManifestDirectoryDescription manifestDescription,
-            Optional<SubdirectoryBase> manifestDirectory,
-            boolean inheritOutputRulesAndRecording)
+            String outputName, boolean inheritOutputRulesAndRecording)
             throws OutputWriteFailedException {
         Optional<OutputterChecked> outputter =
-                writer.createSubdirectory(
-                        outputName,
-                        manifestDescription,
-                        manifestDirectory,
-                        inheritOutputRulesAndRecording);
+                writer.createSubdirectory(outputName, inheritOutputRulesAndRecording);
         recordedOutputs.add(outputName, outputter.isPresent());
         return outputter;
     }
@@ -90,21 +79,20 @@ class RecordOutputNamesForWriter implements Writer {
     }
 
     @Override
-    public <T> Optional<FileType[]> writeWithIndex(
+    public <T> boolean writeWithIndex(
             IndexableOutputNameStyle outputNameStyle,
             ElementWriterSupplier<T> elementWriter,
             ElementSupplier<T> element,
             String index)
             throws OutputWriteFailedException {
 
-        Optional<FileType[]> fileTypesWritten =
-                writer.writeWithIndex(outputNameStyle, elementWriter, element, index);
+        boolean success = writer.writeWithIndex(outputNameStyle, elementWriter, element, index);
 
         if (includeIndexableOutputs) {
-            recordedOutputs.add(outputNameStyle.getOutputName(), fileTypesWritten.isPresent());
+            recordedOutputs.add(outputNameStyle.getOutputName(), success);
         }
 
-        return fileTypesWritten;
+        return success;
     }
 
     @Override
@@ -117,12 +105,8 @@ class RecordOutputNamesForWriter implements Writer {
     }
 
     @Override
-    public Optional<Path> createFilenameForWriting(
-            String outputName,
-            String extension,
-            Optional<ManifestDescription> manifestDescription) {
-        Optional<Path> filename =
-                writer.createFilenameForWriting(outputName, extension, manifestDescription);
+    public Optional<Path> createFilenameForWriting(String outputName, String extension) {
+        Optional<Path> filename = writer.createFilenameForWriting(outputName, extension);
         recordedOutputs.add(outputName, filename.isPresent());
         return filename;
     }

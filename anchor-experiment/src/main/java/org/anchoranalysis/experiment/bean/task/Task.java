@@ -28,7 +28,6 @@ package org.anchoranalysis.experiment.bean.task;
 
 import com.google.common.base.Preconditions;
 import java.util.List;
-import java.util.Optional;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.exception.friendly.AnchorFriendlyCheckedException;
 import org.anchoranalysis.core.log.error.ErrorReporter;
@@ -44,9 +43,7 @@ import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.experiment.task.ParametersUnbound;
 import org.anchoranalysis.inference.concurrency.ConcurrencyPlan;
-import org.anchoranalysis.io.generator.combined.ManifestGenerator;
 import org.anchoranalysis.io.input.InputFromManager;
-import org.anchoranalysis.io.manifest.Manifest;
 import org.anchoranalysis.io.output.bean.enabled.IgnoreUnderscorePrefix;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
@@ -64,8 +61,8 @@ import org.apache.commons.lang.time.StopWatch;
  * <p>Initially {@link ParametersUnbound} are created as task-wide parameters across inputs, whereas
  * {@link InputBound} are created in a further step, specific to each input.
  *
- * <p>e.g. we move from a logger and manifest for the experiment as a whole in {@link
- * ParametersUnbound}, to a logger and manifest for the task itself in {@link InputBound}.
+ * <p>e.g. we move from a logger for the experiment as a whole in {@link ParametersUnbound}, to a
+ * logger for the task itself in {@link InputBound}.
  *
  * <p>The following outputs are produced, and depending on parameterization, written to the
  * file-system:
@@ -76,7 +73,6 @@ import org.apache.commons.lang.time.StopWatch;
  * <tr><th>Output Name</th><th>Default?</th><th>Description</th></tr>
  * </thead>
  * <tbody>
- * <tr><td>{@value Task#OUTPUT_MANIFEST}</td><td>no</td><td>A XML and Java serialized <i>.ser</i> file describing all files outputted.</td></tr>
  * <tr><td rowspan="3">outputs from {@link InputOutputExperiment}.</td></tr>
  * </tbody>
  * </table>
@@ -86,8 +82,6 @@ import org.apache.commons.lang.time.StopWatch;
  * @param <S> shared-state type
  */
 public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Task<T, S>> {
-
-    public static final String OUTPUT_MANIFEST = "jobManifest";
 
     /** Is the execution-time of the task per-input expected to be very quick to execute? */
     public abstract boolean hasVeryQuickPerInputExecution();
@@ -121,20 +115,15 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
     public boolean executeJob(ParametersUnbound<T, S> parametersUnbound)
             throws JobExecutionException {
 
-        Manifest manifestTask = new Manifest();
-
         // Bind an outputter for the task
         // The outputter is initially created any log and this is attached later.
         OutputterChecked outputterTask =
                 TaskOutputterFactory.createOutputterForTask(
-                        parametersUnbound.getInput(),
-                        Optional.of(manifestTask),
-                        parametersUnbound.getParametersExperiment());
+                        parametersUnbound.getInput(), parametersUnbound.getParametersExperiment());
         Preconditions.checkArgument(outputterTask.getSettings().hasBeenInitialized());
 
         // Create bound parameters
-        InputBound<T, S> parametersBound =
-                bindOtherParameters(parametersUnbound, outputterTask, manifestTask);
+        InputBound<T, S> parametersBound = bindOtherParameters(parametersUnbound, outputterTask);
 
         outputterTask.assignLogger(parametersBound.getLogger());
 
@@ -185,14 +174,11 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
      *
      * @param parametersUnbound parameters before being bound for a specific task.
      * @param outputterTaskChecked a bound output manager for the task.
-     * @param manifestTask a bound manifest for the task.
      * @return a complete {@link InputBound} with all parameters set to objects bound for the
      *     specific task.
      */
     private InputBound<T, S> bindOtherParameters(
-            ParametersUnbound<T, S> parametersUnbound,
-            OutputterChecked outputterTaskChecked,
-            Manifest manifestTask) {
+            ParametersUnbound<T, S> parametersUnbound, OutputterChecked outputterTaskChecked) {
 
         // We create a new log reporter for this job only
         StatefulMessageLogger loggerJob =
@@ -207,7 +193,6 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
         return new InputBound<>(
                 parametersUnbound.getInput(),
                 parametersUnbound.getSharedState(),
-                manifestTask,
                 parametersUnbound.getParametersExperiment().isDetailedLogging(),
                 parametersUnbound.getParametersExperiment().getContext(),
                 new InputOutputContextStateful(
@@ -305,10 +290,5 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
             // never be called on the input-object
             parameters.getInput().close(parameters.getLogger().errorReporter());
         }
-
-        parameters
-                .getOutputter()
-                .writerSelective()
-                .write(OUTPUT_MANIFEST, ManifestGenerator::new, parameters::getManifest);
     }
 }

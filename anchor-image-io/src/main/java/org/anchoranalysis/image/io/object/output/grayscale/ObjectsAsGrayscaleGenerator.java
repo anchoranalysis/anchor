@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.image.io.object.output.grayscale;
 
-import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +35,6 @@ import org.anchoranalysis.image.io.stack.output.StackWriteAttributes;
 import org.anchoranalysis.image.io.stack.output.StackWriteAttributesFactory;
 import org.anchoranalysis.image.io.stack.output.generator.RasterGeneratorSelectFormat;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
-import org.anchoranalysis.io.manifest.ManifestDescription;
 
 /**
  * Base class for generators that accept a set of objects as input.
@@ -55,11 +53,6 @@ public abstract class ObjectsAsGrayscaleGenerator
      */
     @Getter private final Dimensions dimensions;
     // END REQUIRED ARGUMENTS
-
-    @Override
-    public Optional<ManifestDescription> createManifestDescription() {
-        return Optional.of(new ManifestDescription("raster", "maskCollection"));
-    }
 
     @Override
     public StackWriteAttributes guaranteedImageAttributes() {

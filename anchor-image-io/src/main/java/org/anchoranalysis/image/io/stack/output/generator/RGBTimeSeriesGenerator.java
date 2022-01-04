@@ -36,7 +36,6 @@ import org.anchoranalysis.image.io.bean.stack.writer.StackWriter;
 import org.anchoranalysis.image.io.stack.StackSeries;
 import org.anchoranalysis.image.io.stack.output.StackWriteOptions;
 import org.anchoranalysis.io.generator.OneStageGenerator;
-import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
@@ -61,10 +60,5 @@ public class RGBTimeSeriesGenerator extends OneStageGenerator<StackSeries> {
     public String selectFileExtension(OutputWriteSettings settings, Optional<Logger> logger)
             throws OperationFailedException {
         return GeneratorOutputter.fileExtensionWriter(settings, rasterOptions, logger);
-    }
-
-    @Override
-    public Optional<ManifestDescription> createManifestDescription() {
-        return Optional.of(new ManifestDescription("raster", "rgbTimeSeries"));
     }
 }

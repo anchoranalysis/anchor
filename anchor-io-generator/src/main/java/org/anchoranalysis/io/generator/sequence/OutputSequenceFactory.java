@@ -25,7 +25,6 @@
  */
 package org.anchoranalysis.io.generator.sequence;
 
-import java.util.Optional;
 import java.util.stream.Stream;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.functional.CheckedStream;
@@ -33,10 +32,6 @@ import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.sequence.pattern.OutputPattern;
 import org.anchoranalysis.io.generator.sequence.pattern.OutputPatternIntegerSuffix;
 import org.anchoranalysis.io.generator.sequence.pattern.OutputPatternStringSuffix;
-import org.anchoranalysis.io.manifest.sequencetype.IncreasingIntegers;
-import org.anchoranalysis.io.manifest.sequencetype.IncrementingIntegers;
-import org.anchoranalysis.io.manifest.sequencetype.SequenceType;
-import org.anchoranalysis.io.manifest.sequencetype.StringsWithoutOrder;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
 
@@ -63,13 +58,13 @@ public class OutputSequenceFactory<T> {
      *
      * <p>The eventual filename written becomes {@code $prefix$index.$extension}.
      *
-     * @param pattern how the output of the sequence looks on the file-system and in the manifest.
+     * @param pattern how the output of the sequence looks on the file-system.
      * @return a newly created sequence
      * @throws OutputWriteFailedException if any outputting cannot be successfully completed.
      */
     public OutputSequenceIncrementing<T> incrementingByOne(OutputPatternIntegerSuffix pattern)
             throws OutputWriteFailedException {
-        return incrementingByOne(pattern, 0);
+        return new OutputSequenceIncrementing<>(bind(pattern));
     }
 
     /**
@@ -89,21 +84,13 @@ public class OutputSequenceFactory<T> {
     public OutputSequenceIncrementing<T> incrementingByOneCurrentDirectory(
             String outputName, String prefix, int numberDigits) throws OutputWriteFailedException {
         OutputPatternIntegerSuffix pattern =
-                new OutputPatternIntegerSuffix(
-                        outputName, true, prefix, numberDigits, true, Optional.empty());
-        return incrementingByOne(pattern, 0);
+                new OutputPatternIntegerSuffix(outputName, true, prefix, numberDigits, true);
+        return incrementingByOne(pattern);
     }
 
-    public OutputSequenceIndexed<T, Integer> incrementingIntegers(
-            OutputPatternIntegerSuffix pattern, int startIndex, int incrementSize)
+    public OutputSequenceIndexed<T, Integer> indexedWithInteger(OutputPatternIntegerSuffix pattern)
             throws OutputWriteFailedException {
-        return new OutputSequenceIndexed<>(
-                bind(pattern), new IncrementingIntegers(startIndex, incrementSize));
-    }
-
-    public OutputSequenceIndexed<T, Integer> increasingIntegers(OutputPatternIntegerSuffix pattern)
-            throws OutputWriteFailedException {
-        return new OutputSequenceIndexed<>(bind(pattern), new IncreasingIntegers());
+        return new OutputSequenceIndexed<>(bind(pattern));
     }
 
     /**
@@ -113,13 +100,13 @@ public class OutputSequenceFactory<T> {
      *
      * <p>The eventual filename written becomes {@code $prefix$index.$extension}.
      *
-     * @param pattern how the output of the sequence looks on the file-system and in the manifest.
+     * @param pattern how the output of the sequence looks on the file-system.
      * @return a newly created sequence
      * @throws OutputWriteFailedException if any outputting cannot be successfully completed.
      */
     public OutputSequenceIndexed<T, String> withoutOrder(OutputPatternStringSuffix pattern)
             throws OutputWriteFailedException {
-        return indexed(pattern, new StringsWithoutOrder());
+        return indexed(pattern);
     }
 
     /**
@@ -147,7 +134,7 @@ public class OutputSequenceFactory<T> {
      *
      * <p>The integer in the filename starts at 0.
      *
-     * @param pattern how the output of the sequence looks on the file-system and in the manifest.
+     * @param pattern how the output of the sequence looks on the file-system.
      * @param stream the items to generate separate files
      * @throws OutputWriteFailedException if any output fails to be written.
      */
@@ -157,16 +144,9 @@ public class OutputSequenceFactory<T> {
         CheckedStream.forEach(stream, OutputWriteFailedException.class, sequenceWriter::add);
     }
 
-    private OutputSequenceIndexed<T, String> indexed(
-            OutputPattern pattern, SequenceType<String> sequenceType)
+    private OutputSequenceIndexed<T, String> indexed(OutputPattern pattern)
             throws OutputWriteFailedException {
-        return new OutputSequenceIndexed<>(
-                bind(pattern), sequenceType, (index, extension) -> index + "." + extension);
-    }
-
-    private OutputSequenceIncrementing<T> incrementingByOne(
-            OutputPatternIntegerSuffix pattern, int startIndex) throws OutputWriteFailedException {
-        return new OutputSequenceIncrementing<>(bind(pattern), startIndex);
+        return new OutputSequenceIndexed<>(bind(pattern));
     }
 
     private BoundOutputter<T> bind(OutputPattern pattern) {

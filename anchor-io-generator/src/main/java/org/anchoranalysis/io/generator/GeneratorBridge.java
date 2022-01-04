@@ -30,8 +30,8 @@ import java.util.stream.Stream;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.functional.CheckedStream;
+import org.anchoranalysis.core.functional.checked.CheckedConsumer;
 import org.anchoranalysis.core.functional.checked.CheckedFunction;
-import org.anchoranalysis.io.manifest.file.FileType;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.output.namestyle.OutputNameStyle;
@@ -88,21 +88,21 @@ public class GeneratorBridge<S, T> implements Generator<S> {
     }
 
     @Override
-    public FileType[] write(S element, OutputNameStyle outputNameStyle, ElementOutputter outputter)
+    public void write(S element, OutputNameStyle outputNameStyle, ElementOutputter outputter)
             throws OutputWriteFailedException {
-        return convertAndExecute(
+        convertAndExecute(
                 element,
                 convertedElement -> generator.write(convertedElement, outputNameStyle, outputter));
     }
 
     @Override
-    public FileType[] writeWithIndex(
+    public void writeWithIndex(
             S element,
             String index,
             IndexableOutputNameStyle outputNameStyle,
             ElementOutputter outputter)
             throws OutputWriteFailedException {
-        return convertAndExecute(
+        convertAndExecute(
                 element,
                 convertedElement ->
                         generator.writeWithIndex(
@@ -110,20 +110,14 @@ public class GeneratorBridge<S, T> implements Generator<S> {
     }
 
     /** Converts an element to <b>one or more target elements</b>, and runs a consumer on each. */
-    private FileType[] convertAndExecute(
-            S element, CheckedFunction<T, FileType[], OutputWriteFailedException> function)
+    private void convertAndExecute(
+            S element, CheckedConsumer<T, OutputWriteFailedException> function)
             throws OutputWriteFailedException {
         try {
             Stream<T> bridgedElement = bridge.apply(element);
 
-            ConcatenateFileTypes concatenate = new ConcatenateFileTypes();
-
             CheckedStream.forEach(
-                    bridgedElement,
-                    OutputWriteFailedException.class,
-                    item -> concatenate.add(function.apply(item)));
-
-            return concatenate.allFileTypes();
+                    bridgedElement, OutputWriteFailedException.class, function::accept);
         } catch (Exception e) {
             throw new OutputWriteFailedException(e);
         }

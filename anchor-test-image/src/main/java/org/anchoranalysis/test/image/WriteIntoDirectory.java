@@ -89,7 +89,7 @@ public class WriteIntoDirectory {
 
     private Outputter outputter;
 
-    private DisplayStackGenerator generatorStack = new DisplayStackGenerator("irrelevant", false);
+    private DisplayStackGenerator generatorStack = new DisplayStackGenerator(false);
 
     private ObjectAsMaskGenerator generatorSingleObject = new ObjectAsMaskGenerator();
 

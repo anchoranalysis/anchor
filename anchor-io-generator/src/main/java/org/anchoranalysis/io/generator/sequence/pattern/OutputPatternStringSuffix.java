@@ -66,7 +66,6 @@ public class OutputPatternStringSuffix extends OutputPattern {
         super(
                 OutputPatternUtilities.maybeSubdirectory(outputName, suppressSubdirectory),
                 new StringSuffixOutputNameStyle(outputName, prefix),
-                true,
-                Optional.empty());
+                true);
     }
 }

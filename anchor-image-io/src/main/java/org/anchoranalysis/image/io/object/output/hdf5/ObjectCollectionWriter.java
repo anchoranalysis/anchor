@@ -34,8 +34,6 @@ import org.anchoranalysis.io.generator.Generator;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ObjectCollectionWriter {
 
-    public static final String MANIFEST_DESCRIPTION = "objects";
-
     public static Generator<ObjectCollection> generator() {
         return new HDF5ObjectsGenerator(true);
     }

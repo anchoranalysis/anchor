@@ -41,7 +41,6 @@ import org.anchoranalysis.image.io.stack.output.StackWriteAttributes;
 import org.anchoranalysis.image.io.stack.output.generator.RasterGeneratorSelectFormat;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.io.generator.TransformingGenerator;
-import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.spatial.box.BoundedList;
 import org.anchoranalysis.spatial.box.BoundingBox;
@@ -58,9 +57,6 @@ import org.anchoranalysis.spatial.point.Point3i;
  */
 public class DrawObjectOnStackGenerator
         extends RasterGeneratorSelectFormat<BoundedList<ObjectMask>> {
-
-    private static final ManifestDescription MANIFEST_DESCRIPTION =
-            new ManifestDescription("raster", "extractedObjectOutline");
 
     // START REQUIRED ARGUMENTS
     private final DrawObjectsGenerator drawObjectsGenerator;
@@ -146,11 +142,6 @@ public class DrawObjectOnStackGenerator
         // An object-mask that is relative to the extracted section
         return drawObjectsGenerator.transform(
                 new ObjectCollectionWithProperties(objectsForDrawing));
-    }
-
-    @Override
-    public Optional<ManifestDescription> createManifestDescription() {
-        return Optional.of(MANIFEST_DESCRIPTION);
     }
 
     @Override

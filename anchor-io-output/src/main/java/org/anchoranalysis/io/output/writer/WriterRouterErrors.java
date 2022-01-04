@@ -30,8 +30,6 @@ import java.nio.file.Path;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.log.error.ErrorReporter;
-import org.anchoranalysis.io.manifest.ManifestDescription;
-import org.anchoranalysis.io.manifest.ManifestDirectoryDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.output.outputter.Outputter;
@@ -44,7 +42,7 @@ import org.anchoranalysis.io.output.outputter.Outputter;
  *
  * <ul>
  *   <li>exceptions are suppressed and errors are instead reported.
- *   <li>differences exist around writing sub-folders and manifests
+ *   <li>differences exist around writing sub-folders.
  * </ul>
  *
  * <p>These operations occur in association with the currently bound output manager.
@@ -67,9 +65,7 @@ public class WriterRouterErrors {
     /**
      * Maybe creates a subdirectory for writing to.
      *
-     * @param outputName the name of the subdirectory
-     * @param manifestDescription a manifest-description associated with the subdirectory as a
-     *     whole.
+     * @param outputName the name of the subdirectory.
      * @param inheritOutputRulesAndRecording if true, the output rules and recording are inherited
      *     from the parent directory. if false, they are not, and all outputs are allowed and are
      *     unrecorded.
@@ -77,15 +73,9 @@ public class WriterRouterErrors {
      *     Optional#empty}.
      */
     public Optional<Outputter> createSubdirectory(
-            String outputName,
-            ManifestDirectoryDescription manifestDescription,
-            boolean inheritOutputRulesAndRecording) {
+            String outputName, boolean inheritOutputRulesAndRecording) {
         try {
-            return delegate.createSubdirectory(
-                            outputName,
-                            manifestDescription,
-                            Optional.empty(),
-                            inheritOutputRulesAndRecording)
+            return delegate.createSubdirectory(outputName, inheritOutputRulesAndRecording)
                     .map(output -> new Outputter(output, errorReporter));
         } catch (OutputWriteFailedException e) {
             errorReporter.recordError(Outputter.class, e);
@@ -140,13 +130,9 @@ public class WriterRouterErrors {
      * @param outputName the output-name. This is the filename without an extension, and may
      *     determine if an output is allowed or not.
      * @param extension the extension
-     * @param manifestDescription manifest-description associated with the file if it exists.
      * @return the path to write to, if it is allowed, otherwise {@link Optional#empty}.
      */
-    public Optional<Path> createFilenameForWriting(
-            String outputName,
-            String extension,
-            Optional<ManifestDescription> manifestDescription) {
-        return delegate.createFilenameForWriting(outputName, extension, manifestDescription);
+    public Optional<Path> createFilenameForWriting(String outputName, String extension) {
+        return delegate.createFilenameForWriting(outputName, extension);
     }
 }

@@ -42,8 +42,6 @@ import org.anchoranalysis.io.output.outputter.Outputter;
 @AllArgsConstructor
 class WriteCSVForGroup {
 
-    private static final String MANIFEST_FUNCTION_FEATURES_GROUP = "groupedFeatureResults";
-
     private String outputName;
     private FeatureNameList featureNames;
     private InputOutputContextSubdirectoryCache context;
@@ -61,9 +59,7 @@ class WriteCSVForGroup {
                 .writerSelective()
                 .write(
                         outputName,
-                        () ->
-                                FeatureTableCSVGeneratorFactory.create(
-                                        MANIFEST_FUNCTION_FEATURES_GROUP, featureNames, true),
+                        () -> FeatureTableCSVGeneratorFactory.create(featureNames, true),
                         () -> results);
     }
 }

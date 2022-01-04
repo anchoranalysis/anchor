@@ -35,23 +35,19 @@ import org.anchoranalysis.experiment.arguments.ExecutionArguments;
 import org.anchoranalysis.experiment.bean.log.LoggingDestination;
 import org.anchoranalysis.experiment.io.InitializationContext;
 import org.anchoranalysis.experiment.log.StatefulMessageLogger;
-import org.anchoranalysis.io.manifest.Manifest;
 import org.anchoranalysis.io.output.bean.OutputManager;
 import org.anchoranalysis.io.output.bean.path.prefixer.PathPrefixer;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
 
 /**
- * Parameters for executing a task, when the manifest, log etc. are still bound to the experiment
+ * Parameters for executing a task, when the log etc. are still bound to the experiment.
  *
  * @author Owen Feehan
  */
 public class ParametersExperiment {
 
     private ExecutionArguments experimentArguments;
-
-    // Parameters for all tasks in general (the experiment)
-    @Getter private final Optional<Manifest> experimentalManifest;
 
     @Getter private final String experimentIdentifier;
 
@@ -75,7 +71,6 @@ public class ParametersExperiment {
     public ParametersExperiment(
             ExecutionArguments experimentArguments,
             String experimentIdentifier,
-            Optional<Manifest> experimentalManifest,
             OutputterChecked outputter,
             PathPrefixer prefixer,
             ExperimentFeedbackContext feedbackContext) {
@@ -83,7 +78,6 @@ public class ParametersExperiment {
         this.experimentArguments = experimentArguments;
         this.context = feedbackContext.inputOutput(experimentArguments, outputter);
         this.experimentIdentifier = experimentIdentifier;
-        this.experimentalManifest = experimentalManifest;
         this.detailedLogging = feedbackContext.isDetailedLogging();
         this.prefixer = prefixer;
     }

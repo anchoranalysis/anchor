@@ -30,7 +30,6 @@ import java.nio.file.Path;
 import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
 
 /**
@@ -45,22 +44,15 @@ public class TextFileOutputter {
      * Creates a {@link TextFileOutput}.
      *
      * @param extension file extension
-     * @param manifestDescription manifest description
      * @param outputter output-manager
      * @param outputName output-name
      * @return the FileOutput or empty() if it the output is not allowed
      */
     public static Optional<TextFileOutput> create(
-            String extension,
-            Optional<ManifestDescription> manifestDescription,
-            OutputterChecked outputter,
-            String outputName) {
+            String extension, OutputterChecked outputter, String outputName) {
 
         Optional<Path> fileOutputPath =
-                outputter
-                        .getWriters()
-                        .selective()
-                        .createFilenameForWriting(outputName, extension, manifestDescription);
+                outputter.getWriters().selective().createFilenameForWriting(outputName, extension);
         return fileOutputPath.map(path -> new TextFileOutput(path.toString()));
     }
 }
