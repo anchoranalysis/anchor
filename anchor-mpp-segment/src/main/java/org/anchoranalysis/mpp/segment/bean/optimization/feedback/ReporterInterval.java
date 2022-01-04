@@ -47,7 +47,7 @@ public abstract class ReporterInterval<T> extends FeedbackReceiverBean<T> {
     // END BEAN FIELDS
 
     @Override
-    public void reportItr(Reporting<T> reporting) {}
+    public void reportIteration(Reporting<T> reporting) {}
 
     protected int getAggInterval() {
         return (int) Math.pow(10.0, aggIntervalLog10);

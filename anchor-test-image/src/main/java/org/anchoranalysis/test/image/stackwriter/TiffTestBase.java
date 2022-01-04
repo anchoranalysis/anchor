@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.test.image.rasterwriter;
+package org.anchoranalysis.test.image.stackwriter;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -32,53 +32,34 @@ import java.util.Optional;
 import org.anchoranalysis.core.format.ImageFileFormat;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.writer.StackWriter;
-import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
-import org.anchoranalysis.image.voxel.datatype.UnsignedIntVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.test.image.rasterwriter.comparison.ComparisonPlan;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.function.Executable;
 
 /**
- * For testing all {@link StackWriter}s that create PNGs.
- *
- * <p>It assumes;
- *
- * <ul>
- *   <li>8-bit and 16-bit grayscale is supported
- *   <li>8-bit RGB is supported
- * </ul>
- *
- * And no other formats are supported.
+ * For testing all {@link StackWriter}s that create TIFFs.
  *
  * <p>Note that {@link ComparisonPlan#ComparisonPlan(boolean, Optional, boolean, String)} can be
  * used to quickly created the saved copies in the resources.
  *
  * @author Owen Feehan
  */
-public abstract class PNGTestBase extends RasterWriterTestBase {
+public abstract class TiffTestBase extends StackWriterTestBase {
 
     private static final ComparisonPlan COMPARISON_PLAN =
             new ComparisonPlan(false, Optional.of(ImageFileFormat.OME_TIFF), false);
 
-    /** All possible voxel types that can be supported. */
-    protected static final VoxelDataType[] ALL_SUPPORTED_VOXEL_TYPES = {
-        UnsignedByteVoxelType.INSTANCE, UnsignedShortVoxelType.INSTANCE
-    };
+    private static final VoxelDataType[] SUPPORTED_VOXEL_TYPES =
+            StackWriterTestBase.ALL_SUPPORTED_VOXEL_TYPES;
 
-    protected PNGTestBase() {
-        super(ImageFileFormat.PNG, false, COMPARISON_PLAN);
+    protected TiffTestBase() {
+        super(ImageFileFormat.TIFF, true, COMPARISON_PLAN);
     }
 
     @Test
     void testSingleChannel() throws ImageIOException, IOException {
-        tester.testSingleChannel(ALL_SUPPORTED_VOXEL_TYPES);
-    }
-
-    @Test
-    void testSingleChannelInt() {
-        assertException(() -> tester.testSingleChannel(UnsignedIntVoxelType.INSTANCE));
+        tester.testSingleChannel(SUPPORTED_VOXEL_TYPES);
     }
 
     void testSingleChannelRGB() throws ImageIOException, IOException {
@@ -87,30 +68,26 @@ public abstract class PNGTestBase extends RasterWriterTestBase {
 
     @Test
     void testTwoChannels() {
-        assertException(() -> tester.testTwoChannels());
+        assertThrows(ImageIOException.class, () -> tester.testTwoChannels());
     }
 
     @Test
-    void testThreeChannelsSeparate() {
-        assertException(() -> tester.testThreeChannelsSeparate());
+    void testThreeChannelsSeparate() throws ImageIOException, IOException {
+        tester.testThreeChannelsSeparate(SUPPORTED_VOXEL_TYPES);
     }
 
     @Test
-    void testThreeChannelsRGBUnsignedByte() throws ImageIOException, IOException {
-        tester.testThreeChannelsRGB(UnsignedByteVoxelType.INSTANCE);
+    void testThreeChannelsRGB() throws ImageIOException, IOException {
+        tester.testThreeChannelsRGB();
+    }
+
+    @Test
+    void testThreeChannelsRGBUnsignedShort() throws ImageIOException, IOException {
+        tester.testThreeChannelsRGB(UnsignedShortVoxelType.INSTANCE);
     }
 
     @Test
     void testFourChannels() {
-        assertException(() -> tester.testFourChannels());
-    }
-
-    @Test
-    void testThreeChannelsRGBUnsignedShort() {
-        assertException(() -> tester.testThreeChannelsRGB(UnsignedShortVoxelType.INSTANCE));
-    }
-
-    private void assertException(Executable executable) {
-        assertThrows(ImageIOException.class, executable);
+        assertThrows(ImageIOException.class, () -> tester.testFourChannels());
     }
 }

@@ -44,7 +44,6 @@ import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.QuickOverlapCalculation;
-import org.anchoranalysis.overlay.OverlayProperties;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.orientation.Orientation;
 import org.anchoranalysis.spatial.orientation.Orientation2D;
@@ -299,18 +298,6 @@ public class Ellipse extends ConicBase implements Serializable {
         }
 
         return orientation.equals(target.orientation);
-    }
-
-    @Override
-    public OverlayProperties generateProperties(Optional<Resolution> resolution) {
-        OverlayProperties properties = super.generateProperties(resolution);
-
-        properties.addDoubleAsString("Radius X (pixels)", radii.x());
-        properties.addDoubleAsString("Radius Y (pixels)", radii.y());
-        orientation.describeOrientation(properties.getMap()::add);
-        properties.addDoubleAsString("Shell Radius (pixels)", shell);
-
-        return properties;
     }
 
     @Override

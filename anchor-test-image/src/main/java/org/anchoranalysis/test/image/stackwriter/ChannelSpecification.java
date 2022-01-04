@@ -23,15 +23,25 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.test.image.rasterwriter;
+package org.anchoranalysis.test.image.stackwriter;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.Value;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class ExtensionAdder {
+/**
+ * Specifies a type and number of channels in a stack.
+ *
+ * @author Owen Feehan
+ */
+@Value
+public class ChannelSpecification {
 
-    public static String addExtension(String filename, String extensionToAdd) {
-        return filename + "." + extensionToAdd;
-    }
+    /** Default data-type for all channels in the stack if not otherwise specified. */
+    VoxelDataType channelVoxelType;
+
+    /** How many channels in the stack? */
+    int numberChannels;
+
+    /** If true, the the RGB-flag is set on the created stack, if false it is not. */
+    boolean makeRGB;
 }

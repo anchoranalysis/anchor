@@ -36,7 +36,7 @@ import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.spatial.box.Extent;
 import org.anchoranalysis.test.image.ChannelFixture.IntensityFunction;
-import org.anchoranalysis.test.image.rasterwriter.ChannelSpecification;
+import org.anchoranalysis.test.image.stackwriter.ChannelSpecification;
 
 /**
  * Creates stacks of 1 or more channels using {@link ChannelFixture}.

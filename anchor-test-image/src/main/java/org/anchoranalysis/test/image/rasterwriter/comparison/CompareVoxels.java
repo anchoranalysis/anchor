@@ -27,7 +27,7 @@ package org.anchoranalysis.test.image.rasterwriter.comparison;
 
 import java.io.FileNotFoundException;
 import org.anchoranalysis.test.image.DualComparer;
-import org.anchoranalysis.test.image.rasterwriter.ExtensionAdder;
+import org.anchoranalysis.test.image.stackwriter.ExtensionAdder;
 
 /**
  * Compares two image-files, by reading both images, and checking that the dimensions and voxel

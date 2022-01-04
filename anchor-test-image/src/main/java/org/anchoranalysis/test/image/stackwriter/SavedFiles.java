@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.test.image.rasterwriter;
+package org.anchoranalysis.test.image.stackwriter;
 
 import java.nio.file.Path;
 import java.util.Optional;

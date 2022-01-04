@@ -34,7 +34,7 @@ import lombok.Value;
 import org.anchoranalysis.core.format.ImageFileFormat;
 import org.anchoranalysis.core.functional.OptionalFactory;
 import org.anchoranalysis.test.image.DualComparer;
-import org.anchoranalysis.test.image.rasterwriter.SavedFiles;
+import org.anchoranalysis.test.image.stackwriter.SavedFiles;
 
 /**
  * A plan on which comparisons to execute for a test.

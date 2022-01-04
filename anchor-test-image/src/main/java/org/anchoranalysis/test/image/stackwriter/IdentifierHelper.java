@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.test.image.rasterwriter;
+package org.anchoranalysis.test.image.stackwriter;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

@@ -28,8 +28,6 @@ package org.anchoranalysis.overlay.collection;
 
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
-import java.util.function.IntPredicate;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.anchoranalysis.core.color.ColorList;
@@ -64,29 +62,12 @@ public class ColoredOverlayCollection implements Iterable<Overlay> {
         return overlays.size();
     }
 
-    public Overlay remove(int index) {
-        colors.remove(index);
-        return overlays.remove(index);
-    }
-
     public Overlay get(int index) {
         return overlays.get(index);
     }
 
     public RGBColor getColor(int index) {
         return colors.get(index);
-    }
-
-    public OverlayCollection withoutColor() {
-        return overlays;
-    }
-
-    public List<BoundingBox> boxList(DrawOverlay drawOverlay, Dimensions dim) {
-        return overlays.boxList(drawOverlay, dim);
-    }
-
-    public Set<Overlay> createSet() {
-        return overlays.createSet();
     }
 
     @Override
@@ -100,22 +81,6 @@ public class ColoredOverlayCollection implements Iterable<Overlay> {
         }
         builder.append("}\n");
         return builder.toString();
-    }
-
-    public ColoredOverlayCollection createSubsetFromIDs(IntPredicate predicateOnIndex) {
-
-        ColoredOverlayCollection out = new ColoredOverlayCollection();
-
-        // This our current
-        for (int i = 0; i < size(); i++) {
-            Overlay overlay = get(i);
-
-            if (predicateOnIndex.test(overlay.getIdentifier())) {
-                out.add(overlay, getColors().get(i));
-            }
-        }
-
-        return out;
     }
 
     // TODO - make more efficient using RTrees
@@ -132,35 +97,6 @@ public class ColoredOverlayCollection implements Iterable<Overlay> {
                 out.add(overlay, getColor(i));
             }
         }
-        return out;
-    }
-
-    // Everything from the two Markss which isn't in the intersection
-    public static OverlayCollection createIntersectionComplement(
-            ColoredOverlayCollection overlays1, ColoredOverlayCollection overlays2) {
-
-        OverlayCollection out = new OverlayCollection();
-
-        if (overlays2 == null) {
-            out.addAll(overlays1.withoutColor());
-            return out;
-        }
-
-        Set<Overlay> set1 = overlays1.createSet();
-        Set<Overlay> set2 = overlays2.createSet();
-
-        for (Overlay overlay : overlays1) {
-            if (!set2.contains(overlay)) {
-                out.add(overlay);
-            }
-        }
-
-        for (Overlay overlay : overlays2) {
-            if (!set1.contains(overlay)) {
-                out.add(overlay);
-            }
-        }
-
         return out;
     }
 }
