@@ -61,7 +61,7 @@ public class Arrange extends StackProvider {
     @BeanField @Getter @Setter private List<Provider<Stack>> list = new ArrayList<>();
 
     /** Determines how the stacks in {@code list} are arranged. */
-    @BeanField @Getter @Setter private StackArranger arrange;
+    @BeanField @Getter @Setter private StackArranger arrange; // NOSONAR
 
     /** Iff true, ensures every stack is converted into 3 channels. */
     @BeanField @Getter @Setter private boolean forceRGB = false;

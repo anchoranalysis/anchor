@@ -57,7 +57,6 @@ public abstract class RasterGenerator<T> implements TransformingGenerator<T, Sta
                 element,
                 outputNameStyle.filenameWithoutExtension(),
                 outputNameStyle.getOutputName(),
-                "",
                 outputter);
     }
 
@@ -73,7 +72,6 @@ public abstract class RasterGenerator<T> implements TransformingGenerator<T, Sta
                 element,
                 Optional.of(outputNameStyle.filenameWithoutExtension(index)),
                 outputNameStyle.getOutputName(),
-                index,
                 outputter);
     }
 
@@ -88,7 +86,6 @@ public abstract class RasterGenerator<T> implements TransformingGenerator<T, Sta
             T elementUntransformed,
             Optional<String> filenameWithoutExtension,
             String outputName,
-            String index,
             ElementOutputter outputter)
             throws OutputWriteFailedException {
 

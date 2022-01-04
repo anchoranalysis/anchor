@@ -88,13 +88,7 @@ public class OutputSequenceFactory<T> {
         return incrementingByOne(pattern);
     }
 
-    public OutputSequenceIndexed<T, Integer> incrementingIntegers(
-            OutputPatternIntegerSuffix pattern, int startIndex, int incrementSize)
-            throws OutputWriteFailedException {
-        return new OutputSequenceIndexed<>(bind(pattern));
-    }
-
-    public OutputSequenceIndexed<T, Integer> increasingIntegers(OutputPatternIntegerSuffix pattern)
+    public OutputSequenceIndexed<T, Integer> indexedWithInteger(OutputPatternIntegerSuffix pattern)
             throws OutputWriteFailedException {
         return new OutputSequenceIndexed<>(bind(pattern));
     }

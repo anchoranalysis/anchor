@@ -100,7 +100,7 @@ public abstract class PeriodicSubdirectoryReporter<T>
 
         this.sequenceWriter =
                 new OutputSequenceFactory<>(generator, getParentOutputter())
-                        .incrementingIntegers(pattern, 0, getAggInterval());
+                        .indexedWithInteger(pattern);
     }
 
     @Override

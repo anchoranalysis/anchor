@@ -27,7 +27,6 @@ package org.anchoranalysis.experiment.bean.task;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.io.output.outputter.BindFailedException;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
@@ -39,8 +38,7 @@ import org.anchoranalysis.io.output.path.prefixer.PathPrefixerException;
 class BindingPathOutputterFactory {
 
     public static OutputterChecked createWithBindingPath(
-            NamedPath path, ParametersExperiment parameters)
-            throws BindFailedException, JobExecutionException {
+            NamedPath path, ParametersExperiment parameters) throws BindFailedException {
         try {
             DirectoryWithPrefix prefixToAssign =
                     parameters
@@ -50,10 +48,7 @@ class BindingPathOutputterFactory {
                                     parameters.experimentIdentifierForOutputPath(),
                                     parameters.getExperimentArguments().createPrefixerContext());
 
-            OutputterChecked boundOutput =
-                    parameters.getOutputter().getChecked().changePrefix(prefixToAssign);
-
-            return boundOutput;
+            return parameters.getOutputter().getChecked().changePrefix(prefixToAssign);
 
         } catch (PathPrefixerException e) {
             throw new BindFailedException(e);

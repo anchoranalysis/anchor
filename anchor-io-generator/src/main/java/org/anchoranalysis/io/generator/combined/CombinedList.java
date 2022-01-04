@@ -51,6 +51,7 @@ class CombinedList<T> {
 
         for (OptionalNameValue<Generator<T>> namedGenerator : list) {
             namedGenerator.getName().ifPresent(outputNameStyle::setOutputName);
+            namedGenerator.getValue().write(element, outputNameStyle, outputter);
         }
     }
 
@@ -67,6 +68,7 @@ class CombinedList<T> {
                 outputNameStyle = outputNameStyle.duplicate();
                 outputNameStyle.setOutputName(namedGenerator.getName().get()); // NOSONAR
             }
+            namedGenerator.getValue().writeWithIndex(element, index, outputNameStyle, outputter);
         }
     }
 

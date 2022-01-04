@@ -65,7 +65,6 @@ public abstract class SingleFileTypeGenerator<T, S> implements TransformingGener
                 element,
                 outputNameStyle.filenameWithoutExtension(),
                 outputNameStyle.getOutputName(),
-                "",
                 outputter);
     }
 
@@ -80,7 +79,6 @@ public abstract class SingleFileTypeGenerator<T, S> implements TransformingGener
                 element,
                 Optional.of(outputNameStyle.filenameWithoutExtension(index)),
                 outputNameStyle.getOutputName(),
-                index,
                 outputter);
     }
 
@@ -88,7 +86,6 @@ public abstract class SingleFileTypeGenerator<T, S> implements TransformingGener
             T element,
             Optional<String> filenameWithoutExtension,
             String outputName,
-            String index,
             ElementOutputter outputter)
             throws OutputWriteFailedException {
 

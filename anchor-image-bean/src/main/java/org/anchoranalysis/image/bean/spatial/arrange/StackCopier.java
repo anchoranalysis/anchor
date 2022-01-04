@@ -1,5 +1,7 @@
 package org.anchoranalysis.image.bean.spatial.arrange;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.box.Extent;
@@ -12,6 +14,7 @@ import org.anchoranalysis.spatial.point.ReadableTuple3i;
  *
  * @author Owen Feehan
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 class StackCopier {
 
     /**
