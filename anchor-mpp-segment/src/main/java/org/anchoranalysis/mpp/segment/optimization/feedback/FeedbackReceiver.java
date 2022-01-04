@@ -34,8 +34,7 @@ public interface FeedbackReceiver<T> {
 
     void reportBegin(FeedbackBeginParameters<T> optInit) throws ReporterException;
 
-    // TODO rename to iterator
-    void reportItr(Reporting<T> reporting) throws ReporterException;
+    void reportIteration(Reporting<T> reporting) throws ReporterException;
 
     void reportNewBest(Reporting<T> reporting) throws ReporterException;
 

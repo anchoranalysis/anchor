@@ -60,13 +60,13 @@ public class FeedbackReceiverRequireArguments<T> extends FeedbackReceiverBean<T>
     }
 
     @Override
-    public void reportItr(Reporting<T> reporting) throws ReporterException {
+    public void reportIteration(Reporting<T> reporting) throws ReporterException {
 
         if (!doFeedback) {
             return;
         }
 
-        feedbackReceiver.reportItr(reporting);
+        feedbackReceiver.reportIteration(reporting);
     }
 
     @Override

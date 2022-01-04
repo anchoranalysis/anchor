@@ -49,17 +49,17 @@ public class FeedbackReceiverList<T> extends FeedbackReceiverBean<T> {
 
         String newLine = System.getProperty("line.separator");
 
-        StringBuilder sb = new StringBuilder();
-        sb.append(getBeanName());
-        sb.append("{");
-        sb.append(newLine);
+        StringBuilder builder = new StringBuilder();
+        builder.append(getBeanName());
+        builder.append("{");
+        builder.append(newLine);
         for (FeedbackReceiver<T> fr : list) {
-            sb.append(fr.toString());
-            sb.append(newLine);
+            builder.append(fr.toString());
+            builder.append(newLine);
         }
-        sb.append("}");
-        sb.append(getBeanName());
-        return sb.toString();
+        builder.append("}");
+        builder.append(getBeanName());
+        return builder.toString();
     }
 
     public boolean add(FeedbackReceiver<T> receiver) {
@@ -67,33 +67,33 @@ public class FeedbackReceiverList<T> extends FeedbackReceiverBean<T> {
     }
 
     @Override
-    public void reportItr(Reporting<T> reporting) throws ReporterException {
+    public void reportIteration(Reporting<T> reporting) throws ReporterException {
 
-        for (FeedbackReceiver<T> fr : list) {
-            fr.reportItr(reporting);
+        for (FeedbackReceiver<T> receiver : list) {
+            receiver.reportIteration(reporting);
         }
     }
 
     @Override
     public void reportNewBest(Reporting<T> reporting) throws ReporterException {
 
-        for (FeedbackReceiver<T> fr : list) {
-            fr.reportNewBest(reporting);
+        for (FeedbackReceiver<T> receiver : list) {
+            receiver.reportNewBest(reporting);
         }
     }
 
     @Override
     public void reportEnd(FeedbackEndParameters<T> parameters) throws ReporterException {
 
-        for (FeedbackReceiver<T> fr : list) {
-            fr.reportEnd(parameters);
+        for (FeedbackReceiver<T> receiver : list) {
+            receiver.reportEnd(parameters);
         }
     }
 
     @Override
     public void reportBegin(FeedbackBeginParameters<T> initialization) throws ReporterException {
-        for (FeedbackReceiver<T> fr : list) {
-            fr.reportBegin(initialization);
+        for (FeedbackReceiver<T> receiver : list) {
+            receiver.reportBegin(initialization);
         }
     }
 }
