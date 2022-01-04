@@ -119,6 +119,6 @@ public class VoxelsResizerExecutionTime extends VoxelsResizer {
 
     /** Builds an identifier for a particular data-type, and with a particular prefix. */
     private static String buildIdentifier(String dataType, String operationIdentifierPrefix) {
-        return String.format("%s - resizing %s voxels", operationIdentifierPrefix, dataType);
+        return String.format("%s - %s", operationIdentifierPrefix, dataType);
     }
 }
