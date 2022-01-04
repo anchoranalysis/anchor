@@ -154,7 +154,7 @@ public class OutputterChecked {
     }
 
     /**
-     * Creates a {@link OutputterChecked} with a changed prefix and {@link WriteOperationRecorder}.
+     * Creates a {@link OutputterChecked} with a changed prefix.
      *
      * <p>All other attributes are identical to the {@link OutputterChecked} on which this method is
      * called.
