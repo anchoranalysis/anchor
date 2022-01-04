@@ -68,6 +68,11 @@ public class SegmentedObjectsAtScale {
 
     /** Records the execution-time of particular operations. */
     private final ExecutionTimeRecorder executionTimeRecorder;
+
+    /**
+     * Appended to the execution-time identifiers to indicate more precisely what is being recorded.
+     */
+    private final String executionTimeSuffix;
     /** END: REQUIRED ARGUMENTS. */
 
     // START: memoized alternative representations of source at at specific scale.
@@ -91,7 +96,7 @@ public class SegmentedObjectsAtScale {
         if (listWithLabels == null) {
             this.listWithLabels =
                     executionTimeRecorder.recordExecutionTime(
-                            "Segmented-objects listWith",
+                            "Segmented-objects listWith" + executionTimeSuffix,
                             () ->
                                     FunctionalList.mapToList(
                                             source, multi -> multi.map(extractObject)));
@@ -109,7 +114,7 @@ public class SegmentedObjectsAtScale {
         if (listWithoutLabels == null) {
             this.listWithoutLabels =
                     executionTimeRecorder.recordExecutionTime(
-                            "Segmented-objects listWithout",
+                            "Segmented-objects listWithout" + executionTimeSuffix,
                             () ->
                                     FunctionalList.mapToList(
                                             source,
@@ -126,10 +131,12 @@ public class SegmentedObjectsAtScale {
      */
     public ObjectCollection objects() {
         if (objects == null) {
+            // Listed first to keep separate from recording the execution time for the objects
+            List<WithConfidence<ObjectMask>> withoutLabels = listWithoutLabels();
             objects =
                     executionTimeRecorder.recordExecutionTime(
-                            "Segmented-objects ObjectCollection",
-                            () -> objectsFromList(listWithoutLabels()));
+                            "Segmented-objects objects" + executionTimeSuffix,
+                            () -> objectsFromList(withoutLabels));
         }
         return objects;
     }

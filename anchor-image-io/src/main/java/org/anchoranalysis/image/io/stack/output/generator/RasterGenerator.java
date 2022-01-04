@@ -105,7 +105,7 @@ public abstract class RasterGenerator<T> implements TransformingGenerator<T, Sta
                     outputter
                             .getExecutionTimeRecorder()
                             .recordExecutionTime(
-                                    "Preparing a raster to write",
+                                    String.format("Preparing a raster to write (%s)", outputName),
                                     () -> transform(elementUntransformed));
 
             StackWriteOptions options =
@@ -123,7 +123,7 @@ public abstract class RasterGenerator<T> implements TransformingGenerator<T, Sta
             outputter
                     .getExecutionTimeRecorder()
                     .recordExecutionTime(
-                            "Writing raster to file-system",
+                            String.format("Writing raster to file-system (%s)", outputName),
                             () ->
                                     // First write to the file system, and then write to the
                                     // operation-recorder.
