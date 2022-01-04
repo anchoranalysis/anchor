@@ -46,8 +46,6 @@ import org.anchoranalysis.image.voxel.object.ObjectCollection;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ObjectCollectionReader {
 
-    private static final Deserializer<ObjectCollection> TIFF_CORRECT_MISSING =
-            new ReadObjectsFromTIFFDirectoryCorrectMissing();
     private static final Deserializer<ObjectCollection> HDF5 = new ReadObjectsFromHDF5();
 
     /**
@@ -63,8 +61,6 @@ public class ObjectCollectionReader {
      *   <li>Otherwise,
      *       <pre>.h5</pre>
      *       is suffixed, and if this path exists, it is read as a HDF5 object-mask collection.
-     *   <li>Otherwise, the path is assumed to be a directory, and this is read as a TIFF-directory
-     *       with serialized bounding-boxes.
      * </ol>
      *
      * <p>In the case of 3, if the path does not exist, but it is the subpath of an {@link
@@ -95,15 +91,8 @@ public class ObjectCollectionReader {
         Path suffixed = addHdf5Extension(path);
         if (suffixed.toFile().exists()) {
             return HDF5.deserialize(suffixed, context);
-        }
-
-        // 3. Treat as a folder of TIFFs
-        if (path.toFile().exists()) {
-            return TIFF_CORRECT_MISSING.deserialize(path, context);
         } else {
-            throw new DeserializationFailedException(
-                    "Neither at HD5 file nor a directory of object TIFFs can be found for: "
-                            + path);
+            throw new DeserializationFailedException("A HD5 file does not exist at: " + path);
         }
     }
 

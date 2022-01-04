@@ -28,7 +28,6 @@ package org.anchoranalysis.io.generator;
 
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.functional.checked.CheckedFunction;
-import org.anchoranalysis.io.manifest.file.FileType;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.output.namestyle.OutputNameStyle;
@@ -57,19 +56,19 @@ public class TransformingGeneratorBridge<S, T, V> implements TransformingGenerat
     }
 
     @Override
-    public FileType[] write(T element, OutputNameStyle outputNameStyle, ElementOutputter outputter)
+    public void write(T element, OutputNameStyle outputNameStyle, ElementOutputter outputter)
             throws OutputWriteFailedException {
-        return delegate.write(applyBridge(element), outputNameStyle, outputter);
+        delegate.write(applyBridge(element), outputNameStyle, outputter);
     }
 
     @Override
-    public FileType[] writeWithIndex(
+    public void writeWithIndex(
             T element,
             String index,
             IndexableOutputNameStyle outputNameStyle,
             ElementOutputter outputter)
             throws OutputWriteFailedException {
-        return delegate.writeWithIndex(applyBridge(element), index, outputNameStyle, outputter);
+        delegate.writeWithIndex(applyBridge(element), index, outputNameStyle, outputter);
     }
 
     private V applyBridge(T element) throws OutputWriteFailedException {

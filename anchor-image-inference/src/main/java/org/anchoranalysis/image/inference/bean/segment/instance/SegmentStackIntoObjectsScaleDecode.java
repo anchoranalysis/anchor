@@ -52,7 +52,6 @@ import org.anchoranalysis.image.inference.segment.MultiScaleObject;
 import org.anchoranalysis.image.inference.segment.SegmentedObjects;
 import org.anchoranalysis.image.voxel.resizer.VoxelsResizerExecutionTime;
 import org.anchoranalysis.inference.concurrency.ConcurrentModelPool;
-import org.anchoranalysis.io.manifest.file.TextFileReader;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 import org.apache.commons.collections.IteratorUtils;
 

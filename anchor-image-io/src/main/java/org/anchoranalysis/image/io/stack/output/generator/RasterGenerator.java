@@ -36,8 +36,6 @@ import org.anchoranalysis.image.io.stack.output.StackWriteAttributes;
 import org.anchoranalysis.image.io.stack.output.StackWriteAttributesFactory;
 import org.anchoranalysis.image.io.stack.output.StackWriteOptions;
 import org.anchoranalysis.io.generator.TransformingGenerator;
-import org.anchoranalysis.io.manifest.ManifestDescription;
-import org.anchoranalysis.io.manifest.file.FileType;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
@@ -45,21 +43,17 @@ import org.anchoranalysis.io.output.namestyle.OutputNameStyle;
 import org.anchoranalysis.io.output.writer.ElementOutputter;
 
 /**
- * Transfroms an entity to a {@link Stack} and writes it to the file-system.
+ * Transforms an entity to a {@link Stack} and writes it to the file-system.
  *
  * @author Owen Feehan
  */
 @AllArgsConstructor
 public abstract class RasterGenerator<T> implements TransformingGenerator<T, Stack> {
 
-    /** A fallback manifest-description if none is supplied by the generator. */
-    private static final ManifestDescription MANIFEST_DESCRIPTION_FALLBACK =
-            new ManifestDescription("raster", "unknown");
-
     @Override
-    public FileType[] write(T element, OutputNameStyle outputNameStyle, ElementOutputter outputter)
+    public void write(T element, OutputNameStyle outputNameStyle, ElementOutputter outputter)
             throws OutputWriteFailedException {
-        return writeInternal(
+        writeInternal(
                 element,
                 outputNameStyle.filenameWithoutExtension(),
                 outputNameStyle.getOutputName(),
@@ -69,13 +63,13 @@ public abstract class RasterGenerator<T> implements TransformingGenerator<T, Sta
 
     /** As only a single-file is involved, this methods delegates to a simpler virtual method. */
     @Override
-    public FileType[] writeWithIndex(
+    public void writeWithIndex(
             T element,
             String index,
             IndexableOutputNameStyle outputNameStyle,
             ElementOutputter outputter)
             throws OutputWriteFailedException {
-        return writeInternal(
+        writeInternal(
                 element,
                 Optional.of(outputNameStyle.filenameWithoutExtension(index)),
                 outputNameStyle.getOutputName(),
@@ -90,9 +84,7 @@ public abstract class RasterGenerator<T> implements TransformingGenerator<T, Sta
      */
     public abstract StackWriteAttributes guaranteedImageAttributes();
 
-    public abstract Optional<ManifestDescription> createManifestDescription();
-
-    private FileType[] writeInternal(
+    private void writeInternal(
             T elementUntransformed,
             Optional<String> filenameWithoutExtension,
             String outputName,
@@ -133,8 +125,6 @@ public abstract class RasterGenerator<T> implements TransformingGenerator<T, Sta
                                             options,
                                             settings,
                                             pathToWriteTo));
-
-            return writeToManifest(outputName, index, outputter, pathToWriteTo, extension);
 
         } catch (OperationFailedException e) {
             throw new OutputWriteFailedException(e);
@@ -186,29 +176,5 @@ public abstract class RasterGenerator<T> implements TransformingGenerator<T, Sta
      */
     private StackWriteAttributes writeAttributes(Stack stack) {
         return StackWriteAttributesFactory.from(stack).or(guaranteedImageAttributes());
-    }
-
-    /** Writes to the manifest, and creates an array of the file-types written. */
-    private FileType[] writeToManifest(
-            String outputName,
-            String index,
-            ElementOutputter outputter,
-            Path pathToWriteTo,
-            String extension) {
-        Optional<ManifestDescription> manifestDescription = createManifestDescription();
-
-        manifestDescription.ifPresent(
-                description ->
-                        outputter.writeFileToOperationRecorder(
-                                outputName, pathToWriteTo, description, index));
-
-        return createFileTypeArray(
-                manifestDescription.orElse(MANIFEST_DESCRIPTION_FALLBACK), extension);
-    }
-
-    /** Creates a new {@link FileType} wrapped in a single-item array. */
-    private static FileType[] createFileTypeArray(
-            ManifestDescription description, String extension) {
-        return new FileType[] {new FileType(description, extension)};
     }
 }

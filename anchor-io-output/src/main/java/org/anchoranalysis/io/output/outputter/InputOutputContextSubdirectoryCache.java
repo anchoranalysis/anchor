@@ -30,13 +30,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.anchoranalysis.io.manifest.ManifestDirectoryDescription;
 
 /**
  * Caches a {@link InputOutputContext} for each subdirectory as they are created.
  *
  * <p>This allows reusage of an existing {@link InputOutputContext} in other outputters without
- * creating duplicate manifest entries.
+ * creating any potential clashes.
+ *
+ * <p>TODO is this still needed without manifests?
  *
  * @author Owen Feehan
  */
@@ -45,9 +46,6 @@ public class InputOutputContextSubdirectoryCache {
 
     /** the context of the directory in which subdirectories may be created */
     private final InputOutputContext parentContext;
-
-    /** A description to use for every created subdirectory */
-    private final ManifestDirectoryDescription manifestDirectoryDescription;
 
     /**
      * If true, the output rules and recording are inherited from the parent directory. if false,
@@ -67,8 +65,6 @@ public class InputOutputContextSubdirectoryCache {
     public InputOutputContext get(Optional<String> subdirectoryName) {
         return mapContexts.computeIfAbsent(
                 subdirectoryName,
-                key ->
-                        parentContext.maybeSubdirectory(
-                                key, manifestDirectoryDescription, inheritOutputRulesAndRecording));
+                key -> parentContext.maybeSubdirectory(key, inheritOutputRulesAndRecording));
     }
 }

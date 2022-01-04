@@ -31,11 +31,6 @@ import java.util.Optional;
 import lombok.Getter;
 import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.io.manifest.ManifestDescription;
-import org.anchoranalysis.io.manifest.ManifestDirectoryDescription;
-import org.anchoranalysis.io.manifest.directory.SubdirectoryBase;
-import org.anchoranalysis.io.manifest.operationrecorder.DualWriterOperationRecorder;
-import org.anchoranalysis.io.manifest.operationrecorder.WriteOperationRecorder;
 import org.anchoranalysis.io.output.bean.OutputManager;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.bean.rules.Permissive;
@@ -63,9 +58,6 @@ public class OutputterChecked {
 
     /** The directory and prefix the output writes to */
     private final OutputterTarget target;
-
-    /** Records a log of outputs written to the filesystem. */
-    private Optional<WriteOperationRecorder> writeOperationRecorder;
 
     /** The writers associated with this output-manager. */
     @Getter private RecordingWriters writers;
@@ -100,7 +92,6 @@ public class OutputterChecked {
                 Permissive.INSTANCE,
                 new OutputWriteContext(),
                 Optional.empty(),
-                Optional.empty(),
                 deleteExistingDirectory,
                 logger);
     }
@@ -122,14 +113,12 @@ public class OutputterChecked {
             DirectoryWithPrefix prefix,
             MultiLevelOutputEnabled outputEnabled,
             OutputWriteContext context,
-            Optional<WriteOperationRecorder> writeOperationRecorder,
             Optional<MultiLevelRecordedOutputs> recordedOutputs,
             boolean deleteExistingDirectory,
             Optional<Logger> logger)
             throws BindFailedException {
         return new OutputterChecked(
                 new OutputterTarget(prefix, deleteExistingDirectory),
-                writeOperationRecorder,
                 outputEnabled,
                 recordedOutputs,
                 context,
@@ -139,21 +128,18 @@ public class OutputterChecked {
     /**
      * Creates using a target.
      *
-     * @param target the target-directory and prefix this outputter writes to
-     * @param writeOperationRecorder an entry for every outputted filr is written here
+     * @param target the target-directory and prefix this outputter writes to.
      * @param recordedOutputs records the names of all outputs written to, if defined.
      * @param context settings and user-supplied parameters for writing outputs.
-     * @param logger logger for warning for information messages when outputting
+     * @param logger logger for warning for information messages when outputting.
      */
     private OutputterChecked(
             OutputterTarget target,
-            Optional<WriteOperationRecorder> writeOperationRecorder,
             MultiLevelOutputEnabled outputsEnabled,
             Optional<MultiLevelRecordedOutputs> recordedOutputs,
             OutputWriteContext context,
             Optional<Logger> logger) {
         this.target = target;
-        this.writeOperationRecorder = writeOperationRecorder;
         this.context = context;
         this.recordedOutputs = recordedOutputs;
         this.outputsEnabled = maybeRecordOutputNames(outputsEnabled);
@@ -167,37 +153,21 @@ public class OutputterChecked {
                         outputter, target.getParentDirectoryCreator(), recordedOutputs); // NOSONAR
     }
 
-    /** Adds an additional operation recorder alongside any existing recorders. */
-    public void addOperationRecorder(WriteOperationRecorder toAdd) {
-        if (writeOperationRecorder.isPresent()) {
-            this.writeOperationRecorder =
-                    Optional.of(
-                            new DualWriterOperationRecorder(writeOperationRecorder.get(), toAdd));
-        } else {
-            this.writeOperationRecorder = Optional.of(toAdd);
-        }
-    }
-
     /**
      * Creates a {@link OutputterChecked} with a changed prefix and {@link WriteOperationRecorder}.
      *
      * <p>All other attributes are identical to the {@link OutputterChecked} on which this method is
      * called.
      *
-     * @param prefixToAssign prefix to assign
-     * @param writeOperationRecorderToAssign writer operator to use for the newly created {@link
-     *     OutputterChecked}.
+     * @param prefixToAssign prefix to assign.
      * @return a newly created identical {@link OutputterChecked} apart from the two aforementioned
      *     changes.
      * @throws BindFailedException
      */
-    public OutputterChecked changePrefix(
-            DirectoryWithPrefix prefixToAssign,
-            Optional<WriteOperationRecorder> writeOperationRecorderToAssign)
+    public OutputterChecked changePrefix(DirectoryWithPrefix prefixToAssign)
             throws BindFailedException {
         return new OutputterChecked(
                 target.changePrefix(prefixToAssign),
-                writeOperationRecorderToAssign,
                 outputsEnabled,
                 recordedOutputs,
                 context,
@@ -208,19 +178,14 @@ public class OutputterChecked {
      * Derives a bound-output-manager for a (possibly newly created) subdirectory of the existing
      * manager
      *
-     * @param subdirectoryName the subdirectory-name
-     * @param manifestDescription manifest-description for the directory if it exists
-     * @param manifestDirectory manifest-folder
+     * @param subdirectoryName the subdirectory-name.
      * @param inheritOutputRulesAndRecording if true, the output rules and recording are inherited
      *     from the parent directory. if false, they are not, and all outputs are allowed and are
      *     unrecorded.
-     * @return a bound-output-manager for the subdirectory
+     * @return a bound-output-manager for the subdirectory.
      */
     public OutputterChecked deriveSubdirectory(
-            String subdirectoryName,
-            ManifestDirectoryDescription manifestDescription,
-            Optional<SubdirectoryBase> manifestDirectory,
-            boolean inheritOutputRulesAndRecording) {
+            String subdirectoryName, boolean inheritOutputRulesAndRecording) {
 
         // Construct a subdirectory for the desired outputName
         Path pathSubdirectory = makeOutputPath(subdirectoryName);
@@ -228,8 +193,6 @@ public class OutputterChecked {
         try {
             return new OutputterChecked(
                     target.changePrefix(new DirectoryWithPrefix(pathSubdirectory)),
-                    writeDirectoryToOperationRecorder(
-                            pathSubdirectory, manifestDescription, manifestDirectory),
                     inheritOutputRulesAndRecording
                             ? outputsEnabled
                             : Permissive.INSTANCE, // Allow all outputs in the subdirectory
@@ -245,26 +208,6 @@ public class OutputterChecked {
             // of the directoryCreator, which should never occur in this class.
             throw new AnchorImpossibleSituationException();
         }
-    }
-
-    /**
-     * Writes a file-entry to the operation recorder
-     *
-     * @param outputName output-name
-     * @param pathSuffix the final part of the path of the file
-     * @param manifestDescription the manifest description
-     * @param index an index associated with this item (there may be other items with the same name,
-     *     but not the same index)
-     */
-    public void writeFileToOperationRecorder(
-            String outputName,
-            Path pathSuffix,
-            ManifestDescription manifestDescription,
-            String index) {
-        writeOperationRecorder.ifPresent(
-                writer ->
-                        writer.recordWrittenFile(
-                                outputName, manifestDescription, relativePath(pathSuffix), index));
     }
 
     /**
@@ -320,42 +263,11 @@ public class OutputterChecked {
         return target.getPrefix();
     }
 
-    /**
-     * Writes a folder-entry to the operation-recorder (if it exists)
-     *
-     * @param pathSuffix the final part of the path of the file
-     * @param manifestDescription the manifest-description
-     * @param manifestDirectory the associated folder in the manifest
-     * @return a write recorder for the sub folder (if it exists) or otherwise the write recorder
-     *     associated with the output manager
-     */
-    private Optional<WriteOperationRecorder> writeDirectoryToOperationRecorder(
-            Path pathSuffix,
-            ManifestDirectoryDescription manifestDescription,
-            Optional<SubdirectoryBase> manifestDirectory) {
-        if (manifestDirectory.isPresent() && writeOperationRecorder.isPresent()) {
-            // Assume the directory we are writing to has no path
-            return Optional.of(
-                    writeOperationRecorder
-                            .get()
-                            .recordSubdirectoryCreated(
-                                    relativePath(pathSuffix),
-                                    manifestDescription,
-                                    manifestDirectory.get()));
-        } else {
-            return writeOperationRecorder;
-        }
-    }
-
     private MultiLevelOutputEnabled maybeRecordOutputNames(MultiLevelOutputEnabled outputsEnabled) {
         if (recordedOutputs.isPresent()) {
             return new RecordOutputNamesMultiLevel(outputsEnabled, recordedOutputs.get());
         } else {
             return outputsEnabled;
         }
-    }
-
-    private Path relativePath(Path pathSuffix) {
-        return target.pathCreator().makePathRelative(pathSuffix);
     }
 }

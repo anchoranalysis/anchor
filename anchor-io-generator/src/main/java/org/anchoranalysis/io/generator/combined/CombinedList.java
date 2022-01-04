@@ -29,9 +29,7 @@ package org.anchoranalysis.io.generator.combined;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import org.anchoranalysis.io.generator.ConcatenateFileTypes;
 import org.anchoranalysis.io.generator.Generator;
-import org.anchoranalysis.io.manifest.file.FileType;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.output.namestyle.OutputNameStyle;
@@ -48,27 +46,20 @@ class CombinedList<T> {
 
     private List<OptionalNameValue<Generator<T>>> list = new ArrayList<>();
 
-    public FileType[] write(T element, OutputNameStyle outputNameStyle, ElementOutputter outputter)
+    public void write(T element, OutputNameStyle outputNameStyle, ElementOutputter outputter)
             throws OutputWriteFailedException {
-
-        ConcatenateFileTypes collect = new ConcatenateFileTypes(list.size() > 1);
 
         for (OptionalNameValue<Generator<T>> namedGenerator : list) {
             namedGenerator.getName().ifPresent(outputNameStyle::setOutputName);
-            collect.add(namedGenerator.getValue().write(element, outputNameStyle, outputter));
         }
-
-        return collect.allFileTypes();
     }
 
-    public FileType[] writeWithIndex(
+    public void writeWithIndex(
             T element,
             String index,
             IndexableOutputNameStyle outputNameStyle,
             ElementOutputter outputter)
             throws OutputWriteFailedException {
-
-        ConcatenateFileTypes collect = new ConcatenateFileTypes(list.size() > 1);
 
         for (OptionalNameValue<Generator<T>> namedGenerator : list) {
 
@@ -76,14 +67,7 @@ class CombinedList<T> {
                 outputNameStyle = outputNameStyle.duplicate();
                 outputNameStyle.setOutputName(namedGenerator.getName().get()); // NOSONAR
             }
-
-            collect.add(
-                    namedGenerator
-                            .getValue()
-                            .writeWithIndex(element, index, outputNameStyle, outputter));
         }
-
-        return collect.allFileTypes();
     }
 
     /**

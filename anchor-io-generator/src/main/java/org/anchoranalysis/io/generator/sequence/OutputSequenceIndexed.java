@@ -27,22 +27,16 @@
 package org.anchoranalysis.io.generator.sequence;
 
 import java.util.Optional;
-import java.util.function.BiFunction;
-import lombok.Getter;
 import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.io.generator.Generator;
-import org.anchoranalysis.io.manifest.file.FileType;
-import org.anchoranalysis.io.manifest.sequencetype.SequenceType;
-import org.anchoranalysis.io.manifest.sequencetype.SequenceTypeException;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.recorded.RecordingWriters;
 
 /**
  * A sequence of outputs that use the same generator with non-incrementing indexes for each output.
  *
- * <p>An {@code index} is associated with each output that must be unique, and must follow only the
- * order expected by {@code sequenceType}.
+ * <p>An {@code index} is associated with each output that must be unique.
  *
  * @author Owen Feehan
  * @param <T> element-type in generator
@@ -52,38 +46,14 @@ public class OutputSequenceIndexed<T, S> implements OutputSequence {
 
     private final Generator<T> generator;
     private final SequenceWriters sequenceWriter;
-    private final BiFunction<S, String, S> combineIndexWithExtension;
-
-    @Getter private SequenceType<S> sequenceType;
 
     /**
-     * Creates a non-incremental sequence of outputs, passing the index to the {@code sequenceType}
-     * without combination with the file extension.
+     * Creates a non-incremental sequence of outputs.
      *
      * @param outputter parameters for the output-sequence.
-     * @param sequenceType sequenceType the indexes are expected to follow.
      * @throws OutputWriteFailedException
      */
-    OutputSequenceIndexed(BoundOutputter<T> outputter, SequenceType<S> sequenceType)
-            throws OutputWriteFailedException {
-        this(outputter, sequenceType, (index, extension) -> index);
-    }
-
-    /**
-     * Creates a non-incremental sequence of outputs, combining the index with the {@code
-     * sequenceType} through a parameterized function.
-     *
-     * @param outputter parameters for the output-sequence
-     * @param sequenceType sequenceType the indexes are expected to follow
-     * @param combineIndexWithExtension combines both an index of type {@code S} with the
-     *     file-extension to produce the index passed to the {@link SequenceType}.
-     * @throws OutputWriteFailedException
-     */
-    OutputSequenceIndexed(
-            BoundOutputter<T> outputter,
-            SequenceType<S> sequenceType,
-            BiFunction<S, String, S> combineIndexWithExtension)
-            throws OutputWriteFailedException {
+    OutputSequenceIndexed(BoundOutputter<T> outputter) throws OutputWriteFailedException {
 
         if (!outputter.getOutputter().getSettings().hasBeenInitialized()) {
             throw new AnchorFriendlyRuntimeException("outputter has not yet been initialized");
@@ -93,11 +63,9 @@ public class OutputSequenceIndexed<T, S> implements OutputSequence {
                 new SequenceWriters(
                         outputter.getOutputter().getWriters(), outputter.getOutputPattern());
         this.generator = outputter.getGenerator();
-        this.sequenceType = sequenceType;
-        this.combineIndexWithExtension = combineIndexWithExtension;
 
         try {
-            this.sequenceWriter.initialize(this.sequenceType);
+            this.sequenceWriter.initialize();
         } catch (InitializeException e) {
             throw new OutputWriteFailedException(e);
         }
@@ -133,25 +101,16 @@ public class OutputSequenceIndexed<T, S> implements OutputSequence {
      */
     public void add(T element, Optional<S> index) throws OutputWriteFailedException {
 
-        try {
-            // Then output isn't allowed and we should just exit
-            if (!sequenceWriter.isOn()) {
-                return;
-            }
+        // Then output isn't allowed and we should just exit
+        if (!sequenceWriter.isOn()) {
+            return;
+        }
 
-            if (index.isPresent()) {
-                Optional<FileType[]> fileTypes =
-                        this.sequenceWriter.write(
-                                () -> generator, () -> element, String.valueOf(index.get()));
-                if (fileTypes.isPresent()) {
-                    updateSequence(fileTypes.get(), index.get());
-                }
-            } else {
-                this.sequenceWriter.writeWithoutName(() -> generator, () -> element);
-            }
+        if (index.isPresent()) {
+            this.sequenceWriter.write(() -> generator, () -> element, String.valueOf(index.get()));
 
-        } catch (SequenceTypeException e) {
-            throw new OutputWriteFailedException(e);
+        } else {
+            this.sequenceWriter.writeWithoutName(() -> generator, () -> element);
         }
     }
 
@@ -174,36 +133,18 @@ public class OutputSequenceIndexed<T, S> implements OutputSequence {
      */
     public void addAsynchronously(T element, Optional<S> index) throws OutputWriteFailedException {
 
-        try {
-            // Then output isn't allowed and we should just exit
-            if (!sequenceWriter.isOn()) {
-                return;
-            }
-
-            if (index.isPresent()) {
-                Optional<FileType[]> fileTypes =
-                        this.sequenceWriter.write(
-                                () -> generator, () -> element, String.valueOf(index.get()));
-                if (fileTypes.isPresent()) {
-                    updateSequence(fileTypes.get(), index.get());
-                }
-            } else {
-                this.sequenceWriter.writeWithoutName(() -> generator, () -> element);
-            }
-
-        } catch (SequenceTypeException e) {
-            throw new OutputWriteFailedException(e);
+        // Then output isn't allowed and we should just exit
+        if (!sequenceWriter.isOn()) {
+            return;
         }
-    }
 
-    private void updateSequence(FileType[] fileTypes, S index) throws SequenceTypeException {
-        synchronized (sequenceType) {
-            for (FileType type : fileTypes) {
-                sequenceType.update(
-                        combineIndexWithExtension.apply(index, type.getFileExtension()));
-            }
+        if (index.isPresent()) {
+
+            this.sequenceWriter.write(() -> generator, () -> element, String.valueOf(index.get()));
+
+        } else {
+            this.sequenceWriter.writeWithoutName(() -> generator, () -> element);
         }
-        sequenceWriter.addFileTypes(fileTypes);
     }
 
     @Override

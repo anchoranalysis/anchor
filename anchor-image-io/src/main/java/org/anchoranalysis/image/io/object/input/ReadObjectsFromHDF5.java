@@ -81,7 +81,7 @@ class ReadObjectsFromHDF5 implements Deserializer<ObjectCollection> {
         // objects present
         int numberObjects =
                 ObjectMaskHDF5Reader.extractIntAttr(
-                        reader.uint32(), "/", HDF5ObjectsGenerator.NUM_OBJECTS_ATTRIBUTE_NAME);
+                        reader.uint32(), "/", HDF5ObjectsGenerator.NUMBER_OBJECTS_ATTRIBUTE_NAME);
         if (numberObjects == 0) {
             return ObjectCollectionFactory.empty();
         }

@@ -36,7 +36,6 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.identifier.name.NameValue;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.MultipleFileTypeGenerator;
-import org.anchoranalysis.io.manifest.file.FileType;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.output.namestyle.OutputNameStyle;
@@ -73,19 +72,19 @@ public class CombinedListGenerator<T> implements MultipleFileTypeGenerator<T> {
     }
 
     @Override
-    public FileType[] write(T element, OutputNameStyle outputNameStyle, ElementOutputter outputter)
+    public void write(T element, OutputNameStyle outputNameStyle, ElementOutputter outputter)
             throws OutputWriteFailedException {
-        return delegate.write(element, outputNameStyle, outputter);
+        delegate.write(element, outputNameStyle, outputter);
     }
 
     @Override
-    public FileType[] writeWithIndex(
+    public void writeWithIndex(
             T element,
             String index,
             IndexableOutputNameStyle outputNameStyle,
             ElementOutputter outputter)
             throws OutputWriteFailedException {
-        return delegate.writeWithIndex(element, index, outputNameStyle, outputter);
+        delegate.writeWithIndex(element, index, outputNameStyle, outputter);
     }
 
     public void add(String name, Generator<T> element) {

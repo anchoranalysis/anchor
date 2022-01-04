@@ -41,8 +41,6 @@ import org.anchoranalysis.io.output.outputter.OutputterChecked;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class NamedStacksOutputter {
 
-    public static final String MANIFEST_FUNCTION = "stackFromCollection";
-
     /**
      * Writes all or a subset from a set of named-stacks to a directory as a raster.
      *
@@ -64,7 +62,7 @@ public class NamedStacksOutputter {
             OutputterChecked outputter)
             throws OutputWriteFailedException {
 
-        OutputSequenceStackFactory.withManifestFunction(MANIFEST_FUNCTION)
-                .withoutOrderSubset(stacks, outputName, suppressSubdirectory, outputter);
+        OutputSequenceStackFactory.NO_RESTRICTIONS.withoutOrderSubset(
+                stacks, outputName, suppressSubdirectory, outputter);
     }
 }

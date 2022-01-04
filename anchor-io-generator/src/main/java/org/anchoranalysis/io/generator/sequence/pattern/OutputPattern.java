@@ -28,7 +28,6 @@ package org.anchoranalysis.io.generator.sequence.pattern;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
 
 /**
@@ -44,7 +43,6 @@ import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
  *   <li>An associated output-name that is used as an identifer in forming rules on what outputs are
  *       enabled or not.
  *   <li>Whether to enforce these rules or not, on what outputs are enabled.
- *   <li>A description to associate with the subdirectory (if it is created) in the manifest.
  * </ul>
  *
  * along with associated rules for writing.
@@ -64,7 +62,4 @@ public abstract class OutputPattern {
 
     /** Whether the output should be checked to see if it is allowed or not. */
     @Getter private final boolean selective;
-
-    /** A manifest-description for the directory, if defined. */
-    @Getter private final Optional<ManifestDescription> manifestDescription;
 }

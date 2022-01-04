@@ -91,13 +91,12 @@ public abstract class PeriodicSubdirectoryReporter<T>
         }
     }
 
-    // We setup the manifest from a Generator
+    /** We setup the sequence-writer. */
     protected void initialize(Generator<T> generator) // NOSONAR
             throws OutputWriteFailedException {
 
         OutputPatternIntegerSuffix pattern =
-                new OutputPatternIntegerSuffix(
-                        outputName, NUMBER_DIGITS_IN_OUTPUT, true, Optional.empty());
+                new OutputPatternIntegerSuffix(outputName, NUMBER_DIGITS_IN_OUTPUT, true);
 
         this.sequenceWriter =
                 new OutputSequenceFactory<>(generator, getParentOutputter())

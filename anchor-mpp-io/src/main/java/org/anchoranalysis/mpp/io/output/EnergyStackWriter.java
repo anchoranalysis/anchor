@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.mpp.io.output;
 
-import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.image.core.channel.Channel;
@@ -34,7 +33,6 @@ import org.anchoranalysis.image.io.channel.output.ChannelGenerator;
 import org.anchoranalysis.io.generator.sequence.OutputSequenceFactory;
 import org.anchoranalysis.io.generator.sequence.pattern.OutputPatternIntegerSuffix;
 import org.anchoranalysis.io.generator.serialized.DictionaryGenerator;
-import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.Outputter;
 
@@ -62,10 +60,6 @@ public class EnergyStackWriter {
     public static final String OUTPUT_ENERGY_STACK_DIRECTORY = "energyStack";
     private static final String OUTPUT_ENERGY_STACK_DICTIONARY = "energyStackDictionary";
 
-    private static final String MANIFEST_FUNCTION_CHANNEL = "energyStackChannel";
-    public static final String MANIFEST_FUNCTION_DICTIONARY = OUTPUT_ENERGY_STACK_DICTIONARY;
-    public static final String MANIFEST_FUNCTION_STACK = OUTPUT_ENERGY_STACK_DIRECTORY;
-
     private final EnergyStack energyStack;
     private final Outputter outputter;
 
@@ -73,12 +67,7 @@ public class EnergyStackWriter {
 
         OutputPatternIntegerSuffix directory =
                 new OutputPatternIntegerSuffix(
-                        OUTPUT_ENERGY_STACK_DIRECTORY,
-                        OUTPUT_ENERGY_STACK_DIRECTORY,
-                        2,
-                        true,
-                        Optional.of(
-                                new ManifestDescription("raster", MANIFEST_FUNCTION_DICTIONARY)));
+                        OUTPUT_ENERGY_STACK_DIRECTORY, OUTPUT_ENERGY_STACK_DIRECTORY, 2, true);
 
         createSequenceFactory()
                 .incrementingByOneStream(
@@ -90,13 +79,13 @@ public class EnergyStackWriter {
                     .writerSelective()
                     .write(
                             OUTPUT_ENERGY_STACK_DICTIONARY,
-                            () -> new DictionaryGenerator(MANIFEST_FUNCTION_DICTIONARY),
+                            DictionaryGenerator::new,
                             energyStack::getParameters);
         }
     }
 
     private OutputSequenceFactory<Channel> createSequenceFactory() {
-        ChannelGenerator generator = new ChannelGenerator(MANIFEST_FUNCTION_CHANNEL);
+        ChannelGenerator generator = new ChannelGenerator();
 
         // We write the energy-stack separately as individual channels
         return new OutputSequenceFactory<>(generator, outputter.getChecked());

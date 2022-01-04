@@ -49,7 +49,6 @@ import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.stack.output.StackWriteAttributes;
 import org.anchoranalysis.image.io.stack.output.StackWriteAttributesFactory;
 import org.anchoranalysis.image.io.stack.output.generator.RasterGeneratorSelectFormat;
-import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /**
@@ -122,11 +121,6 @@ public class TextStyle extends AnchorBean<TextStyle> {
             } catch (OperationFailedException e) {
                 throw new OutputWriteFailedException(e);
             }
-        }
-
-        @Override
-        public Optional<ManifestDescription> createManifestDescription() {
-            return Optional.of(new ManifestDescription("raster", "text"));
         }
 
         @Override

@@ -33,9 +33,6 @@ import lombok.Getter;
 import org.anchoranalysis.core.format.ImageFileFormat;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.time.ExecutionTimeRecorder;
-import org.anchoranalysis.io.manifest.ManifestDescription;
-import org.anchoranalysis.io.manifest.ManifestDirectoryDescription;
-import org.anchoranalysis.io.manifest.directory.SubdirectoryBase;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.enabled.multi.MultiLevelOutputEnabled;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
@@ -59,26 +56,17 @@ public class ElementOutputter {
 
     /**
      * Derives a bound-output-manager for a (possibly newly created) subdirectory of the existing
-     * manager
+     * manager.
      *
-     * @param subdirectoryName the subdirectory-name
-     * @param manifestDescription manifest-description for the directory if it exists
-     * @param manifestDirectory manifest-folder
+     * @param subdirectoryName the subdirectory-name.
      * @param inheritOutputRulesAndRecording if true, the output rules and recording are inherited
      *     from the parent directory. if false, they are not, and all outputs are allowed and are
      *     unrecorded.
-     * @return a bound-output-manager for the subdirectory
+     * @return a bound-output-manager for the subdirectory.
      */
     public OutputterChecked deriveSubdirectory(
-            String subdirectoryName,
-            ManifestDirectoryDescription manifestDescription,
-            Optional<SubdirectoryBase> manifestDirectory,
-            boolean inheritOutputRulesAndRecording) {
-        return outputter.deriveSubdirectory(
-                subdirectoryName,
-                manifestDescription,
-                manifestDirectory,
-                inheritOutputRulesAndRecording);
+            String subdirectoryName, boolean inheritOutputRulesAndRecording) {
+        return outputter.deriveSubdirectory(subdirectoryName, inheritOutputRulesAndRecording);
     }
 
     /**
@@ -94,23 +82,6 @@ public class ElementOutputter {
     public Path makeOutputPath(
             Optional<String> suffixWithoutExtension, String extension, String fallbackSuffix) {
         return outputter.makeOutputPath(suffixWithoutExtension, extension, fallbackSuffix);
-    }
-
-    /**
-     * Writes a file-entry to the operation recorder
-     *
-     * @param outputName output-name
-     * @param pathSuffix the final part of the path of the file
-     * @param manifestDescription the manifest description
-     * @param index an index associated with this item (there may be other items with the same name,
-     *     but not the same index)
-     */
-    public void writeFileToOperationRecorder(
-            String outputName,
-            Path pathSuffix,
-            ManifestDescription manifestDescription,
-            String index) {
-        outputter.writeFileToOperationRecorder(outputName, pathSuffix, manifestDescription, index);
     }
 
     /**

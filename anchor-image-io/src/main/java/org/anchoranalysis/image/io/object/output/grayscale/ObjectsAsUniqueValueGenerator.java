@@ -68,6 +68,6 @@ public class ObjectsAsUniqueValueGenerator extends ObjectsAsGrayscaleGenerator {
             out.assignValue(value++).toObject(object);
         }
 
-        return new ChannelGenerator("maskCollection").transform(out);
+        return new ChannelGenerator().transform(out);
     }
 }

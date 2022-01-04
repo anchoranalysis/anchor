@@ -26,16 +26,12 @@
 
 package org.anchoranalysis.io.generator.sequence;
 
-import java.util.Arrays;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.io.generator.sequence.pattern.OutputPattern;
-import org.anchoranalysis.io.manifest.ManifestDirectoryDescription;
-import org.anchoranalysis.io.manifest.file.FileType;
-import org.anchoranalysis.io.manifest.sequencetype.SequenceType;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
 import org.anchoranalysis.io.output.recorded.RecordingWriters;
@@ -60,26 +56,16 @@ class SequenceWriters {
 
     @Getter private Optional<RecordingWriters> writers = Optional.empty();
 
-    private IndexableSubdirectory directoryManifest;
-
-    public void initialize(SequenceType<?> sequenceType) throws InitializeException {
-
-        this.directoryManifest = new IndexableSubdirectory(pattern.getOutputNameStyle());
+    public void initialize() throws InitializeException {
 
         try {
-            this.writers =
-                    selectWritersMaybeCreateSubdirectory(
-                            createDirectoryDescription(sequenceType), directoryManifest);
+            this.writers = selectWritersMaybeCreateSubdirectory();
         } catch (OutputWriteFailedException e) {
             throw new InitializeException(e);
         }
     }
 
-    public void addFileTypes(FileType[] fileTypes) {
-        Arrays.stream(fileTypes).forEach(directoryManifest::addFileType);
-    }
-
-    public <T> Optional<FileType[]> write(
+    public <T> boolean write(
             ElementWriterSupplier<T> generator, ElementSupplier<T> element, String index)
             throws OutputWriteFailedException {
 
@@ -87,7 +73,7 @@ class SequenceWriters {
             return multiplexSelective()
                     .writeWithIndex(pattern.getOutputNameStyle(), generator, element, index);
         } else {
-            return Optional.empty();
+            return false;
         }
     }
 
@@ -122,24 +108,17 @@ class SequenceWriters {
                 .multiplex(pattern.isSelective());
     }
 
-    private Optional<RecordingWriters> selectWritersMaybeCreateSubdirectory(
-            ManifestDirectoryDescription directoryDescription, IndexableSubdirectory subdirectory)
+    private Optional<RecordingWriters> selectWritersMaybeCreateSubdirectory()
             throws OutputWriteFailedException {
         if (pattern.getSubdirectoryName().isPresent()) {
             return parentWriters
                     .multiplex(pattern.isSelective())
                     .createSubdirectory(
                             pattern.getSubdirectoryName().get(), // NOSONAR
-                            directoryDescription,
-                            Optional.of(subdirectory),
                             false)
                     .map(OutputterChecked::getWriters);
         } else {
             return Optional.of(parentWriters);
         }
-    }
-
-    private ManifestDirectoryDescription createDirectoryDescription(SequenceType<?> sequenceType) {
-        return new ManifestDirectoryDescription(pattern.getManifestDescription(), sequenceType);
     }
 }

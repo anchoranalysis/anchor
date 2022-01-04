@@ -25,13 +25,10 @@
  */
 package org.anchoranalysis.experiment.bean.task;
 
-import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
-import org.anchoranalysis.io.manifest.Manifest;
-import org.anchoranalysis.io.manifest.operationrecorder.WriteOperationRecorder;
 import org.anchoranalysis.io.output.outputter.BindFailedException;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
 import org.anchoranalysis.io.output.path.prefixer.DirectoryWithPrefix;
@@ -42,41 +39,24 @@ import org.anchoranalysis.io.output.path.prefixer.PathPrefixerException;
 class BindingPathOutputterFactory {
 
     public static OutputterChecked createWithBindingPath(
-            NamedPath path, Optional<Manifest> manifestTask, ParametersExperiment parameters)
+            NamedPath path, ParametersExperiment parameters)
             throws BindFailedException, JobExecutionException {
         try {
             DirectoryWithPrefix prefixToAssign =
-                    new PrefixForInput(
-                                    parameters.getPrefixer(),
-                                    parameters.getExperimentArguments().createPrefixerContext())
-                            .prefixForFile(
+                    parameters
+                            .getPrefixer()
+                            .outFilePrefix(
                                     path,
                                     parameters.experimentIdentifierForOutputPath(),
-                                    parameters.getExperimentalManifest());
-
-            // Initializes the manifest to be written
-            manifestTask.ifPresent(recorder -> recorder.initialize(prefixToAssign.getDirectory()));
+                                    parameters.getExperimentArguments().createPrefixerContext());
 
             OutputterChecked boundOutput =
-                    parameters
-                            .getOutputter()
-                            .getChecked()
-                            .changePrefix(prefixToAssign, writeRecorder(manifestTask));
+                    parameters.getOutputter().getChecked().changePrefix(prefixToAssign);
 
-            if (parameters.getExperimentalManifest().isPresent()) {
-                ManifestClashChecker.throwExceptionIfClashes(
-                        parameters.getExperimentalManifest().get(), // NOSONAR
-                        boundOutput,
-                        path.getPath());
-            }
             return boundOutput;
 
         } catch (PathPrefixerException e) {
             throw new BindFailedException(e);
         }
-    }
-
-    private static Optional<WriteOperationRecorder> writeRecorder(Optional<Manifest> manifest) {
-        return manifest.map(Manifest::getRootDirectory);
     }
 }

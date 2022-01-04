@@ -29,10 +29,6 @@ package org.anchoranalysis.io.output.writer;
 import java.nio.file.Path;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.anchoranalysis.io.manifest.ManifestDescription;
-import org.anchoranalysis.io.manifest.ManifestDirectoryDescription;
-import org.anchoranalysis.io.manifest.directory.SubdirectoryBase;
-import org.anchoranalysis.io.manifest.file.FileType;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.output.namestyle.SimpleOutputNameStyle;
@@ -57,19 +53,12 @@ public class AlwaysAllowed implements Writer {
 
     @Override
     public Optional<OutputterChecked> createSubdirectory(
-            String outputName,
-            ManifestDirectoryDescription manifestDescription,
-            Optional<SubdirectoryBase> manifestDirectory,
-            boolean inheritOutputRulesAndRecording)
+            String outputName, boolean inheritOutputRulesAndRecording)
             throws OutputWriteFailedException {
 
         maybeExecutePreop();
         return Optional.of(
-                outputter.deriveSubdirectory(
-                        outputName,
-                        manifestDescription,
-                        manifestDirectory,
-                        inheritOutputRulesAndRecording));
+                outputter.deriveSubdirectory(outputName, inheritOutputRulesAndRecording));
     }
 
     // Write a file without checking if the outputName is allowed
@@ -94,7 +83,7 @@ public class AlwaysAllowed implements Writer {
     }
 
     @Override
-    public <T> Optional<FileType[]> writeWithIndex(
+    public <T> boolean writeWithIndex(
             IndexableOutputNameStyle outputNameStyle,
             ElementWriterSupplier<T> elementWriter,
             ElementSupplier<T> element,
@@ -106,14 +95,11 @@ public class AlwaysAllowed implements Writer {
                         outputNameForWriting(outputNameStyle.getOutputName()),
                         () -> {
                             maybeExecutePreop();
-                            return Optional.of(
-                                    elementWriter
-                                            .get()
-                                            .writeWithIndex(
-                                                    element.get(),
-                                                    index,
-                                                    outputNameStyle,
-                                                    outputter));
+                            elementWriter
+                                    .get()
+                                    .writeWithIndex(
+                                            element.get(), index, outputNameStyle, outputter);
+                            return true;
                         });
     }
 
@@ -137,20 +123,12 @@ public class AlwaysAllowed implements Writer {
         return true;
     }
 
-    // A non-generator way of creating outputs, that are still included in the manifest
-    // Returns null if output is not allowed
     @Override
-    public Optional<Path> createFilenameForWriting(
-            String outputName,
-            String extension,
-            Optional<ManifestDescription> manifestDescription) {
+    public Optional<Path> createFilenameForWriting(String outputName, String extension) {
 
         maybeExecutePreop();
 
         Path path = outputter.makeOutputPath(Optional.of(outputName), extension, outputName);
-
-        manifestDescription.ifPresent(
-                md -> outputter.writeFileToOperationRecorder(outputName, path, md, ""));
         return Optional.of(path);
     }
 

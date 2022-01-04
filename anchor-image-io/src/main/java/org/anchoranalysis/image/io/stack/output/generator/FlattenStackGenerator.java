@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.image.io.stack.output.generator;
 
-import java.util.Optional;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.stack.output.StackWriteAttributes;
@@ -38,8 +37,8 @@ import org.anchoranalysis.image.io.stack.output.StackWriteAttributes;
  */
 public class FlattenStackGenerator extends RasterGeneratorDelegateToRaster<Stack, Stack> {
 
-    public FlattenStackGenerator(boolean padIfNecessary, String manifestFunction) {
-        super(new StackGenerator(padIfNecessary, Optional.of(manifestFunction), true));
+    public FlattenStackGenerator(boolean padIfNecessary) {
+        super(new StackGenerator(padIfNecessary, true));
     }
 
     @Override

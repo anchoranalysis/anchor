@@ -29,10 +29,6 @@ package org.anchoranalysis.io.output.writer;
 import java.nio.file.Path;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.anchoranalysis.io.manifest.ManifestDescription;
-import org.anchoranalysis.io.manifest.ManifestDirectoryDescription;
-import org.anchoranalysis.io.manifest.directory.SubdirectoryBase;
-import org.anchoranalysis.io.manifest.file.FileType;
 import org.anchoranalysis.io.output.enabled.single.SingleLevelOutputEnabled;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
@@ -61,10 +57,7 @@ public class CheckIfAllowed implements Writer {
 
     @Override
     public Optional<OutputterChecked> createSubdirectory(
-            String outputName,
-            ManifestDirectoryDescription manifestDescription,
-            Optional<SubdirectoryBase> manifestDirectory,
-            boolean inheritOutputRulesAndRecording)
+            String outputName, boolean inheritOutputRulesAndRecording)
             throws OutputWriteFailedException {
 
         if (!outputEnabled.isOutputEnabled(outputName)) {
@@ -73,8 +66,7 @@ public class CheckIfAllowed implements Writer {
 
         maybeExecutePreop();
 
-        return writer.createSubdirectory(
-                outputName, manifestDescription, manifestDirectory, inheritOutputRulesAndRecording);
+        return writer.createSubdirectory(outputName, inheritOutputRulesAndRecording);
     }
 
     @Override
@@ -94,7 +86,7 @@ public class CheckIfAllowed implements Writer {
     }
 
     @Override
-    public <T> Optional<FileType[]> writeWithIndex(
+    public <T> boolean writeWithIndex(
             IndexableOutputNameStyle outputNameStyle,
             ElementWriterSupplier<T> elementWriter,
             ElementSupplier<T> element,
@@ -102,7 +94,7 @@ public class CheckIfAllowed implements Writer {
             throws OutputWriteFailedException {
 
         if (!outputEnabled.isOutputEnabled(outputNameStyle.getOutputName())) {
-            return Optional.empty();
+            return false;
         }
 
         maybeExecutePreop();
@@ -125,10 +117,7 @@ public class CheckIfAllowed implements Writer {
     }
 
     @Override
-    public Optional<Path> createFilenameForWriting(
-            String outputName,
-            String extension,
-            Optional<ManifestDescription> manifestDescription) {
+    public Optional<Path> createFilenameForWriting(String outputName, String extension) {
 
         if (!outputEnabled.isOutputEnabled(outputName)) {
             return Optional.empty();
@@ -136,7 +125,7 @@ public class CheckIfAllowed implements Writer {
 
         maybeExecutePreop();
 
-        return writer.createFilenameForWriting(outputName, extension, manifestDescription);
+        return writer.createFilenameForWriting(outputName, extension);
     }
 
     private void maybeExecutePreop() {

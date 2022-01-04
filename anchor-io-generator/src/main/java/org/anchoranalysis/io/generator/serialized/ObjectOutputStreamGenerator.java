@@ -31,19 +31,10 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.nio.file.Path;
-import java.util.Optional;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 public class ObjectOutputStreamGenerator<T extends Serializable> extends SerializedGenerator<T> {
-
-    public ObjectOutputStreamGenerator() {
-        this(Optional.empty());
-    }
-
-    public ObjectOutputStreamGenerator(Optional<String> manifestFunction) {
-        super(manifestFunction);
-    }
 
     @Override
     public void writeToFile(T element, OutputWriteSettings settings, Path filePath)

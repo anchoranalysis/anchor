@@ -28,21 +28,12 @@ package org.anchoranalysis.io.generator.serialized;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.Optional;
 import org.anchoranalysis.core.format.NonImageFileFormat;
 import org.anchoranalysis.core.serialize.XStreamSerializer;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 public class XStreamGenerator<T> extends SerializedGenerator<T> {
-
-    public XStreamGenerator() {
-        this(Optional.empty());
-    }
-
-    public XStreamGenerator(Optional<String> manifestFunction) {
-        super(manifestFunction);
-    }
 
     @Override
     public void writeToFile(T element, OutputWriteSettings settings, Path filePath)

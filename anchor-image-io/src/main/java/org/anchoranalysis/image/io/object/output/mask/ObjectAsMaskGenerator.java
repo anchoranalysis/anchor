@@ -41,7 +41,6 @@ import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.Point3i;
@@ -66,11 +65,6 @@ public class ObjectAsMaskGenerator extends RasterGeneratorSelectFormat<ObjectMas
     @Override
     public Stack transform(ObjectMask element) throws OutputWriteFailedException {
         return new Stack(createChannelFromMask(element, resolution));
-    }
-
-    @Override
-    public Optional<ManifestDescription> createManifestDescription() {
-        return Optional.of(new ManifestDescription("raster", "mask"));
     }
 
     @Override

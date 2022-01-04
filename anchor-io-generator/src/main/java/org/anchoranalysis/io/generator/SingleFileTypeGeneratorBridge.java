@@ -32,7 +32,6 @@ import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.checked.CheckedFunction;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
@@ -57,11 +56,6 @@ public class SingleFileTypeGeneratorBridge<S, T, V> extends SingleFileTypeGenera
     public String selectFileExtension(OutputWriteSettings settings, Optional<Logger> logger)
             throws OperationFailedException {
         return delegate.selectFileExtension(settings, logger);
-    }
-
-    @Override
-    public Optional<ManifestDescription> createManifestDescription() {
-        return delegate.createManifestDescription();
     }
 
     @Override

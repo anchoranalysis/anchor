@@ -41,12 +41,11 @@ public class DisplayStackGenerator extends RasterGeneratorDelegateToRaster<Stack
     /**
      * Creates the generator.
      *
-     * @param manifestFunction function-stored in manifest for this generator
      * @param always2D if true, a stack is guaranteed always to be 2D (i.e. have only one z-slice).
      *     If false, it may be 2D or 3D.
      */
-    public DisplayStackGenerator(String manifestFunction, boolean always2D) {
-        super(new StackGenerator(manifestFunction, always2D));
+    public DisplayStackGenerator(boolean always2D) {
+        super(new StackGenerator(always2D));
     }
 
     @Override

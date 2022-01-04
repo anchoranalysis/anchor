@@ -95,10 +95,7 @@ public class CSVWriter implements AutoCloseable {
 
         Optional<TextFileOutput> output =
                 TextFileOutputter.create(
-                        NonImageFileFormat.CSV.extensionWithoutPeriod(),
-                        Optional.empty(),
-                        outputter,
-                        outputName);
+                        NonImageFileFormat.CSV.extensionWithoutPeriod(), outputter, outputName);
 
         OptionalUtilities.ifPresent(output, TextFileOutput::start);
         return output.map(CSVWriter::new);

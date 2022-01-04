@@ -28,10 +28,6 @@ package org.anchoranalysis.io.output.writer;
 
 import java.nio.file.Path;
 import java.util.Optional;
-import org.anchoranalysis.io.manifest.ManifestDescription;
-import org.anchoranalysis.io.manifest.ManifestDirectoryDescription;
-import org.anchoranalysis.io.manifest.directory.SubdirectoryBase;
-import org.anchoranalysis.io.manifest.file.FileType;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
@@ -59,9 +55,6 @@ public interface Writer {
      *
      * @param outputName the name of the subdirectory. This may determine if an output is allowed or
      *     not.
-     * @param manifestDescription a manifest-description associated with the subdirectory as a
-     *     whole, if it exists.
-     * @param manifestDirectory a manifest-folder if it exists
      * @param inheritOutputRulesAndRecording if true, the output rules and recording are inherited
      *     from the parent directory. if false, they are not, and all outputs are allowed and are
      *     unrecorded.
@@ -70,10 +63,7 @@ public interface Writer {
      * @throws OutputWriteFailedException
      */
     Optional<OutputterChecked> createSubdirectory(
-            String outputName,
-            ManifestDirectoryDescription manifestDescription,
-            Optional<SubdirectoryBase> manifestDirectory,
-            boolean inheritOutputRulesAndRecording)
+            String outputName, boolean inheritOutputRulesAndRecording)
             throws OutputWriteFailedException;
 
     /**
@@ -81,9 +71,9 @@ public interface Writer {
      *
      * @param outputName the name of the subdirectory. This may determine if an output is allowed or
      *     not.
-     * @param elementWriter writes the element to the filesystem
-     * @param element the element to write
-     * @return true if the output was allowed, false otherwise
+     * @param elementWriter writes the element to the filesystem.
+     * @param element the element to write.
+     * @return true if the output was allowed, false otherwise.
      * @throws OutputWriteFailedException
      */
     <T> boolean write(
@@ -93,14 +83,14 @@ public interface Writer {
     /**
      * Writes an indexed-element using an {@link ElementWriter} in the current directory.
      *
-     * @param outputNameStyle how to combine a particular output-name with an index
-     * @param elementWriter writes the element to the filesystem
-     * @param element the element to write
-     * @param index the index
-     * @return any file-types written if the output was allowed, otherwise {@link Optional#empty}.
+     * @param outputNameStyle how to combine a particular output-name with an index.
+     * @param elementWriter writes the element to the filesystem.
+     * @param element the element to write.
+     * @param index the index.
+     * @return true if the output was allowed, false otherwise.
      * @throws OutputWriteFailedException
      */
-    <T> Optional<FileType[]> writeWithIndex(
+    <T> boolean writeWithIndex(
             IndexableOutputNameStyle outputNameStyle,
             ElementWriterSupplier<T> elementWriter,
             ElementSupplier<T> element,
@@ -113,9 +103,9 @@ public interface Writer {
      *
      * @param outputName the name of the subdirectory. This may determine if an output is allowed or
      *     not, but will not be included in the outputted filename.
-     * @param elementWriter writes the element to the filesystem
-     * @param element the element to write
-     * @return true if the output was allowed, false otherwise
+     * @param elementWriter writes the element to the filesystem.
+     * @param element the element to write.
+     * @return true if the output was allowed, false otherwise.
      * @throws OutputWriteFailedException
      */
     <T> boolean writeWithoutName(
@@ -132,9 +122,7 @@ public interface Writer {
      * @param outputName the output-name. This is the filename without an extension, and may
      *     determine if an output is allowed or not.
      * @param extension the extension
-     * @param manifestDescription manifest-description associated with the file if it exists.
      * @return the path to write to, if it is allowed, otherwise {@link Optional#empty}.
      */
-    Optional<Path> createFilenameForWriting(
-            String outputName, String extension, Optional<ManifestDescription> manifestDescription);
+    Optional<Path> createFilenameForWriting(String outputName, String extension);
 }

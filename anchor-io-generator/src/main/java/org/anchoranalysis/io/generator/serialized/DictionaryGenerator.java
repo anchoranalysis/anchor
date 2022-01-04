@@ -34,7 +34,6 @@ import org.anchoranalysis.core.format.NonImageFileFormat;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.io.generator.OneStageGenerator;
-import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
@@ -45,10 +44,6 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
  */
 @AllArgsConstructor
 public class DictionaryGenerator extends OneStageGenerator<Dictionary> {
-
-    private static final String MANIFEST_TYPE = "dictionary";
-
-    private final String manifestFunction;
 
     @Override
     public void writeToFile(Dictionary element, OutputWriteSettings settings, Path filePath)
@@ -63,10 +58,5 @@ public class DictionaryGenerator extends OneStageGenerator<Dictionary> {
     @Override
     public String selectFileExtension(OutputWriteSettings settings, Optional<Logger> logger) {
         return NonImageFileFormat.XML.extensionWithoutPeriod();
-    }
-
-    @Override
-    public Optional<ManifestDescription> createManifestDescription() {
-        return Optional.of(new ManifestDescription(MANIFEST_TYPE, manifestFunction));
     }
 }

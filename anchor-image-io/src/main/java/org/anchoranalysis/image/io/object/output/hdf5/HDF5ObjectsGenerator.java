@@ -35,7 +35,6 @@ import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.io.object.HDF5PathHelper;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.io.generator.OneStageGenerator;
-import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 
 /**
@@ -47,7 +46,7 @@ import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 public class HDF5ObjectsGenerator extends OneStageGenerator<ObjectCollection> {
 
     // Name of the attribute in the root of the HDF5 that stores the number of objects
-    public static final String NUM_OBJECTS_ATTRIBUTE_NAME = "numberObjects";
+    public static final String NUMBER_OBJECTS_ATTRIBUTE_NAME = "numberObjects";
 
     // START REQUIRED ARGUMENTS
     /** Whether to use compression when writing the object-masks in HDF5. */
@@ -68,12 +67,6 @@ public class HDF5ObjectsGenerator extends OneStageGenerator<ObjectCollection> {
     @Override
     public String selectFileExtension(OutputWriteSettings settings, Optional<Logger> logger) {
         return "h5";
-    }
-
-    @Override
-    public Optional<ManifestDescription> createManifestDescription() {
-        return Optional.of(
-                new ManifestDescription("hdf5", ObjectCollectionWriter.MANIFEST_DESCRIPTION));
     }
 
     private void writeObjects(ObjectCollection objects, Path filePath) {
@@ -101,6 +94,6 @@ public class HDF5ObjectsGenerator extends OneStageGenerator<ObjectCollection> {
     // Adds an attribute with the total number of objects, so it can be quickly queried
     //  from the HDF5 without parsing all the datasets
     private void addObjectsSizeAttribute(IHDF5Writer writer, ObjectCollection objects) {
-        writer.uint32().setAttr("/", NUM_OBJECTS_ATTRIBUTE_NAME, objects.size());
+        writer.uint32().setAttr("/", NUMBER_OBJECTS_ATTRIBUTE_NAME, objects.size());
     }
 }

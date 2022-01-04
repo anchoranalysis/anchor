@@ -59,8 +59,6 @@ import org.anchoranalysis.spatial.orientation.DirectionVector;
 /** @author Owen Feehan */
 class ObjectFeatureListCSVGenerator extends CSVGenerator<ObjectCollection> {
 
-    private static final String MANIFEST_FUNCTION = "objectFeatures";
-
     private FeatureCalculatorMulti<FeatureInputSingleObject> featureCalculator;
 
     private FeatureTableCSVGenerator<ResultsVectorList> delegate;
@@ -72,7 +70,6 @@ class ObjectFeatureListCSVGenerator extends CSVGenerator<ObjectCollection> {
             SharedObjects sharedObjects,
             Logger logger)
             throws CreateException {
-        super(MANIFEST_FUNCTION);
         this.logger = logger;
 
         try {
@@ -81,9 +78,7 @@ class ObjectFeatureListCSVGenerator extends CSVGenerator<ObjectCollection> {
                             this::createFullFeatureList, sharedObjects);
             this.featureCalculator = tuple.getCalculator();
 
-            delegate =
-                    FeatureTableCSVGeneratorFactory.create(
-                            MANIFEST_FUNCTION, tuple.getNames(), false);
+            delegate = FeatureTableCSVGeneratorFactory.create(tuple.getNames(), false);
         } catch (OperationFailedException e) {
             throw new CreateException(e);
         }

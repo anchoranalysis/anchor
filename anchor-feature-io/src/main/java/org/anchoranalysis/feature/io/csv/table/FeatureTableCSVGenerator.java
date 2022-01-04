@@ -28,6 +28,7 @@ package org.anchoranalysis.feature.io.csv.table;
 
 import java.nio.file.Path;
 import java.util.List;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.tabular.CSVGenerator;
 import org.anchoranalysis.io.generator.tabular.CSVWriter;
@@ -40,20 +41,11 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
  * @author Owen Feehan
  * @param <T> type of object that describes <i>all</i> rows of feature calculations.
  */
+@AllArgsConstructor
 public abstract class FeatureTableCSVGenerator<T> extends CSVGenerator<T> {
 
+    /** The headers of all columns for the CSV output. */
     private List<String> headerNames;
-
-    /**
-     * Creates for a particular manifest-function and headers.
-     *
-     * @param manifestFunction the manifest-function.
-     * @param headerNames the headers of all columns for the CSV output.
-     */
-    protected FeatureTableCSVGenerator(String manifestFunction, List<String> headerNames) {
-        super(manifestFunction);
-        this.headerNames = headerNames;
-    }
 
     @Override
     public void writeToFile(T element, OutputWriteSettings settings, Path filePath)

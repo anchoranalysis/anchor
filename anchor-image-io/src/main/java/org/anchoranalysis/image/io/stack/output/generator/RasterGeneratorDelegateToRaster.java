@@ -25,13 +25,11 @@
  */
 package org.anchoranalysis.image.io.stack.output.generator;
 
-import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.stack.output.StackWriteAttributes;
-import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /**
@@ -49,11 +47,6 @@ public abstract class RasterGeneratorDelegateToRaster<S, T> extends RasterGenera
     /** The delegate. */
     private final RasterGenerator<S> delegate;
     // END REQUIRED ARGUMENTS
-
-    @Override
-    public Optional<ManifestDescription> createManifestDescription() {
-        return delegate.createManifestDescription();
-    }
 
     @Override
     public StackWriteAttributes guaranteedImageAttributes() {
