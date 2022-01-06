@@ -38,12 +38,12 @@ import org.anchoranalysis.spatial.box.BoundingBox;
 
 /**
  * An implementation of {@link Overlay} that draws an {@link ObjectMask} on an image.
- * 
+ *
  * @author Owen feehan
  */
 public class OverlayObjectMask extends Overlay {
 
-	/** The {@link ObjectMask} to draw. */
+    /** The {@link ObjectMask} to draw. */
     @Getter private final ObjectWithProperties object;
 
     /** ID associated with object */

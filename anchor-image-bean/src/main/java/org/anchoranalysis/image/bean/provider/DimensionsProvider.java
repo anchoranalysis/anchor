@@ -26,6 +26,8 @@
 
 package org.anchoranalysis.image.bean.provider;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.Provider;
 import org.anchoranalysis.image.bean.ImageBean;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
@@ -35,5 +37,6 @@ import org.anchoranalysis.image.core.dimensions.Dimensions;
  *
  * @author Owen Feehan
  */
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class DimensionsProvider extends ImageBean<DimensionsProvider>
         implements Provider<Dimensions> {}

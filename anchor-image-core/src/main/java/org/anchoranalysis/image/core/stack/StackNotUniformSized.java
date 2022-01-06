@@ -95,15 +95,31 @@ public class StackNotUniformSized implements Iterable<Channel> {
      * in the newly created {@link Stack}. But if a projection is needed, it is always freshly
      * created as a new channel.
      *
-     * @return a newly created {@link Stack}, with maximum intensity projections of each {@link
-     *     Channel}.
+     * @return a newly created {@link Stack} with maximum intensity projections of each {@link
+     *     Channel} if 3D. {@code this} if it's already a single z-slice (i.e. 2D).
      */
     public StackNotUniformSized projectMax() {
-        return deriveMapped(Channel::projectMax);
+        if (getNumberChannels() > 0
+                && channels.stream().anyMatch(channel -> channel.extent().z() > 1)) {
+            return deriveMapped(Channel::projectMax);
+        } else {
+            return this;
+        }
     }
 
     /**
-     * Appends a channel to the stack, as the new final-most channel positionwise.
+     * Is at least one channel 3D?
+     *
+     * @return true if at least one channel exists with a z-size that is more than one. false
+     *     otherwise (including if no channels exist).
+     */
+    public boolean isAnyChannel3D() {
+        return getNumberChannels() > 0
+                && channels.stream().anyMatch(channel -> channel.extent().z() > 1);
+    }
+
+    /**
+     * Appends a channel to the stack, as the new final-most channel position-wise.
      *
      * @param channel the channel.
      */

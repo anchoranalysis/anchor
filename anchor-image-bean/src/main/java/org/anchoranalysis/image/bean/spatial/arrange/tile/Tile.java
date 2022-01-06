@@ -30,6 +30,7 @@ import com.github.davidmoten.guavamini.Preconditions;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.function.UnaryOperator;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -39,11 +40,10 @@ import org.anchoranalysis.image.bean.nonbean.spatial.arrange.ArrangeStackExcepti
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.StackArrangement;
 import org.anchoranalysis.image.bean.spatial.arrange.Single;
 import org.anchoranalysis.image.bean.spatial.arrange.StackArranger;
-import org.anchoranalysis.image.core.stack.RGBStack;
+import org.anchoranalysis.image.bean.spatial.arrange.align.BoxAligner;
+import org.anchoranalysis.image.bean.spatial.arrange.align.Center;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.box.Extent;
-import org.anchoranalysis.spatial.point.Point3i;
-import org.anchoranalysis.spatial.point.ReadableTuple3i;
 
 /**
  * A higher-level aggregate structure that arranges other {@link StackArranger}s in a tabular
@@ -78,6 +78,9 @@ public class Tile extends StackArranger {
      * particular cell.
      */
     @BeanField @Getter @Setter private StackArranger cellDefault = new Single();
+
+    /** How to align a smaller image inside a larger cell. */
+    @BeanField @Getter @Setter private BoxAligner aligner = new Center();
     // END BEAN PROPERTIES
 
     /**
@@ -94,19 +97,19 @@ public class Tile extends StackArranger {
     }
 
     @Override
-    public StackArrangement arrangeStacks(final Iterator<RGBStack> stacks)
+    public StackArrangement arrangeStacks(final Iterator<Extent> extents)
             throws ArrangeStackException {
 
         Extent tableSize = new Extent(numberColumns, numberRows, 1);
 
         ArrangerIndex arrangers = new ArrangerIndex(cells, cellDefault, tableSize);
 
-        ArrangementIndex table = new ArrangementIndex(stacks, arrangers, tableSize);
+        ArrangementIndex table = new ArrangementIndex(extents, arrangers, tableSize);
 
         return createArrangement(table, new CellSizeCalculator(table));
     }
 
-    private static StackArrangement createArrangement(
+    private StackArrangement createArrangement(
             ArrangementIndex table, CellSizeCalculator cellSizes) {
 
         StackArrangement arrangement = new StackArrangement(cellSizes.total());
@@ -119,11 +122,8 @@ public class Tile extends StackArranger {
 
                     StackArrangement stacksInCell = table.get(column, row);
 
-                    BoundingBox box = cellSizes.cell(column, row);
-                    Point3i relativeCorner =
-                            relativeCornerToCell(box.extent(), stacksInCell.extent());
-
-                    addAllWithShift(stacksInCell, arrangement, box.cornerMin(), relativeCorner);
+                    BoundingBox cell = cellSizes.cell(column, row);
+                    addAll(stacksInCell, arrangement, box -> aligner.align(box, cell));
                 }
             }
         }
@@ -131,31 +131,20 @@ public class Tile extends StackArranger {
     }
 
     /**
-     * The minimum corner of a stack relative to the cell minimum corner, so as to center it across
-     * all dimensions.
-     */
-    private static Point3i relativeCornerToCell(Extent cellSize, Extent stackSize) {
-        Point3i relativeCorner = Point3i.immutableSubtract(cellSize.asTuple(), stackSize.asTuple());
-        relativeCorner.divideBy(2); // To center
-        return relativeCorner;
-    }
-
-    /**
      * Add all {@link BoundingBox}es in {@code source} to {@code destination} after two additional
      * shifts.
      */
-    private static void addAllWithShift(
+    private static void addAll(
             Iterable<BoundingBox> source,
             StackArrangement destination,
-            ReadableTuple3i shift1,
-            ReadableTuple3i shift2) {
+            UnaryOperator<BoundingBox> mapBox) {
 
         // We now loop through each item in the cell, and add to our output set with
         //   the correct offset
         for (BoundingBox box : source) {
-            Point3i cornerMin = Point3i.immutableAdd(box.cornerMin(), shift1);
-            cornerMin.add(shift2);
-            destination.add(new BoundingBox(cornerMin, box.extent()));
+            assert (destination.extent().contains(box));
+            assert (!box.extent().anyDimensionIsLargerThan(box.extent()));
+            destination.add(mapBox.apply(box));
         }
     }
 }

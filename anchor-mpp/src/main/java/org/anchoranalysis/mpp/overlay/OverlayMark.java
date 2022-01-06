@@ -42,7 +42,7 @@ import org.anchoranalysis.spatial.box.BoundingBox;
 
 /**
  * An implementation of {@link Overlay} that draws an {@link Mark} on an image.
- * 
+ *
  * @author Owen feehan
  */
 @EqualsAndHashCode(callSuper = false)

@@ -26,6 +26,8 @@
 
 package org.anchoranalysis.image.bean.channel.converter;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.bean.ImageBean;
 import org.anchoranalysis.image.core.channel.convert.ChannelConverter;
@@ -35,6 +37,7 @@ import org.anchoranalysis.image.core.channel.convert.ChannelConverter;
  *
  * @param <T> destination voxel type to convert to
  */
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class ConvertChannelTo<T> extends ImageBean<ConvertChannelTo<T>> {
 
     /**

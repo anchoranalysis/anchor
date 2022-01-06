@@ -1,4 +1,4 @@
-package org.anchoranalysis.image.bean.spatial.arrange;
+package org.anchoranalysis.image.bean.nonbean.spatial.arrange;
 
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
@@ -8,6 +8,14 @@ import org.anchoranalysis.spatial.point.ReadableTuple3i;
 
 /**
  * Two {@link VoxelBuffer}s representing the source and destination of a copy operation.
+ *
+ * <p>The buffers must have:
+ *
+ * <ul>
+ *   <li>An identical number of channels.
+ *   <li>or the source must be singled-channeled (which is then used as every channel to match the
+ *       destination).
+ * </ul>
  *
  * @author Owen Feehan
  */
@@ -34,7 +42,12 @@ class BufferPair {
      * @param destinationZ the index of the z-slice to copy into for {@code destinationStack}.
      */
     public void assign(Stack sourceStack, Stack destinationStack, int sourceZ, int destinationZ) {
-        for (int channelIndex = 0; channelIndex < source.length; channelIndex++) {
+        for (int channelIndex = 0; channelIndex < destination.length; channelIndex++) {
+
+            if (source.length == 1) {
+                sourceZ = 1;
+            }
+
             source[channelIndex] = bufferForSlice(sourceStack, channelIndex, sourceZ);
             destination[channelIndex] =
                     bufferForSlice(destinationStack, channelIndex, destinationZ);

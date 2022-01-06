@@ -33,10 +33,10 @@ import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.object.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.image.core.object.properties.ObjectWithProperties;
 import org.anchoranalysis.image.core.stack.RGBStack;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.overlay.writer.ObjectDrawAttributes;
 import org.anchoranalysis.overlay.writer.PrecalculationOverlay;
 import org.anchoranalysis.spatial.box.BoundingBox;
-import org.anchoranalysis.image.voxel.object.ObjectMask;
 
 /**
  * Draws a representation of an {@link ObjectMask} on a {@link RGBStack}.
@@ -46,14 +46,14 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
 public abstract class DrawObject extends AnchorBean<DrawObject> {
 
     /**
-     * Draws a single-object on top of a RGB-stack
+     * Draws a single-object on top of a RGB-stack.
      *
      * @param object the object to draw.
      * @param stack the image to draw on.
      * @param attributes attributes for each object when drawing.
      * @param iteration the current iteration.
      * @param restrictTo a restriction on which part of stack we draw onto to (considered in terms
-     *     of the possibly-zoomed pixel cooridinates).
+     *     of the possibly-zoomed pixel coordinates).
      */
     public final void writeSingle(
             ObjectWithProperties object,

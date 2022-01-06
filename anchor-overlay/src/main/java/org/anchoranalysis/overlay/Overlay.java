@@ -26,6 +26,8 @@
 
 package org.anchoranalysis.overlay;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.object.properties.ObjectWithProperties;
@@ -39,6 +41,7 @@ import org.anchoranalysis.spatial.box.BoundingBox;
  *
  * @author Owen Feehan
  */
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class Overlay implements Identifiable {
 
     /**

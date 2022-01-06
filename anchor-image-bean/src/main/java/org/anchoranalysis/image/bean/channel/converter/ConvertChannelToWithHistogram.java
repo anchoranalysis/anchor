@@ -26,6 +26,8 @@
 
 package org.anchoranalysis.image.bean.channel.converter;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.image.core.channel.convert.attached.ChannelConverterAttached;
 import org.anchoranalysis.math.histogram.Histogram;
@@ -37,6 +39,7 @@ import org.anchoranalysis.math.histogram.Histogram;
  * @author Owen Feehan
  * @param <T> the buffer-type to convert the channel to
  */
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class ConvertChannelToWithHistogram<T>
         extends AnchorBean<ConvertChannelToWithHistogram<T>> {
 

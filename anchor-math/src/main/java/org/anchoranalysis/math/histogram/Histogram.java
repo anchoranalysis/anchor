@@ -91,7 +91,7 @@ public final class Histogram {
     }
 
     /**
-     * Constructs with a maximum value, and assuming a minimum value of 0.
+     * Constructs with a minimum and maximum value.
      *
      * @param minValue minimum possible value in the histogram (inclusive).
      * @param maxValue maximum possible value in the histogram (inclusive).

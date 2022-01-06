@@ -252,7 +252,6 @@ public class Stack implements Iterable<Channel> {
      * @return the extracted slice, as a new {@link Stack} but reusing the existing voxels.
      */
     public Stack extractSlice(int z) {
-        // We know the sizes will be correct
         return new Stack(rgb, delegate.extractSlice(z));
     }
 
@@ -265,11 +264,14 @@ public class Stack implements Iterable<Channel> {
      * created as a new channel.
      *
      * @return a newly created {@link Stack}, with maximum intensity projections of each {@link
-     *     Channel}.
+     *     Channel} if 3D. Otherwise if 2D, then {@code this} is returned.
      */
     public Stack projectMax() {
-        // We know the sizes will be correct
-        return new Stack(rgb, delegate.projectMax());
+        if (delegate.isAnyChannel3D()) {
+            return new Stack(rgb, delegate.projectMax());
+        } else {
+            return this;
+        }
     }
 
     /**
@@ -392,6 +394,16 @@ public class Stack implements Iterable<Channel> {
      */
     public Stack duplicateDeep() {
         return new Stack(this);
+    }
+
+    /**
+     * Is at least one channel 3D?
+     *
+     * @return true if at least one channel exists with a z-size that is more than one. false
+     *     otherwise (including if no channels exist).
+     */
+    public boolean isAnyChannel3D() {
+        return delegate.isAnyChannel3D();
     }
 
     /**

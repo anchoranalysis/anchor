@@ -37,7 +37,6 @@ import org.anchoranalysis.image.bean.nonbean.spatial.arrange.ArrangeStackExcepti
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.StackArrangement;
 import org.anchoranalysis.image.bean.spatial.arrange.Single;
 import org.anchoranalysis.image.bean.spatial.arrange.StackArranger;
-import org.anchoranalysis.image.core.stack.RGBStack;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.box.Extent;
 import org.anchoranalysis.spatial.point.Point3i;
@@ -110,21 +109,19 @@ public class Overlay extends StackArranger {
     }
 
     @Override
-    public StackArrangement arrangeStacks(Iterator<RGBStack> stacks) throws ArrangeStackException {
+    public StackArrangement arrangeStacks(Iterator<Extent> extents) throws ArrangeStackException {
 
-        if (!stacks.hasNext()) {
+        if (!extents.hasNext()) {
             throw new ArrangeStackException("No image in iterator for source");
         }
 
-        StackArrangement arrangement = SINGLE.arrangeStacks(stacks);
+        StackArrangement arrangement = SINGLE.arrangeStacks(extents);
 
-        if (!stacks.hasNext()) {
+        if (!extents.hasNext()) {
             throw new ArrangeStackException("No image in iterator for overlay");
         }
 
-        RGBStack overlay = stacks.next();
-
-        BoundingBox box = boxForOverlay(arrangement.extent(), overlay.extent());
+        BoundingBox box = boxForOverlay(arrangement.extent(), extents.next());
         arrangement.add(box);
         return arrangement;
     }

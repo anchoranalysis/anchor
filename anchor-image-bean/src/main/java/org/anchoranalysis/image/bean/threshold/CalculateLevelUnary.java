@@ -26,8 +26,10 @@
 
 package org.anchoranalysis.image.bean.threshold;
 
+import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.OperationFailedException;
@@ -39,6 +41,7 @@ import org.anchoranalysis.math.histogram.Histogram;
  * @author Owen Feehan
  */
 @EqualsAndHashCode(callSuper = false)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class CalculateLevelUnary extends CalculateLevel {
 
     // START BEAN PROPERTIES

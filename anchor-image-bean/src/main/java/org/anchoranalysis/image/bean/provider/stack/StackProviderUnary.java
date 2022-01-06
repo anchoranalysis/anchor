@@ -26,7 +26,9 @@
 
 package org.anchoranalysis.image.bean.provider.stack;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.Provider;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -38,6 +40,7 @@ import org.anchoranalysis.image.core.stack.Stack;
  *
  * @author Owen Feehan
  */
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class StackProviderUnary extends StackProvider {
 
     // START BEAN FIELDS

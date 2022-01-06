@@ -45,12 +45,34 @@ import org.anchoranalysis.io.input.InputFromManager;
 public interface ProvidesStackInput extends InputFromManager {
 
     /**
+     * Exposes the input as a single {@link Stack} throw an error if more than one exists.
+     *
+     * @param progress a progress-reporter.
+     * @param logger a logger for any non-fatal errors. Fatal errors throw an exception.
+     * @return the single stack.
+     * @throws OperationFailedException if more than one stack exists, or otherwise a fatal error
+     *     occurs loading the stacks.
+     */
+    default Stack asStack(Progress progress, Logger logger) throws OperationFailedException {
+        NamedStacks set = asSet(progress, logger);
+        if (set.isEmpty()) {
+            throw new OperationFailedException(
+                    "No stack exists in the input. Exactly one is required.");
+        }
+        if (set.size() > 1) {
+            throw new OperationFailedException(
+                    "More than one stack exists in the input, only one is expected.");
+        }
+        return set.getArbitraryElement();
+    }
+
+    /**
      * Exposes the input as a set of named stacks (inferring the names).
      *
      * @param progress a progress-reporter.
      * @param logger a logger for any non-fatal errors. Fatal errors throw an exception.
      * @return a set of named-stacks.
-     * @throws OperationFailedException
+     * @throws OperationFailedException if a fatal error occurs loading the stack.
      */
     default NamedStacks asSet(Progress progress, Logger logger) throws OperationFailedException {
         NamedStacks set = new NamedStacks();

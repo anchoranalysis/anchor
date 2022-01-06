@@ -27,6 +27,8 @@
 package org.anchoranalysis.image.bean.segment.binary;
 
 import java.util.Optional;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.annotation.GroupingRoot;
 import org.anchoranalysis.image.bean.nonbean.segment.BinarySegmentationParameters;
 import org.anchoranalysis.image.bean.nonbean.segment.SegmentationFailedException;
@@ -43,6 +45,7 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
  * @author Owen Feehan
  */
 @GroupingRoot
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class BinarySegmentation extends SegmentationBean<BinarySegmentation> {
 
     /**

@@ -135,7 +135,7 @@ public final class Point3i extends Tuple3i {
     }
 
     /**
-     * Adds two tuples immutably.
+     * Adds <b>two</b> tuples immutably.
      *
      * @param tuple1 the first tuple to add.
      * @param tuple2 the second tuple to add.
@@ -145,6 +145,23 @@ public final class Point3i extends Tuple3i {
     public static Point3i immutableAdd(ReadableTuple3i tuple1, ReadableTuple3i tuple2) {
         Point3i pointCopy = new Point3i(tuple1);
         pointCopy.add(tuple2);
+        return pointCopy;
+    }
+
+    /**
+     * Adds <b>three</b> tuples immutably.
+     *
+     * @param tuple1 the first tuple to add.
+     * @param tuple2 the second tuple to add.
+     * @param tuple3 the third tuple to add.
+     * @return a newly created point, where each dimension is the sum of the corresponding
+     *     dimensions in the points.
+     */
+    public static Point3i immutableAdd(
+            ReadableTuple3i tuple1, ReadableTuple3i tuple2, ReadableTuple3i tuple3) {
+        Point3i pointCopy = new Point3i(tuple1);
+        pointCopy.add(tuple2);
+        pointCopy.add(tuple3);
         return pointCopy;
     }
 

@@ -26,11 +26,14 @@
 
 package org.anchoranalysis.image.bean.unitvalue.extent.volume;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.bean.unitvalue.extent.UnitValueExtent;
 
 /**
  * A base class for a value that describes a <b>volume</b> measurement on the image.
  *
- * @author Owen
+ * @author Owen Feehan
  */
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class UnitValueVolume extends UnitValueExtent {}

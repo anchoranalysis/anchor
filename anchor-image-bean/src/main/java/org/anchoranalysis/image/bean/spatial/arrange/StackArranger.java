@@ -27,14 +27,17 @@
 package org.anchoranalysis.image.bean.spatial.arrange;
 
 import java.util.Iterator;
+import java.util.List;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.ArrangeStackException;
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.StackArrangement;
+import org.anchoranalysis.image.bean.nonbean.spatial.arrange.StackCopierAtBox;
 import org.anchoranalysis.image.core.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.core.channel.factory.ChannelFactorySingleType;
 import org.anchoranalysis.image.core.stack.RGBStack;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
+import org.anchoranalysis.spatial.box.Extent;
 
 /**
  * Base class for a method that determines positions for {@link RGBStack}s when combined onto a
@@ -53,7 +56,7 @@ public abstract class StackArranger extends AnchorBean<StackArranger> {
      * @throws ArrangeStackException if there are more {@code stacks} than can be arranged, or
      *     otherwise an error occurs arranging them.
      */
-    public RGBStack combine(Iterable<RGBStack> stacks) throws ArrangeStackException {
+    public RGBStack combine(List<RGBStack> stacks) throws ArrangeStackException {
         return combine(stacks, ChannelFactory.instance().get(UnsignedByteVoxelType.INSTANCE));
     }
 
@@ -66,14 +69,14 @@ public abstract class StackArranger extends AnchorBean<StackArranger> {
      * @throws ArrangeStackException if there are more {@code stacks} than can be arranged, or
      *     otherwise an error occurs arranging them.
      */
-    public RGBStack combine(Iterable<RGBStack> stacks, ChannelFactorySingleType factory)
+    public RGBStack combine(List<RGBStack> stacks, ChannelFactorySingleType factory)
             throws ArrangeStackException {
 
-        Iterator<RGBStack> rasterIterator = stacks.iterator();
+        Iterator<Extent> extentIterator = stacks.stream().map(RGBStack::extent).iterator();
 
-        StackArrangement arrangement = arrangeStacks(rasterIterator);
+        StackArrangement arrangement = arrangeStacks(extentIterator);
 
-        if (rasterIterator.hasNext()) {
+        if (extentIterator.hasNext()) {
             throw new ArrangeStackException("There are more stacks than can be arranged.");
         }
 
@@ -85,11 +88,11 @@ public abstract class StackArranger extends AnchorBean<StackArranger> {
     /**
      * Arranges stacks to that they fit together in a single raster.
      *
-     * @param stacks the stacks to arrange.
+     * @param extents the size of each respective stack for the arrangement.
      * @return bounding-boxes for each respective {@link RGBStack} in the unified plane.
      * @throws ArrangeStackException if a bounding-box cannot be determined for any stack.
      */
-    public abstract StackArrangement arrangeStacks(Iterator<RGBStack> stacks)
+    public abstract StackArrangement arrangeStacks(Iterator<Extent> extents)
             throws ArrangeStackException;
 
     private static void populateStacks(
@@ -97,7 +100,7 @@ public abstract class StackArranger extends AnchorBean<StackArranger> {
 
         int index = 0;
         for (RGBStack image : generatedImages) {
-            StackCopier.copyImage(image.asStack(), out, arrangement.get(index++));
+            StackCopierAtBox.copyImageInto(image.asStack(), out, arrangement.get(index++));
         }
     }
 }

@@ -30,7 +30,6 @@ import java.util.Iterator;
 import java.util.Stack;
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.ArrangeStackException;
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.StackArrangement;
-import org.anchoranalysis.image.core.stack.RGBStack;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.box.Extent;
 
@@ -45,12 +44,10 @@ import org.anchoranalysis.spatial.box.Extent;
 public class Single extends StackArranger {
 
     @Override
-    public StackArrangement arrangeStacks(Iterator<RGBStack> stacks) throws ArrangeStackException {
+    public StackArrangement arrangeStacks(Iterator<Extent> extents) throws ArrangeStackException {
 
-        if (stacks.hasNext()) {
-            RGBStack stack = stacks.next();
-
-            Extent extent = stack.getChannel(0).extent();
+        if (extents.hasNext()) {
+            Extent extent = extents.next();
 
             return new StackArrangement(extent, new BoundingBox(extent));
         } else {
