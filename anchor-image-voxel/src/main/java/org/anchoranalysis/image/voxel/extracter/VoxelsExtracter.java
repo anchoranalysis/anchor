@@ -147,11 +147,11 @@ public interface VoxelsExtracter<T> {
      *
      * @param sizeX new size in X dimension.
      * @param sizeY new size in Y dimension.
-     * @param interpolator means to interpolate voxels as they are resized.
+     * @param resizer an interpolator for resizing voxels.
      * @return newly created voxels of specified size containing interpolated voxels from the
      *     current voxels.
      */
-    Voxels<T> resizedXY(int sizeX, int sizeY, VoxelsResizer interpolator);
+    Voxels<T> resizedXY(int sizeX, int sizeY, VoxelsResizer resizer);
 
     /**
      * A <i>maximum</i> intensity projection of all slices

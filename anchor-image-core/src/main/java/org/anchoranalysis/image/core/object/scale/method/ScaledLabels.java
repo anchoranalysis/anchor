@@ -57,7 +57,7 @@ import org.anchoranalysis.spatial.scale.ScaleFactor;
  */
 class ScaledLabels<T> {
 
-    private static final VoxelsResizer INTERPOLATOR = createInterpolatorForLabels();
+    private static final VoxelsResizer RESIZER = createResizerForLabels();
 
     private Map<Integer, T> labelMapping = new HashMap<>();
 
@@ -83,7 +83,7 @@ class ScaledLabels<T> {
         Channel labels = createLabels(boundedElements, preOperation);
 
         // Scale the raster with nearest neighbor interpolation
-        this.labelsScaled = labels.scaleXY(scaleFactor, INTERPOLATOR);
+        this.labelsScaled = labels.scaleXY(scaleFactor, RESIZER);
 
         // Inferring the number of labels that have been produced
         this.numberLabels = boundedElements.size() - objectsOverlap.size();
@@ -181,7 +181,7 @@ class ScaledLabels<T> {
      *
      * @return a nearest-neighbor interpolator with boundaries extended as 0.
      */
-    private static VoxelsResizer createInterpolatorForLabels() {
-        return VoxelsResizerFactory.getInstance().binaryResizing(0);
+    private static VoxelsResizer createResizerForLabels() {
+        return VoxelsResizerFactory.getInstance().binaryResizer(0);
     }
 }

@@ -244,14 +244,14 @@ public class BoundedVoxels<T> {
      * <p>This is an <b>immutable</b> operation.
      *
      * @param scaleFactor what to scale X and Y dimensions by?
-     * @param interpolator means of interpolating between pixels.
+     * @param resizer an interpolator for resizing voxels.
      * @param clipTo an extent which the object-masks should always fit inside after scaling (to
      *     catch any rounding errors that push the bounding box outside the scene-boundary).
      * @return a new {@link BoundedVoxels} box of specified size containing scaled contents of the
      *     existing.
      */
     public BoundedVoxels<T> scale(
-            ScaleFactor scaleFactor, VoxelsResizer interpolator, Optional<Extent> clipTo) {
+            ScaleFactor scaleFactor, VoxelsResizer resizer, Optional<Extent> clipTo) {
 
         // Construct a new bounding-box, clipping if necessary
         BoundingBox boundingBoxScaled =
@@ -262,7 +262,7 @@ public class BoundedVoxels<T> {
                 extracterLocal.resizedXY(
                         boundingBoxScaled.extent().x(),
                         boundingBoxScaled.extent().y(),
-                        interpolator);
+                        resizer);
 
         return new BoundedVoxels<>(boundingBoxScaled, voxelsOut);
     }
