@@ -85,7 +85,7 @@ class ColoredDualStackTester {
     }
 
     /**
-     * Combines a big cyan-colored image with a smaller magenta-colored image.
+     * Combines a big cyan-colored image with a smaller magenta-colored image, in that specific order.
      *
      * @param arranger how to arrange the two stacks when combined.
      * @param flattenSmall when true, the smaller stack is flattened across the z-dimension.

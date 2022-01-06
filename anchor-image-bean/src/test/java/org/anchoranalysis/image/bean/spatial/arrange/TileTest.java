@@ -40,7 +40,7 @@ class TileTest {
     @Test
     void testSingleCellOverlay() throws ArrangeStackException {
         Tile tile = createWithCellEntry(0, 0);
-        testSingleCell(tile, MAGENTA, CYAN, CYAN, false);
+        testSingleCell(tile, CYAN, MAGENTA, CYAN, false);
     }
 
     /**
