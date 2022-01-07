@@ -26,6 +26,8 @@
 
 package org.anchoranalysis.image.bean.provider;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.NullParametersBean;
 import org.anchoranalysis.bean.Provider;
 import org.anchoranalysis.core.color.ColorList;
@@ -35,5 +37,6 @@ import org.anchoranalysis.core.color.ColorList;
  *
  * @author Owen Feehan
  */
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class ColorProvider extends NullParametersBean<ColorProvider>
         implements Provider<ColorList> {}

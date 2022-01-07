@@ -35,12 +35,14 @@ import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.core.time.OperationContext;
 
 /**
- * Fixtures to create loggers that don't output anything.
+ * Fixture to create a {@link Logger} that don't output anything.
+ *
+ * <p>A {@link OperationContext} containg such a logger may also be created.
  *
  * @author Owen Feehan
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class LoggingFixture {
+public class LoggerFixture {
 
     /**
      * A {@link MessageLogger} that doesn't output anything.

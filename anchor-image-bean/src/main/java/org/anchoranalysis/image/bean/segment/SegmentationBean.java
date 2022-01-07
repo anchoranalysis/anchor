@@ -26,6 +26,8 @@
 
 package org.anchoranalysis.image.bean.segment;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.bean.ImageBean;
 
 /**
@@ -34,4 +36,5 @@ import org.anchoranalysis.image.bean.ImageBean;
  * @author Owen Feehan
  * @param <T> bean-type
  */
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class SegmentationBean<T> extends ImageBean<T> {}

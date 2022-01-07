@@ -57,16 +57,16 @@ public class VoxelsResizerExecutionTime extends VoxelsResizer {
     /**
      * Creates with an {@link VoxelsResizer} and {@link ExecutionTimeRecorder}.
      *
-     * @param interpolator the interpolator whose activity will be recorded.
+     * @param resizer an interpolator for resizing voxels.
      * @param executionTimeRecorder the recorder of the execution times.
      * @param operationIdentifierPrefix a prefix that will be prepended to the identifiers used to
      *     record execution time (to help make them unique to a given context).
      */
     public VoxelsResizerExecutionTime(
-            VoxelsResizer interpolator,
+            VoxelsResizer resizer,
             ExecutionTimeRecorder executionTimeRecorder,
             String operationIdentifierPrefix) {
-        this.resizer = interpolator;
+        this.resizer = resizer;
         this.executionTimeRecorder = executionTimeRecorder;
         this.identifierByte = buildIdentifier("byte", operationIdentifierPrefix);
         this.identifierShort = buildIdentifier("short", operationIdentifierPrefix);

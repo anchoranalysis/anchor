@@ -75,8 +75,8 @@ class AtCorner<T> implements VoxelsExtracter<T> {
     }
 
     @Override
-    public Voxels<T> resizedXY(int sizeX, int sizeY, VoxelsResizer interpolator) {
-        return delegate.resizedXY(sizeX, sizeY, interpolator);
+    public Voxels<T> resizedXY(int sizeX, int sizeY, VoxelsResizer resizer) {
+        return delegate.resizedXY(sizeX, sizeY, resizer);
     }
 
     @Override

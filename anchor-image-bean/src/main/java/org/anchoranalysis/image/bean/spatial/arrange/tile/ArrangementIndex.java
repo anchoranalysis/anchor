@@ -33,7 +33,6 @@ import java.util.stream.Stream;
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.ArrangeStackException;
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.StackArrangement;
 import org.anchoranalysis.image.bean.spatial.arrange.StackArranger;
-import org.anchoranalysis.image.core.stack.RGBStack;
 import org.anchoranalysis.spatial.box.Extent;
 
 /**
@@ -54,13 +53,13 @@ class ArrangementIndex {
      * <p>If the iterator has no more stacks available, the table ends without processing further
      * entities.
      *
-     * @param stacks the stacks to arrange.
+     * @param extents the respective sizes to arrange.
      * @param arrangers a {@link StackArranger} for each cell in the table.
      * @param tableSize the table size, in columns (x-dimension) and rows (y-dimension).
      * @throws ArrangeStackException if the {@code stacks} and {@code arrangers} do not match
      *     expectations, or otherwise an error occurs.
      */
-    public ArrangementIndex(Iterator<RGBStack> stacks, ArrangerIndex arrangers, Extent tableSize)
+    public ArrangementIndex(Iterator<Extent> extents, ArrangerIndex arrangers, Extent tableSize)
             throws ArrangeStackException {
 
         rows = new ArrayList<>();
@@ -69,12 +68,12 @@ class ArrangementIndex {
         for (int row = 0; row < tableSize.y(); row++) {
             for (int column = 0; column < tableSize.x(); column++) {
 
-                if (!stacks.hasNext()) {
+                if (!extents.hasNext()) {
                     // Exit early if there are no more stacks to iterate.
                     return;
                 }
 
-                StackArrangement item = arrangers.getForCell(column, row).arrangeStacks(stacks);
+                StackArrangement item = arrangers.getForCell(column, row).arrangeStacks(extents);
 
                 List<StackArrangement> currentRows = getListOrAdd(rows, row);
                 List<StackArrangement> currentColumns = getListOrAdd(columns, column);

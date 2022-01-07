@@ -35,7 +35,7 @@ import org.anchoranalysis.io.output.bean.OutputManager;
 import org.anchoranalysis.io.output.outputter.BindFailedException;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
-import org.anchoranalysis.test.LoggingFixture;
+import org.anchoranalysis.test.LoggerFixture;
 import org.anchoranalysis.test.io.output.OutputterCheckedFixture;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -56,7 +56,7 @@ public class OutputterFixture {
     }
 
     private static Outputter outputter(OutputterChecked outputter) {
-        ErrorReporter errorReporter = LoggingFixture.suppressedLogger().errorReporter();
+        ErrorReporter errorReporter = LoggerFixture.suppressedLogger().errorReporter();
         return new Outputter(outputter, errorReporter);
     }
 }

@@ -26,7 +26,9 @@
 
 package org.anchoranalysis.image.bean.provider;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.Provider;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -38,6 +40,7 @@ import org.anchoranalysis.image.core.mask.Mask;
  *
  * @author Owen Feehan
  */
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class MaskProviderUnary extends MaskProvider {
 
     // START BEAN PROPERTIES

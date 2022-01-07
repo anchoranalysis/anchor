@@ -17,19 +17,19 @@ class OverlayTest {
     /** Tests aligned towards the <b>minimum</b> on every axis. */
     @Test
     void testMin() throws ArrangeStackException {
-        testSingleCell(new Overlay("left", "top", "bottom"), MAGENTA, CYAN, CYAN, false);
-    }
-
-    /** Tests aligned towards the <b>center</b> on every axis. */
-    @Test
-    void testCenter() throws ArrangeStackException {
-        testSingleCell(new Overlay("center", "center", "center"), CYAN, MAGENTA, CYAN, false);
+        testSingleCell(new Overlay("left", "top", "bottom"), MAGENTA, MAGENTA, CYAN, false);
     }
 
     /** Tests aligned towards the <b>max</b> on every axis. */
     @Test
     void testMax() throws ArrangeStackException {
-        testSingleCell(new Overlay("right", "bottom", "top"), CYAN, CYAN, MAGENTA, false);
+        testSingleCell(new Overlay("right", "bottom", "top"), CYAN, MAGENTA, MAGENTA, false);
+    }
+    
+    /** Tests aligned towards the <b>center</b> on every axis. */
+    @Test
+    void testCenter() throws ArrangeStackException {
+        testSingleCell(new Overlay("center", "center", "center"), CYAN, MAGENTA, CYAN, false);
     }
 
     /** Tests with an overlay with a single z-slice. */

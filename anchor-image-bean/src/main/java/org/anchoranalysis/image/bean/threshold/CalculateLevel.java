@@ -26,6 +26,8 @@
 
 package org.anchoranalysis.image.bean.threshold;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.NullParametersBean;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.math.histogram.Histogram;
@@ -38,6 +40,7 @@ import org.anchoranalysis.math.histogram.Histogram;
  *
  * @author Owen Feehan
  */
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class CalculateLevel extends NullParametersBean<CalculateLevel> {
 
     /**

@@ -941,7 +941,7 @@ public class ObjectMask {
     }
 
     private VoxelsResizer createResizer(BinaryValuesInt binaryValues) {
-        return VoxelsResizerFactory.getInstance().binaryResizing(binaryValues.getOff());
+        return VoxelsResizerFactory.getInstance().binaryResizer(binaryValues.getOff());
     }
 
     /**

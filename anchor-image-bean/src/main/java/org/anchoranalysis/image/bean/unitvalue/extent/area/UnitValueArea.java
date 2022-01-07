@@ -26,6 +26,8 @@
 
 package org.anchoranalysis.image.bean.unitvalue.extent.area;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.bean.unitvalue.extent.UnitValueExtent;
 
 /**
@@ -33,4 +35,5 @@ import org.anchoranalysis.image.bean.unitvalue.extent.UnitValueExtent;
  *
  * @author Owen
  */
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class UnitValueArea extends UnitValueExtent {}

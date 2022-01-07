@@ -16,7 +16,7 @@ class DualStacks {
      * The size of the <i>small</i> stack. This covers more than half of {@code SIZE_BIG} in the X
      * and Y dimensions but not in the Z.
      */
-    public static final Extent SIZE_SMALL = new Extent(35, 30, 10);
+    public static final Extent SIZE_SMALL = new Extent(35, 30, 30);
 
     /**
      * Create a list containing the two {@link RGBStack}s.

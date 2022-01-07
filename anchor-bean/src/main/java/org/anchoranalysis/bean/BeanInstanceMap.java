@@ -78,9 +78,11 @@ public class BeanInstanceMap {
      * @param <T> the family-type
      * @param familyType the class that defines the family.
      * @param instance an instance to add.
+     * @return {@code instance}.
      */
-    public <T> void putInstanceFor(Class<? extends T> familyType, T instance) {
+    public <T> T putInstanceFor(Class<? extends T> familyType, T instance) {
         map.put(familyType, instance);
+        return instance;
     }
 
     /**

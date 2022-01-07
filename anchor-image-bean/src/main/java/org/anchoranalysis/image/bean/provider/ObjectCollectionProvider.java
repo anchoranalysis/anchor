@@ -26,6 +26,8 @@
 
 package org.anchoranalysis.image.bean.provider;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.Provider;
 import org.anchoranalysis.bean.annotation.GroupingRoot;
 import org.anchoranalysis.image.bean.ImageBean;
@@ -37,5 +39,6 @@ import org.anchoranalysis.image.voxel.object.ObjectCollection;
  * @author Owen Feehan
  */
 @GroupingRoot
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class ObjectCollectionProvider extends ImageBean<ObjectCollectionProvider>
         implements Provider<ObjectCollection> {}

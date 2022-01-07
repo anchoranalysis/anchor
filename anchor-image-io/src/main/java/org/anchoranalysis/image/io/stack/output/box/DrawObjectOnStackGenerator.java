@@ -184,7 +184,7 @@ public class DrawObjectOnStackGenerator
         return object.mapBoundingBoxPreserveExtent(
                 boundingBox -> boundingBox.shiftTo(relativePosition));
     }
-    
+
     private Either<Dimensions, DisplayStack> createBackground(BoundedList<ObjectMask> element)
             throws OutputWriteFailedException {
 

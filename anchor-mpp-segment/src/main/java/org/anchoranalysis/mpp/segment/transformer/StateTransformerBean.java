@@ -29,7 +29,7 @@ package org.anchoranalysis.mpp.segment.transformer;
 import org.anchoranalysis.bean.AnchorBean;
 
 /**
- * Transforms one type into another
+ * Transforms one type into another.
  *
  * @author Owen Feehan
  * @param <S> source-type for transformation

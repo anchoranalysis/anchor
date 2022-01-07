@@ -26,6 +26,8 @@
 
 package org.anchoranalysis.image.bean.provider.stack;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.Provider;
 import org.anchoranalysis.bean.annotation.GroupingRoot;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
@@ -38,6 +40,7 @@ import org.anchoranalysis.image.core.stack.Stack;
  * @author Owen Feehan
  */
 @GroupingRoot
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class StackProvider extends BeanProviderAsStackBase<StackProvider, Stack> {
 
     @Override

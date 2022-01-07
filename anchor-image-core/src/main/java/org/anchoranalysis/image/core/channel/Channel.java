@@ -162,15 +162,15 @@ public class Channel {
      * <p>The z-dimension remains unchanged.
      *
      * @param scaleFactor the scaling-factor to be applied to the sizes.
-     * @param interpolator the interpolator.
+     * @param resizer an interpolator for resizing voxels.
      * @return a newly created {@link Channel} containing a resized version of the current.
      */
-    public Channel scaleXY(ScaleFactor scaleFactor, VoxelsResizer interpolator) {
+    public Channel scaleXY(ScaleFactor scaleFactor, VoxelsResizer resizer) {
         // Rounding as sometimes we get values which, for example, are 7.999999, intended to be 8,
         // due to how we use our ScaleFactors
         int newSizeX = Scaler.scaleQuantity(scaleFactor.x(), dimensions().x());
         int newSizeY = Scaler.scaleQuantity(scaleFactor.y(), dimensions().y());
-        return resizeXY(newSizeX, newSizeY, interpolator);
+        return resizeXY(newSizeX, newSizeY, resizer);
     }
 
     /**
@@ -181,11 +181,11 @@ public class Channel {
      * <p>The z-dimension remains unchanged.
      *
      * @param extentToAssign the new size to assign. The z-component is ignored.
-     * @param interpolator the interpolator.
+     * @param resizer an interpolator for resizing voxels.
      * @return a newly created {@link Channel} containing a resized version of the current.
      */
-    public Channel resizeXY(Extent extentToAssign, VoxelsResizer interpolator) {
-        return resizeXY(extentToAssign.x(), extentToAssign.y(), interpolator);
+    public Channel resizeXY(Extent extentToAssign, VoxelsResizer resizer) {
+        return resizeXY(extentToAssign.x(), extentToAssign.y(), resizer);
     }
 
     /**
@@ -194,16 +194,16 @@ public class Channel {
      *
      * @param x the size along the x-axis.
      * @param y the size along the y-axis.
-     * @param interpolator the interpolator.
+     * @param resizer an interpolator for resizing voxels.
      * @return a newly created {@link Channel} containing a resized version of the current.
      */
-    public Channel resizeXY(int x, int y, VoxelsResizer interpolator) {
+    public Channel resizeXY(int x, int y, VoxelsResizer resizer) {
 
         assert (FACTORY != null);
 
         Dimensions dimensionsScaled = dimensions.resizeXY(x, y);
 
-        Voxels<?> resized = voxels.extract().resizedXY(x, y, interpolator);
+        Voxels<?> resized = voxels.extract().resizedXY(x, y, resizer);
         return FACTORY.create(resized, dimensionsScaled.resolution());
     }
 

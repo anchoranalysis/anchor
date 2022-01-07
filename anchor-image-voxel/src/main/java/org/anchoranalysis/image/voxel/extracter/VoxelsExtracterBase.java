@@ -114,7 +114,7 @@ abstract class VoxelsExtracterBase<T> implements VoxelsExtracter<T> {
     }
 
     @Override
-    public Voxels<T> resizedXY(int sizeX, int sizeY, VoxelsResizer interpolator) {
+    public Voxels<T> resizedXY(int sizeX, int sizeY, VoxelsResizer resizer) {
 
         Extent extentResized = new Extent(sizeX, sizeY, voxels.extent().z());
 
@@ -122,7 +122,7 @@ abstract class VoxelsExtracterBase<T> implements VoxelsExtracter<T> {
 
         assert (bufferTarget.slice(0).capacity() == extentResized.areaXY());
 
-        interpolator.resize(new VoxelsUntyped(voxels), new VoxelsUntyped(bufferTarget));
+        resizer.resize(new VoxelsUntyped(voxels), new VoxelsUntyped(bufferTarget));
 
         assert (bufferTarget.slice(0).capacity() == extentResized.areaXY());
         return bufferTarget;

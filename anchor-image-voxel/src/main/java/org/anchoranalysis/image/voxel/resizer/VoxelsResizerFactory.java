@@ -74,7 +74,7 @@ public class VoxelsResizerFactory {
      *     binary states.
      * @return a corresponding {@link VoxelsResizer}.
      */
-    public VoxelsResizer binaryResizing(int outOfBoundsValue) {
+    public VoxelsResizer binaryResizer(int outOfBoundsValue) {
         VoxelsResizerImgLib2 interpolator = new NearestNeighbor();
         interpolator.extendWith(outOfBoundsValue);
         return interpolator;

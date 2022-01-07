@@ -26,7 +26,9 @@
 
 package org.anchoranalysis.image.bean.threshold.relation;
 
+import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.shared.relation.threshold.RelationToThreshold;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesInt;
 
@@ -37,6 +39,7 @@ import org.anchoranalysis.image.voxel.binary.values.BinaryValuesInt;
  * @author Owen
  */
 @EqualsAndHashCode(callSuper = false)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class BinaryVoxelsBase extends RelationToThreshold {
 
     // This is sufficient for all base-classes, as we can rely on them not being further

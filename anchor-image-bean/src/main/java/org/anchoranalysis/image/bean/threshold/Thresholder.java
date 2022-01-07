@@ -27,6 +27,8 @@
 package org.anchoranalysis.image.bean.threshold;
 
 import java.util.Optional;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.NullParametersBean;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.voxel.VoxelsUntyped;
@@ -44,6 +46,7 @@ import org.anchoranalysis.math.histogram.Histogram;
  *
  * @author Owen Feehan
  */
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class Thresholder extends NullParametersBean<VoxelsThresholder> {
 
     /**

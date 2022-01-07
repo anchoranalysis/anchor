@@ -27,6 +27,8 @@
 package org.anchoranalysis.image.bean.unitvalue.extent;
 
 import java.util.Optional;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.image.bean.nonbean.UnitValueException;
 import org.anchoranalysis.image.core.dimensions.UnitConverter;
@@ -37,6 +39,7 @@ import org.anchoranalysis.image.core.dimensions.UnitConverter;
  *
  * @author Owen
  */
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class UnitValueExtent extends AnchorBean<UnitValueExtent> {
 
     /**

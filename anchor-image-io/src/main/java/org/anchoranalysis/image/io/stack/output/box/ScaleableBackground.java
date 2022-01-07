@@ -93,17 +93,17 @@ public class ScaleableBackground {
     }
 
     /**
-     * Creates a background from a stack with scaling
+     * Creates a background from a stack with scaling.
      *
-     * @param stack the stack
-     * @param scaleFactor what to scale the stack by
-     * @param interpolator interpolator to use for scaling stacks
-     * @return a newly created class
+     * @param stack the stack.
+     * @param scaleFactor what to scale the stack by.
+     * @param resizer an interpolator for resizing voxels.
+     * @return a newly created {@link ScaleableBackground}.
      */
     public static ScaleableBackground scaleBy(
-            DisplayStack stack, ScaleFactor scaleFactor, VoxelsResizer interpolator) {
+            DisplayStack stack, ScaleFactor scaleFactor, VoxelsResizer resizer) {
         // The interpolator is never used, so we can safely pass a null
-        return new ScaleableBackground(stack, Optional.of(scaleFactor), interpolator);
+        return new ScaleableBackground(stack, Optional.of(scaleFactor), resizer);
     }
 
     /***

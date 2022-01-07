@@ -26,7 +26,9 @@
 
 package org.anchoranalysis.image.bean.provider;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
@@ -38,6 +40,7 @@ import org.anchoranalysis.image.core.channel.Channel;
  *
  * @author Owen Feehan
  */
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class ChannelProviderUnary extends ChannelProvider {
 
     // START BEAN PROPERTIES

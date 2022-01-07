@@ -1,5 +1,6 @@
-package org.anchoranalysis.image.bean.spatial.arrange;
+package org.anchoranalysis.image.bean.nonbean.spatial.arrange;
 
+import com.google.common.base.Preconditions;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.core.stack.Stack;
@@ -12,20 +13,25 @@ import org.anchoranalysis.spatial.point.ReadableTuple3i;
  * Copies a {@code source} stack into a {@code destination} stack at a particular {@link
  * BoundingBox}.
  *
+ * <p>Ordinarily both {@code source} and {@code destination} must have an identical number of
+ * channels. However, exceptionally, if {@code source} is single-channeled it is replicated as
+ * needed to match {@code destination}.
+ *
  * @author Owen Feehan
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-class StackCopier {
+public class StackCopierAtBox {
 
     /**
      * Copies a {@code source} stack into a {@code destination} stack at a particular {@link
      * BoundingBox}.
      *
-     * @param source the stack that is copied.
+     * @param source the stack that is copied (either singled-channeled or containing the same
+     *     number of channels as {@code destination}.
      * @param destination the stack into which {@code source} is copied.
-     * @param box the bounding-box in {@code target} into which {@code source} is copied.
+     * @param box the bounding-box in {@code destination} into which {@code source} is copied.
      */
-    public static void copyImage(Stack source, Stack destination, BoundingBox box) {
+    public static void copyImageInto(Stack source, Stack destination, BoundingBox box) {
         if (box.extent().z() != source.dimensions().z()) {
             // When the source z-size is different to the target
             // z-size, let's repeat the source z-slices to fill the target.
@@ -58,15 +64,16 @@ class StackCopier {
      *     the source. 0 disables.
      */
     private static void copyImage(Stack source, Stack destination, BoundingBox box, int zShift) {
-
-        assert (source.getNumberChannels() == destination.getNumberChannels());
+        Preconditions.checkArgument(
+                source.getNumberChannels() == destination.getNumberChannels()
+                        || source.getNumberChannels() == 1);
 
         Extent extent = source.extent();
 
         ReadableTuple3i cornerMin = box.cornerMin();
         Point3i cornerMax = box.calculateCornerMax();
 
-        BufferPair buffers = new BufferPair(source.getNumberChannels());
+        BufferPair buffers = new BufferPair(destination.getNumberChannels());
 
         for (int z = 0; z < extent.z(); z++) {
             buffers.assign(source, destination, z, z + cornerMin.z() + zShift);

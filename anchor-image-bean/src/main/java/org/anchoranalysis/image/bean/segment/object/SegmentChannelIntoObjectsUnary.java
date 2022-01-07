@@ -27,7 +27,9 @@
 package org.anchoranalysis.image.bean.segment.object;
 
 import java.util.Optional;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.bean.nonbean.segment.SegmentationFailedException;
@@ -41,6 +43,7 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
  *
  * @author Owen Feehan
  */
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class SegmentChannelIntoObjectsUnary extends SegmentChannelIntoObjects {
 
     // START BEAN PROPERTIES

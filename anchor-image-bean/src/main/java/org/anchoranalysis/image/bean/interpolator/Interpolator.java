@@ -26,6 +26,8 @@
 
 package org.anchoranalysis.image.bean.interpolator;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.image.voxel.resizer.VoxelsResizer;
 
@@ -34,6 +36,7 @@ import org.anchoranalysis.image.voxel.resizer.VoxelsResizer;
  *
  * @author Owen Feehan
  */
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class Interpolator extends AnchorBean<Interpolator> {
 
     /** A memoized instance of the {@link VoxelsResizer} that was created. */

@@ -42,7 +42,7 @@ class TransferViaSpecificType<T> {
     @FunctionalInterface
     public interface TransferSlice<T> {
         VoxelBuffer<T> transferSlice(
-                VoxelsResizer interpolator,
+                VoxelsResizer resizer,
                 VoxelBuffer<T> sourceBuffer,
                 VoxelBuffer<T> destinationBuffer,
                 Extent extentSource,
@@ -72,15 +72,11 @@ class TransferViaSpecificType<T> {
         destination.replaceSlice(z, slice.duplicate());
     }
 
-    public void transferTo(int z, VoxelsResizer interpolator) {
+    public void transferTo(int z, VoxelsResizer resizer) {
         VoxelBuffer<T> destinationSlice = destination.slice(z);
         VoxelBuffer<T> transferredSlice =
                 transferSlice.transferSlice(
-                        interpolator,
-                        slice,
-                        destinationSlice,
-                        source.extent(),
-                        destination.extent());
+                        resizer, slice, destinationSlice, source.extent(), destination.extent());
         if (transferredSlice != destinationSlice) {
             destination.replaceSlice(z, transferredSlice);
         }

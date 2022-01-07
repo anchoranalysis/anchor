@@ -33,7 +33,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
-import org.anchoranalysis.test.LoggingFixture;
+import org.anchoranalysis.test.LoggerFixture;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class InputOutputContextFixture {
@@ -45,7 +45,7 @@ public class InputOutputContextFixture {
     }
 
     public static InputOutputContext withSuppressedLogger() {
-        return withLogger(LoggingFixture.suppressedLogger());
+        return withLogger(LoggerFixture.suppressedLogger());
     }
 
     public static InputOutputContext withLogger(Logger logger) {

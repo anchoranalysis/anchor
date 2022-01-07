@@ -56,7 +56,7 @@ class StackScaler {
      * @param stack the stack to scale.
      * @param scaleFactor the factor to scale by. This typically involves downscaling, but it can
      *     also be upscaling.
-     * @param interpolator the interpolator to use for scaling.
+     * @param resizer an interpolator for resizing voxels.
      * @param executionTimeRecorder records the execution time of operations.
      * @return the converted stack.
      * @throws SegmentationFailedException if the stack has neither 1 nor 3 channels.
@@ -64,25 +64,23 @@ class StackScaler {
     public static DualScale<Stack> scaleToModelSize(
             Stack stack,
             ScaleFactor scaleFactor,
-            VoxelsResizer interpolator,
+            VoxelsResizer resizer,
             ExecutionTimeRecorder executionTimeRecorder)
             throws SegmentationFailedException {
         checkInput(stack);
 
-        VoxelsResizer interpolatorRecording =
-                new VoxelsResizerExecutionTime(
-                        interpolator, executionTimeRecorder, "As model input");
+        VoxelsResizer resizerRecording =
+                new VoxelsResizerExecutionTime(resizer, executionTimeRecorder, "As model input");
 
         if (stack.getNumberChannels() == 1) {
             Channel channelScaled =
-                    scaleChannel(stack.getChannel(0), scaleFactor, interpolatorRecording);
+                    scaleChannel(stack.getChannel(0), scaleFactor, resizerRecording);
             return new DualScale<>(stack, grayscaleToRGB(channelScaled));
         } else {
             try {
                 Stack stackScaled =
                         stack.mapChannel(
-                                channel ->
-                                        scaleChannel(channel, scaleFactor, interpolatorRecording));
+                                channel -> scaleChannel(channel, scaleFactor, resizerRecording));
                 return new DualScale<>(stack, stackScaled);
             } catch (OperationFailedException e) {
                 throw new SegmentationFailedException(e);
@@ -92,8 +90,8 @@ class StackScaler {
 
     /** Scales a single {@link Channel}. */
     private static Channel scaleChannel(
-            Channel channel, ScaleFactor scaleFactor, VoxelsResizer interpolator) {
-        return channel.scaleXY(scaleFactor, interpolator);
+            Channel channel, ScaleFactor scaleFactor, VoxelsResizer resizer) {
+        return channel.scaleXY(scaleFactor, resizer);
     }
 
     /** Checks that the {@link Stack} has the expected number of channels and z-slices. */
