@@ -40,7 +40,7 @@ import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
 import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
 import org.anchoranalysis.image.io.stack.time.TimeSequence;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import org.anchoranalysis.test.LoggingFixture;
+import org.anchoranalysis.test.LoggerFixture;
 import org.anchoranalysis.test.TestLoader;
 
 /**
@@ -90,7 +90,7 @@ class ExpectedImage {
     private final int intensityValueToCount;
     // END: REQUIRED ARGUMENTS
 
-    private Logger logger = LoggingFixture.suppressedLogger();
+    private Logger logger = LoggerFixture.suppressedLogger();
 
     public void openAndAssert(
             StackReader stackReader, TestLoader loader, ExecutionTimeRecorder executionTimeRecorder)

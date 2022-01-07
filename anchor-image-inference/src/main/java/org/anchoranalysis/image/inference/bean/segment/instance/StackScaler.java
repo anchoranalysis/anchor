@@ -70,8 +70,7 @@ class StackScaler {
         checkInput(stack);
 
         VoxelsResizer resizerRecording =
-                new VoxelsResizerExecutionTime(
-                        resizer, executionTimeRecorder, "As model input");
+                new VoxelsResizerExecutionTime(resizer, executionTimeRecorder, "As model input");
 
         if (stack.getNumberChannels() == 1) {
             Channel channelScaled =
@@ -81,8 +80,7 @@ class StackScaler {
             try {
                 Stack stackScaled =
                         stack.mapChannel(
-                                channel ->
-                                        scaleChannel(channel, scaleFactor, resizerRecording));
+                                channel -> scaleChannel(channel, scaleFactor, resizerRecording));
                 return new DualScale<>(stack, stackScaled);
             } catch (OperationFailedException e) {
                 throw new SegmentationFailedException(e);

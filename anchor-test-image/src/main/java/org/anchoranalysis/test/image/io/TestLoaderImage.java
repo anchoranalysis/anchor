@@ -30,7 +30,6 @@ import java.io.FileNotFoundException;
 import java.nio.file.Path;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.serialize.DeserializationFailedException;
 import org.anchoranalysis.core.time.ExecutionTimeRecorderIgnore;
@@ -42,7 +41,7 @@ import org.anchoranalysis.image.io.object.input.ObjectCollectionReader;
 import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.io.bioformats.ConfigureBioformatsLogging;
-import org.anchoranalysis.test.LoggingFixture;
+import org.anchoranalysis.test.LoggerFixture;
 import org.anchoranalysis.test.TestDataLoadException;
 import org.anchoranalysis.test.TestLoader;
 
@@ -57,15 +56,11 @@ public class TestLoaderImage {
     private final StackReader stackReader;
     // END REQUIRED ARGUMENTS
 
-    private final Logger logger = LoggingFixture.suppressedLogger();
+    private final Logger logger = LoggerFixture.suppressedLogger();
 
     public TestLoaderImage(TestLoader loader) {
-        TestReaderWriterUtilities.ensureStackReader();
         this.loader = loader;
-        this.stackReader =
-                RegisterBeanFactories.getDefaultInstances() // NOSONAR
-                        .getInstanceFor(StackReader.class)
-                        .get();
+        this.stackReader = BeanInstanceMapFixture.ensureStackReader();
     }
 
     public Channel openChannelFromTestPath(String testPath) {
@@ -157,11 +152,11 @@ public class TestLoaderImage {
     public ObjectCollection openObjectsFromFilePath(Path folderPath) {
 
         ConfigureBioformatsLogging.instance().makeSureConfigured();
-        TestReaderWriterUtilities.ensureStackReader();
+        BeanInstanceMapFixture.ensureStackReader();
 
         try {
             return ObjectCollectionReader.createFromPath(
-                    folderPath, LoggingFixture.suppressedOperationContext());
+                    folderPath, LoggerFixture.suppressedOperationContext());
         } catch (DeserializationFailedException e) {
             throw new TestDataLoadException(e);
         }

@@ -30,12 +30,13 @@ import com.github.davidmoten.guavamini.Preconditions;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.function.UnaryOperator;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.functional.checked.CheckedUnaryOperator;
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.ArrangeStackException;
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.StackArrangement;
 import org.anchoranalysis.image.bean.spatial.arrange.Single;
@@ -109,8 +110,8 @@ public class Tile extends StackArranger {
         return createArrangement(table, new CellSizeCalculator(table));
     }
 
-    private StackArrangement createArrangement(
-            ArrangementIndex table, CellSizeCalculator cellSizes) {
+    private StackArrangement createArrangement(ArrangementIndex table, CellSizeCalculator cellSizes)
+            throws ArrangeStackException {
 
         StackArrangement arrangement = new StackArrangement(cellSizes.total());
 
@@ -133,18 +134,27 @@ public class Tile extends StackArranger {
     /**
      * Add all {@link BoundingBox}es in {@code source} to {@code destination} after two additional
      * shifts.
+     *
+     * @throws ArrangeStackException if z-size and positions aren't equal for {@code source} and
+     *     {@code destination}.
      */
     private static void addAll(
             Iterable<BoundingBox> source,
             StackArrangement destination,
-            UnaryOperator<BoundingBox> mapBox) {
+            CheckedUnaryOperator<BoundingBox, OperationFailedException> mapBox)
+            throws ArrangeStackException {
 
         // We now loop through each item in the cell, and add to our output set with
         //   the correct offset
         for (BoundingBox box : source) {
             assert (destination.extent().contains(box));
             assert (!box.extent().anyDimensionIsLargerThan(box.extent()));
-            destination.add(mapBox.apply(box));
+            try {
+                destination.add(mapBox.apply(box));
+            } catch (OperationFailedException e) {
+                throw new ArrangeStackException(
+                        "Invalid values on the z-dimension exist for the cell alignment.");
+            }
         }
     }
 }

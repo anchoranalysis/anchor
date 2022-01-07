@@ -10,7 +10,7 @@ import org.anchoranalysis.spatial.box.BoundingBox;
 public class Center extends BoxAligner {
 
     @Override
-    public BoundingBox align(BoundingBox smaller, BoundingBox larger) {
+    public BoundingBox alignAfterCheck(BoundingBox smaller, BoundingBox larger) {
         return CenterUtilities.centerSmaller(smaller.cornerMin(), smaller.extent(), larger);
     }
 }

@@ -260,9 +260,7 @@ public class BoundedVoxels<T> {
 
         Voxels<T> voxelsOut =
                 extracterLocal.resizedXY(
-                        boundingBoxScaled.extent().x(),
-                        boundingBoxScaled.extent().y(),
-                        resizer);
+                        boundingBoxScaled.extent().x(), boundingBoxScaled.extent().y(), resizer);
 
         return new BoundedVoxels<>(boundingBoxScaled, voxelsOut);
     }

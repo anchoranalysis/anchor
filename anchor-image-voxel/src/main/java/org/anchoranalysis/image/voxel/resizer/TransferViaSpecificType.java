@@ -76,11 +76,7 @@ class TransferViaSpecificType<T> {
         VoxelBuffer<T> destinationSlice = destination.slice(z);
         VoxelBuffer<T> transferredSlice =
                 transferSlice.transferSlice(
-                        resizer,
-                        slice,
-                        destinationSlice,
-                        source.extent(),
-                        destination.extent());
+                        resizer, slice, destinationSlice, source.extent(), destination.extent());
         if (transferredSlice != destinationSlice) {
             destination.replaceSlice(z, transferredSlice);
         }

@@ -18,6 +18,9 @@ import org.anchoranalysis.spatial.scale.ScaleFactor;
  *
  * <p>When {@code preserveAspectRatio==false}, the smaller bounding-box is guaranteed to become
  * identical to the larger.
+ *
+ * <p>Growth never occurs in the z-dimension, and the size in this dimension should be equal for
+ * both {@code smaller} and {@code larger}.
  */
 @NoArgsConstructor
 @AllArgsConstructor
@@ -28,7 +31,7 @@ public class Grow extends BoxAligner {
     // END BEAN PROPERTIES
 
     @Override
-    public BoundingBox align(BoundingBox smaller, BoundingBox larger) {
+    public BoundingBox alignAfterCheck(BoundingBox smaller, BoundingBox larger) {
         if (preserveAspectRatio) {
             return alignPreserveAspectRatio(smaller, larger);
         } else {

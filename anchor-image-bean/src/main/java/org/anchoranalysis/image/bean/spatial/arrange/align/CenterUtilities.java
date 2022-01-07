@@ -17,7 +17,8 @@ class CenterUtilities {
 
     public static BoundingBox centerSmaller(
             ReadableTuple3i smallerCornerMin, Extent smallerExtent, BoundingBox larger) {
-        Point3i relativeCorner = relativeCornerToCell(larger.extent(), smallerExtent);
+        Point3i relativeCorner =
+                relativeCornerToLarger(smallerExtent, larger.extent(), smallerCornerMin);
         return shiftBoundingBoxCorner(
                 smallerCornerMin, larger.cornerMin(), relativeCorner, smallerExtent);
     }
@@ -39,8 +40,10 @@ class CenterUtilities {
      * The minimum corner of {@code smaller} relative to {@code larger}, so as to center it across
      * all dimensions.
      */
-    private static Point3i relativeCornerToCell(Extent larger, Extent smaller) {
+    private static Point3i relativeCornerToLarger(
+            Extent smaller, Extent larger, ReadableTuple3i smallerCornerMin) {
         Point3i relativeCorner = Point3i.immutableSubtract(larger.asTuple(), smaller.asTuple());
+        relativeCorner.subtract(smallerCornerMin);
         relativeCorner.divideBy(2); // To center
         return relativeCorner;
     }

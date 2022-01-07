@@ -33,7 +33,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.input.FeatureInputNull;
 import org.anchoranalysis.feature.results.ResultsVector;
 import org.anchoranalysis.feature.shared.SharedFeatures;
-import org.anchoranalysis.test.LoggingFixture;
+import org.anchoranalysis.test.LoggerFixture;
 import org.anchoranalysis.test.feature.ConstantsInListFixture;
 import org.junit.jupiter.api.Test;
 
@@ -48,7 +48,7 @@ class FeatureSessionTest {
         session.start(
                 new FeatureInitialization(),
                 new SharedFeatures(),
-                LoggingFixture.suppressedLogger());
+                LoggerFixture.suppressedLogger());
 
         ResultsVector results1 = session.calculate(FeatureInputNull.instance());
         ConstantsInListFixture.checkResultsVector(results1);
