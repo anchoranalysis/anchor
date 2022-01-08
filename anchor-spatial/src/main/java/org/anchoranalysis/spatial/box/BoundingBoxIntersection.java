@@ -128,7 +128,7 @@ public final class BoundingBoxIntersection {
             ExtentBoundsComparer compareX,
             ExtentBoundsComparer compareY,
             ExtentBoundsComparer compareZ) {
-        return new BoundingBox(
+        return BoundingBox.createReuse(
                 new Point3i(compareX.min(), compareY.min(), compareZ.min()),
                 new Extent(compareX.extent(), compareY.extent(), compareZ.extent()));
     }

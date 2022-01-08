@@ -74,7 +74,7 @@ class ThresholderGlobalTest {
     void testMask() throws OperationFailedException {
 
         // An object-mask in the left half
-        ObjectMask object = new ObjectMask(new BoundingBox(MASK_CORNER_MIN, MASK_EXTENT));
+        ObjectMask object = new ObjectMask(BoundingBox.createReuse(MASK_CORNER_MIN, MASK_EXTENT));
         object.assignOn().toAll();
 
         testThreshold(Optional.of(object), 2400, 112000000);

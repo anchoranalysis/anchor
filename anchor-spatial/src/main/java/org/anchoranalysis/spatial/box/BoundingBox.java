@@ -147,6 +147,8 @@ public final class BoundingBox implements Serializable, Comparable<BoundingBox> 
      * 
      * <p>The {@code cornerMin} is <b>not</b> duplicated before being stored internally. It should not be subsequently modified externally.
      * 
+     * <p>{code cornerMin} will also never be changed internally, so it is safe to pass a constant using this method.
+     * 
      * See {@link #createDuplicate(ReadableTuple3i, Extent)} for an alternative that duplicates {@code cornerMin}.
      *
      * @param cornerMin the corner that is the minimum point in all dimensions for the bounding-box.
@@ -209,7 +211,7 @@ public final class BoundingBox implements Serializable, Comparable<BoundingBox> 
      *     dimension flattened.
      */
     public BoundingBox flattenZ() {
-        return new BoundingBox(cornerMin.duplicateChangeZ(0), extent.duplicateChangeZ(1));
+        return BoundingBox.createReuse(cornerMin.duplicateChangeZ(0), extent.duplicateChangeZ(1));
     }
 
     /**
@@ -220,7 +222,7 @@ public final class BoundingBox implements Serializable, Comparable<BoundingBox> 
      *     identical.
      */
     public BoundingBox changeExtent(Extent extent) {
-        return new BoundingBox(cornerMin, extent);
+        return BoundingBox.createReuse(cornerMin, extent);
     }
 
     /**
@@ -244,7 +246,7 @@ public final class BoundingBox implements Serializable, Comparable<BoundingBox> 
      *     Z-dimension, but is otherwise identical.
      */
     public BoundingBox changeZ(int cornerZ, int extentZ) {
-        return new BoundingBox(
+        return BoundingBox.createReuse(
                 cornerMin.duplicateChangeZ(cornerZ), extent.duplicateChangeZ(extentZ));
     }
 
@@ -256,7 +258,7 @@ public final class BoundingBox implements Serializable, Comparable<BoundingBox> 
      *     is otherwise identical.
      */
     public BoundingBox changeExtentZ(int extentZ) {
-        return new BoundingBox(cornerMin, extent.duplicateChangeZ(extentZ));
+        return BoundingBox.createReuse(cornerMin, extent.duplicateChangeZ(extentZ));
     }
 
     /**
@@ -348,7 +350,7 @@ public final class BoundingBox implements Serializable, Comparable<BoundingBox> 
         Extent extentGrown = extent.growBy(multiplyByTwo(toAdd));
 
         // Clamp to make sure we remain within bounds
-        return new BoundingBox(cornerMinShifted, extentGrown).clampTo(containingExtent);
+        return BoundingBox.createReuse(cornerMinShifted, extentGrown).clampTo(containingExtent);
     }
 
     /**
@@ -429,7 +431,7 @@ public final class BoundingBox implements Serializable, Comparable<BoundingBox> 
         } else {
         	ReadableTuple3i min = cornerMinValid ? cornerMin : ClampToUtilities.replaceNegativeWithZero(cornerMin);
 	        ReadableTuple3i max = cornerMaxValid ? cornerMax : ClampToUtilities.limitToExtent(cornerMax, extent);
-		        return new BoundingBox(min, max);
+		    return new BoundingBox(min, max);
         }
     }
 
@@ -451,7 +453,7 @@ public final class BoundingBox implements Serializable, Comparable<BoundingBox> 
      * @return a newly created bounding box with relative coordinates.
      */
     public BoundingBox relativePositionToBox(BoundingBox other) {
-        return new BoundingBox(relativePositionTo(other), extent);
+        return BoundingBox.createReuse(relativePositionTo(other), extent);
     }
 
     /**
@@ -509,7 +511,7 @@ public final class BoundingBox implements Serializable, Comparable<BoundingBox> 
      * @return newly created bounding-box with shifted corner position and identical extent.
      */
     public BoundingBox shiftBy(ReadableTuple3i shift) {
-        return new BoundingBox(Point3i.immutableAdd(cornerMin, shift), extent);
+        return BoundingBox.createReuse(Point3i.immutableAdd(cornerMin, shift), extent);
     }
 
     /**
@@ -521,7 +523,7 @@ public final class BoundingBox implements Serializable, Comparable<BoundingBox> 
      * @return newly created bounding-box with shifted corner position and identical extent.
      */
     public BoundingBox shiftBackBy(ReadableTuple3i shift) {
-        return new BoundingBox(Point3i.immutableSubtract(cornerMin, shift), extent);
+        return BoundingBox.createReuse(Point3i.immutableSubtract(cornerMin, shift), extent);
     }
 
     /**
@@ -541,7 +543,7 @@ public final class BoundingBox implements Serializable, Comparable<BoundingBox> 
      * @return a newly-created bounding-box with a new z-slice corner and the same extent.
      */
     public BoundingBox shiftToZ(int cornerZToAssign) {
-        return new BoundingBox(cornerMin.duplicateChangeZ(cornerZToAssign), extent);
+        return BoundingBox.createReuse(cornerMin.duplicateChangeZ(cornerZToAssign), extent);
     }
 
     /**
@@ -552,7 +554,7 @@ public final class BoundingBox implements Serializable, Comparable<BoundingBox> 
      * @return a newly-created bounding-box reflected through the origin.
      */
     public BoundingBox reflectThroughOrigin() {
-        return new BoundingBox(Point3i.immutableScale(cornerMin, -1), extent);
+        return BoundingBox.createReuse(Point3i.immutableScale(cornerMin, -1), extent);
     }
 
     /**
@@ -577,7 +579,7 @@ public final class BoundingBox implements Serializable, Comparable<BoundingBox> 
     public BoundingBox scaleClampTo(ScaleFactor scaleFactor, Extent clampTo) {
         Point3i cornerScaled = scaledCorner(scaleFactor);
         Extent extentScaled = scaledExtent(scaleFactor);
-        BoundingBox boxScaled = new BoundingBox(cornerScaled, extentScaled);
+        BoundingBox boxScaled = BoundingBox.createReuse(cornerScaled, extentScaled);
         return boxScaled.clampTo(clampTo);
     }
 
@@ -589,7 +591,7 @@ public final class BoundingBox implements Serializable, Comparable<BoundingBox> 
      * @return a new bounding-box with scaled corner-point and the specified extent.
      */
     public BoundingBox scale(ScaleFactor scaleFactor, Extent extentToAssign) {
-        return new BoundingBox(scaledCorner(scaleFactor), extentToAssign);
+        return BoundingBox.createReuse(scaledCorner(scaleFactor), extentToAssign);
     }
 
     @Override

@@ -33,7 +33,7 @@ class CenterUtilities {
             ReadableTuple3i shift2,
             Extent extent) {
         Point3i cornerMinShifted = Point3i.immutableAdd(cornerMin, shift1, shift2);
-        return new BoundingBox(cornerMinShifted, extent);
+        return BoundingBox.createReuse(cornerMinShifted, extent);
     }
 
     /**

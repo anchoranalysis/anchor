@@ -25,8 +25,7 @@ import org.anchoranalysis.spatial.point.Point3i;
  * <p>Inspired by this <a href="https://gist.github.com/JesseCrocker/cfd05006335c2c828a2b">Python
  * implementation by Jesse Crocker</a>, which is in turn apparently inspired from <a
  * href="https://www.crispymtn.com/stories/the-algorithm-for-a-perfectly-balanced-photo-gallery
- * collage.py">now missing site</a> (see <a
- * href="https://web.archive.org/web/20131113185038/http://www.crispymtn.com/stories/the-algorithm-for-a-perfectly-balanced-photo-gallery">archive</a>).
+ * collage.py">now missing site</a>.
  *
  * @author Owen Feehan
  */

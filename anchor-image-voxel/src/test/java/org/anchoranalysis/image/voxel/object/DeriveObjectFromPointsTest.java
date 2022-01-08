@@ -21,7 +21,7 @@ class DeriveObjectFromPointsTest {
     private static final Point3i POINT3 = new Point3i(27, 6, 29);
 
     private static final BoundingBox EXPECTED_BOUNDING_BOX =
-            new BoundingBox(new Point3i(7, 6, 4), new Extent(21, 3, 26));
+            BoundingBox.createReuse(new Point3i(7, 6, 4), new Extent(21, 3, 26));
 
     private DeriveObjectFromPoints deriver = new DeriveObjectFromPoints();
 

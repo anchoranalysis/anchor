@@ -889,7 +889,7 @@ public class ObjectMask {
     public ObjectMask relativeMaskTo(BoundingBox box) {
         Point3i point = voxels.boundingBox().relativePositionTo(box);
 
-        return new ObjectMask(new BoundingBox(point, voxels.extent()), voxels.voxels());
+        return new ObjectMask(BoundingBox.createReuse(point, voxels.extent()), voxels.voxels());
     }
 
     /**

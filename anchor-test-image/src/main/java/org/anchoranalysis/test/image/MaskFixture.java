@@ -126,13 +126,13 @@ public class MaskFixture {
     private static BoundingBox createRectange(Point3i corner, boolean do3D) {
         Extent extentCorrected = Extent.createFromTupleReuse(maybeSuppressZ(BOX_EXTENT, do3D, 1));
         Point3i cornerCorrected = maybeSuppressZ(corner, do3D, 0);
-        return new BoundingBox(cornerCorrected, extentCorrected);
+        return BoundingBox.createReuse(cornerCorrected, extentCorrected);
     }
 
     /** Suppresses the Z dimension of a point when operating in 2D. */
     private static Point3i maybeSuppressZ(Point3i point, boolean do3D, int suppressedValue) {
         if (do3D) {
-            return point;
+            return new Point3i(point);
         } else {
             return new Point3i(point.x(), point.y(), suppressedValue);
         }

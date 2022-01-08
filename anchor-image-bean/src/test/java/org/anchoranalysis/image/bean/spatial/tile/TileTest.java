@@ -28,7 +28,7 @@ class TileTest {
     @Test
     void testHorizontal() throws ArrangeStackException {
         BoundingBox box =
-                new BoundingBox(
+                BoundingBox.createReuse(
                         new Point3i(DualStacks.SIZE_BIG.x(), 0, 0),
                         new Extent(
                                 DualStacks.SIZE_SMALL.x(),
@@ -52,7 +52,7 @@ class TileTest {
     @Test
     void testVertical() throws ArrangeStackException {
         BoundingBox box =
-                new BoundingBox(
+                BoundingBox.createReuse(
                         new Point3i(0, DualStacks.SIZE_BIG.y(), 0),
                         new Extent(
                                 DualStacks.SIZE_BIG.y(),
