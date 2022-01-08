@@ -32,6 +32,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.annotation.DefaultInstance;
+import org.anchoranalysis.image.bean.interpolator.Interpolator;
 import org.anchoranalysis.image.bean.spatial.arrange.StackArranger;
 import org.anchoranalysis.image.io.stack.output.generator.RasterGenerator;
 
@@ -50,6 +52,9 @@ public class CombineRasterGenerator<T> extends AnchorBean<CombineRasterGenerator
 
     // A list of all generators to be tiled (left to right, then top to bottom)
     @BeanField @Getter @Setter private List<RasterGenerator<T>> generatorList = new ArrayList<>();
+
+    /** The interpolator to use for scaling images, if needed. */
+    @BeanField @Getter @Setter @DefaultInstance private Interpolator interpolator;
     // END BEAN PROPERTIES
 
     public void add(RasterGenerator<T> generator) {
@@ -57,7 +62,7 @@ public class CombineRasterGenerator<T> extends AnchorBean<CombineRasterGenerator
     }
 
     public RasterGenerator<T> createGenerator() {
-        return new CombineGenerator<>(arrange, generatorList);
+        return new CombineGenerator<>(arrange, generatorList, interpolator.voxelsResizer());
     }
 
     @Override

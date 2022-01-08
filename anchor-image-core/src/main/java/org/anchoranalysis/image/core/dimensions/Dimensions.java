@@ -125,7 +125,7 @@ public final class Dimensions {
      *     and Z value is unchanged.
      */
     public Dimensions scaleXYBy(ScaleFactor scaleFactor) {
-        return new Dimensions(extent.scaleXYBy(scaleFactor), scaledResolution(scaleFactor));
+        return new Dimensions(extent.scaleXYBy(scaleFactor, true), scaledResolution(scaleFactor));
     }
 
     /**

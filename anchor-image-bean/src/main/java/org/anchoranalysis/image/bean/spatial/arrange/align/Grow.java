@@ -47,7 +47,7 @@ public class Grow extends BoxAligner {
         ScaleFactor factor =
                 RelativeScaleCalculator.relativeScalePreserveAspectRatio(
                         smaller.extent(), larger.extent());
-        Extent imageScaled = smaller.extent().scaleXYBy(factor);
+        Extent imageScaled = smaller.extent().scaleXYBy(factor, true);
         return CenterUtilities.centerSmaller(smaller.cornerMin(), imageScaled, larger);
     }
 }

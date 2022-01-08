@@ -6,6 +6,8 @@ import java.awt.Color;
 import org.anchoranalysis.core.color.RGBColor;
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.ArrangeStackException;
 import org.anchoranalysis.image.core.stack.RGBStack;
+import org.anchoranalysis.image.voxel.resizer.Linear;
+import org.anchoranalysis.image.voxel.resizer.VoxelsResizer;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.ReadableTuple3i;
 
@@ -15,7 +17,7 @@ import org.anchoranalysis.spatial.point.ReadableTuple3i;
  *
  * @author Owen Feehan
  */
-class ColoredDualStackTester {
+public class ColoredDualStackTester {
 
     /** A {@link RGBColor} that is <b>black</b>. */
     public static final RGBColor BLACK = new RGBColor(Color.BLACK);
@@ -25,6 +27,9 @@ class ColoredDualStackTester {
 
     /** A {@link RGBColor} that is <b>magenta</b>. */
     public static final RGBColor MAGENTA = new RGBColor(Color.MAGENTA);
+
+    /** For resizing images with interpolation. */
+    private static final VoxelsResizer RESIZER = new Linear();
 
     /**
      * Combines the two stacks, expecting a single-celled output.
@@ -95,7 +100,7 @@ class ColoredDualStackTester {
      */
     public static RGBStack combine(StackArranger arranger, boolean flattenSmall)
             throws ArrangeStackException {
-        return arranger.combine(DualStacks.asList(CYAN, MAGENTA, flattenSmall));
+        return arranger.combine(DualStacks.asList(CYAN, MAGENTA, flattenSmall), RESIZER);
     }
 
     /**
@@ -128,7 +133,10 @@ class ColoredDualStackTester {
         assertVoxelColor(
                 messagePrefix + "center", stack, box.centerOfGravity(), colorExpectedCenter);
         assertVoxelColor(
-                messagePrefix + "maxCorner", stack, box.calculateCornerMax(), colorExpectedMax);
+                messagePrefix + "maxCorner",
+                stack,
+                box.calculateCornerMaxInclusive(),
+                colorExpectedMax);
     }
 
     /**

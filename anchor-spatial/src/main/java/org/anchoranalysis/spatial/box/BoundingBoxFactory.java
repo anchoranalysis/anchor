@@ -47,7 +47,7 @@ public class BoundingBoxFactory {
      * @return the newly created bounding-box
      */
     public static BoundingBox at(int x, int y, int width, int height) {
-        return new BoundingBox(new Point3i(x, y, 0), new Extent(width, height));
+        return BoundingBox.createReuse(new Point3i(x, y, 0), new Extent(width, height));
     }
 
     /**
@@ -62,7 +62,7 @@ public class BoundingBoxFactory {
      * @return the newly created bounding-box
      */
     public static BoundingBox at(int x, int y, int z, int width, int height, int depth) {
-        return new BoundingBox(new Point3i(x, y, z), new Extent(width, height, depth));
+        return BoundingBox.createReuse(new Point3i(x, y, z), new Extent(width, height, depth));
     }
 
     /**

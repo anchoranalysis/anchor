@@ -58,7 +58,7 @@ class Intersection {
         Point3i relativeBox2ToBox1 = Point3i.immutableSubtract(box1.cornerMin(), box2.cornerMin());
 
         return new Intersection(
-                new BoundingBox(relativeIntersectionToBox1, boxIntersect.extent()),
+                BoundingBox.createReuse(relativeIntersectionToBox1, boxIntersect.extent()),
                 relativeBox2ToBox1);
     }
 }

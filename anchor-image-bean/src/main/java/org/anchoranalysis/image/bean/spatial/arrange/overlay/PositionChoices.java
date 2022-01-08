@@ -1,4 +1,4 @@
-package org.anchoranalysis.image.bean.spatial.overlay;
+package org.anchoranalysis.image.bean.spatial.arrange.overlay;
 
 import java.util.Arrays;
 import java.util.List;

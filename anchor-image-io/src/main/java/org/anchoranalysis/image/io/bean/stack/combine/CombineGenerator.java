@@ -36,6 +36,7 @@ import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.stack.output.StackWriteAttributes;
 import org.anchoranalysis.image.io.stack.output.generator.RasterGenerator;
 import org.anchoranalysis.image.io.stack.output.generator.RasterGeneratorSelectFormat;
+import org.anchoranalysis.image.voxel.resizer.VoxelsResizer;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 @AllArgsConstructor
@@ -43,6 +44,7 @@ class CombineGenerator<T> extends RasterGeneratorSelectFormat<T> {
 
     private final StackArranger arrangeRaster;
     private final List<RasterGenerator<T>> generators;
+    private final VoxelsResizer resizer;
 
     @Override
     public Stack transform(T element) throws OutputWriteFailedException {
@@ -56,7 +58,7 @@ class CombineGenerator<T> extends RasterGeneratorSelectFormat<T> {
             //
             // We assume iterable generators always produce images of the same size
             //   and base our measurements on the first call to generate
-            return arrangeRaster.combine(generated).asStack();
+            return arrangeRaster.combine(generated, resizer).asStack();
 
         } catch (ArrangeStackException e) {
             throw new OutputWriteFailedException(e);

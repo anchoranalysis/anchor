@@ -435,7 +435,7 @@ public class ObjectMask {
      * @return either the current object-mask unchanged (if it already fits inside) or a new
      *     object-mask clipped to fit inside
      */
-    public ObjectMask clipTo(Extent extent) {
+    public ObjectMask clampTo(Extent extent) {
         if (extent.contains(boundingBox())) {
             // nothing to do
             return this;

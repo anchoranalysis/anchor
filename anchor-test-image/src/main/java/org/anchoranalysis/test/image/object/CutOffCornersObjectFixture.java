@@ -111,7 +111,7 @@ public class CutOffCornersObjectFixture {
     }
 
     private ObjectMask createAt(Point3i cornerMin, Extent extent, VoxelPattern pattern) {
-        BoundingBox box = new BoundingBox(cornerMin, extent);
+        BoundingBox box = BoundingBox.createReuse(cornerMin, extent);
 
         if (dimensions.isPresent()) {
             assertTrue(dimensions.get().contains(box));

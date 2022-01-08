@@ -7,7 +7,7 @@ import org.anchoranalysis.image.core.stack.RGBStack;
 import org.anchoranalysis.spatial.box.Extent;
 
 /** Two {@link RGBStack} of different sizes, with specific respective colors. */
-class DualStacks {
+public class DualStacks {
 
     /** The size of the <i>big</i> stack. */
     public static final Extent SIZE_BIG = new Extent(60, 50, 30);

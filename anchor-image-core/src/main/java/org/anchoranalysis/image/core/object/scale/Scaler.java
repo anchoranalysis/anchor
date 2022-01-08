@@ -97,7 +97,7 @@ public class Scaler {
                     factor,
                     ObjectScalingMethodFactory.of(overlappingObjects),
                     Optional.empty(),
-                    Optional.of(object -> object.clipTo(clipTo)),
+                    Optional.of(object -> object.clampTo(clipTo)),
                     ACCESS_OBJECTS);
         } catch (CreateException e) {
             throw new OperationFailedException(e);

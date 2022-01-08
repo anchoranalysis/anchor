@@ -168,8 +168,8 @@ public class Channel {
     public Channel scaleXY(ScaleFactor scaleFactor, VoxelsResizer resizer) {
         // Rounding as sometimes we get values which, for example, are 7.999999, intended to be 8,
         // due to how we use our ScaleFactors
-        int newSizeX = Scaler.scaleQuantity(scaleFactor.x(), dimensions().x());
-        int newSizeY = Scaler.scaleQuantity(scaleFactor.y(), dimensions().y());
+        int newSizeX = Scaler.scaleRound(scaleFactor.x(), dimensions().x());
+        int newSizeY = Scaler.scaleRound(scaleFactor.y(), dimensions().y());
         return resizeXY(newSizeX, newSizeY, resizer);
     }
 

@@ -115,8 +115,8 @@ class ThresholderGlobalTest {
         Voxels<UnsignedByteBuffer> voxels =
                 VoxelsFactory.getUnsignedByte().createInitialized(SCENE_EXTENT);
 
-        BoundingBox left = new BoundingBox(new Point3i(0, 0, 0), extentHalf);
-        BoundingBox right = new BoundingBox(new Point3i(SCENE_WIDTH / 2, 0, 0), extentHalf);
+        BoundingBox left = BoundingBox.createReuse(new Point3i(0, 0, 0), extentHalf);
+        BoundingBox right = BoundingBox.createReuse(new Point3i(SCENE_WIDTH / 2, 0, 0), extentHalf);
 
         writeModulo(voxels, left, 0);
         writeModulo(

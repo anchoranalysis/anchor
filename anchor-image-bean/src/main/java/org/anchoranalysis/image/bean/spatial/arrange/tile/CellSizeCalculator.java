@@ -80,7 +80,7 @@ class CellSizeCalculator {
         SizeAtPoint height = rowHeights.get(rowIndex);
         Point3i cornerPoint = new Point3i(width.getPoint(), height.getPoint(), 0);
         Extent cellSize = new Extent(width.getSize(), height.getSize(), maxZ);
-        return new BoundingBox(cornerPoint, cellSize);
+        return BoundingBox.createReuse(cornerPoint, cellSize);
     }
 
     /**

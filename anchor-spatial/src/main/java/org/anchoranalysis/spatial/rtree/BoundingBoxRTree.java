@@ -155,7 +155,7 @@ public class BoundingBoxRTree<T> extends RTree<T> {
      * floats.
      */
     private static double[] maxPoint(BoundingBox box) {
-        ReadableTuple3i max = box.calculateCornerMax();
+        ReadableTuple3i max = box.calculateCornerMaxInclusive();
         return new double[] {max.x(), max.y(), max.z()};
     }
 }

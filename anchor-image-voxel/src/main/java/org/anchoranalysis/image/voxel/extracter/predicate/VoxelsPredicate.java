@@ -25,6 +25,7 @@
  */
 package org.anchoranalysis.image.voxel.extracter.predicate;
 
+import java.util.Optional;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.spatial.box.BoundingBox;
 
@@ -75,14 +76,36 @@ public interface VoxelsPredicate {
     public boolean lowerCountExistsThan(int threshold);
 
     /**
-     * Creates an object-mask for all the voxels inside the bounding-box satisfying the predicate.
+     * Creates an {@link ObjectMask} for all the voxels inside the bounding-box satisfying the
+     * predicate.
      *
      * <p>Any voxels satisfying the predicate are set to <i>on</i>.
      *
      * <p>All other voxels are set to <i>off</i>.
      *
+     * <p>Unlike {@link #deriveObjectTight}, this operates only within a certain bounding-box, and
+     * always uses an identical bounding-box for the created {@link ObjectMask} as {@code box}.
+     *
      * @param box bounding-box.
-     * @return an object-mask referring to the bounding-box.
+     * @return an object-mask referring to the bounding-box, with the same corner-position and size
+     *     as {@code box}.
      */
     ObjectMask deriveObject(BoundingBox box);
+
+    /**
+     * Creates an {@link ObjectMask} for all the voxels satisfying the predicate, minimally fitting
+     * the bounding-box to the <i>on</i> voxels only.
+     *
+     * <p>Any voxels satisfying the predicate are set to <i>on</i>.
+     *
+     * <p>All other voxels are set to <i>off</i>.
+     *
+     * <p>Unlike {@link #deriveObject(BoundingBox)}, this operates all the voxels, and will
+     * typically use a much smaller bounding-box (fewer voxels) to describe the <i>on</i> voxels.
+     *
+     * @return an object-mask indicating all voxels that match the predicate, and with as minimal a
+     *     bounding-box as possible to contain these. If no voxels match, then {@link
+     *     Optional#empty()}.
+     */
+    Optional<ObjectMask> deriveObjectTight();
 }

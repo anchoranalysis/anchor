@@ -1,10 +1,11 @@
-package org.anchoranalysis.image.bean.spatial.arrange;
+package org.anchoranalysis.image.bean.spatial.overlay;
 
 import static org.anchoranalysis.image.bean.spatial.arrange.ColoredDualStackTester.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.ArrangeStackException;
-import org.anchoranalysis.image.bean.spatial.overlay.Overlay;
+import org.anchoranalysis.image.bean.spatial.arrange.ColoredDualStackTester;
+import org.anchoranalysis.image.bean.spatial.arrange.overlay.Overlay;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -25,7 +26,7 @@ class OverlayTest {
     void testMax() throws ArrangeStackException {
         testSingleCell(new Overlay("right", "bottom", "top"), CYAN, MAGENTA, MAGENTA, false);
     }
-    
+
     /** Tests aligned towards the <b>center</b> on every axis. */
     @Test
     void testCenter() throws ArrangeStackException {

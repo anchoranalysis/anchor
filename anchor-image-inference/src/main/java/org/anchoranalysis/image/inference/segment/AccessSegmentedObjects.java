@@ -58,7 +58,7 @@ class AccessSegmentedObjects implements AccessObjectMask<WithConfidence<ObjectMa
 
     @Override
     public WithConfidence<ObjectMask> clipTo(WithConfidence<ObjectMask> element, Extent extent) {
-        return element.map(existingObject -> existingObject.clipTo(extent));
+        return element.map(existingObject -> existingObject.clampTo(extent));
     }
 
     @Override

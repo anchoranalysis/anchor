@@ -25,6 +25,7 @@
  */
 package org.anchoranalysis.image.voxel.extracter.predicate;
 
+import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +34,7 @@ import org.anchoranalysis.image.voxel.iterator.IterateVoxelsAll;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxelsBoundingBox;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxelsObjectMask;
 import org.anchoranalysis.image.voxel.iterator.process.voxelbuffer.ProcessVoxelBufferUnary;
+import org.anchoranalysis.image.voxel.object.DeriveObjectFromPoints;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.math.arithmetic.Counter;
 import org.anchoranalysis.spatial.box.BoundingBox;
@@ -111,6 +113,27 @@ public class PredicateImplementation<T> implements VoxelsPredicate {
         return object;
     }
 
+    @Override
+    public Optional<ObjectMask> deriveObjectTight() {
+        DeriveObjectFromPoints deriver = new DeriveObjectFromPoints();
+
+        IterateVoxelsAll.withVoxelBuffer(
+                voxels,
+                (point, buffer, offset) -> {
+                    buffer.position(offset);
+
+                    if (predicate.test(buffer.buffer())) {
+                        deriver.add(point);
+                    }
+                });
+
+        return deriver.deriveObject();
+    }
+
+    /**
+     * Extends a predicate that it only returns true after a certain {@code threshold} of successful
+     * matches.
+     */
     private boolean predicateMatchWithCounter(int threshold) {
 
         Counter counter = new Counter();
@@ -128,6 +151,7 @@ public class PredicateImplementation<T> implements VoxelsPredicate {
                 });
     }
 
+    /** Count the number of voxels that match a predicate. */
     private int countPredicate(BiConsumer<Voxels<T>, ProcessVoxelBufferUnary<T>> consumer) {
 
         // We use an object on the heap, as the lambda cannot reference a variable on the stack.

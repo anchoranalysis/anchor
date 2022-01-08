@@ -123,7 +123,7 @@ public class IterateVoxelsObjectMask {
         ReadableTuple3i cornerMin = object.boundingBox().cornerMin();
         byte valueOn = object.binaryValuesByte().getOn();
 
-        Point3i cornerMax = object.boundingBox().calculateCornerMaxExclusive();
+        ReadableTuple3i cornerMax = object.boundingBox().calculateCornerMaxExclusive();
 
         Point3i point = new Point3i();
 
@@ -254,7 +254,7 @@ public class IterateVoxelsObjectMask {
         Preconditions.checkArgument(voxels1.extent().equals(voxels2.extent()));
 
         ReadableTuple3i cornerMin = object.boundingBox().cornerMin();
-        ReadableTuple3i cornerMax = object.boundingBox().calculateCornerMax();
+        ReadableTuple3i cornerMax = object.boundingBox().calculateCornerMaxInclusive();
 
         byte maskOn = object.binaryValuesByte().getOn();
 
@@ -301,7 +301,7 @@ public class IterateVoxelsObjectMask {
         Preconditions.checkArgument(voxels1.extent().equals(voxels2.extent()));
 
         ReadableTuple3i cornerMin = object.boundingBox().cornerMin();
-        ReadableTuple3i cornerMax = object.boundingBox().calculateCornerMax();
+        ReadableTuple3i cornerMax = object.boundingBox().calculateCornerMaxInclusive();
 
         byte maskOn = object.binaryValuesByte().getOn();
 

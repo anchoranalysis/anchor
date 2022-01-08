@@ -545,7 +545,7 @@ public class BoundedVoxels<T> {
                         clampNegative(boundingBox.cornerMin().y(), negative.y()),
                         clampNegative(boundingBox.cornerMin().z(), negative.z()));
 
-        ReadableTuple3i boxMax = boundingBox.calculateCornerMax();
+        ReadableTuple3i boxMax = boundingBox.calculateCornerMaxInclusive();
 
         ReadableTuple3i maxPossible;
         if (clipRegion.isPresent()) {
