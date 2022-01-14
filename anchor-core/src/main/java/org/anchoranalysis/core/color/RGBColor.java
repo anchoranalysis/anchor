@@ -27,6 +27,7 @@ package org.anchoranalysis.core.color;
  */
 
 import java.awt.Color;
+import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
 
 /**
  * A color encoded in <a href="https://en.wikipedia.org/wiki/RGB_color_space">RGB color space</a>.
@@ -89,6 +90,32 @@ public class RGBColor {
      */
     public int getGreen() {
         return delegate.getGreen();
+    }
+
+    /**
+     * Gets a component from an index value.
+     *
+     * <p>An index of {@code 0} is <i>red</i>.
+     *
+     * <p>An index of {@code 1} is <i>green</i>.
+     *
+     * <p>An index of {@code 2} is <i>blue</i>.
+     *
+     * @param index the index.
+     * @return the color component corresponding to the index.
+     */
+    public int get(int index) {
+        switch (index) {
+            case 0:
+                return getRed();
+            case 1:
+                return getGreen();
+            case 2:
+                return getBlue();
+            default:
+                throw new AnchorFriendlyRuntimeException(
+                        "An invalid index value was used: " + index);
+        }
     }
 
     /**

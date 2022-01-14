@@ -26,13 +26,18 @@
 
 package org.anchoranalysis.image.io.bean.stack.combine;
 
+import java.awt.image.BufferedImage;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.Provider;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
+import org.anchoranalysis.image.bean.spatial.SizeXY;
+import org.anchoranalysis.image.core.bufferedimage.CreateStackFromBufferedImage;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.channel.convert.ChannelConverter;
 import org.anchoranalysis.image.core.channel.convert.ConversionPolicy;
@@ -41,6 +46,9 @@ import org.anchoranalysis.image.core.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
 import org.anchoranalysis.image.core.stack.Stack;
+import org.anchoranalysis.image.io.stack.output.StackWriteAttributes;
+import org.anchoranalysis.image.io.stack.output.StackWriteAttributesFactory;
+import org.anchoranalysis.image.io.stack.output.generator.RasterGeneratorSelectFormat;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedShortBuffer;
 import org.anchoranalysis.image.voxel.convert.ToShortScaleByType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
@@ -49,24 +57,29 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.spatial.box.BoundingBox;
 
 @NoArgsConstructor
-public class GenerateString extends StackProvider {
+public class WriteText extends StackProvider {
 
     // START BEAN PROPERTIES
-    /** Text to draw on an image */
+    /** Text to draw on an image. */
     @BeanField @Getter @Setter private String text = "text";
 
-    @BeanField @Getter @Setter private TextStyle stringRasterGenerator;
+    @BeanField @Getter @Setter private TextStyle style;
+
+    /** Explicit size of the image the string is draw on. */
+    @BeanField @Getter @Setter private SizeXY size;
 
     @BeanField @Getter @Setter private boolean createShort;
 
-    /* The string is printed using the maximum-value intensity-value of the image */
+    /** The string is printed using the maximum-value intensity-value of the image. */
     @BeanField @Getter @Setter private Provider<Stack> intensityProvider;
 
-    /** Repeats the generated (2D) string in z, so it's the same z-extent as repeatZProvider */
+    /**
+     * Repeats the generated (2D) string in z, so it's the same z-size as {@code intensityProvider}
+     */
     @BeanField @Getter @Setter private Provider<Stack> repeatZProvider;
     // END BEAN PROPERITES
 
-    public GenerateString(String text) {
+    public WriteText(String text) {
         this.text = text;
     }
 
@@ -108,7 +121,7 @@ public class GenerateString extends StackProvider {
 
     private Stack create2D() throws ProvisionFailedException {
         try {
-            Stack stack = stringRasterGenerator.createGenerator().transform(text);
+            Stack stack = new RasterizedTextGenerator(size, style).transform(text);
 
             if (createShort) {
                 ChannelConverter<UnsignedShortBuffer> conveter =
@@ -158,5 +171,39 @@ public class GenerateString extends StackProvider {
     private Channel emptyChannelWithChangedZ(Channel channel, int zToAssign) {
         Dimensions dimensionsChangedZ = channel.dimensions().duplicateChangeZ(zToAssign);
         return ChannelFactory.instance().create(dimensionsChangedZ, channel.getVoxelDataType());
+    }
+
+    /**
+     * Creates an image with text matching the style/size specified in this bean.
+     *
+     * @author Owen Feehan
+     */
+    @AllArgsConstructor
+    private static class RasterizedTextGenerator extends RasterGeneratorSelectFormat<String> {
+
+        private final SizeXY size;
+
+        private final TextStyle style;
+
+        @Override
+        public Stack transform(String element) throws OutputWriteFailedException {
+
+            BufferedImage bufferedImage =
+                    new BufferedImage(
+                            size.getWidth(), size.getHeight(), BufferedImage.TYPE_INT_RGB);
+
+            style.drawText(element, bufferedImage, size.asExtent());
+
+            try {
+                return CreateStackFromBufferedImage.createFrom(bufferedImage);
+            } catch (OperationFailedException e) {
+                throw new OutputWriteFailedException(e);
+            }
+        }
+
+        @Override
+        public StackWriteAttributes guaranteedImageAttributes() {
+            return StackWriteAttributesFactory.rgbMaybe3D(false);
+        }
     }
 }

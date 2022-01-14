@@ -78,7 +78,7 @@ public final class BoundingBox implements Serializable, Comparable<BoundingBox> 
      *
      * <p>It is calculated lazily when first needed by {@link #calculateCornerMaxExclusive()}.
      */
-    private Point3i cornerMaxExclusive;
+    @EqualsAndHashCode.Exclude private Point3i cornerMaxExclusive;
 
     /**
      * Dimensions in pixels needed to represent the bounding box.

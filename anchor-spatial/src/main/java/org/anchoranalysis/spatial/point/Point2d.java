@@ -71,8 +71,7 @@ public final class Point2d implements Serializable {
      * @param toAdd tuple to add to current state.
      */
     public void add(Point2i toAdd) {
-        this.x = this.x + toAdd.x();
-        this.y = this.y + toAdd.y();
+        add(toAdd.x(), toAdd.y());
     }
 
     /**
@@ -81,8 +80,29 @@ public final class Point2d implements Serializable {
      * @param toAdd tuple to add to current state.
      */
     public void add(Point2d toAdd) {
-        this.x = this.x + toAdd.x();
-        this.y = this.y + toAdd.y();
+        add(toAdd.x(), toAdd.y());
+    }
+
+    /**
+     * Arithmetically adds two {@code int} values, to the X- and Y- dimensions.
+     *
+     * @param xToAdd x-value to add to current state.
+     * @param yToAdd y-value to add to current state.
+     */
+    public void add(int xToAdd, int yToAdd) {
+        this.x = this.x + xToAdd;
+        this.y = this.y + yToAdd;
+    }
+
+    /**
+     * Arithmetically adds two {@code double} values, to the X- and Y- dimensions.
+     *
+     * @param xToAdd x-value to add to current state.
+     * @param yToAdd y-value to add to current state.
+     */
+    public void add(double xToAdd, double yToAdd) {
+        this.x = this.x + xToAdd;
+        this.y = this.y + yToAdd;
     }
 
     /**
