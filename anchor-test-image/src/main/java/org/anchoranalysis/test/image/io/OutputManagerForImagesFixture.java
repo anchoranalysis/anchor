@@ -41,7 +41,7 @@ import org.anchoranalysis.test.io.output.OutputManagerFixture;
 public class OutputManagerForImagesFixture {
 
     public static OutputManager createOutputManager(Optional<Path> pathForPrefixer) {
-        BeanInstanceMapFixture.ensureStackWriter();
+        BeanInstanceMapFixture.ensureStackWriter(true);
         return OutputManagerFixture.createOutputManager(pathForPrefixer);
     }
 }

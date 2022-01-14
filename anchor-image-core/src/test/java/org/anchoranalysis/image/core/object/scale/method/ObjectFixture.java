@@ -67,7 +67,9 @@ class ObjectFixture {
 
     private static ObjectMask objectAt(int xMin) {
         ObjectMask object =
-                new ObjectMask(BoundingBox.createReuse(new Point3i(xMin, 0, 0), new Extent(WIDTH, 30, 10)));
+                new ObjectMask(
+                        BoundingBox.createReuse(
+                                new Point3i(xMin, 0, 0), new Extent(WIDTH, 30, 10)));
         object.assignOn().toAll();
         return object;
     }

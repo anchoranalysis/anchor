@@ -174,7 +174,8 @@ public class BoundedVoxels<T> {
 
         // we copy in one by one
         for (int z = 0; z < buffer.extent().z(); z++) {
-            extracterLocal.boxCopyTo(boxSrc, buffer, BoundingBox.createReuse(new Point3i(0, 0, z), extent));
+            extracterLocal.boxCopyTo(
+                    boxSrc, buffer, BoundingBox.createReuse(new Point3i(0, 0, z), extent));
         }
 
         return new BoundedVoxels<>(boxNew, buffer);
@@ -226,7 +227,9 @@ public class BoundedVoxels<T> {
         // We allocate a new buffer
         Voxels<T> bufferNew = factory.createInitialized(grownBox.extent());
         extracterLocal.boxCopyTo(
-                new BoundingBox(extent), bufferNew, BoundingBox.createReuse(grownBox.cornerMin(), extent));
+                new BoundingBox(extent),
+                bufferNew,
+                BoundingBox.createReuse(grownBox.cornerMin(), extent));
 
         // We create a new bounding box
         BoundingBox box =
@@ -341,7 +344,8 @@ public class BoundedVoxels<T> {
 
         int relZ = zMin - boundingBox.cornerMin().z();
 
-        BoundingBox target = BoundingBox.createReuse(
+        BoundingBox target =
+                BoundingBox.createReuse(
                         boundingBox.cornerMin().duplicateChangeZ(zMin),
                         boundingBox.extent().duplicateChangeZ(zMax - zMin + 1));
 

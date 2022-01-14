@@ -42,6 +42,9 @@ public final class Point3i extends Tuple3i {
     /** */
     private static final long serialVersionUID = 1L;
 
+    /** A constant {@link Point3i} where all dimensions are zero. */
+    public static final Point3i ORIGIN = new Point3i();
+
     /** Creates the points with a 0 in each dimension. */
     public Point3i() {
         // Initializes with zeroes

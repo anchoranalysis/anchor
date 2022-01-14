@@ -122,7 +122,7 @@ public final class PointRange {
      *     dimension - across all added points.
      */
     public BoundingBox toBoundingBoxNoCheck() {
-        return new BoundingBox(min, max);
+        return BoundingBox.createDuplicate(min, max);
     }
 
     /**

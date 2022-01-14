@@ -65,7 +65,7 @@ public class BoundingBoxUnion {
                 ExtentBoundsComparer.createMax(
                         cornerMin, cornerMinOther, cornerMax, cornerMaxOther, ReadableTuple3i::z);
 
-        return new BoundingBox(
+        return BoundingBox.createReuse(
                 extractPoint(comparerX, comparerY, comparerZ, ExtentBoundsComparer::min),
                 extractPoint(comparerX, comparerY, comparerZ, ExtentBoundsComparer::max));
     }

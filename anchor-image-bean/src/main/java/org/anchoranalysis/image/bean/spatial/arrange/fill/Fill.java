@@ -1,16 +1,16 @@
 package org.anchoranalysis.image.bean.spatial.arrange.fill;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.Value;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.core.functional.FunctionalIterate;
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.ArrangeStackException;
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.StackArrangement;
 import org.anchoranalysis.image.bean.spatial.arrange.StackArranger;
@@ -33,125 +33,133 @@ import org.anchoranalysis.spatial.point.Point3i;
 @AllArgsConstructor
 public class Fill extends StackArranger {
 
-    /**
-     * A particular stack to be arranged, with calculated aspect-ratio, and its unique index
-     * position.
-     */
-    @Value
-    private static class Element {
-
-        /** Index position. */
-        private final int index;
-
-        /** The size of the stack. */
-        private final Extent extent;
-
-        /** The aspect-ratio: width of {@code extent} divided by height. */
-        private final double aspectRatio;
-
-        public Element(int index, Extent extent) {
-            this.index = index;
-            this.extent = extent;
-            this.aspectRatio = extent.aspectRatioXY();
-        }
-    }
-
     // START BEAN PROPERTIES
     /**
-     * The number of rows in the montage. If fewer {@link Extent}s are passed than this, the rows
-     * may be fewer.
+     * The number of rows to use the montage, when sufficient images are available.
+     *
+     * <p>If fewer {@link Extent}s are passed, then a row is created for each {@link Extent}, so
+     * much as possible.
      */
-    @BeanField @Getter @Setter private int rows = 1;
+    @BeanField @Getter @Setter private int numberRows = 1;
 
-    @BeanField @Getter @Setter private int width = 4096;
+    /**
+     * When true the number of {@link Extent}s per row is allowed vary, to sensibly fill space.
+     *
+     * <p>When false, the total number of {@link Extent}s per row is kept uniform, apart from the
+     * final occupied row (if there are insufficient images to fully populate it).
+     *
+     * <p>In both cases, the sizes of the images are allowed to vary, to maximally fill the
+     * available space.
+     */
+    @BeanField @Getter @Setter private boolean varyNumberImagesPerRow = true;
     // END BEAN PROPERTIES
 
     /**
-     * Create for a certain number of rows.
+     * Create with a particular number of rows.
      *
-     * @param rows the number of rows.
+     * @param rows the number of rows to use the montage, when sufficient images are available.
      */
     public Fill(int rows) {
-        this.rows = rows;
+        this.numberRows = rows;
     }
 
     @Override
     public StackArrangement arrangeStacks(Iterator<Extent> extents) throws ArrangeStackException {
-        List<Element> elements = createElements(extents);
+        List<ExtentToArrange> elements = createElements(extents);
 
         // In case there are fewer elements than rows, we change the number of rows
-        int rowsSelected = Math.min(rows, elements.size());
+        int numberRowsMin = Math.min(numberRows, elements.size());
 
         try {
-            List<List<Element>> partitions =
-                    LinearPartition.partition(elements, Element::getAspectRatio, rowsSelected);
-            double resultHeight = 0.0;
-            for (List<Element> row : partitions) {
-                double rowWidth = sumAspectRatios(row);
-                Element element = row.get(0);
-                double scaleRatio = extractScaleFactor(element, rowWidth);
-                resultHeight += (element.getExtent().y() * scaleRatio);
-            }
+            // Partition the images, so that each row has a roughly similar sum of aspect-ratios
+            List<List<ExtentToArrange>> partitions = partitionExtents(elements, numberRowsMin);
 
-            Extent resultSize = new Extent(width, (int) resultHeight, 1);
+            Extent combinedSize =
+                    FitCombinedScaler.scaleImagesToCombine(partitions, !varyNumberImagesPerRow);
 
-            // Create boxes populated with null for each element
-            List<BoundingBox> boxes = new ArrayList<>(elements.size());
-            FunctionalIterate.repeat(elements.size(), () -> boxes.add(null));
+            // Create a bounding box for each element, using the ID to determine the position in the
+            // array.
+            BoundingBox[] boxes = derivingBoundingBoxes(elements.size(), partitions, combinedSize);
 
-            StackArrangement arrangement = new StackArrangement(resultSize, boxes);
-
-            int yPosition = 0;
-            for (List<Element> row : partitions) {
-                double rowWidth = sumAspectRatios(row);
-                int xPosition = 0;
-                int rowHeight = 0;
-
-                for (Element element : row) {
-                    double scaleRatio = extractScaleFactor(element, rowWidth);
-
-                    Extent sizeNew = element.getExtent().scaleXYBy(scaleRatio, false);
-
-                    Point3i cornerMin = new Point3i(xPosition, yPosition, 0);
-
-                    BoundingBox box = BoundingBox.createReuse(cornerMin, sizeNew);
-                    box = box.clampTo(resultSize);
-
-                    boxes.set(element.getIndex(), box);
-
-                    xPosition += sizeNew.x();
-                    rowHeight = sizeNew.y();
-                }
-                yPosition += rowHeight;
-            }
-
-            for (BoundingBox box : arrangement.boxes()) {
-                assert (arrangement.extent().contains(box));
-            }
-
-            return arrangement;
+            return new StackArrangement(combinedSize, Arrays.asList(boxes));
 
         } catch (OperationFailedException e) {
             throw new ArrangeStackException("An error occurred partitioning the elements", e);
         }
     }
 
-    private double extractScaleFactor(Element element, double rowWidth) {
-        double widthPercent = element.getAspectRatio() / rowWidth;
-        double imageWidth = widthPercent * width;
-        return imageWidth / element.getExtent().x();
+    /** Partitions {@code elements} into smaller lists, each representing a particular row. */
+    private List<List<ExtentToArrange>> partitionExtents(
+            List<ExtentToArrange> elements, int numberRows) throws OperationFailedException {
+        if (varyNumberImagesPerRow) {
+            return LinearPartition.partition(elements, ExtentToArrange::getAspectRatio, numberRows);
+        } else {
+            return partitionIntoFixedChunks(elements, numberRows);
+        }
     }
 
-    private double sumAspectRatios(List<Element> elements) {
-        return elements.stream().mapToDouble(element -> element.getAspectRatio()).sum();
+    /**
+     * Partition {@code elements} into fixed chunks of particular fixed size (apart from the last
+     * row).
+     */
+    private static <T> List<List<T>> partitionIntoFixedChunks(List<T> elements, int numberRows) {
+        List<List<T>> out = new ArrayList<List<T>>(numberRows);
+
+        // Calculate the number of images per row
+        int imagesPerRow = (int) Math.ceil(((double) elements.size()) / numberRows);
+        int count = 0;
+        List<T> current = new LinkedList<>();
+        for (T element : elements) {
+            current.add(element);
+            count++;
+            if (count == imagesPerRow) {
+                out.add(current);
+                current = new LinkedList<>();
+                count = 0;
+            }
+        }
+        if (count != 0) {
+            out.add(current);
+        }
+        return out;
     }
 
-    private static List<Element> createElements(Iterator<Extent> extents) {
+    /** Creates a {@link ExtentToArrange} for each respective {@link Extent}. */
+    private static List<ExtentToArrange> createElements(Iterator<Extent> extents) {
         int index = 0;
-        List<Element> elements = new ArrayList<>();
+        List<ExtentToArrange> elements = new LinkedList<>();
         while (extents.hasNext()) {
-            elements.add(new Element(index++, extents.next()));
+            elements.add(new ExtentToArrange(index++, extents.next()));
         }
         return elements;
+    }
+
+    /**
+     * Derive a {@link BoundingBox} for each {@link Extent}, corresponding to its location and size
+     * in the combined size.
+     */
+    private static BoundingBox[] derivingBoundingBoxes(
+            int numberElements, List<List<ExtentToArrange>> partitions, Extent combinedSize) {
+        BoundingBox[] boxes = new BoundingBox[numberElements];
+
+        Point3i cornerMin = new Point3i();
+        for (List<ExtentToArrange> row : partitions) {
+            cornerMin.setX(0);
+            Extent extent = null;
+            assert (!row.isEmpty());
+
+            for (ExtentToArrange element : row) {
+                extent = element.getExtent();
+
+                BoundingBox box =
+                        BoundingBox.createDuplicate(cornerMin, extent).clampTo(combinedSize);
+                boxes[element.getIndex()] = box;
+
+                cornerMin.incrementX(extent.x());
+            }
+            cornerMin.incrementY(extent.y());
+        }
+
+        return boxes;
     }
 }

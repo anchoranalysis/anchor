@@ -29,9 +29,6 @@ class FillTest {
     /** How many {@link Extent}s to use as inputs in the test. */
     private static final int NUMBER_EXTENTS = 15;
 
-    /** The width of the combined image. */
-    private static final int COMBINED_WIDTH = 512;
-
     /** The number of rows in the combined image. */
     private static final int COMBINED_NUMBER_ROWS = 3;
 
@@ -48,7 +45,7 @@ class FillTest {
 
         // Create extents incrementally
         List<RGBStack> stacks = IncrementallyLargerStacksFixture.createStacks(COLORS);
-        RGBStack combined = new Fill(COMBINED_NUMBER_ROWS, COMBINED_WIDTH).combine(stacks, RESIZER);
+        RGBStack combined = new Fill(COMBINED_NUMBER_ROWS).combine(stacks, RESIZER);
 
         // Check that each color appears in an expected way.
         assertColorChecks(combined, index -> stacks.get(index).extent());

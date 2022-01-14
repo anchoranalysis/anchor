@@ -65,7 +65,7 @@ class LinearPartition {
 
         checkSizes(list.size(), numberPartitions);
 
-        // East case with identical number of values and partitions
+        // Exit case with identical number of values and partitions
         if (list.size() == numberPartitions) {
             return Arrays.asList(new ArrayList<>(list));
         }
