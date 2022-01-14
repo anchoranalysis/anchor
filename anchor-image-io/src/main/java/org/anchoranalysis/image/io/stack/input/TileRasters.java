@@ -32,9 +32,9 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.bean.provider.stack.Arrange;
 import org.anchoranalysis.image.bean.spatial.arrange.overlay.Overlay;
 import org.anchoranalysis.image.bean.spatial.arrange.tile.Tile;
-import org.anchoranalysis.image.io.bean.stack.combine.GenerateString;
 import org.anchoranalysis.image.io.bean.stack.combine.StackProviderWithLabel;
 import org.anchoranalysis.image.io.bean.stack.combine.TextStyle;
+import org.anchoranalysis.image.io.bean.stack.combine.WriteText;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class TileRasters {
@@ -67,14 +67,14 @@ public class TileRasters {
         return tile;
     }
 
-    private static GenerateString addGenerateString(
+    private static WriteText addGenerateString(
             StackProviderWithLabel providerWithLabel,
             boolean createShort,
             boolean scaleLabel,
             boolean expandLabelZ) {
 
-        GenerateString out = new GenerateString(providerWithLabel.getLabel());
-        out.setStringRasterGenerator(new TextStyle(3));
+        WriteText out = new WriteText(providerWithLabel.getLabel());
+        out.setStyle(new TextStyle());
         out.setCreateShort(createShort);
         if (scaleLabel) {
             out.setIntensityProvider(providerWithLabel.getStack());

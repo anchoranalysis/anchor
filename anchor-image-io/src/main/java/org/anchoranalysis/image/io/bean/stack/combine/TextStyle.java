@@ -31,38 +31,24 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.geom.Rectangle2D;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import java.util.Optional;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.shared.color.RGBColorBean;
 import org.anchoranalysis.core.color.RGBColor;
-import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.image.bean.spatial.SizeXY;
-import org.anchoranalysis.image.core.bufferedimage.CreateStackFromBufferedImage;
-import org.anchoranalysis.image.core.stack.Stack;
-import org.anchoranalysis.image.io.stack.output.StackWriteAttributes;
-import org.anchoranalysis.image.io.stack.output.StackWriteAttributesFactory;
-import org.anchoranalysis.image.io.stack.output.generator.RasterGeneratorSelectFormat;
-import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import org.anchoranalysis.spatial.box.Extent;
 
 /**
  * The size and style of text as it should appear in an image.
  *
  * @author Owen Feehan
  */
-@NoArgsConstructor
 public class TextStyle extends AnchorBean<TextStyle> {
 
     // START BEAN PROPERTIES
-    /** Explicit size of the image the string is draw on */
-    @BeanField @OptionalBean @Getter @Setter private SizeXY size;
-
     /** Font-size of drawn text */
     @BeanField @Getter @Setter private int fontSize = 12;
 
@@ -75,90 +61,39 @@ public class TextStyle extends AnchorBean<TextStyle> {
 
     /** Whether to bold the drawn text */
     @BeanField @Getter @Setter private boolean bold = false;
-
-    /**
-     * Padding added around the text in both dimensions if a default size is inferred (ignored if an
-     * explicit size is specified )
-     */
-    @BeanField @Getter @Setter private double padding = 0;
     // END BEAN PROPERTIES
 
-    public TextStyle(double padding) {
-        this.padding = padding;
-    }
-
-    /** Creates a generator, which produces a drawn string on an image when generated */
-    public RasterGeneratorSelectFormat<String> createGenerator() {
-        return new RasterizedTextGenerator();
-    }
-
     /**
-     * Creates an image with text matching the style/size specified in this bean.
+     * Draws text on a {@link BufferedImage}.
      *
-     * @author Owen Feehan
+     * @param textToDraw the text to draw.
+     * @param image the image.
+     * @param extent the size of the {@code image}.
      */
-    private class RasterizedTextGenerator extends RasterGeneratorSelectFormat<String> {
+    public void drawText(String textToDraw, BufferedImage image, Extent extent) {
+        Graphics2D graphics = createGraphicsFromBufferedImage(image);
 
-        @Override
-        public Stack transform(String element) throws OutputWriteFailedException {
+        graphics.fill(new Rectangle(0, 0, extent.x(), extent.y()));
 
-            SizeXY resolvedSize =
-                    Optional.ofNullable(size).orElseGet(() -> alternativeSizeFromDefault(element));
+        drawCenteredString(textToDraw, extent, graphics);
+    }
 
-            assert (resolvedSize.asExtent().areaXY() > 0);
+    private Graphics2D createGraphicsFromBufferedImage(BufferedImage bufferedImage) {
+        Graphics2D graphics = bufferedImage.createGraphics();
 
-            BufferedImage bufferedImage =
-                    new BufferedImage(
-                            resolvedSize.getWidth(),
-                            resolvedSize.getHeight(),
-                            BufferedImage.TYPE_INT_RGB);
-            Graphics2D graphics = createGraphicsFromBufferedImage(bufferedImage);
+        Font font = new Font(fontName, bold ? Font.BOLD : Font.PLAIN, fontSize);
 
-            drawCenteredString(element, resolvedSize, graphics);
+        graphics.setColor(fontColor.toAWTColor());
+        graphics.setFont(font);
+        return graphics;
+    }
 
-            try {
-                return CreateStackFromBufferedImage.createFrom(bufferedImage);
-            } catch (OperationFailedException e) {
-                throw new OutputWriteFailedException(e);
-            }
-        }
-
-        @Override
-        public StackWriteAttributes guaranteedImageAttributes() {
-            return StackWriteAttributesFactory.rgbMaybe3D(false);
-        }
-
-        private Graphics2D createGraphicsFromBufferedImage(BufferedImage bufferedImage) {
-
-            Graphics2D graphics = bufferedImage.createGraphics();
-
-            Font font = new Font("SansSerif", bold ? Font.BOLD : Font.PLAIN, fontSize);
-
-            graphics.setColor(fontColor.toAWTColor());
-            graphics.setFont(font);
-            return graphics;
-        }
-
-        private void drawCenteredString(String stringToDraw, SizeXY size, Graphics g) {
-            FontMetrics fm = g.getFontMetrics();
-            int x = (size.getWidth() - fm.stringWidth(stringToDraw)) / 2;
-            int y = (fm.getAscent() + (size.getHeight() - (fm.getAscent() + fm.getDescent())) / 2);
-            g.drawString(stringToDraw, x, y);
-        }
-
-        private SizeXY alternativeSizeFromDefault(String element) {
-
-            Graphics2D graphics =
-                    createGraphicsFromBufferedImage(
-                            new BufferedImage(1000, 1000, BufferedImage.TYPE_INT_RGB));
-            FontMetrics fm = graphics.getFontMetrics();
-            Rectangle2D defaultSize = fm.getStringBounds(element, graphics);
-            return new SizeXY(
-                    addPadding(defaultSize.getWidth()), addPadding(defaultSize.getHeight()));
-        }
-
-        private int addPadding(double value) {
-            return (int) Math.ceil(value + (padding * 2));
-        }
+    private static void drawCenteredString(String stringToDraw, Extent extent, Graphics graphics) {
+        FontMetrics metrics = graphics.getFontMetrics();
+        int x = (extent.x() - metrics.stringWidth(stringToDraw)) / 2;
+        int y =
+                (metrics.getAscent()
+                        + (extent.y() - (metrics.getAscent() + metrics.getDescent())) / 2);
+        graphics.drawString(stringToDraw, x, y);
     }
 }

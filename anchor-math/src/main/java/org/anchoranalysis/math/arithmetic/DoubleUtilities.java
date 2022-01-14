@@ -39,7 +39,7 @@ public class DoubleUtilities {
 
     /**
      * Are the two numbers equal, within a tolerance?
-     * 
+     *
      * <p>The tolerance is {@value PrecisionConstants#EPSILON}.
      *
      * @param value1 the first value.
@@ -48,7 +48,7 @@ public class DoubleUtilities {
      *     PrecisionConstants.EPSILON}.
      */
     @SuppressWarnings("javadoc")
-	public static boolean areEqual(double value1, double value2) {
+    public static boolean areEqual(double value1, double value2) {
         return Math.abs(value1 - value2) < PrecisionConstants.EPSILON;
     }
 

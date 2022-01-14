@@ -121,6 +121,7 @@ public class BufferedImageFromStack {
             throws CreateException {
         checkExtentZ(extent);
 
+        // TODO is it right that this refers to BGR but we input the channels in RGB order?
         BufferedImage image =
                 new BufferedImage(extent.x(), extent.y(), BufferedImage.TYPE_3BYTE_BGR);
 

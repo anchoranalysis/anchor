@@ -27,7 +27,6 @@
 package org.anchoranalysis.image.core.stack;
 
 import com.google.common.base.Functions;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -37,7 +36,6 @@ import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.core.index.SetOperationFailedException;
-import org.anchoranalysis.image.core.bufferedimage.BufferedImageFromStack;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.channel.convert.ConversionPolicy;
 import org.anchoranalysis.image.core.channel.convert.attached.ChannelConverterAttached;
@@ -49,7 +47,6 @@ import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.VoxelsUntyped;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
-import org.anchoranalysis.image.voxel.convert.bufferedimage.BufferedImageFromVoxels;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
@@ -371,38 +368,6 @@ public class DisplayStack {
      */
     public DisplayStack extractSlice(int z) throws CreateException {
         return new DisplayStack(stack.extractSlice(z), converters);
-    }
-
-    /**
-     * Derive a AWT {@link BufferedImage} from the {@link DisplayStack} after applying any
-     * applicable conversion.
-     *
-     * @return a newly created {@link BufferedImage} with identical voxels to the {@link
-     *     DisplayStack} after conversion.
-     */
-    public BufferedImage deriveBufferedImage() {
-        try {
-            if (stack.getNumberChannels() == 3) {
-                return BufferedImageFromStack.createRGB(
-                        voxelsForChannel(0),
-                        voxelsForChannel(1),
-                        voxelsForChannel(2),
-                        stack.extent());
-            }
-            return BufferedImageFromVoxels.createGrayscaleByte(voxelsForChannel(0));
-        } catch (CreateException e) {
-            throw new AnchorImpossibleSituationException();
-        }
-    }
-
-    private Voxels<UnsignedByteBuffer> voxelsForChannel(int channelIndex) {
-        return mapper.mapChannelIfSupported(
-                channelIndex,
-                (channel, converter) ->
-                        converter
-                                .getVoxelsConverter()
-                                .convertFrom(channel.voxels(), VoxelsFactory.getUnsignedByte()),
-                channel -> channel.voxels().asByte());
     }
 
     private Stack deriveStack(IntFunction<Channel> indexToChannel) {
