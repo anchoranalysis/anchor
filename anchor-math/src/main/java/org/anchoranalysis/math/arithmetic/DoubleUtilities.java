@@ -38,14 +38,17 @@ import lombok.NoArgsConstructor;
 public class DoubleUtilities {
 
     /**
-     * Are the two numbers equal?
+     * Are the two numbers equal, within a tolerance?
+     * 
+     * <p>The tolerance is {@value PrecisionConstants#EPSILON}.
      *
      * @param value1 the first value.
      * @param value2 the second value.
      * @return true iff {@code value1} and {@code value2} differ by less than {@code
      *     PrecisionConstants.EPSILON}.
      */
-    public static boolean areEqual(double value1, double value2) {
+    @SuppressWarnings("javadoc")
+	public static boolean areEqual(double value1, double value2) {
         return Math.abs(value1 - value2) < PrecisionConstants.EPSILON;
     }
 
