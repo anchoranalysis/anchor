@@ -52,8 +52,8 @@ public class BoundingBoxUnion {
         ReadableTuple3i cornerMin = box.cornerMin();
         ReadableTuple3i cornerMinOther = other.cornerMin();
 
-        ReadableTuple3i cornerMax = box.calculateCornerMax();
-        ReadableTuple3i cornerMaxOther = other.calculateCornerMax();
+        ReadableTuple3i cornerMax = box.calculateCornerMaxInclusive();
+        ReadableTuple3i cornerMaxOther = other.calculateCornerMaxInclusive();
 
         ExtentBoundsComparer comparerX =
                 ExtentBoundsComparer.createMax(
@@ -65,7 +65,7 @@ public class BoundingBoxUnion {
                 ExtentBoundsComparer.createMax(
                         cornerMin, cornerMinOther, cornerMax, cornerMaxOther, ReadableTuple3i::z);
 
-        return new BoundingBox(
+        return BoundingBox.createReuse(
                 extractPoint(comparerX, comparerY, comparerZ, ExtentBoundsComparer::min),
                 extractPoint(comparerX, comparerY, comparerZ, ExtentBoundsComparer::max));
     }

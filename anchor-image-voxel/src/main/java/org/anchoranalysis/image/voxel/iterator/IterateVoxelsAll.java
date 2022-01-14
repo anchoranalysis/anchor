@@ -26,12 +26,12 @@
 package org.anchoranalysis.image.voxel.iterator;
 
 import com.google.common.base.Preconditions;
+import java.util.function.IntBinaryOperator;
 import java.util.function.IntPredicate;
 import java.util.function.IntUnaryOperator;
 import java.util.function.Predicate;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.functional.unchecked.IntBinaryOperation;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
@@ -449,7 +449,7 @@ public class IterateVoxelsAll {
             Voxels<UnsignedByteBuffer> voxelsIn1,
             Voxels<UnsignedByteBuffer> voxelsIn2,
             Voxels<UnsignedByteBuffer> voxelsOut,
-            IntBinaryOperation operation) {
+            IntBinaryOperator operation) {
         Preconditions.checkArgument(voxelsIn1.extent().equals(voxelsIn2.extent()));
         Preconditions.checkArgument(voxelsIn2.extent().equals(voxelsOut.extent()));
 
@@ -463,7 +463,7 @@ public class IterateVoxelsAll {
 
                             while (in1.hasRemaining()) {
                                 out.putUnsigned(
-                                        operation.apply(in1.getUnsigned(), in2.getUnsigned()));
+                                        operation.applyAsInt(in1.getUnsigned(), in2.getUnsigned()));
                             }
 
                             assert (!in2.hasRemaining());

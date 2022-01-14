@@ -46,14 +46,14 @@ import org.anchoranalysis.spatial.point.PointConverter;
 public class CircleObjectFixture {
 
     /**
-     * Creates several successive circles whose center is incrementally shifted
+     * Creates several successive circles whose center is incrementally shifted.
      *
-     * @param numberCircles how many circles to create
-     * @param startCenter the center of the first circle
-     * @param radius the radius for all circles
-     * @param centerShift shifts the center by this amount for each successive circle
-     * @param radiusShift increases the radius by this amount for each successive circle
-     * @return a collection of circular-objects
+     * @param numberCircles how many circles to create.
+     * @param startCenter the center of the first circle.
+     * @param radius the radius for all circles.
+     * @param centerShift shifts the center by this amount for each successive circle.
+     * @param radiusShift increases the radius by this amount for each successive circle.
+     * @return a collection of circular-objects.
      */
     public static ObjectCollection successiveCircles(
             int numberCircles,
@@ -78,11 +78,11 @@ public class CircleObjectFixture {
     }
 
     /**
-     * Creates a single circular mask at a particular center point and radius
+     * Creates a single circular mask at a particular center point and radius.
      *
-     * @param center center-point
-     * @param radius the radius
-     * @return a circular object-mask as above with a minimally fitting bounding-box around it
+     * @param center center-point.
+     * @param radius the radius.
+     * @return a circular object-mask as above with a minimally fitting bounding-box around it.
      */
     public static ObjectMask circleAt(Point2d center, int radius) {
         Point3d center3d = PointConverter.convertTo3d(center);
@@ -103,9 +103,8 @@ public class CircleObjectFixture {
         Point3i centerCeil = PointConverter.intFromDoubleCeil(center3d);
         Point3i centerFloor = PointConverter.intFromDoubleFloor(center3d);
         Point3i radii = new Point3i(radius, radius, 0);
-
-        Point3i cornerMin = Point3i.immutableSubtract(centerFloor, radii);
-        Point3i cornerMax = Point3i.immutableAdd(centerCeil, radii);
-        return new BoundingBox(cornerMin, cornerMax);
+        centerFloor.subtract(radii);
+        centerCeil.add(radii);
+        return BoundingBox.createReuse(centerFloor, centerCeil);
     }
 }

@@ -144,7 +144,7 @@ class VoxelizedMarkHistogram implements VoxelizedMark {
         Dimensions dimensions = stack.dimensions();
         BoundingBox box = mark.boxAllRegions(dimensions);
 
-        ReadableTuple3i cornerMax = box.calculateCornerMax();
+        ReadableTuple3i cornerMax = box.calculateCornerMaxInclusive();
 
         object = new ObjectMask(box);
         objectFlattened = new ObjectMask(box.flattenZ());

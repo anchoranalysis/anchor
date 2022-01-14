@@ -27,6 +27,8 @@ package org.anchoranalysis.spatial.point;
  */
 
 import java.io.Serializable;
+import java.util.function.IntPredicate;
+import org.anchoranalysis.core.functional.unchecked.IntBinaryPredicate;
 import org.anchoranalysis.spatial.axis.Axis;
 import org.anchoranalysis.spatial.axis.AxisConverter;
 
@@ -85,6 +87,33 @@ public interface ReadableTuple3i extends Serializable, Comparable<ReadableTuple3
      * @return a copy of the current object with changed Z-component value.
      */
     ReadableTuple3i duplicateChangeZ(int zValueToAssign);
+
+    /**
+     * Whether the values in all dimensions satisfy a predicate.
+     *
+     * @param predicate the test applied to each dimension's value.
+     * @return true if the values in <b>all</b> three dimensions satisfy the predicate, false
+     *     otherwise.
+     */
+    default boolean matchAllDimensions(IntPredicate predicate) {
+        return predicate.test(x()) && predicate.test(y()) && predicate.test(z());
+    }
+
+    /**
+     * Whether the values in each dimension satisfy a predicate, where the value in the current
+     * object is the left argument, and the corresponding value in {@code point} forms the right
+     * argument.
+     *
+     * @param point the point that forms the second right-most value in the predicate.
+     * @param predicate the test applied to each dimension's value (and corresponding value in
+     *     {@code point}).
+     * @return true if <b>all</b> three dimensions satisfy the predicate, false otherwise.
+     */
+    default boolean matchAllDimensions(ReadableTuple3i point, IntBinaryPredicate predicate) {
+        return predicate.test(x(), point.x())
+                && predicate.test(y(), point.y())
+                && predicate.test(z(), point.z());
+    }
 
     @Override
     default int compareTo(ReadableTuple3i other) {

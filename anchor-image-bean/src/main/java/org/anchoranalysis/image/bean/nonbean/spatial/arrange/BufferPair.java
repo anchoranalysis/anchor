@@ -3,7 +3,6 @@ package org.anchoranalysis.image.bean.nonbean.spatial.arrange;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.spatial.box.Extent;
-import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.point.ReadableTuple3i;
 
 /**
@@ -63,7 +62,8 @@ class BufferPair {
      *     ignored).
      * @param sizeDestination the size of the destination stack.
      */
-    public void copySlice(ReadableTuple3i cornerMin, Point3i cornerMax, Extent sizeDestination) {
+    public void copySlice(
+            ReadableTuple3i cornerMin, ReadableTuple3i cornerMax, Extent sizeDestination) {
         int index = 0;
         for (int y = cornerMin.y(); y <= cornerMax.y(); y++) {
             for (int x = cornerMin.x(); x <= cornerMax.x(); x++) {

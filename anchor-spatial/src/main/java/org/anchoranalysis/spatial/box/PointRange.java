@@ -28,6 +28,7 @@ package org.anchoranalysis.spatial.box;
 
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.spatial.point.Point3i;
+import org.anchoranalysis.spatial.point.ReadableTuple3i;
 
 /**
  * Tracks the range experienced by points in the X, Y and Z dimensions.
@@ -57,7 +58,7 @@ public final class PointRange {
      *
      * @param point the point to add.
      */
-    public void add(Point3i point) {
+    public void add(ReadableTuple3i point) {
         add(point.x(), point.y(), point.z());
     }
 
@@ -121,7 +122,7 @@ public final class PointRange {
      *     dimension - across all added points.
      */
     public BoundingBox toBoundingBoxNoCheck() {
-        return new BoundingBox(min, max);
+        return BoundingBox.createDuplicate(min, max);
     }
 
     /**

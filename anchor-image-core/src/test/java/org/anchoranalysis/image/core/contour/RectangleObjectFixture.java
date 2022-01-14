@@ -78,7 +78,7 @@ class RectangleObjectFixture {
     }
 
     private static ObjectMask createRectangle(Point3i corner, Extent extent) {
-        ObjectMask object = new ObjectMask(new BoundingBox(corner, extent));
+        ObjectMask object = new ObjectMask(BoundingBox.createReuse(corner, extent));
         object.assignOn().toAll();
         return object;
     }

@@ -127,7 +127,7 @@ public class ObjectMaskFixture {
      */
     public ObjectMask filledMask(int cornerX, int cornerY, int cornerZ) {
         Point3i corner = new Point3i(cornerX, cornerY, cornerZ);
-        ObjectMask object = new ObjectMask(new BoundingBox(corner, extent));
+        ObjectMask object = new ObjectMask(BoundingBox.createReuse(corner, extent));
         object.assignOn().toAll();
         if (removeCorners) {
             removeEachCorner(object);

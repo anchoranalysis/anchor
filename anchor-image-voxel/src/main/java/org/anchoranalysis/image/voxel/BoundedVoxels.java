@@ -164,7 +164,7 @@ public class BoundedVoxels<T> {
         }
 
         BoundingBox boxNew =
-                new BoundingBox(
+                BoundingBox.createReuse(
                         boundingBox.cornerMin(), boundingBox.extent().duplicateChangeZ(sizeZ));
 
         Voxels<T> buffer = factory.createInitialized(boxNew.extent());
@@ -174,7 +174,8 @@ public class BoundedVoxels<T> {
 
         // we copy in one by one
         for (int z = 0; z < buffer.extent().z(); z++) {
-            extracterLocal.boxCopyTo(boxSrc, buffer, new BoundingBox(new Point3i(0, 0, z), extent));
+            extracterLocal.boxCopyTo(
+                    boxSrc, buffer, BoundingBox.createReuse(new Point3i(0, 0, z), extent));
         }
 
         return new BoundedVoxels<>(boxNew, buffer);
@@ -226,11 +227,13 @@ public class BoundedVoxels<T> {
         // We allocate a new buffer
         Voxels<T> bufferNew = factory.createInitialized(grownBox.extent());
         extracterLocal.boxCopyTo(
-                new BoundingBox(extent), bufferNew, new BoundingBox(grownBox.cornerMin(), extent));
+                new BoundingBox(extent),
+                bufferNew,
+                BoundingBox.createReuse(grownBox.cornerMin(), extent));
 
         // We create a new bounding box
         BoundingBox box =
-                new BoundingBox(
+                BoundingBox.createReuse(
                         Point3i.immutableSubtract(
                                 this.boundingBox.cornerMin(), grownBox.cornerMin()),
                         grownBox.extent());
@@ -342,7 +345,7 @@ public class BoundedVoxels<T> {
         int relZ = zMin - boundingBox.cornerMin().z();
 
         BoundingBox target =
-                new BoundingBox(
+                BoundingBox.createReuse(
                         boundingBox.cornerMin().duplicateChangeZ(zMin),
                         boundingBox.extent().duplicateChangeZ(zMax - zMin + 1));
 
@@ -545,7 +548,7 @@ public class BoundedVoxels<T> {
                         clampNegative(boundingBox.cornerMin().y(), negative.y()),
                         clampNegative(boundingBox.cornerMin().z(), negative.z()));
 
-        ReadableTuple3i boxMax = boundingBox.calculateCornerMax();
+        ReadableTuple3i boxMax = boundingBox.calculateCornerMaxInclusive();
 
         ReadableTuple3i maxPossible;
         if (clipRegion.isPresent()) {
@@ -559,7 +562,7 @@ public class BoundedVoxels<T> {
                         clampPositive(boxMax.x(), positive.x(), maxPossible.x()) + negClamped.x(),
                         clampPositive(boxMax.y(), positive.y(), maxPossible.y()) + negClamped.y(),
                         clampPositive(boxMax.z(), positive.z(), maxPossible.z()) + negClamped.z());
-        return new BoundingBox(negClamped, this.voxels.extent().growBy(growBy));
+        return BoundingBox.createReuse(negClamped, this.voxels.extent().growBy(growBy));
     }
 
     /**

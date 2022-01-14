@@ -57,4 +57,14 @@ public class ArrangeStackException extends AnchorCheckedException {
     public ArrangeStackException(Exception cause) {
         super(cause);
     }
+
+    /**
+     * Create with a message and cause.
+     *
+     * @param message the message.
+     * @param cause the cause.
+     */
+    public ArrangeStackException(String message, Exception cause) {
+        super(message, cause);
+    }
 }

@@ -53,6 +53,6 @@ public class AccessObjectMaskSimple implements AccessObjectMask<ObjectMask> {
 
     @Override
     public ObjectMask clipTo(ObjectMask element, Extent extent) {
-        return element.clipTo(extent);
+        return element.clampTo(extent);
     }
 }

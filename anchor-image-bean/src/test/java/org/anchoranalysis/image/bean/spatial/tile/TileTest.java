@@ -1,12 +1,14 @@
-package org.anchoranalysis.image.bean.spatial.arrange;
+package org.anchoranalysis.image.bean.spatial.tile;
 
 import static org.anchoranalysis.image.bean.spatial.arrange.ColoredDualStackTester.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.ArrangeStackException;
+import org.anchoranalysis.image.bean.spatial.arrange.ColoredDualStackTester;
+import org.anchoranalysis.image.bean.spatial.arrange.DualStacks;
+import org.anchoranalysis.image.bean.spatial.arrange.overlay.Overlay;
 import org.anchoranalysis.image.bean.spatial.arrange.tile.Cell;
 import org.anchoranalysis.image.bean.spatial.arrange.tile.Tile;
-import org.anchoranalysis.image.bean.spatial.overlay.Overlay;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.box.Extent;
 import org.anchoranalysis.spatial.point.Point3i;
@@ -26,7 +28,7 @@ class TileTest {
     @Test
     void testHorizontal() throws ArrangeStackException {
         BoundingBox box =
-                new BoundingBox(
+                BoundingBox.createReuse(
                         new Point3i(DualStacks.SIZE_BIG.x(), 0, 0),
                         new Extent(
                                 DualStacks.SIZE_SMALL.x(),
@@ -50,7 +52,7 @@ class TileTest {
     @Test
     void testVertical() throws ArrangeStackException {
         BoundingBox box =
-                new BoundingBox(
+                BoundingBox.createReuse(
                         new Point3i(0, DualStacks.SIZE_BIG.y(), 0),
                         new Extent(
                                 DualStacks.SIZE_BIG.y(),

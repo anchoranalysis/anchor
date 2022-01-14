@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.box.Extent;
-import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.point.ReadableTuple3i;
 
 /**
@@ -71,7 +70,7 @@ public class StackCopierAtBox {
         Extent extent = source.extent();
 
         ReadableTuple3i cornerMin = box.cornerMin();
-        Point3i cornerMax = box.calculateCornerMax();
+        ReadableTuple3i cornerMax = box.calculateCornerMaxInclusive();
 
         BufferPair buffers = new BufferPair(destination.getNumberChannels());
 

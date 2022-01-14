@@ -156,7 +156,8 @@ public class ObjectMaskMerger {
         Extent extent = source.boundingBox().extent();
 
         source.extract()
-                .objectCopyTo(source, destination.voxels(), new BoundingBox(pointDest, extent));
+                .objectCopyTo(
+                        source, destination.voxels(), BoundingBox.createReuse(pointDest, extent));
     }
 
     /**

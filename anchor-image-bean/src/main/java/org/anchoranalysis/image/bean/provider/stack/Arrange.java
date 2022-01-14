@@ -33,7 +33,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.Provider;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
+import org.anchoranalysis.image.bean.interpolator.Interpolator;
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.ArrangeStackException;
 import org.anchoranalysis.image.bean.spatial.arrange.StackArranger;
 import org.anchoranalysis.image.core.channel.factory.ChannelFactorySingleType;
@@ -71,6 +73,9 @@ public class Arrange extends StackProvider {
      * <i>unsigned byte</i>.
      */
     @BeanField @Getter @Setter private boolean createShort = false;
+
+    /** The interpolator to use for scaling images, if needed. */
+    @BeanField @Getter @Setter @DefaultInstance private Interpolator interpolator;
     // END BEAN
 
     /**
@@ -118,7 +123,7 @@ public class Arrange extends StackProvider {
                             ? new ChannelFactoryUnsignedShort()
                             : new ChannelFactoryUnsignedByte();
 
-            return arrange.combine(rasterList, factory).asStack();
+            return arrange.combine(rasterList, interpolator.voxelsResizer(), factory).asStack();
         } catch (ArrangeStackException e) {
             throw new ProvisionFailedException(e);
         }

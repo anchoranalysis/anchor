@@ -109,7 +109,7 @@ public class DrawCroppedObjectsGenerator extends ObjectsAsRGBGenerator {
 
         for (ObjectMask objectMask : objects) {
             BoundingBox boxNew =
-                    new BoundingBox(
+                    BoundingBox.createReuse(
                             objectMask.boundingBox().relativePositionTo(src),
                             objectMask.boundingBox().extent());
             out.add(

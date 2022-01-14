@@ -468,22 +468,24 @@ public final class Extent implements Serializable, Comparable<Extent> {
      * @return true iff {@code} only describes space contained in the current extent.
      */
     public boolean contains(BoundingBox box) {
-        return contains(box.cornerMin()) && contains(box.calculateCornerMax());
+        return contains(box.cornerMin()) && contains(box.calculateCornerMaxInclusive());
     }
 
     /**
      * Scales the X- and Y- dimensions by a scaling-factor.
      *
      * @param scaleFactor the scaling-factor to multiply the respective X and Y dimension values by.
+     * @param round if true, each dimension is rounded to the nearest whole number. If false, it is
+     *     <i>ceil</i>ed upwards to the nearest number.
      * @return a new {@link Extent} whose X and Y values are scaled versions of the current values,
      *     and Z value is unchanged.
      */
-    public Extent scaleXYBy(ScaleFactor scaleFactor) {
+    public Extent scaleXYBy(ScaleFactor scaleFactor, boolean round) {
         return new Extent(
                 immutablePointOperation(
                         point -> {
-                            point.setX(Scaler.scaleQuantity(scaleFactor.x(), x()));
-                            point.setY(Scaler.scaleQuantity(scaleFactor.y(), y()));
+                            point.setX(Scaler.scaleMultiplex(scaleFactor.x(), x(), round));
+                            point.setY(Scaler.scaleMultiplex(scaleFactor.y(), y(), round));
                         }));
     }
 
@@ -491,16 +493,17 @@ public final class Extent implements Serializable, Comparable<Extent> {
      * Scales <i>all</i> dimensions by a scaling-factor.
      *
      * @param scaleFactor the scaling-factor to multiply the respective dimension values by.
+     * @param round if true, each dimension is rounded to the nearest whole number. If false, it is
+     *     <i>ceil</i>ed upwards to the nearest number.
      * @return a new {@link Extent} whose dimension values are scaled versions of the current
      *     values, with a minimum of 1.
      */
-    public Extent scaleBy(double scaleFactor) {
+    public Extent scaleXYBy(double scaleFactor, boolean round) {
         return new Extent(
                 immutablePointOperation(
                         point -> {
-                            point.setX(Scaler.scaleQuantity(scaleFactor, x()));
-                            point.setY(Scaler.scaleQuantity(scaleFactor, y()));
-                            point.setY(Scaler.scaleQuantity(scaleFactor, z()));
+                            point.setX(Scaler.scaleMultiplex(scaleFactor, x(), round));
+                            point.setY(Scaler.scaleMultiplex(scaleFactor, y(), round));
                         }));
     }
 
@@ -768,6 +771,17 @@ public final class Extent implements Serializable, Comparable<Extent> {
     public Extent minimum(Extent extent) {
         return new Extent(
                 Math.min(x(), extent.x()), Math.min(y(), extent.y()), Math.min(z(), extent.z()));
+    }
+
+    /**
+     * Derives an aspect-ratio, by dividing the X-dimension by the Y-dimension value.
+     *
+     * <p>Note that the Z-dimension is irrelevant to this calculation.
+     *
+     * @return The X-dimension divided by the Y-dimension.
+     */
+    public double aspectRatioXY() {
+        return ((double) x()) / y();
     }
 
     @Override

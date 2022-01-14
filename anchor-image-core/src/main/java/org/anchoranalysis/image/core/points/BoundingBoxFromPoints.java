@@ -74,7 +74,7 @@ public class BoundingBoxFromPoints {
     public static BoundingBox fromTwoPoints(Point3d point1, Point3d point2) {
         Point3d min = calculateMin(point1, point2);
         Point3d max = calculateMax(point1, point2);
-        return new BoundingBox(min, max);
+        return BoundingBox.createReuse(min, max);
     }
 
     private static Point3d calculateMin(Point3d point1, Point3d point2) {

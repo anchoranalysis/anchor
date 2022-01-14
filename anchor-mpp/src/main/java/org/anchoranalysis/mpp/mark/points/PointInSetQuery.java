@@ -36,7 +36,7 @@ import org.anchoranalysis.spatial.point.PointConverter;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class PointInSetQuery {
 
-    public static boolean anyCrnrInSet(Point3i point, Set<Point3d> set) {
+    public static boolean anyCornerInSet(Point3i point, Set<Point3d> set) {
         return set.contains(PointConverter.doubleFromInt(point));
     }
 }

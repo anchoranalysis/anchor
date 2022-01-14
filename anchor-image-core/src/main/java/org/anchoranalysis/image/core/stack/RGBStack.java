@@ -28,18 +28,26 @@ package org.anchoranalysis.image.core.stack;
 
 import com.google.common.base.Preconditions;
 import java.awt.Color;
+import java.util.Iterator;
+import java.util.Optional;
 import org.anchoranalysis.core.color.RGBColor;
 import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
+import org.anchoranalysis.core.functional.checked.CheckedUnaryOperator;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.core.channel.factory.ChannelFactorySingleType;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
+import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
+import org.anchoranalysis.image.voxel.iterator.IterateVoxelsAll;
+import org.anchoranalysis.image.voxel.object.DeriveObjectFromPoints;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.spatial.box.Extent;
 import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.point.ReadableTuple3i;
@@ -50,7 +58,7 @@ import org.anchoranalysis.spatial.point.ReadableTuple3i;
  *
  * @author Owen Feehan
  */
-public class RGBStack {
+public class RGBStack implements Iterable<Channel> {
 
     private final Stack stack;
 
@@ -158,6 +166,21 @@ public class RGBStack {
         } catch (CreateException e) {
             throw new AnchorImpossibleSituationException();
         }
+    }
+
+    /**
+     * Produces a new stack with a particular mapping applied to each channel.
+     *
+     * <p>The function applied to the channel should ensure it produces uniform sizes.
+     *
+     * @param mapping performs an operation on a channel and produces a modified channel (or a
+     *     different one entirely).
+     * @return a new stack (after any modification by {@code mapping}) preserving the channel order.
+     * @throws OperationFailedException if the channels produced have non-uniform sizes.
+     */
+    public RGBStack mapChannel(CheckedUnaryOperator<Channel, OperationFailedException> mapping)
+            throws OperationFailedException {
+        return new RGBStack(stack.mapChannel(mapping));
     }
 
     /**
@@ -294,6 +317,54 @@ public class RGBStack {
     }
 
     /**
+     * Extracts an {@link ObjectMask} from a {@link Channel} of all voxels that have a particular
+     * color.
+     *
+     * <p>This operation is only supported when all channels have type unsigned-byte.
+     *
+     * <p>The bounding-box of the created {@link ObjectMask} will fit the voxels as maximally
+     * tightly as possible.
+     *
+     * @param color the color to search for.
+     * @return an {@link ObjectMask} describing all voxels with this color, if any exist. If no
+     *     exist, then {@link Optional#empty()}.
+     * @throws OperationFailedException if any channel has a data-type other than unsigned-byte.
+     */
+    public Optional<ObjectMask> objectWithColor(RGBColor color) throws OperationFailedException {
+
+        if (!allChannelsHaveType(UnsignedByteVoxelType.INSTANCE)) {
+            throw new OperationFailedException(
+                    "At least one channel has an unsupported data-type. This operation is only supported when all channels have type unsigned-byte.");
+        }
+
+        DeriveObjectFromPoints deriver = new DeriveObjectFromPoints();
+
+        byte rawRed = (byte) color.getRed();
+        byte rawGreen = (byte) color.getGreen();
+        byte rawBlue = (byte) color.getBlue();
+
+        IterateVoxelsAll.withThreeBuffers(
+                voxelsAsByte(0),
+                voxelsAsByte(1),
+                voxelsAsByte(2),
+                (Point3i point,
+                        UnsignedByteBuffer buffer1,
+                        UnsignedByteBuffer buffer2,
+                        UnsignedByteBuffer buffer3,
+                        int offset1,
+                        int offset2,
+                        int offset3) -> {
+                    if (buffer1.getRaw(offset1) == rawRed
+                            && buffer2.getRaw(offset2) == rawGreen
+                            && buffer3.getRaw(offset3) == rawBlue) {
+                        deriver.add(point);
+                    }
+                });
+
+        return deriver.deriveObject();
+    }
+
+    /**
      * The width and height and depth of the image.
      *
      * <p>i.e. the size of each of the three possible dimensions.
@@ -316,6 +387,16 @@ public class RGBStack {
      */
     public UnsignedByteBuffer sliceBuffer(int channelIndex, int zIndex) {
         return stack.getChannel(channelIndex).voxels().asByte().slice(zIndex).buffer();
+    }
+
+    @Override
+    public Iterator<Channel> iterator() {
+        return stack.iterator();
+    }
+
+    /** The {@link Voxels} for a particular channel, as {@link UnsignedByteVoxelType}. */
+    private Voxels<UnsignedByteBuffer> voxelsAsByte(int channelIndex) {
+        return stack.getChannel(channelIndex).voxels().asByte();
     }
 
     /** Convert a single-channeled stack into three-channel stack, by duplicating. */

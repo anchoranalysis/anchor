@@ -25,6 +25,7 @@
  */
 package org.anchoranalysis.image.voxel.extracter.predicate;
 
+import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.spatial.box.BoundingBox;
@@ -75,5 +76,10 @@ public class PredicateAtCorner implements VoxelsPredicate {
     @Override
     public ObjectMask deriveObject(BoundingBox box) {
         return delegate.deriveObject(box.shiftBackBy(corner)).shiftBy(corner);
+    }
+
+    @Override
+    public Optional<ObjectMask> deriveObjectTight() {
+        return delegate.deriveObjectTight().map(mask -> mask.shiftBy(corner));
     }
 }

@@ -73,7 +73,7 @@ public abstract class PointListBase extends Mark {
     @Override
     public BoundingBox box(Dimensions dimensions, int regionID) {
         // Note that the shell radius is ignored.
-        return new BoundingBox(min, max);
+        return BoundingBox.createReuse(min, max);
     }
 
     private static Point3d calculateMin(List<Point3d> points) {
@@ -121,7 +121,7 @@ public abstract class PointListBase extends Mark {
     }
 
     protected BoundingBox box() {
-        return new BoundingBox(getMin(), getMax());
+        return BoundingBox.createReuse(getMin(), getMax());
     }
 
     @Override

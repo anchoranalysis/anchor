@@ -83,7 +83,7 @@ public final class BoundingBoxIntersection {
     }
 
     /**
-     * Finds the intersection and clamp to a a containing extent.
+     * Finds the intersection and clamp to a containing extent.
      *
      * @param other the bounding-box to find intersection with.
      * @param containingExtent the extent the intersection is clamped to.
@@ -128,7 +128,7 @@ public final class BoundingBoxIntersection {
             ExtentBoundsComparer compareX,
             ExtentBoundsComparer compareY,
             ExtentBoundsComparer compareZ) {
-        return new BoundingBox(
+        return BoundingBox.createReuse(
                 new Point3i(compareX.min(), compareY.min(), compareZ.min()),
                 new Extent(compareX.extent(), compareY.extent(), compareZ.extent()));
     }
@@ -146,8 +146,8 @@ public final class BoundingBoxIntersection {
             cornerMin1 = box1.cornerMin();
             cornerMin2 = box2.cornerMin();
 
-            cornerMax1 = box1.calculateCornerMax();
-            cornerMax2 = box2.calculateCornerMax();
+            cornerMax1 = box1.calculateCornerMaxInclusive();
+            cornerMax2 = box2.calculateCornerMaxInclusive();
         }
 
         public Optional<ExtentBoundsComparer> createMin(ToIntFunction<ReadableTuple3i> extract) {

@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.image.bean.spatial.overlay;
+package org.anchoranalysis.image.bean.spatial.arrange.overlay;
 
 import java.util.Iterator;
 import java.util.Optional;
@@ -131,7 +131,7 @@ public class Overlay extends StackArranger {
             throws ArrangeStackException {
         Extent extent = deriveExtent(enclosing, overlay);
         Point3i cornerMin = cornerMin(enclosing, overlay);
-        return new BoundingBox(cornerMin, extent);
+        return BoundingBox.createReuse(cornerMin, extent);
     }
 
     /** The minimum corner at which the overlay should be located in the output image. */

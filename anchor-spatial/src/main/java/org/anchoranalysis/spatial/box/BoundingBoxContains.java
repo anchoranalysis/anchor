@@ -48,7 +48,7 @@ public final class BoundingBoxContains {
      */
     public BoundingBoxContains(BoundingBox box) {
         this.box = box;
-        this.cornerMax = box.calculateCornerMax();
+        this.cornerMax = box.calculateCornerMaxInclusive();
     }
 
     /**
@@ -109,6 +109,6 @@ public final class BoundingBoxContains {
      */
     public boolean box(BoundingBox maybeContainedInside) {
         return point(maybeContainedInside.cornerMin())
-                && point(maybeContainedInside.calculateCornerMax());
+                && point(maybeContainedInside.calculateCornerMaxInclusive());
     }
 }

@@ -46,6 +46,7 @@ import org.anchoranalysis.io.bioformats.ConfigureBioformatsLogging;
 import org.anchoranalysis.io.bioformats.bean.BioformatsReader;
 import org.anchoranalysis.io.bioformats.bean.options.ForceTimeSeriesToStack;
 import org.anchoranalysis.io.bioformats.bean.writer.Tiff;
+import org.anchoranalysis.io.imagej.bean.stack.writer.PNG;
 import org.apache.commons.configuration.beanutils.BeanHelper;
 
 /**
@@ -74,10 +75,11 @@ public class BeanInstanceMapFixture {
     /**
      * Ensure a {@link StackWriter} instance exists in the underlying {@link BeanInstanceMap}.
      *
+     * @param tiff if true, TIFFs are created, otherwise PNGs.
      * @return the instance, as already exists, or if newly created.
      */
-    public static StackWriter ensureStackWriter() {
-        return addIfMissing(StackWriter.class, Tiff::new);
+    public static StackWriter ensureStackWriter(boolean tiff) {
+        return addIfMissing(StackWriter.class, tiff ? Tiff::new : PNG::new);
     }
 
     /**
@@ -116,7 +118,7 @@ public class BeanInstanceMapFixture {
     }
 
     /**
-     * Get the {@link AnchorDefaultBeanFactory} if it already registeres it, otherwise registers it.
+     * Get the {@link AnchorDefaultBeanFactory} if it already registers it, otherwise registers it.
      */
     private static AnchorDefaultBeanFactory getOrCreateBeanFactory() {
         if (!RegisterBeanFactories.isCalledRegisterAllPackage()) {

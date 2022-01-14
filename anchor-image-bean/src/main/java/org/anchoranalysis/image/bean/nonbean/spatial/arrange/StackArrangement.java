@@ -29,7 +29,7 @@ package org.anchoranalysis.image.bean.nonbean.spatial.arrange;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import lombok.Value;
 import lombok.experimental.Accessors;
 import org.anchoranalysis.image.core.stack.Stack;
@@ -42,7 +42,7 @@ import org.anchoranalysis.spatial.box.Extent;
  *
  * @author Owen Feehan
  */
-@RequiredArgsConstructor
+@AllArgsConstructor
 @Value
 @Accessors(fluent = true)
 public class StackArrangement implements Iterable<BoundingBox> {
@@ -56,7 +56,18 @@ public class StackArrangement implements Iterable<BoundingBox> {
     // END REQUIRED ARGUMENTS
 
     /** Where to locate a respective image on a larger image. */
-    private List<BoundingBox> list = new ArrayList<>();
+    private final List<BoundingBox> boxes;
+
+    /**
+     * Create with the overall {@link Extent} and no boxes.
+     *
+     * @param extent the size of the larger image in which all the {@link BoundingBox}es in {@code
+     *     list} must fully reside.
+     */
+    public StackArrangement(Extent extent) {
+        this.extent = extent;
+        this.boxes = new ArrayList<>();
+    }
 
     /**
      * Create with a single {@link BoundingBox}.
@@ -76,7 +87,7 @@ public class StackArrangement implements Iterable<BoundingBox> {
      * @param box the {@link BoundingBox}.
      */
     public void add(BoundingBox box) {
-        list.add(box);
+        boxes.add(box);
     }
 
     /**
@@ -87,11 +98,11 @@ public class StackArrangement implements Iterable<BoundingBox> {
      * @throws IndexOutOfBoundsException if the index is out of range.
      */
     public BoundingBox get(int index) {
-        return list.get(index);
+        return boxes.get(index);
     }
 
     @Override
     public Iterator<BoundingBox> iterator() {
-        return list.iterator();
+        return boxes.iterator();
     }
 }

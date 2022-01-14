@@ -25,20 +25,22 @@
  */
 package org.anchoranalysis.core.functional.unchecked;
 
+import java.util.function.IntPredicate;
+
 /**
- * A binary operation on two int-values that produces an {@code int}.
+ * Like {@link IntPredicate} but accepts two arguments.
  *
  * @author Owen Feehan
  */
 @FunctionalInterface
-public interface IntBinaryOperation {
+public interface IntBinaryPredicate {
 
     /**
-     * Applies the operation on two integer values.
+     * Tests the predicate on two integer values.
      *
      * @param value1 the first argument for the operation.
      * @param value2 the second argument for the operation.
-     * @return the result of the operation.
+     * @return true if the predicate is fufilled, false otherwise.
      */
-    int apply(int value1, int value2);
+    boolean test(int value1, int value2);
 }

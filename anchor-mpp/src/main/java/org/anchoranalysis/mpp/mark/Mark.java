@@ -142,7 +142,7 @@ public abstract class Mark implements Serializable, Identifiable {
 
         byte maskOn = binaryValues.getOn();
 
-        ReadableTuple3i maxPos = box.calculateCornerMax();
+        ReadableTuple3i maxPos = box.calculateCornerMaxInclusive();
 
         Point3i point = new Point3i();
         for (point.setZ(box.cornerMin().z()); point.z() <= maxPos.z(); point.incrementZ()) {

@@ -137,7 +137,7 @@ public class ScaleableBackground {
     public Extent extentAfterAnyScaling() {
         Extent extent = stack.extent();
         if (scaleFactor.isPresent()) {
-            return extent.scaleXYBy(scaleFactor.get());
+            return extent.scaleXYBy(scaleFactor.get(), true);
         } else {
             return extent;
         }

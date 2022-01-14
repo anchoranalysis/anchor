@@ -44,7 +44,7 @@ class ObjectMaskHDF5Reader {
         Voxels<UnsignedByteBuffer> voxels = createVoxels(reader.uint8().readMDArray(datasetPath));
 
         BoundingBox box =
-                new BoundingBox(cornerPoint(reader.uint32(), datasetPath), voxels.extent());
+                BoundingBox.createReuse(cornerPoint(reader.uint32(), datasetPath), voxels.extent());
 
         return new ObjectMask(box, voxels);
     }

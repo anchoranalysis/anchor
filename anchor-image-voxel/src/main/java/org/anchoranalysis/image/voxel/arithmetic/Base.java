@@ -104,7 +104,7 @@ abstract class Base<T> implements VoxelsArithmetic {
 
         byte maskOnByte = object.binaryValuesByte().getOn();
 
-        ReadableTuple3i pointMax = box.calculateCornerMax();
+        ReadableTuple3i pointMax = box.calculateCornerMaxInclusive();
         for (int z = box.cornerMin().z(); z <= pointMax.z(); z++) {
 
             T pixels = bufferForSlice.apply(z);

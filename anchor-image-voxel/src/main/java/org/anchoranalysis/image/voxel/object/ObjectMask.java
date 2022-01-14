@@ -435,7 +435,7 @@ public class ObjectMask {
      * @return either the current object-mask unchanged (if it already fits inside) or a new
      *     object-mask clipped to fit inside
      */
-    public ObjectMask clipTo(Extent extent) {
+    public ObjectMask clampTo(Extent extent) {
         if (extent.contains(boundingBox())) {
             // nothing to do
             return this;
@@ -889,7 +889,7 @@ public class ObjectMask {
     public ObjectMask relativeMaskTo(BoundingBox box) {
         Point3i point = voxels.boundingBox().relativePositionTo(box);
 
-        return new ObjectMask(new BoundingBox(point, voxels.extent()), voxels.voxels());
+        return new ObjectMask(BoundingBox.createReuse(point, voxels.extent()), voxels.voxels());
     }
 
     /**
