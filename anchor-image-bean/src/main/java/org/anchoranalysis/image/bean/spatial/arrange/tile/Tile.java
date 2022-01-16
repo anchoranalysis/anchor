@@ -38,6 +38,7 @@ import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.checked.CheckedUnaryOperator;
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.ArrangeStackException;
+import org.anchoranalysis.image.bean.nonbean.spatial.arrange.BoundingBoxEnclosed;
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.StackArrangement;
 import org.anchoranalysis.image.bean.spatial.arrange.Single;
 import org.anchoranalysis.image.bean.spatial.arrange.StackArranger;
@@ -124,7 +125,12 @@ public class Tile extends StackArranger {
                     StackArrangement stacksInCell = table.get(column, row);
 
                     BoundingBox cell = cellSizes.cell(column, row);
-                    addAll(stacksInCell, arrangement, box -> aligner.align(box, cell));
+                    addAll(
+                            stacksInCell,
+                            arrangement,
+                            box ->
+                                    new BoundingBoxEnclosed(
+                                            aligner.align(box.getBox(), cell), cell));
                 }
             }
         }
@@ -139,16 +145,16 @@ public class Tile extends StackArranger {
      *     {@code destination}.
      */
     private static void addAll(
-            Iterable<BoundingBox> source,
+            Iterable<BoundingBoxEnclosed> source,
             StackArrangement destination,
-            CheckedUnaryOperator<BoundingBox, OperationFailedException> mapBox)
+            CheckedUnaryOperator<BoundingBoxEnclosed, OperationFailedException> mapBox)
             throws ArrangeStackException {
 
         // We now loop through each item in the cell, and add to our output set with
         //   the correct offset
-        for (BoundingBox box : source) {
-            assert (destination.extent().contains(box));
-            assert (!box.extent().anyDimensionIsLargerThan(box.extent()));
+        for (BoundingBoxEnclosed box : source) {
+            assert (destination.extent().contains(box.getBox()));
+            assert (!box.getBox().extent().anyDimensionIsLargerThan(destination.extent()));
             try {
                 destination.add(mapBox.apply(box));
             } catch (OperationFailedException e) {

@@ -114,7 +114,7 @@ public abstract class StackArranger extends AnchorBean<StackArranger> {
 
         int index = 0;
         for (RGBStack image : generatedImages) {
-            BoundingBox box = arrangement.get(index++);
+            BoundingBox box = arrangement.get(index++).getBox();
             if (!image.extent().equals(box.extent())) {
                 // Resize image to match the box
                 try {

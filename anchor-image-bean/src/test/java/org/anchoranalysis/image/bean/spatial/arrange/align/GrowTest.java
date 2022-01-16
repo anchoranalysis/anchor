@@ -22,7 +22,6 @@ class GrowTest {
 
     @Test
     void testWithPreserve() throws OperationFailedException {
-        BoxAlignerTester.doTest(
-                new Grow(true), new Point3i(15, 10, 15), new Extent(100,200,30));
+        BoxAlignerTester.doTest(new Grow(true), new Point3i(15, 10, 15), new Extent(100, 200, 30));
     }
 }

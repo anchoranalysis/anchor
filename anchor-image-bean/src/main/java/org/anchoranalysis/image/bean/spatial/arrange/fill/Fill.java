@@ -11,7 +11,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.ArrangeStackException;
+import org.anchoranalysis.image.bean.nonbean.spatial.arrange.BoundingBoxEnclosed;
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.StackArrangement;
 import org.anchoranalysis.image.bean.spatial.arrange.StackArranger;
 import org.anchoranalysis.spatial.box.BoundingBox;
@@ -81,7 +83,10 @@ public class Fill extends StackArranger {
             // array.
             BoundingBox[] boxes = derivingBoundingBoxes(elements.size(), partitions, combinedSize);
 
-            return new StackArrangement(combinedSize, Arrays.asList(boxes));
+            List<BoundingBoxEnclosed> boxesEnclosed =
+                    FunctionalList.mapToList(Arrays.stream(boxes), BoundingBoxEnclosed::new);
+
+            return new StackArrangement(combinedSize, boxesEnclosed);
 
         } catch (OperationFailedException e) {
             throw new ArrangeStackException("An error occurred partitioning the elements", e);

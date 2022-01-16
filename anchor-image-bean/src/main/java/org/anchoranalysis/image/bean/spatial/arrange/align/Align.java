@@ -116,7 +116,7 @@ public class Align extends BoxAligner {
      */
     private Point3i alignCorner(Extent smaller, Extent larger) throws OperationFailedException {
         return new Point3i(
-                position(alignXEnum, Extent::x, smaller, 0,larger),
+                position(alignXEnum, Extent::x, smaller, 0, larger),
                 position(alignYEnum, Extent::y, smaller, 0, larger),
                 position(alignZEnum, Extent::z, smaller, 0, larger));
     }
@@ -155,7 +155,8 @@ public class Align extends BoxAligner {
             AlignmentOnDimension alignment,
             ToIntFunction<Extent> extractValue,
             Extent smaller,
-            int disconsideredLeft, Extent larger)
+            int disconsideredLeft,
+            Extent larger)
             throws OperationFailedException {
         return alignment.align(
                 extractValue.applyAsInt(larger),
