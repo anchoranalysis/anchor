@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 /**
  * Given a <a
  * href="https://opencurriculum.org/5512/monotonically-increasing-and-decreasing-functions-an-algebraic-approach/">monotonically
- * increasing</a function of an integer, determine the input value that provides an output value as
+ * increasing</a> function of an integer, determine the input value that provides an output value as
  * close to {@code target} as possible.
  *
  * <p>The input-values must be integers, and have a minimum bound.
