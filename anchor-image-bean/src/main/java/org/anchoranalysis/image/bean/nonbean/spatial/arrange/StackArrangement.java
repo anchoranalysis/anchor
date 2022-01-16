@@ -45,7 +45,7 @@ import org.anchoranalysis.spatial.box.Extent;
 @AllArgsConstructor
 @Value
 @Accessors(fluent = true)
-public class StackArrangement implements Iterable<BoundingBox> {
+public class StackArrangement implements Iterable<BoundingBoxEnclosed> {
 
     // START REQUIRED ARGUMENTS
     /**
@@ -56,7 +56,7 @@ public class StackArrangement implements Iterable<BoundingBox> {
     // END REQUIRED ARGUMENTS
 
     /** Where to locate a respective image on a larger image. */
-    private final List<BoundingBox> boxes;
+    private final List<BoundingBoxEnclosed> boxes;
 
     /**
      * Create with the overall {@link Extent} and no boxes.
@@ -82,11 +82,21 @@ public class StackArrangement implements Iterable<BoundingBox> {
     }
 
     /**
-     * Adds a new {@link BoundingBox} to the arrangement.
+     * Adds a new {@link BoundingBox} to the arrangement, with no padding.
      *
-     * @param box the {@link BoundingBox}.
+     * @param box the {@link BoundingBox} in which the image should be placed.
      */
     public void add(BoundingBox box) {
+        boxes.add(new BoundingBoxEnclosed(box));
+    }
+
+    /**
+     * Adds a new {@link BoundingBoxEnclosed} to the arrangement.
+     *
+     * @param box the {@link BoundingBox} in which the image should be placed, together with any
+     *     enclosing box (e.g. with padding).
+     */
+    public void add(BoundingBoxEnclosed box) {
         boxes.add(box);
     }
 
@@ -94,15 +104,16 @@ public class StackArrangement implements Iterable<BoundingBox> {
      * Gets the {@link BoundingBox} corresponding to a particular index.
      *
      * @param index the index.
-     * @return the corresponding {@link BoundingBox} in the arrangement.
+     * @return the corresponding {@link BoundingBox} in the arrangement, and any enclosing
+     *     bounding-box.
      * @throws IndexOutOfBoundsException if the index is out of range.
      */
-    public BoundingBox get(int index) {
+    public BoundingBoxEnclosed get(int index) {
         return boxes.get(index);
     }
 
     @Override
-    public Iterator<BoundingBox> iterator() {
+    public Iterator<BoundingBoxEnclosed> iterator() {
         return boxes.iterator();
     }
 }
