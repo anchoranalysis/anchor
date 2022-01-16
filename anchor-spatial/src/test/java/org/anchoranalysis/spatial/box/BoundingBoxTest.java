@@ -71,6 +71,6 @@ class BoundingBoxTest {
         BoundingBox obj1 = BoundingBoxFactory.at(10, 11, 95, 1024, 1021, 17);
         BoundingBox obj2 = BoundingBoxFactory.at(10, 11, 95, 1024, 1021, 17);
 
-        assertTrue(obj1.equals(obj2));
+        assertEquals(obj1, obj2);
     }
 }

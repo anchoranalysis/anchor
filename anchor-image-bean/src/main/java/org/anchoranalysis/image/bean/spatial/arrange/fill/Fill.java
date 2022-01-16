@@ -103,7 +103,7 @@ public class Fill extends StackArranger {
      * row).
      */
     private static <T> List<List<T>> partitionIntoFixedChunks(List<T> elements, int numberRows) {
-        List<List<T>> out = new ArrayList<List<T>>(numberRows);
+        List<List<T>> out = new ArrayList<>(numberRows);
 
         // Calculate the number of images per row
         int imagesPerRow = (int) Math.ceil(((double) elements.size()) / numberRows);
@@ -157,7 +157,7 @@ public class Fill extends StackArranger {
 
                 cornerMin.incrementX(extent.x());
             }
-            cornerMin.incrementY(extent.y());
+            cornerMin.incrementY(extent.y()); // NOSONAR
         }
 
         return boxes;

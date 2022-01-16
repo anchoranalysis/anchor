@@ -23,13 +23,12 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.math;
+package org.anchoranalysis.math.histogram;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.math.arithmetic.Counter;
-import org.anchoranalysis.math.histogram.Histogram;
 import org.junit.jupiter.api.Test;
 
 /**

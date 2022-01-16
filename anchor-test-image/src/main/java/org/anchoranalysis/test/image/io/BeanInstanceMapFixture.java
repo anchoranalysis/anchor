@@ -26,8 +26,6 @@
 
 package org.anchoranalysis.test.image.io;
 
-import java.util.Optional;
-import java.util.function.Supplier;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.AnchorBean;
@@ -68,8 +66,7 @@ public class BeanInstanceMapFixture {
      * @return the instance, as already exists, or if newly created.
      */
     public static StackReader ensureStackReader() {
-        return addIfMissing(
-                StackReader.class, () -> new BioformatsReader(new ForceTimeSeriesToStack()));
+        return addOrReplace(StackReader.class, new BioformatsReader(new ForceTimeSeriesToStack()));
     }
 
     /**
@@ -79,7 +76,7 @@ public class BeanInstanceMapFixture {
      * @return the instance, as already exists, or if newly created.
      */
     public static StackWriter ensureStackWriter(boolean tiff) {
-        return addIfMissing(StackWriter.class, tiff ? Tiff::new : PNG::new);
+        return addOrReplace(StackWriter.class, tiff ? new Tiff() : new PNG());
     }
 
     /**
@@ -89,8 +86,7 @@ public class BeanInstanceMapFixture {
      * @return the instance, as already exists, or if newly created.
      */
     public static ImageMetadataReader ensureImageMetadataReader() {
-        return addIfMissing(
-                ImageMetadataReader.class, () -> new FromStackReader(ensureStackReader()));
+        return addOrReplace(ImageMetadataReader.class, new FromStackReader(ensureStackReader()));
     }
 
     /**
@@ -99,7 +95,7 @@ public class BeanInstanceMapFixture {
      * @return the instance, as already exists, or if newly created.
      */
     public static Interpolator ensureInterpolator() {
-        return addIfMissing(Interpolator.class, ImgLib2Linear::new);
+        return addOrReplace(Interpolator.class, new ImgLib2Linear());
     }
 
     /**
@@ -128,15 +124,11 @@ public class BeanInstanceMapFixture {
         }
     }
 
-    /** Adds a new instance, if no instance already exists for {@code cls} in the map. */
-    private static <T> T addIfMissing(Class<T> cls, Supplier<T> instanceCreator) {
-        AnchorDefaultBeanFactory defaultFactory = getOrCreateBeanFactory();
-        Optional<T> instanceOptional =
-                getOrCreateBeanFactory().getDefaultInstances().getInstanceFor(cls);
-        return instanceOptional.orElseGet(
-                () ->
-                        defaultFactory
-                                .getDefaultInstances()
-                                .putInstanceFor(cls, instanceCreator.get()));
+    /**
+     * Adds a new instance if none exists for {@code cls}, or else replaces the existing instance.
+     */
+    private static <T> T addOrReplace(Class<T> cls, T instance) {
+        getOrCreateBeanFactory().getDefaultInstances().putInstanceFor(cls, instance);
+        return instance;
     }
 }

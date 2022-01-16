@@ -4,6 +4,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.function.ToDoubleFunction;
 import java.util.function.ToIntFunction;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.spatial.box.Extent;
 
 /**
@@ -11,6 +13,7 @@ import org.anchoranalysis.spatial.box.Extent;
  *
  * @author Owen Feehan
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 class FitCombinedScaler {
 
     /**
@@ -63,7 +66,11 @@ class FitCombinedScaler {
             if (permitPartialFinalRow && index == lastIndex && partitions.size() > 1) {
                 // Adjust the row-width to be a fraction of its usual size, so as to give a
                 // row-height similar to the others
-                rowWidth = maybeAdjustRowWidth(aspectRatioSum, sumOfSums / index, rowWidth);
+
+                // It is not possible for index to be 0, as the lastIndex will never be 0 when the
+                // partition-size must be >= 2
+                rowWidth =
+                        maybeAdjustRowWidth(aspectRatioSum, sumOfSums / index, rowWidth); // NOSONAR
             }
 
             sumOfSums += aspectRatioSum;
@@ -89,14 +96,12 @@ class FitCombinedScaler {
     /** Sums an {@code int} value extracted from each element. */
     private static <T> int sumExtractedInt(
             Collection<T> collection, ToIntFunction<T> extractValue) {
-        return collection.stream().mapToInt(element -> extractValue.applyAsInt(element)).sum();
+        return collection.stream().mapToInt(extractValue::applyAsInt).sum();
     }
 
     /** Sums an {@code double} value extracted from each element. */
     private static <T> double sumExtractedDouble(
             Collection<T> collection, ToDoubleFunction<T> extractValue) {
-        return collection.stream()
-                .mapToDouble(element -> extractValue.applyAsDouble(element))
-                .sum();
+        return collection.stream().mapToDouble(extractValue::applyAsDouble).sum();
     }
 }
