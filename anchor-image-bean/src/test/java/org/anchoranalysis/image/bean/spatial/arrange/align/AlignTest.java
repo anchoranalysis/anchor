@@ -7,16 +7,16 @@ import org.anchoranalysis.spatial.point.Point3i;
 import org.junit.jupiter.api.Test;
 
 /**
- * Tests {@link Center}.
+ * Tests {@link Align}.
  *
  * @author Owen Feehan
  */
-class TestCenter {
+class AlignTest {
 
     @Test
     void testAlign() throws OperationFailedException {
         BoxAlignerTester.doTest(
-                new Center(), new Point3i(60, 115, 15), BoxAlignerTester.SMALLER.extent());
+                new Align(), new Point3i(60, 115, 30), BoxAlignerTester.SMALLER.extent());
     }
 
     /** Test incompatible z-dimension values. */
@@ -25,7 +25,7 @@ class TestCenter {
         assertThrows(
                 OperationFailedException.class,
                 () ->
-                        new Center()
+                        new Align()
                                 .align(
                                         BoxAlignerTester.SMALLER,
                                         BoxAlignerTester.SMALLER.changeExtentZ(5)));

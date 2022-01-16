@@ -3,6 +3,7 @@ package org.anchoranalysis.image.bean.spatial.arrange;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.awt.Color;
+import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 import org.anchoranalysis.core.color.RGBColor;
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.ArrangeStackException;
 import org.anchoranalysis.image.core.stack.RGBStack;
@@ -100,6 +101,12 @@ public class ColoredDualStackTester {
      */
     public static RGBStack combine(StackArranger arranger, boolean flattenSmall)
             throws ArrangeStackException {
+        // We use null here as a hack, as the parameter shouldn't ever be needed
+        try {
+            arranger.checkMisconfigured(null);
+        } catch (BeanMisconfiguredException e) {
+            throw new ArrangeStackException(e);
+        }
         return arranger.combine(DualStacks.asList(CYAN, MAGENTA, flattenSmall), RESIZER);
     }
 

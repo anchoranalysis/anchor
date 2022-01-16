@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.box.Extent;
@@ -38,6 +39,12 @@ class BoxAlignerTester {
     public static void doTest(
             BoxAligner aligner, ReadableTuple3i expectedCorner, Extent expectedExtent)
             throws OperationFailedException {
+        // We use null here as a hack, as the parameter shouldn't ever be needed
+        try {
+            aligner.checkMisconfigured(null);
+        } catch (BeanMisconfiguredException e) {
+            throw new OperationFailedException(e);
+        }
         BoundingBox box = aligner.align(SMALLER, LARGER);
         assertEquals(expectedCorner, box.cornerMin(), "cornerMin");
         assertEquals(expectedExtent, box.extent(), "extent");

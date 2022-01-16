@@ -1,22 +1,20 @@
-package org.anchoranalysis.image.bean.spatial.arrange.overlay;
+package org.anchoranalysis.image.bean.nonbean.spatial.align;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.ToIntFunction;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.anchoranalysis.image.bean.nonbean.spatial.arrange.ArrangeStackException;
-import org.anchoranalysis.spatial.box.Extent;
+import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 
 /**
- * The choices of text that may describe the position along a particular axis.
+ * The choices of text that may describe the position of an entity along a particular axis.
  *
  * <p>All choices are case insensitive.
  */
 @AllArgsConstructor
 @RequiredArgsConstructor
-class PositionChoices {
+public class PositionChoices {
 
     // START ARGUMENTS
     /** The text to describe the <b>minimum</b> position along the axis. */
@@ -36,35 +34,26 @@ class PositionChoices {
     // END ARGUMENTS
 
     /**
-     * Calculates the position on a particular axis to locate the overlay.
+     * Calculates how to align a particular axis.
      *
      * @param fieldName the name of the field where the position was specified.
      * @param fieldValue the value of the field.
-     * @param extractValue extracts a value on the particular axis from a {@link Extent}.
-     * @param enclosing the total enclosing size of all stacks to align with.
-     * @param overlay the size of the overlay (what is being aligned).
      * @return the minimum corner on the particular axis to locate the overlay.
-     * @throws ArrangeStackException if an invalid value for a field was used.
+     * @throws BeanMisconfiguredException if an invalid value for a field was used.
      */
-    public int position(
-            String fieldName,
-            String fieldValue,
-            ToIntFunction<Extent> extractValue,
-            Extent enclosing,
-            Extent overlay)
-            throws ArrangeStackException {
-
+    public AlignmentOnDimension alignmentForDimension(String fieldName, String fieldValue)
+            throws BeanMisconfiguredException {
         if (fieldValue.equalsIgnoreCase(textMin) || matchesAlternative(fieldValue)) {
-            return 0;
+            return AlignmentOnDimension.MIN;
         } else if (fieldValue.equalsIgnoreCase(textCenter)) {
-            return (extractValue.applyAsInt(enclosing) - extractValue.applyAsInt(overlay)) / 2;
+            return AlignmentOnDimension.CENTER;
         } else if (fieldValue.equalsIgnoreCase(textMax)) {
-            return extractValue.applyAsInt(enclosing) - extractValue.applyAsInt(overlay);
+            return AlignmentOnDimension.MAX;
         } else {
             String describeAllChoices = String.join(", ", allChoices());
-            throw new ArrangeStackException(
+            throw new BeanMisconfiguredException(
                     String.format(
-                            "The string '%s' is an invalid value for field %s. Accept values are: %s",
+                            "The string '%s' is an invalid value for field %s. Acceptable values are: %s",
                             fieldValue, fieldName, describeAllChoices));
         }
     }
