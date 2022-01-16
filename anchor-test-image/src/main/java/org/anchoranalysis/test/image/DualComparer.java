@@ -63,25 +63,25 @@ public class DualComparer {
     }
 
     /**
-     * Compare two images that have an identical path, but in two different test loaders
+     * Compare two images that have an identical path, but in two different test loaders.
      *
-     * @param path relative-path (compared to root of both loaders) of files to compare
-     * @return true if the images are equal (every pixel is identical, and data-types are the same)
-     * @throws FileNotFoundException if one or both of the files cannot be found
+     * @param path relative-path (compared to root of both loaders) of files to compare.
+     * @return true when the images are equal (every pixel is identical, and data-types are the same).
+     * @throws FileNotFoundException if one or both of the files cannot be found.
      */
     public boolean compareTwoImages(String path) throws FileNotFoundException {
         return TestLoaderImage.compareTwoImages(loaderImage1, path, loaderImage2, path, false);
     }
 
     /**
-     * Compare two images with different paths, but in two different test loaders
+     * Compare two images with different paths, but in two different test loaders.
      *
-     * @param path1 relative-path (compared to root of first loader) of first image
-     * @param path2 relative-path (compared to root of second loader) of second image
+     * @param path1 relative-path (compared to root of first loader) of first image.
+     * @param path2 relative-path (compared to root of second loader) of second image.
      * @param ignoreResolutionDifferences if true any differences in image-resolution are not
-     *     considered
-     * @return true if the images are equal (every pixel is identical, and data-types are the same)
-     * @throws FileNotFoundException if one or both of the files cannot be found
+     *     considered.
+     * @return true when the images are equal (every pixel is identical, and data-types are the same), false otherwise.
+     * @throws FileNotFoundException if one or both of the files cannot be found.
      */
     public boolean compareTwoImages(String path1, String path2, boolean ignoreResolutionDifferences)
             throws FileNotFoundException {
@@ -94,7 +94,7 @@ public class DualComparer {
      * identical for equality.
      *
      * @param path relative-path (compared to root of both loaders) of files to compare
-     * @return true if the xml-documents are equal, fALSE otherwise
+     * @return true when the xml-documents are equal, false otherwise.
      */
     public boolean compareTwoXmlDocuments(String path) {
         return CompareXML.areDocumentsEqual(
@@ -105,10 +105,10 @@ public class DualComparer {
      * Compare two CSV files, ignoring the first numFirstColumnsToIgnore. They need to be exactly
      * identical, apart from these ignored columns.
      *
-     * @param path relative-path (compared to root of both loaders) of files to compare
-     * @param messageStream if non-equal, additional explanation messages are printed here
-     * @return true if the csv-files are identical apart from the ignored columns, fALSE otherwise
-     * @throws CSVReaderException if something goes wrong with csv I/O or a csv file is reject
+     * @param path relative-path (compared to root of both loaders) of files to compare.
+     * @param messageStream if non-equal, additional explanation messages are printed here.
+     * @return true when the csv-files are identical apart from the ignored columns, false otherwise.
+     * @throws CSVReaderException if something goes wrong with csv I/O or a csv file is reject.
      */
     public boolean compareTwoCsvFiles(String path, CSVComparer comparer, PrintStream messageStream)
             throws CSVReaderException {
@@ -121,9 +121,9 @@ public class DualComparer {
     /**
      * Compare two object-mask-collections.
      *
-     * @param path relative-path (compared to root of both loaders) of files to compare
+     * @param path relative-path (compared to root of both loaders) of files to compare.
      * @return true if both paths return object-collections that are voxelwise identical.
-     * @throws IOException if something goes wrong with I/O
+     * @throws IOException if something goes wrong with I/O.
      */
     public boolean compareTwoObjectCollections(String path) throws IOException {
         ObjectCollection objects1 = loaderImage1.openObjectsFromTestPath(path);
@@ -134,9 +134,9 @@ public class DualComparer {
     /**
      * Compare two binary-files.
      *
-     * @param path relative-path (compared to root of both loaders) of files to compare
-     * @return true if both paths have binary-files that are bytewise identical
-     * @throws IOException if something goes wrong with I/O
+     * @param path relative-path (compared to root of both loaders) of files to compare.
+     * @return true if both paths have binary-files that are bytewise identical.
+     * @throws IOException if something goes wrong with I/O.
      */
     public boolean compareTwoBinaryFiles(String path) throws IOException {
         return Files.equal(
@@ -155,8 +155,8 @@ public class DualComparer {
      *
      * <p>Any existing file is replaced.
      *
-     * @param path relative-path (compared to root of both loaders) of files to copy
-     * @throws IOException if copyign fails
+     * @param path relative-path (compared to root of both loaders) of files to copy.
+     * @throws IOException if copying fails.
      */
     public void copyFromPath1ToPath2(String path) throws IOException {
         FileUtils.copyFile(

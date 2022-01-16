@@ -36,6 +36,7 @@ import org.anchoranalysis.io.output.outputter.BindFailedException;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
 import org.anchoranalysis.test.LoggerFixture;
+import org.anchoranalysis.test.io.output.OutputManagerFixture;
 import org.anchoranalysis.test.io.output.OutputterCheckedFixture;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -52,7 +53,7 @@ public class OutputterFixture {
     public static OutputterChecked outputterChecked(Optional<Path> pathTempDirectory)
             throws BindFailedException {
         return OutputterCheckedFixture.createFrom(
-                OutputManagerForImagesFixture.createOutputManager(pathTempDirectory));
+        		OutputManagerFixture.createOutputManager(pathTempDirectory));
     }
 
     private static Outputter outputter(OutputterChecked outputter) {
