@@ -25,7 +25,7 @@ class BoxAlignerTester {
 
     /** The larger bounding-box passed to {@link BoxAligner#align}. */
     public static final BoundingBox LARGER =
-            BoundingBox.createReuse(new Point3i(5, 10, 15), new Extent(100, 200, 30));
+            BoundingBox.createReuse(new Point3i(5, 10, 15), new Extent(120, 200, 30));
 
     /**
      * Calls {@link BoxAligner#align} with the smaller and larger bounding box, and checks the

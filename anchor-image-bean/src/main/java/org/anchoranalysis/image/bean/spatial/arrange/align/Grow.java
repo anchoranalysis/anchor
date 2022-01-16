@@ -49,7 +49,7 @@ public class Grow extends BoxAligner {
     public BoundingBox alignAfterCheck(BoundingBox smaller, BoundingBox larger)
             throws OperationFailedException {
         if (preserveAspectRatio) {
-            Extent smallerGrown = scaledSmaller(smaller.extent(), larger.extent());
+            Extent smallerGrown = growSmaller(smaller.extent(), larger.extent());
             return align.align(smallerGrown, larger);
         } else {
             return larger;
@@ -60,7 +60,7 @@ public class Grow extends BoxAligner {
     public BoundingBox alignAfterCheck(Extent smaller, Extent larger)
             throws OperationFailedException {
         if (preserveAspectRatio) {
-            Extent smallerGrown = scaledSmaller(smaller, larger);
+            Extent smallerGrown = growSmaller(smaller, larger);
             return align.align(smallerGrown, larger);
         } else {
             return new BoundingBox(larger);
@@ -71,7 +71,7 @@ public class Grow extends BoxAligner {
     public BoundingBox alignAfterCheck(Extent smaller, BoundingBox larger)
             throws OperationFailedException {
         if (preserveAspectRatio) {
-            Extent smallerGrown = scaledSmaller(smaller, larger.extent());
+            Extent smallerGrown = growSmaller(smaller, larger.extent());
             return align.align(smallerGrown, larger);
         } else {
             return larger;
@@ -82,7 +82,7 @@ public class Grow extends BoxAligner {
      * Scales {@code smaller} as much as possible, preserving aspect-ratio, while still fitting
      * inside {@code larger}.
      */
-    private Extent scaledSmaller(Extent smaller, Extent larger) {
+    private Extent growSmaller(Extent smaller, Extent larger) {
         ScaleFactor factor =
                 RelativeScaleCalculator.relativeScalePreserveAspectRatio(smaller, larger);
         return smaller.scaleXYBy(factor, true);
