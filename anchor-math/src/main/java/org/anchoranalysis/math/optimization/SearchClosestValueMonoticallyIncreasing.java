@@ -19,6 +19,8 @@ import lombok.RequiredArgsConstructor;
  * href="https://en.wikipedia.org/wiki/Binary_search_algorithm">binary-search</a>-style recursive
  * evaluation to find the integer value that produces the exact closest value to {@code target}.
  *
+ * <p>An upper bound on the input-values may also be optionally imposed via {@code boundUpper}.
+ *
  * @author Owen Feehan
  */
 @RequiredArgsConstructor
@@ -74,7 +76,9 @@ public class SearchClosestValueMonoticallyIncreasing {
     public SearchClosestValueMonoticallyIncreasing(double target, ValueFunction function) {
         this.target = target;
         this.function = function;
-        this.boundUpper = value -> false; // This disables the upper bound
+
+        // This disables the upper bound
+        this.boundUpper = value -> false;
     }
 
     /**
