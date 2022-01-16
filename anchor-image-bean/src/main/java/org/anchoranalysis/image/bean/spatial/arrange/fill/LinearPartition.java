@@ -41,7 +41,7 @@ class LinearPartition {
      */
     public static List<List<Integer>> partition(List<Integer> list, int numberPartitions)
             throws OperationFailedException {
-        return partition(list, value -> (double) value, numberPartitions);
+        return partition(list, double.class::cast, numberPartitions);
     }
 
     /**

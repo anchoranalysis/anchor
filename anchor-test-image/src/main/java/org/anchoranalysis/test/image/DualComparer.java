@@ -66,7 +66,8 @@ public class DualComparer {
      * Compare two images that have an identical path, but in two different test loaders.
      *
      * @param path relative-path (compared to root of both loaders) of files to compare.
-     * @return true when the images are equal (every pixel is identical, and data-types are the same).
+     * @return true when the images are equal (every pixel is identical, and data-types are the
+     *     same).
      * @throws FileNotFoundException if one or both of the files cannot be found.
      */
     public boolean compareTwoImages(String path) throws FileNotFoundException {
@@ -80,7 +81,8 @@ public class DualComparer {
      * @param path2 relative-path (compared to root of second loader) of second image.
      * @param ignoreResolutionDifferences if true any differences in image-resolution are not
      *     considered.
-     * @return true when the images are equal (every pixel is identical, and data-types are the same), false otherwise.
+     * @return true when the images are equal (every pixel is identical, and data-types are the
+     *     same), false otherwise.
      * @throws FileNotFoundException if one or both of the files cannot be found.
      */
     public boolean compareTwoImages(String path1, String path2, boolean ignoreResolutionDifferences)
@@ -107,7 +109,8 @@ public class DualComparer {
      *
      * @param path relative-path (compared to root of both loaders) of files to compare.
      * @param messageStream if non-equal, additional explanation messages are printed here.
-     * @return true when the csv-files are identical apart from the ignored columns, false otherwise.
+     * @return true when the csv-files are identical apart from the ignored columns, false
+     *     otherwise.
      * @throws CSVReaderException if something goes wrong with csv I/O or a csv file is reject.
      */
     public boolean compareTwoCsvFiles(String path, CSVComparer comparer, PrintStream messageStream)
