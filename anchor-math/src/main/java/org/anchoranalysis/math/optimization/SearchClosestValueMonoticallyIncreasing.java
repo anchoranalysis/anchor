@@ -63,6 +63,10 @@ public class SearchClosestValueMonoticallyIncreasing {
      * <p>It is expressed as a predicate rather than as a constant, as the threshold may not be
      * known exactly, and this allows the search function to explore it, as it also seeks the
      * closest value to {@code target}.
+     *
+     * <p>It is <b>guaranteed</b> that this predicate will only be evaluated after a call to {@code
+     * function} with the same value - and this call was the most-recent call. This may help
+     * optimize implementation code of {@code function} and {@code boundUpper}.
      */
     private final IntPredicate boundUpper;
 
@@ -77,7 +81,7 @@ public class SearchClosestValueMonoticallyIncreasing {
         this.target = target;
         this.function = function;
 
-        // This disables the upper bound
+        // Disables the upper bound.
         this.boundUpper = value -> false;
     }
 

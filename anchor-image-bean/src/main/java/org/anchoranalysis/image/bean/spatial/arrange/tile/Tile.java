@@ -41,8 +41,8 @@ import org.anchoranalysis.image.bean.nonbean.spatial.arrange.ArrangeStackExcepti
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.StackArrangement;
 import org.anchoranalysis.image.bean.spatial.arrange.Single;
 import org.anchoranalysis.image.bean.spatial.arrange.StackArranger;
+import org.anchoranalysis.image.bean.spatial.arrange.align.Align;
 import org.anchoranalysis.image.bean.spatial.arrange.align.BoxAligner;
-import org.anchoranalysis.image.bean.spatial.arrange.align.Center;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.box.Extent;
 
@@ -81,7 +81,7 @@ public class Tile extends StackArranger {
     @BeanField @Getter @Setter private StackArranger cellDefault = new Single();
 
     /** How to align a smaller image inside a larger cell. */
-    @BeanField @Getter @Setter private BoxAligner aligner = new Center();
+    @BeanField @Getter @Setter private BoxAligner aligner = new Align();
     // END BEAN PROPERTIES
 
     /**

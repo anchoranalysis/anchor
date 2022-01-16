@@ -1,6 +1,7 @@
 package org.anchoranalysis.image.bean.spatial.arrange.align;
 
 import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.spatial.box.Extent;
 import org.anchoranalysis.spatial.point.Point3i;
 import org.junit.jupiter.api.Test;
 
@@ -9,7 +10,7 @@ import org.junit.jupiter.api.Test;
  *
  * @author Owen Feehan
  */
-class TestGrow {
+class GrowTest {
 
     @Test
     void testWithoutPreserve() throws OperationFailedException {
@@ -22,6 +23,6 @@ class TestGrow {
     @Test
     void testWithPreserve() throws OperationFailedException {
         BoxAlignerTester.doTest(
-                new Grow(true), new Point3i(15, 25, 15), BoxAlignerTester.LARGER.extent());
+                new Grow(true), new Point3i(15, 10, 15), new Extent(100,200,30));
     }
 }

@@ -27,19 +27,20 @@
 package org.anchoranalysis.image.bean.spatial.arrange.overlay;
 
 import java.util.Iterator;
-import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.image.bean.nonbean.spatial.align.PositionChoicesConstants;
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.ArrangeStackException;
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.StackArrangement;
 import org.anchoranalysis.image.bean.spatial.arrange.Single;
 import org.anchoranalysis.image.bean.spatial.arrange.StackArranger;
+import org.anchoranalysis.image.bean.spatial.arrange.align.Align;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.box.Extent;
-import org.anchoranalysis.spatial.point.Point3i;
 
 /**
  * Overlays one image on the other.
@@ -59,49 +60,26 @@ import org.anchoranalysis.spatial.point.Point3i;
 @AllArgsConstructor
 public class Overlay extends StackArranger {
 
-    // START: strings used for position choices
-    private static final String LEFT = "left";
-    private static final String RIGHT = "right";
-    private static final String TOP = "top";
-    private static final String CENTER = "center";
-    private static final String BOTTOM = "bottom";
-    // END: strings used for position choices
-
-    /**
-     * The choice which will cause a single-sliced overlay to be duplicated across the z-dimension
-     * to match the z-size onto which it is projected.
-     */
-    private static final String REPEAT = "repeat";
-
-    private static final PositionChoices CHOICES_X = new PositionChoices(LEFT, CENTER, RIGHT);
-    private static final PositionChoices CHOICES_Y = new PositionChoices(TOP, CENTER, BOTTOM);
-    private static final PositionChoices CHOICES_Z =
-            new PositionChoices(BOTTOM, CENTER, TOP, Optional.of(REPEAT));
-
     private static final Single SINGLE = new Single();
 
     // START BEAN PROPERTIES
-    /**
-     * Indicates how to align the image across the <b>X-axis</b> (i.e. horizontally): one of {@code
-     * left, right, center}.
-     */
-    @BeanField @Getter @Setter private String alignX = LEFT;
-
-    /**
-     * Indicates how to align the image across the <b>Y-axis</b> (i.e. vertically): one of {@code
-     * top, bottom, center}.
-     */
-    @BeanField @Getter @Setter private String alignY = TOP;
-
-    /**
-     * Indicates how to align the image across the <b>Z-axis</b>: one of {@code top, bottom, center,
-     * repeat}.
-     *
-     * <p>{@code repeat} is a special-case where a single z-slice overlay will be duplicated across
-     * the z-dimension of the stack onto which it is overlayed.
-     */
-    @BeanField @Getter @Setter private String alignZ = BOTTOM;
+    /** Indicates how to align the image across the three axes. */
+    @BeanField @Getter @Setter private Align align = new Align("left", "top", "bottom");
     // END BEAN PROPERTIES
+
+    /**
+     * Creates with alignment text for each axis.
+     *
+     * @param alignX indicates how to align the image across the <b>X-axis</b>: one of {@code top,
+     *     bottom, center}.
+     * @param alignY indicates how to align the image across the <b>Y-axis</b> (i.e. vertically):
+     *     one of {@code top, bottom, center}.
+     * @param alignZ indicates how to align the image across the <b>Z-axis</b>: one of {@code top,
+     *     bottom, center, repeat}. See {@code alignZ}.
+     */
+    public Overlay(String alignX, String alignY, String alignZ) {
+        this.align = new Align(alignX, alignY, alignZ);
+    }
 
     @Override
     public String describeBean() {
@@ -129,43 +107,27 @@ public class Overlay extends StackArranger {
     /** The bounding-box for the overlay, relative to the stack on which it will be projected. */
     private BoundingBox boxForOverlay(Extent enclosing, Extent overlay)
             throws ArrangeStackException {
-        Extent extent = deriveExtent(enclosing, overlay);
-        Point3i cornerMin = cornerMin(enclosing, overlay);
-        return BoundingBox.createReuse(cornerMin, extent);
-    }
+        try {
 
-    /** The minimum corner at which the overlay should be located in the output image. */
-    private Point3i cornerMin(Extent enclosing, Extent overlay) throws ArrangeStackException {
-        return new Point3i(
-                CHOICES_X.position("alignX", alignX, Extent::x, enclosing, overlay),
-                CHOICES_Y.position("alignY", alignY, Extent::y, enclosing, overlay),
-                CHOICES_Z.position("alignZ", alignZ, Extent::z, enclosing, overlay));
-    }
+            if (align.getAlignZ().equalsIgnoreCase(PositionChoicesConstants.REPEAT)) {
 
-    /** Determines the size of the overlayed stack, as projected into the image. */
-    private Extent deriveExtent(Extent enclosing, Extent overlay) throws ArrangeStackException {
-        return new Extent(
-                Math.min(overlay.x(), enclosing.x()),
-                Math.min(overlay.y(), enclosing.y()),
-                deriveZExtent(enclosing, overlay));
-    }
+                BoundingBox boxAligned = align.align(overlay.flattenZ(), enclosing.flattenZ());
 
-    /**
-     * Determines the size of the z-dimension of the overlayed stack, as projected into the image.
-     */
-    private int deriveZExtent(Extent enclosing, Extent overlay) throws ArrangeStackException {
-        if (alignZ.equalsIgnoreCase(REPEAT)) {
+                if (overlay.z() != 1) {
+                    throw new ArrangeStackException(
+                            String.format(
+                                    "If alignZ is `repeat` then the overlay must have a single z-slice, but it has %d slices.",
+                                    overlay.z()));
+                }
 
-            if (overlay.z() != 1) {
-                throw new ArrangeStackException(
-                        String.format(
-                                "If alignZ is `repeat` then the overlay must have a single z-slice, but it has %d slices.",
-                                overlay.z()));
+                return boxAligned.changeExtent(
+                        extentToChange -> extentToChange.duplicateChangeZ(enclosing.z()));
+            } else {
+                return align.align(overlay, enclosing);
             }
-
-            return enclosing.z();
-        } else {
-            return Math.min(overlay.z(), enclosing.z());
+        } catch (OperationFailedException e) {
+            throw new ArrangeStackException(
+                    "Failed to align the overlay with the enclosing stack", e);
         }
     }
 }
