@@ -83,7 +83,7 @@ public class Align extends BoxAligner {
     public BoundingBox alignAfterCheck(BoundingBox smaller, BoundingBox larger)
             throws OperationFailedException {
         ReadableTuple3i cornerLarger = larger.cornerMin();
-        Point3i cornerAligned = alignCorner(larger.extent(), smaller);
+        Point3i cornerAligned = alignCorner(smaller, larger.extent());
         cornerAligned.add(cornerLarger);
         return BoundingBox.createReuse(cornerAligned, smaller.extent());
     }
@@ -91,7 +91,7 @@ public class Align extends BoxAligner {
     @Override
     public BoundingBox alignAfterCheck(Extent smaller, Extent larger)
             throws OperationFailedException {
-        Point3i cornerAligned = alignCorner(larger, smaller);
+        Point3i cornerAligned = alignCorner(smaller, larger);
         return BoundingBox.createReuse(cornerAligned, smaller);
     }
 
@@ -99,7 +99,7 @@ public class Align extends BoxAligner {
     public BoundingBox alignAfterCheck(Extent smaller, BoundingBox larger)
             throws OperationFailedException {
         ReadableTuple3i cornerLarger = larger.cornerMin();
-        Point3i cornerAligned = alignCorner(larger.extent(), smaller);
+        Point3i cornerAligned = alignCorner(smaller, larger.extent());
         cornerAligned.add(cornerLarger);
         return BoundingBox.createReuse(cornerAligned, smaller);
     }
@@ -108,34 +108,34 @@ public class Align extends BoxAligner {
      * The minimum corner at which the entity should be locate after alignment, considering all of
      * {@code larger}.
      *
-     * @param larger the larger size to align against as a reference.
      * @param smaller the smaller size to align with {@code larger}.
+     * @param larger the larger size to align against as a reference.
      * @return the minimum corner to use for the aligned box, newly-created.
      * @throws OperationFailedException if an unrecognised string is used for one of {@code alignX},
      *     {@code alignY} or {@code alignZ}.
      */
-    private Point3i alignCorner(Extent larger, Extent smaller) throws OperationFailedException {
+    private Point3i alignCorner(Extent smaller, Extent larger) throws OperationFailedException {
         return new Point3i(
-                position(alignXEnum, Extent::x, larger, smaller, 0),
-                position(alignYEnum, Extent::y, larger, smaller, 0),
-                position(alignZEnum, Extent::z, larger, smaller, 0));
+                position(alignXEnum, Extent::x, smaller, 0,larger),
+                position(alignYEnum, Extent::y, smaller, 0, larger),
+                position(alignZEnum, Extent::z, smaller, 0, larger));
     }
 
     /**
      * The minimum corner at which the entity should be locate after alignment, ignoring the space
      * to the left.
      *
-     * @param larger the larger size to align against as a reference.
      * @param smaller the smaller size to align with {@code larger}.
+     * @param larger the larger size to align against as a reference.
      * @return the minimum corner to use for the aligned box, newly-created.
      * @throws OperationFailedException if an unrecognized string is used for one of {@code alignX},
      *     {@code alignY} or {@code alignZ}.
      */
-    public Point3i alignCorner(Extent larger, BoundingBox smaller) throws OperationFailedException {
+    public Point3i alignCorner(BoundingBox smaller, Extent larger) throws OperationFailedException {
         return new Point3i(
-                position(alignXEnum, Extent::x, larger, smaller.extent(), smaller.cornerMin().x()),
-                position(alignYEnum, Extent::y, larger, smaller.extent(), smaller.cornerMin().y()),
-                position(alignZEnum, Extent::z, larger, smaller.extent(), smaller.cornerMin().z()));
+                position(alignXEnum, Extent::x, smaller.extent(), smaller.cornerMin().x(), larger),
+                position(alignYEnum, Extent::y, smaller.extent(), smaller.cornerMin().y(), larger),
+                position(alignZEnum, Extent::z, smaller.extent(), smaller.cornerMin().z(), larger));
     }
 
     /**
@@ -154,9 +154,8 @@ public class Align extends BoxAligner {
     private static int position(
             AlignmentOnDimension alignment,
             ToIntFunction<Extent> extractValue,
-            Extent larger,
             Extent smaller,
-            int disconsideredLeft)
+            int disconsideredLeft, Extent larger)
             throws OperationFailedException {
         return alignment.align(
                 extractValue.applyAsInt(larger),
