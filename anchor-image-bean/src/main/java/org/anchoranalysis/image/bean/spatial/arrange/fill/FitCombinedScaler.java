@@ -54,12 +54,13 @@ class FitCombinedScaler {
      */
     private static void scaleImagesToMatchRow(
             List<List<ExtentToArrange>> partitions, int rowWidth, boolean permitPartialFinalRow) {
-        // Tracks the sum of each row so far
+        // Tracks the sum of each row so far, so the average aspect-ratio can be be calculated
         double sumOfSums = 0.0;
 
         int lastIndex = partitions.size() - 1;
         for (int index = 0; index < partitions.size(); index++) {
             List<ExtentToArrange> row = partitions.get(index);
+
             double aspectRatioSum = sumExtractedDouble(row, ExtentToArrange::getAspectRatio);
 
             // Special treatment for final row
@@ -70,14 +71,15 @@ class FitCombinedScaler {
                 // It is not possible for index to be 0, as the lastIndex will never be 0 when the
                 // partition-size must be >= 2
                 rowWidth =
-                        maybeAdjustRowWidth(aspectRatioSum, sumOfSums / index, rowWidth); // NOSONAR
+                        maybeAdjustTargetRowWidth(
+                                aspectRatioSum, sumOfSums / index, rowWidth); // NOSONAR
             }
 
             sumOfSums += aspectRatioSum;
 
-            for (ExtentToArrange element : row) {
-                element.scaleToMatchRow(aspectRatioSum, rowWidth);
-            }
+            // Scale the elements in the row so they have identical height, and exactly match the
+            // target rowWidth
+            ScaleElementsInRow.scaleElementsToMatchRow(row, rowWidth, aspectRatioSum);
         }
     }
 
@@ -85,7 +87,8 @@ class FitCombinedScaler {
      * Adjusts the row-width, if needed, in the final row, to make the row height more similar to
      * the other rows.
      */
-    private static int maybeAdjustRowWidth(double currentHeight, double meanHeight, int rowWidth) {
+    private static int maybeAdjustTargetRowWidth(
+            double currentHeight, double meanHeight, int rowWidth) {
         if (currentHeight < (MAXIMUM_PERMITTED_DIFFERENCE_ASPECT_RATIO_FINAL_ROW * meanHeight)) {
             return (int) (rowWidth * (currentHeight / meanHeight));
         } else {

@@ -124,6 +124,21 @@ public class Scaler {
     }
 
     /**
+     * Multiplies a quantity (integer) by a scaling-factor, returning it as an integer via
+     * <b>floor</b>.
+     *
+     * <p>Refuses to return 0 or any negative value, making 1 the minimum return value.
+     *
+     * @param scalingFactor the scaling-factor.
+     * @param quantity the quantity.
+     * @return the scaled-quantity, rounded up or down an integer.
+     */
+    public static int scaleFloor(double scalingFactor, int quantity) {
+        int val = (int) Math.floor(scalingFactor * quantity);
+        return Math.max(val, 1);
+    }
+
+    /**
      * Calculates a scaling-factor (for one dimension) by doing a floating point division of two
      * integers.
      *
