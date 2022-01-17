@@ -142,9 +142,12 @@ public class Fill extends StackArranger {
     /**
      * Derive a {@link BoundingBox} for each {@link Extent}, corresponding to its location and size
      * in the combined size.
+     *
+     * @throws OperationFailedException if any bounding box lies outside the image.
      */
     private static BoundingBox[] derivingBoundingBoxes(
-            int numberElements, List<List<ExtentToArrange>> partitions, Extent combinedSize) {
+            int numberElements, List<List<ExtentToArrange>> partitions, Extent combinedSize)
+            throws OperationFailedException {
         BoundingBox[] boxes = new BoundingBox[numberElements];
 
         Point3i cornerMin = new Point3i();
@@ -155,6 +158,13 @@ public class Fill extends StackArranger {
 
             for (ExtentToArrange element : row) {
                 extent = element.getExtent();
+
+                if (!combinedSize.contains(cornerMin)) {
+                    throw new OperationFailedException(
+                            String.format(
+                                    "Element %d with corner %s is not located inside the montaged image of size %s",
+                                    element.getIndex(), cornerMin, combinedSize));
+                }
 
                 BoundingBox box =
                         BoundingBox.createDuplicate(cornerMin, extent).clampTo(combinedSize);

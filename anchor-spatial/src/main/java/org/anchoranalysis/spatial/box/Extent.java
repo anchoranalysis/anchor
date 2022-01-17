@@ -321,6 +321,26 @@ public final class Extent implements Serializable, Comparable<Extent> {
     }
 
     /**
+     * Creates a copy of the current {@link Extent} with the value for the X-dimension changed.
+     *
+     * @param xToAssign the value to assign for the x-dimension.
+     * @return the copy, with a changed x-value.
+     */
+    public Extent duplicateChangeX(int xToAssign) {
+        return new Extent(xToAssign, size.y(), size.z());
+    }
+
+    /**
+     * Creates a copy of the current {@link Extent} with the value for the Y-dimension changed.
+     *
+     * @param yToAssign the value to assign for the y-dimension.
+     * @return the copy, with a changed y-value.
+     */
+    public Extent duplicateChangeY(int yToAssign) {
+        return new Extent(size.x(), yToAssign, size.z());
+    }
+
+    /**
      * Creates a copy of the current {@link Extent} with the value for the Z-dimension changed.
      *
      * @param zToAssign the value to assign for the z-dimension.
