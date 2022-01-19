@@ -47,7 +47,7 @@ import org.anchoranalysis.io.input.path.matcher.PathMatchConstraints;
 /**
  * Matches file-paths against some kind of pattern.
  *
- * @author Owen
+ * @author Owen Feehan
  */
 public abstract class PathMatcher extends AnchorBean<PathMatcher> {
 
@@ -95,23 +95,14 @@ public abstract class PathMatcher extends AnchorBean<PathMatcher> {
             Optional<InputManagerParameters> parameters)
             throws InputReadFailedException {
 
-        if (directory.toString().isEmpty()) {
-            throw new InputReadFailedException(
-                    "The directory is unspecified (an empty string) which is not allowed. Consider using '.' for the current working directory");
-        }
-
-        if (!directory.toFile().exists() || !directory.toFile().isDirectory()) {
-            throw new InputReadFailedException(
-                    String.format(
-                            "Directory '%s' does not exist",
-                            directory.toAbsolutePath().normalize()));
-        }
-
+    	checkDirectoryPreconditions(directory);
+        
         DualPathPredicates predicates =
                 createPredicates(
                         directory,
                         ignoreHidden,
                         parameters.map(InputManagerParameters::getInputContext));
+        
         Optional<Logger> logger =
                 OptionalFactory.create(
                         acceptDirectoryErrors && parameters.isPresent(),
@@ -162,6 +153,21 @@ public abstract class PathMatcher extends AnchorBean<PathMatcher> {
             return path -> predicate.test(path) && HiddenPathChecker.includePath(path);
         } else {
             return predicate;
+        }
+    }
+        
+    /** Checks that the directory path satisifies preconditions. */
+    private static void checkDirectoryPreconditions(Path directory) throws InputReadFailedException {
+    	if (directory.toString().isEmpty()) {
+            throw new InputReadFailedException(
+                    "The directory is unspecified (an empty string) which is not allowed. Consider using '.' for the current working directory");
+        }
+
+        if (!directory.toFile().exists() || !directory.toFile().isDirectory()) {
+            throw new InputReadFailedException(
+                    String.format(
+                            "Directory '%s' does not exist",
+                            directory.toAbsolutePath().normalize()));
         }
     }
 }
