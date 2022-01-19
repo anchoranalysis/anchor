@@ -45,7 +45,11 @@ public interface InputFromManager {
     /**
      * A unique name associated with the input.
      *
-     * @return a string uniquely (in the current dataset) identifying the input in a meaningful way
+     * <p>The name should never begin with or end with whitespace.
+     *
+     * <p>It should never contain backslashes, but forward-slashes are permitted.
+     *
+     * @return a string uniquely (in the current dataset) identifying the input in a meaningful way.
      */
     String identifier();
 
@@ -55,6 +59,7 @@ public interface InputFromManager {
      * @return a path based upon the unique identifier for the input
      */
     default Path identifierAsPath() {
+        // TODO remove any trailing whitespace as it's unsupported by a windows path
         return Paths.get(identifier());
     }
 

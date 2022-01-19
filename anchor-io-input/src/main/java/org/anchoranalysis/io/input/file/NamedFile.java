@@ -29,7 +29,6 @@ package org.anchoranalysis.io.input.file;
 import java.io.File;
 import java.nio.file.Path;
 import java.util.function.BiFunction;
-import lombok.AllArgsConstructor;
 import lombok.Value;
 
 /**
@@ -41,7 +40,6 @@ import lombok.Value;
  *
  * @author Owen Feehan
  */
-@AllArgsConstructor
 @Value
 public class NamedFile {
 
@@ -50,6 +48,18 @@ public class NamedFile {
 
     /** The file. */
     private File file;
+
+    /**
+     * Create with an identifier and a file.
+     *
+     * @param identifier unique identifier associated with the file.
+     * @param file the file.
+     */
+    public NamedFile(String identifier, File file) {
+        this.identifier = identifier;
+        this.file = file;
+        assert (!identifier.endsWith(" "));
+    }
 
     /**
      * The path of {@link #getFile}.
