@@ -38,7 +38,7 @@ import org.anchoranalysis.io.output.outputter.OutputterChecked;
  *
  * <p>The text cannot be written immediately, so is saved until {@link #close} is called.
  *
- * @author feehano
+ * @author Owen Feehan
  */
 @RequiredArgsConstructor
 public class FailureOnlyMessageLogger implements StatefulMessageLogger {

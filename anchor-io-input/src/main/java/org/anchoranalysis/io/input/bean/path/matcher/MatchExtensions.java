@@ -26,11 +26,11 @@
 
 package org.anchoranalysis.io.input.bean.path.matcher;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -39,6 +39,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.primitive.StringSet;
 import org.anchoranalysis.core.format.FormatExtensions;
+import org.anchoranalysis.core.functional.checked.CheckedPredicate;
 import org.anchoranalysis.core.system.path.ExtensionUtilities;
 import org.anchoranalysis.io.input.InputContextParameters;
 import org.anchoranalysis.io.input.InputReadFailedException;
@@ -80,14 +81,15 @@ public class MatchExtensions extends PathMatcher {
     }
 
     @Override
-    protected Predicate<Path> createMatcherFile(
+    protected CheckedPredicate<Path, IOException> createMatcherFile(
             Path directory, Optional<InputContextParameters> inputContext)
             throws InputReadFailedException {
 
         Set<String> fileExtensions = fileExtensions(inputContext);
 
         if (matcher != null) {
-            Predicate<Path> firstPred = matcher.createMatcherFile(directory, inputContext);
+            CheckedPredicate<Path, IOException> firstPred =
+                    matcher.createMatcherFile(directory, inputContext);
             return path -> firstPred.test(path) && matchesAnyExtension(path, fileExtensions);
         } else {
             return path -> matchesAnyExtension(path, fileExtensions);

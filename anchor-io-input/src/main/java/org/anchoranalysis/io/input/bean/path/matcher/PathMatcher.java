@@ -27,12 +27,13 @@
 package org.anchoranalysis.io.input.bean.path.matcher;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Predicate;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.functional.OptionalFactory;
+import org.anchoranalysis.core.functional.checked.CheckedPredicate;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.io.input.InputContextParameters;
@@ -51,17 +52,38 @@ import org.anchoranalysis.io.input.path.matcher.PathMatchConstraints;
 public abstract class PathMatcher extends AnchorBean<PathMatcher> {
 
     /**
+     * Like {@link #matchingFiles(Path, boolean, boolean, boolean, Optional, Optional)} but uses sensible defaults.
+     *
+     * <p>Hidden files are ignored.
+     *
+     * <p>Continues even when a directory-access-error occurs, without throwing an exception.
+     *
+     * <p>No maximum directory depth is imposed.
+     *
+     * <p>No parameters are applied.
+     *
+     * @param directory root directory to search.
+     * @param recursive whether to recursively search.
+     * @return a collection of files matching the conditions.
+     * @throws InputReadFailedException if an error occurrs reading/writing or interacting with the
+     *     filesystem.
+     */
+    public List<File> matchingFiles(Path directory, boolean recursive)
+            throws InputReadFailedException {
+        return matchingFiles(directory, recursive, false, true, Optional.empty(), Optional.empty());
+    }
+    /**
      * Finds a collection of files that match particular conditions on their paths.
      *
      * @param directory root directory to search.
      * @param recursive whether to recursively search.
      * @param ignoreHidden whether to ignore hidden files/directories or not.
-     * @param parameters parameters providing input-context.
      * @param acceptDirectoryErrors if true, continues when a directory-access-error occurs (logging
      *     it), otherwise throws an exception.
      * @param maxDirectoryDepth a maximum depth in directories to search.
+     * @param parameters parameters providing input-context
      * @return a collection of files matching the conditions.
-     * @throws InputReadFailedException if an error occurrs reading/writing or interacting with the
+     * @throws InputReadFailedException if an error occurs reading/writing or interacting with the
      *     filesystem.
      */
     public List<File> matchingFiles(
@@ -95,48 +117,47 @@ public abstract class PathMatcher extends AnchorBean<PathMatcher> {
                         acceptDirectoryErrors && parameters.isPresent(),
                         () -> parameters.get().getLogger()); // NOSONAR
         Optional<Progress> progress = parameters.map(InputManagerParameters::getProgress);
-        return runMatch(predicates, maxDirectoryDepth, directory, true, progress, logger);
-    }
 
-    private List<File> runMatch(
-            DualPathPredicates predicates,
-            Optional<Integer> maxDirectoryDepth,
-            Path directory,
-            boolean recursive,
-            Optional<Progress> progress,
-            Optional<Logger> logger)
-            throws InputReadFailedException {
+        PathMatchConstraints constraints = new PathMatchConstraints(predicates, maxDirectoryDepth);
         try {
             return new FindMatchingFiles(recursive, progress)
-                    .findMatchingFiles(
-                            directory,
-                            new PathMatchConstraints(
-                                    predicates, maxDirectoryDepth.orElse(Integer.MAX_VALUE)),
-                            logger);
+                    .search(directory, constraints, logger);
         } catch (FindFilesException e) {
             throw new InputReadFailedException("Cannot find matching files", e);
         }
     }
+
+    /**
+     * Create a predicate to be used for matching against path.
+     *
+     * @param directory the directory being searched. Only paths in this directory (or its
+     *     subdirectories) will ever be passed to the predicate.
+     * @param inputContext the input-context.
+     * @return a predicate that can be used to accept or reject a path (contained in {@code
+     *     directory}.
+     * @throws InputReadFailedException if the testing of the predicate fails.
+     */
+    protected abstract CheckedPredicate<Path, IOException> createMatcherFile(
+            Path directory, Optional<InputContextParameters> inputContext)
+            throws InputReadFailedException;
 
     private DualPathPredicates createPredicates(
             Path directory, boolean ignoreHidden, Optional<InputContextParameters> parameters)
             throws InputReadFailedException {
 
         // Many checks are possible on a file, including whether it is hidden or not
-        Predicate<Path> fileMatcher =
+        CheckedPredicate<Path, IOException> fileMatcher =
                 maybeAddIgnoreHidden(ignoreHidden, createMatcherFile(directory, parameters));
 
         // The only check on a directory is (maybe) whether it is hidden or not
-        Predicate<Path> directoryMatcher = maybeAddIgnoreHidden(ignoreHidden, path -> true);
+        CheckedPredicate<Path, IOException> directoryMatcher =
+                maybeAddIgnoreHidden(ignoreHidden, path -> true);
 
         return new DualPathPredicates(fileMatcher, directoryMatcher);
     }
 
-    protected abstract Predicate<Path> createMatcherFile(
-            Path directory, Optional<InputContextParameters> inputContext)
-            throws InputReadFailedException;
-
-    private Predicate<Path> maybeAddIgnoreHidden(boolean ignoreHidden, Predicate<Path> predicate) {
+    private CheckedPredicate<Path, IOException> maybeAddIgnoreHidden(
+            boolean ignoreHidden, CheckedPredicate<Path, IOException> predicate) {
         if (ignoreHidden) {
             return path -> predicate.test(path) && HiddenPathChecker.includePath(path);
         } else {

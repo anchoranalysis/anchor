@@ -43,7 +43,6 @@ class AddFilesToList extends SimpleFileVisitor<Path> {
 
     @Override
     public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-
         if (attrs.isRegularFile() && !attrs.isDirectory() && predicates.getFile().test(file)) {
             list.add(file.normalize().toFile());
         }
@@ -53,11 +52,10 @@ class AddFilesToList extends SimpleFileVisitor<Path> {
     @Override
     public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs)
             throws IOException {
-
-        if (!predicates.getDirectory().test(dir)) {
+        if (predicates.getDirectory().test(dir)) {
+            return super.preVisitDirectory(dir, attrs);
+        } else {
             return FileVisitResult.SKIP_SUBTREE;
         }
-
-        return super.preVisitDirectory(dir, attrs);
     }
 }

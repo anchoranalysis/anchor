@@ -26,18 +26,30 @@
 
 package org.anchoranalysis.io.input.bean.path.matcher;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Optional;
-import java.util.function.Predicate;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.functional.checked.CheckedPredicate;
 import org.anchoranalysis.io.input.InputContextParameters;
 import org.anchoranalysis.io.input.InputReadFailedException;
 
+/**
+ * Matches paths using a Java-style glob.
+ *
+ * <p>Please see {@link FileSystem#getPathMatcher} for the syntax of the glob.
+ *
+ * <p>In summary, a single wildcard like {@code *.jpg} will match only files in the top-level
+ * directory, whereas a double wildcard like {@code **.jpg} will match files in all subdirectories
+ * recursively.
+ *
+ * @author Owen Feehan
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 public class MatchGlob extends PathMatcher {
@@ -51,7 +63,7 @@ public class MatchGlob extends PathMatcher {
     // END BEAN FIELDS
 
     @Override
-    protected Predicate<Path> createMatcherFile(
+    protected CheckedPredicate<Path, IOException> createMatcherFile(
             Path directory, Optional<InputContextParameters> inputContext)
             throws InputReadFailedException {
         return FilterPathHelper.createPredicate(directory, "glob", globString(inputContext));

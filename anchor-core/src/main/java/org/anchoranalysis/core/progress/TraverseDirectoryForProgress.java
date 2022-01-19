@@ -33,9 +33,9 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Predicate;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.core.functional.checked.CheckedPredicate;
 
 /**
  * Traverses files and subdirectories contained in a directory, in a way that is useful for tracking
@@ -68,7 +68,7 @@ public class TraverseDirectoryForProgress {
     public static TraversalResult traverseRecursive(
             Path path,
             int minNumberDirectories,
-            Predicate<Path> matcherDirectory,
+            CheckedPredicate<Path, IOException> matcherDirectory,
             int maxDirectoryDepth)
             throws IOException {
 
@@ -111,18 +111,18 @@ public class TraverseDirectoryForProgress {
      *     have been traversed.
      * @throws IOException if any file or subdirectory cannot be accessed or traversed.
      */
-    public static TraversalResult traverseNotRecursive(Path path, Predicate<Path> matcherDirectory)
-            throws IOException {
+    public static TraversalResult traverseNotRecursive(
+            Path path, CheckedPredicate<Path, IOException> matcherDirectory) throws IOException {
         List<Path> filesOut = new ArrayList<>();
         subdirectoriesFor(path, Optional.empty(), Optional.of(filesOut), matcherDirectory);
         return new TraversalResult(new ArrayList<>(), filesOut, 1);
     }
 
-    private static boolean subdirectoriesFor(
+    private static <E extends Exception> boolean subdirectoriesFor(
             Path parent,
             Optional<List<Path>> directoriesOut,
             Optional<List<Path>> filesOut,
-            Predicate<Path> matcherDirectory)
+            CheckedPredicate<Path, IOException> matcherDirectory)
             throws IOException {
 
         boolean addedDirectory = false;
@@ -163,7 +163,7 @@ public class TraverseDirectoryForProgress {
             List<Path> parents,
             List<Path> definiteLeafs,
             Optional<List<Path>> filesOut,
-            Predicate<Path> matcherDirectory)
+            CheckedPredicate<Path, IOException> matcherDirectory)
             throws IOException {
         List<Path> out = new ArrayList<>();
         for (Path path : parents) {

@@ -32,9 +32,11 @@ class ScaleElementsInRow {
         int actualRowWidth = scaleElementsToApproximatelyMatch(row, targetWidth, aspectRatioSum);
 
         // As the above will always round, it's possible the final row-size will always be
-        // smaller or greater than permitted
-        // To fix the gap, we add or subtract one pixel width to the largest width images (what
-        // will do the least damage)
+        // smaller or greater than permitted.
+        // To fix the gap, one pixel width is added/subtracted (as circumstances need) from a
+        // certain
+        // number of images, chosen by priority of the size of their rounding error, during prior
+        // scaling.
         maybeAdjustElementWidth(row, targetWidth, actualRowWidth);
     }
 
@@ -84,8 +86,8 @@ class ScaleElementsInRow {
      * Adjusts the width of a certain number of elements in {@code row}.
      *
      * <p>Elements are chosen in priority of their rounding error, picking the elements with the
-     * largest rounding-up errors to make smaller, and with the legesting rounding-down errors to
-     * make larger.
+     * largest rounding-up errors to make smaller, and with the largest rounding-down errors to make
+     * larger.
      *
      * <p>The note the order of elements in {@code row} is usually altered during processing.
      *
@@ -97,6 +99,10 @@ class ScaleElementsInRow {
     private static void adjustElementWidth(
             List<ExtentToArrange> row, int numberElements, int adjustment) {
         Preconditions.checkArgument(numberElements <= row.size());
+
+        // Sort the elements, in order of most desirable rounding-errors to correct.
+        // The order depends on whether we are making a positive adjustment or negative adjustment,
+        // to find respectively rounding-down or rounding-up errors.
         Collections.sort(
                 row,
                 Comparator.comparingDouble(
