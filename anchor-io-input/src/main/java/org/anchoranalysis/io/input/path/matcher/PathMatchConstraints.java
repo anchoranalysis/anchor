@@ -26,7 +26,9 @@
 
 package org.anchoranalysis.io.input.path.matcher;
 
+import java.nio.file.Files;	//NOSONAR
 import java.util.Optional;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Value;
@@ -68,7 +70,7 @@ public class PathMatchConstraints {
      * Creates with {@link DualPathPredicates} and an optional maximum directory-depth.
      *
      * @param predicates predicates to match against both a file and a directory.
-     * @param a limits on the depth of how many sub-directories are to be recursed. If undefined, it
+     * @param maxDirectoryDepth limits on the depth of how many sub-directories are to be recursed. If undefined, it
      *     is unlimited.
      */
     public PathMatchConstraints(
