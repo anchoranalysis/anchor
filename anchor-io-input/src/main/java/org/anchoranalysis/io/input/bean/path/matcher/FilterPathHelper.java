@@ -26,27 +26,32 @@
 
 package org.anchoranalysis.io.input.bean.path.matcher;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.PathMatcher;
-import java.util.function.Predicate;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.core.functional.checked.CheckedPredicate;
+import org.anchoranalysis.core.system.path.PathDifference;
+import org.anchoranalysis.core.system.path.PathDifferenceException;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class FilterPathHelper {
 
-    public static Predicate<Path> createPredicate(
-            Path directory, String fileType, String fileFilter) {
-        PathMatcher matcher = FilterPathHelper.matcherForFilter(directory, fileType, fileFilter);
-        return path -> FilterPathHelper.acceptPathViaMatcher(path, matcher);
-    }
-
-    private static boolean acceptPathViaMatcher(Path path, PathMatcher matcher) {
-        return matcher.matches(path.getFileName());
-    }
-
-    private static PathMatcher matcherForFilter(
+    public static CheckedPredicate<Path, IOException> createPredicate(
             Path directory, String filterType, String fileFilter) {
-        return directory.getFileSystem().getPathMatcher(filterType + ":" + fileFilter);
+        PathMatcher matcher =
+                directory.getFileSystem().getPathMatcher(filterType + ":" + fileFilter);
+        return path -> FilterPathHelper.testPathOnDifference(path, directory, matcher);
+    }
+
+    private static boolean testPathOnDifference(Path path, Path directory, PathMatcher matcher)
+            throws IOException {
+        try {
+            PathDifference difference = PathDifference.differenceFrom(directory, path);
+            return matcher.matches(difference.combined());
+        } catch (PathDifferenceException e) {
+            throw new IOException(e);
+        }
     }
 }

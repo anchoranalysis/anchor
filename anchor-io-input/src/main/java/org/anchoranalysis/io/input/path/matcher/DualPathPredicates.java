@@ -25,10 +25,11 @@
  */
 package org.anchoranalysis.io.input.path.matcher;
 
+import java.io.IOException;
 import java.nio.file.Path;
-import java.util.function.Predicate;
 import lombok.AllArgsConstructor;
 import lombok.Value;
+import org.anchoranalysis.core.functional.checked.CheckedPredicate;
 
 /**
  * A {@code Predicate<Path} for both a file and a directory.
@@ -40,8 +41,8 @@ import lombok.Value;
 public class DualPathPredicates {
 
     /** Only accepts files where the predicate returns true */
-    private Predicate<Path> file;
+    private CheckedPredicate<Path, IOException> file;
 
     /** Only accepts any containing directories where the predicate returns true */
-    private Predicate<Path> directory;
+    private CheckedPredicate<Path, IOException> directory;
 }

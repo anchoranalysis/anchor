@@ -36,4 +36,8 @@ public class FindFilesException extends AnchorFriendlyCheckedException {
     public FindFilesException(String message) {
         super(message);
     }
+
+    public FindFilesException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }

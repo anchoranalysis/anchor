@@ -59,7 +59,6 @@ public interface InputFromManager {
      * @return a path based upon the unique identifier for the input
      */
     default Path identifierAsPath() {
-        // TODO remove any trailing whitespace as it's unsupported by a windows path
         return Paths.get(identifier());
     }
 

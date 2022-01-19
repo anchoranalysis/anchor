@@ -26,13 +26,14 @@
 
 package org.anchoranalysis.io.input.bean.path.matcher;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Optional;
-import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.functional.checked.CheckedPredicate;
 import org.anchoranalysis.core.system.path.FilePathToUnixStyleConverter;
 import org.anchoranalysis.io.input.InputContextParameters;
 
@@ -54,7 +55,7 @@ public class MatchRegularExpression extends PathMatcher {
     // END BEAN FIELDS
 
     @Override
-    protected Predicate<Path> createMatcherFile(
+    protected CheckedPredicate<Path, IOException> createMatcherFile(
             Path directory, Optional<InputContextParameters> inputContext) {
         if (applyToPath) {
             Pattern pattern = Pattern.compile(expression);

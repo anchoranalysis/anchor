@@ -29,30 +29,60 @@ package org.anchoranalysis.io.input.path.matcher;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Predicate;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.functional.FunctionalList;
+import org.anchoranalysis.core.functional.checked.CheckedPredicate;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.core.progress.ProgressIncrement;
 import org.anchoranalysis.core.progress.TraversalResult;
 import org.anchoranalysis.core.progress.TraverseDirectoryForProgress;
 
-@AllArgsConstructor
+/**
+ * Finds files in a {@code directory} that satisfy certain constraints.
+ *
+ * <p>It may be searched recursively or not.
+ *
+ * <p>It is designed to keep a {@link Progress} approximately up to date, so it can be visually
+ * communicated how much of the search has progressed. It achieves this <b>very approximately</b> by
+ * searching for top-level directories, and considering that each represents a similar block of
+ * progress.
+ *
+ * @author Owen Feehan
+ */
 @RequiredArgsConstructor
 public class FindMatchingFiles {
 
-    /** Recursive whether to recursively iterate through directories */
-    private boolean recursive = false;
+    /** Whether to recursively iterate through directories. */
+    private final boolean recursive;
 
-    /** The progress reporter */
-    private Optional<Progress> progress = Optional.empty();
+    /** The progress reporter. */
+    private final Optional<Progress> progress;
 
-    public List<File> findMatchingFiles(
+    /**
+     * Create indicating whether to search recursively or not.
+     *
+     * @param recursive whether to search recursively.
+     */
+    public FindMatchingFiles(boolean recursive) {
+        this.recursive = recursive;
+        this.progress = Optional.empty();
+    }
+
+    /**
+     * Searches a {@code directory} for files that match the {@code constraints}.
+     *
+     * @param directory the directory to search.
+     * @param constraints the constraints applied to the paths.
+     * @param logger logs unexpected non-fatal issues that are encountered.
+     * @return a newly created list containing all files in {@code directory} that match the
+     *     constraints.
+     * @throws FindFilesException if a fatal error is encountered during the search.
+     */
+    public List<File> search(
             Path directory, PathMatchConstraints constraints, Optional<Logger> logger)
             throws FindFilesException {
 
@@ -73,7 +103,7 @@ public class FindMatchingFiles {
             return convertToList(traversal, constraints, logger);
 
         } catch (IOException e) {
-            throw new FindFilesException("A failure occurred searching a directory for files");
+            throw new FindFilesException("A failure occurred searching a directory for files", e);
         }
     }
 
@@ -81,7 +111,7 @@ public class FindMatchingFiles {
             TraversalResult traversal, PathMatchConstraints constraints, Optional<Logger> logger)
             throws FindFilesException {
 
-        List<File> listOut = new ArrayList<>();
+        List<File> out = new LinkedList<>();
 
         List<Path> leafDirectories =
                 filterLeafDirectories(
@@ -94,8 +124,7 @@ public class FindMatchingFiles {
                                         progressReporter, leafDirectories.size() + 1));
 
         // We first check the files that we remembered from our folder search
-        filesFromDirectorySearch(
-                traversal.getFiles(), constraints.getPredicates().getFile(), listOut);
+        filesFromDirectorySearch(traversal.getFiles(), constraints.getPredicates().getFile(), out);
 
         progressIncrement.ifPresent(ProgressIncrement::update);
 
@@ -103,14 +132,14 @@ public class FindMatchingFiles {
         assert remainingDirectoryDepth >= 1;
         otherFiles(
                 leafDirectories,
-                constraints.replaceMaxDirDepth(remainingDirectoryDepth),
-                listOut,
+                constraints.replaceMaxDirectoryDepth(remainingDirectoryDepth),
+                out,
                 progressIncrement,
                 logger);
 
         progressIncrement.ifPresent(ProgressIncrement::close);
 
-        return listOut;
+        return out;
     }
 
     private static ProgressIncrement createAndOpenProgress(Progress progress, int numberElements) {
@@ -122,15 +151,28 @@ public class FindMatchingFiles {
     }
 
     private static List<Path> filterLeafDirectories(
-            List<Path> leafDirectories, Predicate<Path> directoryMatcher) {
-        return FunctionalList.filterToList(leafDirectories, directoryMatcher);
+            List<Path> leafDirectories, CheckedPredicate<Path, IOException> directoryMatcher)
+            throws FindFilesException {
+        try {
+            return FunctionalList.filterToList(
+                    leafDirectories, IOException.class, directoryMatcher);
+        } catch (IOException e) {
+            throw new FindFilesException(
+                    "An error occurred evaluating the predicate on a file-path", e);
+        }
     }
 
     private static void filesFromDirectorySearch(
-            List<Path> filesOut, Predicate<Path> matcher, List<File> listOut) {
+            List<Path> filesOut, CheckedPredicate<Path, IOException> matcher, List<File> listOut)
+            throws FindFilesException {
         for (Path path : filesOut) {
-            if (matcher.test(path)) {
-                listOut.add(path.normalize().toFile());
+            try {
+                if (matcher.test(path)) {
+                    listOut.add(path.normalize().toFile());
+                }
+            } catch (IOException e) {
+                throw new FindFilesException(
+                        "An error occurred evaluating the predicate on a file-path", e);
             }
         }
     }
