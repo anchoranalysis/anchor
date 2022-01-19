@@ -42,7 +42,7 @@ import org.anchoranalysis.spatial.scale.ScaleFactor;
 public interface ObjectScalingMethod {
 
     /**
-     * Applies a scaling factor to elements, where each element is associate with a unique {@link
+     * Applies a scaling factor to elements, where each element is associated with a unique {@link
      * ObjectMask}.
      *
      * @param <T> the element-type, which must have a sensible {@link Object#hashCode} and {@link
@@ -63,7 +63,7 @@ public interface ObjectScalingMethod {
     }
 
     /**
-     * Applies a scaling factor to elements, where each element is associate with a unique {@link
+     * Applies a scaling factor to elements, where each element is associated with a unique {@link
      * ObjectMask}.
      *
      * @param <T> the element-type, which must have a sensible {@link Object#hashCode} and {@link

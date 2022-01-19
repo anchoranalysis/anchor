@@ -33,7 +33,7 @@ import org.anchoranalysis.mpp.segment.optimization.kernel.KernelCalculationConte
  *
  * <p>It receives no feedback on whether proposals are accepted/rejected.
  *
- * @author feehano
+ * @author Owen Feehan
  */
 public abstract class KernelIndependent<T, S> extends Kernel<T, S> {
 
