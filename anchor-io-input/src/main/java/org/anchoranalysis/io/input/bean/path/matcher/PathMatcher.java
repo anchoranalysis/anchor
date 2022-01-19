@@ -52,7 +52,7 @@ import org.anchoranalysis.io.input.path.matcher.PathMatchConstraints;
 public abstract class PathMatcher extends AnchorBean<PathMatcher> {
 
     /**
-     * Like {@link #matchingFiles(Path, boolean, boolean, boolean, Optional, Optional) but uses sensible defaults.
+     * Like {@link #matchingFiles(Path, boolean, boolean, boolean, Optional, Optional)} but uses sensible defaults.
      *
      * <p>Hidden files are ignored.
      *
