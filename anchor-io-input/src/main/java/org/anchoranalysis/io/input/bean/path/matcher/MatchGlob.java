@@ -27,6 +27,7 @@
 package org.anchoranalysis.io.input.bean.path.matcher;
 
 import java.io.IOException;
+import java.nio.file.FileSystem;	//NOSONAR
 import java.nio.file.Path;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
@@ -53,7 +54,7 @@ import org.anchoranalysis.io.input.InputReadFailedException;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MatchGlob extends PathMatcher {
-
+	
     // START BEAN FIELDS
     /**
      * The string describing a glob e.g. "*.jpg". If empty, then the inputFilterGlob from
