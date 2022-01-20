@@ -31,9 +31,9 @@ import java.util.Optional;
 import java.util.function.Supplier;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.core.collection.StringSetTrie;
 import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.core.index.range.IndexRangeNegative;
-import org.apache.commons.collections4.trie.PatriciaTrie;
 
 /**
  * Arguments that can further specify an experiment's <b>input</b> in addition to its bean
@@ -60,7 +60,7 @@ public class InputArguments {
      *
      * <p>{@link Optional#empty} implies no extension filters exist.
      */
-    @Getter private Optional<PatriciaTrie<String>> filterExtensions = Optional.empty();
+    @Getter private Optional<StringSetTrie> filterExtensions = Optional.empty();
 
     /**
      * If true, the entire filename or relative path (excluding extension) is used to determine a
@@ -121,13 +121,13 @@ public class InputArguments {
     }
 
     public void assignFilterExtensionsIfMissing(
-            Supplier<Optional<PatriciaTrie<String>>> filterExtensions) {
+            Supplier<Optional<StringSetTrie>> filterExtensions) {
         if (!this.filterExtensions.isPresent()) {
             this.filterExtensions = filterExtensions.get();
         }
     }
 
-    public void assignFilterExtensions(PatriciaTrie<String> filterExtensions) {
+    public void assignFilterExtensions(StringSetTrie filterExtensions) {
         this.filterExtensions = Optional.of(filterExtensions);
     }
 

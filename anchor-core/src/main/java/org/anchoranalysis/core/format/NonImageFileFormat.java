@@ -60,7 +60,7 @@ public enum NonImageFileFormat implements FileFormat {
     private final String extension;
 
     NonImageFileFormat(String extension) {
-        this.extension = FormatExtensionsHelper.normalizeToLowerCase(extension);
+        this.extension = FormatExtensions.normalizeToLowerCase(extension);
     }
 
     @Override

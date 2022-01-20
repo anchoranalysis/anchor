@@ -32,10 +32,10 @@ import java.util.List;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
+import org.anchoranalysis.core.collection.StringSetTrie;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.index.range.IndexRangeNegative;
 import org.anchoranalysis.io.input.bean.DebugModeParameters;
-import org.apache.commons.collections4.trie.PatriciaTrie;
 
 /**
  * Additional parameters that offer context for many beans that provide input-functions.
@@ -54,7 +54,7 @@ public class InputContextParameters {
     @Getter @Setter private Optional<String> inputFilterGlob = Optional.empty();
 
     /** A trie of extensions that can be used filter inputs */
-    @Getter @Setter private PatriciaTrie<String> inputFilterExtensions;
+    @Getter @Setter private StringSetTrie inputFilterExtensions;
 
     /** Parameters for debug-mode (only defined if we are in debug mode) */
     @Getter @Setter private Optional<DebugModeParameters> debugModeParameters = Optional.empty();

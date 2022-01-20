@@ -69,7 +69,7 @@ public class FormatExtensions {
      * @return true if the filePath ends with the expected extension
      */
     public static boolean matches(String filePath, String extensionWithoutLeadingPeriod) {
-        return FormatExtensionsHelper.normalizeToLowerCase(filePath)
+        return FormatExtensions.normalizeToLowerCase(filePath)
                 .endsWith("." + extensionWithoutLeadingPeriod);
     }
 
@@ -114,6 +114,18 @@ public class FormatExtensions {
         } else {
             return str;
         }
+    }
+
+    /**
+     * Normalize an extension to lower-case.
+     *
+     * <p>This function exists to achieve normalization in a consistent way across many calls.
+     *
+     * @param extension the extension to normalize.
+     * @return a lower-case version of {@code extension}.
+     */
+    public static String normalizeToLowerCase(String extension) {
+        return extension.toLowerCase();
     }
 
     private static String changeExtension(
