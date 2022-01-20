@@ -1,6 +1,6 @@
-package org.anchoranalysis.core.functional.checked;
+package org.anchoranalysis.core.functional.unchecked;
 
-import java.util.function.BiFunction;
+import java.util.function.Function;
 
 /*-
  * #%L
@@ -29,24 +29,21 @@ import java.util.function.BiFunction;
  */
 
 /**
- * Like {@link BiFunction} but can also throw a checked exception.
+ * Like {@link Function} but also accepts an {@code int} parameter.
  *
  * @author Owen Feehan
  * @param <S> first parameter-type
- * @param <T> second parameter-type
  * @param <V> return-type
- * @param <E> exception-type that can be thrown
  */
 @FunctionalInterface
-public interface CheckedBiFunction<S, T, V, E extends Exception> {
+public interface FunctionWithInt<S, V> {
 
     /**
      * Calls the function.
      *
      * @param first first parameter.
-     * @param second second parameter.
+     * @param second second parameter which is {@code int}.
      * @return the return-value from the function.
-     * @throws E an exception that may be thrown.
      */
-    V apply(S first, T second) throws E;
+    V apply(S first, int second);
 }

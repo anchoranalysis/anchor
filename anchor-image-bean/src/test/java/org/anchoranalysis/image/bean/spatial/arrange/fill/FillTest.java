@@ -17,6 +17,7 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.image.voxel.resizer.Linear;
 import org.anchoranalysis.image.voxel.resizer.VoxelsResizer;
 import org.anchoranalysis.spatial.box.Extent;
+import org.anchoranalysis.test.LoggerFixture;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -45,7 +46,9 @@ class FillTest {
 
         // Create extents incrementally
         List<RGBStack> stacks = IncrementallyLargerStacksFixture.createStacks(COLORS);
-        RGBStack combined = new Fill(COMBINED_NUMBER_ROWS).combine(stacks, RESIZER);
+        RGBStack combined =
+                new Fill(COMBINED_NUMBER_ROWS)
+                        .combine(stacks, RESIZER, LoggerFixture.suppressedOperationContext());
 
         // Check that each color appears in an expected way.
         assertColorChecks(combined, index -> stacks.get(index).extent());

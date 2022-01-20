@@ -42,9 +42,10 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.functional.checked.CheckedBiFunction;
 import org.anchoranalysis.core.functional.checked.CheckedFunction;
+import org.anchoranalysis.core.functional.checked.CheckedFunctionWithInt;
 import org.anchoranalysis.core.functional.checked.CheckedPredicate;
+import org.anchoranalysis.core.functional.unchecked.FunctionWithInt;
 import org.apache.commons.lang3.tuple.Pair;
 
 /** Utility functions for manipulating or creating {@link java.util.List} in a functional way. */
@@ -217,7 +218,7 @@ public class FunctionalList {
      *     result of the mapping.
      */
     public static <S, T> List<T> mapToListWithIndex(
-            List<S> list, BiFunction<S, Integer, T> mapFunction) {
+            List<S> list, FunctionWithInt<S, T> mapFunction) {
         return IntStream.range(0, list.size())
                 .mapToObj(index -> mapFunction.apply(list.get(index), index))
                 .collect(Collectors.toList());
@@ -253,6 +254,8 @@ public class FunctionalList {
      * @param  <E> an exception that may be thrown by an {@code mapFunction}
      * @param collection the collection to be mapped.
      * @param throwableClass class type of exception that may be thrown by {@code mapFunction}.
+     * @param parallel when true, the mapping occurs in parallel on many cores, otherwise
+     *     serialized.
      * @param mapFunction function to do the mapping to an Optional (the item is included in the
      *     output if the optional is defined).
      * @return a list with the same size and same order, but using derived elements that are a
@@ -262,13 +265,18 @@ public class FunctionalList {
     public static <S, T, E extends Exception> List<T> mapToListOptional(
             Collection<S> collection,
             Class<? extends Exception> throwableClass,
+            boolean parallel,
             CheckedFunction<S, Optional<T>, E> mapFunction)
             throws E {
-        return mapToListOptional(collection.stream(), throwableClass, mapFunction);
+        Stream<S> stream = collection.stream();
+        if (parallel) {
+            stream = stream.parallel();
+        }
+        return mapToListOptional(stream, throwableClass, mapFunction);
     }
 
     /**
-     * Maps a collection to a list with each element in the original collection maybe producing an
+     * Maps a stream to a list with each element in the original collection maybe producing an
      * element in the output.
      *
      * @param  <S> parameter-type for function
@@ -288,6 +296,40 @@ public class FunctionalList {
             CheckedFunction<S, Optional<T>, E> mapFunction)
             throws E {
         return CheckedStream.map(stream, throwableClass, mapFunction)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Maps a list to a new list with each element in the original collection maybe producing an
+     * element in the output.
+     *
+     * @param  <S> parameter-type for function
+     * @param  <T> return-type for function
+     * @param  <E> an exception that may be thrown by an {@code mapFunction}
+     * @param list the list to be mapped.
+     * @param throwableClass class type of exception that may be thrown by {@code mapFunction}.
+     * @param parallel when true, the mapping occurs in parallel on many cores, otherwise
+     *     serialized.
+     * @param mapFunction function to do the mapping to an Optional (the item is included in the
+     *     output if the optional is defined).
+     * @return a list with the same size and same order, but using derived elements that are a
+     *     result of the mapping.
+     * @throws E if it is thrown by any call to {@code mapFunction}
+     */
+    public static <S, T, E extends Exception> List<T> mapToListOptionalWithIndex(
+            List<S> list,
+            Class<? extends Exception> throwableClass,
+            boolean parallel,
+            CheckedFunctionWithInt<S, Optional<T>, E> mapFunction)
+            throws E {
+        IntStream range = IntStream.range(0, list.size());
+        if (parallel) {
+            range = range.parallel();
+        }
+        return CheckedStream.mapIntStream(
+                        range, throwableClass, index -> mapFunction.apply(list.get(index), index))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(Collectors.toList());
@@ -422,9 +464,7 @@ public class FunctionalList {
      * @throws E if an exception is thrown during mapping.
      */
     public static <S, T, E extends Exception> List<T> filterAndMapWithIndexToList(
-            List<S> list,
-            Predicate<S> predicate,
-            CheckedBiFunction<S, Integer, T, E> mapFuncWithIndex)
+            List<S> list, Predicate<S> predicate, CheckedFunctionWithInt<S, T, E> mapFuncWithIndex)
             throws E {
         List<T> out = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {

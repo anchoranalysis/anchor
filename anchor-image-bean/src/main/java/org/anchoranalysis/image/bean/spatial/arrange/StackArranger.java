@@ -30,6 +30,7 @@ import java.util.Iterator;
 import java.util.List;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.time.OperationContext;
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.ArrangeStackException;
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.StackArrangement;
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.StackCopierAtBox;
@@ -57,14 +58,18 @@ public abstract class StackArranger extends AnchorBean<StackArranger> {
      * @param stacks the images that will be combined.
      * @param resizer resizes an image, if it doesn't match the bounding-box size for the copy
      *     operation.
+     * @param context objects for the operation.
      * @return a newly created {@link RGBStack} with all {@code stacks} copied into it.
      * @throws ArrangeStackException if there are more {@code stacks} than can be arranged, or
      *     otherwise an error occurs arranging them.
      */
-    public RGBStack combine(List<RGBStack> stacks, VoxelsResizer resizer)
+    public RGBStack combine(List<RGBStack> stacks, VoxelsResizer resizer, OperationContext context)
             throws ArrangeStackException {
         return combine(
-                stacks, resizer, ChannelFactory.instance().get(UnsignedByteVoxelType.INSTANCE));
+                stacks,
+                resizer,
+                ChannelFactory.instance().get(UnsignedByteVoxelType.INSTANCE),
+                context);
     }
 
     /**
@@ -74,17 +79,21 @@ public abstract class StackArranger extends AnchorBean<StackArranger> {
      * @param resizer resizes an image, if it doesn't match the bounding-box size for the copy
      *     operation.
      * @param factory the factory used to create the new {@link RGBStack}.
+     * @param context objects for the operation.
      * @return a newly created {@link RGBStack} with all {@code stacks} copied into it.
      * @throws ArrangeStackException if there are more {@code stacks} than can be arranged, or
      *     otherwise an error occurs arranging them.
      */
     public RGBStack combine(
-            List<RGBStack> stacks, VoxelsResizer resizer, ChannelFactorySingleType factory)
+            List<RGBStack> stacks,
+            VoxelsResizer resizer,
+            ChannelFactorySingleType factory,
+            OperationContext context)
             throws ArrangeStackException {
 
         Iterator<Extent> extentIterator = stacks.stream().map(RGBStack::extent).iterator();
 
-        StackArrangement arrangement = arrangeStacks(extentIterator);
+        StackArrangement arrangement = arrangeStacks(extentIterator, context);
 
         if (extentIterator.hasNext()) {
             throw new ArrangeStackException("There are more stacks than can be arranged.");
@@ -99,11 +108,12 @@ public abstract class StackArranger extends AnchorBean<StackArranger> {
      * Arranges stacks to that they fit together in a single raster.
      *
      * @param extents the size of each respective stack for the arrangement.
+     * @param context objects for the operation.
      * @return bounding-boxes for each respective {@link RGBStack} in the unified plane.
      * @throws ArrangeStackException if a bounding-box cannot be determined for any stack.
      */
-    public abstract StackArrangement arrangeStacks(Iterator<Extent> extents)
-            throws ArrangeStackException;
+    public abstract StackArrangement arrangeStacks(
+            Iterator<Extent> extents, OperationContext context) throws ArrangeStackException;
 
     private static void populateStacks(
             Iterable<RGBStack> generatedImages,

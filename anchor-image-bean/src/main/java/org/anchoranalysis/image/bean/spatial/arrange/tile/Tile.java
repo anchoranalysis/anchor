@@ -37,6 +37,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.checked.CheckedUnaryOperator;
+import org.anchoranalysis.core.time.OperationContext;
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.ArrangeStackException;
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.BoundingBoxEnclosed;
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.StackArrangement;
@@ -99,14 +100,14 @@ public class Tile extends StackArranger {
     }
 
     @Override
-    public StackArrangement arrangeStacks(final Iterator<Extent> extents)
+    public StackArrangement arrangeStacks(final Iterator<Extent> extents, OperationContext context)
             throws ArrangeStackException {
 
         Extent tableSize = new Extent(numberColumns, numberRows, 1);
 
         ArrangerIndex arrangers = new ArrangerIndex(cells, cellDefault, tableSize);
 
-        ArrangementIndex table = new ArrangementIndex(extents, arrangers, tableSize);
+        ArrangementIndex table = new ArrangementIndex(extents, arrangers, tableSize, context);
 
         return createArrangement(table, new CellSizeCalculator(table));
     }

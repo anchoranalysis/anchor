@@ -33,6 +33,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.time.OperationContext;
 import org.anchoranalysis.image.bean.nonbean.spatial.align.PositionChoicesConstants;
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.ArrangeStackException;
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.StackArrangement;
@@ -87,13 +88,14 @@ public class Overlay extends StackArranger {
     }
 
     @Override
-    public StackArrangement arrangeStacks(Iterator<Extent> extents) throws ArrangeStackException {
+    public StackArrangement arrangeStacks(Iterator<Extent> extents, OperationContext context)
+            throws ArrangeStackException {
 
         if (!extents.hasNext()) {
             throw new ArrangeStackException("No image in iterator for source");
         }
 
-        StackArrangement arrangement = SINGLE.arrangeStacks(extents);
+        StackArrangement arrangement = SINGLE.arrangeStacks(extents, context);
 
         if (!extents.hasNext()) {
             throw new ArrangeStackException("No image in iterator for overlay");

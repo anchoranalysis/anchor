@@ -35,6 +35,7 @@ import org.anchoranalysis.bean.Provider;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
+import org.anchoranalysis.core.time.OperationContext;
 import org.anchoranalysis.image.bean.interpolator.Interpolator;
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.ArrangeStackException;
 import org.anchoranalysis.image.bean.spatial.arrange.StackArranger;
@@ -123,7 +124,12 @@ public class Arrange extends StackProvider {
                             ? new ChannelFactoryUnsignedShort()
                             : new ChannelFactoryUnsignedByte();
 
-            return arrange.combine(rasterList, interpolator.voxelsResizer(), factory).asStack();
+            return arrange.combine(
+                            rasterList,
+                            interpolator.voxelsResizer(),
+                            factory,
+                            new OperationContext(getLogger()))
+                    .asStack();
         } catch (ArrangeStackException e) {
             throw new ProvisionFailedException(e);
         }
