@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.core.progress;
+package org.anchoranalysis.io.input.path.matcher;
 
 import java.nio.file.Path;
 import java.util.LinkedList;
@@ -38,7 +38,7 @@ import lombok.Value;
  */
 @Value
 @AllArgsConstructor
-public class TraversalResult {
+class TraversalResult {
 
     /**
      * All the directories in the bottom-most depth that was traversed.

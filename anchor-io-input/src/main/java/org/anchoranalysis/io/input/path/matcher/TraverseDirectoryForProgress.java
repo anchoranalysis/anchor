@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.core.progress;
+package org.anchoranalysis.io.input.path.matcher;
 
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
@@ -44,7 +44,7 @@ import org.anchoranalysis.core.functional.checked.CheckedPredicate;
  * @author Owen Feehan
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class TraverseDirectoryForProgress {
+class TraverseDirectoryForProgress {
 
     /**
      * Performs a breadth-first traversal of the subdirectories of a {@code path} <i>recursively</i>
@@ -141,11 +141,11 @@ public class TraverseDirectoryForProgress {
     }
 
     /**
-     * Adds a path to either the directoriesOut or filesOut
+     * Adds a path to either the {@code directoriesOut} or {@code filesOut}.
      *
-     * @param directoriesOut directories-added (if present)
-     * @param filesOut files-added (if present)
-     * @return true if directory is added, false otherwise
+     * @param directoriesOut directories-added (if present).
+     * @param filesOut files-added (if present).
+     * @return true if directory is added, false otherwise.
      */
     private static boolean addFileOrDirectory(
             Path file, Optional<List<Path>> directoriesOut, Optional<List<Path>> filesOut) {

@@ -36,8 +36,6 @@ import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.core.progress.ProgressIncrement;
-import org.anchoranalysis.core.progress.TraversalResult;
-import org.anchoranalysis.core.progress.TraverseDirectoryForProgress;
 import org.anchoranalysis.io.input.bean.path.matcher.FilePathMatcher; // NOSONAR
 
 /**
@@ -79,7 +77,6 @@ public class FindMatchingFiles {
      *
      * @param directory the directory to search.
      * @param constraints the constraints applied to the paths.
-     * @param logger logs unexpected non-fatal issues that are encountered.
      * @return a newly created list containing all files in {@code directory} that match the
      *     constraints.
      * @throws FindFilesException if a fatal error is encountered during the search.
