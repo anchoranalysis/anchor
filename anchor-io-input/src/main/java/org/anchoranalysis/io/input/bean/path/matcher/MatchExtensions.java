@@ -30,7 +30,6 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -43,6 +42,7 @@ import org.anchoranalysis.core.functional.checked.CheckedPredicate;
 import org.anchoranalysis.core.system.path.ExtensionUtilities;
 import org.anchoranalysis.io.input.InputContextParameters;
 import org.anchoranalysis.io.input.InputReadFailedException;
+import org.apache.commons.collections4.trie.PatriciaTrie;
 
 /**
  * Maybe imposes a file-extension condition, optionally on top of an existing matcher.
@@ -86,8 +86,7 @@ public class MatchExtensions extends FilePathMatcher {
             Path directory, Optional<InputContextParameters> inputContext)
             throws InputReadFailedException {
 
-        // TODO replace with a prie
-        Set<String> fileExtensions = fileExtensions(inputContext);
+        PatriciaTrie<String> fileExtensions = fileExtensions(inputContext);
 
         if (matcher != null) {
             CheckedPredicate<Path, IOException> firstPred =
@@ -104,7 +103,7 @@ public class MatchExtensions extends FilePathMatcher {
     }
 
     // Does a path end with at least one of the extensions? Or fileExtensions are empty.
-    private boolean matchesAnyExtension(Path path, Set<String> fileExtensions) {
+    private boolean matchesAnyExtension(Path path, PatriciaTrie<String> fileExtensions) {
 
         if (fileExtensions.isEmpty()) {
             // Note SPECIAL CASE. When empty, the check isn't applied, so is always true
@@ -114,19 +113,21 @@ public class MatchExtensions extends FilePathMatcher {
         // Extract extension from path
         Optional<String> extension = ExtensionUtilities.extractExtension(path);
         if (extension.isPresent()) {
-            return fileExtensions.contains(extension.get().toLowerCase());
+            return fileExtensions.containsKey(extension.get().toLowerCase());
         } else {
             return false;
         }
     }
 
-    private Set<String> fileExtensions(Optional<InputContextParameters> inputContext) {
+    private PatriciaTrie<String> fileExtensions(Optional<InputContextParameters> inputContext) {
         if (prioritizeInputContext
                 && inputContext.isPresent()
                 && inputContext.get().getInputFilterExtensions() != null) {
             return inputContext.get().getInputFilterExtensions();
         } else {
-            return extensions.set();
+            PatriciaTrie<String> trie = new PatriciaTrie<>();
+            extensions.forEach(extension -> trie.put(extension, extension));
+            return trie;
         }
     }
 
