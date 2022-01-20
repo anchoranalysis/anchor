@@ -43,7 +43,7 @@ class AddFilesToList extends SimpleFileVisitor<Path> {
 
     @Override
     public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-        if (attrs.isRegularFile() && !attrs.isDirectory() && predicates.getFile().test(file)) {
+        if (attrs.isRegularFile() && !attrs.isDirectory() && predicates.matchFile(file)) {
             list.add(file.normalize().toFile());
         }
         return FileVisitResult.CONTINUE;

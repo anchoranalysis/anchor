@@ -90,7 +90,7 @@ public class TraverseDirectoryForProgress {
             filesOut.addAll(filesOutCurrent);
 
             if (subdirectories.isEmpty()) {
-                return new TraversalResult(new ArrayList<>(), filesOut, depth);
+                return new TraversalResult(filesOut, depth);
             } else if (subdirectories.size() > minNumberDirectories || depth == maxDirectoryDepth) {
                 return new TraversalResult(subdirectories, filesOut, depth);
             }
@@ -115,7 +115,7 @@ public class TraverseDirectoryForProgress {
             Path path, CheckedPredicate<Path, IOException> matcherDirectory) throws IOException {
         List<Path> filesOut = new ArrayList<>();
         subdirectoriesFor(path, Optional.empty(), Optional.of(filesOut), matcherDirectory);
-        return new TraversalResult(new ArrayList<>(), filesOut, 1);
+        return new TraversalResult(filesOut, 1);
     }
 
     private static boolean subdirectoriesFor(

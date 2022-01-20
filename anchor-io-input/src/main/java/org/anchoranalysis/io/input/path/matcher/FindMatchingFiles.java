@@ -33,13 +33,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.anchoranalysis.core.functional.FunctionalList;
-import org.anchoranalysis.core.functional.checked.CheckedPredicate;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.core.progress.ProgressIncrement;
 import org.anchoranalysis.core.progress.TraversalResult;
 import org.anchoranalysis.core.progress.TraverseDirectoryForProgress;
+import org.anchoranalysis.io.input.bean.path.matcher.FilePathMatcher; // NOSONAR
 
 /**
  * Finds files in a {@code directory} that satisfy certain constraints.
@@ -50,6 +49,9 @@ import org.anchoranalysis.core.progress.TraverseDirectoryForProgress;
  * communicated how much of the search has progressed. It achieves this <b>very approximately</b> by
  * searching for top-level directories, and considering that each represents a similar block of
  * progress.
+ *
+ * <p>TODO guarantee that only relevant paths are passed to the predicates, which allows removal of
+ * logic to calculate the relative-paths in {@link FilePathMatcher}.
  *
  * @author Owen Feehan
  */
@@ -130,8 +132,7 @@ public class FindMatchingFiles {
         List<File> out = new LinkedList<>();
 
         List<Path> leafDirectories =
-                filterLeafDirectories(
-                        traversal.getLeafDirectories(), constraints.getPredicates().getDirectory());
+                constraints.getPredicates().matchingLeafDirectories(traversal.getLeafDirectories());
 
         Optional<ProgressIncrement> progressIncrement =
                 progress.map(
@@ -140,7 +141,7 @@ public class FindMatchingFiles {
                                         progressReporter, leafDirectories.size() + 1));
 
         // We first check the files that we remembered from our folder search
-        filesFromDirectorySearch(traversal.getFiles(), constraints.getPredicates().getFile(), out);
+        constraints.getPredicates().consumeMatchingFiles(traversal.getFiles(), out::add);
 
         progressIncrement.ifPresent(ProgressIncrement::update);
 
@@ -158,50 +159,6 @@ public class FindMatchingFiles {
         return out;
     }
 
-    private static ProgressIncrement createAndOpenProgress(Progress progress, int numberElements) {
-        ProgressIncrement progressIncrement = new ProgressIncrement(progress);
-        progressIncrement.open();
-        progressIncrement.setMin(0);
-        progressIncrement.setMax(numberElements);
-        return progressIncrement;
-    }
-
-    private static List<Path> filterLeafDirectories(
-            List<Path> leafDirectories, CheckedPredicate<Path, IOException> directoryMatcher)
-            throws FindFilesException {
-        try {
-            return FunctionalList.filterToList(
-                    leafDirectories, IOException.class, directoryMatcher);
-        } catch (IOException e) {
-            throw new FindFilesException(
-                    "An error occurred evaluating the predicate on a file-path", e);
-        }
-    }
-
-    private static void filesFromDirectorySearch(
-            List<Path> filesOut, CheckedPredicate<Path, IOException> matcher, List<File> listOut)
-            throws FindFilesException {
-        for (Path path : filesOut) {
-            try {
-                if (matcher.test(path)) {
-                    listOut.add(path.normalize().toFile());
-                }
-            } catch (IOException e) {
-                throw new FindFilesException(
-                        "An error occurred evaluating the predicate on a file-path", e);
-            }
-        }
-    }
-
-    /**
-     * @param progressDirectories
-     * @param pathMatchConstraints
-     * @param listOut
-     * @param progressIncrement
-     * @param logger if defined, any directory errors are written to this, instead of throwing an
-     *     exception
-     * @throws FindFilesException if logger is not defined, and a directory error occurs
-     */
     private void otherFiles(
             List<Path> progressDirectories,
             PathMatchConstraints pathMatchConstraints,
@@ -225,5 +182,13 @@ public class FindMatchingFiles {
                 progressIncrement.ifPresent(ProgressIncrement::update);
             }
         }
+    }
+
+    private static ProgressIncrement createAndOpenProgress(Progress progress, int numberElements) {
+        ProgressIncrement progressIncrement = new ProgressIncrement(progress);
+        progressIncrement.open();
+        progressIncrement.setMin(0);
+        progressIncrement.setMax(numberElements);
+        return progressIncrement;
     }
 }

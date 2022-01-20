@@ -75,7 +75,7 @@ public class MatchExtensions extends FilePathMatcher {
     /**
      * Create for specific extensions.
      *
-     * @param extensions the extensions.
+     * @param extension an extension.
      */
     public MatchExtensions(String... extension) {
         this.extensions = new StringSet(extension);
