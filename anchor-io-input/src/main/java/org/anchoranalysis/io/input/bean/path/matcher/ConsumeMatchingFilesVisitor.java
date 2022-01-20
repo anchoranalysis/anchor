@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.io.input.path.matcher;
+package org.anchoranalysis.io.input.bean.path.matcher;
 
 import java.io.File;
 import java.io.IOException;
@@ -32,19 +32,30 @@ import java.nio.file.FileVisitResult;
 import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.util.List;
+import java.util.function.Consumer;
 import lombok.AllArgsConstructor;
+import org.anchoranalysis.io.input.path.matcher.DualPathPredicates;
 
+/**
+ * Calls a {@link Consumer} as each file is visited, if it matches a predicate.
+ *
+ * <p>Subdirectories are also disconsidered if they fail to match a predicate.
+ *
+ * @author Owen Feehan
+ */
 @AllArgsConstructor
-class AddFilesToList extends SimpleFileVisitor<Path> {
+class ConsumeMatchingFilesVisitor extends SimpleFileVisitor<Path> {
 
-    private List<File> list;
+    /** The predicates that determine if files and directories match. */
     private DualPathPredicates predicates;
+
+    /** The consumer that is called on every matching file. */
+    private Consumer<File> consumer;
 
     @Override
     public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
         if (attrs.isRegularFile() && !attrs.isDirectory() && predicates.matchFile(file)) {
-            list.add(file.normalize().toFile());
+            consumer.accept(file.normalize().toFile());
         }
         return FileVisitResult.CONTINUE;
     }

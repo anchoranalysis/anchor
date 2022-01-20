@@ -85,7 +85,7 @@ public class MatchRegularExpression extends FilePathMatcher {
     @Override
     protected CheckedPredicate<Path, IOException> createMatcherFile(
             Path directory, Optional<InputContextParameters> inputContext) {
-        return FilterPathHelper.predicateForPathMatcher(
+        return PredicateFromPathMatcher.create(
                 directory, "regex", expressionMatchingSlashes(), !applyToPath);
     }
 

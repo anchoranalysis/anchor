@@ -35,14 +35,11 @@ import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.functional.OptionalFactory;
 import org.anchoranalysis.core.functional.checked.CheckedPredicate;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.io.input.InputContextParameters;
 import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.input.bean.InputManagerParameters;
 import org.anchoranalysis.io.input.path.matcher.DualPathPredicates;
 import org.anchoranalysis.io.input.path.matcher.FindFilesException;
-import org.anchoranalysis.io.input.path.matcher.FindMatchingFiles;
-import org.anchoranalysis.io.input.path.matcher.PathMatchConstraints;
 
 /**
  * Matches file-paths against some kind of pattern.
@@ -111,12 +108,13 @@ public abstract class FilePathMatcher extends AnchorBean<FilePathMatcher> {
                 OptionalFactory.create(
                         acceptDirectoryErrors && parameters.isPresent(),
                         () -> parameters.get().getLogger()); // NOSONAR
-        Optional<Progress> progress = parameters.map(InputManagerParameters::getProgress);
-
-        PathMatchConstraints constraints = new PathMatchConstraints(predicates, maxDirectoryDepth);
         try {
-            return new FindMatchingFiles(recursive && canMatchSubdirectories(), progress)
-                    .search(directory, constraints, logger);
+            return FindMatchingFiles.search(
+                    directory,
+                    predicates,
+                    recursive && canMatchSubdirectories(),
+                    maxDirectoryDepth,
+                    logger);
         } catch (FindFilesException e) {
             throw new InputReadFailedException("Cannot find matching files", e);
         }

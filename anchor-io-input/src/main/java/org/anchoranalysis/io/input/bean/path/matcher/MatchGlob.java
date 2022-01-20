@@ -70,7 +70,7 @@ public class MatchGlob extends FilePathMatcher {
             throws InputReadFailedException {
         Optional<String> globString = globString(inputContext);
         if (globString.isPresent()) {
-            return FilterPathHelper.predicateForPathMatcher(
+            return PredicateFromPathMatcher.create(
                     directory, "glob", globString.get(), !canMatchSubdirectories());
         } else {
             // Match everything as no glob-string is defined anywhere

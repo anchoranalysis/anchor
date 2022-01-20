@@ -1,17 +1,16 @@
-package org.anchoranalysis.io.input.path.matcher;
+package org.anchoranalysis.io.input.bean.path.matcher;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
 
 import java.io.File;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
-import org.anchoranalysis.core.progress.Progress;
+import org.anchoranalysis.io.input.path.matcher.DualDirectoryFixture;
+import org.anchoranalysis.io.input.path.matcher.DualPathPredicates;
+import org.anchoranalysis.io.input.path.matcher.FindFilesException;
 import org.anchoranalysis.test.TestLoader;
-import org.mockito.InOrder;
 
 /**
  * Executes a search on a {@link FindMatchingFiles} on two directories in the resources, and asserts
@@ -73,27 +72,11 @@ class FindMatchingFilesFixture {
             String assertMessage)
             throws FindFilesException {
 
-        PathMatchConstraints constraints = new PathMatchConstraints(predicates);
-
-        Progress progress = mock(Progress.class);
-
-        FindMatchingFiles finder = new FindMatchingFiles(recursive, Optional.of(progress));
-        List<File> files = finder.search(directory, constraints);
+        List<File> files =
+                FindMatchingFiles.search(
+                        directory, predicates, recursive, Optional.empty(), Optional.empty());
 
         // Check we found the expected number of files
         assertEquals(assertMessage, expectedNumberFound, files.size());
-        verifyProgress(progress);
-    }
-
-    /** Verify the methods were called on {@link Progress} roughly as expected. */
-    private static void verifyProgress(Progress progress) {
-        // Check that progress was handled as expected
-        InOrder inOrder = inOrder(progress);
-        inOrder.verify(progress, times(1)).open();
-        inOrder.verify(progress, times(1)).setMin(anyInt());
-        inOrder.verify(progress, times(1)).setMax(anyInt());
-        inOrder.verify(progress, atLeastOnce()).update(anyInt());
-        inOrder.verify(progress, times(1)).close();
-        inOrder.verifyNoMoreInteractions();
     }
 }

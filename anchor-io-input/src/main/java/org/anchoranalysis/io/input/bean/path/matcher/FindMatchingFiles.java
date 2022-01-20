@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.io.input.path.matcher;
+package org.anchoranalysis.io.input.bean.path.matcher;
 
 import java.io.File;
 import java.io.IOException;
@@ -34,22 +34,63 @@ import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.EnumSet;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.core.log.Logger;
+import org.anchoranalysis.core.progress.Progress;
+import org.anchoranalysis.io.input.path.matcher.DualPathPredicates;
+import org.anchoranalysis.io.input.path.matcher.FindFilesException;
 
+/**
+ * Finds files in a {@code directory} that satisfy certain constraints.
+ *
+ * <p>It may be searched recursively or not.
+ *
+ * <p>It is designed to keep a {@link Progress} approximately up to date, so it can be visually
+ * communicated how much of the search has progressed. It achieves this <b>very approximately</b> by
+ * searching for top-level directories, and considering that each represents a similar block of
+ * progress.
+ *
+ * @author Owen Feehan
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-class WalkSingleDirectory {
+class FindMatchingFiles {
 
-    public static void apply(Path dir, PathMatchConstraints constraints, List<File> listOut)
+    /**
+     * Searches a {@code directory} for files that match the {@code constraints} - with an optional
+     * logger.
+     *
+     * <p>Assign 1 to {@code maxDirectoryDepth} to consider only the immediate files in {@code
+     * directory}.
+     *
+     * @param directory the directory to search.
+     * @param constraints the constraints applied to the paths.
+     * @param recursive whether to search recursively.
+     * @param maxDirectoryDepth limits on the depth of how many sub-directories are to be recursed.
+     *     If unassigned, there is no limit.
+     * @param logger logs unexpected non-fatal issues that are encountered.
+     * @return a newly created list containing all files in {@code directory} that match the
+     *     constraints.
+     * @throws FindFilesException if a fatal error is encountered during the search.
+     */
+    public static List<File> search(
+            Path directory,
+            DualPathPredicates predicates,
+            boolean recursive,
+            Optional<Integer> maxDirectoryDepth,
+            Optional<Logger> logger)
             throws FindFilesException {
 
+        List<File> out = new LinkedList<>();
         try {
             Files.walkFileTree(
-                    dir,
+                    directory,
                     EnumSet.of(FileVisitOption.FOLLOW_LINKS),
-                    constraints.getMaxDirectoryDepth(),
-                    new AddFilesToList(listOut, constraints.getPredicates()));
+                    recursive ? maxDirectoryDepth.orElse(Integer.MAX_VALUE) : 1,
+                    new ConsumeMatchingFilesVisitor(predicates, out::add));
         } catch (AccessDeniedException e) {
             throw new FindFilesException(String.format("Cannot access directory: %s", e.getFile()));
         } catch (FileSystemException e) {
@@ -60,5 +101,6 @@ class WalkSingleDirectory {
             throw new FindFilesException(
                     String.format("An IO error occurring accessing directory: %s", e.toString()));
         }
+        return out;
     }
 }
