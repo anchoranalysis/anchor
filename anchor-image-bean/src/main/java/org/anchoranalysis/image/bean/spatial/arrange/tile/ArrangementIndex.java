@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Stream;
+import org.anchoranalysis.core.time.OperationContext;
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.ArrangeStackException;
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.StackArrangement;
 import org.anchoranalysis.image.bean.spatial.arrange.StackArranger;
@@ -56,10 +57,15 @@ class ArrangementIndex {
      * @param extents the respective sizes to arrange.
      * @param arrangers a {@link StackArranger} for each cell in the table.
      * @param tableSize the table size, in columns (x-dimension) and rows (y-dimension).
+     * @param context objects for the operation.
      * @throws ArrangeStackException if the {@code stacks} and {@code arrangers} do not match
      *     expectations, or otherwise an error occurs.
      */
-    public ArrangementIndex(Iterator<Extent> extents, ArrangerIndex arrangers, Extent tableSize)
+    public ArrangementIndex(
+            Iterator<Extent> extents,
+            ArrangerIndex arrangers,
+            Extent tableSize,
+            OperationContext context)
             throws ArrangeStackException {
 
         rows = new ArrayList<>();
@@ -73,7 +79,8 @@ class ArrangementIndex {
                     return;
                 }
 
-                StackArrangement item = arrangers.getForCell(column, row).arrangeStacks(extents);
+                StackArrangement item =
+                        arrangers.getForCell(column, row).arrangeStacks(extents, context);
 
                 List<StackArrangement> currentRows = getListOrAdd(rows, row);
                 List<StackArrangement> currentColumns = getListOrAdd(columns, column);

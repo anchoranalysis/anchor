@@ -11,6 +11,7 @@ import org.anchoranalysis.image.voxel.resizer.Linear;
 import org.anchoranalysis.image.voxel.resizer.VoxelsResizer;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.ReadableTuple3i;
+import org.anchoranalysis.test.LoggerFixture;
 
 /**
  * Tests by arranging two {@link RGBStack} of different sizes, the bigger colored entirely in cyan,
@@ -107,7 +108,10 @@ public class ColoredDualStackTester {
         } catch (BeanMisconfiguredException e) {
             throw new ArrangeStackException(e);
         }
-        return arranger.combine(DualStacks.asList(CYAN, MAGENTA, flattenSmall), RESIZER);
+        return arranger.combine(
+                DualStacks.asList(CYAN, MAGENTA, flattenSmall),
+                RESIZER,
+                LoggerFixture.suppressedOperationContext());
     }
 
     /**

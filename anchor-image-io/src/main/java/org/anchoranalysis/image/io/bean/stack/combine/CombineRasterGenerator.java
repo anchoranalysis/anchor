@@ -61,10 +61,6 @@ public class CombineRasterGenerator<T> extends AnchorBean<CombineRasterGenerator
         generatorList.add(generator);
     }
 
-    public RasterGenerator<T> createGenerator() {
-        return new CombineGenerator<>(arrange, generatorList, interpolator.voxelsResizer());
-    }
-
     @Override
     public String describeBean() {
         return getBeanName();

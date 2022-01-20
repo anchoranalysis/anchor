@@ -28,6 +28,7 @@ package org.anchoranalysis.image.bean.spatial.arrange;
 
 import java.util.Iterator;
 import java.util.Stack;
+import org.anchoranalysis.core.time.OperationContext;
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.ArrangeStackException;
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.StackArrangement;
 import org.anchoranalysis.spatial.box.BoundingBox;
@@ -44,7 +45,8 @@ import org.anchoranalysis.spatial.box.Extent;
 public class Single extends StackArranger {
 
     @Override
-    public StackArrangement arrangeStacks(Iterator<Extent> extents) throws ArrangeStackException {
+    public StackArrangement arrangeStacks(Iterator<Extent> extents, OperationContext context)
+            throws ArrangeStackException {
 
         if (extents.hasNext()) {
             Extent extent = extents.next();

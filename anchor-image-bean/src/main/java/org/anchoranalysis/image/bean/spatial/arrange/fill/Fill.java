@@ -12,6 +12,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.FunctionalList;
+import org.anchoranalysis.core.time.OperationContext;
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.ArrangeStackException;
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.BoundingBoxEnclosed;
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.StackArrangement;
@@ -66,7 +67,8 @@ public class Fill extends StackArranger {
     }
 
     @Override
-    public StackArrangement arrangeStacks(Iterator<Extent> extents) throws ArrangeStackException {
+    public StackArrangement arrangeStacks(Iterator<Extent> extents, OperationContext context)
+            throws ArrangeStackException {
         List<ExtentToArrange> elements = createElements(extents);
 
         // In case there are fewer elements than rows, we change the number of rows
@@ -74,7 +76,11 @@ public class Fill extends StackArranger {
 
         try {
             // Partition the images, so that each row has a roughly similar sum of aspect-ratios
-            List<List<ExtentToArrange>> partitions = partitionExtents(elements, numberRowsMin);
+            List<List<ExtentToArrange>> partitions =
+                    context.getExecutionTimeRecorder()
+                            .recordExecutionTime(
+                                    "Partition extents",
+                                    () -> partitionExtents(elements, numberRowsMin));
 
             Extent combinedSize =
                     FitCombinedScaler.scaleImagesToCombine(partitions, !varyNumberImagesPerRow);

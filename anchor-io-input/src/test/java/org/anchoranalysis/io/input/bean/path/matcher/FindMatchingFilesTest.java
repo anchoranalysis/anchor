@@ -1,6 +1,8 @@
-package org.anchoranalysis.io.input.path.matcher;
+package org.anchoranalysis.io.input.bean.path.matcher;
 
 import java.nio.file.Path;
+import org.anchoranalysis.io.input.path.matcher.DualPathPredicates;
+import org.anchoranalysis.io.input.path.matcher.FindFilesException;
 import org.anchoranalysis.test.TestLoader;
 import org.junit.jupiter.api.Test;
 

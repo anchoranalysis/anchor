@@ -29,6 +29,7 @@ package org.anchoranalysis.image.io.bean.stack.combine;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.functional.FunctionalList;
+import org.anchoranalysis.core.time.OperationContext;
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.ArrangeStackException;
 import org.anchoranalysis.image.bean.spatial.arrange.StackArranger;
 import org.anchoranalysis.image.core.stack.RGBStack;
@@ -45,6 +46,7 @@ class CombineGenerator<T> extends RasterGeneratorSelectFormat<T> {
     private final StackArranger arrangeRaster;
     private final List<RasterGenerator<T>> generators;
     private final VoxelsResizer resizer;
+    private final OperationContext context;
 
     @Override
     public Stack transform(T element) throws OutputWriteFailedException {
@@ -58,7 +60,7 @@ class CombineGenerator<T> extends RasterGeneratorSelectFormat<T> {
             //
             // We assume iterable generators always produce images of the same size
             //   and base our measurements on the first call to generate
-            return arrangeRaster.combine(generated, resizer).asStack();
+            return arrangeRaster.combine(generated, resizer, context).asStack();
 
         } catch (ArrangeStackException e) {
             throw new OutputWriteFailedException(e);

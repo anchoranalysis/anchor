@@ -36,8 +36,13 @@ import org.anchoranalysis.core.functional.checked.CheckedPredicate;
 import org.anchoranalysis.core.system.path.PathDifference;
 import org.anchoranalysis.core.system.path.PathDifferenceException;
 
+/**
+ * Creates a predicate that performs matching, using a {@link PathMatcher} to perform the matching.
+ *
+ * @author Owen Feehan
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-class FilterPathHelper {
+class PredicateFromPathMatcher {
 
     /**
      * Creates a predicate that performs matching, using a {@link PathMatcher} to perform the
@@ -54,7 +59,7 @@ class FilterPathHelper {
      * @return a newly created predicate that, given a path, returns true if matches, and false
      *     otherwise.
      */
-    public static CheckedPredicate<Path, IOException> predicateForPathMatcher(
+    public static CheckedPredicate<Path, IOException> create(
             Path directory, String filterType, String fileFilter, boolean filenameOnly) {
         PathMatcher matcher =
                 directory.getFileSystem().getPathMatcher(filterType + ":" + fileFilter);
@@ -82,6 +87,7 @@ class FilterPathHelper {
         }
     }
 
+    /** Match against the relative path from {@code directory} to {@code path}. */
     private static boolean matchRelativePath(Path path, Path directory, Predicate<Path> predicate)
             throws IOException {
         try {
@@ -92,6 +98,7 @@ class FilterPathHelper {
         }
     }
 
+    /** Match against the filename only in {@code path}. */
     private static boolean matchFilename(Path path, Predicate<Path> predicate) {
         return predicate.test(path.getFileName());
     }

@@ -19,7 +19,7 @@ import org.anchoranalysis.test.TestLoader;
  * @author owen
  */
 @AllArgsConstructor
-class DualDirectoryFixture {
+public class DualDirectoryFixture {
 
     /** Path in src/test/resources to the directory, containing the subdirectories to test. */
     private static final String DIRECTORY_PARENT = "FindMatchingFiles/";

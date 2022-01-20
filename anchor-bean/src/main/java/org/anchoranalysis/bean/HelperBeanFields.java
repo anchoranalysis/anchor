@@ -58,6 +58,7 @@ class HelperBeanFields {
                     FunctionalList.mapToListOptional(
                             bean.fields(),
                             OperationFailedException.class,
+                            false,
                             field -> maybeDescribeChildBean(bean, field));
             return String.join(", ", descriptions);
 
