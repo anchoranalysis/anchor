@@ -27,7 +27,7 @@
 package org.anchoranalysis.io.input.bean.path.matcher;
 
 import java.io.IOException;
-import java.nio.file.FileSystem;	//NOSONAR
+import java.nio.file.FileSystem; // NOSONAR
 import java.nio.file.Path;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
@@ -53,12 +53,13 @@ import org.anchoranalysis.io.input.InputReadFailedException;
  */
 @NoArgsConstructor
 @AllArgsConstructor
-public class MatchGlob extends PathMatcher {
-	
+public class MatchGlob extends FilePathMatcher {
+
     // START BEAN FIELDS
     /**
-     * The string describing a glob e.g. "*.jpg". If empty, then the inputFilterGlob from
-     * inputContext is used
+     * The string describing a glob e.g. "*.jpg".
+     *
+     * <p>If empty, then it is populated from the {@link InputContextParameters} where they exist.
      */
     @BeanField @AllowEmpty @Getter @Setter private String glob = "";
     // END BEAN FIELDS
@@ -67,13 +68,25 @@ public class MatchGlob extends PathMatcher {
     protected CheckedPredicate<Path, IOException> createMatcherFile(
             Path directory, Optional<InputContextParameters> inputContext)
             throws InputReadFailedException {
-        return FilterPathHelper.createPredicate(directory, "glob", globString(inputContext));
+        Optional<String> globString = globString(inputContext);
+        if (globString.isPresent()) {
+            return FilterPathHelper.predicateForPathMatcher(
+                    directory, "glob", globString.get(), !canMatchSubdirectories());
+        } else {
+            // Match everything as no glob-string is defined anywhere
+            return path -> true;
+        }
     }
 
-    private String globString(Optional<InputContextParameters> inputContext)
+    @Override
+    protected boolean canMatchSubdirectories() {
+        return glob.contains("**");
+    }
+
+    private Optional<String> globString(Optional<InputContextParameters> inputContext)
             throws InputReadFailedException {
         if (!glob.isEmpty()) {
-            return glob;
+            return Optional.of(glob);
         } else if (inputContext.isPresent()) {
             return inputContext.get().getInputFilterGlob();
         } else {

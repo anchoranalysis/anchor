@@ -73,7 +73,23 @@ public class FindMatchingFiles {
     }
 
     /**
-     * Searches a {@code directory} for files that match the {@code constraints}.
+     * Searches a {@code directory} for files that match the {@code constraints} - without a logger.
+     *
+     * @param directory the directory to search.
+     * @param constraints the constraints applied to the paths.
+     * @param logger logs unexpected non-fatal issues that are encountered.
+     * @return a newly created list containing all files in {@code directory} that match the
+     *     constraints.
+     * @throws FindFilesException if a fatal error is encountered during the search.
+     */
+    public List<File> search(Path directory, PathMatchConstraints constraints)
+            throws FindFilesException {
+        return search(directory, constraints, Optional.empty());
+    }
+
+    /**
+     * Searches a {@code directory} for files that match the {@code constraints} - with an optional
+     * logger.
      *
      * @param directory the directory to search.
      * @param constraints the constraints applied to the paths.

@@ -51,7 +51,7 @@ public class InputContextParameters {
     @Getter private Optional<Path> inputDirectory = Optional.empty();
 
     /** A glob that can be used by beans to filter input */
-    @Getter @Setter private String inputFilterGlob = "*";
+    @Getter @Setter private Optional<String> inputFilterGlob = Optional.empty();
 
     /** A list of extensions that can be used filter inputs */
     @Getter @Setter private Set<String> inputFilterExtensions;

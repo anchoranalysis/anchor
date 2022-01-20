@@ -77,7 +77,7 @@ public class ExecutionArguments {
         out.setDebugModeParameters(debugModeParameters);
         out.setInputDirectory(input.getDirectory());
         out.setInputPaths(input.getPaths());
-        input.getFilterGlob().ifPresent(out::setInputFilterGlob);
+        out.setInputFilterGlob(input.getFilterGlob());
         input.getFilterExtensions().ifPresent(out::setInputFilterExtensions);
         out.setIdentifierSubrange(input.getIdentifierSubrange());
         out.setRelativeForIdentifier(input.isRelativeForIdentifier());

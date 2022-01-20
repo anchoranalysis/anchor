@@ -34,6 +34,7 @@ import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 
 /**
  * Calculates the <i>"difference"</i> between a path and a base.
@@ -48,6 +49,7 @@ import lombok.RequiredArgsConstructor;
  * @author Owen Feehan
  */
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+@ToString
 public class PathDifference {
 
     /** The file-name component of the difference, if it exists. */

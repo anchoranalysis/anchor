@@ -99,9 +99,9 @@ public enum ImageFileFormat implements FileFormat {
     }
 
     private ImageFileFormat(String defaultExtension, Optional<String> alternativeExtension) {
-        this.defaultExtension = FormatExtensions.normalizeToLowerCase(defaultExtension);
+        this.defaultExtension = FormatExtensionsHelper.normalizeToLowerCase(defaultExtension);
         this.alternativeExtension =
-                alternativeExtension.map(FormatExtensions::normalizeToLowerCase);
+                alternativeExtension.map(FormatExtensionsHelper::normalizeToLowerCase);
     }
 
     /**

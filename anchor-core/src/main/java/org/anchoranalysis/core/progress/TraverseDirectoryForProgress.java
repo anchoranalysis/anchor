@@ -118,7 +118,7 @@ public class TraverseDirectoryForProgress {
         return new TraversalResult(new ArrayList<>(), filesOut, 1);
     }
 
-    private static <E extends Exception> boolean subdirectoriesFor(
+    private static boolean subdirectoriesFor(
             Path parent,
             Optional<List<Path>> directoriesOut,
             Optional<List<Path>> filesOut,

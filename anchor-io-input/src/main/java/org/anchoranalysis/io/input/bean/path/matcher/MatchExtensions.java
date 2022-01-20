@@ -52,10 +52,11 @@ import org.anchoranalysis.io.input.InputReadFailedException;
  * @author Owen Feehan
  */
 @NoArgsConstructor
-public class MatchExtensions extends PathMatcher {
+public class MatchExtensions extends FilePathMatcher {
 
     // START BEAN PROPERTIES
-    @BeanField @OptionalBean @Getter @Setter private PathMatcher matcher;
+    /** A secondary matcher, which is required additionally match (as well as the extension). */
+    @BeanField @OptionalBean @Getter @Setter private FilePathMatcher matcher;
 
     /**
      * A set of file-extensions (without the period), one of which must match the end of a path.
@@ -72,11 +73,11 @@ public class MatchExtensions extends PathMatcher {
     // END BEAN PROPERTIES
 
     /**
-     * Create for specific extension.
+     * Create for specific extensions.
      *
-     * @param extension the extension.
+     * @param extensions the extensions.
      */
-    public MatchExtensions(String extension) {
+    public MatchExtensions(String... extension) {
         this.extensions = new StringSet(extension);
     }
 
@@ -85,6 +86,7 @@ public class MatchExtensions extends PathMatcher {
             Path directory, Optional<InputContextParameters> inputContext)
             throws InputReadFailedException {
 
+        // TODO replace with a prie
         Set<String> fileExtensions = fileExtensions(inputContext);
 
         if (matcher != null) {
@@ -94,6 +96,11 @@ public class MatchExtensions extends PathMatcher {
         } else {
             return path -> matchesAnyExtension(path, fileExtensions);
         }
+    }
+
+    @Override
+    protected boolean canMatchSubdirectories() {
+        return true;
     }
 
     // Does a path end with at least one of the extensions? Or fileExtensions are empty.
