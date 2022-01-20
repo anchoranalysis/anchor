@@ -83,15 +83,6 @@ class ExtentToArrange implements Comparable<ExtentToArrange> {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        ExtentToArrange other = (ExtentToArrange) obj;
-        return extent.x() == other.getExtent().x();
-    }
-
-    @Override
     public int compareTo(ExtentToArrange o) {
         return -1 * extent.compareTo(o.extent);
     }

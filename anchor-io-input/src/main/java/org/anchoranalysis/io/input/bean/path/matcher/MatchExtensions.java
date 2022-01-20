@@ -30,7 +30,6 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -38,6 +37,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.primitive.StringSet;
+import org.anchoranalysis.core.collection.StringSetTrie;
 import org.anchoranalysis.core.format.FormatExtensions;
 import org.anchoranalysis.core.functional.checked.CheckedPredicate;
 import org.anchoranalysis.core.system.path.ExtensionUtilities;
@@ -52,10 +52,11 @@ import org.anchoranalysis.io.input.InputReadFailedException;
  * @author Owen Feehan
  */
 @NoArgsConstructor
-public class MatchExtensions extends PathMatcher {
+public class MatchExtensions extends FilePathMatcher {
 
     // START BEAN PROPERTIES
-    @BeanField @OptionalBean @Getter @Setter private PathMatcher matcher;
+    /** A secondary matcher, which is required additionally match (as well as the extension). */
+    @BeanField @OptionalBean @Getter @Setter private FilePathMatcher matcher;
 
     /**
      * A set of file-extensions (without the period), one of which must match the end of a path.
@@ -72,11 +73,11 @@ public class MatchExtensions extends PathMatcher {
     // END BEAN PROPERTIES
 
     /**
-     * Create for specific extension.
+     * Create for specific extensions.
      *
-     * @param extension the extension.
+     * @param extension an extension.
      */
-    public MatchExtensions(String extension) {
+    public MatchExtensions(String... extension) {
         this.extensions = new StringSet(extension);
     }
 
@@ -85,7 +86,7 @@ public class MatchExtensions extends PathMatcher {
             Path directory, Optional<InputContextParameters> inputContext)
             throws InputReadFailedException {
 
-        Set<String> fileExtensions = fileExtensions(inputContext);
+        StringSetTrie fileExtensions = fileExtensions(inputContext);
 
         if (matcher != null) {
             CheckedPredicate<Path, IOException> firstPred =
@@ -96,8 +97,13 @@ public class MatchExtensions extends PathMatcher {
         }
     }
 
+    @Override
+    protected boolean canMatchSubdirectories() {
+        return true;
+    }
+
     // Does a path end with at least one of the extensions? Or fileExtensions are empty.
-    private boolean matchesAnyExtension(Path path, Set<String> fileExtensions) {
+    private boolean matchesAnyExtension(Path path, StringSetTrie fileExtensions) {
 
         if (fileExtensions.isEmpty()) {
             // Note SPECIAL CASE. When empty, the check isn't applied, so is always true
@@ -113,13 +119,13 @@ public class MatchExtensions extends PathMatcher {
         }
     }
 
-    private Set<String> fileExtensions(Optional<InputContextParameters> inputContext) {
+    private StringSetTrie fileExtensions(Optional<InputContextParameters> inputContext) {
         if (prioritizeInputContext
                 && inputContext.isPresent()
                 && inputContext.get().getInputFilterExtensions() != null) {
             return inputContext.get().getInputFilterExtensions();
         } else {
-            return extensions.set();
+            return new StringSetTrie(extensions.set());
         }
     }
 

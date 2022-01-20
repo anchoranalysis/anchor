@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.core.progress;
+package org.anchoranalysis.io.input.path.matcher;
 
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
@@ -44,7 +44,7 @@ import org.anchoranalysis.core.functional.checked.CheckedPredicate;
  * @author Owen Feehan
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class TraverseDirectoryForProgress {
+class TraverseDirectoryForProgress {
 
     /**
      * Performs a breadth-first traversal of the subdirectories of a {@code path} <i>recursively</i>
@@ -90,7 +90,7 @@ public class TraverseDirectoryForProgress {
             filesOut.addAll(filesOutCurrent);
 
             if (subdirectories.isEmpty()) {
-                return new TraversalResult(new ArrayList<>(), filesOut, depth);
+                return new TraversalResult(filesOut, depth);
             } else if (subdirectories.size() > minNumberDirectories || depth == maxDirectoryDepth) {
                 return new TraversalResult(subdirectories, filesOut, depth);
             }
@@ -115,10 +115,10 @@ public class TraverseDirectoryForProgress {
             Path path, CheckedPredicate<Path, IOException> matcherDirectory) throws IOException {
         List<Path> filesOut = new ArrayList<>();
         subdirectoriesFor(path, Optional.empty(), Optional.of(filesOut), matcherDirectory);
-        return new TraversalResult(new ArrayList<>(), filesOut, 1);
+        return new TraversalResult(filesOut, 1);
     }
 
-    private static <E extends Exception> boolean subdirectoriesFor(
+    private static boolean subdirectoriesFor(
             Path parent,
             Optional<List<Path>> directoriesOut,
             Optional<List<Path>> filesOut,
@@ -141,11 +141,11 @@ public class TraverseDirectoryForProgress {
     }
 
     /**
-     * Adds a path to either the directoriesOut or filesOut
+     * Adds a path to either the {@code directoriesOut} or {@code filesOut}.
      *
-     * @param directoriesOut directories-added (if present)
-     * @param filesOut files-added (if present)
-     * @return true if directory is added, false otherwise
+     * @param directoriesOut directories-added (if present).
+     * @param filesOut files-added (if present).
+     * @return true if directory is added, false otherwise.
      */
     private static boolean addFileOrDirectory(
             Path file, Optional<List<Path>> directoriesOut, Optional<List<Path>> filesOut) {

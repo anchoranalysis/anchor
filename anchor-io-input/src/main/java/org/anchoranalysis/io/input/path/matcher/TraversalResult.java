@@ -23,9 +23,10 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.core.progress;
+package org.anchoranalysis.io.input.path.matcher;
 
 import java.nio.file.Path;
+import java.util.LinkedList;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Value;
@@ -35,9 +36,9 @@ import lombok.Value;
  *
  * @author Owen Feehan
  */
-@AllArgsConstructor
 @Value
-public class TraversalResult {
+@AllArgsConstructor
+class TraversalResult {
 
     /**
      * All the directories in the bottom-most depth that was traversed.
@@ -54,8 +55,21 @@ public class TraversalResult {
     private List<Path> files;
 
     /**
-     * The depth of directories processed, where 1 = root directory traversed, 2 = root directory +
-     * one further level etc.
+     * The depth of directories processed, where {@code 1 = root directory} traversed, {@code 2 =
+     * root directory + one further level} etc.
      */
     private int depth;
+
+    /**
+     * Create with files and a depth, but no leaf directories.
+     *
+     * @param files all files in any directories that have been traversed.
+     * @param depth the depth of directories processed, where {@code 1 = root directory} traversed,
+     *     {@code 2 = root directory + one further level} etc.
+     */
+    public TraversalResult(List<Path> files, int depth) {
+        this.leafDirectories = new LinkedList<>();
+        this.files = files;
+        this.depth = depth;
+    }
 }

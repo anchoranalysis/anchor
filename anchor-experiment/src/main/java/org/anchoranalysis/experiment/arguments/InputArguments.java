@@ -28,9 +28,10 @@ package org.anchoranalysis.experiment.arguments;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
+import java.util.function.Supplier;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.core.collection.StringSetTrie;
 import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.core.index.range.IndexRangeNegative;
 
@@ -59,7 +60,7 @@ public class InputArguments {
      *
      * <p>{@link Optional#empty} implies no extension filters exist.
      */
-    @Getter private Optional<Set<String>> filterExtensions = Optional.empty();
+    @Getter private Optional<StringSetTrie> filterExtensions = Optional.empty();
 
     /**
      * If true, the entire filename or relative path (excluding extension) is used to determine a
@@ -119,13 +120,14 @@ public class InputArguments {
         this.identifierSubrange = Optional.of(identifierSubrange);
     }
 
-    public void assignFilterExtensionsIfMissing(Optional<Set<String>> filterExtensions) {
+    public void assignFilterExtensionsIfMissing(
+            Supplier<Optional<StringSetTrie>> filterExtensions) {
         if (!this.filterExtensions.isPresent()) {
-            this.filterExtensions = filterExtensions;
+            this.filterExtensions = filterExtensions.get();
         }
     }
 
-    public void assignFilterExtensions(Set<String> filterExtensions) {
+    public void assignFilterExtensions(StringSetTrie filterExtensions) {
         this.filterExtensions = Optional.of(filterExtensions);
     }
 

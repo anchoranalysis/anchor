@@ -25,10 +25,14 @@
  */
 package org.anchoranalysis.io.input.path.matcher;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.List;
+import java.util.function.Consumer;
 import lombok.AllArgsConstructor;
-import lombok.Value;
+import lombok.Getter;
+import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.functional.checked.CheckedPredicate;
 
 /**
@@ -37,12 +41,61 @@ import org.anchoranalysis.core.functional.checked.CheckedPredicate;
  * @author Owen Feehan
  */
 @AllArgsConstructor
-@Value
 public class DualPathPredicates {
 
     /** Only accepts files where the predicate returns true */
     private CheckedPredicate<Path, IOException> file;
 
     /** Only accepts any containing directories where the predicate returns true */
-    private CheckedPredicate<Path, IOException> directory;
+    @Getter private CheckedPredicate<Path, IOException> directory;
+
+    /**
+     * Whether the path to a particular file matches the predicate {@code file}?
+     *
+     * @param path the path.
+     * @return true if matches the predicate.
+     * @throws IOException if an error occurs testing the path.
+     */
+    public boolean matchFile(Path path) throws IOException {
+        return file.test(path);
+    }
+
+    /**
+     * Calls a {@link Consumer} on any path that matches the predicate {@code file}.
+     *
+     * @param paths the paths to test.
+     * @param consumerMatching the consumer to call if a path matches.
+     * @throws FindFilesException if an error occurs testing a path.
+     */
+    public void consumeMatchingFiles(List<Path> paths, Consumer<File> consumerMatching)
+            throws FindFilesException {
+        for (Path path : paths) {
+            try {
+                if (file.test(path)) {
+                    consumerMatching.accept(path.normalize().toFile());
+                }
+            } catch (IOException e) {
+                throw new FindFilesException(
+                        "An error occurred evaluating the predicate on a file-path", e);
+            }
+        }
+    }
+
+    /**
+     * Creates a new list of paths to leaf-directories that match the predicate {@code directory}.
+     *
+     * @param leafDirectories the paths to the directories to consider.
+     * @return a newly created list containing the elements of {@code leafDirectories} that match
+     *     {@code directory}.
+     * @throws FindFilesException if an error occurs testing a path.
+     */
+    public List<Path> matchingLeafDirectories(List<Path> leafDirectories)
+            throws FindFilesException {
+        try {
+            return FunctionalList.filterToList(leafDirectories, IOException.class, directory);
+        } catch (IOException e) {
+            throw new FindFilesException(
+                    "An error occurred evaluating the predicate on a file-path", e);
+        }
+    }
 }

@@ -47,12 +47,16 @@ import org.anchoranalysis.io.input.path.matcher.PathMatchConstraints;
 /**
  * Matches file-paths against some kind of pattern.
  *
+ * <p>Search operations can be executed against this pattern, to find all files in a directory that
+ * match.
+ *
  * @author Owen Feehan
  */
-public abstract class PathMatcher extends AnchorBean<PathMatcher> {
+public abstract class FilePathMatcher extends AnchorBean<FilePathMatcher> {
 
     /**
-     * Like {@link #matchingFiles(Path, boolean, boolean, boolean, Optional, Optional)} but uses sensible defaults.
+     * Like {@link #matchingFiles(Path, boolean, boolean, boolean, Optional, Optional)} but uses
+     * sensible defaults.
      *
      * <p>Hidden files are ignored.
      *
@@ -95,14 +99,14 @@ public abstract class PathMatcher extends AnchorBean<PathMatcher> {
             Optional<InputManagerParameters> parameters)
             throws InputReadFailedException {
 
-    	checkDirectoryPreconditions(directory);
-        
+        checkDirectoryPreconditions(directory);
+
         DualPathPredicates predicates =
                 createPredicates(
                         directory,
                         ignoreHidden,
                         parameters.map(InputManagerParameters::getInputContext));
-        
+
         Optional<Logger> logger =
                 OptionalFactory.create(
                         acceptDirectoryErrors && parameters.isPresent(),
@@ -111,7 +115,7 @@ public abstract class PathMatcher extends AnchorBean<PathMatcher> {
 
         PathMatchConstraints constraints = new PathMatchConstraints(predicates, maxDirectoryDepth);
         try {
-            return new FindMatchingFiles(recursive, progress)
+            return new FindMatchingFiles(recursive && canMatchSubdirectories(), progress)
                     .search(directory, constraints, logger);
         } catch (FindFilesException e) {
             throw new InputReadFailedException("Cannot find matching files", e);
@@ -131,6 +135,17 @@ public abstract class PathMatcher extends AnchorBean<PathMatcher> {
     protected abstract CheckedPredicate<Path, IOException> createMatcherFile(
             Path directory, Optional<InputContextParameters> inputContext)
             throws InputReadFailedException;
+
+    /**
+     * Determines if it possible to match a file in a subdirectory.
+     *
+     * <p>If it impossible to match a subdirectory, this allows us to disable any recursive search,
+     * as it is pointless effort.
+     *
+     * @return true if its possible for the predicate returned by {@code createMatcherFile} to match
+     *     a file in a subdirectory, false otherwise.
+     */
+    protected abstract boolean canMatchSubdirectories();
 
     private DualPathPredicates createPredicates(
             Path directory, boolean ignoreHidden, Optional<InputContextParameters> parameters)
@@ -155,10 +170,11 @@ public abstract class PathMatcher extends AnchorBean<PathMatcher> {
             return predicate;
         }
     }
-        
+
     /** Checks that the directory path satisifies preconditions. */
-    private static void checkDirectoryPreconditions(Path directory) throws InputReadFailedException {
-    	if (directory.toString().isEmpty()) {
+    private static void checkDirectoryPreconditions(Path directory)
+            throws InputReadFailedException {
+        if (directory.toString().isEmpty()) {
             throw new InputReadFailedException(
                     "The directory is unspecified (an empty string) which is not allowed. Consider using '.' for the current working directory");
         }

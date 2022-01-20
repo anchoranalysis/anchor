@@ -149,15 +149,13 @@ public class Align extends BoxAligner {
      * @param disconsideredLeft the first of this amount in {@code larger} is not considered for
      *     alignment. Alignment only occurs with the remaining space.
      * @return the minimum corner on the particular axis to locate the overlay.
-     * @throws OperationFailedException if an invalid value for a field was used.
      */
     private static int position(
             AlignmentOnDimension alignment,
             ToIntFunction<Extent> extractValue,
             Extent smaller,
             int disconsideredLeft,
-            Extent larger)
-            throws OperationFailedException {
+            Extent larger) {
         return alignment.align(
                 extractValue.applyAsInt(larger),
                 extractValue.applyAsInt(smaller),

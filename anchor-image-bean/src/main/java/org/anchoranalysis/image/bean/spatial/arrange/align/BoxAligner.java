@@ -39,7 +39,7 @@ public abstract class BoxAligner extends AnchorBean<BoxAligner> {
      */
     public BoundingBox align(BoundingBox smaller, BoundingBox larger)
             throws OperationFailedException {
-        checkCorner(smaller.cornerMin(), larger.cornerMin());
+        checkCorner(smaller.cornerMin());
         checkExtent(smaller.extent(), larger.extent());
         return alignAfterCheck(smaller, larger);
     }
@@ -129,8 +129,7 @@ public abstract class BoxAligner extends AnchorBean<BoxAligner> {
     public abstract BoundingBox alignAfterCheck(Extent smaller, BoundingBox larger)
             throws OperationFailedException;
 
-    private static void checkCorner(ReadableTuple3i smaller, ReadableTuple3i larger)
-            throws OperationFailedException {
+    private static void checkCorner(ReadableTuple3i smaller) throws OperationFailedException {
         if (smaller.z() != 0) {
             throw new OperationFailedException(
                     String.format(

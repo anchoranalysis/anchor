@@ -30,9 +30,9 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
+import org.anchoranalysis.core.collection.StringSetTrie;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.index.range.IndexRangeNegative;
 import org.anchoranalysis.io.input.bean.DebugModeParameters;
@@ -51,10 +51,10 @@ public class InputContextParameters {
     @Getter private Optional<Path> inputDirectory = Optional.empty();
 
     /** A glob that can be used by beans to filter input */
-    @Getter @Setter private String inputFilterGlob = "*";
+    @Getter @Setter private Optional<String> inputFilterGlob = Optional.empty();
 
-    /** A list of extensions that can be used filter inputs */
-    @Getter @Setter private Set<String> inputFilterExtensions;
+    /** A trie of extensions that can be used filter inputs */
+    @Getter @Setter private StringSetTrie inputFilterExtensions;
 
     /** Parameters for debug-mode (only defined if we are in debug mode) */
     @Getter @Setter private Optional<DebugModeParameters> debugModeParameters = Optional.empty();

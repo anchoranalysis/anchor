@@ -39,9 +39,9 @@ import org.anchoranalysis.core.format.ImageFileFormat;
 import org.anchoranalysis.core.functional.OptionalFactory;
 import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.input.bean.InputManagerParameters;
+import org.anchoranalysis.io.input.bean.path.matcher.FilePathMatcher;
 import org.anchoranalysis.io.input.bean.path.matcher.MatchExtensions;
 import org.anchoranalysis.io.input.bean.path.matcher.MatchGlob;
-import org.anchoranalysis.io.input.bean.path.matcher.PathMatcher;
 import org.anchoranalysis.io.input.file.FilesProviderException;
 import org.anchoranalysis.io.input.path.GlobExtractor;
 import org.anchoranalysis.io.input.path.GlobExtractor.GlobWithDirectory;
@@ -59,7 +59,8 @@ public class SearchDirectory extends FilesProviderWithDirectoryString {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter
-    private PathMatcher matcher = new MatchExtensions(ImageFileFormat.JPEG.getDefaultExtension());
+    private FilePathMatcher matcher =
+            new MatchExtensions(ImageFileFormat.JPEG.getDefaultExtension());
 
     /** If true the search is applied recursively over sub-directories. */
     @BeanField @Getter @Setter private boolean recursive = false;

@@ -388,10 +388,11 @@ public class FunctionalList {
      *     included in the returned list.
      * @param mapFunction function for mapping.
      * @return a newly created list.
-     * @throws E if an exception is thrown during mapping.
+     * @throws E if an exception is thrown while calling {@code predicate} or {@code mapFunction}.
      */
     public static <S, T, E extends Exception> List<T> filterAndMapToList(
-            List<S> list, Predicate<S> predicate, CheckedFunction<S, T, E> mapFunction) throws E {
+            List<S> list, CheckedPredicate<S, E> predicate, CheckedFunction<S, T, E> mapFunction)
+            throws E {
 
         List<T> out = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {

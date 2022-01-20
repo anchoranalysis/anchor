@@ -28,8 +28,6 @@ package org.anchoranalysis.core.format;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
-import java.util.Set;
-import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
@@ -71,7 +69,8 @@ public class FormatExtensions {
      * @return true if the filePath ends with the expected extension
      */
     public static boolean matches(String filePath, String extensionWithoutLeadingPeriod) {
-        return normalizeToLowerCase(filePath).endsWith("." + extensionWithoutLeadingPeriod);
+        return FormatExtensions.normalizeToLowerCase(filePath)
+                .endsWith("." + extensionWithoutLeadingPeriod);
     }
 
     /**
@@ -104,27 +103,29 @@ public class FormatExtensions {
     }
 
     /**
-     * Creates a set of extensions with the leading period.
+     * Removes a single leading period from a string, if one exists.
      *
-     * @param extensionsWithPeriod an array with extensions that each have a leading period
-     * @return a set with each element in the array but with the leading period removed.
+     * @param str a string that may or may not have a leading period.
+     * @return a string with the leading period remove, if it exists.
      */
-    public static Set<String> removeLeadingPeriod(String[] extensionsWithPeriod) {
-        return Arrays.stream(extensionsWithPeriod)
-                .map(extension -> extension.substring(1))
-                .collect(Collectors.toSet());
-    }
-
-    static String removeAnyLeadingPeriod(String identifier) {
-        if (!identifier.isEmpty() && identifier.charAt(0) == '.') {
-            return identifier.substring(1);
+    public static String removeAnyLeadingPeriod(String str) {
+        if (!str.isEmpty() && str.charAt(0) == '.') {
+            return str.substring(1);
         } else {
-            return identifier;
+            return str;
         }
     }
 
-    static String normalizeToLowerCase(String input) {
-        return input.toLowerCase();
+    /**
+     * Normalize an extension to lower-case.
+     *
+     * <p>This function exists to achieve normalization in a consistent way across many calls.
+     *
+     * @param extension the extension to normalize.
+     * @return a lower-case version of {@code extension}.
+     */
+    public static String normalizeToLowerCase(String extension) {
+        return extension.toLowerCase();
     }
 
     private static String changeExtension(

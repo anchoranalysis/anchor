@@ -30,6 +30,7 @@ import java.io.File;
 import java.nio.file.Path;
 import java.util.function.BiFunction;
 import lombok.Value;
+import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
 
 /**
  * A file with an associated unique name.
@@ -58,7 +59,11 @@ public class NamedFile {
     public NamedFile(String identifier, File file) {
         this.identifier = identifier;
         this.file = file;
-        assert (!identifier.endsWith(" "));
+        if (identifier.startsWith(" ") || identifier.endsWith(" ")) {
+            throw new AnchorFriendlyRuntimeException(
+                    "An identifier is not permitted to begin or end with whitespace: "
+                            + identifier);
+        }
     }
 
     /**
