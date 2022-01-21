@@ -33,6 +33,7 @@ import org.anchoranalysis.image.core.channel.convert.attached.ChannelConverterAt
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.convert.ToByteScaleByMinMaxValue;
 import org.anchoranalysis.image.voxel.convert.VoxelsConverter;
+import org.anchoranalysis.image.voxel.iterator.MinMaxRange;
 
 /**
  * Converts a {@link Channel} to {@link UnsignedByteBuffer} by scaling against the <b>maximum
@@ -58,9 +59,8 @@ public class IntensityRange implements ChannelConverterAttached<Channel, Unsigne
 
     @Override
     public void attachObject(Channel channel) {
-        voxelsConverter.setMinMaxValues(
-                channel.extract().voxelWithMinIntensity(),
-                channel.extract().voxelWithMaxIntensity());
+        MinMaxRange range = channel.extract().voxelsWithMinMaxIntensity();
+        voxelsConverter.setMinMaxValues(range.getMin(), range.getMax());
     }
 
     @Override
