@@ -31,6 +31,7 @@ import org.anchoranalysis.image.voxel.iterator.MinMaxRange;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.image.voxel.resizer.VoxelsResizer;
 import org.anchoranalysis.spatial.box.BoundingBox;
+import org.anchoranalysis.spatial.box.Extent;	//NOSONAR
 import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.point.ReadableTuple3i;
 
@@ -117,7 +118,7 @@ public interface VoxelsExtracter<T> {
     /**
      * Copies a bounding-box area to another {@link Voxels}.
      *
-     * <p>{@code from} and {@code destinationBox} must have identically-sized extents.
+     * <p>{@code from} and {@code destinationBox} must have identically-sized {@link Extent}s.
      *
      * @param from box to copy from (relative to the current voxels).
      * @param voxelsDestination where to copy into.
@@ -132,7 +133,7 @@ public interface VoxelsExtracter<T> {
      * not changed.
      *
      * <p>{@code from}'s bounding-box and {@code destinationBox} must have identically-sized
-     * extents.
+     * {@link Extent}s.
      *
      * @param from only copies voxels which correspond to an <i>on</i> voxels in the object-mask.
      * @param voxelsDestination where to copy into.
@@ -191,12 +192,16 @@ public interface VoxelsExtracter<T> {
     /**
      * Finds the minimum-value of any voxel and rounding down (floor) to the nearest long.
      *
+     *<p>The computational cost of the operation is {@code O(n)} in the number of voxels. The result is not cached.
+     *
      * @return the minimum-value.
      */
     long voxelWithMinIntensity();
 
     /**
      * Finds the maximum-value of any voxel and rounding up (ceiling) to the nearest long.
+     * 
+     * <p>The computational cost of the operation is {@code O(n)} in the number of voxels. The result is not cached.
      *
      * @return the maximum-value.
      */
@@ -209,8 +214,10 @@ public interface VoxelsExtracter<T> {
      *
      * <p>The maximum is rounded up (ceil) to the nearest long.
      *
-     * <p>This is often more efficient than calling {@link #voxelWithMinIntensity()} and {@link
+     * <p>This is efficient than calling {@link #voxelWithMinIntensity()} and {@link
      * #voxelWithMaxIntensity()} separately.
+     * 
+     * <p>The computational cost of the operation is {@code O(n)} in the number of voxels. The result is not cached.
      *
      * @return the minimum- and maximum values.
      */

@@ -38,6 +38,8 @@ public interface VoxelsPredicate {
 
     /**
      * Does at least one value satisfy the predicate - across all voxels?
+     * 
+     * <p>The computational cost of the operation is {@code O(n)} in the number of voxels in the worst-case. Typically, it exits earlier.
      *
      * @return true iff at least one value exists.
      */
@@ -45,6 +47,8 @@ public interface VoxelsPredicate {
 
     /**
      * Counts the number of values satisfying the predicate - across all voxels.
+     * 
+     * <p>The computational cost of the operation is {@code O(n)} in the number of voxels.
      *
      * @return the total count.
      */
@@ -53,6 +57,8 @@ public interface VoxelsPredicate {
     /**
      * Counts the number of values satisfying the predicate - but restricted to voxels corresponding
      * to <i>on</i> in an object-mask.
+     * 
+     * <p>The computational cost of the operation is {@code O(n)} in the number of voxels.
      *
      * @param object the object-mask.
      * @return the total count according to the above constraint.
@@ -61,6 +67,8 @@ public interface VoxelsPredicate {
 
     /**
      * Whether the count is greater than a particular threshold.
+     * 
+     * <p>The computational cost of the operation is {@code O(n)} in the number of voxels in the worst-case. Typically, it exits earlier.
      *
      * @param threshold the threshold.
      * @return true as soon as more voxels are counted than the threshold, false if it never occurs.
@@ -69,6 +77,8 @@ public interface VoxelsPredicate {
 
     /**
      * Whether the count is less than a particular threshold.
+     * 
+     * <p>The computational cost of the operation is {@code O(n)} in the number of voxels in the worst-case. Typically, it exits earlier.
      *
      * @param threshold the threshold.
      * @return false as soon as as many voxels as threshold, true if it never occurs.
@@ -85,6 +95,8 @@ public interface VoxelsPredicate {
      *
      * <p>Unlike {@link #deriveObjectTight}, this operates only within a certain bounding-box, and
      * always uses an identical bounding-box for the created {@link ObjectMask} as {@code box}.
+     * 
+     * <p>The computational cost of the operation is {@code O(n)} in the number of voxels in {@code box} only.
      *
      * @param box bounding-box.
      * @return an object-mask referring to the bounding-box, with the same corner-position and size
@@ -102,6 +114,8 @@ public interface VoxelsPredicate {
      *
      * <p>Unlike {@link #deriveObject(BoundingBox)}, this operates all the voxels, and will
      * typically use a much smaller bounding-box (fewer voxels) to describe the <i>on</i> voxels.
+     * 
+     * <p>The computational cost of the operation is {@code O(n)} in the number of voxels in {@code box} only.
      *
      * @return an object-mask indicating all voxels that match the predicate, and with as minimal a
      *     bounding-box as possible to contain these. If no voxels match, then {@link
