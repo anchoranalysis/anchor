@@ -56,6 +56,30 @@ public class StringUtilities {
                 !components.isEmpty(), () -> String.join(delimeter, components));
     }
 
+    /**
+     * Left-pad a string with whitespace, so it reaches a fixed length.
+     *
+     * @param string the string without padding.
+     * @param targetLength the desired total length of string, for which padding may be added.
+     * @return a string, is either padded with whitespace to give a length {@code targetLength}
+     *     unless it is already larger than {@code targetLength}.
+     */
+    public static String leftPad(String string, int targetLength) {
+        return String.format("%1$" + targetLength + "s", string); // NOSONAR
+    }
+
+    /**
+     * Right-pad a string with whitespace, so it reaches a fixed length.
+     *
+     * @param string the string without padding.
+     * @param targetLength the desired total length of string, for which padding may be added.
+     * @return a string, is either padded with whitespace to give a length {@code targetLength}
+     *     unless it is already larger than {@code targetLength}.
+     */
+    public static String rightPad(String string, int targetLength) {
+        return String.format("%1$-" + targetLength + "s", string); // NOSONAR
+    }
+
     /** Creates a list of strings, where strings are included only if they are non-empty. */
     private static List<String> listOfNonEmptyStrings(String... stringMaybeEmpty) {
         return Arrays.stream(stringMaybeEmpty)

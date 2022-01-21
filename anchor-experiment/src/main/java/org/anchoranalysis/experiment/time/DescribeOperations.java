@@ -29,6 +29,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.time.RecordedExecutionTimes;
 import org.anchoranalysis.core.value.LanguageUtilities;
+import org.anchoranalysis.core.value.StringUtilities;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -72,7 +73,8 @@ class DescribeOperations {
         String prefix = StringUtils.repeat("..", operation.getNumberParentOperations());
 
         String paddedIdentifier =
-                rightPadding(prefix + operation.getOperationIdentifier(), WIDTH_IDENTIFIER);
+                StringUtilities.rightPad(
+                        prefix + operation.getOperationIdentifier(), WIDTH_IDENTIFIER);
         String suffix =
                 String.format(
                         "across %d %s",
@@ -87,16 +89,7 @@ class DescribeOperations {
     }
 
     private static String describeTime(double executionTime) {
-        return leftPadding(String.format("%.3f s", executionTime), WIDTH_EXECUTION_TIME);
-    }
-
-    /** Left-pad a string with spaces, so it reaches a fixed length. */
-    private static String leftPadding(String string, int number) {
-        return String.format("%1$" + number + "s", string); // NOSONAR
-    }
-
-    /** Right-pad a string with spaces, so it reaches a fixed length. */
-    private static String rightPadding(String string, int number) {
-        return String.format("%1$-" + number + "s", string); // NOSONAR
+        return StringUtilities.leftPad(
+                String.format("%.3f s", executionTime), WIDTH_EXECUTION_TIME);
     }
 }
