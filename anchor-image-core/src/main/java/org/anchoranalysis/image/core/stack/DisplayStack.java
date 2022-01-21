@@ -62,12 +62,20 @@ import org.anchoranalysis.spatial.point.Point3i;
  * <p>A converter is optionally associated with each channel, used to convert the source images into
  * unsigned 8-bit.
  *
+ * <p>When only two channels are present, one particular channel (with index={@value
+ * DisplayStack#CHANNEL_TO_SKIP_WHEN_TWO}) is left blank.
+ *
  * @author Owen Feehan
  */
 public class DisplayStack {
 
     private static final double QUANTILE_LOWER = 0.0001;
     private static final double QUANTILE_UPPER = 0.9999;
+
+    /**
+     * Index of channel to leave blank when there are only two channels. 0=first, 1=second, 2=third.
+     */
+    public static final int CHANNEL_TO_SKIP_WHEN_TWO = 1;
 
     /** The underlying stack that will be displayed, possibly after conversion. */
     @Getter private final Stack stack;
@@ -381,21 +389,18 @@ public class DisplayStack {
     private Stack deriveStack(IntFunction<Channel> indexToChannel) {
         Stack out = new Stack(stack.getNumberChannels() == 3);
         int eventualNumberChannels = stack.getNumberChannels() == 1 ? 1 : 3;
-        int index = 0;
-        for (index = 0; index < stack.getNumberChannels(); index++) {
+        for (int index = 0; index < eventualNumberChannels; index++) {
             try {
-                out.addChannel(indexToChannel.apply(index));
+                if (getNumberChannels() == 2 && index == CHANNEL_TO_SKIP_WHEN_TWO) {
+                    out.addChannel(
+                            ChannelFactory.instance()
+                                    .create(stack.dimensions(), UnsignedByteVoxelType.INSTANCE));
+                } else {
+                    out.addChannel(indexToChannel.apply(translateChannelIndex(index)));
+                }
             } catch (IncorrectImageSizeException e) {
                 throw new AnchorImpossibleSituationException();
             }
-        }
-        while (index < eventualNumberChannels) {
-            try {
-                out.addBlankChannel();
-            } catch (OperationFailedException e) {
-                throw new AnchorImpossibleSituationException();
-            }
-            index++;
         }
         return out;
     }
@@ -412,11 +417,12 @@ public class DisplayStack {
 
     private void setConverterFor(
             int channelIndex,
+            Channel channelSource,
             Optional<ChannelConverterAttached<Channel, UnsignedByteBuffer>> converter)
             throws SetOperationFailedException {
         try {
             if (converter.isPresent()) {
-                converter.get().attachObject(stack.getChannel(channelIndex));
+                converter.get().attachObject(channelSource);
             }
         } catch (OperationFailedException e) {
             throw new SetOperationFailedException(e);
@@ -430,19 +436,45 @@ public class DisplayStack {
      */
     private void addConvertersAsNeeded(int eventualNumberChannels)
             throws SetOperationFailedException {
-        addEmptyConverters(eventualNumberChannels);
-        int numberConvertersToAdd = Math.min(getNumberChannels(), 3);
-        int index = 0;
-        for (index = 0; index < numberConvertersToAdd; index++) {
-            VoxelDataType dataType = stack.getChannel(index).getVoxelDataType();
+        addEmptyConverters(getNumberChannels());
+
+        // The index we retrieve from in the original channel
+        for (int index = 0; index < getNumberChannels(); index++) {
+            Channel channelSource = stack.getChannel(index);
+            VoxelDataType dataType = channelSource.getVoxelDataType();
             if (!dataType.equals(UnsignedByteVoxelType.INSTANCE)) {
-                setConverterFor(index, Optional.of(createConverterFor(dataType)));
+                setConverterFor(index, channelSource, Optional.of(createConverterFor(dataType)));
             }
         }
     }
 
+    /** Translates a destination channel index into a source index. */
+    private int translateChannelIndex(int index) {
+        if (getNumberChannels() == 1) {
+            // Always 0
+            return 0;
+        } else if (getNumberChannels() == 2) {
+            switch (CHANNEL_TO_SKIP_WHEN_TWO) {
+                case 0:
+                    return index - 1;
+                case 1:
+                    if (index == 2) {
+                        return 1;
+                    } else {
+                        return index;
+                    }
+                default:
+                    return index;
+            }
+            // Take care of the keep free channel
+        } else {
+            return index;
+        }
+    }
+
     private ChannelMapper createChannelMapper() {
-        return new ChannelMapper(stack::getChannel, converters::get);
+        return new ChannelMapper(
+                index -> stack.getChannel(translateChannelIndex(index)), converters::get);
     }
 
     /**
