@@ -30,6 +30,7 @@ import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.ProjectableBuffer;
 import org.anchoranalysis.image.voxel.buffer.max.MaxIntensityProjection;
 import org.anchoranalysis.image.voxel.buffer.mean.MeanIntensityProjection;
+import org.anchoranalysis.image.voxel.iterator.MinMaxRange;
 import org.anchoranalysis.spatial.box.Extent;
 
 class FloatImplementation extends VoxelsExtracterBase<FloatBuffer> {
@@ -50,7 +51,7 @@ class FloatImplementation extends VoxelsExtracterBase<FloatBuffer> {
     @Override
     public long voxelWithMaxIntensity() {
 
-        float max = Float.MAX_VALUE;
+        float max = Float.MIN_VALUE;
 
         Extent extent = voxels.extent();
 
@@ -72,7 +73,7 @@ class FloatImplementation extends VoxelsExtracterBase<FloatBuffer> {
     @Override
     public long voxelWithMinIntensity() {
 
-        float min = Float.MIN_VALUE;
+        float min = Float.MAX_VALUE;
 
         Extent extent = voxels.extent();
 
@@ -89,6 +90,31 @@ class FloatImplementation extends VoxelsExtracterBase<FloatBuffer> {
             }
         }
         return (long) Math.floor(min);
+    }
+
+    @Override
+    public MinMaxRange voxelsWithMinMaxIntensity() {
+        float min = Float.MAX_VALUE;
+        float max = Float.MIN_VALUE;
+
+        Extent extent = voxels.extent();
+
+        for (int z = 0; z < extent.z(); z++) {
+
+            FloatBuffer pixels = voxels.sliceBuffer(z);
+
+            while (pixels.hasRemaining()) {
+
+                float value = pixels.get();
+                if (value < min) {
+                    min = value;
+                }
+                if (value > max) {
+                    max = value;
+                }
+            }
+        }
+        return new MinMaxRange((long) Math.floor(min), (long) Math.ceil(max));
     }
 
     @Override

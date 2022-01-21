@@ -30,6 +30,7 @@ import org.anchoranalysis.image.voxel.buffer.ProjectableBuffer;
 import org.anchoranalysis.image.voxel.buffer.max.MaxIntensityProjection;
 import org.anchoranalysis.image.voxel.buffer.mean.MeanIntensityProjection;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedIntBuffer;
+import org.anchoranalysis.image.voxel.iterator.MinMaxRange;
 import org.anchoranalysis.spatial.box.Extent;
 
 class UnsignedIntImplementation extends VoxelsExtracterBase<UnsignedIntBuffer> {
@@ -79,6 +80,31 @@ class UnsignedIntImplementation extends VoxelsExtracterBase<UnsignedIntBuffer> {
             }
         }
         return min;
+    }
+
+    @Override
+    public MinMaxRange voxelsWithMinMaxIntensity() {
+        long min = Long.MAX_VALUE;
+        long max = Long.MIN_VALUE;
+
+        Extent extent = voxels.extent();
+
+        for (int z = 0; z < extent.z(); z++) {
+
+            UnsignedIntBuffer pixels = voxels.sliceBuffer(z);
+
+            while (pixels.hasRemaining()) {
+
+                long val = pixels.getUnsigned();
+                if (val < min) {
+                    min = val;
+                }
+                if (val > max) {
+                    max = val;
+                }
+            }
+        }
+        return new MinMaxRange(min, max);
     }
 
     @Override

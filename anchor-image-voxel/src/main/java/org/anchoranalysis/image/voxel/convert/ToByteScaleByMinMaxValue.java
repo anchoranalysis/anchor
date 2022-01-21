@@ -42,7 +42,7 @@ import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedShortBuffer;
 public final class ToByteScaleByMinMaxValue extends ToByte {
 
     private float scale = 0;
-    private int subtract = 0;
+    private long subtract = 0;
 
     /**
      * Creates with the minimum- and maximum-values which existing values are scaled against.
@@ -52,7 +52,7 @@ public final class ToByteScaleByMinMaxValue extends ToByte {
      * @param maxValue the <i>maximum</i>-value that will be represented in the scaled-values
      *     (inclusive).
      */
-    public ToByteScaleByMinMaxValue(int minValue, int maxValue) {
+    public ToByteScaleByMinMaxValue(long minValue, long maxValue) {
         setMinMaxValues(minValue, maxValue);
     }
 
@@ -62,7 +62,7 @@ public final class ToByteScaleByMinMaxValue extends ToByte {
      * @param minValue the <i>minimum</i>-value that will be represented in the scaled-values.
      * @param maxValue the <i>maximum</i>-value that will be represented in the scaled-values.
      */
-    public void setMinMaxValues(int minValue, int maxValue) {
+    public void setMinMaxValues(long minValue, long maxValue) {
         this.scale = 255.0f / (maxValue - minValue);
         this.subtract = minValue;
     }
