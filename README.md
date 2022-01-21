@@ -4,6 +4,8 @@ This is part of the source-distribution for the [Anchor Image Analysis](http://w
 
 It contains the **core libraries for Anchor** (excluding plugins and graphical extensions and projects).
 
+The source code uses [Project Lombok](https://projectlombok.org/) to reduce [boilerplate](https://en.wikipedia.org/wiki/Boilerplate_code).
+
 Please see:
 
 * [Javadoc](https://www.anchoranalysis.org/javadoc/) for Anchor project, as a whole.

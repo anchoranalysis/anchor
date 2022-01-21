@@ -25,6 +25,7 @@
  */
 package org.anchoranalysis.io.bioformats.copyconvert;
 
+import java.io.IOException;
 import lombok.Value;
 
 /**
@@ -61,9 +62,21 @@ public class ImageFileEncoding {
      *
      * <p>When not RGB encoded, it describes the number of interleaved channels present.
      *
-     * @return the number of channels as per above.
+     * @return the number of channels as per above, which must always be positive.
+     * @throws IOException if numberChannelsPerArray is zero, and the image is either non-RGB or
+     *     interleaved.
      */
-    public int numberDistinctChannelsSource() {
-        return (rgb && !interleaved) ? numberChannelsPerArray / 3 : numberChannelsPerArray;
+    public int numberDistinctChannelsSource() throws IOException {
+        if (rgb && !interleaved) {
+            return 1;
+        } else {
+            if (numberChannelsPerArray == 0) {
+                throw new IOException(
+                        String.format(
+                                "numberChannelsPerArray must be positive, but is rather %d",
+                                numberChannelsPerArray));
+            }
+            return numberChannelsPerArray;
+        }
     }
 }

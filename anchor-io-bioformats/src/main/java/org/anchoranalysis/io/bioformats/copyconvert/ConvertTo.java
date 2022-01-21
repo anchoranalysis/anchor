@@ -130,8 +130,17 @@ public abstract class ConvertTo<T> {
 
         int areaXY = dimensions.areaXY();
 
+        int numberDistinctChannelsSource = sourceImageEncoding.numberDistinctChannelsSource();
+
+        if (numberDistinctChannelsSource <= 0) {
+            throw new IOException(
+                    String.format(
+                            "The number of distinct channels in the source must be positive, but is %d",
+                            numberDistinctChannelsSource));
+        }
+
         // This is the number of bytes to increment by.
-        this.sourceIncrement = bytesPerVoxel() * sourceImageEncoding.numberDistinctChannelsSource();
+        this.sourceIncrement = bytesPerVoxel() * numberDistinctChannelsSource;
 
         // This is the number of bytes (which is identical to the number of lements).
         this.sourceSize = areaXY * sourceIncrement;
