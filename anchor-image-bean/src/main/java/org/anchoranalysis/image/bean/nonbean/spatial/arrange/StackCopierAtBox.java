@@ -1,6 +1,5 @@
 package org.anchoranalysis.image.bean.nonbean.spatial.arrange;
 
-import com.google.common.base.Preconditions;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.core.stack.Stack;
@@ -63,10 +62,6 @@ public class StackCopierAtBox {
      *     the source. 0 disables.
      */
     private static void copyImage(Stack source, Stack destination, BoundingBox box, int zShift) {
-        Preconditions.checkArgument(
-                source.getNumberChannels() == destination.getNumberChannels()
-                        || source.getNumberChannels() == 1);
-
         Extent extent = source.extent();
 
         ReadableTuple3i cornerMin = box.cornerMin();

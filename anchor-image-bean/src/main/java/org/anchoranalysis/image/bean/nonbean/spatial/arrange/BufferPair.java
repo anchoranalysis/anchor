@@ -19,7 +19,11 @@ import org.anchoranalysis.spatial.point.ReadableTuple3i;
  * @author Owen Feehan
  */
 class BufferPair {
+
+    /** The buffer to copy <b>from</b>. */
     private final VoxelBuffer<?>[] source;
+
+    /** The buffer to copy <b>to</b>. */
     private final VoxelBuffer<?>[] destination;
 
     /**
@@ -41,13 +45,26 @@ class BufferPair {
      * @param destinationZ the index of the z-slice to copy into for {@code destinationStack}.
      */
     public void assign(Stack sourceStack, Stack destinationStack, int sourceZ, int destinationZ) {
+
+        // Store the mapping between source and destination channel in an array to quickly access
+        // later
+        int[] sourceChannelMapping =
+                new int[] {
+                    selectSourceChannel(0, sourceStack.getNumberChannels()),
+                    selectSourceChannel(1, sourceStack.getNumberChannels()),
+                    selectSourceChannel(2, sourceStack.getNumberChannels()),
+                };
+
         for (int channelIndex = 0; channelIndex < destination.length; channelIndex++) {
 
-            if (source.length == 1) {
-                sourceZ = 1;
-            }
+            int destinationChannel = sourceChannelMapping[channelIndex];
 
-            source[channelIndex] = bufferForSlice(sourceStack, channelIndex, sourceZ);
+            // Load the appropriate channel to copy from, or null to ignore
+            source[channelIndex] =
+                    destinationChannel != -1
+                            ? bufferForSlice(
+                                    sourceStack, sourceChannelMapping[channelIndex], sourceZ)
+                            : null;
             destination[channelIndex] =
                     bufferForSlice(destinationStack, channelIndex, destinationZ);
         }
@@ -64,16 +81,46 @@ class BufferPair {
      */
     public void copySlice(
             ReadableTuple3i cornerMin, ReadableTuple3i cornerMax, Extent sizeDestination) {
+
         int index = 0;
         for (int y = cornerMin.y(); y <= cornerMax.y(); y++) {
             for (int x = cornerMin.x(); x <= cornerMax.x(); x++) {
 
                 int outPos = sizeDestination.offset(x, y);
 
-                for (int channel = 0; channel < source.length; channel++) {
-                    destination[channel].putInt(outPos, source[channel].getInt(index));
+                for (int channel = 0; channel < destination.length; channel++) {
+
+                    VoxelBuffer<?> sourceBuffer = source[channel];
+                    if (sourceBuffer != null) {
+                        destination[channel].putInt(outPos, sourceBuffer.getInt(index));
+                    }
                 }
                 index++;
+            }
+        }
+    }
+
+    /**
+     * Selects what channel to use for source for a particular destination {@code channelIndex}.
+     *
+     * @param destinationChannelIndex which destination channel is being considered. 0 for red, 1
+     *     for green, 2 for blue.
+     * @param numberChannelsSource how many source channels exist.
+     * @return which channel in the source to copy from, or -1 to avoid copying this channel.
+     */
+    private int selectSourceChannel(int destinationChannelIndex, int numberChannelsSource) {
+        if (destinationChannelIndex < numberChannelsSource) {
+            // Corresponds exactly to a source channel, so select.
+            return destinationChannelIndex;
+        } else {
+            if (numberChannelsSource == 1) {
+                // The source is grayscale, so always take the first channel, so its added as white.
+                return 0;
+            } else {
+                // Insufficient number of channels to do full RGB, so skip any channel in
+                // destination
+                // that doesn't have a corresponding channel in source.
+                return -1;
             }
         }
     }
