@@ -277,7 +277,7 @@ public class Stack implements Iterable<Channel> {
     /**
      * Adds a new empty {@link Channel} in the final-most position in the list.
      *
-     * <p>The dimensions of type of the new channel are inferred from existing channels.
+     * <p>The dimensions and type of the new channel are inferred from existing channels.
      *
      * @throws OperationFailedException if no existing channel exists, or the existing channels lack
      *     uniform size or type.

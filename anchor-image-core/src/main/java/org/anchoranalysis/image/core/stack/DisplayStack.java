@@ -39,6 +39,7 @@ import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.channel.convert.ConversionPolicy;
 import org.anchoranalysis.image.core.channel.convert.attached.ChannelConverterAttached;
+import org.anchoranalysis.image.core.channel.convert.attached.channel.IntensityRange;
 import org.anchoranalysis.image.core.channel.convert.attached.channel.UpperLowerQuantileIntensity;
 import org.anchoranalysis.image.core.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
@@ -121,7 +122,7 @@ public class DisplayStack {
     public static DisplayStack create(Channel channel) throws CreateException {
         DisplayStack display = new DisplayStack(new Stack(channel));
         try {
-            display.addConvertersAsNeeded();
+            display.addConvertersAsNeeded(1);
         } catch (SetOperationFailedException e) {
             throw new CreateException(e);
         }
@@ -139,9 +140,16 @@ public class DisplayStack {
      */
     public static DisplayStack create(Stack stack) throws CreateException {
         DisplayStack display = new DisplayStack(stack);
-        display.checkNumberChannels(stack.getNumberChannels());
         try {
-            display.addConvertersAsNeeded();
+            if (stack.getNumberChannels() > 3) {
+                throw new CreateException(
+                        String.format(
+                                "Cannot convert to DisplayStack as there are %d channels. There must be 3 or less.",
+                                stack.getNumberChannels()));
+            }
+
+            int eventualNumber = stack.getNumberChannels() == 1 ? 1 : 3;
+            display.addConvertersAsNeeded(eventualNumber);
         } catch (SetOperationFailedException e) {
             throw new CreateException(e);
         }
@@ -158,7 +166,7 @@ public class DisplayStack {
     public static DisplayStack create(RGBStack rgbStack) throws CreateException {
         DisplayStack display = new DisplayStack(rgbStack.asStack());
         try {
-            display.addConvertersAsNeeded();
+            display.addConvertersAsNeeded(3);
         } catch (SetOperationFailedException e) {
             throw new CreateException(e);
         }
@@ -372,12 +380,22 @@ public class DisplayStack {
 
     private Stack deriveStack(IntFunction<Channel> indexToChannel) {
         Stack out = new Stack(stack.getNumberChannels() == 3);
-        for (int index = 0; index < stack.getNumberChannels(); index++) {
+        int eventualNumberChannels = stack.getNumberChannels() == 1 ? 1 : 3;
+        int index = 0;
+        for (index = 0; index < stack.getNumberChannels(); index++) {
             try {
                 out.addChannel(indexToChannel.apply(index));
             } catch (IncorrectImageSizeException e) {
                 throw new AnchorImpossibleSituationException();
             }
+        }
+        while (index < eventualNumberChannels) {
+            try {
+                out.addBlankChannel();
+            } catch (OperationFailedException e) {
+                throw new AnchorImpossibleSituationException();
+            }
+            index++;
         }
         return out;
     }
@@ -393,47 +411,55 @@ public class DisplayStack {
     }
 
     private void setConverterFor(
-            int channelIndex, ChannelConverterAttached<Channel, UnsignedByteBuffer> converter)
+            int channelIndex,
+            Optional<ChannelConverterAttached<Channel, UnsignedByteBuffer>> converter)
             throws SetOperationFailedException {
         try {
-            converter.attachObject(stack.getChannel(channelIndex));
+            if (converter.isPresent()) {
+                converter.get().attachObject(stack.getChannel(channelIndex));
+            }
         } catch (OperationFailedException e) {
             throw new SetOperationFailedException(e);
         }
-        converters.set(channelIndex, Optional.of(converter));
+        converters.set(channelIndex, converter);
     }
 
-    private void addConvertersAsNeeded() throws SetOperationFailedException {
-        addEmptyConverters(getNumberChannels());
-        for (int index = 0; index < getNumberChannels(); index++) {
-            if (!stack.getChannel(index)
-                    .getVoxelDataType()
-                    .equals(UnsignedByteVoxelType.INSTANCE)) {
-                setConverterFor(
-                        index, new UpperLowerQuantileIntensity(QUANTILE_LOWER, QUANTILE_UPPER));
-            }
-        }
-    }
-
-    private void checkNumberChannels(int numberChannels) throws CreateException {
-
-        if (numberChannels > 3) {
-            throw new CreateException(
-                    String.format(
-                            "Cannot convert to DisplayStack as there are %d channels. There must be 3 or less.",
-                            numberChannels));
-        }
-
-        if (numberChannels == 2) {
-            try {
-                stack.addBlankChannel();
-            } catch (OperationFailedException e) {
-                throw new CreateException(e);
+    /**
+     * Adds as many converters and blank channels as needed so that the total nubmer becomes {@code
+     * eventualNumberChannels}.
+     */
+    private void addConvertersAsNeeded(int eventualNumberChannels)
+            throws SetOperationFailedException {
+        addEmptyConverters(eventualNumberChannels);
+        int numberConvertersToAdd = Math.min(getNumberChannels(), 3);
+        int index = 0;
+        for (index = 0; index < numberConvertersToAdd; index++) {
+            VoxelDataType dataType = stack.getChannel(index).getVoxelDataType();
+            if (!dataType.equals(UnsignedByteVoxelType.INSTANCE)) {
+                setConverterFor(index, Optional.of(createConverterFor(dataType)));
             }
         }
     }
 
     private ChannelMapper createChannelMapper() {
         return new ChannelMapper(stack::getChannel, converters::get);
+    }
+
+    /**
+     * Determines what kind of converter to use for a particular channel, to map it to an unsigned
+     * 8-bit channel.
+     */
+    private static ChannelConverterAttached<Channel, UnsignedByteBuffer> createConverterFor(
+            VoxelDataType dataType) {
+        // If the bit-depth is managable to create a histogram, let's use it to establish quantiles
+        // TODO introduce an alternative structure to the histogram for calculating the quantiles
+        // when not 8-bit.
+        if (dataType.bitDepth() <= 16) {
+            return new UpperLowerQuantileIntensity(QUANTILE_LOWER, QUANTILE_UPPER);
+        } else {
+            // Otherwise for float or 32-bit types, a histogram would be too big in memory. So let's
+            // use a straightforward min or max.
+            return new IntensityRange();
+        }
     }
 }

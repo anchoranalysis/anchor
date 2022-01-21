@@ -27,6 +27,7 @@ package org.anchoranalysis.image.voxel.extracter;
 
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.extracter.predicate.VoxelsPredicate;
+import org.anchoranalysis.image.voxel.iterator.MinMaxRange;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.image.voxel.resizer.VoxelsResizer;
 import org.anchoranalysis.spatial.box.BoundingBox;
@@ -188,16 +189,30 @@ public interface VoxelsExtracter<T> {
     VoxelsPredicate voxelsGreaterThan(int threshold);
 
     /**
-     * Finds the minimum-value of any voxel and rounding down (floor) to nearest long.
+     * Finds the minimum-value of any voxel and rounding down (floor) to the nearest long.
      *
-     * @return the minimum-value
+     * @return the minimum-value.
      */
     long voxelWithMinIntensity();
 
     /**
-     * Finds the maximum-value of any voxel and rounding up (ceiling) to nearest long.
+     * Finds the maximum-value of any voxel and rounding up (ceiling) to the nearest long.
      *
-     * @return the maximum-value
+     * @return the maximum-value.
      */
     long voxelWithMaxIntensity();
+
+    /**
+     * Finds the minimum-value <b>and</b> maximum of any voxel.
+     *
+     * <p>The minimum is rounded down (floor) to the nearest long.
+     *
+     * <p>The maximum is rounded up (ceil) to the nearest long.
+     *
+     * <p>This is often more efficient than calling {@link #voxelWithMinIntensity()} and {@link
+     * #voxelWithMaxIntensity()} separately.
+     *
+     * @return the minimum- and maximum values.
+     */
+    MinMaxRange voxelsWithMinMaxIntensity();
 }

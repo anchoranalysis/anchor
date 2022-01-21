@@ -29,6 +29,7 @@ import lombok.AllArgsConstructor;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.extracter.predicate.PredicateAtCorner;
 import org.anchoranalysis.image.voxel.extracter.predicate.VoxelsPredicate;
+import org.anchoranalysis.image.voxel.iterator.MinMaxRange;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.image.voxel.resizer.VoxelsResizer;
 import org.anchoranalysis.spatial.box.BoundingBox;
@@ -107,6 +108,11 @@ class AtCorner<T> implements VoxelsExtracter<T> {
     @Override
     public long voxelWithMinIntensity() {
         return delegate.voxelWithMinIntensity();
+    }
+
+    @Override
+    public MinMaxRange voxelsWithMinMaxIntensity() {
+        return delegate.voxelsWithMinMaxIntensity();
     }
 
     @Override
