@@ -31,7 +31,7 @@ import org.anchoranalysis.image.core.channel.convert.ConversionPolicy;
 import org.anchoranalysis.image.core.channel.convert.ToUnsignedByte;
 import org.anchoranalysis.image.core.channel.convert.attached.ChannelConverterAttached;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
-import org.anchoranalysis.image.voxel.convert.ToByteScaleByMaxValue;
+import org.anchoranalysis.image.voxel.convert.ToUnsignedByteScaleByMaxValue;
 import org.anchoranalysis.image.voxel.convert.VoxelsConverter;
 
 /**
@@ -44,14 +44,14 @@ import org.anchoranalysis.image.voxel.convert.VoxelsConverter;
  */
 public class MaxIntensity implements ChannelConverterAttached<Channel, UnsignedByteBuffer> {
 
-    private ToByteScaleByMaxValue voxelsConverter;
+    private ToUnsignedByteScaleByMaxValue voxelsConverter;
 
     private ToUnsignedByte delegate;
 
     /** Default constructor. */
     public MaxIntensity() {
         // Initialize with a dummy value
-        voxelsConverter = new ToByteScaleByMaxValue(1);
+        voxelsConverter = new ToUnsignedByteScaleByMaxValue(1);
 
         delegate = new ToUnsignedByte(voxelsConverter);
     }

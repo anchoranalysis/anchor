@@ -26,21 +26,29 @@
 package org.anchoranalysis.image.voxel.buffer;
 
 import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 
 /**
  * A buffer to which slices may be added to form a projection.
  *
  * @author Owen Feehan
- * @param <T> buffer-type
+ * @param <T> buffer type used for aggregation {@link UnsignedByteBuffer} etc.
  */
 public interface ProjectableBuffer<T> {
 
     /**
-     * Adds a slice to the buffer.
+     * Adds a {@link VoxelBuffer} to the projection, as a single entity.
      *
-     * @param voxels voxels for the slice.
+     * @param voxels the voxel buffer to add.
      */
-    void addSlice(VoxelBuffer<T> voxels);
+    void addVoxelBuffer(VoxelBuffer<T> voxels);
+
+    /**
+     * Adds a {@link Voxels} to the projection, as a single entity.
+     *
+     * @param voxels the voxels to add (which contains one or more voxel-buffers).
+     */
+    void addVoxels(Voxels<T> voxels);
 
     /**
      * Performs any final operation before turning the projected buffer.

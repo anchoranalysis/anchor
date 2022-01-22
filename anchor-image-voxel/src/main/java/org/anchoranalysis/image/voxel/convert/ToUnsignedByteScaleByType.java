@@ -35,34 +35,29 @@ import org.anchoranalysis.image.voxel.datatype.UnsignedIntVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 
 /**
- * Converts voxel buffers to an <b>unsigned 16-bit buffer</b>, scaling against the maximum value in
- * each data-type.
+ * Converts voxel buffers to a {@link UnsignedByteBuffer} scaling against the maximum value in each
+ * buffer.
  *
- * <p>There is no clamping of values, but some values might become very small.
+ * <p>There is no clamping of values, but some might become very small.
  *
  * @author Owen Feehan
  */
-public final class ToShortScaleByType extends VoxelsConverter<UnsignedShortBuffer> {
+public final class ToUnsignedByteScaleByType extends ToUnsignedByte {
 
     private static final int DIVIDE_BY_UNSIGNED_INT =
-            (int) (UnsignedIntVoxelType.MAX_VALUE / UnsignedShortVoxelType.MAX_VALUE);
+            (int) (UnsignedIntVoxelType.MAX_VALUE / UnsignedByteVoxelType.MAX_VALUE);
 
-    private static final int MULTIPLY_BY_UNSIGNED_BYTE =
+    private static final int DIVIDE_BY_UNSIGNED_SHORT =
             (int) (UnsignedShortVoxelType.MAX_VALUE / UnsignedByteVoxelType.MAX_VALUE);
 
     @Override
-    protected void convertUnsignedByte(UnsignedByteBuffer in, UnsignedShortBuffer out) {
-        out.putUnsigned(in.getUnsigned() * MULTIPLY_BY_UNSIGNED_BYTE);
+    protected void convertUnsignedShort(UnsignedShortBuffer in, UnsignedByteBuffer out) {
+        out.putUnsigned(in.getUnsigned() / DIVIDE_BY_UNSIGNED_SHORT);
     }
 
     @Override
-    protected void convertUnsignedShort(UnsignedShortBuffer in, UnsignedShortBuffer out) {
-        out.putRaw(in.getRaw());
-    }
-
-    @Override
-    protected void convertUnsignedInt(UnsignedIntBuffer in, UnsignedShortBuffer out) {
-        out.putLongClamped(in.getUnsigned() / DIVIDE_BY_UNSIGNED_INT);
+    protected void convertUnsignedInt(UnsignedIntBuffer in, UnsignedByteBuffer out) {
+        out.putLong(in.getUnsigned() / DIVIDE_BY_UNSIGNED_INT);
     }
 
     /**
@@ -78,7 +73,7 @@ public final class ToShortScaleByType extends VoxelsConverter<UnsignedShortBuffe
      *     position is incremented.
      */
     @Override
-    protected void convertFloat(FloatBuffer in, UnsignedShortBuffer out) {
-        out.putDouble(in.get() / DIVIDE_BY_UNSIGNED_INT);
+    protected void convertFloat(FloatBuffer in, UnsignedByteBuffer out) {
+        out.putFloat(in.get() / DIVIDE_BY_UNSIGNED_INT);
     }
 }

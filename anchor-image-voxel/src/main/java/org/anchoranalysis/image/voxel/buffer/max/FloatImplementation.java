@@ -27,21 +27,30 @@
 package org.anchoranalysis.image.voxel.buffer.max;
 
 import java.nio.FloatBuffer;
+import org.anchoranalysis.core.functional.unchecked.BiFloatPredicate;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 import org.anchoranalysis.spatial.box.Extent;
 
-class FloatImplementation extends MaxIntensityBufferBase<FloatBuffer> {
+class FloatImplementation extends MaybeReplaceBufferBase<FloatBuffer> {
 
-    public FloatImplementation(Extent extent) {
+    /** The predicate to apply to determine, whether to replace a value or not. */
+    private final BiFloatPredicate predicate;
+
+    public FloatImplementation(Extent extent, BiFloatPredicate predicate) {
         super(extent, VoxelsFactory.getFloat());
+        this.predicate = predicate;
     }
 
     @Override
-    protected void maybeReplaceCurrentBufferPosition(
-            FloatBuffer sliceToBeAdded, FloatBuffer projection) {
-        float inPixel = sliceToBeAdded.get();
-        if (inPixel > projection.get()) {
+    protected void maybeReplaceCurrentBufferPosition(FloatBuffer buffer, FloatBuffer projection) {
+        float inPixel = buffer.get();
+        if (predicate.test(inPixel, projection.get())) {
             projection.put(projection.position() - 1, inPixel);
         }
+    }
+
+    @Override
+    protected void assignCurrentBufferPosition(FloatBuffer buffer, FloatBuffer projection) {
+        projection.put(buffer.get());
     }
 }

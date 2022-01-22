@@ -32,7 +32,7 @@ import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
  *
  * @author Owen Feehan
  */
-public abstract class ToByte extends VoxelsConverter<UnsignedByteBuffer> {
+public abstract class ToUnsignedByte extends VoxelsConverter<UnsignedByteBuffer> {
 
     @Override
     protected void convertUnsignedByte(UnsignedByteBuffer in, UnsignedByteBuffer out) {

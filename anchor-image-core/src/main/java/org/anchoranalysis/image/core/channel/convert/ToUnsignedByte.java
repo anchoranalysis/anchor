@@ -28,7 +28,7 @@ package org.anchoranalysis.image.core.channel.convert;
 
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
-import org.anchoranalysis.image.voxel.convert.ToByteNoScaling;
+import org.anchoranalysis.image.voxel.convert.ToUnsignedByteNoScaling;
 import org.anchoranalysis.image.voxel.convert.VoxelsConverter;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
@@ -46,7 +46,7 @@ public class ToUnsignedByte extends ChannelConverter<UnsignedByteBuffer> {
 
     /** Converting without scaling any values. */
     public ToUnsignedByte() {
-        this(new ToByteNoScaling());
+        this(new ToUnsignedByteNoScaling());
     }
 
     /**

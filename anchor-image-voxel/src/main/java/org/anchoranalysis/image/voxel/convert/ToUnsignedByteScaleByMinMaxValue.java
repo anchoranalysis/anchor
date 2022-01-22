@@ -32,26 +32,53 @@ import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedIntBuffer;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedShortBuffer;
 
 /**
- * Converts voxel buffers to an <b>unsigned 8-bit</b> buffer without scaling any values.
+ * Converts voxel buffers to an <b>unsigned 8-bit</b> buffer scaling against a the minimum and
+ * maximum constant.
  *
- * <p>Values larger than 255 are clamping.
+ * <p>The scaling is linear between these two boundaries.
  *
  * @author Owen Feehan
  */
-public final class ToByteNoScaling extends ToByte {
+public final class ToUnsignedByteScaleByMinMaxValue extends ToUnsignedByte {
+
+    private float scale = 0;
+    private long subtract = 0;
+
+    /**
+     * Creates with the minimum- and maximum-values which existing values are scaled against.
+     *
+     * @param minValue the <i>minimum</i>-value that will be represented in the scaled-values
+     *     (inclusive).
+     * @param maxValue the <i>maximum</i>-value that will be represented in the scaled-values
+     *     (inclusive).
+     */
+    public ToUnsignedByteScaleByMinMaxValue(long minValue, long maxValue) {
+        setMinMaxValues(minValue, maxValue);
+    }
+
+    /**
+     * Assigns the minimum- and maximum-values which existing values are scaled against.
+     *
+     * @param minValue the <i>minimum</i>-value that will be represented in the scaled-values.
+     * @param maxValue the <i>maximum</i>-value that will be represented in the scaled-values.
+     */
+    public void setMinMaxValues(long minValue, long maxValue) {
+        this.scale = 255.0f / (maxValue - minValue);
+        this.subtract = minValue;
+    }
 
     @Override
     protected void convertUnsignedShort(UnsignedShortBuffer in, UnsignedByteBuffer out) {
-        out.putUnsigned(in.getUnsigned());
+        out.putFloatClamped(scale * (in.getUnsigned() - subtract));
     }
 
     @Override
     protected void convertUnsignedInt(UnsignedIntBuffer in, UnsignedByteBuffer out) {
-        out.putLong(in.getUnsigned());
+        out.putFloatClamped(scale * (in.getUnsigned() - subtract));
     }
 
     @Override
     protected void convertFloat(FloatBuffer in, UnsignedByteBuffer out) {
-        out.putFloatClamped(in.get());
+        out.putFloatClamped(scale * (in.get() - subtract));
     }
 }
