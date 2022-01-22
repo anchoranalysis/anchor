@@ -212,29 +212,6 @@ public class CheckedStream {
     }
 
     /**
-     * Like {@link #mapIntStream(IntStream, Class, CheckedIntFunction)} but executes in parallel.
-     *
-     * @param <T> end-type for mapping
-     * @param <E> an exception that be thrown during mapping
-     * @param stream stream of {@code int}s.
-     * @param throwableClass the class of {@code E}.
-     * @param mapFunc function for mapping.
-     * @return the stream after the mapping.
-     * @throws E if {@code mapFunc} throws it.
-     */
-    public static <T, E extends Exception> Stream<T> mapIntStreamParallel(
-            IntStream stream,
-            Class<? extends Exception> throwableClass,
-            CheckedIntFunction<T, E> mapFunc)
-            throws E { // NOSONAR
-        try {
-            return stream.parallel().mapToObj(index -> suppressCheckedException(index, mapFunc));
-        } catch (ConvertedToRuntimeException e) {
-            return throwException(e, throwableClass);
-        }
-    }
-
-    /**
      * Performs a {@link IntStream#mapToObj} but accepts a function that can throw a
      * checked-exception.
      *

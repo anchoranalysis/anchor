@@ -254,8 +254,6 @@ public class FunctionalList {
      * @param  <E> an exception that may be thrown by an {@code mapFunction}
      * @param collection the collection to be mapped.
      * @param throwableClass class type of exception that may be thrown by {@code mapFunction}.
-     * @param parallel when true, the mapping occurs in parallel on many cores, otherwise
-     *     serialized.
      * @param mapFunction function to do the mapping to an Optional (the item is included in the
      *     output if the optional is defined).
      * @return a list with the same size and same order, but using derived elements that are a
@@ -265,14 +263,9 @@ public class FunctionalList {
     public static <S, T, E extends Exception> List<T> mapToListOptional(
             Collection<S> collection,
             Class<? extends Exception> throwableClass,
-            boolean parallel,
             CheckedFunction<S, Optional<T>, E> mapFunction)
             throws E {
-        Stream<S> stream = collection.stream();
-        if (parallel) {
-            stream = stream.parallel();
-        }
-        return mapToListOptional(stream, throwableClass, mapFunction);
+        return mapToListOptional(collection.stream(), throwableClass, mapFunction);
     }
 
     /**
@@ -310,8 +303,6 @@ public class FunctionalList {
      * @param  <E> an exception that may be thrown by an {@code mapFunction}
      * @param list the list to be mapped.
      * @param throwableClass class type of exception that may be thrown by {@code mapFunction}.
-     * @param parallel when true, the mapping occurs in parallel on many cores, otherwise
-     *     serialized.
      * @param mapFunction function to do the mapping to an Optional (the item is included in the
      *     output if the optional is defined).
      * @return a list with the same size and same order, but using derived elements that are a
@@ -321,13 +312,9 @@ public class FunctionalList {
     public static <S, T, E extends Exception> List<T> mapToListOptionalWithIndex(
             List<S> list,
             Class<? extends Exception> throwableClass,
-            boolean parallel,
             CheckedFunctionWithInt<S, Optional<T>, E> mapFunction)
             throws E {
         IntStream range = IntStream.range(0, list.size());
-        if (parallel) {
-            range = range.parallel();
-        }
         return CheckedStream.mapIntStream(
                         range, throwableClass, index -> mapFunction.apply(list.get(index), index))
                 .filter(Optional::isPresent)
