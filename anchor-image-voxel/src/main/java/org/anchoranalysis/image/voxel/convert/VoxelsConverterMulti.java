@@ -86,7 +86,7 @@ public class VoxelsConverterMulti {
         if (outputVoxelType.equals(UnsignedByteVoxelType.INSTANCE)) {
             return (VoxelsConverter<S>) new ToUnsignedByteNoScaling();
         } else if (outputVoxelType.equals(UnsignedShortVoxelType.INSTANCE)) {
-            return (VoxelsConverter<S>) new ToUnsignedShortScaleByType();
+            return (VoxelsConverter<S>) new ToUnsignedShortNoScaling();
         } else if (outputVoxelType.equals(FloatVoxelType.INSTANCE)) {
             return (VoxelsConverter<S>) new ToFloatNoScaling();
         } else if (outputVoxelType.equals(UnsignedIntVoxelType.INSTANCE)) {

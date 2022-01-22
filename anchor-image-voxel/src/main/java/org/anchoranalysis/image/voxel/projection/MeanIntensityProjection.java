@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.image.voxel.buffer.max;
+package org.anchoranalysis.image.voxel.projection;
 
 import java.nio.FloatBuffer;
 import lombok.AccessLevel;
@@ -38,20 +38,19 @@ import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedIntVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
+import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 import org.anchoranalysis.spatial.box.Extent;
 
 /**
- * Creates buffers for performing a <a
- * href="https://en.wikipedia.org/wiki/Maximum_intensity_projection">Maximum Intensity
- * Projection</a>.
+ * Creates buffers for performing a mean-intensity-projection.
  *
  * @author Owen Feehan
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class MaxIntensityProjection {
+public class MeanIntensityProjection {
 
     /**
-     * Creates a buffer for a <i>maximum-intensity projection</i> for <b>unsigned byte</b> voxels.
+     * Creates a buffer for a <i>mean-intensity projection</i> for <b>unsigned byte</b> voxels.
      *
      * @param dataType the data-type to use for creating the buffer.
      * @param extent the size of the projected image. The z-dimension is ignored.
@@ -78,58 +77,42 @@ public class MaxIntensityProjection {
     }
 
     /**
-     * Creates a buffer for a <i>maximum-intensity projection</i> for <b>unsigned byte</b> voxels.
+     * Creates a buffer for a <i>mean-intensity projection</i> for <b>unsigned byte</b> voxels.
      *
      * @param extent the size of the projected image. The z-dimension is ignored.
      * @return a newly created buffer that can be used for projection.
      */
     public static ProjectableBuffer<UnsignedByteBuffer> createUnsignedByte(Extent extent) {
-        return new UnsignedByteImplementation(
-                extent, MaxIntensityProjection::isValueGreaterThanExistingInt);
+        return new MeanIntensityBuffer<>(VoxelsFactory.getUnsignedByte(), extent);
     }
 
     /**
-     * Creates a buffer for a <i>maximum-intensity projection</i> for <b>unsigned short</b> voxels.
+     * Creates a buffer for a <i>mean-intensity projection</i> for <b>unsigned short</b> voxels.
      *
      * @param extent the size of the projected image. The z-dimension is ignored.
      * @return a newly created buffer that can be used for projection.
      */
     public static ProjectableBuffer<UnsignedShortBuffer> createUnsignedShort(Extent extent) {
-        return new UnsignedShortImplementation(
-                extent, MaxIntensityProjection::isValueGreaterThanExistingInt);
+        return new MeanIntensityBuffer<>(VoxelsFactory.getUnsignedShort(), extent);
     }
 
     /**
-     * Creates a buffer for a <i>maximum-intensity projection</i> for <b>unsigned int</b> voxels.
+     * Creates a buffer for a <i>mean-intensity projection</i> for <b>unsigned int</b> voxels.
      *
      * @param extent the size of the projected image. The z-dimension is ignored.
      * @return a newly created buffer that can be used for projection.
      */
     public static ProjectableBuffer<UnsignedIntBuffer> createUnsignedInt(Extent extent) {
-        return new UnsignedIntImplementation(
-                extent, MaxIntensityProjection::isValueGreaterThanExistingLong);
+        return new MeanIntensityBuffer<>(VoxelsFactory.getUnsignedInt(), extent);
     }
 
     /**
-     * Creates a buffer for a <i>maximum-intensity projection</i> for <b>float</b> voxels.
+     * Creates a buffer for a <i>mean-intensity projection</i> for <b>float</b> voxels.
      *
      * @param extent the size of the projected image. The z-dimension is ignored.
      * @return a newly created buffer that can be used for projection.
      */
     public static ProjectableBuffer<FloatBuffer> createFloat(Extent extent) {
-        return new FloatImplementation(
-                extent, MaxIntensityProjection::isValueGreaterThanExistingFloat);
-    }
-
-    private static boolean isValueGreaterThanExistingInt(int value, int existing) {
-        return value > existing;
-    }
-
-    private static boolean isValueGreaterThanExistingLong(long value, long existing) {
-        return value > existing;
-    }
-
-    private static boolean isValueGreaterThanExistingFloat(float value, float existing) {
-        return value > existing;
+        return new MeanIntensityBuffer<>(VoxelsFactory.getFloat(), extent);
     }
 }

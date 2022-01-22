@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.image.voxel.buffer.max;
+package org.anchoranalysis.image.voxel.projection.extrema;
 
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.ProjectableBuffer;
@@ -57,37 +57,40 @@ abstract class MaybeReplaceBufferBase<T> implements ProjectableBuffer<T> {
 
     protected MaybeReplaceBufferBase(Extent extent, VoxelsFactoryTypeBound<T> factory) {
         this.factory = factory;
-        this.extent = extent.flattenZ();
+        this.extent = extent;
     }
 
     @Override
     public void addVoxels(Voxels<T> voxels) {
-        for (int z = 0; z < voxels.extent().z(); z++) {
-            addVoxelBuffer(voxels.slice(z));
+
+        if (projection == null) {
+            // The first call is handled differently if it doesn't already exist. We just make a
+            // copy.
+            projection = voxels.duplicate();
+        } else {
+            for (int z = 0; z < voxels.extent().z(); z++) {
+                addVoxelBufferInternal(voxels.slice(z), z);
+            }
         }
     }
 
     @Override
     public void addVoxelBuffer(VoxelBuffer<T> voxels) {
-
-        T buffer = voxels.buffer();
-
-        if (projection != null) {
-
-            VoxelBuffer<T> projectionBuffer = projection.slice(0);
-
-            // Maybe replace the existing voxels
-            while (projectionBuffer.hasRemaining()) {
-                maybeReplaceCurrentBufferPosition(buffer, projectionBuffer.buffer());
-            }
-        } else {
+        if (projection == null) {
+            // The first call is handled differently if it doesn't already exist. We just make a
+            // copy.
             projection = factory.createInitialized(extent);
+
             VoxelBuffer<T> projectionBuffer = projection.slice(0);
+
+            T buffer = voxels.buffer();
 
             // Copy the existing voxels as its the first buffer
             while (projectionBuffer.hasRemaining()) {
                 assignCurrentBufferPosition(buffer, projectionBuffer.buffer());
             }
+        } else {
+            addVoxelBufferInternal(voxels, 0);
         }
     }
 
@@ -116,4 +119,16 @@ abstract class MaybeReplaceBufferBase<T> implements ProjectableBuffer<T> {
      * @param projection the buffer being iterated over for the projection voxels.
      */
     protected abstract void assignCurrentBufferPosition(T buffer, T projection);
+
+    private void addVoxelBufferInternal(VoxelBuffer<T> voxels, int z) {
+
+        T buffer = voxels.buffer();
+
+        VoxelBuffer<T> projectionBuffer = projection.slice(z);
+
+        // Maybe replace the existing voxels
+        while (projectionBuffer.hasRemaining()) {
+            maybeReplaceCurrentBufferPosition(buffer, projectionBuffer.buffer());
+        }
+    }
 }

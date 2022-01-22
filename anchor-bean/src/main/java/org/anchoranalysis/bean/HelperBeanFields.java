@@ -55,7 +55,7 @@ class HelperBeanFields {
     public static String describeChildBeans(AnchorBean<?> bean) {
         try {
             List<String> descriptions =
-            		FunctionalList.mapToListOptional(
+                    FunctionalList.mapToListOptional(
                             bean.fields(),
                             OperationFailedException.class,
                             field -> maybeDescribeChildBean(bean, field));

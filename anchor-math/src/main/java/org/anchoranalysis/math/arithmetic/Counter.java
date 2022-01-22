@@ -25,7 +25,9 @@
  */
 package org.anchoranalysis.math.arithmetic;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 /**
  * A simple counter that increments.
@@ -34,6 +36,8 @@ import lombok.Getter;
  *
  * @author Owen Feehan
  */
+@AllArgsConstructor
+@NoArgsConstructor
 public class Counter {
 
     /** The count, as per current state. */
@@ -42,6 +46,17 @@ public class Counter {
     /** Increases the counter by one. */
     public void increment() {
         count++;
+    }
+
+    /**
+     * Increases the counter by one, returning the previous value.
+     *
+     * @return the value before the increment.
+     */
+    public int incrementReturn() {
+        int previous = count;
+        count++;
+        return previous;
     }
 
     /**

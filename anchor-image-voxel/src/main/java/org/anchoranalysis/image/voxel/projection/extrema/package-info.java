@@ -23,5 +23,9 @@
  * THE SOFTWARE.
  * #L%
  */
-/** Buffer for performing a <i>mean intensity projection</i>. */
-package org.anchoranalysis.image.voxel.buffer.mean;
+/**
+ * Classes for performing both a <a
+ * href="https://en.wikipedia.org/wiki/Maximum_intensity_projection">Maximum Intensity
+ * Projection</a> and a minimum projection.
+ */
+package org.anchoranalysis.image.voxel.projection.extrema;

@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-image-voxel
+ * anchor-image
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -23,9 +23,34 @@
  * THE SOFTWARE.
  * #L%
  */
-/**
- * Buffer for performing a <a
- * href="https://en.wikipedia.org/wiki/Maximum_intensity_projection">Maximum Intensity
- * Projection</a>.
- */
-package org.anchoranalysis.image.voxel.buffer.max;
+
+package org.anchoranalysis.image.voxel.projection.extrema;
+
+import java.nio.FloatBuffer;
+import org.anchoranalysis.core.functional.unchecked.BiFloatPredicate;
+import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
+import org.anchoranalysis.spatial.box.Extent;
+
+class FloatImplementation extends MaybeReplaceBufferBase<FloatBuffer> {
+
+    /** The predicate to apply to determine, whether to replace a value or not. */
+    private final BiFloatPredicate predicate;
+
+    public FloatImplementation(Extent extent, BiFloatPredicate predicate) {
+        super(extent, VoxelsFactory.getFloat());
+        this.predicate = predicate;
+    }
+
+    @Override
+    protected void maybeReplaceCurrentBufferPosition(FloatBuffer buffer, FloatBuffer projection) {
+        float inPixel = buffer.get();
+        if (predicate.test(inPixel, projection.get())) {
+            projection.put(projection.position() - 1, inPixel);
+        }
+    }
+
+    @Override
+    protected void assignCurrentBufferPosition(FloatBuffer buffer, FloatBuffer projection) {
+        projection.put(buffer.get());
+    }
+}

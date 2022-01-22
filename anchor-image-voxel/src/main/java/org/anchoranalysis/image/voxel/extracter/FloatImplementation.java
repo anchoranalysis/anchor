@@ -28,9 +28,9 @@ package org.anchoranalysis.image.voxel.extracter;
 import java.nio.FloatBuffer;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.ProjectableBuffer;
-import org.anchoranalysis.image.voxel.buffer.max.MaxIntensityProjection;
-import org.anchoranalysis.image.voxel.buffer.mean.MeanIntensityProjection;
 import org.anchoranalysis.image.voxel.iterator.MinMaxRange;
+import org.anchoranalysis.image.voxel.projection.MeanIntensityProjection;
+import org.anchoranalysis.image.voxel.projection.extrema.MaxIntensityProjection;
 import org.anchoranalysis.spatial.box.Extent;
 
 class FloatImplementation extends VoxelsExtracterBase<FloatBuffer> {
