@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.image.bean.channel.converter;
+package org.anchoranalysis.image.bean.channel;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

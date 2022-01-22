@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-image-bean
+ * anchor-image
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -24,27 +24,39 @@
  * #L%
  */
 
-package org.anchoranalysis.image.bean.channel.converter;
+package org.anchoranalysis.image.voxel.convert;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.exception.CreateException;
-import org.anchoranalysis.image.bean.ImageBean;
-import org.anchoranalysis.image.core.channel.convert.ChannelConverter;
+import java.nio.FloatBuffer;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedIntBuffer;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedShortBuffer;
 
 /**
- * Creates a {@link ChannelConverter} for converting a channel to a particular type.
+ * Converts voxel buffers to an <b>unsigned 16-bit</b> buffer without scaling any values.
  *
- * @param <T> destination voxel type to convert to
+ * <p>Values with intesity greater than {@code 65535} are clamped to {@code 65535}.
+ *
+ * @author Owen Feehan
  */
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-public abstract class ConvertChannelTo<T> extends ImageBean<ConvertChannelTo<T>> {
+public final class ToUnsignedShortNoScaling extends VoxelsConverter<UnsignedShortBuffer> {
 
-    /**
-     * Creates the converter.
-     *
-     * @return the created converter.
-     * @throws CreateException if the converter cannot be successfully created.
-     */
-    public abstract ChannelConverter<T> createConverter() throws CreateException;
+    @Override
+    protected void convertUnsignedByte(UnsignedByteBuffer in, UnsignedShortBuffer out) {
+        out.putUnsigned(in.getUnsigned());
+    }
+
+    @Override
+    protected void convertUnsignedShort(UnsignedShortBuffer in, UnsignedShortBuffer out) {
+        out.putRaw(in.getRaw());
+    }
+
+    @Override
+    protected void convertUnsignedInt(UnsignedIntBuffer in, UnsignedShortBuffer out) {
+        out.putLongClamped(in.getUnsigned());
+    }
+
+    @Override
+    protected void convertFloat(FloatBuffer in, UnsignedShortBuffer out) {
+        out.putFloatClamped(in.get());
+    }
 }

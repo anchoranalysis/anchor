@@ -50,7 +50,7 @@ import org.anchoranalysis.image.io.stack.output.StackWriteAttributes;
 import org.anchoranalysis.image.io.stack.output.StackWriteAttributesFactory;
 import org.anchoranalysis.image.io.stack.output.generator.RasterGeneratorSelectFormat;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedShortBuffer;
-import org.anchoranalysis.image.voxel.convert.ToShortScaleByType;
+import org.anchoranalysis.image.voxel.convert.ToUnsignedShortScaleByType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
@@ -125,7 +125,7 @@ public class WriteText extends StackProvider {
 
             if (createShort) {
                 ChannelConverter<UnsignedShortBuffer> conveter =
-                        new ToUnsignedShort(new ToShortScaleByType());
+                        new ToUnsignedShort(new ToUnsignedShortScaleByType());
 
                 stack = conveter.convert(stack, ConversionPolicy.CHANGE_EXISTING_CHANNEL);
             }

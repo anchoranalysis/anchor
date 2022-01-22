@@ -32,53 +32,47 @@ import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedIntBuffer;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedShortBuffer;
 
 /**
- * Converts voxel buffers to an <b>unsigned 8-bit</b> buffer scaling against a the minimum and
- * maximum constant.
+ * Converts voxel buffers to an <b>unsigned 8-bit</b> buffer linearly scaling against the maximum
+ * constant value.
  *
- * <p>The scaling is linear between these two boundaries.
+ * <p>The scaling occurs so that the full 8-bit range of values is supported.
  *
  * @author Owen Feehan
  */
-public final class ToByteScaleByMinMaxValue extends ToByte {
+public final class ToUnsignedByteScaleByMaxValue extends ToUnsignedByte {
 
-    private float scale = 0;
-    private long subtract = 0;
+    private float scale;
 
     /**
-     * Creates with the minimum- and maximum-values which existing values are scaled against.
+     * Creates with the maximum-value which existing values are scaled against.
      *
-     * @param minValue the <i>minimum</i>-value that will be represented in the scaled-values
-     *     (inclusive).
-     * @param maxValue the <i>maximum</i>-value that will be represented in the scaled-values
-     *     (inclusive).
+     * @param maxValue the maximum-value that will be represented in the scaled-values.
      */
-    public ToByteScaleByMinMaxValue(long minValue, long maxValue) {
-        setMinMaxValues(minValue, maxValue);
+    public ToUnsignedByteScaleByMaxValue(int maxValue) {
+        setMaxValue(maxValue);
     }
 
     /**
-     * Assigns the minimum- and maximum-values which existing values are scaled against.
+     * Assigns the maximum-value that will be represented in the scaled-values.
      *
-     * @param minValue the <i>minimum</i>-value that will be represented in the scaled-values.
-     * @param maxValue the <i>maximum</i>-value that will be represented in the scaled-values.
+     * @param maxValue the maximum-value.
      */
-    public void setMinMaxValues(long minValue, long maxValue) {
-        this.scale = 255.0f / (maxValue - minValue);
-        this.subtract = minValue;
+    public void setMaxValue(long maxValue) {
+        this.scale = 255.0f / maxValue;
     }
 
     @Override
     protected void convertUnsignedShort(UnsignedShortBuffer in, UnsignedByteBuffer out) {
-        out.putFloatClamped(scale * (in.getUnsigned() - subtract));
+        out.putFloatClamped(scale * in.getUnsigned());
     }
 
     @Override
     protected void convertUnsignedInt(UnsignedIntBuffer in, UnsignedByteBuffer out) {
-        out.putFloatClamped(scale * (in.getUnsigned() - subtract));
+        out.putFloatClamped(scale * in.getUnsigned());
     }
 
     @Override
     protected void convertFloat(FloatBuffer in, UnsignedByteBuffer out) {
-        out.putFloatClamped(scale * (in.get() - subtract));
+        out.putFloatClamped(scale * in.get());
     }
 }

@@ -31,7 +31,7 @@ import org.anchoranalysis.image.core.channel.convert.ConversionPolicy;
 import org.anchoranalysis.image.core.channel.convert.ToUnsignedByte;
 import org.anchoranalysis.image.core.channel.convert.attached.ChannelConverterAttached;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
-import org.anchoranalysis.image.voxel.convert.ToByteScaleByMinMaxValue;
+import org.anchoranalysis.image.voxel.convert.ToUnsignedByteScaleByMinMaxValue;
 import org.anchoranalysis.image.voxel.convert.VoxelsConverter;
 import org.anchoranalysis.image.voxel.iterator.MinMaxRange;
 
@@ -45,14 +45,14 @@ import org.anchoranalysis.image.voxel.iterator.MinMaxRange;
  */
 public class IntensityRange implements ChannelConverterAttached<Channel, UnsignedByteBuffer> {
 
-    private ToByteScaleByMinMaxValue voxelsConverter;
+    private ToUnsignedByteScaleByMinMaxValue voxelsConverter;
 
     private ToUnsignedByte delegate;
 
     /** Default constructor. */
     public IntensityRange() {
         // Initialize with a dummy value
-        voxelsConverter = new ToByteScaleByMinMaxValue(0, 1);
+        voxelsConverter = new ToUnsignedByteScaleByMinMaxValue(0, 1);
 
         delegate = new ToUnsignedByte(voxelsConverter);
     }

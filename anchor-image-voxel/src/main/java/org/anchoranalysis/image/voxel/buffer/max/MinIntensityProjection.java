@@ -41,17 +41,16 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.spatial.box.Extent;
 
 /**
- * Creates buffers for performing a <a
- * href="https://en.wikipedia.org/wiki/Maximum_intensity_projection">Maximum Intensity
- * Projection</a>.
+ * Creates buffers for performing a <i>minimum intensity projection</i>, similarly to {@link
+ * MaxIntensityProjection} but calculating the minimum.
  *
  * @author Owen Feehan
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class MaxIntensityProjection {
+public class MinIntensityProjection {
 
     /**
-     * Creates a buffer for a <i>maximum-intensity projection</i> for <b>unsigned byte</b> voxels.
+     * Creates a buffer for a <i>minimum-intensity projection</i> for <b>unsigned byte</b> voxels.
      *
      * @param dataType the data-type to use for creating the buffer.
      * @param extent the size of the projected image. The z-dimension is ignored.
@@ -72,64 +71,64 @@ public class MaxIntensityProjection {
             return (ProjectableBuffer<T>) createFloat(extent);
         } else {
             throw new OperationFailedException(
-                    "No maximum-intensity projection buffer can be created, as voxel-data-type is unsupported: "
+                    "No minimum-intensity projection buffer can be created, as voxel-data-type is unsupported: "
                             + dataType.toString());
         }
     }
 
     /**
-     * Creates a buffer for a <i>maximum-intensity projection</i> for <b>unsigned byte</b> voxels.
+     * Creates a buffer for a <i>minimum-intensity projection</i> for <b>unsigned byte</b> voxels.
      *
      * @param extent the size of the projected image. The z-dimension is ignored.
      * @return a newly created buffer that can be used for projection.
      */
     public static ProjectableBuffer<UnsignedByteBuffer> createUnsignedByte(Extent extent) {
         return new UnsignedByteImplementation(
-                extent, MaxIntensityProjection::isValueGreaterThanExistingInt);
+                extent, MinIntensityProjection::isValueLessThanExistingInt);
     }
 
     /**
-     * Creates a buffer for a <i>maximum-intensity projection</i> for <b>unsigned short</b> voxels.
+     * Creates a buffer for a <i>minimum-intensity projection</i> for <b>unsigned short</b> voxels.
      *
      * @param extent the size of the projected image. The z-dimension is ignored.
      * @return a newly created buffer that can be used for projection.
      */
     public static ProjectableBuffer<UnsignedShortBuffer> createUnsignedShort(Extent extent) {
         return new UnsignedShortImplementation(
-                extent, MaxIntensityProjection::isValueGreaterThanExistingInt);
+                extent, MinIntensityProjection::isValueLessThanExistingInt);
     }
 
     /**
-     * Creates a buffer for a <i>maximum-intensity projection</i> for <b>unsigned int</b> voxels.
+     * Creates a buffer for a <i>minimum-intensity projection</i> for <b>unsigned int</b> voxels.
      *
      * @param extent the size of the projected image. The z-dimension is ignored.
      * @return a newly created buffer that can be used for projection.
      */
     public static ProjectableBuffer<UnsignedIntBuffer> createUnsignedInt(Extent extent) {
         return new UnsignedIntImplementation(
-                extent, MaxIntensityProjection::isValueGreaterThanExistingLong);
+                extent, MinIntensityProjection::isValueLessThanExistingLong);
     }
 
     /**
-     * Creates a buffer for a <i>maximum-intensity projection</i> for <b>float</b> voxels.
+     * Creates a buffer for a <i>minimum-intensity projection</i> for <b>float</b> voxels.
      *
      * @param extent the size of the projected image. The z-dimension is ignored.
      * @return a newly created buffer that can be used for projection.
      */
     public static ProjectableBuffer<FloatBuffer> createFloat(Extent extent) {
         return new FloatImplementation(
-                extent, MaxIntensityProjection::isValueGreaterThanExistingFloat);
+                extent, MinIntensityProjection::isValueLessThanExistingFloat);
     }
 
-    private static boolean isValueGreaterThanExistingInt(int value, int existing) {
-        return value > existing;
+    private static boolean isValueLessThanExistingInt(int value, int existing) {
+        return value < existing;
     }
 
-    private static boolean isValueGreaterThanExistingLong(long value, long existing) {
-        return value > existing;
+    private static boolean isValueLessThanExistingLong(long value, long existing) {
+        return value < existing;
     }
 
-    private static boolean isValueGreaterThanExistingFloat(float value, float existing) {
-        return value > existing;
+    private static boolean isValueLessThanExistingFloat(float value, float existing) {
+        return value < existing;
     }
 }

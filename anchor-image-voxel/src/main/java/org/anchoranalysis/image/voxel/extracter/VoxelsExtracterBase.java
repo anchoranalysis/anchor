@@ -269,7 +269,7 @@ abstract class VoxelsExtracterBase<T> implements VoxelsExtracter<T> {
     }
 
     private Voxels<T> project(ProjectableBuffer<T> projection) {
-        voxels.extent().iterateOverZ(z -> projection.addSlice(voxels.slice(z)));
+        voxels.extent().iterateOverZ(z -> projection.addVoxelBuffer(voxels.slice(z)));
         return projection.completeProjection();
     }
 }

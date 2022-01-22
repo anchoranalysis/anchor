@@ -23,5 +23,7 @@
  * THE SOFTWARE.
  * #L%
  */
-/** Base classes for comparing a channel to another type. */
-package org.anchoranalysis.image.bean.channel.converter;
+/**
+ * Base classes for performing operations on {@link org.anchoranalysis.image.core.channel.Channel}s.
+ */
+package org.anchoranalysis.image.bean.channel;

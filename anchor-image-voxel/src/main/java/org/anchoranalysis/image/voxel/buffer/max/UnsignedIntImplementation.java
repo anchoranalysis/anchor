@@ -26,23 +26,35 @@
 
 package org.anchoranalysis.image.voxel.buffer.max;
 
+import org.anchoranalysis.core.functional.unchecked.BiLongPredicate;
 import org.anchoranalysis.image.voxel.buffer.primitive.PrimitiveConverter;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedIntBuffer;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 import org.anchoranalysis.spatial.box.Extent;
 
-class UnsignedIntImplementation extends MaxIntensityBufferBase<UnsignedIntBuffer> {
+class UnsignedIntImplementation extends MaybeReplaceBufferBase<UnsignedIntBuffer> {
 
-    public UnsignedIntImplementation(Extent extent) {
+    /** The predicate to apply to determine, whether to replace a value or not. */
+    private final BiLongPredicate predicate;
+
+    public UnsignedIntImplementation(Extent extent, BiLongPredicate predicate) {
         super(extent, VoxelsFactory.getUnsignedInt());
+        this.predicate = predicate;
     }
 
     @Override
     protected void maybeReplaceCurrentBufferPosition(
-            UnsignedIntBuffer sliceToBeAdded, UnsignedIntBuffer projection) {
-        int inPixel = sliceToBeAdded.getRaw();
-        if (PrimitiveConverter.unsignedIntToLong(inPixel) > projection.getUnsigned()) {
+            UnsignedIntBuffer buffer, UnsignedIntBuffer projection) {
+        int inPixel = buffer.getRaw();
+        if (predicate.test(
+                PrimitiveConverter.unsignedIntToLong(inPixel), projection.getUnsigned())) {
             projection.putRaw(projection.position() - 1, inPixel);
         }
+    }
+
+    @Override
+    protected void assignCurrentBufferPosition(
+            UnsignedIntBuffer buffer, UnsignedIntBuffer projection) {
+        projection.putRaw(buffer.getRaw());
     }
 }
