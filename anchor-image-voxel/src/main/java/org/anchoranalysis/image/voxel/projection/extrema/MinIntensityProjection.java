@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.image.voxel.buffer.max;
+package org.anchoranalysis.image.voxel.projection.extrema;
 
 import java.nio.FloatBuffer;
 import lombok.AccessLevel;

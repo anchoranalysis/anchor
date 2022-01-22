@@ -24,37 +24,37 @@
  * #L%
  */
 
-package org.anchoranalysis.image.voxel.buffer.max;
+package org.anchoranalysis.image.voxel.projection.extrema;
 
 import org.anchoranalysis.core.functional.unchecked.BiIntPredicate;
 import org.anchoranalysis.image.voxel.buffer.primitive.PrimitiveConverter;
-import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedShortBuffer;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 import org.anchoranalysis.spatial.box.Extent;
 
-class UnsignedShortImplementation extends MaybeReplaceBufferBase<UnsignedShortBuffer> {
+class UnsignedByteImplementation extends MaybeReplaceBufferBase<UnsignedByteBuffer> {
 
     /** The predicate to apply to determine, whether to replace a value or not. */
     private final BiIntPredicate predicate;
 
-    public UnsignedShortImplementation(Extent extent, BiIntPredicate predicate) {
-        super(extent, VoxelsFactory.getUnsignedShort());
+    public UnsignedByteImplementation(Extent extent, BiIntPredicate predicate) {
+        super(extent, VoxelsFactory.getUnsignedByte());
         this.predicate = predicate;
     }
 
     @Override
     protected void maybeReplaceCurrentBufferPosition(
-            UnsignedShortBuffer buffer, UnsignedShortBuffer projection) {
-        short inPixel = buffer.getRaw();
+            UnsignedByteBuffer buffer, UnsignedByteBuffer projection) {
+        byte inPixel = buffer.getRaw();
         if (predicate.test(
-                PrimitiveConverter.unsignedShortToInt(inPixel), projection.getUnsigned())) {
+                PrimitiveConverter.unsignedByteToInt(inPixel), projection.getUnsigned())) {
             projection.putRaw(projection.position() - 1, inPixel);
         }
     }
 
     @Override
     protected void assignCurrentBufferPosition(
-            UnsignedShortBuffer buffer, UnsignedShortBuffer projection) {
+            UnsignedByteBuffer buffer, UnsignedByteBuffer projection) {
         projection.putRaw(buffer.getRaw());
     }
 }

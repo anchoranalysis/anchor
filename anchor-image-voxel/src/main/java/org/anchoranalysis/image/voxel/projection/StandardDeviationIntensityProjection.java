@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.image.voxel.buffer.mean;
+package org.anchoranalysis.image.voxel.projection;
 
 import java.nio.FloatBuffer;
 import lombok.AccessLevel;
@@ -42,15 +42,18 @@ import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 import org.anchoranalysis.spatial.box.Extent;
 
 /**
- * Creates buffers for performing a mean-intensity-projection.
+ * Creates buffers for projecting the standard-deviation.
+ *
+ * <p>This occurs similarly to a mean-intensity-projection, but instead writes the
+ * standard-deviation of each voxel across buffers.
  *
  * @author Owen Feehan
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class MeanIntensityProjection {
+public class StandardDeviationIntensityProjection {
 
     /**
-     * Creates a buffer for a <i>mean-intensity projection</i> for <b>unsigned byte</b> voxels.
+     * Creates a buffer for a <i>standard-deviation projection</i> for <b>unsigned byte</b> voxels.
      *
      * @param dataType the data-type to use for creating the buffer.
      * @param extent the size of the projected image. The z-dimension is ignored.
@@ -77,42 +80,42 @@ public class MeanIntensityProjection {
     }
 
     /**
-     * Creates a buffer for a <i>mean-intensity projection</i> for <b>unsigned byte</b> voxels.
+     * Creates a buffer for a <i>standard-deviation projection</i> for <b>unsigned byte</b> voxels.
      *
      * @param extent the size of the projected image. The z-dimension is ignored.
      * @return a newly created buffer that can be used for projection.
      */
     public static ProjectableBuffer<UnsignedByteBuffer> createUnsignedByte(Extent extent) {
-        return new MeanIntensityBuffer<>(VoxelsFactory.getUnsignedByte(), extent);
+        return new StandardDeviationIntensityBuffer<>(VoxelsFactory.getUnsignedByte(), extent);
     }
 
     /**
-     * Creates a buffer for a <i>mean-intensity projection</i> for <b>unsigned short</b> voxels.
+     * Creates a buffer for a <i>standard-deviation projection</i> for <b>unsigned short</b> voxels.
      *
      * @param extent the size of the projected image. The z-dimension is ignored.
      * @return a newly created buffer that can be used for projection.
      */
     public static ProjectableBuffer<UnsignedShortBuffer> createUnsignedShort(Extent extent) {
-        return new MeanIntensityBuffer<>(VoxelsFactory.getUnsignedShort(), extent);
+        return new StandardDeviationIntensityBuffer<>(VoxelsFactory.getUnsignedShort(), extent);
     }
 
     /**
-     * Creates a buffer for a <i>mean-intensity projection</i> for <b>unsigned int</b> voxels.
+     * Creates a buffer for a <i>standard-deviation projection</i> for <b>unsigned int</b> voxels.
      *
      * @param extent the size of the projected image. The z-dimension is ignored.
      * @return a newly created buffer that can be used for projection.
      */
     public static ProjectableBuffer<UnsignedIntBuffer> createUnsignedInt(Extent extent) {
-        return new MeanIntensityBuffer<>(VoxelsFactory.getUnsignedInt(), extent);
+        return new StandardDeviationIntensityBuffer<>(VoxelsFactory.getUnsignedInt(), extent);
     }
 
     /**
-     * Creates a buffer for a <i>mean-intensity projection</i> for <b>float</b> voxels.
+     * Creates a buffer for a <i>standard-deviation projection</i> for <b>float</b> voxels.
      *
      * @param extent the size of the projected image. The z-dimension is ignored.
      * @return a newly created buffer that can be used for projection.
      */
     public static ProjectableBuffer<FloatBuffer> createFloat(Extent extent) {
-        return new MeanIntensityBuffer<>(VoxelsFactory.getFloat(), extent);
+        return new StandardDeviationIntensityBuffer<>(VoxelsFactory.getFloat(), extent);
     }
 }

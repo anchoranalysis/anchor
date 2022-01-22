@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.image.voxel.buffer.mean;
+package org.anchoranalysis.image.voxel.projection;
 
 import java.nio.FloatBuffer;
 import org.anchoranalysis.image.voxel.Voxels;
@@ -47,51 +47,52 @@ class MeanIntensityBuffer<T> implements ProjectableBuffer<T> {
     private static final VoxelsConverterMulti CONVERTER = new VoxelsConverterMulti();
 
     private Voxels<FloatBuffer> voxelsSum;
-    private int countSlices = 0;
-    private final VoxelsFactoryTypeBound<T> flatType;
+    private int count = 0;
+    private final VoxelsFactoryTypeBound<T> factory;
 
     /**
      * Creates with minimal parameters, as no preprocessing is necessary.
      *
-     * @param flatType the voxel data-type to use for the flattened (mean-intensity) buffer.
+     * @param factory the voxel data-type to use for to create the (mean-intensity) buffer.
      * @param extent the size expected for images that will be projected.
      */
-    public MeanIntensityBuffer(VoxelsFactoryTypeBound<T> flatType, Extent extent) {
-        this.flatType = flatType;
-        this.voxelsSum = VoxelsFactory.getFloat().createInitialized(extent.flattenZ());
+    public MeanIntensityBuffer(VoxelsFactoryTypeBound<T> factory, Extent extent) {
+        this.factory = factory;
+        this.voxelsSum = VoxelsFactory.getFloat().createInitialized(extent);
     }
 
     @Override
     public void addVoxelBuffer(VoxelBuffer<T> voxelBuffer) {
-        addVoxelBufferInternal(voxelBuffer);
-        countSlices++;
+        addVoxelBufferInternal(voxelBuffer, 0);
+        count++;
     }
 
     @Override
     public void addVoxels(Voxels<T> voxels) {
         for (int z = 0; z < voxels.extent().z(); z++) {
-            addVoxelBufferInternal(voxels.slice(z));
+            addVoxelBufferInternal(voxels.slice(z), z);
         }
-        countSlices++;
+        count++;
     }
 
     @Override
     public Voxels<T> completeProjection() {
-        voxelsSum.arithmetic().divideBy(countSlices);
-        return CONVERTER.convert(new VoxelsUntyped(voxelsSum), flatType);
+        voxelsSum.arithmetic().divideBy(count);
+        return CONVERTER.convert(new VoxelsUntyped(voxelsSum), factory);
     }
 
     /** Adds a {@link VoxelsBuffer} without incrementing the count. */
-    private void addVoxelBufferInternal(VoxelBuffer<T> voxelBuffer) {
+    private void addVoxelBufferInternal(VoxelBuffer<T> voxelBuffer, int z) {
+        FloatBuffer sumBuffer = voxelsSum.sliceBuffer(z);
         voxelsSum
                 .extent()
                 .iterateOverXYOffset(
-                        offset -> incrementSumBuffer(offset, voxelBuffer.getInt(offset)));
+                        offset ->
+                                incrementSumBuffer(offset, voxelBuffer.getInt(offset), sumBuffer));
     }
 
-    /** Increments a particular offset in the sum bufffer by a certain amount */
-    private void incrementSumBuffer(int index, int toAdd) {
-        FloatBuffer sumBuffer = voxelsSum.sliceBuffer(0);
+    /** Increments a particular offset in the sum buffer by a certain amount */
+    private void incrementSumBuffer(int index, int toAdd, FloatBuffer sumBuffer) {
         sumBuffer.put(index, sumBuffer.get(index) + toAdd);
     }
 }

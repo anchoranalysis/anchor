@@ -4,19 +4,16 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
-
-import org.anchoranalysis.core.functional.checked.CheckedFunction;
-
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.core.functional.checked.CheckedFunction;
 
 /**
  * Like {@link FunctionalList} but executes any operations in parallel where possible.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class FunctionalListParallel {
 
     /**

@@ -24,37 +24,37 @@
  * #L%
  */
 
-package org.anchoranalysis.image.voxel.buffer.max;
+package org.anchoranalysis.image.voxel.projection.extrema;
 
-import org.anchoranalysis.core.functional.unchecked.BiLongPredicate;
+import org.anchoranalysis.core.functional.unchecked.BiIntPredicate;
 import org.anchoranalysis.image.voxel.buffer.primitive.PrimitiveConverter;
-import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedIntBuffer;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedShortBuffer;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 import org.anchoranalysis.spatial.box.Extent;
 
-class UnsignedIntImplementation extends MaybeReplaceBufferBase<UnsignedIntBuffer> {
+class UnsignedShortImplementation extends MaybeReplaceBufferBase<UnsignedShortBuffer> {
 
     /** The predicate to apply to determine, whether to replace a value or not. */
-    private final BiLongPredicate predicate;
+    private final BiIntPredicate predicate;
 
-    public UnsignedIntImplementation(Extent extent, BiLongPredicate predicate) {
-        super(extent, VoxelsFactory.getUnsignedInt());
+    public UnsignedShortImplementation(Extent extent, BiIntPredicate predicate) {
+        super(extent, VoxelsFactory.getUnsignedShort());
         this.predicate = predicate;
     }
 
     @Override
     protected void maybeReplaceCurrentBufferPosition(
-            UnsignedIntBuffer buffer, UnsignedIntBuffer projection) {
-        int inPixel = buffer.getRaw();
+            UnsignedShortBuffer buffer, UnsignedShortBuffer projection) {
+        short inPixel = buffer.getRaw();
         if (predicate.test(
-                PrimitiveConverter.unsignedIntToLong(inPixel), projection.getUnsigned())) {
+                PrimitiveConverter.unsignedShortToInt(inPixel), projection.getUnsigned())) {
             projection.putRaw(projection.position() - 1, inPixel);
         }
     }
 
     @Override
     protected void assignCurrentBufferPosition(
-            UnsignedIntBuffer buffer, UnsignedIntBuffer projection) {
+            UnsignedShortBuffer buffer, UnsignedShortBuffer projection) {
         projection.putRaw(buffer.getRaw());
     }
 }
