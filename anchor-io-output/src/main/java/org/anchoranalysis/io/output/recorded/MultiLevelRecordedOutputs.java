@@ -61,8 +61,9 @@ public class MultiLevelRecordedOutputs {
                     "output-name has been recorded as a second-level output, without having being recorded as a first-level output: "
                             + outputName);
         }
-
-        return second.computeIfAbsent(outputName, name -> new RecordedOutputs());
+        synchronized(this) {
+        	return second.computeIfAbsent(outputName, name -> new RecordedOutputs());
+        }
     }
 
     /**
