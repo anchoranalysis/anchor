@@ -28,7 +28,6 @@ package org.anchoranalysis.feature.session.cache;
 
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
-import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
@@ -51,12 +50,6 @@ class ResettableCalculator<T extends FeatureInput> implements FeatureCalculator<
     private ResettableSet<CalculationPartMap<?, T, ?, FeatureCalculationException>>
             setCalculationMap = new ResettableSet<>(false);
 
-    private Logger logger;
-
-    public void initialize(Logger logger) {
-        this.logger = logger;
-    }
-
     /** Invalidates internal caches (resets!) so all items will be calculated anew. */
     public void invalidate() {
         setCalculation.invalidate();
@@ -66,13 +59,7 @@ class ResettableCalculator<T extends FeatureInput> implements FeatureCalculator<
     @Override
     public double calculate(Feature<T> feature, FeatureCalculationInput<T> input)
             throws FeatureCalculationException {
-        double val = feature.calculateCheckInitialized(input);
-        if (Double.isNaN(val)) {
-            logger.messageLogger()
-                    .logFormatted(
-                            "WARNING: NaN returned from feature %s", feature.getFriendlyName());
-        }
-        return val;
+        return feature.calculateCheckInitialized(input);
     }
 
     @SuppressWarnings("unchecked")
