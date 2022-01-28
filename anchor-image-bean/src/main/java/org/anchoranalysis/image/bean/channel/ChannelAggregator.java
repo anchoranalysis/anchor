@@ -3,6 +3,8 @@ package org.anchoranalysis.image.bean.channel;
 import java.util.Optional;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.log.Logger;
+import org.anchoranalysis.image.bean.nonbean.ConsistentChannelChecker;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 
@@ -17,19 +19,45 @@ import org.anchoranalysis.image.core.dimensions.Dimensions;
 public abstract class ChannelAggregator extends AnchorBean<ChannelAggregator> {
 
     /**
+     * When true the resolution is no longer considered when comparing added channels to any
+     * existing channel.
+     */
+    private boolean ignoreResolution = false;
+
+    private ConsistentChannelChecker checker = new ConsistentChannelChecker();
+
+    /**
      * Adds a {@link Channel} to the aggregation.
      *
      * @param channel the channel to add.
+     * @param logger the logger to output warning messages to.
      * @throws OperationFailedException if the dimensions do not match existing channels that were
      *     previously added.
      */
-    public synchronized void addChannel(Channel channel) throws OperationFailedException {
-        Optional<Dimensions> existing = existing();
-        if (existing.isPresent() && !channel.dimensions().equals(existing.get())) {
-            throw new OperationFailedException(
-                    String.format(
-                            "Dimensions of added-channel (%s) and aggregated-channel must be equal (%s)",
-                            channel.dimensions(), existing));
+    public synchronized void addChannel(Channel channel, Logger logger)
+            throws OperationFailedException {
+        Optional<Dimensions> existing = existingDimensions();
+
+        checker.checkChannelType(channel);
+
+        if (existing.isPresent() && !areDimensionsEqual(channel.dimensions(), existing.get())) {
+
+            if (existing.get().extent().equals(channel.dimensions().extent())) {
+                // If the sizes are the same but the resolutions differ, we stop comparing
+                // resolution
+                logger.messageLogger()
+                        .logFormatted(
+                                "Dropping image-resolution as it is not consistent between images: existing %s versus %s to add",
+                                existing.get().resolution(), channel.resolution());
+                existing = dropResolution(existing);
+                ignoreResolution = true;
+            } else {
+
+                throw new OperationFailedException(
+                        String.format(
+                                "Sizes of added-channel (%s) and aggregated-channel must be equal (%s)",
+                                channel.dimensions().extent(), existing.get().extent()));
+            }
         }
 
         addChannelAfterCheck(channel);
@@ -43,7 +71,7 @@ public abstract class ChannelAggregator extends AnchorBean<ChannelAggregator> {
      */
     public Channel aggregatedChannel() throws OperationFailedException {
 
-        if (!existing().isPresent()) {
+        if (!existingDimensions().isPresent()) {
             throw new OperationFailedException(
                     "No channels have been added, so cannot create aggregation");
         }
@@ -54,17 +82,17 @@ public abstract class ChannelAggregator extends AnchorBean<ChannelAggregator> {
     /**
      * The {@link Dimensions} to use for the aggregation.
      *
-     * @return the dimensions, if at least one call to {@link #addChannel(Channel)} has occurred,
-     *     otherwise {@link Optional#empty()}.
+     * @return the dimensions, if at least one call to {@link #addChannel(Channel, Logger)} has
+     *     occurred, otherwise {@link Optional#empty()}.
      */
-    protected abstract Optional<Dimensions> existing();
+    protected abstract Optional<Dimensions> existingDimensions();
 
     /**
      * Adds a {@link Channel} to the aggregation - after checking {@code channel} has acceptable
      * dimensions.
      *
      * @param channel the channel to add, guaranteed to have identical dimensions to any previous
-     *     call to {@link #addChannel(Channel)}.
+     *     call to {@link #addChannel(Channel, Logger)}.
      * @throws OperationFailedException if the dimensions do not match existing channels that were
      *     previously added.
      */
@@ -78,4 +106,23 @@ public abstract class ChannelAggregator extends AnchorBean<ChannelAggregator> {
      * @return a {@link Channel}, either as already exists internally, or newly created.
      */
     protected abstract Channel retrieveCreateAggregatedChannel();
+
+    /**
+     * Are two {@link Dimensions}, either considering or disconsidering the {@link Resolution}
+     * depending on {@code ignoreResolution}.
+     */
+    private boolean areDimensionsEqual(Dimensions existing, Dimensions toAdd) {
+        if (ignoreResolution) {
+            return existing.extent().equals(toAdd.extent());
+        } else {
+            return existing.equals(toAdd);
+        }
+    }
+
+    /** Removes the {@link Resolution} component. */
+    private static Optional<Dimensions> dropResolution(Optional<Dimensions> dimensions) {
+        return dimensions.map(
+                dimensionsToChange ->
+                        dimensionsToChange.duplicateChangeResolution(Optional.empty()));
+    }
 }

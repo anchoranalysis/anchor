@@ -46,9 +46,9 @@ import org.anchoranalysis.image.io.channel.input.ChannelGetter;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 
 /**
- * Applies a filter to a particular channel
+ * Applies a filter to a particular {@link Channel}.
  *
- * <p>Forms input from a stack called <i>input_channel</i>
+ * <p>Forms input from a stack called <i>input_channel</i>.
  *
  * @author Owen Feehan
  */

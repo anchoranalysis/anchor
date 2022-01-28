@@ -30,6 +30,7 @@ import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.spatial.box.BoundingBox;
@@ -50,6 +51,7 @@ import org.anchoranalysis.spatial.scale.ScaleFactor;
 @EqualsAndHashCode
 @Accessors(fluent = true)
 @AllArgsConstructor
+@ToString
 public final class Dimensions {
 
     /**
@@ -266,11 +268,6 @@ public final class Dimensions {
      */
     public boolean contains(BoundingBox box) {
         return extent.contains(box);
-    }
-
-    @Override
-    public String toString() {
-        return extent.toString();
     }
 
     /**

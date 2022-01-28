@@ -105,6 +105,25 @@ public class HistogramFromObjectsFactory {
     }
 
     /**
+     * Creates a {@link Histogram} of <i>all</i> voxel intensity values in {@code channel}, or only
+     * those in {@code mask} if it is dfined.
+     *
+     * @param channel the channel with voxels.
+     * @param mask an optional mask, that restricts which voxels are considered.
+     * @return a newly created {@link Histogram}.
+     * @throws CreateException if the size of the channel and mask do not match, or a histogram
+     *     cannot otherwise created.
+     */
+    public static Histogram createFrom(Channel channel, Optional<Mask> mask)
+            throws CreateException {
+        if (mask.isPresent()) {
+            return createFrom(channel, mask.get());
+        } else {
+            return HistogramFactory.createFrom(channel.voxels());
+        }
+    }
+
+    /**
      * Creates a {@link Histogram} of <i>all</i> voxel intensity values in {@code channel}
      * corresponding to {@link Mask}.
      *
