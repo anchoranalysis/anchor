@@ -139,7 +139,7 @@ public class CheckedStream {
      * @param throwableClass the class of {@code E}.
      * @param mapFunction the function to use for mapping.
      * @return the output of the flatMap.
-     * @throws E if the exception is thrown during mapping
+     * @throws E if the exception is thrown during mapping.
      */
     public static <S, T, E extends Exception> Stream<T> map(
             Stream<S> stream,
