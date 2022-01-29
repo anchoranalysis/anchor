@@ -87,7 +87,7 @@ import org.apache.commons.io.IOCase;
  * @param <S> shared-state for job
  */
 public class InputOutputExperiment<T extends InputFromManager, S> extends OutputExperiment
-        implements ReplaceInputManager, ReplaceOutputManager, ReplaceTask<T, S> {
+        implements ReplaceInputManager<T>, ReplaceOutputManager, ReplaceTask<T, S> {
 
     private static final String EXECUTION_TIME_COLLECTING_INPUTS = "Collecting inputs";
 
@@ -134,10 +134,9 @@ public class InputOutputExperiment<T extends InputFromManager, S> extends Output
         return super.useDetailedLogging();
     }
 
-    @SuppressWarnings("unchecked")
     @Override
-    public void replaceInputManager(InputManager<?> inputManager) throws OperationFailedException {
-        this.input = (InputManager<T>) inputManager;
+    public void replaceInputManager(InputManager<T> inputManager) throws OperationFailedException {
+        this.input = inputManager;
     }
 
     @Override

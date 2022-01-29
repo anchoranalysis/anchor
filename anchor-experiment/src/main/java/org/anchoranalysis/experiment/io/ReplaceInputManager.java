@@ -27,6 +27,7 @@
 package org.anchoranalysis.experiment.io;
 
 import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.input.bean.InputManager;
 
 /**
@@ -34,7 +35,7 @@ import org.anchoranalysis.io.input.bean.InputManager;
  *
  * @author Owen Feehan
  */
-public interface ReplaceInputManager {
+public interface ReplaceInputManager<T extends InputFromManager> {
 
-    public void replaceInputManager(InputManager<?> inputManager) throws OperationFailedException;
+    public void replaceInputManager(InputManager<T> inputManager) throws OperationFailedException;
 }
