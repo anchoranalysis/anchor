@@ -27,7 +27,7 @@ package org.anchoranalysis.image.core.dimensions.size.suggestion;
 
 import java.util.Optional;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.spatial.box.Extent;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 /**
@@ -40,12 +40,34 @@ public interface ImageSizeSuggestion {
     /**
      * Calculates the scaling factor.
      *
-     * @param dimensionsToBeScaled dimensions of the source image/entity that will be scaled, if
-     *     they are known.
+     * @param extentToBeScaled dimensions of the source image/entity that will be scaled, if they
+     *     are known.
      * @return the scaling-factor to use
      * @throws OperationFailedException if insufficient information is available to calculation a
      *     factor.
      */
-    ScaleFactor calculateScaleFactor(Optional<Dimensions> dimensionsToBeScaled)
+    ScaleFactor calculateScaleFactor(Optional<Extent> extentToBeScaled)
             throws OperationFailedException;
+
+    /**
+     * A {@link ScaleFactor}, if one exists, that is applied <b>uniformally</b>, independent of the
+     * {@link Extent} to be scaled.
+     *
+     * @return such a scale-factor, if it exists. {@link Optional#empty} if it does not exist.
+     */
+    Optional<ScaleFactor> uniformScaleFactor();
+
+    /**
+     * A specific <b>width</b>, if one exists, to which each image should be resized.
+     *
+     * @return the width if it exists, otherwise {@link Optional#empty}.
+     */
+    Optional<Integer> uniformWidth();
+
+    /**
+     * A specific <b>height</b>, if one exists, to which each image should be resized.
+     *
+     * @return the height if it exists, otherwise {@link Optional#empty}.
+     */
+    Optional<Integer> uniformHeight();
 }

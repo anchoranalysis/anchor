@@ -33,7 +33,6 @@ import java.util.stream.Stream;
 import org.anchoranalysis.core.time.OperationContext;
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.ArrangeStackException;
 import org.anchoranalysis.image.bean.nonbean.spatial.arrange.StackArrangement;
-import org.anchoranalysis.image.bean.spatial.arrange.StackArranger;
 import org.anchoranalysis.spatial.box.Extent;
 
 /**
@@ -49,13 +48,13 @@ class ArrangementIndex {
     private List<List<StackArrangement>> columns;
 
     /**
-     * Create from a {@code Iterator<RGBStack>}.
+     * Create from a {@code Iterator<Extent>}.
      *
      * <p>If the iterator has no more stacks available, the table ends without processing further
      * entities.
      *
      * @param extents the respective sizes to arrange.
-     * @param arrangers a {@link StackArranger} for each cell in the table.
+     * @param arrangers how to arrange each cell in the table.
      * @param tableSize the table size, in columns (x-dimension) and rows (y-dimension).
      * @param context objects for the operation.
      * @throws ArrangeStackException if the {@code stacks} and {@code arrangers} do not match
