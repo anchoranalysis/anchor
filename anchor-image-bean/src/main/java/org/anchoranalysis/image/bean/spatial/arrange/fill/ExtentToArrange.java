@@ -12,7 +12,7 @@ import org.anchoranalysis.spatial.box.Extent;
  * so as to sort in descending order by width.
  */
 @ToString
-class ExtentToArrange implements Comparable<ExtentToArrange> {
+public class ExtentToArrange implements Comparable<ExtentToArrange> {
 
     /** Index position. */
     @Getter private final int index;
@@ -76,14 +76,23 @@ class ExtentToArrange implements Comparable<ExtentToArrange> {
         this.extent = extent.duplicateChangeX(extent.x() + growBy);
     }
 
-    /** Determines the scaling factor to use, to achieve a particular {@code targetWidth}. */
-    private double extractScaleFactor(double sumAspectRatios, int rowWidth) {
-        double widthPercent = aspectRatio / sumAspectRatios;
-        return (widthPercent * rowWidth) / extent.x();
+    /**
+     * The size in the X-dimension.
+     *
+     * @return the width.
+     */
+    public int width() {
+        return extent.x();
     }
 
     @Override
     public int compareTo(ExtentToArrange o) {
         return -1 * extent.compareTo(o.extent);
+    }
+
+    /** Determines the scaling factor to use, to achieve a particular {@code targetWidth}. */
+    private double extractScaleFactor(double sumAspectRatios, int rowWidth) {
+        double widthPercent = aspectRatio / sumAspectRatios;
+        return (widthPercent * rowWidth) / extent.x();
     }
 }

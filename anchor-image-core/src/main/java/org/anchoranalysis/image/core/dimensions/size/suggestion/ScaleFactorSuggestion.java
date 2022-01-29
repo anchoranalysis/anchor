@@ -28,7 +28,7 @@ package org.anchoranalysis.image.core.dimensions.size.suggestion;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.Value;
-import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.spatial.box.Extent;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 /**
@@ -40,10 +40,38 @@ import org.anchoranalysis.spatial.scale.ScaleFactor;
 @Value
 class ScaleFactorSuggestion implements ImageSizeSuggestion {
 
-    private final double scaleFactor;
+    /** The {@link ScaleFactor} to suggest. */
+    private final ScaleFactor scaleFactor;
+
+    /**
+     * Create with identical factor for both X- and Y- dimensions.
+     *
+     * @param scaleFactor the factor to apply to both dimensions.
+     */
+    public ScaleFactorSuggestion(double scaleFactor) {
+        this.scaleFactor = new ScaleFactor(scaleFactor, scaleFactor);
+    }
 
     @Override
-    public ScaleFactor calculateScaleFactor(Optional<Dimensions> dimensionsToBeScaled) {
-        return new ScaleFactor(scaleFactor, scaleFactor);
+    public ScaleFactor calculateScaleFactor(Optional<Extent> extentToBeScaled) {
+        return scaleFactor;
+    }
+
+    @Override
+    public Optional<ScaleFactor> uniformScaleFactor() {
+        return Optional.of(scaleFactor);
+    }
+
+    @Override
+    public Optional<Integer> uniformWidth() {
+        // By definition, the scaled width depends on the unscaled width. It will never be uniform.
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<Integer> uniformHeight() {
+        // By definition, the scaled height depends on the unscaled height. It will never be
+        // uniform.
+        return Optional.empty();
     }
 }

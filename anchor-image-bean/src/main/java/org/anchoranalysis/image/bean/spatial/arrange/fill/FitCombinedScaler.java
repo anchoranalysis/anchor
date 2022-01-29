@@ -14,7 +14,7 @@ import org.anchoranalysis.spatial.box.Extent;
  * @author Owen Feehan
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-class FitCombinedScaler {
+public class FitCombinedScaler {
 
     /**
      * When {@code permitPartianFinalRow==true} this is the maximum permitted difference in
@@ -31,14 +31,11 @@ class FitCombinedScaler {
      * @param partitions the {@link Extent}s partitioned into rows.
      * @param permitPartialFinalRow allows the final row to only be partially filled, so as to keep
      *     its height similar to other rows.
+     * @param width the desired width of the combiend image.
      * @return the size of the combined image, containing all rows and columns.
      */
-    public static Extent scaleImagesToCombine(
-            List<List<ExtentToArrange>> partitions, boolean permitPartialFinalRow) {
-        // Determine the desired width by adding the widths of the first row
-        int width =
-                sumExtractedInt(
-                        partitions.get(0), extentToArrange -> extentToArrange.getExtent().x());
+    public static Extent scaleToWidth(
+            List<List<ExtentToArrange>> partitions, boolean permitPartialFinalRow, int width) {
 
         // Scale each image to match the row width, preserving-aspect ratio
         scaleImagesToMatchRow(partitions, width, permitPartialFinalRow);

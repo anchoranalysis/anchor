@@ -30,7 +30,7 @@ import lombok.Value;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
-import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.core.functional.OptionalFactory;
 import org.anchoranalysis.spatial.box.Extent;
 import org.anchoranalysis.spatial.scale.RelativeScaleCalculator;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
@@ -76,10 +76,10 @@ class ScaleToSuggestion implements ImageSizeSuggestion {
     }
 
     @Override
-    public ScaleFactor calculateScaleFactor(Optional<Dimensions> dimensionsToBeScaled)
+    public ScaleFactor calculateScaleFactor(Optional<Extent> extentToBeScaled)
             throws OperationFailedException {
-        if (dimensionsToBeScaled.isPresent()) {
-            return calculateForExtent(dimensionsToBeScaled.get().extent());
+        if (extentToBeScaled.isPresent()) {
+            return calculateForExtent(extentToBeScaled.get());
         } else {
             throw new OperationFailedException(
                     "It is necessary to supply existing dimensions for this suggestion, but none are supplied");
@@ -101,5 +101,36 @@ class ScaleToSuggestion implements ImageSizeSuggestion {
 
     private static ScaleFactor createFactorDerived(int target, int source) {
         return new ScaleFactor(Scaler.deriveScalingFactor(target, source));
+    }
+
+    @Override
+    public Optional<ScaleFactor> uniformScaleFactor() {
+        // By definition, there is no constant scale-factor, as it depends on the width and height
+        // of the extent.
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<Integer> uniformWidth() {
+        // There is no specific width, if both a width and a height are specified, as well as
+        // preserveAspectRatio
+        return extractSpecificDimension(width, height);
+    }
+
+    @Override
+    public Optional<Integer> uniformHeight() {
+        // There is no specific height, if both a width and a height are specified, as well as
+        // preserveAspectRatio
+        return extractSpecificDimension(height, width);
+    }
+
+    /** Extracts a specific guaranteed value to which an image will be scaled to, if it exists. */
+    private Optional<Integer> extractSpecificDimension(
+            Optional<Integer> toReturn, Optional<Integer> toCheck) {
+        if (toCheck.isPresent()) {
+            return OptionalFactory.createFlat(!preserveAspectRatio, () -> toReturn);
+        } else {
+            return toReturn;
+        }
     }
 }

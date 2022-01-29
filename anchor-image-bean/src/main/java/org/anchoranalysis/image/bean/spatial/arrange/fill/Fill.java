@@ -1,6 +1,5 @@
 package org.anchoranalysis.image.bean.spatial.arrange.fill;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -9,7 +8,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.annotation.NonNegative;
+import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
+import org.anchoranalysis.bean.initializable.CheckMisconfigured;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.time.OperationContext;
@@ -55,6 +58,30 @@ public class Fill extends StackArranger {
      * available space.
      */
     @BeanField @Getter @Setter private boolean varyNumberImagesPerRow = true;
+
+    /**
+     * The width of the combined image in pixels.
+     *
+     * <p>When 0, this is disabled.
+     *
+     * <p>At least one of both {@code width} and {@code widthRatio} must be enabled. If both are,
+     * the minimum width is used.
+     */
+    @BeanField @Getter @Setter @NonNegative private int width = 0;
+
+    /**
+     * What fraction of the natural width of the elements should be used to determine the final
+     * width.
+     *
+     * <p>The natural width of the elements, is the average-width of an entire row after
+     * partitioning.
+     *
+     * <p>When 0.0, this is disabled.
+     *
+     * <p>At least one of both {@code width} and {@code widthRatio} must be enabled. If both are,
+     * the minimum width is used.
+     */
+    @BeanField @Getter @Setter @NonNegative private double widthRatio = 0.1;
     // END BEAN PROPERTIES
 
     /**
@@ -64,6 +91,13 @@ public class Fill extends StackArranger {
      */
     public Fill(int rows) {
         this.numberRows = rows;
+    }
+
+    @Override
+    public void checkMisconfigured(BeanInstanceMap defaultInstances)
+            throws BeanMisconfiguredException {
+        super.checkMisconfigured(defaultInstances);
+        CheckMisconfigured.atLeastOne("width", "widthRatio", width > 0, widthRatio > 0.0);
     }
 
     @Override
@@ -80,11 +114,13 @@ public class Fill extends StackArranger {
                     context.getExecutionTimeRecorder()
                             .recordExecutionTime(
                                     "Partition extents",
-                                    () -> partitionExtents(elements, numberRowsMin));
+                                    () ->
+                                            Partitioner.partitionExtents(
+                                                    elements,
+                                                    numberRowsMin,
+                                                    varyNumberImagesPerRow));
 
-            Extent combinedSize =
-                    FitCombinedScaler.scaleImagesToCombine(partitions, !varyNumberImagesPerRow);
-
+            Extent combinedSize = scaleToTargetWidth(partitions);
             // Create a bounding box for each element, using the ID to determine the position in the
             // array.
             BoundingBox[] boxes = derivingBoundingBoxes(elements.size(), partitions, combinedSize);
@@ -99,40 +135,10 @@ public class Fill extends StackArranger {
         }
     }
 
-    /** Partitions {@code elements} into smaller lists, each representing a particular row. */
-    private List<List<ExtentToArrange>> partitionExtents(
-            List<ExtentToArrange> elements, int numberRows) throws OperationFailedException {
-        if (varyNumberImagesPerRow) {
-            return LinearPartition.partition(elements, ExtentToArrange::getAspectRatio, numberRows);
-        } else {
-            return partitionIntoFixedChunks(elements, numberRows);
-        }
-    }
-
-    /**
-     * Partition {@code elements} into fixed chunks of particular fixed size (apart from the last
-     * row).
-     */
-    private static <T> List<List<T>> partitionIntoFixedChunks(List<T> elements, int numberRows) {
-        List<List<T>> out = new ArrayList<>(numberRows);
-
-        // Calculate the number of images per row
-        int imagesPerRow = (int) Math.ceil(((double) elements.size()) / numberRows);
-        int count = 0;
-        List<T> current = new LinkedList<>();
-        for (T element : elements) {
-            current.add(element);
-            count++;
-            if (count == imagesPerRow) {
-                out.add(current);
-                current = new LinkedList<>();
-                count = 0;
-            }
-        }
-        if (count != 0) {
-            out.add(current);
-        }
-        return out;
+    /** Scales the partitioned elements, to match the desired target-width. */
+    private Extent scaleToTargetWidth(List<List<ExtentToArrange>> partitions) {
+        int combinedWidth = CombinedWidthCalculator.calculate(partitions, width, widthRatio);
+        return FitCombinedScaler.scaleToWidth(partitions, !varyNumberImagesPerRow, combinedWidth);
     }
 
     /** Creates a {@link ExtentToArrange} for each respective {@link Extent}. */

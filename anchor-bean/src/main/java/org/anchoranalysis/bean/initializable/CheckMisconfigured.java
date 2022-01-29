@@ -41,13 +41,15 @@ import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 public class CheckMisconfigured {
 
     /**
-     * Checks that one of two properties is defined, but not both simultaneously (exclusive OR).
+     * Checks that one of two properties is defined, but not both simultaneously.
      *
-     * @param property1Name name of first property (for error messages)
-     * @param property2Name name of second property (for error messages)
-     * @param property1Defined whether property1 is defined
-     * @param property2Defined whether property2 is defined
-     * @throws BeanMisconfiguredException if neither or both properties are defined
+     * <p>This imposes an <b>exclusive or</b> check.
+     *
+     * @param property1Name name of <b>first</b> property (for error messages).
+     * @param property2Name name of <b>second</b> property (for error messages).
+     * @param property1Defined whether the <b>first</b> property is defined.
+     * @param property2Defined whether the <b>second</b> property is defined.
+     * @throws BeanMisconfiguredException if neither or both properties are defined.
      */
     public static void oneOnly(
             String property1Name,
@@ -64,7 +66,32 @@ public class CheckMisconfigured {
         if (property1Defined && property2Defined) {
             throw new BeanMisconfiguredException(
                     String.format(
-                            "Only of both '%s' and '%s' should be defined",
+                            "Only one of both '%s' and '%s' must be defined",
+                            property1Name, property2Name));
+        }
+    }
+
+    /**
+     * Checks that one of two properties is defined, or both.
+     *
+     * <p>This imposes an <b>or</b> check.
+     *
+     * @param property1Name name of <b>first</b> property (for error messages).
+     * @param property2Name name of <b>second</b> property (for error messages).
+     * @param property1Defined whether the <b>first</b> property is defined.
+     * @param property2Defined whether the <b>second</b> property is defined.
+     * @throws BeanMisconfiguredException if neither are defined.
+     */
+    public static void atLeastOne(
+            String property1Name,
+            String property2Name,
+            boolean property1Defined,
+            boolean property2Defined)
+            throws BeanMisconfiguredException {
+        if (!property1Defined && !property2Defined) {
+            throw new BeanMisconfiguredException(
+                    String.format(
+                            "One of either '%s' or '%s' must be defined",
                             property1Name, property2Name));
         }
     }
