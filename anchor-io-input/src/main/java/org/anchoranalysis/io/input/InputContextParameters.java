@@ -68,6 +68,9 @@ public class InputContextParameters {
     /** If true, the order of the inputs are shuffled (randomized). */
     @Getter @Setter private boolean shuffle = false;
 
+    /** If defined, an upper limit that is imposed on the number of inputs. */
+    @Getter @Setter private Optional<Integer> limitUpper = Optional.empty();
+
     /** If defined, this indicates and specifies only a subset of the naming-elements to use. */
     @Getter @Setter private Optional<IndexRangeNegative> identifierSubrange = Optional.empty();
 

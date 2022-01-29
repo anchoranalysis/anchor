@@ -53,6 +53,9 @@ public class InputArguments {
     /** If defined, a glob that is applied on inputDirectory */
     @Getter private Optional<String> filterGlob = Optional.empty();
 
+    /** If defined, an upper limit that is imposed on the number of inputs. */
+    @Getter private Optional<Integer> limitUpper = Optional.empty();
+
     /**
      * If defined, a set of extension filters that can be applied on inputDirectory
      *
@@ -137,6 +140,10 @@ public class InputArguments {
 
     public void assignRelativeForIdentifier() {
         this.relativeForIdentifier = true;
+    }
+
+    public void assignLimitUpper(int limit) {
+        this.limitUpper = Optional.of(limit);
     }
 
     public void assignShuffle() {

@@ -82,6 +82,7 @@ public class ExecutionArguments {
         out.setIdentifierSubrange(input.getIdentifierSubrange());
         out.setRelativeForIdentifier(input.isRelativeForIdentifier());
         out.setShuffle(input.isShuffle());
+        out.setLimitUpper(input.getLimitUpper());
         return out;
     }
 
