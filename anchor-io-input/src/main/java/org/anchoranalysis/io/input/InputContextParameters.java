@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.io.input;
 
+import io.vavr.control.Either;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
@@ -68,8 +69,14 @@ public class InputContextParameters {
     /** If true, the order of the inputs are shuffled (randomized). */
     @Getter @Setter private boolean shuffle = false;
 
-    /** If defined, an upper limit that is imposed on the number of inputs. */
-    @Getter @Setter private Optional<Integer> limitUpper = Optional.empty();
+    /** 
+     * If defined, an upper limit that is imposed on the number of inputs.
+     * 
+     * <p>When an {@link Integer} is is a fixed number of inputs.
+     * 
+     * <p>When a {@link Double} it is a ratio of the total number of inputs (and should only be in the interval {@code (0.0, 1.0)}).
+     */
+    @Getter @Setter private Optional<Either<Integer, Double>> limitUpper = Optional.empty();
 
     /** If defined, this indicates and specifies only a subset of the naming-elements to use. */
     @Getter @Setter private Optional<IndexRangeNegative> identifierSubrange = Optional.empty();
