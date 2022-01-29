@@ -84,6 +84,17 @@ public class ExtentToArrange implements Comparable<ExtentToArrange> {
     public int width() {
         return extent.x();
     }
+    
+    /**
+     * Returns the ratio of *image height to width*.
+     * 
+     * <p>This is the inversion of the aspect-ratio, which is the ratio of *image width to height*.
+     * 
+     * @return the inverted aspect-ratio.
+     */
+    public double aspectRatioInverted() {
+    	return 1.0 / aspectRatio;
+    }
 
     @Override
     public int compareTo(ExtentToArrange o) {
