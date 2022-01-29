@@ -60,5 +60,11 @@
 		 <artifactId>anchor-io-generator</artifactId>
 		 <version>0.0.1-SNAPSHOT</version>
 	</dependency>
+	
+	<dependency>
+        <groupId>io.vavr</groupId>
+        <artifactId>vavr</artifactId>
+        <version>${vavr.version}</version>
+    </dependency>
  </dependencies>
 </project>

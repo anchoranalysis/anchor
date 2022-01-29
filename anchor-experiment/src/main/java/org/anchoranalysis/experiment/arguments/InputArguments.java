@@ -25,6 +25,8 @@
  */
 package org.anchoranalysis.experiment.arguments;
 
+import com.github.davidmoten.guavamini.Preconditions;
+import io.vavr.control.Either;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
@@ -53,8 +55,15 @@ public class InputArguments {
     /** If defined, a glob that is applied on inputDirectory */
     @Getter private Optional<String> filterGlob = Optional.empty();
 
-    /** If defined, an upper limit that is imposed on the number of inputs. */
-    @Getter private Optional<Integer> limitUpper = Optional.empty();
+    /** 
+     * If defined, an upper limit that is imposed on the number of inputs.
+     *
+     * <p>When an {@link Integer} is is a fixed number of inputs.
+     * 
+     * <p>When a {@link Double} it is a ratio of the total number of inputs (and should only be in the interval {@code (0.0, 1.0)}).
+     * 
+     */
+    @Getter private Optional<Either<Integer, Double>> limitUpper = Optional.empty();
 
     /**
      * If defined, a set of extension filters that can be applied on inputDirectory
@@ -142,8 +151,24 @@ public class InputArguments {
         this.relativeForIdentifier = true;
     }
 
-    public void assignLimitUpper(int limit) {
-        this.limitUpper = Optional.of(limit);
+    /**
+     * Assigns a fixed upper limit of number of inputs.
+     *
+     * @param fixedLimit the maximum number of inputs allowed.
+     */
+    public void assignFixedLimit(int fixedLimit) {
+        this.limitUpper = Optional.of(Either.left(fixedLimit));
+    }
+
+    /**
+     * Assigns a fixed upper limit that is a ratio of the number of inputs allowed.
+     *
+     * @param ratioLimit the maximum number of inputs allowed.
+     */
+    public void assignRatioLimit(double ratioLimit) {
+        Preconditions.checkArgument(ratioLimit > 0.0);
+        Preconditions.checkArgument(ratioLimit < 1.0);
+        this.limitUpper = Optional.of(Either.right(ratioLimit));
     }
 
     public void assignShuffle() {
