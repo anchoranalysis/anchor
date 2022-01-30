@@ -17,7 +17,7 @@ class CombinedWidthCalculator {
      *
      * <p>This will be either from {@code width} or calculated using the {@code widthRatio}.
      *
-     * <p>If both are specified, the minimum is taken.
+     * <p>If both are specified, the maximum is taken.
      *
      * @param partitions how the images are arranged in the table.
      * @param width a specific width if one when assigned, or 0 if unassigned.
@@ -28,7 +28,7 @@ class CombinedWidthCalculator {
             List<List<ExtentToArrange>> partitions, int width, double widthRatio) {
         if (width > 0) {
             if (widthRatio > 0.0) {
-                return Math.min(width, calculateFromRatio(partitions, widthRatio));
+                return Math.max(width, calculateFromRatio(partitions, widthRatio));
             } else {
                 return width;
             }
