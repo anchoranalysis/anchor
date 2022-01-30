@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.ToDoubleFunction;
-
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
@@ -19,24 +18,31 @@ class Partitioner {
 
     /**
      * Partitions {@code elements} into lists, that each represent a particular batch.
-     * 
+     *
      * <p>A batch may be a row or column.
      *
      * @param elements the elements to partition.
      * @param numberBatches how many batches to partition into.
-     * @param varyNumberImagesPerBatch if the number of elements in each batch may vary (i.e. it must
-     *     not be uniform) so as to make better use of space.
-     * @param batchIsRow when true, each batch represents a row in the table. when false, each batch represents a column in the table.
+     * @param varyNumberImagesPerBatch if the number of elements in each batch may vary (i.e. it
+     *     must not be uniform) so as to make better use of space.
+     * @param batchIsRow when true, each batch represents a row in the table. when false, each batch
+     *     represents a column in the table.
      * @return a list of batches, where each batch is a subset of elements after partitioning. Each
      *     element in {@code elements} will appear exactly once in total across these nested lists.
      * @throws OperationFailedException if there are too few items in {@code elements} to be split
      *     into partitions, when {@code varyNumberImagesPerBatch==true}.
      */
     public static List<List<ExtentToArrange>> partitionExtents(
-            List<ExtentToArrange> elements, int numberBatches, boolean varyNumberImagesPerBatch, boolean batchIsRow)
+            List<ExtentToArrange> elements,
+            int numberBatches,
+            boolean varyNumberImagesPerBatch,
+            boolean batchIsRow)
             throws OperationFailedException {
         if (varyNumberImagesPerBatch) {
-        	ToDoubleFunction<ExtentToArrange> extractCost = batchIsRow ?  ExtentToArrange::getAspectRatio : ExtentToArrange::aspectRatioInverted;
+            ToDoubleFunction<ExtentToArrange> extractCost =
+                    batchIsRow
+                            ? ExtentToArrange::getAspectRatio
+                            : ExtentToArrange::aspectRatioInverted;
             return LinearPartition.partition(elements, extractCost, numberBatches);
         } else {
             return partitionIntoBatches(elements, numberBatches);
@@ -44,7 +50,8 @@ class Partitioner {
     }
 
     /**
-     * Partition {@code elements} into fixed-sized batches (apart from the last batch that may have fewer).
+     * Partition {@code elements} into fixed-sized batches (apart from the last batch that may have
+     * fewer).
      */
     private static <T> List<List<T>> partitionIntoBatches(List<T> elements, int numberBatches) {
         List<List<T>> out = new ArrayList<>(numberBatches);

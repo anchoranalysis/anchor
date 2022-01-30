@@ -118,7 +118,8 @@ public class Fill extends StackArranger {
                                             Partitioner.partitionExtents(
                                                     elements,
                                                     numberRowsMin,
-                                                    varyNumberImagesPerRow, true));
+                                                    varyNumberImagesPerRow,
+                                                    true));
 
             Extent combinedSize = scaleToTargetWidth(partitions);
             // Create a bounding box for each element, using the ID to determine the position in the
