@@ -130,12 +130,12 @@ abstract class VoxelsExtracterBase<T> implements VoxelsExtracter<T> {
 
     @Override
     public final Voxels<T> projectMax() {
-        return project(createMaxIntensityBuffer(voxels.extent()));
+        return project(createMaxIntensityBuffer(voxels.extent().flattenZ()));
     }
 
     @Override
     public final Voxels<T> projectMean() {
-        return project(createMeanIntensityBuffer(voxels.extent()));
+        return project(createMeanIntensityBuffer(voxels.extent().flattenZ()));
     }
 
     @Override

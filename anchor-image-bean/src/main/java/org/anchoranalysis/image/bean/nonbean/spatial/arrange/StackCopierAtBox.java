@@ -31,9 +31,15 @@ public class StackCopierAtBox {
      */
     public static void copyImageInto(Stack source, Stack destination, BoundingBox box) {
         if (box.extent().z() != source.dimensions().z()) {
-            // When the source z-size is different to the target
-            // z-size, let's repeat the source z-slices to fill the target.
-            copyImageRepeatedZ(source, destination, box);
+        	if (source.dimensions().z()==1) {
+	            // When the source z-size is different to the target
+	            // z-size, let's repeat the source z-slices to fill the target.
+	            copyImageRepeatedZ(source, destination, box);
+        	} else if (box.extent().z()==1) {
+        		copyImage(source.projectMax(), destination, box, 0);
+        	} else {
+        		copyImageRepeatedZ(source.projectMax(), destination, box);
+        	}
         } else {
             copyImage(source, destination, box, 0);
         }
