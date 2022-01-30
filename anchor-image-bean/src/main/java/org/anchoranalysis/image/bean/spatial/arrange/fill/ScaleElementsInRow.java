@@ -1,6 +1,7 @@
 package org.anchoranalysis.image.bean.spatial.arrange.fill;
 
 import com.github.davidmoten.guavamini.Preconditions;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -103,12 +104,13 @@ class ScaleElementsInRow {
         // Sort the elements, in order of most desirable rounding-errors to correct.
         // The order depends on whether we are making a positive adjustment or negative adjustment,
         // to find respectively rounding-down or rounding-up errors.
+        List<ExtentToArrange> sortedRow = new ArrayList<>(row);
         Collections.sort(
-                row,
+                sortedRow,
                 Comparator.comparingDouble(
                         extent -> -1 * adjustment * extent.getScaleRoundingError()));
 
-        Iterator<ExtentToArrange> iterator = row.iterator();
+        Iterator<ExtentToArrange> iterator = sortedRow.iterator();
         while (numberElements > 0) {
             ExtentToArrange element = iterator.next();
             element.growWidth(adjustment);

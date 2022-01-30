@@ -56,6 +56,11 @@ public abstract class InputFromManagerDelegate<T extends InputFromManager>
         delegate.close(errorReporter);
     }
 
+    @Override
+    public String toString() {
+        return delegate.toString();
+    }
+
     protected T getDelegate() {
         return delegate;
     }
