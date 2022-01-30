@@ -45,11 +45,11 @@ import org.anchoranalysis.spatial.box.BoundingBox;
 public abstract class Overlay implements Identifiable {
 
     /**
-     * A bounding-box around the overlay
+     * A bounding-box around the overlay.
      *
-     * @param overlayWriter
-     * @param dimensions The dimensions of the containing-scene
-     * @return the bounding-box
+     * @param overlayWriter writes the overlay on the image.
+     * @param dimensions the dimensions of the containing-image or scene.
+     * @return the bounding-box.
      */
     public abstract BoundingBox box(DrawOverlay overlayWriter, Dimensions dimensions);
 
