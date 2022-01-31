@@ -27,6 +27,7 @@ package org.anchoranalysis.core.identifier.name;
  */
 
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -38,6 +39,9 @@ import org.anchoranalysis.core.functional.checked.CheckedBiConsumer;
 /**
  * A tree map that creates a new item, if it doesn't already exist upon a <i>get</i> operation.
  *
+ * <p>Internally it uses a {@link HashMap} for it's implementation, and the {@code K} and {@code V}
+ * types must obey the rules for a {@link HashMap} (with valid equals, hashcode etc.)
+ *
  * @author Owen Feehan
  * @param <K> identifier (key)-type
  * @param <V> value-type
@@ -47,6 +51,7 @@ public class MapCreate<K, V> {
     // We use a tree-map to retain a deterministic order in the keys, as outputting in alphabetic
     // order is nice
     private Map<K, V> map;
+
     private Supplier<V> createNewElement;
 
     /**
@@ -55,7 +60,7 @@ public class MapCreate<K, V> {
      * @param createNewElement called as necessary to create a new element in the tree.
      */
     public MapCreate(Supplier<V> createNewElement) {
-        this.map = new TreeMap<>();
+        this.map = new HashMap<>();
         this.createNewElement = createNewElement;
     }
 
@@ -83,10 +88,19 @@ public class MapCreate<K, V> {
     /**
      * The entries in the map.
      *
-     * @return a set view of the mappings contained in this map.
+     * @return a set view of the entries contained in this map.
      */
     public Set<Entry<K, V>> entrySet() {
         return map.entrySet();
+    }
+
+    /**
+     * The keys in the map.
+     *
+     * @return a set view of the keys contained in this map.
+     */
+    public Set<K> keySet() {
+        return map.keySet();
     }
 
     /**
