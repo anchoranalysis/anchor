@@ -147,7 +147,12 @@ class AppendHelper {
             boolean debugMode)
             throws OperationFailedException {
         try {
-            return reader.apply(namedBean.getValue().deriveFrom(input::pathForBinding, debugMode));
+            return reader.apply(
+                    namedBean
+                            .getValue()
+                            .deriveFrom(input::pathForBinding, debugMode)
+                            .toAbsolutePath()
+                            .normalize());
         } catch (Exception e) {
             throw new OperationFailedException("An error occured appending to the multi-input", e);
         }

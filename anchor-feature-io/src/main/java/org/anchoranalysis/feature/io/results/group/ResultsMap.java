@@ -28,8 +28,8 @@ package org.anchoranalysis.feature.io.results.group;
 import com.google.common.collect.Comparators;
 import java.util.Comparator;
 import java.util.Optional;
+import org.anchoranalysis.core.collection.MapCreate;
 import org.anchoranalysis.core.functional.checked.CheckedBiConsumer;
-import org.anchoranalysis.core.identifier.name.MapCreate;
 import org.anchoranalysis.feature.io.name.MultiName;
 import org.anchoranalysis.feature.io.results.LabelledResultsVector;
 import org.anchoranalysis.feature.results.ResultsVectorList;
@@ -44,7 +44,7 @@ class ResultsMap {
             new MapCreate<>(
                     ResultsVectorList::new, Comparators.emptiesFirst(Comparator.naturalOrder()));
 
-    public void addResultsFor(LabelledResultsVector results) {
+    public synchronized void addResultsFor(LabelledResultsVector results) {
         // Place into the aggregate structure
         map.computeIfAbsent(results.getLabels().getGroup()).add(results.getResults());
     }

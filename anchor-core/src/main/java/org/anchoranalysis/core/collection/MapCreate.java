@@ -1,4 +1,4 @@
-package org.anchoranalysis.core.identifier.name;
+package org.anchoranalysis.core.collection;
 
 /*
  * #%L
@@ -27,6 +27,7 @@ package org.anchoranalysis.core.identifier.name;
  */
 
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -38,6 +39,11 @@ import org.anchoranalysis.core.functional.checked.CheckedBiConsumer;
 /**
  * A tree map that creates a new item, if it doesn't already exist upon a <i>get</i> operation.
  *
+ * <p>Internally it uses a {@link HashMap} for it's implementation, and the {@code K} and {@code V}
+ * types must obey the rules for a {@link HashMap} (with valid equals, hashcode etc.)
+ *
+ * <p>This structure is not inherently thread-safe.
+ *
  * @author Owen Feehan
  * @param <K> identifier (key)-type
  * @param <V> value-type
@@ -47,20 +53,22 @@ public class MapCreate<K, V> {
     // We use a tree-map to retain a deterministic order in the keys, as outputting in alphabetic
     // order is nice
     private Map<K, V> map;
+
+    /** How to create a new element, called when needed. */
     private Supplier<V> createNewElement;
 
     /**
-     * Creates without a comparator, using instead the natural ordering of elements.
+     * Creates without a comparator, using a {@link HashMap} internally.
      *
      * @param createNewElement called as necessary to create a new element in the tree.
      */
     public MapCreate(Supplier<V> createNewElement) {
-        this.map = new TreeMap<>();
+        this.map = new HashMap<>();
         this.createNewElement = createNewElement;
     }
 
     /**
-     * Creates with an explicit comparator.
+     * Creates with an explicit comparator, and using a {@link TreeMap} internally.
      *
      * @param createNewElement called as necessary to create a new element in the tree.
      * @param comparator used to impose an ordering on elements.
@@ -71,22 +79,52 @@ public class MapCreate<K, V> {
     }
 
     /**
+     * Gets an existing element from the map, returning null if it is absent.
+     *
+     * @param key the key for the map query.
+     * @return an element, either retrieved from the map, or null, if none exists in the map.
+     */
+    public V get(K key) {
+        return map.get(key);
+    }
+
+    /**
      * Gets an existing element from the map, newly creating and storing the element if it's absent.
      *
      * @param key the key for the map query.
      * @return an element, either retrieved from the map, or newly created.
      */
-    public synchronized V computeIfAbsent(K key) {
+    public V computeIfAbsent(K key) {
         return map.computeIfAbsent(key, ignored -> createNewElement.get());
+    }
+
+    /**
+     * Removes the entry for the specified key only if it is currently mapped to the specified
+     * value.
+     *
+     * @param key the key to remove.
+     * @param value the value to remove.
+     */
+    public void remove(K key, V value) {
+        map.remove(key, value);
     }
 
     /**
      * The entries in the map.
      *
-     * @return a set view of the mappings contained in this map.
+     * @return a set view of the entries contained in this map.
      */
     public Set<Entry<K, V>> entrySet() {
         return map.entrySet();
+    }
+
+    /**
+     * The keys in the map.
+     *
+     * @return a set view of the keys contained in this map.
+     */
+    public Set<K> keySet() {
+        return map.keySet();
     }
 
     /**
