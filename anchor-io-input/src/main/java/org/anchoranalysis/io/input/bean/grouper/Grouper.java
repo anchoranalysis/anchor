@@ -1,7 +1,9 @@
 package org.anchoranalysis.io.input.bean.grouper;
 
 import java.nio.file.Path;
+import java.util.Optional;
 import org.anchoranalysis.bean.AnchorBean;
+import org.anchoranalysis.core.functional.OptionalFactory;
 import org.anchoranalysis.io.input.path.DerivePathException;
 
 /**
@@ -20,6 +22,17 @@ public abstract class Grouper extends AnchorBean<Grouper> {
      *     to a single group.
      */
     public abstract boolean isGroupingEnabled();
+
+    /**
+     * Like {@link #deriveGroupKey(Path)} but can also be called when grouping is disabled.
+     *
+     * @param identifier an identifier for an input, expressed as a {@link Path}.
+     * @return the result of {@link #deriveGroupKey(Path)} when {@code isGroupingEnabled()==true), otherwise {@link Optional#empty()}.
+     * @throws DerivePathException if a key cannot be derived from {@code identifier} successfully.
+     */
+    public Optional<String> deriveGroupKeyOptional(Path identifier) throws DerivePathException {
+        return OptionalFactory.createChecked(isGroupingEnabled(), () -> deriveGroupKey(identifier));
+    }
 
     /**
      * Derives a key for the group from {@code identifier}.
