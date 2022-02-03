@@ -34,11 +34,11 @@ import org.anchoranalysis.core.index.range.IndexRangeNegativeFactory;
 import org.junit.jupiter.api.Test;
 
 /**
- * Tests {@link IndexRangeNegative}.
+ * Tests {@link IndexRangeNegativeFactory}.
  *
  * @author Owen Feehan
  */
-class IndexRangeFactoryTest {
+class IndexRangeNegativeFactoryTest {
 
     /** Tests without a colon. */
     @Test
@@ -80,7 +80,7 @@ class IndexRangeFactoryTest {
     }
 
     private static void testExpectException(String strToParse) {
-        assertThrows(OperationFailedException.class, () -> IndexRangeFactoryTest.parse(strToParse));
+        assertThrows(OperationFailedException.class, () -> IndexRangeNegativeFactoryTest.parse(strToParse));
     }
 
     private static void test(String strToParse, int expectedStart, int expectedEnd)

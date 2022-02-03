@@ -95,7 +95,17 @@ public class BeanInstanceMapFixture {
      * @return the instance, as already exists, or if newly created.
      */
     public static Interpolator ensureInterpolator() {
-        return addOrReplace(Interpolator.class, new ImgLib2Linear());
+    	return ensureInterpolator(new ImgLib2Linear());
+    }
+    
+    /**
+     * Ensure a {@link Interpolator} instance exists in the underlying {@link BeanInstanceMap}.
+     *
+     * @param interpolator the interpolator to add, if necessary.
+     * @return the instance, as already exists, or if newly created.
+     */
+    public static Interpolator ensureInterpolator(Interpolator interpolator) {
+        return addOrReplace(Interpolator.class, interpolator);
     }
 
     /**

@@ -39,7 +39,7 @@ import org.junit.jupiter.api.Test;
  *
  * @author Owen Feehan
  */
-class IndexRangeTest {
+class IndexRangeNegativeTest {
 
     private static final List<String> ELEMENTS = Arrays.asList("a", "b", "c", "d", "e");
 
