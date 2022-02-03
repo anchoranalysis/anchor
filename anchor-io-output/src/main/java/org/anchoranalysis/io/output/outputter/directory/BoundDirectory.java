@@ -32,6 +32,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.io.output.outputter.BindFailedException;
+import org.anchoranalysis.io.output.outputter.DirectoryCreationParameters;
 import org.anchoranalysis.io.output.writer.WriterExecuteBeforeEveryOperation;
 
 /**
@@ -56,14 +57,12 @@ class BoundDirectory {
      * Creates for a particular directory.
      *
      * @param directoryPath the path to the directory
-     * @param deleteExistingDirectory if true, any existing directory at the intended path for
-     *     creation, is first deleted. If false, an exception is thrown in this circumstance.
+     * @param parameters parameters that influence how a directory is created.
      * @throws BindFailedException
      */
-    public BoundDirectory(Path directoryPath, boolean deleteExistingDirectory)
+    public BoundDirectory(Path directoryPath, DirectoryCreationParameters parameters)
             throws BindFailedException {
-        this.directoryCreator =
-                new LazyDirectoryCreatorPool(directoryPath, deleteExistingDirectory);
+        this.directoryCreator = new LazyDirectoryCreatorPool(directoryPath, parameters);
         this.parentDirectoryCreator = creatorForDirectory(directoryPath, Optional.empty());
     }
 

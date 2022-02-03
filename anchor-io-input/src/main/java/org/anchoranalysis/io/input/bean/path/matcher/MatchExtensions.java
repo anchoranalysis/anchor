@@ -122,8 +122,8 @@ public class MatchExtensions extends FilePathMatcher {
     private StringSetTrie fileExtensions(Optional<InputContextParameters> inputContext) {
         if (prioritizeInputContext
                 && inputContext.isPresent()
-                && inputContext.get().getInputFilterExtensions() != null) {
-            return inputContext.get().getInputFilterExtensions();
+                && inputContext.get().getInputFilterExtensions().isPresent()) {
+            return inputContext.get().getInputFilterExtensions().get();
         } else {
             return new StringSetTrie(extensions.set());
         }

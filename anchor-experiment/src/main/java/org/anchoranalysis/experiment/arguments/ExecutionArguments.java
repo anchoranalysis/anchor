@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.experiment.arguments;
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Optional;
 import lombok.Getter;
@@ -68,22 +67,12 @@ public class ExecutionArguments {
     }
 
     /**
-     * Creates an input-context, reusing parameters from the experiment-execution
+     * Additional parameters that offer context for many beans that provide input-functions.
      *
-     * @throws IOException
+     * @return the parameters, resuing the internal data-structure.
      */
-    public InputContextParameters createInputContext() throws IOException {
-        InputContextParameters out = new InputContextParameters();
-        out.setDebugModeParameters(debugModeParameters);
-        out.setInputDirectory(input.getDirectory());
-        out.setInputPaths(input.getPaths());
-        out.setInputFilterGlob(input.getFilterGlob());
-        input.getFilterExtensions().ifPresent(out::setInputFilterExtensions);
-        out.setIdentifierSubrange(input.getIdentifierSubrange());
-        out.setRelativeForIdentifier(input.isRelativeForIdentifier());
-        out.setShuffle(input.isShuffle());
-        out.setLimitUpper(input.getLimitUpper());
-        return out;
+    public InputContextParameters inputContextParameters() {
+        return input.getContextParameters();
     }
 
     public PathPrefixerContext createPrefixerContext() throws PathPrefixerException {

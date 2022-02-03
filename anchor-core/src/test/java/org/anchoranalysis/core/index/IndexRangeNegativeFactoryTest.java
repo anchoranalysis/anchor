@@ -80,7 +80,9 @@ class IndexRangeNegativeFactoryTest {
     }
 
     private static void testExpectException(String strToParse) {
-        assertThrows(OperationFailedException.class, () -> IndexRangeNegativeFactoryTest.parse(strToParse));
+        assertThrows(
+                OperationFailedException.class,
+                () -> IndexRangeNegativeFactoryTest.parse(strToParse));
     }
 
     private static void test(String strToParse, int expectedStart, int expectedEnd)

@@ -31,6 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.nio.file.Path;
 import java.util.Optional;
 import org.anchoranalysis.core.index.GetOperationFailedException;
+import org.anchoranalysis.io.output.outputter.DirectoryCreationParameters;
 import org.anchoranalysis.io.output.writer.WriterExecuteBeforeEveryOperation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -52,7 +53,8 @@ class LazyDirectoryCreatorCacheTest {
 
     @BeforeEach
     void setup() {
-        directoryCreator = new LazyDirectoryCreatorPool(directory, false);
+        directoryCreator =
+                new LazyDirectoryCreatorPool(directory, new DirectoryCreationParameters());
     }
 
     @Test

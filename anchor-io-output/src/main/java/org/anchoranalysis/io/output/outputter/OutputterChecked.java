@@ -79,20 +79,21 @@ public class OutputterChecked {
      * <p>Outputs are not recorded.
      *
      * @param pathDirectory directory to associate with output-manager
-     * @param deleteExistingDirectory if true this directory if it already exists is deleted before
-     *     executing the experiment, otherwise an exception is thrown if it exists.
+     * @param directoryCreation how to create the output directory.
      * @param logger logger for warning for information messages when outputting
      * @throws BindFailedException
      */
     public static OutputterChecked createForDirectoryPermissive(
-            Path pathDirectory, boolean deleteExistingDirectory, Optional<Logger> logger)
+            Path pathDirectory,
+            DirectoryCreationParameters directoryCreation,
+            Optional<Logger> logger)
             throws BindFailedException {
         return createWithPrefix(
                 new DirectoryWithPrefix(pathDirectory),
                 Permissive.INSTANCE,
                 new OutputWriteContext(),
                 Optional.empty(),
-                deleteExistingDirectory,
+                directoryCreation,
                 logger);
     }
 
@@ -102,8 +103,7 @@ public class OutputterChecked {
      * @param outputEnabled which outputs are enabled or not
      * @param prefix the prefix
      * @param context associated output context
-     * @param deleteExistingDirectory if true this directory if it already exists is deleted before
-     *     executing the experiment, otherwise an exception is thrown if it exists.
+     * @param directoryCreation how to create the output directory.
      * @param recordedOutputs if defined, records output-names that are written / not-written in
      *     {@link OutputterChecked} (but not any sub-directories thereof)
      * @param logger logger for warning for information messages when outputting
@@ -114,11 +114,11 @@ public class OutputterChecked {
             MultiLevelOutputEnabled outputEnabled,
             OutputWriteContext context,
             Optional<MultiLevelRecordedOutputs> recordedOutputs,
-            boolean deleteExistingDirectory,
+            DirectoryCreationParameters directoryCreation,
             Optional<Logger> logger)
             throws BindFailedException {
         return new OutputterChecked(
-                new OutputterTarget(prefix, deleteExistingDirectory),
+                new OutputterTarget(prefix, directoryCreation),
                 outputEnabled,
                 recordedOutputs,
                 context,

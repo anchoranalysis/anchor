@@ -27,7 +27,8 @@ public abstract class Grouper extends AnchorBean<Grouper> {
      * Like {@link #deriveGroupKey(Path)} but can also be called when grouping is disabled.
      *
      * @param identifier an identifier for an input, expressed as a {@link Path}.
-     * @return the result of {@link #deriveGroupKey(Path)} when {@code isGroupingEnabled()==true}, otherwise {@link Optional#empty()}.
+     * @return the result of {@link #deriveGroupKey(Path)} when {@code isGroupingEnabled()==true},
+     *     otherwise {@link Optional#empty()}.
      * @throws DerivePathException if a key cannot be derived from {@code identifier} successfully.
      */
     public Optional<String> deriveGroupKeyOptional(Path identifier) throws DerivePathException {
@@ -40,7 +41,8 @@ public abstract class Grouper extends AnchorBean<Grouper> {
      * <p>This key determines which group {@code input} belongs to e.g. like a GROUP BY key in
      * databases.
      *
-     * <p>This method should <b>only</b> be called, after checking that {@link #isGroupingEnabled()} is true.
+     * <p>This method should <b>only</b> be called, after checking that {@link #isGroupingEnabled()}
+     * is true.
      *
      * @param identifier an identifier for an input, expressed as a {@link Path}.
      * @return the group key, which will always use forward-slashes as a <i>separator</i>, and never

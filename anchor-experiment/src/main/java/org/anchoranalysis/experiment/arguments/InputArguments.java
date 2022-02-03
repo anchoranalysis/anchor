@@ -25,17 +25,13 @@
  */
 package org.anchoranalysis.experiment.arguments;
 
-import com.github.davidmoten.guavamini.Preconditions;
-import io.vavr.control.Either;
 import java.nio.file.Path;
-import java.util.List;
 import java.util.Optional;
-import java.util.function.Supplier;
+import java.util.function.Consumer;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.collection.StringSetTrie;
 import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
-import org.anchoranalysis.core.index.range.IndexRangeNegative;
+import org.anchoranalysis.io.input.InputContextParameters;
 
 /**
  * Arguments that can further specify an experiment's <b>input</b> in addition to its bean
@@ -46,70 +42,25 @@ import org.anchoranalysis.core.index.range.IndexRangeNegative;
 @NoArgsConstructor
 public class InputArguments {
 
-    /** A list of paths referring to specific inputs; */
-    @Getter private Optional<List<Path>> paths = Optional.empty();
-
-    /** A directory indicating where inputs can be located */
-    @Getter private Optional<Path> directory = Optional.empty();
-
-    /** If defined, a glob that is applied on inputDirectory */
-    @Getter private Optional<String> filterGlob = Optional.empty();
+    /** Context parameters that an influence determining inputs. */
+    @Getter private InputContextParameters contextParameters = new InputContextParameters();
 
     /**
-     * If defined, an upper limit that is imposed on the number of inputs.
-     *
-     * <p>When an {@link Integer} is is a fixed number of inputs.
-     *
-     * <p>When a {@link Double} it is a ratio of the total number of inputs (and should only be in
-     * the interval {@code (0.0, 1.0)}).
-     */
-    @Getter private Optional<Either<Integer, Double>> limitUpper = Optional.empty();
-
-    /**
-     * If defined, a set of extension filters that can be applied on inputDirectory
-     *
-     * <p>A defined but empty set implies no check is applied
-     *
-     * <p>{@link Optional#empty} implies no extension filters exist.
-     */
-    @Getter private Optional<StringSetTrie> filterExtensions = Optional.empty();
-
-    /**
-     * If true, the entire filename or relative path (excluding extension) is used to determine a
-     * unique identifier.
-     */
-    @Getter private boolean relativeForIdentifier = false;
-
-    /** If defined, this indicates and specifies only a subset of the naming-elements to use. */
-    @Getter private Optional<IndexRangeNegative> identifierSubrange = Optional.empty();
-
-    /**
-     * If True, any files in the input directory that are unused as inputs, are copied to the output
-     * directory.
+     * When true, any files in the input directory that are unused as inputs, are copied to the
+     * output directory.
      */
     @Getter private boolean copyNonInputs = false;
 
-    /** If true, the order of the inputs are shuffled (randomized). */
-    @Getter private boolean shuffle = false;
-
     /** A directory indicating where models can be located */
-    private Optional<Path> modelDirectory;
-
-    public void assignPaths(List<Path> inputPaths) {
-        this.paths = Optional.of(inputPaths);
-    }
+    private Optional<Path> modelDirectory = Optional.empty();
 
     /**
-     * Sets an input-directory.
+     * When defined, this {@code consumer} is called when the directory is first created, as it is
+     * created lazily only when first needed.
      *
-     * <p>If defined, The path will be converted to an absolute path, if it hasn't been already,
-     * based upon the current working directory.
-     *
-     * @param inputDirectory the input-directory to an assign
+     * <p>It is called with the path of the directory as an argument.
      */
-    public void assignInputDirectory(Optional<Path> inputDirectory) {
-        this.directory = inputDirectory.map(InputArguments::normalizeDirectory);
-    }
+    @Getter private Optional<Consumer<Path>> callUponDirectoryCreation = Optional.empty();
 
     public Path getModelDirectory() {
         return modelDirectory.orElseThrow(
@@ -120,66 +71,11 @@ public class InputArguments {
         this.modelDirectory = Optional.of(modelDirectory);
     }
 
-    public void assignFilterGlob(String filterGlob) {
-        this.filterGlob = Optional.of(filterGlob);
-    }
-
-    /**
-     * If defined, this indicates and specifies only a subset of the elements of the identifier to
-     * use.
-     */
-    public void assignIdentifierSubrange(IndexRangeNegative identifierSubrange) {
-        this.identifierSubrange = Optional.of(identifierSubrange);
-    }
-
-    public void assignFilterExtensionsIfMissing(
-            Supplier<Optional<StringSetTrie>> filterExtensions) {
-        if (!this.filterExtensions.isPresent()) {
-            this.filterExtensions = filterExtensions.get();
-        }
-    }
-
-    public void assignFilterExtensions(StringSetTrie filterExtensions) {
-        this.filterExtensions = Optional.of(filterExtensions);
-    }
-
     public void assignCopyNonInputs() {
         this.copyNonInputs = true;
     }
 
-    public void assignRelativeForIdentifier() {
-        this.relativeForIdentifier = true;
-    }
-
-    /**
-     * Assigns a fixed upper limit of number of inputs.
-     *
-     * @param fixedLimit the maximum number of inputs allowed.
-     */
-    public void assignFixedLimit(int fixedLimit) {
-        this.limitUpper = Optional.of(Either.left(fixedLimit));
-    }
-
-    /**
-     * Assigns a fixed upper limit that is a ratio of the number of inputs allowed.
-     *
-     * @param ratioLimit the maximum number of inputs allowed.
-     */
-    public void assignRatioLimit(double ratioLimit) {
-        Preconditions.checkArgument(ratioLimit > 0.0);
-        Preconditions.checkArgument(ratioLimit < 1.0);
-        this.limitUpper = Optional.of(Either.right(ratioLimit));
-    }
-
-    public void assignShuffle() {
-        this.shuffle = true;
-    }
-
-    private static Path normalizeDirectory(Path directory) {
-        if (!directory.isAbsolute()) {
-            return directory.toAbsolutePath().normalize();
-        } else {
-            return directory.normalize();
-        }
+    public void assignCallUponDirectoryCreation(Consumer<Path> consumer) {
+        this.callUponDirectoryCreation = Optional.of(consumer);
     }
 }
