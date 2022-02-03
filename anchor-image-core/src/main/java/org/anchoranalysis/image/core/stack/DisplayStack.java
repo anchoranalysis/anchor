@@ -431,12 +431,12 @@ public class DisplayStack {
     }
 
     /**
-     * Adds as many converters and blank channels as needed so that the total nubmer becomes {@code
+     * Adds as many converters and blank channels as needed so that the total number becomes {@code
      * eventualNumberChannels}.
      */
     private void addConvertersAsNeeded(int eventualNumberChannels)
             throws SetOperationFailedException {
-        addEmptyConverters(getNumberChannels());
+        addEmptyConverters(eventualNumberChannels);
 
         // The index we retrieve from in the original channel
         for (int index = 0; index < getNumberChannels(); index++) {

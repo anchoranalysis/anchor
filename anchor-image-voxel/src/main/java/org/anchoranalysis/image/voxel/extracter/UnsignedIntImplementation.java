@@ -33,6 +33,11 @@ import org.anchoranalysis.image.voxel.projection.MeanIntensityProjection;
 import org.anchoranalysis.image.voxel.projection.extrema.MaxIntensityProjection;
 import org.anchoranalysis.spatial.box.Extent;
 
+/**
+ * Implementation of {@link VoxelsExtracter} where voxels have <b>unsigned int</b> type.
+ *
+ * @author Owen Feehan
+ */
 class UnsignedIntImplementation extends VoxelsExtracterBase<UnsignedIntBuffer> {
 
     public UnsignedIntImplementation(Voxels<UnsignedIntBuffer> voxels) {

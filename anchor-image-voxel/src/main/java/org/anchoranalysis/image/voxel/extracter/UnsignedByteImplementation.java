@@ -28,13 +28,16 @@ package org.anchoranalysis.image.voxel.extracter;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.ProjectableBuffer;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
-import org.anchoranalysis.image.voxel.iterator.IterateVoxelsAll;
-import org.anchoranalysis.image.voxel.iterator.MinMaxRange;
 import org.anchoranalysis.image.voxel.projection.MeanIntensityProjection;
 import org.anchoranalysis.image.voxel.projection.extrema.MaxIntensityProjection;
 import org.anchoranalysis.spatial.box.Extent;
 
-class UnsignedByteImplementation extends VoxelsExtracterBase<UnsignedByteBuffer> {
+/**
+ * Implementation of {@link VoxelsExtracter} where voxels have <b>unsigned byte</b> type.
+ *
+ * @author Owen Feehan
+ */
+class UnsignedByteImplementation extends VoxelsExtracterAsIntBase<UnsignedByteBuffer> {
 
     public UnsignedByteImplementation(Voxels<UnsignedByteBuffer> voxels) {
         super(voxels);
@@ -47,21 +50,6 @@ class UnsignedByteImplementation extends VoxelsExtracterBase<UnsignedByteBuffer>
             UnsignedByteBuffer destinationBuffer,
             int destinationIndex) {
         destinationBuffer.putRaw(destinationIndex, sourceBuffer.getRaw(sourceIndex));
-    }
-
-    @Override
-    public long voxelWithMaxIntensity() {
-        return IterateVoxelsAll.intensityMax(voxels);
-    }
-
-    @Override
-    public long voxelWithMinIntensity() {
-        return IterateVoxelsAll.intensityMin(voxels);
-    }
-
-    @Override
-    public MinMaxRange voxelsWithMinMaxIntensity() {
-        return IterateVoxelsAll.intensityMinMax(voxels);
     }
 
     @Override

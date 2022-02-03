@@ -7,6 +7,7 @@ import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.bean.nonbean.ConsistentChannelChecker;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.core.dimensions.Resolution; // NOSONAR
 
 /**
  * A method of aggregating the voxels from many identically-sized {@link Channel}s into one.
@@ -49,7 +50,6 @@ public abstract class ChannelAggregator extends AnchorBean<ChannelAggregator> {
                         .logFormatted(
                                 "Dropping image-resolution as it is not consistent between images: existing %s versus %s to add",
                                 existing.get().resolution(), channel.resolution());
-                existing = dropResolution(existing);
                 ignoreResolution = true;
             } else {
 
@@ -108,6 +108,21 @@ public abstract class ChannelAggregator extends AnchorBean<ChannelAggregator> {
     protected abstract Channel retrieveCreateAggregatedChannel();
 
     /**
+     * Removes the {@link Resolution} component in {@link Dimensions}.
+     *
+     * @param dimensions to maybe remove resolution from.
+     * @return {@code dimensions} unchanged when {@code ignoreResolution==false}, otherwise {@code
+     *     dimensions} without any resolution specified.
+     */
+    protected Dimensions maybeDropResolution(Dimensions dimensions) {
+        if (ignoreResolution) {
+            return dimensions.duplicateChangeResolution(Optional.empty());
+        } else {
+            return dimensions;
+        }
+    }
+
+    /**
      * Are two {@link Dimensions}, either considering or disconsidering the {@link Resolution}
      * depending on {@code ignoreResolution}.
      */
@@ -117,12 +132,5 @@ public abstract class ChannelAggregator extends AnchorBean<ChannelAggregator> {
         } else {
             return existing.equals(toAdd);
         }
-    }
-
-    /** Removes the {@link Resolution} component. */
-    private static Optional<Dimensions> dropResolution(Optional<Dimensions> dimensions) {
-        return dimensions.map(
-                dimensionsToChange ->
-                        dimensionsToChange.duplicateChangeResolution(Optional.empty()));
     }
 }

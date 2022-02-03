@@ -96,9 +96,21 @@ public class ExtentToArrange implements Comparable<ExtentToArrange> {
         return 1.0 / aspectRatio;
     }
 
+    /** Sorts in descending order by {@code extent}. */
     @Override
-    public int compareTo(ExtentToArrange o) {
-        return -1 * extent.compareTo(o.extent);
+    public int compareTo(ExtentToArrange other) {
+        return -1 * extent.compareTo(other.extent);
+    }
+
+    /** To be correspond to {@link #compareTo(ExtentToArrange)}. */
+    @Override
+    public boolean equals(Object other) {
+        if (other instanceof ExtentToArrange) {
+            ExtentToArrange otherCast = (ExtentToArrange) other;
+            return extent.equals(otherCast.extent);
+        } else {
+            return false;
+        }
     }
 
     /** Determines the scaling factor to use, to achieve a particular {@code targetWidth}. */

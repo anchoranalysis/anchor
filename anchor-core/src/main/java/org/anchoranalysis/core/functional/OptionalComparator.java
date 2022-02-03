@@ -2,6 +2,8 @@ package org.anchoranalysis.core.functional;
 
 import java.util.Comparator;
 import java.util.Optional;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 /**
  * Creates a {@link Comparator} that can work with {@link Optional}s.
@@ -10,6 +12,7 @@ import java.util.Optional;
  *
  * @author Owen Feehan
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class OptionalComparator {
 
     /**
