@@ -64,7 +64,9 @@ class CalculationCache<T extends FeatureInput> implements FeatureCalculationCach
 
     // Set up the cache
     @Override
-    public void initialize(FeatureInitialization initialization, Logger logger) {}
+    public void initialize(FeatureInitialization initialization, Logger logger) {
+        // NOTHING TO DO
+    }
 
     @Override
     public void invalidate() {

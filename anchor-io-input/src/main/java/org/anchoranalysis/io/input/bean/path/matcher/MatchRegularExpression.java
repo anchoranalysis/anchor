@@ -99,11 +99,10 @@ public class MatchRegularExpression extends FilePathMatcher {
             // A single backslash needs to be escaped by two-backslashes in a regular-expression
             // A single backslash needs to be escaped by two-backslashes in Java, to write a single
             // backslash in a regular-expression
-            // A single backslash needs to be escaped by two-backslashes in the replacement argument
-            // to expression.replaceAll due to backreferences
-            // In total, 8 blackslashes (2*2*2) in the string to test against a single backslash in
-            // the actual string :)
-            return expression.replaceAll("/", "\\\\\\\\");
+            // In total, 4 blackslashes (2*2) exist in the literal string to test against a single
+            // backslash in
+            // the actual underlying string :)
+            return expression.replace("/", "\\\\");
         } else {
             return expression;
         }

@@ -123,7 +123,7 @@ public class MatchExtensions extends FilePathMatcher {
         if (prioritizeInputContext
                 && inputContext.isPresent()
                 && inputContext.get().getInputFilterExtensions().isPresent()) {
-            return inputContext.get().getInputFilterExtensions().get();
+            return inputContext.get().getInputFilterExtensions().get(); // NOSONAR
         } else {
             return new StringSetTrie(extensions.set());
         }

@@ -43,7 +43,7 @@ public class AreaPhysical extends UnitValueArea {
 
     // START BEAN PROPERTIES
     /** The volume in units of meters, with the unit described by {@code unitType}. */
-    @BeanField @Getter @Setter private double value;
+    @BeanField @Getter @Setter private double value; // NOSONAR
 
     /**
      * How much each value represents e.g. square nanometers, squares millimeters etc.
@@ -52,7 +52,7 @@ public class AreaPhysical extends UnitValueArea {
      *
      * <p>See {@link SpatialUnits} for acceptable string-values.
      */
-    @BeanField @Getter @Setter private String unitType = "";
+    @BeanField @Getter @Setter private String unitType = ""; // NOSONAR
     // END BEAN PROPERTIES
 
     @Override

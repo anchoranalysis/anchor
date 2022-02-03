@@ -33,6 +33,11 @@ import org.anchoranalysis.image.voxel.projection.MeanIntensityProjection;
 import org.anchoranalysis.image.voxel.projection.extrema.MaxIntensityProjection;
 import org.anchoranalysis.spatial.box.Extent;
 
+/**
+ * Implementation of {@link VoxelsExtracter} where voxels have <b>float</b> type.
+ *
+ * @author Owen Feehan
+ */
 class FloatImplementation extends VoxelsExtracterBase<FloatBuffer> {
 
     public FloatImplementation(Voxels<FloatBuffer> voxels) {
