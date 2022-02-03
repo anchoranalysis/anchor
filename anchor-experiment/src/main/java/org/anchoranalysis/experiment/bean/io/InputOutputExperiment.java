@@ -28,7 +28,6 @@ package org.anchoranalysis.experiment.bean.io;
 
 import com.owenfeehan.pathpatternfinder.PathPatternFinder;
 import com.owenfeehan.pathpatternfinder.Pattern;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.List;
@@ -159,7 +158,7 @@ public class InputOutputExperiment<T extends InputFromManager, S> extends Output
                             new Logger(parameters.getLoggerExperiment()));
             InputManagerParameters parametersInput =
                     new InputManagerParameters(
-                            parameters.getExperimentArguments().createInputContext(),
+                            parameters.getExperimentArguments().inputContextParameters(),
                             ProgressIgnore.get(),
                             operationContext);
 
@@ -183,7 +182,7 @@ public class InputOutputExperiment<T extends InputFromManager, S> extends Output
                 return Optional.empty();
             }
 
-        } catch (InputReadFailedException | IOException e) {
+        } catch (InputReadFailedException e) {
             throw new ExperimentExecutionException(
                     "An error occured while searching for inputs", e);
         }
