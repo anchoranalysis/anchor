@@ -26,7 +26,9 @@
 
 package org.anchoranalysis.io.output.bean;
 
+import java.nio.file.Path;
 import java.util.Optional;
+import java.util.function.Consumer;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.AnchorBean;
@@ -39,6 +41,7 @@ import org.anchoranalysis.io.output.bean.path.prefixer.PathPrefixer;
 import org.anchoranalysis.io.output.bean.rules.OutputEnabledRules;
 import org.anchoranalysis.io.output.enabled.multi.MultiLevelOutputEnabled;
 import org.anchoranalysis.io.output.outputter.BindFailedException;
+import org.anchoranalysis.io.output.outputter.DirectoryCreationParameters;
 import org.anchoranalysis.io.output.outputter.OutputWriteContext;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
 import org.anchoranalysis.io.output.path.prefixer.DirectoryWithPrefix;
@@ -120,6 +123,9 @@ public class OutputManager extends AnchorBean<OutputManager> {
      * @param writeContext context needed for writing. This is typically provided via a call to
      *     {@link #createContextForWriting(Optional, ExecutionTimeRecorder)}.
      * @param prefixerContext parameters for the file-path prefixer.
+     * @param callUponDirectoryCreation when defined, this {@code consumer} is called (with the
+     *     directory path) when the directory is first created, as it is created lazily only when
+     *     first needed.
      * @param logger logger for warning for information messages when outputting.
      * @return a newly created outputter.
      * @throws BindFailedException
@@ -130,6 +136,7 @@ public class OutputManager extends AnchorBean<OutputManager> {
             Optional<MultiLevelRecordedOutputs> recordedOutputs,
             OutputWriteContext writeContext,
             PathPrefixerContext prefixerContext,
+            Optional<Consumer<Path>> callUponDirectoryCreation,
             Optional<Logger> logger)
             throws BindFailedException {
 
@@ -142,7 +149,8 @@ public class OutputManager extends AnchorBean<OutputManager> {
                     outputsEnabled,
                     writeContext,
                     recordedOutputs,
-                    silentlyDeleteExisting,
+                    new DirectoryCreationParameters(
+                            silentlyDeleteExisting, callUponDirectoryCreation),
                     logger);
 
         } catch (PathPrefixerException e) {

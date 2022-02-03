@@ -32,6 +32,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Value;
 import org.anchoranalysis.io.output.outputter.BindFailedException;
+import org.anchoranalysis.io.output.outputter.DirectoryCreationParameters;
 import org.anchoranalysis.io.output.path.prefixer.DirectoryWithPrefix;
 import org.anchoranalysis.io.output.path.prefixer.PathCreator;
 import org.anchoranalysis.io.output.writer.WriterExecuteBeforeEveryOperation;
@@ -52,9 +53,16 @@ public class OutputterTarget {
 
     @Getter private final DirectoryWithPrefix prefix;
 
-    public OutputterTarget(DirectoryWithPrefix prefix, boolean deleteExistingDirectory)
+    /**
+     * Creates for a particular directory, with optionally an associated prefix.
+     *
+     * @param directory the directory to output, with optionally an associated prefix.
+     * @param parameters parameters that influence how the directory is created.
+     * @throws BindFailedException if the directory cannot be successfully used as an output target.
+     */
+    public OutputterTarget(DirectoryWithPrefix directory, DirectoryCreationParameters parameters)
             throws BindFailedException {
-        this(new BoundDirectory(prefix.getDirectory(), deleteExistingDirectory), prefix);
+        this(new BoundDirectory(directory.getDirectory(), parameters), directory);
     }
 
     /**

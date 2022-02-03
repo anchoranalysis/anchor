@@ -195,6 +195,7 @@ public abstract class OutputExperiment extends Experiment {
                                     outputs.getRecordedOutputs(),
                                     writeContext,
                                     arguments.createPrefixerContext(),
+                                    arguments.input().getCallUponDirectoryCreation(),
                                     Optional.empty());
 
             Preconditions.checkArgument(rootOutputter.getSettings().hasBeenInitialized());

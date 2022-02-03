@@ -27,6 +27,7 @@ package org.anchoranalysis.experiment.arguments;
 
 import java.nio.file.Path;
 import java.util.Optional;
+import java.util.function.Consumer;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
@@ -45,13 +46,21 @@ public class InputArguments {
     @Getter private InputContextParameters contextParameters = new InputContextParameters();
 
     /**
-     * If True, any files in the input directory that are unused as inputs, are copied to the output
-     * directory.
+     * When true, any files in the input directory that are unused as inputs, are copied to the
+     * output directory.
      */
     @Getter private boolean copyNonInputs = false;
 
     /** A directory indicating where models can be located */
     private Optional<Path> modelDirectory = Optional.empty();
+
+    /**
+     * When defined, this {@code consumer} is called when the directory is first created, as it is
+     * created lazily only when first needed.
+     *
+     * <p>It is called with the path of the directory as an argument.
+     */
+    @Getter private Optional<Consumer<Path>> callUponDirectoryCreation = Optional.empty();
 
     public Path getModelDirectory() {
         return modelDirectory.orElseThrow(
@@ -64,5 +73,9 @@ public class InputArguments {
 
     public void assignCopyNonInputs() {
         this.copyNonInputs = true;
+    }
+
+    public void assignCallUponDirectoryCreation(Consumer<Path> consumer) {
+        this.callUponDirectoryCreation = Optional.of(consumer);
     }
 }

@@ -32,10 +32,12 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Consumer;
 import lombok.Getter;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.system.path.PathDifference;
 import org.anchoranalysis.core.system.path.PathDifferenceException;
+import org.anchoranalysis.io.output.outputter.DirectoryCreationParameters;
 import org.anchoranalysis.io.output.writer.WriterExecuteBeforeEveryOperation;
 
 /**
@@ -49,11 +51,8 @@ import org.anchoranalysis.io.output.writer.WriterExecuteBeforeEveryOperation;
 class LazyDirectoryCreatorPool {
 
     // START REQUIRED ARGUMENTS
-    /**
-     * If true, any existing directory at the intended path for creation, is first deleted. If
-     * false, an exception is thrown in this circumstance.
-     */
-    private final boolean deleteExisting;
+    /** Parameters that influence how a directory is created. */
+    private final DirectoryCreationParameters parameters;
 
     /** The root directory in which <i>all</i> memoized directories must exist. */
     @Getter private final Path rootDirectory;
@@ -67,12 +66,11 @@ class LazyDirectoryCreatorPool {
      *
      * @param rootDirectory a root directory, in which all paths subsequently passed to {@link
      *     #getOrCreate} should reside.
-     * @param deleteExisting if true, deletes any existing folder that exists in paths we create. if
-     *     false, an error is thrown if an existing directory exists.
+     * @param parameters Parameters that influence how a directory is created.
      */
-    public LazyDirectoryCreatorPool(Path rootDirectory, boolean deleteExisting) {
+    public LazyDirectoryCreatorPool(Path rootDirectory, DirectoryCreationParameters parameters) {
         this.rootDirectory = rootDirectory.normalize();
-        this.deleteExisting = deleteExisting;
+        this.parameters = parameters;
     }
 
     /**
@@ -110,7 +108,8 @@ class LazyDirectoryCreatorPool {
     /** A directory-creator for the root directory */
     private LazyDirectoryCreator getRootCreator(
             Optional<WriterExecuteBeforeEveryOperation> opBefore) {
-        return getOrCreate(Paths.get(""), rootDirectory, opBefore);
+        return getOrCreate(
+                Paths.get(""), rootDirectory, opBefore, parameters.getCallUponDirectoryCreation());
     }
 
     /**
@@ -145,7 +144,8 @@ class LazyDirectoryCreatorPool {
                 key = key.resolve(next);
             }
 
-            lazyDirectory = getOrCreate(key, rootDirectory.resolve(key), opBeforeRunning);
+            lazyDirectory =
+                    getOrCreate(key, rootDirectory.resolve(key), opBeforeRunning, Optional.empty());
 
             // The current directory becomes the opBefore of the next element
             opBeforeRunning = Optional.of(lazyDirectory);
@@ -158,11 +158,19 @@ class LazyDirectoryCreatorPool {
     }
 
     private synchronized LazyDirectoryCreator getOrCreate(
-            Path key, Path directoryFull, Optional<WriterExecuteBeforeEveryOperation> opBefore) {
+            Path key,
+            Path directoryFull,
+            Optional<WriterExecuteBeforeEveryOperation> opBefore,
+            Optional<Consumer<Path>> opAfter) {
         return map.computeIfAbsent(
                 key,
                 // The creator is bound to the full path not the partial path in the key
-                path -> new LazyDirectoryCreator(directoryFull, deleteExisting, opBefore));
+                path ->
+                        new LazyDirectoryCreator(
+                                directoryFull,
+                                parameters.isDeleteExistingDirectory(),
+                                opBefore,
+                                opAfter));
     }
 
     private Path differenceFromRoot(Path path) throws GetOperationFailedException {
