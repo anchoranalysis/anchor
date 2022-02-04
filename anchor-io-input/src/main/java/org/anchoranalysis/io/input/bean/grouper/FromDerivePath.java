@@ -19,7 +19,9 @@ public abstract class FromDerivePath extends Grouper {
      * Creates an {@link InputGrouper} that can be used to derive a group-key from a particular
      * input.
      *
-     * @param the {@link InputGrouper}, if grouping is enabled. Otherwise {@link Optional#empty()}.
+     * @param groupIndexRange an index-range to use for grouping, by subsetting components from each
+     *     input's identifier.
+     * @return the {@link InputGrouper}, if grouping is enabled. Otherwise {@link Optional#empty()}.
      */
     @Override
     public Optional<InputGrouper> createInputGrouper(Optional<IndexRangeNegative> groupIndexRange) {
