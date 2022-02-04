@@ -28,6 +28,9 @@ package org.anchoranalysis.experiment.arguments;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.index.range.IndexRangeNegative;
+import org.anchoranalysis.core.index.range.IndexRangeNegativeFactory;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.image.core.dimensions.size.suggestion.ImageSizeSuggestion;
 import org.anchoranalysis.image.core.dimensions.size.suggestion.ImageSizeSuggestionFactory;
@@ -51,6 +54,11 @@ public class TaskArguments {
     /** Suggests a maximum number of processors (CPUs) for a task. */
     @Getter private Optional<Integer> maxNumberProcessors = Optional.empty();
 
+    /**
+     * An index-range to use for grouping, by subsetting components from each input's identifier.
+     */
+    @Getter private Optional<IndexRangeNegative> groupIndexRange = Optional.empty();
+
     public void assignTaskName(Optional<String> taskName) {
         this.taskName = taskName;
     }
@@ -59,6 +67,26 @@ public class TaskArguments {
         try {
             this.size = Optional.of(ImageSizeSuggestionFactory.create(size));
         } catch (SuggestionFormatException e) {
+            throw new ExperimentExecutionException(e);
+        }
+    }
+
+    /**
+     * Assigns an index-range to use to form groups, by subsetting components from each input's
+     * identifier.
+     *
+     * @param groupRange a string in the format expected by {@link IndexRangeNegativeFactory#parse},
+     *     or an empty-string which is considered as "0".
+     * @throws ExperimentExecutionException if {@code groupRange} does have the expected format.
+     */
+    public void assignGroup(String groupRange) throws ExperimentExecutionException {
+        try {
+            if (groupRange.isEmpty()) {
+                // Default to 0, if no string is specified
+                groupRange = "0";
+            }
+            this.groupIndexRange = Optional.of(IndexRangeNegativeFactory.parse(groupRange));
+        } catch (OperationFailedException e) {
             throw new ExperimentExecutionException(e);
         }
     }

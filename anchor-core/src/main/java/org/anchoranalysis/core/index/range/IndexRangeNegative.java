@@ -25,8 +25,9 @@
  */
 package org.anchoranalysis.core.index.range;
 
+import java.util.ArrayList;
 import java.util.List;
-import lombok.AllArgsConstructor;
+import java.util.function.IntFunction;
 import lombok.Value;
 import org.anchoranalysis.core.exception.OperationFailedException;
 
@@ -37,7 +38,6 @@ import org.anchoranalysis.core.exception.OperationFailedException;
  *
  * @author Owen Feehan
  */
-@AllArgsConstructor
 @Value
 public class IndexRangeNegative {
 
@@ -60,12 +60,38 @@ public class IndexRangeNegative {
     private int endIndex;
 
     /**
+     * Create with a start and end index.
+     *
+     * @param startIndex the start-index (which can be negative).
+     * @param endIndex the end-index (which can be negative).
+     * @throws OperationFailedException if the indices are incorrectly ordered.
+     */
+    public IndexRangeNegative(int startIndex, int endIndex) throws OperationFailedException {
+        this.startIndex = startIndex;
+        this.endIndex = endIndex;
+
+        if (startIndex >= 0 && endIndex >= 0 && endIndex < startIndex) {
+            throw new OperationFailedException(
+                    String.format(
+                            "The start-index (%d) must precede the end-index (%d)",
+                            startIndex, endIndex));
+        }
+
+        if (startIndex < 0 && endIndex < 0 && endIndex < startIndex) {
+            throw new OperationFailedException(
+                    String.format(
+                            "The start-index (%d) must precede the end-index (%d)",
+                            startIndex, endIndex));
+        }
+    }
+
+    /**
      * Extracts a subset of elements from a list according to the specified index/range.
      *
      * @param <T> type of element in the list
      * @param list the list to extract a subset from
      * @return a newly created list that contains a subset of elements from {@code list}
-     *     corresponding to the indec/range.
+     *     corresponding to the index/range.
      * @throws OperationFailedException if an index lies outside the range {@code (-listSize,
      *     listSize)} or {@code startIndex>=endIndex}.
      */
@@ -82,6 +108,40 @@ public class IndexRangeNegative {
         }
 
         return list.subList(startCorrected, endCorrected + 1);
+    }
+
+    /**
+     * Extracts a subset of elements from a collection according to the specified index/range.
+     *
+     * <p>Collection is any generic structure, with a fixed number of elements, that can be accessed
+     * via {@code extractIndex}.
+     *
+     * @param <T> type of element in the list
+     * @param numberElements the number of elements in the collection.
+     * @param extractIndex extracts an element at a particular index from the collection.
+     *     Zero-indexed.
+     * @return a newly created list that contains a subset of elements from the collection
+     *     corresponding to the index/range.
+     * @throws OperationFailedException if an index lies outside the range {@code (-numberElements,
+     *     numberElements)} or {@code startIndex>=endIndex}.
+     */
+    public <T> List<T> extract(int numberElements, IntFunction<T> extractIndex)
+            throws OperationFailedException {
+        int startCorrected = correctedStartIndex(numberElements);
+        int endCorrected = correctedEndIndex(numberElements);
+
+        if (startCorrected > endCorrected) {
+            throw new OperationFailedException(
+                    String.format(
+                            "The start-index %d must produce an earlier position than the end-index %d.",
+                            startIndex, endIndex));
+        }
+
+        List<T> out = new ArrayList<>(endCorrected - startCorrected + 1);
+        for (int i = startCorrected; i <= endCorrected; i++) {
+            out.add(extractIndex.apply(i));
+        }
+        return out;
     }
 
     /**

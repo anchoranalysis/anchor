@@ -81,7 +81,9 @@ public class ElementOutputter {
      */
     public Path makeOutputPath(
             Optional<String> suffixWithoutExtension, String extension, String fallbackSuffix) {
-        return outputter.makeOutputPath(suffixWithoutExtension, extension, fallbackSuffix);
+        Path path = outputter.makeOutputPath(suffixWithoutExtension, extension, fallbackSuffix);
+        makeAnyNecessarySubdirectories(path);
+        return path;
     }
 
     /**
@@ -104,5 +106,12 @@ public class ElementOutputter {
 
     public Optional<Logger> logger() {
         return logger.get();
+    }
+
+    /** Create any necessary subdirectories so that {@code path} can be created as a file. */
+    private static void makeAnyNecessarySubdirectories(Path path) {
+        if (path.getParent() != null) {
+            path.getParent().toFile().mkdirs();
+        }
     }
 }

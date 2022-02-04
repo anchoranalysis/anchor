@@ -1,10 +1,9 @@
 package org.anchoranalysis.io.input.bean.grouper;
 
-import java.nio.file.Path;
 import java.util.Optional;
 import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.core.functional.OptionalFactory;
-import org.anchoranalysis.io.input.path.DerivePathException;
+import org.anchoranalysis.core.index.range.IndexRangeNegative;
+import org.anchoranalysis.io.input.grouper.InputGrouper;
 
 /**
  * Determines how partition inputs into groups.
@@ -16,38 +15,13 @@ import org.anchoranalysis.io.input.path.DerivePathException;
 public abstract class Grouper extends AnchorBean<Grouper> {
 
     /**
-     * Whether the grouping is enabled.
+     * Creates an {@link InputGrouper} that can be used to derive a group-key from a particular
+     * input.
      *
-     * @return true if inputs may be divided into groups, false if are guaranteed to always belong
-     *     to a single group.
+     * @param groupIndexRange an index-range to use for grouping, by subsetting components from each
+     *     input's identifier.
+     * @param the {@link InputGrouper}, if grouping is enabled. Otherwise {@link Optional#empty()}.
      */
-    public abstract boolean isGroupingEnabled();
-
-    /**
-     * Like {@link #deriveGroupKey(Path)} but can also be called when grouping is disabled.
-     *
-     * @param identifier an identifier for an input, expressed as a {@link Path}.
-     * @return the result of {@link #deriveGroupKey(Path)} when {@code isGroupingEnabled()==true},
-     *     otherwise {@link Optional#empty()}.
-     * @throws DerivePathException if a key cannot be derived from {@code identifier} successfully.
-     */
-    public Optional<String> deriveGroupKeyOptional(Path identifier) throws DerivePathException {
-        return OptionalFactory.createChecked(isGroupingEnabled(), () -> deriveGroupKey(identifier));
-    }
-
-    /**
-     * Derives a key for the group from {@code identifier}.
-     *
-     * <p>This key determines which group {@code input} belongs to e.g. like a GROUP BY key in
-     * databases.
-     *
-     * <p>This method should <b>only</b> be called, after checking that {@link #isGroupingEnabled()}
-     * is true.
-     *
-     * @param identifier an identifier for an input, expressed as a {@link Path}.
-     * @return the group key, which will always use forward-slashes as a <i>separator</i>, and never
-     *     back-slashes, irrespective of operating-system.
-     * @throws DerivePathException if a key cannot be derived from {@code identifier} successfully.
-     */
-    public abstract String deriveGroupKey(Path identifier) throws DerivePathException;
+    public abstract Optional<InputGrouper> createInputGrouper(
+            Optional<IndexRangeNegative> groupIndexRange);
 }
