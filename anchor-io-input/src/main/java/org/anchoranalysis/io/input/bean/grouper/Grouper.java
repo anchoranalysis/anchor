@@ -20,7 +20,7 @@ public abstract class Grouper extends AnchorBean<Grouper> {
      *
      * @param groupIndexRange an index-range to use for grouping, by subsetting components from each
      *     input's identifier.
-     * @eturn the {@link InputGrouper}, if grouping is enabled. Otherwise {@link Optional#empty()}.
+     * @return the {@link InputGrouper}, if grouping is enabled. Otherwise {@link Optional#empty()}.
      */
     public abstract Optional<InputGrouper> createInputGrouper(
             Optional<IndexRangeNegative> groupIndexRange);
