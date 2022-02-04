@@ -17,9 +17,6 @@ public interface InputGrouper {
      * <p>This key determines which group {@code input} belongs to e.g. like a GROUP BY key in
      * databases.
      *
-     * <p>This method should <b>only</b> be called, after checking that {@link #isGroupingEnabled()}
-     * is true.
-     *
      * @param identifier an identifier for an input, expressed as a {@link Path}.
      * @return a derived grouping-key.
      * @throws DerivePathException if a key cannot be derived from {@code identifier} successfully.
