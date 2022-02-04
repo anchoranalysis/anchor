@@ -41,9 +41,6 @@ public abstract class FromDerivePath extends Grouper {
      * <p>This key determines which group {@code input} belongs to e.g. like a GROUP BY key in
      * databases.
      *
-     * <p>This method should <b>only</b> be called, after checking that {@link #isGroupingEnabled()}
-     * is true.
-     *
      * @param identifier an identifier for an input, expressed as a {@link Path}.
      * @return the group key, which will always use forward-slashes as a <i>separator</i>, and never
      *     back-slashes, irrespective of operating-system.
