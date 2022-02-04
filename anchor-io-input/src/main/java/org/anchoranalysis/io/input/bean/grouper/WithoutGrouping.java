@@ -1,7 +1,8 @@
 package org.anchoranalysis.io.input.bean.grouper;
 
-import java.nio.file.Path;
-import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
+import java.util.Optional;
+import org.anchoranalysis.core.index.range.IndexRangeNegative;
+import org.anchoranalysis.io.input.grouper.InputGrouper;
 
 /**
  * Avoids grouping of inputs, effectively processing all inputs as one large group.
@@ -11,12 +12,7 @@ import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationExcep
 public class WithoutGrouping extends Grouper {
 
     @Override
-    public boolean isGroupingEnabled() {
-        return false;
-    }
-
-    @Override
-    public String deriveGroupKey(Path identifier) {
-        throw new AnchorImpossibleSituationException();
+    public Optional<InputGrouper> createInputGrouper(Optional<IndexRangeNegative> groupIndexRange) {
+        return Optional.empty();
     }
 }

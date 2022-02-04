@@ -1,6 +1,7 @@
 package org.anchoranalysis.core.collection;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.Supplier;
 import lombok.Getter;
@@ -49,7 +50,7 @@ public class MapCreateCountdown<K, V> {
         @Getter private int count = 0;
 
         /** The element if created, otherwise null. */
-        private V element;
+        @Getter private V element;
 
         /** Increments the current count. */
         public void increment() {
@@ -113,12 +114,33 @@ public class MapCreateCountdown<K, V> {
     }
 
     /**
+     * Runs an operation on the element, creating if necessary, <b>without</b> decrementing the
+     * count.
+     *
+     * @param key the key in the map.
+     * @param operation the operation to run on {@code key}.
+     * @throws OperationFailedException if thrown by {@code operation}, of if {@code key} does not
+     *     exist in the map.
+     */
+    public void processElement(K key, CheckedConsumer<V, OperationFailedException> operation)
+            throws OperationFailedException {
+        synchronized (this) {
+            ElementWithCount<V> withCount = map.get(key);
+            if (withCount == null) {
+                throw new OperationFailedException("No entry exists in map for key: " + key);
+            }
+            V element = withCount.getElementDecrement();
+
+            operation.accept(element);
+        }
+    }
+
+    /**
      * Runs an operation on the element, creating if necessary, and decrementing the count.
      *
      * @param key the key in the map.
      * @param operation the operation to run on {@code key}.
-     * @throws OperationFailedException if the key does not already exist.
-     * @throws OperationFailedException if thown by {@code operation}, of if {@code key} does not
+     * @throws OperationFailedException if thrown by {@code operation}, of if {@code key} does not
      *     exist in the map.
      */
     public void processElementDecrement(
@@ -146,6 +168,17 @@ public class MapCreateCountdown<K, V> {
         if (count == 0) {
             // remove from map and run operation
             cleanUpElement.accept(key, element);
+        }
+    }
+
+    /**
+     * Applies the clean-up function on any keys remaining in the map.
+     *
+     * @throws OperationFailedException if thrown by the clean-up routine.
+     */
+    public void cleanUpRemaining() throws OperationFailedException {
+        for (Map.Entry<K, ElementWithCount<V>> entry : map.entrySet()) {
+            cleanUpElement.accept(entry.getKey(), entry.getValue().getElement());
         }
     }
 }
