@@ -41,7 +41,6 @@ import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.writer.StackWriter;
 import org.anchoranalysis.image.io.bean.stack.writer.WriterErrorMessageHelper;
-import org.anchoranalysis.image.io.stack.StackSeries;
 import org.anchoranalysis.image.io.stack.output.StackWriteOptions;
 import org.anchoranalysis.image.voxel.datatype.FindCommonVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
@@ -74,13 +73,6 @@ public abstract class BioformatsWriter extends StackWriter {
 
     /** Whether the writer supports writing RGB images or not. */
     private final boolean supportsRGB;
-
-    @Override
-    public void writeStackSeries(StackSeries stackSeries, Path filePath, StackWriteOptions options)
-            throws ImageIOException {
-        throw new ImageIOException(
-                "Writing time-series is unsupported by this " + StackWriter.class.getSimpleName());
-    }
 
     @Override
     public void writeStack(Stack stack, Path filePath, StackWriteOptions options)

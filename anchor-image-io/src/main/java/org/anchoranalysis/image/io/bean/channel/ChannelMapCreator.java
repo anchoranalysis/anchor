@@ -24,53 +24,30 @@
  * #L%
  */
 
-package org.anchoranalysis.image.io.channel.input;
+package org.anchoranalysis.image.io.bean.channel;
 
-import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.Set;
-import org.anchoranalysis.image.io.bean.channel.ChannelEntry;
+import org.anchoranalysis.bean.AnchorBean;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.log.Logger;
+import org.anchoranalysis.image.core.channel.Channel; // NOSONAR
+import org.anchoranalysis.image.io.channel.input.ChannelMap;
+import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
 
 /**
- * A map of image channel-names to indices (entries).
- *
- * <p>It is vital that the insertion order is preserved, so a LinkedHashMap or similar should be
- * used This bean has a custom-factory
+ * Creates a {@link ChannelMap} for a particular {@link OpenedImageFile}.
  *
  * @author Owen Feehan
  */
-public class NamedEntries {
+public abstract class ChannelMapCreator extends AnchorBean<ChannelMapCreator> {
 
-    private LinkedHashMap<String, ChannelEntry> map = new LinkedHashMap<>();
-
-    public void add(ChannelEntry entry) {
-        map.put(entry.getName(), entry);
-    }
-
-    public int get(String name) {
-        ChannelEntry entry = map.get(name);
-        if (entry != null) {
-            return entry.getIndex();
-        } else {
-            return -1;
-        }
-    }
-
-    public Set<String> keySet() {
-        return map.keySet();
-    }
-
-    public Collection<ChannelEntry> entryCollection() {
-        return map.values();
-    }
-
-    public int getException(String name) {
-        int ind = get(name);
-        if (ind != -1) {
-            return ind;
-        } else {
-            throw new IndexOutOfBoundsException(
-                    String.format("No channel index for '%s' in imgChannelMap", name));
-        }
-    }
+    /**
+     * Creates the {@link ChannelMap}.
+     *
+     * @param openedFile an opened image-file containing {@link Channel}s.
+     * @param logger a logger for recording informative or error messages.
+     * @return a {@link ChannelMap} that assigns names to channels in {@code openedFile}.
+     * @throws CreateException if the {@link ChannelMap} cannot be successfully created.
+     */
+    public abstract ChannelMap create(OpenedImageFile openedFile, Logger logger)
+            throws CreateException;
 }

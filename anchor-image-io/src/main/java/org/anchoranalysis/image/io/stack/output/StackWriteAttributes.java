@@ -101,8 +101,9 @@ public class StackWriteAttributes {
     }
 
     /**
-     * Derives a {@link StackWriteAttributes} that will be RGB, but is otherwise unchanged.
+     * Derives a {@link StackWriteAttributes} that will be RGB or RGB-A, but is otherwise unchanged.
      *
+     * @param plusAlpha when true, RGBA is used. when false, RGB.
      * @return a newly created {@link StackWriteAttributes} derived from the existing object.
      */
     public StackWriteAttributes rgb(boolean plusAlpha) {

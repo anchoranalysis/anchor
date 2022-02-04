@@ -29,6 +29,10 @@ package org.anchoranalysis.image.io.object.input;
 import ch.systemsx.cisd.base.mdarray.MDByteArray;
 import ch.systemsx.cisd.hdf5.IHDF5IntReader;
 import ch.systemsx.cisd.hdf5.IHDF5Reader;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+import org.anchoranalysis.image.io.object.HDF5PathHelper;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
@@ -37,9 +41,22 @@ import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.box.Extent;
 import org.anchoranalysis.spatial.point.Point3i;
 
+/**
+ * Reads an {@link ObjectMask} from a serialized HDF5 file.
+ *
+ * @author Owen Feehan
+ */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 class ObjectMaskHDF5Reader {
 
-    public ObjectMask apply(IHDF5Reader reader, String datasetPath) {
+	/**
+	 * Reads an {@link ObjectMask} stored in a opened HDF5 file at a particular path.
+	 * 
+	 * @param reader a reader for the opened HDF5 file containing the {@link ObjectMask}.
+	 * @param datasetPath the path in the HDF5 file where the object-mask is stored.
+	 * @return a newly created {@link ObjectMask}, containing newly allocated voxel-buffers.
+	 */
+    public static ObjectMask readObject(IHDF5Reader reader, String datasetPath) {
 
         Voxels<UnsignedByteBuffer> voxels = createVoxels(reader.uint8().readMDArray(datasetPath));
 
@@ -49,29 +66,21 @@ class ObjectMaskHDF5Reader {
         return new ObjectMask(box, voxels);
     }
 
-    public static int extractIntAttr(IHDF5IntReader reader, String path, String attr) {
-        return reader.getAttr(path, attr);
-    }
-
-    private static Extent extractExtent(MDByteArray mdb) {
-        int[] dims = mdb.dimensions();
-        return new Extent(dims[0], dims[1], dims[2]);
-    }
-
     /**
-     * This approach is a bit efficient as we end up making two memory allocations ( the first in
-     * the JHDF5 library, the second for the {@link Voxels})
+     * This approach is a bit efficient as we end up making two memory allocations.
+     * 
+     * <p>The first allocation occurs in the JHDF5 library; the second for the {@link Voxels}.
      *
-     * <p>However our code, currently uses a memory model of a byte-array per slice. There doesn't
-     * seem to be a convenient way to get the same structure back from the MDByteArray.
+     * <p>Our {@ObjectMask} implementations currently uses a memory model of a byte-array per slice. There doesn't
+     * seem to be a convenient way to get the same structure back from the {@link MDByteArray}.
      *
      * <p>So this is the easiest approach for implementation.
      *
-     * @param mdb
-     * @return
+     * @param source the byte-array to derive a {@link Voxels} from.
+     * @return a newly created {@link Voxels}, identical to those in the {@code source}.
      */
-    private Voxels<UnsignedByteBuffer> createVoxels(MDByteArray mdb) {
-        Extent extent = extractExtent(mdb);
+    private static Voxels<UnsignedByteBuffer> createVoxels(MDByteArray source) {
+        Extent extent = extractExtent(source);
         Voxels<UnsignedByteBuffer> voxels =
                 VoxelsFactory.getUnsignedByte().createInitialized(extent);
 
@@ -81,7 +90,7 @@ class ObjectMaskHDF5Reader {
 
             for (int y = 0; y < extent.y(); y++) {
                 for (int x = 0; x < extent.x(); x++) {
-                    buffer.putRaw(extent.offset(x, y), mdb.get(x, y, z));
+                    buffer.putRaw(extent.offset(x, y), source.get(x, y, z));
                 }
             }
         }
@@ -91,8 +100,18 @@ class ObjectMaskHDF5Reader {
 
     private static Point3i cornerPoint(IHDF5IntReader reader, String path) {
         return new Point3i(
-                extractIntAttr(reader, path, "x"),
-                extractIntAttr(reader, path, "y"),
-                extractIntAttr(reader, path, "z"));
+                extractIntAttr(reader, path, HDF5PathHelper.EXTENT_X),
+                extractIntAttr(reader, path, HDF5PathHelper.EXTENT_Y),
+                extractIntAttr(reader, path, HDF5PathHelper.EXTENT_Z));
+    }
+    
+
+    private static int extractIntAttr(IHDF5IntReader reader, String path, String attr) {
+        return reader.getAttr(path, attr);
+    }
+
+    private static Extent extractExtent(MDByteArray mdb) {
+        int[] dims = mdb.dimensions();
+        return new Extent(dims[0], dims[1], dims[2]);
     }
 }

@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-io-ij
+ * anchor-image-io
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -24,24 +24,35 @@
  * #L%
  */
 
-package org.anchoranalysis.io.imagej.bean.stack.writer;
+package org.anchoranalysis.image.io.bean.channel;
 
-import java.nio.file.Path;
-import org.anchoranalysis.image.io.ImageIOException;
-import org.anchoranalysis.image.io.stack.StackSeries;
-import org.anchoranalysis.image.io.stack.output.StackWriteOptions;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+import org.anchoranalysis.bean.AnchorBean;
+import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.image.core.channel.Channel; // NOSONAR
 
 /**
- * Base class for {@link ImageJRasterWriter} that <b>doesn't</b> support writing time-series as a
- * stack.
+ * A particular {@link Channel} to be read from a file, identified by its position (index) in the
+ * file.
+ *
+ * <p>A name is also assigned by the user.
  *
  * @author Owen Feehan
  */
-public abstract class NoTimeSeries extends ImageJRasterWriter {
+@AllArgsConstructor
+public class IndexedChannel extends AnchorBean<IndexedChannel> {
 
-    @Override
-    public void writeStackSeries(StackSeries stackSeries, Path filePath, StackWriteOptions options)
-            throws ImageIOException {
-        throw new ImageIOException("Writing as a time-series is unsupported for this format");
-    }
+    // START BEAN PROPERTIES
+    /**
+     * The name of the {@link Channel} this entry represents.
+     *
+     * <p>This has no link to the underlying file, and may be assigned by the user, as makes sense.
+     */
+    @BeanField @Getter @Setter private String name;
+
+    /** The index (starting at zero) of this {@link Channel} relative to others. */
+    @BeanField @Getter @Setter private int index;
+    // END BEAN PROPERTIES
 }

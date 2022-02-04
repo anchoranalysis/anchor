@@ -59,7 +59,7 @@ public class StackWriteAttributesFactory {
     /**
      * Creates a {@link StackWriteAttributes} which depending on a flag will always be 2D.
      *
-     * @param always2D if the stack is guaranteed to be always 2D.
+     * @param always2D when true, this indicates that the stack is guaranteed to be always 2D.
      * @return a newly created {@link StackWriteAttributes}
      */
     public static StackWriteAttributes maybeAlways2D(boolean always2D) {

@@ -29,8 +29,6 @@ package org.anchoranalysis.image.io.stack.input;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.core.progress.Progress;
-import org.anchoranalysis.core.progress.ProgressIgnore;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.core.stack.named.NamedStacks;
 import org.anchoranalysis.image.io.stack.time.TimeSequence;
@@ -47,14 +45,13 @@ public interface ProvidesStackInput extends InputFromManager {
     /**
      * Exposes the input as a single {@link Stack} throw an error if more than one exists.
      *
-     * @param progress a progress-reporter.
      * @param logger a logger for any non-fatal errors. Fatal errors throw an exception.
      * @return the single stack.
      * @throws OperationFailedException if more than one stack exists, or otherwise a fatal error
      *     occurs loading the stacks.
      */
-    default Stack asStack(Progress progress, Logger logger) throws OperationFailedException {
-        NamedStacks set = asSet(progress, logger);
+    default Stack asStack(Logger logger) throws OperationFailedException {
+        NamedStacks set = asSet(logger);
         if (set.isEmpty()) {
             throw new OperationFailedException(
                     "No stack exists in the input. Exactly one is required.");
@@ -69,14 +66,13 @@ public interface ProvidesStackInput extends InputFromManager {
     /**
      * Exposes the input as a set of named stacks (inferring the names).
      *
-     * @param progress a progress-reporter.
      * @param logger a logger for any non-fatal errors. Fatal errors throw an exception.
      * @return a set of named-stacks.
      * @throws OperationFailedException if a fatal error occurs loading the stack.
      */
-    default NamedStacks asSet(Progress progress, Logger logger) throws OperationFailedException {
+    default NamedStacks asSet(Logger logger) throws OperationFailedException {
         NamedStacks set = new NamedStacks();
-        addToStoreInferNames(new WrapStackAsTimeSequenceStore(set), 0, progress, logger);
+        addToStoreInferNames(new WrapStackAsTimeSequenceStore(set), 0, logger);
         return set;
     }
 
@@ -85,40 +81,50 @@ public interface ProvidesStackInput extends InputFromManager {
      *
      * @param store the store.
      * @param logger a logger for any non-fatal errors. Fatal errors throw an exception.
-     * @throws OperationFailedException
+     * @throws OperationFailedException if the operation cannot successfully complete.
      */
     default void addToStoreInferNames(NamedProviderStore<Stack> store, Logger logger)
             throws OperationFailedException {
         addToStoreInferNames(
                 new WrapStackAsTimeSequenceStore(store),
                 0, // default series-number
-                ProgressIgnore.get(),
                 logger);
     }
 
     /**
-     * Adds the current object to a named-store of stacks.
+     * The number of time-frames in the underlying input image.
      *
-     * @param stacks
-     * @param seriesIndex
-     * @param progress
+     * @return the number of time-frames.
+     * @throws OperationFailedException if the operation cannot successfully complete.
+     */
+    int numberFrames() throws OperationFailedException;
+
+    /**
+     * Adds any stacks exposed by the current element to a named-store of stacks - inferring the
+     * names of the {@link Stack}s.
+     *
+     * @param stacks the named-store of stacks.
+     * @param seriesIndex the index of the series (beginning at 0) to retrieve stacks from the
+     *     {@link TimeSequence}.
      * @param logger a logger for any non-fatal errors. Fatal errors throw an exception.
-     * @throws OperationFailedException
+     * @throws OperationFailedException if the operation cannot successfully complete.
      */
     void addToStoreInferNames(
-            NamedProviderStore<TimeSequence> stacks,
-            int seriesIndex,
-            Progress progress,
-            Logger logger)
+            NamedProviderStore<TimeSequence> stacks, int seriesIndex, Logger logger)
             throws OperationFailedException;
 
+    /**
+     * Adds any stacks exposed by the current element to a named-store of stacks - with a particular
+     * name.
+     *
+     * @param name the name to use for the added stack.
+     * @param stacks the named-store of stacks.
+     * @param seriesIndex the index of the series (beginning at 0) to retrieve stacks from the
+     *     {@link TimeSequence}.
+     * @param logger a logger for any non-fatal errors. Fatal errors throw an exception.
+     * @throws OperationFailedException if the operation cannot successfully complete.
+     */
     void addToStoreWithName(
-            String name,
-            NamedProviderStore<TimeSequence> stacks,
-            int seriesIndex,
-            Progress progress,
-            Logger logger)
+            String name, NamedProviderStore<TimeSequence> stacks, int seriesIndex, Logger logger)
             throws OperationFailedException;
-
-    int numberFrames() throws OperationFailedException;
 }

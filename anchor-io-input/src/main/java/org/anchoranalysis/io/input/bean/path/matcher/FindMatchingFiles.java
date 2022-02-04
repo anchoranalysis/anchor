@@ -40,7 +40,6 @@ import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.io.input.path.matcher.DualPathPredicates;
 import org.anchoranalysis.io.input.path.matcher.FindFilesException;
 
@@ -48,11 +47,6 @@ import org.anchoranalysis.io.input.path.matcher.FindFilesException;
  * Finds files in a {@code directory} that satisfy certain constraints.
  *
  * <p>It may be searched recursively or not.
- *
- * <p>It is designed to keep a {@link Progress} approximately up to date, so it can be visually
- * communicated how much of the search has progressed. It achieves this <b>very approximately</b> by
- * searching for top-level directories, and considering that each represents a similar block of
- * progress.
  *
  * @author Owen Feehan
  */

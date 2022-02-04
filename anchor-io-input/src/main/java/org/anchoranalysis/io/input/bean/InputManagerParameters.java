@@ -30,8 +30,6 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.core.progress.Progress;
-import org.anchoranalysis.core.progress.ProgressIgnore;
 import org.anchoranalysis.core.time.ExecutionTimeRecorder;
 import org.anchoranalysis.core.time.OperationContext;
 import org.anchoranalysis.io.input.InputContextParameters;
@@ -45,8 +43,6 @@ import org.anchoranalysis.io.input.InputContextParameters;
 public class InputManagerParameters {
 
     @Getter private final InputContextParameters inputContext;
-
-    @Getter private final Progress progress;
 
     /** Allows for logging and recording the execution-time of particular operations. */
     @Getter private final OperationContext operationContext;
@@ -67,11 +63,7 @@ public class InputManagerParameters {
      * @param operationContext context for logging and recording execution times.
      */
     public InputManagerParameters(OperationContext operationContext) {
-        this(new InputContextParameters(), ProgressIgnore.get(), operationContext);
-    }
-
-    public InputManagerParameters withProgressReporter(Progress progressToAssign) {
-        return new InputManagerParameters(inputContext, progressToAssign, operationContext);
+        this(new InputContextParameters(), operationContext);
     }
 
     public boolean isDebugModeActivated() {

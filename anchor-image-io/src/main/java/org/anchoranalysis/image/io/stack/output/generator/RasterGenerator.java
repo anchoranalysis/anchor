@@ -45,6 +45,7 @@ import org.anchoranalysis.io.output.writer.ElementOutputter;
 /**
  * Transforms an entity to a {@link Stack} and writes it to the file-system.
  *
+ * @param <T> the type of entity that is transformed to a {@link Stack}
  * @author Owen Feehan
  */
 @AllArgsConstructor
@@ -82,52 +83,6 @@ public abstract class RasterGenerator<T> implements TransformingGenerator<T, Sta
      */
     public abstract StackWriteAttributes guaranteedImageAttributes();
 
-    private void writeInternal(
-            T elementUntransformed,
-            Optional<String> filenameWithoutExtension,
-            String outputName,
-            ElementOutputter outputter)
-            throws OutputWriteFailedException {
-
-        try {
-            Stack transformedElement =
-                    outputter
-                            .getExecutionTimeRecorder()
-                            .recordExecutionTime(
-                                    String.format("Preparing a raster to write (%s)", outputName),
-                                    () -> transform(elementUntransformed));
-
-            StackWriteOptions options =
-                    new StackWriteOptions(
-                            writeAttributes(transformedElement),
-                            outputter.getSuggestedFormatToWrite());
-
-            OutputWriteSettings settings = outputter.getSettings();
-            String extension =
-                    selectFileExtension(transformedElement, options, settings, outputter.logger());
-
-            Path pathToWriteTo =
-                    outputter.makeOutputPath(filenameWithoutExtension, extension, outputName);
-
-            outputter
-                    .getExecutionTimeRecorder()
-                    .recordExecutionTime(
-                            String.format("Writing raster to file-system (%s)", outputName),
-                            () ->
-                                    // First write to the file system, and then write to the
-                                    // operation-recorder.
-                                    writeToFile(
-                                            elementUntransformed,
-                                            transformedElement,
-                                            options,
-                                            settings,
-                                            pathToWriteTo));
-
-        } catch (OperationFailedException e) {
-            throw new OutputWriteFailedException(e);
-        }
-    }
-
     /**
      * Selects the file-extension to use for a particular stack.
      *
@@ -136,7 +91,7 @@ public abstract class RasterGenerator<T> implements TransformingGenerator<T, Sta
      * @param settings general settings for writing output
      * @param logger logger for information messages or warnings associated with writing outputs
      * @return the file extension without any leading period
-     * @throws OperationFailedException
+     * @throws OperationFailedException if the operation could not be successfully completed.
      */
     protected abstract String selectFileExtension(
             Stack stack,
@@ -146,7 +101,7 @@ public abstract class RasterGenerator<T> implements TransformingGenerator<T, Sta
             throws OperationFailedException;
 
     /**
-     * Writes a raster to the file-system.
+     * Writes a stack to the file-system.
      *
      * @param untransformedElement the element for the generator <i>before</i> transforming to a
      *     {@link Stack}
@@ -154,7 +109,7 @@ public abstract class RasterGenerator<T> implements TransformingGenerator<T, Sta
      * @param options options that describe how {@code stack} should be written
      * @param settings general settings for writing output.
      * @param filePath the file-path to write too including the extension.
-     * @throws OutputWriteFailedException
+     * @throws OutputWriteFailedException if the image could not be be successfully written to the file-system.
      */
     protected abstract void writeToFile(
             T untransformedElement,
@@ -164,6 +119,58 @@ public abstract class RasterGenerator<T> implements TransformingGenerator<T, Sta
             Path filePath)
             throws OutputWriteFailedException;
 
+    /** Writes an untransformed element to the file-system, after transforming it to a {@link Stack}. */
+    private void writeInternal(
+            T elementUntransformed,
+            Optional<String> filenameWithoutExtension,
+            String outputName,
+            ElementOutputter outputter)
+            throws OutputWriteFailedException {
+
+        Stack transformedElement =
+                outputter
+                        .getExecutionTimeRecorder()
+                        .recordExecutionTime(
+                                String.format("Preparing a raster to write (%s)", outputName),
+                                () -> transform(elementUntransformed));
+
+        StackWriteOptions options =
+                new StackWriteOptions(
+                        writeAttributes(transformedElement),
+                        outputter.getSuggestedFormatToWrite());
+        
+        writeToFilesystem(elementUntransformed, transformedElement, filenameWithoutExtension, options, outputName, outputter);
+     }
+    
+    /** Writes the transformed element (i.e. the image) to the file-system */
+    private void writeToFilesystem(T elementUntransformed, Stack transformedElement, Optional<String> filenameWithoutExtension, StackWriteOptions options, String outputName, ElementOutputter outputter) throws OutputWriteFailedException {
+    	try {
+	        String extension =
+	                selectFileExtension(transformedElement, options, outputter.getSettings(), outputter.logger());
+	
+	        Path pathToWriteTo =
+	                outputter.makeOutputPath(filenameWithoutExtension, extension, outputName);
+	
+	        outputter
+	                .getExecutionTimeRecorder()
+	                .recordExecutionTime(
+	                        String.format("Writing raster to file-system (%s)", outputName),
+	                        () ->
+	                                // First write to the file system, and then write to the
+	                                // operation-recorder.
+	                                writeToFile(
+	                                        elementUntransformed,
+	                                        transformedElement,
+	                                        options,
+	                                        outputter.getSettings(),
+	                                        pathToWriteTo));
+        
+	     } catch (OperationFailedException e) {
+	         throw new OutputWriteFailedException(e);
+	     }
+
+    }
+    
     /**
      * Forms write-options to use for this particular stack by combining the general guarantees for
      * the generator with the specific image-attributes of this particular stack.

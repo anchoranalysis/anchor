@@ -51,9 +51,13 @@ import org.anchoranalysis.spatial.box.BoundingBox;
 public class BoundingBoxOutline extends DrawObject {
 
     // START BEAN PROPERTIES
+	/** How many voxels are used for the outline of the bounding-box. */
     @BeanField @Getter @Setter private int outlineWidth;
     // END BEAN PROPERTIES
 
+    /**
+     * Creates with an outline-width of 1 voxel.
+     */
     public BoundingBoxOutline() {
         this(1);
     }
@@ -84,6 +88,7 @@ public class BoundingBoxOutline extends DrawObject {
         };
     }
 
+    /** Creates a {@link ObjectMask} whose entire bounding-box has <i>on</i> voxels. */
     private ObjectMask createBoundingBoxObject(ObjectMask object) {
         ObjectMask mask = object.duplicate();
         mask.assignOn().toAll();

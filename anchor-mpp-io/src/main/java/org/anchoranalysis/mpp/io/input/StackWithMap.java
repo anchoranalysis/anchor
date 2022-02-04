@@ -34,8 +34,6 @@ import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
 import org.anchoranalysis.core.identifier.provider.store.StoreSupplier;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.log.error.ErrorReporter;
-import org.anchoranalysis.core.progress.Progress;
-import org.anchoranalysis.core.progress.ProgressIgnore;
 import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
 import org.anchoranalysis.image.io.stack.time.TimeSequence;
 
@@ -56,19 +54,15 @@ public class StackWithMap implements MultiInputSubMap<TimeSequence> {
     @Override
     public void addToStore(NamedProviderStore<TimeSequence> stackCollection, Logger logger)
             throws OperationFailedException {
-        addToStore(stackCollection, 0, ProgressIgnore.get(), logger);
+        addToStore(stackCollection, 0, logger);
     }
 
     public void addToStore(
-            NamedProviderStore<TimeSequence> stackCollection,
-            int seriesNum,
-            Progress progress,
-            Logger logger)
+            NamedProviderStore<TimeSequence> stackCollection, int seriesNum, Logger logger)
             throws OperationFailedException {
 
         // We add the main object
-        mainInputObject.addToStoreWithName(
-                mainObjectName, stackCollection, seriesNum, progress, logger);
+        mainInputObject.addToStoreWithName(mainObjectName, stackCollection, seriesNum, logger);
 
         // We add the other objects
         map.addToStore(stackCollection, logger);

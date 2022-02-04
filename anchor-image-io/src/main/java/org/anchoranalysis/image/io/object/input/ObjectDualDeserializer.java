@@ -32,7 +32,6 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.format.FormatExtensions;
 import org.anchoranalysis.core.format.ImageFileFormat;
 import org.anchoranalysis.core.format.NonImageFileFormat;
-import org.anchoranalysis.core.progress.ProgressIgnore;
 import org.anchoranalysis.core.serialize.DeserializationFailedException;
 import org.anchoranalysis.core.serialize.Deserializer;
 import org.anchoranalysis.core.serialize.ObjectInputStreamDeserializer;
@@ -89,11 +88,7 @@ class ObjectDualDeserializer implements Deserializer<ObjectMask> {
                 stackReader.openFile(pathTiff, context.getExecutionTimeRecorder())) {
             Stack stack =
                     openedFile
-                            .openCheckType(
-                                    0,
-                                    ProgressIgnore.get(),
-                                    UnsignedByteVoxelType.INSTANCE,
-                                    context.getLogger())
+                            .openCheckType(0, UnsignedByteVoxelType.INSTANCE, context.getLogger())
                             .get(0);
 
             if (stack.getNumberChannels() != 1) {

@@ -33,7 +33,6 @@ import org.anchoranalysis.core.format.ImageFileFormat;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.ImageIOException;
-import org.anchoranalysis.image.io.stack.StackSeries;
 import org.anchoranalysis.image.io.stack.output.StackWriteOptions;
 
 /**
@@ -46,7 +45,7 @@ public abstract class StackWriter extends AnchorBean<StackWriter> {
     /**
      * Writes a stack to the filesystem at a particular path with an extension appended to the path.
      *
-     * @param stack the stack to write
+     * @param stack the stack to write.
      * @param filePath the path to write the file to, apart from an extension.
      * @param options options which may influence how a raster is written.
      * @return the full path (including extension) used for writing.
@@ -68,6 +67,8 @@ public abstract class StackWriter extends AnchorBean<StackWriter> {
      *
      * @param writeOptions options which may influence how a raster is written.
      * @param logger the logger to use for the warning message.
+     * @return the image file-format.
+     * @throws ImageIOException if unable to successfully determine the file-format to use to write.
      */
     public ImageFileFormat fileFormatWarnUnexpected(
             StackWriteOptions writeOptions, Optional<Logger> logger) throws ImageIOException {
@@ -91,6 +92,8 @@ public abstract class StackWriter extends AnchorBean<StackWriter> {
      * The file format that will be written by the generator.
      *
      * @param writeOptions options which may influence how a raster is written.
+     * @return the image file-format.
+     * @throws ImageIOException if unable to successfully determine the file-format to use to write.
      */
     public abstract ImageFileFormat fileFormat(StackWriteOptions writeOptions)
             throws ImageIOException;
@@ -98,23 +101,11 @@ public abstract class StackWriter extends AnchorBean<StackWriter> {
     /**
      * Writes a stack to the filesystem at a particular path.
      *
-     * @param stack the stack to write
-     * @param filePath the path to write the file to
+     * @param stack the stack to write.
+     * @param filePath the path to write the file to.
      * @param options options which may influence how a raster is written.
-     * @throws ImageIOException if anything goes wrong whle writing.
+     * @throws ImageIOException if anything goes wrong while writing.
      */
     public abstract void writeStack(Stack stack, Path filePath, StackWriteOptions options)
-            throws ImageIOException;
-
-    /**
-     * Writes a series of stacks to the filesystem at a particular path.
-     *
-     * @param stackSeries the series of stacks
-     * @param filePath the path to write the file to
-     * @param options options which may influence how a raster is written.
-     * @throws ImageIOException
-     */
-    public abstract void writeStackSeries(
-            StackSeries stackSeries, Path filePath, StackWriteOptions options)
             throws ImageIOException;
 }

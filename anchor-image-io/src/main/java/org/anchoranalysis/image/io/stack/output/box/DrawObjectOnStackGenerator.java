@@ -59,8 +59,13 @@ public class DrawObjectOnStackGenerator
         extends RasterGeneratorSelectFormat<BoundedList<ObjectMask>> {
 
     // START REQUIRED ARGUMENTS
+    /** The generator to draw objects. */
     private final DrawObjectsGenerator drawObjectsGenerator;
+
+    /** The generator to draw the background. */
     private final Optional<TransformingGenerator<BoundingBox, Stack>> backgroundGenerator;
+
+    /** Whether to flatten the z-dimension so that it is single-sliced. */
     private final boolean flatten;
     // END REQUIRED ARGUMENTS
 
@@ -71,6 +76,7 @@ public class DrawObjectOnStackGenerator
      * @param background stack that exists as a background for the object.
      * @param colors colors to use for outling of objects.
      * @param outlineWidth width of the outline around an object.
+     * @return the newly created generator.
      */
     public static DrawObjectOnStackGenerator createFromStack(
             ScaleableBackground background, int outlineWidth, ColorIndex colors) {
@@ -80,11 +86,11 @@ public class DrawObjectOnStackGenerator
 
     /**
      * Creates the generator with an empty background - and with default color green and flattened
-     * in Z
+     * in Z-dimension.
      *
-     * @param outlineWidth width of the outline around an object
-     * @param colors colors to use for outlining of objects
-     * @return
+     * @param outlineWidth width of the outline around an object.
+     * @param colors colors to use for outlining of objects.
+     * @return the newly created generator.
      */
     public static DrawObjectOnStackGenerator createWithEmptyBackground(
             int outlineWidth, ColorIndex colors) {
@@ -93,12 +99,13 @@ public class DrawObjectOnStackGenerator
 
     /**
      * Creates the generator with maybe a stack as the background, or else an empty background - and
-     * with default color green and flattened in Z
+     * with default color green and flattened in Z.
      *
      * @param background stack that exists as a background for the object (or none, in which case a
-     *     0-valued grayscale background is assumed)
-     * @param colors colors to use for outling of objects
-     * @param outlineWidth width of the outline around an object
+     *     0-valued grayscale background is assumed).
+     * @param colors colors to use for outlining of objects.
+     * @param outlineWidth width of the outline around an object.
+     * @return the newly created generator.
      */
     public static DrawObjectOnStackGenerator createFromStack(
             Optional<ScaleableBackground> background, int outlineWidth, ColorIndex colors) {
@@ -113,9 +120,10 @@ public class DrawObjectOnStackGenerator
      * Creates an extracted-object generator that draws an outline - with default color green and
      * flattened in Z.
      *
-     * @param backgroundGenerator generates a background for a bounding-box
-     * @param outlineWidth width of the outline around an object
-     * @param colors colors to use for outlining of objects
+     * @param backgroundGenerator generates a background for a bounding-box.
+     * @param outlineWidth width of the outline around an object.
+     * @param colors colors to use for outlining of objects.
+     * @return the newly created generator.
      */
     public static DrawObjectOnStackGenerator createFromGenerator(
             TransformingGenerator<BoundingBox, Stack> backgroundGenerator,
@@ -150,14 +158,14 @@ public class DrawObjectOnStackGenerator
     }
 
     /**
-     * Creates an extracted-object generator that draws an outline
+     * Creates an extracted-object generator that draws an outline.
      *
      * @param backgroundGenerator generates a background for a bounding-box, otherwise the
-     *     background is set to all zeros
-     * @param outlineWidth width of the outline around an object
-     * @param colorIndex the colors used by successive objects in rotation
+     *     background is set to all zeros.
+     * @param outlineWidth width of the outline around an object.
+     * @param colorIndex the colors used by successive objects in rotation.
      * @param flatten whether to flatten in the z-dimension (maximum-intensity projection of stack
-     *     and bounding-box)
+     *     and bounding-box).
      */
     private DrawObjectOnStackGenerator(
             Optional<TransformingGenerator<BoundingBox, Stack>> backgroundGenerator,

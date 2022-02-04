@@ -31,7 +31,6 @@ import lombok.Setter;
 import org.anchoranalysis.annotation.io.AnnotationWithStrategy;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.core.progress.ProgressMultiple;
 import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
 import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.input.InputsWithDirectory;
@@ -60,20 +59,12 @@ public class AnnotationInputManager<T extends ProvidesStackInput, S extends Anno
     public InputsWithDirectory<AnnotationWithStrategy<S>> inputs(InputManagerParameters parameters)
             throws InputReadFailedException {
 
-        try (ProgressMultiple progress = new ProgressMultiple(parameters.getProgress(), 2)) {
+        InputsWithDirectory<T> inputs = input.inputs(parameters);
 
-            InputsWithDirectory<T> inputs = input.inputs(parameters);
-
-            progress.incrementChild();
-
-            InputsWithDirectory<AnnotationWithStrategy<S>> transformed =
-                    inputs.map(this::combineInput, progress.trackCurrentChild());
-
-            progress.incrementChild();
-
-            return transformed;
+        try {
+            return inputs.map(this::combineInput, OperationFailedException.class);
         } catch (OperationFailedException e) {
-            throw new InputReadFailedException(e);
+            throw new InputReadFailedException("Cannot successfully create an annotation", e);
         }
     }
 

@@ -34,8 +34,6 @@ import loci.formats.FormatException;
 import loci.formats.IFormatReader;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.progress.Progress;
-import org.anchoranalysis.core.progress.ProgressIncrement;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.dimensions.OrientationChange;
 import org.anchoranalysis.io.bioformats.DestinationChannelForIndex;
@@ -55,7 +53,6 @@ public class CopyConvert {
      *
      * @param reader the source of the copy.
      * @param destination the destination of the copy.
-     * @param progress tracking progress.
      * @param targetShape the shape of the image-file to convert to (before any orientation
      *     correction).
      * @param readOptions Options that influence how stack is read.
@@ -67,7 +64,6 @@ public class CopyConvert {
     public static void copyAllFrames(
             IFormatReader reader,
             List<Channel> destination,
-            Progress progress,
             ImageFileShape targetShape,
             ConvertTo<?> convertTo,
             ReadOptions readOptions,
@@ -79,42 +75,34 @@ public class CopyConvert {
                 calculateByteArraysPerIteration(
                         targetShape.getNumberChannels(), numberChannelsPerByteArray);
 
-        try (ProgressIncrement progressIncrement = new ProgressIncrement(progress)) {
+        IterateOverSlices.iterateDimensionsOrder(
+                reader.getDimensionOrder(),
+                targetShape,
+                numberByteArraysPerIteration,
+                (t, z, c, readerIndex) -> {
 
-            progressIncrement.setMax(targetShape.totalNumberSlices());
-            progressIncrement.open();
+                    /** Selects a destination channel for a particular relative channel */
+                    DestinationChannelForIndex destinationChannel =
+                            channelIndexRelative ->
+                                    destination.get(
+                                            destinationIndex(
+                                                    c + channelIndexRelative,
+                                                    t,
+                                                    targetShape.getNumberChannels()));
 
-            IterateOverSlices.iterateDimensionsOrder(
-                    reader.getDimensionOrder(),
-                    targetShape,
-                    numberByteArraysPerIteration,
-                    (t, z, c, readerIndex) -> {
-
-                        /** Selects a destination channel for a particular relative channel */
-                        DestinationChannelForIndex destinationChannel =
-                                channelIndexRelative ->
-                                        destination.get(
-                                                destinationIndex(
-                                                        c + channelIndexRelative,
-                                                        t,
-                                                        targetShape.getNumberChannels()));
-
-                        ImageFileEncoding encoding =
-                                new ImageFileEncoding(
-                                        reader.isRGB(),
-                                        reader.isInterleaved(),
-                                        numberChannelsPerByteArray);
-                        convertTo.copyAllChannels(
-                                targetShape.getImageDimensions(),
-                                openByteBuffer(reader, readerIndex),
-                                destinationChannel,
-                                z,
-                                encoding,
-                                orientationCorrection);
-
-                        progressIncrement.update();
-                    });
-        }
+                    ImageFileEncoding encoding =
+                            new ImageFileEncoding(
+                                    reader.isRGB(),
+                                    reader.isInterleaved(),
+                                    numberChannelsPerByteArray);
+                    convertTo.copyAllChannels(
+                            targetShape.getImageDimensions(),
+                            openByteBuffer(reader, readerIndex),
+                            destinationChannel,
+                            z,
+                            encoding,
+                            orientationCorrection);
+                });
     }
 
     /** Reads bytes from a {@link IFormatReader} making sure the endianness is correct. */

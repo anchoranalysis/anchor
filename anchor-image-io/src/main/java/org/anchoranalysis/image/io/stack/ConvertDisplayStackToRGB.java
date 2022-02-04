@@ -35,19 +35,30 @@ import org.anchoranalysis.image.core.stack.DisplayStack;
 import org.anchoranalysis.image.core.stack.RGBStack;
 import org.anchoranalysis.spatial.box.BoundingBox;
 
+/**
+ * Converts a {@link DisplayStack} to a {@link RGBStack}.
+ * 
+ * @author Owen Feehan
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ConvertDisplayStackToRGB {
 
-    public static RGBStack convert(DisplayStack background) {
+	/**
+	 * Converts all of a {@link DisplayStack} to a {@link RGBStack}.
+	 * 
+	 * @param stack the stack to convert.
+	 * @return a newly created {@link RGBStack} with identical voxels and size as {@code stack}.
+	 */
+    public static RGBStack convert(DisplayStack stack) {
 
         try {
-            if (background.getNumberChannels() == 1) {
+            if (stack.getNumberChannels() == 1) {
                 return new RGBStack(
-                        background.createChannel(0, true),
-                        background.createChannel(0, true),
-                        background.createChannel(0, true));
-            } else if (background.getNumberChannels() == 3) {
-                return new RGBStack(background.deriveStack(true));
+                        stack.createChannel(0, true),
+                        stack.createChannel(0, true),
+                        stack.createChannel(0, true));
+            } else if (stack.getNumberChannels() == 3) {
+                return new RGBStack(stack.deriveStack(true));
             } else {
                 throw new AnchorImpossibleSituationException();
             }
@@ -56,17 +67,24 @@ public class ConvertDisplayStackToRGB {
         }
     }
 
-    public static RGBStack convertCropped(DisplayStack background, BoundingBox box) {
+	/**
+	 * Converts a bounding-box region in {@link DisplayStack} to a {@link RGBStack}.
+	 * 
+	 * @param stack the stack, from which a portion is to be converted.
+	 * @param box the region in {@code stack} which is converted.
+	 * @return a newly created {@link RGBStack} with identical voxels and size as {@code stack}.
+	 */
+    public static RGBStack convertCropped(DisplayStack stack, BoundingBox box) {
 
         try {
-            if (background.getNumberChannels() == 1) {
-                Channel channel = background.extractChannelForBoundingBox(0, box);
+            if (stack.getNumberChannels() == 1) {
+                Channel channel = stack.extractChannelForBoundingBox(0, box);
                 return new RGBStack(channel, channel.duplicate(), channel.duplicate());
-            } else if (background.getNumberChannels() == 3) {
+            } else if (stack.getNumberChannels() == 3) {
                 return new RGBStack(
-                        background.extractChannelForBoundingBox(0, box),
-                        background.extractChannelForBoundingBox(1, box),
-                        background.extractChannelForBoundingBox(2, box));
+                        stack.extractChannelForBoundingBox(0, box),
+                        stack.extractChannelForBoundingBox(1, box),
+                        stack.extractChannelForBoundingBox(2, box));
             } else {
                 throw new AnchorImpossibleSituationException();
             }

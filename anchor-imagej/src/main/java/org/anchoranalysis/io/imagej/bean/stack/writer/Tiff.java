@@ -37,7 +37,7 @@ import org.anchoranalysis.image.io.stack.output.StackWriteOptions;
  *
  * @author Owen Feehan
  */
-public class Tiff extends SupportsTimeSeries {
+public class Tiff extends ImageJRasterWriter {
 
     @Override
     protected boolean writeRaster(FileSaver fileSaver, String path, boolean asStack) {
