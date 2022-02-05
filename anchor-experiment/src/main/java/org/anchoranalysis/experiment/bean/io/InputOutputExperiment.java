@@ -40,7 +40,6 @@ import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.log.Divider;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.log.MessageLogger;
-import org.anchoranalysis.core.progress.ProgressIgnore;
 import org.anchoranalysis.core.time.OperationContext;
 import org.anchoranalysis.core.value.LanguageUtilities;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
@@ -159,7 +158,6 @@ public class InputOutputExperiment<T extends InputFromManager, S> extends Output
             InputManagerParameters parametersInput =
                     new InputManagerParameters(
                             parameters.getExperimentArguments().inputContextParameters(),
-                            ProgressIgnore.get(),
                             operationContext);
 
             if (parameters.isDetailedLogging()) {

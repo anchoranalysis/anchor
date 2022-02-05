@@ -33,6 +33,7 @@ import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.io.object.HDF5PathHelper;
+import org.anchoranalysis.image.voxel.object.ObjectMask;	// NOSONAR
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.io.generator.OneStageGenerator;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
@@ -45,7 +46,7 @@ import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 @AllArgsConstructor
 public class HDF5ObjectsGenerator extends OneStageGenerator<ObjectCollection> {
 
-    // Name of the attribute in the root of the HDF5 that stores the number of objects
+    /** Name of the attribute in the root of the HDF5 that stores the number of objects. */
     public static final String NUMBER_OBJECTS_ATTRIBUTE_NAME = "numberObjects";
 
     // START REQUIRED ARGUMENTS
@@ -53,7 +54,7 @@ public class HDF5ObjectsGenerator extends OneStageGenerator<ObjectCollection> {
     private final boolean compressed;
     // END REQUIRED ARGUMENTS
 
-    /** Creates with an element (and compressed set to true) */
+    /** Creates with compression activated. */
     public HDF5ObjectsGenerator() {
         this.compressed = true;
     }
@@ -69,6 +70,7 @@ public class HDF5ObjectsGenerator extends OneStageGenerator<ObjectCollection> {
         return "h5";
     }
 
+    /** Write all the {@link ObjectMask}s in {@code objects} to a HDF5 file at {@code filePath}. */
     private void writeObjects(ObjectCollection objects, Path filePath) {
 
         IHDF5Writer writer = HDF5Factory.open(filePath.toString());
@@ -80,7 +82,7 @@ public class HDF5ObjectsGenerator extends OneStageGenerator<ObjectCollection> {
                 ObjectMaskHDF5Writer writerHDF5 =
                         new ObjectMaskHDF5Writer(
                                 objects.get(i),
-                                HDF5PathHelper.pathForObject(i),
+                                pathForObject(i),
                                 writer,
                                 compressed);
                 writerHDF5.apply();
@@ -91,9 +93,13 @@ public class HDF5ObjectsGenerator extends OneStageGenerator<ObjectCollection> {
         }
     }
 
-    // Adds an attribute with the total number of objects, so it can be quickly queried
-    //  from the HDF5 without parsing all the datasets
-    private void addObjectsSizeAttribute(IHDF5Writer writer, ObjectCollection objects) {
+    /** Adds an attribute with the total number of objects, so it can be quickly queried from the HDF5 without parsing all the datasets. */
+    private static void addObjectsSizeAttribute(IHDF5Writer writer, ObjectCollection objects) {
         writer.uint32().setAttr("/", NUMBER_OBJECTS_ATTRIBUTE_NAME, objects.size());
+    }
+    
+    /** The path in the HDF5 file for a particular object. */
+    private static String pathForObject(int index) {
+        return String.format("%s/%08d", HDF5PathHelper.OBJECTS_ROOT_WITH_SEPERATORS, index);
     }
 }

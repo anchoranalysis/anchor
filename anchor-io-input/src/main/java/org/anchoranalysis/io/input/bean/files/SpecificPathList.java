@@ -37,8 +37,6 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.primitive.StringList;
 import org.anchoranalysis.core.functional.FunctionalList;
-import org.anchoranalysis.core.functional.FunctionalProgress;
-import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.core.system.path.CommonPath;
 import org.anchoranalysis.io.input.InputContextParameters;
 import org.anchoranalysis.io.input.bean.InputManagerParameters;
@@ -96,7 +94,7 @@ public class SpecificPathList extends FilesProvider {
         Optional<List<String>> selectedPaths = selectListPaths(parameters.getInputContext());
 
         if (selectedPaths.isPresent()) {
-            return matchingFilesForList(selectedPaths.get(), parameters.getProgress());
+            return matchingFilesForList(selectedPaths.get());
         } else if (fallback != null) {
             return fallback.create(parameters);
         } else {
@@ -135,7 +133,7 @@ public class SpecificPathList extends FilesProvider {
         return FunctionalList.mapToList(paths, Path::toString);
     }
 
-    private static List<File> matchingFilesForList(List<String> listPaths, Progress progress) {
-        return FunctionalProgress.mapList(listPaths, progress, File::new);
+    private static List<File> matchingFilesForList(List<String> listPaths) {
+        return FunctionalList.mapToList(listPaths, File::new);
     }
 }

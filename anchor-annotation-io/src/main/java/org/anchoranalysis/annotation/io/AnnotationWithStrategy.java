@@ -98,6 +98,6 @@ public class AnnotationWithStrategy<T extends AnnotatorStrategy>
      * @return a supplier of the stacks.
      */
     public NamedStacksSupplier stacks(Logger logger) {
-        return NamedStacksSupplier.cache(progress -> getDelegate().asSet(progress, logger));
+        return NamedStacksSupplier.cache(() -> getDelegate().asSet(logger));
     }
 }

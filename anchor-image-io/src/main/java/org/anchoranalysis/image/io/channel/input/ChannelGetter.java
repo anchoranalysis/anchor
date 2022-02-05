@@ -28,13 +28,33 @@ package org.anchoranalysis.image.io.channel.input;
 
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.image.core.channel.Channel;
 
+/**
+ * Retrieves a {@link Channel} by name from a particular time-point.
+ *
+ * @author Owen Feehan
+ */
 public interface ChannelGetter {
 
+    /**
+     * Does a particular channel-name exist?
+     *
+     * @param channelName the name of the channel to check.
+     * @return true iff the channel-name exists.
+     */
     boolean hasChannel(String channelName);
 
-    Channel getChannel(String channelName, int timeIndex, Progress progress, Logger logger)
+    /**
+     * Retrieve the {@link Channel} corresponding to {@code channelName} at a particular time-frame.
+     *
+     * @param channelName the name of the {@link Channel}.
+     * @param timeIndex the index (beginning at 0) of the frame.
+     * @param logger logger to write informative messes or non-fatal errors.
+     * @return the retrieved {@link Channel}.
+     * @throws GetOperationFailedException if no channel exists with {@code channelName} at
+     *     time-point {@code timeIndex}.
+     */
+    Channel getChannel(String channelName, int timeIndex, Logger logger)
             throws GetOperationFailedException;
 }

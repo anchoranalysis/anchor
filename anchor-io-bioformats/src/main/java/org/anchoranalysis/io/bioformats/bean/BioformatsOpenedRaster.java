@@ -41,7 +41,6 @@ import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.core.functional.checked.CheckedSupplier;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.channel.factory.ChannelFactorySingleType;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
@@ -126,14 +125,13 @@ class BioformatsOpenedRaster implements OpenedImageFile {
     }
 
     @Override
-    public TimeSequence open(int seriesIndex, Progress progress, Logger logger)
-            throws ImageIOException {
+    public TimeSequence open(int seriesIndex, Logger logger) throws ImageIOException {
 
         int pixelType = reader.getPixelType();
 
         VoxelDataType dataType = multiplexFormat(pixelType);
 
-        return openAsType(seriesIndex, progress, dataType, logger);
+        return openAsType(seriesIndex, dataType, logger);
     }
 
     @Override
@@ -196,8 +194,7 @@ class BioformatsOpenedRaster implements OpenedImageFile {
     }
 
     /** Opens as a specific data-type. */
-    private TimeSequence openAsType(
-            int seriesIndex, Progress progress, VoxelDataType dataType, Logger logger)
+    private TimeSequence openAsType(int seriesIndex, VoxelDataType dataType, Logger logger)
             throws ImageIOException {
 
         try {
@@ -216,8 +213,7 @@ class BioformatsOpenedRaster implements OpenedImageFile {
                     createUninitialisedChannels(
                             dimensions, timeSequence, multiplexVoxelDataType(dataType), logger);
 
-            copyBytesIntoChannels(
-                    listAllChannels, dimensions, progress, dataType, readOptions, logger);
+            copyBytesIntoChannels(listAllChannels, dimensions, dataType, readOptions, logger);
 
             LOG.debug(
                     String.format(
@@ -266,7 +262,6 @@ class BioformatsOpenedRaster implements OpenedImageFile {
     private void copyBytesIntoChannels(
             List<Channel> listChannels,
             Dimensions dimensions,
-            Progress progress,
             VoxelDataType dataType,
             ReadOptions readOptions,
             Logger logger)
@@ -281,7 +276,6 @@ class BioformatsOpenedRaster implements OpenedImageFile {
             CopyConvert.copyAllFrames(
                     reader,
                     listChannels,
-                    progress,
                     new ImageFileShape(dimensions, numberChannels, sizeT),
                     convertTo,
                     readOptions,

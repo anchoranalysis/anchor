@@ -72,6 +72,7 @@ public class DrawObjectsGenerator extends ObjectsAsRGBGenerator {
      * A generator that draws an outline around objects on a background using varied colors for the
      * objects.
      *
+     * @param numberColors the number of unique colors to use.
      * @param outlineWidth the width of the outline.
      * @param background the background.
      * @return the generator.
@@ -97,6 +98,7 @@ public class DrawObjectsGenerator extends ObjectsAsRGBGenerator {
      * A generator that draws an outline around objects on a background using varied colors for the
      * objects.
      *
+     * @param numberColors the number of unique colors to use.
      * @param outlineWidth the width of the outline.
      * @param background the background or dimensions for a background (drawn as all black).
      * @return the generator.

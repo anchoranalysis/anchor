@@ -80,6 +80,11 @@ public abstract class RasterGeneratorDelegateToRaster<S, T> extends RasterGenera
      */
     protected abstract Stack convertBeforeTransform(Stack stack);
 
+    /**
+     * The delegate.
+     * 
+     * @return the delegate.
+     */
     protected RasterGenerator<S> getDelegate() {
         return delegate;
     }

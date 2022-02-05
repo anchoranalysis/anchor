@@ -37,9 +37,7 @@ import lombok.Value;
 import lombok.experimental.Accessors;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.FunctionalList;
-import org.anchoranalysis.core.functional.FunctionalProgress;
 import org.anchoranalysis.core.functional.checked.CheckedFunction;
-import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.io.input.file.NamedFile;
 
 /**
@@ -76,8 +74,8 @@ public class InputsWithDirectory<T extends InputFromManager> {
      *
      * <p>This is an <i>immutable</i> operation.
      *
-     * @param <S> the type of inputs that are mapped to
-     * @param mapFunction the function that transforms and existing input into a new input
+     * @param <S> the type of inputs that are mapped to.
+     * @param mapFunction the function that transforms and existing input into a new input.
      * @return a newly created input-manager with the mapped inputs, but an identical directory.
      */
     public <S extends InputFromManager> InputsWithDirectory<S> map(Function<T, S> mapFunction) {
@@ -85,16 +83,20 @@ public class InputsWithDirectory<T extends InputFromManager> {
     }
 
     /**
-     * Like {{@link #map(Function)} but increments a {@link Progress}.
+     * Creates a new {@link InputsWithDirectory} which is the result of mapping the existing inputs.
      *
-     * @param <S> the type of inputs that are mapped to
-     * @param mapFunction the function that transforms and existing input into a new input
+     * <p>This is an <i>immutable</i> operation.
+     *
+     * @param <S> the type of inputs that are mapped to.
+     * @param <E> an exception that may be thrown by {@code mapFunction}.
+     * @param mapFunction the function that transforms and existing input into a new input.
      * @return a newly created input-manager with the mapped inputs, but an identical directory.
-     * @throws E if {@code mapFunction} throws E
+     * @throws E if thrown by {@code mapFunction}.
      */
     public <S extends InputFromManager, E extends Exception> InputsWithDirectory<S> map(
-            CheckedFunction<T, S, E> mapFunction, Progress progress) throws E {
-        return withInputs(FunctionalProgress.mapList(inputs, progress, mapFunction));
+            CheckedFunction<T, S, E> mapFunction, Class<? extends E> throwableClass) throws E {
+        return new InputsWithDirectory<>(
+                FunctionalList.mapToList(inputs, throwableClass, mapFunction), directory);
     }
 
     /**

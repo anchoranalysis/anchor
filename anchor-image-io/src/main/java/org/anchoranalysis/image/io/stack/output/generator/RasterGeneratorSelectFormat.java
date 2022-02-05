@@ -41,6 +41,7 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
  * A {@link RasterGenerator} that selects an appropriate output-format based upon each generated
  * image.
  *
+ * @param <T> the type of entity that is transformed to a {@link Stack}
  * @author Owen Feehan
  */
 public abstract class RasterGeneratorSelectFormat<T> extends RasterGenerator<T> {

@@ -29,8 +29,6 @@ package org.anchoranalysis.image.io.stack.input;
 import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.core.progress.Progress;
-import org.anchoranalysis.core.progress.ProgressIgnore;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.stack.ImageMetadata;
 import org.anchoranalysis.image.core.stack.Stack;
@@ -52,17 +50,15 @@ public interface OpenedImageFile extends AutoCloseable {
      * <p>If it's not the correct type, an error is thrown.
      *
      * @param seriesIndex the index of the series to open.
-     * @param progress tracks progress when opening.
      * @param channelDataType the expected data-type of the channels.
      * @param logger the logger.
      * @return a newly created {@link TimeSequence} of images for the series.
-     * @throws ImageIOException
+     * @throws ImageIOException if an error occurs reading the image during this operation.
      */
     default TimeSequence openCheckType(
-            int seriesIndex, Progress progress, VoxelDataType channelDataType, Logger logger)
-            throws ImageIOException {
+            int seriesIndex, VoxelDataType channelDataType, Logger logger) throws ImageIOException {
 
-        TimeSequence sequence = open(seriesIndex, progress, logger);
+        TimeSequence sequence = open(seriesIndex, logger);
 
         if (!sequence.allChannelsHaveType(channelDataType)) {
             throw new ImageIOException(
@@ -77,6 +73,7 @@ public interface OpenedImageFile extends AutoCloseable {
      *
      * @param logger the logger.
      * @return a time-sequence of images.
+     * @throws ImageIOException if an error occurs reading the image to determine this information.
      */
     default TimeSequence open(Logger logger) throws ImageIOException {
         return open(0, logger);
@@ -88,22 +85,15 @@ public interface OpenedImageFile extends AutoCloseable {
      * @param seriesIndex the index of the series of the open, zero-indexed.
      * @param logger the logger.
      * @return a time-sequence of images.
+     * @throws ImageIOException if an error occurs reading the image during this operation.
      */
-    default TimeSequence open(int seriesIndex, Logger logger) throws ImageIOException {
-        return open(seriesIndex, ProgressIgnore.get(), logger);
-    }
+    TimeSequence open(int seriesIndex, Logger logger) throws ImageIOException;
 
     /**
-     * Like {@link #open(int, Logger)} but additionally tracks progress of the opening.
+     * The number of series (distinct sets of images) in the image-file.
      *
-     * @param seriesIndex the index of the series of the open, zero-indexed.
-     * @param progress tracks progress.
-     * @param logger the logger.
-     * @return a time-sequence of images.
+     * @return the number of series.
      */
-    TimeSequence open(int seriesIndex, Progress progress, Logger logger) throws ImageIOException;
-
-    /** The number of series (distinct sets of images) in the image-file. */
     int numberSeries();
 
     /**
@@ -112,6 +102,7 @@ public interface OpenedImageFile extends AutoCloseable {
      * @param logger the logger.
      * @return a list of the names, which should correspond (and have the same number of items) as
      *     {@link #numberChannels(Logger)}.
+     * @throws ImageIOException if an error occurs reading the image to determine this information.
      */
     Optional<List<String>> channelNames(Logger logger) throws ImageIOException;
 
@@ -119,6 +110,8 @@ public interface OpenedImageFile extends AutoCloseable {
      * The number of channels in the image-file e.g. 1 for grayscale, 3 for RGB.
      *
      * @param logger the logger.
+     * @return the number of channels.
+     * @throws ImageIOException if an error occurs reading the image to determine this information.
      */
     int numberChannels(Logger logger) throws ImageIOException;
 
@@ -126,6 +119,8 @@ public interface OpenedImageFile extends AutoCloseable {
      * The number of frames in the image-file i.e. distinct images for a particular time-point.
      *
      * @param logger the logger.
+     * @return the number of frames.
+     * @throws ImageIOException if an error occurs reading the image to determine this information.
      */
     int numberFrames(Logger logger) throws ImageIOException;
 
@@ -133,13 +128,25 @@ public interface OpenedImageFile extends AutoCloseable {
      * The bit-depth of the image voxels e.g. 8 for 8-bit, 16 for 16-bit etc.
      *
      * @param logger the logger.
+     * @return the bit-depth.
+     * @throws ImageIOException if an error occurs reading the image to determine this information.
      */
     int bitDepth(Logger logger) throws ImageIOException;
 
-    /** The timestamps and file-attributes associated with the image. */
+    /**
+     * The timestamps and file-attributes associated with the image.
+     *
+     * @return timestamps and file-attributes, either newly-created or reused.
+     * @throws ImageIOException if an error occurs reading the image to determine this information.
+     */
     ImageTimestampsAttributes timestamps() throws ImageIOException;
 
-    /** Whether the image-file has RGB encoded voxels. */
+    /**
+     * Whether the image-file has RGB encoded voxels.
+     *
+     * @return true if the image has RGB or RGBA encoded voxels, false otherwise.
+     * @throws ImageIOException if an error occurs reading the image to determine this information.
+     */
     boolean isRGB() throws ImageIOException;
 
     /** Closes the opened image-file, removing any intermediate data-structures. */

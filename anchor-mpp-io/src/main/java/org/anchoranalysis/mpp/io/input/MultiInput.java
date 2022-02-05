@@ -34,7 +34,6 @@ import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
 import org.anchoranalysis.core.identifier.provider.store.SharedObjects;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.log.error.ErrorReporter;
-import org.anchoranalysis.core.progress.Progress;
 import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.core.stack.Stack;
@@ -85,21 +84,14 @@ public class MultiInput implements ProvidesStackInput, ExportSharedObjects {
 
     @Override
     public void addToStoreInferNames(
-            NamedProviderStore<TimeSequence> stacks,
-            int seriesIndex,
-            Progress progress,
-            Logger logger)
+            NamedProviderStore<TimeSequence> stacks, int seriesIndex, Logger logger)
             throws OperationFailedException {
-        stack.addToStore(stacks, seriesIndex, progress, logger);
+        stack.addToStore(stacks, seriesIndex, logger);
     }
 
     @Override
     public void addToStoreWithName(
-            String name,
-            NamedProviderStore<TimeSequence> stacks,
-            int seriesIndex,
-            Progress progress,
-            Logger logger)
+            String name, NamedProviderStore<TimeSequence> stacks, int seriesIndex, Logger logger)
             throws OperationFailedException {
         throw new OperationFailedException("Not supported");
     }

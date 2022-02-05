@@ -50,7 +50,11 @@ public class StackGenerator extends RasterGeneratorSelectFormat<Stack> {
     /** Properties of the stack that is being written used to guide the outputting. */
     private StackWriteAttributes writeOptions;
 
-    /** Creates a generator that performs no padding. */
+    /** 
+     * Creates a generator that performs no padding.
+     * 
+     * @param always2D when true, this indicates that the stack is guaranteed to be always 2D.
+     */
     public StackGenerator(boolean always2D) {
         this(false, always2D);
     }
@@ -61,6 +65,7 @@ public class StackGenerator extends RasterGeneratorSelectFormat<Stack> {
      *
      * @param padIfNecessary iff true, in the specific case of a 2-channel stack, an additional
      *     blank channel is added to make it 3-channels.
+     * @param always2D when true, this indicates that the stack is guaranteed to be always 2D.
      */
     public StackGenerator(boolean padIfNecessary, boolean always2D) {
         this(padIfNecessary, StackWriteAttributesFactory.maybeAlways2D(always2D));

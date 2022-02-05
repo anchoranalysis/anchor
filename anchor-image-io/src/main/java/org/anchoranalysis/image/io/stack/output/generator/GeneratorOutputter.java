@@ -47,16 +47,16 @@ public class GeneratorOutputter {
     /**
      * Gets the default {@link StackWriter}.
      *
-     * @param outputWriteSettings
+     * @param settings the settings that influence how outputs are written.
      * @return a writer (always non-null)
      * @throws ImageIOException if a writer doesn't exist
      */
-    public static StackWriter writer(OutputWriteSettings outputWriteSettings)
+    public static StackWriter writer(OutputWriteSettings settings)
             throws ImageIOException {
         // We need duplicate the writer to help make it thread safe. Unsure if this is necessary or
         // not.
         Optional<StackWriter> defaultWriter =
-                outputWriteSettings.getWriterInstance(StackWriter.class);
+                settings.getWriterInstance(StackWriter.class);
         if (defaultWriter.isPresent()) {
             return defaultWriter.get().duplicateBean();
         } else {
@@ -65,12 +65,12 @@ public class GeneratorOutputter {
     }
 
     public static String fileExtensionWriter(
-            OutputWriteSettings outputWriteSettings,
+            OutputWriteSettings settings,
             StackWriteOptions writeOptions,
             Optional<Logger> logger)
             throws OperationFailedException {
         try {
-            return writer(outputWriteSettings)
+            return writer(settings)
                     .fileFormatWarnUnexpected(writeOptions, logger)
                     .getDefaultExtension();
         } catch (ImageIOException e) {

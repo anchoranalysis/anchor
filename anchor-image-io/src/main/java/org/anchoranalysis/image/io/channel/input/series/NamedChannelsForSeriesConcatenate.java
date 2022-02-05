@@ -37,8 +37,6 @@ import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
 import org.anchoranalysis.core.identifier.provider.store.StoreSupplier;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.core.progress.Progress;
-import org.anchoranalysis.core.progress.ProgressMultiple;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
@@ -52,13 +50,12 @@ public class NamedChannelsForSeriesConcatenate implements NamedChannelsForSeries
     private List<NamedChannelsForSeries> list = new ArrayList<>();
 
     @Override
-    public Channel getChannel(String channelName, int timeIndex, Progress progress, Logger logger)
+    public Channel getChannel(String channelName, int timeIndex, Logger logger)
             throws GetOperationFailedException {
 
         for (NamedChannelsForSeries item : list) {
 
-            Optional<Channel> channel =
-                    item.getChannelOptional(channelName, timeIndex, progress, logger);
+            Optional<Channel> channel = item.getChannelOptional(channelName, timeIndex, logger);
             if (channel.isPresent()) {
                 return channel.get();
             }
@@ -69,14 +66,12 @@ public class NamedChannelsForSeriesConcatenate implements NamedChannelsForSeries
     }
 
     @Override
-    public Optional<Channel> getChannelOptional(
-            String channelName, int timeIndex, Progress progress, Logger logger)
+    public Optional<Channel> getChannelOptional(String channelName, int timeIndex, Logger logger)
             throws GetOperationFailedException {
 
         for (NamedChannelsForSeries item : list) {
 
-            Optional<Channel> channel =
-                    item.getChannelOptional(channelName, timeIndex, progress, logger);
+            Optional<Channel> channel = item.getChannelOptional(channelName, timeIndex, logger);
             if (channel.isPresent()) {
                 return channel;
             }
@@ -85,17 +80,11 @@ public class NamedChannelsForSeriesConcatenate implements NamedChannelsForSeries
         return Optional.empty();
     }
 
-    public void addAsSeparateChannels(
-            NamedStacks stackCollection, int t, Progress progress, Logger logger)
+    public void addAsSeparateChannels(NamedStacks stackCollection, int t, Logger logger)
             throws OperationFailedException {
 
-        try (ProgressMultiple progressMultiple = new ProgressMultiple(progress, list.size())) {
-
-            for (NamedChannelsForSeries item : list) {
-                item.addAsSeparateChannels(
-                        stackCollection, t, progressMultiple.trackCurrentChild(), logger);
-                progressMultiple.incrementChild();
-            }
+        for (NamedChannelsForSeries item : list) {
+            item.addAsSeparateChannels(stackCollection, t, logger);
         }
     }
 
@@ -124,17 +113,17 @@ public class NamedChannelsForSeriesConcatenate implements NamedChannelsForSeries
         return set;
     }
 
-    public int sizeT(Progress progress, Logger logger) throws ImageIOException {
+    public int sizeT(Logger logger) throws ImageIOException {
 
         int series = 0;
         boolean first = true;
 
         for (NamedChannelsForSeries item : list) {
             if (first) {
-                series = item.sizeT(progress, logger);
+                series = item.sizeT(logger);
                 first = false;
             } else {
-                series = Math.min(series, item.sizeT(progress, logger));
+                series = Math.min(series, item.sizeT(logger));
             }
         }
         return series;
