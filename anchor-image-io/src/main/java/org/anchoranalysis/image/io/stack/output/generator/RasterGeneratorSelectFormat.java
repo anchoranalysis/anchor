@@ -57,7 +57,11 @@ public abstract class RasterGeneratorSelectFormat<T> extends RasterGenerator<T> 
             OutputWriteSettings settings,
             Optional<Logger> logger)
             throws OperationFailedException {
-        return GeneratorOutputter.fileExtensionWriter(settings, options, logger);
+        try {
+            return GeneratorOutputter.fileExtensionWriter(settings, options, logger);
+        } catch (ImageIOException e) {
+            throw new OperationFailedException(e);
+        }
     }
 
     @Override

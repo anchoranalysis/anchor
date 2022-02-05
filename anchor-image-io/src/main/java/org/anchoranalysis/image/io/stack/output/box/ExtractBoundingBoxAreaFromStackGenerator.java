@@ -27,7 +27,7 @@
 package org.anchoranalysis.image.io.stack.output.box;
 
 import lombok.RequiredArgsConstructor;
-import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.stack.output.StackWriteAttributes;
 import org.anchoranalysis.image.io.stack.output.StackWriteAttributesFactory;
@@ -52,7 +52,7 @@ public class ExtractBoundingBoxAreaFromStackGenerator
     public Stack transform(BoundingBox element) throws OutputWriteFailedException {
         try {
             return background.extractRegionFromStack(element);
-        } catch (CreateException e) {
+        } catch (OperationFailedException e) {
             throw new OutputWriteFailedException(e);
         }
     }

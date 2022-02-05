@@ -87,8 +87,8 @@ class ReadObjectsFromHDF5 implements Deserializer<ObjectCollection> {
         // First check the number of objects expected
         // if the the rootPath exists in the HDF5, if not, it's an indication that there's no
         // objects present
-        int numberObjects = reader.uint32().getAttr(
-                        "/", HDF5ObjectsGenerator.NUMBER_OBJECTS_ATTRIBUTE_NAME);
+        int numberObjects =
+                reader.uint32().getAttr("/", HDF5ObjectsGenerator.NUMBER_OBJECTS_ATTRIBUTE_NAME);
         if (numberObjects == 0) {
             return ObjectCollectionFactory.empty();
         }

@@ -36,13 +36,14 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.object.properties.ObjectWithProperties;
 import org.anchoranalysis.image.core.stack.RGBStack;
+import org.anchoranalysis.image.voxel.object.ObjectMask; // NOSONAR
 import org.anchoranalysis.overlay.bean.DrawObject;
 import org.anchoranalysis.overlay.writer.ObjectDrawAttributes;
 import org.anchoranalysis.overlay.writer.PrecalculationOverlay;
 import org.anchoranalysis.spatial.box.BoundingBox;
 
 /**
- * Branches to two different writers depending on a binary condition.
+ * Branches to two different {@link DrawObject} depending on a predicate.
  *
  * @author Owen Feehan
  */
@@ -50,23 +51,42 @@ import org.anchoranalysis.spatial.box.BoundingBox;
 public class IfElse extends DrawObject {
 
     // START BEAN PROPERTIES
+    /** The {@link DrawObject} that is used when {@code condition==true}. */
     @BeanField @Getter @Setter private DrawObject whenTrue;
 
+    /** The {@link DrawObject} that is used when {@code condition==false}. */
     @BeanField @Getter @Setter private DrawObject whenFalse;
     // END BEAN PROPERTIES
 
-    private Optional<Condition> condition = Optional.empty();
+    /** The condition that is tested, to determine which {@link DrawObject} to use. */
+    private Optional<Predicate> predicate = Optional.empty();
 
+    /** Interface for the condition that is tested, to determine which {@link DrawObject} to use. */
     @FunctionalInterface
-    public interface Condition {
-        boolean isTrue(ObjectWithProperties object, RGBStack stack, int id);
+    public interface Predicate {
+
+        /**
+         * Evaluates whether the condition is true or not.
+         *
+         * @param object a particular {@link ObjectMask}.
+         * @param stack the corresponding image on which {@code object} lies.
+         * @param identifier an identifier associated with {@code object}.
+         * @return true or false, as evaluated.
+         */
+        boolean test(ObjectWithProperties object, RGBStack stack, int identifier);
     }
 
-    public IfElse(Condition condition, DrawObject trueWriter, DrawObject falseWriter) {
-        super();
-        this.condition = Optional.of(condition);
-        this.whenTrue = trueWriter;
-        this.whenFalse = falseWriter;
+    /**
+     * Creates for a particular condition.
+     *
+     * @param predicate the condition that is tested, to determine which {@link DrawObject} to use.
+     * @param whenTrue the {@link DrawObject} that is used when {@code condition==true}.
+     * @param whenFalse the {@link DrawObject} that is used when {@code condition==false}.
+     */
+    public IfElse(Predicate predicate, DrawObject whenTrue, DrawObject whenFalse) {
+        this.predicate = Optional.of(predicate);
+        this.whenTrue = whenTrue;
+        this.whenFalse = whenFalse;
     }
 
     @Override
@@ -87,10 +107,10 @@ public class IfElse extends DrawObject {
                     BoundingBox restrictTo)
                     throws OperationFailedException {
 
-                if (condition.isPresent()
-                        && condition
+                if (predicate.isPresent()
+                        && predicate
                                 .get()
-                                .isTrue(object, background, attributes.idFor(object, iteration))) {
+                                .test(object, background, attributes.idFor(object, iteration))) {
                     precalculationTrue.writePrecalculatedMask(
                             background, attributes, iteration, restrictTo);
                 } else {

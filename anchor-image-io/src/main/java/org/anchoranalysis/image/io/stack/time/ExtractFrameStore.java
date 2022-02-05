@@ -34,33 +34,52 @@ import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
 import org.anchoranalysis.core.identifier.provider.store.StoreSupplier;
 import org.anchoranalysis.image.core.stack.Stack;
 
-public class WrapStackAsTimeSequenceStore implements NamedProviderStore<TimeSequence> {
+/**
+ * Exposes a {@code NamedProviderStore<TimeSeries>} as a {@code NamedProviderStore<Stack>} by
+ * extracting a frame from each series.
+ *
+ * @author Owen Feehan
+ */
+public class ExtractFrameStore implements NamedProviderStore<TimeSeries> {
 
-    private NamedProviderStore<Stack> namedProvider;
-    private int t;
+    private final NamedProviderStore<Stack> stacks;
 
-    public WrapStackAsTimeSequenceStore(NamedProviderStore<Stack> namedProvider) {
-        this(namedProvider, 0);
+    /** The time-index to extract from each {@link TimeSeries}. */
+    private final int timeIndex;
+
+    /**
+     * Creates to extract at time-index 0.
+     *
+     * @param stacks the underlying store of {@link Stack}s.
+     */
+    public ExtractFrameStore(NamedProviderStore<Stack> stacks) {
+        this(stacks, 0);
     }
 
-    public WrapStackAsTimeSequenceStore(NamedProviderStore<Stack> namedProvider, int t) {
-        this.namedProvider = namedProvider;
-        this.t = t;
+    /**
+     * Creates to extract at time-index {@code timeIndex}.
+     *
+     * @param stacks the underlying store of {@link Stack}s.
+     * @param timeIndex the time-index to extract from each {@link TimeSeries}.
+     */
+    public ExtractFrameStore(NamedProviderStore<Stack> stacks, int timeIndex) {
+        this.stacks = stacks;
+        this.timeIndex = timeIndex;
     }
 
     @Override
-    public Optional<TimeSequence> getOptional(String key) throws NamedProviderGetException {
-        return namedProvider.getOptional(key).map(TimeSequence::new);
+    public Optional<TimeSeries> getOptional(String key) throws NamedProviderGetException {
+        return stacks.getOptional(key).map(TimeSeries::new);
     }
 
     @Override
     public Set<String> keys() {
-        return namedProvider.keys();
+        return stacks.keys();
     }
 
     @Override
-    public void add(String identifier, StoreSupplier<TimeSequence> supplier)
+    public void add(String identifier, StoreSupplier<TimeSeries> supplier)
             throws OperationFailedException {
-        namedProvider.add(identifier, () -> supplier.get().get(t));
+        stacks.add(identifier, () -> supplier.get().getFrame(timeIndex));
     }
 }

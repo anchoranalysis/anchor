@@ -57,10 +57,10 @@ public class StackWriteAttributesFactory {
             new StackWriteAttributes(true, true, false, StackRGBState.NOT_RGB, true);
 
     /**
-     * Creates a {@link StackWriteAttributes} which depending on a flag will always be 2D.
+     * Creates a {@link StackWriteAttributes} which, depending on a flag, may always be 2D.
      *
      * @param always2D when true, this indicates that the stack is guaranteed to be always 2D.
-     * @return a newly created {@link StackWriteAttributes}
+     * @return a newly created {@link StackWriteAttributes}.
      */
     public static StackWriteAttributes maybeAlways2D(boolean always2D) {
         return new StackWriteAttributes(always2D, false, false, StackRGBState.NOT_RGB, false);

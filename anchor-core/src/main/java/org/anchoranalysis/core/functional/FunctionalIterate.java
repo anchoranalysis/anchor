@@ -27,6 +27,8 @@ package org.anchoranalysis.core.functional;
 
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.functional.checked.CheckedBiConsumer;
@@ -34,6 +36,7 @@ import org.anchoranalysis.core.functional.checked.CheckedBooleanSupplier;
 import org.anchoranalysis.core.functional.checked.CheckedConsumer;
 import org.anchoranalysis.core.functional.checked.CheckedIntConsumer;
 import org.anchoranalysis.core.functional.checked.CheckedRunnable;
+import org.anchoranalysis.core.functional.checked.CheckedSupplier;
 
 /**
  * Utilities for repeating operations a certain number of times.
@@ -114,6 +117,25 @@ public class FunctionalIterate {
             }
         }
         return false;
+    }
+
+    /**
+     * Repeats an operation a number of times, to form a {@link Stream}.
+     *
+     * @param <T> type of element to created in the {@link Stream}.
+     * @param <E> an exception that may be thrown by {@code operation}.
+     * @param numberTimes how many times to repeat the operation
+     * @param throwableClass the class of {@code E}.
+     * @param supplier the operation
+     * @return a newly created {@link Stream} of {@code numberTimes} * the objects created by {@code
+     *     supplier}.
+     * @throws E if {@code operation} throws it.
+     */
+    public static <T, E extends Exception> Stream<T> repeatAsStream(
+            int numberTimes, Class<? extends E> throwableClass, CheckedSupplier<T, E> supplier)
+            throws E {
+        return CheckedStream.mapToObj(
+                IntStream.range(0, numberTimes), throwableClass, index -> supplier.get());
     }
 
     /**

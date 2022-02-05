@@ -36,19 +36,20 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.channel.factory.ChannelFactorySingleType;
 import org.anchoranalysis.image.core.channel.factory.ChannelFactoryUnsignedByte;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
-import org.anchoranalysis.image.core.object.properties.ObjectCollectionWithProperties;
+import org.anchoranalysis.image.core.object.properties.ObjectCollectionWithProperties; // NOSONAR
 import org.anchoranalysis.image.core.stack.DisplayStack;
 import org.anchoranalysis.image.core.stack.RGBStack;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.stack.output.StackWriteAttributes;
 import org.anchoranalysis.image.io.stack.output.StackWriteAttributesFactory;
 import org.anchoranalysis.image.io.stack.output.generator.RasterGeneratorSelectFormat;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.overlay.bean.DrawObject;
 import org.anchoranalysis.overlay.writer.ObjectDrawAttributes;
 
 /**
- * A base class for generators that draw objects on top of a RGB-Stack.
+ * A base class for generators that draw an {@link ObjectCollection} upon a {@link RGBStack}.
  *
  * @author Owen Feehan
  */
@@ -79,9 +80,9 @@ public abstract class ObjectsAsRGBGenerator
                         "No background has been set, as is needed by this generator");
             }
 
-            RGBStack backgroundRGB = generateBackground(element, background);
-            drawObject.write(generateMasks(element), backgroundRGB, attributes);
-            return backgroundRGB.asStack();
+            RGBStack backgroundRegion = generateBackgroundRegion(element, background);
+            drawObject.write(generateMasks(element), backgroundRegion, attributes);
+            return backgroundRegion.asStack();
         } catch (OperationFailedException | CreateException e) {
             throw new OutputWriteFailedException(e);
         }
@@ -89,21 +90,49 @@ public abstract class ObjectsAsRGBGenerator
 
     @Override
     public StackWriteAttributes guaranteedImageAttributes() {
-        return StackWriteAttributesFactory.rgb(isAlways2D(), false);
+        return StackWriteAttributesFactory.rgb(isBackground2D(), false);
     }
 
-    protected abstract RGBStack generateBackground(
-            ObjectCollectionWithProperties element, Either<Dimensions, DisplayStack> background)
+    /**
+     * Creates a {@link RGBStack} containing the background, without objects being drawn upon it.
+     *
+     * <p>This background may be all or only a region of the entire background-stack.
+     *
+     * @param objects the current objects to be drawn.
+     * @param background the entire background.
+     * @return a newly created {@link RGBStack}, as above.
+     * @throws CreateException if the background cannot be successfully created.
+     */
+    protected abstract RGBStack generateBackgroundRegion(
+            ObjectCollectionWithProperties objects, Either<Dimensions, DisplayStack> background)
             throws CreateException;
 
+    /**
+     * Creates a {@link ObjectCollectionWithProperties} indicative of the masks that will be imposed
+     * on top of the background-region.
+     *
+     * @param objects the objects to draw.
+     * @return either {@code objects} or a derived-representation of {@code objects}, as will be
+     *     drawn on the background-region.
+     * @throws CreateException if the background cannot be successfully created.
+     */
     protected abstract ObjectCollectionWithProperties generateMasks(
-            ObjectCollectionWithProperties element) throws CreateException;
+            ObjectCollectionWithProperties objects) throws CreateException;
 
+    /**
+     * Creates an empty {@link RGBStack}.
+     *
+     * <p>Empty implies all voxels are zero-valued i.e. have black color.
+     *
+     * @param dimensions the size of the stack to create.
+     * @return the newly created {@link RGBStack}.
+     */
     protected static RGBStack createEmptyStackFor(Dimensions dimensions) {
         return new RGBStack(dimensions, CHANNEL_FACTORY);
     }
 
-    private boolean isAlways2D() {
+    /** Is the background a 2D image? */
+    private boolean isBackground2D() {
         return background.fold(Function.identity(), DisplayStack::dimensions).z() == 1;
     }
 }

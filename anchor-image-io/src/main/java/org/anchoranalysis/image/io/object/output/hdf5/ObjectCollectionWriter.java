@@ -32,21 +32,22 @@ import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.io.generator.Generator;
 
 /**
- * Centralized point to access a {@link Generator} which writes an {@link ObjectCollection} to the file-system.
- * 
+ * Centralized point to access a {@link Generator} which writes an {@link ObjectCollection} to the
+ * file-system.
+ *
  * @author Owen Feehan
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ObjectCollectionWriter {
 
-	// Singleton instance
-	private static final Generator<ObjectCollection> GENERATOR = new HDF5ObjectsGenerator(true);
-	
-	/**
-	 * A {@link Generator} which writes an {@link ObjectCollection} to the file-system.
-	 * 
-	 * @return the generator.
-	 */
+    // Singleton instance
+    private static final Generator<ObjectCollection> GENERATOR = new HDF5ObjectsGenerator(true);
+
+    /**
+     * A {@link Generator} which writes an {@link ObjectCollection} to the file-system.
+     *
+     * @return the generator.
+     */
     public static Generator<ObjectCollection> generator() {
         return GENERATOR;
     }

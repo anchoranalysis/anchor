@@ -35,11 +35,11 @@ import org.anchoranalysis.core.identifier.provider.store.StoreSupplier;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.log.error.ErrorReporter;
 import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
-import org.anchoranalysis.image.io.stack.time.TimeSequence;
+import org.anchoranalysis.image.io.stack.time.TimeSeries;
 
 /** Combines a Stack with a map of other stacks */
 @RequiredArgsConstructor
-public class StackWithMap implements MultiInputSubMap<TimeSequence> {
+public class StackWithMap implements MultiInputSubMap<TimeSeries> {
 
     // START REQUIRED ARGUMENTS
     /** Needed for getting main-stack */
@@ -49,16 +49,16 @@ public class StackWithMap implements MultiInputSubMap<TimeSequence> {
     // END REQUIRED ARGUMENTS
 
     // Where the other stacks are stored
-    private OperationMap<TimeSequence> map = new OperationMap<>();
+    private OperationMap<TimeSeries> map = new OperationMap<>();
 
     @Override
-    public void addToStore(NamedProviderStore<TimeSequence> stackCollection, Logger logger)
+    public void addToStore(NamedProviderStore<TimeSeries> stackCollection, Logger logger)
             throws OperationFailedException {
         addToStore(stackCollection, 0, logger);
     }
 
     public void addToStore(
-            NamedProviderStore<TimeSequence> stackCollection, int seriesNum, Logger logger)
+            NamedProviderStore<TimeSeries> stackCollection, int seriesNum, Logger logger)
             throws OperationFailedException {
 
         // We add the main object
@@ -69,7 +69,7 @@ public class StackWithMap implements MultiInputSubMap<TimeSequence> {
     }
 
     @Override
-    public void add(String name, StoreSupplier<TimeSequence> op) {
+    public void add(String name, StoreSupplier<TimeSeries> op) {
         map.add(name, op);
     }
 
@@ -95,7 +95,7 @@ public class StackWithMap implements MultiInputSubMap<TimeSequence> {
     }
 
     @Override
-    public StoreSupplier<TimeSequence> get(String name) throws OperationFailedException {
+    public StoreSupplier<TimeSeries> get(String name) throws OperationFailedException {
 
         if (name.equals(mainObjectName)) {
             throw new OperationFailedException("Retrieving the main-object name is not allowed");

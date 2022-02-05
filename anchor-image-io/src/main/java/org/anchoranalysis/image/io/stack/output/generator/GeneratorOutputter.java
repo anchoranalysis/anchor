@@ -29,8 +29,8 @@ package org.anchoranalysis.image.io.stack.output.generator;
 import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
+import org.anchoranalysis.image.core.stack.Stack; // NOSONAR
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.writer.StackWriter;
 import org.anchoranalysis.image.io.stack.output.StackWriteOptions;
@@ -48,15 +48,13 @@ public class GeneratorOutputter {
      * Gets the default {@link StackWriter}.
      *
      * @param settings the settings that influence how outputs are written.
-     * @return a writer (always non-null)
-     * @throws ImageIOException if a writer doesn't exist
+     * @return the default {@link StackWriter}.
+     * @throws ImageIOException if a default writer doesn't exist.
      */
-    public static StackWriter writer(OutputWriteSettings settings)
-            throws ImageIOException {
+    public static StackWriter writer(OutputWriteSettings settings) throws ImageIOException {
         // We need duplicate the writer to help make it thread safe. Unsure if this is necessary or
         // not.
-        Optional<StackWriter> defaultWriter =
-                settings.getWriterInstance(StackWriter.class);
+        Optional<StackWriter> defaultWriter = settings.getWriterInstance(StackWriter.class);
         if (defaultWriter.isPresent()) {
             return defaultWriter.get().duplicateBean();
         } else {
@@ -64,17 +62,21 @@ public class GeneratorOutputter {
         }
     }
 
+    /**
+     * The file extension to use for the default {@link StackWriter}, as returned by {@link
+     * #writer(OutputWriteSettings)}.
+     *
+     * @param settings the parameters that influence how outputs are written, in general.
+     * @param writeOptions parameters that influence how {@link Stack}s are written.
+     * @param logger a logger, to write informative messages or non-fatal errors to.
+     * @return the file extension (without a leading period) to be used by the default writer.
+     * @throws ImageIOException if a default writer doesn't exist.
+     */
     public static String fileExtensionWriter(
-            OutputWriteSettings settings,
-            StackWriteOptions writeOptions,
-            Optional<Logger> logger)
-            throws OperationFailedException {
-        try {
-            return writer(settings)
-                    .fileFormatWarnUnexpected(writeOptions, logger)
-                    .getDefaultExtension();
-        } catch (ImageIOException e) {
-            throw new OperationFailedException(e);
-        }
+            OutputWriteSettings settings, StackWriteOptions writeOptions, Optional<Logger> logger)
+            throws ImageIOException {
+        return writer(settings)
+                .fileFormatWarnUnexpected(writeOptions, logger)
+                .getDefaultExtension();
     }
 }

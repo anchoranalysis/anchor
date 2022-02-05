@@ -39,7 +39,7 @@ import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.core.stack.named.NamedStacks;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.channel.input.ChannelGetter;
-import org.anchoranalysis.image.io.stack.time.TimeSequence;
+import org.anchoranalysis.image.io.stack.time.TimeSeries;
 
 public interface NamedChannelsForSeries extends ChannelGetter {
 
@@ -72,8 +72,7 @@ public interface NamedChannelsForSeries extends ChannelGetter {
     void addAsSeparateChannels(NamedStacks stacks, int timeIndex, Logger logger)
             throws OperationFailedException;
 
-    void addAsSeparateChannels(
-            NamedProviderStore<TimeSequence> stacks, int timeIndex, Logger logger)
+    void addAsSeparateChannels(NamedProviderStore<TimeSeries> stacks, int timeIndex, Logger logger)
             throws OperationFailedException;
 
     StoreSupplier<Stack> allChannelsAsStack(int timeIndex, Logger logger);

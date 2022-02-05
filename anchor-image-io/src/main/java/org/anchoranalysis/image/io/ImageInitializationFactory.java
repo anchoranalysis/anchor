@@ -34,16 +34,34 @@ import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.core.dimensions.size.suggestion.ImageSizeSuggestion;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 
+/**
+ * Creates instances of {@link ImageInitialization} based upon an {@link InputOutputContext}.
+ *
+ * @author Owen Feehan
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ImageInitializationFactory {
 
+    /**
+     * Create from an {@link InputOutputContext} - without any suggested size.
+     *
+     * @param context the context.
+     * @return a newly created {@link ImageInitialization} based upon {@code context}.
+     */
     public static ImageInitialization create(InputOutputContext context) {
         return create(context, Optional.empty());
     }
 
+    /**
+     * Create from an {@link InputOutputContext} - with a suggested size.
+     *
+     * @param context the context.
+     * @param suggestedSize a suggested input on how to resize an image, if one is provided.
+     * @return a newly created {@link ImageInitialization} based upon {@code context}.
+     */
     public static ImageInitialization create(
-            InputOutputContext context, Optional<ImageSizeSuggestion> suggestedResize) {
+            InputOutputContext context, Optional<ImageSizeSuggestion> suggestedSize) {
         SharedObjects sharedObjects = new SharedObjects(context.common());
-        return new ImageInitialization(sharedObjects, suggestedResize);
+        return new ImageInitialization(sharedObjects, suggestedSize);
     }
 }

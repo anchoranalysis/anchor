@@ -43,7 +43,7 @@ import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.core.stack.named.NamedStacks;
 import org.anchoranalysis.image.io.ImageIOException;
-import org.anchoranalysis.image.io.stack.time.TimeSequence;
+import org.anchoranalysis.image.io.stack.time.TimeSeries;
 
 public class NamedChannelsForSeriesConcatenate implements NamedChannelsForSeries {
 
@@ -89,7 +89,7 @@ public class NamedChannelsForSeriesConcatenate implements NamedChannelsForSeries
     }
 
     public void addAsSeparateChannels(
-            NamedProviderStore<TimeSequence> stackCollection, int timeIndex, Logger logger)
+            NamedProviderStore<TimeSeries> stackCollection, int timeIndex, Logger logger)
             throws OperationFailedException {
         for (NamedChannelsForSeries item : list) {
             item.addAsSeparateChannels(stackCollection, timeIndex, logger);

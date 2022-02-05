@@ -43,7 +43,7 @@ import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.channel.IndexedChannel;
 import org.anchoranalysis.image.io.channel.input.ChannelMap;
 import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
-import org.anchoranalysis.image.io.stack.time.TimeSequence;
+import org.anchoranalysis.image.io.stack.time.TimeSeries;
 
 @RequiredArgsConstructor
 public class NamedChannelsForSeriesMap implements NamedChannelsForSeries {
@@ -55,7 +55,7 @@ public class NamedChannelsForSeriesMap implements NamedChannelsForSeries {
     private final int seriesIndex;
     // END REQUIRED ARGUMENTS
 
-    private TimeSequence sequence;
+    private TimeSeries timeSeries;
 
     @Override
     public Dimensions dimensions(Logger logger) throws ImageIOException {
@@ -73,7 +73,7 @@ public class NamedChannelsForSeriesMap implements NamedChannelsForSeries {
         }
 
         try {
-            Stack stack = createTimeSeries(logger).get(timeIndex);
+            Stack stack = createTimeSeries(logger).getFrame(timeIndex);
 
             if (index >= stack.getNumberChannels()) {
                 throw new GetOperationFailedException(
@@ -100,7 +100,7 @@ public class NamedChannelsForSeriesMap implements NamedChannelsForSeries {
         }
 
         try {
-            Stack stack = createTimeSeries(logger).get(timeIndex);
+            Stack stack = createTimeSeries(logger).getFrame(timeIndex);
 
             if (index >= stack.getNumberChannels()) {
                 return Optional.empty();
@@ -153,7 +153,7 @@ public class NamedChannelsForSeriesMap implements NamedChannelsForSeries {
 
     @Override
     public void addAsSeparateChannels(
-            NamedProviderStore<TimeSequence> stackCollection, int timeIndex, Logger logger)
+            NamedProviderStore<TimeSeries> stackCollection, int timeIndex, Logger logger)
             throws OperationFailedException {
         // Populate our stack from all the channels
         for (String channelName : channelMap.names()) {
@@ -174,15 +174,15 @@ public class NamedChannelsForSeriesMap implements NamedChannelsForSeries {
         return StoreSupplier.cache(() -> stackForAllChannels(t, logger));
     }
 
-    private TimeSequence createTimeSeries(Logger logger) throws OperationFailedException {
-        if (sequence == null) {
+    private TimeSeries createTimeSeries(Logger logger) throws OperationFailedException {
+        if (timeSeries == null) {
             try {
-                sequence = openedFile.open(seriesIndex, logger);
+                timeSeries = openedFile.open(seriesIndex, logger);
             } catch (ImageIOException e) {
                 throw new OperationFailedException(e);
             }
         }
-        return sequence;
+        return timeSeries;
     }
 
     private Stack stackForAllChannels(int timeIndex, Logger logger)
@@ -200,11 +200,11 @@ public class NamedChannelsForSeriesMap implements NamedChannelsForSeries {
         return out;
     }
 
-    private TimeSequence extractChannelAsTimeSequence(
+    private TimeSeries extractChannelAsTimeSequence(
             String channelName, int timeIndex, Logger logger) throws OperationFailedException {
         try {
             Channel image = getChannel(channelName, timeIndex, logger);
-            return new TimeSequence(new Stack(image));
+            return new TimeSeries(new Stack(image));
         } catch (GetOperationFailedException e) {
             throw new OperationFailedException(e);
         }

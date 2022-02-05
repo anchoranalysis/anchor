@@ -37,18 +37,18 @@ import org.anchoranalysis.spatial.box.BoundingBox;
 
 /**
  * Converts a {@link DisplayStack} to a {@link RGBStack}.
- * 
+ *
  * @author Owen Feehan
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ConvertDisplayStackToRGB {
 
-	/**
-	 * Converts all of a {@link DisplayStack} to a {@link RGBStack}.
-	 * 
-	 * @param stack the stack to convert.
-	 * @return a newly created {@link RGBStack} with identical voxels and size as {@code stack}.
-	 */
+    /**
+     * Converts all of a {@link DisplayStack} to a {@link RGBStack}.
+     *
+     * @param stack the stack to convert.
+     * @return a newly created {@link RGBStack} with identical voxels and size as {@code stack}.
+     */
     public static RGBStack convert(DisplayStack stack) {
 
         try {
@@ -67,13 +67,13 @@ public class ConvertDisplayStackToRGB {
         }
     }
 
-	/**
-	 * Converts a bounding-box region in {@link DisplayStack} to a {@link RGBStack}.
-	 * 
-	 * @param stack the stack, from which a portion is to be converted.
-	 * @param box the region in {@code stack} which is converted.
-	 * @return a newly created {@link RGBStack} with identical voxels and size as {@code stack}.
-	 */
+    /**
+     * Converts a bounding-box region in {@link DisplayStack} to a {@link RGBStack}.
+     *
+     * @param stack the stack, from which a portion is to be converted.
+     * @param box the region in {@code stack} which is converted.
+     * @return a newly created {@link RGBStack} with identical voxels and size as {@code stack}.
+     */
     public static RGBStack convertCropped(DisplayStack stack, BoundingBox box) {
 
         try {

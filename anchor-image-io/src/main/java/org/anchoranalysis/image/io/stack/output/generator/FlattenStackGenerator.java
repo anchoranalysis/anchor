@@ -37,6 +37,12 @@ import org.anchoranalysis.image.io.stack.output.StackWriteAttributes;
  */
 public class FlattenStackGenerator extends RasterGeneratorDelegateToRaster<Stack, Stack> {
 
+    /**
+     * Creates with possible padding.
+     *
+     * @param padIfNecessary iff true, in the specific case of a 2-channel stack, an additional
+     *     blank channel is added to make it 3-channels.
+     */
     public FlattenStackGenerator(boolean padIfNecessary) {
         super(new StackGenerator(padIfNecessary, true));
     }

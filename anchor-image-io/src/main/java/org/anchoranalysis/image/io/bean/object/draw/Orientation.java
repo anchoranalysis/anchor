@@ -36,6 +36,7 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.object.properties.ObjectWithProperties;
 import org.anchoranalysis.image.core.stack.RGBStack;
+import org.anchoranalysis.image.io.object.ExtractMidpoint;
 import org.anchoranalysis.overlay.bean.DrawObject;
 import org.anchoranalysis.overlay.writer.ObjectDrawAttributes;
 import org.anchoranalysis.overlay.writer.PrecalculationOverlay;
@@ -89,7 +90,7 @@ public class Orientation extends DrawObject {
                     BoundingBox restrictTo)
                     throws OperationFailedException {
 
-                Point3i midpoint = Midpoint.calculateMidpoint(object, false);
+                Point3i midpoint = ExtractMidpoint.midpoint(object, false);
 
                 Optional<Double> orientationRadians = calculateOrientation(object);
                 if (!orientationRadians.isPresent()) {
@@ -138,7 +139,7 @@ public class Orientation extends DrawObject {
             Point3i point = new Point3i((int) x, (int) y, 0);
 
             if (box.contains().pointIgnoreZ(point)) {
-                Midpoint.writeRelPoint(point, color, stack, box);
+                Midpoint.writeRelativePoint(point, color, stack, box);
 
                 x += xIncr;
                 y += yIncr;

@@ -45,13 +45,16 @@ import org.anchoranalysis.spatial.point.ReadableTuple3i;
 class IntersectionWriter {
 
     /**
-     * Writes only to the intersection of an object-mask and a {@link RGBStack} that is positioned at {@code stackBox}.
-     * 
+     * Writes only to the intersection of an object-mask and a {@link RGBStack} that is positioned
+     * at {@code stackBox}.
+     *
      * @param object the {@link ObjectMask} to write (perhaps partially).
      * @param color the color to write {@code object} as in the image.
      * @param stack the stack to write {@code object} upon (whatever portion intersects).
-     * @param stackBox where {@code stack} is considered to be located, relative to the same reference coordinates as {@code object}.
-     * @throws OperationFailedException if no intersection exists between {@code object} and {@code stackBox}.
+     * @param stackBox where {@code stack} is considered to be located, relative to the same
+     *     reference coordinates as {@code object}.
+     * @throws OperationFailedException if no intersection exists between {@code object} and {@code
+     *     stackBox}.
      */
     public static void writeRGBMaskIntersection(
             ObjectMask object, RGBColor color, RGBStack stack, BoundingBox stackBox)

@@ -37,14 +37,26 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
  *
  * @author Owen Feehan
  * @param <T> exposed-iterator type
- * @param <V> hidden-iterator-type
+ * @param <V> delegate-iterator-type (hidden type)
  */
 public class RasterGeneratorBridge<T, V> extends RasterGeneratorDelegateToRaster<V, T> {
 
     // START REQUIRED ARGUMENTS
+    /**
+     * The function that translates an element of type {@code T} to an element of type {@code V} for
+     * the bridge.
+     */
     private final CheckedFunction<T, V, ? extends Throwable> elementBridge;
     // END REQUIRED ARGUMENTS
 
+    /**
+     * Creates with a delegate and a function to bridge the exposed element-type to the delegate
+     * element-type.
+     *
+     * @param delegate the delegate {@link RasterGenerator} which is called after bridging.
+     * @param elementBridge the function that bridges the exposed element-type to the delegate
+     *     element-type.
+     */
     public RasterGeneratorBridge(
             RasterGenerator<V> delegate, CheckedFunction<T, V, ? extends Throwable> elementBridge) {
         super(delegate);

@@ -82,7 +82,7 @@ public abstract class RasterGeneratorDelegateToRaster<S, T> extends RasterGenera
 
     /**
      * The delegate.
-     * 
+     *
      * @return the delegate.
      */
     protected RasterGenerator<S> getDelegate() {

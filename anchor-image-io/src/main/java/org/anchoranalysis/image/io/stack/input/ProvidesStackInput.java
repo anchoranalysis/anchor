@@ -31,8 +31,8 @@ import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.core.stack.named.NamedStacks;
-import org.anchoranalysis.image.io.stack.time.TimeSequence;
-import org.anchoranalysis.image.io.stack.time.WrapStackAsTimeSequenceStore;
+import org.anchoranalysis.image.io.stack.time.ExtractFrameStore;
+import org.anchoranalysis.image.io.stack.time.TimeSeries;
 import org.anchoranalysis.io.input.InputFromManager;
 
 /**
@@ -72,7 +72,7 @@ public interface ProvidesStackInput extends InputFromManager {
      */
     default NamedStacks asSet(Logger logger) throws OperationFailedException {
         NamedStacks set = new NamedStacks();
-        addToStoreInferNames(new WrapStackAsTimeSequenceStore(set), 0, logger);
+        addToStoreInferNames(new ExtractFrameStore(set), 0, logger);
         return set;
     }
 
@@ -86,7 +86,7 @@ public interface ProvidesStackInput extends InputFromManager {
     default void addToStoreInferNames(NamedProviderStore<Stack> store, Logger logger)
             throws OperationFailedException {
         addToStoreInferNames(
-                new WrapStackAsTimeSequenceStore(store),
+                new ExtractFrameStore(store),
                 0, // default series-number
                 logger);
     }
@@ -105,12 +105,11 @@ public interface ProvidesStackInput extends InputFromManager {
      *
      * @param stacks the named-store of stacks.
      * @param seriesIndex the index of the series (beginning at 0) to retrieve stacks from the
-     *     {@link TimeSequence}.
+     *     {@link TimeSeries}.
      * @param logger a logger for any non-fatal errors. Fatal errors throw an exception.
      * @throws OperationFailedException if the operation cannot successfully complete.
      */
-    void addToStoreInferNames(
-            NamedProviderStore<TimeSequence> stacks, int seriesIndex, Logger logger)
+    void addToStoreInferNames(NamedProviderStore<TimeSeries> stacks, int seriesIndex, Logger logger)
             throws OperationFailedException;
 
     /**
@@ -120,11 +119,11 @@ public interface ProvidesStackInput extends InputFromManager {
      * @param name the name to use for the added stack.
      * @param stacks the named-store of stacks.
      * @param seriesIndex the index of the series (beginning at 0) to retrieve stacks from the
-     *     {@link TimeSequence}.
+     *     {@link TimeSeries}.
      * @param logger a logger for any non-fatal errors. Fatal errors throw an exception.
      * @throws OperationFailedException if the operation cannot successfully complete.
      */
     void addToStoreWithName(
-            String name, NamedProviderStore<TimeSequence> stacks, int seriesIndex, Logger logger)
+            String name, NamedProviderStore<TimeSeries> stacks, int seriesIndex, Logger logger)
             throws OperationFailedException;
 }
