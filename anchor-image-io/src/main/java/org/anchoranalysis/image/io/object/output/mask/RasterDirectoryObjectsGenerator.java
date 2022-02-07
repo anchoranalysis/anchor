@@ -39,13 +39,18 @@ import org.anchoranalysis.io.generator.collection.CollectionGenerator;
 /**
  * Writes each object as a binary {@link Mask} in a directory.
  *
- * <p>Writes the corner information as a binary-serialized file in the directory
+ * <p>Writes the corner information as a binary-serialized file in a directory
  *
  * @author Owen Feehan
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class RasterDirectoryObjectsGenerator {
 
+    /**
+     * Creates the {@link Generator} to write each object as a binary {@link Mask} in a directory.
+     *
+     * @return the newly created generator.
+     */
     public static Generator<ObjectCollection> create() {
 
         // Creates a raster for each object inside a a directory

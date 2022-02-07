@@ -33,32 +33,44 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.InitializeException;
-import org.anchoranalysis.image.bean.provider.stack.Arrange;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.core.stack.Stack;
-import org.anchoranalysis.image.io.stack.input.TileRasters;
+import org.anchoranalysis.image.io.stack.input.TileStackProviders;
 
-// A short-cut provider for tiling a number of stack providers with labels
+/**
+ * Tiles a number of {@link StackProviderWithLabel}s as a single {@link StackProvider}.
+ *
+ * @author Owen Feehan
+ */
 public class TileWithLabels extends StackProvider {
 
     // START BEAN PROPERTIES
+    /** The list of {@link StackProviderWithLabel}s that are tiled. */
     @BeanField @Getter @Setter private List<StackProviderWithLabel> list = new ArrayList<>();
 
-    @BeanField @Getter @Setter private int numCols = 3;
+    /**
+     * How many columns when tiling, so long as there are sufficient {@link
+     * StackProviderWithLabel}s.
+     */
+    @BeanField @Getter @Setter private int numColumns = 3;
 
+    /**
+     * When true, the voxel-data-type of the created image is <i>unsigned short</i>, otherwise
+     * <i>unsigned byte</i>.
+     */
     @BeanField @Getter @Setter boolean createShort;
 
-    @BeanField @Getter @Setter boolean scaleLabel = true;
-
-    @BeanField @Getter @Setter
-    boolean expandLabelZ = false; // Repeats the label in the z-dimension to match the stackProvider
+    /**
+     * When true, the label is repeated across all z-slices in the stack. when false, it appears on
+     * only one z-slice.
+     */
+    @BeanField @Getter @Setter boolean expandLabelZ = false;
     // END BEAN PROPERTIES
 
     @Override
     public Stack get() throws ProvisionFailedException {
-        Arrange arrangeRaster =
-                TileRasters.createStackProvider(
-                        list, numCols, createShort, scaleLabel, expandLabelZ);
+        StackProvider arrangeRaster =
+                TileStackProviders.tile(list, numColumns, createShort, expandLabelZ);
         try {
             arrangeRaster.initializeRecursive(getInitialization(), getLogger());
         } catch (InitializeException e) {

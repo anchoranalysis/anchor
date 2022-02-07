@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.image.io.channel.input.series;
+package org.anchoranalysis.image.io.channel.map;
 
 import java.util.Optional;
 import java.util.Set;
@@ -45,16 +45,33 @@ import org.anchoranalysis.image.io.channel.input.ChannelMap;
 import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
 import org.anchoranalysis.image.io.stack.time.TimeSeries;
 
+/**
+ * A set of named {@link Channel}s available from an {@link OpenedImageFile}.
+ *
+ * <p>{@link Channel}s are added to a {@link Stack} in the order they appear in the {@code
+ * channelMap}.
+ *
+ * @author Owen Feehan
+ */
 @RequiredArgsConstructor
-public class NamedChannelsForSeriesMap implements NamedChannelsForSeries {
+public class OpenedNamedChannels implements NamedChannelsMap {
 
     // END REQUIRED ARGUMENTS
-    // Null until the first time we request a channel
+    /** The underlying opened image-file that provides the channels. */
     private final OpenedImageFile openedFile;
+
+    /** A mapping between names to indices of {@link Channel}s. */
     private final ChannelMap channelMap;
+
+    /** Which series to open in {@link OpenedImageFile}. */
     private final int seriesIndex;
     // END REQUIRED ARGUMENTS
 
+    /**
+     * The currently opened {@link TimeSeries}.
+     *
+     * <p>null until first opened.
+     */
     private TimeSeries timeSeries;
 
     @Override
@@ -137,14 +154,14 @@ public class NamedChannelsForSeriesMap implements NamedChannelsForSeries {
     }
 
     @Override
-    public void addAsSeparateChannels(NamedStacks stacks, int timeIndex, Logger logger)
+    public void addAsSeparateChannels(NamedStacks destination, int timeIndex, Logger logger)
             throws OperationFailedException {
 
         try {
             // Populate our stack from all the channels
             for (String channelName : channelMap.names()) {
                 Channel image = getChannel(channelName, timeIndex, logger);
-                stacks.add(channelName, new Stack(image));
+                destination.add(channelName, new Stack(image));
             }
         } catch (GetOperationFailedException e) {
             throw new OperationFailedException(e);
@@ -153,14 +170,14 @@ public class NamedChannelsForSeriesMap implements NamedChannelsForSeries {
 
     @Override
     public void addAsSeparateChannels(
-            NamedProviderStore<TimeSeries> stackCollection, int timeIndex, Logger logger)
+            NamedProviderStore<TimeSeries> destination, int timeIndex, Logger logger)
             throws OperationFailedException {
         // Populate our stack from all the channels
         for (String channelName : channelMap.names()) {
-            stackCollection.add(
+            destination.add(
                     channelName,
                     StoreSupplier.cache(
-                            () -> extractChannelAsTimeSequence(channelName, timeIndex, logger)));
+                            () -> extractChannelAsTimeSeries(channelName, timeIndex, logger)));
         }
     }
 
@@ -174,6 +191,7 @@ public class NamedChannelsForSeriesMap implements NamedChannelsForSeries {
         return StoreSupplier.cache(() -> stackForAllChannels(t, logger));
     }
 
+    /** Create the {@link TimeSeries} from which channels are extracted. */
     private TimeSeries createTimeSeries(Logger logger) throws OperationFailedException {
         if (timeSeries == null) {
             try {
@@ -185,6 +203,7 @@ public class NamedChannelsForSeriesMap implements NamedChannelsForSeries {
         return timeSeries;
     }
 
+    /** Creates a {@link Stack} containing each channel at {@code timeIndex}. */
     private Stack stackForAllChannels(int timeIndex, Logger logger)
             throws OperationFailedException {
         Stack out = new Stack();
@@ -200,8 +219,12 @@ public class NamedChannelsForSeriesMap implements NamedChannelsForSeries {
         return out;
     }
 
-    private TimeSeries extractChannelAsTimeSequence(
-            String channelName, int timeIndex, Logger logger) throws OperationFailedException {
+    /**
+     * Creates a {@link TimeSeries} containing a single channel and time-point, extracted from
+     * {@code timeIndex}.
+     */
+    private TimeSeries extractChannelAsTimeSeries(String channelName, int timeIndex, Logger logger)
+            throws OperationFailedException {
         try {
             Channel image = getChannel(channelName, timeIndex, logger);
             return new TimeSeries(new Stack(image));

@@ -33,7 +33,7 @@ import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.stack.ImageMetadata;
 import org.anchoranalysis.image.io.ImageIOException;
-import org.anchoranalysis.image.io.channel.input.series.NamedChannelsForSeries;
+import org.anchoranalysis.image.io.channel.map.NamedChannelsMap;
 import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
 import org.anchoranalysis.image.io.stack.time.TimeSeries;
 
@@ -87,15 +87,15 @@ public abstract class NamedChannelsInput implements ProvidesStackInput {
     public abstract int bitDepth(Logger logger) throws ImageIOException;
 
     /**
-     * Creates a {@link NamedChannelsForSeries} representing the channels for a particular series in
-     * this input.
+     * Creates a {@link NamedChannelsMap} representing the channels for a particular series in this
+     * input.
      *
      * @param seriesIndex the index of the series to use (beginning at 0).
      * @param logger the logger where informative or non-fatal error messages amy be written.
-     * @return a newly created {@link NamedChannelsForSeries} bound to {@code seriesIndex}.
+     * @return a newly created {@link NamedChannelsMap} bound to {@code seriesIndex}.
      * @throws ImageIOException if the operation cannot successfully complete.
      */
-    public abstract NamedChannelsForSeries createChannelsForSeries(int seriesIndex, Logger logger)
+    public abstract NamedChannelsMap createChannelsForSeries(int seriesIndex, Logger logger)
             throws ImageIOException;
 
     /**
@@ -114,7 +114,7 @@ public abstract class NamedChannelsInput implements ProvidesStackInput {
             throws OperationFailedException {
         // Adds each channel as a separate stack
         try {
-            NamedChannelsForSeries namedChannels = createChannelsForSeries(seriesIndex, logger);
+            NamedChannelsMap namedChannels = createChannelsForSeries(seriesIndex, logger);
             // Apply it only to first time-series frame
             namedChannels.addAsSeparateChannels(stacks, 0, logger);
 
@@ -137,11 +137,12 @@ public abstract class NamedChannelsInput implements ProvidesStackInput {
         return 1;
     }
 
-    private TimeSeries channelsAsTimeSequence(int seriesNum, Logger logger)
+    /** All channels for a particular series, exposed as a {@link TimeSeries}. */
+    private TimeSeries channelsAsTimeSequence(int seriesIndex, Logger logger)
             throws OperationFailedException {
         // Apply it only to first time-series frame
         try {
-            NamedChannelsForSeries namedChannels = createChannelsForSeries(seriesNum, logger);
+            NamedChannelsMap namedChannels = createChannelsForSeries(seriesIndex, logger);
             return new TimeSeries(namedChannels.allChannelsAsStack(0, logger).get());
 
         } catch (ImageIOException e) {

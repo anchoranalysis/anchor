@@ -51,11 +51,14 @@ import org.anchoranalysis.image.io.stack.output.StackWriteAttributesFactory;
 import org.anchoranalysis.image.io.stack.output.generator.RasterGeneratorSelectFormat;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedShortBuffer;
 import org.anchoranalysis.image.voxel.convert.ToUnsignedShortScaleByType;
-import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
-import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.spatial.box.BoundingBox;
 
+/**
+ * Creates an image that contains text only.
+ *
+ * @author Owen Feehan
+ */
 @NoArgsConstructor
 public class WriteText extends StackProvider {
 
@@ -68,10 +71,11 @@ public class WriteText extends StackProvider {
     /** Explicit size of the image the string is draw on. */
     @BeanField @Getter @Setter private SizeXY size;
 
+    /**
+     * When true, {@code text} is drawn across all z-slices in the stack. when false, it appears on
+     * only one z-slice.
+     */
     @BeanField @Getter @Setter private boolean createShort;
-
-    /** The string is printed using the maximum-value intensity-value of the image. */
-    @BeanField @Getter @Setter private Provider<Stack> intensityProvider;
 
     /**
      * Repeats the generated (2D) string in z, so it's the same z-size as {@code intensityProvider}
@@ -79,6 +83,11 @@ public class WriteText extends StackProvider {
     @BeanField @Getter @Setter private Provider<Stack> repeatZProvider;
     // END BEAN PROPERITES
 
+    /**
+     * Creates the bean to write particular text, otherwise using default settings.
+     *
+     * @param text the text to write.
+     */
     public WriteText(String text) {
         this.text = text;
     }
@@ -108,17 +117,6 @@ public class WriteText extends StackProvider {
         }
     }
 
-    private static long maxValueFromStack(Stack stack) {
-        long max = 0;
-        for (Channel channel : stack) {
-            long channelVal = channel.extract().voxelWithMaxIntensity();
-            if (channelVal > max) {
-                max = channelVal;
-            }
-        }
-        return max;
-    }
-
     private Stack create2D() throws ProvisionFailedException {
         try {
             Stack stack = new RasterizedTextGenerator(size, style).transform(text);
@@ -129,22 +127,6 @@ public class WriteText extends StackProvider {
 
                 stack = conveter.convert(stack, ConversionPolicy.CHANGE_EXISTING_CHANNEL);
             }
-
-            if (intensityProvider != null) {
-                int maxTypeValue =
-                        createShort
-                                ? UnsignedShortVoxelType.MAX_VALUE_INT
-                                : UnsignedByteVoxelType.MAX_VALUE_INT;
-
-                Stack stackIntensity = intensityProvider.get();
-                double maxValue = maxValueFromStack(stackIntensity);
-                double mult = maxValue / maxTypeValue;
-
-                for (Channel channel : stack) {
-                    channel.arithmetic().multiplyBy(mult);
-                }
-            }
-
             return stack;
         } catch (OutputWriteFailedException e) {
             throw new ProvisionFailedException(e);

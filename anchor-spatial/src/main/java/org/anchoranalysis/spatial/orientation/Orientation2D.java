@@ -27,7 +27,6 @@
 package org.anchoranalysis.spatial.orientation;
 
 import cern.colt.matrix.DoubleMatrix2D;
-import java.util.function.BiConsumer;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -84,20 +83,7 @@ public class Orientation2D extends Orientation {
     }
 
     @Override
-    public void describeOrientation(BiConsumer<String, String> consumer) {
-        addAngleProperty(consumer, "orientationRadians", angleRadians);
-        addAngleProperty(consumer, "orientationDegrees", getAngleDegrees());
-    }
-
-    @Override
     public int numberDimensions() {
         return 2;
-    }
-
-    private static void addAngleProperty(
-            BiConsumer<String, String> consumer, String unitType, double angleValue) {
-        consumer.accept(
-                String.format("Orientation Angle (%s)", unitType),
-                String.format("%1.2f", angleValue));
     }
 }

@@ -27,7 +27,6 @@
 package org.anchoranalysis.spatial.orientation;
 
 import java.io.Serializable;
-import java.util.function.BiConsumer;
 
 /**
  * The <a href="https://en.wikipedia.org/wiki/Orientation_(geometry)">orientation</a> (direction) in
@@ -99,12 +98,4 @@ public abstract class Orientation implements Serializable {
      * @return the new {@link Orientation} in the negative direction.
      */
     public abstract Orientation negative();
-
-    /**
-     * Consumes descriptive human-readable name-value pairs to describe the current orientation.
-     *
-     * @param consumer called for each descriptive name-value pair that describes an aspect of the
-     *     current orientation.
-     */
-    public abstract void describeOrientation(BiConsumer<String, String> consumer);
 }

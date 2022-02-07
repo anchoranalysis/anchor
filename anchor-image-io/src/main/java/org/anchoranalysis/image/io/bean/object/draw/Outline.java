@@ -51,6 +51,7 @@ import org.anchoranalysis.spatial.box.BoundingBox;
 public class Outline extends DrawObject {
 
     // START BEAN PROPERTIES
+    /** The size of the outline, in terms of the number of voxels. */
     @BeanField @Getter @Setter private int outlineWidth;
 
     /**
@@ -60,10 +61,16 @@ public class Outline extends DrawObject {
     @BeanField @Getter @Setter private boolean includeZ;
     // END BEAN PROPERTIES
 
+    /** Creates with an outline-width of 1 voxel. */
     public Outline() {
         this(1);
     }
 
+    /**
+     * Create with a particular outline-width.
+     *
+     * @param outlineWidth the size of the outline, in terms of the number of voxels.
+     */
     public Outline(int outlineWidth) {
         this(outlineWidth, true);
     }
