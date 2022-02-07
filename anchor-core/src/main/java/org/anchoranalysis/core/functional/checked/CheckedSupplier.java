@@ -1,7 +1,6 @@
 package org.anchoranalysis.core.functional.checked;
 
 import java.util.function.Supplier;
-import org.anchoranalysis.core.progress.CheckedProgressingSupplier;
 
 /*-
  * #%L
@@ -46,13 +45,4 @@ public interface CheckedSupplier<T, E extends Exception> {
      * @throws E an exception that may be thrown.
      */
     T get() throws E;
-
-    /**
-     * An interface to a similar supplier that monitors progress.
-     *
-     * @return a supplier that also monitors progress, but executes the same task.
-     */
-    default CheckedProgressingSupplier<T, E> progressing() {
-        return progress -> get();
-    }
 }
