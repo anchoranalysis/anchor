@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.bean.primitive;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -58,7 +58,7 @@ public class StringList extends AnchorBean<StringList> implements PrimitiveBeanC
 
     /** Constructs with an empty list. */
     public StringList() {
-        list = new ArrayList<>();
+        list = new LinkedList<>();
     }
 
     /**

@@ -40,7 +40,7 @@ public class IndexByRegion<T> {
     private final List<VoxelPartition<T>> list;
 
     public IndexByRegion(VoxelPartitionFactory<T> factory, int numberRegions, int numberSlices) {
-        list = new ArrayList<>();
+        list = new ArrayList<>(numberRegions);
         FunctionalIterate.repeat(numberRegions, () -> list.add(factory.create(numberSlices)));
     }
 

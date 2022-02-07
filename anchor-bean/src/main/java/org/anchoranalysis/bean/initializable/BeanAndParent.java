@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.bean.initializable;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Stream;
 import lombok.AllArgsConstructor;
@@ -62,7 +62,7 @@ class BeanAndParent {
 
     private List<AnchorBean<?>> beansRootToLeaf() {
 
-        List<AnchorBean<?>> listObjects = new ArrayList<>();
+        List<AnchorBean<?>> listObjects = new LinkedList<>();
 
         BeanAndParent next = this;
         listObjects.add(0, next.getBean());

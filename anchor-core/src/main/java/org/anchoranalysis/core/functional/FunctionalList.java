@@ -30,6 +30,7 @@ import com.google.common.collect.Streams;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.BiFunction;
@@ -363,6 +364,25 @@ public class FunctionalList {
             Collection<S> collection, Function<S, Stream<T>> mapFunction) {
         return collection.stream().flatMap(mapFunction).collect(Collectors.toList());
     }
+    
+    /**
+     * Flat-maps a collection to a list where in the original collection can produce many elements
+     * in the outgoing list.
+     *
+     * @param  <S> parameter-type for function
+     * @param  <T> return-type for function
+     * @param  <E> exception that may be thrown by {@code collection}
+     * @param collection the collection to be mapped
+     * @param throwableClass the class of {@code E}.
+     * @param mapFunction function to do the mapping
+     * @return a list with the same size and same order, but using derived elements that are a
+     *     result of the mapping
+     * @throws E if thrown by {@code mapFunction}
+     */
+    public static <S, T, E extends Exception> List<T> flatMapToList(
+            Collection<S> collection, Class<? extends Exception> throwableClass, CheckedFunction<S, Collection<? extends T>, E> mapFunction) throws E {
+        return CheckedStream.flatMap( collection.stream(), throwableClass, mapFunction).collect(Collectors.toList());
+    }
 
     /**
      * Creates a list of elements, where each element corresponds to an index in a range.
@@ -449,7 +469,7 @@ public class FunctionalList {
             List<S> list, CheckedPredicate<S, E> predicate, CheckedFunction<S, T, E> mapFunction)
             throws E {
 
-        List<T> out = new ArrayList<>();
+        List<T> out = new LinkedList<>();
         for (int i = 0; i < list.size(); i++) {
 
             S item = list.get(i);

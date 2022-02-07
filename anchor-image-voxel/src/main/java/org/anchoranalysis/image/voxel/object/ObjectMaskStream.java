@@ -146,7 +146,7 @@ public final class ObjectMaskStream {
      */
     public <T, E extends Exception> List<T> mapToListOptional(
             CheckedFunction<ObjectMask, Optional<T>, E> mapFunction) throws E {
-        List<T> out = new ArrayList<>();
+        List<T> out = new ArrayList<>(delegate.size());
         for (ObjectMask obj : delegate) {
             Optional<T> result = mapFunction.apply(obj);
             result.ifPresent(out::add);

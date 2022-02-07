@@ -26,8 +26,8 @@
 
 package org.anchoranalysis.bean.initializable;
 
-import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import lombok.AccessLevel;
@@ -52,7 +52,7 @@ class HelperInit {
             AnchorBean<?> bean, BeanInitializer<?> initializer, Logger logger)
             throws InitializeException {
 
-        List<BeanAndParent> everything = new ArrayList<>();
+        List<BeanAndParent> everything = new LinkedList<>();
         everything.add(new BeanAndParent(bean, null));
 
         Set<AnchorBean<?>> done = new HashSet<>();

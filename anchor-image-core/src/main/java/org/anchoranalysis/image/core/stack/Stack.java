@@ -465,7 +465,7 @@ public class Stack implements Iterable<Channel> {
      * @return a newly created {@link List}, reusing the existing {@link Channel}s.
      */
     public List<Channel> asListChannels() {
-        ArrayList<Channel> out = new ArrayList<>();
+        List<Channel> out = new ArrayList<>(delegate.getNumberChannels());
         for (Channel channel : delegate) {
             out.add(channel);
         }

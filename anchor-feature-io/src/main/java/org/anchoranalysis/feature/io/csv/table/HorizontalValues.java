@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.feature.io.csv.table;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import org.anchoranalysis.core.value.TypedValue;
 import org.anchoranalysis.feature.io.csv.FeatureCSVWriter;
@@ -65,7 +65,7 @@ class HorizontalValues extends FeatureTableCSVGenerator<ResultsVectorList> {
 
         for (ResultsVector results : allFeatureResults) {
 
-            List<TypedValue> csvRow = new ArrayList<>();
+            List<TypedValue> csvRow = new LinkedList<>();
             results.addTypedValuesTo(csvRow, FeatureCSVWriter.NUMBER_DECIMAL_PLACES);
             writer.writeRow(csvRow);
         }

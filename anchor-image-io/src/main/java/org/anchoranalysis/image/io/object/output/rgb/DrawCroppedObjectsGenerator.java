@@ -127,7 +127,7 @@ public class DrawCroppedObjectsGenerator extends ObjectsAsRGBGenerator {
     private static ObjectCollectionWithProperties relativeTo(
             ObjectCollection objects, BoundingBox source) {
 
-        ObjectCollectionWithProperties out = new ObjectCollectionWithProperties();
+        ObjectCollectionWithProperties out = new ObjectCollectionWithProperties(objects.size());
 
         for (ObjectMask objectMask : objects) {
             BoundingBox boxNew =

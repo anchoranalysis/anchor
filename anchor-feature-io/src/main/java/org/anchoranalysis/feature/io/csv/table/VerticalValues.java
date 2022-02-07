@@ -72,7 +72,7 @@ class VerticalValues extends FeatureTableCSVGenerator<ResultsVectorList> {
             String featureName, ResultsVectorList allFeatureResults, int featureIndex, int size)
             throws OutputWriteFailedException {
 
-        List<TypedValue> csvRow = new ArrayList<>();
+        List<TypedValue> csvRow = new ArrayList<>(allFeatureResults.size());
 
         // The Name
         csvRow.add(new TypedValue(featureName));

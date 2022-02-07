@@ -27,8 +27,8 @@
 package org.anchoranalysis.bean;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -53,7 +53,7 @@ class HelperFindChildren {
             AnchorBean<?> bean, List<Field> listFields, Class<?> match)
             throws BeanMisconfiguredException {
 
-        List<T> out = new ArrayList<>();
+        List<T> out = new LinkedList<>();
 
         try {
             for (Field field : listFields) {

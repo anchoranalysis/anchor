@@ -41,7 +41,7 @@ public class VoxelPartitionHistogram implements VoxelPartition<Histogram> {
 
         combined = histogramFactory.get();
 
-        list = new ArrayList<>();
+        list = new ArrayList<>(numberSlices);
         for (int i = 0; i < numberSlices; i++) {
             list.add(histogramFactory.get());
         }
