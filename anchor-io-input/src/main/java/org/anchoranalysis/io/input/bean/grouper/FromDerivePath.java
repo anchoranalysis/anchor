@@ -25,7 +25,7 @@ public abstract class FromDerivePath extends Grouper {
      */
     @Override
     public Optional<InputGrouper> createInputGrouper(Optional<IndexRangeNegative> groupIndexRange) {
-        return Optional.of(identifier -> deriveGroupKey(identifier));
+        return Optional.of(this::deriveGroupKey);
     }
 
     /**

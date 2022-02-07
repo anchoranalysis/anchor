@@ -37,7 +37,13 @@ public class ExtractPathElementRange {
     public static Path extract(Path path, IndexRangeNegative range) throws DerivePathException {
         try {
             List<Path> elementsSubrange = range.extract(path.getNameCount(), path::getName);
-            return getFile(elementsSubrange).toPath();
+            if (!elementsSubrange.isEmpty()) {
+                return getFile(elementsSubrange).toPath();
+            } else {
+                throw new DerivePathException(
+                        String.format(
+                                "No element exists in the range %s for path %s:", range, path));
+            }
         } catch (OperationFailedException e) {
             throw new DerivePathException(
                     "Cannot extract a subrange of elements from the path: " + path, e);

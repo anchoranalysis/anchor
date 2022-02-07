@@ -39,6 +39,9 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class QuadraticEquationSolver {
 
+    /** A threshold below which, error is considered very small, and converted into 0. */
+    private static final double VERY_SMALL_ERROR = -1e-3;
+
     /** Roots (solution) of a quadratic equation. */
     @AllArgsConstructor
     @Data
@@ -68,7 +71,7 @@ public class QuadraticEquationSolver {
         double common = b * b - 4 * a * c;
 
         // As sometimes we get minor presumably "round-off" error we adjust
-        if (common > -1e-3 && common < 0) {
+        if (common > VERY_SMALL_ERROR && common < 0) {
             common = 0;
         }
 

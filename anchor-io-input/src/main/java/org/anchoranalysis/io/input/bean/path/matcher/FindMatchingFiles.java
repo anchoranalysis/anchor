@@ -39,7 +39,6 @@ import java.util.List;
 import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.io.input.path.matcher.DualPathPredicates;
 import org.anchoranalysis.io.input.path.matcher.FindFilesException;
 
@@ -74,8 +73,7 @@ class FindMatchingFiles {
             Path directory,
             DualPathPredicates predicates,
             boolean recursive,
-            Optional<Integer> maxDirectoryDepth,
-            Optional<Logger> logger)
+            Optional<Integer> maxDirectoryDepth)
             throws FindFilesException {
 
         List<File> out = new LinkedList<>();
