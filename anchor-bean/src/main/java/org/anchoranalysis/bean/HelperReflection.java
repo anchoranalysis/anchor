@@ -31,8 +31,8 @@ import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -53,7 +53,7 @@ class HelperReflection {
      * @return all fields in the class
      */
     public static List<Field> findAllFields(Class<?> classWithFields) {
-        List<Field> out = new ArrayList<>();
+        List<Field> out = new LinkedList<>();
 
         Class<?> current = classWithFields;
         do {

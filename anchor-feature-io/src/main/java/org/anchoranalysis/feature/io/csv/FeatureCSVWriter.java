@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.feature.io.csv;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.core.value.TypedValue;
@@ -143,7 +143,7 @@ public class FeatureCSVWriter {
      */
     private List<TypedValue> buildCSVRow(RowLabels identifier, ResultsVector resultsFromFeatures) {
 
-        List<TypedValue> csvRow = new ArrayList<>();
+        List<TypedValue> csvRow = new LinkedList<>();
         identifier.addToRow(csvRow);
         resultsFromFeatures.addTypedValuesTo(csvRow, numberDecimalPlaces);
         return csvRow;

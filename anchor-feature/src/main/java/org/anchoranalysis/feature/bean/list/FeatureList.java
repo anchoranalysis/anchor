@@ -66,6 +66,15 @@ public class FeatureList<T extends FeatureInput> extends AnchorBean<FeatureList<
     public FeatureList() {
         this(new ArrayList<>());
     }
+    
+    /** 
+     * Creates with an empty list of particular capacity.
+     * 
+     * @param capacity initial capacity of the created empty list.
+     */
+    public FeatureList(int capacity) {
+        this(new ArrayList<>(capacity));
+    }
 
     /**
      * Creates with a single {@link Feature}.
@@ -123,7 +132,7 @@ public class FeatureList<T extends FeatureInput> extends AnchorBean<FeatureList<
      */
     public <S extends FeatureInput, E extends Exception> FeatureList<S> map(
             CheckedFunction<Feature<T>, Feature<S>, E> mapFunc) throws E {
-        FeatureList<S> out = new FeatureList<>();
+        FeatureList<S> out = new FeatureList<>(list.size());
         for (Feature<T> feature : list) {
             out.add(mapFunc.apply(feature));
         }

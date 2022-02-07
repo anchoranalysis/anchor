@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.feature.session.cache.finder;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import org.anchoranalysis.feature.calculate.cache.ChildCacheName;
@@ -47,7 +47,7 @@ public class CacheTransferSourceCollection
     private Set<ChildCacheName> allCacheNames = new HashSet<>();
 
     /** All the sources that are searched for child-caches. */
-    private List<CacheTransferSource<? extends FeatureInput>> list = new ArrayList<>();
+    private List<CacheTransferSource<? extends FeatureInput>> list = new LinkedList<>();
 
     /**
      * Adds a source.

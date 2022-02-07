@@ -26,8 +26,8 @@
 
 package org.anchoranalysis.experiment.task.processor;
 
-import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -43,7 +43,7 @@ public class ConcurrentJobMonitor implements Iterable<SubmittedJob> {
     // END REQUIRED FIELDS
 
     // All submitted tasks
-    private List<SubmittedJob> list = new ArrayList<>();
+    private List<SubmittedJob> list = new LinkedList<>();
 
     public synchronized boolean add(SubmittedJob e) {
         return list.add(e);

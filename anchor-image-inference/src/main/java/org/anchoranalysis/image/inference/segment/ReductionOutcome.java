@@ -97,7 +97,7 @@ public class ReductionOutcome<T> {
      * @return a newly created list, containing retained elements, and newly-added elements.
      */
     public List<T> listAfter(List<T> input) {
-        List<T> out = new ArrayList<>();
+        List<T> out = new ArrayList<>(indicesRetained.size());
         for (int index : indicesRetained) {
             out.add(input.get(index));
         }

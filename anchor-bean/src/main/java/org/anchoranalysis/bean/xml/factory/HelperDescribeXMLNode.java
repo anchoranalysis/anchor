@@ -26,8 +26,8 @@
 
 package org.anchoranalysis.bean.xml.factory;
 
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -130,7 +130,7 @@ class HelperDescribeXmlNode {
      */
     public static String describeXMLNode(ConfigurationNode node) {
         // We recurse back to the top, putting each item at the front of a linked list
-        List<ConfigurationNode> listNames = new ArrayList<>();
+        List<ConfigurationNode> listNames = new LinkedList<>();
 
         ConfigurationNode nodeCurrent = node;
         while (nodeCurrent != null) {

@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.bean.define.adder;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
@@ -38,7 +38,7 @@ import org.anchoranalysis.bean.define.DefineAddException;
 public class Concatenate extends DefineAdderBean {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private List<DefineAdderBean> list = new ArrayList<>();
+    @BeanField @Getter @Setter private List<DefineAdderBean> list = new LinkedList<>();
     // END BEAN PROPERTIES
 
     @Override

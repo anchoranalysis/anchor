@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.image.core.points;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
@@ -119,7 +119,7 @@ public class PointsFromObject {
      * @return a newly created list.
      */
     public static List<Point2i> listFromAllOutlines2i(ObjectCollection objects) {
-        List<Point2i> points = new ArrayList<>();
+        List<Point2i> points = new LinkedList<>();
 
         for (ObjectMask object : objects) {
             consumeContourPoints(object, points::add);

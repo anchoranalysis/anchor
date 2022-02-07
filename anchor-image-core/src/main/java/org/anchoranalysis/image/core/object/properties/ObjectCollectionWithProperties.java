@@ -47,9 +47,13 @@ public class ObjectCollectionWithProperties implements Iterable<ObjectWithProper
 
     private final List<ObjectWithProperties> delegate;
 
-    /** Create with zero objects. */
-    public ObjectCollectionWithProperties() {
-        delegate = new ArrayList<>();
+    /** 
+     * Create with zero objects.
+     * 
+     * @param capacity the capacity of the internally created list.
+     */
+    public ObjectCollectionWithProperties(int capacity) {
+        delegate = new ArrayList<>(capacity);
     }
 
     /**
