@@ -77,7 +77,7 @@ public class ImageInitialization implements BeanInitialization {
     @Getter private final SharedObjects sharedObjects;
 
     /** A suggested input on how to resize an image, if one is provided. */
-    @Getter private final Optional<ImageSizeSuggestion> suggestedResize;
+    @Getter private final Optional<ImageSizeSuggestion> suggestedSize;
 
     // START: Initialization
     /** The associated initialization for a {@link FeatureRelatedBean}. */
@@ -119,12 +119,12 @@ public class ImageInitialization implements BeanInitialization {
      *
      * @param sharedObjects objects shared between different components, a form of shared memory
      *     between them.
-     * @param suggestedResize a suggested input on how to resize an image, if one is provided.
+     * @param suggestedSize a suggested input on how to resize an image, if one is provided.
      */
     public ImageInitialization(
-            SharedObjects sharedObjects, Optional<ImageSizeSuggestion> suggestedResize) {
+            SharedObjects sharedObjects, Optional<ImageSizeSuggestion> suggestedSize) {
         this.sharedObjects = sharedObjects;
-        this.suggestedResize = suggestedResize;
+        this.suggestedSize = suggestedSize;
         this.features = FeatureRelatedInitialization.create(sharedObjects);
 
         stacks = sharedObjects.getOrCreate(Stack.class);

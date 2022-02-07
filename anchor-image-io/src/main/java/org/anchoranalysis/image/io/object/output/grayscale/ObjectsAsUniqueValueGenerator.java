@@ -36,7 +36,7 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /**
- * Writes objects as a Raster with unique id values for each object.
+ * Writes objects as an image with an incrementing unique integer id value for each object.
  *
  * <p>Note that a maximum of 254 objects are allowed to be written on a channel in this way (for a
  * 8-bit image)
@@ -47,6 +47,11 @@ public class ObjectsAsUniqueValueGenerator extends ObjectsAsGrayscaleGenerator {
 
     private static ChannelFactoryUnsignedByte factory = new ChannelFactoryUnsignedByte();
 
+    /**
+     * Create with a particular dimensions.
+     *
+     * @param dimensions the size and resolution of the image that will be created.
+     */
     public ObjectsAsUniqueValueGenerator(Dimensions dimensions) {
         super(dimensions);
     }

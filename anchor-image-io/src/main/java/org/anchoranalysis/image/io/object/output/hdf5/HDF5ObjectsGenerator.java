@@ -33,8 +33,8 @@ import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.io.object.HDF5PathHelper;
-import org.anchoranalysis.image.voxel.object.ObjectMask;	// NOSONAR
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
+import org.anchoranalysis.image.voxel.object.ObjectMask; // NOSONAR
 import org.anchoranalysis.io.generator.OneStageGenerator;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 
@@ -81,10 +81,7 @@ public class HDF5ObjectsGenerator extends OneStageGenerator<ObjectCollection> {
 
                 ObjectMaskHDF5Writer writerHDF5 =
                         new ObjectMaskHDF5Writer(
-                                objects.get(i),
-                                pathForObject(i),
-                                writer,
-                                compressed);
+                                objects.get(i), pathForObject(i), writer, compressed);
                 writerHDF5.apply();
             }
 
@@ -93,11 +90,14 @@ public class HDF5ObjectsGenerator extends OneStageGenerator<ObjectCollection> {
         }
     }
 
-    /** Adds an attribute with the total number of objects, so it can be quickly queried from the HDF5 without parsing all the datasets. */
+    /**
+     * Adds an attribute with the total number of objects, so it can be quickly queried from the
+     * HDF5 without parsing all the datasets.
+     */
     private static void addObjectsSizeAttribute(IHDF5Writer writer, ObjectCollection objects) {
         writer.uint32().setAttr("/", NUMBER_OBJECTS_ATTRIBUTE_NAME, objects.size());
     }
-    
+
     /** The path in the HDF5 file for a particular object. */
     private static String pathForObject(int index) {
         return String.format("%s/%08d", HDF5PathHelper.OBJECTS_ROOT_WITH_SEPERATORS, index);

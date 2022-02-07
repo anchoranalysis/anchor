@@ -32,10 +32,17 @@ import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.input.bean.InputManager;
 
+/**
+ * Extends an {@link InputManager} to add a {@link StackReader} bean property.
+ *
+ * @author Owen Feehan
+ * @param <T> input-type
+ */
 public abstract class InputManagerWithStackReader<T extends InputFromManager>
         extends InputManager<T> {
 
     // START BEAN PROPERTIES
+    /** How to read an image from the file-system. */
     @BeanField @DefaultInstance @Getter @Setter private StackReader stackReader;
     // END BEAN PROPERTIES
 }

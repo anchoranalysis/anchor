@@ -24,14 +24,14 @@
  * #L%
  */
 
-package org.anchoranalysis.image.io.channel.input.series;
+package org.anchoranalysis.image.io.channel.map;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
 import org.anchoranalysis.core.identifier.provider.store.StoreSupplier;
@@ -43,17 +43,40 @@ import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.core.stack.named.NamedStacks;
 import org.anchoranalysis.image.io.ImageIOException;
-import org.anchoranalysis.image.io.stack.time.TimeSequence;
+import org.anchoranalysis.image.io.stack.time.TimeSeries;
 
-public class NamedChannelsForSeriesConcatenate implements NamedChannelsForSeries {
+/**
+ * Exposes one or more instances of a {@link NamedChannelsMap} as a single aggregated {@link
+ * NamedChannelsMap}.
+ *
+ * <p>The aggregated map contains all the channels from each underlying map.
+ *
+ * <p>If a channel-name is non-unique, it is undefined which channel will be retrieved for this
+ * name.
+ *
+ * <p>{@link Channel}s are added to a {@link Stack} in the order they appear successively in the
+ * {@code list}.
+ *
+ * @author Owen Feehan
+ */
+public class NamedChannelsConcatenate implements NamedChannelsMap {
 
-    private List<NamedChannelsForSeries> list = new ArrayList<>();
+    private final List<NamedChannelsMap> list;
+
+    /**
+     * Create with arguments to concatenate.
+     *
+     * @param maps each {@link NamedChannelsMap} to be concatenated.
+     */
+    public NamedChannelsConcatenate(NamedChannelsMap... maps) {
+        this.list = Arrays.stream(maps).collect(Collectors.toList());
+    }
 
     @Override
     public Channel getChannel(String channelName, int timeIndex, Logger logger)
             throws GetOperationFailedException {
 
-        for (NamedChannelsForSeries item : list) {
+        for (NamedChannelsMap item : list) {
 
             Optional<Channel> channel = item.getChannelOptional(channelName, timeIndex, logger);
             if (channel.isPresent()) {
@@ -69,7 +92,7 @@ public class NamedChannelsForSeriesConcatenate implements NamedChannelsForSeries
     public Optional<Channel> getChannelOptional(String channelName, int timeIndex, Logger logger)
             throws GetOperationFailedException {
 
-        for (NamedChannelsForSeries item : list) {
+        for (NamedChannelsMap item : list) {
 
             Optional<Channel> channel = item.getChannelOptional(channelName, timeIndex, logger);
             if (channel.isPresent()) {
@@ -80,45 +103,45 @@ public class NamedChannelsForSeriesConcatenate implements NamedChannelsForSeries
         return Optional.empty();
     }
 
+    @Override
     public void addAsSeparateChannels(NamedStacks stackCollection, int t, Logger logger)
             throws OperationFailedException {
 
-        for (NamedChannelsForSeries item : list) {
+        for (NamedChannelsMap item : list) {
             item.addAsSeparateChannels(stackCollection, t, logger);
         }
     }
 
+    @Override
     public void addAsSeparateChannels(
-            NamedProviderStore<TimeSequence> stackCollection, int timeIndex, Logger logger)
+            NamedProviderStore<TimeSeries> stackCollection, int timeIndex, Logger logger)
             throws OperationFailedException {
-        for (NamedChannelsForSeries item : list) {
+        for (NamedChannelsMap item : list) {
             item.addAsSeparateChannels(stackCollection, timeIndex, logger);
         }
     }
 
-    public boolean add(NamedChannelsForSeries e) {
-        return list.add(e);
+    @Override
+    public int numberChannels() {
+        return list.stream().mapToInt(NamedChannelsMap::numberChannels).sum();
     }
 
     @Override
-    public int numberChannels() {
-        return list.stream().mapToInt(NamedChannelsForSeries::numberChannels).sum();
-    }
-
     public Set<String> channelNames() {
         HashSet<String> set = new HashSet<>();
-        for (NamedChannelsForSeries item : list) {
+        for (NamedChannelsMap item : list) {
             set.addAll(item.channelNames());
         }
         return set;
     }
 
+    @Override
     public int sizeT(Logger logger) throws ImageIOException {
 
         int series = 0;
         boolean first = true;
 
-        for (NamedChannelsForSeries item : list) {
+        for (NamedChannelsMap item : list) {
             if (first) {
                 series = item.sizeT(logger);
                 first = false;
@@ -131,7 +154,7 @@ public class NamedChannelsForSeriesConcatenate implements NamedChannelsForSeries
 
     @Override
     public boolean hasChannel(String channelName) {
-        for (NamedChannelsForSeries item : list) {
+        for (NamedChannelsMap item : list) {
             if (item.channelNames().contains(channelName)) {
                 return true;
             }
@@ -139,13 +162,10 @@ public class NamedChannelsForSeriesConcatenate implements NamedChannelsForSeries
         return false;
     }
 
+    @Override
     public Dimensions dimensions(Logger logger) throws ImageIOException {
         // Assumes dimensions are the same for every item in the list
         return list.get(0).dimensions(logger);
-    }
-
-    public Iterator<NamedChannelsForSeries> iteratorFromRaster() {
-        return list.iterator();
     }
 
     @Override
@@ -159,9 +179,10 @@ public class NamedChannelsForSeriesConcatenate implements NamedChannelsForSeries
         return false;
     }
 
+    /** Create a {@link Stack} of all {@link Channel}s at {@code timeIndex}. */
     private Stack stackAllChannels(int timeIndex, Logger logger) throws OperationFailedException {
         Stack out = new Stack();
-        for (NamedChannelsForSeries namedChannels : list) {
+        for (NamedChannelsMap namedChannels : list) {
             try {
                 addAllChannelsFrom(namedChannels.allChannelsAsStack(timeIndex, logger).get(), out);
             } catch (IncorrectImageSizeException e) {
@@ -171,6 +192,7 @@ public class NamedChannelsForSeriesConcatenate implements NamedChannelsForSeries
         return out;
     }
 
+    /** Add all {@link Channel}s in {@code source} to {@code destination}. */
     private static void addAllChannelsFrom(Stack source, Stack destination)
             throws IncorrectImageSizeException {
         for (Channel channel : source) {

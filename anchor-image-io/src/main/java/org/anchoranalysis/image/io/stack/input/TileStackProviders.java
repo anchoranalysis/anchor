@@ -30,35 +30,52 @@ import java.util.List;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.bean.provider.stack.Arrange;
+import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.bean.spatial.arrange.overlay.Overlay;
 import org.anchoranalysis.image.bean.spatial.arrange.tile.Tile;
 import org.anchoranalysis.image.io.bean.stack.combine.StackProviderWithLabel;
 import org.anchoranalysis.image.io.bean.stack.combine.TextStyle;
 import org.anchoranalysis.image.io.bean.stack.combine.WriteText;
 
+/**
+ * Tile multiple {@link StackProvider}s into a single {@link StackProvider}.
+ *
+ * @author Owen Feehan
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class TileRasters {
+public class TileStackProviders {
 
-    public static Arrange createStackProvider(
-            List<StackProviderWithLabel> list,
+    /**
+     * Creates a {@link StackProvider} that provides a tiled-representation of {@code providers}.
+     *
+     * @param providers the providers to tile.
+     * @param numberColumns the number of columns in the tiled-version.
+     * @param createShort when true, the voxel-data-type of the created image is <i>unsigned
+     *     short</i>, otherwise <i>unsigned byte</i>.
+     * @param expandLabelZ when true, the label is repeated across all z-slices in the stack. when
+     *     false, it appears on only one z-slice.
+     * @return the newly created {@link StackProvider}.
+     */
+    public static StackProvider tile(
+            List<StackProviderWithLabel> providers,
             int numberColumns,
             boolean createShort,
-            boolean scaleLabel,
             boolean expandLabelZ) {
 
         // Makes everything an unsigned-short and using RGB output
         Arrange arrange = new Arrange(createShort, true);
 
         // Add stack providers
-        for (StackProviderWithLabel provider : list) {
+        for (StackProviderWithLabel provider : providers) {
             arrange.addStack(provider.getStack());
-            arrange.addStack(addGenerateString(provider, createShort, scaleLabel, expandLabelZ));
+            arrange.addStack(addGenerateString(provider, createShort, expandLabelZ));
         }
-        arrange.setArrange(createTile(numberColumns, list.size()));
+        arrange.setArrange(createTile(numberColumns, providers.size()));
 
         return arrange;
     }
 
+    /** Create the {@link Tile} arrangement of images. */
     private static Tile createTile(int numberColumns, int numberProviders) {
         Tile tile = new Tile();
         tile.setNumberColumns(numberColumns);
@@ -67,18 +84,13 @@ public class TileRasters {
         return tile;
     }
 
+    /** Create the {@link WriteText} that adds text to each tile. */
     private static WriteText addGenerateString(
-            StackProviderWithLabel providerWithLabel,
-            boolean createShort,
-            boolean scaleLabel,
-            boolean expandLabelZ) {
+            StackProviderWithLabel providerWithLabel, boolean createShort, boolean expandLabelZ) {
 
         WriteText out = new WriteText(providerWithLabel.getLabel());
         out.setStyle(new TextStyle());
         out.setCreateShort(createShort);
-        if (scaleLabel) {
-            out.setIntensityProvider(providerWithLabel.getStack());
-        }
         if (expandLabelZ) {
             out.setRepeatZProvider(providerWithLabel.getStack());
         }

@@ -37,15 +37,16 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.object.properties.ObjectWithProperties;
 import org.anchoranalysis.image.core.stack.RGBStack;
+import org.anchoranalysis.image.io.object.ExtractMidpoint;
+import org.anchoranalysis.image.voxel.object.ObjectMask; // NOSONAR
 import org.anchoranalysis.overlay.bean.DrawObject;
 import org.anchoranalysis.overlay.writer.ObjectDrawAttributes;
 import org.anchoranalysis.overlay.writer.PrecalculationOverlay;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.Point3i;
-import org.anchoranalysis.spatial.point.PointConverter;
 
 /**
- * Writes a cross at the midpoint of an object
+ * Draws a cross at the midpoint of an {@link ObjectMask}.
  *
  * @author Owen Feehan
  */
@@ -53,23 +54,25 @@ import org.anchoranalysis.spatial.point.PointConverter;
 @AllArgsConstructor
 public class Midpoint extends DrawObject {
 
-    private static final String PROPERTY_MIDPOINT = "midpointInt";
-
-    // START BEAN PROEPRTIES
+    // START BEAN PROPERTIES
+    /**
+     * How long the cross extends on one-side (not considering the center pixel).
+     *
+     * <p>e.g. a value of 2, means the cross has 5 {@code ((2*2)+1)} voxels width and height in
+     * total.
+     *
+     * <p>e.g. a value of 5, means the cross has 21 {@code ((2*10)+1)} voxels width and height in
+     * total.
+     */
     @BeanField @Getter @Setter private int extraLength = 2;
     // END BEAN PROPERTIES
-
-    public static Point3i calculateMidpoint(ObjectWithProperties object, boolean suppressZ) {
-
-        return maybeSuppressZ(calculateMidpoint3D(object), suppressZ);
-    }
 
     @Override
     public PrecalculationOverlay precalculate(ObjectWithProperties object, Dimensions dim)
             throws CreateException {
 
-        // We ignore the z-dimension so it's projectable onto a 2D slice
-        Point3i midPoint = calculateMidpoint(object, true);
+        // We ignore the z-dimension so that it's projectable onto a 2D slice.
+        Point3i midPoint = ExtractMidpoint.midpoint(object, true);
 
         return new PrecalculationOverlay(object) {
 
@@ -81,7 +84,7 @@ public class Midpoint extends DrawObject {
                     BoundingBox restrictTo)
                     throws OperationFailedException {
 
-                writeCross(
+                drawCross(
                         midPoint,
                         attributes.colorFor(object, iteration),
                         background,
@@ -91,19 +94,12 @@ public class Midpoint extends DrawObject {
         };
     }
 
-    public static void writeRelPoint(
-            Point3i point, RGBColor color, RGBStack stack, BoundingBox boxContainer) {
-        if (boxContainer.contains().point(point)) {
-            stack.assignVoxel(Point3i.immutableSubtract(point, boxContainer.cornerMin()), color);
-        }
-    }
-
-    public static void writeCross(
-            Point3i midpoint,
-            RGBColor color,
-            RGBStack stack,
-            int extraLength,
-            BoundingBox boxContainer) {
+    /**
+     * Draws a cross at {@code midpoint} on the {@code box} extracted region {@code stack}, where
+     * the point is expressed in global-coordinates.
+     */
+    private static void drawCross(
+            Point3i midpoint, RGBColor color, RGBStack stack, int extraLength, BoundingBox box) {
 
         if (!stack.dimensions().contains(midpoint)) {
             return;
@@ -114,43 +110,37 @@ public class Midpoint extends DrawObject {
         // X direction
         for (int i = 0; i < extraLength; i++) {
             midpoint.decrementX();
-            writeRelPoint(midpoint, color, stack, boxContainer);
+            drawPoint(midpoint, color, stack, box);
         }
         midpoint.incrementX(extraLength);
 
         for (int i = 0; i < extraLength; i++) {
             midpoint.incrementX();
-            writeRelPoint(midpoint, color, stack, boxContainer);
+            drawPoint(midpoint, color, stack, box);
         }
         midpoint.decrementX(extraLength);
 
         // Y direction
         for (int i = 0; i < extraLength; i++) {
             midpoint.decrementY();
-            writeRelPoint(midpoint, color, stack, boxContainer);
+            drawPoint(midpoint, color, stack, box);
         }
         midpoint.incrementY(extraLength);
 
         for (int i = 0; i < extraLength; i++) {
             midpoint.decrementY();
-            writeRelPoint(midpoint, color, stack, boxContainer);
+            drawPoint(midpoint, color, stack, box);
         }
         midpoint.decrementY(extraLength);
     }
 
-    private static Point3i maybeSuppressZ(Point3i point, boolean suppressZ) {
-        if (suppressZ) {
-            point.setZ(0);
-        }
-        return point;
-    }
-
-    private static Point3i calculateMidpoint3D(ObjectWithProperties object) {
-        if (object.hasProperty(PROPERTY_MIDPOINT)) {
-            return Point3i.immutableAdd(
-                    object.getProperty(PROPERTY_MIDPOINT), object.boundingBox().cornerMin());
-        } else {
-            return PointConverter.intFromDoubleFloor(object.asObjectMask().centerOfGravity());
+    /**
+     * Writes a {@code point} on the {@code box} extracted region {@code stack}, where the point is
+     * expressed in global-coordinates.
+     */
+    private static void drawPoint(Point3i point, RGBColor color, RGBStack stack, BoundingBox box) {
+        if (box.contains().point(point)) {
+            stack.assignVoxel(Point3i.immutableSubtract(point, box.cornerMin()), color);
         }
     }
 }

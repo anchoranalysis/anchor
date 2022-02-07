@@ -33,10 +33,10 @@ import java.util.function.IntFunction;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.annotation.io.assignment.Assignment;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
-import org.anchoranalysis.image.bean.provider.stack.Arrange;
+import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.bean.stack.combine.StackProviderWithLabel;
-import org.anchoranalysis.image.io.stack.input.TileRasters;
+import org.anchoranalysis.image.io.stack.input.TileStackProviders;
 import org.anchoranalysis.image.io.stack.output.StackWriteAttributes;
 import org.anchoranalysis.image.io.stack.output.StackWriteAttributesFactory;
 import org.anchoranalysis.image.io.stack.output.generator.RasterGeneratorSelectFormat;
@@ -79,7 +79,7 @@ public class AssignmentGenerator extends RasterGeneratorSelectFormat<Assignment<
 
         AssignmentColorPool colorPool = colorPoolCreator.apply(element.numberPaired());
 
-        Arrange stackProvider =
+        StackProvider stackProvider =
                 createTiledStackProvider(
                         objectDrawer.createObjectsImage(element, true, colorPool),
                         objectDrawer.createObjectsImage(element, false, colorPool),
@@ -98,13 +98,13 @@ public class AssignmentGenerator extends RasterGeneratorSelectFormat<Assignment<
         return StackWriteAttributesFactory.rgbMaybe3D(false);
     }
 
-    private static Arrange createTiledStackProvider(
+    private static StackProvider createTiledStackProvider(
             Stack stackLeft, Stack stackRight, String nameLeft, String nameRight) {
         List<StackProviderWithLabel> listProvider = new ArrayList<>();
         listProvider.add(new StackProviderWithLabel(stackLeft, nameLeft));
         listProvider.add(new StackProviderWithLabel(stackRight, nameRight));
 
-        return TileRasters.createStackProvider(listProvider, 2, false, false, true);
+        return TileStackProviders.tile(listProvider, 2, false, true);
     }
 
     /** Creates a label with the name (and optionally numeric count) for a particular image. */

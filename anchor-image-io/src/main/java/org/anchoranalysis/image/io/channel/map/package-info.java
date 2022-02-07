@@ -24,7 +24,7 @@
  * #L%
  */
 /**
- * Non-bean classes for reading a <i>series of {@link
- * org.anchoranalysis.image.core.channel.Channel}s</i> from the filesystem.
+ * Non-bean classes for a <i>mapping of names to {@link
+ * org.anchoranalysis.image.core.channel.Channel}s</i>.
  */
-package org.anchoranalysis.image.io.channel.input.series;
+package org.anchoranalysis.image.io.channel.map;

@@ -50,9 +50,9 @@ public class StackGenerator extends RasterGeneratorSelectFormat<Stack> {
     /** Properties of the stack that is being written used to guide the outputting. */
     private StackWriteAttributes writeOptions;
 
-    /** 
+    /**
      * Creates a generator that performs no padding.
-     * 
+     *
      * @param always2D when true, this indicates that the stack is guaranteed to be always 2D.
      */
     public StackGenerator(boolean always2D) {

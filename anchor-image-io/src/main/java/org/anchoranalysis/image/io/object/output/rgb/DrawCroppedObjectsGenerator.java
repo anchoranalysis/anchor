@@ -28,8 +28,6 @@ package org.anchoranalysis.image.io.object.output.rgb;
 
 import com.google.common.base.Functions;
 import io.vavr.control.Either;
-import lombok.Getter;
-import lombok.Setter;
 import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.bean.spatial.Padding;
@@ -47,39 +45,61 @@ import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.box.Extent;
 
 /**
- * Similar to {@link DrawObjectsGenerator}
+ * Similar to {@link DrawObjectsGenerator}, but with the background stack cropped to focus only on
+ * the region containing objects.
  *
- * <p>BUT with the background stack cropped to contain the objects a small margin
+ * <p>Padding is also placed around the objects.
  *
  * @author Owen Feehan
  */
 public class DrawCroppedObjectsGenerator extends ObjectsAsRGBGenerator {
 
-    @Getter @Setter private Padding padding;
+    // START REQUIRED ARGUMENTS
+    /**
+     * How much padding to place at the margin.
+     *
+     * <p>This is a fixed-size space at the margins that is guaranteed to contain no objects.
+     */
+    private final Padding padding;
+    // END REQUIRED ARGUMENTS
 
+    /**
+     * Identifies which region in {@code background} is extracted for the final image.
+     *
+     * <p>null when not yet created.
+     */
     private BoundingBox box;
 
+    /**
+     * Create with a particular background and method for drawing-objects.
+     *
+     * @param drawObject method for drawing an object on an image.
+     * @param background the background image, on which objects are drawn.
+     * @param padding padding used to add a margin around the objects in the cropped area.
+     * @param colors the colors to use for objects, indexed by a particular identifier.
+     */
     public DrawCroppedObjectsGenerator(
-            DrawObject drawObject, DisplayStack background, ColorIndex colorIndex) {
-        super(drawObject, new ObjectDrawAttributes(colorIndex), Either.right(background));
+            DrawObject drawObject, DisplayStack background, Padding padding, ColorIndex colors) {
+        super(drawObject, new ObjectDrawAttributes(colors), Either.right(background));
+        this.padding = padding;
     }
 
     @Override
-    protected RGBStack generateBackground(
-            ObjectCollectionWithProperties element, Either<Dimensions, DisplayStack> background)
+    protected RGBStack generateBackgroundRegion(
+            ObjectCollectionWithProperties objects, Either<Dimensions, DisplayStack> background)
             throws CreateException {
         Extent extent = background.fold(Functions.identity(), DisplayStack::dimensions).extent();
-
-        ObjectCollection objects = element.withoutProperties();
 
         if (objects.isEmpty()) {
             throw new CreateException("This generator expects at least one object to be present");
         }
 
         // Get a bounding box that contains all the objects
-        this.box = ObjectMaskMerger.mergeBoundingBoxes(objects.streamStandardJava());
+        this.box =
+                ObjectMaskMerger.mergeBoundingBoxes(
+                        objects.withoutProperties().streamStandardJava());
 
-        box = growBox(box, extent);
+        box = calculateBoxIncludingPadding(box, extent);
 
         // Extract the relevant piece of background
         return background.fold(
@@ -88,13 +108,14 @@ public class DrawCroppedObjectsGenerator extends ObjectsAsRGBGenerator {
     }
 
     @Override
-    protected ObjectCollectionWithProperties generateMasks(ObjectCollectionWithProperties element)
+    protected ObjectCollectionWithProperties generateMasks(ObjectCollectionWithProperties objects)
             throws CreateException {
         // Create a new set of object-masks, relative to the box position
-        return relativeTo(element.withoutProperties(), box);
+        return relativeTo(objects.withoutProperties(), box);
     }
 
-    private BoundingBox growBox(BoundingBox box, Extent containingExtent) {
+    /** Determine the bounding-box, including padding, to extract from the image. */
+    private BoundingBox calculateBoxIncludingPadding(BoundingBox box, Extent containingExtent) {
         if (padding.hasNoPadding()) {
             return box;
         } else {
@@ -102,15 +123,16 @@ public class DrawCroppedObjectsGenerator extends ObjectsAsRGBGenerator {
         }
     }
 
+    /** Express {@code objects} coordinates, as relative-coordinates to {@code source}. */
     private static ObjectCollectionWithProperties relativeTo(
-            ObjectCollection objects, BoundingBox src) {
+            ObjectCollection objects, BoundingBox source) {
 
         ObjectCollectionWithProperties out = new ObjectCollectionWithProperties();
 
         for (ObjectMask objectMask : objects) {
             BoundingBox boxNew =
                     BoundingBox.createReuse(
-                            objectMask.boundingBox().relativePositionTo(src),
+                            objectMask.boundingBox().relativePositionTo(source),
                             objectMask.boundingBox().extent());
             out.add(
                     new ObjectMask(

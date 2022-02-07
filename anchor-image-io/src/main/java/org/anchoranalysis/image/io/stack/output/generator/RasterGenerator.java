@@ -109,7 +109,8 @@ public abstract class RasterGenerator<T> implements TransformingGenerator<T, Sta
      * @param options options that describe how {@code stack} should be written
      * @param settings general settings for writing output.
      * @param filePath the file-path to write too including the extension.
-     * @throws OutputWriteFailedException if the image could not be be successfully written to the file-system.
+     * @throws OutputWriteFailedException if the image could not be be successfully written to the
+     *     file-system.
      */
     protected abstract void writeToFile(
             T untransformedElement,
@@ -119,7 +120,9 @@ public abstract class RasterGenerator<T> implements TransformingGenerator<T, Sta
             Path filePath)
             throws OutputWriteFailedException;
 
-    /** Writes an untransformed element to the file-system, after transforming it to a {@link Stack}. */
+    /**
+     * Writes an untransformed element to the file-system, after transforming it to a {@link Stack}.
+     */
     private void writeInternal(
             T elementUntransformed,
             Optional<String> filenameWithoutExtension,
@@ -136,41 +139,56 @@ public abstract class RasterGenerator<T> implements TransformingGenerator<T, Sta
 
         StackWriteOptions options =
                 new StackWriteOptions(
-                        writeAttributes(transformedElement),
-                        outputter.getSuggestedFormatToWrite());
-        
-        writeToFilesystem(elementUntransformed, transformedElement, filenameWithoutExtension, options, outputName, outputter);
-     }
-    
-    /** Writes the transformed element (i.e. the image) to the file-system */
-    private void writeToFilesystem(T elementUntransformed, Stack transformedElement, Optional<String> filenameWithoutExtension, StackWriteOptions options, String outputName, ElementOutputter outputter) throws OutputWriteFailedException {
-    	try {
-	        String extension =
-	                selectFileExtension(transformedElement, options, outputter.getSettings(), outputter.logger());
-	
-	        Path pathToWriteTo =
-	                outputter.makeOutputPath(filenameWithoutExtension, extension, outputName);
-	
-	        outputter
-	                .getExecutionTimeRecorder()
-	                .recordExecutionTime(
-	                        String.format("Writing raster to file-system (%s)", outputName),
-	                        () ->
-	                                // First write to the file system, and then write to the
-	                                // operation-recorder.
-	                                writeToFile(
-	                                        elementUntransformed,
-	                                        transformedElement,
-	                                        options,
-	                                        outputter.getSettings(),
-	                                        pathToWriteTo));
-        
-	     } catch (OperationFailedException e) {
-	         throw new OutputWriteFailedException(e);
-	     }
+                        writeAttributes(transformedElement), outputter.getSuggestedFormatToWrite());
 
+        writeToFilesystem(
+                elementUntransformed,
+                transformedElement,
+                filenameWithoutExtension,
+                options,
+                outputName,
+                outputter);
     }
-    
+
+    /** Writes the transformed element (i.e. the image) to the file-system */
+    private void writeToFilesystem(
+            T elementUntransformed,
+            Stack transformedElement,
+            Optional<String> filenameWithoutExtension,
+            StackWriteOptions options,
+            String outputName,
+            ElementOutputter outputter)
+            throws OutputWriteFailedException {
+        try {
+            String extension =
+                    selectFileExtension(
+                            transformedElement,
+                            options,
+                            outputter.getSettings(),
+                            outputter.logger());
+
+            Path pathToWriteTo =
+                    outputter.makeOutputPath(filenameWithoutExtension, extension, outputName);
+
+            outputter
+                    .getExecutionTimeRecorder()
+                    .recordExecutionTime(
+                            String.format("Writing raster to file-system (%s)", outputName),
+                            () ->
+                                    // First write to the file system, and then write to the
+                                    // operation-recorder.
+                                    writeToFile(
+                                            elementUntransformed,
+                                            transformedElement,
+                                            options,
+                                            outputter.getSettings(),
+                                            pathToWriteTo));
+
+        } catch (OperationFailedException e) {
+            throw new OutputWriteFailedException(e);
+        }
+    }
+
     /**
      * Forms write-options to use for this particular stack by combining the general guarantees for
      * the generator with the specific image-attributes of this particular stack.

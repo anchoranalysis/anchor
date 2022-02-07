@@ -33,9 +33,9 @@ import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.stack.ImageMetadata;
 import org.anchoranalysis.image.io.ImageIOException;
-import org.anchoranalysis.image.io.channel.input.series.NamedChannelsForSeries;
+import org.anchoranalysis.image.io.channel.map.NamedChannelsMap;
 import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
-import org.anchoranalysis.image.io.stack.time.TimeSequence;
+import org.anchoranalysis.image.io.stack.time.TimeSeries;
 
 /**
  * Provides a set of channels as an input, with each channel having a name.
@@ -50,7 +50,8 @@ public abstract class NamedChannelsInput implements ProvidesStackInput {
      * Number of series that exist.
      *
      * @return the number of series.
-     * @throws ImageIOException if the information cannot be successfully retrieved from the underlying image.
+     * @throws ImageIOException if the information cannot be successfully retrieved from the
+     *     underlying image.
      */
     public abstract int numberSeries() throws ImageIOException;
 
@@ -60,7 +61,8 @@ public abstract class NamedChannelsInput implements ProvidesStackInput {
      * @param seriesIndex the index of the series.
      * @param logger a logger for any non-fatal errors. Fatal errors throw an exception.
      * @return the corresponding dimensions.
-     * @throws ImageIOException if the information cannot be successfully retrieved from the underlying image.
+     * @throws ImageIOException if the information cannot be successfully retrieved from the
+     *     underlying image.
      */
     public abstract Dimensions dimensions(int seriesIndex, Logger logger) throws ImageIOException;
 
@@ -69,7 +71,8 @@ public abstract class NamedChannelsInput implements ProvidesStackInput {
      *
      * @param logger a logger for any non-fatal errors. Fatal errors throw an exception.
      * @return the number of channels.
-     * @throws ImageIOException if the information cannot be successfully retrieved from the underlying image.
+     * @throws ImageIOException if the information cannot be successfully retrieved from the
+     *     underlying image.
      */
     public abstract int numberChannels(Logger logger) throws ImageIOException;
 
@@ -78,19 +81,21 @@ public abstract class NamedChannelsInput implements ProvidesStackInput {
      *
      * @param logger a logger for any non-fatal errors. Fatal errors throw an exception.
      * @return the bit-depth.
-     * @throws ImageIOException if the information cannot be successfully retrieved from the underlying image.
+     * @throws ImageIOException if the information cannot be successfully retrieved from the
+     *     underlying image.
      */
     public abstract int bitDepth(Logger logger) throws ImageIOException;
 
     /**
-     * Creates a {@link NamedChannelsForSeries} representing the channels for a particular series in this input.
-     * 
+     * Creates a {@link NamedChannelsMap} representing the channels for a particular series in this
+     * input.
+     *
      * @param seriesIndex the index of the series to use (beginning at 0).
      * @param logger the logger where informative or non-fatal error messages amy be written.
-     * @return a newly created {@link NamedChannelsForSeries} bound to {@code seriesIndex}.
+     * @return a newly created {@link NamedChannelsMap} bound to {@code seriesIndex}.
      * @throws ImageIOException if the operation cannot successfully complete.
      */
-    public abstract NamedChannelsForSeries createChannelsForSeries(int seriesIndex, Logger logger)
+    public abstract NamedChannelsMap createChannelsForSeries(int seriesIndex, Logger logger)
             throws ImageIOException;
 
     /**
@@ -105,11 +110,11 @@ public abstract class NamedChannelsInput implements ProvidesStackInput {
 
     @Override
     public void addToStoreInferNames(
-            NamedProviderStore<TimeSequence> stacks, int seriesIndex, Logger logger)
+            NamedProviderStore<TimeSeries> stacks, int seriesIndex, Logger logger)
             throws OperationFailedException {
         // Adds each channel as a separate stack
         try {
-            NamedChannelsForSeries namedChannels = createChannelsForSeries(seriesIndex, logger);
+            NamedChannelsMap namedChannels = createChannelsForSeries(seriesIndex, logger);
             // Apply it only to first time-series frame
             namedChannels.addAsSeparateChannels(stacks, 0, logger);
 
@@ -120,7 +125,7 @@ public abstract class NamedChannelsInput implements ProvidesStackInput {
 
     @Override
     public void addToStoreWithName(
-            String name, NamedProviderStore<TimeSequence> stacks, int seriesIndex, Logger logger)
+            String name, NamedProviderStore<TimeSeries> stacks, int seriesIndex, Logger logger)
             throws OperationFailedException {
 
         // Adds this stack (cached) under the given name
@@ -132,12 +137,13 @@ public abstract class NamedChannelsInput implements ProvidesStackInput {
         return 1;
     }
 
-    private TimeSequence channelsAsTimeSequence(int seriesNum, Logger logger)
+    /** All channels for a particular series, exposed as a {@link TimeSeries}. */
+    private TimeSeries channelsAsTimeSequence(int seriesIndex, Logger logger)
             throws OperationFailedException {
         // Apply it only to first time-series frame
         try {
-            NamedChannelsForSeries namedChannels = createChannelsForSeries(seriesNum, logger);
-            return new TimeSequence(namedChannels.allChannelsAsStack(0, logger).get());
+            NamedChannelsMap namedChannels = createChannelsForSeries(seriesIndex, logger);
+            return new TimeSeries(namedChannels.allChannelsAsStack(0, logger).get());
 
         } catch (ImageIOException e) {
             throw new OperationFailedException(e);

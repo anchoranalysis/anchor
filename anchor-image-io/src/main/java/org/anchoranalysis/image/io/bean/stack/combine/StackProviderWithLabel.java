@@ -34,15 +34,28 @@ import org.anchoranalysis.bean.Provider;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.core.stack.Stack;
 
+/**
+ * Combines a {@code Provider<Stack>} with a label.
+ *
+ * @author Owen Feehan
+ */
 @NoArgsConstructor
 public class StackProviderWithLabel extends NullParametersBean<StackProviderWithLabel> {
 
     // START BEAN PROPERTIES
+    /** Provides the stack. */
     @BeanField @Getter @Setter private Provider<Stack> stack;
 
+    /** The label associated with {@code stack}. */
     @BeanField @Getter @Setter private String label;
     // END BEAN PROPERTIES
 
+    /**
+     * Create for a particular {@link Stack} and label.
+     *
+     * @param stack the stack.
+     * @param label the label.
+     */
     public StackProviderWithLabel(Stack stack, String label) {
         this.stack = () -> stack;
         this.label = label;

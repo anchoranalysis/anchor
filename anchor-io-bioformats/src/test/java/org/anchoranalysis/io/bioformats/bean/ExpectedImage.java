@@ -38,7 +38,7 @@ import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.reader.StackReader;
 import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
-import org.anchoranalysis.image.io.stack.time.TimeSequence;
+import org.anchoranalysis.image.io.stack.time.TimeSeries;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.test.LoggerFixture;
 import org.anchoranalysis.test.TestLoader;
@@ -113,8 +113,8 @@ class ExpectedImage {
         Path path = loader.resolveTestPath(relativePath());
 
         OpenedImageFile openedFile = reader.openFile(path, executionTimeRecorder);
-        TimeSequence timeSequence = openedFile.open(logger);
-        return timeSequence.get(0);
+        TimeSeries timeSequence = openedFile.open(logger);
+        return timeSequence.getFrame(0);
     }
 
     private void assertEqualsPrefix(String message, int expected, int actual) {

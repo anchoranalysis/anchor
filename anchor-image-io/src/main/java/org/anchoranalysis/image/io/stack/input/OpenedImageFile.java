@@ -33,7 +33,7 @@ import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.stack.ImageMetadata;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.ImageIOException;
-import org.anchoranalysis.image.io.stack.time.TimeSequence;
+import org.anchoranalysis.image.io.stack.time.TimeSeries;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 
 /**
@@ -52,20 +52,20 @@ public interface OpenedImageFile extends AutoCloseable {
      * @param seriesIndex the index of the series to open.
      * @param channelDataType the expected data-type of the channels.
      * @param logger the logger.
-     * @return a newly created {@link TimeSequence} of images for the series.
+     * @return a newly created {@link TimeSeries} of images for the series.
      * @throws ImageIOException if an error occurs reading the image during this operation.
      */
-    default TimeSequence openCheckType(
-            int seriesIndex, VoxelDataType channelDataType, Logger logger) throws ImageIOException {
+    default TimeSeries openCheckType(int seriesIndex, VoxelDataType channelDataType, Logger logger)
+            throws ImageIOException {
 
-        TimeSequence sequence = open(seriesIndex, logger);
+        TimeSeries series = open(seriesIndex, logger);
 
-        if (!sequence.allChannelsHaveType(channelDataType)) {
+        if (!series.allChannelsHaveType(channelDataType)) {
             throw new ImageIOException(
                     String.format("File does not have dataType %s", channelDataType));
         }
 
-        return sequence;
+        return series;
     }
 
     /**
@@ -75,7 +75,7 @@ public interface OpenedImageFile extends AutoCloseable {
      * @return a time-sequence of images.
      * @throws ImageIOException if an error occurs reading the image to determine this information.
      */
-    default TimeSequence open(Logger logger) throws ImageIOException {
+    default TimeSeries open(Logger logger) throws ImageIOException {
         return open(0, logger);
     }
 
@@ -87,7 +87,7 @@ public interface OpenedImageFile extends AutoCloseable {
      * @return a time-sequence of images.
      * @throws ImageIOException if an error occurs reading the image during this operation.
      */
-    TimeSequence open(int seriesIndex, Logger logger) throws ImageIOException;
+    TimeSeries open(int seriesIndex, Logger logger) throws ImageIOException;
 
     /**
      * The number of series (distinct sets of images) in the image-file.

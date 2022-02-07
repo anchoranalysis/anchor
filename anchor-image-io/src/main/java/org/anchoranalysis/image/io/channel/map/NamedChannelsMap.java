@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.image.io.channel.input.series;
+package org.anchoranalysis.image.io.channel.map;
 
 import java.util.Optional;
 import java.util.Set;
@@ -39,9 +39,17 @@ import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.core.stack.named.NamedStacks;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.channel.input.ChannelGetter;
-import org.anchoranalysis.image.io.stack.time.TimeSequence;
+import org.anchoranalysis.image.io.stack.time.TimeSeries;
 
-public interface NamedChannelsForSeries extends ChannelGetter {
+/**
+ * A collection of {@link Channel}s, each identified by a unique name and a time-index.
+ *
+ * <p>All contained {@link Channel}s must have the same dimensions, irrespective of name and
+ * time-index.
+ *
+ * @author Owen Feehan
+ */
+public interface NamedChannelsMap extends ChannelGetter {
 
     /**
      * Gets a channel if it exists, returning empty if it doesn't.
@@ -63,19 +71,65 @@ public interface NamedChannelsForSeries extends ChannelGetter {
      */
     int numberChannels();
 
+    /**
+     * All channel-names.
+     *
+     * @return a set view of all channel-names in the map.
+     */
     Set<String> channelNames();
 
+    /**
+     * The number of frames along the time-axis.
+     *
+     * @param logger a logger for any non-fatal errors. Fatal errors throw an exception.
+     * @return the number of time-frames.
+     * @throws ImageIOException if unable to successfully determine the number of frames.
+     */
     int sizeT(Logger logger) throws ImageIOException;
 
+    /**
+     * The dimensions of each {@link Channel}.
+     *
+     * @param logger a logger for any non-fatal errors. Fatal errors throw an exception.
+     * @return the dimensions.
+     * @throws ImageIOException if unable to successfully determine the dimensions.
+     */
     Dimensions dimensions(Logger logger) throws ImageIOException;
 
-    void addAsSeparateChannels(NamedStacks stacks, int timeIndex, Logger logger)
+    /**
+     * Adds each {@link Channel} as a separate {@link Stack} in a {@link NamedStacks}.
+     *
+     * @param destination the {@link NamedStacks} into which each {@link Channel} is copied.
+     * @param timeIndex the index of the time-frame, beginning at zero.
+     * @param logger a logger for any non-fatal errors. Fatal errors throw an exception.
+     * @throws OperationFailedException if unable to add a {@link Channel}.
+     */
+    void addAsSeparateChannels(NamedStacks destination, int timeIndex, Logger logger)
             throws OperationFailedException;
 
+    /**
+     * Adds each {@link Channel} as a separate {@link TimeSeries} in a {@link NamedProviderStore}.
+     *
+     * <p>Although added as a {@link TimeSeries}, each added {@link Stack} will have only a
+     * single-time frame at point 0, representing the channel found at {@code timeIndex}.
+     *
+     * @param destination the {@link NamedStacks} into which each {@link Channel} is copied.
+     * @param timeIndex the index of the time-frame, beginning at zero.
+     * @param logger a logger for any non-fatal errors. Fatal errors throw an exception.
+     * @throws OperationFailedException if unable to add a {@link Channel}.
+     */
     void addAsSeparateChannels(
-            NamedProviderStore<TimeSequence> stacks, int timeIndex, Logger logger)
+            NamedProviderStore<TimeSeries> destination, int timeIndex, Logger logger)
             throws OperationFailedException;
 
+    /**
+     * Combines all channels as a single {@link Stack} at a particular time-frame.
+     *
+     * @param timeIndex the index of the time-frame, beginning at zero.
+     * @param logger a logger for any non-fatal errors. Fatal errors throw an exception.
+     * @return a supplier for a newly created {@link Stack}, containing all {@link Channel}s. The
+     *     order depends on implementation.
+     */
     StoreSupplier<Stack> allChannelsAsStack(int timeIndex, Logger logger);
 
     /**

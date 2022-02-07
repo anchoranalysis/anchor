@@ -29,7 +29,7 @@ package org.anchoranalysis.image.io.object;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-/** 
+/**
  * Paths to identify objects in the HDF5 for object-masks.
  *
  * @author Owen Feehan
@@ -37,9 +37,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class HDF5PathHelper {
 
-    /** Hardcoded string that identifies in the HDF5 file for where the object-collection is stored. */
+    /**
+     * Hardcoded string that identifies in the HDF5 file for where the object-collection is stored.
+     */
     public static final String OBJECTS_ROOT_WITH_SEPERATORS = "/ObjMaskCollection/"; // NOSONAR
-    
+
     /** Attribute for x dimension of the extent. */
     public static final String EXTENT_X = "x";
 

@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.spatial.orientation;
 
-import java.util.function.BiConsumer;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -70,10 +69,5 @@ public class OrientationRotationMatrix extends Orientation {
     @Override
     public int numberDimensions() {
         return rotationMatrix.getNumberDimensions();
-    }
-
-    @Override
-    public void describeOrientation(BiConsumer<String, String> consumer) {
-        // NOTHING TO DO
     }
 }

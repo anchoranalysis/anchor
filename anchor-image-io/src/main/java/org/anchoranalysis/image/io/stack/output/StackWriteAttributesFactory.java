@@ -57,20 +57,34 @@ public class StackWriteAttributesFactory {
             new StackWriteAttributes(true, true, false, StackRGBState.NOT_RGB, true);
 
     /**
-     * Creates a {@link StackWriteAttributes} which depending on a flag will always be 2D.
+     * A {@link StackWriteAttributes} which, depending on a flag, may be guaranteed to be 2D.
      *
      * @param always2D when true, this indicates that the stack is guaranteed to be always 2D.
-     * @return a newly created {@link StackWriteAttributes}
+     * @return a newly created {@link StackWriteAttributes}.
      */
     public static StackWriteAttributes maybeAlways2D(boolean always2D) {
         return new StackWriteAttributes(always2D, false, false, StackRGBState.NOT_RGB, false);
     }
 
+    /**
+     * A {@link StackWriteAttributes} which is <b>always RGB/RGBA</b>, and is <b>not</b> guaranteed
+     * to be 2D.
+     *
+     * @param plusAlpha when true, this indicates RGBA. when false, RGB.
+     * @return a newly created {@link StackWriteAttributes}.
+     */
     public static StackWriteAttributes rgbMaybe3D(boolean plusAlpha) {
         return new StackWriteAttributes(
                 false, false, !plusAlpha, StackRGBState.multiplexAlpha(plusAlpha), false);
     }
 
+    /**
+     * A {@link StackWriteAttributes} which is <b>always a binary-channel</b>, and depending on a
+     * flag, may be guaranteed to be 2D.
+     *
+     * @param always2D when true, this indicates that the stack is guaranteed to be always 2D.
+     * @return a newly created {@link StackWriteAttributes}.
+     */
     public static StackWriteAttributes binaryChannel(boolean always2D) {
         if (always2D) {
             return BINARY_CHANNEL_ALWAYS_2D;
@@ -79,6 +93,13 @@ public class StackWriteAttributesFactory {
         }
     }
 
+    /**
+     * A {@link StackWriteAttributes} which is <b>always a single-channel</b>, and depending on a
+     * flag, may be guaranteed to be 2D.
+     *
+     * @param always2D when true, this indicates that the stack is guaranteed to be always 2D.
+     * @return a newly created {@link StackWriteAttributes}.
+     */
     public static StackWriteAttributes singleChannelMaybe3D(boolean always2D) {
         if (always2D) {
             return SINGLE_CHANNEL_ALWAYS_2D;
@@ -87,11 +108,27 @@ public class StackWriteAttributesFactory {
         }
     }
 
+    /**
+     * A {@link StackWriteAttributes} which depending on a flags, may be RGB/RGBA or not, may be
+     * guaranteed to be 2D or not.
+     *
+     * @param rgb when true, this indicates RGB or RGBA image.
+     * @param always2D when true, this indicates that the stack is guaranteed to be always 2D.
+     * @param plusAlpha when true, this indicates RGBA. when false, RGB. Only relevant when {@code
+     *     rgb==true}.
+     * @return a newly created {@link StackWriteAttributes}.
+     */
     public static StackWriteAttributes maybeRGB(boolean rgb, boolean always2D, boolean plusAlpha) {
         return new StackWriteAttributes(
                 always2D, false, !plusAlpha, StackRGBState.multiplex(rgb, plusAlpha), false);
     }
 
+    /**
+     * A {@link StackWriteAttributes} which depending on a flags, may be RGB or not.
+     *
+     * @param rgb when true, this indicates an RGB image (but never RGBA).
+     * @return a newly created {@link StackWriteAttributes}.
+     */
     public static StackWriteAttributes maybeRGBWithoutAlpha(boolean rgb) {
         if (rgb) {
             return new StackWriteAttributes(
@@ -101,6 +138,14 @@ public class StackWriteAttributesFactory {
         }
     }
 
+    /**
+     * A {@link StackWriteAttributes} which is <b>always RGB</b>, and depending on a flag, may be
+     * guaranteed to be 2D.
+     *
+     * @param always2D when true, this indicates that the stack is guaranteed to be always 2D.
+     * @param plusAlpha when true, this indicates RGBA. when false, RGB.
+     * @return a newly created {@link StackWriteAttributes}.
+     */
     public static StackWriteAttributes rgb(boolean always2D, boolean plusAlpha) {
         if (always2D) {
             return new StackWriteAttributes(
@@ -113,7 +158,7 @@ public class StackWriteAttributesFactory {
     /**
      * The options that narrowly describe a stack as possible.
      *
-     * @param stack the stack to derive options from
+     * @param stack the stack to derive options from.
      * @return options that narrowly describe {@code stack}.
      */
     public static StackWriteAttributes from(Stack stack) {
@@ -156,6 +201,7 @@ public class StackWriteAttributesFactory {
         }
     }
 
+    /** An image that is guaranteed to always have three-channels. */
     private static StackWriteAttributes threeChannels(boolean always2D) {
         return always2D ? THREE_CHANNELS_ALWAYS_2D : THREE_CHANNELS_MAYBE_3D;
     }

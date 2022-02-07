@@ -482,13 +482,13 @@ public class Stack implements Iterable<Channel> {
             return true;
         }
 
-        VoxelDataType channelDataType = null;
+        VoxelDataType dataType = null;
         for (Channel channel : this) {
 
-            if (channelDataType == null) {
-                channelDataType = channel.getVoxelDataType();
+            if (dataType == null) {
+                dataType = channel.getVoxelDataType();
             } else {
-                if (!channel.getVoxelDataType().equals(channelDataType)) {
+                if (!channel.getVoxelDataType().equals(dataType)) {
                     return false;
                 }
             }
@@ -499,13 +499,13 @@ public class Stack implements Iterable<Channel> {
     /**
      * Determines if all channels have a specific data-type.
      *
-     * @param channelDataType the specific data-type.
-     * @return true iff all channels have {@code channelDataType} as their voxel data-type.
+     * @param voxelDataType the specific data-type.
+     * @return true iff all channels have {@code voxelDataType} as their voxel data-type.
      */
-    public boolean allChannelsHaveType(VoxelDataType channelDataType) {
+    public boolean allChannelsHaveType(VoxelDataType voxelDataType) {
 
         for (Channel channel : this) {
-            if (!channel.getVoxelDataType().equals(channelDataType)) {
+            if (!channel.getVoxelDataType().equals(voxelDataType)) {
                 return false;
             }
         }

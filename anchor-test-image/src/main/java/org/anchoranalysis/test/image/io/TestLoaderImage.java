@@ -84,7 +84,7 @@ public class TestLoaderImage {
 
         try (OpenedImageFile openedFile =
                 stackReader.openFile(filePath, ExecutionTimeRecorderIgnore.instance())) {
-            return openedFile.open(logger).get(0);
+            return openedFile.open(logger).getFrame(0);
         } catch (ImageIOException e) {
             throw new TestDataLoadException(e);
         }

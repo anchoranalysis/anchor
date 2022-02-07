@@ -62,6 +62,7 @@ import org.anchoranalysis.io.output.outputter.InputOutputContext;
  */
 public class OutputFeatureTable extends ImageBean<OutputFeatureTable> {
 
+    /** The output-name for a CSV table of feature-values. */
     public static final String OUTPUT_FEATURE_TABLE = "features";
 
     // START BEAN PROPERTIES

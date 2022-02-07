@@ -51,13 +51,11 @@ import org.anchoranalysis.spatial.box.BoundingBox;
 public class BoundingBoxOutline extends DrawObject {
 
     // START BEAN PROPERTIES
-	/** How many voxels are used for the outline of the bounding-box. */
+    /** How many voxels are used for the outline of the bounding-box. */
     @BeanField @Getter @Setter private int outlineWidth;
     // END BEAN PROPERTIES
 
-    /**
-     * Creates with an outline-width of 1 voxel.
-     */
+    /** Creates with an outline-width of 1 voxel. */
     public BoundingBoxOutline() {
         this(1);
     }

@@ -29,10 +29,7 @@ package org.anchoranalysis.image.io.object.input;
 import java.nio.file.Path;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.cache.CachedSupplier;
-import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.format.NonImageFileFormat;
-import org.anchoranalysis.core.functional.checked.CheckedSupplier;
 import org.anchoranalysis.core.serialize.DeserializationFailedException;
 import org.anchoranalysis.core.serialize.Deserializer;
 import org.anchoranalysis.core.time.OperationContext;
@@ -96,22 +93,17 @@ public class ObjectCollectionReader {
         }
     }
 
-    public static CheckedSupplier<ObjectCollection, OperationFailedException> createFromPathCached(
-            CheckedSupplier<Path, OperationFailedException> path, OperationContext context) {
-        return CachedSupplier.cacheChecked(
-                () -> {
-                    try {
-                        return createFromPath(path.get(), context);
-                    } catch (DeserializationFailedException e) {
-                        throw new OperationFailedException(e);
-                    }
-                });
-    }
-
+    /**
+     * Whether a path has a suitable extension to be considered a HDF5 file?
+     *
+     * @param path the path whose extension is checked.
+     * @return true if the path ends with an extension that is considered HDF5.
+     */
     public static boolean hasHdf5Extension(Path path) {
         return NonImageFileFormat.HDF5.matches(path);
     }
 
+    /** Adds a HDF5 extension to {@code path}. */
     private static Path addHdf5Extension(Path path) {
         return path.resolveSibling(
                 path.getFileName() + NonImageFileFormat.HDF5.extensionWithPeriod());

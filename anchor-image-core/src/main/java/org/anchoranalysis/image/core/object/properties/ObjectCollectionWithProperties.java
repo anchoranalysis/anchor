@@ -130,11 +130,21 @@ public class ObjectCollectionWithProperties implements Iterable<ObjectWithProper
     }
 
     /**
-     * Number of elements in the collection.
+     * Number of objects in the collection.
      *
      * @return the size of the collection.
      */
     public int size() {
         return delegate.size();
+    }
+
+    /**
+     * Whether the number of objects is zero.
+     *
+     * @return true when no objects are contained in the collection, false if at least one object
+     *     exists.
+     */
+    public boolean isEmpty() {
+        return delegate.isEmpty();
     }
 }

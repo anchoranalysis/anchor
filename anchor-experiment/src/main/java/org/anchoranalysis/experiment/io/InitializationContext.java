@@ -46,7 +46,7 @@ public class InitializationContext {
     @Getter private final InputOutputContext inputOutput;
 
     /** A suggested input on how to resize an image, if one is provided. */
-    @Getter private final Optional<ImageSizeSuggestion> suggestedResize;
+    @Getter private final Optional<ImageSizeSuggestion> suggestedSize;
 
     public InitializationContext(InputOutputContext inputOutput) {
         this(inputOutput, Optional.empty());

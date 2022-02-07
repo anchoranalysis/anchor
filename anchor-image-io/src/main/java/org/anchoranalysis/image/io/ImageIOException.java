@@ -30,43 +30,38 @@ import org.anchoranalysis.core.exception.friendly.AnchorFriendlyCheckedException
 
 /**
  * When an error occurs reading or writing an image to/from the file-system.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class ImageIOException extends AnchorFriendlyCheckedException {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+    /** */
+    private static final long serialVersionUID = 1L;
 
-
-	/**
-	 * Create with a cause only.
-	 * 
-	 * @param cause the cause
-	 */
+    /**
+     * Create with a cause only.
+     *
+     * @param cause the cause
+     */
     public ImageIOException(Throwable cause) {
         super(cause);
     }
 
-	/**
-	 * Create with a message only.
-	 * 
-	 * @param message the message.
-	 */
+    /**
+     * Create with a message only.
+     *
+     * @param message the message.
+     */
     public ImageIOException(String message) {
         super(message);
     }
 
-    
-	/**
-	 * Create with a message and cause.
-	 * 
-	 * @param message the message.
-	 * @param cause the cause.
-	 */
+    /**
+     * Create with a message and cause.
+     *
+     * @param message the message.
+     * @param cause the cause.
+     */
     public ImageIOException(String message, Throwable cause) {
         super(message, cause);
     }

@@ -64,7 +64,7 @@ public abstract class StackReader extends AnchorBean<StackReader> {
             return context.getExecutionTimeRecorder()
                     .recordExecutionTime(
                             "Opening stack for reading",
-                            () -> openedFile.open(context.getLogger()).get(0));
+                            () -> openedFile.open(context.getLogger()).getFrame(0));
         } finally {
             openedFile.close();
         }

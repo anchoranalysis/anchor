@@ -38,8 +38,8 @@ import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
-import org.anchoranalysis.image.io.stack.time.TimeSequence;
-import org.anchoranalysis.image.io.stack.time.WrapStackAsTimeSequenceStore;
+import org.anchoranalysis.image.io.stack.time.ExtractFrameStore;
+import org.anchoranalysis.image.io.stack.time.TimeSeries;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.math.histogram.Histogram;
 import org.anchoranalysis.mpp.init.MarksInitialization;
@@ -84,14 +84,14 @@ public class MultiInput implements ProvidesStackInput, ExportSharedObjects {
 
     @Override
     public void addToStoreInferNames(
-            NamedProviderStore<TimeSequence> stacks, int seriesIndex, Logger logger)
+            NamedProviderStore<TimeSeries> stacks, int seriesIndex, Logger logger)
             throws OperationFailedException {
         stack.addToStore(stacks, seriesIndex, logger);
     }
 
     @Override
     public void addToStoreWithName(
-            String name, NamedProviderStore<TimeSequence> stacks, int seriesIndex, Logger logger)
+            String name, NamedProviderStore<TimeSeries> stacks, int seriesIndex, Logger logger)
             throws OperationFailedException {
         throw new OperationFailedException("Not supported");
     }
@@ -101,7 +101,7 @@ public class MultiInput implements ProvidesStackInput, ExportSharedObjects {
 
         ImageInitialization image = new ImageInitialization(target);
 
-        stack().addToStore(new WrapStackAsTimeSequenceStore(image.stacks()), logger);
+        stack().addToStore(new ExtractFrameStore(image.stacks()), logger);
         objects().addToStore(image.objects(), logger);
         dictionary().addToStore(image.dictionaries(), logger);
         filePath().addToStore(image.filePaths(), logger);
@@ -154,7 +154,7 @@ public class MultiInput implements ProvidesStackInput, ExportSharedObjects {
         return mapFilePath;
     }
 
-    public MultiInputSubMap<TimeSequence> stack() {
+    public MultiInputSubMap<TimeSeries> stack() {
         return stack;
     }
 

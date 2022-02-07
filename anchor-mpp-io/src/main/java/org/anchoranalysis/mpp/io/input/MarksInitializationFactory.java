@@ -51,7 +51,7 @@ public class MarksInitializationFactory {
 
         SharedObjects sharedObjects = new SharedObjects(context.common());
         ImageInitialization image =
-                new ImageInitialization(sharedObjects, context.getSuggestedResize());
+                new ImageInitialization(sharedObjects, context.getSuggestedSize());
 
         if (input.isPresent()) {
             try {

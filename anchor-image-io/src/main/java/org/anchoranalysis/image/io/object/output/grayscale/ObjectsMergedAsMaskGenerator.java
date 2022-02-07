@@ -42,6 +42,12 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
  */
 public class ObjectsMergedAsMaskGenerator extends ObjectsAsGrayscaleGenerator {
 
+    /**
+     * Create with particular size for the mask image.
+     *
+     * @param dimensions the {@link Dimensions} of the image in which the mask should be created
+     *     (sufficiently large to contain any possible merged objects).
+     */
     public ObjectsMergedAsMaskGenerator(Dimensions dimensions) {
         super(dimensions);
     }

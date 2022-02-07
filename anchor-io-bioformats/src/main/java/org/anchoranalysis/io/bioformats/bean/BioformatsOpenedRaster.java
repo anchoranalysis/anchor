@@ -32,6 +32,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
+import java.util.stream.Stream;
 import loci.formats.FormatException;
 import loci.formats.IFormatReader;
 import loci.formats.meta.IMetadata;
@@ -39,6 +41,7 @@ import lombok.experimental.Accessors;
 import org.anchoranalysis.core.cache.CachedSupplier;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
+import org.anchoranalysis.core.functional.FunctionalIterate;
 import org.anchoranalysis.core.functional.checked.CheckedSupplier;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.core.channel.Channel;
@@ -51,7 +54,7 @@ import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.stack.CalculateOrientationChange;
 import org.anchoranalysis.image.io.stack.input.ImageTimestampsAttributes;
 import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
-import org.anchoranalysis.image.io.stack.time.TimeSequence;
+import org.anchoranalysis.image.io.stack.time.TimeSeries;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.io.bioformats.DimensionsCreator;
 import org.anchoranalysis.io.bioformats.bean.options.ReadOptions;
@@ -61,6 +64,7 @@ import org.anchoranalysis.io.bioformats.copyconvert.CopyConvert;
 import org.anchoranalysis.io.bioformats.copyconvert.ImageFileShape;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.commons.math3.util.Pair;
 
 /**
  * An image-file that has been opened with the Bioformats library.
@@ -125,7 +129,7 @@ class BioformatsOpenedRaster implements OpenedImageFile {
     }
 
     @Override
-    public TimeSequence open(int seriesIndex, Logger logger) throws ImageIOException {
+    public TimeSeries open(int seriesIndex, Logger logger) throws ImageIOException {
 
         int pixelType = reader.getPixelType();
 
@@ -170,7 +174,7 @@ class BioformatsOpenedRaster implements OpenedImageFile {
 
     @Override
     public Dimensions dimensionsForSeries(int seriesIndex, Logger logger) throws ImageIOException {
-        Dimensions dimensions = dimensionsForSeriesWithoutOrientationChange(seriesIndex);
+        Dimensions dimensions = dimensionsWithoutOrientationChange(seriesIndex);
         return calculateOrientation(logger).dimensions(dimensions);
     }
 
@@ -184,8 +188,7 @@ class BioformatsOpenedRaster implements OpenedImageFile {
         return channelNames;
     }
 
-    private Dimensions dimensionsForSeriesWithoutOrientationChange(int seriesIndex)
-            throws ImageIOException {
+    private Dimensions dimensionsWithoutOrientationChange(int seriesIndex) throws ImageIOException {
         try {
             return new DimensionsCreator(metadata).apply(reader, readOptions, seriesIndex);
         } catch (CreateException e) {
@@ -194,7 +197,7 @@ class BioformatsOpenedRaster implements OpenedImageFile {
     }
 
     /** Opens as a specific data-type. */
-    private TimeSequence openAsType(int seriesIndex, VoxelDataType dataType, Logger logger)
+    private TimeSeries openAsType(int seriesIndex, VoxelDataType dataType, Logger logger)
             throws ImageIOException {
 
         try {
@@ -204,23 +207,21 @@ class BioformatsOpenedRaster implements OpenedImageFile {
 
             reader.setSeries(seriesIndex);
 
-            TimeSequence timeSequence = new TimeSequence();
-
-            Dimensions dimensions = dimensionsForSeriesWithoutOrientationChange(seriesIndex);
+            Dimensions dimensions = dimensionsWithoutOrientationChange(seriesIndex);
 
             // Assumes order of time first, and then channels
-            List<Channel> listAllChannels =
+            Pair<List<Channel>, TimeSeries> pair =
                     createUninitialisedChannels(
-                            dimensions, timeSequence, multiplexVoxelDataType(dataType), logger);
+                            dimensions, multiplexVoxelDataType(dataType), logger);
 
-            copyBytesIntoChannels(listAllChannels, dimensions, dataType, readOptions, logger);
+            copyBytesIntoChannels(pair.getFirst(), dimensions, dataType, readOptions, logger);
 
             LOG.debug(
                     String.format(
                             "Finished opening series %d as %s with z=%d, t=%d",
                             seriesIndex, dataType, reader.getSizeZ(), reader.getSizeT()));
 
-            return timeSequence;
+            return pair.getSecond();
 
         } catch (ImageIOException e) {
             throw new ImageIOException(
@@ -228,35 +229,42 @@ class BioformatsOpenedRaster implements OpenedImageFile {
         }
     }
 
-    private List<Channel> createUninitialisedChannels(
-            Dimensions dimensions,
-            TimeSequence timeSequence,
-            ChannelFactorySingleType factory,
-            Logger logger)
+    private Pair<List<Channel>, TimeSeries> createUninitialisedChannels(
+            Dimensions dimensions, ChannelFactorySingleType factory, Logger logger)
             throws ImageIOException {
 
         try {
-            dimensions = calculateOrientation(logger).dimensions(dimensions);
+            Dimensions dimensionsToUse = calculateOrientation(logger).dimensions(dimensions);
 
             /** A list of all channels i.e. aggregating the channels associated with each stack */
-            List<Channel> listAllChannels = new ArrayList<>();
+            List<Channel> listAllChannels = new ArrayList<>(sizeT * numberChannels);
 
-            for (int t = 0; t < sizeT; t++) {
-                Stack stack = new Stack(isRGB());
-                for (int c = 0; c < numberChannels; c++) {
+            Stream<Stack> stacks =
+                    FunctionalIterate.repeatAsStream(
+                            sizeT,
+                            IncorrectImageSizeException.class,
+                            () -> createEmptyStack(factory, dimensionsToUse, listAllChannels::add));
 
-                    Channel channel = factory.createEmptyUninitialised(dimensions);
-
-                    stack.addChannel(channel);
-                    listAllChannels.add(channel);
-                }
-                timeSequence.add(stack);
-            }
-
-            return listAllChannels;
+            return new Pair<>(listAllChannels, new TimeSeries(stacks));
         } catch (IncorrectImageSizeException e) {
             throw new AnchorImpossibleSituationException();
         }
+    }
+
+    private Stack createEmptyStack(
+            ChannelFactorySingleType factory,
+            Dimensions dimensions,
+            Consumer<Channel> consumeChannel)
+            throws IncorrectImageSizeException {
+        Stack stack = new Stack(isRGB());
+        for (int c = 0; c < numberChannels; c++) {
+
+            Channel channel = factory.createEmptyUninitialised(dimensions);
+
+            stack.addChannel(channel);
+            consumeChannel.accept(channel);
+        }
+        return stack;
     }
 
     private void copyBytesIntoChannels(

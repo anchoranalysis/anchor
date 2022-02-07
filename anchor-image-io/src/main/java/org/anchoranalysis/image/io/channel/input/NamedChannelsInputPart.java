@@ -26,23 +26,9 @@
 
 package org.anchoranalysis.image.io.channel.input;
 
-import java.io.File;
-import java.nio.file.Path;
-import java.util.List;
-import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.image.io.ImageIOException;
-
 /**
  * One part of a {@link NamedChannelsInput} that can be combined with others.
  *
  * @author Owen Feehan
  */
-public abstract class NamedChannelsInputPart extends NamedChannelsInput {
-
-    public abstract boolean hasChannel(String channelName, Logger logger) throws ImageIOException;
-
-    public abstract List<Path> pathForBindingForAllChannels() throws OperationFailedException;
-
-    public abstract File getFile();
-}
+public abstract class NamedChannelsInputPart extends NamedChannelsInput {}

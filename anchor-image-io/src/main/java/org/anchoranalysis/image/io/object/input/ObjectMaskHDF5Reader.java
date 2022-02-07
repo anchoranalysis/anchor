@@ -31,7 +31,6 @@ import ch.systemsx.cisd.hdf5.IHDF5IntReader;
 import ch.systemsx.cisd.hdf5.IHDF5Reader;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-
 import org.anchoranalysis.image.io.object.HDF5PathHelper;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
@@ -49,13 +48,13 @@ import org.anchoranalysis.spatial.point.Point3i;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class ObjectMaskHDF5Reader {
 
-	/**
-	 * Reads an {@link ObjectMask} stored in a opened HDF5 file at a particular path.
-	 * 
-	 * @param reader a reader for the opened HDF5 file containing the {@link ObjectMask}.
-	 * @param datasetPath the path in the HDF5 file where the object-mask is stored.
-	 * @return a newly created {@link ObjectMask}, containing newly allocated voxel-buffers.
-	 */
+    /**
+     * Reads an {@link ObjectMask} stored in a opened HDF5 file at a particular path.
+     *
+     * @param reader a reader for the opened HDF5 file containing the {@link ObjectMask}.
+     * @param datasetPath the path in the HDF5 file where the object-mask is stored.
+     * @return a newly created {@link ObjectMask}, containing newly allocated voxel-buffers.
+     */
     public static ObjectMask readObject(IHDF5Reader reader, String datasetPath) {
 
         Voxels<UnsignedByteBuffer> voxels = createVoxels(reader.uint8().readMDArray(datasetPath));
@@ -68,11 +67,12 @@ class ObjectMaskHDF5Reader {
 
     /**
      * This approach is a bit efficient as we end up making two memory allocations.
-     * 
+     *
      * <p>The first allocation occurs in the JHDF5 library; the second for the {@link Voxels}.
      *
-     * <p>Our {@ObjectMask} implementations currently uses a memory model of a byte-array per slice. There doesn't
-     * seem to be a convenient way to get the same structure back from the {@link MDByteArray}.
+     * <p>Our {@ObjectMask} implementations currently uses a memory model of a byte-array per slice.
+     * There doesn't seem to be a convenient way to get the same structure back from the {@link
+     * MDByteArray}.
      *
      * <p>So this is the easiest approach for implementation.
      *
@@ -104,7 +104,6 @@ class ObjectMaskHDF5Reader {
                 extractIntAttr(reader, path, HDF5PathHelper.EXTENT_Y),
                 extractIntAttr(reader, path, HDF5PathHelper.EXTENT_Z));
     }
-    
 
     private static int extractIntAttr(IHDF5IntReader reader, String path, String attr) {
         return reader.getAttr(path, attr);

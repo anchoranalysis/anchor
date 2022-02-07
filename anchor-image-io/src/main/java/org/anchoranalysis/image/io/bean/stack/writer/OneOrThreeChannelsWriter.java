@@ -37,8 +37,9 @@ import org.anchoranalysis.image.io.stack.output.StackRGBState;
 import org.anchoranalysis.image.io.stack.output.StackWriteOptions;
 
 /**
- * A base-class for a {@link StackWriter} that writes an image that has either one or three channels.
- * 
+ * A base-class for a {@link StackWriter} that writes an image that has either one or three
+ * channels.
+ *
  * <p>The {@link StackWriter} must also support a flexible extension, which the user can specify.
  *
  * @author Owen Feehan
@@ -46,7 +47,7 @@ import org.anchoranalysis.image.io.stack.output.StackWriteOptions;
 public abstract class OneOrThreeChannelsWriter extends StackWriter {
 
     // START BEAN PROPERTIES
-	/** Which extension to use to write the image (without any leading period). */
+    /** Which extension to use to write the image (without any leading period). */
     @BeanField @Getter @Setter private String extension = "png";
     // END BEAN PROPERTIES
 
@@ -74,8 +75,9 @@ public abstract class OneOrThreeChannelsWriter extends StackWriter {
     }
 
     /**
-     * Writes the {@link Stack} to the file-system, after a check has already occurred that the correct number of channels exist.
-     * 
+     * Writes the {@link Stack} to the file-system, after a check has already occurred that the
+     * correct number of channels exist.
+     *
      * @param stack the stack to write.
      * @param filePath the path to write the image to.
      * @throws ImageIOException if unable to successfully write the image.

@@ -41,9 +41,22 @@ import org.anchoranalysis.io.input.csv.CSVReaderException;
 import org.anchoranalysis.io.input.csv.ReadByLine;
 import org.anchoranalysis.math.histogram.Histogram;
 
+/**
+ * Reads a CSV file from the file-system that describes a histogram of voxel values.
+ *
+ * @author owen Feehan
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class HistogramCSVReader {
 
+    /**
+     * Reads a CSV file from the file-system that describes a histogram of voxel values.
+     *
+     * @param filePath the path to the CSV file.
+     * @return a newly created {@link Histogram} representing the values in the file.
+     * @throws CSVReaderException if any file I/O errors, or otherwise the histogram cannot be
+     *     successfully created.
+     */
     public static Histogram readHistogramFromFile(Path filePath) throws CSVReaderException {
 
         Map<Integer, Integer> map = new HashMap<>();
@@ -55,6 +68,12 @@ public class HistogramCSVReader {
         return histogramFromMap(map);
     }
 
+    /**
+     * Processes a line of elements, so that entites are added to {@code map}.
+     *
+     * @param map a mapping of bin identifiers to counts for the histogram.
+     * @param line the line being processed.
+     */
     private static void addLineToMap(Map<Integer, Integer> map, String[] line)
             throws OperationFailedException {
 
@@ -82,18 +101,12 @@ public class HistogramCSVReader {
         map.put(bin, count);
     }
 
-    // Maximum-value
+    /** Maximum value in {@code set}. */
     private static int maxValue(Set<Integer> set) {
-
-        Integer max = null;
-        for (Integer i : set) {
-            if (max == null || i > max) {
-                max = i;
-            }
-        }
-        return max;
+        return set.stream().mapToInt(Integer::intValue).max().getAsInt(); // NOSONAR
     }
 
+    /** Creates a {@link Histogram} from a mapping of bins to counts. */
     private static Histogram histogramFromMap(Map<Integer, Integer> map) throws CSVReaderException {
 
         // We get the highest-intensity value from the map
@@ -110,10 +123,15 @@ public class HistogramCSVReader {
         return histogram;
     }
 
-    private static int guessMaxHistogramBin(int maxCsvValue) throws CSVReaderException {
-        if (maxCsvValue <= UnsignedByteVoxelType.MAX_VALUE) {
+    /**
+     * Guess the maximum possible histogram bin given maximum bin in the CSV file.
+     *
+     * <p>This guesses which voxel data-type was originally used to make the histogram.
+     */
+    private static int guessMaxHistogramBin(int maxCsvBin) throws CSVReaderException {
+        if (maxCsvBin <= UnsignedByteVoxelType.MAX_VALUE) {
             return UnsignedByteVoxelType.MAX_VALUE_INT;
-        } else if (maxCsvValue <= UnsignedShortVoxelType.MAX_VALUE) {
+        } else if (maxCsvBin <= UnsignedShortVoxelType.MAX_VALUE) {
             return UnsignedShortVoxelType.MAX_VALUE_INT;
         } else {
             throw new CSVReaderException(

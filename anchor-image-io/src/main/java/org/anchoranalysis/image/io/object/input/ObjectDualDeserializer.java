@@ -89,7 +89,7 @@ class ObjectDualDeserializer implements Deserializer<ObjectMask> {
             Stack stack =
                     openedFile
                             .openCheckType(0, UnsignedByteVoxelType.INSTANCE, context.getLogger())
-                            .get(0);
+                            .getFrame(0);
 
             if (stack.getNumberChannels() != 1) {
                 throw new DeserializationFailedException("Raster file must have 1 channel exactly");

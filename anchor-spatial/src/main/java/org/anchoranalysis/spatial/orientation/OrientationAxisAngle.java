@@ -27,7 +27,6 @@
 package org.anchoranalysis.spatial.orientation;
 
 import cern.colt.matrix.DoubleMatrix2D;
-import java.util.function.BiConsumer;
 import lombok.EqualsAndHashCode;
 import lombok.Value;
 import org.anchoranalysis.spatial.point.Vector3d;
@@ -93,10 +92,5 @@ public class OrientationAxisAngle extends Orientation {
     @Override
     public int numberDimensions() {
         return 3;
-    }
-
-    @Override
-    public void describeOrientation(BiConsumer<String, String> consumer) {
-        // NOTHING TO DO
     }
 }
