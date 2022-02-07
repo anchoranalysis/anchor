@@ -196,7 +196,7 @@ public class FunctionalList {
      * @param mapFunction function to do the mapping.
      * @return a list with the same size and same order, but using derived elements that are a
      *     result of the mapping.
-     * @throws E if the exception is thrown during mapping
+     * @throws E if the exception is thrown during mapping.
      */
     public static <S, T, E extends Exception> List<T> mapToList(
             Stream<S> stream,
@@ -221,6 +221,32 @@ public class FunctionalList {
             List<S> list, FunctionWithInt<S, T> mapFunction) {
         return IntStream.range(0, list.size())
                 .mapToObj(index -> mapFunction.apply(list.get(index), index))
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Maps a collection to a list with each element derived from a corresponding element in the
+     * original collection - and also letting the map function use an index.
+     *
+     * @param <S> parameter-type for function
+     * @param <T> return-type for function
+     * @param  <E> exception that can be thrown by @{@code mapFunction}
+     * @param list the list to be mapped.
+     * @param throwableClass class type of exception that may be thrown by {@code mapFunction}.
+     * @param mapFunction function to do the mapping.
+     * @return a list with the same size and same order, but using derived elements that are a
+     *     result of the mapping.
+     * @throws E if the exception is thrown during mapping.
+     */
+    public static <S, T, E extends Exception> List<T> mapToListWithIndex(
+            List<S> list,
+            Class<? extends Exception> throwableClass,
+            CheckedFunctionWithInt<S, T, E> mapFunction)
+            throws E {
+        return CheckedStream.mapToObj(
+                        IntStream.range(0, list.size()),
+                        throwableClass,
+                        index -> mapFunction.apply(list.get(index), index))
                 .collect(Collectors.toList());
     }
 
