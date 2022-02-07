@@ -66,10 +66,10 @@ public class FeatureList<T extends FeatureInput> extends AnchorBean<FeatureList<
     public FeatureList() {
         this(new ArrayList<>());
     }
-    
-    /** 
+
+    /**
      * Creates with an empty list of particular capacity.
-     * 
+     *
      * @param capacity initial capacity of the created empty list.
      */
     public FeatureList(int capacity) {

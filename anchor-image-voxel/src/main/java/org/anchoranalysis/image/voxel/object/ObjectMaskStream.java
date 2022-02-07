@@ -249,7 +249,7 @@ public final class ObjectMaskStream {
      * @throws E if thrown by the predicate
      */
     public <E extends Exception> ObjectCollection filter(
-            CheckedPredicate<ObjectMask, E> predicate, Optional<ObjectCollection> objectsRejected)
+            CheckedPredicate<ObjectMask, E> predicate, Optional<List<ObjectMask>> objectsRejected)
             throws E {
 
         ObjectCollection out = new ObjectCollection();

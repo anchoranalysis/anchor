@@ -38,6 +38,7 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.functional.CheckedStream;
@@ -72,37 +73,36 @@ public class ObjectCollectionFactory {
      */
     @SafeVarargs
     public static ObjectCollection of(ObjectMask... object) {
-        ObjectCollection out = new ObjectCollection();
-        Arrays.stream(object).forEach(out::add);
-        return out;
+        return new ObjectCollection(Arrays.stream(object));
     }
 
     /**
      * Creates a new collection with elements copied from existing collections.
      *
-     * @param objects existing collections to copy from.
+     * @param collection existing collections to copy from.
      * @return the newly-created collection, reusing the objects from {@code objects}.
      */
     @SafeVarargs
-    public static ObjectCollection of(ObjectCollection... objects) {
-        ObjectCollection out = new ObjectCollection();
-        Arrays.stream(objects).forEach(out::addAll);
-        return out;
+    public static ObjectCollection of(ObjectCollection... collection) {
+        Stream<ObjectMask> stream =
+                Arrays.stream(collection).flatMap(objects -> objects.streamStandardJava());
+        return new ObjectCollection(stream);
     }
 
     /**
      * Creates a new collection with elements copied from existing collections, if they exist.
      *
-     * @param objects existing collections to copy from.
+     * @param collections existing collections to copy from.
      * @return the newly-created collection, reusing the objects from {@code objects}.
      */
     @SafeVarargs
-    public static ObjectCollection of(Optional<ObjectCollection>... objects) {
-        ObjectCollection out = new ObjectCollection();
-        for (Optional<ObjectCollection> collection : objects) {
-            collection.ifPresent(out::addAll);
-        }
-        return out;
+    public static ObjectCollection of(Optional<ObjectCollection>... collections) {
+        Stream<ObjectMask> stream =
+                Arrays.stream(collections)
+                        .filter(Optional::isPresent)
+                        .map(Optional::get)
+                        .flatMap(objects -> objects.streamStandardJava());
+        return new ObjectCollection(stream);
     }
 
     /**
@@ -113,9 +113,22 @@ public class ObjectCollectionFactory {
      */
     @SafeVarargs
     public static ObjectCollection of(Collection<ObjectMask>... collections) {
-        ObjectCollection out = new ObjectCollection();
-        Arrays.stream(collections).forEach(out::addAll);
-        return out;
+        Stream<ObjectMask> stream = Arrays.stream(collections).flatMap(objects -> objects.stream());
+        return new ObjectCollection(stream);
+    }
+
+    /**
+     * Creates a new collection by mapping an {@link Iterable} to {@link ObjectMask}.
+     *
+     * @param <T> type that will be mapped to {@link ObjectCollection}.
+     * @param iterable source of entities to be mapped.
+     * @param mapFunction function for mapping.
+     * @return a newly created {@link ObjectCollection}.
+     */
+    public static <T> ObjectCollection mapFrom(
+            Iterable<T> iterable, Function<T, ObjectMask> mapFunction) {
+        Stream<T> streamIn = StreamSupport.stream(iterable.spliterator(), false);
+        return new ObjectCollection(streamIn.map(mapFunction));
     }
 
     /**
@@ -124,17 +137,20 @@ public class ObjectCollectionFactory {
      * @param <T> type that will be mapped to {@link ObjectCollection}.
      * @param <E> exception-type that can be thrown during mapping.
      * @param iterable source of entities to be mapped.
+     * @param throwableClass the class of the exception that might be thrown during mapping.
      * @param mapFunction function for mapping.
      * @return a newly created {@link ObjectCollection}.
      * @throws E exception if it occurs during mapping.
      */
     public static <T, E extends Exception> ObjectCollection mapFrom(
-            Iterable<T> iterable, CheckedFunction<T, ObjectMask, E> mapFunction) throws E {
-        ObjectCollection out = new ObjectCollection();
-        for (T item : iterable) {
-            out.add(mapFunction.apply(item));
-        }
-        return out;
+            Iterable<T> iterable,
+            Class<? extends E> throwableClass,
+            CheckedFunction<T, ObjectMask, E> mapFunction)
+            throws E {
+        Stream<T> streamIn = StreamSupport.stream(iterable.spliterator(), false);
+        Stream<ObjectMask> streamConverted =
+                CheckedStream.map(streamIn, throwableClass, mapFunction);
+        return new ObjectCollection(streamConverted);
     }
 
     /**
@@ -297,28 +313,39 @@ public class ObjectCollectionFactory {
      * Creates a new collection by filtering an iterable and then mapping it to {@link ObjectMask}.
      *
      * @param <T> type that will be mapped to {@link ObjectMask}.
-     * @param <E> exception-type that may be thrown during mapping.
-     * @param iterable incoming collection to be mapped.
+     * @param collection incoming collection to be mapped.
      * @param predicate only elements from the iterable that satisfy this predicate are added.
+     * @param mapFunction function for mapping.
+     * @return a newly created {@link ObjectCollection}.
+     */
+    public static <T> ObjectCollection filterAndMapFrom(
+            Collection<T> collection, Predicate<T> predicate, Function<T, ObjectMask> mapFunction) {
+        Stream<ObjectMask> stream = collection.stream().filter(predicate).map(mapFunction);
+        return new ObjectCollection(stream);
+    }
+
+    /**
+     * Creates a new collection by filtering an iterable and then mapping it to {@link ObjectMask}.
+     *
+     * @param <T> type that will be mapped to {@link ObjectMask}.
+     * @param <E> exception-type that may be thrown during mapping.
+     * @param collection incoming collection to be mapped.
+     * @param predicate only elements from the iterable that satisfy this predicate are added.
+     * @param throwableClass the class of {@code E}.
      * @param mapFunction function for mapping.
      * @return a newly created {@link ObjectCollection}.
      * @throws E if thrown by <code>mapFunction</code>
      */
     public static <T, E extends Exception> ObjectCollection filterAndMapFrom(
-            Iterable<T> iterable,
+            Collection<T> collection,
             Predicate<T> predicate,
+            Class<? extends E> throwableClass,
             CheckedFunction<T, ObjectMask, E> mapFunction)
             throws E {
-        ObjectCollection out = new ObjectCollection();
-        for (T item : iterable) {
-
-            if (!predicate.test(item)) {
-                continue;
-            }
-
-            out.add(mapFunction.apply(item));
-        }
-        return out;
+        Stream<ObjectMask> stream =
+                CheckedStream.map(
+                        collection.stream().filter(predicate), throwableClass, mapFunction);
+        return new ObjectCollection(stream);
     }
 
     /**
