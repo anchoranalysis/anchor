@@ -102,7 +102,7 @@ public class ExtentToArrange implements Comparable<ExtentToArrange> {
         return -1 * extent.compareTo(other.extent);
     }
 
-    /** To be correspond to {@link #compareTo(ExtentToArrange)}. */
+    /** To correspond to {@link #compareTo(ExtentToArrange)}. */
     @Override
     public boolean equals(Object other) {
         if (other instanceof ExtentToArrange) {
@@ -111,6 +111,12 @@ public class ExtentToArrange implements Comparable<ExtentToArrange> {
         } else {
             return false;
         }
+    }
+
+    /** To correspond to {@link #equals(Object)}. */
+    @Override
+    public int hashCode() {
+        return extent.hashCode();
     }
 
     /** Determines the scaling factor to use, to achieve a particular {@code targetWidth}. */

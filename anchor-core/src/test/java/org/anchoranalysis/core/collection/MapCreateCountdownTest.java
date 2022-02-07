@@ -80,12 +80,12 @@ class MapCreateCountdownTest {
 
     /** Verify that the processor mock was called {@code numberTimes}. */
     private void verifyProcessor(int numberTimes) throws OperationFailedException {
-        verify(processor, times(numberTimes)).accept(eq(VALUE));
+        verify(processor, times(numberTimes)).accept(VALUE);
     }
 
     /** Verify that the cleanUp mock was called for a particular {@code key}. */
     private void verifyCleanUp(String key) throws OperationFailedException {
-        verify(cleanUp, times(1)).accept(eq(key), eq(VALUE));
+        verify(cleanUp, times(1)).accept(key, VALUE);
     }
 
     /** Builds a set of {@link Strings} from each argument. */

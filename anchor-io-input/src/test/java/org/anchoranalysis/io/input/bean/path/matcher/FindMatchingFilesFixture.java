@@ -73,8 +73,7 @@ class FindMatchingFilesFixture {
             throws FindFilesException {
 
         List<File> files =
-                FindMatchingFiles.search(
-                        directory, predicates, recursive, Optional.empty(), Optional.empty());
+                FindMatchingFiles.search(directory, predicates, recursive, Optional.empty());
 
         // Check we found the expected number of files
         assertEquals(assertMessage, expectedNumberFound, files.size());

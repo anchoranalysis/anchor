@@ -32,9 +32,7 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.core.functional.OptionalFactory;
 import org.anchoranalysis.core.functional.checked.CheckedPredicate;
-import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.io.input.InputContextParameters;
 import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.input.bean.InputManagerParameters;
@@ -103,18 +101,12 @@ public abstract class FilePathMatcher extends AnchorBean<FilePathMatcher> {
                         directory,
                         ignoreHidden,
                         parameters.map(InputManagerParameters::getInputContext));
-
-        Optional<Logger> logger =
-                OptionalFactory.create(
-                        acceptDirectoryErrors && parameters.isPresent(),
-                        () -> parameters.get().getLogger()); // NOSONAR
         try {
             return FindMatchingFiles.search(
                     directory,
                     predicates,
                     recursive && canMatchSubdirectories(),
-                    maxDirectoryDepth,
-                    logger);
+                    maxDirectoryDepth);
         } catch (FindFilesException e) {
             throw new InputReadFailedException("Cannot find matching files", e);
         }

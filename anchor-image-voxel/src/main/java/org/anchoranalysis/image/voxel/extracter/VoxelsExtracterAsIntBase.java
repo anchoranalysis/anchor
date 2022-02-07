@@ -20,7 +20,7 @@ abstract class VoxelsExtracterAsIntBase<T extends UnsignedBufferAsInt>
      *
      * @param voxels the voxels to extract from.
      */
-    public VoxelsExtracterAsIntBase(Voxels<T> voxels) {
+    protected VoxelsExtracterAsIntBase(Voxels<T> voxels) {
         super(voxels);
     }
 

@@ -80,8 +80,7 @@ public class Align extends BoxAligner {
     }
 
     @Override
-    public BoundingBox alignAfterCheck(BoundingBox smaller, BoundingBox larger)
-            throws OperationFailedException {
+    public BoundingBox alignAfterCheck(BoundingBox smaller, BoundingBox larger) {
         ReadableTuple3i cornerLarger = larger.cornerMin();
         Point3i cornerAligned = alignCorner(smaller, larger.extent());
         cornerAligned.add(cornerLarger);
@@ -128,10 +127,8 @@ public class Align extends BoxAligner {
      * @param smaller the smaller size to align with {@code larger}.
      * @param larger the larger size to align against as a reference.
      * @return the minimum corner to use for the aligned box, newly-created.
-     * @throws OperationFailedException if an unrecognized string is used for one of {@code alignX},
-     *     {@code alignY} or {@code alignZ}.
      */
-    public Point3i alignCorner(BoundingBox smaller, Extent larger) throws OperationFailedException {
+    public Point3i alignCorner(BoundingBox smaller, Extent larger) {
         return new Point3i(
                 position(alignXEnum, Extent::x, smaller.extent(), smaller.cornerMin().x(), larger),
                 position(alignYEnum, Extent::y, smaller.extent(), smaller.cornerMin().y(), larger),

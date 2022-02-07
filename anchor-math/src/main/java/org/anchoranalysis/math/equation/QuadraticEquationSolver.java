@@ -39,9 +39,9 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class QuadraticEquationSolver {
 
-	/** A threshold below which, error is considered very small, and converted into 0. */
-	private static final double VERY_SMALL_ERROR = -1e-3;
-	
+    /** A threshold below which, error is considered very small, and converted into 0. */
+    private static final double VERY_SMALL_ERROR = -1e-3;
+
     /** Roots (solution) of a quadratic equation. */
     @AllArgsConstructor
     @Data
