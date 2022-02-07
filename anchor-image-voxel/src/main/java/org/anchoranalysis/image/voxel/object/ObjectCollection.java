@@ -86,24 +86,6 @@ public class ObjectCollection implements Iterable<ObjectMask> {
     }
 
     /**
-     * Adds all objects in {@code objects} to the collection.
-     *
-     * @param objects the objects to add.
-     */
-    public void addAll(ObjectCollection objects) {
-        addAll(objects.delegate);
-    }
-
-    /**
-     * Adds all objects in {@code collection} to the collection.
-     *
-     * @param collection the collection of objects to add.
-     */
-    public void addAll(Collection<? extends ObjectMask> collection) {
-        delegate.addAll(collection);
-    }
-
-    /**
      * Checks if two collections are equal in a shallow way.
      *
      * <p>Specifically, objects are tested to be equal using their object references.

@@ -364,7 +364,7 @@ public class FunctionalList {
             Collection<S> collection, Function<S, Stream<T>> mapFunction) {
         return collection.stream().flatMap(mapFunction).collect(Collectors.toList());
     }
-    
+
     /**
      * Flat-maps a collection to a list where in the original collection can produce many elements
      * in the outgoing list.
@@ -380,8 +380,12 @@ public class FunctionalList {
      * @throws E if thrown by {@code mapFunction}
      */
     public static <S, T, E extends Exception> List<T> flatMapToList(
-            Collection<S> collection, Class<? extends Exception> throwableClass, CheckedFunction<S, Collection<? extends T>, E> mapFunction) throws E {
-        return CheckedStream.flatMap( collection.stream(), throwableClass, mapFunction).collect(Collectors.toList());
+            Collection<S> collection,
+            Class<? extends Exception> throwableClass,
+            CheckedFunction<S, Collection<? extends T>, E> mapFunction)
+            throws E {
+        return CheckedStream.flatMap(collection.stream(), throwableClass, mapFunction)
+                .collect(Collectors.toList());
     }
 
     /**
@@ -524,8 +528,27 @@ public class FunctionalList {
      *     first} and the corresponding element from {@code second}.
      */
     public static <S, T> List<Pair<S, T>> zip(Collection<S> first, Collection<T> second) {
+        return zip(first, second, Pair::of);
+    }
+
+    /**
+     * Create a list of elements from two separate collections.
+     *
+     * <p>Elements are combined from each in the same order as iteration.
+     *
+     * @param <S> element-type in first collection
+     * @param <T> element-type in second collection
+     * @param <V> combined-element type
+     * @param first first collection.
+     * @param second second collection.
+     * @param combine how to combine a first and second element.
+     * @return a newly created list where each element is a pair comprising an element from {@code
+     *     first} and the corresponding element from {@code second}.
+     */
+    public static <S, T, V> List<V> zip(
+            Collection<S> first, Collection<T> second, BiFunction<S, T, V> combine) {
         checkCollectionSize(first, second);
-        return Streams.zip(first.stream(), second.stream(), Pair::of).collect(Collectors.toList());
+        return Streams.zip(first.stream(), second.stream(), combine).collect(Collectors.toList());
     }
 
     /** Checks two collections have an identical number of elements. */

@@ -183,7 +183,6 @@ public final class MarkCollection implements Iterable<Mark>, Serializable {
 
     public ObjectCollection deriveObjects(
             Dimensions dimensions, RegionMembershipWithFlags regionMembership) {
-
         return ObjectCollectionFactory.filterAndMapFrom(
                 marks,
                 mark -> mark.numberRegions() > regionMembership.getRegionID(),

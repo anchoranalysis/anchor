@@ -26,11 +26,13 @@
 
 package org.anchoranalysis.image.bean.object;
 
+import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.ImageBean;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 
 /**
  * Base class for filtering an {@link ObjectCollection} to remove objects according to a criteria.
@@ -54,6 +56,6 @@ public abstract class ObjectFilter extends ImageBean<ObjectFilter> {
     public abstract ObjectCollection filter(
             ObjectCollection objectsToFilter,
             Optional<Dimensions> dimensions,
-            Optional<ObjectCollection> objectsRejected)
+            Optional<List<ObjectMask>> objectsRejected)
             throws OperationFailedException;
 }
