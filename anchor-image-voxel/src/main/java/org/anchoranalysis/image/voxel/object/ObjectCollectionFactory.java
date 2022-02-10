@@ -202,7 +202,7 @@ public class ObjectCollectionFactory {
      */
     @SafeVarargs
     public static ObjectCollection of(BinaryVoxels<UnsignedByteBuffer>... masks) {
-        Stream<ObjectMask> stream = Arrays.stream(masks).map( mask -> new ObjectMask(mask) );
+        Stream<ObjectMask> stream = Arrays.stream(masks).map(mask -> new ObjectMask(mask));
         return new ObjectCollection(stream);
     }
 

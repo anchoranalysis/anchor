@@ -174,7 +174,7 @@ public class NamedChannelsConcatenate implements NamedChannelsMap {
     }
 
     @Override
-    public boolean isRGB() throws ImageIOException {
+    public boolean isRGB(Logger logger) throws ImageIOException {
         // Assume once a concatenation happens, it is no longer a RGB file.
         return false;
     }

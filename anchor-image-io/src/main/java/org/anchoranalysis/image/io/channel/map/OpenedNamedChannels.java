@@ -182,8 +182,8 @@ public class OpenedNamedChannels implements NamedChannelsMap {
     }
 
     @Override
-    public boolean isRGB() throws ImageIOException {
-        return openedFile.isRGB();
+    public boolean isRGB(Logger logger) throws ImageIOException {
+        return openedFile.isRGB(logger);
     }
 
     @Override

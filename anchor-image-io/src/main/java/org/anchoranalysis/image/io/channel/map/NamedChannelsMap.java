@@ -137,8 +137,9 @@ public interface NamedChannelsMap extends ChannelGetter {
      *
      * <p>In this case, there should be exactly three channels, named "red", "green" and "blue".
      *
+     * @param logger a logger for any non-fatal errors. Fatal errors throw an exception.
      * @return true if the channels describe an RGB image.
      * @throws ImageIOException if this cannot be successfully inferred.
      */
-    boolean isRGB() throws ImageIOException;
+    boolean isRGB(Logger logger) throws ImageIOException;
 }
