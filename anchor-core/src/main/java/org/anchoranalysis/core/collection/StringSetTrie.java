@@ -27,6 +27,8 @@ package org.anchoranalysis.core.collection;
 
 import java.util.Collection;
 import java.util.Set;
+import java.util.stream.Stream;
+
 import org.apache.commons.collections4.trie.PatriciaTrie;
 
 /**
@@ -54,6 +56,16 @@ public class StringSetTrie {
         for (String element : collection) {
             add(element);
         }
+    }
+    
+    /**
+     * Create from existing collection.
+     *
+     * @param stream the stream to create from.
+     */
+    public StringSetTrie(Stream<String> stream) {
+        this();
+        stream.forEach(this::add);
     }
 
     /**
