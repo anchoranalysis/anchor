@@ -430,9 +430,14 @@ public class Stack implements Iterable<Channel> {
      *
      * <p>If fewer {@link Channel}s exist, only these are included, without throwing an exception.
      *
-     * @return a newly created {@link Stack} reusing the existing {@link Channel}s in this instance.
+     * @return either the existing {@link Stack} (if three channels or less) or a newly created
+     *     {@link Stack}, reusing the existing {@link Channel}s in this instance.
      */
     public Stack extractUpToThreeChannels() {
+        if (getNumberChannels() <= 3) {
+            return this;
+        }
+
         Stack out = new Stack(rgb);
         int maxNumber = Math.min(3, delegate.getNumberChannels());
         for (int i = 0; i < maxNumber; i++) {

@@ -39,6 +39,7 @@ import org.anchoranalysis.bean.primitive.DoubleList;
 import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.time.ExecutionTimeRecorder;
+import org.anchoranalysis.image.bean.displayer.StackDisplayer;
 import org.anchoranalysis.image.bean.interpolator.Interpolator;
 import org.anchoranalysis.image.bean.nonbean.segment.SegmentationFailedException;
 import org.anchoranalysis.image.bean.spatial.ScaleCalculator;
@@ -49,6 +50,7 @@ import org.anchoranalysis.image.inference.ImageInferenceModel;
 import org.anchoranalysis.image.inference.segment.DualScale;
 import org.anchoranalysis.image.inference.segment.LabelledWithConfidence;
 import org.anchoranalysis.image.inference.segment.MultiScaleObject;
+import org.anchoranalysis.image.inference.segment.SegmentedBackground;
 import org.anchoranalysis.image.inference.segment.SegmentedObjects;
 import org.anchoranalysis.image.voxel.resizer.VoxelsResizerExecutionTime;
 import org.anchoranalysis.inference.concurrency.ConcurrentModelPool;
@@ -96,6 +98,9 @@ public abstract class SegmentStackIntoObjectsScaleDecode<T, S extends ImageInfer
 
     /** The interpolator to use for scaling images. */
     @BeanField @Getter @Setter @DefaultInstance private Interpolator interpolator;
+
+    /** How to convert an image to be displayed to the user. */
+    @BeanField @Getter @Setter @DefaultInstance private StackDisplayer displayer;
     // END BEAN PROPERTIES
 
     @Override
@@ -124,7 +129,12 @@ public abstract class SegmentStackIntoObjectsScaleDecode<T, S extends ImageInfer
                             "Deriving input for segmentation",
                             () -> deriveInputSubtractMeans(stacksDual.atModelScale()));
 
-            return segmentInput(input, stacksDual, scaleFactor, modelPool, executionTimeRecorder);
+            return segmentInput(
+                    input,
+                    new SegmentedBackground(stacksDual, displayer),
+                    scaleFactor,
+                    modelPool,
+                    executionTimeRecorder);
         } catch (OperationFailedException e) {
             throw new SegmentationFailedException(e);
         }
@@ -132,14 +142,14 @@ public abstract class SegmentStackIntoObjectsScaleDecode<T, S extends ImageInfer
 
     private SegmentedObjects segmentInput(
             T input,
-            DualScale<Stack> stacksDual,
+            SegmentedBackground background,
             ScaleFactor scaleFactor,
             ConcurrentModelPool<S> modelPool,
             ExecutionTimeRecorder executionTimeRecorder)
             throws SegmentationFailedException {
         try {
             ImageInferenceContext context =
-                    createContext(stacksDual, scaleFactor, executionTimeRecorder);
+                    createContext(background.getBackground(), scaleFactor, executionTimeRecorder);
 
             String inputName = inputName().orElse(FALLBACK_INPUT_NAME);
 
@@ -148,7 +158,7 @@ public abstract class SegmentStackIntoObjectsScaleDecode<T, S extends ImageInfer
             List<LabelledWithConfidence<MultiScaleObject>> objects =
                     helper.queueInference(input, modelPool, context);
 
-            return new SegmentedObjects(objects, stacksDual, executionTimeRecorder);
+            return new SegmentedObjects(objects, background, executionTimeRecorder);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             throw new SegmentationFailedException(e);

@@ -46,6 +46,12 @@ public class RasterGeneratorDelegateToDisplayStack<T> extends RasterGeneratorSel
 
     // START REQUIRED ARGUMENTS
     private final SingleFileTypeGenerator<T, DisplayStack> delegate;
+
+    /**
+     * Whether the raster image that is produced is RGB or not.
+     *
+     * <p>RGB-A images should never be produced.
+     */
     private final boolean rgb;
     // START END ARGUMENTS
 

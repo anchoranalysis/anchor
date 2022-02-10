@@ -33,6 +33,9 @@ package org.anchoranalysis.image.voxel.datatype;
  */
 public class UnsignedByteVoxelType extends UnsignedVoxelType {
 
+    /** How many bits to represent this voxel-type. */
+    public static final int BIT_DEPTH = 8;
+
     /** Minimum supported value for the type, as a {@code long}. */
     public static final long MAX_VALUE = 255;
 
@@ -43,6 +46,6 @@ public class UnsignedByteVoxelType extends UnsignedVoxelType {
     public static final UnsignedByteVoxelType INSTANCE = new UnsignedByteVoxelType();
 
     private UnsignedByteVoxelType() {
-        super(8, "unsigned8", MAX_VALUE);
+        super(BIT_DEPTH, "unsigned8", MAX_VALUE);
     }
 }

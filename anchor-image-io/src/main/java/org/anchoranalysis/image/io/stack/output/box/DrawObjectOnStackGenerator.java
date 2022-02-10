@@ -30,7 +30,6 @@ import io.vavr.control.Either;
 import java.util.Optional;
 import java.util.stream.Stream;
 import org.anchoranalysis.core.color.ColorIndex;
-import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.object.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.image.core.object.properties.ObjectWithProperties;
@@ -207,10 +206,6 @@ public class DrawObjectOnStackGenerator
             channelExtracted = channelExtracted.projectMax();
         }
 
-        try {
-            return Either.right(DisplayStack.create(channelExtracted));
-        } catch (CreateException e) {
-            throw new OutputWriteFailedException(e);
-        }
+        return Either.right(new DisplayStack(channelExtracted));
     }
 }

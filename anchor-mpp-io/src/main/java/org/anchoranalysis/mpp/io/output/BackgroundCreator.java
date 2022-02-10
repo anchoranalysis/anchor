@@ -31,6 +31,7 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
+import org.anchoranalysis.image.bean.displayer.StackDisplayer;
 import org.anchoranalysis.image.core.stack.DisplayStack;
 import org.anchoranalysis.image.core.stack.Stack;
 
@@ -38,10 +39,12 @@ import org.anchoranalysis.image.core.stack.Stack;
 public class BackgroundCreator {
 
     public static DisplayStack createBackground(
-            NamedProviderStore<Stack> stackCollection, String backgroundStackName)
+            NamedProviderStore<Stack> stackCollection,
+            String backgroundStackName,
+            StackDisplayer displayer)
             throws CreateException {
         try {
-            return DisplayStack.create(stackCollection.getException(backgroundStackName));
+            return displayer.deriveFrom(stackCollection.getException(backgroundStackName));
         } catch (NamedProviderGetException e) {
             throw new CreateException("Cannot get background display-stack with identifier: ", e);
         }

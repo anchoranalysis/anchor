@@ -32,7 +32,7 @@ import org.anchoranalysis.core.identifier.getter.IdentifierGetter;
 import org.anchoranalysis.image.core.stack.DisplayStack;
 import org.anchoranalysis.image.core.stack.RGBStack;
 import org.anchoranalysis.image.core.stack.Stack;
-import org.anchoranalysis.image.io.stack.ConvertDisplayStackToRGB;
+import org.anchoranalysis.image.io.stack.ConvertStackToRGB;
 import org.anchoranalysis.image.io.stack.output.StackWriteAttributes;
 import org.anchoranalysis.image.io.stack.output.StackWriteAttributesFactory;
 import org.anchoranalysis.image.io.stack.output.generator.RasterGeneratorSelectFormat;
@@ -57,7 +57,7 @@ public abstract class MarksGeneratorBase
     @Override
     public Stack transform(ColoredMarksWithDisplayStack element) throws OutputWriteFailedException {
         try {
-            RGBStack stack = ConvertDisplayStackToRGB.convert(background(element.getStack()));
+            RGBStack stack = ConvertStackToRGB.convert(background(element.getStack()), true);
 
             ColoredOverlayCollection overlays =
                     OverlayCollectionMarkFactory.createColor(

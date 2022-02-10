@@ -68,7 +68,7 @@ public class HDF5ObjectsGenerator extends OneStageGenerator<ObjectCollection> {
 
                 ObjectMaskHDF5Writer writerHDF5 =
                         new ObjectMaskHDF5Writer(
-                        		element.get(i), pathForObject(i), writer, compressed);
+                                element.get(i), pathForObject(i), writer, compressed);
                 writerHDF5.writeObject();
             }
 
