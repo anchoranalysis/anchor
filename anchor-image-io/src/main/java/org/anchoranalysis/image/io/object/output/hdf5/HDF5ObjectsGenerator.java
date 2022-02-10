@@ -34,7 +34,6 @@ import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.io.object.HDF5PathHelper;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
-import org.anchoranalysis.image.voxel.object.ObjectMask; // NOSONAR
 import org.anchoranalysis.io.generator.OneStageGenerator;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 
@@ -61,33 +60,26 @@ public class HDF5ObjectsGenerator extends OneStageGenerator<ObjectCollection> {
 
     @Override
     public void writeToFile(ObjectCollection element, OutputWriteSettings settings, Path filePath) {
-        // Write a HDF file
-        writeObjects(element, filePath);
-    }
-
-    @Override
-    public String selectFileExtension(OutputWriteSettings settings, Optional<Logger> logger) {
-        return "h5";
-    }
-
-    /** Write all the {@link ObjectMask}s in {@code objects} to a HDF5 file at {@code filePath}. */
-    private void writeObjects(ObjectCollection objects, Path filePath) {
-
         IHDF5Writer writer = HDF5Factory.open(filePath.toString());
 
-        addObjectsSizeAttribute(writer, objects);
+        addObjectsSizeAttribute(writer, element);
         try {
-            for (int i = 0; i < objects.size(); i++) {
+            for (int i = 0; i < element.size(); i++) {
 
                 ObjectMaskHDF5Writer writerHDF5 =
                         new ObjectMaskHDF5Writer(
-                                objects.get(i), pathForObject(i), writer, compressed);
+                        		element.get(i), pathForObject(i), writer, compressed);
                 writerHDF5.writeObject();
             }
 
         } finally {
             writer.close();
         }
+    }
+
+    @Override
+    public String selectFileExtension(OutputWriteSettings settings, Optional<Logger> logger) {
+        return "h5";
     }
 
     /**
