@@ -98,6 +98,7 @@ class ObjectMaskHDF5Reader {
         return voxels;
     }
 
+    /** Extracts the minimum-corner point in three dimensions. */
     private static Point3i cornerPoint(IHDF5IntReader reader, String path) {
         return new Point3i(
                 extractIntAttr(reader, path, HDF5PathHelper.EXTENT_X),
@@ -105,12 +106,14 @@ class ObjectMaskHDF5Reader {
                 extractIntAttr(reader, path, HDF5PathHelper.EXTENT_Z));
     }
 
+    /** Extracts an attribute of type int. */
     private static int extractIntAttr(IHDF5IntReader reader, String path, String attr) {
         return reader.getAttr(path, attr);
     }
 
-    private static Extent extractExtent(MDByteArray mdb) {
-        int[] dims = mdb.dimensions();
+    /** Extracts the size of the bounding-box of the mask. */
+    private static Extent extractExtent(MDByteArray array) {
+        int[] dims = array.dimensions();
         return new Extent(dims[0], dims[1], dims[2]);
     }
 }

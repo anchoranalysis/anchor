@@ -70,25 +70,30 @@ class ObjectMaskHDF5Writer {
         }
     }
 
-    public void apply() {
+    /**
+     * Writes the {@link ObjectMask} to the HDF5 file.
+     */
+    public void writeObject() {
 
         writer.uint8().writeMDArray(pathHDF5, byteArray(object.binaryVoxels()), compressionLevel());
 
         addCorner();
     }
 
+    /** Adds attributes for the minimum-corner of the bounding-box of the {@link ObjectMask}. */
     private void addCorner() {
-        addAttribute(HDF5PathHelper.EXTENT_X, ReadableTuple3i::x);
-        addAttribute(HDF5PathHelper.EXTENT_Y, ReadableTuple3i::y);
-        addAttribute(HDF5PathHelper.EXTENT_Z, ReadableTuple3i::z);
+        addIntAttribute(HDF5PathHelper.EXTENT_X, ReadableTuple3i::x);
+        addIntAttribute(HDF5PathHelper.EXTENT_Y, ReadableTuple3i::y);
+        addIntAttribute(HDF5PathHelper.EXTENT_Z, ReadableTuple3i::z);
     }
 
-    private void addAttribute(String attrName, ToIntFunction<ReadableTuple3i> extraValue) {
-
-        Integer cornerValue = extraValue.applyAsInt(object.boundingBox().cornerMin());
-        writer.uint32().setAttr(pathHDF5, attrName, cornerValue.intValue());
+    /** Adds an attribute of type int, as extracted from a {@link ReadableTuple3i}. */
+    private void addIntAttribute(String name, ToIntFunction<ReadableTuple3i> extractValue) {
+        Integer value = extractValue.applyAsInt(object.boundingBox().cornerMin());
+        writer.uint32().setAttr(pathHDF5, name, value.intValue());
     }
 
+    /** Converts a {@code BinaryVoxels<UnsignedByteBuffer>} into a byte-array suitable for the HDF5 file. */
     private static MDByteArray byteArray(BinaryVoxels<UnsignedByteBuffer> voxels) {
 
         MDByteArray array = new MDByteArray(voxels.extent().toArray());
