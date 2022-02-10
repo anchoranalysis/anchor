@@ -159,7 +159,7 @@ class BioformatsOpenedRaster implements OpenedImageFile {
     }
 
     @Override
-    public boolean isRGB() {
+    public boolean isRGB(Logger logger) {
         return rgb;
     }
 
@@ -243,7 +243,12 @@ class BioformatsOpenedRaster implements OpenedImageFile {
                     FunctionalIterate.repeatAsStream(
                             sizeT,
                             IncorrectImageSizeException.class,
-                            () -> createEmptyStack(factory, dimensionsToUse, listAllChannels::add));
+                            () ->
+                                    createEmptyStack(
+                                            factory,
+                                            dimensionsToUse,
+                                            listAllChannels::add,
+                                            logger));
 
             return new Pair<>(listAllChannels, new TimeSeries(stacks));
         } catch (IncorrectImageSizeException e) {
@@ -254,9 +259,10 @@ class BioformatsOpenedRaster implements OpenedImageFile {
     private Stack createEmptyStack(
             ChannelFactorySingleType factory,
             Dimensions dimensions,
-            Consumer<Channel> consumeChannel)
+            Consumer<Channel> consumeChannel,
+            Logger logger)
             throws IncorrectImageSizeException {
-        Stack stack = new Stack(isRGB());
+        Stack stack = new Stack(isRGB(logger));
         for (int c = 0; c < numberChannels; c++) {
 
             Channel channel = factory.createEmptyUninitialised(dimensions);

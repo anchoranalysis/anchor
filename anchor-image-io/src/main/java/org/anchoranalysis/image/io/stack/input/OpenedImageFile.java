@@ -144,10 +144,11 @@ public interface OpenedImageFile extends AutoCloseable {
     /**
      * Whether the image-file has RGB encoded voxels.
      *
+     * @param logger the logger.
      * @return true if the image has RGB or RGBA encoded voxels, false otherwise.
      * @throws ImageIOException if an error occurs reading the image to determine this information.
      */
-    boolean isRGB() throws ImageIOException;
+    boolean isRGB(Logger logger) throws ImageIOException;
 
     /** Closes the opened image-file, removing any intermediate data-structures. */
     void close() throws ImageIOException;
@@ -179,7 +180,7 @@ public interface OpenedImageFile extends AutoCloseable {
                 dimensionsForSeries(seriesIndex, logger),
                 numberChannels(logger),
                 numberFrames(logger),
-                isRGB(),
+                isRGB(logger),
                 bitDepth(logger),
                 timestamps.getAttributes(),
                 timestamps.getAcqusitionTime());
