@@ -48,7 +48,7 @@ public class DualStack {
      * Creates to infer a background from the energy-stack.
      *
      * @param energyStack the energy-stack.
-     * @param dispalyer how to display the {@code energyStack}.
+     * @param displayer how to display the {@code energyStack}.
      * @throws CreateException if a display-stack cannot be derived.
      */
     public DualStack(EnergyStack energyStack, StackDisplayer displayer) throws CreateException {
