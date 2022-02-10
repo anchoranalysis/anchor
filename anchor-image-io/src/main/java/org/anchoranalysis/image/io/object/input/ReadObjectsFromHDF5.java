@@ -109,7 +109,6 @@ class ReadObjectsFromHDF5 implements Deserializer<ObjectCollection> {
      * received.
      */
     private ObjectCollection readObjectsNoCheck(IHDF5Reader reader, String rootPath) {
-
         List<String> groups = reader.object().getAllGroupMembers(rootPath);
         return ObjectCollectionFactory.mapFrom(
                 groups, groupName -> ObjectMaskHDF5Reader.readObject(reader, rootPath + groupName));
