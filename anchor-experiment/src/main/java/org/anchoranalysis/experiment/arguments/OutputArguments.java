@@ -64,7 +64,8 @@ public class OutputArguments {
         prefixer.requestOutputSuppressDirectories();
     }
 
-    public void requestOmitExperimentIdentifier() {
+    public void requestOmitExperimentIdentifier(String argument) {
+        // We ignore the argument, as it's already been parsed to create the output-manager
         prefixer.requestOmitExperimentIdentifier();
     }
 

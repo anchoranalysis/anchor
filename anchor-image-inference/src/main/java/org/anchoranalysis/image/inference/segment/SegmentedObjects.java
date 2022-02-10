@@ -32,7 +32,6 @@ import lombok.Getter;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.time.ExecutionTimeRecorder;
-import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.inference.bean.segment.reduce.ReduceElements;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.spatial.box.Extent;
@@ -60,7 +59,7 @@ public class SegmentedObjects {
     @Getter private final DualScale<SegmentedObjectsAtScale> objects;
 
     /** The background image to use for segmentation, when visualizing segmentations. */
-    private final DualScale<Stack> background;
+    private final SegmentedBackground background;
 
     /**
      * Create for a collection of objects with an <b>identical label</b>.
@@ -74,7 +73,7 @@ public class SegmentedObjects {
     public SegmentedObjects(
             String classLabel,
             Collection<WithConfidence<MultiScaleObject>> objects,
-            DualScale<Stack> background,
+            SegmentedBackground background,
             ExecutionTimeRecorder executionTimeRecorder) {
         this(addLabel(classLabel, objects), background, executionTimeRecorder);
     }
@@ -90,7 +89,7 @@ public class SegmentedObjects {
      */
     public SegmentedObjects(
             List<LabelledWithConfidence<MultiScaleObject>> objects,
-            DualScale<Stack> background,
+            SegmentedBackground background,
             ExecutionTimeRecorder executionTimeRecorder) {
         this.list = objects;
         this.background = background;
@@ -100,12 +99,14 @@ public class SegmentedObjects {
                                 list,
                                 MultiScaleObject::getInputScale,
                                 background.atInputScale(),
+                                background.getDisplayer(),
                                 executionTimeRecorder,
                                 " (input-scale)"),
                         new SegmentedObjectsAtScale(
                                 list,
                                 MultiScaleObject::getModelScale,
                                 background.atModelScale(),
+                                background.getDisplayer(),
                                 executionTimeRecorder,
                                 " (model-scale)"));
     }

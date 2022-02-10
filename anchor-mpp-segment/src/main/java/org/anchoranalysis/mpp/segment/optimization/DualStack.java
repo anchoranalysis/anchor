@@ -30,6 +30,7 @@ import lombok.AllArgsConstructor;
 import lombok.Value;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.feature.energy.EnergyStack;
+import org.anchoranalysis.image.bean.displayer.StackDisplayer;
 import org.anchoranalysis.image.core.stack.DisplayStack;
 
 /** Stores an {@link EnergyStack} together with a background stack. */
@@ -46,10 +47,11 @@ public class DualStack {
     /**
      * Creates to infer a background from the energy-stack.
      *
-     * @param energyStack the energy-stack
-     * @throws CreateException if a display-stack cannot be derived
+     * @param energyStack the energy-stack.
+     * @param displayer how to display the {@code energyStack}.
+     * @throws CreateException if a display-stack cannot be derived.
      */
-    public DualStack(EnergyStack energyStack) throws CreateException {
-        this(energyStack, DisplayStack.create(energyStack.withoutParameters().asStack()));
+    public DualStack(EnergyStack energyStack, StackDisplayer displayer) throws CreateException {
+        this(energyStack, displayer.deriveFrom(energyStack.withoutParameters().asStack()));
     }
 }

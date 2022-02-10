@@ -34,6 +34,7 @@ import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.time.ExecutionTimeRecorder;
+import org.anchoranalysis.image.bean.displayer.StackDisplayer;
 import org.anchoranalysis.image.core.object.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.image.core.stack.DisplayStack;
 import org.anchoranalysis.image.core.stack.Stack;
@@ -65,6 +66,9 @@ public class SegmentedObjectsAtScale {
 
     /** The background image associated with this particular scale. */
     @Getter private final Stack background;
+
+    /** How to convert the background in an image suitable to be displayed. */
+    private final StackDisplayer displayer;
 
     /** Records the execution-time of particular operations. */
     private final ExecutionTimeRecorder executionTimeRecorder;
@@ -162,7 +166,7 @@ public class SegmentedObjectsAtScale {
     public DisplayStack backgroundDisplayStack() {
         if (backgroundDisplayStack == null) {
             try {
-                backgroundDisplayStack = DisplayStack.create(background.extractUpToThreeChannels());
+                backgroundDisplayStack = displayer.deriveFrom(background);
             } catch (CreateException e) {
                 throw new AnchorImpossibleSituationException();
             }

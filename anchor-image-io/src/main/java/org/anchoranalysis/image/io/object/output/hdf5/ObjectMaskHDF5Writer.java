@@ -70,9 +70,7 @@ class ObjectMaskHDF5Writer {
         }
     }
 
-    /**
-     * Writes the {@link ObjectMask} to the HDF5 file.
-     */
+    /** Writes the {@link ObjectMask} to the HDF5 file. */
     public void writeObject() {
 
         writer.uint8().writeMDArray(pathHDF5, byteArray(object.binaryVoxels()), compressionLevel());
@@ -93,7 +91,10 @@ class ObjectMaskHDF5Writer {
         writer.uint32().setAttr(pathHDF5, name, value.intValue());
     }
 
-    /** Converts a {@code BinaryVoxels<UnsignedByteBuffer>} into a byte-array suitable for the HDF5 file. */
+    /**
+     * Converts a {@code BinaryVoxels<UnsignedByteBuffer>} into a byte-array suitable for the HDF5
+     * file.
+     */
     private static MDByteArray byteArray(BinaryVoxels<UnsignedByteBuffer> voxels) {
 
         MDByteArray array = new MDByteArray(voxels.extent().toArray());

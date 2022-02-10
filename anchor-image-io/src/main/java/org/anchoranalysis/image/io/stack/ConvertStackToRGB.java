@@ -28,37 +28,59 @@ package org.anchoranalysis.image.io.stack;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
+import org.anchoranalysis.image.bean.displayer.StackDisplayer;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
 import org.anchoranalysis.image.core.stack.DisplayStack;
 import org.anchoranalysis.image.core.stack.RGBStack;
+import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.spatial.box.BoundingBox;
 
 /**
- * Converts a {@link DisplayStack} to a {@link RGBStack}.
+ * Converts a {@link Stack} or {@link DisplayStack} to a {@link RGBStack}.
  *
  * @author Owen Feehan
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class ConvertDisplayStackToRGB {
+public class ConvertStackToRGB {
 
     /**
      * Converts all of a {@link DisplayStack} to a {@link RGBStack}.
      *
      * @param stack the stack to convert.
+     * @param displayer how to convert {@code stack} to be displayed.
+     * @param alwaysNew when true, new channels are always created. when false, they are only
+     *     created if needed (e.g. if the voxel-data type is not already 8-bit).
+     * @return a newly created {@link RGBStack} with exactly three channels, and intensity-values
+     *     converted to 8-bit.
+     * @throws CreateException cannot successfuly convert {@link Stack} to a {@link DisplayStack}
+     *     (as an intermediate step).
+     */
+    public static RGBStack convert(Stack stack, StackDisplayer displayer, boolean alwaysNew)
+            throws CreateException {
+        return convert(displayer.deriveFrom(stack), alwaysNew);
+    }
+
+    /**
+     * Converts all of a {@link DisplayStack} to a {@link RGBStack}.
+     *
+     * @param stack the stack to convert.
+     * @param alwaysNew when true, new channels are always created. when false, they are only
+     *     created if needed (e.g. if the voxel-data type is not already 8-bit).
      * @return a newly created {@link RGBStack} with identical voxels and size as {@code stack}.
      */
-    public static RGBStack convert(DisplayStack stack) {
+    public static RGBStack convert(DisplayStack stack, boolean alwaysNew) {
 
         try {
             if (stack.getNumberChannels() == 1) {
                 return new RGBStack(
-                        stack.createChannel(0, true),
-                        stack.createChannel(0, true),
-                        stack.createChannel(0, true));
+                        stack.createChannel(0, alwaysNew),
+                        stack.createChannel(0, alwaysNew),
+                        stack.createChannel(0, alwaysNew));
             } else if (stack.getNumberChannels() == 3) {
-                return new RGBStack(stack.deriveStack(true));
+                return new RGBStack(stack.deriveStack(alwaysNew));
             } else {
                 throw new AnchorImpossibleSituationException();
             }

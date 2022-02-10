@@ -34,6 +34,9 @@ package org.anchoranalysis.image.voxel.datatype;
  */
 public class FloatVoxelType extends VoxelDataType {
 
+    /** How many bits to represent this voxel-type. */
+    public static final int BIT_DEPTH = 32;
+
     /** Minimum supported value for the type. */
     public static final long MAX_VALUE = VoxelDataType.VALUE_NOT_COMPATIBLE;
 
@@ -44,7 +47,7 @@ public class FloatVoxelType extends VoxelDataType {
     public static final FloatVoxelType INSTANCE = new FloatVoxelType();
 
     private FloatVoxelType() {
-        super(32, "float", MAX_VALUE, MIN_VALUE);
+        super(BIT_DEPTH, "float", MAX_VALUE, MIN_VALUE);
     }
 
     @Override

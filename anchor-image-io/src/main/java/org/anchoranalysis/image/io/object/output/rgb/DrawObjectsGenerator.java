@@ -37,7 +37,7 @@ import org.anchoranalysis.image.core.object.properties.ObjectCollectionWithPrope
 import org.anchoranalysis.image.core.stack.DisplayStack;
 import org.anchoranalysis.image.core.stack.RGBStack;
 import org.anchoranalysis.image.io.bean.object.draw.Outline;
-import org.anchoranalysis.image.io.stack.ConvertDisplayStackToRGB;
+import org.anchoranalysis.image.io.stack.ConvertStackToRGB;
 import org.anchoranalysis.overlay.bean.DrawObject;
 import org.anchoranalysis.overlay.writer.ObjectDrawAttributes;
 
@@ -130,7 +130,8 @@ public class DrawObjectsGenerator extends ObjectsAsRGBGenerator {
     protected RGBStack generateBackgroundRegion(
             ObjectCollectionWithProperties objects, Either<Dimensions, DisplayStack> background) {
         return background.fold(
-                DrawObjectsGenerator::createEmptyStackFor, ConvertDisplayStackToRGB::convert);
+                DrawObjectsGenerator::createEmptyStackFor,
+                stack -> ConvertStackToRGB.convert(stack, true));
     }
 
     @Override

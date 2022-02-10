@@ -35,7 +35,6 @@ import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.time.ExecutionTimeRecorder;
-import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.inference.bean.reduce.ObjectForReduction;
 import org.anchoranalysis.image.inference.bean.reduce.ObjectForReductionFactory;
 import org.anchoranalysis.image.inference.bean.segment.reduce.ReduceElements;
@@ -66,7 +65,7 @@ class SegmentedObjectsReducer {
     private final ReduceElements<ObjectMask> reduce;
 
     /** The background image to use for segmentation, when visualizing segmentations. */
-    private final DualScale<Stack> background;
+    private final SegmentedBackground background;
 
     /** Records the execution-time of particular operations. */
     private final ExecutionTimeRecorder executionTimeRecorder;

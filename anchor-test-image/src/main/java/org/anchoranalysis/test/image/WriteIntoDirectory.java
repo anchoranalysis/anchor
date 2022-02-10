@@ -34,6 +34,8 @@ import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.core.index.SetOperationFailedException;
+import org.anchoranalysis.image.bean.displayer.IntensityQuantiles;
+import org.anchoranalysis.image.bean.displayer.StackDisplayer;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
@@ -67,6 +69,8 @@ import org.anchoranalysis.test.image.io.OutputterFixture;
 @RequiredArgsConstructor
 public class WriteIntoDirectory {
 
+    private static final StackDisplayer DISPLAYER = new IntensityQuantiles();
+
     /**
      * If there are no objects or specified dimensions, this size is used for an output image as a
      * fallback
@@ -92,17 +96,6 @@ public class WriteIntoDirectory {
     private DisplayStackGenerator generatorStack = new DisplayStackGenerator(false);
 
     private ObjectAsMaskGenerator generatorSingleObject = new ObjectAsMaskGenerator();
-
-    /**
-     * Writes a stack up to a maximum of three channels.
-     *
-     * @param outputName
-     * @param stack
-     * @throws CreateException
-     */
-    public void writeStack(String outputName, Stack stack) throws CreateException {
-        writeStack(outputName, DisplayStack.create(stack.extractUpToThreeChannels()));
-    }
 
     public void writeStack(String outputName, DisplayStack stack) {
         setupOutputterIfNecessary();
@@ -179,7 +172,7 @@ public class WriteIntoDirectory {
 
     private static DisplayStack displayStackFor(Channel channel) {
         try {
-            return DisplayStack.create(channel);
+            return DISPLAYER.deriveFrom(channel);
         } catch (CreateException e) {
             throw new AnchorFriendlyRuntimeException(e);
         }
@@ -187,7 +180,7 @@ public class WriteIntoDirectory {
 
     private static DisplayStack displayStackFor(Stack stack) {
         try {
-            return DisplayStack.create(stack);
+            return DISPLAYER.deriveFrom(stack);
         } catch (CreateException e) {
             throw new AnchorFriendlyRuntimeException(e);
         }

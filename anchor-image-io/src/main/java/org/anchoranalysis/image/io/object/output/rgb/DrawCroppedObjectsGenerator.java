@@ -36,7 +36,7 @@ import org.anchoranalysis.image.core.merge.ObjectMaskMerger;
 import org.anchoranalysis.image.core.object.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.image.core.stack.DisplayStack;
 import org.anchoranalysis.image.core.stack.RGBStack;
-import org.anchoranalysis.image.io.stack.ConvertDisplayStackToRGB;
+import org.anchoranalysis.image.io.stack.ConvertStackToRGB;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.overlay.bean.DrawObject;
@@ -104,7 +104,7 @@ public class DrawCroppedObjectsGenerator extends ObjectsAsRGBGenerator {
         // Extract the relevant piece of background
         return background.fold(
                 dimensions -> createEmptyStackFor(new Dimensions(box.extent())),
-                stack -> ConvertDisplayStackToRGB.convertCropped(stack, box));
+                stack -> ConvertStackToRGB.convertCropped(stack, box));
     }
 
     @Override
