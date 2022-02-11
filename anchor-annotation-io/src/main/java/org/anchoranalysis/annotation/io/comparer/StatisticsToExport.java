@@ -25,7 +25,7 @@
  */
 package org.anchoranalysis.annotation.io.comparer;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import lombok.Getter;
 import org.anchoranalysis.core.value.TypedValue;
@@ -50,13 +50,13 @@ public class StatisticsToExport {
      * The names of statistics describing the annotation-comparison, as produced by {@link
      * #getValues()}.
      */
-    @Getter List<String> names = new ArrayList<>();
+    @Getter List<String> names = Arrays.asList();
 
     /**
      * The values of statistics describing the annotation-comparison, corresponding exactly to the
      * names in {@link #getNames()}.
      */
-    @Getter List<TypedValue> values = new ArrayList<>();
+    @Getter List<TypedValue> values = Arrays.asList();
 
     /**
      * Appends the names and values from another {@code AnnotationComparison} to the existing.

@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.mpp.bean.regionmap;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -49,7 +49,7 @@ import org.anchoranalysis.core.functional.FunctionalList;
 public class RegionMap extends AnchorBean<RegionMap> {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private List<RegionMembership> list = new ArrayList<>();
+    @BeanField @Getter @Setter private List<RegionMembership> list = Arrays.asList();
     // END BEAN PROPERTIES
 
     // Creates a region map with a single entry mapping to a particular region

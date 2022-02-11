@@ -34,6 +34,8 @@ import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.bean.xml.factory.AnchorDefaultBeanFactory;
 import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
+import org.anchoranalysis.image.bean.displayer.IntensityQuantiles;
+import org.anchoranalysis.image.bean.displayer.StackDisplayer;
 import org.anchoranalysis.image.bean.interpolator.ImgLib2Linear;
 import org.anchoranalysis.image.bean.interpolator.Interpolator;
 import org.anchoranalysis.image.io.bean.stack.metadata.reader.FromStackReader;
@@ -106,6 +108,15 @@ public class BeanInstanceMapFixture {
      */
     public static Interpolator ensureInterpolator(Interpolator interpolator) {
         return addOrReplace(Interpolator.class, interpolator);
+    }
+
+    /**
+     * Ensure a {@link StackDisplayer} instance exists in the underlying {@link BeanInstanceMap}.
+     *
+     * @return the instance, as already exists, or if newly created.
+     */
+    public static StackDisplayer ensureStackDisplayer() {
+        return addOrReplace(StackDisplayer.class, new IntensityQuantiles());
     }
 
     /**

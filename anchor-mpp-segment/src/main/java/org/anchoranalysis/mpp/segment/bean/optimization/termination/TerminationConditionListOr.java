@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.mpp.segment.bean.optimization.termination;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -39,7 +39,7 @@ import org.anchoranalysis.core.log.MessageLogger;
 public class TerminationConditionListOr extends TerminationCondition {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private List<TerminationCondition> list = new ArrayList<>();
+    @BeanField @Getter @Setter private List<TerminationCondition> list = Arrays.asList();
     // END BEAN PROPERTIES
 
     public TerminationConditionListOr(

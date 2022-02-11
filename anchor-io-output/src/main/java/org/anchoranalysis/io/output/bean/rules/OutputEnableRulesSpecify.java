@@ -25,7 +25,7 @@
  */
 package org.anchoranalysis.io.output.bean.rules;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,7 +54,7 @@ public abstract class OutputEnableRulesSpecify extends OutputEnabledRules {
     @BeanField @OptionalBean @Getter @Setter private StringSet first;
 
     /** Output-names in the second-level (for all first level output-names) */
-    @BeanField @Getter @Setter private List<NamedBean<StringSet>> second = new ArrayList<>();
+    @BeanField @Getter @Setter private List<NamedBean<StringSet>> second = Arrays.asList();
     // END BEAN PROPERTIES
 
     // We cache the second-level map here.

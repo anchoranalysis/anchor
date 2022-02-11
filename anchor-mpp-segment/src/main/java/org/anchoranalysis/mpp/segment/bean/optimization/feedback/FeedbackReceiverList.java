@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.mpp.segment.bean.optimization.feedback;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
@@ -41,7 +41,7 @@ import org.anchoranalysis.mpp.segment.optimization.step.Reporting;
 public class FeedbackReceiverList<T> extends FeedbackReceiverBean<T> {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private List<FeedbackReceiver<T>> list = new ArrayList<>();
+    @BeanField @Getter @Setter private List<FeedbackReceiver<T>> list = Arrays.asList();
     // END BEAN PROPERTIES
 
     @Override

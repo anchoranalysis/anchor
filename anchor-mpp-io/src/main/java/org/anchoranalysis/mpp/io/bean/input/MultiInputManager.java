@@ -27,6 +27,7 @@
 package org.anchoranalysis.mpp.io.bean.input;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -53,10 +54,10 @@ public class MultiInputManager extends InputManagerWithStackReader<MultiInput> {
     @BeanField @Getter @Setter private InputManager<? extends ProvidesStackInput> input;
 
     @BeanField @OptionalBean @Getter @Setter
-    private List<NamedBean<DerivePath>> appendStack = new ArrayList<>();
+    private List<NamedBean<DerivePath>> appendStack = Arrays.asList();
 
     @BeanField @OptionalBean @Getter @Setter
-    private List<NamedBean<DerivePath>> appendMarks = new ArrayList<>();
+    private List<NamedBean<DerivePath>> appendMarks = Arrays.asList();
 
     @BeanField @OptionalBean @Getter @Setter
     private List<NamedBean<DerivePath>> appendMarksFromAnnotation =

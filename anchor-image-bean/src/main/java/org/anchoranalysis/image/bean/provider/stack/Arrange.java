@@ -27,6 +27,7 @@
 package org.anchoranalysis.image.bean.provider.stack;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -61,7 +62,7 @@ public class Arrange extends StackProvider {
 
     // START BEAN
     /** The stacks that are passed in respect order into {@code arrange}. */
-    @BeanField @Getter @Setter private List<Provider<Stack>> list = new ArrayList<>();
+    @BeanField @Getter @Setter private List<Provider<Stack>> list = Arrays.asList();
 
     /** Determines how the stacks in {@code list} are arranged. */
     @BeanField @Getter @Setter private StackArranger arrange; // NOSONAR

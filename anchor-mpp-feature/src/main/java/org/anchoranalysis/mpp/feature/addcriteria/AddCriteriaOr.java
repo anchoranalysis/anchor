@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.mpp.feature.addcriteria;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import lombok.Getter;
@@ -42,7 +42,7 @@ import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 public class AddCriteriaOr extends AddCriteriaPair {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private List<AddCriteriaPair> list = new ArrayList<>();
+    @BeanField @Getter @Setter private List<AddCriteriaPair> list = Arrays.asList();
     // END BEAN PROPERTIES
 
     @Override

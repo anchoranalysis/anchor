@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.image.feature.bean.evaluator;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.UnaryOperator;
 import lombok.Getter;
@@ -60,7 +60,7 @@ public class FeatureListEvaluator<T extends FeatureInput>
      * A list of providers, combined together to form a list of features, to be calculated in a
      * session
      */
-    @BeanField @Getter @Setter private List<FeatureProvider<T>> features = new ArrayList<>();
+    @BeanField @Getter @Setter private List<FeatureProvider<T>> features = Arrays.asList();
     // END BEAN PROPERTIES
 
     /**
