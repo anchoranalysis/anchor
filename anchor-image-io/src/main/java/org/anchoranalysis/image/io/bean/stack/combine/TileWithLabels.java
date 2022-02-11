@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.image.io.bean.stack.combine;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
@@ -46,7 +46,7 @@ public class TileWithLabels extends StackProvider {
 
     // START BEAN PROPERTIES
     /** The list of {@link StackProviderWithLabel}s that are tiled. */
-    @BeanField @Getter @Setter private List<StackProviderWithLabel> list = new ArrayList<>();
+    @BeanField @Getter @Setter private List<StackProviderWithLabel> list = Arrays.asList();
 
     /**
      * How many columns when tiling, so long as there are sufficient {@link

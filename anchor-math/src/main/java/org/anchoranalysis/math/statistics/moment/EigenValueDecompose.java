@@ -49,7 +49,7 @@ class EigenValueDecompose {
 
     private static List<EigenvalueAndVector> eigenValueDecompose(DoubleMatrix2D secondMoments) {
 
-        List<EigenvalueAndVector> list = new ArrayList<>();
+        List<EigenvalueAndVector> list = new ArrayList<>(3);
 
         EigenvalueDecomposition ed = new EigenvalueDecomposition(secondMoments);
 

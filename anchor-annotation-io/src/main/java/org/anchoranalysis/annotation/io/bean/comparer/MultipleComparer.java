@@ -29,6 +29,7 @@ package org.anchoranalysis.annotation.io.bean.comparer;
 import io.vavr.Tuple;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
@@ -81,7 +82,7 @@ public class MultipleComparer extends AnchorBean<MultipleComparer> {
 
     /** The other entities to compare with the annotation. */
     @BeanField @NonEmpty @Getter @Setter
-    private List<NamedBean<ComparableSource>> sources = new ArrayList<>();
+    private List<NamedBean<ComparableSource>> sources = Arrays.asList();
 
     /**
      * If true, a maximum-intensity-projection is first applied to any 3D objects into a 2D plane,

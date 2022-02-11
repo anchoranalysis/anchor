@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.experiment.bean.log;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -48,7 +48,7 @@ public class ToMultiple extends LoggingDestination {
 
     // START BEAN
     /** The list of loggers to log to */
-    @BeanField @Getter @Setter private List<LoggingDestination> list = new ArrayList<>();
+    @BeanField @Getter @Setter private List<LoggingDestination> list = Arrays.asList();
     // END BEAN
 
     /**

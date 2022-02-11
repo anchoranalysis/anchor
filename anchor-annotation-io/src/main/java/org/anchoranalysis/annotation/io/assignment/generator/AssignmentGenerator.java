@@ -100,7 +100,7 @@ public class AssignmentGenerator extends RasterGeneratorSelectFormat<Assignment<
 
     private static StackProvider createTiledStackProvider(
             Stack stackLeft, Stack stackRight, String nameLeft, String nameRight) {
-        List<StackProviderWithLabel> listProvider = new ArrayList<>();
+        List<StackProviderWithLabel> listProvider = new ArrayList<>(2);
         listProvider.add(new StackProviderWithLabel(stackLeft, nameLeft));
         listProvider.add(new StackProviderWithLabel(stackRight, nameRight));
 

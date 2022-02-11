@@ -454,6 +454,13 @@ public class DisplayStack {
 
     private ChannelMapper createChannelMapper() {
         return new ChannelMapper(
-                index -> stack.getChannel(translateChannelIndex(index)), converters::get);
+                index -> stack.getChannel(translateChannelIndex(index)),
+                index -> {
+                    if (index < converters.size()) {
+                        return converters.get(index);
+                    } else {
+                        return Optional.empty();
+                    }
+                });
     }
 }

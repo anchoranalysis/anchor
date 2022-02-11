@@ -27,6 +27,7 @@
 package org.anchoranalysis.bean.define;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -123,7 +124,7 @@ public class Define extends AnchorBean<Define> {
 
         if (list == null) {
             // Nothing there, so we exit early
-            return new ArrayList<>();
+            return Arrays.asList();
         }
 
         // We always create a new list, as a workaround for our inability to cast
