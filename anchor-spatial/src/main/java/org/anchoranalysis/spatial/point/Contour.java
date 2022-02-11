@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.spatial.point;
 
-import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import lombok.Getter;
 
@@ -38,7 +38,7 @@ import lombok.Getter;
 public class Contour {
 
     /** An ordered list of points in the contour. */
-    @Getter private List<Point3f> points = Arrays.asList();
+    @Getter private List<Point3f> points = new LinkedList<>();
 
     /**
      * All the points in the contour, converted into {@link Point3i}.
