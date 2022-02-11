@@ -70,11 +70,11 @@ public final class ObjectMaskStream {
      */
     public <E extends Exception> ObjectCollection map(
             CheckedFunction<ObjectMask, ObjectMask, E> mapFunction) throws E {
-        ObjectCollection out = new ObjectCollection();
+        ArrayList<ObjectMask> list = new ArrayList<>(delegate.size());
         for (ObjectMask object : delegate) {
-            out.add(mapFunction.apply(object));
+            list.add(mapFunction.apply(object));
         }
-        return out;
+        return new ObjectCollection(list);
     }
 
     /**
@@ -208,7 +208,7 @@ public final class ObjectMaskStream {
                 CheckedStream.flatMap(
                         delegate.streamStandardJava(),
                         throwableClass,
-                        element -> mapFunction.apply(element).asList()));
+                        element -> mapFunction.apply(element).asList().stream()));
     }
 
     /**
@@ -216,11 +216,30 @@ public final class ObjectMaskStream {
      *
      * <p>This is an <i>immutable</i> operation.
      *
-     * @param predicate iff true object is included, otherwise excluded
-     * @return a newly created object-collection, a filtered version of all objects
+     * @param predicate iff true object is included, otherwise excluded.
+     * @return a newly created object-collection, a filtered version of all objects.
      */
     public ObjectCollection filter(Predicate<ObjectMask> predicate) {
         return new ObjectCollection(delegate.streamStandardJava().filter(predicate));
+    }
+
+    /**
+     * Filters a {@link ObjectCollection} to <b>include</b> certain items based on a predicate
+     *
+     * <p>This is an <i>immutable</i> operation.
+     *
+     * @param <E> an exception that may be thrown by {@code predicate}.
+     * @param predicate iff true object is included, otherwise excluded.
+     * @param throwableClass the class of {@code E}.
+     * @return a newly created object-collection, a filtered version of all objects.
+     * @throws E if the exception is thrown during filtering.
+     */
+    public <E extends Exception> ObjectCollection filter(
+            CheckedPredicate<ObjectMask, E> predicate, Class<? extends Exception> throwableClass)
+            throws E {
+        Stream<ObjectMask> stream =
+                CheckedStream.filter(delegate.streamStandardJava(), throwableClass, predicate);
+        return new ObjectCollection(stream);
     }
 
     /**
@@ -233,38 +252,6 @@ public final class ObjectMaskStream {
      */
     public ObjectCollection filterExclude(Predicate<ObjectMask> predicate) {
         return filter(object -> !predicate.test(object));
-    }
-
-    /**
-     * Filters a {@link ObjectCollection} to include certain items based on a predicate - and
-     * optionally store rejected objects.
-     *
-     * <p>This is an <i>immutable</i> operation.
-     *
-     * @param  <E> exception-type that can be thrown by the predicate
-     * @param predicate iff true object is included, otherwise excluded
-     * @param objectsRejected iff true, any object rejected by the filter is added to this
-     *     collection
-     * @return a newly created object-collection, a filtered version of all objects
-     * @throws E if thrown by the predicate
-     */
-    public <E extends Exception> ObjectCollection filter(
-            CheckedPredicate<ObjectMask, E> predicate, Optional<List<ObjectMask>> objectsRejected)
-            throws E {
-
-        ObjectCollection out = new ObjectCollection();
-
-        for (ObjectMask current : delegate) {
-
-            if (predicate.test(current)) {
-                out.add(current);
-            } else {
-                if (objectsRejected.isPresent()) {
-                    objectsRejected.get().add(current);
-                }
-            }
-        }
-        return out;
     }
 
     /**

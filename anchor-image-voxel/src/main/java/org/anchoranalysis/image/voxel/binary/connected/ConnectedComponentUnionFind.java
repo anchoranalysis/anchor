@@ -26,11 +26,14 @@
 
 package org.anchoranalysis.image.voxel.binary.connected;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.function.Consumer;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
@@ -42,7 +45,7 @@ import org.anchoranalysis.image.voxel.extracter.VoxelsExtracter;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxelsAll;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
-import org.anchoranalysis.image.voxel.object.ObjectCollectionFactory;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.spatial.box.Extent;
 import org.anchoranalysis.spatial.point.Point3i;
 import org.jgrapht.alg.util.UnionFind;
@@ -91,14 +94,14 @@ class ConnectedComponentUnionFind {
      */
     private <T> ObjectCollection deriveConnected(
             BinaryVoxels<T> voxels, BufferReadWrite<T> bufferReaderWriter) {
-        ObjectCollection objects = ObjectCollectionFactory.empty();
-        visitRegion(voxels, objects, minNumberVoxels, bufferReaderWriter);
-        return objects;
+        LinkedList<ObjectMask> objects = new LinkedList<>();
+        visitRegion(voxels, objects::add, minNumberVoxels, bufferReaderWriter);
+        return new ObjectCollection(new ArrayList<>(objects));
     }
 
     private <T> void visitRegion(
             BinaryVoxels<T> visited,
-            ObjectCollection objects,
+            Consumer<ObjectMask> consumer,
             int minimumNumberVoxels,
             BufferReadWrite<T> bufferReaderWriter) {
 
@@ -115,7 +118,7 @@ class ConnectedComponentUnionFind {
                                 createMergeWithNeighbors(indexBuffer, unionIndex),
                                 bufferReaderWriter));
 
-        processIndexBuffer(maxBigIDAdded, unionIndex, indexBuffer, objects, minimumNumberVoxels);
+        processIndexBuffer(maxBigIDAdded, unionIndex, indexBuffer, consumer, minimumNumberVoxels);
     }
 
     private MergeWithNeighbors createMergeWithNeighbors(
@@ -192,12 +195,12 @@ class ConnectedComponentUnionFind {
         }
     }
 
-    private static ObjectCollection extractMasksInto(
+    private static void extractMasksInto(
             PointRangeWithCount[] boxArr,
             Map<Integer, Integer> mapIDOrdered,
             Voxels<UnsignedIntBuffer> indexBuffer,
             int minNumberVoxels,
-            ObjectCollection objects) {
+            Consumer<ObjectMask> consume) {
 
         VoxelsExtracter<UnsignedIntBuffer> extracter = indexBuffer.extract();
 
@@ -207,7 +210,7 @@ class ConnectedComponentUnionFind {
 
             if (boxWithCnt.getCount() >= minNumberVoxels) {
                 try {
-                    objects.add(
+                    consume.accept(
                             extracter
                                     .voxelsEqualTo(smallID)
                                     .deriveObject(boxWithCnt.deriveBoundingBox()));
@@ -216,14 +219,13 @@ class ConnectedComponentUnionFind {
                 }
             }
         }
-        return objects;
     }
 
     private static void processIndexBuffer(
             int maxBigIDAdded,
             UnionFind<Integer> unionIndex,
             Voxels<UnsignedIntBuffer> indexBuffer,
-            ObjectCollection objects,
+            Consumer<ObjectMask> consumer,
             int minNumberVoxels) {
         Set<Integer> primaryIDs = setFromUnionFind(maxBigIDAdded, unionIndex);
 
@@ -233,6 +235,6 @@ class ConnectedComponentUnionFind {
 
         addPointsAndAssignNewIdentifiers(indexBuffer, unionIndex, mapIDOrdered, boxArr);
 
-        extractMasksInto(boxArr, mapIDOrdered, indexBuffer, minNumberVoxels, objects);
+        extractMasksInto(boxArr, mapIDOrdered, indexBuffer, minNumberVoxels, consumer);
     }
 }

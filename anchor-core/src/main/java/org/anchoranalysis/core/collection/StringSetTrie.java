@@ -28,7 +28,6 @@ package org.anchoranalysis.core.collection;
 import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Stream;
-
 import org.apache.commons.collections4.trie.PatriciaTrie;
 
 /**
@@ -57,7 +56,7 @@ public class StringSetTrie {
             add(element);
         }
     }
-    
+
     /**
      * Create from existing collection.
      *

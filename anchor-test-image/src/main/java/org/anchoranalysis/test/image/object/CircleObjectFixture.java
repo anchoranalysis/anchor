@@ -25,6 +25,7 @@
  */
 package org.anchoranalysis.test.image.object;
 
+import java.util.ArrayList;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.voxel.assigner.VoxelsAssigner;
@@ -62,19 +63,19 @@ public class CircleObjectFixture {
             Point2d centerShift,
             double radiusShift) {
 
-        ObjectCollection out = new ObjectCollection();
+        ArrayList<ObjectMask> objects = new ArrayList<>(numberCircles);
 
         Point2d currentCenter = startCenter;
         double currentRadius = radius;
 
         for (int i = 0; i < numberCircles; i++) {
-            out.add(circleAt(currentCenter, (int) currentRadius));
+            objects.add(circleAt(currentCenter, (int) currentRadius));
 
             currentCenter.add(centerShift);
             currentRadius += radiusShift;
         }
 
-        return out;
+        return new ObjectCollection(objects);
     }
 
     /**

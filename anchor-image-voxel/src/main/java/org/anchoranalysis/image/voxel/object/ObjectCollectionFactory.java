@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.image.voxel.object;
 
+import com.google.common.collect.Streams;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
@@ -62,7 +63,7 @@ public class ObjectCollectionFactory {
      * @return a newly-created empty object collection.
      */
     public static ObjectCollection empty() {
-        return new ObjectCollection();
+        return new ObjectCollection(Stream.empty());
     }
 
     /**
@@ -159,16 +160,55 @@ public class ObjectCollectionFactory {
      * <p>The object is only included in the outgoing collection if {@link Optional#isPresent()}.
      *
      * @param <T> type that will be mapped to {@link ObjectCollection}.
+     * @param iterable iterable to be mapped.
+     * @param mapFunction function for mapping.
+     * @return a newly created ObjectCollection.
+     */
+    public static <T> ObjectCollection mapFromOptional(
+            Iterable<T> iterable, Function<T, Optional<ObjectMask>> mapFunction) {
+        return mapFromOptional(iterable.iterator(), mapFunction);
+    }
+
+    /**
+     * Creates a new collection by mapping an {@link Iterable} to {@link Optional}.
+     *
+     * <p>The object is only included in the outgoing collection if {@link Optional#isPresent()}.
+     *
+     * @param <T> type that will be mapped to {@link ObjectCollection}.
      * @param <E> exception-type that can be thrown during mapping.
      * @param iterable iterable to be mapped.
      * @param mapFunction function for mapping.
+     * @param throwableClass the class of the exception that might be thrown during mapping.
      * @return a newly created ObjectCollection.
      * @throws E exception if it occurs during mapping.
      */
     public static <T, E extends Exception> ObjectCollection mapFromOptional(
-            Iterable<T> iterable, CheckedFunction<T, Optional<ObjectMask>, E> mapFunction)
+            Iterable<T> iterable,
+            Class<? extends Exception> throwableClass,
+            CheckedFunction<T, Optional<ObjectMask>, E> mapFunction)
             throws E {
-        return mapFromOptional(iterable.iterator(), mapFunction);
+        return mapFromOptional(iterable.iterator(), throwableClass, mapFunction);
+    }
+
+    /**
+     * Creates a new collection by mapping an {@link Iterator} to {@link Optional}.
+     *
+     * <p>The object is only included in the outgoing collection if {@link Optional#isPresent()}.
+     *
+     * @param <T> type that will be mapped to {@link ObjectCollection}.
+     * @param iterator to be mapped.
+     * @param mapFunction function for mapping.
+     * @return a newly created {@link ObjectCollection}.
+     */
+    public static <T> ObjectCollection mapFromOptional(
+            Iterator<T> iterator, Function<T, Optional<ObjectMask>> mapFunction) {
+
+        Stream<ObjectMask> stream =
+                Streams.stream(iterator)
+                        .map(mapFunction)
+                        .filter(Optional::isPresent)
+                        .map(Optional::get);
+        return new ObjectCollection(stream);
     }
 
     /**
@@ -180,17 +220,21 @@ public class ObjectCollectionFactory {
      * @param <E> exception-type that can be thrown during mapping.
      * @param iterator to be mapped.
      * @param mapFunction function for mapping.
+     * @param throwableClass the class of the exception that might be thrown during mapping.
      * @return a newly created {@link ObjectCollection}.
      * @throws E exception if it occurs during mapping.
      */
     public static <T, E extends Exception> ObjectCollection mapFromOptional(
-            Iterator<T> iterator, CheckedFunction<T, Optional<ObjectMask>, E> mapFunction)
+            Iterator<T> iterator,
+            Class<? extends Exception> throwableClass,
+            CheckedFunction<T, Optional<ObjectMask>, E> mapFunction)
             throws E {
-        ObjectCollection out = new ObjectCollection();
-        while (iterator.hasNext()) {
-            mapFunction.apply(iterator.next()).ifPresent(out::add);
-        }
-        return out;
+
+        Stream<ObjectMask> stream =
+                CheckedStream.map(Streams.stream(iterator), throwableClass, mapFunction)
+                        .filter(Optional::isPresent)
+                        .map(Optional::get);
+        return new ObjectCollection(stream);
     }
 
     /**
@@ -354,6 +398,7 @@ public class ObjectCollectionFactory {
      * @param <E> exception that be thrown during mapping.
      * @param list incoming list to be mapped.
      * @param predicate only elements from the list that satisfy this predicate are added.
+     * @param throwableClass the class of the exception that might be thrown during mapping.
      * @param mapFunctionWithIndex function for mapping, also including an index (the original
      *     position in the bounding-box).
      * @return a newly created {@link ObjectCollection}.
@@ -362,18 +407,24 @@ public class ObjectCollectionFactory {
     public static <T, E extends Exception> ObjectCollection filterAndMapWithIndexFrom(
             List<T> list,
             Predicate<T> predicate,
+            Class<? extends E> throwableClass,
             CheckedBiFunction<T, Integer, ObjectMask, E> mapFunctionWithIndex)
             throws E {
-        ObjectCollection out = new ObjectCollection();
-        for (int i = 0; i < list.size(); i++) {
+        Stream<Optional<ObjectMask>> stream =
+                CheckedStream.mapToObj(
+                        IntStream.range(0, list.size()),
+                        throwableClass,
+                        index -> {
+                            T item = list.get(index);
 
-            T item = list.get(i);
+                            if (predicate.test(item)) {
+                                return Optional.of(mapFunctionWithIndex.apply(item, index));
+                            } else {
+                                return Optional.empty();
+                            }
+                        });
 
-            if (predicate.test(item)) {
-                out.add(mapFunctionWithIndex.apply(item, i));
-            }
-        }
-        return out;
+        return new ObjectCollection(stream.filter(Optional::isPresent).map(Optional::get));
     }
 
     /**
@@ -407,7 +458,26 @@ public class ObjectCollectionFactory {
             CheckedFunction<T, ObjectCollection, E> mapFunction)
             throws E {
         return flatMapFromCollection(
-                stream, throwableClass, source -> mapFunction.apply(source).asList());
+                stream, throwableClass, source -> mapFunction.apply(source).streamStandardJava());
+    }
+
+    /**
+     * Creates a new collection by flat-mapping an incoming stream to {@link ObjectCollection} and
+     * rethrowing any exception during mapping.
+     *
+     * @param <T> type that will be flatMapped to {@link ObjectCollection}.
+     * @param stream incoming stream to be flat-mapped.
+     * @param throwableClass the class of the exception that might be thrown during mapping.
+     * @param mapFunction function for flat-mapping.
+     * @return a newly created {@link ObjectCollection}.
+     * @throws E exception of it occurs during mapping.
+     */
+    public static <T, E extends Exception> ObjectCollection flatMapFromStream(
+            Stream<T> stream,
+            Class<? extends Exception> throwableClass,
+            CheckedFunction<T, Stream<ObjectMask>, E> mapFunction)
+            throws E {
+        return flatMapFromCollection(stream, throwableClass, source -> mapFunction.apply(source));
     }
 
     /**
@@ -424,7 +494,7 @@ public class ObjectCollectionFactory {
     public static <T, E extends Exception> ObjectCollection flatMapFromCollection(
             Stream<T> stream,
             Class<? extends Exception> throwableClass,
-            CheckedFunction<T, Collection<? extends ObjectMask>, E> mapFunction)
+            CheckedFunction<T, Stream<? extends ObjectMask>, E> mapFunction)
             throws E {
         return new ObjectCollection(CheckedStream.flatMap(stream, throwableClass, mapFunction));
     }

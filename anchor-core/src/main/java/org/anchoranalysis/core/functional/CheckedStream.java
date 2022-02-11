@@ -26,7 +26,6 @@ package org.anchoranalysis.core.functional;
  * #L%
  */
 
-import java.util.Collection;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import lombok.AccessLevel;
@@ -263,10 +262,10 @@ public class CheckedStream {
     public static <S, T, E extends Exception> Stream<T> flatMap(
             Stream<S> stream,
             Class<? extends Exception> throwableClass,
-            CheckedFunction<S, Collection<? extends T>, E> flatMapFunction)
+            CheckedFunction<S, Stream<? extends T>, E> flatMapFunction)
             throws E { // NOSONAR
         try {
-            return stream.flatMap(item -> suppressCheckedException(item, flatMapFunction).stream());
+            return stream.flatMap(item -> suppressCheckedException(item, flatMapFunction));
 
         } catch (ConvertedToRuntimeException e) {
             return throwException(e, throwableClass);
