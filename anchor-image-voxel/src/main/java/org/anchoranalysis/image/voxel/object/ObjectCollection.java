@@ -39,18 +39,25 @@ import org.anchoranalysis.spatial.point.ReadableTuple3i;
 /**
  * A collection of {@link ObjectMask}s.
  *
- * <p>It is backed internally by an {@link ArrayList}, offering add operations in constant time, and
- * other operations in linear-time.
+ * <p>The class itself contains only <i>immutable</i> operations, although the {@link ObjectMask}s
+ * it contains are themselves mutable.
  *
  * @author Owen Feehan
  */
 public class ObjectCollection implements Iterable<ObjectMask> {
 
-    private final List<ObjectMask> delegate;
+    private final ArrayList<ObjectMask> delegate;
 
-    /** Creates with no objects. */
-    public ObjectCollection() {
-        delegate = new ArrayList<>();
+    /**
+     * Creates with the underlying list.
+     *
+     * <p>Note that as {@code objects} will be used internally, it should no used, or especially
+     * changed external to this class.
+     *
+     * @param objects the list of objects that will be used internally.
+     */
+    public ObjectCollection(ArrayList<ObjectMask> objects) {
+        this.delegate = objects;
     }
 
     /**
@@ -59,7 +66,7 @@ public class ObjectCollection implements Iterable<ObjectMask> {
      * @param stream the stream of objects.
      */
     public ObjectCollection(Stream<ObjectMask> stream) {
-        delegate = stream.collect(Collectors.toList());
+        this.delegate = stream.collect(Collectors.toCollection(ArrayList::new));
     }
 
     /**
@@ -74,15 +81,6 @@ public class ObjectCollection implements Iterable<ObjectMask> {
      */
     public ObjectCollection shiftBy(ReadableTuple3i shiftBy) {
         return stream().mapBoundingBoxPreserveExtent(box -> box.shiftBy(shiftBy));
-    }
-
-    /**
-     * Adds an object to the collection.
-     *
-     * @param object the object to add.
-     */
-    public void add(ObjectMask object) {
-        delegate.add(object);
     }
 
     /**
@@ -156,15 +154,6 @@ public class ObjectCollection implements Iterable<ObjectMask> {
     @Override
     public Iterator<ObjectMask> iterator() {
         return delegate.iterator();
-    }
-
-    /**
-     * Removes the object at the specified position in the collection.
-     *
-     * @param index the position of the object to remove.
-     */
-    public void remove(int index) {
-        delegate.remove(index);
     }
 
     /**

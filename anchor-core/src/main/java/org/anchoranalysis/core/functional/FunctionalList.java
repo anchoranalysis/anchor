@@ -382,7 +382,7 @@ public class FunctionalList {
     public static <S, T, E extends Exception> List<T> flatMapToList(
             Collection<S> collection,
             Class<? extends Exception> throwableClass,
-            CheckedFunction<S, Collection<? extends T>, E> mapFunction)
+            CheckedFunction<S, Stream<? extends T>, E> mapFunction)
             throws E {
         return CheckedStream.flatMap(collection.stream(), throwableClass, mapFunction)
                 .collect(Collectors.toList());
@@ -469,11 +469,11 @@ public class FunctionalList {
      * @return a newly created list.
      * @throws E if an exception is thrown while calling {@code predicate} or {@code mapFunction}.
      */
-    public static <S, T, E extends Exception> List<T> filterAndMapToList(
+    public static <S, T, E extends Exception> LinkedList<T> filterAndMapToList(
             List<S> list, CheckedPredicate<S, E> predicate, CheckedFunction<S, T, E> mapFunction)
             throws E {
 
-        List<T> out = new LinkedList<>();
+        LinkedList<T> out = new LinkedList<>();
         for (int i = 0; i < list.size(); i++) {
 
             S item = list.get(i);

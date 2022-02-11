@@ -70,18 +70,18 @@ public class ConcurrentJobMonitor implements Iterable<SubmittedJob> {
 
     public synchronized String executingTasks() {
 
-        StringBuilder sb = new StringBuilder();
-        for (SubmittedJob st : list) {
-            if (st.getJobState().isExecuting()) {
-                sb.append(
+        StringBuilder builder = new StringBuilder();
+        for (SubmittedJob job : list) {
+            if (job.getJobState().isExecuting()) {
+                builder.append(
                         String.format(
                                 "%d(%s,%ds), ",
-                                st.getJobDescription().getJobNumber(),
-                                st.getJobDescription().getJobShortName(),
-                                st.getJobState().getTime() / 1000));
+                                job.getJobDescription().getJobNumber(),
+                                job.getJobDescription().getJobShortName(),
+                                job.getJobState().getTime() / 1000));
             }
         }
-        return sb.toString();
+        return builder.toString();
     }
 
     public synchronized long numberOngoingJobs() {

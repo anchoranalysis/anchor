@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.bean.shared.regex;
 
-import java.util.LinkedList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import lombok.Getter;
@@ -46,7 +46,7 @@ public class RegExList extends RegEx {
 
     // START BEAN PROPERTIES
     /** The list of {@link RegEx}es that are successively tried to be matched. */
-    @BeanField @Getter @Setter private List<RegEx> list = new LinkedList<>();
+    @BeanField @Getter @Setter private List<RegEx> list = Arrays.asList();
     // END BEAN PROPERTIES
 
     @Override

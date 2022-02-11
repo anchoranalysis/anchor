@@ -26,8 +26,8 @@
 
 package org.anchoranalysis.annotation.io.assignment;
 
+import java.util.Arrays;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.DoubleStream;
 import lombok.Getter;
@@ -51,13 +51,13 @@ import org.anchoranalysis.spatial.box.Extent;
 public class OverlappingObjects implements Assignment<ObjectMask> {
 
     /** The unassigned objects in the <i>left</i> set. */
-    @Getter private List<ObjectMask> leftUnassigned = new LinkedList<>();
+    @Getter private List<ObjectMask> leftUnassigned = Arrays.asList();
 
     /** The unassigned objects in the <i>right</i> set. */
-    @Getter private List<ObjectMask> rightUnassigned = new LinkedList<>();
+    @Getter private List<ObjectMask> rightUnassigned = Arrays.asList();
 
     /** The objects which have been paired. */
-    private List<ObjectMaskPair> pairs = new LinkedList<>();
+    private List<ObjectMaskPair> pairs = Arrays.asList();
 
     /**
      * Creates with only <i>left unassigned</i> objects.
