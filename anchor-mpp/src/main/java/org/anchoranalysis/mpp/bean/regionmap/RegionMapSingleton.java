@@ -26,6 +26,8 @@
 
 package org.anchoranalysis.mpp.bean.regionmap;
 
+import java.util.Arrays;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.mpp.mark.GlobalRegionIdentifiers;
@@ -38,21 +40,17 @@ public class RegionMapSingleton {
 
     public static synchronized RegionMap instance() {
         if (regionMap == null) {
+            List<RegionMembership> list =
+                    Arrays.asList(
+                            new RegionMembershipAnd(GlobalRegionIdentifiers.SUBMARK_INSIDE),
+                            new RegionMembershipAnd(GlobalRegionIdentifiers.SUBMARK_SHELL),
+                            new RegionMembershipAnd(GlobalRegionIdentifiers.SUBMARK_CORE),
+                            new RegionMembershipAnd(GlobalRegionIdentifiers.SUBMARK_OUTSIDE),
+                            new RegionMembershipAnd(GlobalRegionIdentifiers.SUBMARK_CORE_INNER),
+                            new RegionMembershipAnd(GlobalRegionIdentifiers.SUBMARK_SHELL_OUTSIDE));
+
             regionMap = new RegionMap();
-            regionMap
-                    .getList()
-                    .add(new RegionMembershipAnd(GlobalRegionIdentifiers.SUBMARK_INSIDE));
-            regionMap.getList().add(new RegionMembershipAnd(GlobalRegionIdentifiers.SUBMARK_SHELL));
-            regionMap.getList().add(new RegionMembershipAnd(GlobalRegionIdentifiers.SUBMARK_CORE));
-            regionMap
-                    .getList()
-                    .add(new RegionMembershipAnd(GlobalRegionIdentifiers.SUBMARK_OUTSIDE));
-            regionMap
-                    .getList()
-                    .add(new RegionMembershipAnd(GlobalRegionIdentifiers.SUBMARK_CORE_INNER));
-            regionMap
-                    .getList()
-                    .add(new RegionMembershipAnd(GlobalRegionIdentifiers.SUBMARK_SHELL_OUTSIDE));
+            regionMap.setList(list);
         }
         return regionMap;
     }
