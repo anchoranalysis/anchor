@@ -39,8 +39,11 @@ import org.anchoranalysis.spatial.point.ReadableTuple3i;
 /**
  * A collection of {@link ObjectMask}s.
  *
- * <p>The class itself contains only <i>immutable</i> operations, although the {@link ObjectMask}s
+ * <p>The class itself contains only <i>immutable</i> methods, although the {@link ObjectMask}s
  * it contains are themselves mutable.
+ * 
+ * <p>Note that the {@link #asList()} method exposes the internal {@link ArrayList} used for storing
+ * objects, and this may be manipulated in a mutable way.
  *
  * @author Owen Feehan
  */
@@ -249,10 +252,15 @@ public class ObjectCollection implements Iterable<ObjectMask> {
     }
 
     /**
-     * Exposes the underlying objects as a list.
+     * Exposes the underlying objects as a {@link ArrayList}.
      *
+     * <p>It is guaranteed to provide efficient random-access.
+     * 
      * <p>Be careful when manipulating this list, as it is the same list used internally in the
      * object.
+     * 
+     * <p>TODO use the method to make it unmodifiable Collections.unmodifiableList after changing
+     * calls.
      *
      * @return a list with the {@link ObjectMask}s in this collection.
      */

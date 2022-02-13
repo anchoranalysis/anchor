@@ -25,7 +25,6 @@
  */
 package org.anchoranalysis.image.core.object.label;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.BiFunction;
@@ -116,14 +115,14 @@ public class LabelObjects<T> {
      * successive unique integer identifiers 1,2,3 etc. and voxels in no element are 0.
      *
      * @param channel the channel whose voxels will be replaced
-     * @param elements the element to write IDs for
+     * @param elements the element to write IDs for.
      * @param mapLabels if set, an entry is added for every labelled element (unscaled) to the label
      *     it is assigned
      * @throws CreateException if there are more than 255 objects, or if two objects overlap (and
      *     {@code overlappingObjectConsumer} is not set).
      */
     public void labelElements(
-            Channel channel, List<T> elements, Optional<Map<Integer, T>> mapLabels)
+            Channel channel, Iterable<T> elements, Optional<Map<Integer, T>> mapLabels)
             throws CreateException {
         performLabelling(channel, elements, mapLabels, this::maybeApplyBefore);
     }
@@ -151,7 +150,7 @@ public class LabelObjects<T> {
      */
     private void performLabelling(
             Channel channel,
-            List<T> elements,
+            Iterable<T> elements,
             Optional<Map<Integer, T>> mapLabelsToBefore,
             UnaryOperator<T> operationAfterMap)
             throws CreateException {
@@ -175,8 +174,8 @@ public class LabelObjects<T> {
                 if (index == channel.getVoxelDataType().maxValue()) {
                     throw new CreateException(
                             String.format(
-                                    "A maximum of %d (non-overlapping) elements are allowed, and this threshold has been reached. There are %d elements in total (overlapping or not).",
-                                    channel.getVoxelDataType().maxValue(), elements.size()));
+                                    "A maximum of %d (non-overlapping) elements are allowed, and this threshold has been reached, without processing all elements.",
+                                    channel.getVoxelDataType().maxValue()));
                 }
             } else {
                 processOverlappingObject(new OverlappingObject<>(element, objectAfterOp));

@@ -27,6 +27,7 @@
 package org.anchoranalysis.annotation.io.assignment;
 
 import java.util.List;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Value;
@@ -66,9 +67,9 @@ public class CostMatrix<T> {
      *
      * @param <T> element-type in lists
      * @param first the collection of elements that forms the left-side of the cost calculation,
-     *     indexed by {@code index1} in the matrix.
+     *     indexed by {@code index1} in the matrix. It should have efficient random-access.
      * @param second the collection of elements that forms the right-side of the cost calculation,
-     *     indexed by {@code index2} in the matrix.
+     *     indexed by {@code index2} in the matrix. It should have efficient random-access.
      * @param symmetric if cost(a,b) = cost(b,a), then set this true, for quicker calculations.
      * @param costCalculator calculates cost(a,b)
      * @return a newly created matrix
@@ -76,8 +77,8 @@ public class CostMatrix<T> {
      *     elements.
      */
     public static <T> CostMatrix<T> create(
-            List<T> first,
-            List<T> second,
+    		List<T> first,
+    		List<T> second,
             boolean symmetric,
             CheckedToDoubleBiFunction<T, T, CreateException> costCalculator)
             throws CreateException {
