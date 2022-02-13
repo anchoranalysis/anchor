@@ -29,24 +29,31 @@ package org.anchoranalysis.mpp.segment.bean.optimization.termination;
 import java.util.Arrays;
 import java.util.List;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.log.MessageLogger;
 
-// An OR list of termination conditions
-@NoArgsConstructor
+/**
+ * Conditions that are combined together in a <b>logical OR</b> to form a single termination-condition.
+ * 
+ * <p>i.e. if any of the conditions are true, the overall condition is true, and termination occurs.
+ * 
+ * @author Owen Feehan
+ *
+ */
 public class TerminationConditionListOr extends TerminationCondition {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private List<TerminationCondition> list = Arrays.asList();
+    @BeanField @Getter @Setter private List<TerminationCondition> list;
     // END BEAN PROPERTIES
+    
+    public TerminationConditionListOr() {
+    	list = Arrays.asList();
+    }
 
     public TerminationConditionListOr(
             TerminationCondition condition1, TerminationCondition condition2) {
-        this();
-        list.add(condition1);
-        list.add(condition2);
+    	list = Arrays.asList(condition1, condition2);
     }
 
     public boolean add(TerminationCondition condition) {
