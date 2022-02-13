@@ -208,7 +208,7 @@ public final class ObjectMaskStream {
                 CheckedStream.flatMap(
                         delegate.streamStandardJava(),
                         throwableClass,
-                        element -> mapFunction.apply(element).asList().stream()));
+                        element -> mapFunction.apply(element).streamStandardJava()));
     }
 
     /**

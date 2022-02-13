@@ -29,6 +29,7 @@ package org.anchoranalysis.image.voxel.object;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
@@ -251,14 +252,19 @@ public class ObjectCollection implements Iterable<ObjectMask> {
     }
 
     /**
-     * Exposes the underlying objects as a list.
+     * Exposes the underlying objects as a {@link ArrayList}.
      *
+     * <p>It is guaranteed to provide efficient random-access.
+     * 
      * <p>Be careful when manipulating this list, as it is the same list used internally in the
      * object.
+     * 
+     * <p>TODO use the method to make it unmodifiable Collections.unmodifiableList after changing
+     * calls.
      *
      * @return a list with the {@link ObjectMask}s in this collection.
      */
-    public ArrayList<ObjectMask> asList() {
+    public List<ObjectMask> asList() {
         return delegate;
     }
 
