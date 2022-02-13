@@ -29,7 +29,6 @@ package org.anchoranalysis.image.voxel.object;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
@@ -39,8 +38,11 @@ import org.anchoranalysis.spatial.point.ReadableTuple3i;
 /**
  * A collection of {@link ObjectMask}s.
  *
- * <p>The class itself contains only <i>immutable</i> operations, although the {@link ObjectMask}s
+ * <p>The class itself contains only <i>immutable</i> methods, although the {@link ObjectMask}s
  * it contains are themselves mutable.
+ * 
+ * <p>Note that the {@link #asList()} method exposes the internal {@link ArrayList} used for storing
+ * objects, and this may be manipulated in a mutable way.
  *
  * @author Owen Feehan
  */
@@ -256,7 +258,7 @@ public class ObjectCollection implements Iterable<ObjectMask> {
      *
      * @return a list with the {@link ObjectMask}s in this collection.
      */
-    public List<ObjectMask> asList() {
+    public ArrayList<ObjectMask> asList() {
         return delegate;
     }
 
