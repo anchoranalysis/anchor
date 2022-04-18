@@ -79,10 +79,11 @@ public class ConvertStackToRGB {
                         stack.createChannel(0, alwaysNew),
                         stack.createChannel(0, alwaysNew),
                         stack.createChannel(0, alwaysNew));
-            } else if (stack.getNumberChannels() == 3) {
-                return new RGBStack(stack.deriveStack(alwaysNew));
             } else {
-                throw new AnchorImpossibleSituationException();
+                return new RGBStack(
+                        stack.createChannel(0, alwaysNew),
+                        stack.createChannel(1, alwaysNew),
+                        stack.createChannel(2, alwaysNew));
             }
         } catch (IncorrectImageSizeException e) {
             throw new AnchorImpossibleSituationException();
