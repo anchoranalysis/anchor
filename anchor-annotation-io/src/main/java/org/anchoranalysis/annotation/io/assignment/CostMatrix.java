@@ -27,7 +27,6 @@
 package org.anchoranalysis.annotation.io.assignment;
 
 import java.util.List;
-
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Value;
@@ -77,8 +76,8 @@ public class CostMatrix<T> {
      *     elements.
      */
     public static <T> CostMatrix<T> create(
-    		List<T> first,
-    		List<T> second,
+            List<T> first,
+            List<T> second,
             boolean symmetric,
             CheckedToDoubleBiFunction<T, T, CreateException> costCalculator)
             throws CreateException {
