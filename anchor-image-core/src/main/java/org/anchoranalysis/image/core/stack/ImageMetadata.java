@@ -67,5 +67,5 @@ public class ImageMetadata {
      * A timestamp, if available, of when the image was first physically created by the
      * camera/device.
      */
-    @Getter private Optional<ZonedDateTime> acqusitionTime;
+    @Getter private Optional<ZonedDateTime> acquisitionTime;
 }
