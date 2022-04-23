@@ -99,7 +99,7 @@ public class BioformatsReader extends StackReaderOrientationCorrection {
 
             IFormatReader reader =
                     selectAndInitReaderWithMetadata(filePath, metadata, executionTimeRecorder);
-
+            
             return new BioformatsOpenedRaster(
                     reader,
                     metadata,
@@ -124,6 +124,7 @@ public class BioformatsReader extends StackReaderOrientationCorrection {
             IFormatReader reader =
                     executionTimeRecorder.recordExecutionTime(
                             "SelectAndInitReader", BioformatsReader::imageReader);
+            configureReaderForPyramidal(reader);
             reader.setMetadataStore(metadata);
             executionTimeRecorder.recordExecutionTime(
                     "Assigning file-path to BioformatsReader",
@@ -137,6 +138,15 @@ public class BioformatsReader extends StackReaderOrientationCorrection {
                 | IOException e) {
             throw new OperationFailedException(e);
         }
+    }
+    
+    /** Performs necessary configuration of the {@link IFormatReader} instructing it how to process image pyramid files (as often occur with whole slide images). */
+    private static void configureReaderForPyramidal(IFormatReader reader) {
+        // For whole slide images, instruct NOT to show the different pyramid resolutions as separate series
+        // but rather express each pyramid (as a whole) as a series.
+        // The getResolutionCount() and setResolution() methods can then be used for more information about the pyramids
+        // See https://docs.openmicroscopy.org/bio-formats/6.5.1/developers/wsi.html
+        reader.setFlattenedResolutions(true);    	
     }
 
     /** The standard multiplexing image-reader from Bioformats. */
