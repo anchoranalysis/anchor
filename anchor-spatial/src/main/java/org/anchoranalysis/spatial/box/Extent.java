@@ -30,7 +30,6 @@ import java.io.Serializable;
 import java.util.function.Consumer;
 import java.util.function.IntPredicate;
 import java.util.stream.IntStream;
-import lombok.Getter;
 import lombok.experimental.Accessors;
 import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.core.functional.checked.CheckedIntConsumer;
@@ -53,6 +52,11 @@ import org.anchoranalysis.spatial.scale.Scaler;
  * <p>Each size corresponds to the perpendicular Cartesian axes i.e. X, Y and Z axes.
  *
  * <p>This class is <b>immutable</b>. No operation will modify existing state.
+ *
+ * <p>The area (width by height) is pre-calculated to make certain operations like calculating
+ * offsets (which may need to be called frequently) efficient. However, for sizes producing very
+ * large areas that exceed the bounds of an {@code int} these need to be handled separately and
+ * carefully. These cases can be checked for by calling {@link #areaXY()}.
  */
 @Accessors(fluent = true)
 public final class Extent implements Serializable, Comparable<Extent> {
@@ -66,8 +70,17 @@ public final class Extent implements Serializable, Comparable<Extent> {
      * Size in X multiplied by size in Y.
      *
      * <p>This may be convenient for calculating offsets and for iterations.
+     *
+     * <p>Note if the area is too large to be stored as an int, a -1 is stored instead. This should
+     * be checked for, with an appropriate error message, or alternative behavior occurring in these
+     * instances.
+     *
+     * <p>We avoid storing the area as a long, as it would create computational overhead in the vast
+     * bulk of cases where an int is sufficient, especially for operations like calculating offsets
+     * that may occur repeatedly in a loop. It is preferable to handle the outlier cases of very
+     * large areas separately.
      */
-    @Getter private final int areaXY;
+    private final int areaXY;
 
     /**
      * Creates with with only X and Y dimensions.
@@ -123,7 +136,8 @@ public final class Extent implements Serializable, Comparable<Extent> {
      */
     private Extent(ReadableTuple3i size) {
         this.size = size;
-        this.areaXY = size.x() * size.y();
+
+        this.areaXY = calculateAreaXY();
 
         if (size.x() == 0 || size.y() == 0 || size.z() == 0) {
             throw new AnchorFriendlyRuntimeException(
@@ -137,6 +151,36 @@ public final class Extent implements Serializable, Comparable<Extent> {
     }
 
     /**
+     * Size in X multiplied by size in Y.
+     *
+     * <p>This may be convenient for calculating offsets and for iterations.
+     *
+     * <p>Note that for very large sizes (e.g. the sizes of whole-slide images) an int may be
+     * insufficiently large to capture the area. Consider instead using {@link
+     * #calculateAreaXYAsDouble()} in these cases.
+     *
+     * @return the X-size multiplied by the Y-size.
+     * @throws AnchorFriendlyRuntimeException if the area is too large to be expressed as an {@code
+     *     int}.
+     */
+    public int areaXY() {
+        return areaXYAsInt();
+    }
+
+    /**
+     * Calculates the area freshly by multiplying the x-size with y-size, as doubles.
+     *
+     * <p>This is useful if the area would otherwise be too large to be represented as an int.
+     *
+     * <p>Any previously calculated area is ignored.
+     *
+     * @return the area calculated as a double.
+     */
+    public double calculateAreaXYAsDouble() {
+        return ((double) size.x()) * size.y();
+    }
+
+    /**
      * Calculates the volume of the {@link Extent} when considered as a box.
      *
      * <p>This is is the size in the X, Y and Z dimensions multiplied together.
@@ -144,7 +188,11 @@ public final class Extent implements Serializable, Comparable<Extent> {
      * @return the volume in voxels.
      */
     public long calculateVolume() {
-        return ((long) areaXY) * size.z();
+        if (areaXY >= 0) {
+            return ((long) areaXY) * size.z();
+        } else {
+            return ((long) size.x()) * size.y() * size.z();
+        }
     }
 
     /**
@@ -281,6 +329,10 @@ public final class Extent implements Serializable, Comparable<Extent> {
     /**
      * Calculates a XYZ-offset of a point in a buffer whose dimensions are this extent.
      *
+     * <p>To be computationally efficient, <b>this does not actively check that {@code areaXY} is
+     * non-negative</b>. It is the responsibility of the caller of this function to otherwise check
+     * this, or infer it from context.
+     *
      * @param x the value in the X-dimension for the point.
      * @param y the value in the Y-dimension for the point.
      * @param z the value in the Z-dimension for the point.
@@ -293,6 +345,10 @@ public final class Extent implements Serializable, Comparable<Extent> {
     /**
      * Calculates a XYZ-offset of a point in a buffer whose dimensions are this extent.
      *
+     * <p>To be computationally efficient, <b>this does not actively check that {@code areaXY} is
+     * non-negative</b>. It is the responsibility of the caller of this function to otherwise check
+     * this, or infer it from context.
+     *
      * @param point the point to calculate an offset for.
      * @return the offset, pertaining only to all dimensions.
      */
@@ -303,6 +359,10 @@ public final class Extent implements Serializable, Comparable<Extent> {
     /**
      * Calculates a XY-offset of a point in a buffer whose dimensions are this extent.
      *
+     * <p>To be computationally efficient, <b>this does not actively check that {@code areaXY} is
+     * non-negative</b>. It is the responsibility of the caller of this function to otherwise check
+     * this, or infer it from context.
+     *
      * @param point the point to calculate an offset for.
      * @return the offset, pertaining only to the X and Y dimensions.
      */
@@ -312,6 +372,10 @@ public final class Extent implements Serializable, Comparable<Extent> {
 
     /**
      * Calculates a XY-offset of a point in a buffer whose dimensions are this extent.
+     *
+     * <p>To be computationally efficient, <b>this does not actively check that {@code areaXY} is
+     * non-negative</b>. It is the responsibility of the caller of this function to otherwise check
+     * this, or infer it from context.
      *
      * @param point the point to calculate an offset for.
      * @return the offset, pertaining only to the X and Y dimensions.
@@ -680,10 +744,13 @@ public final class Extent implements Serializable, Comparable<Extent> {
      * @param <E> a checked-exception that {@code offsetConsumer} may throw.
      * @param offsetConsumer called for each point with the offset.
      * @throws E if {@code indexConsumer} throws this exception.
+     * @throws AnchorFriendlyRuntimeException if the area is too large to be expressed as an {@code
+     *     int}.
      */
     public <E extends Exception> void iterateOverXYOffset(CheckedIntConsumer<E> offsetConsumer)
             throws E {
-        for (int offset = 0; offset < areaXY; offset++) {
+        int maxOffset = areaXYAsInt();
+        for (int offset = 0; offset < maxOffset; offset++) {
             offsetConsumer.accept(offset);
         }
     }
@@ -807,6 +874,32 @@ public final class Extent implements Serializable, Comparable<Extent> {
     @Override
     public int compareTo(Extent other) {
         return size.compareTo(other.size);
+    }
+
+    /**
+     * Returns the XY area as int, but only if it fits inside the range of an int, otherwise raising
+     * a {@link AnchorFriendlyRuntimeException}.
+     */
+    private int areaXYAsInt() {
+        if (areaXY >= 0) {
+            return areaXY;
+        } else {
+            throw new AnchorFriendlyRuntimeException(
+                    "The area is negative, which is physically impossible, and an indication that the area is too large to be stored as an int.");
+        }
+    }
+
+    /**
+     * Calculates the XY area to assign to a variable, or -1 if it is too large to be stored as an
+     * int.
+     */
+    private int calculateAreaXY() {
+        double areaXYDouble = ((double) size.x()) * size.y();
+        if (areaXYDouble <= Integer.MAX_VALUE) {
+            return size.x() * size.y();
+        } else {
+            return -1;
+        }
     }
 
     private Point3i immutablePointOperation(Consumer<Point3i> pointOperation) {
