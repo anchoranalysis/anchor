@@ -103,13 +103,11 @@ public class ConvertStackToRGB {
             if (stack.getNumberChannels() == 1) {
                 Channel channel = stack.extractChannelForBoundingBox(0, box);
                 return new RGBStack(channel, channel.duplicate(), channel.duplicate());
-            } else if (stack.getNumberChannels() == 3) {
+            } else {
                 return new RGBStack(
                         stack.extractChannelForBoundingBox(0, box),
                         stack.extractChannelForBoundingBox(1, box),
                         stack.extractChannelForBoundingBox(2, box));
-            } else {
-                throw new AnchorImpossibleSituationException();
             }
         } catch (IncorrectImageSizeException e) {
             // This should not be possible
