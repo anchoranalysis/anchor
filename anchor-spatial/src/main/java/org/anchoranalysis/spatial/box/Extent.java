@@ -191,7 +191,7 @@ public final class Extent implements Serializable, Comparable<Extent> {
         if (areaXY >= 0) {
             return ((long) areaXY) * size.z();
         } else {
-            return ((long) size.x()) * size.y() * size.z();
+            return (((long) size.x()) * size.y()) * size.z();
         }
     }
 
