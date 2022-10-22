@@ -31,6 +31,7 @@ import java.util.Optional;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.stack.ImageMetadata;
+import org.anchoranalysis.image.core.stack.ImagePyramidMetadata;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.stack.time.TimeSeries;
@@ -142,6 +143,14 @@ public interface OpenedImageFile extends AutoCloseable {
     ImageTimestampsAttributes timestamps() throws ImageIOException;
 
     /**
+     * Metadata to describe an image-pyramid, if it exists for this opened-image.
+     *
+     * @return the metadata, or {@link Optional#empty} if no pyramid exists.
+     * @throws ImageIOException if an error occurs reading the image to determine this information.
+     */
+    Optional<ImagePyramidMetadata> pyramid() throws ImageIOException;
+
+    /**
      * Whether the image-file has RGB encoded voxels.
      *
      * @param logger the logger.
@@ -180,9 +189,11 @@ public interface OpenedImageFile extends AutoCloseable {
                 dimensionsForSeries(seriesIndex, logger),
                 numberChannels(logger),
                 numberFrames(logger),
+                numberSeries(),
                 isRGB(logger),
                 bitDepth(logger),
                 timestamps.getAttributes(),
-                timestamps.getAcqusitionTime());
+                timestamps.getAcqusitionTime(),
+                pyramid());
     }
 }

@@ -54,6 +54,14 @@ public class ImageMetadata {
      */
     @Getter private int numberFrames;
 
+    /**
+     * The number of separate images stored in the file.
+     *
+     * <p>Pyramid image files should ideally attempt to present themselves as a single element in
+     * the series, but this depends on the driver.
+     */
+    @Getter private int numberSeries;
+
     /** Whether the image is RGB or not. */
     @Getter private boolean rgb;
 
@@ -68,4 +76,12 @@ public class ImageMetadata {
      * camera/device.
      */
     @Getter private Optional<ZonedDateTime> acquisitionTime;
+
+    /**
+     * Metadata to describe an image pyramid, if it exists.
+     *
+     * <p>If multiple pyramids exist, the metadata items are extracted for the pyramid considered
+     * most important.
+     */
+    @Getter private Optional<ImagePyramidMetadata> pyramid;
 }
