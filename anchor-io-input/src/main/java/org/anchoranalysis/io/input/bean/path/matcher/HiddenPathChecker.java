@@ -67,10 +67,26 @@ class HiddenPathChecker {
                 // Note a {@link ArrayIndexOutOfBoundsException} is being thrown here when running
                 // on
                 // the Linux subsystem of Windows. It's caught in {@link includePath}.
-                return Files.isHidden(path);
+            	return fallbackIsHidden(path);
             }
         } catch (UnsupportedOperationException e) {
-            return Files.isHidden(path);
+            return fallbackIsHidden(path);
         }
     }
+    
+    /**
+     *  The least preferred method for determining if a file is hidden.
+     */
+    private static boolean fallbackIsHidden(Path path) throws IOException {
+    	String pathAsString = path.toString();
+    	if (pathAsString.equals(".") || pathAsString.equals("..")) {
+    		// We consider any relative paths as not being hidden
+    		// On MacOS a . is considered hidden, which creates problems. So it's
+    		// important to explictly indicate that this is not-hidden.
+    		return false;
+    	} else {
+    		return Files.isHidden(path);
+    	}
+    }
 }
+ 

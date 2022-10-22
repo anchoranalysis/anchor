@@ -3,7 +3,7 @@
  	<parent>
         <groupId>org.anchoranalysis.anchor</groupId>
    	    <artifactId>anchor-pom</artifactId>
-		<version>0.1.2-SNAPSHOT</version>
+		<version>0.1.3-SNAPSHOT</version>
     </parent> 
 	
     <artifactId>anchor-parent</artifactId>
@@ -44,9 +44,9 @@
         <module>anchor-core</module>
         <module>anchor-bean</module>
         <module>anchor-beans-shared</module>
-		<module>anchor-spatial</module>
+	<module>anchor-spatial</module>
         <module>anchor-annotation</module>
-	   <module>anchor-image-voxel</module>
+   	<module>anchor-image-voxel</module>
         <module>anchor-image-core</module>
         <module>anchor-math</module>
         <module>anchor-overlay</module>
@@ -54,7 +54,7 @@
 	<module>anchor-io-output</module>
 	<module>anchor-io-generator</module>
         <module>anchor-feature</module>
-		<module>anchor-feature-session</module>
+	<module>anchor-feature-session</module>
         <module>anchor-image-bean</module>
         <module>anchor-image-feature</module>
         <module>anchor-mpp</module>
@@ -64,19 +64,19 @@
         <module>anchor-image-io</module>
         <module>anchor-mpp-io</module>
         <module>anchor-mpp-segment</module>
-	   <module>anchor-inference</module>
-	   <module>anchor-image-inference</module>
+   	<module>anchor-inference</module>
+   	<module>anchor-image-inference</module>
 	<module>anchor-annotation-io</module>
 
-	   <!-- IO modules that the test routines dependent on -->
-	   <module>anchor-io-bioformats</module>
-	   <module>anchor-imagej</module>
+	<!-- IO modules that the test routines dependent on -->
+	<module>anchor-io-bioformats</module>
+	<module>anchor-imagej</module>
 	   
-	   <!-- Test modules -->
-		<module>anchor-test</module>
-		<module>anchor-test-io-output</module>
-		<module>anchor-test-feature</module>
-		<module>anchor-test-image</module>
+	<!-- Test modules -->
+	<module>anchor-test</module>
+	<module>anchor-test-io-output</module>
+	<module>anchor-test-feature</module>
+	<module>anchor-test-image</module>
     </modules>
 
 	<!-- Provides a means of reaching anchor-pom and ImageJ -->
