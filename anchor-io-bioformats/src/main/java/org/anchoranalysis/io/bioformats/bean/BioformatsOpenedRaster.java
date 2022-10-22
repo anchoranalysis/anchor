@@ -49,6 +49,7 @@ import org.anchoranalysis.image.core.channel.factory.ChannelFactorySingleType;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
 import org.anchoranalysis.image.core.dimensions.OrientationChange;
+import org.anchoranalysis.image.core.stack.ImagePyramidMetadata;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.stack.CalculateOrientationChange;
@@ -186,6 +187,11 @@ class BioformatsOpenedRaster implements OpenedImageFile {
     @Override
     public Optional<List<String>> channelNames(Logger logger) throws ImageIOException {
         return channelNames;
+    }
+
+    @Override
+    public Optional<ImagePyramidMetadata> pyramid() throws ImageIOException {
+        return ImagePyramidMetadataFactory.derivePyramidMetadata(reader);
     }
 
     private Dimensions dimensionsWithoutOrientationChange(int seriesIndex) throws ImageIOException {

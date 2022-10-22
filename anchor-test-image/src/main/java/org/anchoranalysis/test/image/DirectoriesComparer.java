@@ -97,11 +97,11 @@ class DirectoriesComparer {
     }
 
     /**
-     * Compares two files to determine if they are identical
+     * Compares two files to determine if they are identical.
      *
-     * @param file1 first file
-     * @param file2 second file
-     * @return true if the files have the same content (byte by byte), false otherwise
+     * @param file1 first file.
+     * @param file2 second file.
+     * @return true if the files have the same content (byte by byte), false otherwise.
      */
     private static boolean compareFiles(File file1, File file2) {
         long index1 = file1.length();
