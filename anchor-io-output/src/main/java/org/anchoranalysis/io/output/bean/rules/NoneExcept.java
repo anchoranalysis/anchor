@@ -56,6 +56,15 @@ public class NoneExcept extends OutputEnableRulesSpecify {
     }
 
     /**
+     * Create with a single first-level output-name.
+     *
+     * @param output output name.
+     */
+    public NoneExcept(String output) {
+        super(new StringSet(output));
+    }
+
+    /**
      * Create with first-level output names
      *
      * @param first first-level output-names

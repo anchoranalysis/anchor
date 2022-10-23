@@ -29,6 +29,7 @@ import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.io.output.bean.OutputManager;
+import org.anchoranalysis.io.output.bean.rules.OutputEnabledRules;
 import org.anchoranalysis.io.output.bean.rules.Permissive;
 import org.anchoranalysis.io.output.outputter.BindFailedException;
 import org.anchoranalysis.io.output.outputter.OutputWriteContext;
@@ -40,15 +41,38 @@ import org.anchoranalysis.io.output.path.prefixer.PathPrefixerException;
 public class OutputterCheckedFixture {
 
     public static OutputterChecked create() throws BindFailedException {
-        return createFrom(OutputManagerFixture.createOutputManager(Optional.empty()));
+        return createFrom(
+                OutputManagerFixture.createOutputManager(
+                        Optional.empty(), false, Optional.empty()));
     }
 
+    /**
+     * Creates a {@link OutputterChecked} from an {@link OutputManager} - that permits all outputs.
+     *
+     * @param outputManager the output-manager to create from.
+     * @return a newly created outputter, as derived from {@link outputManager}.
+     * @throws BindFailedException
+     */
     public static OutputterChecked createFrom(OutputManager outputManager)
+            throws BindFailedException {
+        return createFrom(outputManager, new Permissive());
+    }
+
+    /**
+     * Creates a {@link OutputterChecked} from an {@link OutputManager} - that outputs in accordance
+     * ot the rules in {@code outputsEnabled}.
+     *
+     * @param outputManager the output-manager to create from.
+     * @return a newly created outputter, as derived from {@link outputManager}.
+     * @throws BindFailedException
+     */
+    public static OutputterChecked createFrom(
+            OutputManager outputManager, OutputEnabledRules outputsEnabled)
             throws BindFailedException {
         try {
             return outputManager.createExperimentOutputter(
                     Optional.of("debug"),
-                    new Permissive().create(Optional.empty()),
+                    outputsEnabled.create(Optional.empty()),
                     Optional.empty(),
                     new OutputWriteContext(outputManager.getOutputWriteSettings()),
                     new PathPrefixerContext(),

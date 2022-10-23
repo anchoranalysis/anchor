@@ -32,6 +32,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.log.error.ErrorReporter;
 import org.anchoranalysis.io.output.bean.OutputManager;
+import org.anchoranalysis.io.output.bean.rules.OutputEnabledRules;
 import org.anchoranalysis.io.output.outputter.BindFailedException;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
@@ -46,14 +47,17 @@ public class OutputterFixture {
         return outputter(outputterChecked(pathTempDirectory));
     }
 
-    public static Outputter outputter(OutputManager outputManager) throws BindFailedException {
-        return outputter(OutputterCheckedFixture.createFrom(outputManager));
+    public static Outputter outputter(
+            OutputManager outputManager, OutputEnabledRules outputsEnabled)
+            throws BindFailedException {
+        return outputter(OutputterCheckedFixture.createFrom(outputManager, outputsEnabled));
     }
 
     public static OutputterChecked outputterChecked(Optional<Path> pathTempDirectory)
             throws BindFailedException {
         return OutputterCheckedFixture.createFrom(
-                OutputManagerFixture.createOutputManager(pathTempDirectory));
+                OutputManagerFixture.createOutputManager(
+                        pathTempDirectory, false, Optional.empty()));
     }
 
     private static Outputter outputter(OutputterChecked outputter) {

@@ -29,7 +29,6 @@ package org.anchoranalysis.experiment.arguments;
 import java.nio.file.Path;
 import java.util.Optional;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import org.anchoranalysis.core.functional.OptionalFactory;
 import org.anchoranalysis.io.input.InputContextParameters;
@@ -46,7 +45,6 @@ import org.anchoranalysis.io.output.path.prefixer.PathPrefixerException;
  *
  * @author Owen Feehan
  */
-@NoArgsConstructor
 @Accessors(fluent = true)
 public class ExecutionArguments {
 
@@ -57,13 +55,25 @@ public class ExecutionArguments {
     @Getter private final OutputArguments output = new OutputArguments();
 
     /** Arguments to help specify the outputs from the experiment. */
-    @Getter private final TaskArguments task = new TaskArguments();
+    @Getter private final TaskArguments task;
 
     /** If defined, parameters for debug-mode. */
     private Optional<DebugModeParameters> debugModeParameters = Optional.empty();
 
-    public ExecutionArguments(Path modelDirectory) {
+    /** Creates with neither a model-directory nor initial task-arguments. */
+    public ExecutionArguments() {
+        this.task = new TaskArguments();
+    }
+
+    /**
+     * Creates with a model-directory and an image-size suggestion.
+     *
+     * @param modelDirectory the model-directory.
+     * @param imageSizeSuggestion an image-size-suggestion.
+     */
+    public ExecutionArguments(Path modelDirectory, TaskArguments task) {
         input.assignModelDirectory(modelDirectory);
+        this.task = task;
     }
 
     /**

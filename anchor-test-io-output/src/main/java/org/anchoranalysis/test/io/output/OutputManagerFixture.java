@@ -36,21 +36,32 @@ import org.anchoranalysis.io.output.bean.OutputManager;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.bean.path.prefixer.IncrementingNumber;
 import org.anchoranalysis.io.output.bean.path.prefixer.PathPrefixer;
+import org.anchoranalysis.io.output.bean.rules.OutputEnabledRules;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class OutputManagerFixture {
 
-    public static OutputManager createOutputManager(Optional<Path> pathForPrefixer) {
+    public static OutputManager createOutputManager(
+            Optional<Path> pathForPrefixer,
+            boolean addPrefixForEachInput,
+            Optional<OutputEnabledRules> outputEnabledRules) {
         OutputManager outputManager = new OutputManager();
         outputManager.setSilentlyDeleteExisting(true);
         outputManager.setOutputWriteSettings(settings());
-        outputManager.setPrefixer(prefixer(pathForPrefixer));
+        outputManager.setPrefixer(prefixer(pathForPrefixer, addPrefixForEachInput));
+        if (outputEnabledRules.isPresent()) {
+            outputManager.setOutputsEnabled(outputEnabledRules.get());
+        }
         return outputManager;
     }
 
-    private static PathPrefixer prefixer(Optional<Path> pathForPrefixer) {
-        Optional<PathPrefixer> prefixer = pathForPrefixer.map(ConstantPathPrefixer::new);
-        return prefixer.orElseGet(IncrementingNumber::new);
+    private static PathPrefixer prefixer(
+            Optional<Path> pathForPrefixer, boolean addPrefixForEachInput) {
+        if (pathForPrefixer.isPresent()) {
+            return new ConstantPathPrefixer(pathForPrefixer.get(), addPrefixForEachInput);
+        } else {
+            return new IncrementingNumber();
+        }
     }
 
     private static OutputWriteSettings settings() {
