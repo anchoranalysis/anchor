@@ -47,6 +47,15 @@ public class SpecificEnabled extends OutputEnabled {
     @BeanField @Getter @Setter private StringSet outputsEnabled;
     // END BEAN PROPERTIES
 
+    /**
+     * Create with a single output-enabled.
+     *
+     * @param output the output to enable.
+     */
+    public SpecificEnabled(String output) {
+        this.outputsEnabled = new StringSet(output);
+    }
+
     @Override
     public boolean isOutputEnabled(String outputName) {
         return outputsEnabled.contains(outputName);

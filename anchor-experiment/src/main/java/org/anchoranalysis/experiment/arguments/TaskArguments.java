@@ -27,7 +27,6 @@ package org.anchoranalysis.experiment.arguments;
 
 import java.util.Optional;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.index.range.IndexRangeNegative;
 import org.anchoranalysis.core.index.range.IndexRangeNegativeFactory;
@@ -42,14 +41,13 @@ import org.anchoranalysis.image.core.dimensions.size.suggestion.SuggestionFormat
  *
  * @author Owen Feehan
  */
-@NoArgsConstructor
 public class TaskArguments {
 
     /** A name to describe the ongoing task. */
     @Getter private Optional<String> taskName = Optional.empty();
 
     /** Suggests dimensions or a scaling-factor to resize an image to. */
-    @Getter private Optional<ImageSizeSuggestion> size = Optional.empty();
+    @Getter private Optional<ImageSizeSuggestion> size;
 
     /** Suggests a maximum number of processors (CPUs) for a task. */
     @Getter private Optional<Integer> maxNumberProcessors = Optional.empty();
@@ -58,6 +56,20 @@ public class TaskArguments {
      * An index-range to use for grouping, by subsetting components from each input's identifier.
      */
     @Getter private Optional<IndexRangeNegative> groupIndexRange = Optional.empty();
+
+    /** Creates with no initial size. */
+    public TaskArguments() {
+        this.size = Optional.empty();
+    }
+
+    /**
+     * Creates with a specific initial size-suggestion.
+     *
+     * @param size the size-suggestion.
+     */
+    public TaskArguments(Optional<ImageSizeSuggestion> size) {
+        this.size = size;
+    }
 
     public void assignTaskName(Optional<String> taskName) {
         this.taskName = taskName;

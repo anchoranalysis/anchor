@@ -29,6 +29,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -53,7 +54,11 @@ public abstract class OutputEnableRulesSpecify extends OutputEnabledRules {
     /** Output-names in the first-level. */
     @BeanField @OptionalBean @Getter @Setter private StringSet first;
 
-    /** Output-names in the second-level (for all first level output-names) */
+    /**
+     * Output-names in the second-level (for all first level output-names).
+     *
+     * <p>If the list is empty, all second-level outputs are considered permissive.
+     */
     @BeanField @Getter @Setter private List<NamedBean<StringSet>> second = Arrays.asList();
     // END BEAN PROPERTIES
 
@@ -85,6 +90,11 @@ public abstract class OutputEnableRulesSpecify extends OutputEnabledRules {
      */
     protected SingleLevelOutputEnabled secondLevelOutputs(
             String outputName, OutputEnabled defaultValue) {
+
+        if (second.isEmpty()) {
+            return new Permissive().create(Optional.empty());
+        }
+
         createSecondLevelMapIfNecessary();
         return mapSecondLevel.getOrDefault(outputName, defaultValue);
     }
