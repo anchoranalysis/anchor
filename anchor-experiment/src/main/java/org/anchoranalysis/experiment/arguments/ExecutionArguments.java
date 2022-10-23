@@ -69,7 +69,7 @@ public class ExecutionArguments {
      * Creates with a model-directory and an image-size suggestion.
      *
      * @param modelDirectory the model-directory.
-     * @param imageSizeSuggestion an image-size-suggestion.
+     * @param task arguments to help specify the outputs from the experiment.
      */
     public ExecutionArguments(Path modelDirectory, TaskArguments task) {
         input.assignModelDirectory(modelDirectory);
