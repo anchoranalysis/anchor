@@ -50,7 +50,7 @@ public class OutputterCheckedFixture {
      * Creates a {@link OutputterChecked} from an {@link OutputManager} - that permits all outputs.
      *
      * @param outputManager the output-manager to create from.
-     * @return a newly created outputter, as derived from {@link outputManager}.
+     * @return a newly created outputter, as derived from {@code outputManager}.
      * @throws BindFailedException
      */
     public static OutputterChecked createFrom(OutputManager outputManager)
@@ -60,10 +60,10 @@ public class OutputterCheckedFixture {
 
     /**
      * Creates a {@link OutputterChecked} from an {@link OutputManager} - that outputs in accordance
-     * ot the rules in {@code outputsEnabled}.
+     * to the rules in {@code outputsEnabled}.
      *
      * @param outputManager the output-manager to create from.
-     * @return a newly created outputter, as derived from {@link outputManager}.
+     * @return a newly created outputter, as derived from {@code outputManager}.
      * @throws BindFailedException
      */
     public static OutputterChecked createFrom(
