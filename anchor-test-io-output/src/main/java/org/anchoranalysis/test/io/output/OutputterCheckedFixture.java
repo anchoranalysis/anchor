@@ -42,8 +42,7 @@ public class OutputterCheckedFixture {
 
     public static OutputterChecked create() throws BindFailedException {
         return createFrom(
-                OutputManagerFixture.createOutputManager(
-                        Optional.empty(), false, Optional.empty()));
+                OutputManagerFixture.createOutputManager(Optional.empty(), Optional.empty()));
     }
 
     /**
