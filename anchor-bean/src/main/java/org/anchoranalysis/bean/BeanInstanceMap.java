@@ -84,6 +84,18 @@ public class BeanInstanceMap {
         map.put(familyType, instance);
         return instance;
     }
+    
+    /**
+     * Removes any instance in the map of a particular family-type.
+     * 
+     * <p>If no instance exists, the method does notnhing.
+     *
+     * @param <T> the family-type
+     * @param familyType the class that defines the family.
+     */
+    public <T> void removeInstanceFor(Class<? extends T> familyType) {
+    	map.remove(familyType);
+    }
 
     /**
      * Populates the entries from another BeanInstanceMap

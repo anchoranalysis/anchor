@@ -73,12 +73,22 @@ public class BeanInstanceMapFixture {
 
     /**
      * Ensure a {@link StackWriter} instance exists in the underlying {@link BeanInstanceMap}.
+     * 
+     * <p>This leaves a global side-affect after being used, which may affect subsequent tests run
+     * in the same maven unit.
      *
      * @param tiff if true, TIFFs are created, otherwise PNGs.
      * @return the instance, as already exists, or if newly created.
      */
     public static StackWriter ensureStackWriter(boolean tiff) {
         return addOrReplace(StackWriter.class, tiff ? new Tiff() : new PNG());
+    }
+    
+    /**
+     * Removes any {@link StackWriter} that may exist.
+     */
+    public static void removeStackWriter() {
+    	getOrCreateBeanFactory().getDefaultInstances().removeInstanceFor(StackWriter.class);
     }
 
     /**
