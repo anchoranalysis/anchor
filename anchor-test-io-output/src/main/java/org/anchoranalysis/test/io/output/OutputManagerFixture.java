@@ -42,23 +42,20 @@ import org.anchoranalysis.io.output.bean.rules.OutputEnabledRules;
 public class OutputManagerFixture {
 
     public static OutputManager createOutputManager(
-            Optional<Path> pathForPrefixer,
-            boolean addPrefixForEachInput,
-            Optional<OutputEnabledRules> outputEnabledRules) {
+            Optional<Path> pathForPrefixer, Optional<OutputEnabledRules> outputEnabledRules) {
         OutputManager outputManager = new OutputManager();
         outputManager.setSilentlyDeleteExisting(true);
         outputManager.setOutputWriteSettings(settings());
-        outputManager.setPrefixer(prefixer(pathForPrefixer, addPrefixForEachInput));
+        outputManager.setPrefixer(prefixer(pathForPrefixer));
         if (outputEnabledRules.isPresent()) {
             outputManager.setOutputsEnabled(outputEnabledRules.get());
         }
         return outputManager;
     }
 
-    private static PathPrefixer prefixer(
-            Optional<Path> pathForPrefixer, boolean addPrefixForEachInput) {
+    private static PathPrefixer prefixer(Optional<Path> pathForPrefixer) {
         if (pathForPrefixer.isPresent()) {
-            return new ConstantPathPrefixer(pathForPrefixer.get(), addPrefixForEachInput);
+            return new ConstantPathPrefixer(pathForPrefixer.get());
         } else {
             return new IncrementingNumber();
         }
