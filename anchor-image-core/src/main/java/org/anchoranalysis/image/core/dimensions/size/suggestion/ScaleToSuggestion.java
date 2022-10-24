@@ -38,7 +38,7 @@ import org.anchoranalysis.spatial.scale.Scaler;
 
 /** A series of suggestions to resize images. */
 @Value
-class ScaleToSuggestion implements ImageSizeSuggestion {
+public class ScaleToSuggestion implements ImageSizeSuggestion {
 
     /** The suggested width to resize to. */
     private final Optional<Integer> width;
