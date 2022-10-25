@@ -48,7 +48,7 @@ import org.anchoranalysis.spatial.point.ReadableTuple3i;
 @NoArgsConstructor
 public class Align extends BoxAligner {
 
-    // START BEAN PROPERTIES
+	// START BEAN PROPERTIES
     /**
      * Indicates how to align the image across the <b>X-axis</b> (i.e. horizontally): one of {@code
      * left, right, center}.
@@ -103,6 +103,7 @@ public class Align extends BoxAligner {
         alignYEnum = PositionChoicesConstants.alignY(alignY);
         alignZEnum = PositionChoicesConstants.alignZ(alignZ);
     }
+ 
 
     @Override
     protected BoundingBox alignAfterCheck(BoundingBox smaller, BoundingBox larger) {
@@ -159,6 +160,17 @@ public class Align extends BoxAligner {
                 position(alignYEnum, Extent::y, smaller.extent(), smaller.cornerMin().y(), larger),
                 position(alignZEnum, Extent::z, smaller.extent(), smaller.cornerMin().z(), larger));
     }
+    
+
+    @Override
+	public Align duplicateBean() {
+		// Needed to preserve the non-bean state
+    	Align duplicated = (Align) super.duplicateBean();
+    	duplicated.alignXEnum = this.alignXEnum;
+    	duplicated.alignYEnum = this.alignYEnum;
+    	duplicated.alignZEnum = this.alignZEnum;
+    	return duplicated;
+	}
 
     /**
      * Calculates the position on a particular axis.
