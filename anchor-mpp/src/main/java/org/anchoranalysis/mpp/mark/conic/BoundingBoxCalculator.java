@@ -37,7 +37,7 @@ import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.Point3d;
 import org.anchoranalysis.spatial.point.Point3i;
 
-/** Functions to calculate a bounding-box for a point surrounded by some form of radii */
+/** Functions to calculate a bounding-box for a point surrounded by some form of radius. */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class BoundingBoxCalculator {
 
