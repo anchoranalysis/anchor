@@ -93,7 +93,7 @@ public class TestLoader {
      * @return a loader associated with the {@code MAVEN_WORKING_DIR/PATH_RESOURCES/PLUS_SOMETHING}
      */
     public static TestLoader createFromMavenWorkingDirectory(String toAppendToDirectory) {
-        Path path = Paths.get(PATH_RESOURCES).resolve(toAppendToDirectory);
+        Path path = pathMavenWorkingDirectory(toAppendToDirectory);
         return new TestLoader(path.toString());
     }
 
@@ -125,6 +125,19 @@ public class TestLoader {
      */
     public TestLoader createForSubdirectory(String subdirectory) {
         return new TestLoader(root.resolve(subdirectory));
+    }
+        
+    /**
+     * Determines the path to a directory inside the Maven Working Directory.
+     * 
+     * It uses the pattern {@code PATH_RESOURCES/PLUS_SOMETHING} inside the Maven
+     * working directory.
+     *
+     * @param toAppendToDirectory appended to Maven working directory to determine final directory.
+     * @return the path to this directory on the file-system.
+     */
+    public static Path pathMavenWorkingDirectory(String toAppendToDirectory) {
+        return Paths.get(PATH_RESOURCES).resolve(toAppendToDirectory);
     }
 
     /**
