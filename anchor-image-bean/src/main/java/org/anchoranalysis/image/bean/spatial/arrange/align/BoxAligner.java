@@ -121,7 +121,7 @@ public abstract class BoxAligner extends AnchorBean<BoxAligner> {
      * @throws OperationFailedException if an unrecognized parameter or illegal state exists
      *     preventing successful alignment.
      */
-    public abstract BoundingBox alignAfterCheck(BoundingBox smaller, BoundingBox larger)
+    protected abstract BoundingBox alignAfterCheck(BoundingBox smaller, BoundingBox larger)
             throws OperationFailedException;
 
     /**
@@ -136,7 +136,7 @@ public abstract class BoxAligner extends AnchorBean<BoxAligner> {
      * @throws OperationFailedException if an unrecognized parameter or illegal state exists
      *     preventing successful alignment.
      */
-    public abstract BoundingBox alignAfterCheck(Extent smaller, Extent larger)
+    protected abstract BoundingBox alignAfterCheck(Extent smaller, Extent larger)
             throws OperationFailedException;
 
     /**
@@ -151,7 +151,7 @@ public abstract class BoxAligner extends AnchorBean<BoxAligner> {
      * @throws OperationFailedException if an unrecognized parameter or illegal state exists
      *     preventing successful alignment.
      */
-    public abstract BoundingBox alignAfterCheck(Extent smaller, BoundingBox larger)
+    protected abstract BoundingBox alignAfterCheck(Extent smaller, BoundingBox larger)
             throws OperationFailedException;
 
     private static void checkCorner(ReadableTuple3i smaller) throws OperationFailedException {

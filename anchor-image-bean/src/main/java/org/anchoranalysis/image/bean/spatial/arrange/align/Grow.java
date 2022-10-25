@@ -71,7 +71,7 @@ public class Grow extends BoxAligner {
     }
 
     @Override
-    public BoundingBox alignAfterCheck(BoundingBox smaller, BoundingBox larger)
+    protected BoundingBox alignAfterCheck(BoundingBox smaller, BoundingBox larger)
             throws OperationFailedException {
         if (preserveAspectRatio) {
             Extent smallerGrown = growSmaller(smaller.extent(), larger.extent());
@@ -82,7 +82,7 @@ public class Grow extends BoxAligner {
     }
 
     @Override
-    public BoundingBox alignAfterCheck(Extent smaller, Extent larger)
+    protected BoundingBox alignAfterCheck(Extent smaller, Extent larger)
             throws OperationFailedException {
         if (preserveAspectRatio) {
             Extent smallerGrown = growSmaller(smaller, larger);
@@ -93,7 +93,7 @@ public class Grow extends BoxAligner {
     }
 
     @Override
-    public BoundingBox alignAfterCheck(Extent smaller, BoundingBox larger)
+    protected BoundingBox alignAfterCheck(Extent smaller, BoundingBox larger)
             throws OperationFailedException {
         if (preserveAspectRatio) {
             Extent smallerGrown = growSmaller(smaller, larger.extent());
