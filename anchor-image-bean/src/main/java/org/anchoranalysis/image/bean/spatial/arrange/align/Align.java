@@ -105,7 +105,7 @@ public class Align extends BoxAligner {
     }
 
     @Override
-    public BoundingBox alignAfterCheck(BoundingBox smaller, BoundingBox larger) {
+    protected BoundingBox alignAfterCheck(BoundingBox smaller, BoundingBox larger) {
         ReadableTuple3i cornerLarger = larger.cornerMin();
         Point3i cornerAligned = alignCorner(smaller, larger.extent());
         cornerAligned.add(cornerLarger);
@@ -113,14 +113,14 @@ public class Align extends BoxAligner {
     }
 
     @Override
-    public BoundingBox alignAfterCheck(Extent smaller, Extent larger)
+    protected BoundingBox alignAfterCheck(Extent smaller, Extent larger)
             throws OperationFailedException {
         Point3i cornerAligned = alignCorner(smaller, larger);
         return BoundingBox.createReuse(cornerAligned, smaller);
     }
 
     @Override
-    public BoundingBox alignAfterCheck(Extent smaller, BoundingBox larger)
+    protected BoundingBox alignAfterCheck(Extent smaller, BoundingBox larger)
             throws OperationFailedException {
         ReadableTuple3i cornerLarger = larger.cornerMin();
         Point3i cornerAligned = alignCorner(smaller, larger.extent());

@@ -126,12 +126,12 @@ public class TestLoader {
     public TestLoader createForSubdirectory(String subdirectory) {
         return new TestLoader(root.resolve(subdirectory));
     }
-        
+
     /**
      * Determines the path to a directory inside the Maven Working Directory.
-     * 
-     * It uses the pattern {@code PATH_RESOURCES/PLUS_SOMETHING} inside the Maven
-     * working directory.
+     *
+     * <p>It uses the pattern {@code PATH_RESOURCES/PLUS_SOMETHING} inside the Maven working
+     * directory.
      *
      * @param toAppendToDirectory appended to Maven working directory to determine final directory.
      * @return the path to this directory on the file-system.
