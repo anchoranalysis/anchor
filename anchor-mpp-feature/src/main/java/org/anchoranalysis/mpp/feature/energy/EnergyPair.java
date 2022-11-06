@@ -29,13 +29,13 @@ package org.anchoranalysis.mpp.feature.energy;
 import lombok.AllArgsConstructor;
 import lombok.Value;
 import org.anchoranalysis.mpp.mark.Mark;
-import org.anchoranalysis.mpp.pair.IdentifiablePair;
+import org.anchoranalysis.mpp.pair.MarkPair;
 
 @AllArgsConstructor
 @Value
 public class EnergyPair {
 
-    private final IdentifiablePair<Mark> pair;
+    private final MarkPair<Mark> pair;
 
     private final EnergyTotal energyTotal;
 }

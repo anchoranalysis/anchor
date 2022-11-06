@@ -31,15 +31,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.object.properties.ObjectWithProperties;
 import org.anchoranalysis.image.core.stack.RGBStack;
 import org.anchoranalysis.image.voxel.object.ObjectMask; // NOSONAR
 import org.anchoranalysis.overlay.bean.DrawObject;
 import org.anchoranalysis.overlay.writer.ObjectDrawAttributes;
-import org.anchoranalysis.overlay.writer.PrecalculationOverlay;
 import org.anchoranalysis.spatial.box.BoundingBox;
 
 /**
@@ -90,34 +87,18 @@ public class IfElse extends DrawObject {
     }
 
     @Override
-    public PrecalculationOverlay precalculate(ObjectWithProperties object, Dimensions dim)
-            throws CreateException {
-
-        // We calculate both the true and false precalculations
-        PrecalculationOverlay precalculationTrue = whenTrue.precalculate(object, dim);
-        PrecalculationOverlay precalculationFalse = whenFalse.precalculate(object, dim);
-
-        return new PrecalculationOverlay(object) {
-
-            @Override
-            public void writePrecalculatedMask(
-                    RGBStack background,
-                    ObjectDrawAttributes attributes,
-                    int iteration,
-                    BoundingBox restrictTo)
-                    throws OperationFailedException {
-
-                if (predicate.isPresent()
-                        && predicate
-                                .get()
-                                .test(object, background, attributes.idFor(object, iteration))) {
-                    precalculationTrue.writePrecalculatedMask(
-                            background, attributes, iteration, restrictTo);
-                } else {
-                    precalculationFalse.writePrecalculatedMask(
-                            background, attributes, iteration, restrictTo);
-                }
-            }
-        };
+    public void drawSingle(
+            ObjectWithProperties object,
+            RGBStack stack,
+            ObjectDrawAttributes attributes,
+            int iteration,
+            BoundingBox restrictTo)
+            throws OperationFailedException {
+        if (predicate.isPresent()
+                && predicate.get().test(object, stack, attributes.idFor(object, iteration))) {
+            whenTrue.drawSingle(object, stack, attributes, iteration, restrictTo);
+        } else {
+            whenFalse.drawSingle(object, stack, attributes, iteration, restrictTo);
+        }
     }
 }

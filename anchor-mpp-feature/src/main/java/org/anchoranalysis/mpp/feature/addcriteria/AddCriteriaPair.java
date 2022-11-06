@@ -35,13 +35,13 @@ import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.mpp.feature.input.FeatureInputPairMemo;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
-import org.anchoranalysis.mpp.pair.IdentifiablePair;
+import org.anchoranalysis.mpp.pair.MarkPair;
 
 public abstract class AddCriteriaPair extends AnchorBean<AddCriteriaPair>
-        implements AddCriteria<IdentifiablePair<Mark>> {
+        implements AddCriteria<MarkPair<Mark>> {
 
     @Override
-    public Optional<IdentifiablePair<Mark>> generateEdge(
+    public Optional<MarkPair<Mark>> generateEdge(
             VoxelizedMarkMemo mark1,
             VoxelizedMarkMemo mark2,
             EnergyStack energyStack,
@@ -51,7 +51,7 @@ public abstract class AddCriteriaPair extends AnchorBean<AddCriteriaPair>
 
         try {
             if (includeMarks(mark1, mark2, energyStack.dimensions(), session, do3D)) {
-                return Optional.of(new IdentifiablePair<Mark>(mark1.getMark(), mark2.getMark()));
+                return Optional.of(new MarkPair<Mark>(mark1.getMark(), mark2.getMark()));
             }
         } catch (IncludeMarksFailureException e) {
             throw new CreateException(e);

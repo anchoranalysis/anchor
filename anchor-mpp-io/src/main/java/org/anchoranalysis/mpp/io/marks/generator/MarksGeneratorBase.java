@@ -63,7 +63,7 @@ public abstract class MarksGeneratorBase
                     OverlayCollectionMarkFactory.createColor(
                             element.getMarksColored(), regionMembership);
 
-            writer.writeOverlays(overlays, stack, idGetter);
+            writer.drawOverlays(overlays, stack, idGetter);
 
             return stack.asStack();
 

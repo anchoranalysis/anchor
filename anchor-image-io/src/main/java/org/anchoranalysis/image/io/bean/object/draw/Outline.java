@@ -30,16 +30,13 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.contour.FindContour;
-import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.object.properties.ObjectWithProperties;
 import org.anchoranalysis.image.core.stack.RGBStack;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.overlay.bean.DrawObject;
 import org.anchoranalysis.overlay.writer.ObjectDrawAttributes;
-import org.anchoranalysis.overlay.writer.PrecalculationOverlay;
 import org.anchoranalysis.spatial.box.BoundingBox;
 
 /**
@@ -76,32 +73,24 @@ public class Outline extends DrawObject {
     }
 
     @Override
-    public PrecalculationOverlay precalculate(ObjectWithProperties object, Dimensions dim)
-            throws CreateException {
-
+    public void drawSingle(
+            ObjectWithProperties object,
+            RGBStack stack,
+            ObjectDrawAttributes attributes,
+            int iteration,
+            BoundingBox restrictTo)
+            throws OperationFailedException {
         ObjectMask outline =
                 FindContour.createFrom(
-                        object.asObjectMask(), outlineWidth, (dim.z() > 1) && includeZ, true);
+                        object.asObjectMask(),
+                        outlineWidth,
+                        (stack.dimensions().z() > 1) && includeZ,
+                        true);
 
         ObjectWithProperties objectWithProperties =
                 new ObjectWithProperties(outline, object.getProperties());
 
-        return new PrecalculationOverlay(object) {
-
-            @Override
-            public void writePrecalculatedMask(
-                    RGBStack background,
-                    ObjectDrawAttributes attributes,
-                    int iteration,
-                    BoundingBox restrictTo)
-                    throws OperationFailedException {
-
-                IntersectionWriter.writeRGBMaskIntersection(
-                        outline,
-                        attributes.colorFor(objectWithProperties, iteration),
-                        background,
-                        restrictTo);
-            }
-        };
+        IntersectionWriter.writeRGBMaskIntersection(
+                outline, attributes.colorFor(objectWithProperties, iteration), stack, restrictTo);
     }
 }

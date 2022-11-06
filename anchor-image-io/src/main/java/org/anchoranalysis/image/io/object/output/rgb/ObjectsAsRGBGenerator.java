@@ -81,7 +81,7 @@ public abstract class ObjectsAsRGBGenerator
             }
 
             RGBStack backgroundRegion = generateBackgroundRegion(element, background);
-            drawObject.write(generateMasks(element), backgroundRegion, attributes);
+            drawObject.drawCollection(generateMasks(element), backgroundRegion, attributes);
             return backgroundRegion.asStack();
         } catch (OperationFailedException | CreateException e) {
             throw new OutputWriteFailedException(e);

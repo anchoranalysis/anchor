@@ -26,14 +26,11 @@
 
 package org.anchoranalysis.image.io.bean.object.draw;
 
-import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.object.properties.ObjectWithProperties;
 import org.anchoranalysis.image.core.stack.RGBStack;
 import org.anchoranalysis.overlay.bean.DrawObject;
 import org.anchoranalysis.overlay.writer.ObjectDrawAttributes;
-import org.anchoranalysis.overlay.writer.PrecalculationOverlay;
 import org.anchoranalysis.spatial.box.BoundingBox;
 
 /**
@@ -44,24 +41,14 @@ import org.anchoranalysis.spatial.box.BoundingBox;
 public class Filled extends DrawObject {
 
     @Override
-    public PrecalculationOverlay precalculate(ObjectWithProperties object, Dimensions dim)
-            throws CreateException {
-        return new PrecalculationOverlay(object) {
-
-            @Override
-            public void writePrecalculatedMask(
-                    RGBStack background,
-                    ObjectDrawAttributes attributes,
-                    int iteration,
-                    BoundingBox restrictTo)
-                    throws OperationFailedException {
-
-                IntersectionWriter.writeRGBMaskIntersection(
-                        object.asObjectMask(),
-                        attributes.colorFor(object, iteration),
-                        background,
-                        restrictTo);
-            }
-        };
+    public void drawSingle(
+            ObjectWithProperties object,
+            RGBStack stack,
+            ObjectDrawAttributes attributes,
+            int iteration,
+            BoundingBox restrictTo)
+            throws OperationFailedException {
+        IntersectionWriter.writeRGBMaskIntersection(
+                object.asObjectMask(), attributes.colorFor(object, iteration), stack, restrictTo);
     }
 }
