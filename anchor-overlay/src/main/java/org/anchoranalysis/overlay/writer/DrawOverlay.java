@@ -41,7 +41,7 @@ import org.anchoranalysis.overlay.collection.ColoredOverlayCollection;
 import org.anchoranalysis.spatial.box.BoundingBox;
 
 /**
- * Draws a {@Overlay} onto a {@link RGBStack}, including precalculated overlays.
+ * Draws an ovleray onto a {@link RGBStack}
  *
  * @author Owen Feehan
  */
