@@ -58,7 +58,7 @@ public class OverlayMark extends Overlay {
         this.regionMembership = regionMembership;
 
         /** How we create our scaled masks */
-        scaledMaskCreator =
+        scaledMaskCreator = new FromMask();
                 new VolumeThreshold(
                         new FromMask(), // Above the threshold, we use the quick *rough* method for
                         // scaling up
@@ -76,12 +76,11 @@ public class OverlayMark extends Overlay {
 
     @Override
     public ObjectWithProperties createObject(
-            DrawOverlay overlayWriter, Dimensions dimEntireImage, BinaryValuesByte bvOut)
+            DrawOverlay drawer, Dimensions dimEntireImage, BinaryValuesByte binaryValuesOut)
             throws CreateException {
-        return new ObjectWithProperties(mark.deriveObject(dimEntireImage, regionMembership, bvOut));
+        return new ObjectWithProperties(mark.deriveObject(dimEntireImage, regionMembership, binaryValuesOut));
     }
 
-    @Override
     public int getIdentifier() {
         return mark.getIdentifier();
     }

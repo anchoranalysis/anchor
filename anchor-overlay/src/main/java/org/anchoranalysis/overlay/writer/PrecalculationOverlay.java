@@ -31,10 +31,11 @@ import lombok.Getter;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.object.properties.ObjectWithProperties;
 import org.anchoranalysis.image.core.stack.RGBStack;
+import org.anchoranalysis.overlay.Overlay;
 import org.anchoranalysis.spatial.box.BoundingBox;
 
 /**
- * Overlays with additional pre-calculations that make them quicker to draw onto a {@link RGBStack}.
+ * Performs a pre-calculation on a {@link Overlay} to be quicker to draw onto a {@link RGBStack}.
  *
  * @author Owen Feehan
  */

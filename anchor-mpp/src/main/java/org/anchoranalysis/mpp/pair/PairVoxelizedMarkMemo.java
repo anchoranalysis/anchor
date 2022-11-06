@@ -28,12 +28,12 @@ package org.anchoranalysis.mpp.pair;
 
 import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 
-public class PairPxlMarkMemo {
+public class PairVoxelizedMarkMemo {
 
     private final VoxelizedMarkMemo source;
     private final VoxelizedMarkMemo destination;
 
-    public PairPxlMarkMemo(VoxelizedMarkMemo source, VoxelizedMarkMemo destination) {
+    public PairVoxelizedMarkMemo(VoxelizedMarkMemo source, VoxelizedMarkMemo destination) {
         super();
 
         if (source.getMark().getIdentifier() < destination.getMark().getIdentifier()) {
@@ -54,11 +54,11 @@ public class PairPxlMarkMemo {
         if (othero == this) {
             return true;
         }
-        if (!(othero instanceof PairPxlMarkMemo)) {
+        if (!(othero instanceof PairVoxelizedMarkMemo)) {
             return false;
         }
 
-        PairPxlMarkMemo other = (PairPxlMarkMemo) othero;
+        PairVoxelizedMarkMemo other = (PairVoxelizedMarkMemo) othero;
         return ((this.source.equals(other.source)) && (this.destination.equals(other.destination)));
     }
 

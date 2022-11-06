@@ -45,7 +45,7 @@ import org.anchoranalysis.overlay.collection.ColoredOverlayCollection;
 import org.anchoranalysis.spatial.box.BoundingBox;
 
 /**
- * Draws an overlay onto a RGB-stack, including precalculated overlays.
+ * Draws a {@Overlay} onto a {@link RGBStack}, including precalculated overlays.
  *
  * @author Owen Feehan
  */
@@ -56,17 +56,17 @@ public abstract class DrawOverlay {
     public abstract DrawObject getDrawObject();
 
     /**
-     * Writes a collection of colored-overlays to the background
+     * Draw a collection of colored-overlays on top of a {@link RGBStack}.
      *
-     * @param overlays overlays
-     * @param stack overlays are written onto this stack
-     * @param idGetter
-     * @throws OperationFailedException
+     * @param overlays the overlays to write, together with their associated color.
+     * @param stack the image to write overlays onto.
+     * @param idGetter gets an id from an {@link Overlay}.
+     * @throws OperationFailedException if the operation cannot complete successfully.
      */
-    public void writeOverlays(
+    public void drawOverlays(
             ColoredOverlayCollection overlays, RGBStack stack, IdentifierGetter<Overlay> idGetter)
             throws OperationFailedException {
-        writeOverlays(
+        drawOverlays(
                 overlays, stack.dimensions(), stack, idGetter, new BoundingBox(stack.extent()));
     }
 
@@ -77,7 +77,7 @@ public abstract class DrawOverlay {
     //
     //   We split the steps in two, so that they can be potentially cached
     //
-    private void writeOverlays(
+    private void drawOverlays(
             ColoredOverlayCollection overlays,
             Dimensions dimensions,
             RGBStack background,
@@ -89,11 +89,11 @@ public abstract class DrawOverlay {
             List<PrecalculationOverlay> overlaysPreprocessed =
                     precalculate(overlays, this, dimensions, BinaryValuesInt.getDefault().asByte());
 
-            writePrecalculatedOverlays(
+            drawPrecalculatedOverlays(
                     overlaysPreprocessed,
                     dimensions,
                     background,
-                    ObjectDrawAttributesFactory.createFromOverlays(
+                    createFromOverlays(
                             overlays, idGetter, new IdentifierFromProperty(PROPERTY_COLOR_ID)),
                     boxContainer);
         } catch (CreateException e) {
@@ -111,7 +111,7 @@ public abstract class DrawOverlay {
      * @param restrictTo
      * @throws OperationFailedException
      */
-    public abstract void writePrecalculatedOverlays(
+    public abstract void drawPrecalculatedOverlays(
             List<PrecalculationOverlay> precalculatedMasks,
             Dimensions dimensions,
             RGBStack background,
@@ -119,10 +119,10 @@ public abstract class DrawOverlay {
             BoundingBox restrictTo)
             throws OperationFailedException;
 
-    public abstract void writeOverlaysIfIntersects(
+    public abstract void drawOverlaysIfIntersects(
             ColoredOverlayCollection overlays,
             RGBStack stack,
-            IdentifierGetter<Overlay> idGetter,
+            IdentifierGetter<Overlay> identifierGetter,
             List<BoundingBox> intersectList)
             throws OperationFailedException;
 
@@ -131,7 +131,7 @@ public abstract class DrawOverlay {
     // there should be exactly one object
     //  per Mark in the marks, in the same order as the Marks is inputted
     public static List<PrecalculationOverlay> precalculate(
-            ColoredOverlayCollection coc,
+            ColoredOverlayCollection overlays,
             DrawOverlay drawOverlay,
             Dimensions dimensions,
             BinaryValuesByte bvOut)
@@ -140,24 +140,33 @@ public abstract class DrawOverlay {
         IdentifyFromIteration<Overlay> colorIDGetter = new IdentifyFromIteration<>();
 
         return CheckedStream.mapToObj(
-                        IntStream.range(0, coc.size()),
+                        IntStream.range(0, overlays.size()),
                         CreateException.class,
                         index -> {
-                            Overlay overlay = coc.get(index);
+                            Overlay overlay = overlays.getOverlay(index);
 
                             ObjectWithProperties object =
                                     overlay.createObject(drawOverlay, dimensions, bvOut);
                             object.setProperty(
                                     PROPERTY_COLOR_ID, colorIDGetter.getIdentifier(overlay, index));
 
-                            return createPrecalc(drawOverlay, object, dimensions);
+                            return createPrecalculation(drawOverlay, object, dimensions);
                         })
                 .collect(Collectors.toList());
     }
 
-    public static PrecalculationOverlay createPrecalc(
+    private static PrecalculationOverlay createPrecalculation(
             DrawOverlay drawOverlay, ObjectWithProperties object, Dimensions dimensions)
             throws CreateException {
         return drawOverlay.getDrawObject().precalculate(object, dimensions);
+    }
+    
+    private static ObjectDrawAttributes createFromOverlays(
+            ColoredOverlayCollection overlays,
+            IdentifierGetter<Overlay> idGetter,
+            IdentifierGetter<ObjectWithProperties> idGetterColor) {
+    	IdentifierGetter<ObjectWithProperties> idGetterMask = new IdentifyDelegateToOverlays(idGetter, overlays, true);
+        return new ObjectDrawAttributes(
+                overlays.getColors(), idGetterMask, idGetterColor);
     }
 }

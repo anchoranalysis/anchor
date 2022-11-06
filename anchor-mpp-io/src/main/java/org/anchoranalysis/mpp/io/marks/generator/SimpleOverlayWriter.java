@@ -52,7 +52,7 @@ public class SimpleOverlayWriter extends DrawOverlay {
     private final DrawObject drawObject;
 
     @Override
-    public void writePrecalculatedOverlays(
+    public void drawPrecalculatedOverlays(
             List<PrecalculationOverlay> precalculatedMasks,
             Dimensions dimensions,
             RGBStack background,
@@ -66,15 +66,15 @@ public class SimpleOverlayWriter extends DrawOverlay {
     }
 
     @Override
-    public void writeOverlaysIfIntersects(
+    public void drawOverlaysIfIntersects(
             ColoredOverlayCollection overlays,
             RGBStack stack,
             IdentifierGetter<Overlay> idGetter,
             List<BoundingBox> intersectList)
             throws OperationFailedException {
 
-        writeOverlays(
-                overlays.subsetWhereBBoxIntersects(stack.dimensions(), this, intersectList),
+        drawOverlays(
+                overlays.subsetWhereBoxIntersects(stack.dimensions(), this, intersectList),
                 stack,
                 idGetter);
     }

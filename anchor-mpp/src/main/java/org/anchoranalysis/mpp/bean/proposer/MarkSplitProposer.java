@@ -31,7 +31,7 @@ import org.anchoranalysis.bean.annotation.GroupingRoot;
 import org.anchoranalysis.mpp.bean.mark.factory.MarkWithIdentifierFactory;
 import org.anchoranalysis.mpp.mark.CompatibleWithMark;
 import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
-import org.anchoranalysis.mpp.pair.PairPxlMarkMemo;
+import org.anchoranalysis.mpp.pair.PairVoxelizedMarkMemo;
 import org.anchoranalysis.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.mpp.proposer.ProposerContext;
 
@@ -39,7 +39,7 @@ import org.anchoranalysis.mpp.proposer.ProposerContext;
 public abstract class MarkSplitProposer extends ProposerBean<MarkSplitProposer>
         implements CompatibleWithMark {
 
-    public abstract Optional<PairPxlMarkMemo> propose(
+    public abstract Optional<PairVoxelizedMarkMemo> propose(
             VoxelizedMarkMemo mark, ProposerContext context, MarkWithIdentifierFactory markFactory)
             throws ProposalAbnormalFailureException;
 }

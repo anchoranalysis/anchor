@@ -32,7 +32,6 @@ import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.object.properties.ObjectWithProperties;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
-import org.anchoranalysis.overlay.identifier.Identifiable;
 import org.anchoranalysis.overlay.writer.DrawOverlay;
 import org.anchoranalysis.spatial.box.BoundingBox;
 
@@ -42,7 +41,7 @@ import org.anchoranalysis.spatial.box.BoundingBox;
  * @author Owen Feehan
  */
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public abstract class Overlay implements Identifiable {
+public abstract class Overlay {
 
     /**
      * A bounding-box around the overlay.
@@ -53,8 +52,17 @@ public abstract class Overlay implements Identifiable {
      */
     public abstract BoundingBox box(DrawOverlay overlayWriter, Dimensions dimensions);
 
+    /**
+     * Derives an object-mask representation of the overlay to be drawn with {@code overlayWriter}.
+     * 
+     * @param drawer the drawer that determines how an overlay is written onto an image. 
+     * @param dimensionsEntireImage how large the image is onto which the overlay will be drawn.
+     * @param binaryValuesOut what constitutes on and off pixels in the produced object-mask.
+     * @return the created object-mask with associated properties.
+     * @throws CreateException if the object cannot be created successfully.
+     */
     public abstract ObjectWithProperties createObject(
-            DrawOverlay overlayWriter, Dimensions dimensionsEntireImage, BinaryValuesByte bvOut)
+            DrawOverlay drawer, Dimensions dimensionsEntireImage, BinaryValuesByte binaryValuesOut)
             throws CreateException;
 
     @Override

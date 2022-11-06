@@ -36,7 +36,6 @@ import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipWithFlags;
-import org.anchoranalysis.overlay.identifier.Identifiable;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.Point3d;
 import org.anchoranalysis.spatial.point.Point3i;
@@ -44,7 +43,7 @@ import org.anchoranalysis.spatial.point.ReadableTuple3i;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 @NoArgsConstructor
-public abstract class Mark implements Serializable, Identifiable {
+public abstract class Mark implements Serializable {
 
     /** */
     private static final long serialVersionUID = 3272456193681334471L;
@@ -170,7 +169,6 @@ public abstract class Mark implements Serializable, Identifiable {
         return String.format("id=%10d", id);
     }
 
-    @Override
     public int getIdentifier() {
         return id;
     }

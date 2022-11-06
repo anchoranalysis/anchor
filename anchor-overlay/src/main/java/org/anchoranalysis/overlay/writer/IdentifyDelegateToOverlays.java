@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.overlay.identifier;
+package org.anchoranalysis.overlay.writer;
 
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.identifier.getter.IdentifierGetter;
@@ -33,7 +33,7 @@ import org.anchoranalysis.overlay.Overlay;
 import org.anchoranalysis.overlay.collection.ColoredOverlayCollection;
 
 @AllArgsConstructor
-public class IdentifyDelegateToOverlays implements IdentifierGetter<ObjectWithProperties> {
+class IdentifyDelegateToOverlays implements IdentifierGetter<ObjectWithProperties> {
 
     private IdentifierGetter<Overlay> delegate;
 
@@ -60,7 +60,7 @@ public class IdentifyDelegateToOverlays implements IdentifierGetter<ObjectWithPr
 
     private int identifierViaOverlay(int iteration) {
         // We get a mark from the configuration based upon the iter
-        Overlay overlay = overlays.get(iteration);
+        Overlay overlay = overlays.getOverlay(iteration);
 
         return delegate.getIdentifier(overlay, iteration);
     }

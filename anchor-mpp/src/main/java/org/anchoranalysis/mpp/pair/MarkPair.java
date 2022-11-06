@@ -26,19 +26,19 @@
 
 package org.anchoranalysis.mpp.pair;
 
-import org.anchoranalysis.overlay.identifier.Identifiable;
+import org.anchoranalysis.mpp.mark.Mark;
 
 /**
  * Pair of marks
  *
  * @param <T> item-type
  */
-public class IdentifiablePair<T extends Identifiable> {
+public class MarkPair<T extends Mark> {
 
     private final T source;
     private final T destination;
 
-    public IdentifiablePair(T source, T destination) {
+    public MarkPair(T source, T destination) {
         super();
 
         if (source.getIdentifier() < destination.getIdentifier()) {
@@ -60,11 +60,11 @@ public class IdentifiablePair<T extends Identifiable> {
         if (othero == this) {
             return true;
         }
-        if (!(othero instanceof IdentifiablePair)) {
+        if (!(othero instanceof MarkPair)) {
             return false;
         }
 
-        IdentifiablePair<T> other = (IdentifiablePair<T>) othero;
+        MarkPair<T> other = (MarkPair<T>) othero;
         return ((this.source.equals(other.source)) && (this.destination.equals(other.destination)));
     }
 

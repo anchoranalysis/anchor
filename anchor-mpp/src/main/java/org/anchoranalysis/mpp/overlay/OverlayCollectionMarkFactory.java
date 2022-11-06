@@ -99,7 +99,7 @@ public class OverlayCollectionMarkFactory {
         ColoredMarks out = new ColoredMarks();
 
         for (int i = 0; i < overlays.size(); i++) {
-            Overlay overlay = overlays.get(i);
+            Overlay overlay = overlays.getOverlay(i);
 
             RGBColor col = overlays.getColor(i);
 

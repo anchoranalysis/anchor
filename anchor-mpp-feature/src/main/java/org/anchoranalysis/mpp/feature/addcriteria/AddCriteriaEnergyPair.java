@@ -39,7 +39,7 @@ import org.anchoranalysis.mpp.feature.energy.EnergyTotal;
 import org.anchoranalysis.mpp.feature.input.FeatureInputPairMemo;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
-import org.anchoranalysis.mpp.pair.IdentifiablePair;
+import org.anchoranalysis.mpp.pair.MarkPair;
 
 public class AddCriteriaEnergyPair implements AddCriteria<EnergyPair> {
 
@@ -109,8 +109,8 @@ public class AddCriteriaEnergyPair implements AddCriteria<EnergyPair> {
                                                         "No feature-evaluator exists"))
                                 .calculate(input, energyPairs);
 
-                IdentifiablePair<Mark> pair =
-                        new IdentifiablePair<>(mark1.getMark(), mark2.getMark());
+                MarkPair<Mark> pair =
+                        new MarkPair<>(mark1.getMark(), mark2.getMark());
                 return Optional.of(new EnergyPair(pair, new EnergyTotal(results.total())));
             } catch (NamedFeatureCalculateException e) {
                 throw new CreateException(e);

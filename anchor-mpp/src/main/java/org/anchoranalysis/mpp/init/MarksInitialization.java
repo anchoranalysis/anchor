@@ -47,7 +47,7 @@ import org.anchoranalysis.mpp.bean.proposer.MarkSplitProposer;
 import org.anchoranalysis.mpp.bean.provider.MarkCollectionProvider;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.MarkCollection;
-import org.anchoranalysis.mpp.pair.IdentifiablePair;
+import org.anchoranalysis.mpp.pair.MarkPair;
 import org.anchoranalysis.mpp.pair.RandomCollection;
 
 @Accessors(fluent = true)
@@ -65,7 +65,7 @@ public class MarksInitialization implements BeanInitialization {
     @Getter private final NamedProviderStore<MarkProposer> markProposers;
     @Getter private final NamedProviderStore<MarkMergeProposer> markMergeProposers;
     @Getter private final NamedProviderStore<MarkSplitProposer> markSplitProposers;
-    @Getter private final NamedProviderStore<RandomCollection<IdentifiablePair<Mark>>> markPairs;
+    @Getter private final NamedProviderStore<RandomCollection<MarkPair<Mark>>> markPairs;
     // END: Stores
 
     public MarksInitialization(ImageInitialization image) {

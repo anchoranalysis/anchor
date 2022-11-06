@@ -39,20 +39,21 @@ import org.anchoranalysis.spatial.box.BoundingBox;
 /**
  * An implementation of {@link Overlay} that draws an {@link ObjectMask} on an image.
  *
- * @author Owen feehan
+ * @author Owen Feehan
  */
 public class OverlayObjectMask extends Overlay {
 
     /** The {@link ObjectMask} to draw. */
     @Getter private final ObjectWithProperties object;
 
-    /** ID associated with object */
-    private final int id;
-
+    /**
+     * Creates with a particular {@link ObjectMask} and identifier.
+     * 
+     * @param object the object-mask.
+     * @param id the identifier.
+     */
     public OverlayObjectMask(ObjectMask object, int id) {
         this.object = new ObjectWithProperties(object);
-        this.object.getProperties().put("id", id);
-        this.id = id;
     }
 
     @Override
@@ -63,14 +64,9 @@ public class OverlayObjectMask extends Overlay {
 
     @Override
     public ObjectWithProperties createObject(
-            DrawOverlay overlayWriter, Dimensions dimEntireImage, BinaryValuesByte bvOut)
+            DrawOverlay drawer, Dimensions dimEntireImage, BinaryValuesByte binaryValuesOut)
             throws CreateException {
         return object;
-    }
-
-    @Override
-    public int getIdentifier() {
-        return id;
     }
 
     // We delegate uniqueness-check to the object-mask

@@ -45,6 +45,44 @@ import org.anchoranalysis.spatial.box.BoundingBox;
  */
 public abstract class DrawObject extends AnchorBean<DrawObject> {
 
+	/**
+     * Writes object-masks onto of a {@link RGBStack} - across all of the stack.
+     * 
+     * @param objects object-masks to write.
+     * @param stack stack to write masks on top of.
+     * @param attributes Extracts attributes from objects relevant to drawing.
+     * @throws OperationFailedException if the object cannot be successfully drawn.
+     */
+    public void write(
+            ObjectCollectionWithProperties objects,
+            RGBStack stack,
+            ObjectDrawAttributes attributes)
+            throws OperationFailedException {
+        write(objects, stack, attributes, new BoundingBox(stack.extent()));
+    }
+    
+    /**
+     * Writes object-masks onto of a {@link RGBStack} - within a bounding box only.
+     * 
+     * @param objects object-masks to write.
+     * @param stack Stack to write masks on top of.
+     * @param attributes Extracts attributes from objects relevant to drawing.
+     * @param boxContainer A bounding box, which restricts where we write out to.
+     * @throws OperationFailedException if the object cannot be successfully drawn.
+     */
+    public void write(
+            ObjectCollectionWithProperties objects,
+            RGBStack stack,
+            ObjectDrawAttributes attributes,
+            BoundingBox boxContainer)
+            throws OperationFailedException {
+        // We iterate through every mark
+        int index = 0;
+        for (ObjectWithProperties object : objects) {
+            writeSingle(object, stack, attributes, index++, boxContainer);
+        }
+    }
+    
     /**
      * Draws a single-object on top of a RGB-stack.
      *
@@ -54,6 +92,7 @@ public abstract class DrawObject extends AnchorBean<DrawObject> {
      * @param iteration the current iteration.
      * @param restrictTo a restriction on which part of stack we draw onto to (considered in terms
      *     of the possibly-zoomed pixel coordinates).
+     * @throws OperationFailedException if the object cannot be successfully drawn.
      */
     public final void writeSingle(
             ObjectWithProperties object,
@@ -64,44 +103,22 @@ public abstract class DrawObject extends AnchorBean<DrawObject> {
             throws OperationFailedException {
 
         try {
-            PrecalculationOverlay precalculatedObj = precalculate(object, stack.dimensions());
-            precalculatedObj.writePrecalculatedMask(stack, attributes, iteration, restrictTo);
+            PrecalculationOverlay precalculated = precalculate(object, stack.dimensions());
+            precalculated.writePrecalculatedMask(stack, attributes, iteration, restrictTo);
 
         } catch (CreateException e) {
             throw new OperationFailedException(e);
         }
     }
 
-    // Does computational preprocessing (so it can be cached). Outputs a collection of object-masks
-    // that are later re used
+    /**
+     * Performs a pre-calculation on n object to be quicker to draw onto a {@link RGBStack}.
+     * 
+     * @param object the object to precalculate.
+     * @param dimensions the size of the scene in which the objects reside.
+     * @return a pre-calculated representation of {@code object}.
+     * @throws CreateException if the operation cannot successfully complete.
+     */
     public abstract PrecalculationOverlay precalculate(
             ObjectWithProperties object, Dimensions dimensions) throws CreateException;
-
-    public void write(
-            ObjectCollectionWithProperties objects,
-            RGBStack background,
-            ObjectDrawAttributes attributes)
-            throws OperationFailedException {
-        write(objects, background, attributes, new BoundingBox(background.extent()));
-    }
-
-    /**
-     * @param objects Masks to write
-     * @param stack Stack to write masks on top of
-     * @param attributes Extracts attributes from objects relevant to drawing
-     * @param boxContainer A bounding box, which restricts where we write out to
-     * @throws OperationFailedException
-     */
-    public void write(
-            ObjectCollectionWithProperties objects,
-            RGBStack stack,
-            ObjectDrawAttributes attributes,
-            BoundingBox boxContainer)
-            throws OperationFailedException {
-        // We iterate through every mark
-        int i = 0;
-        for (ObjectWithProperties object : objects) {
-            writeSingle(object, stack, attributes, i++, boxContainer);
-        }
-    }
 }
