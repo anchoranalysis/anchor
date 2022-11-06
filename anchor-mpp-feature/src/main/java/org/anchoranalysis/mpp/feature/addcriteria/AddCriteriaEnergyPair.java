@@ -109,8 +109,7 @@ public class AddCriteriaEnergyPair implements AddCriteria<EnergyPair> {
                                                         "No feature-evaluator exists"))
                                 .calculate(input, energyPairs);
 
-                MarkPair<Mark> pair =
-                        new MarkPair<>(mark1.getMark(), mark2.getMark());
+                MarkPair<Mark> pair = new MarkPair<>(mark1.getMark(), mark2.getMark());
                 return Optional.of(new EnergyPair(pair, new EnergyTotal(results.total())));
             } catch (NamedFeatureCalculateException e) {
                 throw new CreateException(e);

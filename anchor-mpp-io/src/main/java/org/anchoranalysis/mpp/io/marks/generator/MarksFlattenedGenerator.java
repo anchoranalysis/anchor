@@ -60,6 +60,6 @@ public class MarksFlattenedGenerator extends MarksGeneratorBase {
     }
 
     private static DrawOverlay createWriter(DrawObject drawObject) {
-        return new SimpleOverlayWriter(new Flatten(drawObject));
+        return new DrawOverlay(new Flatten(drawObject));
     }
 }

@@ -33,6 +33,7 @@ import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.overlay.Overlay;
 import org.anchoranalysis.overlay.bean.DrawObject;
+import org.anchoranalysis.overlay.writer.DrawOverlay;
 
 public class MarksGenerator extends MarksGeneratorBase {
 
@@ -48,7 +49,7 @@ public class MarksGenerator extends MarksGeneratorBase {
             DrawObject drawObject,
             IdentifierGetter<Overlay> idGetter,
             RegionMembershipWithFlags regionMembership) {
-        super(new SimpleOverlayWriter(drawObject), idGetter, regionMembership);
+        super(new DrawOverlay(drawObject), idGetter, regionMembership);
     }
 
     @Override

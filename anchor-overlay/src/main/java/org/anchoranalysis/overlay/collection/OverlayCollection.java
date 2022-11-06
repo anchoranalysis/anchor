@@ -35,28 +35,25 @@ import org.anchoranalysis.overlay.Overlay;
 
 /**
  * A collection of {@link Overlay} objects.
- * 
- * <p>It is built on top of an internal list representation.
- * 
- * @author Owen Feehan
  *
+ * <p>It is built on top of an internal list representation.
+ *
+ * @author Owen Feehan
  */
 public class OverlayCollection implements Iterable<Overlay> {
 
     private List<Overlay> delegate;
 
-    /**
-     * Creates an empty collection.
-     */
+    /** Creates an empty collection. */
     public OverlayCollection() {
         delegate = new ArrayList<>();
     }
 
     /**
      * Creates the collection from a stream of {@link Overlay}s.
-     * 
+     *
      * <p>Each element is reused internally, without any copying.
-     * 
+     *
      * @param stream the stream.
      */
     public OverlayCollection(Stream<Overlay> stream) {
@@ -70,11 +67,11 @@ public class OverlayCollection implements Iterable<Overlay> {
 
     /**
      * Access a particular element in the collection by index.
-     * 
+     *
      * @param index the index (starting at 0).
      * @return the respective element at index {@code index}.
-     * @throws IndexOutOfBoundsException if the index is out of range
-     *         (<tt>index &lt; 0 || index &gt;= size()</tt>)
+     * @throws IndexOutOfBoundsException if the index is out of range (<tt>index &lt; 0 || index
+     *     &gt;= size()</tt>)
      */
     public Overlay get(int index) {
         return delegate.get(index);
@@ -82,7 +79,7 @@ public class OverlayCollection implements Iterable<Overlay> {
 
     /**
      * The total number of elements in the list.
-     * 
+     *
      * @return the total number of elements.
      */
     public int size() {
@@ -91,7 +88,7 @@ public class OverlayCollection implements Iterable<Overlay> {
 
     /**
      * Append an overlay to the end of the list.
-     * 
+     *
      * @param overlay the overlay to append.
      */
     public void add(Overlay overlay) {

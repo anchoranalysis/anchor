@@ -54,15 +54,14 @@ public abstract class Overlay {
 
     /**
      * Derives an object-mask representation of the overlay to be drawn with {@code overlayWriter}.
-     * 
-     * @param drawer the drawer that determines how an overlay is written onto an image. 
+     *
      * @param dimensionsEntireImage how large the image is onto which the overlay will be drawn.
      * @param binaryValuesOut what constitutes on and off pixels in the produced object-mask.
      * @return the created object-mask with associated properties.
      * @throws CreateException if the object cannot be created successfully.
      */
     public abstract ObjectWithProperties createObject(
-            DrawOverlay drawer, Dimensions dimensionsEntireImage, BinaryValuesByte binaryValuesOut)
+            Dimensions dimensionsEntireImage, BinaryValuesByte binaryValuesOut)
             throws CreateException;
 
     @Override

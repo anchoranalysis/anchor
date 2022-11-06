@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.mpp.overlay;
 
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.anchoranalysis.core.exception.CreateException;
@@ -35,8 +36,6 @@ import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.overlay.Overlay;
-import org.anchoranalysis.overlay.object.scaled.FromMask;
-import org.anchoranalysis.overlay.object.scaled.ScaledOverlayCreator;
 import org.anchoranalysis.overlay.writer.DrawOverlay;
 import org.anchoranalysis.spatial.box.BoundingBox;
 
@@ -45,29 +44,15 @@ import org.anchoranalysis.spatial.box.BoundingBox;
  *
  * @author Owen feehan
  */
+@AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 public class OverlayMark extends Overlay {
 
+    /** The {@link Mark} to overlay. */
     @Getter private final Mark mark;
+
+    /** The region-membership associated with {@code mark}. */
     private final RegionMembershipWithFlags regionMembership;
-
-    @EqualsAndHashCode.Exclude private final ScaledOverlayCreator scaledMaskCreator;
-
-    public OverlayMark(Mark mark, RegionMembershipWithFlags regionMembership) {
-        this.mark = mark;
-        this.regionMembership = regionMembership;
-
-        /** How we create our scaled masks */
-        scaledMaskCreator = new FromMask();
-                new VolumeThreshold(
-                        new FromMask(), // Above the threshold, we use the quick *rough* method for
-                        // scaling up
-                        new FromMark(
-                                regionMembership), // Below the threshold, we use the slower *fine*
-                        // method for scaling up
-                        5000 // The threshold that decides which to use
-                        );
-    }
 
     @Override
     public BoundingBox box(DrawOverlay overlayWriter, Dimensions dim) {
@@ -76,9 +61,10 @@ public class OverlayMark extends Overlay {
 
     @Override
     public ObjectWithProperties createObject(
-            DrawOverlay drawer, Dimensions dimEntireImage, BinaryValuesByte binaryValuesOut)
+            Dimensions dimensionsEntireImage, BinaryValuesByte binaryValuesOut)
             throws CreateException {
-        return new ObjectWithProperties(mark.deriveObject(dimEntireImage, regionMembership, binaryValuesOut));
+        return new ObjectWithProperties(
+                mark.deriveObject(dimensionsEntireImage, regionMembership, binaryValuesOut));
     }
 
     public int getIdentifier() {

@@ -48,7 +48,7 @@ public class OverlayObjectMask extends Overlay {
 
     /**
      * Creates with a particular {@link ObjectMask} and identifier.
-     * 
+     *
      * @param object the object-mask.
      * @param id the identifier.
      */
@@ -64,7 +64,7 @@ public class OverlayObjectMask extends Overlay {
 
     @Override
     public ObjectWithProperties createObject(
-            DrawOverlay drawer, Dimensions dimEntireImage, BinaryValuesByte binaryValuesOut)
+            Dimensions dimensionsEntireImage, BinaryValuesByte binaryValuesOut)
             throws CreateException {
         return object;
     }

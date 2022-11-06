@@ -37,25 +37,21 @@ import org.anchoranalysis.overlay.Overlay;
 import org.anchoranalysis.overlay.writer.DrawOverlay;
 import org.anchoranalysis.spatial.box.BoundingBox;
 
-
 /**
  * Like a {@link OverlayCollection} but additionally associates a color with each overlay.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 @AllArgsConstructor
 public class ColoredOverlayCollection implements Iterable<Overlay> {
 
-	/** The collection of overlays, each element corresponding to {@code colors}. */
+    /** The collection of overlays, each element corresponding to {@code colors}. */
     @Getter private OverlayCollection overlays;
-    
+
     /** The list of colors, each element corresponding to {@code overlays}. */
     @Getter private ColorList colors;
 
-    /**
-     * Create an empty collection.
-     */
+    /** Create an empty collection. */
     public ColoredOverlayCollection() {
         overlays = new OverlayCollection();
         colors = new ColorList();
@@ -63,7 +59,7 @@ public class ColoredOverlayCollection implements Iterable<Overlay> {
 
     /**
      * Append an overlay and its respective color to the end of the list..
-     * 
+     *
      * @param overlay the overlay to append.
      * @param color the corresponding color of the overlay.
      */
@@ -79,7 +75,7 @@ public class ColoredOverlayCollection implements Iterable<Overlay> {
 
     /**
      * The total number of elements in the list.
-     * 
+     *
      * @return the total number of elements.
      */
     public int size() {
@@ -88,24 +84,23 @@ public class ColoredOverlayCollection implements Iterable<Overlay> {
 
     /**
      * Access a particular {@link Overlay} in the collection by index.
-     * 
+     *
      * @param index the index (starting at 0).
      * @return the respective element at index {@code index}.
-     * @throws IndexOutOfBoundsException if the index is out of range
-     *         (<tt>index &lt; 0 || index &gt;= size()</tt>)
+     * @throws IndexOutOfBoundsException if the index is out of range (<tt>index &lt; 0 || index
+     *     &gt;= size()</tt>)
      */
     public Overlay getOverlay(int index) {
         return overlays.get(index);
     }
-    
-    
+
     /**
      * Access a particular color in the collection by index.
-     * 
+     *
      * @param index the index (starting at 0).
      * @return the respective element at index {@code index}.
-     * @throws IndexOutOfBoundsException if the index is out of range
-     *         (<tt>index &lt; 0 || index &gt;= size()</tt>)
+     * @throws IndexOutOfBoundsException if the index is out of range (<tt>index &lt; 0 || index
+     *     &gt;= size()</tt>)
      */
     public RGBColor getColor(int index) {
         return colors.get(index);
@@ -125,17 +120,20 @@ public class ColoredOverlayCollection implements Iterable<Overlay> {
     }
 
     /**
-     * Find overlays whose bounding-boxes intersect with any of the boxes in {@code toIntersectWith}.
-     * 
+     * Find overlays whose bounding-boxes intersect with any of the boxes in {@code
+     * toIntersectWith}.
+     *
      * @param scene the size of the image in which all bounding-boxes must fully fit inside.
-     * @param drawOverlay what draws the overlays on the image, and thus determines the bounding-box of an overlay.
-     * @param toIntersectWith the list of boxes against which elements are searched for any intersection.
-     * @return a newly created {@link ColoredOverlayCollection} containing the elements (uncopied) which match the criteria. This may be empty if
-     * no elements match the criteria.
+     * @param drawOverlay what draws the overlays on the image, and thus determines the bounding-box
+     *     of an overlay.
+     * @param toIntersectWith the list of boxes against which elements are searched for any
+     *     intersection.
+     * @return a newly created {@link ColoredOverlayCollection} containing the elements (uncopied)
+     *     which match the criteria. This may be empty if no elements match the criteria.
      */
     public ColoredOverlayCollection subsetWhereBoxIntersects(
             Dimensions scene, DrawOverlay drawOverlay, List<BoundingBox> toIntersectWith) {
-    	
+
         // TODO - make more efficient using RTrees
 
         ColoredOverlayCollection out = new ColoredOverlayCollection();

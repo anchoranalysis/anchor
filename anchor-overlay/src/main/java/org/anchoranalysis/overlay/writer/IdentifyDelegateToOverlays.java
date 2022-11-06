@@ -32,11 +32,22 @@ import org.anchoranalysis.image.core.object.properties.ObjectWithProperties;
 import org.anchoranalysis.overlay.Overlay;
 import org.anchoranalysis.overlay.collection.ColoredOverlayCollection;
 
+/**
+ * Calls {@code IdentifierGetter<Overlay>} the corresponding overlay element to retrieve an
+ * identifier for a {@link ObjectWithProperties}.
+ *
+ * @author Owen Feehan
+ */
 @AllArgsConstructor
 class IdentifyDelegateToOverlays implements IdentifierGetter<ObjectWithProperties> {
 
-    private IdentifierGetter<Overlay> delegate;
+    /** The delegate used to retrieve the identifier. */
+    private final IdentifierGetter<Overlay> delegate;
 
+    /**
+     * A collection that should have a 1-1 correspondence with the objects being passed to {@link
+     * #getIdentifier(ObjectWithProperties, int)} and the corresponding indices.
+     */
     private final ColoredOverlayCollection overlays;
 
     /**
@@ -52,16 +63,15 @@ class IdentifyDelegateToOverlays implements IdentifierGetter<ObjectWithPropertie
     public int getIdentifier(ObjectWithProperties element, int iteration) {
 
         if (moduloIteration) {
-            return identifierViaOverlay(iteration % overlays.size());
+            return identifierFromDelegate(iteration % overlays.size());
         } else {
-            return identifierViaOverlay(iteration);
+            return identifierFromDelegate(iteration);
         }
     }
 
-    private int identifierViaOverlay(int iteration) {
-        // We get a mark from the configuration based upon the iter
+    /** An identifier from what is associated with the {@link Overlay}. */
+    private int identifierFromDelegate(int iteration) {
         Overlay overlay = overlays.getOverlay(iteration);
-
         return delegate.getIdentifier(overlay, iteration);
     }
 }
