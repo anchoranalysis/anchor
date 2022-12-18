@@ -30,9 +30,8 @@ import org.anchoranalysis.core.exception.friendly.AnchorFriendlyCheckedException
 
 /**
  * When an error occurs providing a set of files.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class FilesProviderException extends AnchorFriendlyCheckedException {
 
@@ -41,7 +40,7 @@ public class FilesProviderException extends AnchorFriendlyCheckedException {
 
     /**
      * Create with a message only.
-     * 
+     *
      * @param message the exception message.
      */
     public FilesProviderException(String message) {
@@ -50,7 +49,7 @@ public class FilesProviderException extends AnchorFriendlyCheckedException {
 
     /**
      * Create with a cause only.
-     * 
+     *
      * @param cause the cause.
      */
     public FilesProviderException(Throwable cause) {

@@ -75,7 +75,7 @@ public class SpecificPathList extends FilesProvider {
 
     /**
      * Creates by reusing an existing list.
-     * 
+     *
      * @param listPaths the list of paths to reuse.
      */
     public SpecificPathList(List<String> listPaths) {
@@ -84,14 +84,14 @@ public class SpecificPathList extends FilesProvider {
 
     /**
      * Creates by reusing an existing list.
-     * 
+     *
      * @param listPaths the list of paths to reuse.
      */
     public SpecificPathList(StringList listPaths) {
         this.listPaths = listPaths;
     }
 
-    /** 
+    /**
      * Factory method for creating the class with an empty list of paths.
      *
      * @return a newly created list that is empty.

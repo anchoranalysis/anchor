@@ -28,10 +28,9 @@ package org.anchoranalysis.io.input;
 
 import org.anchoranalysis.core.exception.AnchorCheckedException;
 
-
 /**
  * When an error occurs reading an input.
- * 
+ *
  * @author Owen Feehan
  */
 public class InputReadFailedException extends AnchorCheckedException {
@@ -41,7 +40,7 @@ public class InputReadFailedException extends AnchorCheckedException {
 
     /**
      * Create with a message only.
-     * 
+     *
      * @param message the exception message.
      */
     public InputReadFailedException(String message) {
@@ -50,7 +49,7 @@ public class InputReadFailedException extends AnchorCheckedException {
 
     /**
      * Create with a cause only.
-     * 
+     *
      * @param cause the cause.
      */
     public InputReadFailedException(Throwable cause) {
@@ -59,7 +58,7 @@ public class InputReadFailedException extends AnchorCheckedException {
 
     /**
      * Create with a message and cause.
-     * 
+     *
      * @param message the exception message.
      * @param cause the cause.
      */

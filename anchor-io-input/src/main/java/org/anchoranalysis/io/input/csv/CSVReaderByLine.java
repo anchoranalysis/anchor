@@ -41,9 +41,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CSVReaderByLine {
 
-    /** 
+    /**
      * Opens a CSV file for reading.
-     * 
+     *
      * @param filePath the path of the CSV file that will be opened.
      * @return a reader opened on {@code filePath}.
      */
@@ -51,30 +51,38 @@ public class CSVReaderByLine {
         return new ReadByLine(filePath, new CSVReader(",", true));
     }
 
-    /** 
-     * Opens a CSV file for reading.
-     * 
-     * @param filePath the path of the CSV file that will be opened.
-     * @param regularExpressionSeperator a regular-expression in Java syntax for splitting a line by separator.
-     * @param firstLineHeaders whether the first line of the CSV file contains headers or not.
-     * @return a reader opened on {@code filePath}.
-     */
-    public static ReadByLine open(Path filePath, String regularExpressionSeperator, boolean firstLineHeaders) {
-        return new ReadByLine(filePath, new CSVReader(regularExpressionSeperator, firstLineHeaders));
-    }
-
-    /** 
+    /**
      * Opens a CSV file for reading.
      *
      * @param filePath the path of the CSV file that will be opened.
-     * @param regularExpressionSeperator a regular-expression in Java syntax for splitting a line by separator.
+     * @param regularExpressionSeperator a regular-expression in Java syntax for splitting a line by
+     *     separator.
      * @param firstLineHeaders whether the first line of the CSV file contains headers or not.
- 	 * @param quotedStrings whether strings should be quoted or not in the CSV file.
-     * @return a reader opened on {@code filePath}. 
+     * @return a reader opened on {@code filePath}.
      */
     public static ReadByLine open(
-            Path filePath, String regularExpressionSeperator, boolean firstLineHeaders, boolean quotedStrings) {
+            Path filePath, String regularExpressionSeperator, boolean firstLineHeaders) {
         return new ReadByLine(
-                filePath, new CSVReader(regularExpressionSeperator, firstLineHeaders, quotedStrings));
+                filePath, new CSVReader(regularExpressionSeperator, firstLineHeaders));
+    }
+
+    /**
+     * Opens a CSV file for reading.
+     *
+     * @param filePath the path of the CSV file that will be opened.
+     * @param regularExpressionSeperator a regular-expression in Java syntax for splitting a line by
+     *     separator.
+     * @param firstLineHeaders whether the first line of the CSV file contains headers or not.
+     * @param quotedStrings whether strings should be quoted or not in the CSV file.
+     * @return a reader opened on {@code filePath}.
+     */
+    public static ReadByLine open(
+            Path filePath,
+            String regularExpressionSeperator,
+            boolean firstLineHeaders,
+            boolean quotedStrings) {
+        return new ReadByLine(
+                filePath,
+                new CSVReader(regularExpressionSeperator, firstLineHeaders, quotedStrings));
     }
 }

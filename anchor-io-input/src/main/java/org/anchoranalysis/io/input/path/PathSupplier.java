@@ -29,17 +29,17 @@ import java.nio.file.Path;
 
 /**
  * Utility interface to supply a {@link Path} or throw a {@link DerivePathException}.
- *  
+ *
  * @author Owen Feehan
  */
 @FunctionalInterface
 public interface PathSupplier {
-	
-	/**
-	 * Supplies a {@link Path}.
-	 * 
-	 * @return the {@link Path}.
-	 * @throws DerivePathException if unable to supply the path.
-	 */
+
+    /**
+     * Supplies a {@link Path}.
+     *
+     * @return the {@link Path}.
+     * @throws DerivePathException if unable to supply the path.
+     */
     Path get() throws DerivePathException;
 }

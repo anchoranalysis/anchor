@@ -53,10 +53,11 @@ public class InputContextParameters {
     /** If defined, a directory which can be used by beans to find input. */
     @Getter private Optional<Path> inputDirectory = Optional.empty();
 
-    /** 
+    /**
      * A glob that can be used by beans to filter input.
      *
-     * <p>It requires the syntax of Java's <a href="https://docs.oracle.com/javase/7/docs/api/java/nio/file/FileSystem.html#getPathMatcher(java.lang.String)">getPathMatcher</a>.
+     * <p>It requires the syntax of Java's <a
+     * href="https://docs.oracle.com/javase/7/docs/api/java/nio/file/FileSystem.html#getPathMatcher(java.lang.String)">getPathMatcher</a>.
      */
     @Getter @Setter private Optional<String> inputFilterGlob = Optional.empty();
 
@@ -113,11 +114,12 @@ public class InputContextParameters {
         this.inputDirectory = inputDirectory.map(InputContextParameters::normalizeDirectory);
     }
 
-    /** 
+    /**
      * Assigns a glob that can be used by beans to filter input.
-     * 
-     * <p>The syntax should be from Java's <a href="https://docs.oracle.com/javase/7/docs/api/java/nio/file/FileSystem.html#getPathMatcher(java.lang.String)">getPathMatcher</a>.
-     * 
+     *
+     * <p>The syntax should be from Java's <a
+     * href="https://docs.oracle.com/javase/7/docs/api/java/nio/file/FileSystem.html#getPathMatcher(java.lang.String)">getPathMatcher</a>.
+     *
      * @param glob a string describing a glob in the syntax expected by Java.
      */
     public void assignFilterGlob(String glob) {
@@ -127,16 +129,18 @@ public class InputContextParameters {
     /**
      * If defined, this indicates and specifies only a subset of the elements of the identifier to
      * use.
-     * 
-     * @param identifierSubrange if defined, this indicates and specifies only a subset of the naming-elements to use.
+     *
+     * @param identifierSubrange if defined, this indicates and specifies only a subset of the
+     *     naming-elements to use.
      */
     public void assignIdentifierSubrange(IndexRangeNegative identifierSubrange) {
         this.identifierSubrange = Optional.of(identifierSubrange);
     }
 
     /**
-     * Assigns extensions that can be used filter inputs, but <b>only when</b> no extensions have already been set.
-     * 
+     * Assigns extensions that can be used filter inputs, but <b>only when</b> no extensions have
+     * already been set.
+     *
      * @param filterExtensions the extensions sued to filter inputs (without the leading period).
      */
     public void assignInputFilterExtensionsIfMissing(
@@ -147,10 +151,11 @@ public class InputContextParameters {
     }
 
     /**
-     * Assigns extensions that can be used filter inputs, but <b>irrespective of whether</b> extensions have already been set.
-     * 
+     * Assigns extensions that can be used filter inputs, but <b>irrespective of whether</b>
+     * extensions have already been set.
+     *
      * <p>Any existing input-filter-extensions are repalced with {@code filterExtensions}.
-     * 
+     *
      * @param filterExtensions the extensions sued to filter inputs (without the leading period).
      */
     public void assignInputFilterExtensions(StringSetTrie filterExtensions) {
@@ -158,8 +163,8 @@ public class InputContextParameters {
     }
 
     /**
-     * Specify that the entire filename or relative path (excluding extension) is
-     * used to determine a unique identifier.
+     * Specify that the entire filename or relative path (excluding extension) is used to determine
+     * a unique identifier.
      */
     public void assignRelativeForIdentifier() {
         this.relativeForIdentifier = true;
@@ -187,16 +192,14 @@ public class InputContextParameters {
 
     /**
      * Assigns a specific list of paths that are used for the inputs.
-     * 
+     *
      * @param paths the paths.
      */
     public void assignPaths(List<Path> paths) {
         this.inputPaths = Optional.of(paths);
     }
 
-    /**
-     * Indicates that the order of the inputs should be shuffled (randomized).
-     */
+    /** Indicates that the order of the inputs should be shuffled (randomized). */
     public void assignShuffle() {
         this.shuffle = true;
     }

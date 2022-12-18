@@ -33,17 +33,16 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 
 /**
  * An opened-CSV file that is read line-by-line and processed.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 @RequiredArgsConstructor
 public class ReadByLine implements AutoCloseable {
 
     // START REQUIRED ARGUMENTS
-	/** Path to the CSV file that will be read. */
+    /** Path to the CSV file that will be read. */
     private final Path filePath;
-    
+
     /** How the CSV will be read. */
     private final CSVReader csvReader;
     // END REQUIRED ARGUMENTS

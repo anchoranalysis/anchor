@@ -29,7 +29,7 @@ import org.anchoranalysis.core.exception.friendly.AnchorFriendlyCheckedException
 
 /**
  * When an error occurs deriving a path from another path.
- * 
+ *
  * @author Owen Feehan
  */
 public class DerivePathException extends AnchorFriendlyCheckedException {
@@ -39,7 +39,7 @@ public class DerivePathException extends AnchorFriendlyCheckedException {
 
     /**
      * Create with a message only.
-     * 
+     *
      * @param message the exception message.
      */
     public DerivePathException(String message) {
@@ -48,7 +48,7 @@ public class DerivePathException extends AnchorFriendlyCheckedException {
 
     /**
      * Create with a cause only.
-     * 
+     *
      * @param cause the cause.
      */
     public DerivePathException(Throwable cause) {
@@ -57,7 +57,7 @@ public class DerivePathException extends AnchorFriendlyCheckedException {
 
     /**
      * Create with a message and cause.
-     * 
+     *
      * @param message the exception message.
      * @param cause the cause.
      */

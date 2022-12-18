@@ -39,15 +39,14 @@ import org.anchoranalysis.io.input.bean.InputManagerParameters;
 
 /**
  * Provides a single file only.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 @NoArgsConstructor
 public class SingleFile extends FilesProviderWithDirectory {
 
     // START BEAN PROPERTIES
-	/** The path of the single-file. */
+    /** The path of the single-file. */
     @BeanField @Getter private String path;
     // END BEAN PROPERTIES
 
@@ -56,7 +55,7 @@ public class SingleFile extends FilesProviderWithDirectory {
 
     /**
      * Creates with a path for the single-file.
-     * 
+     *
      * @param path the path.
      */
     public SingleFile(String path) {
@@ -85,7 +84,7 @@ public class SingleFile extends FilesProviderWithDirectory {
             return Paths.get(path).getParent();
         }
     }
-    
+
     private boolean hasDirectory() {
         return directory != null;
     }

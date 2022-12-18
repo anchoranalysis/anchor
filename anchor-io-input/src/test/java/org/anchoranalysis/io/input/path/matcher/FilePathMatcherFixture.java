@@ -46,7 +46,7 @@ public class FilePathMatcherFixture {
 
     /**
      * Creates with a {@link TestLoader}.
-     *  
+     *
      * @param loader how to laod files from the resources.
      */
     public FilePathMatcherFixture(TestLoader loader) {
@@ -59,11 +59,12 @@ public class FilePathMatcherFixture {
      *
      * @param expectedNumberNonRecursive the number of files expected to match the {@code
      *     predicates}, when run non-recursively.
-     * @param expectedNumberRecursive the number of files expected to match the {@code
-     *     predicates}, when run recursively.
+     * @param expectedNumberRecursive the number of files expected to match the {@code predicates},
+     *     when run recursively.
      * @param matcher the matcher to use.
      * @param assertMessagePrefix a prefix to add to the message used when asserting.
-     * @throws InputReadFailedException if an exception is thrown by {@code FilePathMatcher#matchingFiles(Path, boolean)}.
+     * @throws InputReadFailedException if an exception is thrown by {@code
+     *     FilePathMatcher#matchingFiles(Path, boolean)}.
      */
     public void doTest(
             int expectedNumberNonRecursive,

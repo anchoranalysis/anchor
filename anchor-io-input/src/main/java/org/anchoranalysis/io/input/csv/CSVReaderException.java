@@ -30,9 +30,8 @@ import org.anchoranalysis.core.exception.friendly.AnchorFriendlyCheckedException
 
 /**
  * When an error occurs reading a CSV file.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class CSVReaderException extends AnchorFriendlyCheckedException {
 
@@ -41,7 +40,7 @@ public class CSVReaderException extends AnchorFriendlyCheckedException {
 
     /**
      * Create with a message only.
-     * 
+     *
      * @param message the exception message.
      */
     public CSVReaderException(String message) {
@@ -50,7 +49,7 @@ public class CSVReaderException extends AnchorFriendlyCheckedException {
 
     /**
      * Create with a cause only.
-     * 
+     *
      * @param cause the cause.
      */
     public CSVReaderException(Throwable cause) {

@@ -57,7 +57,7 @@ public abstract class FilesProviderWithDirectory extends FilesProvider {
 
     /**
      * The associated directory with the list of files.
-     * 
+     *
      * @param inputContext the input-context.
      * @return the associated directory, as a path.
      */
@@ -65,9 +65,9 @@ public abstract class FilesProviderWithDirectory extends FilesProvider {
 
     /**
      * The matching files for this provider that exist in a particular directory.
-     * 
+     *
      * <p>This directory may or may not be searched recursively, depending on implementation.
-     * 
+     *
      * @param directory the directory.
      * @param parameters parameters passed to an {@link InputManager} to generate input-objects.
      * @return a newly created list of matching files.
@@ -76,9 +76,9 @@ public abstract class FilesProviderWithDirectory extends FilesProvider {
     public abstract List<File> matchingFilesForDirectory(
             Path directory, InputManagerParameters parameters) throws FilesProviderException;
 
-    /** 
+    /**
      * Like {@link #getDirectoryAsPath} but converts any relative path to absolute one.
-     * 
+     *
      * @param inputContext the input-context.
      * @return an absolute path.
      */
@@ -88,7 +88,7 @@ public abstract class FilesProviderWithDirectory extends FilesProvider {
 
     /**
      * If path is relative, it's joined to path associated with this particular bean.
-     * 
+     *
      * <p>If path is absolute, it is returned unchanged.
      *
      * @param path the path which may be relative or absolute.

@@ -64,12 +64,13 @@ class FindMatchingFilesFixture {
      *
      * @param expectedNumberNonRecursive the number of files expected to match the {@code
      *     predicates}, when run non-recursively.
-     * @param expectedNumberRecursive the number of files expected to match the {@code
-     *     predicates}, when run recursively.
+     * @param expectedNumberRecursive the number of files expected to match the {@code predicates},
+     *     when run recursively.
      * @param nested if true, the nested subdirectory is used, otherwise the flat subdirectory.
      * @param predicates if true, a filter is applied to only detect files that end in ".txt". if
      *     false, no filter is applied.
-     * @throws FindFilesException if thrown by {@link FindMatchingFiles#search(Path, DualPathPredicates, boolean, Optional)}.
+     * @throws FindFilesException if thrown by {@link FindMatchingFiles#search(Path,
+     *     DualPathPredicates, boolean, Optional)}.
      */
     public void assertNumberFoundFiles(
             int expectedNumberNonRecursive,

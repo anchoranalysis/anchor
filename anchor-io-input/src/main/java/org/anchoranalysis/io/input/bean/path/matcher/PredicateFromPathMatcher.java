@@ -67,16 +67,23 @@ class PredicateFromPathMatcher {
     }
 
     /**
-     * Creates a predicate that performs matching, using internally a {@code Predicate<Path>} for the final check of a path.
+     * Creates a predicate that performs matching, using internally a {@code Predicate<Path>} for
+     * the final check of a path.
      *
-     * <p>This wraps an existing predicate that is designed to work with a simple path, to a more advanced predicate
-     * that ensures an appropriate relative-path or filename is passed, as appropriate.
+     * <p>This wraps an existing predicate that is designed to work with a simple path, to a more
+     * advanced predicate that ensures an appropriate relative-path or filename is passed, as
+     * appropriate.
      *
      * @param directory the directory in which the search commenced.
-     * @param filterType the string before the : in {@code FileSystem:getPathMatcher} i.e. glob or regex
-     * @param fileFilter the string after the : in {@code FileSystem:getPathMatcher} i.e. the expression for a glob or regex
-     * @param filenameOnly if true, the match only occurs against the filename (ignoring the rest of the path). if false, it is applied to the entire relative-path between {@code directory} and the path being considered, including the filename.
-     * @return a newly created predicate that, given a path, returns true if matches, and false otherwise.
+     * @param filterType the string before the : in {@code FileSystem:getPathMatcher} i.e. glob or
+     *     regex
+     * @param fileFilter the string after the : in {@code FileSystem:getPathMatcher} i.e. the
+     *     expression for a glob or regex
+     * @param filenameOnly if true, the match only occurs against the filename (ignoring the rest of
+     *     the path). if false, it is applied to the entire relative-path between {@code directory}
+     *     and the path being considered, including the filename.
+     * @return a newly created predicate that, given a path, returns true if matches, and false
+     *     otherwise.
      */
     private static CheckedPredicate<Path, IOException> predicateForPathMatcher(
             Path directory, Predicate<Path> predicate, boolean filenameOnly) {

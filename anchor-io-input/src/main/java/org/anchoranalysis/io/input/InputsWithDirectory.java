@@ -131,7 +131,7 @@ public class InputsWithDirectory<T extends InputFromManager> {
 
     /**
      * Whether no inputs exist.
-     * 
+     *
      * @return true if no inputs exist, false if at least one input exists.
      */
     public boolean isEmpty() {
@@ -148,11 +148,9 @@ public class InputsWithDirectory<T extends InputFromManager> {
     }
 
     /**
-     * Returns a list iterator over the elements in this list (in proper
-     * sequence).
+     * Returns a list iterator over the elements in this list (in proper sequence).
      *
-     * @return a list iterator over the elements in this list (in proper
-     *         sequence)
+     * @return a list iterator over the elements in this list (in proper sequence)
      */
     public ListIterator<T> listIterator() {
         return inputs.listIterator();

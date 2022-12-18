@@ -42,7 +42,7 @@ public abstract class SingleFileInputBase implements InputFromManager {
 
     /**
      * Creates for a particular file.
-     * 
+     *
      * @param file the file, with an associated name.
      */
     protected SingleFileInputBase(NamedFile file) {
@@ -67,7 +67,7 @@ public abstract class SingleFileInputBase implements InputFromManager {
 
     /**
      * The associated single file.
-     * 
+     *
      * @return the file, as used internally.
      */
     public File getFile() {

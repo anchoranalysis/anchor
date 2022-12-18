@@ -37,9 +37,8 @@ import org.anchoranalysis.io.input.file.FilesProviderException;
 
 /**
  * Base class for providing a list of {@link File}s.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public abstract class FilesProvider extends AnchorBean<FilesProvider> {
 

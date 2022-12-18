@@ -31,7 +31,6 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.Value;
-
 import org.anchoranalysis.core.system.path.FilePathToUnixStyleConverter;
 
 /**
@@ -42,11 +41,11 @@ import org.anchoranalysis.core.system.path.FilePathToUnixStyleConverter;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class GlobExtractor {
 
-	/**
-	 * A string describing a glob, associated with a directory onto which it will be applied.
-	 * 
-	 * @author Owen Feehan
-	 */
+    /**
+     * A string describing a glob, associated with a directory onto which it will be applied.
+     *
+     * @author Owen Feehan
+     */
     @Value
     @AllArgsConstructor
     public static class GlobWithDirectory {
@@ -54,8 +53,10 @@ public class GlobExtractor {
         /** The directory part of the string, or null if it doesn't exist */
         private Optional<String> directory;
 
-        /** 
-         * A glob with Java's <a href="https://docs.oracle.com/javase/7/docs/api/java/nio/file/FileSystem.html#getPathMatcher(java.lang.String)">getPathMatcher</a> syntax.
+        /**
+         * A glob with Java's <a
+         * href="https://docs.oracle.com/javase/7/docs/api/java/nio/file/FileSystem.html#getPathMatcher(java.lang.String)">getPathMatcher</a>
+         * syntax.
          */
         private String glob;
     }

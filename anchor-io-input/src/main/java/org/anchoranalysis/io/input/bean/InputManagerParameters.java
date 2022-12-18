@@ -42,7 +42,7 @@ import org.anchoranalysis.io.input.InputContextParameters;
 @RequiredArgsConstructor
 public class InputManagerParameters {
 
-	/** Additional parameters that offer context for many beans that provide input-functions. */
+    /** Additional parameters that offer context for many beans that provide input-functions. */
     @Getter private final InputContextParameters inputContext;
 
     /** Allows for logging and recording the execution-time of particular operations. */
@@ -69,7 +69,7 @@ public class InputManagerParameters {
 
     /**
      * Whether debug-mode has been activated.
-     * 
+     *
      * @return true iff debug-mode has been activated.
      */
     public boolean isDebugModeActivated() {
@@ -78,7 +78,7 @@ public class InputManagerParameters {
 
     /**
      * Parameters for debug-mode (only defined if we are in debug mode).
-     * 
+     *
      * @return the parameters, if they exist.
      */
     public Optional<DebugModeParameters> getDebugModeParameters() {
@@ -87,7 +87,7 @@ public class InputManagerParameters {
 
     /**
      * Allows for the execution time of certain operations to be recorded.
-     * 
+     *
      * @return the execution-time-recorder.
      */
     public ExecutionTimeRecorder getExecutionTimeRecorder() {
@@ -97,7 +97,7 @@ public class InputManagerParameters {
     /**
      * Where to write informative messages to, and and any non-fatal errors (fatal errors are throw
      * as exceptions).
-     * 
+     *
      * @return the logger.
      */
     public Logger getLogger() {

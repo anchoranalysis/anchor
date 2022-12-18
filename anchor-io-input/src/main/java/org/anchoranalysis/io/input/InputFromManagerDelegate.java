@@ -64,7 +64,7 @@ public abstract class InputFromManagerDelegate<T extends InputFromManager>
 
     /**
      * The delegate.
-     * 
+     *
      * @return the delegate.
      */
     protected T getDelegate() {

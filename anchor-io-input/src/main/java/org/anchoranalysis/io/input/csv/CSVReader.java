@@ -43,12 +43,12 @@ import lombok.Setter;
 public class CSVReader {
 
     // START REQUIRED ARGUMENTS
-	/** A regular-expression in Java syntax for splitting a line by separator. */
+    /** A regular-expression in Java syntax for splitting a line by separator. */
     private final String regularExpressionSeperator;
-    
+
     /** Whether the first line of the CSV file contains headers or not. */
     private final boolean firstLineHeaders;
-    
+
     /** Whether strings should be quoted or not in the CSV file. */
     private final boolean quotedStrings;
     // END REQUIRED ARGUMENTS
@@ -60,21 +60,22 @@ public class CSVReader {
 
     /**
      * A CSV file that has been opened for reading from the file-system.
-     * 
+     *
      * @author Owen File
      */
     public class OpenedCSVFile implements AutoCloseable {
 
-    	/**
-    	 * Sets the number of columns, if it is already known from elsewhere.
-    	 * 
-    	 * <p>If no number has been assigned (or -1) it is automatically determined when reading the CSV file.
-    	 */
+        /**
+         * Sets the number of columns, if it is already known from elsewhere.
+         *
+         * <p>If no number has been assigned (or -1) it is automatically determined when reading the
+         * CSV file.
+         */
         @Setter private int numberColumns = -1;
 
         /**
          * Reads the next-line from the open CSV file.
-         * 
+         *
          * @return the line or {@link Optional#empty} if there are no more lines to read.
          * @throws IOException if any problem occurs access the file.
          */
@@ -115,17 +116,18 @@ public class CSVReader {
 
         /**
          * Does the first line of the CSV file specify headers rather than values?
-         * 
+         *
          * @return true iff the first line specifies headers.
          */
         public boolean hasHeaders() {
             return firstLineHeaders;
         }
 
-        /** 
+        /**
          * The header-names of the CSV file if available.
-         * 
-         * @return an array, corresponding to each header, or {@code null} if no headers are available.
+         *
+         * @return an array, corresponding to each header, or {@code null} if no headers are
+         *     available.
          */
         public String[] getHeaders() {
             return headers;
@@ -146,8 +148,9 @@ public class CSVReader {
 
     /**
      * Create, expecting unquoted strings.
-     * 
-     * @param regularExpressionSeperator a regular-expression in Java syntax for splitting a line by separator.
+     *
+     * @param regularExpressionSeperator a regular-expression in Java syntax for splitting a line by
+     *     separator.
      * @param firstLineHeaders whether the first line of the CSV file contains headers or not.
      */
     public CSVReader(String regularExpressionSeperator, boolean firstLineHeaders) {

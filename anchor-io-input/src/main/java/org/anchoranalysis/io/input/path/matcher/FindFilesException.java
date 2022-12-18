@@ -30,7 +30,7 @@ import org.anchoranalysis.core.exception.friendly.AnchorFriendlyCheckedException
 
 /**
  * When an error occurs finding files.
- * 
+ *
  * @author Owen Feehan
  */
 public class FindFilesException extends AnchorFriendlyCheckedException {
@@ -40,7 +40,7 @@ public class FindFilesException extends AnchorFriendlyCheckedException {
 
     /**
      * Create with a message only.
-     * 
+     *
      * @param message the exception message.
      */
     public FindFilesException(String message) {
@@ -49,7 +49,7 @@ public class FindFilesException extends AnchorFriendlyCheckedException {
 
     /**
      * Create with a message and cause.
-     * 
+     *
      * @param message the exception message.
      * @param cause the cause.
      */
