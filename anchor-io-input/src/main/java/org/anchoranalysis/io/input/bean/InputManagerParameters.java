@@ -35,13 +35,14 @@ import org.anchoranalysis.core.time.OperationContext;
 import org.anchoranalysis.io.input.InputContextParameters;
 
 /**
- * Parameters passed to an {@link InputManager} to generate input-objects
+ * Parameters passed to an {@link InputManager} to generate input-objects.
  *
  * @author Owen Feehan
  */
 @RequiredArgsConstructor
 public class InputManagerParameters {
 
+	/** Additional parameters that offer context for many beans that provide input-functions. */
     @Getter private final InputContextParameters inputContext;
 
     /** Allows for logging and recording the execution-time of particular operations. */
@@ -66,18 +67,39 @@ public class InputManagerParameters {
         this(new InputContextParameters(), operationContext);
     }
 
+    /**
+     * Whether debug-mode has been activated.
+     * 
+     * @return true iff debug-mode has been activated.
+     */
     public boolean isDebugModeActivated() {
         return inputContext.getDebugModeParameters().isPresent();
     }
 
+    /**
+     * Parameters for debug-mode (only defined if we are in debug mode).
+     * 
+     * @return the parameters, if they exist.
+     */
     public Optional<DebugModeParameters> getDebugModeParameters() {
         return inputContext.getDebugModeParameters();
     }
 
+    /**
+     * Allows for the execution time of certain operations to be recorded.
+     * 
+     * @return the execution-time-recorder.
+     */
     public ExecutionTimeRecorder getExecutionTimeRecorder() {
         return operationContext.getExecutionTimeRecorder();
     }
 
+    /**
+     * Where to write informative messages to, and and any non-fatal errors (fatal errors are throw
+     * as exceptions).
+     * 
+     * @return the logger.
+     */
     public Logger getLogger() {
         return operationContext.getLogger();
     }

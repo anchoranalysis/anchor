@@ -150,9 +150,9 @@ public class FunctionalList {
      * @param  <S> parameter-type for function
      * @param  <T> return-type for function
      * @param  <E> exception that can be thrown by @{@code mapFunction}
-     * @param collection the collection to be mapped
-     * @param throwableClass class type of exception that may be thrown by {@code mapFunction}
-     * @param mapFunction function to do the mapping
+     * @param collection the collection to be mapped.
+     * @param throwableClass class type of exception that may be thrown by {@code mapFunction}.
+     * @param mapFunction function to do the mapping.
      * @return a list with the same size and same order, but using derived elements that are a
      *     result of the mapping
      * @throws E if the exception is thrown during mapping

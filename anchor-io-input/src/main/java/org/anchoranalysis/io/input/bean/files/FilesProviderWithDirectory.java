@@ -31,6 +31,7 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.io.input.InputContextParameters;
+import org.anchoranalysis.io.input.bean.InputManager;
 import org.anchoranalysis.io.input.bean.InputManagerParameters;
 import org.anchoranalysis.io.input.file.FilesProviderException;
 
@@ -54,22 +55,44 @@ public abstract class FilesProviderWithDirectory extends FilesProvider {
         return Optional.of(getDirectoryAsPath(inputContext));
     }
 
+    /**
+     * The associated directory with the list of files.
+     * 
+     * @param inputContext the input-context.
+     * @return the associated directory, as a path.
+     */
     public abstract Path getDirectoryAsPath(InputContextParameters inputContext);
 
+    /**
+     * The matching files for this provider that exist in a particular directory.
+     * 
+     * <p>This directory may or may not be searched recursively, depending on implementation.
+     * 
+     * @param directory the directory.
+     * @param parameters parameters passed to an {@link InputManager} to generate input-objects.
+     * @return a newly created list of matching files.
+     * @throws FilesProviderException if the operation is unable to complete successfully.
+     */
     public abstract List<File> matchingFilesForDirectory(
             Path directory, InputManagerParameters parameters) throws FilesProviderException;
 
-    /** Like getDirectory as Path but converts any relative path to absolute one */
+    /** 
+     * Like {@link #getDirectoryAsPath} but converts any relative path to absolute one.
+     * 
+     * @param inputContext the input-context.
+     * @return an absolute path.
+     */
     public Path getDirectoryAsPathEnsureAbsolute(InputContextParameters inputContext) {
         return makeAbsolutePathIfNecessary(getDirectoryAsPath(inputContext));
     }
 
     /**
-     * If path is absolute, it's returned as-is If path is relative, and the 'makeAbsolute' option
-     * is activated, it's added to the localizedPath
+     * If path is relative, it's joined to path associated with this particular bean.
+     * 
+     * <p>If path is absolute, it is returned unchanged.
      *
-     * @param path
-     * @return
+     * @param path the path which may be relative or absolute.
+     * @return a resolved path as per above if relative, or an unchanged path if absolute.
      */
     private Path makeAbsolutePathIfNecessary(Path path) {
         if (path.isAbsolute()) {

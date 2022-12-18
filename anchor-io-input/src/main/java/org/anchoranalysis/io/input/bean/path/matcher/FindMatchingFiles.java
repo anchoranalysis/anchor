@@ -60,11 +60,10 @@ class FindMatchingFiles {
      * directory}.
      *
      * @param directory the directory to search.
-     * @param constraints the constraints applied to the paths.
+     * @param predicates the constraints applied to the paths.
      * @param recursive whether to search recursively.
      * @param maxDirectoryDepth limits on the depth of how many sub-directories are to be recursed.
      *     If unassigned, there is no limit.
-     * @param logger logs unexpected non-fatal issues that are encountered.
      * @return a newly created list containing all files in {@code directory} that match the
      *     constraints.
      * @throws FindFilesException if a fatal error is encountered during the search.

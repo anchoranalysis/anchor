@@ -64,10 +64,25 @@ public class FileNamerContext {
     /** Logs information messages. */
     private Logger logger;
 
+    /**
+     * Creates with a logger, and otherwise uses sensible defaults.
+     * 
+     * @param logger the logger.
+     */
     public FileNamerContext(Logger logger) {
         this(Optional.empty(), false, Optional.empty(), logger);
     }
 
+    /**
+     * Creates with specific parameters.
+     * 
+     * @param inputDirectory a directory associated with the inputs, which if defined, is guaranteed to be a parent of
+     * them all.
+     * @param relativeToDirectory if true, the namer should prefer to derive file-names relative to the directory, rather than
+     * only the varying elements in the file-names.
+     * @param nameSubrange if defined, this indicates and specifies only a subset of the naming-elements to use.
+     * @param logger the logger.
+     */
     public FileNamerContext(
             Optional<Path> inputDirectory,
             boolean relativeToDirectory,
@@ -76,6 +91,12 @@ public class FileNamerContext {
         this(inputDirectory, relativeToDirectory, DEFAULT_ELSE_NAME, nameSubrange, logger);
     }
 
+    /**
+     * Creates with a fallback-name and a logger, but otherwise using sensible defaults.
+     * 
+     * @param elseName a fallback-name, if a failure occurs when naming.
+     * @param logger the logger.
+     */
     public FileNamerContext(String elseName, Logger logger) {
         this(Optional.empty(), false, elseName, Optional.empty(), logger);
     }

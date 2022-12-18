@@ -73,15 +73,29 @@ public class SpecificPathList extends FilesProvider {
     @BeanField @OptionalBean @Getter @Setter private FilesProvider fallback;
     // END BEAN PROPERTIES
 
+    /**
+     * Creates by reusing an existing list.
+     * 
+     * @param listPaths the list of paths to reuse.
+     */
     public SpecificPathList(List<String> listPaths) {
         this.listPaths = new StringList(listPaths);
     }
 
+    /**
+     * Creates by reusing an existing list.
+     * 
+     * @param listPaths the list of paths to reuse.
+     */
     public SpecificPathList(StringList listPaths) {
         this.listPaths = listPaths;
     }
 
-    /** Factory method for creating the class with an empty list of paths */
+    /** 
+     * Factory method for creating the class with an empty list of paths.
+     *
+     * @return a newly created list that is empty.
+     */
     public static SpecificPathList createWithEmptyList() {
         SpecificPathList out = new SpecificPathList();
         out.listPaths = new StringList();

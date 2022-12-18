@@ -34,9 +34,16 @@ import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
 import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 
+/**
+ * Calls an existing {@link FilePathProvider} indirectly to provide an identical result.
+ * 
+ * @author Owen Feehan
+ *
+ */
 public class FilePathProviderReference extends FilePathProvider {
 
     // START BEAN PROPERTIES
+	/** A unique identifer for another {@link FilePathProvider} that is referenced. */
     @BeanField @Getter @Setter private String id = "";
     // END BEAN PROPERTIES
 

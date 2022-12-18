@@ -33,6 +33,11 @@ package org.anchoranalysis.io.input.file;
  */
 public class FileInput extends SingleFileInputBase {
 
+	/**
+	 * Creates for a single file.
+	 * 
+	 * @param file the single file, with an associated name.
+	 */
     public FileInput(NamedFile file) {
         super(file);
     }

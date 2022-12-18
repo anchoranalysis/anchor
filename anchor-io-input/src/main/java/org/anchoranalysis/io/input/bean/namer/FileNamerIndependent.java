@@ -37,6 +37,13 @@ import org.anchoranalysis.io.input.file.NamedFile;
 
 /**
  * Base class for methods that derive the name independently for each file.
+ * 
+ * <p>By independently, this means the name is derived using information from a 
+ * particular file only, and not from the collective set of the files that are
+ * named together.
+ * 
+ * <p>An exception may occur via the index, which is derived collectively from
+ * all files, but may be used in sub-classes.
  *
  * @author Owen Feehan
  */
@@ -56,6 +63,15 @@ public abstract class FileNamerIndependent extends FileNamer {
         return out;
     }
 
+    /**
+     * Derives a unique name for this file.
+     * 
+     * @param file the file.
+     * @param inputDirectory the root input-directory used in naming.
+     * @param index a unique incrementing number, beginning at zero, passed to each call to this method within a collection. 
+     * @return the derived unique name.
+     * @throws CreateException if unable to create the unique name.
+     */
     protected abstract String deriveName(File file, Optional<Path> inputDirectory, int index)
             throws CreateException;
 

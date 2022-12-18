@@ -90,6 +90,7 @@ public class InputsWithDirectory<T extends InputFromManager> {
      * @param <S> the type of inputs that are mapped to.
      * @param <E> an exception that may be thrown by {@code mapFunction}.
      * @param mapFunction the function that transforms and existing input into a new input.
+     * @param throwableClass class type of exception that may be thrown by {@code mapFunction}.
      * @return a newly created input-manager with the mapped inputs, but an identical directory.
      * @throws E if thrown by {@code mapFunction}.
      */
@@ -128,14 +129,31 @@ public class InputsWithDirectory<T extends InputFromManager> {
         }
     }
 
+    /**
+     * Whether no inputs exist.
+     * 
+     * @return true if no inputs exist, false if at least one input exists.
+     */
     public boolean isEmpty() {
         return inputs.isEmpty();
     }
 
+    /**
+     * Returns an iterator over the elements in this list in proper sequence.
+     *
+     * @return an iterator over the elements in this list in proper sequence
+     */
     public Iterator<T> iterator() {
         return inputs.iterator();
     }
 
+    /**
+     * Returns a list iterator over the elements in this list (in proper
+     * sequence).
+     *
+     * @return a list iterator over the elements in this list (in proper
+     *         sequence)
+     */
     public ListIterator<T> listIterator() {
         return inputs.listIterator();
     }
