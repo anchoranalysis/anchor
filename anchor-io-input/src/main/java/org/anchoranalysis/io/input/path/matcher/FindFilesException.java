@@ -28,15 +28,31 @@ package org.anchoranalysis.io.input.path.matcher;
 
 import org.anchoranalysis.core.exception.friendly.AnchorFriendlyCheckedException;
 
+/**
+ * When an error occurs finding files.
+ *
+ * @author Owen Feehan
+ */
 public class FindFilesException extends AnchorFriendlyCheckedException {
 
     /** */
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Create with a message only.
+     *
+     * @param message the exception message.
+     */
     public FindFilesException(String message) {
         super(message);
     }
 
+    /**
+     * Create with a message and cause.
+     *
+     * @param message the exception message.
+     * @param cause the cause.
+     */
     public FindFilesException(String message, Throwable cause) {
         super(message, cause);
     }

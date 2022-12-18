@@ -68,6 +68,7 @@ public abstract class FilesProviderUnary extends FilesProvider {
      * @param source the incoming files (which may be consumed and modified).
      * @param debugMode whether we are executing in debug-mode or not
      * @return the transformed (outgoing) files.
+     * @throws FilesProviderException if unable to complete the transform operation successfully.
      */
     protected abstract List<File> transform(List<File> source, boolean debugMode)
             throws FilesProviderException;

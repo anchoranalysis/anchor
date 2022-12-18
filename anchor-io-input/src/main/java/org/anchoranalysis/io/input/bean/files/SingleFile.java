@@ -37,16 +37,27 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.input.InputContextParameters;
 import org.anchoranalysis.io.input.bean.InputManagerParameters;
 
+/**
+ * Provides a single file only.
+ *
+ * @author Owen Feehan
+ */
 @NoArgsConstructor
 public class SingleFile extends FilesProviderWithDirectory {
 
     // START BEAN PROPERTIES
+    /** The path of the single-file. */
     @BeanField @Getter private String path;
     // END BEAN PROPERTIES
 
     // Optionally changes the directory of the path
     private Path directory;
 
+    /**
+     * Creates with a path for the single-file.
+     *
+     * @param path the path.
+     */
     public SingleFile(String path) {
         this.path = path;
     }
@@ -63,19 +74,6 @@ public class SingleFile extends FilesProviderWithDirectory {
         return Collections.singletonList(file);
     }
 
-    public static String replaceBackslashes(String str) {
-        return str.replace('\\', '/');
-    }
-
-    public void setPath(String path) {
-        // Make everything a forward slash
-        this.path = replaceBackslashes(path);
-    }
-
-    private boolean hasDirectory() {
-        return directory != null;
-    }
-
     @Override
     public Path getDirectoryAsPath(InputContextParameters inputContext) {
 
@@ -85,5 +83,9 @@ public class SingleFile extends FilesProviderWithDirectory {
             // We infer the directory if it isn't set
             return Paths.get(path).getParent();
         }
+    }
+
+    private boolean hasDirectory() {
+        return directory != null;
     }
 }

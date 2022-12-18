@@ -30,23 +30,30 @@ import java.nio.file.Path;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.io.input.csv.CSVReaderByLine.ProcessCSVLine;
 
+/**
+ * An opened-CSV file that is read line-by-line and processed.
+ *
+ * @author Owen Feehan
+ */
 @RequiredArgsConstructor
 public class ReadByLine implements AutoCloseable {
 
     // START REQUIRED ARGUMENTS
+    /** Path to the CSV file that will be read. */
     private final Path filePath;
+
+    /** How the CSV will be read. */
     private final CSVReader csvReader;
     // END REQUIRED ARGUMENTS
 
     private CSVReader.OpenedCSVFile openedFile = null;
 
     /**
-     * The headers of the CSV file
+     * The headers of the CSV file.
      *
-     * @throws CSVReaderException
-     * @return a string or null if the headers don't exist
+     * @throws CSVReaderException if the file cannot be opened successfully.
+     * @return a string or null if the headers don't exist.
      */
     public String[] headers() throws CSVReaderException {
         openIfNecessary();
@@ -60,7 +67,7 @@ public class ReadByLine implements AutoCloseable {
      *
      * @param lineProcessor called one for each row incrementally
      * @return the number of lines read
-     * @throws CSVReaderException
+     * @throws CSVReaderException if any file-system I/O errors occur.
      */
     public int read(ProcessCSVLine lineProcessor) throws CSVReaderException {
 
@@ -87,22 +94,22 @@ public class ReadByLine implements AutoCloseable {
         }
     }
 
-    private void openIfNecessary() throws CSVReaderException {
-        if (openedFile == null) {
-            openedFile = csvReader.read(filePath);
-        }
-    }
-
     /**
      * Closes any opened-files
      *
-     * @throws CSVReaderException
+     * @throws CSVReaderException if any file-system I/O errors occur.
      */
     @Override
     public void close() throws CSVReaderException {
         if (openedFile != null) {
             openedFile.close();
             openedFile = null;
+        }
+    }
+
+    private void openIfNecessary() throws CSVReaderException {
+        if (openedFile == null) {
+            openedFile = csvReader.read(filePath);
         }
     }
 }

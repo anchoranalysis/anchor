@@ -34,6 +34,7 @@ import org.anchoranalysis.core.log.error.ErrorReporter;
  * A base class for {@link InputFromManager}-implementing classes that delegate to another.
  *
  * @author Owen Feehan
+ * @param <T> inout-type
  */
 @AllArgsConstructor
 public abstract class InputFromManagerDelegate<T extends InputFromManager>
@@ -61,6 +62,11 @@ public abstract class InputFromManagerDelegate<T extends InputFromManager>
         return delegate.toString();
     }
 
+    /**
+     * The delegate.
+     *
+     * @return the delegate.
+     */
     protected T getDelegate() {
         return delegate;
     }

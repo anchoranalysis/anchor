@@ -121,6 +121,8 @@ public interface InputFromManager {
     /**
      * Performs all tidying up, file-closing etc. after we are finished using the {@link
      * InputFromManager}
+     *
+     * @param errorReporter whether errors are reported to.
      */
     default void close(ErrorReporter errorReporter) {}
 }

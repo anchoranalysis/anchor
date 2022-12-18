@@ -27,19 +27,40 @@ package org.anchoranalysis.io.input.path;
 
 import org.anchoranalysis.core.exception.friendly.AnchorFriendlyCheckedException;
 
+/**
+ * When an error occurs deriving a path from another path.
+ *
+ * @author Owen Feehan
+ */
 public class DerivePathException extends AnchorFriendlyCheckedException {
 
     /** */
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Create with a message only.
+     *
+     * @param message the exception message.
+     */
     public DerivePathException(String message) {
         super(message);
     }
 
+    /**
+     * Create with a cause only.
+     *
+     * @param cause the cause.
+     */
     public DerivePathException(Throwable cause) {
         super(cause);
     }
 
+    /**
+     * Create with a message and cause.
+     *
+     * @param message the exception message.
+     * @param cause the cause.
+     */
     public DerivePathException(String message, Throwable cause) {
         super(message, cause);
     }

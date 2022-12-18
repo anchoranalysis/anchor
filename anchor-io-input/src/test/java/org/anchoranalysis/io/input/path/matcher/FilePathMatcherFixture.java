@@ -44,6 +44,11 @@ public class FilePathMatcherFixture {
 
     private final DualDirectoryFixture dualDirectory;
 
+    /**
+     * Creates with a {@link TestLoader}.
+     *
+     * @param loader how to laod files from the resources.
+     */
     public FilePathMatcherFixture(TestLoader loader) {
         dualDirectory = new DualDirectoryFixture(loader);
     }
@@ -53,12 +58,13 @@ public class FilePathMatcherFixture {
      * checks the the number of files is as expected.
      *
      * @param expectedNumberNonRecursive the number of files expected to match the {@code
-     *     predicates}, when run recursively.
-     * @param expectedNumberNonRecursive the number of files expected to match the {@code
      *     predicates}, when run non-recursively.
+     * @param expectedNumberRecursive the number of files expected to match the {@code predicates},
+     *     when run recursively.
      * @param matcher the matcher to use.
-     * @parma assertMessagePrefix a prefix to add to the message used when asserting.
-     * @throws FindFilesException if thrown by {@link FilePathMatcher#matchingFiles(Path, boolean)}.
+     * @param assertMessagePrefix a prefix to add to the message used when asserting.
+     * @throws InputReadFailedException if an exception is thrown by {@code
+     *     FilePathMatcher#matchingFiles(Path, boolean)}.
      */
     public void doTest(
             int expectedNumberNonRecursive,

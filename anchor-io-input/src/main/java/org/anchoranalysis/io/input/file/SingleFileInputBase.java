@@ -40,6 +40,11 @@ public abstract class SingleFileInputBase implements InputFromManager {
 
     private NamedFile file;
 
+    /**
+     * Creates for a particular file.
+     *
+     * @param file the file, with an associated name.
+     */
     protected SingleFileInputBase(NamedFile file) {
         this.file = file;
         Preconditions.checkArgument(!file.getIdentifier().isEmpty());
@@ -60,6 +65,11 @@ public abstract class SingleFileInputBase implements InputFromManager {
         return identifier();
     }
 
+    /**
+     * The associated single file.
+     *
+     * @return the file, as used internally.
+     */
     public File getFile() {
         return file.getFile();
     }

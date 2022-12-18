@@ -68,6 +68,7 @@ public abstract class FilesProviderWithDirectoryUnary extends FilesProviderWithD
      *
      * @param source the incoming files (which may be consumed and modified).
      * @return the transformed (outgoing) files.
+     * @throws FilesProviderException if unable to complete the transform operation successfully.
      */
     protected abstract List<File> transform(List<File> source) throws FilesProviderException;
 }

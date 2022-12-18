@@ -28,15 +28,30 @@ package org.anchoranalysis.io.input.file;
 
 import org.anchoranalysis.core.exception.friendly.AnchorFriendlyCheckedException;
 
+/**
+ * When an error occurs providing a set of files.
+ *
+ * @author Owen Feehan
+ */
 public class FilesProviderException extends AnchorFriendlyCheckedException {
 
     /** */
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Create with a message only.
+     *
+     * @param message the exception message.
+     */
     public FilesProviderException(String message) {
         super(message);
     }
 
+    /**
+     * Create with a cause only.
+     *
+     * @param cause the cause.
+     */
     public FilesProviderException(Throwable cause) {
         super(cause);
     }

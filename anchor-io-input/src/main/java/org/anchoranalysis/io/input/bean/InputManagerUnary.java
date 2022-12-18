@@ -61,6 +61,7 @@ public abstract class InputManagerUnary<T extends InputFromManager> extends Inpu
      * @param fromDelegate the inputs from the delegate.
      * @param parameters parameters for determining inputs.
      * @return inputs to return after any further processing.
+     * @throws InputReadFailedException if inputs cannot be successfully read from the file-system.
      */
     protected abstract InputsWithDirectory<T> inputsFromDelegate(
             InputsWithDirectory<T> fromDelegate, InputManagerParameters parameters)

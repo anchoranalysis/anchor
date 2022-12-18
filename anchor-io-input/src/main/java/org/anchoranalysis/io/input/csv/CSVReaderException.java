@@ -28,15 +28,30 @@ package org.anchoranalysis.io.input.csv;
 
 import org.anchoranalysis.core.exception.friendly.AnchorFriendlyCheckedException;
 
+/**
+ * When an error occurs reading a CSV file.
+ *
+ * @author Owen Feehan
+ */
 public class CSVReaderException extends AnchorFriendlyCheckedException {
 
     /** */
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Create with a message only.
+     *
+     * @param message the exception message.
+     */
     public CSVReaderException(String message) {
         super(message);
     }
 
+    /**
+     * Create with a cause only.
+     *
+     * @param cause the cause.
+     */
     public CSVReaderException(Throwable cause) {
         super(cause);
     }

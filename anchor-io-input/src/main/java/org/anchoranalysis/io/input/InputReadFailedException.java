@@ -28,19 +28,40 @@ package org.anchoranalysis.io.input;
 
 import org.anchoranalysis.core.exception.AnchorCheckedException;
 
+/**
+ * When an error occurs reading an input.
+ *
+ * @author Owen Feehan
+ */
 public class InputReadFailedException extends AnchorCheckedException {
 
     /** */
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Create with a message only.
+     *
+     * @param message the exception message.
+     */
     public InputReadFailedException(String message) {
         super(message);
     }
 
+    /**
+     * Create with a cause only.
+     *
+     * @param cause the cause.
+     */
     public InputReadFailedException(Throwable cause) {
         super(cause);
     }
 
+    /**
+     * Create with a message and cause.
+     *
+     * @param message the exception message.
+     * @param cause the cause.
+     */
     public InputReadFailedException(String message, Throwable cause) {
         super(message, cause);
     }

@@ -35,6 +35,11 @@ import org.anchoranalysis.io.input.InputContextParameters;
 import org.anchoranalysis.io.input.bean.InputManagerParameters;
 import org.anchoranalysis.io.input.file.FilesProviderException;
 
+/**
+ * Base class for providing a list of {@link File}s.
+ *
+ * @author Owen Feehan
+ */
 public abstract class FilesProvider extends AnchorBean<FilesProvider> {
 
     /**
@@ -55,6 +60,7 @@ public abstract class FilesProvider extends AnchorBean<FilesProvider> {
      *
      * @param inputContext the input-context.
      * @return a path to this directory.
+     * @throws FilesProviderException if an error occurs establishing the root directory.
      */
     public abstract Optional<Path> rootDirectory(InputContextParameters inputContext)
             throws FilesProviderException;
