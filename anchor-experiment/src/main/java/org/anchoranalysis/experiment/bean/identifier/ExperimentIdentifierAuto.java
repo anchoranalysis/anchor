@@ -34,6 +34,7 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.functional.OptionalFactory;
 
 /**
  * Automatically populates a experiment-name and version number
@@ -43,16 +44,16 @@ import org.anchoranalysis.bean.annotation.BeanField;
 public class ExperimentIdentifierAuto extends ExperimentIdentifier {
 
     // START BEAN FIELDS
-    /** If there's no task-name, then this constant is used as a fallback name */
+    /** If there's no task-name, then this constant is used as a fallback name. */
     @BeanField @Getter @Setter private String fallbackName = "experiment";
 
-    /** If true, the current day (yyyy.MM.dd) is included in the output */
+    /** If true, the current day (yyyy.MM.dd) is included in the output. */
     @BeanField @Getter @Setter private boolean day = true;
 
-    /** If true, the current time (HH.mm.ss) is included in the output */
+    /** If true, the current time (HH.mm.ss) is included in the output. */
     @BeanField @Getter @Setter private boolean time = true;
 
-    /** Only relevant if time==true. Whether the second is included in the time */
+    /** Only relevant if time==true. Whether the second is included in the time. */
     @BeanField @Getter @Setter private boolean second = true;
     // END BEAN FIELDS
 
@@ -91,18 +92,16 @@ public class ExperimentIdentifierAuto extends ExperimentIdentifier {
     private Optional<String> createFormatterPatternStr() {
         if (day) {
             if (time) {
-                return Optional.of(FORMAT_DAY + "." + createPatternStrTime());
+                return Optional.of(FORMAT_DAY + "." + timePattern());
             } else {
                 return Optional.of(FORMAT_DAY);
             }
-        } else if (time) {
-            return Optional.of(createPatternStrTime());
         } else {
-            return Optional.empty();
+            return OptionalFactory.create(time, this::timePattern);
         }
     }
 
-    private String createPatternStrTime() {
+    private String timePattern() {
         if (second) {
             return FORMAT_TIME_BASE + "." + FORMAT_TIME_SECOND;
         } else {

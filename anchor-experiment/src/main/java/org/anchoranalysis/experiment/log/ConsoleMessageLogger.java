@@ -26,6 +26,11 @@
 
 package org.anchoranalysis.experiment.log;
 
+/**
+ * Logs messages to the console, STDOUT.
+ *
+ * @author Owen
+ */
 public class ConsoleMessageLogger implements StatefulMessageLogger {
 
     @Override

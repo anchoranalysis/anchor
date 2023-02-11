@@ -27,6 +27,7 @@
 package org.anchoranalysis.experiment.task;
 
 import java.nio.file.Path;
+import lombok.Getter;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.core.log.error.ErrorReporter;
@@ -47,20 +48,33 @@ import org.anchoranalysis.io.output.outputter.Outputter;
  */
 public class InputOutputContextStateful implements InputOutputContext {
 
-    private final ExecutionArguments experimentArguments;
+    /** User-supplied arguments that can further specify an experiment's execution. */
+    @Getter private final ExecutionArguments executionArguments;
+
     private final Outputter outputter;
 
     private final StatefulMessageLogger messageLogger;
     private final ExecutionTimeRecorder executionTimeRecorder;
     private final Logger logger; // Always related to the above two fields
 
+    /**
+     * Creates with initialization arguments.
+     *
+     * @param executionArguments user-supplied arguments that can further specify an experiment's
+     *     execution.
+     * @param outputter where files are outputted to, and how that output occurs.
+     * @param executionTimeRecorder records how long different aspects of an experiment take to
+     *     execute.
+     * @param logger where log messages written to.
+     * @param errorReporter where errors are written to.
+     */
     public InputOutputContextStateful(
-            ExecutionArguments experimentArguments,
+            ExecutionArguments executionArguments,
             Outputter outputter,
             ExecutionTimeRecorder executionTimeRecorder,
             StatefulMessageLogger logger,
             ErrorReporter errorReporter) {
-        this.experimentArguments = experimentArguments;
+        this.executionArguments = executionArguments;
         this.outputter = outputter;
         this.executionTimeRecorder = executionTimeRecorder;
         this.messageLogger = logger;
@@ -69,12 +83,12 @@ public class InputOutputContextStateful implements InputOutputContext {
 
     @Override
     public Path getModelDirectory() {
-        return experimentArguments.input().getModelDirectory();
+        return executionArguments.input().getModelDirectory();
     }
 
     @Override
     public boolean isDebugEnabled() {
-        return experimentArguments.isDebugModeEnabled();
+        return executionArguments.isDebugModeEnabled();
     }
 
     @Override
@@ -90,13 +104,11 @@ public class InputOutputContextStateful implements InputOutputContext {
     /**
      * Exposed as {@link StatefulMessageLogger} rather than as {@link MessageLogger} that is found
      * in {@link Logger}
+     *
+     * @return the logger.
      */
     public StatefulMessageLogger getMessageLogger() {
         return messageLogger;
-    }
-
-    public ExecutionArguments getExperimentArguments() {
-        return experimentArguments;
     }
 
     @Override

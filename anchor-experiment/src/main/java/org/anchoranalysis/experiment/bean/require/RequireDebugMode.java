@@ -26,6 +26,11 @@
 
 package org.anchoranalysis.experiment.bean.require;
 
+/**
+ * Require that debug-mode has been enabled.
+ *
+ * @author Owen Feehan
+ */
 public class RequireDebugMode extends RequireArguments {
 
     @Override

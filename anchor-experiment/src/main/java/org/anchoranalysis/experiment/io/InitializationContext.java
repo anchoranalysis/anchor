@@ -48,18 +48,38 @@ public class InitializationContext {
     /** A suggested input on how to resize an image, if one is provided. */
     @Getter private final Optional<ImageSizeSuggestion> suggestedSize;
 
-    public InitializationContext(InputOutputContext inputOutput) {
-        this(inputOutput, Optional.empty());
+    /**
+     * Create with an {@link InputOutputContext}.
+     *
+     * @param inputOutputContext the input-output context.
+     */
+    public InitializationContext(InputOutputContext inputOutputContext) {
+        this(inputOutputContext, Optional.empty());
     }
 
+    /**
+     * An outputter that writes to the particular output-directory.
+     *
+     * @return the outputter.
+     */
     public Outputter getOutputter() {
         return inputOutput.getOutputter();
     }
 
+    /**
+     * Creates a {@link CommonContext} a context that contains a subset of this context.
+     *
+     * @return a newly created {@link CommonContext} reusing the objects from this context.
+     */
     public CommonContext common() {
         return inputOutput.common();
     }
 
+    /**
+     * The associated logger.
+     *
+     * @return the logger associated with input-output operations.
+     */
     public Logger getLogger() {
         return inputOutput.getLogger();
     }

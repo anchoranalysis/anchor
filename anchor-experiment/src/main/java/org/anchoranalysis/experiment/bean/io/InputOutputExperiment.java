@@ -138,8 +138,8 @@ public class InputOutputExperiment<T extends InputFromManager, S> extends Output
     }
 
     @Override
-    public void replaceOutputManager(OutputManager outputter) throws OperationFailedException {
-        this.setOutput(outputter);
+    public void replaceOutputManager(OutputManager output) throws OperationFailedException {
+        this.setOutput(output);
     }
 
     @Override
@@ -157,7 +157,7 @@ public class InputOutputExperiment<T extends InputFromManager, S> extends Output
                             new Logger(parameters.getLoggerExperiment()));
             InputManagerParameters parametersInput =
                     new InputManagerParameters(
-                            parameters.getExperimentArguments().inputContextParameters(),
+                            parameters.getExecutionArguments().inputContextParameters(),
                             operationContext);
 
             if (parameters.isDetailedLogging()) {
@@ -205,7 +205,7 @@ public class InputOutputExperiment<T extends InputFromManager, S> extends Output
         Optional<Collection<NamedFile>> nonInputs = CopyNonInputs.prepare(inputs, parameters);
 
         TaskStatistics statistics =
-                taskProcessor.executeLogStats(
+                taskProcessor.executeLogStatistics(
                         parameters.getOutputter(), inputs.inputs(), parameters);
 
         if (nonInputs.isPresent()) {

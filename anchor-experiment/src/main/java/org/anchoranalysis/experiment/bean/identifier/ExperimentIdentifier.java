@@ -29,13 +29,21 @@ package org.anchoranalysis.experiment.bean.identifier;
 import java.util.Optional;
 import org.anchoranalysis.bean.AnchorBean;
 
+/**
+ * A method to produce an identifier for an experiment.
+ *
+ * <p>This identifier is not guaranteed to be unique, but often is unique within a particular local
+ * context where output-files may be stored.
+ *
+ * @author Owen Feehan
+ */
 public abstract class ExperimentIdentifier extends AnchorBean<ExperimentIdentifier> {
 
     /**
-     * Creates an identifier for the experiment
+     * Creates an identifier for the experiment.
      *
-     * @param taskName a name describing the current task if it xists
-     * @return a string to identify the current experiment
+     * @param taskName a name describing the current task if it exists.
+     * @return a string to identify the current experiment.
      */
     public abstract String identifier(Optional<String> taskName);
 }

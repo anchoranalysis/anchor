@@ -41,6 +41,11 @@ class OutputExperimentLogHelper {
 
     private static final Divider DIVIDER = new Divider();
 
+    /**
+     * Log a start-experiment message, but only when in detailed mode.
+     *
+     * @param parameters the parameters that define an experiment.
+     */
     public static void maybeLogStart(ParametersExperiment parameters) {
         if (parameters.isDetailedLogging()) {
             parameters
@@ -52,6 +57,12 @@ class OutputExperimentLogHelper {
         }
     }
 
+    /**
+     * Log a start-experiment message, but only when in detailed mode.
+     *
+     * @param recordedOutputs tracks which outputs have been written to the file-system or not.
+     * @param parameters the parameters that define an experiment.
+     */
     public static void maybeRecordedOutputs(
             MultiLevelRecordedOutputs recordedOutputs, ParametersExperiment parameters) {
         if (parameters.isDetailedLogging()) {
@@ -66,6 +77,12 @@ class OutputExperimentLogHelper {
         }
     }
 
+    /**
+     * Log a completed-experiment message, but only when in detailed mode.
+     *
+     * @param parameters the parameters that define an experiment.
+     * @param executionTimeSeconds how many seconds duration it took to execute the task.
+     */
     public static void maybeLogCompleted(
             ParametersExperiment parameters, long executionTimeSeconds) {
         if (parameters.isDetailedLogging()) {

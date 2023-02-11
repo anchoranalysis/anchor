@@ -83,7 +83,11 @@ import org.apache.commons.lang.time.StopWatch;
  */
 public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Task<T, S>> {
 
-    /** Is the execution-time of the task per-input expected to be very quick to execute? */
+    /**
+     * Is the execution-time of the task per-input expected to be very quick to execute?
+     *
+     * @return true iff the execution is expected to be very quick, false otherwise.
+     */
     public abstract boolean hasVeryQuickPerInputExecution();
 
     /**
@@ -96,7 +100,8 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
      * @param parameters the experiment-parameters.
      * @return the shared-state that is passed to each call to {@link #executeJob} and to {@link
      *     #afterAllJobsAreExecuted}.
-     * @throws ExperimentExecutionException
+     * @throws ExperimentExecutionException if a fatal error occurs executing this step of the
+     *     experiment.
      */
     public abstract S beforeAnyJobIsExecuted(
             Outputter outputter,
@@ -135,12 +140,18 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
      *
      * @param sharedState the shared-state
      * @param context IO-context for experiment (not for an individual job)
-     * @throws ExperimentExecutionException
+     * @throws ExperimentExecutionException if a fatal error occurs executing this step of the
+     *     experiment.
      */
     public abstract void afterAllJobsAreExecuted(S sharedState, InputOutputContext context)
             throws ExperimentExecutionException;
 
-    /** Is an input-object compatible with this particular task? */
+    /**
+     * Is an input-object type compatible with this particular task?
+     *
+     * @param inputClass the class of the input-object type to be queried.
+     * @return true if the input-object type is compatible with the current task, false otherwise.
+     */
     public boolean isInputCompatibleWith(Class<? extends InputFromManager> inputClass) {
         return inputTypesExpected().doesClassInheritFromAny(inputClass);
     }
@@ -148,15 +159,18 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
     /**
      * Highest class(es) that will function as a valid input.
      *
-     * <p>This is usually the class of T (or sometimes the absolute base class InputFromManager)
+     * <p>This is usually the class of T (or sometimes the absolute base class InputFromManager).
+     *
+     * @return the input-types that a task expects.
      */
     public abstract InputTypesExpected inputTypesExpected();
 
     /**
      * Performs the task on a particular input.
      *
-     * @param input the input
-     * @throws JobExecutionException
+     * @param input the input for the job.
+     * @throws JobExecutionException if an error occurs executing a particular job, that is not
+     *     otherwise suppressed.
      */
     public abstract void doJobOnInput(InputBound<T, S> input) throws JobExecutionException;
 
@@ -196,7 +210,7 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
                 parametersUnbound.getParametersExperiment().isDetailedLogging(),
                 parametersUnbound.getParametersExperiment().getContext(),
                 new InputOutputContextStateful(
-                        parametersUnbound.getParametersExperiment().getExperimentArguments(),
+                        parametersUnbound.getParametersExperiment().getExecutionArguments(),
                         outputterTask,
                         parametersUnbound.getParametersExperiment().getExecutionTimeRecorder(),
                         loggerJob,
@@ -210,7 +224,7 @@ public abstract class Task<T extends InputFromManager, S> extends AnchorBean<Tas
                 .createWithLogFallback(
                         outputterTask,
                         parameters.getLoggerExperiment(),
-                        parameters.getExperimentArguments(),
+                        parameters.getExecutionArguments(),
                         parameters.isDetailedLogging());
     }
 

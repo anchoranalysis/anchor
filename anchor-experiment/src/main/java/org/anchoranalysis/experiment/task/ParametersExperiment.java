@@ -35,7 +35,6 @@ import org.anchoranalysis.experiment.arguments.ExecutionArguments;
 import org.anchoranalysis.experiment.bean.log.LoggingDestination;
 import org.anchoranalysis.experiment.io.InitializationContext;
 import org.anchoranalysis.experiment.log.StatefulMessageLogger;
-import org.anchoranalysis.io.output.bean.OutputManager;
 import org.anchoranalysis.io.output.bean.path.prefixer.PathPrefixer;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
@@ -47,13 +46,14 @@ import org.anchoranalysis.io.output.outputter.OutputterChecked;
  */
 public class ParametersExperiment {
 
-    private ExecutionArguments experimentArguments;
+    /** User-supplied arguments that can further specify an experiment's execution. */
+    private ExecutionArguments executionArguments;
 
     @Getter private final String experimentIdentifier;
 
     @Getter private final InputOutputContextStateful context;
 
-    /** The {@link OutputManager} associated with the experiment which {@link Outputter} uses. */
+    /** Determines prefixes used in the paths for outputted files. */
     @Getter private final PathPrefixer prefixer;
 
     /** This is a means to create new log-reporters for each task. */
@@ -68,15 +68,25 @@ public class ParametersExperiment {
     /** Allows execution-time for particular operations to be recorded. */
     @Getter private ExecutionTimeRecorder executionTimeRecorder;
 
+    /**
+     * Creates with initialization arguments.
+     *
+     * @param executionArguments user-supplied arguments that can further specify an experiment's
+     *     execution.
+     * @param experimentIdentifier uniquely identifies an experiment.
+     * @param outputter where files are outputted to, and how that output occurs.
+     * @param prefixer determines prefixes used in the paths for outputted files.
+     * @param feedbackContext allows execution-time for particular operations to be recorded.
+     */
     public ParametersExperiment(
-            ExecutionArguments experimentArguments,
+            ExecutionArguments executionArguments,
             String experimentIdentifier,
             OutputterChecked outputter,
             PathPrefixer prefixer,
             ExperimentFeedbackContext feedbackContext) {
         this.executionTimeRecorder = feedbackContext.getExecutionTimeRecorder();
-        this.experimentArguments = experimentArguments;
-        this.context = feedbackContext.inputOutput(experimentArguments, outputter);
+        this.executionArguments = executionArguments;
+        this.context = feedbackContext.inputOutput(executionArguments, outputter);
         this.experimentIdentifier = experimentIdentifier;
         this.detailedLogging = feedbackContext.isDetailedLogging();
         this.prefixer = prefixer;
@@ -88,30 +98,54 @@ public class ParametersExperiment {
      * @return the identifier, or {@link Optional#empty} to exclude from output path.
      */
     public Optional<String> experimentIdentifierForOutputPath() {
-        if (!experimentArguments.output().getPrefixer().isOmitExperimentIdentifier()) {
+        if (!executionArguments.output().getPrefixer().isOmitExperimentIdentifier()) {
             return Optional.of(experimentIdentifier);
         } else {
             return Optional.empty();
         }
     }
 
+    /**
+     * An outputter that writes to the particular output-directory.
+     *
+     * @return the outputter.
+     */
     public Outputter getOutputter() {
         return context.getOutputter();
     }
 
+    /**
+     * The message-logger used for experiment-wide messages.
+     *
+     * @return the logger.
+     */
     public StatefulMessageLogger getLoggerExperiment() {
         return context.getMessageLogger();
     }
 
-    public ExecutionArguments getExperimentArguments() {
-        return context.getExperimentArguments();
+    /**
+     * User-supplied arguments that can further specify an experiment's execution.
+     *
+     * @return the arguments.
+     */
+    public ExecutionArguments getExecutionArguments() {
+        return context.getExecutionArguments();
     }
 
-    public InitializationContext createInitializationContext() {
-        return new InitializationContext(
-                context, context.getExperimentArguments().task().getSize());
+    /**
+     * Derives an {@link InitializationContext} from the parameters.
+     *
+     * @return a newly created {@link InitializationContext}.
+     */
+    public InitializationContext deriveInitializationContext() {
+        return new InitializationContext(context, context.getExecutionArguments().task().getSize());
     }
 
+    /**
+     * The execution-times that have been recorded.
+     *
+     * @return newly created {@link RecordedExecutionTimes} that describes the execution-times.
+     */
     public RecordedExecutionTimes executionTimeStatistics() {
         return executionTimeRecorder.recordedTimes();
     }

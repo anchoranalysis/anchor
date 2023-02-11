@@ -32,11 +32,21 @@ import java.util.stream.Stream;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.log.MessageLogger;
 
-public class MessageLoggerList implements StatefulMessageLogger {
+/**
+ * Logs messages to multiple other loggers.
+ *
+ * @author Owen Feehan
+ */
+public class MultipleLoggers implements StatefulMessageLogger {
 
     private final List<StatefulMessageLogger> list;
 
-    public MessageLoggerList(Stream<StatefulMessageLogger> stream) {
+    /**
+     * Creates with a stream of loggers.
+     *
+     * @param stream the stream of loggers.
+     */
+    public MultipleLoggers(Stream<StatefulMessageLogger> stream) {
         list = stream.collect(Collectors.toList());
     }
 
@@ -68,13 +78,5 @@ public class MessageLoggerList implements StatefulMessageLogger {
         for (MessageLogger logger : list) {
             logger.logFormatted(formatString, args);
         }
-    }
-
-    public boolean add(StatefulMessageLogger arg0) {
-        return list.add(arg0);
-    }
-
-    public List<StatefulMessageLogger> getList() {
-        return list;
     }
 }

@@ -36,7 +36,7 @@ import org.anchoranalysis.experiment.log.StatefulMessageLogger;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
 
 /**
- * Logs messages to a particular location ONLY if certain conditions are fulfilled.
+ * Logs messages to a particular location ONLY if debug-mode is enabled.
  *
  * @author Owen Feehan
  */

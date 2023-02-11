@@ -83,7 +83,7 @@ public class TextFileMessageLogger implements StatefulMessageLogger {
      */
     public TextFileMessageLogger(
             String outputName, OutputterChecked outputter, ErrorReporter errorReporter) {
-        this.fileOutputSupplier = () -> TextFileLogHelper.createOutput(outputter, outputName);
+        this.fileOutputSupplier = () -> MessageLoggerHelper.createOutput(outputter, outputName);
         this.errorReporter = errorReporter;
     }
 

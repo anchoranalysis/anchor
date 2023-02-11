@@ -24,54 +24,32 @@
  * #L%
  */
 
-package org.anchoranalysis.experiment.task.processor;
+package org.anchoranalysis.experiment.log;
 
-import org.apache.commons.lang.time.StopWatch;
+import java.util.Optional;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import org.anchoranalysis.io.generator.text.TextFileOutput;
+import org.anchoranalysis.io.generator.text.TextFileOutputter;
+import org.anchoranalysis.io.output.outputter.OutputterChecked;
 
-public class JobState {
+/**
+ * Utility functions for helping to log messages.
+ *
+ * @author Owen Feehan
+ */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+class MessageLoggerHelper {
 
-    private enum State {
-        UNSTARTED,
-        EXECUTING,
-        COMPLETED_SUCCESS,
-        COMPLETED_FAILURE
-    }
-
-    private StopWatch stopWatch = new StopWatch();
-
-    private State state = State.UNSTARTED;
-
-    public boolean isUnstarted() {
-        return state == State.UNSTARTED;
-    }
-
-    public boolean isExecuting() {
-        return state == State.EXECUTING;
-    }
-
-    public boolean isCompleted() {
-        return isCompletedSuccessfully() || isCompletedFailure();
-    }
-
-    public boolean isCompletedSuccessfully() {
-        return state == State.COMPLETED_SUCCESS;
-    }
-
-    public boolean isCompletedFailure() {
-        return state == State.COMPLETED_FAILURE;
-    }
-
-    public void markAsExecuting() {
-        state = State.EXECUTING;
-        stopWatch.start();
-    }
-
-    public void markAsCompleted(boolean successful) {
-        state = successful ? State.COMPLETED_SUCCESS : State.COMPLETED_FAILURE;
-        stopWatch.stop();
-    }
-
-    public int getTime() {
-        return (int) stopWatch.getTime();
+    /**
+     * creates a {@link TextFileOutput} if {@code outputName} is enabled.
+     *
+     * @param outputter how and to where files are outputted.
+     * @param outputName the name of the output to maybe be created.
+     * @return a newly created {@link TextFileOutput} iff the output is enabled.
+     */
+    public static Optional<TextFileOutput> createOutput(
+            OutputterChecked outputter, String outputName) {
+        return TextFileOutputter.create("txt", outputter, outputName);
     }
 }

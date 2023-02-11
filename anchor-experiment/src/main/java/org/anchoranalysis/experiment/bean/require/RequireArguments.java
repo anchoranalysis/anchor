@@ -28,7 +28,18 @@ package org.anchoranalysis.experiment.bean.require;
 
 import org.anchoranalysis.bean.AnchorBean;
 
+/**
+ * A predicate on whether all necessary arguments exist for some purpose.
+ *
+ * @author Owen Feehan
+ */
 public abstract class RequireArguments extends AnchorBean<RequireArguments> {
 
+    /**
+     * Do all necessary arguments exist?
+     *
+     * @param debugModeEnabled true iff debug-mode has been enabled.
+     * @return true iff all necessary arguments exist, false otherwise.
+     */
     public abstract boolean hasAllRequiredArguments(boolean debugModeEnabled);
 }

@@ -35,19 +35,34 @@ import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.outputter.BindFailedException;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
+import org.anchoranalysis.io.output.path.prefixer.DirectoryWithPrefix;
 import org.anchoranalysis.io.output.path.prefixer.NamedPath;
+import org.anchoranalysis.io.output.path.prefixer.PathPrefixerException;
 
+/**
+ * Helps creates {@link OutputterChecked} for a task.
+ *
+ * @author Owen Feehan
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class TaskOutputterFactory {
 
-    // If pathForBinding is null, we bind to the root folder instead
+    /**
+     * Creates a {@link OutputterChecked} for a task.
+     *
+     * <p>If pathForBinding is undefined, then output occurs to experiment's root folder instead.
+     *
+     * @param input the input for the task.
+     * @param parameters the parameters that define the experiment.
+     * @return a newly created outputter.
+     * @throws JobExecutionException if unable to bind the outputter to the output-directory.
+     */
     public static OutputterChecked createOutputterForTask(
             InputFromManager input, ParametersExperiment parameters) throws JobExecutionException {
         try {
             Optional<Path> pathForBinding = input.pathForBinding();
             if (pathForBinding.isPresent()) {
-                return BindingPathOutputterFactory.createWithBindingPath(
-                        derivePathWithDescription(input), parameters);
+                return createWithBindingPath(derivePathWithDescription(input), parameters);
             } else {
                 return parameters.getOutputter().getChecked();
             }
@@ -72,5 +87,23 @@ class TaskOutputterFactory {
 
     private static String quoteString(Path path) {
         return String.format("'%s'", path.toString());
+    }
+
+    private static OutputterChecked createWithBindingPath(
+            NamedPath path, ParametersExperiment parameters) throws BindFailedException {
+        try {
+            DirectoryWithPrefix prefixToAssign =
+                    parameters
+                            .getPrefixer()
+                            .outFilePrefix(
+                                    path,
+                                    parameters.experimentIdentifierForOutputPath(),
+                                    parameters.getExecutionArguments().derivePathPrefixerContext());
+
+            return parameters.getOutputter().getChecked().changePrefix(prefixToAssign);
+
+        } catch (PathPrefixerException e) {
+            throw new BindFailedException(e);
+        }
     }
 }

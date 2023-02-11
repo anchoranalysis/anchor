@@ -41,14 +41,16 @@ import org.anchoranalysis.experiment.task.TaskStatistics;
 import org.anchoranalysis.experiment.task.processor.CallableJob;
 import org.anchoranalysis.experiment.task.processor.ConcurrentJobMonitor;
 import org.anchoranalysis.experiment.task.processor.JobDescription;
-import org.anchoranalysis.experiment.task.processor.JobState;
+import org.anchoranalysis.experiment.task.processor.JobStateMonitor;
 import org.anchoranalysis.experiment.task.processor.SubmittedJob;
 import org.anchoranalysis.inference.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.outputter.Outputter;
 
 /**
- * Executes jobs in parallel
+ * Executes jobs in parallel across cores on the system.
+ *
+ * <p>Each input is processed in a separate thread on an available core.
  *
  * @author Owen Feehan
  * @param <T> input-object type
@@ -128,7 +130,7 @@ public class ParallelProcessor<T extends InputFromManager, S> extends JobProcess
             ;
 
         if (monitor.numberExecutingJobs() != 0
-                || monitor.numberOngoingJobs() != 0
+                || monitor.numberUncompletedJobs() != 0
                 || monitor.numberCompletedJobs() != numberInputs) {
             parametersExperiment
                     .getLoggerExperiment()
@@ -136,7 +138,7 @@ public class ParallelProcessor<T extends InputFromManager, S> extends JobProcess
         }
 
         getTask().afterAllJobsAreExecuted(sharedState, parametersExperiment.getContext());
-        return monitor.createStatistics();
+        return monitor.deriveStatistics();
     }
 
     private void submitJob(
@@ -154,7 +156,7 @@ public class ParallelProcessor<T extends InputFromManager, S> extends JobProcess
                         parametersExperiment, input, sharedState, isSuppressExceptions());
 
         // Task always gets duplicated when it's called
-        JobState state = new JobState();
+        JobStateMonitor state = new JobStateMonitor();
         executorService.submit(
                 new CallableJob<>(
                         getTask(),
@@ -162,7 +164,7 @@ public class ParallelProcessor<T extends InputFromManager, S> extends JobProcess
                         state,
                         description,
                         monitor,
-                        loggerForMonitor(parametersExperiment),
+                        ProcessorUtilities.loggerForMonitor(parametersExperiment),
                         showOngoingJobsLessThan));
 
         monitor.add(new SubmittedJob(description, state));

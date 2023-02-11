@@ -26,35 +26,21 @@
 
 package org.anchoranalysis.experiment.task.processor;
 
+import lombok.Value;
+
+/**
+ * A description of the job's name and associated number.
+ *
+ * @author Owen Feehan
+ */
+@Value
 public class JobDescription {
 
-    private String jobShortName;
-    private int jobNumber;
-
-    public JobDescription(String jobShortName, int jobNumber) {
-        super();
-        this.jobShortName = jobShortName;
-        this.jobNumber = jobNumber;
-    }
+    private String shortName;
+    private int number;
 
     @Override
     public String toString() {
-        return String.format("%4d(%s)", jobNumber, jobShortName);
-    }
-
-    public String getJobShortName() {
-        return jobShortName;
-    }
-
-    public void setJobShortName(String jobShortName) {
-        this.jobShortName = jobShortName;
-    }
-
-    public int getJobNumber() {
-        return jobNumber;
-    }
-
-    public void setJobNumber(int jobNumber) {
-        this.jobNumber = jobNumber;
+        return String.format("%4d(%s)", number, shortName);
     }
 }

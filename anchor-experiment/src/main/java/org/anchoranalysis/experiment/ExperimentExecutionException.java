@@ -37,12 +37,22 @@ import org.anchoranalysis.core.exception.friendly.AnchorFriendlyCheckedException
 public class ExperimentExecutionException extends AnchorFriendlyCheckedException {
 
     /** */
-    private static final long serialVersionUID = -7030930961354624998L;
+    private static final long serialVersionUID = 1L;
 
-    public ExperimentExecutionException(String string) {
-        super(string);
+    /**
+     * Creates with a message only.
+     *
+     * @param message the message.
+     */
+    public ExperimentExecutionException(String message) {
+        super(message);
     }
 
+    /**
+     * Creates with a cause only.
+     *
+     * @param cause the cause.
+     */
     public ExperimentExecutionException(Throwable cause) {
         super(cause);
     }
@@ -50,10 +60,10 @@ public class ExperimentExecutionException extends AnchorFriendlyCheckedException
     /**
      * A string message displayed to the user as well as a stack-trace of the cause.
      *
-     * @param string the error message displayed to the user.
+     * @param message the error message displayed to the user.
      * @param cause cause of the exception.
      */
-    public ExperimentExecutionException(String string, Throwable cause) {
-        super(string, cause);
+    public ExperimentExecutionException(String message, Throwable cause) {
+        super(message, cause);
     }
 }

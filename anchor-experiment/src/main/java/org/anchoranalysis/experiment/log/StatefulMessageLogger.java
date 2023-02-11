@@ -29,10 +29,29 @@ package org.anchoranalysis.experiment.log;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.log.MessageLogger;
 
-/** A {@link MessageLogger} that can be started and stopped, and is aware this state. */
+/**
+ * A {@link MessageLogger} that can be started and stopped, and is aware of this state.
+ *
+ * @author Owen Feehan
+ */
 public interface StatefulMessageLogger extends MessageLogger {
 
+    /**
+     * Starts logging.
+     *
+     * <p>This must be called once <b>before</b> any logging occurs.
+     *
+     * @throws OperationFailedException if logging cannot be successfully started.
+     */
     void start() throws OperationFailedException;
 
+    /**
+     * Stops logging.
+     *
+     * <p>This must be called once <b>after</b> all logging has occurred.
+     *
+     * @param successful true when the task completed successfully.
+     * @param warningOccurred true if at least one warning has occurred, false otherwise.
+     */
     void close(boolean successful, boolean warningOccurred);
 }

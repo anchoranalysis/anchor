@@ -34,8 +34,15 @@ import org.anchoranalysis.io.input.bean.InputManager;
  * Indicates and provides a mechanism that the {@link InputManager} can be replaced.
  *
  * @author Owen Feehan
+ * @param <T> input-type
  */
 public interface ReplaceInputManager<T extends InputFromManager> {
 
+    /**
+     * Replace the existing @{link InputManager} associated with this class.
+     *
+     * @param inputManager the new input-manager that is assigned.
+     * @throws OperationFailedException if the assignment cannot complete successfully.
+     */
     public void replaceInputManager(InputManager<T> inputManager) throws OperationFailedException;
 }

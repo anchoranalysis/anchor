@@ -51,30 +51,54 @@ public class InputArguments {
      */
     @Getter private boolean copyNonInputs = false;
 
-    /** A directory indicating where models can be located */
+    /** A directory indicating where models can be located. */
     private Optional<Path> modelDirectory = Optional.empty();
 
     /**
-     * When defined, this {@code consumer} is called when the directory is first created, as it is
-     * created lazily only when first needed.
+     * When defined, this {@link Consumer} is called when an output directory is first created.
+     *
+     * <p>This occurs as directories are created lazily only when first needed.
      *
      * <p>It is called with the path of the directory as an argument.
      */
     @Getter private Optional<Consumer<Path>> callUponDirectoryCreation = Optional.empty();
 
+    /**
+     * A directory indicating where models can be located.
+     *
+     * @return the path to the directory.
+     */
     public Path getModelDirectory() {
         return modelDirectory.orElseThrow(
                 () -> new AnchorFriendlyRuntimeException("Model-directory is required but absent"));
     }
 
+    /**
+     * Assigns a directory indicating where models can be located.
+     *
+     * @param modelDirectory the directory.
+     */
     public void assignModelDirectory(Path modelDirectory) {
         this.modelDirectory = Optional.of(modelDirectory);
     }
 
+    /**
+     * Activates a toggle where any files in the input directory that are unused as inputs, are
+     * copied to the output directory.
+     */
     public void assignCopyNonInputs() {
         this.copyNonInputs = true;
     }
 
+    /**
+     * Indicates that {@code consumer} will be called when an output directory is first created.
+     *
+     * <p>This occurs as directories are created lazily only when first needed.
+     *
+     * <p>It is called with the path of the directory as an argument.
+     *
+     * @param consumer the consumer that is called.
+     */
     public void assignCallUponDirectoryCreation(Consumer<Path> consumer) {
         this.callUponDirectoryCreation = Optional.of(consumer);
     }

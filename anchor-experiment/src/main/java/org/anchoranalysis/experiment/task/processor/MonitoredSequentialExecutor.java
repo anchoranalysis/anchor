@@ -34,6 +34,7 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import lombok.AllArgsConstructor;
+import lombok.Value;
 import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.experiment.task.TaskStatistics;
 
@@ -68,6 +69,8 @@ public class MonitoredSequentialExecutor<T> {
      *
      * @param logPrefix prefixed to the output of each log-message
      * @param inputs a collection of strings that uniquely determine each input
+     * @return statistics about the success/failure/execution-time etc. of applying the task to
+     *     inputs.
      */
     public TaskStatistics executeEachWithMonitor(String logPrefix, List<T> inputs) {
 
@@ -85,13 +88,13 @@ public class MonitoredSequentialExecutor<T> {
         while (itr.hasNext()) {
             InputAfterSubmission input = itr.next();
             try {
-                input.execInput(jobLogger);
+                input.executeInput(jobLogger);
             } finally {
                 itr.remove();
             }
         }
 
-        return monitor.createStatistics();
+        return monitor.deriveStatistics();
     }
 
     private List<InputAfterSubmission> mapToSubmitted(
@@ -103,7 +106,7 @@ public class MonitoredSequentialExecutor<T> {
 
         for (T input : allInputs) {
             JobDescription desc = new JobDescription(dscrFunc.apply(input), count++);
-            JobState state = new JobState();
+            JobStateMonitor state = new JobStateMonitor();
 
             SubmittedJob submittedJob = new SubmittedJob(desc, state);
             out.add(new InputAfterSubmission(input, submittedJob));
@@ -114,28 +117,23 @@ public class MonitoredSequentialExecutor<T> {
     }
 
     // Contains both a reference to the original input and a SubmittedJob
+    @Value
     private class InputAfterSubmission {
 
         private T input;
-        private SubmittedJob sj;
+        private SubmittedJob job;
 
-        public InputAfterSubmission(T input, SubmittedJob submittedJob) {
-            super();
-            this.input = input;
-            this.sj = submittedJob;
-        }
+        public void executeInput(JobStartStopLogger jobLogger) {
 
-        public void execInput(JobStartStopLogger jobLogger) {
+            job.getJobState().markAsExecuting();
 
-            sj.getJobState().markAsExecuting();
-
-            jobLogger.logStart(sj.getJobDescription());
+            jobLogger.logStart(job.getJobDescription());
 
             boolean success = execFunc.test(input);
 
-            sj.getJobState().markAsCompleted(success);
+            job.getJobState().markAsCompleted(success);
 
-            jobLogger.logEnd(sj.getJobDescription(), sj.getJobState(), success);
+            jobLogger.logEnd(job.getJobDescription(), job.getJobState());
         }
     }
 }

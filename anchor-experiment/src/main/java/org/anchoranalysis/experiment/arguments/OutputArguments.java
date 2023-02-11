@@ -52,23 +52,52 @@ public class OutputArguments {
      */
     @Getter private OutputEnabledDelta outputEnabledDelta = new OutputEnabledDelta();
 
+    /**
+     * Assigns a suggestion for a preferred image-output format.
+     *
+     * @param format the preferred format.
+     */
     public void assignSuggestedImageOutputFormat(ImageFileFormat format) {
         prefixer.assignSuggestedImageOutputFormat(format);
     }
 
+    /**
+     * Requests outputting with an incrementing number sequence, rather than the usual outputter
+     * (normally based upon input filenames).
+     */
     public void requestOutputIncrementingNumberSequence() {
         prefixer.requestOutputIncrementingNumberSequence();
     }
 
+    /**
+     * Requests suppressing directories (replacing subdirectory separators with an underscore) in
+     * the identifiers that are outputted.
+     */
     public void requestOutputSuppressDirectories() {
         prefixer.requestOutputSuppressDirectories();
     }
 
+    /**
+     * Requests that the experiment-identifier (name and index) is not included in the
+     * output-directory path.
+     *
+     * <p>Note that {@code argument} is ignored, and retained so as to have a compatible interface
+     * with other code.
+     *
+     * @param argument the arguments to the command-line (which are ignored).
+     */
     public void requestOmitExperimentIdentifier(String argument) {
         // We ignore the argument, as it's already been parsed to create the output-manager
         prefixer.requestOmitExperimentIdentifier();
     }
 
+    /**
+     * Has a request occurred that the experiment-identifier is omitted?
+     *
+     * <p>i.e. the name and index are not included in the output-directory path.
+     *
+     * @return true when the experiment-identifier has been requested to be omitted.
+     */
     public boolean isOmitExperimentIdentifier() {
         return prefixer.isOmitExperimentIdentifier();
     }

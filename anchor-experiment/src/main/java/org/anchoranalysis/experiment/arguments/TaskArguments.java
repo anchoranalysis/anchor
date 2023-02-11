@@ -71,10 +71,22 @@ public class TaskArguments {
         this.size = size;
     }
 
+    /**
+     * Assigns a name for the task.
+     *
+     * @param taskName the name to assign.
+     */
     public void assignTaskName(Optional<String> taskName) {
         this.taskName = taskName;
     }
 
+    /**
+     * Assign dimensions or scaling factor or size for an image, as may be used by a task.
+     *
+     * @param size a string describing the size in a format compatible with {@link
+     *     ImageSizeSuggestionFactory#create(String)}.
+     * @throws ExperimentExecutionException if the format of size is invalid.
+     */
     public void assignSize(String size) throws ExperimentExecutionException {
         try {
             this.size = Optional.of(ImageSizeSuggestionFactory.create(size));
@@ -103,6 +115,12 @@ public class TaskArguments {
         }
     }
 
+    /**
+     * Assigns a suggested maximum number of processors (CPUs) for a task.
+     *
+     * @param numberProcessors the maximum number of processors.
+     * @throws ExperimentExecutionException if the string doesn't describe a positive integer.
+     */
     public void assignMaxNumberProcessors(String numberProcessors)
             throws ExperimentExecutionException {
         try {
