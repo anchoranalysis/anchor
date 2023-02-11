@@ -55,17 +55,25 @@ public class ExperimentFeedbackContext {
     /** Allows execution-time for particular operations to be recorded. */
     @Getter private final ExecutionTimeRecorder executionTimeRecorder;
 
+    /**
+     * Derive an {@link InputOutputContextStateful} from the current context.
+     *
+     * @param executionArguments the {@link ExecutionArguments} for the context.
+     * @param outputter the {@link OutputterChecked} for the context.
+     * @return a newly-created {@link InputOutputContextStateful} derived from both this class and
+     *     the passed arguments to this function.
+     */
     public InputOutputContextStateful inputOutput(
-            ExecutionArguments experimentArguments, OutputterChecked outputter) {
+            ExecutionArguments executionArguments, OutputterChecked outputter) {
         return new InputOutputContextStateful(
-                experimentArguments,
+                executionArguments,
                 wrapExceptions(outputter, loggerExperiment),
                 executionTimeRecorder,
                 loggerExperiment,
                 new ErrorReporterForTask(loggerExperiment));
     }
 
-    /** Redirects any output-exceptions into the log */
+    /** Redirects any output-exceptions into the log. */
     private static Outputter wrapExceptions(
             OutputterChecked outputterChecked, MessageLogger logger) {
         return new Outputter(outputterChecked, new ErrorReporterIntoLog(logger));

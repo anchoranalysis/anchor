@@ -30,6 +30,11 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 
+/**
+ * Logs messages to a text-file create in the output-directory.
+ *
+ * @author Owen Feehan
+ */
 public abstract class ToTextFileBase extends LoggingDestination {
 
     // START BEAN FIELDS

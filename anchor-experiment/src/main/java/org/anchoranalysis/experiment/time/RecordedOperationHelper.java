@@ -42,7 +42,7 @@ class RecordedOperationHelper {
      * Creates the operation.
      *
      * @param operationIdentifier the identifier.
-     * @parma numberParentOperations the number of parent operations. Zero if there are no parents.
+     * @param numberParentOperations the number of parent operations. Zero if there are no parents.
      * @param runningSum the running sum.
      * @return the operation.
      */

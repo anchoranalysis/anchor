@@ -61,12 +61,13 @@ import org.anchoranalysis.io.output.recorded.RecordedOutputsWithRules;
 import org.apache.commons.lang.time.StopWatch;
 
 /**
- * An experiment that uses a {@link OutputManager} to specify the outputting of results.
+ * An {@link Experiment} that produces output files, as defined by a {@link OutputManager}.
  *
  * @author Owen Feehan
  */
 public abstract class OutputExperiment extends Experiment {
 
+    /** The name for the output that records the total execution-time of the experiment. */
     public static final String OUTPUT_EXECUTION_TIME = "executionTime";
 
     // START BEAN PROPERTIES
@@ -194,7 +195,7 @@ public abstract class OutputExperiment extends Experiment {
                                     enabledOutputs,
                                     outputs.getRecordedOutputs(),
                                     writeContext,
-                                    arguments.createPrefixerContext(),
+                                    arguments.derivePathPrefixerContext(),
                                     arguments.input().getCallUponDirectoryCreation(),
                                     Optional.empty());
 

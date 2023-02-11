@@ -57,21 +57,21 @@ public class OutputPrefixerSettings {
     @Getter private Optional<ImageFileFormat> suggestedImageOutputFormat = Optional.empty();
 
     /**
-     * Requests outputting with an incrementing number sequence, rather than the usual outputter
-     * (normally based upon input filenames).
+     * When true, requests outputting with an incrementing number sequence, rather than the usual
+     * outputter (normally based upon input filenames).
      */
     @Getter private boolean outputIncrementingNumberSequence = false;
 
     /**
-     * Requests that the experiment-identifier (name and index) is not included in the
+     * When true, Requests that the experiment-identifier (name and index) is not included in the
      * output-directory path.
      */
     @Getter private boolean omitExperimentIdentifier = false;
     // END: GETTERS AND SETTERS
 
     /**
-     * Requests suppressing directories (replacing subdirectory separators with an underscore) in
-     * the identifiers that are outputted.
+     * When true, Requests suppressing directories (replacing subdirectory separators with an
+     * underscore) in the identifiers that are outputted.
      */
     private boolean outputSuppressDirectories = false;
 
@@ -98,18 +98,35 @@ public class OutputPrefixerSettings {
         this.outputDirectory = Optional.of(outputDirectory);
     }
 
+    /**
+     * Assigns a suggestion for a preferred image-output format.
+     *
+     * @param format the preferred format.
+     */
     public void assignSuggestedImageOutputFormat(ImageFileFormat format) {
         this.suggestedImageOutputFormat = Optional.of(format);
     }
 
+    /**
+     * Requests outputting with an incrementing number sequence, rather than the usual outputter
+     * (normally based upon input filenames).
+     */
     public void requestOutputIncrementingNumberSequence() {
         this.outputIncrementingNumberSequence = true;
     }
 
+    /**
+     * Requests suppressing directories (replacing subdirectory separators with an underscore) in
+     * the identifiers that are outputted.
+     */
     public void requestOutputSuppressDirectories() {
         this.outputSuppressDirectories = true;
     }
 
+    /**
+     * Requests that the experiment-identifier (name and index) is not included in the
+     * output-directory path.
+     */
     public void requestOmitExperimentIdentifier() {
         this.omitExperimentIdentifier = true;
     }

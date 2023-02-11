@@ -45,20 +45,21 @@ public class JobStartStopLogger {
     /** a noun describing the job that appears in the log e.g. "Job". */
     private final String jobDescriptionText;
 
-    /** monitors the progress of jobs */
-    private final ConcurrentJobMonitor monitor;
-
     /**
      * Indicates if lines of hashes should be placed before and after each log message (adds
-     * emphasis)
+     * emphasis).
      */
     private final boolean showHashSeperators;
 
     /**
-     * When the number of ongoing jobs is less than this threshold, they are shown in event logs. 0
-     * disables.
+     * When the number of ongoing jobs is less than this threshold, they are shown in event logs.
+     *
+     * <p>A value of 0 disables.
      */
     private final int showOngoingJobsLessThan;
+
+    /** Monitors the progress of jobs. */
+    private final ConcurrentJobMonitor monitor;
 
     /** Write messages to logger, if defined. */
     private final Optional<MessageLogger> logger;
@@ -73,12 +74,12 @@ public class JobStartStopLogger {
      * Creates a job-logger.
      *
      * @param jobDescriptionText a noun describing the job that appears in the log e.g. "Job"
-     * @param logger write messages to logger, if defined.
+     * @param monitor monitors the progress of jobs.
      * @param showHashSeperators indicates if lines of hashes should be placed before and after each
-     *     log message (adds emphasis)
+     *     log message (adds emphasis).
      * @param showOngoingJobsLessThan When the number of ongoing jobs is less than this threshold,
      *     they are shown in event logs. 0 disables.
-     * @param monitor monitors the progress of jobs
+     * @param logger write messages to logger, if defined.
      */
     public JobStartStopLogger(
             String jobDescriptionText,
@@ -86,20 +87,18 @@ public class JobStartStopLogger {
             boolean showHashSeperators,
             int showOngoingJobsLessThan,
             Optional<MessageLogger> logger) {
-        super();
         this.jobDescriptionText = jobDescriptionText;
-        this.logger = logger;
         this.monitor = monitor;
         this.showHashSeperators = showHashSeperators;
         this.showOngoingJobsLessThan = showOngoingJobsLessThan;
-
-        this.disableLogMessages = monitor.getTotalNumberTasks() <= 1 || !logger.isPresent();
+        this.logger = logger;
+        this.disableLogMessages = monitor.getTotalNumberJobs() <= 1 || !logger.isPresent();
     }
 
     /**
      * Performs logging for when a job starts.
      *
-     * @param job the job that was started
+     * @param job the job that was started.
      */
     public synchronized void logStart(JobDescription job) {
 
@@ -114,14 +113,15 @@ public class JobStartStopLogger {
      * Performs logging for when a job ends.
      *
      * @param job the job that ended.
+     * @param monitor tracks the execution-state of a job.
      */
-    public synchronized void logEnd(JobDescription job, JobState jobState, boolean success) {
+    public synchronized void logEnd(JobDescription job, JobStateMonitor monitor) {
 
         if (disableLogMessages) {
             return;
         }
 
-        logEvent(success ? "end  " : "ERROR", job, timeText(jobState));
+        logEvent(monitor.isCompletedSuccessfully() ? "end  " : "ERROR", job, timeText(monitor));
     }
 
     private void logEvent(String eventWord, JobDescription job, String timeStr) {
@@ -136,17 +136,17 @@ public class JobStartStopLogger {
                                 .logFormatted(
                                         "%s %4d:\t%s\t[%s]\t%s\t%s  %s",
                                         jobDescriptionText,
-                                        job.getJobNumber(),
+                                        job.getNumber(),
                                         eventWord,
                                         monitor.currentStateDescription(),
                                         timeStr,
-                                        job.getJobShortName(),
+                                        job.getShortName(),
                                         ongoingJobText()));
     }
 
     private String ongoingJobText() {
         return showOngoingJobsLessThan > 0
-                ? monitor.ongoingTasksLessThan(showOngoingJobsLessThan)
+                ? monitor.describeUncompletedJobs(showOngoingJobsLessThan).orElse("")
                 : "";
     }
 
@@ -162,7 +162,7 @@ public class JobStartStopLogger {
         }
     }
 
-    private static String timeText(JobState jobState) {
-        return String.format("(%ds)", jobState.getTime() / 1000);
+    private static String timeText(JobStateMonitor jobState) {
+        return String.format("(%ds)", jobState.getExecutionDuration() / 1000);
     }
 }

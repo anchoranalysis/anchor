@@ -43,7 +43,9 @@ import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.outputter.Outputter;
 
 /**
- * Executes jobs sequentially
+ * Executes jobs sequentially, without any parallelism.
+ *
+ * <p>This is the simplest form of a {@link JobProcessor}.
  *
  * @author Owen Feehan
  * @param <T> input-object type
@@ -65,16 +67,16 @@ public class SequentialProcessor<T extends InputFromManager, S> extends JobProce
                         .beforeAnyJobIsExecuted(
                                 rootOutputter, concurrencyPlan, inputs, parametersExperiment);
 
-        TaskStatistics stats =
+        TaskStatistics statistics =
                 executeAllJobs(
                         inputs,
                         sharedState,
                         parametersExperiment,
-                        loggerForMonitor(parametersExperiment));
+                        ProcessorUtilities.loggerForMonitor(parametersExperiment));
 
         getTask().afterAllJobsAreExecuted(sharedState, parametersExperiment.getContext());
 
-        return stats;
+        return statistics;
     }
 
     private TaskStatistics executeAllJobs(
@@ -83,14 +85,14 @@ public class SequentialProcessor<T extends InputFromManager, S> extends JobProce
             ParametersExperiment parametersExperiment,
             Optional<MessageLogger> loggerMonitor) {
 
-        MonitoredSequentialExecutor<T> seqExecutor =
+        MonitoredSequentialExecutor<T> executor =
                 new MonitoredSequentialExecutor<>(
                         object -> executeJobAndLog(object, sharedState, parametersExperiment),
                         T::identifier,
                         loggerMonitor,
                         false);
 
-        return seqExecutor.executeEachWithMonitor("Job: ", inputs);
+        return executor.executeEachWithMonitor("Job: ", inputs);
     }
 
     private boolean executeJobAndLog(

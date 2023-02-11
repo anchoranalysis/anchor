@@ -67,7 +67,7 @@ class CopyNonInputs {
     public static <T extends InputFromManager> Optional<Collection<NamedFile>> prepare(
             InputsWithDirectory<T> inputs, ParametersExperiment parameters)
             throws ExperimentExecutionException {
-        if (parameters.getExperimentArguments().input().isCopyNonInputs()) {
+        if (parameters.getExecutionArguments().input().isCopyNonInputs()) {
 
             if (inputs.directory().isPresent()) {
                 try {
@@ -128,7 +128,7 @@ class CopyNonInputs {
             Path outputDirectory, String identifier, ParametersExperiment parameters) {
         return outputDirectory.resolve(
                 parameters
-                        .getExperimentArguments()
+                        .getExecutionArguments()
                         .output()
                         .getPrefixer()
                         .maybeSuppressDirectories(identifier, false));

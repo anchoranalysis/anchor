@@ -44,10 +44,13 @@ import org.anchoranalysis.io.output.outputter.Outputter;
 @AllArgsConstructor
 public class InputBound<T, S> {
 
+    /** The input is bound. * */
     @Getter private final T input;
 
+    /** The state shared between inputs. */
     @Getter private final S sharedState;
 
+    /** Whether logging is more detailed (true) or less detailed (false). */
     @Getter private final boolean detailedLogging;
 
     /** The input-output context associated with the current experiment. */
@@ -56,37 +59,83 @@ public class InputBound<T, S> {
     /** The input-output context associated with the current job. */
     @Getter private final InputOutputContextStateful contextJob;
 
-    /** Immutably changes the input-object */
+    /**
+     * Copies the current instance but changes the input.
+     *
+     * <p>This an <i>immutable</i> operation that does not alter the existing instance.
+     *
+     * @param inputToAssign the input in the copy, that replaces the existing input.
+     * @return a copy of the current instance, except the input is replaced with {@code
+     *     inputToAssign}.
+     * @param <U> the type of {@code inputToAssign}.
+     */
     public <U> InputBound<U, S> changeInput(U inputToAssign) {
         return new InputBound<>(
                 inputToAssign, sharedState, detailedLogging, contextExperiment, contextJob);
     }
 
-    /** Immutably changes the input-object and shared-state */
+    /**
+     * Copies the current instance but changes both the input and shared-state.
+     *
+     * <p>This an <i>immutable</i> operation that does not alter the existing instance.
+     *
+     * @param inputToAssign the input in the copy, that replaces the existing input.
+     * @param sharedStateToAssign the shared-state in the copy, that replaces the existing
+     *     shared-state.
+     * @return a copy of the current instance, except the input is replaced with {@code
+     *     inputToAssign}.
+     * @param <U> the type of {@code inputToAssign}.
+     * @param <V> the type of {@code sharedStateToAssign}.
+     */
     public <U, V> InputBound<U, V> changeInputAndSharedState(
             U inputToAssign, V sharedStateToAssign) {
         return new InputBound<>(
                 inputToAssign, sharedStateToAssign, detailedLogging, contextExperiment, contextJob);
     }
 
+    /**
+     * Creates an {@link InitializationContext} from the current instance.
+     *
+     * @return a newly created {@link InitializationContext}.
+     */
     public InitializationContext createInitializationContext() {
         return new InitializationContext(
-                contextJob, contextExperiment.getExperimentArguments().task().getSize());
+                contextJob, contextExperiment.getExecutionArguments().task().getSize());
     }
 
+    /**
+     * The {@link Outputter} associated with this input, as it is being processed as a job.
+     *
+     * @return the outputter.
+     */
     public Outputter getOutputter() {
         return contextJob.getOutputter();
     }
 
+    /**
+     * The {@link Logger} associated with this input, as it is being processed as a job.
+     *
+     * @return the logger.
+     */
     public Logger getLogger() {
         return contextJob.getLogger();
     }
 
+    /**
+     * The {@link StatefulMessageLogger} associated with the job thati s being processed.
+     *
+     * @return the logger.
+     */
     public StatefulMessageLogger getLogReporterJob() {
         return contextJob.getMessageLogger();
     }
 
+    /**
+     * The arguments for the task that is being processed.
+     *
+     * @return the arguments.
+     */
     public TaskArguments getTaskArguments() {
-        return contextExperiment.getExperimentArguments().task();
+        return contextExperiment.getExecutionArguments().task();
     }
 }

@@ -38,6 +38,11 @@ public class ErrorReporterForTask implements ErrorReporter {
 
     private ErrorReporter delegate;
 
+    /**
+     * Create to use a particular logger to report errors.
+     *
+     * @param logger the logger.
+     */
     public ErrorReporterForTask(MessageLogger logger) {
         delegate = new ErrorReporterIntoLog(logger);
     }

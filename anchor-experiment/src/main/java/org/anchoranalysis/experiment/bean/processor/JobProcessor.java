@@ -27,15 +27,12 @@
 package org.anchoranalysis.experiment.bean.processor;
 
 import java.util.List;
-import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.OperationFailedException;
-import org.anchoranalysis.core.functional.OptionalFactory;
 import org.anchoranalysis.core.log.Divider;
-import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.bean.task.Task;
 import org.anchoranalysis.experiment.io.ReplaceTask;
@@ -45,7 +42,7 @@ import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.outputter.Outputter;
 
 /**
- * Processes a job
+ * Base class for a method to apply a task on inputs.
  *
  * @author Owen Feehan
  * @param <T> input-object type
@@ -57,21 +54,36 @@ public abstract class JobProcessor<T extends InputFromManager, S>
     private static final Divider DIVIDER = new Divider();
 
     // START BEAN PROPERTIES
+    /** The task to be applied to inputs. */
     @BeanField @Getter @Setter private Task<T, S> task;
 
+    /**
+     * When true, any exception thrown processing and input is caught and logged.
+     *
+     * <p>This stops processing the affected input, but otherwise allows processing of other inputs
+     * to continue.
+     *
+     * <p>When false, an exception throw for a single input is immediately thrown, so all processing
+     * stops.
+     */
     @BeanField @Getter @Setter private boolean suppressExceptions = true;
     // END BEAN PROPERTIES
 
     /**
-     * Executes the tasks, gathers statistics, and logs them
+     * Executes the task on all {@code inputs} and logs statistics about this to the file-systen.
      *
-     * @param rootOutputter
-     * @param inputs
-     * @param parametersExperiment
-     * @return task statistics
-     * @throws ExperimentExecutionException
+     * @param rootOutputter an outputter, bound to the base (root) output directory into which
+     *     outputed files are written.
+     * @param inputs the inputs to apply {@code task} on.
+     * @param parametersExperiment parameters that exist pertaining to the experiment that is
+     *     underway.
+     * @return statistics about the success/failure/execution-time etc. of applying the task to
+     *     inputs.
+     * @throws ExperimentExecutionException if anything goes wrong executing the experiment (but not
+     *     necessarily if a processing a particular input fails when {@code suppressExceptions ==
+     *     true}.
      */
-    public TaskStatistics executeLogStats(
+    public TaskStatistics executeLogStatistics(
             Outputter rootOutputter, List<T> inputs, ParametersExperiment parametersExperiment)
             throws ExperimentExecutionException {
 
@@ -79,23 +91,22 @@ public abstract class JobProcessor<T extends InputFromManager, S>
             parametersExperiment.getLoggerExperiment().log(DIVIDER.withLabel("Processing"));
         }
 
-        TaskStatistics stats = execute(rootOutputter, inputs, parametersExperiment);
+        TaskStatistics statistics = execute(rootOutputter, inputs, parametersExperiment);
 
         if (parametersExperiment.isDetailedLogging()) {
-            logStats(stats, parametersExperiment);
+            logStatistics(statistics, parametersExperiment);
         }
 
-        return stats;
+        return statistics;
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public void replaceTask(Task<T, S> taskToReplace) throws OperationFailedException {
 
-        // This is a bit hacky. If the underlying task inherit from IReplaceTask then, rather than
-        // directly
-        //  replacing the task, we call this method. In effect, this allows skipping of the task
-        // that is replaced.
+        // This is a bit hacky. If the underlying task inherit from ReplaceTask then, rather than
+        // directly replacing the task, we call this method.
+        // In effect, this allows skipping of the task that is replaced.
         if (ReplaceTask.class.isAssignableFrom(this.task.getClass())) {
             ((ReplaceTask<T, S>) this.task).replaceTask(taskToReplace);
         } else {
@@ -104,40 +115,51 @@ public abstract class JobProcessor<T extends InputFromManager, S>
         }
     }
 
-    /** Is an input-object compatible with this particular task? */
+    /**
+     * Is an input-type compatible with this particular task?
+     *
+     * @param inputClass a class describing the type of input, that is checked for compatibility.
+     * @return true iff the input-type is compatible.
+     */
     public boolean isInputCompatibleWith(Class<? extends InputFromManager> inputClass) {
         return task.isInputCompatibleWith(inputClass);
     }
 
-    /** Is the execution-time of the task per-input expected to be very quick to execute? */
+    /**
+     * Is the execution-time of the task per-input expected to be very quick to execute?
+     *
+     * @return true when the execution-time is expected to be very quick, or false otherwise.
+     */
     public boolean hasVeryQuickPerInputExecution() {
         return task.hasVeryQuickPerInputExecution();
     }
 
     /**
-     * The job processor is expected to remove items from the inputs-list as they are consumed so as
-     * to allow garbage-collection of these items before all jobs are processed (as the list might
-     * be quite large).
+     * Executes the task on all {@code inputs}.
      *
-     * @param rootOutputter
-     * @param inputs
-     * @param parametersExperiment
-     * @return
-     * @throws ExperimentExecutionException
+     * <p>It is expected that elements are removed from {@code inputs} as they are consumed so as to
+     * allow garbage-collection of these items before all jobs are processed (as the list might be
+     * quite large).
+     *
+     * @param rootOutputter an outputter, bound to the base (root) output directory into which
+     *     outputted files are written.
+     * @param inputs the inputs to apply {@code task} on.
+     * @param parametersExperiment parameters that exist pertaining to the experiment that is
+     *     underway.
+     * @return statistics about the success/failure/execution-time etc. of applying the task to
+     *     inputs.
+     * @throws ExperimentExecutionException if anything goes wrong executing the experiment (but not
+     *     necessarily if a processing a particular input fails when {@code suppressExceptions ==
+     *     true}.
      */
     protected abstract TaskStatistics execute(
             Outputter rootOutputter, List<T> inputs, ParametersExperiment parametersExperiment)
             throws ExperimentExecutionException;
 
-    protected Optional<MessageLogger> loggerForMonitor(ParametersExperiment parametersExperiment) {
-        return OptionalFactory.create(
-                parametersExperiment.isDetailedLogging(),
-                parametersExperiment::getLoggerExperiment);
-    }
-
-    private static void logStats(TaskStatistics stats, ParametersExperiment parametersExperiment) {
+    private static void logStatistics(
+            TaskStatistics stats, ParametersExperiment parametersExperiment) {
         StatisticsLogger statisticsLogger =
                 new StatisticsLogger(parametersExperiment.getLoggerExperiment());
-        statisticsLogger.logTextualMessage(stats);
+        statisticsLogger.logStatisticsDescription(stats);
     }
 }

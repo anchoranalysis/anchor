@@ -49,24 +49,26 @@ public class CallableJob<T extends InputFromManager, S>
 
     private Task<T, S> task;
     private ParametersUnbound<T, S> parametersUnbound;
-    private JobState jobState;
+    private JobStateMonitor stateMonitor;
     private JobDescription jobDescription;
     private JobStartStopLogger logger;
 
     /**
      * Constructor.
      *
-     * @param task
-     * @param parametersUnbound
-     * @param taskState
-     * @param jobDescription
-     * @param monitor
-     * @param loggerMonitor the logger used for the monitor
+     * @param task the task that will be executed.
+     * @param parametersUnbound parameters for the task, that have yet to be bound to a job.
+     * @param stateMonitor monitors the state of a job.
+     * @param jobDescription a unique description of the job.
+     * @param monitor monitors state changes across jobs.
+     * @param loggerMonitor the logger used for the monitor.
+     * @param showOngoingJobsLessThan When the number of ongoing jobs is less than this threshold,
+     *     they are shown in event logs. 0 disables.
      */
     public CallableJob(
             Task<T, S> task,
             ParametersUnbound<T, S> parametersUnbound,
-            JobState taskState,
+            JobStateMonitor stateMonitor,
             JobDescription jobDescription,
             ConcurrentJobMonitor monitor,
             Optional<MessageLogger> loggerMonitor,
@@ -74,7 +76,7 @@ public class CallableJob<T extends InputFromManager, S>
         super();
         this.task = task;
         this.parametersUnbound = parametersUnbound;
-        this.jobState = taskState;
+        this.stateMonitor = stateMonitor;
         this.jobDescription = jobDescription;
         this.logger =
                 new JobStartStopLogger(
@@ -85,13 +87,13 @@ public class CallableJob<T extends InputFromManager, S>
     public Optional<JobExecutionException> call() {
 
         try {
-            Task<T, S> taskDup = task.duplicateBean();
+            Task<T, S> taskDuplicated = task.duplicateBean();
 
-            jobState.markAsExecuting();
+            stateMonitor.markAsExecuting();
 
             logger.logStart(jobDescription);
 
-            boolean success = taskDup.executeJob(parametersUnbound);
+            boolean success = taskDuplicated.executeJob(parametersUnbound);
 
             closeJobStateAndLog(success);
 
@@ -118,12 +120,12 @@ public class CallableJob<T extends InputFromManager, S>
 
             return Optional.of(new JobExecutionException(e));
         } finally {
-            Preconditions.checkArgument(!jobState.isExecuting());
+            Preconditions.checkArgument(!stateMonitor.isExecuting());
         }
     }
 
     private void closeJobStateAndLog(boolean success) {
-        jobState.markAsCompleted(success);
-        logger.logEnd(jobDescription, jobState, success);
+        stateMonitor.markAsCompleted(success);
+        logger.logEnd(jobDescription, stateMonitor);
     }
 }

@@ -33,5 +33,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class NoSharedState {
 
+    /** A singleton instance. */
     public static final NoSharedState INSTANCE = new NoSharedState();
 }

@@ -26,22 +26,27 @@
 
 package org.anchoranalysis.experiment.task.processor;
 
+import lombok.Value;
+
+/**
+ * A job that has been submitted for execution.
+ *
+ * <p>It may be:
+ *
+ * <ul>
+ *   <li>Waiting in a queue before it is executed.
+ *   <li>In the process of being executed.
+ *   <li>Completed executing.
+ * </ul>
+ *
+ * @author Owen Feehan
+ */
+@Value
 public class SubmittedJob {
 
+    /** A unique description for the job. */
     private JobDescription jobDescription;
-    private JobState jobState;
 
-    public SubmittedJob(JobDescription jobDescription, JobState jobState) {
-        super();
-        this.jobDescription = jobDescription;
-        this.jobState = jobState;
-    }
-
-    public JobState getJobState() {
-        return jobState;
-    }
-
-    public JobDescription getJobDescription() {
-        return jobDescription;
-    }
+    /** The current execution-state of the job. */
+    private JobStateMonitor jobState;
 }

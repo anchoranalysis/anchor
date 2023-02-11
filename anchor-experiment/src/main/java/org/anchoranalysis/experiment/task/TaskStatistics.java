@@ -32,7 +32,7 @@ import lombok.experimental.Accessors;
 import org.anchoranalysis.math.arithmetic.RunningSum;
 
 /**
- * Maintains statistics on the execution of a task (considering jobs in aggregate)
+ * Maintains statistics on the execution of a task (considering jobs in aggregate).
  *
  * @author Owen Feehan
  */
@@ -54,7 +54,7 @@ public class TaskStatistics {
     /**
      * Number of jobs that have not been completed.
      *
-     * @return
+     * @return the number of jobs.
      */
     public long numberNotCompleted() {
         long numberNotCompleted =
@@ -66,7 +66,7 @@ public class TaskStatistics {
     /**
      * Execution-time of all jobs in milliseconds, ignoring any parallelism.
      *
-     * @return the mean-time
+     * @return the total execution-time.
      */
     public RunningSum executionTimeTotal() {
         RunningSum total = success.duplicate();
@@ -77,7 +77,7 @@ public class TaskStatistics {
     /**
      * Mean execution-time of successfully-completed jobs in milliseconds.
      *
-     * @return the mean-time
+     * @return the mean execution-time.
      */
     public double meanExecutionTimeSuccess() {
         return success.mean();
@@ -86,7 +86,7 @@ public class TaskStatistics {
     /**
      * Mean execution-time of failed jobs in milliseconds.
      *
-     * @return the mean-time
+     * @return the mean execution-time.
      */
     public double meanExecutionTimeFailed() {
         return failed.mean();
@@ -95,23 +95,35 @@ public class TaskStatistics {
     /**
      * Did all jobs execute and completely successfully?
      *
-     * @return true if yes, false if no
+     * @return true if yes, false if no.
      */
     public boolean allSuccessful() {
         return numberCompletedSuccess() == numberTotalScheduledJobs;
     }
 
-    /** The number of jobs that completed successfully. */
+    /**
+     * The number of jobs that completed successfully.
+     *
+     * @return the number of jobs.
+     */
     public long numberCompletedSuccess() {
         return success.getCount();
     }
 
-    /** The number of jobs that completed with failure. */
+    /**
+     * The number of jobs that completed with failure.
+     *
+     * @return the number of jobs.
+     */
     public long numberCompletedFailed() {
         return failed.getCount();
     }
 
-    /** The number of jobs that completed in total. */
+    /**
+     * The number of jobs that completed in total.
+     *
+     * @return the number of jobs.
+     */
     public long numberCompletedTotal() {
         return numberCompletedSuccess() + numberCompletedFailed();
     }

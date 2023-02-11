@@ -79,13 +79,20 @@ public class ExecutionArguments {
     /**
      * Additional parameters that offer context for many beans that provide input-functions.
      *
-     * @return the parameters, resuing the internal data-structure.
+     * @return the parameters, reusing the internal data-structure.
      */
     public InputContextParameters inputContextParameters() {
         return input.getContextParameters();
     }
 
-    public PathPrefixerContext createPrefixerContext() throws PathPrefixerException {
+    /**
+     * Derive a {@link PathPrefixerContext} from the arguments in this class.
+     *
+     * @return a newly created {@link PathPrefixerContext} derived from this class.
+     * @throws PathPrefixerException if the the path in {@code outputDirectory} of {@link
+     *     PathPrefixerContext} is relative instead of absolute.
+     */
+    public PathPrefixerContext derivePathPrefixerContext() throws PathPrefixerException {
         return new PathPrefixerContext(isDebugModeEnabled(), output.getPrefixer());
     }
 
@@ -101,6 +108,11 @@ public class ExecutionArguments {
         debugModeParameters = Optional.of(new DebugModeParameters(debugContainsAsOptional));
     }
 
+    /**
+     * Has debug mode been enabled when executing an experiment?
+     *
+     * @return true iff debug mode has been enabled.
+     */
     public boolean isDebugModeEnabled() {
         return debugModeParameters.isPresent();
     }

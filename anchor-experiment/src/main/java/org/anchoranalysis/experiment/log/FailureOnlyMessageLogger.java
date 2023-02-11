@@ -81,7 +81,7 @@ public class FailureOnlyMessageLogger implements StatefulMessageLogger {
 
         try {
             OptionalUtilities.ifPresent(
-                    TextFileLogHelper.createOutput(outputter, outputName),
+                    MessageLoggerHelper.createOutput(outputter, outputName),
                     output -> {
                         output.start();
                         output.getWriter().append(message);

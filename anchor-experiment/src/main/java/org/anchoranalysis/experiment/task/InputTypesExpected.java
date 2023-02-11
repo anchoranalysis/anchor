@@ -31,7 +31,7 @@ import java.util.List;
 import org.anchoranalysis.io.input.InputFromManager;
 
 /**
- * A list of base (parent) classes for input-types that a task expects
+ * A list of base (parent) classes for input-types that a task expects.
  *
  * @author Owen Feehan
  */
@@ -39,27 +39,32 @@ public class InputTypesExpected {
 
     private List<Class<? extends InputFromManager>> list = new ArrayList<>();
 
-    public InputTypesExpected(Class<? extends InputFromManager> cls) {
-        list.add(cls);
+    /**
+     * Creates with the class of the input-type.
+     *
+     * @param inputTypeClass the class of the input-type.
+     */
+    public InputTypesExpected(Class<? extends InputFromManager> inputTypeClass) {
+        list.add(inputTypeClass);
     }
 
     /**
-     * Does the childclass inherit from any one of expected input-types
+     * Does the child-class inherit from any one of expected input-types?
      *
      * @param childClass the class to test if it inherits
      * @return true if inherits from at least one input-type, false otherwise
      */
     public boolean doesClassInheritFromAny(Class<? extends InputFromManager> childClass) {
-        for (Class<? extends InputFromManager> possibleInputTypeClass : list) {
-            if (possibleInputTypeClass.isAssignableFrom(childClass)) {
-                return true;
-            }
-        }
-        return false;
+        return list.stream().anyMatch(possibleInput -> possibleInput.isAssignableFrom(childClass));
     }
 
-    public boolean add(Class<? extends InputFromManager> e) {
-        return list.add(e);
+    /**
+     * Appends an input-type class to the existing list.
+     *
+     * @param inputTypeClass the input-type class to append.
+     */
+    public void add(Class<? extends InputFromManager> inputTypeClass) {
+        list.add(inputTypeClass);
     }
 
     @Override

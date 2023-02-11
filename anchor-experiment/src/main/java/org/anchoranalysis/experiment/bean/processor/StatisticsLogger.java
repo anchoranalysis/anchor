@@ -32,6 +32,11 @@ import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.core.value.LanguageUtilities;
 import org.anchoranalysis.experiment.task.TaskStatistics;
 
+/**
+ * Logs messages about {@link TaskStatistics}.
+ *
+ * @author Owen Feehan
+ */
 @AllArgsConstructor
 class StatisticsLogger {
 
@@ -40,31 +45,35 @@ class StatisticsLogger {
     private MessageLogger logger;
 
     /**
-     * Logs a textual message describing the statistics
+     * Logs a message describing the statistics.
      *
-     * @param stats the statistics
+     * @param statistics the statistics, from which a message will be derived.
      */
-    public void logTextualMessage(TaskStatistics stats) {
+    public void logStatisticsDescription(TaskStatistics statistics) {
 
-        if (stats.allSuccessful()) {
+        if (statistics.allSuccessful()) {
             logMessageAboutTasks(
                     "All ",
-                    stats.numberCompletedSuccess(),
+                    statistics.numberCompletedSuccess(),
                     " completed successfully.",
-                    stats.executionTimeTotal()::mean);
+                    statistics.executionTimeTotal()::mean);
         } else {
 
             logMessageAboutTasks(
                     "",
-                    stats.numberCompletedSuccess(),
+                    statistics.numberCompletedSuccess(),
                     String.format(
-                            " out of %d completed successfully.", stats.numberTotalScheduledJobs()),
-                    stats::meanExecutionTimeSuccess);
+                            " out of %d completed successfully.",
+                            statistics.numberTotalScheduledJobs()),
+                    statistics::meanExecutionTimeSuccess);
 
             logMessageAboutTasks(
-                    "", stats.numberCompletedFailed(), " failed.", stats::meanExecutionTimeFailed);
+                    "",
+                    statistics.numberCompletedFailed(),
+                    " failed.",
+                    statistics::meanExecutionTimeFailed);
 
-            long numNotCompleted = stats.numberNotCompleted();
+            long numNotCompleted = statistics.numberNotCompleted();
             if (numNotCompleted > 0) {
                 logger.logFormatted(
                         "%s were never submitted.", maybePluralizeJobs(numNotCompleted));
@@ -98,25 +107,27 @@ class StatisticsLogger {
     /**
      * Logs a message with optional additional message about average-execution time
      *
-     * @param msg the message to always log
-     * @param showExecutionTime indicates whether to include the optional additional message or not
-     * @param moreThanOneJob indicates that there was more than one job i.e. num_jobs >=2
-     * @param executionTimeMs function for calculating the average-execution time in millisecond
+     * @param message the message to always log.
+     * @param showExecutionTime indicates whether to include the optional additional message or not.
+     * @param moreThanOneJob indicates that there was more than one job i.e. {@code number_jobs
+     *     >=2}.
+     * @param executionTimeMillis function for calculating the average-execution time in
+     *     milliseconds.
      */
     private void logMessageWithExecutionTime(
-            String msg,
+            String message,
             boolean showExecutionTime,
             boolean moreThanOneJob,
-            DoubleSupplier executionTimeMs) {
+            DoubleSupplier executionTimeMillis) {
         if (showExecutionTime) {
-            double execTimeSeconds = executionTimeMs.getAsDouble() / 1000;
-            msg =
-                    msg
+            double execTimeSeconds = executionTimeMillis.getAsDouble() / 1000;
+            message =
+                    message
                             + String.format(
                                     " The %sexecution time was %.3f s.",
                                     maybeIncludeAverage(moreThanOneJob), execTimeSeconds);
         }
-        logger.log(msg);
+        logger.log(message);
     }
 
     private String maybeIncludeAverage(boolean moreThanOneJob) {

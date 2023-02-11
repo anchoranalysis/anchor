@@ -39,21 +39,31 @@ public class JobExecutionException extends AnchorFriendlyCheckedException {
     /** */
     private static final long serialVersionUID = -7030930961354624998L;
 
-    public JobExecutionException(String string) {
-        super(string);
-    }
-
-    public JobExecutionException(Throwable exc) {
-        super("The job's execution failed.", exc);
+    /**
+     * Creates with a message only, but no cause.
+     *
+     * @param message the message.
+     */
+    public JobExecutionException(String message) {
+        super(message);
     }
 
     /**
-     * A string message displayed to the user as well as a stack-trace of the cause
+     * Creates with a cause only, but no message.
      *
-     * @param string the error message displayed to the user
-     * @param cause cause of the error, and a stack trace is displayed to theu ser
+     * @param cause the cause.
      */
-    public JobExecutionException(String string, Throwable cause) {
-        super(string, cause);
+    public JobExecutionException(Throwable cause) {
+        super("The job's execution failed.", cause);
+    }
+
+    /**
+     * A string message displayed to the user as well as a stack-trace of the cause.
+     *
+     * @param message the error message displayed to the user.
+     * @param cause cause of the error, and a stack trace is displayed to the user.
+     */
+    public JobExecutionException(String message, Throwable cause) {
+        super(message, cause);
     }
 }

@@ -34,9 +34,16 @@ import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.arguments.ExecutionArguments;
 import org.apache.commons.configuration.XMLConfiguration;
 
+/**
+ * A base class for a type of task that produces some kind of result of interest.
+ *
+ * <p>It is an atomic unit of execution in the Anchor framework in many contexts.
+ *
+ * @author Owen Feehan
+ */
 public abstract class Experiment extends AnchorBean<Experiment> implements AssociateXMLUponLoad {
 
-    // Allows to reference the xml configuration from where the experiment was defined
+    /** Allows to reference the XML configuration from where the experiment was defined. */
     private XMLConfiguration xmlConfiguration = null;
 
     /**
@@ -44,11 +51,16 @@ public abstract class Experiment extends AnchorBean<Experiment> implements Assoc
      *
      * @param arguments arguments that may influence how the experiment is run.
      * @return the path files written into as <i>output</i>, if such a path exists.
-     * @throws ExperimentExecutionException
+     * @throws ExperimentExecutionException if an error occurs executing the experiment.
      */
     public abstract Optional<Path> executeExperiment(ExecutionArguments arguments)
             throws ExperimentExecutionException;
 
+    /**
+     * The configuration of experiment serialized into XML form.
+     *
+     * @return the internal XML-representation that has been associated with the experiment.
+     */
     public XMLConfiguration getXMLConfiguration() {
         return xmlConfiguration;
     }
@@ -59,8 +71,13 @@ public abstract class Experiment extends AnchorBean<Experiment> implements Assoc
     }
 
     /**
-     * Whether to detail more (a lengthy experiment) or less (something quick and simple - suitable
-     * for console)?
+     * Whether to log in more or less detail.
+     *
+     * <p>It's appropriate to perform more detailed logging for a lengthier experiment, but
+     * something quick and simple is preferable for a short job, which may only be outputted to the
+     * console.
+     *
+     * @return true iff detailed logging should be employed.
      */
     public abstract boolean useDetailedLogging();
 }

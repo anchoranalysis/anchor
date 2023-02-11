@@ -30,12 +30,26 @@ import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
+/**
+ * Helper functions for creating an experiment-identifier.
+ *
+ * @author Owen Feehan
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class IdentifierUtilities {
 
+    /**
+     * Creates a string in the form {@code $NAME_$VERSION} or {@code $NAME}.
+     *
+     * <p>The latter case occurs when no version is present.
+     *
+     * @param name the name.
+     * @param version an optional version.
+     * @return the created string, as above.
+     */
     public static String identifierFromNameVersion(String name, Optional<String> version) {
-        StringBuilder sb = new StringBuilder(name);
-        version.ifPresent(v -> sb.append("_" + v));
-        return sb.toString();
+        StringBuilder builder = new StringBuilder(name);
+        version.ifPresent(versionString -> builder.append("_" + versionString));
+        return builder.toString();
     }
 }

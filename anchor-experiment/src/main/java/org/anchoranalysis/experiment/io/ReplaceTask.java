@@ -39,5 +39,11 @@ import org.anchoranalysis.io.input.InputFromManager;
  */
 public interface ReplaceTask<T extends InputFromManager, S> {
 
+    /**
+     * Replace the currently-assigned {@link Task} with another.
+     *
+     * @param taskToReplace the task to replace.
+     * @throws OperationFailedException if the task cannot be successfully replaced.
+     */
     public void replaceTask(Task<T, S> taskToReplace) throws OperationFailedException;
 }

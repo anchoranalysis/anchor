@@ -36,5 +36,11 @@ import org.anchoranalysis.io.output.bean.OutputManager;
  */
 public interface ReplaceOutputManager {
 
-    public void replaceOutputManager(OutputManager outputter) throws OperationFailedException;
+    /**
+     * Replace the currently-assigned {@link OutputManager} with another.
+     *
+     * @param output the task to replace.
+     * @throws OperationFailedException if the task cannot be successfully replaced.
+     */
+    public void replaceOutputManager(OutputManager output) throws OperationFailedException;
 }

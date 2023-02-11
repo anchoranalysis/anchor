@@ -29,26 +29,58 @@ package org.anchoranalysis.experiment.task.processor;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.anchoranalysis.core.functional.OptionalFactory;
 import org.anchoranalysis.experiment.task.TaskStatistics;
 import org.anchoranalysis.math.arithmetic.RunningSum;
 
+/**
+ * Monitors all submitted jobs and their current state of execution.
+ *
+ * <p>It provides statistics and a textual description of the aggregate state of execution across
+ * all jobs.
+ *
+ * @author Owen Feehan
+ */
 @RequiredArgsConstructor
 public class ConcurrentJobMonitor implements Iterable<SubmittedJob> {
 
     // START REQUIRED FIELDS
-    private final long totalNumberJobs;
+    /** The total number of submitted jobs to be executed. */
+    @Getter private final long totalNumberJobs;
     // END REQUIRED FIELDS
 
-    // All submitted tasks
+    /** All submitted tasks. */
     private List<SubmittedJob> list = new LinkedList<>();
 
-    public synchronized boolean add(SubmittedJob e) {
-        return list.add(e);
+    /**
+     * Adds a job to be considered in the aggregate view.
+     *
+     * @param job the job.
+     */
+    public synchronized void add(SubmittedJob job) {
+        list.add(job);
     }
 
+    /**
+     * A human-understandable string describing the aggregate state.
+     *
+     * <p>It features:
+     *
+     * <ul>
+     *   <li>The number of completed jobs.
+     *   <li>The number of executing jobs.
+     *   <li>The number of jobs, that have not yet started executing (remaining to be executed).
+     * </ul>
+     *
+     * <p>The string is shortened using abbreviations to help fit in a line of console outut.
+     *
+     * @return the string, as per above.
+     */
     public synchronized String currentStateDescription() {
 
         long numberJobsCompleted = numberCompletedJobs();
@@ -60,55 +92,83 @@ public class ConcurrentJobMonitor implements Iterable<SubmittedJob> {
                 numberJobsCompleted, numberJobsExecuting, numberJobsRemaining, totalNumberJobs);
     }
 
-    public synchronized String ongoingTasksLessThan(int num) {
-        if (numberOngoingJobs() < num) {
-            return executingTasks();
-        } else {
-            return "";
-        }
+    /**
+     * A string that describes all jobs that are not tey completed, but only if there are fewer than
+     * a certain number.
+     *
+     * <p>The string shows the number and a short-name for each job, and the number of seconds for
+     * which it is has been executing.
+     *
+     * <p>The string shows the jobs on one long line, without using newlines.
+     *
+     * @param fewerThanThreshold a description is only shown if the total number of executing tasks
+     *     is less than this threshold.
+     * @return a string in the form above if the condition is fulfilled, or otherwise {@link
+     *     Optional#empty}.
+     */
+    public synchronized Optional<String> describeUncompletedJobs(int fewerThanThreshold) {
+        return OptionalFactory.create(
+                numberUncompletedJobs() < fewerThanThreshold, this::describeAllUncompletedTasks);
     }
 
-    public synchronized String executingTasks() {
-
-        StringBuilder builder = new StringBuilder();
-        for (SubmittedJob job : list) {
-            if (job.getJobState().isExecuting()) {
-                builder.append(
-                        String.format(
-                                "%d(%s,%ds), ",
-                                job.getJobDescription().getJobNumber(),
-                                job.getJobDescription().getJobShortName(),
-                                job.getJobState().getTime() / 1000));
-            }
-        }
-        return builder.toString();
-    }
-
-    public synchronized long numberOngoingJobs() {
+    /**
+     * The number of jobs that remain uncompleted.
+     *
+     * @return the number of jobs.
+     */
+    public synchronized long numberUncompletedJobs() {
         return totalNumberJobs - numberCompletedJobs();
     }
 
+    /**
+     * The number of jobs that have completed, regardless of failure state.
+     *
+     * <p>This includes both jobs that have completed successfully and with failure.
+     *
+     * @return the number of jobs.
+     */
     public synchronized long numberCompletedJobs() {
-        return numberJobs(JobState::isCompleted);
+        return numberJobs(JobStateMonitor::isCompleted);
     }
 
+    /**
+     * The number of jobs that have completed in a state of success.
+     *
+     * @return the number of jobs.
+     */
     public synchronized long numberCompletedSuccessfullyJobs() {
-        return numberJobs(JobState::isCompletedSuccessfully);
+        return numberJobs(JobStateMonitor::isCompletedSuccessfully);
     }
 
+    /**
+     * The number of jobs that have completed in a state of failure.
+     *
+     * @return the number of jobs.
+     */
     public synchronized long numberCompletedFailureJobs() {
-        return numberJobs(JobState::isCompletedFailure);
+        return numberJobs(JobStateMonitor::isCompletedFailure);
     }
 
+    /**
+     * The number of jobs that are currently executing.
+     *
+     * @return the number of jobs.
+     */
     public synchronized long numberExecutingJobs() {
-        return numberJobs(JobState::isExecuting);
+        return numberJobs(JobStateMonitor::isExecuting);
     }
 
-    public synchronized TaskStatistics createStatistics() {
+    /**
+     * Derive statistics on the aggregate state of jobs.
+     *
+     * @return a newly created {@link TaskStatistics} capturing the state at the point it was
+     *     executed.
+     */
+    public synchronized TaskStatistics deriveStatistics() {
         return new TaskStatistics(
-                getTotalNumberTasks(),
-                runningSum(JobState::isCompletedSuccessfully),
-                runningSum(JobState::isCompletedFailure));
+                getTotalNumberJobs(),
+                runningSum(JobStateMonitor::isCompletedSuccessfully),
+                runningSum(JobStateMonitor::isCompletedFailure));
     }
 
     @Override
@@ -116,23 +176,38 @@ public class ConcurrentJobMonitor implements Iterable<SubmittedJob> {
         return list.iterator();
     }
 
-    public long getTotalNumberTasks() {
-        return totalNumberJobs;
-    }
-
-    private RunningSum runningSum(Predicate<JobState> predicate) {
+    private RunningSum runningSum(Predicate<JobStateMonitor> predicate) {
         return new RunningSum(sumExectionTime(predicate), numberJobs(predicate));
     }
 
-    private long numberJobs(Predicate<JobState> predicate) {
+    private long numberJobs(Predicate<JobStateMonitor> predicate) {
         return filteredJobs(predicate).count();
     }
 
-    private long sumExectionTime(Predicate<JobState> predicate) {
-        return filteredJobs(predicate).mapToLong(s -> s.getJobState().getTime()).sum();
+    private long sumExectionTime(Predicate<JobStateMonitor> predicate) {
+        return filteredJobs(predicate)
+                .mapToLong(job -> job.getJobState().getExecutionDuration())
+                .sum();
     }
 
-    private Stream<SubmittedJob> filteredJobs(Predicate<JobState> pred) {
-        return list.stream().filter(s -> pred.test(s.getJobState()));
+    private Stream<SubmittedJob> filteredJobs(Predicate<JobStateMonitor> predicate) {
+        return list.stream().filter(job -> predicate.test(job.getJobState()));
+    }
+
+    /** A string describing all currently executing tasks. */
+    private String describeAllUncompletedTasks() {
+
+        StringBuilder builder = new StringBuilder();
+        for (SubmittedJob job : list) {
+            if (job.getJobState().isExecuting()) {
+                builder.append(
+                        String.format(
+                                "%d(%s,%ds), ",
+                                job.getJobDescription().getNumber(),
+                                job.getJobDescription().getShortName(),
+                                job.getJobState().getExecutionDuration() / 1000));
+            }
+        }
+        return builder.toString();
     }
 }
