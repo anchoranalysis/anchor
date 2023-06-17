@@ -59,14 +59,13 @@ public class AcquisitionDateReader {
             };
 
     /**
-     * The tags tried in order in the EXIF data to read the acqusition-time zone.
+     * The tags tried in order in the EXIF data to read the acquisition-time zone.
      *
      * <p>A timezone is not specified, by default, with EXIF data for times. But some
      * quasi-unofficial tags apparently specify it.
      */
     private static final int[] TIMEZONE_TAGS =
             new int[] {
-                ExifDirectoryBase.TAG_TIME_ZONE_OFFSET,
                 ExifDirectoryBase.TAG_TIME_ZONE_OFFSET_TIFF_EP
             };
 
