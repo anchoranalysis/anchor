@@ -38,6 +38,20 @@
     </pluginRepository>
   </pluginRepositories>    
   
+  <properties>
+  		
+		<!-- Logback - https://logback.qos.ch/ -->
+		<!--
+		NB: 1.3.x is the last version with Java 8 support,
+		and 1.2.x is the last version with an SLF4J binding in logback-classic.
+		-->
+		<logback.version>1.2.12</logback.version>
+		<logback-classic.version>${logback.version}</logback-classic.version>
+		<logback-core.version>${logback.version}</logback-core.version>
+		<ch.qos.logback.logback-classic.version>${logback-classic.version}</ch.qos.logback.logback-classic.version>
+		<ch.qos.logback.logback-core.version>${logback-core.version}</ch.qos.logback.logback-core.version>
+  </properties>
+  
    <dependencies>
 	    <dependency>
 		  <groupId>${project.groupId}</groupId>
@@ -149,6 +163,29 @@
 		    <groupId>org.slf4j</groupId>
 		    <artifactId>slf4j-api</artifactId>
 		    <version>1.7.6</version>
+		</dependency>
+		
+		
+		<!-- Logback - https://logback.qos.ch/ -->
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>${ch.qos.logback.logback-classic.version}</version>
+			<exclusions>
+				<exclusion>
+					<!--
+					Conflicts with jakarta.activation:jakarta.activation-api
+					See: https://wiki.eclipse.org/Jakarta_EE_Maven_Coordinates
+					-->
+					<groupId>javax.activation</groupId>
+					<artifactId>activation</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-core</artifactId>
+			<version>${ch.qos.logback.logback-core.version}</version>
 		</dependency>
 
 	</dependencies>
