@@ -32,6 +32,7 @@ import lombok.NoArgsConstructor;
 import net.imglib2.img.AbstractNativeImg;
 import net.imglib2.img.NativeImg;
 import net.imglib2.img.array.ArrayImg;
+import net.imglib2.img.basictypeaccess.DataAccess;
 import net.imglib2.img.basictypeaccess.array.ArrayDataAccess;
 import net.imglib2.img.planar.PlanarImg;
 import net.imglib2.type.NativeType;
@@ -87,7 +88,7 @@ class WrapNativeImg {
      *     {@link NativeImg}.
      * @return the {@code buffer} wrapped into a {@link NativeImg}.
      */
-    public static <S extends NativeType<S>, T, U> NativeImg<S, T> buffer(
+    public static <S extends NativeType<S>, T extends DataAccess, U> NativeImg<S, T> buffer(
             VoxelBuffer<U> buffer,
             Extent extent,
             Function<U, T> extractArrayFromBuffer,

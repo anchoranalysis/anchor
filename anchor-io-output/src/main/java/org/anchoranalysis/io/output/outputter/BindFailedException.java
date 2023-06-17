@@ -28,15 +28,31 @@ package org.anchoranalysis.io.output.outputter;
 
 import org.anchoranalysis.core.exception.friendly.AnchorFriendlyCheckedException;
 
+
+/**
+ * When an outputter cannot be successfully bound to an output directory.
+ * 
+ * @author Owen Feehan
+ */
 public class BindFailedException extends AnchorFriendlyCheckedException {
 
     /** */
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Create from message.
+     * 
+     * @param message the message.
+     */
     public BindFailedException(String message) {
         super(message);
     }
 
+    /**
+     * Create from cause.
+     * 
+     * @param cause the cause.
+     */
     public BindFailedException(Throwable cause) {
         super(cause);
     }

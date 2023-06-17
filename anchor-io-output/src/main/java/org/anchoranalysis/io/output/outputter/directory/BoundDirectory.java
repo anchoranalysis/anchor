@@ -72,7 +72,7 @@ class BoundDirectory {
      * @param subdirectoryPath subdirectory of existing {@link BoundDirectory} for which a new
      *     {@link BoundDirectory} will be created.
      * @return a newly created {@link BoundDirectory} bound to {@code directoryPath}.
-     * @throws BindFailedException
+     * @throws BindFailedException when an outputter cannot be successfully bound to an output directory.
      */
     public BoundDirectory bindToSubdirectory(Path subdirectoryPath) throws BindFailedException {
         Preconditions.checkArgument(rootDirectoryContains(subdirectoryPath));
