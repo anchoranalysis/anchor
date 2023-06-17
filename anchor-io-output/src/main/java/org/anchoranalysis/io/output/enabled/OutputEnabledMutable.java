@@ -120,8 +120,8 @@ public class OutputEnabledMutable implements MultiLevelOutputEnabled {
     /**
      * Adds enabled outputs from another {@link OutputEnabledMutable}.
      *
-     * @param other the other {@link OutputEnabledMutable} to add from
-     * @return the current object
+     * @param other the other {@link OutputEnabledMutable} to add from.
+     * @return the current object.
      */
     public OutputEnabledMutable addEnabledOutputs(OutputEnabledMutable other) {
         enabledFirst.addAll(other.enabledFirst);
