@@ -1,0 +1,11 @@
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+
+jobs:
+
+  build:
+    uses: anchoranalysis/anchor-java-cicd/.github/workflows/push_master.yml@main
+    secrets: inherit
