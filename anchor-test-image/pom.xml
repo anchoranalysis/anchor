@@ -91,5 +91,13 @@
 		    <scope>compile</scope>
 		</dependency>
 		
+		
+		<dependency>
+	      <groupId>xml-apis</groupId>
+	      <artifactId>xml-apis</artifactId>
+	      <version>${xml-apis.version}</version>
+	      <scope>compile</scope>
+	 	</dependency>
+		
 	</dependencies>
 </project>
