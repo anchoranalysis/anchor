@@ -74,19 +74,31 @@ public abstract class OutputEnableRulesSpecify extends OutputEnabledRules {
         this.first = first;
     }
 
+    
+    /**
+     * Whether the first-level names contain a particular output (if defined)?
+     * 
+     * @param outputName the output-name to query.
+     * @return true iff the first-level names are defined <b>and</b> {@code outputName} is contained.
+     */
     protected boolean firstLevelContains(String outputName) {
         return first != null && first.contains(outputName);
     }
 
     /**
      * Creates a new second-level {@link SingleLevelOutputEnabled} from the relevant set of strings.
+     * 
+     * @param outputNames a set of output-names that are used to create the {@link SingleLevelOutputEnabled}.
+     * @return the newly created {@link SingleLevelOutputEnabled}.
      */
     protected abstract SingleLevelOutputEnabled createSecondLevelFromSet(StringSet outputNames);
 
     /**
-     * @param outputName
-     * @param defaultValue
-     * @return
+     * Retrieves a second-level {@link SingleLevelOutputEnabled} corresponding to a first-level output-name.
+     * 
+     * @param outputName the name of the first-level output.
+     * @param defaultValue the default-value used if no existing second-level entry exists.
+     * @return an existing corresponding {@link SingleLevelOutputEnabled} or otherwise a newly created one.
      */
     protected SingleLevelOutputEnabled secondLevelOutputs(
             String outputName, OutputEnabled defaultValue) {
@@ -99,6 +111,11 @@ public abstract class OutputEnableRulesSpecify extends OutputEnabledRules {
         return mapSecondLevel.getOrDefault(outputName, defaultValue);
     }
 
+    /** 
+     * Are output-names in the first-level defined?
+     *
+     * @return true iff they are defined.
+     */
     protected boolean isFirstDefined() {
         return first != null;
     }

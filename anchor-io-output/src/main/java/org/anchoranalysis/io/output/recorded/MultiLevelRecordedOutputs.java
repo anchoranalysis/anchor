@@ -52,7 +52,7 @@ public class MultiLevelRecordedOutputs {
      * from the first-level.
      *
      * @param outputName the outputName from the first-level
-     * @return
+     * @return the {@link RecordedOutputs}.
      */
     public RecordedOutputs second(String outputName) {
 
