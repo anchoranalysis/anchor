@@ -29,8 +29,9 @@ package org.anchoranalysis.bean;
 import java.lang.reflect.Field;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Optional;
+
 import javax.annotation.Nullable;
-import lombok.Getter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.exception.BeanDuplicateException;
@@ -61,9 +62,9 @@ public abstract class AnchorBean<F> {
      * A local path on the filesystem associated with this bean (from serialization) if defined.
      * Otherwise null.
      */
-    @Getter @Nullable private Path localPath;
+    @Nullable private Path localPath;
 
-    /**
+	/**
      * A short-name identifying a bean (by default the name of the class associated with the bean).
      *
      * @return the short-name of the bean
@@ -83,6 +84,17 @@ public abstract class AnchorBean<F> {
     public String describeBean() {
         return getBeanName();
     }
+    
+    /**
+     * A local path on the file-system, optionally associated with this bean.
+     * 
+     * <p>The association is usually established when a bean is loaded (deserialized) from a file.
+     * 
+     * @return the local-path, if defined.
+     */
+    public Optional<Path> getLocalPath() {
+		return Optional.ofNullable(localPath);
+	}
 
     /**
      * By default, we use {@link #describeBean} as the string representation of the bean.
