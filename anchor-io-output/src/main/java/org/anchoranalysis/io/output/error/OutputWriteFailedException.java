@@ -35,19 +35,19 @@ public class OutputWriteFailedException extends AnchorFriendlyCheckedException {
     /** */
     private static final long serialVersionUID = 1036971819028250342L;
 
-    public OutputWriteFailedException(String s) {
-        super(s);
+    public OutputWriteFailedException(String message) {
+        super(message);
     }
 
-    public OutputWriteFailedException(String s, HasFriendlyErrorMessage e) {
-        super(s + ": " + e.friendlyMessageHierarchy(), null);
+    public OutputWriteFailedException(String message, HasFriendlyErrorMessage e) {
+        super(message + ": " + e.friendlyMessageHierarchy(), null);
     }
 
-    public OutputWriteFailedException(String s, AnchorCombinableException e) {
-        super(s, e.summarize());
+    public OutputWriteFailedException(String message, AnchorCombinableException e) {
+        super(message, e.summarize());
     }
 
-    public OutputWriteFailedException(Throwable e) {
-        super("", e);
+    public OutputWriteFailedException(Throwable cause) {
+        super("", cause);
     }
 }
