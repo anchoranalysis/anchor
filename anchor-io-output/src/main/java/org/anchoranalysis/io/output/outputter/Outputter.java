@@ -145,6 +145,11 @@ public class Outputter {
         return delegate;
     }
 
+    /**
+     * The directory and prefix into which outputting occurs.
+     *
+     * @return the directory and prefix.
+     */
     public DirectoryWithPrefix getPrefix() {
         return delegate.getPrefix();
     }

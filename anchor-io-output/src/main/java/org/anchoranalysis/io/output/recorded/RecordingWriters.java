@@ -110,7 +110,9 @@ public class RecordingWriters {
      * A writer that performs a second-level check on which outputs occur, but writes to the
      * top-level directory.
      *
-     * @return a newly created writer checking on particular second-level otuput names.
+     * @param outputNameFirstLevel the first (top-most) level of an output name, with which writing
+     *     any second-level outputs is associated.
+     * @return a newly created writer checking on particular second-level output names.
      */
     public Writer secondLevel(String outputNameFirstLevel) {
         SingleLevelOutputEnabled outputEnabledSecondLevel =
@@ -121,13 +123,20 @@ public class RecordingWriters {
         return recordSecondLevel(secondLevelWriter, outputNameFirstLevel);
     }
 
-    /** A writer that allows all output-names, and records the written output-names */
+    /**
+     * A writer that allows all output-names, and records the written output-names.
+     *
+     * @return the writer.
+     */
     public Writer permissive() {
         return permissiveRecording;
     }
 
     /**
-     * A writer that allows only certain selected output-names, and records the written output-names
+     * A writer that allows only certain selected output-names, and records the written
+     * output-names.
+     *
+     * @return the writer.
      */
     public Writer selective() {
         return selectiveRecording;

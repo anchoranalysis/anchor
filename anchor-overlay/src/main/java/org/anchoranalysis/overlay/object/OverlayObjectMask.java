@@ -58,7 +58,7 @@ public class OverlayObjectMask extends Overlay {
 
     @Override
     public BoundingBox box(DrawOverlay overlayWriter, Dimensions dimensions) {
-        // Assumes thhe object-mask is always inside the dimensions.
+        // Assumes the object-mask is always inside the dimensions.
         return object.boundingBox();
     }
 

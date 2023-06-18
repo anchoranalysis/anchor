@@ -78,7 +78,7 @@ public class OutputManager extends AnchorBean<OutputManager> {
      */
     @BeanField @Getter @Setter private boolean silentlyDeleteExisting = false;
 
-    /** General settings (default file extensions, colors etc.) for outtping files. */
+    /** General settings (default file extensions, colors etc.) for outputting files. */
     @BeanField @Getter @Setter
     private OutputWriteSettings outputWriteSettings = new OutputWriteSettings();
 
@@ -128,7 +128,8 @@ public class OutputManager extends AnchorBean<OutputManager> {
      *     first needed.
      * @param logger logger for warning for information messages when outputting.
      * @return a newly created outputter.
-     * @throws BindFailedException when an outputter cannot be successfully bound to an output directory.
+     * @throws BindFailedException when an outputter cannot be successfully bound to an output
+     *     directory.
      */
     public OutputterChecked createExperimentOutputter(
             Optional<String> experimentIdentifier,

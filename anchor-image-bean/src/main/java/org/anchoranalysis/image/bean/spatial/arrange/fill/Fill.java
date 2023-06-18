@@ -183,6 +183,7 @@ public class Fill extends StackArranger {
      *
      * @throws OperationFailedException if any bounding box lies outside the image.
      */
+    @SuppressWarnings("null")
     private static BoundingBox[] derivingBoundingBoxes(
             int numberElements, List<List<ExtentToArrange>> partitions, Extent combinedSize)
             throws OperationFailedException {

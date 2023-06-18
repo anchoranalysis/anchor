@@ -28,15 +28,30 @@ package org.anchoranalysis.io.output.path.prefixer;
 
 import org.anchoranalysis.core.exception.friendly.AnchorFriendlyCheckedException;
 
+/**
+ * Thrown when unable to successfully determine a prefix for a path.
+ *
+ * @author Owen Feehan
+ */
 public class PathPrefixerException extends AnchorFriendlyCheckedException {
 
     /** */
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Creates from a message only.
+     *
+     * @param message the message.
+     */
     public PathPrefixerException(String message) {
         super(message);
     }
 
+    /**
+     * Creates from a cause only.
+     *
+     * @param cause the cause.
+     */
     public PathPrefixerException(Throwable cause) {
         super(cause);
     }

@@ -51,6 +51,7 @@ public class OutputterTarget {
     /** The directory to which the output-manager is bound to. */
     private BoundDirectory directory;
 
+    /** The directory and prefix into which outputting occurs. */
     @Getter private final DirectoryWithPrefix prefix;
 
     /**

@@ -35,8 +35,9 @@ import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.output.outputter.Outputter;
 
 /**
- * Write data via {@link ElementWriter}s to the file system, or creates new sub-directories for
- * writng data to.
+ * Write data via {@link ElementWriter}s to the file system.
+ *
+ * <p>Or alternatively write by creating new sub-directories for writing data to.
  *
  * <p>This class is similar to {@link Writer} but:
  *
@@ -56,8 +57,6 @@ import org.anchoranalysis.io.output.outputter.Outputter;
  */
 @AllArgsConstructor
 public class WriterRouterErrors {
-
-    public static final int NUMBER_ELEMENTS_WRITTEN_ERRORED = -1;
 
     private Writer delegate;
     private ErrorReporter errorReporter;

@@ -45,14 +45,14 @@ public interface InputOutputContext {
     /**
      * An input-directory in which models are stored.
      *
-     * <p>return a path to the model-directory
+     * @return a path to the model-directory.
      */
     Path getModelDirectory();
 
     /**
      * An outputter that writes to the particular output-directory.
      *
-     * @return the outputter
+     * @return the outputter.
      */
     Outputter getOutputter();
 
