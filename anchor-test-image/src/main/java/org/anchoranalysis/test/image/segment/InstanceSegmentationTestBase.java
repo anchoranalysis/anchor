@@ -61,19 +61,19 @@ public abstract class InstanceSegmentationTestBase {
     private CarImageLoader loader = new CarImageLoader();
 
     @BeforeEach
-    void setup() throws InitializeException {
+    public void setup() throws InitializeException {
         writer = new WriteIntoDirectory(temporaryDirectory, false);
         segmenter = createSegmenter();
         initSegmenter(segmenter);
     }
 
     @Test
-    void testRGB() throws SegmentationFailedException {
+    public void testRGB() throws SegmentationFailedException {
         assertExpectedSegmentation(stackRGB(), targetBox(), "rgb");
     }
 
     @Test
-    void testGrayscale8Bit() throws SegmentationFailedException {
+    public void testGrayscale8Bit() throws SegmentationFailedException {
         assertExpectedSegmentation(stackGrayscale(), targetBox(), "grayscale");
     }
 
