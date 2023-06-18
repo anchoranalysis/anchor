@@ -59,8 +59,8 @@ public abstract class IndexableOutputNameStyle extends OutputNameStyle {
     /**
      * Like {@link #filenameWithoutExtension()} but incorporates an <i>integer</i> index.
      *
-     * @param index the index
-     * @return @return the filename (without an extension, including without the period before the
+     * @param index the index, unique within a set of filenames being outputted.
+     * @return the filename (without an extension, including without the period before the
      *     extension).
      */
     public String filenameWithoutExtension(int index) {
@@ -71,7 +71,7 @@ public abstract class IndexableOutputNameStyle extends OutputNameStyle {
      * Like {@link #filenameWithoutExtension()} but incorporates an <i>string</i> index.
      *
      * @param index the index
-     * @return @return the filename (without an extension, including without the period before the
+     * @return the filename (without an extension, including without the period before the
      *     extension).
      */
     public String filenameWithoutExtension(String index) {
@@ -86,7 +86,12 @@ public abstract class IndexableOutputNameStyle extends OutputNameStyle {
         throw new UnsupportedOperationException("an index is required to determine a filename");
     }
 
-    /** Constructs a full name from the output format string and an index */
+    /**
+     * Constructs a file name from the output format string and an index.
+     *
+     * @param index the index, unique within a set of filenames being outputted.
+     * @return the file-name as a string.
+     */
     protected abstract String filenameFromOutputFormatString(
             String outputFormatString, String index);
 

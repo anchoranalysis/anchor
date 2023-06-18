@@ -43,7 +43,7 @@ public interface ElementSupplier<T> {
      * Gets/creates the element to be written.
      *
      * @return the element to be written
-     * @throws OutputWriteFailedException
+     * @throws OutputWriteFailedException if unable to successfully supply an element to be written.
      */
     T get() throws OutputWriteFailedException;
 }

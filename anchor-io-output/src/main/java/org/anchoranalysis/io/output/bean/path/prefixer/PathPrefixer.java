@@ -36,6 +36,13 @@ import org.anchoranalysis.io.output.path.prefixer.NamedPath;
 import org.anchoranalysis.io.output.path.prefixer.PathPrefixerContext;
 import org.anchoranalysis.io.output.path.prefixer.PathPrefixerException;
 
+/**
+ * Base classes for methods to determine an output directory and associated file prefix.
+ *
+ * <p>This is derived from an identifier for an experiment, and input paths.
+ *
+ * @author Owen Feehan
+ */
 public abstract class PathPrefixer extends AnchorBean<PathPrefixer> {
 
     /**
@@ -45,9 +52,9 @@ public abstract class PathPrefixer extends AnchorBean<PathPrefixer> {
      * @param path an input to derive a prefix from
      * @param experimentIdentifier if defined, an identifier for the experiment, to be included in
      *     the directory root.
-     * @param context
-     * @return a prefixer
-     * @throws PathPrefixerException
+     * @param context the context in which prefixing of paths occurs.
+     * @return a directory with an associated prefix.
+     * @throws PathPrefixerException if unable to successfully determine a prefix.
      */
     public abstract DirectoryWithPrefix outFilePrefix(
             NamedPath path, Optional<String> experimentIdentifier, PathPrefixerContext context)
@@ -58,13 +65,23 @@ public abstract class PathPrefixer extends AnchorBean<PathPrefixer> {
      *
      * @param experimentIdentifier if defined, an identifier for the experiment, to be included in
      *     the directory root.
-     * @param context
-     * @return a prefixer
-     * @throws PathPrefixerException
+     * @param context the context in which prefixing of paths occurs.
+     * @return a directory with an associated prefix.
+     * @throws PathPrefixerException if unable to successfully determine a prefix.
      */
     public abstract DirectoryWithPrefix rootDirectoryPrefix(
             Optional<String> experimentIdentifier, PathPrefixerContext context)
             throws PathPrefixerException;
+
+    /**
+     * Like {@link #resolvePath(Path)} but accepts a String as the path.
+     *
+     * @param pathToResolve input-path that is relative.
+     * @return the converted path (relative to the localizedPath of the current file)
+     */
+    protected Path resolvePath(String pathToResolve) {
+        return resolvePath(Paths.get(pathToResolve));
+    }
 
     /**
      * Converts a relative-path to an absolute-path (relative to the file-path associated with this
@@ -75,7 +92,7 @@ public abstract class PathPrefixer extends AnchorBean<PathPrefixer> {
      *
      * <p>If the pathToResolve is already absolute, then we return it as-is
      *
-     * @param pathToResolve input-path that is relative
+     * @param pathToResolve input-path that is relative.
      * @return the converted path (relative to the localizedPath of the current file)
      */
     protected Path resolvePath(Path pathToResolve) {
@@ -85,23 +102,20 @@ public abstract class PathPrefixer extends AnchorBean<PathPrefixer> {
             return pathToResolve;
         }
 
-        // We have a relative path
-        if (getLocalPath() == null) {
+        Path localPath = getLocalPath();
+
+        if (localPath != null) {
+            assert !pathToResolve.isAbsolute();
+            assert localPath.isAbsolute();
+            Path parent = localPath.getParent();
+
+            return parent.resolve(pathToResolve).normalize();
+        } else {
+            // We have a relative path
             throw new BeanStrangeException(
                     String.format(
                             "Cannot resolve relative-path: %s as there is no localPath for this bean",
                             pathToResolve));
         }
-
-        assert !pathToResolve.isAbsolute();
-        assert getLocalPath().isAbsolute();
-        Path parent = getLocalPath().getParent();
-
-        return parent.resolve(pathToResolve).normalize();
-    }
-
-    /** An absolute path to the prefix */
-    protected Path resolvePath(String maybeRelativePath) {
-        return resolvePath(Paths.get(maybeRelativePath));
     }
 }

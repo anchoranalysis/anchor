@@ -28,6 +28,7 @@ package org.anchoranalysis.io.input.bean.files;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
@@ -61,6 +62,7 @@ public abstract class FilesProviderWithDirectoryString extends FilesProviderWith
      */
     @BeanField @AllowEmpty @Getter @Setter private String directory = "";
 
+    /** When true paths are resolved against the location of the associated BeanXML file. */
     @BeanField @Getter @Setter private boolean localized = false;
     // END BEAN FIELDS
 
@@ -69,8 +71,9 @@ public abstract class FilesProviderWithDirectoryString extends FilesProviderWith
 
         if (!directory.isEmpty()) {
             Path directoryAsPath = Paths.get(directory);
-            if (localized && !directoryAsPath.isAbsolute()) {
-                return localRoot().resolve(directoryAsPath);
+            Optional<Path> localRoot = calculateLocalRoot();
+            if (localized && !directoryAsPath.isAbsolute() && localRoot.isPresent()) {
+                return calculateLocalRoot().get().resolve(directoryAsPath);
             } else {
                 return directoryAsPath;
             }
@@ -81,14 +84,20 @@ public abstract class FilesProviderWithDirectoryString extends FilesProviderWith
     }
 
     private Path inferDirectory(InputContextParameters inputContext) {
-        if (localized) {
-            return localRoot();
+        Optional<Path> localRoot = calculateLocalRoot();
+        if (localized && localRoot.isPresent()) {
+            return localRoot.get();
         } else {
             return inputContext.getInputDirectory().orElseGet(() -> Paths.get("."));
         }
     }
 
-    private Path localRoot() {
-        return getLocalPath().getParent();
+    private Optional<Path> calculateLocalRoot() {
+        Path localPath = getLocalPath();
+        if (localPath != null) {
+            return Optional.ofNullable(localPath.getParent());
+        } else {
+            return Optional.empty();
+        }
     }
 }

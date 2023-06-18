@@ -34,6 +34,7 @@ import org.anchoranalysis.io.output.namestyle.OutputNameStyle;
  * Writes an element (with or without an index) to the file system.
  *
  * @author Owen Feehan
+ * @param <T> the type of element to be written
  */
 public interface ElementWriter<T> {
 
@@ -42,9 +43,9 @@ public interface ElementWriter<T> {
      * items).
      *
      * @param element the element to write.
-     * @param outputNameStyle TODO
-     * @param outputter
-     * @throws OutputWriteFailedException
+     * @param outputNameStyle how to write output-names.
+     * @param outputter how the element is outputted.
+     * @throws OutputWriteFailedException if the write operation fails.
      */
     void write(T element, OutputNameStyle outputNameStyle, ElementOutputter outputter)
             throws OutputWriteFailedException;
@@ -53,10 +54,11 @@ public interface ElementWriter<T> {
      * Writes an indexable output (many outputs of the same type, uniquely identified by an index).
      *
      * @param element the element to write.
-     * @param index TODO
-     * @param outputNameStyle
-     * @param outputter
-     * @throws OutputWriteFailedException
+     * @param index a string that uniquely identifies this element compared to others in the same
+     *     write operation.
+     * @param outputNameStyle how to write output-names.
+     * @param outputter how the element is outputted.
+     * @throws OutputWriteFailedException if the write operation fails.
      */
     void writeWithIndex(
             T element,

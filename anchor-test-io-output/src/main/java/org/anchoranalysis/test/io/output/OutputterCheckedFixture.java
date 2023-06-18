@@ -50,7 +50,8 @@ public class OutputterCheckedFixture {
      *
      * @param outputManager the output-manager to create from.
      * @return a newly created outputter, as derived from {@code outputManager}.
-     * @throws BindFailedException when an outputter cannot be successfully bound to an output directory.
+     * @throws BindFailedException when an outputter cannot be successfully bound to an output
+     *     directory.
      */
     public static OutputterChecked createFrom(OutputManager outputManager)
             throws BindFailedException {
@@ -63,7 +64,8 @@ public class OutputterCheckedFixture {
      *
      * @param outputManager the output-manager to create from.
      * @return a newly created outputter, as derived from {@code outputManager}.
-     * @throws BindFailedException when an outputter cannot be successfully bound to an output directory.
+     * @throws BindFailedException when an outputter cannot be successfully bound to an output
+     *     directory.
      */
     public static OutputterChecked createFrom(
             OutputManager outputManager, OutputEnabledRules outputsEnabled)

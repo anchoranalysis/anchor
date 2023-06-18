@@ -42,8 +42,6 @@ import org.anchoranalysis.io.output.outputter.OutputterChecked;
 @RequiredArgsConstructor
 public class CheckIfAllowed implements Writer {
 
-    public static final int NUMBER_ELEMENTS_WRITTEN_NOT_ALLOWED = -2;
-
     // START REQUIRED ARGUMENTS
     /** Whether a particular output is enabled or not? */
     private final SingleLevelOutputEnabled outputEnabled;

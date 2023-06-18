@@ -32,9 +32,18 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * A directory into which files can be written, and a prefix for the name of each written file.
+ *
+ * <p>A <i>delimeter</i> may additionally be specified that is inserted between the prefix and a
+ * filename when a filename is specified (which may not always be the case).
+ *
+ * @author Owen Feehan
+ */
 @AllArgsConstructor
 public class DirectoryWithPrefix implements PathCreator {
 
+    /** The directory in which files can be written to. */
     @Getter private Path directory;
 
     /** Always prepended to outputted filenames. */
@@ -43,12 +52,22 @@ public class DirectoryWithPrefix implements PathCreator {
     /** Added between {@code prefix} and the filename, if the filename is defined. */
     @Setter private String delimiter = "";
 
-    public DirectoryWithPrefix(Path folderPath) {
-        setDirectory(folderPath.normalize());
+    /**
+     * Creates for a directory, with no prefix.
+     *
+     * @param directory the directory.
+     */
+    public DirectoryWithPrefix(Path directory) {
+        setDirectory(directory.normalize());
     }
 
-    public void setDirectory(Path folderPath) {
-        this.directory = folderPath.normalize();
+    /**
+     * Assigns a new directory, replacing the existing directory.
+     *
+     * @param directory the directory.
+     */
+    public void setDirectory(Path directory) {
+        this.directory = directory.normalize();
     }
 
     /**
@@ -65,6 +84,11 @@ public class DirectoryWithPrefix implements PathCreator {
         }
     }
 
+    /**
+     * The prefix concatenated with the delimeter.
+     *
+     * @return the result of the concatenation above.
+     */
     public String prefixWithDelimeter() {
         return prefix + delimiter;
     }

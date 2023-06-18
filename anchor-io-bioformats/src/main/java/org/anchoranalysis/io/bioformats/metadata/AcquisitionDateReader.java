@@ -65,9 +65,7 @@ public class AcquisitionDateReader {
      * quasi-unofficial tags apparently specify it.
      */
     private static final int[] TIMEZONE_TAGS =
-            new int[] {
-                ExifDirectoryBase.TAG_TIME_ZONE_OFFSET_TIFF_EP
-            };
+            new int[] {ExifDirectoryBase.TAG_TIME_ZONE_OFFSET_TIFF_EP};
 
     /**
      * Reads an image acquisition-date from a file identified by path, based on the present of EXIF

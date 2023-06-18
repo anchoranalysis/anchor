@@ -74,6 +74,7 @@ public class ElementOutputter {
      * with an additional suffix.
      *
      * @param suffixWithoutExtension the suffix for the path (without any extension).
+     * @param extension the file extension (without a leading period).
      * @param fallbackSuffix if neither a {@code prefix} is defined nor a {@code suffix}, then this
      *     provides a suffix to use so a file isn't only an extension.
      * @return a newly created absolute path, combining directory, prefix (if it exists), suffix and
@@ -95,15 +96,29 @@ public class ElementOutputter {
         return outputter.getSettings();
     }
 
+    /**
+     * A suggestion on what file-format to write.
+     *
+     * @return a suggestion for the file-format, if known.
+     */
     public Optional<ImageFileFormat> getSuggestedFormatToWrite() {
         return outputter.getContext().getSuggestedFormatToWrite();
     }
 
-    /** Which outputs are enabled or not enabled. */
+    /**
+     * Which outputs are enabled or not enabled.
+     *
+     * @return an interface that can be used to determine if an individual output is enabled.
+     */
     public MultiLevelOutputEnabled getOutputsEnabled() {
         return outputter.getOutputsEnabled();
     }
 
+    /**
+     * The associated logger.
+     *
+     * @return the logger.
+     */
     public Optional<Logger> logger() {
         return logger.get();
     }

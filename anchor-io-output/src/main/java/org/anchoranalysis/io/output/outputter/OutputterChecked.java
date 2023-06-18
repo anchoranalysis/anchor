@@ -56,7 +56,7 @@ import org.anchoranalysis.io.output.writer.ElementOutputter;
  */
 public class OutputterChecked {
 
-    /** The directory and prefix the output writes to */
+    /** The directory and prefix the output writes to. */
     private final OutputterTarget target;
 
     /** The writers associated with this output-manager. */
@@ -259,6 +259,11 @@ public class OutputterChecked {
         this.logger = Optional.of(logger);
     }
 
+    /**
+     * The directory and prefix into which outputting occurs.
+     *
+     * @return the directory and prefix.
+     */
     public DirectoryWithPrefix getPrefix() {
         return target.getPrefix();
     }
