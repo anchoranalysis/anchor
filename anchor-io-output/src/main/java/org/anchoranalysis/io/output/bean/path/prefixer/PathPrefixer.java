@@ -102,12 +102,12 @@ public abstract class PathPrefixer extends AnchorBean<PathPrefixer> {
             return pathToResolve;
         }
 
-        Path localPath = getLocalPath();
+        Optional<Path> localPath = getLocalPath();
 
-        if (localPath != null) {
+        if (localPath.isPresent()) {
             assert !pathToResolve.isAbsolute();
-            assert localPath.isAbsolute();
-            Path parent = localPath.getParent();
+            assert localPath.get().isAbsolute();
+            Path parent = localPath.get().getParent();
 
             return parent.resolve(pathToResolve).normalize();
         } else {

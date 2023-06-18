@@ -28,6 +28,7 @@ package org.anchoranalysis.bean;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -38,6 +39,7 @@ import org.anchoranalysis.bean.exception.BeanDuplicateException;
 import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 import org.anchoranalysis.bean.primitive.StringSet;
 import org.apache.commons.lang3.ClassUtils;
+
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class HelperDuplication {
@@ -62,7 +64,10 @@ class HelperDuplication {
             }
 
             // We also copy the localization information for the new bean
-            beanOut.localise(bean.getLocalPath());
+            Optional<Path> localPath = bean.getLocalPath();
+            if (localPath.isPresent()) {
+            	beanOut.localise(localPath.get());
+            }
             return beanOut;
 
         } catch (IllegalAccessException
