@@ -139,7 +139,7 @@ public class Outputter {
      * Gets the underlying delegate of {@link Outputter} that throws checked-exceptions instead of
      * using a {@link ErrorReporter}.
      *
-     * @return the checked-ouputter
+     * @return the checked-ouputter.
      */
     public OutputterChecked getChecked() {
         return delegate;
