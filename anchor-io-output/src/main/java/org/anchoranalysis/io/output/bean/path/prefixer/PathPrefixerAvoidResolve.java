@@ -45,7 +45,7 @@ import org.anchoranalysis.io.output.path.prefixer.PathPrefixerException;
  * relative-path rather than an absolute path after fully resolving paths
  *
  * <p>This is useful for combining with the MultiRootedFilePathPrefixer. This results in
- * relative-paths keeping the same root, as when passed in
+ * relative-paths keeping the same root, as when passed in.
  *
  * @author Owen Feehan
  */

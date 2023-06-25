@@ -51,6 +51,7 @@ public interface MultiLevelOutputEnabled extends SingleLevelOutputEnabled {
      * A second-level of {@link OutputEnabled} for a particular {@code outputName} as used in
      * first-level.
      *
+     * @param outputName the name of the output.
      * @return an appropriate {@link OutputEnabled} for the second-level.
      */
     SingleLevelOutputEnabled second(String outputName);
