@@ -99,7 +99,7 @@ class SuggestionFromArray {
     /** Like {@link #extractInteger(int)} but takes an {@link Optional} as an parameter. */
     private Optional<Integer> extractIntegerOptional(Optional<Integer> position)
             throws SuggestionFormatException {
-        return OptionalUtilities.map(position, this::extractInteger);
+        return OptionalUtilities.map(position, pos -> this.extractInteger(pos) );
     }
 
     /** Extracts an integer at a particular position in the array. */

@@ -86,6 +86,11 @@ public class OutputterTarget {
         return directory.getParentDirectoryCreator();
     }
 
+    /**
+     * The directory into which outputting occurs.
+     * 
+     * @return a path to the directory.
+     */
     public Path getDirectory() {
         return prefix.getDirectory();
     }

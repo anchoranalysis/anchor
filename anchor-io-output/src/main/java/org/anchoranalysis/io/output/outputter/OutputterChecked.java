@@ -81,7 +81,8 @@ public class OutputterChecked {
      * @param pathDirectory directory to associate with output-manager
      * @param directoryCreation how to create the output directory.
      * @param logger logger for warning for information messages when outputting
-     * @throws BindFailedException
+     * @return the created outputter.
+     * @throws BindFailedException if a directory cannot be created at the intended path.
      */
     public static OutputterChecked createForDirectoryPermissive(
             Path pathDirectory,
@@ -107,6 +108,7 @@ public class OutputterChecked {
      * @param recordedOutputs if defined, records output-names that are written / not-written in
      *     {@link OutputterChecked} (but not any sub-directories thereof)
      * @param logger logger for warning for information messages when outputting
+     * @return the created outputter.
      * @throws BindFailedException if a directory cannot be created at the intended path.
      */
     public static OutputterChecked createWithPrefix(
@@ -162,7 +164,7 @@ public class OutputterChecked {
      * @param prefixToAssign prefix to assign.
      * @return a newly created identical {@link OutputterChecked} apart from the two aforementioned
      *     changes.
-     * @throws BindFailedException
+     * @throws BindFailedException if a directory cannot be created at the intended path.
      */
     public OutputterChecked changePrefix(DirectoryWithPrefix prefixToAssign)
             throws BindFailedException {
@@ -219,6 +221,11 @@ public class OutputterChecked {
         return context.getSettings();
     }
 
+    /**
+     * The directory into which outputting occurs.
+     * 
+     * @return a path to the directory.
+     */
     public Path getOutputDirectory() {
         return target.getDirectory();
     }

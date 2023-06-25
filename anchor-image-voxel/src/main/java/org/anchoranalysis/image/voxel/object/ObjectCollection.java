@@ -293,7 +293,7 @@ public class ObjectCollection implements Iterable<ObjectMask> {
      * @return the stream containing only the objects whose indices are in {@code indices}.
      */
     public Stream<ObjectMask> streamIndices(Collection<Integer> indices) {
-        return indices.stream().map(this::get);
+        return indices.stream().map( index -> this.get(index) );
     }
 
     /** Descriptive string representation of an {@link ObjectMask}. */

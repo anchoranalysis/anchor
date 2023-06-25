@@ -40,11 +40,27 @@ import org.junit.jupiter.api.io.TempDir;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
+/**
+ * Outputs a XML file to the file-system and reopens-it, checking equality.
+ * 
+ * @author Owen Feehan
+ *
+ */
 class XmlOutputterTest {
 
-    @TempDir Path directory;
+	/** The directory in which the test creates files. */
+	@TempDir Path directory;
 
-    @Test
+	/**
+	 * Checks outputting a XML file.
+	 * 
+	 * @throws ParserConfigurationException if thrown by underlying code.
+	 * @throws SAXException if thrown by underlying code.
+	 * @throws IOException if thrown by underlying code.
+	 * @throws TransformerException if thrown by underlying code.
+	 * @throws URISyntaxException if thrown by underlying code.
+	 */
+	@Test
     void test()
             throws ParserConfigurationException, SAXException, IOException, TransformerException,
                     URISyntaxException {

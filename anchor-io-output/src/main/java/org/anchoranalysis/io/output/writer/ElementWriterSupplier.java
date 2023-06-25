@@ -43,7 +43,7 @@ public interface ElementWriterSupplier<T> {
      * Gets/creates the {@link ElementWriter} to be used for an output.
      *
      * @return the element writer
-     * @throws OutputWriteFailedException
+     * @throws OutputWriteFailedException if the operation cannot succeed successfully.
      */
     ElementWriter<T> get() throws OutputWriteFailedException;
 }
