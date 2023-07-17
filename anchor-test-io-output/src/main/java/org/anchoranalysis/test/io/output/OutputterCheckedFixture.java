@@ -37,9 +37,21 @@ import org.anchoranalysis.io.output.outputter.OutputterChecked;
 import org.anchoranalysis.io.output.path.prefixer.PathPrefixerContext;
 import org.anchoranalysis.io.output.path.prefixer.PathPrefixerException;
 
+/**
+ * A fixture that implements a basic implementation of a {@link OutputterChecked}.
+ *
+ * @author Owen Feehan
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class OutputterCheckedFixture {
 
+    /**
+     * Creates with default empty values.
+     *
+     * @return a newly created outputter, as derived with default values.
+     * @throws BindFailedException when an outputter cannot be successfully bound to an output
+     *     directory.
+     */
     public static OutputterChecked create() throws BindFailedException {
         return createFrom(
                 OutputManagerFixture.createOutputManager(Optional.empty(), Optional.empty()));
@@ -63,6 +75,7 @@ public class OutputterCheckedFixture {
      * to the rules in {@code outputsEnabled}.
      *
      * @param outputManager the output-manager to create from.
+     * @param outputsEnabled which outputs have enabled or not.
      * @return a newly created outputter, as derived from {@code outputManager}.
      * @throws BindFailedException when an outputter cannot be successfully bound to an output
      *     directory.
