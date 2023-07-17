@@ -25,6 +25,11 @@
  */
 package org.anchoranalysis.io.output.enabled.single;
 
+/**
+ * An interface for any class that defines whether a top-level output is enabled.
+ *
+ * @author Owen Feehan
+ */
 public interface SingleLevelOutputEnabled {
 
     /**

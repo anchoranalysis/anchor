@@ -28,6 +28,11 @@ package org.anchoranalysis.io.output.namestyle;
 
 import java.util.Optional;
 
+/**
+ * Outputs a file-name involving a string suffix.
+ *
+ * @author Owen Feehan
+ */
 public class StringSuffixOutputNameStyle extends IndexableOutputNameStyle {
 
     /** */
@@ -35,10 +40,17 @@ public class StringSuffixOutputNameStyle extends IndexableOutputNameStyle {
 
     private String outputFormatString;
 
+    /** Empty constructor, as needed for deserialization. */
     public StringSuffixOutputNameStyle() {
         // Here as the empty constructor is needed for deserialization
     }
 
+    /**
+     * Creates with an output-name.
+     *
+     * @param outputName the output-name (without any prefix).
+     * @param prefix an optional prefix that is prepended to {@code outputName}.
+     */
     public StringSuffixOutputNameStyle(String outputName, Optional<String> prefix) {
         super(outputName);
         if (prefix.isPresent()) {
@@ -63,7 +75,7 @@ public class StringSuffixOutputNameStyle extends IndexableOutputNameStyle {
         return outputFormatString;
     }
 
-    private StringSuffixOutputNameStyle(StringSuffixOutputNameStyle src) {
-        super(src);
+    private StringSuffixOutputNameStyle(StringSuffixOutputNameStyle source) {
+        super(source);
     }
 }

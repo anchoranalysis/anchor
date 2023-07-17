@@ -29,7 +29,8 @@ package org.anchoranalysis.io.output.namestyle;
 import com.google.common.base.Preconditions;
 
 /**
- * Outputs a file-name involving an integer of length {@code numberDigits} with leading zeros.
+ * Outputs a file-name involving an integer suffix of length {@code numberDigits} with leading
+ * zeros.
  *
  * <p>Optionally, a prefix will be placed before this number (with an underscore to separate).
  *
@@ -42,21 +43,38 @@ public class IntegerSuffixOutputNameStyle extends IndexableOutputNameStyle {
     /** */
     private static final long serialVersionUID = 0;
 
-    // A string placed before the numberic part of the naming-style
+    /** A string placed before the numeric part of the naming-style. */
     private String prefix;
 
+    /** A fixed number of digits (prefixed with leading zeros) for the numeric part. */
     private int numberDigits;
 
+    /** Empty constructor, as needed for deserialization. */
     public IntegerSuffixOutputNameStyle() {
         // Here as the empty constructor is needed for deserialization
     }
 
+    /**
+     * Creates with an output-name and a number of digits.
+     *
+     * @param outputName the output-name.
+     * @param numberDigits a fixed number of digits (prefixed with leading zeros) for the numeric
+     *     part.
+     */
     public IntegerSuffixOutputNameStyle(String outputName, int numberDigits) {
         super(outputName);
         Preconditions.checkArgument(numberDigits > 1);
         this.numberDigits = numberDigits;
     }
 
+    /**
+     * Creates with an output-name, a prefix, and a number of digits.
+     *
+     * @param outputName the output-name.
+     * @param prefix a string placed before the numeric part of the naming-style.
+     * @param numberDigits a fixed number of digits (prefixed with leading zeros) for the numeric
+     *     part.
+     */
     public IntegerSuffixOutputNameStyle(String outputName, String prefix, int numberDigits) {
         this(outputName, numberDigits);
         this.prefix = prefix;

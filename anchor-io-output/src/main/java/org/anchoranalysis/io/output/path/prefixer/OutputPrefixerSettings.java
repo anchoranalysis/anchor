@@ -50,7 +50,7 @@ public class OutputPrefixerSettings {
     private static final char REPLACEMENT_CHARACTER = '_';
 
     // START: GETTERS AND SETTERS
-    /** A directory indicating where inputs can be located */
+    /** A directory indicating where inputs can be located. */
     @Getter private Optional<Path> outputDirectory = Optional.empty();
 
     /** A file format suggested for writing images to the file system. */
@@ -94,6 +94,11 @@ public class OutputPrefixerSettings {
         }
     }
 
+    /**
+     * Assigns a directory indicating where inputs can be located.
+     *
+     * @param outputDirectory the output-directory.
+     */
     public void assignOutputDirectory(Path outputDirectory) {
         this.outputDirectory = Optional.of(outputDirectory);
     }
@@ -131,6 +136,11 @@ public class OutputPrefixerSettings {
         this.omitExperimentIdentifier = true;
     }
 
+    /**
+     * Checks that if a path is defined as the output-directory then it must be absolute.
+     *
+     * @throws PathPrefixerException if the above conditions do not hold true.
+     */
     public void checkAbsolutePath() throws PathPrefixerException {
         if (outputDirectory.isPresent() && !outputDirectory.get().isAbsolute()) {
             throw new PathPrefixerException(

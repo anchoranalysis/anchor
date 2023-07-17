@@ -45,7 +45,7 @@ public class PathPrefixerContext {
     /**
      * Create with default parameters.
      *
-     * @throws PathPrefixerException
+     * @throws PathPrefixerException if a prefix cannot be successfully derived.
      */
     public PathPrefixerContext() throws PathPrefixerException {
         this(false, new OutputPrefixerSettings());

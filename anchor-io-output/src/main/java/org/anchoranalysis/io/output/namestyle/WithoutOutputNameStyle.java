@@ -36,6 +36,11 @@ public class WithoutOutputNameStyle extends OutputNameStyle {
 
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Creates with an output-name.
+     *
+     * @param outputName an identifier used in rules to determine if an output is enabled or not.
+     */
     public WithoutOutputNameStyle(String outputName) {
         super(outputName);
     }

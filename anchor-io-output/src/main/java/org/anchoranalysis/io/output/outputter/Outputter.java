@@ -102,7 +102,9 @@ public class Outputter {
      * A writer that performs a second-level check on which outputs occur, but writes to the
      * top-level directory.
      *
-     * @return a newly created writer checking on particular second-level otuput names.
+     * @param outputNameFirstLevel the first-level outputName with which second-level checks are
+     *     performed.
+     * @return a newly created writer checking on particular second-level output names.
      */
     public WriterRouterErrors writerSecondLevel(String outputNameFirstLevel) {
         return new WriterRouterErrors(
@@ -119,10 +121,20 @@ public class Outputter {
         return delegate.hashCode();
     }
 
+    /**
+     * General settings for outputting.
+     *
+     * @return the settings.
+     */
     public OutputWriteSettings getSettings() {
         return delegate.getSettings();
     }
 
+    /**
+     * The directory into which outputting occurs.
+     *
+     * @return a path to the directory.
+     */
     public Path getOutputDirectory() {
         return delegate.getOutputDirectory();
     }
@@ -131,6 +143,11 @@ public class Outputter {
         return delegate.toString();
     }
 
+    /**
+     * Which outputs are enabled or not enabled.
+     *
+     * @return an object indicating which outputs are enabled.
+     */
     public MultiLevelOutputEnabled outputsEnabled() {
         return delegate.getOutputsEnabled();
     }

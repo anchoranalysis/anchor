@@ -40,7 +40,6 @@ import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 import org.anchoranalysis.bean.primitive.StringSet;
 import org.apache.commons.lang3.ClassUtils;
 
-
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class HelperDuplication {
 
@@ -66,7 +65,7 @@ class HelperDuplication {
             // We also copy the localization information for the new bean
             Optional<Path> localPath = bean.getLocalPath();
             if (localPath.isPresent()) {
-            	beanOut.localise(localPath.get());
+                beanOut.localise(localPath.get());
             }
             return beanOut;
 

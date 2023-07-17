@@ -30,24 +30,51 @@ import org.anchoranalysis.core.exception.combinable.AnchorCombinableException;
 import org.anchoranalysis.core.exception.friendly.AnchorFriendlyCheckedException;
 import org.anchoranalysis.core.exception.friendly.HasFriendlyErrorMessage;
 
+/**
+ * When an output could not be successfully written to the file-system.
+ *
+ * @author Owen Feehan
+ */
 public class OutputWriteFailedException extends AnchorFriendlyCheckedException {
 
     /** */
     private static final long serialVersionUID = 1036971819028250342L;
 
+    /**
+     * Creates with a message only.
+     *
+     * @param message the message.
+     */
     public OutputWriteFailedException(String message) {
         super(message);
     }
 
-    public OutputWriteFailedException(String message, HasFriendlyErrorMessage e) {
-        super(message + ": " + e.friendlyMessageHierarchy(), null);
-    }
-
-    public OutputWriteFailedException(String message, AnchorCombinableException e) {
-        super(message, e.summarize());
-    }
-
+    /**
+     * Creates with a cause only.
+     *
+     * @param cause the cause.
+     */
     public OutputWriteFailedException(Throwable cause) {
         super("", cause);
+    }
+
+    /**
+     * Creates with a message and a cause that provides a friendly error message.
+     *
+     * @param message the message (which is prefixed together with the friendly error message).
+     * @param cause a cause that provides a friendly error message.
+     */
+    public OutputWriteFailedException(String message, HasFriendlyErrorMessage cause) {
+        super(message + ": " + cause.friendlyMessageHierarchy(), null);
+    }
+
+    /**
+     * Creates with a message and a cause that can be combined with others in summary form.
+     *
+     * @param message the message (which is prefixed together with the combiend error message).
+     * @param cause a cause that provides a summary, when combined with others.
+     */
+    public OutputWriteFailedException(String message, AnchorCombinableException cause) {
+        super(message, cause.summarize());
     }
 }

@@ -37,20 +37,26 @@ import java.util.Optional;
  */
 public abstract class IndexableOutputNameStyle extends OutputNameStyle {
 
-    private static final long serialVersionUID = -2393013576294162543L;
+    private static final long serialVersionUID = 01L;
 
+    /** Empty constructor, as needed for deserialization. */
     protected IndexableOutputNameStyle() {
         // Here as the empty constructor is needed for deserialization
     }
 
+    /**
+     * Creates with an output-name.
+     *
+     * @param outputName the output-name.
+     */
     protected IndexableOutputNameStyle(String outputName) {
         super(outputName);
     }
 
     /**
-     * Copy constructor
+     * Copy constructor.
      *
-     * @param source source
+     * @param source source.
      */
     protected IndexableOutputNameStyle(IndexableOutputNameStyle source) {
         super(source.getOutputName());
@@ -90,10 +96,17 @@ public abstract class IndexableOutputNameStyle extends OutputNameStyle {
      * Constructs a file name from the output format string and an index.
      *
      * @param index the index, unique within a set of filenames being outputted.
+     * @param outputFormatString a format-string as recognized by {@link String#format} that expects
+     *     a single string element (what will be populated by {@code index}) to form the name.
      * @return the file-name as a string.
      */
     protected abstract String filenameFromOutputFormatString(
             String outputFormatString, String index);
 
+    /**
+     * A format-string as recognized by {@link String#format} that expects a single string element.
+     *
+     * @return the format-string.
+     */
     protected abstract String outputFormatString();
 }

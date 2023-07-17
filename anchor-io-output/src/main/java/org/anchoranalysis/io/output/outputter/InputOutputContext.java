@@ -139,6 +139,11 @@ public interface InputOutputContext {
                 .orElse(this);
     }
 
+    /**
+     * Creates a {@link OperationContext} based upon the state in this class.
+     *
+     * @return a newly created {@link OperationContext}.
+     */
     default OperationContext operationContext() {
         return new OperationContext(getExecutionTimeRecorder(), getLogger());
     }

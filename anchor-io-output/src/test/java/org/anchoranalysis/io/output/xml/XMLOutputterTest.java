@@ -42,25 +42,24 @@ import org.xml.sax.SAXException;
 
 /**
  * Outputs a XML file to the file-system and reopens-it, checking equality.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
-class XmlOutputterTest {
+class XMLOutputterTest {
 
-	/** The directory in which the test creates files. */
-	@TempDir Path directory;
+    /** The directory in which the test creates files. */
+    @TempDir Path directory;
 
-	/**
-	 * Checks outputting a XML file.
-	 * 
-	 * @throws ParserConfigurationException if thrown by underlying code.
-	 * @throws SAXException if thrown by underlying code.
-	 * @throws IOException if thrown by underlying code.
-	 * @throws TransformerException if thrown by underlying code.
-	 * @throws URISyntaxException if thrown by underlying code.
-	 */
-	@Test
+    /**
+     * Checks outputting a XML file.
+     *
+     * @throws ParserConfigurationException if thrown by underlying code.
+     * @throws SAXException if thrown by underlying code.
+     * @throws IOException if thrown by underlying code.
+     * @throws TransformerException if thrown by underlying code.
+     * @throws URISyntaxException if thrown by underlying code.
+     */
+    @Test
     void test()
             throws ParserConfigurationException, SAXException, IOException, TransformerException,
                     URISyntaxException {
@@ -71,7 +70,7 @@ class XmlOutputterTest {
 
         Document docIn = loader.openXmlFromTestPath(testPathIn);
 
-        XMLWriter.writeXmlToFile(docIn, pathOut);
+        XMLWriter.writeXMLToFile(docIn, pathOut);
 
         Document docOut = TestLoader.openXmlAbsoluteFilePath(pathOut);
 

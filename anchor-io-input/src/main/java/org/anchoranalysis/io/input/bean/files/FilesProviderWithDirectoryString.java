@@ -93,6 +93,6 @@ public abstract class FilesProviderWithDirectoryString extends FilesProviderWith
     }
 
     private Optional<Path> calculateLocalRoot() {
-        return getLocalPath().flatMap( path -> Optional.ofNullable(path.getParent()) );
+        return getLocalPath().flatMap(path -> Optional.ofNullable(path.getParent()));
     }
 }

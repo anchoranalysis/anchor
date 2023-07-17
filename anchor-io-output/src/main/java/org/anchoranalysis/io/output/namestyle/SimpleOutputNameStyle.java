@@ -28,10 +28,20 @@ package org.anchoranalysis.io.output.namestyle;
 
 import java.util.Optional;
 
+/**
+ * A constant filename that is identical to the output-name plus extension.
+ *
+ * @author Owen Feehan
+ */
 public class SimpleOutputNameStyle extends OutputNameStyle {
 
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Creates with an output-name.
+     *
+     * @param outputName an identifier used in rules to determine if an output is enabled or not.
+     */
     public SimpleOutputNameStyle(String outputName) {
         super(outputName);
     }

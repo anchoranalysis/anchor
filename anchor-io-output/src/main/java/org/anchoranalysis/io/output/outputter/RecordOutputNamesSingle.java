@@ -29,11 +29,16 @@ import lombok.AllArgsConstructor;
 import org.anchoranalysis.io.output.enabled.single.SingleLevelOutputEnabled;
 import org.anchoranalysis.io.output.recorded.RecordedOutputs;
 
+/**
+ * Records which output-names are written while delegating to a @{link SingleLevelOutputEnabled}.
+ *
+ * @author Owen Feehan
+ */
 @AllArgsConstructor
 class RecordOutputNamesSingle implements SingleLevelOutputEnabled {
 
     // START REQUIRED ARGUMENTS
-    /** What all outputs that this write processes are added to. */
+    /** What all operations are delegated to. */
     private final SingleLevelOutputEnabled outputEnabled;
 
     /** What all outputs that this write processes are added to. */

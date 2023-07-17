@@ -80,6 +80,8 @@ class LazyDirectoryCreatorPool {
      * @param opBefore an operation to execute before creating the directory (if it doesn't already
      *     exist)
      * @return either an existing element if it exists or a newly created element
+     * @throws GetOperationFailedException if unable to successfully derive a path for the output
+     *     directory, if it needs to be created newly.
      */
     public LazyDirectoryCreator getOrCreate(
             Path directory, Optional<WriterExecuteBeforeEveryOperation> opBefore)

@@ -33,6 +33,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * Base class for an approach to generate a filename for an output.
+ *
+ * @author Owen Feehan
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 public abstract class OutputNameStyle implements Serializable {
@@ -55,7 +60,7 @@ public abstract class OutputNameStyle implements Serializable {
     /**
      * Deep copy the current object.
      *
-     * @return a newly created copy
+     * @return a newly created copy.
      */
     public abstract OutputNameStyle duplicate();
 }

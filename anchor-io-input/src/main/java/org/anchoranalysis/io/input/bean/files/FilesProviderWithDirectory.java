@@ -98,13 +98,13 @@ public abstract class FilesProviderWithDirectory extends FilesProvider {
         if (path.isAbsolute()) {
             return path;
         } else {
-        	Optional<Path> localPath = getLocalPath();
-        	if (localPath.isPresent()) {
-	            Path parent = localPath.get().getParent();
-	            return parent.resolve(path);
-        	} else {
-        		return path.toAbsolutePath();
-        	}
+            Optional<Path> localPath = getLocalPath();
+            if (localPath.isPresent()) {
+                Path parent = localPath.get().getParent();
+                return parent.resolve(path);
+            } else {
+                return path.toAbsolutePath();
+            }
         }
     }
 }

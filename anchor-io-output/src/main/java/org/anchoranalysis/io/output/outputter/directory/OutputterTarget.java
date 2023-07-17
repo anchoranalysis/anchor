@@ -82,19 +82,29 @@ public class OutputterTarget {
                 directory.bindToSubdirectory(prefixToAssign.getDirectory()), prefixToAssign);
     }
 
+    /**
+     * Parent directory creator to be executed before any derived sub-directories.
+     *
+     * @return an operation writer, if it exists.
+     */
     public Optional<WriterExecuteBeforeEveryOperation> getParentDirectoryCreator() {
         return directory.getParentDirectoryCreator();
     }
 
     /**
      * The directory into which outputting occurs.
-     * 
+     *
      * @return a path to the directory.
      */
     public Path getDirectory() {
         return prefix.getDirectory();
     }
 
+    /**
+     * Creates the path into which output is written.
+     *
+     * @return an instance can determine the direction into which output is written.
+     */
     public PathCreator pathCreator() {
         return prefix;
     }

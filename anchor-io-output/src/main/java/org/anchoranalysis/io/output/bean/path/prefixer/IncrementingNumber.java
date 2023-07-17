@@ -56,6 +56,11 @@ public class IncrementingNumber extends PathPrefixerAvoidResolve {
     @BeanField @Getter @Setter private int numberDigits = 4;
     // END BEAN PROPERTIES
 
+    /**
+     * Creates with a prefix.
+     *
+     * @param prefix a string prefixed to each output-path.
+     */
     public IncrementingNumber(String prefix) {
         super(prefix);
     }

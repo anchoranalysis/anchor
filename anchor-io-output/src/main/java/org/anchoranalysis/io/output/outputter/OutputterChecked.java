@@ -223,7 +223,7 @@ public class OutputterChecked {
 
     /**
      * The directory into which outputting occurs.
-     * 
+     *
      * @return a path to the directory.
      */
     public Path getOutputDirectory() {
@@ -245,6 +245,7 @@ public class OutputterChecked {
      * Like {@link #makeOutputPath(String)} but additionally adds an extension.
      *
      * @param suffixWithoutExtension the suffix for the path (without any extension).
+     * @param extension a file extension (without a leading period).
      * @param fallbackSuffix if neither a {@code prefix} is defined nor a {@code suffix}, then this
      *     provides a suffix to use so a file isn't only an extension.
      * @return a newly created absolute path, combining directory, prefix (if it exists), suffix and

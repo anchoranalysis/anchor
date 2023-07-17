@@ -72,6 +72,8 @@ public class RecordedOutputsWithRules {
      *
      * @param recordedOutputs where output-names are recorded as they are written / queried
      * @param defaultRules default rules for which outputs are enabled.
+     * @param delta additional output-names to enable or disable from an existing set of
+     *     output-enabled rules.
      */
     public RecordedOutputsWithRules(
             MultiLevelRecordedOutputs recordedOutputs,
