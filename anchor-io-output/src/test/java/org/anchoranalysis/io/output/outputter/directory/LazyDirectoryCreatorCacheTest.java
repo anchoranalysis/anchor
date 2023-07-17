@@ -45,16 +45,14 @@ import org.junit.jupiter.api.io.TempDir;
 class LazyDirectoryCreatorCacheTest {
 
     /** The directory in which the test creates files. */
-	@TempDir Path directory;
+    @TempDir Path directory;
 
     private static final String RELATIVE_PATH_DIRECT = "path1";
     private static final String RELATIVE_PATH_NESTED = "path1/nested1";
 
     private LazyDirectoryCreatorPool directoryCreator;
 
-    /**
-     * Sets up the test.
-     */
+    /** Sets up the test. */
     @BeforeEach
     void setup() {
         directoryCreator =
@@ -63,7 +61,7 @@ class LazyDirectoryCreatorCacheTest {
 
     /**
      * Tests a child element that is a direct descendant.
-     * 
+     *
      * @throws GetOperationFailedException if the exception throws it.
      */
     @Test
@@ -75,7 +73,7 @@ class LazyDirectoryCreatorCacheTest {
 
     /**
      * Tests a child element that is a non-direct descendant.
-     * 
+     *
      * @throws GetOperationFailedException if the exception throws it.
      */
     @Test

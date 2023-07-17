@@ -40,6 +40,11 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.serialize.XMLParser;
 import org.w3c.dom.Document;
 
+/**
+ * Writes XML in the form of a {@link Document} to the file-system.
+ *
+ * @author Owen Feehan
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class XMLWriter {
 
@@ -48,9 +53,9 @@ public class XMLWriter {
      *
      * @param document the XML-document
      * @param path the path to write to on the file-system
-     * @throws IOException
+     * @throws IOException if any error occurs writing the XML file to the file-system.
      */
-    public static void writeXmlToFile(Document document, Path path) throws IOException {
+    public static void writeXMLToFile(Document document, Path path) throws IOException {
         try {
             Transformer transformer = createTransformer();
 

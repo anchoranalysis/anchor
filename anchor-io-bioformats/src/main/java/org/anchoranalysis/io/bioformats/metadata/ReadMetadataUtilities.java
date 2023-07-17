@@ -129,7 +129,9 @@ public class ReadMetadataUtilities {
 
         Optional<Date> date =
                 readTagsUntilPresent(
-                        directory, tagsAcqusitionDate, (dir,tag) -> ReadMetadataUtilities.readDate(dir,tag));
+                        directory,
+                        tagsAcqusitionDate,
+                        (dir, tag) -> ReadMetadataUtilities.readDate(dir, tag));
 
         // Map to a time-zone
         return date.map(
@@ -141,7 +143,10 @@ public class ReadMetadataUtilities {
 
     private static ZoneId timeZoneOffset(Directory directory, int[] tagsTimezoneOffset) {
         Optional<Integer> zoneOffset =
-                readTagsUntilPresent(directory, tagsTimezoneOffset, (dir, tag) -> ReadMetadataUtilities.readInt(dir, tag));
+                readTagsUntilPresent(
+                        directory,
+                        tagsTimezoneOffset,
+                        (dir, tag) -> ReadMetadataUtilities.readInt(dir, tag));
         if (zoneOffset.isPresent()) {
             return ZoneId.ofOffset("UTC", ZoneOffset.ofHours(zoneOffset.get()));
         } else {

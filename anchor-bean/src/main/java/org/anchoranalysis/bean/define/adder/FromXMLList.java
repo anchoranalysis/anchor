@@ -29,7 +29,6 @@ package org.anchoranalysis.bean.define.adder;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
-
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.AnchorBean;
@@ -63,13 +62,13 @@ public class FromXMLList extends DefineAdderBean {
 
     @Override
     public void addTo(Define define) throws DefineAddException {
-    	
-    	Optional<Path> path = resolvedPath();
-    	
-    	if (!path.isPresent()) {
-    		throw new DefineAddException("No path is associated with this bean");
-    	}
-    	
+
+        Optional<Path> path = resolvedPath();
+
+        if (!path.isPresent()) {
+            throw new DefineAddException("No path is associated with this bean");
+        }
+
         try {
             List<NamedBean<AnchorBean<?>>> beans = loadList(path.get());
 
@@ -79,7 +78,7 @@ public class FromXMLList extends DefineAdderBean {
 
             define.addAll(beans);
         } catch (BeanXMLException e) {
-        	
+
             // We embed any XML exception in the file-name from where it originated
             throw new DefineAddException(new LocalisedBeanException(path.get().toString(), e));
         }
@@ -92,7 +91,7 @@ public class FromXMLList extends DefineAdderBean {
     }
 
     private Optional<Path> resolvedPath() {
-		return BeanPathCalculator.pathFromBean(this, nameWithExtension());
+        return BeanPathCalculator.pathFromBean(this, nameWithExtension());
     }
 
     private List<NamedBean<AnchorBean<?>>> loadList(Path path) throws BeanXMLException {

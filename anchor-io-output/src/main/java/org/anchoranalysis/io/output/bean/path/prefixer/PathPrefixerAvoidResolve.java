@@ -68,6 +68,11 @@ public abstract class PathPrefixerAvoidResolve extends PathPrefixer {
     // Caches the calculation
     private Path resolvedRoot = null;
 
+    /**
+     * Creates with a prefix.
+     *
+     * @param prefix a string prefixed to each output-path (see property description).
+     */
     protected PathPrefixerAvoidResolve(String prefix) {
         this.prefix = prefix;
     }
@@ -115,8 +120,9 @@ public abstract class PathPrefixerAvoidResolve extends PathPrefixer {
      * @param path an input-path to match against
      * @param experimentIdentifier if defined, an identifier for the experiment, to be included in
      *     the directory root.
-     * @return a prefixer
-     * @throws PathPrefixerException
+     * @param context the path-prefixer context.
+     * @return a prefixer.
+     * @throws PathPrefixerException if a prefix cannot be successfully derived.
      */
     public DirectoryWithPrefix outFilePrefixAvoidResolve(
             NamedPath path, Optional<String> experimentIdentifier, PathPrefixerContext context)
@@ -128,17 +134,18 @@ public abstract class PathPrefixerAvoidResolve extends PathPrefixer {
     }
 
     /**
-     * Determines the out-file prefix from a path
+     * Determines the out-file prefix from a path.
      *
      * @param path path to calculate prefix from with associated descriptive-name
      * @param root root of prefix
      * @param context the path-prefixer context.
-     * @return folder/filename for prefixing
+     * @return folder/filename for prefixing.
+     * @throws PathPrefixerException if a prefix cannot be successfully derived.
      */
     public abstract DirectoryWithPrefix outFilePrefixFromPath(
             NamedPath path, Path root, PathPrefixerContext context) throws PathPrefixerException;
 
-    /** The root of the experiment for outputting files */
+    /** The root of the experiment for outputting files. */
     private Path resolveRoot(Optional<String> experimentIdentifier, PathPrefixerContext context) {
 
         if (resolvedRoot == null) {

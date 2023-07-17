@@ -118,6 +118,7 @@ public class OutputManager extends AnchorBean<OutputManager> {
      *
      * @param experimentIdentifier if defined, an identifier for the experiment, to be included in
      *     the directory root.
+     * @param recordedOutputs if defined, remembers which outputs are written or not.
      * @param outputsEnabled which outputs are enabled. This is typically provided via a call to
      *     {@link #determineEnabledOutputs(RecordedOutputsWithRules)}.
      * @param writeContext context needed for writing. This is typically provided via a call to

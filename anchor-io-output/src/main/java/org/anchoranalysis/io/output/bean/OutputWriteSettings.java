@@ -39,9 +39,6 @@ import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 import org.anchoranalysis.bean.shared.color.scheme.ColorScheme;
 import org.anchoranalysis.bean.shared.color.scheme.HSB;
 import org.anchoranalysis.bean.shared.color.scheme.Shuffle;
-import org.anchoranalysis.core.color.ColorIndex;
-import org.anchoranalysis.core.color.ColorIndexModulo;
-import org.anchoranalysis.core.exception.OperationFailedException;
 
 /**
  * Settings for how to write output, including default writers.
@@ -75,6 +72,16 @@ public class OutputWriteSettings extends AnchorBean<OutputWriteSettings> {
         initialize(defaultInstances);
     }
 
+    /**
+     * This method should be called once on this object before further calling {@link
+     * #getWriterInstance}.
+     *
+     * <p>It will setup internally a state mapping different types of writers to instances, using
+     * default values where appropriate.
+     *
+     * @param defaultInstances a map indicating defaults of different instance types.
+     * @throws BeanMisconfiguredException if an error occurs creating any type of writer.
+     */
     public void initialize(BeanInstanceMap defaultInstances) throws BeanMisconfiguredException {
 
         // A convenient place to set up our writerInstances, as it is executed once, before
@@ -93,6 +100,11 @@ public class OutputWriteSettings extends AnchorBean<OutputWriteSettings> {
         }
     }
 
+    /**
+     * Whether the method {@link #initialize} has been called yet?
+     *
+     * @return true if the above method has been called at least once, false otherwise.
+     */
     public boolean hasBeenInitialized() {
         return (writerInstances != null);
     }
@@ -112,9 +124,5 @@ public class OutputWriteSettings extends AnchorBean<OutputWriteSettings> {
     public <T> Optional<T> getWriterInstance(Class<? extends T> writerFamilyType) {
         // We look for the default instance, corresponding to the particular class
         return writerInstances.getInstanceFor(writerFamilyType);
-    }
-
-    public ColorIndex defaultColorIndexFor(int numberColors) throws OperationFailedException {
-        return new ColorIndexModulo(getDefaultColors().createList(numberColors));
     }
 }

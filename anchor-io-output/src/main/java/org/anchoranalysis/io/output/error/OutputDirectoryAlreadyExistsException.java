@@ -40,6 +40,11 @@ public class OutputDirectoryAlreadyExistsException extends AnchorFriendlyRuntime
     /** */
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Create with a message only.
+     *
+     * @param message the message.
+     */
     public OutputDirectoryAlreadyExistsException(String message) {
         super(message);
     }

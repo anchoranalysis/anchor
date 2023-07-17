@@ -65,7 +65,8 @@ public class OutputEnabledMutable implements MultiLevelOutputEnabled {
     /**
      * Creates with one or more enabled outputs.
      *
-     * @param outputNames the names of the enabled-outputs
+     * @param additionalSecond specifies the second-level outputs, when {@code enabledSecond==true}.
+     * @param outputNames the names of the enabled-outputs.
      */
     public OutputEnabledMutable(SingleLevelOutputEnabled additionalSecond, String... outputNames) {
         this(Optional.of(additionalSecond), outputNames);

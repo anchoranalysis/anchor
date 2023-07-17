@@ -30,11 +30,16 @@ import org.anchoranalysis.io.output.enabled.multi.MultiLevelOutputEnabled;
 import org.anchoranalysis.io.output.enabled.single.SingleLevelOutputEnabled;
 import org.anchoranalysis.io.output.recorded.MultiLevelRecordedOutputs;
 
+/**
+ * Records which output-names are written while delegating to a @{link MultiLevelOutputEnabled}.
+ *
+ * @author Owen Feehan
+ */
 @AllArgsConstructor
 class RecordOutputNamesMultiLevel implements MultiLevelOutputEnabled {
 
     // START REQUIRED ARGUMENTS
-    /** What all outputs that this write processes are added to. */
+    /** What all operations are delegated to. */
     private final MultiLevelOutputEnabled outputEnabled;
 
     /** What all outputs that this write processes are added to. */

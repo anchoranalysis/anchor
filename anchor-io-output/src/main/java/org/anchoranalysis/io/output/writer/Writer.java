@@ -60,7 +60,7 @@ public interface Writer {
      *     unrecorded.
      * @return an output-manager for the directory if it is allowed, otherwise {@link
      *     Optional#empty}.
-     * @throws OutputWriteFailedException
+     * @throws OutputWriteFailedException if the directory creation fails.
      */
     Optional<OutputterChecked> createSubdirectory(
             String outputName, boolean inheritOutputRulesAndRecording)
@@ -74,7 +74,7 @@ public interface Writer {
      * @param elementWriter writes the element to the filesystem.
      * @param element the element to write.
      * @return true if the output was allowed, false otherwise.
-     * @throws OutputWriteFailedException
+     * @throws OutputWriteFailedException if the write operation fails.
      */
     <T> boolean write(
             String outputName, ElementWriterSupplier<T> elementWriter, ElementSupplier<T> element)
@@ -88,7 +88,7 @@ public interface Writer {
      * @param element the element to write.
      * @param index the index.
      * @return true if the output was allowed, false otherwise.
-     * @throws OutputWriteFailedException
+     * @throws OutputWriteFailedException if the write operation fails.
      */
     <T> boolean writeWithIndex(
             IndexableOutputNameStyle outputNameStyle,
@@ -106,7 +106,7 @@ public interface Writer {
      * @param elementWriter writes the element to the filesystem.
      * @param element the element to write.
      * @return true if the output was allowed, false otherwise.
-     * @throws OutputWriteFailedException
+     * @throws OutputWriteFailedException if the write operation fails.
      */
     <T> boolean writeWithoutName(
             String outputName, ElementWriterSupplier<T> elementWriter, ElementSupplier<T> element)

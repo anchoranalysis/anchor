@@ -29,6 +29,11 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.io.output.enabled.single.SingleLevelOutputEnabled;
 
+/**
+ * Base class for operations that combines two {@link MultiLevelOutputEnabled}s.
+ *
+ * @author Owen Feehan
+ */
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class MultiLevelBinary implements MultiLevelOutputEnabled {
 
@@ -48,8 +53,23 @@ public abstract class MultiLevelBinary implements MultiLevelOutputEnabled {
         return combineSecond(enabled1.second(outputName), enabled2.second(outputName));
     }
 
+    /**
+     * Determines whether an output is enabled via a combination of the two {@link
+     * MultiLevelOutputEnabled}.
+     *
+     * @param first whether {@code enabled1} is enabled.
+     * @param second whether {@code enabled2} is enabled.
+     * @return whether the combined output is enabled.
+     */
     protected abstract boolean combine(boolean first, boolean second);
 
+    /**
+     * Builds a second-level output by combining {@code enabled1} and {@code enabled2}.
+     *
+     * @param first the {@link MultiLevelOutputEnabled} corresponding to {@code enabled1}.
+     * @param second the {@link MultiLevelOutputEnabled} corresponding to {@code enabled2}.
+     * @return the combined output.
+     */
     protected abstract SingleLevelOutputEnabled combineSecond(
             SingleLevelOutputEnabled first, SingleLevelOutputEnabled second);
 }

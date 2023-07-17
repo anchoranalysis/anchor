@@ -50,7 +50,7 @@ class BoundDirectory {
     /** A pool with a unique {@link LazyDirectoryCreator} for every directory. */
     private final LazyDirectoryCreatorPool directoryCreator;
 
-    /** Parent directory creator to be executed before any derived sub-directories */
+    /** Parent directory creator to be executed before any derived sub-directories. */
     @Getter private final Optional<WriterExecuteBeforeEveryOperation> parentDirectoryCreator;
 
     /**

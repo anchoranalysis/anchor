@@ -68,9 +68,8 @@ class MapForLabelsCreator<T> {
 
         return indexStream.collect(
                 Collectors.toMap(
-                		index -> this.inputElementForLabel(index),
-                		index -> this.outputElementForIndex(index)
-                		));
+                        index -> this.inputElementForLabel(index),
+                        index -> this.outputElementForIndex(index)));
     }
 
     private T inputElementForLabel(int index) {

@@ -26,8 +26,14 @@
 
 package org.anchoranalysis.io.output.writer;
 
+/**
+ * Interface for classes with a method that should be called before every outputting write
+ * operation.
+ *
+ * @author Owen Feehan
+ */
 public interface WriterExecuteBeforeEveryOperation {
 
-    /** Is called before every operation */
+    /** To be called before every operation. */
     public void execute();
 }
