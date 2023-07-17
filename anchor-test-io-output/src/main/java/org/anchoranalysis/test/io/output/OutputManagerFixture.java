@@ -38,9 +38,21 @@ import org.anchoranalysis.io.output.bean.path.prefixer.IncrementingNumber;
 import org.anchoranalysis.io.output.bean.path.prefixer.PathPrefixer;
 import org.anchoranalysis.io.output.bean.rules.OutputEnabledRules;
 
+/**
+ * A fixture that implements a basic implementation of a {@link OutputManager}.
+ *
+ * @author Owen Feehan
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class OutputManagerFixture {
 
+    /**
+     * Creates the {@link OutputManager} fixture.
+     *
+     * @param pathForPrefixer a path to use for the prefixer in the output-manager.
+     * @param outputEnabledRules rules that determine which outputs occur or not.
+     * @return a newly created fixture for {@link OutputManager}.
+     */
     public static OutputManager createOutputManager(
             Optional<Path> pathForPrefixer, Optional<OutputEnabledRules> outputEnabledRules) {
         OutputManager outputManager = new OutputManager();
