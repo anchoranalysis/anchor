@@ -44,6 +44,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 public abstract class ReadOptionsDelegate extends ReadOptions {
 
     // START BEAN PROPERTIES
+    /** Options can be specified to alter how an image file is read. */
     @BeanField @Getter @Setter private ReadOptions options = new Default();
     // END BEAN PROPERTIES
 
@@ -82,6 +83,11 @@ public abstract class ReadOptionsDelegate extends ReadOptions {
         return options.channelsPerByteArray(reader);
     }
 
+    /**
+     * The {@link ReadOptions} that is used as a delegate by sub-classes.
+     *
+     * @return the delegate.
+     */
     protected ReadOptions delegate() {
         return options;
     }

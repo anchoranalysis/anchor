@@ -26,6 +26,11 @@
 
 package org.anchoranalysis.io.bioformats.copyconvert.toshort;
 
+/**
+ * Convert to an <i>unsigned short</i> buffer, given an <i>signed short</i> source buffer.
+ *
+ * @author Owen Feehan
+ */
 public final class UnsignedShortFromSignedShort extends ToUnsignedShort {
 
     @Override

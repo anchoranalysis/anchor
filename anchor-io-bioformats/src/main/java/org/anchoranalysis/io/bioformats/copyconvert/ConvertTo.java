@@ -171,6 +171,18 @@ public abstract class ConvertTo<T> {
                 convert(source, channelIndexRelative, orientationCorrection, littleEndian));
     }
 
+    /**
+     * Converts a slice of single-channel into a newly created buffer of type T {@code T}.
+     *
+     * @param source source buffer containing the bytes we copy from.
+     * @param channelIndexRelative 0 if the buffer is non interleaved, or otherwise the index of the
+     *     channel among the interleaved channels.
+     * @param orientationCorrection any correction of orientation to be applied as bytes are
+     *     converted.
+     * @param littleEndian true iff the bytes in {@code source} are in little-endian order.
+     * @return the converted buffer.
+     * @throws IOException when operation is unsupported, given particular parameterization.
+     */
     protected T convert(
             ByteBuffer source,
             int channelIndexRelative,
@@ -195,12 +207,32 @@ public abstract class ConvertTo<T> {
      *
      * <p>This is kept separate to {@link #copyChangeOrientation} as it can be done slightly more
      * efficiently.
+     *
+     * @param source the buffer we copy all channels from.
+     * @param littleEndian true iff the bytes in {@code source} are in little-endian order.
+     * @param channelIndexRelative 0 if the buffer is non interleaved, or otherwise the index of the
+     *     channel among the interleaved channels.
+     * @param destination finds an appropriate destination channel for a particular
+     *     relative-channel-index.
+     * @throws IOException when the operation fails due to read or write IO problems.
      */
     protected abstract void copyKeepOrientation(
             ByteBuffer source, boolean littleEndian, int channelIndexRelative, T destination)
             throws IOException;
 
-    /** Copy the bytes, changing orientation. */
+    /**
+     * Copy the bytes, changing orientation.
+     *
+     * @param source the buffer we copy all channels from.
+     * @param littleEndian true iff the bytes in {@code source} are in little-endian order.
+     * @param channelIndexRelative 0 if the buffer is non interleaved, or otherwise the index of the
+     *     channel among the interleaved channels.
+     * @param destination finds an appropriate destination channel for a particular
+     *     relative-channel-index.
+     * @param orientationCorrection any correction of orientation to be applied as bytes are
+     *     converted.
+     * @throws IOException when the operation fails due to read or write IO problems.
+     */
     protected abstract void copyChangeOrientation(
             ByteBuffer source,
             boolean littleEndian,

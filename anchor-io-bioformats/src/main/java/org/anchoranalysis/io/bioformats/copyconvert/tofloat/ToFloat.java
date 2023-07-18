@@ -38,6 +38,7 @@ import org.anchoranalysis.io.bioformats.copyconvert.ConvertTo;
  */
 public abstract class ToFloat extends ConvertTo<FloatBuffer> {
 
+    /** Constructor populating super-class with necessary values. */
     protected ToFloat() {
         super(VoxelsUntyped::asFloat, FloatBuffer::allocate, VoxelBufferWrap::floatBuffer);
     }

@@ -32,9 +32,16 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
 
+/**
+ * Forces the <i>number of channels</i> to be a specific-value, irrespective of what bioformats
+ * infers.
+ *
+ * @author Owen Feehan
+ */
 public class ForceNumberChannels extends ReadOptionsDelegate {
 
     // START BEAN PROPERTIES
+    /** The assigned number of channels. */
     @BeanField @Positive @Getter @Setter private int numberChannels;
     // END BEAN PROPERTIES
 

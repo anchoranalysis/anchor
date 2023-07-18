@@ -34,6 +34,11 @@ import org.anchoranalysis.image.core.dimensions.OrientationChange;
 import org.anchoranalysis.image.voxel.buffer.primitive.PrimitiveConverter;
 import org.anchoranalysis.io.bioformats.copyconvert.ImageFileEncoding;
 
+/**
+ * Convert to a <i>float</i> buffer, given an <i>unsigned-byte</i> source buffer.
+ *
+ * @author Owen Feehan
+ */
 public class FloatFromUnsignedByte extends ToFloat {
 
     @Override

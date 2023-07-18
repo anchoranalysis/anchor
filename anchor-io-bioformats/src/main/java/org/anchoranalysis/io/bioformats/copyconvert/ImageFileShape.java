@@ -36,11 +36,20 @@ public class ImageFileShape {
     private final int numberChannels;
     private final int numberFrames;
 
-    /** The total number of z-slices across all frames, channels. */
+    /**
+     * The total number of z-slices across all frames, channels.
+     *
+     * @return the total number of slices.
+     */
     public int totalNumberSlices() {
         return numberFrames * imageDimensions.z() * numberChannels;
     }
 
+    /**
+     * The number of z-slices for a specific channel and frame.
+     *
+     * @return the number of z-slices.
+     */
     public int getNumberSlices() {
         return imageDimensions.z();
     }

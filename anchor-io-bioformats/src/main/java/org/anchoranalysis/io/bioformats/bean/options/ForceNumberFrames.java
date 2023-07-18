@@ -32,9 +32,16 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
 
+/**
+ * Forces the <i>number of frames</i> to be a specific-value, irrespective of what bioformats
+ * infers.
+ *
+ * @author Owen Feehan
+ */
 public class ForceNumberFrames extends ReadOptionsDelegate {
 
     // START BEAN PROPERTIES
+    /** The assigned number of frames. */
     @BeanField @Positive @Getter @Setter private int numberFrames;
     // END BEAN PROPERTIES
 

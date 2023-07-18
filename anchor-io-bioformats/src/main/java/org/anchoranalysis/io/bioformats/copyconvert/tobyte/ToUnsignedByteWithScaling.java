@@ -38,6 +38,7 @@ import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
  */
 public abstract class ToUnsignedByteWithScaling extends ToUnsignedByte {
 
+    /** The additional scaling that is applied during conversion. */
     protected final ApplyScaling scaling;
 
     /**
@@ -102,6 +103,13 @@ public abstract class ToUnsignedByteWithScaling extends ToUnsignedByte {
         }
     }
 
-    /** Extracts a value from the source-array, and apply any scaling and clamping. */
+    /**
+     * Extracts a value from the source-array, and apply any scaling and clamping.
+     *
+     * @param sourceArray the bytes from which <i>some</i> values are extracted.
+     * @param index the offset in {@code sourceArray} from which a value is read.
+     * @param littleEndian true iff the bytes in {@code source} are in little-endian order.
+     * @return the extracted value.
+     */
     protected abstract int extractScaledValue(byte[] sourceArray, int index, boolean littleEndian);
 }

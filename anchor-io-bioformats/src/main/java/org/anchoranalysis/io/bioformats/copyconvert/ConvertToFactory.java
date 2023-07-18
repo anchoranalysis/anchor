@@ -53,9 +53,28 @@ import org.anchoranalysis.io.bioformats.copyconvert.toshort.ToUnsignedShort;
 import org.anchoranalysis.io.bioformats.copyconvert.toshort.UnsignedShortFromSignedShort;
 import org.anchoranalysis.io.bioformats.copyconvert.toshort.UnsignedShortFromUnsignedShort;
 
+/**
+ * Creates a {@link ConvertTo} to match the desired voxel-type.
+ *
+ * @author Owen Feehan
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ConvertToFactory {
 
+    /**
+     * Creates a {@link ConvertTo} to match the desired voxel-type.
+     *
+     * <p>It should match both the desired target type, and the voxel-type present in the input
+     * {@code reader}.
+     *
+     * @param reader a reader whose current state contains information about the file being read.
+     * @param targetDataType the data-type voxels should be converted to.
+     * @param effectiveBitsPerPixel how many bits are used (from the total available amount) per
+     *     pixel (voxel).
+     * @return a newly created {@link ConvertTo} as matches the above.
+     * @throws CreateException if no {@link ConvertTo} can be created from the source type to
+     *     desired target type.
+     */
     public static ConvertTo<?> create( // NOSONAR
             IFormatReader reader, VoxelDataType targetDataType, int effectiveBitsPerPixel)
             throws CreateException {

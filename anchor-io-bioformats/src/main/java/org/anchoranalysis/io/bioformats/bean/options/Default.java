@@ -31,6 +31,11 @@ import java.util.List;
 import java.util.Optional;
 import loci.formats.IFormatReader;
 
+/**
+ * A default set of {@link ReadOptions} without special behavior.
+ *
+ * @author Owen Feehan
+ */
 public class Default extends ReadOptions {
 
     // START BEAN FIELDS

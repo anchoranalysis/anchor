@@ -38,6 +38,7 @@ import org.anchoranalysis.io.bioformats.copyconvert.ConvertTo;
  */
 public abstract class ToUnsignedInt extends ConvertTo<UnsignedIntBuffer> {
 
+    /** Constructor populating super-class with necessary values. */
     protected ToUnsignedInt() {
         super(
                 VoxelsUntyped::asInt,

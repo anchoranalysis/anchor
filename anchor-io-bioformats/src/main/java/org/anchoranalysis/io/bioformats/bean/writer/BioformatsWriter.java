@@ -99,6 +99,9 @@ public abstract class BioformatsWriter extends StackWriter {
     /**
      * Creates or gets an instance of {@link IFormatWriter} which dictates the file format to use
      * for writing.
+     *
+     * @return a newly created writer.
+     * @throws ImageIOException if a writer cannot be created successfully.
      */
     protected abstract IFormatWriter createWriter() throws ImageIOException;
 
