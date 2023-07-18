@@ -42,11 +42,25 @@ import org.anchoranalysis.io.bioformats.bean.options.ReadOptions;
 import org.anchoranalysis.spatial.box.Extent;
 import org.anchoranalysis.spatial.point.Point3d;
 
+/**
+ * Infers {@link Dimensions} for a particular image-file.
+ *
+ * @author Owen Feehan
+ */
 @AllArgsConstructor
 public class DimensionsCreator {
 
     private final IMetadata lociMetadata;
 
+    /**
+     * Infers the dimensions from an image file.
+     *
+     * @param reader a bioformats reader that has opened the image-file.
+     * @param readOptions further specification of how to read the image file.
+     * @param seriesIndex which series to read (zero-indexed).
+     * @return newly created {@link Dimensions}.
+     * @throws CreateException if unable to infer dimensions from the image file.
+     */
     public Dimensions apply(IFormatReader reader, ReadOptions readOptions, int seriesIndex)
             throws CreateException {
         Preconditions.checkArgument(lociMetadata != null);

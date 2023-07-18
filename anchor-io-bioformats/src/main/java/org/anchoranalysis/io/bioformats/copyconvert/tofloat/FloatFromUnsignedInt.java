@@ -36,6 +36,11 @@ import java.nio.FloatBuffer;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.image.core.dimensions.OrientationChange;
 
+/**
+ * Convert to a <i>float</i> buffer, given an <i>unsigned-int</i> source buffer.
+ *
+ * @author Owen Feehan
+ */
 @RequiredArgsConstructor
 public class FloatFromUnsignedInt extends ToFloat {
 

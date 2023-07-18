@@ -32,9 +32,15 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
 
+/**
+ * Forces the <i>bits per pixel</i> to be a specific-value, irrespective of what bioformats infers.
+ *
+ * @author Owen Feehan
+ */
 public class ForceBitsPerPixel extends ReadOptionsDelegate {
 
     // START BEAN PROPERTIES
+    /** The assigned bits per pixels. */
     @BeanField @Positive @Getter @Setter private int bitsPerPixel = 0;
     // END BEAN PROPERTIES
 

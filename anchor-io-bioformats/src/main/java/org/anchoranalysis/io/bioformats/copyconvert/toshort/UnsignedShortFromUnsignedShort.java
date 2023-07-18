@@ -28,6 +28,11 @@ package org.anchoranalysis.io.bioformats.copyconvert.toshort;
 
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 
+/**
+ * Convert to an <i>unsigned short</i> buffer, given an <i>unsigned short</i> source buffer.
+ *
+ * @author Owen Feehan
+ */
 public final class UnsignedShortFromUnsignedShort extends ToUnsignedShort {
 
     @Override

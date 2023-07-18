@@ -54,6 +54,7 @@ class FindPyramidImages {
      * @param reader the reader whose images across series are considered.
      * @return a newly created map from image-name to series index with the image - excluding any
      *     images as per above rules.
+     * @throws ImageIOException if a writer cannot be created successfully.
      */
     public static Map<String, Integer> findImagesExcluding(IFormatReader reader)
             throws ImageIOException {

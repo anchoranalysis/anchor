@@ -40,6 +40,11 @@ public class ConfigureBioformatsLogging {
 
     private static ConfigureBioformatsLogging instance;
 
+    /**
+     * A singleton instance.
+     *
+     * @return the instance.
+     */
     public static ConfigureBioformatsLogging instance() {
         if (instance == null) {
             instance = new ConfigureBioformatsLogging();

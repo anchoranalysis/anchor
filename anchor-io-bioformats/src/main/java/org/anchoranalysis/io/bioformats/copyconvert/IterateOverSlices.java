@@ -43,11 +43,14 @@ class IterateOverSlices {
     /**
      * Iterates through all the frames, channels, z-slices in whatever order the reader recommends.
      *
-     * @param dimensionsOrder
+     * @param dimensionsOrder a string as per bioformats library defining the dimension order e.g.
+     *     "XYCZT", "XYZTC" etc.
      * @param shape the shape of the dimensions of the data
+     * @param numberByteArrays the number of distinct byte arrays (possibly corresponding to
+     *     distinct channels, depending on interleaving).
      * @param channelIteration called for each unique z-slice from each channel and each frame
-     * @throws IOException
-     * @throws FormatException
+     * @throws IOException if any error occurs due to reading or writing IO.
+     * @throws FormatException if any error occurs due a file-format error.
      */
     public static void iterateDimensionsOrder(
             String dimensionsOrder,

@@ -108,6 +108,7 @@ class BioformatsOpenedRaster implements OpenedImageFile {
      * @param readOptions parameters that effect how to read the image.
      * @param calculateOrientation any correction of orientation to be applied as bytes are
      *     converted.
+     * @param timestamps timestamps and other file-attributes for the image being opened.
      */
     public BioformatsOpenedRaster(
             IFormatReader reader,

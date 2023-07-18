@@ -31,6 +31,11 @@ import loci.common.DataTools;
 import org.anchoranalysis.image.core.dimensions.OrientationChange;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedIntBuffer;
 
+/**
+ * Convert to an <i>unsigned int</i> buffer, given an <i>unsigned int</i> source buffer.
+ *
+ * @author Owen Feehan
+ */
 public class UnsignedIntFromUnsignedInt extends ToUnsignedInt {
 
     private static final int BYTES_PER_VOXEL = 4;

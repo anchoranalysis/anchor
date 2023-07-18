@@ -39,5 +39,11 @@ import org.anchoranalysis.image.core.channel.Channel;
 @FunctionalInterface
 public interface DestinationChannelForIndex {
 
+    /**
+     * Retrieves the channel corresponding to a particular index.
+     *
+     * @param index the index (beginning at 0).
+     * @return the corresponding channel.
+     */
     Channel get(int index);
 }

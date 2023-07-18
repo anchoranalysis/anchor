@@ -55,11 +55,12 @@ public class CopyConvert {
      * @param destination the destination of the copy.
      * @param targetShape the shape of the image-file to convert to (before any orientation
      *     correction).
+     * @param convertTo how to convert the source bytes to the desired target form.
      * @param readOptions Options that influence how stack is read.
      * @param orientationCorrection any correction of orientation to be applied as bytes are
      *     converted.
-     * @throws FormatException
-     * @throws IOException
+     * @throws FormatException when the operation fails due to file-format problems.
+     * @throws IOException when the operation fails due to read or write IO problems.
      */
     public static void copyAllFrames(
             IFormatReader reader,

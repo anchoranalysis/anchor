@@ -44,6 +44,7 @@ public abstract class ToUnsignedShort extends ConvertTo<UnsignedShortBuffer> {
 
     private static final int BYTES_PER_VOXEL = 2;
 
+    /** Constructor populating super-class with necessary values. */
     protected ToUnsignedShort() {
         super(
                 VoxelsUntyped::asShort,
@@ -56,6 +57,12 @@ public abstract class ToUnsignedShort extends ConvertTo<UnsignedShortBuffer> {
         return true;
     }
 
+    /**
+     * Converts a value retrieved from the source buffer to the destination form.
+     *
+     * @param value the value retrieved from the source buffer.
+     * @return the converted value in the form to match the destination.
+     */
     protected abstract short convertValue(short value);
 
     @Override
