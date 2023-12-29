@@ -36,7 +36,7 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
 
 /**
- * Creates and starts a {@link OutputSequence} with a particular generator and context.
+ * Creates and starts an output-seqience with a particular generator and context.
  *
  * <p>This usually occurs in a subdirectory (relative to {@link #outputter}, but not necessarily.
  *
