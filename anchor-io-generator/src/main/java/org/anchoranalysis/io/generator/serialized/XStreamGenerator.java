@@ -33,6 +33,12 @@ import org.anchoranalysis.core.serialize.XStreamSerializer;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
+/**
+ * A generator that serialized using the <a href="https://x-stream.github.io/">XStream library</a>
+ * and format.
+ *
+ * @param <T> iteration-type
+ */
 public class XStreamGenerator<T> extends SerializedGenerator<T> {
 
     @Override

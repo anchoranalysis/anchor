@@ -36,6 +36,11 @@ import org.anchoranalysis.io.generator.OneStageGenerator;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
+/**
+ * A generator that writes the contents of a {@link String} to the file-system as text-file.
+ *
+ * @author Owen Feehan
+ */
 @NoArgsConstructor
 public class StringGenerator extends OneStageGenerator<String> {
 
@@ -44,7 +49,7 @@ public class StringGenerator extends OneStageGenerator<String> {
             throws OutputWriteFailedException {
 
         try {
-            WriteStringToFile.apply(element, filePath);
+            WriteStringToFile.writeTextFile(element, filePath);
         } catch (IOException e) {
             throw new OutputWriteFailedException(e);
         }

@@ -45,6 +45,6 @@ public class ImageLabelAnnotationWriter implements AnnotationWriter<ImageLabelAn
 
         DirectoryCreator.createNecessaryDirectories(path);
 
-        WriteStringToFile.apply(annotation.getLabel(), path);
+        WriteStringToFile.writeTextFile(annotation.getLabel(), path);
     }
 }

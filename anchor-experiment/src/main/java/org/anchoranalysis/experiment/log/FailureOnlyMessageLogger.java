@@ -84,7 +84,7 @@ public class FailureOnlyMessageLogger implements StatefulMessageLogger {
                     MessageLoggerHelper.createOutput(outputter, outputName),
                     output -> {
                         output.start();
-                        output.getWriter().append(message);
+                        output.getWriter().get().append(message);
                         output.end();
                     });
 

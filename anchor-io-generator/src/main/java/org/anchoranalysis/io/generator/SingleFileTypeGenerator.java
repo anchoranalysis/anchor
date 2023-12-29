@@ -44,6 +44,17 @@ import org.anchoranalysis.io.output.writer.ElementOutputter;
  */
 public abstract class SingleFileTypeGenerator<T, S> implements TransformingGenerator<T, S> {
 
+    /**
+     * Write generated content for {code element} to the file {@code filePath}.
+     *
+     * <p>This function deliberately leaves ambiguity over what occurs if a file already exists at
+     * {@code filePath}.
+     *
+     * @param element element to be assigned and then transformed.
+     * @param settings settings for outputting.
+     * @param filePath the path to the file to write to.
+     * @throws OutputWriteFailedException if the content cannot be written successfully.
+     */
     public abstract void writeToFile(T element, OutputWriteSettings settings, Path filePath)
             throws OutputWriteFailedException;
 
@@ -53,7 +64,7 @@ public abstract class SingleFileTypeGenerator<T, S> implements TransformingGener
      * @param settings settings for outputting.
      * @param logger logger for warning for information messages when outputting.
      * @return the file extension (without leading period) to be used for outputting.
-     * @throws OperationFailedException
+     * @throws OperationFailedException if unable to select a file-extension.
      */
     public abstract String selectFileExtension(
             OutputWriteSettings settings, Optional<Logger> logger) throws OperationFailedException;

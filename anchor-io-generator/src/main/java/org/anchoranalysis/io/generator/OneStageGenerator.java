@@ -27,6 +27,15 @@ package org.anchoranalysis.io.generator;
 
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
+/**
+ * A {@link SingleFileTypeGenerator} that does not transform an element before generating.
+ *
+ * <p>This bundles some simpler form of {@link SingleFileTypeGenerator}.
+ *
+ * @author Owen Feehan
+ * @param <T> iteration-type
+ * @param <S> type after any necessary preprocessing
+ */
 public abstract class OneStageGenerator<T> extends SingleFileTypeGenerator<T, T> {
 
     @Override

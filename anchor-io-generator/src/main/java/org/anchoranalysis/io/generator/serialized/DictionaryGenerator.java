@@ -38,7 +38,7 @@ import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /**
- * Writes the contents of a {@link Dictionary} to the file-system as XML.
+ * A generator that writes the contents of a {@link Dictionary} to the file-system as XML.
  *
  * @author Owen Feehan
  */

@@ -33,6 +33,15 @@ import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.io.generator.OneStageGenerator;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 
+/**
+ * A generator that writes <i>binary serialized files</i> to the file-system.
+ *
+ * <p>These files are in the <a
+ * href="https://docs.oracle.com/javase/6/docs/platform/serialization/spec/protocol.html">Java
+ * serialization format</a>.
+ *
+ * @param <T> iteration-type
+ */
 @AllArgsConstructor
 public abstract class SerializedGenerator<T> extends OneStageGenerator<T> {
 
@@ -42,6 +51,12 @@ public abstract class SerializedGenerator<T> extends OneStageGenerator<T> {
                 + extensionSuffix(settings);
     }
 
-    /** Appended to the standard "serialized" extension, to form the complete extension */
+    /**
+     * Appended to the standard "serialized" extension, to form the complete extension.
+     *
+     * @param outputWriteSettings the associated {@link OutputWriteSettings}.
+     * @return the suffix for the extension including any leading period, when appropriate. This may
+     *     be the empty string if no suffix exists.
+     */
     protected abstract String extensionSuffix(OutputWriteSettings outputWriteSettings);
 }

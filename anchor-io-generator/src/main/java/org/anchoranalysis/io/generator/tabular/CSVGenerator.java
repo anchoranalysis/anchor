@@ -34,6 +34,11 @@ import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.io.generator.OneStageGenerator;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 
+/**
+ * A generator that writes the contents of a CSV file to the file-system.
+ *
+ * @param <T> iteration-type
+ */
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class CSVGenerator<T> extends OneStageGenerator<T> {
 
