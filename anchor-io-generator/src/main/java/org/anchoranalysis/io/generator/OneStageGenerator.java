@@ -34,7 +34,6 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
  *
  * @author Owen Feehan
  * @param <T> iteration-type
- * @param <S> type after any necessary preprocessing
  */
 public abstract class OneStageGenerator<T> extends SingleFileTypeGenerator<T, T> {
 
