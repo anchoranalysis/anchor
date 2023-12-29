@@ -33,14 +33,23 @@ import java.nio.file.Path;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
+/** Writes a string to a text file. */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class WriteStringToFile {
 
-    public static void apply(String element, Path filePath) throws IOException {
+    /**
+     * Creates a new text-file at {@code filePath} whose contents are {@code contents}.
+     *
+     * @param contents successive characters that will be written to the text-file.
+     * @param filePath the path of the text-file, which will be overwritten if it already exists.
+     * @throws IOException if the file already exists and is a directory, or if it cannot be
+     *     created.
+     */
+    public static void writeTextFile(String contents, Path filePath) throws IOException {
         FileWriter outFile = new FileWriter(filePath.toFile());
         PrintWriter out = new PrintWriter(outFile);
 
-        out.println(element);
+        out.println(contents);
 
         out.close();
     }

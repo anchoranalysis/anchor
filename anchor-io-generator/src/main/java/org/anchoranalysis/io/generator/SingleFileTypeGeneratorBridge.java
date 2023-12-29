@@ -48,7 +48,13 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 public class SingleFileTypeGeneratorBridge<S, T, V> extends SingleFileTypeGenerator<T, S> {
 
     // START REQUIRED ARGUMENTS
+    /**
+     * Another generator that is ultimately called for each element after transforming an element
+     * with {@code elementBridge}.
+     */
     private final SingleFileTypeGenerator<V, S> delegate;
+
+    /** Transforms an element before passing it to {@code delegate}. */
     private final CheckedFunction<T, V, ? extends Throwable> elementBridge;
     // END REQUIRED ARGUMENTS
 

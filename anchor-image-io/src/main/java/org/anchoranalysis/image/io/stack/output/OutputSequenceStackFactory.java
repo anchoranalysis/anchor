@@ -31,7 +31,6 @@ import org.anchoranalysis.core.identifier.provider.NamedProvider;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.stack.output.generator.StackGenerator;
 import org.anchoranalysis.io.generator.collection.NamedProviderOutputter;
-import org.anchoranalysis.io.generator.sequence.OutputSequence;
 import org.anchoranalysis.io.generator.sequence.OutputSequenceFactory;
 import org.anchoranalysis.io.generator.sequence.OutputSequenceIncrementing;
 import org.anchoranalysis.io.generator.sequence.OutputSequenceIndexed;
@@ -40,7 +39,7 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
 
 /**
- * Creates {@link OutputSequence} of different kinds for writing stacks to a directory.
+ * Creates output-sequences of different kinds for writing stacks to a directory.
  *
  * @author Owen Feehan
  */

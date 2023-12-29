@@ -34,6 +34,12 @@ import java.nio.file.Path;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
+/**
+ * Generator that writes an element to the file-system using the Java {@link ObjectOutputStream}
+ * format.
+ *
+ * @param <T> iteration-type (which must be serializable)
+ */
 public class ObjectOutputStreamGenerator<T extends Serializable> extends SerializedGenerator<T> {
 
     @Override

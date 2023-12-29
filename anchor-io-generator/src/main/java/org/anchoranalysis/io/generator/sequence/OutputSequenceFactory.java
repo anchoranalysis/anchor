@@ -40,6 +40,7 @@ import org.anchoranalysis.io.output.outputter.OutputterChecked;
  *
  * <p>This usually occurs in a subdirectory (relative to {@link #outputter}, but not necessarily.
  *
+ * @param <T> element-type for generator (that can also be iterated over)
  * @author Owen Feehan
  */
 @AllArgsConstructor
@@ -88,6 +89,18 @@ public class OutputSequenceFactory<T> {
         return incrementingByOne(pattern);
     }
 
+    /**
+     * Writes elements (indexed by integers) to {@code directory}, without any order in the
+     * sequence.
+     *
+     * <p>Each index must be unique.
+     *
+     * <p>The eventual filename written becomes {@code $prefix$index.$extension}.
+     *
+     * @param pattern how the output of the sequence looks on the file-system.
+     * @return a newly created sequence
+     * @throws OutputWriteFailedException if any outputting cannot be successfully completed.
+     */
     public OutputSequenceIndexed<T, Integer> indexedWithInteger(OutputPatternIntegerSuffix pattern)
             throws OutputWriteFailedException {
         return new OutputSequenceIndexed<>(bind(pattern));

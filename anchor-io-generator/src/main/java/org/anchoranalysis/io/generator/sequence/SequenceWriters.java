@@ -54,6 +54,7 @@ class SequenceWriters {
     private final OutputPattern pattern;
     // END: REQUIRED ARGUMENTS
 
+    /** The associated writers, if they exist. */
     @Getter private Optional<RecordingWriters> writers = Optional.empty();
 
     public void initialize() throws InitializeException {
@@ -83,21 +84,26 @@ class SequenceWriters {
      * <p>This should only be called once for a sequence, as otherwise an existing element will be
      * overwritten.
      *
-     * @param <T>
-     * @param generator
-     * @param element
-     * @throws OutputWriteFailedException
+     * @param <T> the type of element to be written
+     * @param writer the writer.
+     * @param element the element.
+     * @throws OutputWriteFailedException if any error occurs writing the element.
      */
-    public <T> void writeWithoutName(ElementWriterSupplier<T> generator, ElementSupplier<T> element)
+    public <T> void writeWithoutName(ElementWriterSupplier<T> writer, ElementSupplier<T> element)
             throws OutputWriteFailedException {
 
         if (isOn()) {
             multiplexSelective()
                     .writeWithoutName(
-                            pattern.getOutputNameStyle().getOutputName(), generator, element);
+                            pattern.getOutputNameStyle().getOutputName(), writer, element);
         }
     }
 
+    /**
+     * Whether the writer is enabled to be used.
+     *
+     * @return true if the writer is enabled.
+     */
     public boolean isOn() {
         return writers.isPresent();
     }

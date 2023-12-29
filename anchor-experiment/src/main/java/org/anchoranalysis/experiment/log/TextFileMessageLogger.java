@@ -101,7 +101,7 @@ public class TextFileMessageLogger implements StatefulMessageLogger {
                             fileOutput,
                             output -> {
                                 output.start();
-                                return output.getWriter();
+                                return output.getWriter().get();
                             });
         } catch (OutputDirectoryAlreadyExistsException e) {
             // Cannot write to a log file

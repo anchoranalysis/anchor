@@ -38,7 +38,7 @@ import org.anchoranalysis.io.generator.OneStageGenerator;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 
 /**
- * Writes a {@link ObjectCollection} to a HDF5 file.
+ * A generator that writes a {@link ObjectCollection} to a HDF5 file.
  *
  * @author Owen Feehan
  */

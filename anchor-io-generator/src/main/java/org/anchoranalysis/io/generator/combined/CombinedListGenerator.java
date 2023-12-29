@@ -27,9 +27,7 @@
 package org.anchoranalysis.io.generator.combined;
 
 import com.google.common.base.Preconditions;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 import lombok.NoArgsConstructor;
@@ -46,35 +44,51 @@ import org.anchoranalysis.io.output.writer.ElementOutputter;
  *
  * <p>One generator must always exist. Zero generators is never allowed.
  *
+ * <p>Each generator is associated with a unique output-name.
+ *
  * @author Owen Feehan
  * @param <T> element-type
  */
 @NoArgsConstructor
 public class CombinedListGenerator<T> implements MultipleFileTypeGenerator<T> {
 
-    private final CombinedList<T> delegate = new CombinedList<>();
+    /** The list of generators that are combined together. */
+    private final CombinedList<T> list = new CombinedList<>();
 
-    private final List<Generator<T>> list = new ArrayList<>();
-
+    /**
+     * Create from a <i>single</i> named generator.
+     *
+     * @param namedGenerator the generator with an associated name.
+     */
     public CombinedListGenerator(NameValue<Generator<T>> namedGenerator) {
         add(namedGenerator.getValue(), Optional.of(namedGenerator.getName()));
     }
 
-    public CombinedListGenerator(Stream<NameValue<Generator<T>>> namedGenerators) {
-        namedGenerators.forEach(item -> add(item.getValue(), Optional.of(item.getName())));
-        checkNonEmptyList();
-    }
-
+    /**
+     * Create from <i>multiple</i> named generators.
+     *
+     * @param generator the generators, each with an associated name.
+     */
     @SafeVarargs
     public CombinedListGenerator(Generator<T>... generator) {
         Arrays.stream(generator).forEach(gen -> add(gen, Optional.empty()));
         checkNonEmptyList();
     }
 
+    /**
+     * Create from a <i>stream</i> of named generators.
+     *
+     * @param namedGenerators the stream of generators, each with an associated name.
+     */
+    public CombinedListGenerator(Stream<NameValue<Generator<T>>> namedGenerators) {
+        namedGenerators.forEach(item -> add(item.getValue(), Optional.of(item.getName())));
+        checkNonEmptyList();
+    }
+
     @Override
     public void write(T element, OutputNameStyle outputNameStyle, ElementOutputter outputter)
             throws OutputWriteFailedException {
-        delegate.write(element, outputNameStyle, outputter);
+        list.write(element, outputNameStyle, outputter);
     }
 
     @Override
@@ -84,18 +98,15 @@ public class CombinedListGenerator<T> implements MultipleFileTypeGenerator<T> {
             IndexableOutputNameStyle outputNameStyle,
             ElementOutputter outputter)
             throws OutputWriteFailedException {
-        delegate.writeWithIndex(element, index, outputNameStyle, outputter);
+        list.writeWithIndex(element, index, outputNameStyle, outputter);
     }
 
-    public void add(String name, Generator<T> element) {
-        add(element, Optional.of(name));
+    /** Adds a generator with an optional name. */
+    private void add(Generator<T> generator, Optional<String> name) {
+        list.add(generator, name);
     }
 
-    private void add(Generator<T> element, Optional<String> name) {
-        list.add(element);
-        delegate.add(element, name);
-    }
-
+    /** Throw an exception if the list is empty. */
     private void checkNonEmptyList() {
         Preconditions.checkArgument(!list.isEmpty());
     }

@@ -84,4 +84,8 @@ class CombinedList<T> {
     public void add(Generator<T> generator, Optional<String> name) {
         list.add(new OptionalNameValue<>(name, generator));
     }
+
+    public boolean isEmpty() {
+        return list.isEmpty();
+    }
 }

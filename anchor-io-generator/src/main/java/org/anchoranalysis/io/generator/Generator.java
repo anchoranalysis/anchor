@@ -34,6 +34,6 @@ import org.anchoranalysis.io.output.writer.ElementWriter;
  * <p>The objects to be written are always a function only of the current <i>element</i>.
  *
  * @author Owen Feehan
- * @param <T> input-type for generator (that can also be iterated over)
+ * @param <T> element-type for generator (that can also be iterated over)
  */
 public interface Generator<T> extends ElementWriter<T> {}

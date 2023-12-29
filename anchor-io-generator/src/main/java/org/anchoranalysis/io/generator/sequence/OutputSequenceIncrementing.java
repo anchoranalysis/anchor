@@ -26,10 +26,8 @@
 
 package org.anchoranalysis.io.generator.sequence;
 
-import java.util.Optional;
 import org.anchoranalysis.core.functional.checked.CheckedRunnable;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
-import org.anchoranalysis.io.output.recorded.RecordingWriters;
 
 /**
  * A sequence of outputs that use the same generator, where each output increments an index by one
@@ -38,15 +36,22 @@ import org.anchoranalysis.io.output.recorded.RecordingWriters;
  * @author Owen Feehan
  * @param <T> element-type in generator
  */
-public class OutputSequenceIncrementing<T> implements OutputSequence {
+public class OutputSequenceIncrementing<T> {
 
     private OutputSequenceIndexed<T, Integer> delegate;
 
     private int iteration = 0;
 
-    public OutputSequenceIncrementing(BoundOutputter<T> parameters)
+    /**
+     * Create with an outputter.
+     *
+     * @param outputter the outputter.
+     * @throws OutputWriteFailedException if missing ingredients for outputting, or if unable to
+     *     initialize.
+     */
+    public OutputSequenceIncrementing(BoundOutputter<T> outputter)
             throws OutputWriteFailedException {
-        delegate = new OutputSequenceIndexed<>(parameters);
+        delegate = new OutputSequenceIndexed<>(outputter);
     }
 
     /**
@@ -87,15 +92,5 @@ public class OutputSequenceIncrementing<T> implements OutputSequence {
         final int iterationBefore = iteration;
         iteration++;
         return () -> delegate.add(element, iterationBefore);
-    }
-
-    @Override
-    public boolean isOn() {
-        return delegate.isOn();
-    }
-
-    @Override
-    public Optional<RecordingWriters> writers() {
-        return delegate.writers();
     }
 }

@@ -31,7 +31,6 @@ import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
-import org.anchoranalysis.io.output.recorded.RecordingWriters;
 
 /**
  * A sequence of outputs that use the same generator with non-incrementing indexes for each output.
@@ -42,7 +41,7 @@ import org.anchoranalysis.io.output.recorded.RecordingWriters;
  * @param <T> element-type in generator
  * @param <S> index-type in sequence
  */
-public class OutputSequenceIndexed<T, S> implements OutputSequence {
+public class OutputSequenceIndexed<T, S> {
 
     private final Generator<T> generator;
     private final SequenceWriters sequenceWriter;
@@ -51,7 +50,8 @@ public class OutputSequenceIndexed<T, S> implements OutputSequence {
      * Creates a non-incremental sequence of outputs.
      *
      * @param outputter parameters for the output-sequence.
-     * @throws OutputWriteFailedException
+     * @throws OutputWriteFailedException if missing ingredients for outputting, or if unable to
+     *     initialize.
      */
     OutputSequenceIndexed(BoundOutputter<T> outputter) throws OutputWriteFailedException {
 
@@ -69,11 +69,6 @@ public class OutputSequenceIndexed<T, S> implements OutputSequence {
         } catch (InitializeException e) {
             throw new OutputWriteFailedException(e);
         }
-    }
-
-    @Override
-    public boolean isOn() {
-        return sequenceWriter.isOn();
     }
 
     /**
@@ -112,10 +107,5 @@ public class OutputSequenceIndexed<T, S> implements OutputSequence {
         } else {
             this.sequenceWriter.writeWithoutName(() -> generator, () -> element);
         }
-    }
-
-    @Override
-    public Optional<RecordingWriters> writers() {
-        return sequenceWriter.writers();
     }
 }
