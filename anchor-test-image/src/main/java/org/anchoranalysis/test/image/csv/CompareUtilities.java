@@ -50,33 +50,37 @@ class CompareUtilities {
     }
 
     /**
-     * Are arrays equals?
+     * Are two arrays of strings equals?
+     * 
+     * <p>To be equal, the same number of elements must exist in both arrays, and each element must be identical.
      *
-     * @param lines1
-     * @param lines2
-     * @param ignoreFirstNumColumns
-     * @return
+     * <p>Exceptionally, an array is an {@link Optional} which can also be {@link Optional#empty} which is also considered in the comparison.
+     * 
+     * @param array1 the first array to be compared.
+     * @param array2 the second array to be compared.
+     * @param ignoreInitialElements when positive, this many of the initial array elements are omitted for consideration in the comparison. when zero, all elements are considered.
+     * @return true if all the above conditions for equality are met.
      */
     public static boolean areArraysEqual(
-            Optional<String[]> lines1, Optional<String[]> lines2, int ignoreFirstNumColumns) {
+            Optional<String[]> array1, Optional<String[]> array2, int ignoreInitialElements) {
 
-        if (!lines1.isPresent()) {
-            return !lines2.isPresent();
+        if (!array1.isPresent()) {
+            return !array2.isPresent();
         }
-        if (!lines2.isPresent()) {
-            return !lines1.isPresent();
+        if (!array2.isPresent()) {
+            return !array1.isPresent();
         }
 
-        if (lines1.get().length != lines2.get().length) {
+        if (array1.get().length != array2.get().length) {
             return false;
         }
 
-        if (ignoreFirstNumColumns > 0) {
+        if (ignoreInitialElements > 0) {
 
-            int maxInd = Math.max(lines1.get().length - ignoreFirstNumColumns, 0);
+            int maxInd = Math.max(array1.get().length - ignoreInitialElements, 0);
 
-            for (int i = ignoreFirstNumColumns; i < maxInd; i++) {
-                if (!lines1.get()[i].equals(lines2.get()[i])) {
+            for (int i = ignoreInitialElements; i < maxInd; i++) {
+                if (!array1.get()[i].equals(array2.get()[i])) {
                     return false;
                 }
             }
@@ -84,7 +88,7 @@ class CompareUtilities {
 
         } else {
             // The simple case where we don't ignore any columns
-            return ArrayUtils.isEquals(lines1.get(), lines2.get());
+            return ArrayUtils.isEquals(array1.get(), array2.get());
         }
     }
 

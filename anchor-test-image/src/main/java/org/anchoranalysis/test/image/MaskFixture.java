@@ -96,9 +96,10 @@ public class MaskFixture {
     /**
      * Creates the {@link Mask} with <b>a particular corner and a particular resolution</b>.
      *
-     * @param corner the corner
+     * @param corner the corner.
      * @param do3D if true, a 3D mask is created, otherwise 2D.
-     * @return the mask
+     * @param resolution the image-resolution for the mask.
+     * @return the mask.
      */
     public static Mask create(Point3i corner, boolean do3D, Optional<Resolution> resolution) {
         Mask mask = new Mask(BinaryVoxelsFactory.createEmptyOff(maskExtent(do3D)), resolution);
@@ -106,18 +107,41 @@ public class MaskFixture {
         return mask;
     }
 
+    /**
+     * The **size** across multiple dimensions of the mask that will be created.
+     * 
+     * @param do3D true indicates that a 3D-mask will be assessed, false rather a 2D-mask.
+     * @return the size.
+     */
     public static Extent maskExtent(boolean do3D) {
         return do3D ? ChannelFixture.MEDIUM_3D : ChannelFixture.MEDIUM_2D;
     }
 
+    /**
+     * The **width** of the mask that will be created.
+     * 
+     * @return the width.
+     */
     public static int width() {
         return BOX_EXTENT.x();
     }
 
+    /**
+     * The **height** of the mask that will be created.
+     * 
+     * @return the height.
+     */
     public static int height() {
         return BOX_EXTENT.y();
     }
 
+    
+    /**
+     * The **depth** of the mask that will be created.
+     * 
+     * @param do3D true indicates that a 3D-mask will be assessed, false rather a 2D-mask.
+     * @return the depth (always 1 for a 2D-mask).
+     */
     public static int depth(boolean do3D) {
         return do3D ? BOX_EXTENT.z() : 1;
     }

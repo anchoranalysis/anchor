@@ -115,7 +115,7 @@ public class DualComparer {
      */
     public boolean compareTwoCsvFiles(String path, CSVComparer comparer, PrintStream messageStream)
             throws CSVReaderException {
-        return comparer.areCsvFilesEqual(
+        return comparer.areCSVFilesEqual(
                 loaderImage1.resolveTestPath(path),
                 loaderImage2.resolveTestPath(path),
                 messageStream);

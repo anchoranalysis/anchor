@@ -34,6 +34,10 @@ import org.anchoranalysis.io.input.csv.CSVReader.OpenedCSVFile;
 import org.anchoranalysis.io.input.csv.CSVReaderException;
 import org.apache.commons.lang.ArrayUtils;
 
+/**
+ * Compares two CSV files to determine if they are identical or not.
+ * 
+ */
 @AllArgsConstructor
 public class CSVComparer {
 
@@ -62,13 +66,14 @@ public class CSVComparer {
      * @param path2 path to second file to compare, without any lines having been already read
      * @param messageStream if CSV files aren't equal, additional explanation messages are printed
      *     here
-     * @throws CSVReaderException if something goes wrong
+     * @throws CSVReaderException if something goes wrong.
+     * @return true iff the two files are considered equal.
      */
-    public boolean areCsvFilesEqual(Path path1, Path path2, PrintStream messageStream)
+    public boolean areCSVFilesEqual(Path path1, Path path2, PrintStream messageStream)
             throws CSVReaderException {
 
-        try (OpenedCSVFile file1 = openCsvFromFilePath(path1)) {
-            try (OpenedCSVFile file2 = openCsvFromFilePath(path2)) {
+        try (OpenedCSVFile file1 = openCSVFromFilePath(path1)) {
+            try (OpenedCSVFile file2 = openCSVFromFilePath(path2)) {
 
                 if (firstLineHeaders && !checkHeadersIdentical(file1, file2, messageStream)) {
                     return false;
@@ -107,7 +112,7 @@ public class CSVComparer {
      * @return a CSVFile object, but without any rows having been read
      * @throws CSVReaderException
      */
-    private OpenedCSVFile openCsvFromFilePath(Path filePath) throws CSVReaderException {
+    private OpenedCSVFile openCSVFromFilePath(Path filePath) throws CSVReaderException {
         CSVReader csvReader = new CSVReader(regExSeperator, firstLineHeaders);
         return csvReader.read(filePath);
     }

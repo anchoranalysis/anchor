@@ -148,13 +148,13 @@ public class WriteIntoDirectory {
     }
 
     /**
-     * Writes a list of display-stacks
+     * Writes a list of display-stacks.
      *
      * @param outputName the output-name
      * @param stacks the list of display-stacks
      * @param always2D if true, the stacks are guaranteed to always to have only one z-slice (which
      *     can influence the output format).
-     * @throws OutputWriteFailedException
+     * @throws OutputWriteFailedException if the stacks cannot be successfully written to the file-system.
      */
     public void writeList(String outputName, List<DisplayStack> stacks, boolean always2D)
             throws OutputWriteFailedException {

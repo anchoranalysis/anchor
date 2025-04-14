@@ -84,14 +84,15 @@ public class BeanInstanceMapFixture {
         return addOrReplace(StackWriter.class, tiff ? new Tiff() : new PNG());
     }
 
-    /** Removes any {@link StackWriter} that may exist. */
+    /**
+     * Removes any {@link StackWriter} that may exist in the underlying {@link BeanInstanceMap}.
+     */
     public static void removeStackWriter() {
         getOrCreateBeanFactory().getDefaultInstances().removeInstanceFor(StackWriter.class);
     }
 
     /**
-     * Ensure a {@link ImageMetadataReader} instance exists in the underlying {@link
-     * BeanInstanceMap}.
+     * Ensure a {@link ImageMetadataReader} instance exists in the underlying {@link BeanInstanceMap}.
      *
      * @return the instance, as already exists, or if newly created.
      */
@@ -100,7 +101,7 @@ public class BeanInstanceMapFixture {
     }
 
     /**
-     * Ensure a {@link Interpolator} instance exists in the underlying {@link BeanInstanceMap}.
+     * Ensure a default {@link Interpolator} instance exists in the underlying {@link BeanInstanceMap}.
      *
      * @return the instance, as already exists, or if newly created.
      */
@@ -109,7 +110,7 @@ public class BeanInstanceMapFixture {
     }
 
     /**
-     * Ensure a {@link Interpolator} instance exists in the underlying {@link BeanInstanceMap}.
+     * Ensure a specific {@link Interpolator} instance exists in the underlying {@link BeanInstanceMap}.
      *
      * @param interpolator the interpolator to add, if necessary.
      * @return the instance, as already exists, or if newly created.
@@ -132,6 +133,8 @@ public class BeanInstanceMapFixture {
      *
      * @param <T> bean-type
      * @param bean bean to check.
+     * @return the checked bean
+     * @throws AnchorFriendlyRuntimeException if the bean is misconfigured
      */
     public static <T extends AnchorBean<?>> T check(T bean) {
         try {
