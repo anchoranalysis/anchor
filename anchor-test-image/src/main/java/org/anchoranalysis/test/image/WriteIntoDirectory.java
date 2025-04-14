@@ -97,11 +97,24 @@ public class WriteIntoDirectory {
 
     private ObjectAsMaskGenerator generatorSingleObject = new ObjectAsMaskGenerator();
 
+    /**
+     * Writes a DisplayStack to the output directory.
+     *
+     * @param outputName The name to use for the output file.
+     * @param stack The DisplayStack to write.
+     */
     public void writeStack(String outputName, DisplayStack stack) {
         setupOutputterIfNecessary();
         outputter.writerPermissive().write(outputName, () -> generatorStack, () -> stack);
     }
 
+    /**
+     * Writes an ObjectMask to the output directory.
+     *
+     * @param outputName The name to use for the output file.
+     * @param object The ObjectMask to write.
+     * @throws SetOperationFailedException If the operation fails.
+     */
     public void writeObject(String outputName, ObjectMask object)
             throws SetOperationFailedException {
         setupOutputterIfNecessary();
@@ -110,7 +123,7 @@ public class WriteIntoDirectory {
 
     /**
      * Writes the outline of objects on a blank RGB image, inferring dimensions of the image to
-     * center the object
+     * center the object.
      *
      * @param outputName output-name
      * @param objects the objects to draw an outline for
@@ -133,6 +146,12 @@ public class WriteIntoDirectory {
         writeObjectsEither(outputName, objects, Either.right(displayStackFor(background)));
     }
 
+    /**
+     * Writes Voxels to the output directory.
+     *
+     * @param outputName The name to use for the output file.
+     * @param voxels The Voxels to write.
+     */
     public void writeVoxels(String outputName, Voxels<UnsignedByteBuffer> voxels) {
 
         Channel channel = ChannelFactory.instance().create(voxels);
@@ -140,6 +159,12 @@ public class WriteIntoDirectory {
         writeChannel(outputName, channel);
     }
 
+    /**
+     * Writes a Channel to the output directory.
+     *
+     * @param outputName The name to use for the output file.
+     * @param channel The Channel to write.
+     */
     public void writeChannel(String outputName, Channel channel) {
 
         setupOutputterIfNecessary();

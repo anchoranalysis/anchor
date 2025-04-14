@@ -35,6 +35,13 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.image.io.TestLoaderImage;
 
+/**
+ * A utility class for loading and processing object masks in test scenarios.
+ * <p>
+ * This class provides methods to load image stacks and extract the largest object mask from them.
+ * It's primarily used for testing purposes related to image object processing.
+ * </p>
+ */
 @AllArgsConstructor
 public class TestLoaderObjects {
 
@@ -43,10 +50,21 @@ public class TestLoaderObjects {
 
     private final TestLoaderImage loader;
 
+    /**
+     * Constructs a TestLoaderObjects with a given TestLoader.
+     *
+     * @param loader The TestLoader to use for loading test data.
+     */
     public TestLoaderObjects(TestLoader loader) {
         this.loader = new TestLoaderImage(loader);
     }
 
+    /**
+     * Opens the largest object from an image stack identified by a suffix.
+     *
+     * @param suffix The suffix used to identify the image stack file.
+     * @return The largest ObjectMask found in the image stack.
+     */
     public ObjectMask openLargestObjectFrom(String suffix) {
         Stack stack = loader.openStackFromTestPath(path(suffix));
         return largestObjectFromStack(stack);

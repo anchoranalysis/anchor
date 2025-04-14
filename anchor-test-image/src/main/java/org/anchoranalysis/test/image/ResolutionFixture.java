@@ -32,9 +32,20 @@ import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 
+/**
+ * Provides a pre-created {@link Resolution} instance for use in tests.
+ * 
+ * <p>This fixture class offers a consistent and readily available Resolution
+ * object, containing known values, and eliminating the need to create new instances
+ * in individual tests.</p>
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ResolutionFixture {
 
+    /**
+     * A pre-created Resolution instance for use in tests.
+     * This instance has a resolution of 0.01 x 0.01 x 0.025.
+     */
     public static final Resolution INSTANCE = create();
 
     private static Resolution create() {

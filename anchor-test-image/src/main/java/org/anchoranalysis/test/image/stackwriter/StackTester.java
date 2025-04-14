@@ -43,6 +43,13 @@ import org.anchoranalysis.test.image.ChannelFixture;
 import org.anchoranalysis.test.image.StackFixture;
 import org.anchoranalysis.test.image.rasterwriter.comparison.ImageComparer;
 
+/**
+ * A utility class for testing stack writers by writing stacks and optionally comparing them.
+ * <p>
+ * This class provides methods to perform various tests on stack writing operations,
+ * including support for different channel specifications, data types, and dimensionality.
+ * </p>
+ */
 @AllArgsConstructor
 public class StackTester {
 
@@ -71,6 +78,16 @@ public class StackTester {
     private final boolean include3D;
     // END REQUIRED ARGUMENTS
 
+    /**
+     * Performs a test on stack writing for specified channel types, number of channels, and RGB setting.
+     *
+     * @param channelVoxelTypes Array of voxel data types to test
+     * @param numberChannels Number of channels in the stack
+     * @param makeRGB Whether to make the stack RGB
+     * @param comparer Optional image comparer for asserting identity
+     * @throws ImageIOException If an error occurs during image I/O operations
+     * @throws IOException If an I/O error occurs
+     */
     public void performTest(
             VoxelDataType[] channelVoxelTypes,
             int numberChannels,
@@ -80,6 +97,17 @@ public class StackTester {
         performTest(channelVoxelTypes, numberChannels, makeRGB, Optional.empty(), comparer);
     }
 
+    /**
+     * Performs a test on stack writing for specified channel types, number of channels, RGB setting, and optional forced first channel type.
+     *
+     * @param channelVoxelTypes Array of voxel data types to test
+     * @param numberChannels Number of channels in the stack
+     * @param makeRGB Whether to make the stack RGB
+     * @param forceFirstChannel Optional voxel data type to force for the first channel
+     * @param comparer Optional image comparer for asserting identity
+     * @throws ImageIOException If an error occurs during image I/O operations
+     * @throws IOException If an I/O error occurs
+     */
     public void performTest(
             VoxelDataType[] channelVoxelTypes,
             int numberChannels,
@@ -95,11 +123,28 @@ public class StackTester {
         }
     }
 
+    /**
+     * Performs a test on stack writing for a specified channel specification.
+     *
+     * @param channels The channel specification to test
+     * @param comparer Optional image comparer for asserting identity
+     * @throws ImageIOException If an error occurs during image I/O operations
+     * @throws IOException If an I/O error occurs
+     */
     public void performTest(ChannelSpecification channels, Optional<ImageComparer> comparer)
             throws ImageIOException, IOException {
         performTest(channels, Optional.empty(), comparer);
     }
 
+    /**
+     * Performs a test on stack writing for a specified channel specification and optional forced first channel type.
+     *
+     * @param channels The channel specification to test
+     * @param forceFirstChannel Optional voxel data type to force for the first channel
+     * @param comparer Optional image comparer for asserting identity
+     * @throws ImageIOException If an error occurs during image I/O operations
+     * @throws IOException If an I/O error occurs
+     */
     public void performTest(
             ChannelSpecification channels,
             Optional<VoxelDataType> forceFirstChannel,
