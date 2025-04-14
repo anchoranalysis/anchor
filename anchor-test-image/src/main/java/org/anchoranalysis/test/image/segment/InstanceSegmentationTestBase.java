@@ -60,6 +60,11 @@ public abstract class InstanceSegmentationTestBase {
 
     private CarImageLoader loader = new CarImageLoader();
 
+    /**
+     * Sets up the test environment before each test.
+     *
+     * @throws InitializeException if initialization fails
+     */
     @BeforeEach
     public void setup() throws InitializeException {
         writer = new WriteIntoDirectory(temporaryDirectory, false);
@@ -67,30 +72,56 @@ public abstract class InstanceSegmentationTestBase {
         initSegmenter(segmenter);
     }
 
+    /**
+     * Tests the segmentation on an RGB image.
+     *
+     * @throws SegmentationFailedException if segmentation fails
+     */
     @Test
     public void testRGB() throws SegmentationFailedException {
         assertExpectedSegmentation(stackRGB(), targetBox(), "rgb");
     }
 
+    /**
+     * Tests the segmentation on a grayscale 8-bit image.
+     *
+     * @throws SegmentationFailedException if segmentation fails
+     */
     @Test
     public void testGrayscale8Bit() throws SegmentationFailedException {
         assertExpectedSegmentation(stackGrayscale(), targetBox(), "grayscale");
     }
 
-    /** Creates the segmentation implementation to be tested. */
+    /** 
+     * Creates the segmentation implementation to be tested.
+     *
+     * @return the segmentation implementation.
+     */
     protected abstract SegmentStackIntoObjectsPooled<?> createSegmenter(); // NOSONAR
 
-    /** The RGB stack that is tested. */
+    /**
+     * Provides the RGB stack to be tested.
+     *
+     * @return the RGB stack
+     */
     protected Stack stackRGB() {
         return loader.carRGB();
     }
 
-    /** The grayscale stack that is tested. */
+    /**
+     * Provides the grayscale stack to be tested.
+     *
+     * @return the grayscale stack
+     */
     protected Stack stackGrayscale() {
         return loader.carGrayscale8Bit();
     }
 
-    /** The bounding-box we use to set an area where we expect segments to reside. */
+    /** 
+     * The bounding-box we use to set an area where we expect segments to reside.
+     *
+     * @return the bounding-box.
+     */
     protected abstract BoundingBox targetBox();
 
     private void assertExpectedSegmentation(Stack stack, BoundingBox targetBox, String suffix)

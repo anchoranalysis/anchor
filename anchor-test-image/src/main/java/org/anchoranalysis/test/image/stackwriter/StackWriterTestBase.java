@@ -92,6 +92,10 @@ public abstract class StackWriterTestBase {
                         comparisonPlan.isSkipComparisonForRGB());
     }
 
-    /** Creates the {@link StackWriter} to be tested. */
+    /** 
+     * Creates the {@link StackWriter} to be tested.
+     * 
+     * @return the stack-writer.
+     */
     protected abstract StackWriter createWriter();
 }
