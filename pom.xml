@@ -78,31 +78,13 @@
 		<module>anchor-test-image</module>
     </modules>
 
-	<!-- Provides a means of reaching anchor-pom and ImageJ -->
+	<!-- Provides a means of reaching ImageJ -->
     <repositories>
-		<repository>
-		  <releases>
-			<enabled>true</enabled>
-			<updatePolicy>never</updatePolicy>
-			<checksumPolicy>warn</checksumPolicy>
-		  </releases>
-		  <snapshots>
-			<enabled>true</enabled>
-			<updatePolicy>always</updatePolicy>
-			<checksumPolicy>warn</checksumPolicy>
-		  </snapshots>
-		  <id>github</id>
-		   <name>GitHub anchor Apache Maven Packages</name>
-		   <url>https://maven.pkg.github.com/anchoranalysis/anchor</url>
-		  <layout>default</layout>
-		</repository>
-		
 		<repository>
 			<id>imagej</id>
 			<name>ImageJ repository</name>
 			<url>https://maven.scijava.org/content/groups/public/</url>
 		</repository>
-		
    	</repositories>
 		
     <build>
