@@ -80,12 +80,12 @@ class AppendHelper {
     /**
      * Appends stacks to the {@link MultiInput}.
      *
-     * @param listPaths list of paths to append
+     * @param paths list of paths to append
      * @param stackReader the stack reader to use
      */
-    public void appendStack(List<NamedBean<DerivePath>> listPaths, final StackReader stackReader) {
+    public void appendStack(List<NamedBean<DerivePath>> paths, final StackReader stackReader) {
         append(
-                listPaths,
+                paths,
                 MultiInput::stack,
                 outPath -> {
                     try {
@@ -99,38 +99,38 @@ class AppendHelper {
     /**
      * Appends histograms to the {@link MultiInput}.
      *
-     * @param listPaths list of paths to append
+     * @param paths list of paths to append
      */
-    public void appendHistogram(List<NamedBean<DerivePath>> listPaths) {
-        append(listPaths, MultiInput::histogram, HistogramCSVReader::readHistogramFromFile);
+    public void appendHistogram(List<NamedBean<DerivePath>> paths) {
+        append(paths, MultiInput::histogram, HistogramCSVReader::readHistogramFromFile);
     }
 
     /**
      * Appends file paths to the {@link MultiInput}.
      *
-     * @param listPaths list of paths to append
+     * @param paths list of paths to append
      */
-    public void appendFilePath(List<NamedBean<DerivePath>> listPaths) {
-        append(listPaths, MultiInput::filePath, outPath -> outPath);
+    public void appendFilePath(List<NamedBean<DerivePath>> paths) {
+        append(paths, MultiInput::filePath, outPath -> outPath);
     }
 
     /**
      * Appends dictionaries to the {@link MultiInput}.
      *
-     * @param listPaths list of paths to append
+     * @param paths list of paths to append
      */
-    public void appendDictionary(List<NamedBean<DerivePath>> listPaths) {
-        append(listPaths, MultiInput::dictionary, Dictionary::readFromFile);
+    public void appendDictionary(List<NamedBean<DerivePath>> paths) {
+        append(paths, MultiInput::dictionary, Dictionary::readFromFile);
     }
 
     /**
      * Appends marks to the {@link MultiInput}.
      *
-     * @param listPaths list of paths to append
+     * @param paths list of paths to append
      */
-    public void appendMarks(List<NamedBean<DerivePath>> listPaths) {
+    public void appendMarks(List<NamedBean<DerivePath>> paths) {
         append(
-                listPaths,
+                paths,
                 MultiInput::marks,
                 serialized -> DESERIALIZER.deserializeMarks(serialized, context));
     }
@@ -138,17 +138,17 @@ class AppendHelper {
     /**
      * Appends marks from annotations to the {@link MultiInput}.
      *
-     * @param listPaths list of paths to append
+     * @param paths list of paths to append
      * @param includeAccepted whether to include accepted annotations
      * @param includeRejected whether to include rejected annotations
      */
     public void appendMarksFromAnnotation(
-            List<NamedBean<DerivePath>> listPaths,
+            List<NamedBean<DerivePath>> paths,
             boolean includeAccepted,
             boolean includeRejected) {
 
         append(
-                listPaths,
+                paths,
                 MultiInput::marks,
                 outPath ->
                         DESERIALIZER.deserializeMarksFromAnnotation(
@@ -158,11 +158,11 @@ class AppendHelper {
     /**
      * Appends objects to the {@link MultiInput}.
      *
-     * @param listPaths list of paths to append
+     * @param paths list of paths to append
      */
-    public void appendObjects(List<NamedBean<DerivePath>> listPaths) {
+    public void appendObjects(List<NamedBean<DerivePath>> paths) {
         append(
-                listPaths,
+                paths,
                 MultiInput::objects,
                 path -> ObjectCollectionReader.createFromPath(path, context));
     }
