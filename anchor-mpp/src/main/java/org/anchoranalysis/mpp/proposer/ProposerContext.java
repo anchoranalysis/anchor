@@ -33,24 +33,52 @@ import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.mpp.mark.Mark;
-import org.anchoranalysis.mpp.mark.voxelized.memo.PxlMarkMemoFactory;
+import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemoFactory;
 import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.mpp.proposer.error.ErrorNode;
 
+/**
+ * Context for proposing operations in the MPP framework.
+ * <p>
+ * This class encapsulates various components needed for proposing operations,
+ * including random number generation, energy stack, region map, and error handling.
+ * </p>
+ */
 @Value
 public class ProposerContext {
 
+    /** Random number generator for sampling operations. */
     private RandomNumberGenerator randomNumberGenerator;
+
+    /** Energy stack for the current context. */
     private EnergyStack energyStack;
+
+    /** Region map for the current context. */
     private RegionMap regionMap;
+
+    /** Operation context for the current operation. */
     private OperationContext operationContext;
+
+    /** Error node for tracking and managing errors. */
     private ErrorNode errorNode;
 
+    /**
+     * Creates a new ProposerContext with a replaced error node.
+     *
+     * @param errorNode The new error node to use
+     * @return A new ProposerContext with the updated error node
+     */
     public ProposerContext replaceError(ErrorNode errorNode) {
         return new ProposerContext(
                 randomNumberGenerator, energyStack, regionMap, operationContext, errorNode);
     }
 
+    /**
+     * Creates a new ProposerContext with an additional error level.
+     *
+     * @param errorMessage The error message to add
+     * @return A new ProposerContext with the added error level
+     */
     public ProposerContext addErrorLevel(String errorMessage) {
         return new ProposerContext(
                 randomNumberGenerator,
@@ -60,16 +88,32 @@ public class ProposerContext {
                 errorNode.add(errorMessage));
     }
 
-    /** Samples an integer uniformally between [0..maxVal) */
+    /**
+     * Samples an integer uniformly between [0..maxValExclusive).
+     *
+     * @param maxValExclusive The exclusive upper bound for the sampled integer
+     * @return A randomly sampled integer
+     */
     public int sampleInteger(int maxValExclusive) {
         return (int) (randomNumberGenerator.sampleDoubleZeroAndOne() * maxValExclusive);
     }
 
+    /**
+     * Gets the dimensions of the energy stack.
+     *
+     * @return The dimensions of the energy stack
+     */
     public Dimensions dimensions() {
         return energyStack.dimensions();
     }
 
+    /**
+     * Creates a VoxelizedMarkMemo for the given mark.
+     *
+     * @param mark The mark to create a VoxelizedMarkMemo for
+     * @return A new VoxelizedMarkMemo
+     */
     public VoxelizedMarkMemo create(Mark mark) {
-        return PxlMarkMemoFactory.create(mark, energyStack.withoutParameters(), regionMap);
+        return VoxelizedMarkMemoFactory.create(mark, energyStack.withoutParameters(), regionMap);
     }
 }

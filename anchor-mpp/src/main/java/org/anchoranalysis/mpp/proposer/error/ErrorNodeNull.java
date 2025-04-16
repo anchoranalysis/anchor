@@ -59,19 +59,4 @@ public class ErrorNodeNull extends ErrorNode {
         // do nothing
         return this;
     }
-
-    @Override
-    public ErrorNode addFormatted(String formatString, Object... args) {
-        return this;
-    }
-
-    @Override
-    public ErrorNode add(Exception e) {
-        return this;
-    }
-
-    @Override
-    public void addErrorDescription(StringBuilder sb) {
-        // NOTHING TO DO
-    }
 }

@@ -32,14 +32,23 @@ import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.mpp.mark.UpdatableMarks;
 
 /**
- * A collection of items from which one can randomly sample
+ * An abstract collection of items from which one can randomly sample.
+ * <p>
+ * This class serves as a base for implementing collections that support
+ * non-uniform random sampling of pairs of items.
+ * </p>
  *
- * @author Owen Feehan
- * @param <T> item-type
+ * @param <T> The type of items in the collection
  */
 @GroupingRoot
 public abstract class RandomCollection<T> extends AnchorBean<RandomCollection<T>>
         implements UpdatableMarks {
 
+    /**
+     * Samples a random pair of items from the collection using a non-uniform distribution.
+     *
+     * @param randomNumberGenerator The random number generator to use for sampling
+     * @return A randomly sampled pair of items
+     */
     public abstract T sampleRandomPairNonUniform(RandomNumberGenerator randomNumberGenerator);
 }

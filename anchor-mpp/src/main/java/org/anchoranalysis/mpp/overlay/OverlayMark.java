@@ -40,9 +40,9 @@ import org.anchoranalysis.overlay.writer.DrawOverlay;
 import org.anchoranalysis.spatial.box.BoundingBox;
 
 /**
- * An implementation of {@link Overlay} that draws an {@link Mark} on an image.
+ * An implementation of {@link Overlay} that draws a {@link Mark} on an image.
  *
- * @author Owen feehan
+ * @author Owen Feehan
  */
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
@@ -67,6 +67,11 @@ public class OverlayMark extends Overlay {
                 mark.deriveObject(dimensionsEntireImage, regionMembership, binaryValuesOut));
     }
 
+    /**
+     * Gets the identifier of the mark.
+     *
+     * @return the identifier of the {@link Mark}
+     */
     public int getIdentifier() {
         return mark.getIdentifier();
     }

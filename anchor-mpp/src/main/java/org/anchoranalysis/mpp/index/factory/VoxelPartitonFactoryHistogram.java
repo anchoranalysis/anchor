@@ -30,13 +30,33 @@ import org.anchoranalysis.math.histogram.Histogram;
 import org.anchoranalysis.mpp.index.VoxelPartition;
 import org.anchoranalysis.mpp.index.VoxelPartitionHistogram;
 
+/**
+ * A factory for creating {@link VoxelPartition} instances that use {@link Histogram}s as parts.
+ * <p>
+ * This implementation creates {@link VoxelPartitionHistogram} objects with histograms of 256 bins (0-255).
+ * </p>
+ */
 public class VoxelPartitonFactoryHistogram implements VoxelPartitionFactory<Histogram> {
 
+    /**
+     * Creates a new {@link VoxelPartitionHistogram} with the specified number of slices.
+     *
+     * @param numSlices the number of slices in the voxel partition
+     * @return a new {@link VoxelPartitionHistogram} instance
+     */
     @Override
     public VoxelPartition<Histogram> create(int numSlices) {
         return new VoxelPartitionHistogram(numSlices, () -> new Histogram(255));
     }
 
+    /**
+     * Adds an unused histogram to the factory.
+     * <p>
+     * This implementation does nothing, as histograms are not reused.
+     * </p>
+     *
+     * @param part the unused histogram
+     */
     @Override
     public void addUnused(Histogram part) {
         // NOTHING TO DO

@@ -32,9 +32,20 @@ import org.anchoranalysis.feature.energy.EnergyStackWithoutParameters;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.mpp.mark.Mark;
 
+/**
+ * Factory class for creating {@link VoxelizedMarkHistogram} instances.
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class VoxelizedMarkFactory {
 
+    /**
+     * Creates a new {@link VoxelizedMarkHistogram} instance.
+     *
+     * @param mark the {@link Mark} to be voxelized
+     * @param stack the {@link EnergyStackWithoutParameters} containing image data
+     * @param regionMap the {@link RegionMap} defining regions for the mark
+     * @return a new {@link VoxelizedMarkHistogram} instance
+     */
     public static VoxelizedMarkHistogram create(
             Mark mark, EnergyStackWithoutParameters stack, RegionMap regionMap) {
         return new VoxelizedMarkHistogram(mark, stack, regionMap);

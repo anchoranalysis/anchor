@@ -39,15 +39,26 @@ import org.anchoranalysis.overlay.collection.ColoredOverlayCollection;
 import org.anchoranalysis.overlay.collection.OverlayCollection;
 
 /**
- * Two-way factory.
+ * Factory for creating {@link OverlayCollection}s from marks and retrieving marks from {@link OverlayCollection}s.
  *
- * <p>Creation of OverlayCollection from marks Retrieval of marks back from OverlayCollections
+ * <p>This class provides methods for two-way conversion:
+ * <ul>
+ *   <li>Creation of {@link OverlayCollection} from marks</li>
+ *   <li>Retrieval of marks from {@link OverlayCollection}s</li>
+ * </ul>
  *
  * @author Owen Feehan
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class OverlayCollectionMarkFactory {
 
+    /**
+     * Creates an {@link OverlayCollection} from a {@link MarkCollection} without color information.
+     *
+     * @param marks the collection of marks
+     * @param regionMembership the region membership for the marks
+     * @return a new {@link OverlayCollection}
+     */
     public static OverlayCollection createWithoutColor(
             MarkCollection marks, RegionMembershipWithFlags regionMembership) {
         OverlayCollection out = new OverlayCollection();
@@ -60,11 +71,26 @@ public class OverlayCollectionMarkFactory {
         return out;
     }
 
+    /**
+     * Creates a {@link ColoredOverlayCollection} from {@link ColoredMarks}.
+     *
+     * @param marks the colored marks
+     * @param regionMembership the region membership for the marks
+     * @return a new {@link ColoredOverlayCollection}
+     */
     public static ColoredOverlayCollection createColor(
             ColoredMarks marks, RegionMembershipWithFlags regionMembership) {
         return createColor(marks.getMarks(), marks.getColorList(), regionMembership);
     }
 
+    /**
+     * Creates a {@link ColoredOverlayCollection} from a {@link MarkCollection} and a {@link ColorIndex}.
+     *
+     * @param marks the collection of marks
+     * @param colorIndex the color index for the marks
+     * @param regionMembership the region membership for the marks
+     * @return a new {@link ColoredOverlayCollection}
+     */
     private static ColoredOverlayCollection createColor(
             MarkCollection marks,
             ColorIndex colorIndex,
@@ -78,7 +104,12 @@ public class OverlayCollectionMarkFactory {
         return out;
     }
 
-    // Creates a marks from whatever Overlays are found in the collection
+    /**
+     * Creates a {@link MarkCollection} from an {@link OverlayCollection}.
+     *
+     * @param overlays the collection of overlays
+     * @return a new {@link MarkCollection} containing marks from {@link OverlayMark}s in the input collection
+     */
     public static MarkCollection marksFromOverlays(OverlayCollection overlays) {
         MarkCollection out = new MarkCollection();
 
@@ -94,18 +125,23 @@ public class OverlayCollectionMarkFactory {
         return out;
     }
 
-    // Creates a marks from whatever Overlays are found in the collection
+    /**
+     * Creates {@link ColoredMarks} from a {@link ColoredOverlayCollection}.
+     *
+     * @param overlays the collection of colored overlays
+     * @return a new {@link ColoredMarks} containing marks and colors from {@link OverlayMark}s in the input collection
+     */
     public static ColoredMarks marksFromOverlays(ColoredOverlayCollection overlays) {
         ColoredMarks out = new ColoredMarks();
 
         for (int i = 0; i < overlays.size(); i++) {
             Overlay overlay = overlays.getOverlay(i);
 
-            RGBColor col = overlays.getColor(i);
+            RGBColor color = overlays.getColor(i);
 
             if (overlay instanceof OverlayMark) {
                 OverlayMark overlayMark = (OverlayMark) overlay;
-                out.add(overlayMark.getMark(), col);
+                out.add(overlayMark.getMark(), color);
             }
         }
 

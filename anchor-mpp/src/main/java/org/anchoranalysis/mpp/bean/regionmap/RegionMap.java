@@ -37,38 +37,65 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.functional.FunctionalList;
 
 /**
- * Maps integer IDs to sub-regions in the map
+ * Maps integer IDs to sub-regions in the map.
  *
- * <p>See org.anchoranalysis.plugin.image.feature.bean.stack.object.AsObjectMask for an example of
- * where equals is needed on this class
- *
- * @author Owen Feehan
+ * <p>This class is used to represent a mapping of integer IDs to sub-regions. It is particularly
+ * useful in scenarios where object masks need to be compared, such as in
+ * org.anchoranalysis.plugin.image.feature.bean.stack.object.AsObjectMask.</p>
  */
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 public class RegionMap extends AnchorBean<RegionMap> {
 
-    // START BEAN PROPERTIES
+    /** 
+     * List of region memberships.
+     * <p>Each element in this list represents a mapping between an integer ID and a sub-region.</p>
+     */
     @BeanField @Getter @Setter private List<RegionMembership> list = Arrays.asList();
-    // END BEAN PROPERTIES
 
-    // Creates a region map with a single entry mapping to a particular region
+    /**
+     * Creates a region map with a single entry mapping to a particular region.
+     *
+     * @param index the index of the region to map
+     */
     public RegionMap(int index) {
         list.add(new RegionMembershipAnd(index));
     }
 
+    /**
+     * Gets the number of regions in the map.
+     *
+     * @return the number of regions
+     */
     public int numRegions() {
         return list.size();
     }
 
+    /**
+     * Gets the region membership for a specific index.
+     *
+     * @param index the index of the region membership to retrieve
+     * @return the RegionMembership at the specified index
+     */
     public RegionMembership membershipForIndex(int index) {
         return list.get(index);
     }
 
+    /**
+     * Gets the region membership with flags for a specific index.
+     *
+     * @param index the index of the region membership to retrieve
+     * @return a new RegionMembershipWithFlags object for the specified index
+     */
     public RegionMembershipWithFlags membershipWithFlagsForIndex(int index) {
         return new RegionMembershipWithFlags(membershipForIndex(index), index);
     }
 
+    /**
+     * Creates a list of all region memberships with their corresponding flags.
+     *
+     * @return a list of RegionMembershipWithFlags objects for all regions in the map
+     */
     public List<RegionMembershipWithFlags> createListMembershipWithFlags() {
         return FunctionalList.mapToListWithIndex(list, RegionMembershipWithFlags::new);
     }

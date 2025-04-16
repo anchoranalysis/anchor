@@ -29,12 +29,28 @@ package org.anchoranalysis.mpp.index.factory;
 import org.anchoranalysis.mpp.index.VoxelPartition;
 
 /**
- * @author Owen Feehan
- * @param <T> part-type
+ * A factory for creating {@link VoxelPartition} instances.
+ *
+ * @param <T> the type of parts stored in the voxel partition
  */
 public interface VoxelPartitionFactory<T> {
 
+    /**
+     * Creates a new {@link VoxelPartition} with the specified number of slices.
+     *
+     * @param numSlices the number of slices in the voxel partition
+     * @return a new {@link VoxelPartition} instance
+     */
     VoxelPartition<T> create(int numSlices);
 
+    /**
+     * Adds an unused part to the factory.
+     * <p>
+     * This method is typically used to recycle parts that are no longer needed,
+     * allowing them to be reused in future voxel partitions.
+     * </p>
+     *
+     * @param part the unused part to add
+     */
     void addUnused(T part);
 }

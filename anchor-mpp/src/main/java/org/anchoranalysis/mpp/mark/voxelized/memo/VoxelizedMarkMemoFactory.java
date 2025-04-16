@@ -30,14 +30,34 @@ import org.anchoranalysis.feature.energy.EnergyStackWithoutParameters;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.mpp.mark.Mark;
 
-// We more explicitly manage the creation and deletiion of PxlMarkMemo as they can take up a large
-// amount of memory
-public class PxlMarkMemoFactory {
+/**
+ * Factory class for creating {@link VoxelizedMarkMemo} instances.
+ * <p>
+ * This class explicitly manages the creation of VoxelizedMarkMemo objects as they can consume
+ * a large amount of memory. It provides a static method for creating these objects, ensuring
+ * controlled instantiation.
+ * </p>
+ */
+public class VoxelizedMarkMemoFactory {
 
-    private PxlMarkMemoFactory() {
+    /**
+     * Private constructor to prevent instantiation.
+     * <p>
+     * This class is designed to be used via its static method only.
+     * </p>
+     */
+    private VoxelizedMarkMemoFactory() {
         // ONLY ALLOWED AS STATIC
     }
 
+    /**
+     * Creates a new {@link VoxelizedMarkMemo} instance.
+     *
+     * @param mark the mark to be voxelized
+     * @param stack the energy stack without parameters
+     * @param regionMap the region map
+     * @return a new {@link VoxelizedMarkMemo} instance
+     */
     public static VoxelizedMarkMemo create(
             Mark mark, EnergyStackWithoutParameters stack, RegionMap regionMap) {
         return new VoxelizedMarkMemo(mark, stack, regionMap);

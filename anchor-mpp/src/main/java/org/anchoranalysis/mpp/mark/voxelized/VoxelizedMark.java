@@ -38,23 +38,72 @@ import org.anchoranalysis.spatial.box.BoundingBox;
  */
 public interface VoxelizedMark {
 
+    /**
+     * Gets the voxel representation of the mark.
+     *
+     * @return the {@link BoundedVoxels} representing the mark
+     */
     BoundedVoxels<UnsignedByteBuffer> voxels();
 
+    /**
+     * Gets the maximum intensity projection of the voxelized mark.
+     *
+     * @return the {@link BoundedVoxels} representing the maximum intensity projection
+     */
     BoundedVoxels<UnsignedByteBuffer> voxelsMaximumIntensityProjection();
 
-    /** A bounding-box enclosing the voxelized representation of the mark */
+    /**
+     * Gets the bounding-box enclosing the voxelized representation of the mark.
+     *
+     * @return the {@link BoundingBox} enclosing the mark
+     */
     BoundingBox boundingBox();
 
-    /** The bounding-box flattened in z dimension */
+    /**
+     * Gets the bounding-box flattened in z dimension.
+     *
+     * @return the flattened {@link BoundingBox}
+     */
     BoundingBox boundingBoxFlattened();
 
+    /**
+     * Creates a duplicate of this voxelized mark.
+     *
+     * @return a new {@link VoxelizedMark} instance that is a copy of this one
+     */
     VoxelizedMark duplicate();
 
+    /**
+     * Calculates statistics for all slices in a specific channel and region.
+     *
+     * @param channelID the ID of the channel
+     * @param regionID the ID of the region
+     * @return the {@link VoxelStatistics} for the specified channel and region
+     */
     VoxelStatistics statisticsForAllSlices(int channelID, int regionID);
 
+    /**
+     * Calculates statistics for all slices in a specific channel and region, using a mask from another channel.
+     *
+     * @param channelID the ID of the channel for statistics
+     * @param regionID the ID of the region
+     * @param maskChannelID the ID of the channel to use as a mask
+     * @return the {@link VoxelStatistics} for the specified channel and region, masked by another channel
+     */
     VoxelStatistics statisticsForAllSlicesMaskSlice(int channelID, int regionID, int maskChannelID);
 
+    /**
+     * Calculates statistics for a specific slice in a specific channel and region.
+     *
+     * @param channelID the ID of the channel
+     * @param regionID the ID of the region
+     * @param sliceID the ID of the slice
+     * @return the {@link VoxelStatistics} for the specified channel, region, and slice
+     */
     VoxelStatistics statisticsFor(int channelID, int regionID, int sliceID);
 
+    /**
+     * Cleans up any resources associated with this voxelized mark.
+     */
     void cleanUp();
 }

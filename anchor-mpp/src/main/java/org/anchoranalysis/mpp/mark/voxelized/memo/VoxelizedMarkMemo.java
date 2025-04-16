@@ -35,20 +35,33 @@ import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.voxelized.VoxelizedMark;
 import org.anchoranalysis.mpp.mark.voxelized.VoxelizedMarkFactory;
 
-/** Memoization of retrieving a {@link VoxelizedMark} from a mark */
+/**
+ * Memoization of retrieving a {@link VoxelizedMark} from a mark.
+ * <p>
+ * This class caches the voxelized representation of a mark to avoid repeated calculations.
+ * </p>
+ */
 public class VoxelizedMarkMemo {
 
-    // START REQUIRED ARGUMENTS
-    /** The associated mark */
+    /** The associated mark. */
     @Getter private Mark mark;
 
+    /** The energy stack without parameters. */
     private EnergyStackWithoutParameters stack;
 
+    /** The region map. */
     @Getter private final RegionMap regionMap;
-    // END REQUIRED ARGUMENTS
 
+    /** Cached supplier for the voxelized mark. */
     private CachedSupplier<VoxelizedMark, AnchorNeverOccursException> cachedMark;
 
+    /**
+     * Creates a new VoxelizedMarkMemo.
+     *
+     * @param mark the mark to be voxelized
+     * @param stack the energy stack without parameters
+     * @param regionMap the region map
+     */
     public VoxelizedMarkMemo(Mark mark, EnergyStackWithoutParameters stack, RegionMap regionMap) {
         this.mark = mark;
         this.stack = stack;
@@ -59,14 +72,17 @@ public class VoxelizedMarkMemo {
     }
 
     /**
-     * A voxelized-respentation of the mark
+     * Gets the voxelized representation of the mark.
      *
-     * @return
+     * @return the voxelized mark
      */
     public VoxelizedMark voxelized() {
         return cachedMark.get();
     }
 
+    /**
+     * Resets the cached voxelized mark.
+     */
     public void reset() {
         cachedMark.reset();
     }
@@ -74,15 +90,19 @@ public class VoxelizedMarkMemo {
     /**
      * Assigns a new mark to replace the existing mark.
      *
-     * @param mark
+     * @param mark the new mark to assign
      */
     public void assignFrom(Mark mark) {
         this.mark = mark;
         reset();
     }
 
-    // Duplicates the current mark memo, resetting the calculation state
+    /**
+     * Duplicates the current mark memo, resetting the calculation state.
+     *
+     * @return a new VoxelizedMarkMemo with the same mark, stack, and region map
+     */
     public VoxelizedMarkMemo duplicateFresh() {
-        return PxlMarkMemoFactory.create(this.mark.duplicate(), stack, regionMap);
+        return VoxelizedMarkMemoFactory.create(this.mark.duplicate(), stack, regionMap);
     }
 }

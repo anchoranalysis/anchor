@@ -32,12 +32,28 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.mpp.mark.GlobalRegionIdentifiers;
 
-// A Default RegionMap
+/**
+ * A singleton class providing a default RegionMap.
+ * <p>
+ * This class creates and manages a single instance of {@link RegionMap} with predefined
+ * region memberships based on global region identifiers.
+ * </p>
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class RegionMapSingleton {
 
+    /** The singleton instance of RegionMap. */
     private static RegionMap regionMap = null;
 
+    /**
+     * Gets the singleton instance of RegionMap.
+     * <p>
+     * If the instance doesn't exist, it creates one with predefined region memberships.
+     * This method is thread-safe.
+     * </p>
+     *
+     * @return the singleton instance of RegionMap
+     */
     public static synchronized RegionMap instance() {
         if (regionMap == null) {
             List<RegionMembership> list =

@@ -50,24 +50,48 @@ import org.anchoranalysis.mpp.mark.MarkCollection;
 import org.anchoranalysis.mpp.pair.MarkPair;
 import org.anchoranalysis.mpp.pair.RandomCollection;
 
+/**
+ * Initialization class for marks-related components in the MPP framework.
+ * <p>
+ * This class manages the initialization of various mark-related stores and provides
+ * access to image and points initialization.
+ * </p>
+ */
 @Accessors(fluent = true)
 public class MarksInitialization implements BeanInitialization {
 
-    // START: Initialization
+    /** The image initialization associated with this marks initialization. */
     @Getter private final ImageInitialization image;
+
+    /** The points initialization associated with this marks initialization. */
     @Getter private final PointsInitialization points;
-    // END: Initialization
 
-    // START: Stores
+    /** Store for mark collections. */
     @Getter private final NamedProviderStore<MarkCollection> marks;
-    @Getter private final NamedProviderStore<MarkCollectionProposer> markCollectionProposers;
-    @Getter private final NamedProviderStore<MarkBounds> markBounds;
-    @Getter private final NamedProviderStore<MarkProposer> markProposers;
-    @Getter private final NamedProviderStore<MarkMergeProposer> markMergeProposers;
-    @Getter private final NamedProviderStore<MarkSplitProposer> markSplitProposers;
-    @Getter private final NamedProviderStore<RandomCollection<MarkPair<Mark>>> markPairs;
-    // END: Stores
 
+    /** Store for mark collection proposers. */
+    @Getter private final NamedProviderStore<MarkCollectionProposer> markCollectionProposers;
+
+    /** Store for mark bounds. */
+    @Getter private final NamedProviderStore<MarkBounds> markBounds;
+
+    /** Store for mark proposers. */
+    @Getter private final NamedProviderStore<MarkProposer> markProposers;
+
+    /** Store for mark merge proposers. */
+    @Getter private final NamedProviderStore<MarkMergeProposer> markMergeProposers;
+
+    /** Store for mark split proposers. */
+    @Getter private final NamedProviderStore<MarkSplitProposer> markSplitProposers;
+
+    /** Store for random collections of mark pairs. */
+    @Getter private final NamedProviderStore<RandomCollection<MarkPair<Mark>>> markPairs;
+
+    /**
+     * Constructs a MarksInitialization with the given ImageInitialization.
+     *
+     * @param image The ImageInitialization to use
+     */
     public MarksInitialization(ImageInitialization image) {
         SharedObjects sharedObjects = image.sharedObjects();
         this.image = image;
@@ -82,14 +106,32 @@ public class MarksInitialization implements BeanInitialization {
         markPairs = sharedObjects.getOrCreate(RandomCollection.class);
     }
 
+    /**
+     * Gets the FeatureRelatedInitialization associated with this MarksInitialization.
+     *
+     * @return The FeatureRelatedInitialization
+     */
     public FeatureRelatedInitialization feature() {
         return image.featuresInitialization();
     }
 
+    /**
+     * Gets the DictionaryInitialization associated with this MarksInitialization.
+     *
+     * @return The DictionaryInitialization
+     */
     public DictionaryInitialization dictionary() {
         return image.dictionaryInitialization();
     }
 
+    /**
+     * Populates the stores with beans from the given Define.
+     *
+     * @param initializer The BeanInitializer to use
+     * @param define The Define containing the beans to populate
+     * @param logger The Logger to use for logging
+     * @throws OperationFailedException If the population operation fails
+     */
     public void populate(BeanInitializer<?> initializer, Define define, Logger logger)
             throws OperationFailedException {
 
