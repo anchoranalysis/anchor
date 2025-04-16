@@ -35,19 +35,29 @@ import org.anchoranalysis.mpp.feature.energy.EnergyTotal;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.MarkCollection;
 
-public class EnergySavedInd implements Serializable, Iterable<EnergyTotal> {
+/**
+ * Stores and manages individual energy values for a collection of marks.
+ *
+ * <p>This class implements {@link Serializable} for persistence and {@link Iterable} for easy iteration over energy values.</p>
+ */
+public class EnergySavedIndividual implements Serializable, Iterable<EnergyTotal> {
 
-    /** */
     private static final long serialVersionUID = -5205697546115728135L;
 
-    // Pairwise total
+    /** The total energy of all individual marks. */
     @Getter @Setter private double energyTotal;
 
+    /** List of individual energy totals for each mark. */
     private ArrayList<EnergyTotal> ind;
 
-    public EnergySavedInd shallowCopy() {
+    /**
+     * Creates a shallow copy of this instance.
+     *
+     * @return a new {@link EnergySavedIndividual} with a shallow copy of the energy totals
+     */
+    public EnergySavedIndividual shallowCopy() {
 
-        EnergySavedInd out = new EnergySavedInd();
+        EnergySavedIndividual out = new EnergySavedIndividual();
 
         // Copy each item directly
         out.ind = new ArrayList<>();
@@ -56,9 +66,14 @@ public class EnergySavedInd implements Serializable, Iterable<EnergyTotal> {
         return out;
     }
 
-    public EnergySavedInd deepCopy() {
+    /**
+     * Creates a deep copy of this instance.
+     *
+     * @return a new {@link EnergySavedIndividual} with a deep copy of the energy totals
+     */
+    public EnergySavedIndividual deepCopy() {
 
-        EnergySavedInd out = new EnergySavedInd();
+        EnergySavedIndividual out = new EnergySavedIndividual();
 
         // Copy each item directly
         out.ind = new ArrayList<>();
@@ -67,29 +82,58 @@ public class EnergySavedInd implements Serializable, Iterable<EnergyTotal> {
         return out;
     }
 
+    /**
+     * Gets the number of individual energy totals stored.
+     *
+     * @return the number of energy totals
+     */
     public int size() {
         return ind.size();
     }
 
+    /**
+     * Gets the energy total at a specific index.
+     *
+     * @param index the index of the energy total to retrieve
+     * @return the {@link EnergyTotal} at the specified index
+     */
     public EnergyTotal get(int index) {
         return this.ind.get(index);
     }
 
+    /**
+     * Resets the list of individual energy totals.
+     */
     public void resetInd() {
         this.ind = new ArrayList<>();
     }
 
+    /**
+     * Adds a new energy total to the list and updates the total energy.
+     *
+     * @param item the {@link EnergyTotal} to add
+     */
     public void add(EnergyTotal item) {
         this.ind.add(item);
         this.energyTotal += item.getTotal();
     }
 
+    /**
+     * Removes an energy total at a specific index and updates the total energy.
+     *
+     * @param index the index of the energy total to remove
+     */
     public void rmv(int index) {
-        // We calculate it's individual contribution
         this.energyTotal -= this.ind.get(index).getTotal();
         this.ind.remove(index);
     }
 
+    /**
+     * Exchanges an energy total at a specific index with a new one and updates the total energy.
+     *
+     * @param index the index of the energy total to exchange
+     * @param item the new {@link EnergyTotal} to replace the existing one
+     */
     public void exchange(int index, EnergyTotal item) {
 
         // we make the necessary changes on the individual components
@@ -98,6 +142,12 @@ public class EnergySavedInd implements Serializable, Iterable<EnergyTotal> {
         this.ind.set(index, item);
     }
 
+    /**
+     * Generates a string description of the marks and their associated energies.
+     *
+     * @param marks the {@link MarkCollection} containing the marks
+     * @return a string representation of the marks and their energies
+     */
     public String describeMarks(MarkCollection marks) {
 
         String newLine = System.getProperty("line.separator");
@@ -122,6 +172,9 @@ public class EnergySavedInd implements Serializable, Iterable<EnergyTotal> {
         return s.toString();
     }
 
+    /**
+     * Asserts that the total energy is valid (not NaN).
+     */
     public void assertValid() {
         assert !Double.isNaN(energyTotal);
     }

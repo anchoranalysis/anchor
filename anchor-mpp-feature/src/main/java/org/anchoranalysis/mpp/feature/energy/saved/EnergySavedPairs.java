@@ -43,18 +43,34 @@ import org.anchoranalysis.mpp.mark.UpdateMarkSetException;
 import org.anchoranalysis.mpp.mark.voxelized.memo.MemoForIndex;
 import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 
+/**
+ * Stores and manages pairwise energy interactions between marks.
+ *
+ * <p>This class implements {@link UpdatableMarks} to allow for dynamic updates of mark pairs and their energies.</p>
+ */
 public class EnergySavedPairs implements UpdatableMarks {
 
     /** Pairwise energy total */
     @Getter private double energyTotal;
 
+    /** Collection of energy pairs with add criteria */
     private RandomCollectionWithAddCriteria<EnergyPair> pairCollection;
 
+    /**
+     * Creates a new instance with the specified add criteria for energy pairs.
+     *
+     * @param addCriteria the {@link AddCriteria} for {@link EnergyPair}s
+     */
     public EnergySavedPairs(AddCriteria<EnergyPair> addCriteria) {
         this.pairCollection = new RandomCollectionWithAddCriteria<>(EnergyPair.class);
         this.pairCollection.setAddCriteria(addCriteria);
     }
 
+    /**
+     * Creates a shallow copy of this instance.
+     *
+     * @return a new {@link EnergySavedPairs} with a shallow copy of the pair collection
+     */
     public EnergySavedPairs shallowCopy() {
         EnergySavedPairs out = new EnergySavedPairs(this.pairCollection.getAddCriteria());
         out.pairCollection = this.pairCollection.shallowCopy();
@@ -62,6 +78,11 @@ public class EnergySavedPairs implements UpdatableMarks {
         return out;
     }
 
+    /**
+     * Creates a deep copy of this instance.
+     *
+     * @return a new {@link EnergySavedPairs} with a deep copy of the pair collection
+     */
     public EnergySavedPairs deepCopy() {
         EnergySavedPairs out = new EnergySavedPairs(this.pairCollection.getAddCriteria());
         out.pairCollection = this.pairCollection.deepCopy();
@@ -138,7 +159,12 @@ public class EnergySavedPairs implements UpdatableMarks {
         this.energyTotal = this.energyTotal - oldPairTotal + newPairTotal;
     }
 
-    // Does the pairs hash only contains items contained in a particular configuration
+    /**
+     * Checks if the pair collection only contains items from a particular mark configuration.
+     *
+     * @param marks the {@link MarkCollection} to check against
+     * @return true if the pair collection only contains marks from the given collection, false otherwise
+     */
     public boolean isMarksSpan(MarkCollection marks) {
         return pairCollection.isMarksSpan(marks);
     }
@@ -167,10 +193,18 @@ public class EnergySavedPairs implements UpdatableMarks {
         return s.toString();
     }
 
+    /**
+     * Asserts that the total energy is valid (not NaN).
+     */
     public void assertValid() {
         assert !Double.isNaN(energyTotal);
     }
 
+    /**
+     * Creates a set of unique energy pairs.
+     *
+     * @return a {@link Set} of unique {@link EnergyPair}s
+     */
     public Set<EnergyPair> createPairsUnique() {
         return pairCollection.createPairsUnique();
     }

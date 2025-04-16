@@ -34,13 +34,22 @@ import org.anchoranalysis.feature.bean.FeatureRelatedBean;
 import org.anchoranalysis.mpp.bean.mark.factory.MarkWithIdentifierFactory;
 import org.anchoranalysis.mpp.feature.bean.energy.scheme.EnergySchemeCreator;
 
+/**
+ * A bean for evaluating marks using features and energy schemes.
+ *
+ * <p>This class extends {@link FeatureRelatedBean} to provide functionality related to feature evaluation
+ * for marks in the context of Marked Point Processes (MPP).</p>
+ */
 public class MarkEvaluator extends FeatureRelatedBean<MarkEvaluator> {
 
     // START BEAN PROPERTIES
+    /** Factory for creating marks with identifiers. */
     @BeanField @Getter @Setter private MarkWithIdentifierFactory markFactory;
 
+    /** Defines additional configuration for the evaluation process. */
     @BeanField @Getter @Setter private Define define;
 
+    /** Creator for the energy scheme used in mark evaluation. */
     @BeanField @Getter @Setter private EnergySchemeCreator energySchemeCreator;
     // END BEAN PROPERTIES
 }
