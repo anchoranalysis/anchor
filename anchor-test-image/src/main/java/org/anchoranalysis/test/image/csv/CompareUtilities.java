@@ -34,18 +34,30 @@ import org.anchoranalysis.io.input.csv.CSVReaderException;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 
+/**
+ * Utility class for comparing and printing CSV-related data.
+ * 
+ * <p>This class provides methods for checking CSV rows, comparing string arrays,
+ * and printing formatted output for CSV comparisons.</p>
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class CompareUtilities {
 
+    /**
+     * Checks if either of the input arrays is empty when zero rows are not allowed.
+     *
+     * @param rejectZeroRows if true, an exception is thrown when either input array is empty
+     * @param lines1 the first array of strings to check
+     * @param lines2 the second array of strings to check
+     * @throws CSVReaderException if rejectZeroRows is true and either lines1 or lines2 is empty
+     */
     public static void checkZeroRows(
             boolean rejectZeroRows, Optional<String[]> lines1, Optional<String[]> lines2)
             throws CSVReaderException {
-        if (!rejectZeroRows) {
-            return;
-        }
-
-        if (!lines1.isPresent() || !lines2.isPresent()) {
-            throw new CSVReaderException("At least one input csv file has zero rows");
+        if (rejectZeroRows) {
+        	if (!lines1.isPresent() || !lines2.isPresent()) {
+                throw new CSVReaderException("At least one input csv file has zero rows");
+            }
         }
     }
 
@@ -96,7 +108,11 @@ class CompareUtilities {
      * Prints two lines (represented by string arrays) to the screen, ensuring that each array item
      * is presented in vertical columns
      *
-     * <p>Default delimeter of " "
+     * <p>Default delimiter of "  " (two spaces)
+     *
+     * @param messageStream the PrintStream to which the formatted lines will be written
+     * @param line1 an array of strings for the first line
+     * @param line2 an array of strings for the second line
      */
     public static void printTwoLines(PrintStream messageStream, String[] line1, String[] line2) {
         printTwoLines(messageStream, line1, line2, "  ");
@@ -125,7 +141,7 @@ class CompareUtilities {
 
             if (i != 0) {
                 // If not the first item
-                // Write out the delimter
+                // Write out the delimiter
                 out1.append(delimeter);
                 out2.append(delimeter);
             }

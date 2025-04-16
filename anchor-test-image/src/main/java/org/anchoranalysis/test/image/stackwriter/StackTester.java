@@ -53,6 +53,13 @@ import org.anchoranalysis.test.image.rasterwriter.comparison.ImageComparer;
 @AllArgsConstructor
 public class StackTester {
 
+    /**
+     * A constant identifier used to represent a small extent in file names.
+     * <p>
+     * This identifier is used when constructing file names for test images,
+     * indicating that the image has a small spatial extent.
+     * </p>
+     */
     public static final String EXTENT_IDENTIFIER = "small";
 
     /** A minimum file-size for all written rasters, below which we assume an error has occurred. */

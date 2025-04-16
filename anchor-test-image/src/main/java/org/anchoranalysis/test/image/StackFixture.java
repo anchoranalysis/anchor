@@ -70,8 +70,11 @@ public class StackFixture {
      * <p>Note that if defined, {@code firstChannelVoxelType} takes precedence for the first
      * channel's data type over that supplied by {@link ChannelSpecification}.
      *
-     * @param extent the size of each channel.
-     * @return the newly created-stack with newly-created channels.
+     * @param channelSpecification specification for the channels to be created
+     * @param extent the size of each channel
+     * @return the newly created stack with newly-created channels
+     * @throws AnchorImpossibleSituationException if an {@link IncorrectImageSizeException} occurs,
+     *         which should never happen given the controlled creation of channels
      */
     public Stack create(ChannelSpecification channelSpecification, Extent extent) {
         Stream<Channel> channels =

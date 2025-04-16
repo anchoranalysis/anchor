@@ -28,9 +28,21 @@ package org.anchoranalysis.test.image.stackwriter;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
+/**
+ * Utility class for adding file extensions to filenames.
+ *
+ * <p>This class provides a static method to append a file extension to a given filename.</p>
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ExtensionAdder {
 
+    /**
+     * Adds a file extension to a filename.
+     *
+     * @param filename the original filename without extension
+     * @param extensionToAdd the extension to be added (without the leading dot)
+     * @return the filename with the added extension
+     */
     public static String addExtension(String filename, String extensionToAdd) {
         return filename + "." + extensionToAdd;
     }

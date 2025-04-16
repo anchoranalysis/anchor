@@ -78,14 +78,32 @@ public class WriteIntoDirectory {
     private static final Dimensions FALLBACK_SIZE = new Dimensions(100, 100, 1);
 
     // START REQUIRED ARGUMENTS
-    /** The directory in which stacks are written */
+    /**
+     * The directory in which stacks and other outputs are written.
+     * 
+     * <p>This directory is used as the root location for all file outputs generated
+     * by this class. It should be a valid, writable directory path.</p>
+     * 
+     * <p>If {@link #printDirectoryToConsole} is set to true, this directory path
+     * will be printed to the console when the first output is written.</p>
+     * 
+     * @see #printDirectoryToConsole
+     */
     @Getter private final Path directory;
 
     /** If true, the path of {@code folder} is printed to the console */
     private final boolean printDirectoryToConsole;
     // END REQUIRED ARGUMENTS
 
-    /** Creates to print directory to the console. */
+    /**
+     * Creates a new WriteIntoDirectory instance with directory printing enabled.
+     * 
+     * <p>This constructor sets {@link #printDirectoryToConsole} to true, meaning
+     * the directory path will be printed to the console when the first output is written.</p>
+     *
+     * @param directory the directory in which stacks and other outputs will be written.
+     *                  It should be a valid, writable directory path.
+     */
     public WriteIntoDirectory(Path directory) {
         this.printDirectoryToConsole = true;
         this.directory = directory;

@@ -67,9 +67,21 @@ abstract class CompareBase implements ImageComparer {
         }
     }
 
+    /**
+     * Compares two image files to determine if they are identical.
+     *
+     * @param filenameWithoutExtension the filename before extensions were added
+     * @param filenameWithExtension the filename with an extension added
+     * @return true if the images are identical, false otherwise
+     * @throws IOException if either of the files being compared cannot be successfully opened
+     */
     protected abstract boolean areIdentical(
             String filenameWithoutExtension, String filenameWithExtension) throws IOException;
 
-    /** A unique identifier used for this comparison-method in test assertions. */
+    /**
+     * Provides a unique identifier for this comparison method.
+     *
+     * @return a string that uniquely identifies this comparison method in test assertions
+     */
     protected abstract String identifierForTest();
 }

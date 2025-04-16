@@ -35,6 +35,12 @@ import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.test.LoggerFixture;
 
+/**
+ * A fixture for creating {@link InputOutputContext} instances for testing purposes.
+ * 
+ * <p>This class provides utility methods to create InputOutputContext objects with
+ * different configurations, such as suppressed loggers or specific model directories.</p>
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class InputOutputContextFixture {
 
