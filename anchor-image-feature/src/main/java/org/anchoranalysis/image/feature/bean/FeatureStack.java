@@ -30,6 +30,13 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.image.feature.input.FeatureInputStack;
 
+/**
+ * An abstract base class for features that operate on image stacks.
+ *
+ * <p>This class extends {@link Feature} and specifies {@link FeatureInputStack}
+ * as the input type. It provides a common base for all features that work with
+ * image stacks, allowing for consistent handling of stack-based feature calculations.</p>
+ */
 public abstract class FeatureStack extends Feature<FeatureInputStack> {
 
     @Override

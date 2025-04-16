@@ -33,12 +33,26 @@ import org.anchoranalysis.feature.input.FeatureInputWithResolution;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.math.histogram.Histogram;
 
+/**
+ * A feature input that contains a histogram and optional resolution information.
+ *
+ * <p>This class implements FeatureInputWithResolution, allowing it to be used
+ * in feature calculations that require resolution information.</p>
+ */
 @AllArgsConstructor
 public class FeatureInputHistogram implements FeatureInputWithResolution {
 
+    /** The histogram associated with this feature input. */
     @Getter private Histogram histogram;
+
+    /** Optional resolution information for the histogram. */
     private Optional<Resolution> resolution;
 
+    /**
+     * Gets the optional resolution information.
+     *
+     * @return An Optional containing the Resolution if available, or an empty Optional if not.
+     */
     @Override
     public Optional<Resolution> getResolutionOptional() {
         return resolution;

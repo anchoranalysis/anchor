@@ -30,10 +30,25 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInputWithResolution;
 import org.anchoranalysis.image.core.dimensions.UnitConverter;
 
-/** converts a feature to a physical distance in a XY place that is isometric */
+/**
+ * Converts a feature from physical volume units to voxel units.
+ *
+ * <p>This feature converter takes a measurement in physical volume units and converts it
+ * to voxel units. It assumes an isometric XY plane in the image space.</p>
+ *
+ * @param <T> the type of feature input, which must include resolution information
+ */
 public class ConvertFromPhysicalVolume<T extends FeatureInputWithResolution>
         extends FeatureConvertUnits<T> {
 
+    /**
+     * Converts the input value from physical volume units to voxel units.
+     *
+     * @param value the input volume value in physical units
+     * @param unitConverter the unit converter to use for the conversion
+     * @return the converted volume in voxel units
+     * @throws FeatureCalculationException if the conversion fails
+     */
     @Override
     protected double convertToPhysical(double value, UnitConverter unitConverter)
             throws FeatureCalculationException {

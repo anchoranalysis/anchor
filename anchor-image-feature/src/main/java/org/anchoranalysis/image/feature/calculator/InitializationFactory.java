@@ -34,9 +34,25 @@ import org.anchoranalysis.core.value.Dictionary;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.initialization.FeatureInitialization;
 
+/**
+ * A factory for creating FeatureInitialization objects.
+ *
+ * <p>This class provides a static method to create FeatureInitialization instances
+ * from optional SharedObjects and EnergyStack inputs.</p>
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class InitializationFactory {
 
+    /**
+     * Creates a FeatureInitialization object from optional SharedObjects and EnergyStack.
+     *
+     * <p>This method extracts the necessary components from the inputs to construct
+     * a FeatureInitialization object.</p>
+     *
+     * @param sharedObjects an optional SharedObjects instance
+     * @param energyStack an optional EnergyStack instance
+     * @return a new FeatureInitialization object
+     */
     public static FeatureInitialization create(
             Optional<SharedObjects> sharedObjects, Optional<EnergyStack> energyStack) {
 

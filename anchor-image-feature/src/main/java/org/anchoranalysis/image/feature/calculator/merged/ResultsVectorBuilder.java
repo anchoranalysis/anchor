@@ -37,27 +37,40 @@ import org.anchoranalysis.image.feature.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 
+/**
+ * Builds a ResultsVector by calculating and inserting feature results.
+ *
+ * <p>This class provides methods to calculate features for single objects or pairs of objects
+ * and insert the results into a ResultsVector.</p>
+ */
 class ResultsVectorBuilder {
 
     private Optional<ErrorReporter> errorReporter;
-    private ResultsVector out;
+    private ResultsVector vector;
     private int count;
 
     /**
-     * Constructor
+     * Constructor for ResultsVectorBuilder.
      *
-     * @param size
-     * @param errorReporter if-defined feature errors are logged here and not thrown as exceptions.
-     *     if not-defined, exceptions are thrown
+     * @param size The size of the ResultsVector to be built.
+     * @param errorReporter If defined, feature errors are logged here and not thrown as exceptions.
+     *                      If not defined, exceptions are thrown.
      */
     public ResultsVectorBuilder(int size, Optional<ErrorReporter> errorReporter) {
         super();
         this.errorReporter = errorReporter;
-        this.out = new ResultsVector(size);
+        this.vector = new ResultsVector(size);
         this.count = 0;
     }
 
-    /** Calculates and inserts a derived {@link ObjectMask} input from a merged input. */
+    /**
+     * Calculates and inserts a derived {@link ObjectMask} input from a merged input.
+     *
+     * @param inputPair The input pair of objects.
+     * @param extractObj A function to extract an ObjectMask from the input pair.
+     * @param calculator The feature calculator for single objects.
+     * @throws NamedFeatureCalculateException If a calculation error occurs.
+     */
     public void calculateAndInsert(
             FeatureInputPairObjects inputPair,
             Function<FeatureInputPairObjects, ObjectMask> extractObj,
@@ -69,22 +82,29 @@ class ResultsVectorBuilder {
     }
 
     /**
-     * Calculates the parameters belong to a particular session and inserts into a ResultsVector
+     * Calculates the features for a particular input and inserts the results into the ResultsVector.
      *
-     * @param input
-     * @param calculator
+     * @param <T> The type of feature input.
+     * @param input The input for feature calculation.
+     * @param calculator The feature calculator.
+     * @throws NamedFeatureCalculateException If a calculation error occurs.
      */
     public <T extends FeatureInput> void calculateAndInsert(
             T input, FeatureCalculatorMulti<T> calculator) throws NamedFeatureCalculateException {
-        ResultsVector rvImage =
+        ResultsVector vectorLocal =
                 errorReporter.isPresent()
                         ? calculator.calculateSuppressErrors(input, errorReporter.get())
                         : calculator.calculate(input);
-        out.set(count, rvImage);
-        count += rvImage.size();
+        vector.set(count, vectorLocal);
+        count += vectorLocal.size();
     }
 
+    /**
+     * Gets the built ResultsVector.
+     *
+     * @return The ResultsVector containing all calculated feature results.
+     */
     public ResultsVector getResultsVector() {
-        return out;
+        return vector;
     }
 }

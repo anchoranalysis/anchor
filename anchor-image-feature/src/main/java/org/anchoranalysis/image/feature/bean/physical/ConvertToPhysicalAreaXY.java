@@ -30,14 +30,30 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInputWithResolution;
 import org.anchoranalysis.image.core.dimensions.UnitConverter;
 
-// converts a feature to a physical distance in a XY place that is isometric
+/**
+ * Converts a feature value representing area in pixel units to physical area units in an isometric XY plane.
+ *
+ * <p>This feature converter takes a measurement in pixel units and converts it
+ * to physical area units (e.g., square micrometers). It assumes an isometric XY plane
+ * in the image space, meaning that the X and Y dimensions have the same physical scale.</p>
+ *
+ * @param <T> the type of feature input, which must include resolution information
+ */
 public class ConvertToPhysicalAreaXY<T extends FeatureInputWithResolution>
         extends FeatureConvertUnits<T> {
 
+    /**
+     * Converts the input value from pixel units to physical area units in an isometric XY plane.
+     *
+     * @param value the input area value in pixel units
+     * @param unitConverter the unit converter to use for the conversion
+     * @return the converted area in physical units
+     * @throws FeatureCalculationException if the conversion fails
+     */
     @Override
     protected double convertToPhysical(double value, UnitConverter unitConverter)
             throws FeatureCalculationException {
-        // We use arbitrary direction as everything should be the same in a isometric XY plane
+        // We use arbitrary direction as everything should be the same in an isometric XY plane
         return unitConverter.toPhysicalArea(value);
     }
 }

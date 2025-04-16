@@ -34,14 +34,14 @@ import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 
 /**
- * Calculates a single-input from a pair
+ * Calculates a single-input from a pair of objects.
  *
- * <p>Three states are possible:
+ * <p>Three extraction modes are possible:
  *
  * <ul>
- *   <li>First
- *   <li>Second
- *   <li>Merged
+ *   <li>First object
+ *   <li>Second object
+ *   <li>Merged objects
  * </ul>
  *
  * @author Owen Feehan
@@ -51,14 +51,27 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
 public class CalculateInputFromPair
         extends CalculationPart<FeatureInputSingleObject, FeatureInputPairObjects> {
 
+    /**
+     * Defines the extraction mode for the calculation.
+     */
     public enum Extract {
+        /** Extract the first object from the pair. */
         FIRST,
+        /** Extract the second object from the pair. */
         SECOND,
+        /** Extract the merged object from the pair. */
         MERGED
     }
 
+    /** The extraction mode to use. */
     private final Extract extract;
 
+    /**
+     * Executes the calculation to extract a single object from the pair.
+     *
+     * @param input The input pair of objects.
+     * @return A new FeatureInputSingleObject containing the extracted object and energy stack.
+     */
     @Override
     protected FeatureInputSingleObject execute(FeatureInputPairObjects input) {
         FeatureInputSingleObject inputNew = new FeatureInputSingleObject(extractObject(input));
@@ -66,12 +79,16 @@ public class CalculateInputFromPair
         return inputNew;
     }
 
+    /**
+     * Extracts the appropriate object from the input pair based on the extraction mode.
+     *
+     * @param input The input pair of objects.
+     * @return The extracted ObjectMask.
+     */
     private ObjectMask extractObject(FeatureInputPairObjects input) {
-
         if (extract == Extract.MERGED) {
             return input.getMerged();
         }
-
         return extract == Extract.FIRST ? input.getFirst() : input.getSecond();
     }
 }

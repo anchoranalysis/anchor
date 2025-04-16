@@ -34,13 +34,21 @@ import org.anchoranalysis.image.feature.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 
 /**
- * Evaluates the first-object in a pair only
+ * Evaluates a feature on the merged object created from a pair of objects.
+ *
+ * <p>This class extends {@link FeatureDeriveFromPair} to specifically calculate
+ * a feature value for the merged object created from both objects in a pair.</p>
  *
  * @author Owen Feehan
  */
 @NoArgsConstructor
 public class Merged extends FeatureDeriveFromPair {
 
+    /**
+     * Creates a new instance that will evaluate the given feature on the merged object of a pair.
+     *
+     * @param item the feature to be evaluated on the merged object
+     */
     public Merged(Feature<FeatureInputSingleObject> item) {
         super(item);
     }

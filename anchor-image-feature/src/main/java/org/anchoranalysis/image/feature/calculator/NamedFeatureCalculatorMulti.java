@@ -33,18 +33,30 @@ import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.name.FeatureNameList;
 
 /**
- * A {@link FeatureCalculatorMulti} with associated feature-names
+ * A {@link FeatureCalculatorMulti} with associated feature-names.
  *
- * @author Owen Feehan
+ * <p>This class combines a multi-feature calculator with a list of feature names,
+ * allowing for named feature calculations.</p>
+ *
  * @param <T> feature input type
+ * @author Owen Feehan
  */
 @Value
 @AllArgsConstructor
 public class NamedFeatureCalculatorMulti<T extends FeatureInput> {
 
+    /** The multi-feature calculator. */
     private FeatureCalculatorMulti<T> calculator;
+
+    /** The list of feature names associated with the calculator. */
     private FeatureNameList names;
 
+    /**
+     * Creates a new instance by applying a mapping function to the calculator.
+     *
+     * @param mapOperator a unary operator that transforms the calculator
+     * @return a new NamedFeatureCalculatorMulti with the transformed calculator and the same names
+     */
     public NamedFeatureCalculatorMulti<T> mapCalculator(
             UnaryOperator<FeatureCalculatorMulti<T>> mapOperator) {
         return new NamedFeatureCalculatorMulti<>(mapOperator.apply(calculator), names);

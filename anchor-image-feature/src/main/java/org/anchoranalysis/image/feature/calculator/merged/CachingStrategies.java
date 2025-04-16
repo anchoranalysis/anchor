@@ -35,20 +35,34 @@ import org.anchoranalysis.feature.session.replace.ReuseSingletonStrategy;
 import org.anchoranalysis.image.feature.input.FeatureInputStack;
 
 /**
- * Strategies for caching used in {@link PairsTableCalculator}
+ * Strategies for caching used in {@link PairsTableCalculator}.
+ *
+ * <p>This class provides factory methods for creating different caching strategies
+ * used in feature calculations.</p>
  *
  * @author Owen Feehan
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class CachingStrategies {
 
-    /** Cache and re-use inputs */
+    /**
+     * Creates a strategy that caches and reuses inputs.
+     *
+     * @param <T> the type of feature input
+     * @return a bound replace strategy that caches and reuses inputs
+     */
     public static <T extends FeatureInput>
             BoundReplaceStrategy<T, CacheAndReuseStrategy<T>> cacheAndReuse() {
         return new BoundReplaceStrategy<>(CacheAndReuseStrategy::new);
     }
 
-    /* Don't cache inputs */
+    /**
+     * Creates a strategy that doesn't cache inputs, but reuses a single instance.
+     *
+     * <p>This strategy is specifically for {@link FeatureInputStack} inputs.</p>
+     *
+     * @return a bound replace strategy that doesn't cache inputs but reuses a single instance
+     */
     public static BoundReplaceStrategy<FeatureInputStack, ReuseSingletonStrategy<FeatureInputStack>>
             noCache() {
         return new BoundReplaceStrategy<>(ReuseSingletonStrategy::new);

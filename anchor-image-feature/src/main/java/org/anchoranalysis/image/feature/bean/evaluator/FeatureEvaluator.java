@@ -55,7 +55,6 @@ import org.anchoranalysis.image.core.stack.Stack;
  *
  * <p>Optionally, an energy stack can be associated with these inputs.
  *
- * @author Owen Feehan
  * @param <T> feature input-type
  */
 public class FeatureEvaluator<T extends FeatureInput>
@@ -98,7 +97,7 @@ public class FeatureEvaluator<T extends FeatureInput>
      * Creates session for evaluating {@code feature} optionally adding an energy-stack.
      *
      * @return the calculator for a newly created session.
-     * @throws OperationFailedException
+     * @throws OperationFailedException if the session creation fails
      */
     public FeatureCalculatorSingle<T> createFeatureSession() throws OperationFailedException {
         return maybeAddEnergyStack(createCalculator());
@@ -114,17 +113,27 @@ public class FeatureEvaluator<T extends FeatureInput>
         return EnergyStackHelper.energyStack(stackEnergy, dictionary);
     }
 
+    /**
+     * Creates a feature calculator.
+     *
+     * @return a new feature calculator
+     * @throws OperationFailedException if the calculator creation fails
+     */
     private FeatureCalculatorSingle<T> createCalculator() throws OperationFailedException {
-
         try {
             return FeatureSession.with(
                     determineFeature(), getInitialization().getSharedFeatures(), getLogger());
-
         } catch (InitializeException | ProvisionFailedException e) {
             throw new OperationFailedException(e);
         }
     }
 
+    /**
+     * Determines the feature to be used, either from the feature field or the feature provider.
+     *
+     * @return the determined feature
+     * @throws ProvisionFailedException if the feature cannot be provided
+     */
     private Feature<T> determineFeature() throws ProvisionFailedException {
         if (featureProvider != null) {
             return featureProvider.get();
@@ -133,6 +142,13 @@ public class FeatureEvaluator<T extends FeatureInput>
         }
     }
 
+    /**
+     * Adds an energy stack to the calculator if one is specified.
+     *
+     * @param calculator the original calculator
+     * @return a new calculator with the energy stack added, or the original calculator if no energy stack is specified
+     * @throws OperationFailedException if adding the energy stack fails
+     */
     private FeatureCalculatorSingle<T> maybeAddEnergyStack(FeatureCalculatorSingle<T> calculator)
             throws OperationFailedException {
         if (stackEnergy != null) {

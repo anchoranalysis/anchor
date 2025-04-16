@@ -39,10 +39,13 @@ import org.anchoranalysis.feature.input.FeatureInputWithResolution;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 
 /**
- * Base-class for a feature that requires input-resolution to be calculated.
+ * Base class for a feature that requires input resolution to be calculated.
  *
+ * <p>This class provides a framework for features that depend on image resolution
+ * for their calculations. It handles cases where resolution might be missing.</p>
+ *
+ * @param <T> feature input type, which must include resolution information
  * @author Owen Feehan
- * @param <T> feature-input type.
  */
 @NoArgsConstructor
 public abstract class WithResolutionBase<T extends FeatureInputWithResolution>
@@ -50,16 +53,27 @@ public abstract class WithResolutionBase<T extends FeatureInputWithResolution>
 
     // START BEAN FIELDS
     /**
-     * Whether to throw an exception (if true) if image-resolution is missing, or return {@code
-     * Double.Nan} (if false).
+     * Whether to return {@code Double.NaN} (if true) or throw an exception (if false) when image resolution is missing.
      */
-    private @BeanField @Getter @Setter boolean acceptMissingResolution = false;
+    @BeanField @Getter @Setter private boolean acceptMissingResolution = false;
     // END BEAN FIELDS
 
+    /**
+     * Creates a new instance with a specified feature.
+     *
+     * @param feature the feature to be used in calculations
+     */
     protected WithResolutionBase(Feature<T> feature) {
         super(feature);
     }
 
+    /**
+     * Calculates the feature value, handling cases where resolution might be missing.
+     *
+     * @param input the input for feature calculation
+     * @return the calculated feature value
+     * @throws FeatureCalculationException if an error occurs during calculation
+     */
     @Override
     public final double calculate(FeatureCalculationInput<T> input)
             throws FeatureCalculationException {
@@ -73,12 +87,19 @@ public abstract class WithResolutionBase<T extends FeatureInputWithResolution>
             } else {
                 return Double.NaN;
             }
-
         } else {
             return calculateWithResolution(value, input.get().getResolutionRequired());
         }
     }
 
+    /**
+     * Calculates the feature value using the provided value and resolution.
+     *
+     * @param value the input value to be used in the calculation
+     * @param resolution the resolution to be used in the calculation
+     * @return the calculated feature value
+     * @throws FeatureCalculationException if an error occurs during calculation
+     */
     protected abstract double calculateWithResolution(double value, Resolution resolution)
             throws FeatureCalculationException;
 }

@@ -32,17 +32,36 @@ import org.anchoranalysis.feature.calculate.part.CalculationPart;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 
+/**
+ * Calculates the number of voxels in a single object, optionally flattening in the Z-dimension.
+ *
+ * <p>This calculation part can either count the voxels in the 3D object or in its 2D projection
+ * (flattened in the Z-dimension), depending on the {@code flattenZ} parameter.</p>
+ */
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 public class CalculateNumberVoxels extends CalculationPart<Double, FeatureInputSingleObject> {
 
+    /** Whether to flatten the object in the Z-dimension before counting voxels. */
     private final boolean flattenZ;
 
+    /**
+     * Executes the calculation to count the number of voxels in the object.
+     *
+     * @param input The input single object.
+     * @return The number of voxels in the object (or its 2D projection if {@code flattenZ} is true).
+     */
     @Override
     public Double execute(FeatureInputSingleObject input) {
         return (double) maybeFlatten(input.getObject()).numberVoxelsOn();
     }
 
+    /**
+     * Flattens the object in the Z-dimension if {@code flattenZ} is true.
+     *
+     * @param object The input object mask.
+     * @return The flattened object if {@code flattenZ} is true, otherwise the original object.
+     */
     private ObjectMask maybeFlatten(ObjectMask object) {
         if (flattenZ) {
             return object.flattenZ();

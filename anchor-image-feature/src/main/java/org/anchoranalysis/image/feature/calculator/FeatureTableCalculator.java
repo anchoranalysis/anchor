@@ -36,21 +36,25 @@ import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 
 /**
- * A feature-calculator with additional functions for encoding the output in in a tabular-format
- * with column-names.
+ * A feature-calculator with additional functions for encoding the output in a tabular format
+ * with column names.
  *
+ * <p>This interface extends FeatureCalculatorMulti to provide methods for initializing,
+ * duplicating, and naming features in a tabular structure.</p>
+ *
+ * @param <T> the type of feature input
  * @author Owen Feehan
- * @param <T>
  */
 public interface FeatureTableCalculator<T extends FeatureInput> extends FeatureCalculatorMulti<T> {
 
     /**
      * Initializes a feature store that has the same structure as that previously created by
-     * createFeatures() from the same object
+     * createFeatures() from the same object.
      *
-     * @param initialization
-     * @param energyStack
-     * @param logger
+     * @param initialization the image initialization context
+     * @param energyStack an optional energy stack for feature calculation
+     * @param logger a logger for reporting initialization progress or errors
+     * @throws InitializeException if initialization fails
      */
     void start(ImageInitialization initialization, Optional<EnergyStack> energyStack, Logger logger)
             throws InitializeException;
@@ -58,16 +62,16 @@ public interface FeatureTableCalculator<T extends FeatureInput> extends FeatureC
     /**
      * Makes a copy of the feature-store for a new thread.
      *
-     * <p>Deep-copies the features. Shallow-copies everything else.
+     * <p>Deep-copies the features. Shallow-copies everything else.</p>
      *
-     * @return the copied-feature-store
+     * @return the copied feature-store
      */
     FeatureTableCalculator<T> duplicateForNewThread();
 
     /**
-     * Creates A list of names for each feature (columns of the table)
+     * Creates a list of names for each feature (columns of the table).
      *
-     * @return the list of feature-names
+     * @return the list of feature names
      */
     FeatureNameList createFeatureNames();
 }
