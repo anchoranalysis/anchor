@@ -41,15 +41,27 @@ import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.mpp.pair.MarkPair;
 
+/**
+ * Implements {@link AddCriteria} for energy pairs, combining energy calculations with additional criteria.
+ */
 public class AddCriteriaEnergyPair implements AddCriteria<EnergyPair> {
 
+    /** Feature list for calculating energy pairs. */
     private FeatureList<FeatureInputPairMemo> energyPairs;
 
-    // List of criteria for adding pairs
+    /** Criteria for adding pairs of marks. */
     private AddCriteriaPair pairAddCriteria;
 
+    /** Optional feature list for additional add criteria. */
     private Optional<FeatureList<FeatureInputPairMemo>> featuresAddCriteria;
 
+    /**
+     * Creates an AddCriteriaEnergyPair with specified energy pairs and add criteria.
+     *
+     * @param energyPairs feature list for energy pair calculations
+     * @param pairAddCriteria criteria for adding mark pairs
+     * @throws InitializeException if initialization fails
+     */
     public AddCriteriaEnergyPair(
             FeatureList<FeatureInputPairMemo> energyPairs, AddCriteriaPair pairAddCriteria)
             throws InitializeException {
@@ -65,14 +77,12 @@ public class AddCriteriaEnergyPair implements AddCriteria<EnergyPair> {
         }
     }
 
-    /** @throws CreateException */
     @Override
     public Optional<FeatureList<FeatureInputPairMemo>> orderedListOfFeatures()
             throws CreateException {
         return Optional.of(energyPairs.shallowDuplicate().append(featuresAddCriteria));
     }
 
-    // Returns null if to reject an edge
     @Override
     public Optional<EnergyPair> generateEdge(
             VoxelizedMarkMemo mark1,
@@ -82,13 +92,6 @@ public class AddCriteriaEnergyPair implements AddCriteria<EnergyPair> {
             boolean do3D)
             throws CreateException {
 
-        // We have to split our FeatureSession in two separate sessions:
-        //       some features for the includeMarks
-        //   and some features for energyPairs
-
-        // If any of the add criteria indicate an edge, then we calculate the features
-        //  This will also ensure the input collection is fully populated with
-        //  necessary calculations from the addCriteria calculations to be used later
         boolean calculate = false;
         try {
             if (pairAddCriteria.includeMarks(

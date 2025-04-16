@@ -31,12 +31,18 @@ import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.pair.MarkPair;
 
 /**
- * A pair collection where the underlying type is a simple {@link MarkPair}
+ * A collection of {@link MarkPair}s with {@link Mark}s as the underlying type.
  *
- * @author Owen Feehan
+ * <p>This class extends {@link RandomCollectionWithAddCriteria} to provide a specialized collection
+ * for pairs of marks, allowing for random access and specific addition criteria.</p>
  */
 public class MarkPairCollection extends RandomCollectionWithAddCriteria<MarkPair<Mark>> {
 
+    /**
+     * Creates a new {@link MarkPairCollection}.
+     *
+     * <p>Initializes the collection with {@link MarkPair} as the underlying class type for the random collection.</p>
+     */
     public MarkPairCollection() {
         super(MarkPair.class);
     }

@@ -31,14 +31,19 @@ import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.input.FeatureInput;
 
+/**
+ * An interface for providing an ordered list of features.
+ *
+ * @param <T> the type of {@link FeatureInput} for the features in the list
+ */
 public interface OrderedFeatureList<T extends FeatureInput> {
 
     /**
-     * A list of features used to determine the {@link
-     * org.anchoranalysis.mpp.feature.addcriteria.AddCriteria}, or {@link Optional#empty} if
-     * irrelvant.
+     * Retrieves an ordered list of features used to determine the {@link AddCriteria}.
      *
-     * @return
+     * @return an {@link Optional} containing a {@link FeatureList} of type T if relevant,
+     *         or {@link Optional#empty()} if irrelevant
+     * @throws CreateException if an error occurs while creating the feature list
      */
     Optional<FeatureList<T>> orderedListOfFeatures() throws CreateException;
 }

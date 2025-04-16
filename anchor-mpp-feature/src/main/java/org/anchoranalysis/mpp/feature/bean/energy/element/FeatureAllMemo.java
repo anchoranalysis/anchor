@@ -30,6 +30,12 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.mpp.feature.input.FeatureInputAllMemo;
 
+/**
+ * An abstract base class for features that operate on {@link FeatureInputAllMemo}.
+ *
+ * <p>This class extends {@link Feature} and provides a specific implementation
+ * for the {@link #inputType()} method to return {@link FeatureInputAllMemo}.</p>
+ */
 public abstract class FeatureAllMemo extends Feature<FeatureInputAllMemo> {
 
     @Override

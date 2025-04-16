@@ -28,30 +28,44 @@ package org.anchoranalysis.mpp.feature.input;
 
 import java.util.Optional;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.input.FeatureInputEnergy;
 import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 
+/**
+ * Feature input that contains a single memoized voxelized mark and an optional energy stack.
+ *
+ * <p>This class extends {@link FeatureInputEnergy} to include a {@link VoxelizedMarkMemo} object,
+ * representing a single memoized voxelized mark for feature calculations.</p>
+ */
 @EqualsAndHashCode(callSuper = true)
 public class FeatureInputSingleMemo extends FeatureInputEnergy {
 
-    private VoxelizedMarkMemo pxlPartMemo;
+    /** The memoized voxelized mark. */
+    @Getter @Setter private VoxelizedMarkMemo memo;
 
+    /**
+     * Creates a new instance with a memoized voxelized mark and a non-optional energy stack.
+     *
+     * @param pxlPartMemo the memoized voxelized mark
+     * @param energyStack the energy stack associated with the mark
+     */
     public FeatureInputSingleMemo(VoxelizedMarkMemo pxlPartMemo, EnergyStack energyStack) {
         this(pxlPartMemo, Optional.of(energyStack));
     }
 
+    /**
+     * Creates a new instance with a memoized voxelized mark and an optional energy stack.
+     *
+     * @param pxlPartMemo the memoized voxelized mark
+     * @param energyStack an optional energy stack associated with the mark
+     */
     public FeatureInputSingleMemo(
             VoxelizedMarkMemo pxlPartMemo, Optional<EnergyStack> energyStack) {
         super(energyStack);
-        this.pxlPartMemo = pxlPartMemo;
-    }
-
-    public VoxelizedMarkMemo getPxlPartMemo() {
-        return pxlPartMemo;
-    }
-
-    public void setPxlPartMemo(VoxelizedMarkMemo pxlPartMemo) {
-        this.pxlPartMemo = pxlPartMemo;
+        this.memo = pxlPartMemo;
     }
 }

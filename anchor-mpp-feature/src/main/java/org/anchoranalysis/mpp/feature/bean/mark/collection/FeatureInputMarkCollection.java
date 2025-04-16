@@ -34,10 +34,19 @@ import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.mpp.mark.MarkCollection;
 
+/**
+ * Feature input that contains a collection of marks and optional dimensions.
+ *
+ * <p>This class implements {@link FeatureInputWithResolution} to provide resolution
+ * information if available from the dimensions.</p>
+ */
 @AllArgsConstructor
 public class FeatureInputMarkCollection implements FeatureInputWithResolution {
 
+    /** The collection of marks. */
     @Getter private MarkCollection marks;
+
+    /** Optional dimensions associated with the mark collection. */
     private Optional<Dimensions> dimensions;
 
     @Override
@@ -45,6 +54,11 @@ public class FeatureInputMarkCollection implements FeatureInputWithResolution {
         return dimensions.flatMap(Dimensions::resolution);
     }
 
+    /**
+     * Gets the optional dimensions associated with the mark collection.
+     *
+     * @return an {@link Optional} containing the {@link Dimensions} if present, or empty if not available
+     */
     public Optional<Dimensions> dimensions() {
         return dimensions;
     }

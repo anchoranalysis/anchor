@@ -28,25 +28,33 @@ package org.anchoranalysis.mpp.feature.input;
 
 import java.util.Optional;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.input.FeatureInputEnergy;
 import org.anchoranalysis.mpp.feature.mark.EnergyMemoList;
 
+/**
+ * Feature input that contains a list of memoized energy calculations for all marks.
+ *
+ * <p>This class extends {@link FeatureInputEnergy} to include an {@link EnergyMemoList},
+ * which represents memoized energy calculations for all marks in the model.</p>
+ */
 @EqualsAndHashCode(callSuper = true)
 public class FeatureInputAllMemo extends FeatureInputEnergy {
 
-    private EnergyMemoList pxlMarkMemoList;
+    /** The list of memoized energy calculations for all marks. */
+    @Getter @Setter private EnergyMemoList calculations;
 
+    /**
+     * Creates a new instance with a list of memoized energy calculations and an energy stack.
+     *
+     * @param pxlMarkMemoList the list of memoized energy calculations for all marks
+     * @param raster the energy stack associated with the calculations
+     */
     public FeatureInputAllMemo(EnergyMemoList pxlMarkMemoList, EnergyStack raster) {
         super(Optional.of(raster));
-        this.pxlMarkMemoList = pxlMarkMemoList;
-    }
-
-    public EnergyMemoList getPxlPartMemo() {
-        return pxlMarkMemoList;
-    }
-
-    public void setPxlPartMemo(EnergyMemoList pxlPartMemoList) {
-        this.pxlMarkMemoList = pxlPartMemoList;
+        this.calculations = pxlMarkMemoList;
     }
 }

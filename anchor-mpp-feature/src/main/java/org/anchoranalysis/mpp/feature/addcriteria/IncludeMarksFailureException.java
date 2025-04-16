@@ -28,16 +28,32 @@ package org.anchoranalysis.mpp.feature.addcriteria;
 
 import org.anchoranalysis.core.exception.AnchorCheckedException;
 
+/**
+ * Exception thrown when there's a failure in including marks during the add criteria process.
+ *
+ * <p>This exception extends {@link AnchorCheckedException} and is used specifically
+ * in the context of mark inclusion operations.</p>
+ */
 public class IncludeMarksFailureException extends AnchorCheckedException {
 
-    /** */
+    /** Serialization version UID. */
     private static final long serialVersionUID = -4475636830799035389L;
 
-    public IncludeMarksFailureException(String string) {
-        super(string);
+    /**
+     * Constructs a new exception with the specified detail message.
+     *
+     * @param message the detail message (which is saved for later retrieval by the {@link #getMessage()} method)
+     */
+    public IncludeMarksFailureException(String message) {
+        super(message);
     }
 
-    public IncludeMarksFailureException(Exception exc) {
-        super(exc);
+    /**
+     * Constructs a new exception with the specified cause.
+     *
+     * @param cause the cause (which is saved for later retrieval by the {@link #getCause()} method)
+     */
+    public IncludeMarksFailureException(Exception cause) {
+        super(cause);
     }
 }

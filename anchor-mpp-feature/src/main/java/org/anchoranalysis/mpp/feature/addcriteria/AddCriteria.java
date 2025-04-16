@@ -34,12 +34,26 @@ import org.anchoranalysis.mpp.feature.input.FeatureInputPairMemo;
 import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 
 /**
- * Add Criteria
+ * Criteria for adding edges between marks in a graph-based model.
  *
- * @param <T> add-criteria
+ * <p>This interface extends {@link OrderedFeatureList} to provide an ordered list of features
+ * for pair-wise mark comparisons.</p>
+ *
+ * @param <T> the type of the generated edge
  */
 public interface AddCriteria<T> extends OrderedFeatureList<FeatureInputPairMemo> {
 
+    /**
+     * Generates an edge between two marks based on the defined criteria.
+     *
+     * @param mark1 the first {@link VoxelizedMarkMemo}
+     * @param mark2 the second {@link VoxelizedMarkMemo}
+     * @param energyStack the {@link EnergyStack} containing image data and parameters
+     * @param session an optional {@link FeatureCalculatorMulti} for feature calculations
+     * @param do3D whether to perform 3D calculations
+     * @return an {@link Optional} containing the generated edge of type T if criteria are met, otherwise empty
+     * @throws CreateException if there's an error during edge generation
+     */
     Optional<T> generateEdge(
             VoxelizedMarkMemo mark1,
             VoxelizedMarkMemo mark2,

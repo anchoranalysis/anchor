@@ -45,29 +45,46 @@ import org.anchoranalysis.feature.shared.SharedFeatures;
 import org.anchoranalysis.image.feature.input.FeatureInputStack;
 
 /**
- * Creates a {@link Dictionary} for a particular {@link EnergyStack} that is associated with a
- * EnergyScheme
+ * Creates a {@link Dictionary} for a particular {@link EnergyStack} that is associated with an {@link EnergyScheme}.
  *
- * @author Owen Feehan
+ * <p>This class calculates image features defined in the energy scheme and stores them in a dictionary.</p>
  */
 @AllArgsConstructor
 public class DictionaryForImageCreator {
 
+    /** The energy scheme containing the image features to be calculated. */
     private EnergyScheme energyScheme;
+
+    /** Shared features used in the feature calculation process. */
     private SharedFeatures sharedFeatures;
+
+    /** Logger for reporting any issues during the creation process. */
     private Logger logger;
 
+    /**
+     * Creates a dictionary containing calculated image features for a given energy stack.
+     *
+     * @param energyStack the energy stack without parameters
+     * @return a dictionary containing the calculated image features
+     * @throws CreateException if there's an error during the dictionary creation process
+     */
     public Dictionary create(EnergyStackWithoutParameters energyStack) throws CreateException {
         try {
             Dictionary dictionary = energyScheme.createDictionary();
             addParametersForImage(energyStack, dictionary);
             return dictionary;
-
         } catch (OperationFailedException e) {
             throw new CreateException(e);
         }
     }
 
+    /**
+     * Adds calculated image feature parameters to the dictionary for a given energy stack.
+     *
+     * @param energyStack the energy stack without parameters
+     * @param dictionary the dictionary to add the calculated features to
+     * @throws OperationFailedException if there's an error during the feature calculation process
+     */
     private void addParametersForImage(
             EnergyStackWithoutParameters energyStack, Dictionary dictionary)
             throws OperationFailedException {
@@ -79,13 +96,21 @@ public class DictionaryForImageCreator {
                         Optional.of(dictionary), Optional.of(energyStack), Optional.empty());
 
         for (NamedBean<Feature<FeatureInputStack>> feature : energyScheme.getListImageFeatures()) {
-
             dictionary.putCheck(
                     feature.getName(),
                     calculateImageFeature(feature.getItem(), initialization, parameters));
         }
     }
 
+    /**
+     * Calculates a single image feature.
+     *
+     * @param feature the feature to calculate
+     * @param initialization the feature initialization parameters
+     * @param parameters the input parameters for the feature calculation
+     * @return the calculated feature value
+     * @throws OperationFailedException if there's an error during the feature calculation process
+     */
     private double calculateImageFeature(
             Feature<FeatureInputStack> feature,
             FeatureInitialization initialization,

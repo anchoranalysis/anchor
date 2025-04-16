@@ -33,13 +33,23 @@ import lombok.EqualsAndHashCode;
 import org.anchoranalysis.mpp.mark.voxelized.memo.MemoForIndex;
 import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 
+/**
+ * A list of {@link VoxelizedMarkMemo} objects that implements {@link MemoForIndex} and {@link Iterable}.
+ *
+ * <p>This class provides methods to manipulate and access the list of voxelized mark memos.</p>
+ */
 @EqualsAndHashCode(callSuper = false)
 public class MemoList implements MemoForIndex, Iterable<VoxelizedMarkMemo> {
 
+    /** The underlying list storing the {@link VoxelizedMarkMemo} objects. */
     private List<VoxelizedMarkMemo> delegate = new ArrayList<>();
 
+    /**
+     * Adds all elements from another {@link MemoForIndex} to this list.
+     *
+     * @param src the source {@link MemoForIndex} to add elements from
+     */
     public void addAll(MemoForIndex src) {
-
         for (int i = 0; i < src.size(); i++) {
             add(src.getMemoForIndex(i));
         }
@@ -50,24 +60,55 @@ public class MemoList implements MemoForIndex, Iterable<VoxelizedMarkMemo> {
         return get(index);
     }
 
+    /**
+     * Returns the number of elements in this list.
+     *
+     * @return the number of elements in this list
+     */
     public int size() {
         return delegate.size();
     }
 
+    /**
+     * Returns the element at the specified position in this list.
+     *
+     * @param index index of the element to return
+     * @return the element at the specified position in this list
+     * @throws IndexOutOfBoundsException if the index is out of range
+     */
     public VoxelizedMarkMemo get(int index) {
         return delegate.get(index);
     }
 
+    /**
+     * Appends the specified element to the end of this list.
+     *
+     * @param e element to be appended to this list
+     * @return {@code true} (as specified by {@link Collection#add})
+     */
     public boolean add(VoxelizedMarkMemo e) {
         return delegate.add(e);
     }
 
+    /**
+     * Removes the element at the specified position in this list.
+     *
+     * @param index the index of the element to be removed
+     * @return the element that was removed from the list
+     * @throws IndexOutOfBoundsException if the index is out of range
+     */
     public VoxelizedMarkMemo remove(int index) {
         return delegate.remove(index);
     }
 
-    public boolean remove(VoxelizedMarkMemo o) {
-        return delegate.remove(o);
+    /**
+     * Removes the first occurrence of the specified element from this list, if it is present.
+     *
+     * @param memo element to be removed from this list, if present
+     * @return {@code true} if this list contained the specified element
+     */
+    public boolean remove(VoxelizedMarkMemo memo) {
+        return delegate.remove(memo);
     }
 
     @Override
@@ -75,6 +116,14 @@ public class MemoList implements MemoForIndex, Iterable<VoxelizedMarkMemo> {
         return delegate.iterator();
     }
 
+    /**
+     * Replaces the element at the specified position in this list with the specified element.
+     *
+     * @param index index of the element to replace
+     * @param element element to be stored at the specified position
+     * @return the element previously at the specified position
+     * @throws IndexOutOfBoundsException if the index is out of range
+     */
     public VoxelizedMarkMemo set(int index, VoxelizedMarkMemo element) {
         return delegate.set(index, element);
     }

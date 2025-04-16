@@ -31,11 +31,24 @@ import lombok.Getter;
 import org.anchoranalysis.core.index.Indexable;
 import org.anchoranalysis.mpp.feature.energy.marks.MarksWithEnergyBreakdown;
 
+/**
+ * An {@link Indexable} object that contains {@link MarksWithEnergyBreakdown}.
+ *
+ * <p>This class extends {@link Indexable} to provide an index for the marks with energy breakdown,
+ * typically used in iterative processes.</p>
+ */
 @EqualsAndHashCode(callSuper = true)
 public class IndexableMarksWithEnergy extends Indexable {
 
+    /** The marks with their energy breakdown. */
     @Getter private MarksWithEnergyBreakdown marks;
 
+    /**
+     * Creates a new {@link IndexableMarksWithEnergy}.
+     *
+     * @param iter the iteration number or index
+     * @param marks the {@link MarksWithEnergyBreakdown} associated with this index
+     */
     public IndexableMarksWithEnergy(int iter, MarksWithEnergyBreakdown marks) {
         super(iter);
         this.marks = marks;

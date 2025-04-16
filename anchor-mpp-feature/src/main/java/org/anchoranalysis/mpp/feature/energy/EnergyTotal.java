@@ -30,25 +30,46 @@ import java.io.Serializable;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * Represents the total energy of a system, which can be modified and queried.
+ *
+ * <p>This class is serializable and provides methods for deep copying, adding energy, and retrieving the total energy.</p>
+ */
 @AllArgsConstructor
 @RequiredArgsConstructor
 public class EnergyTotal implements Serializable {
 
-    /** */
+    /** Serialization version UID. */
     private static final long serialVersionUID = -595099053761257083L;
 
+    /** The total energy value. */
     private double total = 0;
 
+    /**
+     * Creates a deep copy of this {@link EnergyTotal} instance.
+     *
+     * @return a new {@link EnergyTotal} instance with the same total energy value
+     */
     public EnergyTotal deepCopy() {
         EnergyTotal out = new EnergyTotal();
         out.total = total;
         return out;
     }
 
+    /**
+     * Adds a value to the total energy.
+     *
+     * @param val the value to add to the total energy
+     */
     public final void add(double val) {
         total += val;
     }
 
+    /**
+     * Gets the current total energy value.
+     *
+     * @return the total energy as a double
+     */
     public final double getTotal() {
         return total;
     }
