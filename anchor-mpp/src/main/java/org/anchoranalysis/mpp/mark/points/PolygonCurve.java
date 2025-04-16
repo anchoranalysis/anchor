@@ -36,53 +36,67 @@ import org.anchoranalysis.spatial.point.Point3d;
 import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 
+/**
+ * Represents a polygon curve in 3D space as a Mark.
+ */
 public class PolygonCurve extends PointListBase {
 
-    /** */
     private static final long serialVersionUID = -2043844259526872933L;
 
     private static final byte FLAG_SUBMARK_NONE = RegionMembershipUtilities.flagForNoRegion();
     private static final byte FLAG_SUBMARK_INSIDE =
             RegionMembershipUtilities.flagForRegion(GlobalRegionIdentifiers.SUBMARK_INSIDE);
 
-    // Applied the same in all 3 dimensions, maybe we need to change this
-    private double distanceThreshold = 0.7;
+    /** 
+     * The distance threshold applied in all 3 dimensions.
+     * TODO: Consider changing this to be dimension-specific.
+     */
+    private static final double DISTANCE_THRESHOLD = 0.7;
 
+    /** Calculator for distances to line segments. */
     private transient DistanceCalculatorToLine distanceCalculator = new DistanceCalculatorToLine();
 
     @Override
     public byte isPointInside(Point3i point) {
 
-        if (distanceToPolygonLocal(point) < distanceThreshold) {
+        if (distanceToPolygonLocal(point) < DISTANCE_THRESHOLD) {
             return FLAG_SUBMARK_INSIDE;
         }
         return FLAG_SUBMARK_NONE;
     }
 
+    /**
+     * Calculates the distance from a point to a polygon segment.
+     *
+     * @param point the point to calculate the distance from
+     * @param pointFirst the first point of the polygon segment
+     * @param pointSecond the second point of the polygon segment
+     * @return the distance from the point to the polygon segment, or Double.POSITIVE_INFINITY if the point is outside the threshold
+     */
     private double distanceToPolygonSegmentLocal(
             Point3i point, Point3d pointFirst, Point3d pointSecond) {
 
-        if (point.x() < (pointFirst.x() - distanceThreshold)) {
+        if (point.x() < (pointFirst.x() - DISTANCE_THRESHOLD)) {
             return Double.POSITIVE_INFINITY;
         }
 
-        if (point.y() < (pointFirst.y() - distanceThreshold)) {
+        if (point.y() < (pointFirst.y() - DISTANCE_THRESHOLD)) {
             return Double.POSITIVE_INFINITY;
         }
 
-        if (point.z() < (pointFirst.z() - distanceThreshold)) {
+        if (point.z() < (pointFirst.z() - DISTANCE_THRESHOLD)) {
             return Double.POSITIVE_INFINITY;
         }
 
-        if (point.x() > (pointSecond.x() + distanceThreshold)) {
+        if (point.x() > (pointSecond.x() + DISTANCE_THRESHOLD)) {
             return Double.POSITIVE_INFINITY;
         }
 
-        if (point.y() > (pointSecond.y() + distanceThreshold)) {
+        if (point.y() > (pointSecond.y() + DISTANCE_THRESHOLD)) {
             return Double.POSITIVE_INFINITY;
         }
 
-        if (point.z() > (pointSecond.z() + distanceThreshold)) {
+        if (point.z() > (pointSecond.z() + DISTANCE_THRESHOLD)) {
             return Double.POSITIVE_INFINITY;
         }
 
@@ -91,9 +105,12 @@ public class PolygonCurve extends PointListBase {
         return distanceCalculator.distanceToLine(point);
     }
 
-    // Distance to polygon - only local (i.e. assumes that we only care about returning small values
-    // in circumstances
-    //  very close to the line segment in question, otherwise we don't care
+    /**
+     * Calculates the distance from a point to the polygon curve.
+     *
+     * @param point the point to calculate the distance from
+     * @return the minimum distance from the point to any segment of the polygon curve
+     */
     private double distanceToPolygonLocal(Point3i point) {
 
         // If a point is inside the bounding box of two points +- the distanceThreshold, we

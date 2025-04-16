@@ -33,8 +33,23 @@ import org.anchoranalysis.feature.shared.SharedFeatures;
 import org.anchoranalysis.mpp.mark.voxelized.memo.MemoForIndex;
 import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 
+/**
+ * An interface for managing a set of marks that can be updated.
+ * 
+ * <p>This interface provides methods for initializing, adding, exchanging, and removing marks
+ * from a set, while maintaining any necessary internal state or data structures.</p>
+ */
 public interface UpdatableMarks {
 
+    /**
+     * Initializes the updatable marks with necessary context.
+     *
+     * @param memo the memo for indexing
+     * @param energyStack the energy stack
+     * @param logger the logger for any logging operations
+     * @param sharedFeatures shared features to be used
+     * @throws InitializeException if initialization fails
+     */
     void initUpdatableMarks(
             MemoForIndex memo,
             EnergyStack energyStack,
@@ -42,8 +57,24 @@ public interface UpdatableMarks {
             SharedFeatures sharedFeatures)
             throws InitializeException;
 
+    /**
+     * Adds a new mark to the existing set of marks.
+     *
+     * @param marksExisting the existing set of marks
+     * @param newMark the new mark to be added
+     * @throws UpdateMarkSetException if the addition operation fails
+     */
     void add(MemoForIndex marksExisting, VoxelizedMarkMemo newMark) throws UpdateMarkSetException;
 
+    /**
+     * Exchanges an existing mark with a new one.
+     *
+     * @param memo the memo for indexing
+     * @param oldMark the mark to be replaced
+     * @param indexOldMark the index of the old mark
+     * @param newMark the new mark to replace the old one
+     * @throws UpdateMarkSetException if the exchange operation fails
+     */
     void exchange(
             MemoForIndex memo,
             VoxelizedMarkMemo oldMark,
@@ -51,5 +82,12 @@ public interface UpdatableMarks {
             VoxelizedMarkMemo newMark)
             throws UpdateMarkSetException;
 
+    /**
+     * Removes a mark from the existing set of marks.
+     *
+     * @param marksExisting the existing set of marks
+     * @param mark the mark to be removed
+     * @throws UpdateMarkSetException if the removal operation fails
+     */
     void remove(MemoForIndex marksExisting, VoxelizedMarkMemo mark) throws UpdateMarkSetException;
 }

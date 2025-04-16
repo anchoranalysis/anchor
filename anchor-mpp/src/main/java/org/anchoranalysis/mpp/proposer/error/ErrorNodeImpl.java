@@ -33,9 +33,11 @@ import javax.swing.tree.TreeNode;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.apache.commons.lang.exception.ExceptionUtils;
 
+/**
+ * Implementation of ErrorNode that also implements TreeNode for use in tree structures.
+ */
 public class ErrorNodeImpl extends ErrorNode implements TreeNode {
 
-    /** */
     private static final long serialVersionUID = -3967665095180902654L;
 
     @SuppressWarnings("unused")
@@ -45,6 +47,12 @@ public class ErrorNodeImpl extends ErrorNode implements TreeNode {
     private String errorMessage;
     private transient Mark associatedMark;
 
+    /**
+     * Constructs a new ErrorNodeImpl.
+     *
+     * @param parent the parent ErrorNode
+     * @param errorMessage the error message for this node
+     */
     ErrorNodeImpl(ErrorNode parent, String errorMessage) {
         super();
         this.parent = parent;
@@ -57,6 +65,50 @@ public class ErrorNodeImpl extends ErrorNode implements TreeNode {
         this.children.add(toAdd);
         return toAdd;
     }
+
+    /**
+     * Gets the error message associated with this node.
+     *
+     * @return the error message
+     */
+    public String getErrorMessage() {
+        return errorMessage;
+    }
+
+    /**
+     * Gets the Mark associated with this error node.
+     *
+     * @return the associated Mark
+     */
+    public Mark getAssociatedMark() {
+        return associatedMark;
+    }
+
+    @Override
+    public String toString() {
+        return getErrorMessage();
+    }
+
+    @Override
+    public ErrorNode addFormatted(String formatString, Object... args) {
+        return add(String.format(formatString, args));
+    }
+
+    @Override
+    public ErrorNode add(Exception e) {
+        return add(ExceptionUtils.getStackTrace(e));
+    }
+
+    @Override
+    public void addErrorDescription(StringBuilder sb) {
+        sb.append(errorMessage);
+        sb.append(System.getProperty("line.separator"));
+        for (ErrorNodeImpl child : children) {
+            child.addErrorDescription(sb);
+        }
+    }
+
+    // TreeNode interface methods
 
     @Override
     public Enumeration<ErrorNodeImpl> children() {
@@ -91,37 +143,5 @@ public class ErrorNodeImpl extends ErrorNode implements TreeNode {
     @Override
     public boolean isLeaf() {
         return getChildCount() == 0;
-    }
-
-    public String getErrorMessage() {
-        return errorMessage;
-    }
-
-    @Override
-    public String toString() {
-        return getErrorMessage();
-    }
-
-    public Mark getAssociatedMark() {
-        return associatedMark;
-    }
-
-    @Override
-    public ErrorNode addFormatted(String formatString, Object... args) {
-        return add(String.format(formatString, args));
-    }
-
-    @Override
-    public ErrorNode add(Exception e) {
-        return add(ExceptionUtils.getStackTrace(e));
-    }
-
-    @Override
-    public void addErrorDescription(StringBuilder sb) {
-        sb.append(errorMessage);
-        sb.append(System.getProperty("line.separator"));
-        for (ErrorNodeImpl child : children) {
-            child.addErrorDescription(sb);
-        }
     }
 }

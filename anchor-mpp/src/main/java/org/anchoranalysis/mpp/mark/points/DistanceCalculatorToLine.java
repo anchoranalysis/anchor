@@ -32,22 +32,27 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.spatial.point.Point3d;
 import org.anchoranalysis.spatial.point.Point3i;
 
+/**
+ * Calculates the distance from a point to a line segment in 3D space.
+ */
 @NoArgsConstructor
 class DistanceCalculatorToLine implements Serializable {
 
-    /** */
     private static final long serialVersionUID = 1L;
 
+    /** The start point of the line segment. */
     @Getter private Point3d startPoint;
 
+    /** The end point of the line segment. */
     @Getter private Point3d endPoint;
 
+    /** The direction vector of the line segment. */
     @Getter private Point3d directionVector;
 
     /**
-     * Copy constructor
+     * Copy constructor.
      *
-     * @param src
+     * @param src the DistanceCalculatorToLine to copy
      */
     public DistanceCalculatorToLine(DistanceCalculatorToLine src) {
         this.startPoint = new Point3d(src.startPoint);
@@ -55,6 +60,12 @@ class DistanceCalculatorToLine implements Serializable {
         this.directionVector = new Point3d(src.directionVector);
     }
 
+    /**
+     * Sets the start and end points of the line segment and calculates the direction vector.
+     *
+     * @param startPoint the start point of the line segment
+     * @param endPoint the end point of the line segment
+     */
     public void setPoints(Point3d startPoint, Point3d endPoint) {
         this.startPoint = new Point3d(startPoint);
         this.endPoint = new Point3d(endPoint);
@@ -64,13 +75,19 @@ class DistanceCalculatorToLine implements Serializable {
         this.directionVector.subtract(startPoint);
     }
 
+    /**
+     * Calculates the distance from a point to the line segment.
+     *
+     * @param point the point to calculate the distance from
+     * @return the squared distance from the point to the line segment
+     */
     public double distanceToLine(Point3i point) {
         // http://mathworld.wolfram.com/Point-LineDistance3-Dimensional.html
 
         double distanceSquared2to1 = endPoint.distanceSquared(startPoint);
         double distanceSquared1to0 = startPoint.distanceSquared(point);
 
-        // Let's calculation the dot_product
+        // Let's calculate the dot product
         double firstX = startPoint.x() - point.x();
         double firstY = startPoint.y() - point.y();
         double firstZ = startPoint.z() - point.z();

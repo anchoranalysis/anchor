@@ -26,8 +26,16 @@
 
 package org.anchoranalysis.mpp.mark;
 
+/**
+ * An interface for objects that can determine compatibility with a Mark.
+ */
 public interface CompatibleWithMark {
 
-    // Tests if a kernel is compatible with a mark of a particular type
+    /**
+     * Tests if the implementing object is compatible with a mark of a particular type.
+     *
+     * @param testMark the mark to test for compatibility
+     * @return true if the implementing object is compatible with the given mark, false otherwise
+     */
     boolean isCompatibleWith(Mark testMark);
 }

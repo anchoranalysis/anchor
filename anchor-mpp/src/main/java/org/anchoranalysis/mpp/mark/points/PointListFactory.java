@@ -36,13 +36,29 @@ import org.anchoranalysis.spatial.point.Point3f;
 import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.point.PointConverter;
 
+/**
+ * A factory for creating PointList objects from various types of point collections.
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PointListFactory {
 
+    /**
+     * Creates a PointList from a list of Point3d objects.
+     *
+     * @param points the list of Point3d objects
+     * @return a new PointList containing the given points
+     */
     public static PointList create(List<Point3d> points) {
         return create(points, -1);
     }
 
+    /**
+     * Creates a PointList from a list of Point3d objects with a specified ID.
+     *
+     * @param points the list of Point3d objects
+     * @param id the ID to assign to the PointList
+     * @return a new PointList containing the given points and ID
+     */
     public static PointList create(List<Point3d> points, int id) {
         PointList mark = new PointList();
         mark.getPoints().addAll(points);
@@ -51,18 +67,38 @@ public class PointListFactory {
         return mark;
     }
 
+    /**
+     * Creates a PointList from a list of Point3f objects.
+     *
+     * @param points the list of Point3f objects
+     * @return a new PointList containing the given points converted to Point3d
+     */
     public static PointList createMarkFromPoints3f(List<Point3f> points) {
         return createMarkFromPoints(points, PointConverter::doubleFromFloat);
     }
 
+    /**
+     * Creates a PointList from a list of Point3i objects.
+     *
+     * @param points the list of Point3i objects
+     * @return a new PointList containing the given points converted to Point3d
+     */
     public static PointList createMarkFromPoints3i(List<Point3i> points) {
         return createMarkFromPoints(points, PointConverter::doubleFromInt);
     }
 
+    /**
+     * Creates a PointList from a list of points of type T, using a conversion function.
+     *
+     * @param <T> the type of the input points
+     * @param points the list of points to convert
+     * @param convert the function to convert points of type T to Point3d
+     * @return a new PointList containing the converted points
+     * @throws IllegalArgumentException if the input list is empty
+     */
     private static <T> PointList createMarkFromPoints(
             List<T> points, Function<T, Point3d> convert) {
         Preconditions.checkArgument(!points.isEmpty(), "are empty");
-
         return new PointList(points.stream().map(convert));
     }
 }

@@ -28,5 +28,16 @@ package org.anchoranalysis.mpp.bean.provider;
 
 import org.anchoranalysis.mpp.bean.bound.MarkBounds;
 
+/**
+ * An abstract provider for {@link MarkBounds}.
+ * <p>
+ * This class extends {@link MarksBaseProvider} and specializes it for providing {@link MarkBounds} objects.
+ * It serves as a base class for concrete implementations that provide specific mark bounds.
+ * </p>
+ */
 public abstract class MarkBoundsProvider
-        extends MarksBaseProvider<MarkBoundsProvider, MarkBounds> {}
+        extends MarksBaseProvider<MarkBoundsProvider, MarkBounds> {
+    
+    // The class is left empty as it's meant to be a type-specific extension of MarksBaseProvider.
+    // Concrete implementations should provide the actual logic for creating MarkBounds objects.
+}

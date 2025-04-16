@@ -29,13 +29,30 @@ package org.anchoranalysis.mpp.mark;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
+/**
+ * Defines global identifiers for different regions of a mark.
+ * 
+ * <p>This class provides constants that represent different parts or regions
+ * of a mark, which can be used for consistent identification across the system.</p>
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class GlobalRegionIdentifiers {
 
+    /** Identifier for the inside region of a submark. */
     public static final int SUBMARK_INSIDE = 0;
+
+    /** Identifier for the shell region of a submark. */
     public static final int SUBMARK_SHELL = 1;
+
+    /** Identifier for the core region of a submark. */
     public static final int SUBMARK_CORE = 2;
+
+    /** Identifier for the outside region of a submark. */
     public static final int SUBMARK_OUTSIDE = 3;
+
+    /** Identifier for the inner core region of a submark. */
     public static final int SUBMARK_CORE_INNER = 4;
+
+    /** Identifier for the outer shell region of a submark. */
     public static final int SUBMARK_SHELL_OUTSIDE = 5;
 }

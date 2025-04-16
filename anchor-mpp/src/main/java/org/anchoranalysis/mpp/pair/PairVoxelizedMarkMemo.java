@@ -28,11 +28,22 @@ package org.anchoranalysis.mpp.pair;
 
 import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 
+/**
+ * Represents a pair of VoxelizedMarkMemo objects, with a defined source and destination.
+ * 
+ * <p>The pair is ordered such that the source always has a lower identifier than the destination.</p>
+ */
 public class PairVoxelizedMarkMemo {
 
     private final VoxelizedMarkMemo source;
     private final VoxelizedMarkMemo destination;
 
+    /**
+     * Constructs a new PairVoxelizedMarkMemo.
+     * 
+     * @param source the first VoxelizedMarkMemo
+     * @param destination the second VoxelizedMarkMemo
+     */
     public PairVoxelizedMarkMemo(VoxelizedMarkMemo source, VoxelizedMarkMemo destination) {
         super();
 
@@ -67,10 +78,20 @@ public class PairVoxelizedMarkMemo {
         return (source.getMark().getIdentifier() * 3) + destination.getMark().getIdentifier();
     }
 
+    /**
+     * Gets the source VoxelizedMarkMemo.
+     * 
+     * @return the source VoxelizedMarkMemo
+     */
     public VoxelizedMarkMemo getSource() {
         return source;
     }
 
+    /**
+     * Gets the destination VoxelizedMarkMemo.
+     * 
+     * @return the destination VoxelizedMarkMemo
+     */
     public VoxelizedMarkMemo getDestination() {
         return destination;
     }

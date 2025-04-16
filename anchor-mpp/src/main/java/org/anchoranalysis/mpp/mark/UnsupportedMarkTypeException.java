@@ -28,16 +28,31 @@ package org.anchoranalysis.mpp.mark;
 
 import org.anchoranalysis.core.exception.AnchorCheckedException;
 
+/**
+ * Exception thrown when an unsupported mark type is encountered.
+ * 
+ * <p>This exception is used to indicate that a particular type of mark
+ * is not supported in the current context or operation.</p>
+ */
 public class UnsupportedMarkTypeException extends AnchorCheckedException {
 
-    /** */
     private static final long serialVersionUID = -5855318973518035098L;
 
-    public UnsupportedMarkTypeException(String string) {
-        super(string);
+    /**
+     * Constructs a new UnsupportedMarkTypeException with the specified detail message.
+     *
+     * @param message the detail message (which is saved for later retrieval by the {@link #getMessage()} method)
+     */
+    public UnsupportedMarkTypeException(String message) {
+        super(message);
     }
 
-    public UnsupportedMarkTypeException(Exception exc) {
-        super(exc);
+    /**
+     * Constructs a new UnsupportedMarkTypeException with the specified cause.
+     *
+     * @param cause the cause (which is saved for later retrieval by the {@link #getCause()} method)
+     */
+    public UnsupportedMarkTypeException(Exception cause) {
+        super(cause);
     }
 }

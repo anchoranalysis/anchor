@@ -32,9 +32,23 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.conic.Ellipsoid;
 
+/**
+ * A factory for creating Ellipsoid marks.
+ * <p>
+ * This class extends MarkFactory, providing a specific implementation
+ * for creating Ellipsoid objects in the MPP (Marked Point Process) framework.
+ * </p>
+ */
 public class MarkEllipsoidFactory extends MarkFactory {
 
     // START BEAN PROPERTIES
+    /**
+     * The shell thickness of the ellipsoid.
+     * <p>
+     * This value determines the thickness of the ellipsoid's outer shell.
+     * The default value is 0.1.
+     * </p>
+     */
     @BeanField @Getter @Setter private double shell = 0.1;
     // END BEAN PROPERTIES
 

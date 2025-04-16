@@ -32,12 +32,21 @@ import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.mpp.proposer.ProposerContext;
 
-// Proposes a mark
+/**
+ * An abstract base class for proposing changes to a mark.
+ */
 @GroupingRoot
 public abstract class MarkProposer extends ProposerBean<MarkProposer>
         implements CompatibleWithMark {
 
-    // The inputMark's attributes become changed in accordance to the internal rules of the proposer
+    /**
+     * Proposes changes to the input mark according to the internal rules of the proposer.
+     *
+     * @param inputMark the mark to be modified
+     * @param context the context for the proposal
+     * @return true if changes were proposed and applied, false otherwise
+     * @throws ProposalAbnormalFailureException if the proposal fails abnormally
+     */
     public abstract boolean propose(VoxelizedMarkMemo inputMark, ProposerContext context)
             throws ProposalAbnormalFailureException;
 }

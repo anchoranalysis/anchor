@@ -34,19 +34,35 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.InitializeException;
 import org.anchoranalysis.mpp.mark.Mark;
 
+/**
+ * A factory for creating marks with unique identifiers.
+ * <p>
+ * This class extends NullParametersBean, providing functionality to create marks
+ * with unique identifiers based on a template mark in the MPP (Marked Point Process) framework.
+ * </p>
+ */
 @NoArgsConstructor
 public class MarkWithIdentifierFactory extends NullParametersBean<MarkWithIdentifierFactory> {
 
     // START BEAN PARAMETERS
+    /**
+     * The reference Poisson intensity for mark creation.
+     */
     @BeanField @Getter @Setter private double referencePoissonIntensity = 1e-5;
 
-    // A template mark from which all new marks are copied
+    /**
+     * A template mark factory from which all new marks are created.
+     */
     @BeanField @Getter @Setter private MarkFactory templateMark = null;
     // END BEAN PARAMETERS
 
     private IdCounter idCounter;
 
-    // Constructor
+    /**
+     * Constructs a MarkWithIdentifierFactory with a specified template mark factory.
+     *
+     * @param templateMark the template mark factory to use for creating new marks
+     */
     public MarkWithIdentifierFactory(MarkFactory templateMark) {
         this.templateMark = templateMark;
     }
@@ -64,6 +80,11 @@ public class MarkWithIdentifierFactory extends NullParametersBean<MarkWithIdenti
         idCounter = new IdCounter(1);
     }
 
+    /**
+     * Creates a new mark based on the template and assigns it a unique identifier.
+     *
+     * @return a new Mark object with a unique identifier
+     */
     public Mark newTemplateMark() {
         assert (templateMark != null);
         Mark mark = this.templateMark.create();
@@ -71,6 +92,11 @@ public class MarkWithIdentifierFactory extends NullParametersBean<MarkWithIdenti
         return mark;
     }
 
+    /**
+     * Generates a new unique identifier and increments the counter.
+     *
+     * @return a new unique identifier
+     */
     public int idAndIncrement() {
         assert idCounter != null;
         return idCounter.getIdAndIncrement();

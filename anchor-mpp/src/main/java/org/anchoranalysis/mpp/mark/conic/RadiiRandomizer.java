@@ -35,13 +35,22 @@ import org.anchoranalysis.mpp.bean.bound.Bound;
 import org.anchoranalysis.spatial.point.Point3d;
 
 /**
- * Utility functions for generating random radii for {@link ConicBase}
+ * Utility functions for generating random radii for {@link ConicBase}.
  *
  * @author Owen Feehan
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class RadiiRandomizer {
 
+    /**
+     * Generates random radii for a conic shape.
+     *
+     * @param bound the bound constraining the radii values
+     * @param randomNumberGenerator the random number generator to use
+     * @param resolution an optional resolution to consider when generating radii
+     * @param do3D if true, generates a 3D radius; if false, the z-component is set to 0
+     * @return a Point3d representing the randomly generated radii
+     */
     public static Point3d randomizeRadii(
             Bound bound,
             RandomNumberGenerator randomNumberGenerator,
@@ -53,6 +62,14 @@ public class RadiiRandomizer {
                 do3D ? randomizeRadius(bound, randomNumberGenerator, resolution) : 0);
     }
 
+    /**
+     * Generates a random radius value within the given bound.
+     *
+     * @param radiusBound the bound constraining the radius value
+     * @param randomNumberGenerator the random number generator to use
+     * @param resolution an optional resolution to consider when generating the radius
+     * @return a randomly generated radius value
+     */
     private static double randomizeRadius(
             Bound radiusBound,
             RandomNumberGenerator randomNumberGenerator,

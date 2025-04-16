@@ -29,19 +29,32 @@ package org.anchoranalysis.mpp.proposer.error;
 import java.io.Serializable;
 import javax.swing.tree.DefaultTreeModel;
 
+/**
+ * Describes failures that occur during a proposition process.
+ * 
+ * <p>This class maintains a tree structure of errors, allowing for hierarchical
+ * error reporting.</p>
+ */
 public class ProposerFailureDescription implements Serializable {
 
-    /** */
     private static final long serialVersionUID = 4418671354471633349L;
 
     private DefaultTreeModel errorTree;
     private ErrorNode root = null;
 
+    /**
+     * Constructs a new ProposerFailureDescription with a null error node.
+     */
     public ProposerFailureDescription() {
         root = ErrorNodeNull.instance();
         errorTree = null;
     }
 
+    /**
+     * Creates a new ProposerFailureDescription with a root error node.
+     *
+     * @return a new ProposerFailureDescription instance with a root error node
+     */
     public static ProposerFailureDescription createRoot() {
         ProposerFailureDescription out = new ProposerFailureDescription();
         ErrorNodeImpl rootImpl = new ErrorNodeImpl(null, "root");
@@ -50,18 +63,38 @@ public class ProposerFailureDescription implements Serializable {
         return out;
     }
 
+    /**
+     * Gets the root error node.
+     *
+     * @return the root ErrorNode
+     */
     public ErrorNode getRoot() {
         return root;
     }
 
+    /**
+     * Gets the error tree model.
+     *
+     * @return the DefaultTreeModel representing the error tree
+     */
     public DefaultTreeModel getErrorTree() {
         return errorTree;
     }
 
+    /**
+     * Sets the error tree model.
+     *
+     * @param errorTree the DefaultTreeModel to set
+     */
     public void setErrorTree(DefaultTreeModel errorTree) {
         this.errorTree = errorTree;
     }
 
+    /**
+     * Generates a string description of all errors in the tree.
+     *
+     * @return a String containing all error descriptions
+     */
     public String describe() {
         StringBuilder sb = new StringBuilder();
         root.addErrorDescription(sb);

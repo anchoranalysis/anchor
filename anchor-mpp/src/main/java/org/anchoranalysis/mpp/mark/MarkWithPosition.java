@@ -33,27 +33,39 @@ import org.anchoranalysis.core.exception.CheckedUnsupportedOperationException;
 import org.anchoranalysis.spatial.point.Point3d;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 
+/**
+ * An abstract base class for marks that have a position in 3D space.
+ */
 public abstract class MarkWithPosition extends Mark implements Serializable {
 
-    /** */
     private static final long serialVersionUID = -6976277985708631268L;
 
-    // START mark state
+    /** The position of the mark in 3D space. */
     @Getter @Setter private Point3d position;
-    // END mark state
 
-    // Constructor
+    /**
+     * Constructs a new MarkWithPosition with a default position at the origin.
+     */
     protected MarkWithPosition() {
         this.position = new Point3d();
     }
 
-    // Copy constructor
+    /**
+     * Copy constructor for MarkWithPosition.
+     *
+     * @param src the MarkWithPosition to copy
+     */
     protected MarkWithPosition(MarkWithPosition src) {
         super(src);
         this.position = new Point3d(src.position);
     }
 
-    public String strPos() {
+    /**
+     * Describes the position of the mark as a string.
+     * 
+     * @return the string.
+     */
+    protected String positionString() {
         return String.format(
                 "[%6.1f,%6.1f,%6.1f]", this.position.x(), this.position.y(), this.position.z());
     }
@@ -68,10 +80,14 @@ public abstract class MarkWithPosition extends Mark implements Serializable {
         return getPosition();
     }
 
-    // Checks if two marks are equal by comparing all attributes
+    /**
+     * Checks if this mark is equal to another mark by comparing all attributes.
+     *
+     * @param m the mark to compare with
+     * @return true if the marks are equal, false otherwise
+     */
     @Override
     public boolean equalsDeep(Mark m) {
-
         if (!super.equalsDeep(m)) {
             return false;
         }
@@ -83,4 +99,6 @@ public abstract class MarkWithPosition extends Mark implements Serializable {
         MarkWithPosition trgt = (MarkWithPosition) m;
         return position.equals(trgt.position);
     }
+
+    // Overridden methods are left without individual JavaDoc comments as requested
 }

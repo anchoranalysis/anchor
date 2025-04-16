@@ -218,7 +218,7 @@ public class Ellipse extends ConicBase implements Serializable {
     public String toString() {
         return String.format(
                 "%s %s pos=%s %s vol=%e shell=%f",
-                "Ellpsd", identifier(), strPos(), descriptionMarks(), volume(0), shell);
+                "Ellpsd", identifier(), positionString(), descriptionMarks(), volume(0), shell);
     }
 
     /**

@@ -28,24 +28,43 @@ package org.anchoranalysis.mpp.proposer.error;
 
 import org.anchoranalysis.core.exception.AnchorCheckedException;
 
-// An exception that adds a string to the current error node
+/**
+ * An exception that adds a string to the current error node.
+ * 
+ * <p>This exception is used to propagate errors while also allowing them to be added to an ErrorNode.</p>
+ */
 public class ErrorNodeException extends AnchorCheckedException {
 
-    /** */
     private static final long serialVersionUID = -4000166470139114311L;
 
+    /** The error message associated with this exception. */
     private final String str;
 
+    /**
+     * Constructs a new ErrorNodeException with the specified error message.
+     *
+     * @param str the error message
+     */
     public ErrorNodeException(String str) {
         super(str);
         this.str = str;
     }
 
+    /**
+     * Constructs a new ErrorNodeException from another exception.
+     *
+     * @param e the exception to convert into an ErrorNodeException
+     */
     public ErrorNodeException(Exception e) {
         super(e.toString());
         this.str = e.toString();
     }
 
+    /**
+     * Adds the error message associated with this exception to an ErrorNode.
+     *
+     * @param errorNode the ErrorNode to which the error message should be added
+     */
     public void addToErrorNode(ErrorNode errorNode) {
         errorNode.add(str);
     }

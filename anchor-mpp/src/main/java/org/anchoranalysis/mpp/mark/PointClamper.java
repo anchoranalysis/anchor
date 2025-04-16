@@ -32,16 +32,32 @@ import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.spatial.point.Point3d;
 import org.anchoranalysis.spatial.point.Point3i;
 
-/** Ensures a point has values contained inside image-dimensions */
+/** 
+ * Utility class to ensure a point has values contained inside image-dimensions.
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PointClamper {
 
+    /**
+     * Clamps an integer point to be within the given dimensions.
+     *
+     * @param point the point to clamp
+     * @param dimensions the dimensions to clamp within
+     * @return a new Point3i with clamped coordinates
+     */
     public static Point3i clamp(Point3i point, Dimensions dimensions) {
         point = clampLow(point);
         point = clampHigh(point, dimensions);
         return point;
     }
 
+    /**
+     * Clamps a double-precision point to be within the given dimensions.
+     *
+     * @param point the point to clamp
+     * @param dimensions the dimensions to clamp within
+     * @return a new Point3d with clamped coordinates
+     */
     public static Point3d clamp(Point3d point, Dimensions dimensions) {
         point = clampLow(point);
         point = clampHigh(point, dimensions);

@@ -33,9 +33,24 @@ import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 
+/**
+ * An abstract base class for defining regions associated with marks.
+ * <p>
+ * This class extends AnchorBean and implements GenerateUniqueParameterization,
+ * providing a foundation for creating mark regions in the MPP (Marked Point Process) framework.
+ * </p>
+ */
 public abstract class MarkRegion extends AnchorBean<MarkRegion>
         implements GenerateUniqueParameterization {
 
+    /**
+     * Creates voxel statistics for the mark region based on the given memo and dimensions.
+     *
+     * @param memo a memoized representation of a voxelized mark
+     * @param dimensions the dimensions of the space in which the mark exists
+     * @return VoxelStatistics object containing statistical information about the mark region
+     * @throws CreateException if there's an error creating the statistics
+     */
     public abstract VoxelStatistics createStatisticsFor(
             VoxelizedMarkMemo memo, Dimensions dimensions) throws CreateException;
 }

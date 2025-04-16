@@ -41,9 +41,11 @@ import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.point.PointConverter;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 
+/**
+ * Represents a polygon in 2D space as a Mark.
+ */
 public class Polygon extends PointListBase {
 
-    /** */
     private static final long serialVersionUID = 1718294470056379145L;
 
     private static final byte FLAG_OUTSIDE = RegionMembershipUtilities.flagForNoRegion();
@@ -53,7 +55,10 @@ public class Polygon extends PointListBase {
     /** A region of interest in ImageJ representing a polygon */
     private PolygonRoi region;
 
+    /** The area of the polygon */
     private double area;
+
+    /** The centroid of the polygon */
     private Point3d centroid;
 
     @Override
@@ -69,12 +74,26 @@ public class Polygon extends PointListBase {
         return FLAG_OUTSIDE;
     }
 
-    private boolean containsPixel(double xDbl, double yDbl) {
-        int x = (int) xDbl;
-        int y = (int) yDbl;
-        return contains(x, y) || contains(x, y + 1) || contains(x + 1, y) || contains(x + 1, y + 1);
+    /**
+     * Checks if a pixel is contained within the polygon.
+     *
+     * @param x the x-coordinate of the pixel
+     * @param y the y-coordinate of the pixel
+     * @return true if the pixel is contained within the polygon, false otherwise
+     */
+    private boolean containsPixel(double x, double y) {
+        int xInt = (int) x;
+        int yInt = (int) y;
+        return contains(xInt, yInt) || contains(xInt, yInt + 1) || contains(xInt + 1, yInt) || contains(xInt + 1, yInt + 1);
     }
 
+    /**
+     * Checks if a point is contained within the polygon.
+     *
+     * @param x the x-coordinate of the point
+     * @param y the y-coordinate of the point
+     * @return true if the point is contained within the polygon, false otherwise
+     */
     private boolean contains(int x, int y) {
         return region.contains(x, y);
     }
@@ -127,6 +146,12 @@ public class Polygon extends PointListBase {
         region = createRoi(getPoints());
     }
 
+    /**
+     * Creates a PolygonRoi from a list of points.
+     *
+     * @param points the list of points defining the polygon
+     * @return a PolygonRoi representing the polygon
+     */
     private static PolygonRoi createRoi(List<Point3d> points) {
 
         float[] xArr = new float[points.size()];
@@ -142,6 +167,12 @@ public class Polygon extends PointListBase {
         return new PolygonRoi(xArr, yArr, points.size(), Roi.POLYGON);
     }
 
+    /**
+     * Calculates the area of the polygon.
+     *
+     * @param points the list of points defining the polygon
+     * @return the area of the polygon
+     */
     private static double area(List<Point3d> points) {
         // http://en.wikipedia.org/wiki/Polygon
 
@@ -160,6 +191,13 @@ public class Polygon extends PointListBase {
         return sum / 2;
     }
 
+    /**
+     * Calculates the centroid of the polygon.
+     *
+     * @param points the list of points defining the polygon
+     * @param area the area of the polygon
+     * @return the centroid of the polygon
+     */
     private static Point3d centroid(List<Point3d> points, double area) {
         // http://en.wikipedia.org/wiki/Polygon
         // Shoelace formula

@@ -37,16 +37,36 @@ import org.anchoranalysis.spatial.point.Point3d;
 import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.point.PointConverter;
 
+/**
+ * Factory class for creating conic marks (ellipses and ellipsoids) from points.
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MarkConicFactory {
 
+    /**
+     * Creates a mark from an integer 3D point.
+     *
+     * @param point the center point of the mark
+     * @param size the size of the mark (diameter)
+     * @param do3D if true, creates a 3D ellipsoid; if false, creates a 2D ellipse
+     * @return a new Mark instance (either Ellipsoid or Ellipse)
+     */
     public static Mark createMarkFromPoint(Point3i point, int size, boolean do3D) {
         return createMarkFromPoint(PointConverter.doubleFromInt(point), size, do3D);
     }
 
+    /**
+     * Creates a mark from a double-precision 3D point.
+     *
+     * @param point the center point of the mark
+     * @param size the size of the mark (diameter)
+     * @param do3D if true, creates a 3D ellipsoid; if false, creates a 2D ellipse
+     * @return a new Mark instance (either Ellipsoid or Ellipse)
+     * @throws IllegalArgumentException if size is not positive or if do3D is false and point.z() is not 0
+     */
     public static Mark createMarkFromPoint(Point3d point, int size, boolean do3D) {
-        Preconditions.checkArgument(size > 0);
-        Preconditions.checkArgument(do3D || point.z() == 0);
+        Preconditions.checkArgument(size > 0, "Size must be positive");
+        Preconditions.checkArgument(do3D || point.z() == 0, "Z-coordinate must be 0 for 2D marks");
 
         if (do3D) {
             Ellipsoid me = new Ellipsoid();

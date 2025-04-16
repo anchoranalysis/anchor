@@ -57,16 +57,10 @@ import org.anchoranalysis.spatial.scale.ScaleFactor;
  */
 public class RotatableBoundingBox extends MarkWithPosition {
 
-    /** */
     private static final long serialVersionUID = 1L;
 
     private static final byte FLAG_SUBMARK_NONE = flagForNoRegion();
     private static final byte FLAG_SUBMARK_REGION0 = flagForRegion(SUBMARK_INSIDE);
-
-    // START mark state
-
-    // Note that internally three-dimensional points are used instead of two-dimensional as it
-    //  fits more nicely with the rotation matrices (at the cost of some extra computation).
 
     /** Add to orientation to get the left-point and bottom-point (without rotation) */
     private Point3d distanceToLeftBottom;
@@ -76,22 +70,22 @@ public class RotatableBoundingBox extends MarkWithPosition {
 
     /** An orientation in the 2D plane to rotate the bounding box by. */
     private Orientation orientation;
-    // END mark state
 
-    // START internal objects
     private RotationMatrix rotMatrix;
     private RotationMatrix rotMatrixInv; // Inversion of rotMatrix
-    // END internal objects
-
-    public RotatableBoundingBox() {
-        this.update(new Point2d(0, 0), new Point2d(0, 0), new Orientation2D());
-    }
 
     /**
      * Repeatedly reused when evaluating points. We instantiate it here, to avoid unnecessary heap
      * allocation.
      */
     private Point3d pointRelative = new Point3d();
+
+    /**
+     * Creates a new RotatableBoundingBox with default values.
+     */
+    public RotatableBoundingBox() {
+        this.update(new Point2d(0, 0), new Point2d(0, 0), new Orientation2D());
+    }
 
     @Override
     public byte isPointInside(Point3i point) {
@@ -115,13 +109,21 @@ public class RotatableBoundingBox extends MarkWithPosition {
         return FLAG_SUBMARK_REGION0;
     }
 
+    /**
+     * Updates the bounding box with new dimensions and orientation.
+     *
+     * @param distanceToLeftBottom the distance to the left-bottom corner
+     * @param distanceToRightTop the distance to the right-top corner
+     * @param orientation the orientation of the bounding box
+     */
     public void update(
             Point2d distanceToLeftBottom, Point2d distanceToRightTop, Orientation orientation) {
-
         update(convert3d(distanceToLeftBottom), convert3d(distanceToRightTop), orientation);
     }
 
-    /** Internal version with Point3d */
+    /**
+     * Internal version of update with Point3d.
+     */
     private void update(
             Point3d distanceToLeftBottom, Point3d distanceToRightTop, Orientation orientation) {
         this.distanceToLeftBottom = distanceToLeftBottom;
@@ -192,10 +194,20 @@ public class RotatableBoundingBox extends MarkWithPosition {
         return 2;
     }
 
+    /**
+     * Converts a 2D point to a 3D point with z=0.
+     */
     private static Point3d convert3d(Point2d point) {
         return new Point3d(point.x(), point.y(), 0);
     }
 
+    /**
+     * Creates a corner point of the bounding box.
+     *
+     * @param x true for right, false for left
+     * @param y true for top, false for bottom
+     * @return the corner point
+     */
     private Point3d cornerPoint(boolean x, boolean y) {
         return new Point3d(
                 x ? distanceToLeftBottom.x() : distanceToRightTop.x(),
@@ -203,7 +215,9 @@ public class RotatableBoundingBox extends MarkWithPosition {
                 0);
     }
 
-    /** Rotates a position and adds the current position afterwards */
+    /**
+     * Rotates a position and adds the current position afterwards.
+     */
     private Point3i rotateAddPos(Point3d point) {
         rotMatrix.rotatePointInplace(point);
         point.add(getPosition());

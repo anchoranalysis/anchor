@@ -71,7 +71,7 @@ public class Circle extends MarkWithPositionAndSingleRadius {
 
     @Override
     public String toString() {
-        return String.format("%s %s pos=%s %s", "circle", identifier(), strPos(), strMarks());
+        return String.format("%s %s pos=%s %s", "circle", identifier(), positionString(), strMarks());
     }
 
     // The duplicate operation for the marks (we avoid clone() in case its confusing, we might not

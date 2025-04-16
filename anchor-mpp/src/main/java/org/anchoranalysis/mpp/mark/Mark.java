@@ -31,7 +31,6 @@ import java.util.Optional;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.exception.CheckedUnsupportedOperationException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
-import org.anchoranalysis.image.core.object.properties.ObjectWithProperties;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.object.ObjectMask;

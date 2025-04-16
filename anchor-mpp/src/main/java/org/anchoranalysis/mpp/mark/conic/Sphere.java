@@ -72,7 +72,7 @@ public class Sphere extends MarkWithPositionAndSingleRadius {
 
     @Override
     public String toString() {
-        return String.format("%s %s pos=%s %s", "Sphr", identifier(), strPos(), strMarks());
+        return String.format("%s %s pos=%s %s", "Sphr", identifier(), positionString(), strMarks());
     }
 
     // The duplicate operation for the marks (we avoid clone() in case its confusing, we might not

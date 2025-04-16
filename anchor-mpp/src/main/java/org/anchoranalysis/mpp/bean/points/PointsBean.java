@@ -36,17 +36,28 @@ import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.mpp.init.PointsInitialization;
 
 /**
+ * An abstract base class for beans that work with points and require initialization.
+ *
  * @author Owen Feehan
- * @param <T> bean-type
+ * @param <T> the specific type of the bean extending this class
  */
 public abstract class PointsBean<T> extends InitializableBean<T, PointsInitialization> {
 
+    /**
+     * Constructs a new PointsBean.
+     * Initializes the bean with a BeanInitializer for PointsInitialization and an AssignerMatchClass.
+     */
     protected PointsBean() {
         super(
                 new BeanInitializer<>(PointsInitialization.class, paramExtracters()),
-                new AssignerMatchClass<PointsInitialization>(PointsInitialization.class));
+                new AssignerMatchClass<>(PointsInitialization.class));
     }
 
+    /**
+     * Creates a list of parameter extractors for PointsInitialization.
+     *
+     * @return a list containing an ExtractDerivedParameter for ImageInitialization
+     */
     private static List<ExtractDerivedParameter<PointsInitialization, ?>> paramExtracters() {
         return Arrays.asList(
                 new ExtractDerivedParameter<>(

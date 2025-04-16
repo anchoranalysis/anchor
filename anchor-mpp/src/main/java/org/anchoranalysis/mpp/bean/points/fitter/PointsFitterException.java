@@ -28,16 +28,32 @@ package org.anchoranalysis.mpp.bean.points.fitter;
 
 import org.anchoranalysis.core.exception.AnchorCheckedException;
 
+/**
+ * Exception thrown when an error occurs during the point fitting process.
+ * <p>
+ * This exception extends {@link AnchorCheckedException} and is used specifically
+ * for errors related to the {@link PointsFitter} operations.
+ * </p>
+ */
 public class PointsFitterException extends AnchorCheckedException {
 
-    /** */
     private static final long serialVersionUID = 6066348459108781534L;
 
-    public PointsFitterException(String string) {
-        super(string);
+    /**
+     * Constructs a new PointsFitterException with the specified detail message.
+     *
+     * @param message the detail message (which is saved for later retrieval by the {@link #getMessage()} method)
+     */
+    public PointsFitterException(String message) {
+        super(message);
     }
 
-    public PointsFitterException(Exception exc) {
-        super(exc);
+    /**
+     * Constructs a new PointsFitterException with the specified cause.
+     *
+     * @param cause the cause (which is saved for later retrieval by the {@link #getCause()} method)
+     */
+    public PointsFitterException(Exception cause) {
+        super(cause);
     }
 }

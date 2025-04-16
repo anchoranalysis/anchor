@@ -33,14 +33,20 @@ import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.spatial.orientation.RotationMatrix;
 import org.anchoranalysis.spatial.point.Point3d;
 
+/**
+ * Utility class for operations related to Ellipsoid marks.
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class EllipsoidUtilities {
 
+    /**
+     * Calculates the normalized radii of an Ellipsoid mark, taking into account rotation and optional resolution.
+     *
+     * @param mark the Ellipsoid mark
+     * @param resolution optional Resolution to adjust for z-axis scaling
+     * @return an array of three doubles representing the normalized radii in x, y, and z directions
+     */
     public static double[] normalisedRadii(Ellipsoid mark, Optional<Resolution> resolution) {
-        // We re-calculate all the bounds to take account of the different z-resolution
-
-        // We get the rotated points of (1,0,0)*getRadii().x() and (0,1,0)*getRadii().y() and
-        // (0,1,0)*getRadii().z()
         RotationMatrix rotMatrix = mark.getOrientation().getRotationMatrix();
 
         Point3d xRot = new Point3d(mark.getRadii().x(), 0, 0);
@@ -62,9 +68,16 @@ public class EllipsoidUtilities {
         return new double[] {xNorm, yNorm, zNorm};
     }
 
+    /**
+     * Adjusts the z-coordinates of the rotated points based on the provided resolution.
+     *
+     * @param xRot rotated point representing x-axis
+     * @param yRot rotated point representing y-axis
+     * @param zRot rotated point representing z-axis
+     * @param resolution optional Resolution to adjust for z-axis scaling
+     */
     private static void adjustForZ(
             Point3d xRot, Point3d yRot, Point3d zRot, Optional<Resolution> resolution) {
-        // We adjust each point for the z contribution
         if (resolution.isPresent()) {
             double zRel = resolution.get().zRelative();
             xRot.setZ(xRot.z() * zRel);

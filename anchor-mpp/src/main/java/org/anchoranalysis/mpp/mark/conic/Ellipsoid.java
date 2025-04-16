@@ -213,7 +213,7 @@ public class Ellipsoid extends ConicBase implements Serializable {
     @Override
     public String toString() {
         return String.format(
-                "%s %s pos=%s %s vol=%e", "Ellpsd", identifier(), strPos(), strMarks(), volume(0));
+                "%s %s pos=%s %s vol=%e", "Ellpsd", identifier(), positionString(), strMarks(), volume(0));
     }
 
     @Override

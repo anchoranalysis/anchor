@@ -37,26 +37,44 @@ import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.Point3d;
 import org.apache.commons.collections.ListUtils;
 
+/**
+ * A base class for marks that consist of a list of 3D points.
+ */
 public abstract class PointListBase extends Mark {
 
-    /** */
     private static final long serialVersionUID = 6520431317406007141L;
 
+    /** The list of 3D points that make up this mark. */
     @Getter private List<Point3d> points;
 
-    @Getter private Point3d min; // Contains the minimum x, y of all the points in the polygon
+    /** The minimum x, y, z coordinates of all the points in the list. */
+    @Getter private Point3d min;
 
-    @Getter private Point3d max; // Contains the maximum x, y of all the points in the polygon
+    /** The maximum x, y, z coordinates of all the points in the list. */
+    @Getter private Point3d max;
 
+    /**
+     * Constructs an empty PointListBase.
+     */
     protected PointListBase() {
         points = new ArrayList<>();
     }
 
+    /**
+     * Constructs a PointListBase from a stream of Point3d objects.
+     *
+     * @param stream the stream of Point3d objects
+     */
     protected PointListBase(Stream<Point3d> stream) {
         points = stream.collect(Collectors.toList());
         updateAfterPointsChange();
     }
 
+    /**
+     * Duplicates this PointListBase into a new instance.
+     *
+     * @param markNew the new PointListBase instance to copy into
+     */
     protected void doDuplicate(PointListBase markNew) {
         markNew.points = new ArrayList<>();
         getPoints().forEach(markNew.points::add);
@@ -64,6 +82,9 @@ public abstract class PointListBase extends Mark {
         markNew.updateAfterPointsChange();
     }
 
+    /**
+     * Updates the min and max points after the list of points has changed.
+     */
     public void updateAfterPointsChange() {
         assert (!points.isEmpty());
         this.min = calculateMin(getPoints());
@@ -76,6 +97,12 @@ public abstract class PointListBase extends Mark {
         return BoundingBox.createReuse(min, max);
     }
 
+    /**
+     * Calculates the minimum point from a list of points.
+     *
+     * @param points the list of points
+     * @return the minimum point
+     */
     private static Point3d calculateMin(List<Point3d> points) {
         Point3d min =
                 new Point3d(
@@ -98,6 +125,12 @@ public abstract class PointListBase extends Mark {
         return min;
     }
 
+    /**
+     * Calculates the maximum point from a list of points.
+     *
+     * @param points the list of points
+     * @return the maximum point
+     */
     private static Point3d calculateMax(List<Point3d> points) {
         Point3d max =
                 new Point3d(
@@ -120,6 +153,11 @@ public abstract class PointListBase extends Mark {
         return max;
     }
 
+    /**
+     * Creates a bounding box from the min and max points.
+     *
+     * @return the bounding box
+     */
     protected BoundingBox box() {
         return BoundingBox.createReuse(getMin(), getMax());
     }
