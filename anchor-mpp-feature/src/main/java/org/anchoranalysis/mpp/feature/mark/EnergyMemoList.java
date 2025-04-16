@@ -37,8 +37,8 @@ import org.anchoranalysis.mpp.feature.energy.scheme.EnergySchemeWithSharedFeatur
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.MarkCollection;
 import org.anchoranalysis.mpp.mark.voxelized.memo.MemoForIndex;
-import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemoFactory;
 import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
+import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemoFactory;
 
 /**
  * A collection of memoized marks on which energies can be derived.
@@ -134,7 +134,8 @@ public class EnergyMemoList implements Serializable, MemoForIndex {
         for (Mark mrk : marks) {
 
             VoxelizedMarkMemo pmm =
-                    VoxelizedMarkMemoFactory.create(mrk, energyStack, energySchemeTotal.getRegionMap());
+                    VoxelizedMarkMemoFactory.create(
+                            mrk, energyStack, energySchemeTotal.getRegionMap());
             this.list.add(pmm);
 
             EnergyTotal ind = energySchemeTotal.totalIndividual(pmm, energyStack);

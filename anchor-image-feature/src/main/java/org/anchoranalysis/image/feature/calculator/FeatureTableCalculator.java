@@ -36,11 +36,11 @@ import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 
 /**
- * A feature-calculator with additional functions for encoding the output in a tabular format
- * with column names.
+ * A feature-calculator with additional functions for encoding the output in a tabular format with
+ * column names.
  *
  * <p>This interface extends FeatureCalculatorMulti to provide methods for initializing,
- * duplicating, and naming features in a tabular structure.</p>
+ * duplicating, and naming features in a tabular structure.
  *
  * @param <T> the type of feature input
  * @author Owen Feehan
@@ -62,7 +62,7 @@ public interface FeatureTableCalculator<T extends FeatureInput> extends FeatureC
     /**
      * Makes a copy of the feature-store for a new thread.
      *
-     * <p>Deep-copies the features. Shallow-copies everything else.</p>
+     * <p>Deep-copies the features. Shallow-copies everything else.
      *
      * @return the copied feature-store
      */

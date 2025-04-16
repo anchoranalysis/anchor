@@ -34,10 +34,9 @@ import org.anchoranalysis.mpp.mark.GlobalRegionIdentifiers;
 
 /**
  * A singleton class providing a default RegionMap.
- * <p>
- * This class creates and manages a single instance of {@link RegionMap} with predefined
- * region memberships based on global region identifiers.
- * </p>
+ *
+ * <p>This class creates and manages a single instance of {@link RegionMap} with predefined region
+ * memberships based on global region identifiers.
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class RegionMapSingleton {
@@ -47,10 +46,9 @@ public class RegionMapSingleton {
 
     /**
      * Gets the singleton instance of RegionMap.
-     * <p>
-     * If the instance doesn't exist, it creates one with predefined region memberships.
-     * This method is thread-safe.
-     * </p>
+     *
+     * <p>If the instance doesn't exist, it creates one with predefined region memberships. This
+     * method is thread-safe.
      *
      * @return the singleton instance of RegionMap
      */

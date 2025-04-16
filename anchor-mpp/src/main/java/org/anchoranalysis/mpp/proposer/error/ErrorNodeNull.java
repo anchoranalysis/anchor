@@ -32,8 +32,8 @@ import lombok.NoArgsConstructor;
 /**
  * A singleton implementation of ErrorNode that does nothing with errors.
  *
- * <p>This class implements the Null Object pattern for ErrorNode, allowing
- * error handling to be safely ignored when desired.</p>
+ * <p>This class implements the Null Object pattern for ErrorNode, allowing error handling to be
+ * safely ignored when desired.
  *
  * @author Owen Feehan
  */

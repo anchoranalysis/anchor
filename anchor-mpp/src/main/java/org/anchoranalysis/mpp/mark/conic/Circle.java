@@ -33,8 +33,8 @@ import org.anchoranalysis.mpp.mark.Mark;
 /**
  * Represents a 2D circle mark.
  *
- * <p>This class extends {@link MarkWithPositionAndSingleRadius} to provide functionality
- * specific to circular marks.</p>
+ * <p>This class extends {@link MarkWithPositionAndSingleRadius} to provide functionality specific
+ * to circular marks.
  */
 @NoArgsConstructor
 public class Circle extends MarkWithPositionAndSingleRadius {
@@ -71,7 +71,8 @@ public class Circle extends MarkWithPositionAndSingleRadius {
 
     @Override
     public String toString() {
-        return String.format("%s %s pos=%s %s", "circle", identifier(), positionString(), strMarks());
+        return String.format(
+                "%s %s pos=%s %s", "circle", identifier(), positionString(), strMarks());
     }
 
     // The duplicate operation for the marks (we avoid clone() in case its confusing, we might not

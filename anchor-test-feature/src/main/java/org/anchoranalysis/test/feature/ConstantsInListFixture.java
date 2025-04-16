@@ -40,21 +40,21 @@ import org.anchoranalysis.feature.results.ResultsVector;
 /**
  * A test fixture for creating and validating feature lists with constant values.
  *
- * <p>This class provides utility methods to create a feature list containing three constant features
- * with predefined values (1.0, 2.0, and 3.0). It also offers a method to check if a results vector
- * matches these expected constant values.</p>
+ * <p>This class provides utility methods to create a feature list containing three constant
+ * features with predefined values (1.0, 2.0, and 3.0). It also offers a method to check if a
+ * results vector matches these expected constant values.
  *
- * <p>This fixture is useful for testing scenarios where you need a consistent set of features
- * with known constant values, allowing for predictable and easily verifiable results.</p>
+ * <p>This fixture is useful for testing scenarios where you need a consistent set of features with
+ * known constant values, allowing for predictable and easily verifiable results.
  *
  * <p>Usage example:
+ *
  * <pre>
  * FeatureList&lt;MyFeatureInput&gt; featureList = ConstantsInListFixture.create();
  * // Use the feature list in your test
  * ResultsVector results = // ... calculate results using the feature list
  * ConstantsInListFixture.checkResultsVector(results);
  * </pre>
- * </p>
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ConstantsInListFixture {
@@ -65,7 +65,7 @@ public class ConstantsInListFixture {
 
     private static final double EPS = 1e-16;
 
-    /** 
+    /**
      * Creates a feature-list associated with the fixture.
      *
      * @return a newly created feature-list.
@@ -80,7 +80,7 @@ public class ConstantsInListFixture {
     /**
      * Checks that a result-vector has the results we expect from the feature-list associated with
      * this fixture.
-     * 
+     *
      * @param vector the results-vector to check.
      */
     public static void checkResultsVector(ResultsVector vector) {

@@ -31,10 +31,9 @@ import org.anchoranalysis.mpp.mark.Mark;
 
 /**
  * An abstract base class for factories that create Mark objects.
- * <p>
- * This class extends AnchorBean, providing a foundation for creating mark factories
- * in the MPP (Marked Point Process) framework.
- * </p>
+ *
+ * <p>This class extends AnchorBean, providing a foundation for creating mark factories in the MPP
+ * (Marked Point Process) framework.
  */
 public abstract class MarkFactory extends AnchorBean<MarkFactory> {
 

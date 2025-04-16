@@ -39,25 +39,21 @@ import org.anchoranalysis.core.identifier.getter.IdentifierGetter;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.spatial.box.BoundingBox;
 
-/**
- * A collection of marks, each associated with a color.
- */
+/** A collection of marks, each associated with a color. */
 @AllArgsConstructor
 public class ColoredMarks implements Iterable<Mark> {
 
     @Getter private MarkCollection marks;
     @Getter private ColorList colorList;
 
-    /**
-     * Creates an empty ColoredMarks instance.
-     */
+    /** Creates an empty ColoredMarks instance. */
     public ColoredMarks() {
         this(new MarkCollection(), new ColorList());
     }
 
     /**
-     * Creates a ColoredMarks instance from a MarkCollection and assigns colors based on a ColorIndex.
-     * Note: This constructor changes the IDs of the marks.
+     * Creates a ColoredMarks instance from a MarkCollection and assigns colors based on a
+     * ColorIndex. Note: This constructor changes the IDs of the marks.
      *
      * @param marks the collection of marks
      * @param colorIndex the color index to use for assigning colors

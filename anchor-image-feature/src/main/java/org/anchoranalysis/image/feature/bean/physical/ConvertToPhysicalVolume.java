@@ -33,9 +33,8 @@ import org.anchoranalysis.image.core.dimensions.UnitConverter;
 /**
  * Converts a feature value representing volume in voxel units to physical volume units.
  *
- * <p>This feature converter takes a measurement in voxel units and converts it
- * to physical volume units (e.g., cubic micrometers). It assumes an isometric XY plane
- * in the image space.</p>
+ * <p>This feature converter takes a measurement in voxel units and converts it to physical volume
+ * units (e.g., cubic micrometers). It assumes an isometric XY plane in the image space.
  *
  * @param <T> the type of feature input, which must include resolution information
  */

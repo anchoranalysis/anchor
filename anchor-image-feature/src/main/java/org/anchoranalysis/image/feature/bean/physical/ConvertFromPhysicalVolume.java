@@ -33,8 +33,8 @@ import org.anchoranalysis.image.core.dimensions.UnitConverter;
 /**
  * Converts a feature from physical volume units to voxel units.
  *
- * <p>This feature converter takes a measurement in physical volume units and converts it
- * to voxel units. It assumes an isometric XY plane in the image space.</p>
+ * <p>This feature converter takes a measurement in physical volume units and converts it to voxel
+ * units. It assumes an isometric XY plane in the image space.
  *
  * @param <T> the type of feature input, which must include resolution information
  */

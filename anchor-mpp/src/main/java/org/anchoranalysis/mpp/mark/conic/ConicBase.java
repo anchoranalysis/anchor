@@ -36,16 +36,14 @@ import org.anchoranalysis.spatial.point.Point3d;
 /**
  * Abstract base class for conic marks (e.g., ellipsoids, spheres).
  *
- * <p>This class extends {@link MarkWithPosition} to provide common functionality
- * for conic-shaped marks in 3D space.</p>
+ * <p>This class extends {@link MarkWithPosition} to provide common functionality for conic-shaped
+ * marks in 3D space.
  */
 public abstract class ConicBase extends MarkWithPosition {
 
     private static final long serialVersionUID = 1680124471263339009L;
 
-    /**
-     * Default constructor.
-     */
+    /** Default constructor. */
     protected ConicBase() {
         super();
     }

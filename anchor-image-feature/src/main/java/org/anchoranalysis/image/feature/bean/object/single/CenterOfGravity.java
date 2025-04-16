@@ -40,7 +40,7 @@ import org.anchoranalysis.spatial.axis.AxisConverter;
 /**
  * Calculates the center of gravity of a single object along a specified axis.
  *
- * <p>This feature computes the center of gravity of an object along the X, Y, or Z axis.</p>
+ * <p>This feature computes the center of gravity of an object along the X, Y, or Z axis.
  */
 @NoArgsConstructor
 public class CenterOfGravity extends FeatureSingleObject {

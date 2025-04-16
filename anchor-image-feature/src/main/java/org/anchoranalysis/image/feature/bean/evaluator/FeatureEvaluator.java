@@ -146,7 +146,8 @@ public class FeatureEvaluator<T extends FeatureInput>
      * Adds an energy stack to the calculator if one is specified.
      *
      * @param calculator the original calculator
-     * @return a new calculator with the energy stack added, or the original calculator if no energy stack is specified
+     * @return a new calculator with the energy stack added, or the original calculator if no energy
+     *     stack is specified
      * @throws OperationFailedException if adding the energy stack fails
      */
     private FeatureCalculatorSingle<T> maybeAddEnergyStack(FeatureCalculatorSingle<T> calculator)

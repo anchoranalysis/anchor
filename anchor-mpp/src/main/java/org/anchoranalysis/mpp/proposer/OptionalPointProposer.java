@@ -33,7 +33,7 @@ import org.anchoranalysis.spatial.point.Point3d;
  * An interface for proposing a position in 3D space.
  *
  * <p>This interface is used to generate optional 3D points, which may or may not be available
- * depending on the specific implementation and context.</p>
+ * depending on the specific implementation and context.
  */
 public interface OptionalPointProposer {
 
@@ -41,8 +41,8 @@ public interface OptionalPointProposer {
      * Proposes a position in 3D space.
      *
      * @param context the {@link ProposerContext} providing additional information for the proposal
-     * @return an {@link Optional} containing a {@link Point3d} if a position is proposed,
-     *         or an empty Optional if no position can be proposed
+     * @return an {@link Optional} containing a {@link Point3d} if a position is proposed, or an
+     *     empty Optional if no position can be proposed
      */
     Optional<Point3d> propose(ProposerContext context);
 }

@@ -33,8 +33,8 @@ import org.anchoranalysis.image.core.dimensions.Resolution;
 /**
  * A bound representing physical extents, which can be resolved based on image resolution.
  *
- * <p>This class extends {@link BoundMinMax} to provide functionality specific to physical
- * extents, where the bound values may be adjusted based on the image resolution.</p>
+ * <p>This class extends {@link BoundMinMax} to provide functionality specific to physical extents,
+ * where the bound values may be adjusted based on the image resolution.
  */
 @NoArgsConstructor
 public class BoundPhysicalExtent extends BoundMinMax {

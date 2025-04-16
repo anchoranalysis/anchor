@@ -36,9 +36,7 @@ import org.anchoranalysis.spatial.point.Point3d;
 import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 
-/**
- * Represents a polygon curve in 3D space as a Mark.
- */
+/** Represents a polygon curve in 3D space as a Mark. */
 public class PolygonCurve extends PointListBase {
 
     private static final long serialVersionUID = -2043844259526872933L;
@@ -47,9 +45,9 @@ public class PolygonCurve extends PointListBase {
     private static final byte FLAG_SUBMARK_INSIDE =
             RegionMembershipUtilities.flagForRegion(GlobalRegionIdentifiers.SUBMARK_INSIDE);
 
-    /** 
-     * The distance threshold applied in all 3 dimensions.
-     * TODO: Consider changing this to be dimension-specific.
+    /**
+     * The distance threshold applied in all 3 dimensions. TODO: Consider changing this to be
+     * dimension-specific.
      */
     private static final double DISTANCE_THRESHOLD = 0.7;
 
@@ -71,7 +69,8 @@ public class PolygonCurve extends PointListBase {
      * @param point the point to calculate the distance from
      * @param pointFirst the first point of the polygon segment
      * @param pointSecond the second point of the polygon segment
-     * @return the distance from the point to the polygon segment, or Double.POSITIVE_INFINITY if the point is outside the threshold
+     * @return the distance from the point to the polygon segment, or Double.POSITIVE_INFINITY if
+     *     the point is outside the threshold
      */
     private double distanceToPolygonSegmentLocal(
             Point3i point, Point3d pointFirst, Point3d pointSecond) {

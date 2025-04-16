@@ -41,9 +41,7 @@ import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.point.PointConverter;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 
-/**
- * Represents a polygon in 2D space as a Mark.
- */
+/** Represents a polygon in 2D space as a Mark. */
 public class Polygon extends PointListBase {
 
     private static final long serialVersionUID = 1718294470056379145L;
@@ -84,7 +82,10 @@ public class Polygon extends PointListBase {
     private boolean containsPixel(double x, double y) {
         int xInt = (int) x;
         int yInt = (int) y;
-        return contains(xInt, yInt) || contains(xInt, yInt + 1) || contains(xInt + 1, yInt) || contains(xInt + 1, yInt + 1);
+        return contains(xInt, yInt)
+                || contains(xInt, yInt + 1)
+                || contains(xInt + 1, yInt)
+                || contains(xInt + 1, yInt + 1);
     }
 
     /**

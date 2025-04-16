@@ -37,9 +37,8 @@ import org.anchoranalysis.mpp.mark.voxelized.VoxelizedMarkFactory;
 
 /**
  * Memoization of retrieving a {@link VoxelizedMark} from a mark.
- * <p>
- * This class caches the voxelized representation of a mark to avoid repeated calculations.
- * </p>
+ *
+ * <p>This class caches the voxelized representation of a mark to avoid repeated calculations.
  */
 public class VoxelizedMarkMemo {
 
@@ -80,9 +79,7 @@ public class VoxelizedMarkMemo {
         return cachedMark.get();
     }
 
-    /**
-     * Resets the cached voxelized mark.
-     */
+    /** Resets the cached voxelized mark. */
     public void reset() {
         cachedMark.reset();
     }

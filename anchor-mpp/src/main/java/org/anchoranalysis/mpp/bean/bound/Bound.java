@@ -32,8 +32,8 @@ import org.anchoranalysis.image.core.dimensions.Resolution;
 /**
  * An abstract class representing an upper and lower bound.
  *
- * <p>This class extends {@link MarkBounds} to provide a framework for implementing
- * specific types of bounds with minimum and maximum values.</p>
+ * <p>This class extends {@link MarkBounds} to provide a framework for implementing specific types
+ * of bounds with minimum and maximum values.
  */
 public abstract class Bound extends MarkBounds {
 

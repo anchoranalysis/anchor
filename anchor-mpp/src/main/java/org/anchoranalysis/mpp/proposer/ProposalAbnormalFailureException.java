@@ -32,9 +32,10 @@ import org.anchoranalysis.core.exception.friendly.AnchorFriendlyCheckedException
  * An exception thrown when a proposal could not be made for an abnormal reason.
  *
  * <p>This is different from the usual failure to make a proposal (return value of null), which
- * happens frequently as an ordinary part of proposal routines.</p>
+ * happens frequently as an ordinary part of proposal routines.
  *
- * <p>This exception extends {@link AnchorFriendlyCheckedException} to provide user-friendly error messages.</p>
+ * <p>This exception extends {@link AnchorFriendlyCheckedException} to provide user-friendly error
+ * messages.
  *
  * @author Owen Feehan
  */
@@ -46,7 +47,8 @@ public class ProposalAbnormalFailureException extends AnchorFriendlyCheckedExcep
     /**
      * Constructs a new exception with the specified detail message and cause.
      *
-     * @param message the detail message (which is saved for later retrieval by the {@link #getMessage()} method)
+     * @param message the detail message (which is saved for later retrieval by the {@link
+     *     #getMessage()} method)
      * @param cause the cause (which is saved for later retrieval by the {@link #getCause()} method)
      */
     public ProposalAbnormalFailureException(String message, Throwable cause) {
@@ -56,7 +58,8 @@ public class ProposalAbnormalFailureException extends AnchorFriendlyCheckedExcep
     /**
      * Constructs a new exception with the specified detail message.
      *
-     * @param message the detail message (which is saved for later retrieval by the {@link #getMessage()} method)
+     * @param message the detail message (which is saved for later retrieval by the {@link
+     *     #getMessage()} method)
      */
     public ProposalAbnormalFailureException(String message) {
         super(message);

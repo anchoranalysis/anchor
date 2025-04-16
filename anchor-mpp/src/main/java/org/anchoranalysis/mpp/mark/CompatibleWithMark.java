@@ -26,9 +26,7 @@
 
 package org.anchoranalysis.mpp.mark;
 
-/**
- * An interface for objects that can determine compatibility with a Mark.
- */
+/** An interface for objects that can determine compatibility with a Mark. */
 public interface CompatibleWithMark {
 
     /**

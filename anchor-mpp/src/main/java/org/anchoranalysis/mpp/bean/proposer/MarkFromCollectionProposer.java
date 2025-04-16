@@ -33,9 +33,7 @@ import org.anchoranalysis.mpp.mark.MarkCollection;
 import org.anchoranalysis.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.mpp.proposer.ProposerContext;
 
-/**
- * An abstract base class for proposing a selection of a single mark from a collection of marks.
- */
+/** An abstract base class for proposing a selection of a single mark from a collection of marks. */
 public abstract class MarkFromCollectionProposer extends ProposerBean<MarkFromCollectionProposer>
         implements CompatibleWithMark {
 

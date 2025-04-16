@@ -36,7 +36,7 @@ import org.anchoranalysis.image.voxel.object.ObjectCollection;
 /**
  * A feature input representing a collection of objects, optionally associated with an energy stack.
  *
- * <p>This class extends FeatureInputEnergy to provide functionality specific to object collections.</p>
+ * <p>This class extends FeatureInputEnergy to provide functionality specific to object collections.
  *
  * @author Owen Feehan
  */
@@ -56,7 +56,8 @@ public class FeatureInputObjectCollection extends FeatureInputEnergy {
     }
 
     /**
-     * Constructs a FeatureInputObjectCollection with a collection of objects and an optional energy stack.
+     * Constructs a FeatureInputObjectCollection with a collection of objects and an optional energy
+     * stack.
      *
      * @param objects the collection of objects to be associated with this input
      * @param energyStack an optional energy stack to be associated with this input

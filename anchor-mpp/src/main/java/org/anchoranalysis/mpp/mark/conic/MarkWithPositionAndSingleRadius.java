@@ -45,9 +45,7 @@ import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 
-/** 
- * Base-class for a conic that has a single radius (circle, sphere etc.)
- */
+/** Base-class for a conic that has a single radius (circle, sphere etc.) */
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class MarkWithPositionAndSingleRadius extends MarkWithPosition
         implements Serializable {
@@ -99,7 +97,8 @@ public abstract class MarkWithPositionAndSingleRadius extends MarkWithPosition
      * <p>So when aligned to axes, we actually scale in all 3 dimensions, and ignore
      * scene-resolution
      *
-     * @throws CheckedUnsupportedOperationException when the scale-factor is not identical for the X and Y dimensions.
+     * @throws CheckedUnsupportedOperationException when the scale-factor is not identical for the X
+     *     and Y dimensions.
      */
     @Override
     public void scale(ScaleFactor scaleFactor) throws CheckedUnsupportedOperationException {

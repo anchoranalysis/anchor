@@ -36,23 +36,18 @@ import org.anchoranalysis.mpp.mark.Mark;
 
 /**
  * A factory for creating marks with unique identifiers.
- * <p>
- * This class extends NullParametersBean, providing functionality to create marks
- * with unique identifiers based on a template mark in the MPP (Marked Point Process) framework.
- * </p>
+ *
+ * <p>This class extends NullParametersBean, providing functionality to create marks with unique
+ * identifiers based on a template mark in the MPP (Marked Point Process) framework.
  */
 @NoArgsConstructor
 public class MarkWithIdentifierFactory extends NullParametersBean<MarkWithIdentifierFactory> {
 
     // START BEAN PARAMETERS
-    /**
-     * The reference Poisson intensity for mark creation.
-     */
+    /** The reference Poisson intensity for mark creation. */
     @BeanField @Getter @Setter private double referencePoissonIntensity = 1e-5;
 
-    /**
-     * A template mark factory from which all new marks are created.
-     */
+    /** A template mark factory from which all new marks are created. */
     @BeanField @Getter @Setter private MarkFactory templateMark = null;
     // END BEAN PARAMETERS
 

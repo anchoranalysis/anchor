@@ -41,16 +41,14 @@ import org.anchoranalysis.mpp.init.PointsInitialization;
 /**
  * An abstract base class for beans related to marks in MPP (Marked Point Process).
  *
- * <p>This class extends {@link InitializableBean} to provide initialization capabilities
- * specific to marks-related beans.</p>
+ * <p>This class extends {@link InitializableBean} to provide initialization capabilities specific
+ * to marks-related beans.
  *
  * @param <T> the type of the bean
  */
 public abstract class MarksBean<T> extends InitializableBean<T, MarksInitialization> {
 
-    /**
-     * Creates a new instance of MarksBean.
-     */
+    /** Creates a new instance of MarksBean. */
     protected MarksBean() {
         super(initializerForMarksBeans(), new AssignerMatchClass<>(MarksInitialization.class));
     }
@@ -58,8 +56,9 @@ public abstract class MarksBean<T> extends InitializableBean<T, MarksInitializat
     /**
      * Creates a property-initializer for MPP-Beans.
      *
-     * <p>Beware concurrency. Initializers are stateful with the {@link BeanInitializer#setParam(Object)}
-     * method so this should be created newly for each thread, rather than reused statically.</p>
+     * <p>Beware concurrency. Initializers are stateful with the {@link
+     * BeanInitializer#setParam(Object)} method so this should be created newly for each thread,
+     * rather than reused statically.
      *
      * @return a new {@link BeanInitializer} for {@link MarksInitialization}
      */

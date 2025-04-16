@@ -36,8 +36,8 @@ import org.anchoranalysis.mpp.index.factory.VoxelPartitionFactory;
 public interface VoxelPartition<T> {
 
     /**
-     * Gets the voxel partition for a specific slice.
-     * This method should only be used for read-only operations to maintain integrity with the combined list.
+     * Gets the voxel partition for a specific slice. This method should only be used for read-only
+     * operations to maintain integrity with the combined list.
      *
      * @param sliceID The ID of the slice
      * @return The voxel partition for the specified slice
@@ -53,8 +53,8 @@ public interface VoxelPartition<T> {
     void addForSlice(int sliceID, int val);
 
     /**
-     * Gets the combined voxel partition for all slices.
-     * This method should only be used for read-only operations.
+     * Gets the combined voxel partition for all slices. This method should only be used for
+     * read-only operations.
      *
      * @return The combined voxel partition
      */

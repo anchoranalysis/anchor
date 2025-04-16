@@ -34,9 +34,7 @@ import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipUtilities;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 
-/**
- * Utility class for calculating overlap between voxelized marks.
- */
+/** Utility class for calculating overlap between voxelized marks. */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class OverlapUtilities {
 
@@ -48,7 +46,8 @@ public class OverlapUtilities {
      * @param regionID the ID of the region to consider for overlap
      * @return the number of overlapping voxels
      */
-    public static double overlapWith(VoxelizedMarkMemo memo1, VoxelizedMarkMemo memo2, int regionID) {
+    public static double overlapWith(
+            VoxelizedMarkMemo memo1, VoxelizedMarkMemo memo2, int regionID) {
 
         Mark mark1 = memo1.getMark();
         Mark mark2 = memo2.getMark();

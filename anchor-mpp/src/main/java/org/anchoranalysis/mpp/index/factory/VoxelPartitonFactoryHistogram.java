@@ -32,9 +32,9 @@ import org.anchoranalysis.mpp.index.VoxelPartitionHistogram;
 
 /**
  * A factory for creating {@link VoxelPartition} instances that use {@link Histogram}s as parts.
- * <p>
- * This implementation creates {@link VoxelPartitionHistogram} objects with histograms of 256 bins (0-255).
- * </p>
+ *
+ * <p>This implementation creates {@link VoxelPartitionHistogram} objects with histograms of 256
+ * bins (0-255).
  */
 public class VoxelPartitonFactoryHistogram implements VoxelPartitionFactory<Histogram> {
 
@@ -51,9 +51,8 @@ public class VoxelPartitonFactoryHistogram implements VoxelPartitionFactory<Hist
 
     /**
      * Adds an unused histogram to the factory.
-     * <p>
-     * This implementation does nothing, as histograms are not reused.
-     * </p>
+     *
+     * <p>This implementation does nothing, as histograms are not reused.
      *
      * @param part the unused histogram
      */

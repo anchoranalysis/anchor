@@ -37,15 +37,15 @@ import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 /**
  * Calculates the number of voxels in a single object.
  *
- * <p>This feature can optionally calculate the number of voxels in the maximum intensity projection (MIP)
- * of the object instead of the full 3D volume.</p>
+ * <p>This feature can optionally calculate the number of voxels in the maximum intensity projection
+ * (MIP) of the object instead of the full 3D volume.
  */
 public class NumberVoxels extends FeatureSingleObject {
 
     // START BEAN PROPERTIES
     /**
-     * If true, calculates the number of voxels in the maximum intensity projection (MIP) of the object.
-     * If false, calculates the number of voxels in the full 3D volume of the object.
+     * If true, calculates the number of voxels in the maximum intensity projection (MIP) of the
+     * object. If false, calculates the number of voxels in the full 3D volume of the object.
      */
     @BeanField @Getter @Setter private boolean mip = false;
     // END BEAN PROPERTIES

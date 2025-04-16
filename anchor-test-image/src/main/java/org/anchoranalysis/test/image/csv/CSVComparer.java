@@ -34,10 +34,7 @@ import org.anchoranalysis.io.input.csv.CSVReader.OpenedCSVFile;
 import org.anchoranalysis.io.input.csv.CSVReaderException;
 import org.apache.commons.lang.ArrayUtils;
 
-/**
- * Compares two CSV files to determine if they are identical or not.
- * 
- */
+/** Compares two CSV files to determine if they are identical or not. */
 @AllArgsConstructor
 public class CSVComparer {
 

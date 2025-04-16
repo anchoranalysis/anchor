@@ -37,9 +37,9 @@ public interface ImageComparer {
 
     /**
      * Asserts that two image-files being compared are identical as images.
-     * 
+     *
      * <p>It's unspecified how exactly images should be opened from the information supplied. This
-     * is implementation-dependent. 
+     * is implementation-dependent.
      *
      * @param filenameWithoutExtension the filename before extensions were added.
      * @param filenameWithExtension the filename with an extension added.

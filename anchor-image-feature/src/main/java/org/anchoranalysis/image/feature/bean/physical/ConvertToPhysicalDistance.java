@@ -46,7 +46,7 @@ import org.anchoranalysis.spatial.orientation.DirectionVector;
  * Converts a distance feature to physical units along a specified direction.
  *
  * <p>This feature converter takes a distance measurement and converts it to physical units
- * considering the direction specified by the {@code direction} property.</p>
+ * considering the direction specified by the {@code direction} property.
  *
  * @param <T> the type of feature input, which must include resolution information
  */
@@ -55,9 +55,7 @@ public class ConvertToPhysicalDistance<T extends FeatureInputWithResolution>
         extends FeatureConvertUnits<T> {
 
     // START BEAN PROPERTIES
-    /** 
-     * Direction of the distance being converted, defaults to a unit vector along the X-axis.
-     */
+    /** Direction of the distance being converted, defaults to a unit vector along the X-axis. */
     @BeanField @Getter @Setter private DirectionVectorBean direction = new SpecifyVector(1.0, 0, 0);
     // END BEAN PROPERTIES
 

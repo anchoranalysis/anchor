@@ -32,9 +32,7 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.spatial.point.Point3d;
 import org.anchoranalysis.spatial.point.Point3i;
 
-/**
- * Calculates the distance from a point to a line segment in 3D space.
- */
+/** Calculates the distance from a point to a line segment in 3D space. */
 @NoArgsConstructor
 class DistanceCalculatorToLine implements Serializable {
 

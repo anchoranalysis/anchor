@@ -35,9 +35,9 @@ import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 
 /**
  * An interface for managing a set of marks that can be updated.
- * 
- * <p>This interface provides methods for initializing, adding, exchanging, and removing marks
- * from a set, while maintaining any necessary internal state or data structures.</p>
+ *
+ * <p>This interface provides methods for initializing, adding, exchanging, and removing marks from
+ * a set, while maintaining any necessary internal state or data structures.
  */
 public interface UpdatableMarks {
 

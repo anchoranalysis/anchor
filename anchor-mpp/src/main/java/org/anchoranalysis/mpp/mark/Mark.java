@@ -44,7 +44,7 @@ import org.anchoranalysis.spatial.scale.ScaleFactor;
 /**
  * Abstract base class representing a mark in 3D space.
  *
- * <p>A mark is a geometric shape with various properties and operations.</p>
+ * <p>A mark is a geometric shape with various properties and operations.
  */
 @NoArgsConstructor
 public abstract class Mark implements Serializable {

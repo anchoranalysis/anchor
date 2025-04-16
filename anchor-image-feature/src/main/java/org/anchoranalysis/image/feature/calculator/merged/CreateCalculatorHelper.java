@@ -47,9 +47,7 @@ import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.feature.calculator.InitializationFactory;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 
-/**
- * Helper class for creating feature calculators with various configurations.
- */
+/** Helper class for creating feature calculators with various configurations. */
 @RequiredArgsConstructor
 class CreateCalculatorHelper {
 
@@ -78,11 +76,10 @@ class CreateCalculatorHelper {
     }
 
     /**
-     * Creates a pair-calculator. 
-     * 
-     * <p>This method substitutes existing caches where they exist for specific
-     * sub-caches of Pair features to reduce calculation, as they've already been calculated for the "single"
-     * features.</p>
+     * Creates a pair-calculator.
+     *
+     * <p>This method substitutes existing caches where they exist for specific sub-caches of Pair
+     * features to reduce calculation, as they've already been calculated for the "single" features.
      *
      * @param <T> The type of feature input
      * @param features The list of features to calculate

@@ -35,8 +35,8 @@ import org.anchoranalysis.image.core.dimensions.Resolution;
 /**
  * Abstract base class for defining bounds on marks in a marked point process.
  *
- * <p>This class extends {@link AnchorBean} and implements {@link Serializable} to provide
- * a foundation for various types of bounds that can be applied to marks.</p>
+ * <p>This class extends {@link AnchorBean} and implements {@link Serializable} to provide a
+ * foundation for various types of bounds that can be applied to marks.
  */
 @GroupingRoot
 public abstract class MarkBounds extends AnchorBean<MarkBounds> implements Serializable {

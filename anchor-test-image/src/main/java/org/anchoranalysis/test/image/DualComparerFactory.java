@@ -31,9 +31,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.test.TestLoader;
 
-/**
- * Factory for creating {@link DualComparer} instances to compare directories.
- */
+/** Factory for creating {@link DualComparer} instances to compare directories. */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class DualComparerFactory {
 
@@ -41,7 +39,8 @@ public class DualComparerFactory {
      * Compares an explicit directory to a directory in Maven's {@code test/resources}.
      *
      * @param pathExplicit the path to the explicit directory to compare
-     * @param pathRelativeTestDir the relative path to the test directory in Maven's {@code test/resources}
+     * @param pathRelativeTestDir the relative path to the test directory in Maven's {@code
+     *     test/resources}
      * @return a {@link DualComparer} for comparing the two directories
      */
     public static DualComparer compareExplicitDirectoryToTest(

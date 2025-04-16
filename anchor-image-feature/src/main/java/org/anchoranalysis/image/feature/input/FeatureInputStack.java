@@ -35,8 +35,8 @@ import org.anchoranalysis.feature.input.FeatureInputEnergy;
 /**
  * A feature input that represents an energy stack.
  *
- * <p>This class extends FeatureInputEnergy to provide specific functionality
- * for working with energy stacks in feature calculations.</p>
+ * <p>This class extends FeatureInputEnergy to provide specific functionality for working with
+ * energy stacks in feature calculations.
  */
 @EqualsAndHashCode(callSuper = true)
 public class FeatureInputStack extends FeatureInputEnergy {
@@ -44,8 +44,8 @@ public class FeatureInputStack extends FeatureInputEnergy {
     /**
      * Constructs a FeatureInputStack with an empty energy stack.
      *
-     * <p>Should only be used if it's guaranteed the energy stack will be added later,
-     * as this is required for proper functionality.</p>
+     * <p>Should only be used if it's guaranteed the energy stack will be added later, as this is
+     * required for proper functionality.
      */
     public FeatureInputStack() {
         this.setEnergyStack(Optional.empty());
@@ -63,8 +63,8 @@ public class FeatureInputStack extends FeatureInputEnergy {
     /**
      * Constructs a FeatureInputStack with an optional energy stack.
      *
-     * @param energyStack An optional energy stack. If present, it will be used to initialize
-     *                    this feature input. If not present, the energy stack will be empty.
+     * @param energyStack An optional energy stack. If present, it will be used to initialize this
+     *     feature input. If not present, the energy stack will be empty.
      */
     public FeatureInputStack(Optional<EnergyStackWithoutParameters> energyStack) {
         if (energyStack.isPresent()) {

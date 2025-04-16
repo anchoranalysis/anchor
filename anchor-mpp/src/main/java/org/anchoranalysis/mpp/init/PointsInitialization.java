@@ -40,9 +40,9 @@ import org.anchoranalysis.mpp.bean.points.fitter.PointsFitter;
 
 /**
  * Initialization class for points-related components in the MPP framework.
- * <p>
- * This class manages the initialization of point fitters and provides access to image initialization.
- * </p>
+ *
+ * <p>This class manages the initialization of point fitters and provides access to image
+ * initialization.
  */
 public class PointsInitialization implements BeanInitialization {
 

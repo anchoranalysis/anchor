@@ -30,9 +30,9 @@ import lombok.EqualsAndHashCode;
 
 /**
  * A wrapper for {@link RegionMembership} that includes pre-calculated flags and a region ID.
- * <p>
- * This class combines a {@link RegionMembership} with its calculated flags and an associated region ID.
- * </p>
+ *
+ * <p>This class combines a {@link RegionMembership} with its calculated flags and an associated
+ * region ID.
  */
 @EqualsAndHashCode
 public class RegionMembershipWithFlags {
@@ -43,9 +43,7 @@ public class RegionMembershipWithFlags {
     /** The underlying region membership. */
     private RegionMembership regionMembership;
 
-    /** 
-     * The ID of the region.
-     */
+    /** The ID of the region. */
     private int regionID;
 
     /**

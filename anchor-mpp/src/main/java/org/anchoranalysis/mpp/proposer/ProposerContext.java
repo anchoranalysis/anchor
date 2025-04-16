@@ -33,16 +33,15 @@ import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.mpp.mark.Mark;
-import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemoFactory;
 import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
+import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemoFactory;
 import org.anchoranalysis.mpp.proposer.error.ErrorNode;
 
 /**
  * Context for proposing operations in the MPP framework.
- * <p>
- * This class encapsulates various components needed for proposing operations,
- * including random number generation, energy stack, region map, and error handling.
- * </p>
+ *
+ * <p>This class encapsulates various components needed for proposing operations, including random
+ * number generation, energy stack, region map, and error handling.
  */
 @Value
 public class ProposerContext {

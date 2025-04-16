@@ -33,14 +33,13 @@ import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.spatial.orientation.RotationMatrix;
 import org.anchoranalysis.spatial.point.Point3d;
 
-/**
- * Utility class for operations related to Ellipsoid marks.
- */
+/** Utility class for operations related to Ellipsoid marks. */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class EllipsoidUtilities {
 
     /**
-     * Calculates the normalized radii of an Ellipsoid mark, taking into account rotation and optional resolution.
+     * Calculates the normalized radii of an Ellipsoid mark, taking into account rotation and
+     * optional resolution.
      *
      * @param mark the Ellipsoid mark
      * @param resolution optional Resolution to adjust for z-axis scaling

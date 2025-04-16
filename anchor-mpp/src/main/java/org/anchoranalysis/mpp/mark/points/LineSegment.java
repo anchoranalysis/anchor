@@ -38,9 +38,7 @@ import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.point.PointConverter;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 
-/**
- * Represents a line segment in 3D space as a Mark.
- */
+/** Represents a line segment in 3D space as a Mark. */
 @NoArgsConstructor
 public class LineSegment extends Mark {
 

@@ -36,8 +36,8 @@ import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 /**
  * Evaluates a feature on the first object in a pair of objects.
  *
- * <p>This class extends {@link FeatureDeriveFromPair} to specifically calculate
- * a feature value for the first object in a pair, ignoring the second object.</p>
+ * <p>This class extends {@link FeatureDeriveFromPair} to specifically calculate a feature value for
+ * the first object in a pair, ignoring the second object.
  *
  * @author Owen Feehan
  */

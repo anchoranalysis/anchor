@@ -45,20 +45,18 @@ import org.anchoranalysis.test.image.rasterwriter.comparison.ImageComparer;
 
 /**
  * A utility class for testing stack writers by writing stacks and optionally comparing them.
- * <p>
- * This class provides methods to perform various tests on stack writing operations,
- * including support for different channel specifications, data types, and dimensionality.
- * </p>
+ *
+ * <p>This class provides methods to perform various tests on stack writing operations, including
+ * support for different channel specifications, data types, and dimensionality.
  */
 @AllArgsConstructor
 public class StackTester {
 
     /**
      * A constant identifier used to represent a small extent in file names.
-     * <p>
-     * This identifier is used when constructing file names for test images,
-     * indicating that the image has a small spatial extent.
-     * </p>
+     *
+     * <p>This identifier is used when constructing file names for test images, indicating that the
+     * image has a small spatial extent.
      */
     public static final String EXTENT_IDENTIFIER = "small";
 
@@ -86,7 +84,8 @@ public class StackTester {
     // END REQUIRED ARGUMENTS
 
     /**
-     * Performs a test on stack writing for specified channel types, number of channels, and RGB setting.
+     * Performs a test on stack writing for specified channel types, number of channels, and RGB
+     * setting.
      *
      * @param channelVoxelTypes Array of voxel data types to test
      * @param numberChannels Number of channels in the stack
@@ -105,7 +104,8 @@ public class StackTester {
     }
 
     /**
-     * Performs a test on stack writing for specified channel types, number of channels, RGB setting, and optional forced first channel type.
+     * Performs a test on stack writing for specified channel types, number of channels, RGB
+     * setting, and optional forced first channel type.
      *
      * @param channelVoxelTypes Array of voxel data types to test
      * @param numberChannels Number of channels in the stack
@@ -144,7 +144,8 @@ public class StackTester {
     }
 
     /**
-     * Performs a test on stack writing for a specified channel specification and optional forced first channel type.
+     * Performs a test on stack writing for a specified channel specification and optional forced
+     * first channel type.
      *
      * @param channels The channel specification to test
      * @param forceFirstChannel Optional voxel data type to force for the first channel

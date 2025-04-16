@@ -35,9 +35,7 @@ import org.anchoranalysis.mpp.pair.PairVoxelizedMarkMemo;
 import org.anchoranalysis.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.mpp.proposer.ProposerContext;
 
-/**
- * An abstract base class for proposing splits of a mark into two new marks.
- */
+/** An abstract base class for proposing splits of a mark into two new marks. */
 @GroupingRoot
 public abstract class MarkSplitProposer extends ProposerBean<MarkSplitProposer>
         implements CompatibleWithMark {
@@ -48,7 +46,8 @@ public abstract class MarkSplitProposer extends ProposerBean<MarkSplitProposer>
      * @param mark the mark to be split
      * @param context the context for the proposal
      * @param markFactory a factory for creating new marks with identifiers
-     * @return an Optional containing a pair of new marks if a split is proposed, or empty if no split is proposed
+     * @return an Optional containing a pair of new marks if a split is proposed, or empty if no
+     *     split is proposed
      * @throws ProposalAbnormalFailureException if the proposal fails abnormally
      */
     public abstract Optional<PairVoxelizedMarkMemo> propose(

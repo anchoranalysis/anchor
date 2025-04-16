@@ -36,7 +36,7 @@ import org.anchoranalysis.image.voxel.iterator.intersecting.CountVoxelsIntersect
  * Counts the number of intersecting voxels where bytes are encoded as region memberships.
  *
  * <p>This class provides methods to count intersecting voxels between two bounded voxel sets,
- * optionally considering a global mask.</p>
+ * optionally considering a global mask.
  *
  * @author Owen Feehan
  */
@@ -67,7 +67,8 @@ public class CountIntersectingVoxels {
     }
 
     /**
-     * Counts the number of intersecting voxels between two bounded voxel sets, considering a global mask.
+     * Counts the number of intersecting voxels between two bounded voxel sets, considering a global
+     * mask.
      *
      * @param voxels1 the first set of bounded voxels
      * @param voxels2 the second set of bounded voxels

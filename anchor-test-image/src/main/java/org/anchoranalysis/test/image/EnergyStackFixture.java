@@ -38,14 +38,14 @@ import org.anchoranalysis.test.image.ChannelFixture.IntensityFunction;
 
 /**
  * A fixture for creating {@link EnergyStack} objects for testing purposes.
- * 
+ *
  * <p>This class provides utility methods to create energy stacks with various configurations,
- * including different sizes (2D or 3D), single or multiple channels, and with or without
- * resolution information. It's designed to be used in test scenarios where standardized
- * {@link EnergyStack} objects are needed.</p>
- * 
+ * including different sizes (2D or 3D), single or multiple channels, and with or without resolution
+ * information. It's designed to be used in test scenarios where standardized {@link EnergyStack}
+ * objects are needed.
+ *
  * <p>The created energy stacks use predefined intensity functions to populate the channel data,
- * ensuring consistent and predictable test data.</p>
+ * ensuring consistent and predictable test data.
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class EnergyStackFixture {
@@ -53,11 +53,12 @@ public class EnergyStackFixture {
     /**
      * Creates an energy-stack with default settings.
      *
-     * <p>This method creates an energy-stack with three channels and includes resolution information.
-     * It's a convenience method that calls the more detailed {@link #create(boolean, boolean, boolean, boolean)}
-     * with default values for single-channel and resolution inclusion.</p>
+     * <p>This method creates an energy-stack with three channels and includes resolution
+     * information. It's a convenience method that calls the more detailed {@link #create(boolean,
+     * boolean, boolean, boolean)} with default values for single-channel and resolution inclusion.
      *
-     * @param big if true, an image of larger size is created; if false, a medium-sized image is created
+     * @param big if true, an image of larger size is created; if false, a medium-sized image is
+     *     created
      * @param do3D if true, a 3D image is created; if false, a 2D image is created
      * @return the newly created energy-stack
      * @see #create(boolean, boolean, boolean, boolean)

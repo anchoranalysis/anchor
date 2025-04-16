@@ -37,8 +37,8 @@ import org.anchoranalysis.image.feature.input.FeatureInputStack;
 /**
  * Strategies for caching used in {@link PairsTableCalculator}.
  *
- * <p>This class provides factory methods for creating different caching strategies
- * used in feature calculations.</p>
+ * <p>This class provides factory methods for creating different caching strategies used in feature
+ * calculations.
  *
  * @author Owen Feehan
  */
@@ -59,7 +59,7 @@ class CachingStrategies {
     /**
      * Creates a strategy that doesn't cache inputs, but reuses a single instance.
      *
-     * <p>This strategy is specifically for {@link FeatureInputStack} inputs.</p>
+     * <p>This strategy is specifically for {@link FeatureInputStack} inputs.
      *
      * @return a bound replace strategy that doesn't cache inputs but reuses a single instance
      */

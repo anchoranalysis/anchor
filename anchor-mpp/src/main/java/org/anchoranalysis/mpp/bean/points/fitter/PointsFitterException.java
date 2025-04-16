@@ -30,10 +30,9 @@ import org.anchoranalysis.core.exception.AnchorCheckedException;
 
 /**
  * Exception thrown when an error occurs during the point fitting process.
- * <p>
- * This exception extends {@link AnchorCheckedException} and is used specifically
- * for errors related to the {@link PointsFitter} operations.
- * </p>
+ *
+ * <p>This exception extends {@link AnchorCheckedException} and is used specifically for errors
+ * related to the {@link PointsFitter} operations.
  */
 public class PointsFitterException extends AnchorCheckedException {
 
@@ -42,7 +41,8 @@ public class PointsFitterException extends AnchorCheckedException {
     /**
      * Constructs a new PointsFitterException with the specified detail message.
      *
-     * @param message the detail message (which is saved for later retrieval by the {@link #getMessage()} method)
+     * @param message the detail message (which is saved for later retrieval by the {@link
+     *     #getMessage()} method)
      */
     public PointsFitterException(String message) {
         super(message);

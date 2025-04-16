@@ -37,9 +37,9 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
  * A pair of objects (first and second) and optionally a merged version of both.
  *
  * <p>Note that first and second simply identify two parts of the pair (tuple). It has no physical
- * meaning related to where the objects are located in the scene.</p>
+ * meaning related to where the objects are located in the scene.
  *
- * <p>If a merged version doesn't exist, it is created and cached on demand.</p>
+ * <p>If a merged version doesn't exist, it is created and cached on demand.
  *
  * @author Owen Feehan
  */
@@ -84,7 +84,8 @@ public class FeatureInputPairObjects extends FeatureInputEnergy {
     }
 
     /**
-     * Constructs a FeatureInputPairObjects with two ObjectMasks, an optional EnergyStack, and an optional merged ObjectMask.
+     * Constructs a FeatureInputPairObjects with two ObjectMasks, an optional EnergyStack, and an
+     * optional merged ObjectMask.
      *
      * @param first the first ObjectMask
      * @param second the second ObjectMask
@@ -135,7 +136,7 @@ public class FeatureInputPairObjects extends FeatureInputEnergy {
     /**
      * Returns a merged version of the two objects.
      *
-     * <p>If a merged version doesn't exist, it is created and cached.</p>
+     * <p>If a merged version doesn't exist, it is created and cached.
      *
      * @return the merged ObjectMask
      */
@@ -158,7 +159,8 @@ public class FeatureInputPairObjects extends FeatureInputEnergy {
     /**
      * Returns a string representation of the object.
      *
-     * @return a string representation of the object, showing the center of gravity of both ObjectMasks
+     * @return a string representation of the object, showing the center of gravity of both
+     *     ObjectMasks
      */
     @Override
     public String toString() {

@@ -33,9 +33,8 @@ import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 /**
  * An abstract base class for features that operate on a single object.
  *
- * <p>This class extends {@link Feature} and specifies {@link FeatureInputSingleObject}
- * as the input type. It provides a common base for all features that work with
- * individual objects in an image.</p>
+ * <p>This class extends {@link Feature} and specifies {@link FeatureInputSingleObject} as the input
+ * type. It provides a common base for all features that work with individual objects in an image.
  */
 public abstract class FeatureSingleObject extends Feature<FeatureInputSingleObject> {
 

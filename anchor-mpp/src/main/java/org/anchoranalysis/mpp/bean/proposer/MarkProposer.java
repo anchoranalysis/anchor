@@ -32,9 +32,7 @@ import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.mpp.proposer.ProposerContext;
 
-/**
- * An abstract base class for proposing changes to a mark.
- */
+/** An abstract base class for proposing changes to a mark. */
 @GroupingRoot
 public abstract class MarkProposer extends ProposerBean<MarkProposer>
         implements CompatibleWithMark {

@@ -36,10 +36,9 @@ import org.anchoranalysis.spatial.point.Point3f;
 
 /**
  * Abstract base class for fitting a mark (e.g., an ellipsoid) to a set of points.
- * <p>
- * This class extends {@link PointsBean} and implements {@link CompatibleWithMark},
- * providing a framework for various point fitting algorithms.
- * </p>
+ *
+ * <p>This class extends {@link PointsBean} and implements {@link CompatibleWithMark}, providing a
+ * framework for various point fitting algorithms.
  */
 @GroupingRoot
 public abstract class PointsFitter extends PointsBean<PointsFitter> implements CompatibleWithMark {

@@ -37,9 +37,7 @@ import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.Point3d;
 import org.apache.commons.collections.ListUtils;
 
-/**
- * A base class for marks that consist of a list of 3D points.
- */
+/** A base class for marks that consist of a list of 3D points. */
 public abstract class PointListBase extends Mark {
 
     private static final long serialVersionUID = 6520431317406007141L;
@@ -53,9 +51,7 @@ public abstract class PointListBase extends Mark {
     /** The maximum x, y, z coordinates of all the points in the list. */
     @Getter private Point3d max;
 
-    /**
-     * Constructs an empty PointListBase.
-     */
+    /** Constructs an empty PointListBase. */
     protected PointListBase() {
         points = new ArrayList<>();
     }
@@ -82,9 +78,7 @@ public abstract class PointListBase extends Mark {
         markNew.updateAfterPointsChange();
     }
 
-    /**
-     * Updates the min and max points after the list of points has changed.
-     */
+    /** Updates the min and max points after the list of points has changed. */
     public void updateAfterPointsChange() {
         assert (!points.isEmpty());
         this.min = calculateMin(getPoints());

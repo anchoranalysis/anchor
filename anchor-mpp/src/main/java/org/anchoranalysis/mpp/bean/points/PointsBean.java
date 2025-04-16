@@ -44,8 +44,8 @@ import org.anchoranalysis.mpp.init.PointsInitialization;
 public abstract class PointsBean<T> extends InitializableBean<T, PointsInitialization> {
 
     /**
-     * Constructs a new PointsBean.
-     * Initializes the bean with a BeanInitializer for PointsInitialization and an AssignerMatchClass.
+     * Constructs a new PointsBean. Initializes the bean with a BeanInitializer for
+     * PointsInitialization and an AssignerMatchClass.
      */
     protected PointsBean() {
         super(

@@ -45,8 +45,9 @@ import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 /**
  * A feature table calculator for single objects.
  *
- * <p>This class implements the {@link FeatureTableCalculator} interface for {@link FeatureInputSingleObject},
- * providing methods to calculate features for single objects and manage the feature calculation process.</p>
+ * <p>This class implements the {@link FeatureTableCalculator} interface for {@link
+ * FeatureInputSingleObject}, providing methods to calculate features for single objects and manage
+ * the feature calculation process.
  */
 @RequiredArgsConstructor
 public class SingleTableCalculator implements FeatureTableCalculator<FeatureInputSingleObject> {

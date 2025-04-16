@@ -36,8 +36,8 @@ import org.anchoranalysis.math.histogram.Histogram;
 /**
  * A feature input that contains a histogram and optional resolution information.
  *
- * <p>This class implements FeatureInputWithResolution, allowing it to be used
- * in feature calculations that require resolution information.</p>
+ * <p>This class implements FeatureInputWithResolution, allowing it to be used in feature
+ * calculations that require resolution information.
  */
 @AllArgsConstructor
 public class FeatureInputHistogram implements FeatureInputWithResolution {

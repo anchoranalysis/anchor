@@ -33,9 +33,9 @@ import org.anchoranalysis.image.feature.input.FeatureInputPairObjects;
 /**
  * An abstract base class for features that operate on pairs of objects.
  *
- * <p>This class extends the generic {@link Feature} class, specifying that
- * the input type is {@link FeatureInputPairObjects}. It provides a common
- * base for all features that work with pairs of objects in image analysis.</p>
+ * <p>This class extends the generic {@link Feature} class, specifying that the input type is {@link
+ * FeatureInputPairObjects}. It provides a common base for all features that work with pairs of
+ * objects in image analysis.
  */
 public abstract class FeaturePairObjects extends Feature<FeatureInputPairObjects> {
 

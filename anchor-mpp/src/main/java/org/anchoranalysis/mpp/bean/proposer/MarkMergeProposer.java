@@ -36,9 +36,7 @@ import org.anchoranalysis.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.mpp.proposer.ProposerContext;
 import org.anchoranalysis.spatial.point.Point3f;
 
-/**
- * An abstract base class for proposing merges between marks.
- */
+/** An abstract base class for proposing merges between marks. */
 @GroupingRoot
 public abstract class MarkMergeProposer extends ProposerBean<MarkMergeProposer>
         implements CompatibleWithMark {
@@ -58,7 +56,7 @@ public abstract class MarkMergeProposer extends ProposerBean<MarkMergeProposer>
 
     /**
      * Gets the points associated with the first mark from the last proposal.
-     * 
+     *
      * @return an Optional containing a list of points, or empty if no points are available
      */
     public Optional<List<Point3f>> getLastPoints1() {
@@ -67,7 +65,7 @@ public abstract class MarkMergeProposer extends ProposerBean<MarkMergeProposer>
 
     /**
      * Gets the points associated with the second mark from the last proposal.
-     * 
+     *
      * @return an Optional containing a list of points, or empty if no points are available
      */
     public Optional<List<Point3f>> getLastPoints2() {

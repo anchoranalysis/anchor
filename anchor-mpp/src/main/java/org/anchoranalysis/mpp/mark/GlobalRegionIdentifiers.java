@@ -31,9 +31,9 @@ import lombok.NoArgsConstructor;
 
 /**
  * Defines global identifiers for different regions of a mark.
- * 
- * <p>This class provides constants that represent different parts or regions
- * of a mark, which can be used for consistent identification across the system.</p>
+ *
+ * <p>This class provides constants that represent different parts or regions of a mark, which can
+ * be used for consistent identification across the system.
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class GlobalRegionIdentifiers {

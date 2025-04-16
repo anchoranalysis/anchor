@@ -28,9 +28,7 @@ package org.anchoranalysis.mpp.mark;
 
 import org.anchoranalysis.core.exception.AnchorCheckedException;
 
-/**
- * Exception thrown when an error occurs while updating a mark set.
- */
+/** Exception thrown when an error occurs while updating a mark set. */
 public class UpdateMarkSetException extends AnchorCheckedException {
 
     private static final long serialVersionUID = -3084951824689469370L;
@@ -38,7 +36,8 @@ public class UpdateMarkSetException extends AnchorCheckedException {
     /**
      * Constructs a new UpdateMarkSetException with the specified detail message.
      *
-     * @param message the detail message (which is saved for later retrieval by the {@link #getMessage()} method)
+     * @param message the detail message (which is saved for later retrieval by the {@link
+     *     #getMessage()} method)
      */
     public UpdateMarkSetException(String message) {
         super(message);

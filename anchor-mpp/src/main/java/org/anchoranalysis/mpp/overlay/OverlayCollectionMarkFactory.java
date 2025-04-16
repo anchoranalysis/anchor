@@ -39,12 +39,14 @@ import org.anchoranalysis.overlay.collection.ColoredOverlayCollection;
 import org.anchoranalysis.overlay.collection.OverlayCollection;
 
 /**
- * Factory for creating {@link OverlayCollection}s from marks and retrieving marks from {@link OverlayCollection}s.
+ * Factory for creating {@link OverlayCollection}s from marks and retrieving marks from {@link
+ * OverlayCollection}s.
  *
  * <p>This class provides methods for two-way conversion:
+ *
  * <ul>
- *   <li>Creation of {@link OverlayCollection} from marks</li>
- *   <li>Retrieval of marks from {@link OverlayCollection}s</li>
+ *   <li>Creation of {@link OverlayCollection} from marks
+ *   <li>Retrieval of marks from {@link OverlayCollection}s
  * </ul>
  *
  * @author Owen Feehan
@@ -84,7 +86,8 @@ public class OverlayCollectionMarkFactory {
     }
 
     /**
-     * Creates a {@link ColoredOverlayCollection} from a {@link MarkCollection} and a {@link ColorIndex}.
+     * Creates a {@link ColoredOverlayCollection} from a {@link MarkCollection} and a {@link
+     * ColorIndex}.
      *
      * @param marks the collection of marks
      * @param colorIndex the color index for the marks
@@ -108,7 +111,8 @@ public class OverlayCollectionMarkFactory {
      * Creates a {@link MarkCollection} from an {@link OverlayCollection}.
      *
      * @param overlays the collection of overlays
-     * @return a new {@link MarkCollection} containing marks from {@link OverlayMark}s in the input collection
+     * @return a new {@link MarkCollection} containing marks from {@link OverlayMark}s in the input
+     *     collection
      */
     public static MarkCollection marksFromOverlays(OverlayCollection overlays) {
         MarkCollection out = new MarkCollection();
@@ -129,7 +133,8 @@ public class OverlayCollectionMarkFactory {
      * Creates {@link ColoredMarks} from a {@link ColoredOverlayCollection}.
      *
      * @param overlays the collection of colored overlays
-     * @return a new {@link ColoredMarks} containing marks and colors from {@link OverlayMark}s in the input collection
+     * @return a new {@link ColoredMarks} containing marks and colors from {@link OverlayMark}s in
+     *     the input collection
      */
     public static ColoredMarks marksFromOverlays(ColoredOverlayCollection overlays) {
         ColoredMarks out = new ColoredMarks();

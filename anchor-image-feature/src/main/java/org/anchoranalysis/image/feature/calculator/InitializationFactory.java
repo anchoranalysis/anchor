@@ -37,8 +37,8 @@ import org.anchoranalysis.feature.initialization.FeatureInitialization;
 /**
  * A factory for creating FeatureInitialization objects.
  *
- * <p>This class provides a static method to create FeatureInitialization instances
- * from optional SharedObjects and EnergyStack inputs.</p>
+ * <p>This class provides a static method to create FeatureInitialization instances from optional
+ * SharedObjects and EnergyStack inputs.
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class InitializationFactory {
@@ -46,8 +46,8 @@ public class InitializationFactory {
     /**
      * Creates a FeatureInitialization object from optional SharedObjects and EnergyStack.
      *
-     * <p>This method extracts the necessary components from the inputs to construct
-     * a FeatureInitialization object.</p>
+     * <p>This method extracts the necessary components from the inputs to construct a
+     * FeatureInitialization object.
      *
      * @param sharedObjects an optional SharedObjects instance
      * @param energyStack an optional EnergyStack instance

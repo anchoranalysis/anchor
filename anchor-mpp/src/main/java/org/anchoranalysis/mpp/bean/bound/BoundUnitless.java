@@ -30,18 +30,17 @@ import java.util.Optional;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 
 /**
- * A bound representing unitless values, where the minimum and maximum are not affected by resolution.
+ * A bound representing unitless values, where the minimum and maximum are not affected by
+ * resolution.
  *
- * <p>This class extends {@link BoundMinMax} to provide functionality for bounds
- * that don't have a specific unit or are not affected by image resolution.</p>
+ * <p>This class extends {@link BoundMinMax} to provide functionality for bounds that don't have a
+ * specific unit or are not affected by image resolution.
  */
 public class BoundUnitless extends BoundMinMax {
 
     private static final long serialVersionUID = 8738881592311859713L;
 
-    /**
-     * Creates a new instance with default minimum and maximum values.
-     */
+    /** Creates a new instance with default minimum and maximum values. */
     public BoundUnitless() {
         super();
     }

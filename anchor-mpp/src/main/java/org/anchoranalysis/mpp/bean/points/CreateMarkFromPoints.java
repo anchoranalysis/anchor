@@ -47,9 +47,7 @@ import org.anchoranalysis.mpp.mark.points.PointList;
 import org.anchoranalysis.spatial.point.Point3f;
 import org.anchoranalysis.spatial.point.PointConverter;
 
-/**
- * Creates a mark by fitting it to a set of points extracted from other marks.
- */
+/** Creates a mark by fitting it to a set of points extracted from other marks. */
 public class CreateMarkFromPoints extends AnchorBean<CreateMarkFromPoints> {
 
     // START BEAN PROPERTIES
@@ -77,8 +75,13 @@ public class CreateMarkFromPoints extends AnchorBean<CreateMarkFromPoints> {
     public Optional<Mark> fitMarkToPointsFromMarks(MarkCollection marks, Dimensions dimensions)
             throws OperationFailedException {
         try {
-            Mark mark = markProvider.get()
-                    .orElseThrow(() -> new OperationFailedException("A mark is required for this operation"));
+            Mark mark =
+                    markProvider
+                            .get()
+                            .orElseThrow(
+                                    () ->
+                                            new OperationFailedException(
+                                                    "A mark is required for this operation"));
 
             List<Point3f> points = extractPointsFromMarks(marks);
 

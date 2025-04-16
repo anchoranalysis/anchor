@@ -31,10 +31,9 @@ import org.anchoranalysis.mpp.mark.points.PointList;
 
 /**
  * A factory for creating PointList marks.
- * <p>
- * This class extends MarkFactory, providing a specific implementation
- * for creating PointList objects in the MPP (Marked Point Process) framework.
- * </p>
+ *
+ * <p>This class extends MarkFactory, providing a specific implementation for creating PointList
+ * objects in the MPP (Marked Point Process) framework.
  */
 public class MarkPointListFactory extends MarkFactory {
 

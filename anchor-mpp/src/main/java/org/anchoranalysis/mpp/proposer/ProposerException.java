@@ -31,8 +31,8 @@ import org.anchoranalysis.core.exception.friendly.AnchorFriendlyCheckedException
 /**
  * An exception thrown when something goes wrong in a Proposer.
  *
- * <p>This exception extends {@link AnchorFriendlyCheckedException} to provide user-friendly error messages
- * for issues occurring during the proposal process.</p>
+ * <p>This exception extends {@link AnchorFriendlyCheckedException} to provide user-friendly error
+ * messages for issues occurring during the proposal process.
  *
  * @author Owen Feehan
  */
@@ -44,7 +44,8 @@ public class ProposerException extends AnchorFriendlyCheckedException {
     /**
      * Constructs a new exception with the specified detail message.
      *
-     * @param message the detail message (which is saved for later retrieval by the {@link #getMessage()} method)
+     * @param message the detail message (which is saved for later retrieval by the {@link
+     *     #getMessage()} method)
      */
     public ProposerException(String message) {
         super(message);

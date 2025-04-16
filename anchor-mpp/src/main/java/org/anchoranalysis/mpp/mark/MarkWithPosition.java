@@ -33,9 +33,7 @@ import org.anchoranalysis.core.exception.CheckedUnsupportedOperationException;
 import org.anchoranalysis.spatial.point.Point3d;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 
-/**
- * An abstract base class for marks that have a position in 3D space.
- */
+/** An abstract base class for marks that have a position in 3D space. */
 public abstract class MarkWithPosition extends Mark implements Serializable {
 
     private static final long serialVersionUID = -6976277985708631268L;
@@ -43,9 +41,7 @@ public abstract class MarkWithPosition extends Mark implements Serializable {
     /** The position of the mark in 3D space. */
     @Getter @Setter private Point3d position;
 
-    /**
-     * Constructs a new MarkWithPosition with a default position at the origin.
-     */
+    /** Constructs a new MarkWithPosition with a default position at the origin. */
     protected MarkWithPosition() {
         this.position = new Point3d();
     }
@@ -62,7 +58,7 @@ public abstract class MarkWithPosition extends Mark implements Serializable {
 
     /**
      * Describes the position of the mark as a string.
-     * 
+     *
      * @return the string.
      */
     protected String positionString() {

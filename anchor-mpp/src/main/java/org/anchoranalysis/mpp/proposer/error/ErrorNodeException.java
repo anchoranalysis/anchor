@@ -30,8 +30,9 @@ import org.anchoranalysis.core.exception.AnchorCheckedException;
 
 /**
  * An exception that adds a string to the current error node.
- * 
- * <p>This exception is used to propagate errors while also allowing them to be added to an ErrorNode.</p>
+ *
+ * <p>This exception is used to propagate errors while also allowing them to be added to an
+ * ErrorNode.
  */
 public class ErrorNodeException extends AnchorCheckedException {
 

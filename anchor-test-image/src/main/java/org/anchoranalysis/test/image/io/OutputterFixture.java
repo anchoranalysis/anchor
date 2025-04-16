@@ -40,16 +40,16 @@ import org.anchoranalysis.test.LoggerFixture;
 import org.anchoranalysis.test.io.output.OutputManagerFixture;
 import org.anchoranalysis.test.io.output.OutputterCheckedFixture;
 
-/**
- * Utility class for creating Outputter instances for testing purposes.
- */
+/** Utility class for creating Outputter instances for testing purposes. */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class OutputterFixture {
 
     /**
-     * Creates an Outputter instance with optionally a path to a temporary directory for outtputting files.
+     * Creates an Outputter instance with optionally a path to a temporary directory for outtputting
+     * files.
      *
-     * @param pathTempDirectory Optional path to a temporary directory. When undefined, an incrementing number will be used for outtputting files.
+     * @param pathTempDirectory Optional path to a temporary directory. When undefined, an
+     *     incrementing number will be used for outtputting files.
      * @return A new Outputter instance.
      * @throws BindFailedException If binding the outputter fails.
      */
@@ -72,9 +72,11 @@ public class OutputterFixture {
     }
 
     /**
-     * Creates an OutputterChecked instance with optionally a path to a temporary directory for outputting files.
+     * Creates an OutputterChecked instance with optionally a path to a temporary directory for
+     * outputting files.
      *
-     * @param pathTempDirectory optional path to a temporary directory. When undefined, an incrementing number will be used for outtputting files.
+     * @param pathTempDirectory optional path to a temporary directory. When undefined, an
+     *     incrementing number will be used for outtputting files.
      * @return A new OutputterChecked instance.
      * @throws BindFailedException If binding the outputter fails.
      */

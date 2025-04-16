@@ -36,9 +36,7 @@ import org.anchoranalysis.spatial.point.Point3f;
 import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.point.PointConverter;
 
-/**
- * A factory for creating PointList objects from various types of point collections.
- */
+/** A factory for creating PointList objects from various types of point collections. */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PointListFactory {
 

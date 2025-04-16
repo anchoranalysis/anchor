@@ -83,12 +83,14 @@ public interface VoxelizedMark {
     VoxelStatistics statisticsForAllSlices(int channelID, int regionID);
 
     /**
-     * Calculates statistics for all slices in a specific channel and region, using a mask from another channel.
+     * Calculates statistics for all slices in a specific channel and region, using a mask from
+     * another channel.
      *
      * @param channelID the ID of the channel for statistics
      * @param regionID the ID of the region
      * @param maskChannelID the ID of the channel to use as a mask
-     * @return the {@link VoxelStatistics} for the specified channel and region, masked by another channel
+     * @return the {@link VoxelStatistics} for the specified channel and region, masked by another
+     *     channel
      */
     VoxelStatistics statisticsForAllSlicesMaskSlice(int channelID, int regionID, int maskChannelID);
 
@@ -102,8 +104,6 @@ public interface VoxelizedMark {
      */
     VoxelStatistics statisticsFor(int channelID, int regionID, int sliceID);
 
-    /**
-     * Cleans up any resources associated with this voxelized mark.
-     */
+    /** Cleans up any resources associated with this voxelized mark. */
     void cleanUp();
 }

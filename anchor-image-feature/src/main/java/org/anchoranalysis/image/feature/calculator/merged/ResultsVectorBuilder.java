@@ -40,8 +40,8 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
 /**
  * Builds a ResultsVector by calculating and inserting feature results.
  *
- * <p>This class provides methods to calculate features for single objects or pairs of objects
- * and insert the results into a ResultsVector.</p>
+ * <p>This class provides methods to calculate features for single objects or pairs of objects and
+ * insert the results into a ResultsVector.
  */
 class ResultsVectorBuilder {
 
@@ -54,7 +54,7 @@ class ResultsVectorBuilder {
      *
      * @param size The size of the ResultsVector to be built.
      * @param errorReporter If defined, feature errors are logged here and not thrown as exceptions.
-     *                      If not defined, exceptions are thrown.
+     *     If not defined, exceptions are thrown.
      */
     public ResultsVectorBuilder(int size, Optional<ErrorReporter> errorReporter) {
         super();
@@ -82,7 +82,8 @@ class ResultsVectorBuilder {
     }
 
     /**
-     * Calculates the features for a particular input and inserts the results into the ResultsVector.
+     * Calculates the features for a particular input and inserts the results into the
+     * ResultsVector.
      *
      * @param <T> The type of feature input.
      * @param input The input for feature calculation.

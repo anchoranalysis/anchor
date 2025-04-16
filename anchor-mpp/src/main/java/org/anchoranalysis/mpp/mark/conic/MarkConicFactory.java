@@ -37,9 +37,7 @@ import org.anchoranalysis.spatial.point.Point3d;
 import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.point.PointConverter;
 
-/**
- * Factory class for creating conic marks (ellipses and ellipsoids) from points.
- */
+/** Factory class for creating conic marks (ellipses and ellipsoids) from points. */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MarkConicFactory {
 
@@ -62,7 +60,8 @@ public class MarkConicFactory {
      * @param size the size of the mark (diameter)
      * @param do3D if true, creates a 3D ellipsoid; if false, creates a 2D ellipse
      * @return a new Mark instance (either Ellipsoid or Ellipse)
-     * @throws IllegalArgumentException if size is not positive or if do3D is false and point.z() is not 0
+     * @throws IllegalArgumentException if size is not positive or if do3D is false and point.z() is
+     *     not 0
      */
     public static Mark createMarkFromPoint(Point3d point, int size, boolean do3D) {
         Preconditions.checkArgument(size > 0, "Size must be positive");

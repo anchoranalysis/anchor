@@ -32,9 +32,7 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 
-/**
- * An abstract base class for proposing scalar values.
- */
+/** An abstract base class for proposing scalar values. */
 public abstract class ScalarProposer extends NullParametersBean<ScalarProposer> {
 
     /**

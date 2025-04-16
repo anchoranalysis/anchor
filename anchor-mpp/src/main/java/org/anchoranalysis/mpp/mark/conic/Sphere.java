@@ -33,8 +33,8 @@ import org.anchoranalysis.mpp.mark.Mark;
 /**
  * Represents a 3D sphere mark.
  *
- * <p>This class extends {@link MarkWithPositionAndSingleRadius} to provide functionality
- * specific to spherical marks in 3D space.</p>
+ * <p>This class extends {@link MarkWithPositionAndSingleRadius} to provide functionality specific
+ * to spherical marks in 3D space.
  */
 @NoArgsConstructor
 public class Sphere extends MarkWithPositionAndSingleRadius {

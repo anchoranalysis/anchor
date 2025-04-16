@@ -38,7 +38,7 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
  *
  * <p>Equals and hash-code must be sensibly defined as these inputs can be used as keys in a cache.
  * The equals implementation assumes equals of {@link ObjectMask} is shallow and computationally
- * inexpensive.</p>
+ * inexpensive.
  *
  * @author Owen Feehan
  */

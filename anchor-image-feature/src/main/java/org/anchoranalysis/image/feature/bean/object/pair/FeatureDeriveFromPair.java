@@ -41,11 +41,11 @@ import org.anchoranalysis.image.feature.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 
 /**
- * Base class for evaluating {@link FeaturePairObjects} in terms of another feature that operates
- * on elements (first, second, merged etc.).
+ * Base class for evaluating {@link FeaturePairObjects} in terms of another feature that operates on
+ * elements (first, second, merged etc.).
  *
- * <p>This class provides methods to calculate feature values for the first, second, and merged objects
- * in a pair, using a specified feature for single objects.</p>
+ * <p>This class provides methods to calculate feature values for the first, second, and merged
+ * objects in a pair, using a specified feature for single objects.
  *
  * @author Owen Feehan
  */

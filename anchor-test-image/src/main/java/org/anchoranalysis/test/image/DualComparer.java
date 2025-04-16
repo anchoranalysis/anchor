@@ -47,7 +47,7 @@ import org.apache.commons.io.FileUtils;
  */
 public class DualComparer {
 
-	/** The first loader. */
+    /** The first loader. */
     @Getter private final TestLoader loader1;
 
     /** The second loader. */
@@ -157,7 +157,8 @@ public class DualComparer {
      * Compare two subdirectories that have an identical path, but in two different test loaders.
      *
      * @param path relative-path (compared to root of both loaders) of subdirectories to compare.
-     * @return true when the subdirectories are equal (contain the same files and directories), false otherwise.
+     * @return true when the subdirectories are equal (contain the same files and directories),
+     *     false otherwise.
      */
     public boolean compareTwoSubdirectories(String path) {
         Path dir1 = loaderImage1.resolveTestPath(path);

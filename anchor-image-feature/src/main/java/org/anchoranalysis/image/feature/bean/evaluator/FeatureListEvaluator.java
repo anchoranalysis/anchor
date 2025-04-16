@@ -56,7 +56,8 @@ public class FeatureListEvaluator<T extends FeatureInput>
         extends FeatureRelatedBean<FeatureListEvaluator<T>> {
 
     /**
-     * A list of providers, combined together to form a list of features, to be calculated in a session.
+     * A list of providers, combined together to form a list of features, to be calculated in a
+     * session.
      */
     @BeanField @Getter @Setter private List<FeatureProvider<T>> features = Arrays.asList();
 

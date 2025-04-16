@@ -32,16 +32,14 @@ import org.anchoranalysis.image.core.dimensions.Resolution;
 /**
  * Represents an upper and lower bound in degrees which is converted to radians when resolved.
  *
- * <p>This class extends {@link BoundMinMax} to provide specific functionality for degree-based bounds,
- * automatically converting degrees to radians when resolving the bounds.</p>
+ * <p>This class extends {@link BoundMinMax} to provide specific functionality for degree-based
+ * bounds, automatically converting degrees to radians when resolving the bounds.
  */
 public class BoundDegrees extends BoundMinMax {
 
     private static final long serialVersionUID = 1281361242890359356L;
 
-    /**
-     * Creates a new instance with default bounds of 0 to 360 degrees.
-     */
+    /** Creates a new instance with default bounds of 0 to 360 degrees. */
     public BoundDegrees() {
         super(0, 360);
     }

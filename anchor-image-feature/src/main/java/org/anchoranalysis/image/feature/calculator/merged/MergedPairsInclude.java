@@ -29,8 +29,8 @@ package org.anchoranalysis.image.feature.calculator.merged;
 /**
  * Specifies which parts of a merged pair to include in calculations.
  *
- * <p>This class allows for selective inclusion of the first object, second object,
- * and/or the merged object in feature calculations.</p>
+ * <p>This class allows for selective inclusion of the first object, second object, and/or the
+ * merged object in feature calculations.
  */
 public final class MergedPairsInclude {
 
@@ -38,9 +38,7 @@ public final class MergedPairsInclude {
     private boolean includeSecond;
     private boolean includeMerged;
 
-    /**
-     * Constructs a MergedPairsInclude with all options set to true.
-     */
+    /** Constructs a MergedPairsInclude with all options set to true. */
     public MergedPairsInclude() {
         this(true, true, true);
     }

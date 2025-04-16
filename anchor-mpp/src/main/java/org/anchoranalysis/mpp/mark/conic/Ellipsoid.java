@@ -54,11 +54,11 @@ import org.anchoranalysis.spatial.scale.ScaleFactor;
  * Represents a 3D ellipsoid mark with multiple sub-regions.
  *
  * <p>The ellipsoid has the following sub-marks:
+ *
  * <ul>
- *   <li>Sub-Mark 0: Center Ellipsoid (inner core)</li>
- *   <li>Sub-Mark 1: Ellipsoid with shell</li>
+ *   <li>Sub-Mark 0: Center Ellipsoid (inner core)
+ *   <li>Sub-Mark 1: Ellipsoid with shell
  * </ul>
- * </p>
  */
 public class Ellipsoid extends ConicBase implements Serializable {
 
@@ -104,9 +104,7 @@ public class Ellipsoid extends ConicBase implements Serializable {
 
     private double radiiShellMaxSq;
 
-    /**
-     * Creates a new Ellipsoid with default values.
-     */
+    /** Creates a new Ellipsoid with default values. */
     public Ellipsoid() {
         super();
         this.radii = new Point3d();
@@ -213,7 +211,8 @@ public class Ellipsoid extends ConicBase implements Serializable {
     @Override
     public String toString() {
         return String.format(
-                "%s %s pos=%s %s vol=%e", "Ellpsd", identifier(), positionString(), strMarks(), volume(0));
+                "%s %s pos=%s %s vol=%e",
+                "Ellpsd", identifier(), positionString(), strMarks(), volume(0));
     }
 
     @Override
@@ -253,9 +252,7 @@ public class Ellipsoid extends ConicBase implements Serializable {
                 / 3;
     }
 
-    /**
-     * Updates internal calculations after a change in the mark's properties.
-     */
+    /** Updates internal calculations after a change in the mark's properties. */
     public void updateAfterMarkChange() {
 
         DoubleMatrix2D matRot = orientation.getRotationMatrix().getMatrix();

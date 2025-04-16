@@ -52,9 +52,7 @@ import org.anchoranalysis.spatial.point.Point3d;
 import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 
-/**
- * Represents a 2D ellipse mark.
- */
+/** Represents a 2D ellipse mark. */
 public class Ellipse extends ConicBase implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -108,9 +106,7 @@ public class Ellipse extends ConicBase implements Serializable {
 
     private double radiiShellMaxSquared;
 
-    /**
-     * Creates a new Ellipse with default values.
-     */
+    /** Creates a new Ellipse with default values. */
     public Ellipse() {
         super();
         this.radii = new Point2d();

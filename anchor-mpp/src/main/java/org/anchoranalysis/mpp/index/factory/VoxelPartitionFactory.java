@@ -45,10 +45,9 @@ public interface VoxelPartitionFactory<T> {
 
     /**
      * Adds an unused part to the factory.
-     * <p>
-     * This method is typically used to recycle parts that are no longer needed,
-     * allowing them to be reused in future voxel partitions.
-     * </p>
+     *
+     * <p>This method is typically used to recycle parts that are no longer needed, allowing them to
+     * be reused in future voxel partitions.
      *
      * @param part the unused part to add
      */

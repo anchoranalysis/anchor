@@ -50,9 +50,7 @@ public class ChannelFixture {
     /** Whether to include resolution with the channel's dimensions. */
     private boolean includeResolution = true;
 
-    /**
-     * Functional interface for creating intensity values for a given location.
-     */
+    /** Functional interface for creating intensity values for a given location. */
     @FunctionalInterface
     public interface IntensityFunction {
 

@@ -92,7 +92,7 @@ public abstract class InstanceSegmentationTestBase {
         assertExpectedSegmentation(stackGrayscale(), targetBox(), "grayscale");
     }
 
-    /** 
+    /**
      * Creates the segmentation implementation to be tested.
      *
      * @return the segmentation implementation.
@@ -117,7 +117,7 @@ public abstract class InstanceSegmentationTestBase {
         return loader.carGrayscale8Bit();
     }
 
-    /** 
+    /**
      * The bounding-box we use to set an area where we expect segments to reside.
      *
      * @return the bounding-box.

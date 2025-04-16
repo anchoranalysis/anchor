@@ -39,7 +39,7 @@ abstract class CompareBase implements ImageComparer {
 
     /**
      * Asserts that two image-files being compared are identical as images.
-     * 
+     *
      * <p>It's unspecified how exactly images should be opened from the information supplied. This
      * is implementation-dependent.
      *

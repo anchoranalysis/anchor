@@ -109,7 +109,7 @@ public class MaskFixture {
 
     /**
      * The **size** across multiple dimensions of the mask that will be created.
-     * 
+     *
      * @param do3D true indicates that a 3D-mask will be assessed, false rather a 2D-mask.
      * @return the size.
      */
@@ -119,7 +119,7 @@ public class MaskFixture {
 
     /**
      * The **width** of the mask that will be created.
-     * 
+     *
      * @return the width.
      */
     public static int width() {
@@ -128,17 +128,16 @@ public class MaskFixture {
 
     /**
      * The **height** of the mask that will be created.
-     * 
+     *
      * @return the height.
      */
     public static int height() {
         return BOX_EXTENT.y();
     }
 
-    
     /**
      * The **depth** of the mask that will be created.
-     * 
+     *
      * @param do3D true indicates that a 3D-mask will be assessed, false rather a 2D-mask.
      * @return the depth (always 1 for a 2D-mask).
      */

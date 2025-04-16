@@ -28,16 +28,13 @@ package org.anchoranalysis.mpp.bean.regionmap;
 
 /**
  * A {@link RegionMembership} implementation that uses an OR operation to check membership.
- * <p>
- * This class extends RegionMembership and implements the isMemberFlag method
- * using an OR operation to determine if a region is a member.
- * </p>
+ *
+ * <p>This class extends RegionMembership and implements the isMemberFlag method using an OR
+ * operation to determine if a region is a member.
  */
 public class RegionMembershipOr extends RegionMembership {
 
-    /**
-     * Constructs a {@link RegionMembershipOr} with no regions set.
-     */
+    /** Constructs a {@link RegionMembershipOr} with no regions set. */
     public RegionMembershipOr() {
         super();
     }

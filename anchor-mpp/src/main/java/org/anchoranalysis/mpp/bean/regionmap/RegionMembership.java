@@ -36,9 +36,8 @@ import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException
 
 /**
  * Abstract class representing membership of regions using a bit-flag system.
- * <p>
- * This class uses 8 boolean fields to represent membership in up to 8 different regions.
- * </p>
+ *
+ * <p>This class uses 8 boolean fields to represent membership in up to 8 different regions.
  */
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)

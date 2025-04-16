@@ -35,8 +35,8 @@ import org.anchoranalysis.feature.name.FeatureNameList;
 /**
  * A {@link FeatureCalculatorMulti} with associated feature-names.
  *
- * <p>This class combines a multi-feature calculator with a list of feature names,
- * allowing for named feature calculations.</p>
+ * <p>This class combines a multi-feature calculator with a list of feature names, allowing for
+ * named feature calculations.
  *
  * @param <T> feature input type
  * @author Owen Feehan

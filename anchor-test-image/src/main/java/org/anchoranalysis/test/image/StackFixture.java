@@ -74,7 +74,7 @@ public class StackFixture {
      * @param extent the size of each channel
      * @return the newly created stack with newly-created channels
      * @throws AnchorImpossibleSituationException if an {@link IncorrectImageSizeException} occurs,
-     *         which should never happen given the controlled creation of channels
+     *     which should never happen given the controlled creation of channels
      */
     public Stack create(ChannelSpecification channelSpecification, Extent extent) {
         Stream<Channel> channels =

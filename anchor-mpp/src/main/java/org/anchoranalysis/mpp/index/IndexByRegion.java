@@ -53,8 +53,8 @@ public class IndexByRegion<T> {
     }
 
     /**
-     * Gets the combined voxel partition for all slices in a region.
-     * This method should only be used for read-only operations to maintain integrity with the combined list.
+     * Gets the combined voxel partition for all slices in a region. This method should only be used
+     * for read-only operations to maintain integrity with the combined list.
      *
      * @param regionID The ID of the region
      * @return The combined voxel partition for the region
@@ -64,8 +64,8 @@ public class IndexByRegion<T> {
     }
 
     /**
-     * Gets the voxel partition for a specific slice in a region.
-     * This method should only be used for read-only operations to maintain integrity with the combined list.
+     * Gets the voxel partition for a specific slice in a region. This method should only be used
+     * for read-only operations to maintain integrity with the combined list.
      *
      * @param regionID The ID of the region
      * @param sliceID The ID of the slice

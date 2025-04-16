@@ -33,8 +33,8 @@ import org.anchoranalysis.bean.annotation.BeanField;
 /**
  * An abstract class representing a bound with minimum and maximum values.
  *
- * <p>This class extends {@link Bound} and uses a {@link ResolvedBound} as a delegate
- * to manage the minimum and maximum values.</p>
+ * <p>This class extends {@link Bound} and uses a {@link ResolvedBound} as a delegate to manage the
+ * minimum and maximum values.
  */
 public abstract class BoundMinMax extends Bound {
 
@@ -44,9 +44,7 @@ public abstract class BoundMinMax extends Bound {
     @BeanField @Getter @Setter private ResolvedBound delegate;
     // END BEAN PROPERTIES
 
-    /**
-     * Creates a new instance with default minimum and maximum values.
-     */
+    /** Creates a new instance with default minimum and maximum values. */
     protected BoundMinMax() {
         delegate = new ResolvedBound();
     }

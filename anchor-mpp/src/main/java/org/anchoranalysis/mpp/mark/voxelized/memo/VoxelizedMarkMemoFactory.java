@@ -32,19 +32,17 @@ import org.anchoranalysis.mpp.mark.Mark;
 
 /**
  * Factory class for creating {@link VoxelizedMarkMemo} instances.
- * <p>
- * This class explicitly manages the creation of VoxelizedMarkMemo objects as they can consume
- * a large amount of memory. It provides a static method for creating these objects, ensuring
+ *
+ * <p>This class explicitly manages the creation of VoxelizedMarkMemo objects as they can consume a
+ * large amount of memory. It provides a static method for creating these objects, ensuring
  * controlled instantiation.
- * </p>
  */
 public class VoxelizedMarkMemoFactory {
 
     /**
      * Private constructor to prevent instantiation.
-     * <p>
-     * This class is designed to be used via its static method only.
-     * </p>
+     *
+     * <p>This class is designed to be used via its static method only.
      */
     private VoxelizedMarkMemoFactory() {
         // ONLY ALLOWED AS STATIC

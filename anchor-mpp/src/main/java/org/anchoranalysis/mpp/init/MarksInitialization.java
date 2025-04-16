@@ -52,10 +52,9 @@ import org.anchoranalysis.mpp.pair.RandomCollection;
 
 /**
  * Initialization class for marks-related components in the MPP framework.
- * <p>
- * This class manages the initialization of various mark-related stores and provides
- * access to image and points initialization.
- * </p>
+ *
+ * <p>This class manages the initialization of various mark-related stores and provides access to
+ * image and points initialization.
  */
 @Accessors(fluent = true)
 public class MarksInitialization implements BeanInitialization {

@@ -30,9 +30,8 @@ import org.anchoranalysis.mpp.mark.Mark;
 
 /**
  * Represents a pair of marks, with a source and destination.
- * <p>
- * The marks are ordered such that the source always has a lower identifier than the destination.
- * </p>
+ *
+ * <p>The marks are ordered such that the source always has a lower identifier than the destination.
  *
  * @param <T> The type of mark in the pair, extending Mark
  */
@@ -43,9 +42,9 @@ public class MarkPair<T extends Mark> {
 
     /**
      * Constructs a new MarkPair.
-     * <p>
-     * The marks are automatically ordered so that the source has a lower identifier than the destination.
-     * </p>
+     *
+     * <p>The marks are automatically ordered so that the source has a lower identifier than the
+     * destination.
      *
      * @param source One of the marks in the pair
      * @param destination The other mark in the pair

@@ -80,9 +80,7 @@ public class RotatableBoundingBox extends MarkWithPosition {
      */
     private Point3d pointRelative = new Point3d();
 
-    /**
-     * Creates a new RotatableBoundingBox with default values.
-     */
+    /** Creates a new RotatableBoundingBox with default values. */
     public RotatableBoundingBox() {
         this.update(new Point2d(0, 0), new Point2d(0, 0), new Orientation2D());
     }
@@ -121,9 +119,7 @@ public class RotatableBoundingBox extends MarkWithPosition {
         update(convert3d(distanceToLeftBottom), convert3d(distanceToRightTop), orientation);
     }
 
-    /**
-     * Internal version of update with Point3d.
-     */
+    /** Internal version of update with Point3d. */
     private void update(
             Point3d distanceToLeftBottom, Point3d distanceToRightTop, Orientation orientation) {
         this.distanceToLeftBottom = distanceToLeftBottom;
@@ -194,9 +190,7 @@ public class RotatableBoundingBox extends MarkWithPosition {
         return 2;
     }
 
-    /**
-     * Converts a 2D point to a 3D point with z=0.
-     */
+    /** Converts a 2D point to a 3D point with z=0. */
     private static Point3d convert3d(Point2d point) {
         return new Point3d(point.x(), point.y(), 0);
     }
@@ -215,9 +209,7 @@ public class RotatableBoundingBox extends MarkWithPosition {
                 0);
     }
 
-    /**
-     * Rotates a position and adds the current position afterwards.
-     */
+    /** Rotates a position and adds the current position afterwards. */
     private Point3i rotateAddPos(Point3d point) {
         rotMatrix.rotatePointInplace(point);
         point.add(getPosition());

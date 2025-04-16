@@ -31,9 +31,8 @@ import lombok.NoArgsConstructor;
 
 /**
  * Utility class for managing 8-bit region membership.
- * <p>
- * This class provides methods for manipulating and checking region membership flags.
- * </p>
+ *
+ * <p>This class provides methods for manipulating and checking region membership flags.
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class RegionMembershipUtilities {

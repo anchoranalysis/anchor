@@ -31,9 +31,7 @@ import cern.colt.matrix.DoubleMatrix1D;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-/**
- * Utility class for tensor-related operations and array/matrix creation.
- */
+/** Utility class for tensor-related operations and array/matrix creation. */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class TensorUtilities {
 

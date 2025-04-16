@@ -41,8 +41,8 @@ import org.anchoranalysis.image.core.dimensions.Resolution;
 /**
  * Base class for a feature that requires input resolution to be calculated.
  *
- * <p>This class provides a framework for features that depend on image resolution
- * for their calculations. It handles cases where resolution might be missing.</p>
+ * <p>This class provides a framework for features that depend on image resolution for their
+ * calculations. It handles cases where resolution might be missing.
  *
  * @param <T> feature input type, which must include resolution information
  * @author Owen Feehan
@@ -53,7 +53,8 @@ public abstract class WithResolutionBase<T extends FeatureInputWithResolution>
 
     // START BEAN FIELDS
     /**
-     * Whether to return {@code Double.NaN} (if true) or throw an exception (if false) when image resolution is missing.
+     * Whether to return {@code Double.NaN} (if true) or throw an exception (if false) when image
+     * resolution is missing.
      */
     @BeanField @Getter @Setter private boolean acceptMissingResolution = false;
     // END BEAN FIELDS

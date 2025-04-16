@@ -46,7 +46,8 @@ import org.anchoranalysis.test.TestDataLoadException;
 import org.anchoranalysis.test.TestLoader;
 
 /**
- * A test loader for image-related operations, providing methods to open and compare images and object collections.
+ * A test loader for image-related operations, providing methods to open and compare images and
+ * object collections.
  */
 @RequiredArgsConstructor
 public class TestLoaderImage {

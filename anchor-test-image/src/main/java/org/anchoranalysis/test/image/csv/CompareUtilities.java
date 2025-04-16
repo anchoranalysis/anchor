@@ -36,9 +36,9 @@ import org.apache.commons.lang.StringUtils;
 
 /**
  * Utility class for comparing and printing CSV-related data.
- * 
- * <p>This class provides methods for checking CSV rows, comparing string arrays,
- * and printing formatted output for CSV comparisons.</p>
+ *
+ * <p>This class provides methods for checking CSV rows, comparing string arrays, and printing
+ * formatted output for CSV comparisons.
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class CompareUtilities {
@@ -55,7 +55,7 @@ class CompareUtilities {
             boolean rejectZeroRows, Optional<String[]> lines1, Optional<String[]> lines2)
             throws CSVReaderException {
         if (rejectZeroRows) {
-        	if (!lines1.isPresent() || !lines2.isPresent()) {
+            if (!lines1.isPresent() || !lines2.isPresent()) {
                 throw new CSVReaderException("At least one input csv file has zero rows");
             }
         }
@@ -63,14 +63,17 @@ class CompareUtilities {
 
     /**
      * Are two arrays of strings equals?
-     * 
-     * <p>To be equal, the same number of elements must exist in both arrays, and each element must be identical.
      *
-     * <p>Exceptionally, an array is an {@link Optional} which can also be {@link Optional#empty} which is also considered in the comparison.
-     * 
+     * <p>To be equal, the same number of elements must exist in both arrays, and each element must
+     * be identical.
+     *
+     * <p>Exceptionally, an array is an {@link Optional} which can also be {@link Optional#empty}
+     * which is also considered in the comparison.
+     *
      * @param array1 the first array to be compared.
      * @param array2 the second array to be compared.
-     * @param ignoreInitialElements when positive, this many of the initial array elements are omitted for consideration in the comparison. when zero, all elements are considered.
+     * @param ignoreInitialElements when positive, this many of the initial array elements are
+     *     omitted for consideration in the comparison. when zero, all elements are considered.
      * @return true if all the above conditions for equality are met.
      */
     public static boolean areArraysEqual(
@@ -108,7 +111,7 @@ class CompareUtilities {
      * Prints two lines (represented by string arrays) to the screen, ensuring that each array item
      * is presented in vertical columns
      *
-     * <p>Default delimiter of "  " (two spaces)
+     * <p>Default delimiter of " " (two spaces)
      *
      * @param messageStream the PrintStream to which the formatted lines will be written
      * @param line1 an array of strings for the first line

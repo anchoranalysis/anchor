@@ -36,7 +36,7 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
  * Calculates the number of voxels in a single object, optionally flattening in the Z-dimension.
  *
  * <p>This calculation part can either count the voxels in the 3D object or in its 2D projection
- * (flattened in the Z-dimension), depending on the {@code flattenZ} parameter.</p>
+ * (flattened in the Z-dimension), depending on the {@code flattenZ} parameter.
  */
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
@@ -49,7 +49,8 @@ public class CalculateNumberVoxels extends CalculationPart<Double, FeatureInputS
      * Executes the calculation to count the number of voxels in the object.
      *
      * @param input The input single object.
-     * @return The number of voxels in the object (or its 2D projection if {@code flattenZ} is true).
+     * @return The number of voxels in the object (or its 2D projection if {@code flattenZ} is
+     *     true).
      */
     @Override
     public Double execute(FeatureInputSingleObject input) {

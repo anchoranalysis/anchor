@@ -41,15 +41,16 @@ import org.anchoranalysis.core.functional.FunctionalList;
  *
  * <p>This class is used to represent a mapping of integer IDs to sub-regions. It is particularly
  * useful in scenarios where object masks need to be compared, such as in
- * org.anchoranalysis.plugin.image.feature.bean.stack.object.AsObjectMask.</p>
+ * org.anchoranalysis.plugin.image.feature.bean.stack.object.AsObjectMask.
  */
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 public class RegionMap extends AnchorBean<RegionMap> {
 
-    /** 
+    /**
      * List of region memberships.
-     * <p>Each element in this list represents a mapping between an integer ID and a sub-region.</p>
+     *
+     * <p>Each element in this list represents a mapping between an integer ID and a sub-region.
      */
     @BeanField @Getter @Setter private List<RegionMembership> list = Arrays.asList();
 

@@ -30,14 +30,13 @@ import org.anchoranalysis.mpp.proposer.OptionalPointProposer;
 
 /**
  * An abstract base class for proposing positions.
- * <p>
- * This class extends ProposerBean and implements OptionalPointProposer,
- * providing a foundation for creating position proposers in the MPP (Marked Point Process) framework.
- * </p>
+ *
+ * <p>This class extends ProposerBean and implements OptionalPointProposer, providing a foundation
+ * for creating position proposers in the MPP (Marked Point Process) framework.
  */
 public abstract class PositionProposer extends ProposerBean<OptionalPointProposer>
         implements OptionalPointProposer {
-    
+
     // The class is left empty as it's meant to be a base class for other position proposers.
     // Specific implementations should override methods from OptionalPointProposer as needed.
 }

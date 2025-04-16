@@ -31,11 +31,12 @@ import org.anchoranalysis.feature.input.FeatureInputWithResolution;
 import org.anchoranalysis.image.core.dimensions.UnitConverter;
 
 /**
- * Converts a feature value representing area in pixel units to physical area units in an isometric XY plane.
+ * Converts a feature value representing area in pixel units to physical area units in an isometric
+ * XY plane.
  *
- * <p>This feature converter takes a measurement in pixel units and converts it
- * to physical area units (e.g., square micrometers). It assumes an isometric XY plane
- * in the image space, meaning that the X and Y dimensions have the same physical scale.</p>
+ * <p>This feature converter takes a measurement in pixel units and converts it to physical area
+ * units (e.g., square micrometers). It assumes an isometric XY plane in the image space, meaning
+ * that the X and Y dimensions have the same physical scale.
  *
  * @param <T> the type of feature input, which must include resolution information
  */

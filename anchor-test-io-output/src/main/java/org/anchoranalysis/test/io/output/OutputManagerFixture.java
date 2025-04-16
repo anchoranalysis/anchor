@@ -49,7 +49,8 @@ public class OutputManagerFixture {
     /**
      * Creates the {@link OutputManager} fixture.
      *
-     * @param pathForPrefixer a path to use for the prefixer in the output-manager. When undefined, an incrementing number will be used. 
+     * @param pathForPrefixer a path to use for the prefixer in the output-manager. When undefined,
+     *     an incrementing number will be used.
      * @param outputEnabledRules rules that determine which outputs occur or not.
      * @return a newly created fixture for {@link OutputManager}.
      */

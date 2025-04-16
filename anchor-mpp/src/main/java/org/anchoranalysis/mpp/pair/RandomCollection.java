@@ -33,10 +33,9 @@ import org.anchoranalysis.mpp.mark.UpdatableMarks;
 
 /**
  * An abstract collection of items from which one can randomly sample.
- * <p>
- * This class serves as a base for implementing collections that support
- * non-uniform random sampling of pairs of items.
- * </p>
+ *
+ * <p>This class serves as a base for implementing collections that support non-uniform random
+ * sampling of pairs of items.
  *
  * @param <T> The type of items in the collection
  */

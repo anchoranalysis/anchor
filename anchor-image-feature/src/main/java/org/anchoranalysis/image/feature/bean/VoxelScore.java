@@ -38,7 +38,7 @@ import org.anchoranalysis.math.histogram.Histogram;
  * Calculates a per-voxel score.
  *
  * <p>This abstract class provides a framework for calculating scores on a per-voxel basis.
- * Implementations should define the specific scoring algorithm in the {@link #calculate} method.</p>
+ * Implementations should define the specific scoring algorithm in the {@link #calculate} method.
  */
 public abstract class VoxelScore extends ImageBean<VoxelScore> {
 

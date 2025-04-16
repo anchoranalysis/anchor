@@ -42,7 +42,7 @@ import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 /**
  * A a list of 3D points.
- * 
+ *
  * <p>Internally a set data-structure (as opposed to list) is used to store the points.
  */
 public class PointList extends PointListBase {
@@ -56,9 +56,7 @@ public class PointList extends PointListBase {
     /** A set that makes it quick to check if a point is on the list. */
     private Set<Point3d> set;
 
-    /**
-     * Constructs an empty PointList.
-     */
+    /** Constructs an empty PointList. */
     public PointList() {
         super();
     }
@@ -132,7 +130,8 @@ public class PointList extends PointListBase {
 
     @Override
     public Point3d centerPoint() {
-        // We take the mean of the BBOX as it's not really well defined. We probably should take the COG.
+        // We take the mean of the BBOX as it's not really well defined. We probably should take the
+        // COG.
         return box().midpoint();
     }
 

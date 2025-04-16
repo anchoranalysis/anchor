@@ -32,9 +32,7 @@ import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.spatial.point.Point3d;
 import org.anchoranalysis.spatial.point.Point3i;
 
-/** 
- * Utility class to ensure a point has values contained inside image-dimensions.
- */
+/** Utility class to ensure a point has values contained inside image-dimensions. */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PointClamper {
 

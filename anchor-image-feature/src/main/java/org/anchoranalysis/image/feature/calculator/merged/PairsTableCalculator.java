@@ -134,7 +134,8 @@ public class PairsTableCalculator implements FeatureTableCalculator<FeatureInput
      * @param input the input pair of objects
      * @param errorReporter the error reporter to use
      * @return the calculated feature results
-     * @throws NamedFeatureCalculateException if an error occurs during calculation and error suppression is disabled
+     * @throws NamedFeatureCalculateException if an error occurs during calculation and error
+     *     suppression is disabled
      */
     public ResultsVector calculateMaybeSuppressErrors(
             FeatureInputPairObjects input, ErrorReporter errorReporter)

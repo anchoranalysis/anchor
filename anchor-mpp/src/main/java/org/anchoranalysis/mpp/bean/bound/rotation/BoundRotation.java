@@ -35,7 +35,8 @@ import org.anchoranalysis.spatial.orientation.Orientation;
 /**
  * Abstract base class for defining bounds on rotations.
  *
- * <p>This class extends {@link AnchorBean} to provide a foundation for various types of rotation bounds.</p>
+ * <p>This class extends {@link AnchorBean} to provide a foundation for various types of rotation
+ * bounds.
  */
 public abstract class BoundRotation extends AnchorBean<BoundRotation> {
 

@@ -34,9 +34,7 @@ import org.anchoranalysis.mpp.mark.MarkCollection;
 import org.anchoranalysis.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.mpp.proposer.ProposerContext;
 
-/**
- * An abstract base class for proposing an entire collection (configuration) of marks.
- */
+/** An abstract base class for proposing an entire collection (configuration) of marks. */
 @GroupingRoot
 public abstract class MarkCollectionProposer extends ProposerBean<MarkCollectionProposer>
         implements CompatibleWithMark {

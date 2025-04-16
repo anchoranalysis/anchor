@@ -35,10 +35,9 @@ import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 
 /**
  * An abstract base class for defining regions associated with marks.
- * <p>
- * This class extends AnchorBean and implements GenerateUniqueParameterization,
- * providing a foundation for creating mark regions in the MPP (Marked Point Process) framework.
- * </p>
+ *
+ * <p>This class extends AnchorBean and implements GenerateUniqueParameterization, providing a
+ * foundation for creating mark regions in the MPP (Marked Point Process) framework.
  */
 public abstract class MarkRegion extends AnchorBean<MarkRegion>
         implements GenerateUniqueParameterization {

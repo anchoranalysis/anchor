@@ -51,9 +51,7 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
 public class CalculateInputFromPair
         extends CalculationPart<FeatureInputSingleObject, FeatureInputPairObjects> {
 
-    /**
-     * Defines the extraction mode for the calculation.
-     */
+    /** Defines the extraction mode for the calculation. */
     public enum Extract {
         /** Extract the first object from the pair. */
         FIRST,

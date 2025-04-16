@@ -29,8 +29,8 @@ package org.anchoranalysis.test.image.object;
 /**
  * Defines a pattern of voxels in a 3D space.
  *
- * <p>This interface provides a method to determine whether a voxel at a given coordinate is &quot;on&quot; or &quot;off&quot;
- * according to the defined pattern.</p>
+ * <p>This interface provides a method to determine whether a voxel at a given coordinate is
+ * &quot;on&quot; or &quot;off&quot; according to the defined pattern.
  */
 public interface VoxelPattern {
 

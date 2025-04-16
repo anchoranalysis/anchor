@@ -30,9 +30,9 @@ import org.anchoranalysis.core.exception.AnchorCheckedException;
 
 /**
  * Exception thrown when an unsupported mark type is encountered.
- * 
- * <p>This exception is used to indicate that a particular type of mark
- * is not supported in the current context or operation.</p>
+ *
+ * <p>This exception is used to indicate that a particular type of mark is not supported in the
+ * current context or operation.
  */
 public class UnsupportedMarkTypeException extends AnchorCheckedException {
 
@@ -41,7 +41,8 @@ public class UnsupportedMarkTypeException extends AnchorCheckedException {
     /**
      * Constructs a new UnsupportedMarkTypeException with the specified detail message.
      *
-     * @param message the detail message (which is saved for later retrieval by the {@link #getMessage()} method)
+     * @param message the detail message (which is saved for later retrieval by the {@link
+     *     #getMessage()} method)
      */
     public UnsupportedMarkTypeException(String message) {
         super(message);

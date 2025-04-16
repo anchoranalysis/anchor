@@ -38,9 +38,7 @@ import org.anchoranalysis.mpp.proposer.error.ErrorNode;
 import org.anchoranalysis.spatial.point.Point3d;
 import org.anchoranalysis.spatial.point.Point3i;
 
-/**
- * An abstract base class for proposing a list of points based on a given point and mark.
- */
+/** An abstract base class for proposing a list of points based on a given point and mark. */
 public abstract class PointsProposer extends NullParametersBean<PointsProposer>
         implements CompatibleWithMark {
 

@@ -34,9 +34,8 @@ import org.anchoranalysis.mpp.index.factory.VoxelPartitionFactory;
 
 /**
  * A voxel partition implementation using histograms to represent voxel value distributions.
- * <p>
- * This class maintains a histogram for each slice and a combined histogram for all slices.
- * </p>
+ *
+ * <p>This class maintains a histogram for each slice and a combined histogram for all slices.
  */
 public class VoxelPartitionHistogram implements VoxelPartition<Histogram> {
 

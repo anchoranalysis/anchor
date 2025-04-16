@@ -38,8 +38,8 @@ import org.anchoranalysis.core.random.RandomNumberGenerator;
 /**
  * A bound resolved into pixel units.
  *
- * <p>This class represents a bound with minimum and maximum values, typically used
- * after resolving a bound into pixel units.</p>
+ * <p>This class represents a bound with minimum and maximum values, typically used after resolving
+ * a bound into pixel units.
  */
 @NoArgsConstructor
 @AllArgsConstructor

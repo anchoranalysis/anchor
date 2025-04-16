@@ -37,10 +37,9 @@ import org.anchoranalysis.test.image.io.TestLoaderImage;
 
 /**
  * A utility class for loading and processing object masks in test scenarios.
- * <p>
- * This class provides methods to load image stacks and extract the largest object mask from them.
- * It's primarily used for testing purposes related to image object processing.
- * </p>
+ *
+ * <p>This class provides methods to load image stacks and extract the largest object mask from
+ * them. It's primarily used for testing purposes related to image object processing.
  */
 @AllArgsConstructor
 public class TestLoaderObjects {

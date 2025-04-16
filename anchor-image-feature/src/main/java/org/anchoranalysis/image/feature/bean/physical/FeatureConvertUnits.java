@@ -42,7 +42,7 @@ import org.anchoranalysis.image.core.dimensions.UnitConverter;
  * An abstract base class for features that convert units between physical and voxel space.
  *
  * <p>This class provides a framework for converting feature values between different unit systems,
- * typically between voxel-based measurements and physical measurements (e.g., micrometers).</p>
+ * typically between voxel-based measurements and physical measurements (e.g., micrometers).
  *
  * @param <T> the type of feature input, which must include resolution information
  */

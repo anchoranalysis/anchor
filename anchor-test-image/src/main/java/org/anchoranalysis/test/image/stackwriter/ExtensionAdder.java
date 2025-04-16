@@ -31,7 +31,7 @@ import lombok.NoArgsConstructor;
 /**
  * Utility class for adding file extensions to filenames.
  *
- * <p>This class provides a static method to append a file extension to a given filename.</p>
+ * <p>This class provides a static method to append a file extension to a given filename.
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ExtensionAdder {
