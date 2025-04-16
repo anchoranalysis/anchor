@@ -37,18 +37,19 @@ import org.anchoranalysis.core.log.error.ErrorReporter;
 import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
 import org.anchoranalysis.image.io.stack.time.TimeSeries;
 
-/** Combines a Stack with a map of other stacks */
+/**
+ * Combines a Stack with a map of other stacks.
+ */
 @RequiredArgsConstructor
 public class StackWithMap implements MultiInputSubMap<TimeSeries> {
 
-    // START REQUIRED ARGUMENTS
-    /** Needed for getting main-stack */
+    /** Needed for getting main-stack. */
     private final String mainObjectName;
 
+    /** The main input object that provides the stack. */
     private final ProvidesStackInput mainInputObject;
-    // END REQUIRED ARGUMENTS
 
-    // Where the other stacks are stored
+    /** Where the other stacks are stored. */
     private OperationMap<TimeSeries> map = new OperationMap<>();
 
     @Override
@@ -57,6 +58,14 @@ public class StackWithMap implements MultiInputSubMap<TimeSeries> {
         addToStore(stackCollection, 0, logger);
     }
 
+    /**
+     * Adds the main stack and other stacks to the store.
+     *
+     * @param stackCollection the store to add the stacks to
+     * @param seriesNum the series number
+     * @param logger the logger for reporting errors
+     * @throws OperationFailedException if adding to the store fails
+     */
     public void addToStore(
             NamedProviderStore<TimeSeries> stackCollection, int seriesNum, Logger logger)
             throws OperationFailedException {
@@ -73,23 +82,49 @@ public class StackWithMap implements MultiInputSubMap<TimeSeries> {
         map.add(name, op);
     }
 
+    /**
+     * Closes resources and cleans up.
+     *
+     * @param errorReporter for reporting any errors during closure
+     */
     public void close(ErrorReporter errorReporter) {
         mainInputObject.close(errorReporter);
         map = null;
     }
 
+    /**
+     * Gets the name of the main object.
+     *
+     * @return the name of the main object
+     */
     public String getMainObjectName() {
         return mainObjectName;
     }
 
+    /**
+     * Gets the input name.
+     *
+     * @return the input name
+     */
     public String inputName() {
         return mainInputObject.identifier();
     }
 
+    /**
+     * Gets the path for binding.
+     *
+     * @return an {@link Optional} containing the path for binding, if available
+     */
     public Optional<Path> pathForBinding() {
         return mainInputObject.pathForBinding();
     }
 
+    /**
+     * Gets the number of frames.
+     *
+     * @return the number of frames
+     * @throws OperationFailedException if retrieving the number of frames fails
+     */
     public int numFrames() throws OperationFailedException {
         return mainInputObject.numberFrames();
     }

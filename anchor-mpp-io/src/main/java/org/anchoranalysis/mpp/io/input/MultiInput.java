@@ -48,7 +48,7 @@ import org.anchoranalysis.mpp.mark.MarkCollection;
 /**
  * An input to an experiment that combines a particular {@link Stack} with other types of entities.
  *
- * <p>Theses entities each have a unique name, and must be one of the following types:
+ * <p>These entities each have a unique name, and must be one of the following types:
  *
  * <ol>
  *   <li>{@link Stack} (in addition to the primary stack that forms the input).
@@ -64,20 +64,42 @@ import org.anchoranalysis.mpp.mark.MarkCollection;
 @Accessors(fluent = true)
 public class MultiInput implements ProvidesStackInput, ExportSharedObjects {
 
+    /** The default name for the input image stack. */
     public static final String DEFAULT_IMAGE_INPUT_NAME = "input_image";
 
+    /** The primary stack input with its associated map. */
     private StackWithMap stack;
 
+    /** A map of {@link MarkCollection}s. */
     private OperationMap<MarkCollection> mapMarks = new OperationMap<>();
+
+    /** A map of {@link ObjectCollection}s. */
     private OperationMap<ObjectCollection> mapObjects = new OperationMap<>();
+
+    /** A map of {@link Dictionary}s. */
     private OperationMap<Dictionary> mapDictionary = new OperationMap<>();
+
+    /** A map of {@link Histogram}s. */
     private OperationMap<Histogram> mapHistogram = new OperationMap<>();
+
+    /** A map of {@link Path}s. */
     private OperationMap<Path> mapFilePath = new OperationMap<>();
 
+    /**
+     * Creates a new {@link MultiInput} with a default name for the main input object.
+     *
+     * @param mainInputObject the main input object that provides the stack
+     */
     public MultiInput(ProvidesStackInput mainInputObject) {
         this(DEFAULT_IMAGE_INPUT_NAME, mainInputObject);
     }
 
+    /**
+     * Creates a new {@link MultiInput} with a specified name for the main input object.
+     *
+     * @param mainObjectName the name for the main input object
+     * @param mainInputObject the main input object that provides the stack
+     */
     public MultiInput(String mainObjectName, ProvidesStackInput mainInputObject) {
         this.stack = new StackWithMap(mainObjectName, mainInputObject);
     }
@@ -134,30 +156,65 @@ public class MultiInput implements ProvidesStackInput, ExportSharedObjects {
         mapFilePath = null;
     }
 
+    /**
+     * Gets the map of {@link MarkCollection}s.
+     *
+     * @return the {@link MultiInputSubMap} of {@link MarkCollection}s
+     */
     public MultiInputSubMap<MarkCollection> marks() {
         return mapMarks;
     }
 
+    /**
+     * Gets the map of {@link ObjectCollection}s.
+     *
+     * @return the {@link MultiInputSubMap} of {@link ObjectCollection}s
+     */
     public MultiInputSubMap<ObjectCollection> objects() {
         return mapObjects;
     }
 
+    /**
+     * Gets the map of {@link Dictionary}s.
+     *
+     * @return the {@link MultiInputSubMap} of {@link Dictionary}s
+     */
     public MultiInputSubMap<Dictionary> dictionary() {
         return mapDictionary;
     }
 
+    /**
+     * Gets the map of {@link Histogram}s.
+     *
+     * @return the {@link MultiInputSubMap} of {@link Histogram}s
+     */
     public MultiInputSubMap<Histogram> histogram() {
         return mapHistogram;
     }
 
+    /**
+     * Gets the map of {@link Path}s.
+     *
+     * @return the {@link MultiInputSubMap} of {@link Path}s
+     */
     public MultiInputSubMap<Path> filePath() {
         return mapFilePath;
     }
 
+    /**
+     * Gets the map of {@link TimeSeries} (stacks).
+     *
+     * @return the {@link MultiInputSubMap} of {@link TimeSeries}
+     */
     public MultiInputSubMap<TimeSeries> stack() {
         return stack;
     }
 
+    /**
+     * Gets the name of the main input object.
+     *
+     * @return the name of the main input object
+     */
     public String getMainObjectName() {
         return stack.getMainObjectName();
     }

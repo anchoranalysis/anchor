@@ -44,24 +44,47 @@ import org.anchoranalysis.io.input.bean.path.DerivePath;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.mpp.io.input.MultiInputSubMap;
 
+/**
+ * Helper class for appending various types of data to a {@link MultiInput} object.
+ */
 @RequiredArgsConstructor
 class AppendHelper {
 
+    /** Helper for deserializing objects. */
     private static final DeserializerHelper<?> DESERIALIZER = new DeserializerHelper<>();
 
-    // START: REQUIRED ARGUMENTS
+    /** The {@link MultiInput} object to which data will be appended. */
     private final MultiInput input;
-    private final boolean debugMode;
-    private final OperationContext context;
-    // END: REQUIRED ARGUMENTS
 
-    /** Reads an object from a path. */
+    /** Flag indicating whether debug mode is active. */
+    private final boolean debugMode;
+
+    /** The context for the current operation. */
+    private final OperationContext context;
+
+    /**
+     * Functional interface for reading an object from a path.
+     *
+     * @param <T> the type of object to be read
+     */
     @FunctionalInterface
     private interface ReadFromPath<T> {
+        /**
+         * Reads an object from the given path.
+         *
+         * @param in the input path
+         * @return the read object
+         * @throws Exception if an error occurs during reading
+         */
         T apply(Path in) throws Exception; // NOSONAR
     }
 
-    /** It is assumed the input files are single channel images. */
+    /**
+     * Appends stacks to the {@link MultiInput}.
+     *
+     * @param listPaths list of paths to append
+     * @param stackReader the stack reader to use
+     */
     public void appendStack(List<NamedBean<DerivePath>> listPaths, final StackReader stackReader) {
         append(
                 listPaths,
@@ -75,21 +98,38 @@ class AppendHelper {
                 });
     }
 
+    /**
+     * Appends histograms to the {@link MultiInput}.
+     *
+     * @param listPaths list of paths to append
+     */
     public void appendHistogram(List<NamedBean<DerivePath>> listPaths) {
         append(listPaths, MultiInput::histogram, HistogramCSVReader::readHistogramFromFile);
     }
 
+    /**
+     * Appends file paths to the {@link MultiInput}.
+     *
+     * @param listPaths list of paths to append
+     */
     public void appendFilePath(List<NamedBean<DerivePath>> listPaths) {
         append(listPaths, MultiInput::filePath, outPath -> outPath);
     }
 
+    /**
+     * Appends dictionaries to the {@link MultiInput}.
+     *
+     * @param listPaths list of paths to append
+     */
     public void appendDictionary(List<NamedBean<DerivePath>> listPaths) {
-
-        // Delayed-calculation of the appending path as it can be a bit expensive when multiplied by
-        // so many items
         append(listPaths, MultiInput::dictionary, Dictionary::readFromFile);
     }
 
+    /**
+     * Appends marks to the {@link MultiInput}.
+     *
+     * @param listPaths list of paths to append
+     */
     public void appendMarks(List<NamedBean<DerivePath>> listPaths) {
         append(
                 listPaths,
@@ -97,6 +137,13 @@ class AppendHelper {
                 serialized -> DESERIALIZER.deserializeMarks(serialized, context));
     }
 
+    /**
+     * Appends marks from annotations to the {@link MultiInput}.
+     *
+     * @param listPaths list of paths to append
+     * @param includeAccepted whether to include accepted annotations
+     * @param includeRejected whether to include rejected annotations
+     */
     public void appendMarksFromAnnotation(
             List<NamedBean<DerivePath>> listPaths,
             boolean includeAccepted,
@@ -110,6 +157,11 @@ class AppendHelper {
                                 outPath, includeAccepted, includeRejected, context));
     }
 
+    /**
+     * Appends objects to the {@link MultiInput}.
+     *
+     * @param listPaths list of paths to append
+     */
     public void appendObjects(List<NamedBean<DerivePath>> listPaths) {
         append(
                 listPaths,
@@ -118,11 +170,11 @@ class AppendHelper {
     }
 
     /**
-     * Appends new items to a particular OperationMap associated with the MultiInput by transforming
-     * paths
+     * Appends new items to a particular {@link MultiInputSubMap} associated with the {@link MultiInput} by transforming paths.
      *
+     * @param <T> the type of objects being appended
      * @param list file-generations to read paths from
-     * @param extractMap extracts an OperationMap from {@code input}
+     * @param extractMap extracts a {@link MultiInputSubMap} from {@code input}
      * @param reader converts from a path to the object of interest
      */
     private <T> void append(
@@ -140,6 +192,17 @@ class AppendHelper {
         }
     }
 
+    /**
+     * Reads an object for appending to the {@link MultiInput}.
+     *
+     * @param <T> the type of object being read
+     * @param input the {@link MultiInput} object
+     * @param reader the reader for the object
+     * @param namedBean the named bean containing the path
+     * @param debugMode whether debug mode is active
+     * @return the read object
+     * @throws OperationFailedException if the read operation fails
+     */
     private static <T> T readObjectForAppend(
             MultiInput input,
             ReadFromPath<T> reader,
@@ -158,6 +221,14 @@ class AppendHelper {
         }
     }
 
+    /**
+     * Opens a raster image from a path.
+     *
+     * @param path the path to the image file
+     * @param stackReader the stack reader to use
+     * @return a {@link TimeSeries} object representing the opened image
+     * @throws ImageIOException if an error occurs while opening the image
+     */
     private TimeSeries openRaster(Path path, StackReader stackReader) throws ImageIOException {
         try (OpenedImageFile openedFile =
                 stackReader.openFile(path, context.getExecutionTimeRecorder())) {

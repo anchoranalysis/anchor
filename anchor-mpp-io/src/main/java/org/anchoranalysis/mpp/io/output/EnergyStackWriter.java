@@ -37,7 +37,7 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.Outputter;
 
 /**
- * Writes an energy-stack.
+ * Writes an energy-stack to the file-system.
  *
  * <p>The following outputs are produced:
  *
@@ -47,8 +47,8 @@ import org.anchoranalysis.io.output.outputter.Outputter;
  * <tr><th>Output Name</th><th>Default?</th><th>Description</th></tr>
  * </thead>
  * <tbody>
- * <tr><td>{@value EnergyStackWriter#OUTPUT_ENERGY_STACK_DIRECTORY}</td><td>no</td><td>Each channel of the energy-stack as a seperate image.</td></tr>
- * <tr><td>{@value EnergyStackWriter#OUTPUT_ENERGY_STACK_DICTIONARY}</td><td>no</td><td>XML serialization of the key-value parameters associated with the energy stack.</td></tr>
+ * <tr><td>{@value #OUTPUT_ENERGY_STACK_DIRECTORY}</td><td>no</td><td>Each channel of the energy-stack as a separate image.</td></tr>
+ * <tr><td>{@value #OUTPUT_ENERGY_STACK_DICTIONARY}</td><td>no</td><td>XML serialization of the key-value parameters associated with the energy stack.</td></tr>
  * </tbody>
  * </table>
  *
@@ -57,12 +57,23 @@ import org.anchoranalysis.io.output.outputter.Outputter;
 @AllArgsConstructor
 public class EnergyStackWriter {
 
+    /** The output name for the directory containing energy stack channels. */
     public static final String OUTPUT_ENERGY_STACK_DIRECTORY = "energyStack";
+
+    /** The output name for the energy stack dictionary. */
     private static final String OUTPUT_ENERGY_STACK_DICTIONARY = "energyStackDictionary";
 
+    /** The energy stack to be written. */
     private final EnergyStack energyStack;
+
+    /** The outputter used for writing. */
     private final Outputter outputter;
 
+    /**
+     * Writes the energy stack to output.
+     *
+     * @throws OutputWriteFailedException if the writing process fails
+     */
     public void writeEnergyStack() throws OutputWriteFailedException {
 
         OutputPatternIntegerSuffix directory =
@@ -84,6 +95,11 @@ public class EnergyStackWriter {
         }
     }
 
+    /**
+     * Creates an output sequence factory for channels.
+     *
+     * @return a new {@link OutputSequenceFactory} for {@link Channel}s
+     */
     private OutputSequenceFactory<Channel> createSequenceFactory() {
         ChannelGenerator generator = new ChannelGenerator();
 

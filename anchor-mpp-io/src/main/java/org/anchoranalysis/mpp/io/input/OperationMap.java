@@ -35,12 +35,13 @@ import org.anchoranalysis.core.identifier.provider.store.StoreSupplier;
 import org.anchoranalysis.core.log.Logger;
 
 /**
- * Stores objects as operations
+ * Stores objects as operations in a map, implementing the {@link MultiInputSubMap} interface.
  *
- * @param <T> object-type
+ * @param <T> the type of objects stored in the map
  */
 public class OperationMap<T> implements MultiInputSubMap<T> {
 
+    /** The internal map storing the operations. */
     private Map<String, StoreSupplier<T>> map = new HashMap<>();
 
     @Override
@@ -65,6 +66,11 @@ public class OperationMap<T> implements MultiInputSubMap<T> {
         return ret;
     }
 
+    /**
+     * Retrieves the internal map storing the operations.
+     *
+     * @return the map of operations
+     */
     public Map<String, StoreSupplier<T>> getMap() {
         return map;
     }

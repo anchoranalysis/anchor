@@ -32,30 +32,43 @@ import org.anchoranalysis.core.identifier.provider.store.StoreSupplier;
 import org.anchoranalysis.core.log.Logger;
 
 /**
- * A sub-item of a {@link MultiInput}.
+ * A sub-item of a {@link MultiInput} that manages a map of objects.
  *
- * <p>It:
- *
+ * <p>This interface provides methods to:
  * <ol>
- *   <li>involves a map of objects of type {@code T}
- *   <li>can have its contents copied into a {@link NamedProviderStore}.
+ *   <li>Add entries to the map.</li>
+ *   <li>Copy the contents of the map into a {@link NamedProviderStore}.</li>
+ *   <li>Retrieve entries from the map.</li>
  * </ol>
  *
- * @param <T> object-type
+ * @param <T> the type of objects stored in the map
  */
 public interface MultiInputSubMap<T> {
 
-    /** Adds an entry to the map */
+    /**
+     * Adds an entry to the map.
+     *
+     * @param name the name of the entry
+     * @param supplier the supplier for the entry's value
+     */
     void add(String name, StoreSupplier<T> supplier);
 
     /**
      * Copies all the existing entries into a {@link NamedProviderStore}.
      *
-     * @param logger a logger for any non-fatal errors. Fatal errors throw an exception.
+     * @param namedStore the store to copy the entries into
+     * @param logger a logger for any non-fatal errors
+     * @throws OperationFailedException if a fatal error occurs during the copy process
      */
     void addToStore(NamedProviderStore<T> namedStore, Logger logger)
             throws OperationFailedException;
 
-    /** Returns null if non-existent */
+    /**
+     * Retrieves an entry from the map.
+     *
+     * @param name the name of the entry to retrieve
+     * @return the {@link StoreSupplier} for the entry, or null if the entry doesn't exist
+     * @throws OperationFailedException if an error occurs while retrieving the entry
+     */
     StoreSupplier<T> get(String name) throws OperationFailedException;
 }

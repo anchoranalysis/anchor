@@ -35,9 +35,21 @@ import org.anchoranalysis.image.bean.displayer.StackDisplayer;
 import org.anchoranalysis.image.core.stack.DisplayStack;
 import org.anchoranalysis.image.core.stack.Stack;
 
+/**
+ * Utility class for creating background {@link DisplayStack}s.
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class BackgroundCreator {
 
+    /**
+     * Creates a background {@link DisplayStack} from a named stack in a collection.
+     *
+     * @param stackCollection the {@link NamedProviderStore} containing the stacks
+     * @param backgroundStackName the name of the background stack in the collection
+     * @param displayer the {@link StackDisplayer} used to derive the display stack
+     * @return a new {@link DisplayStack} representing the background
+     * @throws CreateException if the background stack cannot be retrieved or processed
+     */
     public static DisplayStack createBackground(
             NamedProviderStore<Stack> stackCollection,
             String backgroundStackName,

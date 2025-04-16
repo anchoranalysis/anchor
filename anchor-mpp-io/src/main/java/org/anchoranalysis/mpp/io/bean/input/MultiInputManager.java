@@ -44,47 +44,60 @@ import org.anchoranalysis.io.input.bean.InputManagerParameters;
 import org.anchoranalysis.io.input.bean.path.DerivePath;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 
-// An input stack
+/**
+ * Manages input for {@link MultiInput} objects, combining various input sources.
+ */
 @NoArgsConstructor
 public class MultiInputManager extends InputManagerWithStackReader<MultiInput> {
 
-    // START BEAN PROPERTIES
+    /** The name of the input to be used in the {@link MultiInput}. */
     @BeanField @Getter @Setter private String inputName = MultiInput.DEFAULT_IMAGE_INPUT_NAME;
 
+    /** The input manager for the main stack. */
     @BeanField @Getter @Setter private InputManager<? extends ProvidesStackInput> input;
 
+    /** List of additional stacks to append. */
     @BeanField @OptionalBean @Getter @Setter
     private List<NamedBean<DerivePath>> appendStack = Arrays.asList();
 
+    /** List of marks to append. */
     @BeanField @OptionalBean @Getter @Setter
     private List<NamedBean<DerivePath>> appendMarks = Arrays.asList();
 
+    /** List of marks from annotations (both accepted and rejected) to append. */
     @BeanField @OptionalBean @Getter @Setter
-    private List<NamedBean<DerivePath>> appendMarksFromAnnotation =
-            new ArrayList<>(); // Uses both accepted and rejected
+    private List<NamedBean<DerivePath>> appendMarksFromAnnotation = new ArrayList<>();
 
+    /** List of marks from annotations (accepted only) to append. */
     @BeanField @OptionalBean @Getter @Setter
-    private List<NamedBean<DerivePath>> appendMarksFromAnnotationAcceptedOnly =
-            new ArrayList<>(); // Uses both accepted only
+    private List<NamedBean<DerivePath>> appendMarksFromAnnotationAcceptedOnly = new ArrayList<>();
 
+    /** List of marks from annotations (rejected only) to append. */
     @BeanField @OptionalBean @Getter @Setter
-    private List<NamedBean<DerivePath>> appendMarksFromAnnotationRejectedOnly =
-            new ArrayList<>(); // Uses both accepted rejected only
+    private List<NamedBean<DerivePath>> appendMarksFromAnnotationRejectedOnly = new ArrayList<>();
 
-    /** Appends object-collections to the {@link MultiInput}. */
+    /** List of object-collections to append to the {@link MultiInput}. */
     @BeanField @OptionalBean @Getter @Setter
     private List<NamedBean<DerivePath>> appendObjects = new ArrayList<>();
 
+    /** List of dictionaries to append. */
     @BeanField @OptionalBean @Getter @Setter
     private List<NamedBean<DerivePath>> appendDictionary = new ArrayList<>();
 
+    /** List of histograms to append. */
     @BeanField @OptionalBean @Getter @Setter
     private List<NamedBean<DerivePath>> appendHistogram = new ArrayList<>();
 
+    /** List of file paths to append. */
     @BeanField @OptionalBean @Getter @Setter
     private List<NamedBean<DerivePath>> appendFilePath = new ArrayList<>();
-    // END BEAN PROPERTIES
 
+    /**
+     * Creates a new {@link MultiInputManager} with specified input name and input manager.
+     *
+     * @param inputName the name of the input
+     * @param input the input manager for the main stack
+     */
     public MultiInputManager(String inputName, InputManager<? extends ProvidesStackInput> input) {
         this.inputName = inputName;
         this.input = input;
@@ -106,6 +119,11 @@ public class MultiInputManager extends InputManagerWithStackReader<MultiInput> {
                         });
     }
 
+    /**
+     * Appends various inputs to the {@link MultiInput} object.
+     *
+     * @param helper the {@link AppendHelper} to use for appending
+     */
     private void appendFromLists(AppendHelper helper) {
         helper.appendStack(appendStack, getStackReader());
         appendFromVariousMarksSources(helper);
@@ -115,6 +133,11 @@ public class MultiInputManager extends InputManagerWithStackReader<MultiInput> {
         helper.appendFilePath(appendFilePath);
     }
 
+    /**
+     * Appends marks from various sources to the {@link MultiInput} object.
+     *
+     * @param helper the {@link AppendHelper} to use for appending
+     */
     private void appendFromVariousMarksSources(AppendHelper helper) {
         helper.appendMarks(appendMarks);
         helper.appendMarksFromAnnotation(appendMarksFromAnnotation, true, true);
