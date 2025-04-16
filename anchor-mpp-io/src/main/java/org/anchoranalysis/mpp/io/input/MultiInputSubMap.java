@@ -35,10 +35,11 @@ import org.anchoranalysis.core.log.Logger;
  * A sub-item of a {@link MultiInput} that manages a map of objects.
  *
  * <p>This interface provides methods to:
+ *
  * <ol>
- *   <li>Add entries to the map.</li>
- *   <li>Copy the contents of the map into a {@link NamedProviderStore}.</li>
- *   <li>Retrieve entries from the map.</li>
+ *   <li>Add entries to the map.
+ *   <li>Copy the contents of the map into a {@link NamedProviderStore}.
+ *   <li>Retrieve entries from the map.
  * </ol>
  *
  * @param <T> the type of objects stored in the map

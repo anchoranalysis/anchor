@@ -35,7 +35,7 @@ import org.anchoranalysis.mpp.feature.energy.marks.MarksWithEnergyBreakdown;
  * An {@link Indexable} object that contains {@link MarksWithEnergyBreakdown}.
  *
  * <p>This class extends {@link Indexable} to provide an index for the marks with energy breakdown,
- * typically used in iterative processes.</p>
+ * typically used in iterative processes.
  */
 @EqualsAndHashCode(callSuper = true)
 public class IndexableMarksWithEnergy extends Indexable {

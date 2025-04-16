@@ -35,7 +35,7 @@ import org.anchoranalysis.mpp.feature.mark.EnergyMemoList;
 /**
  * Saves and manages the total energy for all items in a collection.
  *
- * <p>This class implements {@link Serializable} for persistence of energy calculations.</p>
+ * <p>This class implements {@link Serializable} for persistence of energy calculations.
  */
 public class EnergySavedAll implements Serializable {
 
@@ -49,7 +49,8 @@ public class EnergySavedAll implements Serializable {
      *
      * @param memoList the {@link EnergyMemoList} containing energy memos for marks
      * @param energyScheme the {@link EnergySchemeWithSharedFeatures} used for energy calculations
-     * @param energyStack the {@link EnergyStackWithoutParameters} providing context for energy calculations
+     * @param energyStack the {@link EnergyStackWithoutParameters} providing context for energy
+     *     calculations
      * @throws NamedFeatureCalculateException if there's an error during energy calculation
      */
     public void calc(

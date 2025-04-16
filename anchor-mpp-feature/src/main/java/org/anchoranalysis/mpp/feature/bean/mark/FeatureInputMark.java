@@ -40,8 +40,8 @@ import org.anchoranalysis.mpp.mark.Mark;
 /**
  * A feature input that wraps a {@link Mark} along with optional dimensions and dictionary.
  *
- * <p>This class implements {@link FeatureInputDictionary} to provide dictionary-related functionality
- * for feature calculations on marks.</p>
+ * <p>This class implements {@link FeatureInputDictionary} to provide dictionary-related
+ * functionality for feature calculations on marks.
  */
 @AllArgsConstructor
 @EqualsAndHashCode

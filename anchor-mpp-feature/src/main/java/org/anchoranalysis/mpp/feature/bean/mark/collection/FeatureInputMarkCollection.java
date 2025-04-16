@@ -37,8 +37,8 @@ import org.anchoranalysis.mpp.mark.MarkCollection;
 /**
  * Feature input that contains a collection of marks and optional dimensions.
  *
- * <p>This class implements {@link FeatureInputWithResolution} to provide resolution
- * information if available from the dimensions.</p>
+ * <p>This class implements {@link FeatureInputWithResolution} to provide resolution information if
+ * available from the dimensions.
  */
 @AllArgsConstructor
 public class FeatureInputMarkCollection implements FeatureInputWithResolution {
@@ -57,7 +57,8 @@ public class FeatureInputMarkCollection implements FeatureInputWithResolution {
     /**
      * Gets the optional dimensions associated with the mark collection.
      *
-     * @return an {@link Optional} containing the {@link Dimensions} if present, or empty if not available
+     * @return an {@link Optional} containing the {@link Dimensions} if present, or empty if not
+     *     available
      */
     public Optional<Dimensions> dimensions() {
         return dimensions;

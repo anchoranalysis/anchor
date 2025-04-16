@@ -44,9 +44,7 @@ import org.anchoranalysis.io.input.bean.path.DerivePath;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.mpp.io.input.MultiInputSubMap;
 
-/**
- * Helper class for appending various types of data to a {@link MultiInput} object.
- */
+/** Helper class for appending various types of data to a {@link MultiInput} object. */
 @RequiredArgsConstructor
 class AppendHelper {
 
@@ -170,7 +168,8 @@ class AppendHelper {
     }
 
     /**
-     * Appends new items to a particular {@link MultiInputSubMap} associated with the {@link MultiInput} by transforming paths.
+     * Appends new items to a particular {@link MultiInputSubMap} associated with the {@link
+     * MultiInput} by transforming paths.
      *
      * @param <T> the type of objects being appended
      * @param list file-generations to read paths from

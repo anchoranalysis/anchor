@@ -30,7 +30,6 @@ import java.util.Optional;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.input.FeatureInputEnergy;
 import org.anchoranalysis.mpp.feature.mark.EnergyMemoList;
@@ -38,8 +37,8 @@ import org.anchoranalysis.mpp.feature.mark.EnergyMemoList;
 /**
  * Feature input that contains a list of memoized energy calculations for all marks.
  *
- * <p>This class extends {@link FeatureInputEnergy} to include an {@link EnergyMemoList},
- * which represents memoized energy calculations for all marks in the model.</p>
+ * <p>This class extends {@link FeatureInputEnergy} to include an {@link EnergyMemoList}, which
+ * represents memoized energy calculations for all marks in the model.
  */
 @EqualsAndHashCode(callSuper = true)
 public class FeatureInputAllMemo extends FeatureInputEnergy {

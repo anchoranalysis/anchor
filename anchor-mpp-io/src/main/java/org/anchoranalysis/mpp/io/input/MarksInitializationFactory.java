@@ -40,9 +40,7 @@ import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.mpp.bean.MarksBean;
 import org.anchoranalysis.mpp.init.MarksInitialization;
 
-/**
- * Factory for creating {@link MarksInitialization} instances.
- */
+/** Factory for creating {@link MarksInitialization} instances. */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MarksInitializationFactory {
 
@@ -93,7 +91,8 @@ public class MarksInitializationFactory {
     }
 
     /**
-     * Creates a new {@link MarksInitialization} instance from existing shared objects and dictionary.
+     * Creates a new {@link MarksInitialization} instance from existing shared objects and
+     * dictionary.
      *
      * @param context the initialization context
      * @param define optional {@link Define} for initializing properties

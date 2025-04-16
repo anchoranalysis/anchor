@@ -34,19 +34,16 @@ import org.anchoranalysis.mpp.pair.MarkPair;
 /**
  * Represents a pair of {@link Mark}s with their associated total energy.
  *
- * <p>This class is immutable and automatically generates getters, equals, hashCode, and toString methods via Lombok.</p>
+ * <p>This class is immutable and automatically generates getters, equals, hashCode, and toString
+ * methods via Lombok.
  */
 @AllArgsConstructor
 @Value
 public class EnergyPair {
 
-    /**
-     * The pair of marks.
-     */
+    /** The pair of marks. */
     private final MarkPair<Mark> pair;
 
-    /**
-     * The total energy associated with the pair of marks.
-     */
+    /** The total energy associated with the pair of marks. */
     private final EnergyTotal energyTotal;
 }

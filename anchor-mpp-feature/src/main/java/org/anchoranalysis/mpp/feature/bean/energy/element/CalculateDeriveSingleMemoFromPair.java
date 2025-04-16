@@ -35,8 +35,8 @@ import org.anchoranalysis.mpp.feature.input.FeatureInputSingleMemo;
 /**
  * Derives a {@link FeatureInputSingleMemo} from a {@link FeatureInputPairMemo}.
  *
- * <p>This class selects either the first or second object from a pair of memoized objects,
- * creating a new {@link FeatureInputSingleMemo} with the selected object and the energy stack.</p>
+ * <p>This class selects either the first or second object from a pair of memoized objects, creating
+ * a new {@link FeatureInputSingleMemo} with the selected object and the energy stack.
  */
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
@@ -46,7 +46,7 @@ public class CalculateDeriveSingleMemoFromPair
     /**
      * Determines which object from the pair to use.
      *
-     * <p>If true, the first object is used; otherwise, the second object is used.</p>
+     * <p>If true, the first object is used; otherwise, the second object is used.
      */
     private final boolean first;
 

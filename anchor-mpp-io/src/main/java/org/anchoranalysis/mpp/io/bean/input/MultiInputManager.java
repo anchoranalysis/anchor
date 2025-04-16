@@ -44,9 +44,7 @@ import org.anchoranalysis.io.input.bean.InputManagerParameters;
 import org.anchoranalysis.io.input.bean.path.DerivePath;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 
-/**
- * Manages input for {@link MultiInput} objects, combining various input sources.
- */
+/** Manages input for {@link MultiInput} objects, combining various input sources. */
 @NoArgsConstructor
 public class MultiInputManager extends InputManagerWithStackReader<MultiInput> {
 

@@ -32,9 +32,9 @@ import org.anchoranalysis.mpp.feature.energy.scheme.EnergyScheme;
 
 /**
  * An abstract class for creating {@link EnergyScheme} instances.
- * 
- * <p>This class extends {@link FeatureRelatedBean} to provide feature-related functionality
- * and defines an abstract method for creating {@link EnergyScheme} objects.</p>
+ *
+ * <p>This class extends {@link FeatureRelatedBean} to provide feature-related functionality and
+ * defines an abstract method for creating {@link EnergyScheme} objects.
  */
 public abstract class EnergySchemeCreator extends FeatureRelatedBean<EnergySchemeCreator> {
 

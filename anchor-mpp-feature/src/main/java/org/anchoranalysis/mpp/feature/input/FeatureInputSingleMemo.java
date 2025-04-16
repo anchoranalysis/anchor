@@ -30,7 +30,6 @@ import java.util.Optional;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.input.FeatureInputEnergy;
 import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
@@ -39,7 +38,7 @@ import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
  * Feature input that contains a single memoized voxelized mark and an optional energy stack.
  *
  * <p>This class extends {@link FeatureInputEnergy} to include a {@link VoxelizedMarkMemo} object,
- * representing a single memoized voxelized mark for feature calculations.</p>
+ * representing a single memoized voxelized mark for feature calculations.
  */
 @EqualsAndHashCode(callSuper = true)
 public class FeatureInputSingleMemo extends FeatureInputEnergy {

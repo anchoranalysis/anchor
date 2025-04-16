@@ -80,7 +80,8 @@ public class MarksWithTotalEnergy implements Serializable {
     /**
      * Makes a deep copy of this instance (except the {@code energyScheme} which is reused).
      *
-     * @return a newly created object with identical contents (some member fields duplicated, some reused)
+     * @return a newly created object with identical contents (some member fields duplicated, some
+     *     reused)
      */
     public MarksWithTotalEnergy deepCopy() {
         return new MarksWithTotalEnergy(this.marks.deepCopy(), this.energyScheme, this.energyTotal);

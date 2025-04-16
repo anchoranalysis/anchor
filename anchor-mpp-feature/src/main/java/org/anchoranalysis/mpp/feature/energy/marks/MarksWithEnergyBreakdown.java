@@ -49,7 +49,7 @@ import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
  * Marks with both the total energy and a breakdown by clique.
  *
  * <p>This class provides functionality to manage and calculate energies for a collection of marks,
- * including individual, pair, and all-mark energies.</p>
+ * including individual, pair, and all-mark energies.
  */
 @AllArgsConstructor
 public class MarksWithEnergyBreakdown implements Serializable {
@@ -95,9 +95,7 @@ public class MarksWithEnergyBreakdown implements Serializable {
         }
     }
 
-    /**
-     * Asserts that the energy calculations are valid.
-     */
+    /** Asserts that the energy calculations are valid. */
     public void assertValid() {
         if (this.individual != null) {
             this.individual.assertValid();
@@ -147,7 +145,8 @@ public class MarksWithEnergyBreakdown implements Serializable {
     /**
      * Creates a shallow copy of this instance.
      *
-     * @return a new {@link MarksWithEnergyBreakdown} instance with shallow copies of the internal state
+     * @return a new {@link MarksWithEnergyBreakdown} instance with shallow copies of the internal
+     *     state
      */
     public MarksWithEnergyBreakdown shallowCopy() {
         return new MarksWithEnergyBreakdown(
@@ -160,7 +159,8 @@ public class MarksWithEnergyBreakdown implements Serializable {
     /**
      * Creates a deep copy of this instance.
      *
-     * @return a new {@link MarksWithEnergyBreakdown} instance with deep copies of the internal state
+     * @return a new {@link MarksWithEnergyBreakdown} instance with deep copies of the internal
+     *     state
      */
     public MarksWithEnergyBreakdown deepCopy() {
         return new MarksWithEnergyBreakdown(

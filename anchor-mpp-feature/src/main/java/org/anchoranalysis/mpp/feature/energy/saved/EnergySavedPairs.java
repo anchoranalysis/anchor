@@ -46,7 +46,8 @@ import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 /**
  * Stores and manages pairwise energy interactions between marks.
  *
- * <p>This class implements {@link UpdatableMarks} to allow for dynamic updates of mark pairs and their energies.</p>
+ * <p>This class implements {@link UpdatableMarks} to allow for dynamic updates of mark pairs and
+ * their energies.
  */
 public class EnergySavedPairs implements UpdatableMarks {
 
@@ -163,7 +164,8 @@ public class EnergySavedPairs implements UpdatableMarks {
      * Checks if the pair collection only contains items from a particular mark configuration.
      *
      * @param marks the {@link MarkCollection} to check against
-     * @return true if the pair collection only contains marks from the given collection, false otherwise
+     * @return true if the pair collection only contains marks from the given collection, false
+     *     otherwise
      */
     public boolean isMarksSpan(MarkCollection marks) {
         return pairCollection.isMarksSpan(marks);
@@ -193,9 +195,7 @@ public class EnergySavedPairs implements UpdatableMarks {
         return s.toString();
     }
 
-    /**
-     * Asserts that the total energy is valid (not NaN).
-     */
+    /** Asserts that the total energy is valid (not NaN). */
     public void assertValid() {
         assert !Double.isNaN(energyTotal);
     }

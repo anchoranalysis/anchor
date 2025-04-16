@@ -36,7 +36,7 @@ import org.anchoranalysis.feature.shared.SharedFeatures;
 /**
  * A set of {@link EnergyScheme}s, each associated with a unique name.
  *
- * <p>{@link SharedFeatures} are also associated with this set.</p>
+ * <p>{@link SharedFeatures} are also associated with this set.
  *
  * @author Owen Feehan
  */
@@ -67,7 +67,8 @@ public class EnergySchemeSet implements Iterable<SimpleNameValue<EnergyScheme>> 
      * Retrieves an {@link EnergyScheme} by its name.
      *
      * @param name the name of the energy scheme to retrieve
-     * @return the {@link SimpleNameValue} containing the named {@link EnergyScheme}, or null if not found
+     * @return the {@link SimpleNameValue} containing the named {@link EnergyScheme}, or null if not
+     *     found
      */
     public SimpleNameValue<EnergyScheme> get(String name) {
         return delegate.get(name);

@@ -31,8 +31,8 @@ import org.anchoranalysis.core.exception.AnchorCheckedException;
 /**
  * Exception thrown when there's a failure in including marks during the add criteria process.
  *
- * <p>This exception extends {@link AnchorCheckedException} and is used specifically
- * in the context of mark inclusion operations.</p>
+ * <p>This exception extends {@link AnchorCheckedException} and is used specifically in the context
+ * of mark inclusion operations.
  */
 public class IncludeMarksFailureException extends AnchorCheckedException {
 
@@ -42,7 +42,8 @@ public class IncludeMarksFailureException extends AnchorCheckedException {
     /**
      * Constructs a new exception with the specified detail message.
      *
-     * @param message the detail message (which is saved for later retrieval by the {@link #getMessage()} method)
+     * @param message the detail message (which is saved for later retrieval by the {@link
+     *     #getMessage()} method)
      */
     public IncludeMarksFailureException(String message) {
         super(message);

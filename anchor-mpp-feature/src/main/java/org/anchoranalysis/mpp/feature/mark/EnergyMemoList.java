@@ -43,7 +43,8 @@ import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemoFactory;
 /**
  * A collection of memoized marks on which energies can be derived.
  *
- * <p>This class implements {@link Serializable} for persistence and {@link MemoForIndex} for indexing operations.</p>
+ * <p>This class implements {@link Serializable} for persistence and {@link MemoForIndex} for
+ * indexing operations.
  *
  * @author Owen Feehan
  */
@@ -57,9 +58,7 @@ public class EnergyMemoList implements Serializable, MemoForIndex {
     /** The region map associated with the energy memo list. */
     private transient RegionMap regionMap;
 
-    /**
-     * Creates an empty energy memo list.
-     */
+    /** Creates an empty energy memo list. */
     public EnergyMemoList() {
         list = new MemoList();
     }
@@ -96,9 +95,7 @@ public class EnergyMemoList implements Serializable, MemoForIndex {
         }
     }
 
-    /**
-     * Cleans up the energy memo list by setting the list to null.
-     */
+    /** Cleans up the energy memo list by setting the list to null. */
     public void clean() {
         list = null;
     }

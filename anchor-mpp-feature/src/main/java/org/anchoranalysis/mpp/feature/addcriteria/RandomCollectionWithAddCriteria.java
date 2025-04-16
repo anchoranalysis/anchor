@@ -58,14 +58,15 @@ import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.mpp.pair.RandomCollection;
 
 /**
- * An implementation of a {@link RandomCollection} that uses {@link AddCriteria} to determine which marks to add.
+ * An implementation of a {@link RandomCollection} that uses {@link AddCriteria} to determine which
+ * marks to add.
  *
- * <p>This class is not a valid bean on its own, as it lacks a default public constructor.
- * To use it in BeanXML, it must be subclassed with such a constructor. However, it is a valid
- * (non-bean) class on its own.
+ * <p>This class is not a valid bean on its own, as it lacks a default public constructor. To use it
+ * in BeanXML, it must be subclassed with such a constructor. However, it is a valid (non-bean)
+ * class on its own.
  *
- * <p>The class is kept non-abstract to allow instantiation when copy methods (shallowCopy, deepCopy, etc.)
- * are called.
+ * <p>The class is kept non-abstract to allow instantiation when copy methods (shallowCopy,
+ * deepCopy, etc.) are called.
  *
  * @param <T> type of the pair
  */
@@ -105,8 +106,8 @@ public class RandomCollectionWithAddCriteria<T> extends RandomCollection<T> {
     /**
      * Creates a shallow copy of this RandomCollectionWithAddCriteria.
      *
-     * <p>This method creates a new instance with the same pairTypeClass and addCriteria,
-     * and copies references to the graph, energyStack, logger, and sharedFeatures.</p>
+     * <p>This method creates a new instance with the same pairTypeClass and addCriteria, and copies
+     * references to the graph, energyStack, logger, and sharedFeatures.
      *
      * @return a new RandomCollectionWithAddCriteria instance with shallow-copied properties
      */
@@ -125,8 +126,8 @@ public class RandomCollectionWithAddCriteria<T> extends RandomCollection<T> {
     /**
      * Creates a deep copy of this RandomCollectionWithAddCriteria.
      *
-     * <p>This method creates a new instance with the same pairTypeClass and addCriteria,
-     * and copies references to the graph, energyStack, logger, and sharedFeatures.</p>
+     * <p>This method creates a new instance with the same pairTypeClass and addCriteria, and copies
+     * references to the graph, energyStack, logger, and sharedFeatures.
      *
      * @return a new RandomCollectionWithAddCriteria instance with deep-copied properties
      */
@@ -270,8 +271,8 @@ public class RandomCollectionWithAddCriteria<T> extends RandomCollection<T> {
     /**
      * Checks if the given {@link MarkCollection} spans all marks in this collection.
      *
-     * <p>This method verifies that all marks in the given collection are present in this collection,
-     * and that this collection doesn't contain any additional marks.</p>
+     * <p>This method verifies that all marks in the given collection are present in this
+     * collection, and that this collection doesn't contain any additional marks.
      *
      * @param marks the {@link MarkCollection} to check against
      * @return true if the given collection spans all marks in this collection, false otherwise

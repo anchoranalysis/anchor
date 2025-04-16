@@ -51,9 +51,7 @@ import org.anchoranalysis.mpp.feature.input.FeatureInputSingleMemo;
 import org.anchoranalysis.mpp.feature.mark.EnergyMemoList;
 import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 
-/**
- * Combines an {@link EnergyScheme} with {@link SharedFeatures} for energy calculations.
- */
+/** Combines an {@link EnergyScheme} with {@link SharedFeatures} for energy calculations. */
 public class EnergySchemeWithSharedFeatures {
 
     /** The energy scheme used for calculations. */
@@ -68,9 +66,7 @@ public class EnergySchemeWithSharedFeatures {
     /** Logger for reporting messages. */
     private Logger logger;
 
-    /**
-     * Caches energy value by index.
-     */
+    /** Caches energy value by index. */
     private class CalculateIndividualTotalOperation
             implements CheckedFunction<Integer, EnergyTotal, NamedFeatureCalculateException> {
 

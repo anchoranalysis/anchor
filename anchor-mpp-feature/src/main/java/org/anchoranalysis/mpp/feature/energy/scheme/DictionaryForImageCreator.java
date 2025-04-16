@@ -45,9 +45,11 @@ import org.anchoranalysis.feature.shared.SharedFeatures;
 import org.anchoranalysis.image.feature.input.FeatureInputStack;
 
 /**
- * Creates a {@link Dictionary} for a particular {@link EnergyStack} that is associated with an {@link EnergyScheme}.
+ * Creates a {@link Dictionary} for a particular {@link EnergyStack} that is associated with an
+ * {@link EnergyScheme}.
  *
- * <p>This class calculates image features defined in the energy scheme and stores them in a dictionary.</p>
+ * <p>This class calculates image features defined in the energy scheme and stores them in a
+ * dictionary.
  */
 @AllArgsConstructor
 public class DictionaryForImageCreator {

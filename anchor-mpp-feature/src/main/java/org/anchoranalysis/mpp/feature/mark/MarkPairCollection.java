@@ -34,14 +34,15 @@ import org.anchoranalysis.mpp.pair.MarkPair;
  * A collection of {@link MarkPair}s with {@link Mark}s as the underlying type.
  *
  * <p>This class extends {@link RandomCollectionWithAddCriteria} to provide a specialized collection
- * for pairs of marks, allowing for random access and specific addition criteria.</p>
+ * for pairs of marks, allowing for random access and specific addition criteria.
  */
 public class MarkPairCollection extends RandomCollectionWithAddCriteria<MarkPair<Mark>> {
 
     /**
      * Creates a new {@link MarkPairCollection}.
      *
-     * <p>Initializes the collection with {@link MarkPair} as the underlying class type for the random collection.</p>
+     * <p>Initializes the collection with {@link MarkPair} as the underlying class type for the
+     * random collection.
      */
     public MarkPairCollection() {
         super(MarkPair.class);

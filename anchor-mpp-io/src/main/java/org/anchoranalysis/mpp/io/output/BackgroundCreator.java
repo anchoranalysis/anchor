@@ -35,9 +35,7 @@ import org.anchoranalysis.image.bean.displayer.StackDisplayer;
 import org.anchoranalysis.image.core.stack.DisplayStack;
 import org.anchoranalysis.image.core.stack.Stack;
 
-/**
- * Utility class for creating background {@link DisplayStack}s.
- */
+/** Utility class for creating background {@link DisplayStack}s. */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class BackgroundCreator {
 

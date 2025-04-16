@@ -33,7 +33,8 @@ import lombok.RequiredArgsConstructor;
 /**
  * Represents the total energy of a system, which can be modified and queried.
  *
- * <p>This class is serializable and provides methods for deep copying, adding energy, and retrieving the total energy.</p>
+ * <p>This class is serializable and provides methods for deep copying, adding energy, and
+ * retrieving the total energy.
  */
 @AllArgsConstructor
 @RequiredArgsConstructor

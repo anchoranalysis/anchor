@@ -41,8 +41,8 @@ public interface OrderedFeatureList<T extends FeatureInput> {
     /**
      * Retrieves an ordered list of features used to determine the {@link AddCriteria}.
      *
-     * @return an {@link Optional} containing a {@link FeatureList} of type T if relevant,
-     *         or {@link Optional#empty()} if irrelevant
+     * @return an {@link Optional} containing a {@link FeatureList} of type T if relevant, or {@link
+     *     Optional#empty()} if irrelevant
      * @throws CreateException if an error occurs while creating the feature list
      */
     Optional<FeatureList<T>> orderedListOfFeatures() throws CreateException;

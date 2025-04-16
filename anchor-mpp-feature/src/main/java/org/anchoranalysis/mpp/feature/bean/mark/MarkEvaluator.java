@@ -37,8 +37,8 @@ import org.anchoranalysis.mpp.feature.bean.energy.scheme.EnergySchemeCreator;
 /**
  * A bean for evaluating marks using features and energy schemes.
  *
- * <p>This class extends {@link FeatureRelatedBean} to provide functionality related to feature evaluation
- * for marks in the context of Marked Point Processes (MPP).</p>
+ * <p>This class extends {@link FeatureRelatedBean} to provide functionality related to feature
+ * evaluation for marks in the context of Marked Point Processes (MPP).
  */
 public class MarkEvaluator extends FeatureRelatedBean<MarkEvaluator> {
 

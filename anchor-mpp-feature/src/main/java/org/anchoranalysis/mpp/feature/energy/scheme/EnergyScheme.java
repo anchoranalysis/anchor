@@ -48,9 +48,8 @@ import org.anchoranalysis.mpp.feature.input.FeatureInputSingleMemo;
 /**
  * The energy for a feature-list as factorized into different cliques.
  *
- * <p>elemInd: individual terms of clique-size==1 f_1(x)
- * elemPair: pairwise terms of clique-size==2 f_2(x,y)
- * elemAll: terms that include every item in the set f_all(x_1,x_2,....x_n) for all n
+ * <p>elemInd: individual terms of clique-size==1 f_1(x) elemPair: pairwise terms of clique-size==2
+ * f_2(x,y) elemAll: terms that include every item in the set f_all(x_1,x_2,....x_n) for all n
  *
  * @author Owen Feehan
  */
@@ -139,7 +138,8 @@ public class EnergyScheme {
     }
 
     /**
-     * Creates and returns the associated {@link Dictionary} or an empty dictionary if none is associated.
+     * Creates and returns the associated {@link Dictionary} or an empty dictionary if none is
+     * associated.
      *
      * @return the created {@link Dictionary}
      * @throws CreateException if the dictionary cannot be created

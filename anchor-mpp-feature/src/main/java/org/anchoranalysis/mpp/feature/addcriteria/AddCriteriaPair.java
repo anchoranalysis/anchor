@@ -40,7 +40,7 @@ import org.anchoranalysis.mpp.pair.MarkPair;
 /**
  * Abstract base class for criteria used to determine if a pair of marks should be included.
  *
- * <p>This class implements {@link AddCriteria} for {@link MarkPair}s of {@link Mark}s.</p>
+ * <p>This class implements {@link AddCriteria} for {@link MarkPair}s of {@link Mark}s.
  */
 public abstract class AddCriteriaPair extends AnchorBean<AddCriteriaPair>
         implements AddCriteria<MarkPair<Mark>> {
@@ -74,7 +74,8 @@ public abstract class AddCriteriaPair extends AnchorBean<AddCriteriaPair>
      * @param session an optional {@link FeatureCalculatorMulti} for feature calculations
      * @param do3D whether to perform 3D calculations
      * @return true if the marks should be included, false otherwise
-     * @throws IncludeMarksFailureException if there's an error during the inclusion decision process
+     * @throws IncludeMarksFailureException if there's an error during the inclusion decision
+     *     process
      */
     public abstract boolean includeMarks(
             VoxelizedMarkMemo mark1,

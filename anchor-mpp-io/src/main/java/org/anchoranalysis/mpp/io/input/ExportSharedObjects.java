@@ -33,19 +33,18 @@ import org.anchoranalysis.core.log.Logger;
 /**
  * An interface for exporting shared objects to a target container.
  *
- * <p>This interface defines a method for copying certain shared objects to a target
- * {@link SharedObjects} container. Implementations of this interface should define
- * the specific logic for exporting their shared objects.</p>
+ * <p>This interface defines a method for copying certain shared objects to a target {@link
+ * SharedObjects} container. Implementations of this interface should define the specific logic for
+ * exporting their shared objects.
  */
 public interface ExportSharedObjects {
 
     /**
      * Adds any exported shared objects to the target container.
      *
-     * <p>This method is responsible for copying the relevant shared objects from the
-     * implementing class to the provided target container. Non-fatal errors should be
-     * logged using the provided logger, while fatal errors should throw an
-     * {@link OperationFailedException}.</p>
+     * <p>This method is responsible for copying the relevant shared objects from the implementing
+     * class to the provided target container. Non-fatal errors should be logged using the provided
+     * logger, while fatal errors should throw an {@link OperationFailedException}.
      *
      * @param target the {@link SharedObjects} container where the exported objects will be added
      * @param logger a {@link Logger} for reporting non-fatal errors

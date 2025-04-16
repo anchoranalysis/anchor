@@ -42,7 +42,8 @@ import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.mpp.pair.MarkPair;
 
 /**
- * Implements {@link AddCriteria} for energy pairs, combining energy calculations with additional criteria.
+ * Implements {@link AddCriteria} for energy pairs, combining energy calculations with additional
+ * criteria.
  */
 public class AddCriteriaEnergyPair implements AddCriteria<EnergyPair> {
 

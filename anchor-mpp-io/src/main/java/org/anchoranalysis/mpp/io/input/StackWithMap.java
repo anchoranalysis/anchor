@@ -37,9 +37,7 @@ import org.anchoranalysis.core.log.error.ErrorReporter;
 import org.anchoranalysis.image.io.stack.input.ProvidesStackInput;
 import org.anchoranalysis.image.io.stack.time.TimeSeries;
 
-/**
- * Combines a Stack with a map of other stacks.
- */
+/** Combines a Stack with a map of other stacks. */
 @RequiredArgsConstructor
 public class StackWithMap implements MultiInputSubMap<TimeSeries> {
 

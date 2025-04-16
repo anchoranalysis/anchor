@@ -34,9 +34,10 @@ import org.anchoranalysis.mpp.mark.voxelized.memo.MemoForIndex;
 import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 
 /**
- * A list of {@link VoxelizedMarkMemo} objects that implements {@link MemoForIndex} and {@link Iterable}.
+ * A list of {@link VoxelizedMarkMemo} objects that implements {@link MemoForIndex} and {@link
+ * Iterable}.
  *
- * <p>This class provides methods to manipulate and access the list of voxelized mark memos.</p>
+ * <p>This class provides methods to manipulate and access the list of voxelized mark memos.
  */
 @EqualsAndHashCode(callSuper = false)
 public class MemoList implements MemoForIndex, Iterable<VoxelizedMarkMemo> {

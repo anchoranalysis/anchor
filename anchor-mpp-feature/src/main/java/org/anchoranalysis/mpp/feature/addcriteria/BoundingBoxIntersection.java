@@ -38,15 +38,11 @@ import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.spatial.box.BoundingBox;
 
-/**
- * An {@link AddCriteriaPair} that includes marks if their bounding boxes intersect.
- */
+/** An {@link AddCriteriaPair} that includes marks if their bounding boxes intersect. */
 public class BoundingBoxIntersection extends AddCriteriaPair {
 
     // START BEAN PROPERTIES
-    /**
-     * If true, the Z dimension is ignored when checking for intersection.
-     */
+    /** If true, the Z dimension is ignored when checking for intersection. */
     @BeanField @Getter @Setter private boolean suppressZ = false;
     // END BEAN PROPERTIES
 

@@ -36,8 +36,8 @@ import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 /**
  * Feature input that contains a pair of memoized voxelized marks and an energy stack.
  *
- * <p>This class extends {@link FeatureInputEnergy} to include two {@link VoxelizedMarkMemo} objects,
- * representing a pair of memoized voxelized marks for feature calculations.</p>
+ * <p>This class extends {@link FeatureInputEnergy} to include two {@link VoxelizedMarkMemo}
+ * objects, representing a pair of memoized voxelized marks for feature calculations.
  */
 @EqualsAndHashCode(callSuper = true)
 @Value

@@ -38,7 +38,8 @@ import org.anchoranalysis.mpp.mark.MarkCollection;
 /**
  * Stores and manages individual energy values for a collection of marks.
  *
- * <p>This class implements {@link Serializable} for persistence and {@link Iterable} for easy iteration over energy values.</p>
+ * <p>This class implements {@link Serializable} for persistence and {@link Iterable} for easy
+ * iteration over energy values.
  */
 public class EnergySavedIndividual implements Serializable, Iterable<EnergyTotal> {
 
@@ -101,9 +102,7 @@ public class EnergySavedIndividual implements Serializable, Iterable<EnergyTotal
         return this.ind.get(index);
     }
 
-    /**
-     * Resets the list of individual energy totals.
-     */
+    /** Resets the list of individual energy totals. */
     public void resetInd() {
         this.ind = new ArrayList<>();
     }
@@ -172,9 +171,7 @@ public class EnergySavedIndividual implements Serializable, Iterable<EnergyTotal
         return s.toString();
     }
 
-    /**
-     * Asserts that the total energy is valid (not NaN).
-     */
+    /** Asserts that the total energy is valid (not NaN). */
     public void assertValid() {
         assert !Double.isNaN(energyTotal);
     }

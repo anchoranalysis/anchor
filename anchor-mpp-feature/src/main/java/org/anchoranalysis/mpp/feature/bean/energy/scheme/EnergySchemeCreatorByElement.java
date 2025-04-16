@@ -51,9 +51,7 @@ import org.anchoranalysis.mpp.feature.input.FeatureInputAllMemo;
 import org.anchoranalysis.mpp.feature.input.FeatureInputPairMemo;
 import org.anchoranalysis.mpp.feature.input.FeatureInputSingleMemo;
 
-/**
- * Creates an {@link EnergyScheme} by combining individual elements and their interactions.
- */
+/** Creates an {@link EnergyScheme} by combining individual elements and their interactions. */
 public class EnergySchemeCreatorByElement extends EnergySchemeCreator {
 
     // START BEAN PROPERTIES
