@@ -31,29 +31,29 @@ import org.anchoranalysis.mpp.bean.bound.Bound;
 import org.anchoranalysis.mpp.mark.Mark;
 
 /**
- * A circle
+ * Represents a 2D circle mark.
  *
- * @author Owen Feehan
+ * <p>This class extends {@link MarkWithPositionAndSingleRadius} to provide functionality
+ * specific to circular marks.</p>
  */
 @NoArgsConstructor
 public class Circle extends MarkWithPositionAndSingleRadius {
 
-    /** */
     private static final long serialVersionUID = 8551900716243748046L;
 
     /**
-     * Creates with a radius within particular bounds.
+     * Creates a circle with a radius within particular bounds.
      *
-     * @param boundRadius
+     * @param boundRadius the bound for the circle's radius
      */
     public Circle(Bound boundRadius) {
         super(boundRadius);
     }
 
     /**
-     * Copy constructor
+     * Copy constructor.
      *
-     * @param source
+     * @param source the Circle to copy from
      */
     public Circle(Circle source) {
         super(source);

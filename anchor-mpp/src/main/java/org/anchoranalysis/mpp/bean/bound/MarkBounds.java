@@ -32,16 +32,42 @@ import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.GroupingRoot;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 
+/**
+ * Abstract base class for defining bounds on marks in a marked point process.
+ *
+ * <p>This class extends {@link AnchorBean} and implements {@link Serializable} to provide
+ * a foundation for various types of bounds that can be applied to marks.</p>
+ */
 @GroupingRoot
 public abstract class MarkBounds extends AnchorBean<MarkBounds> implements Serializable {
 
-    /** */
     private static final long serialVersionUID = 0;
 
+    /**
+     * Gets the resolved minimum value of the bound, considering resolution and dimensionality.
+     *
+     * @param resolution an optional resolution to consider when resolving the bound
+     * @param do3D whether to consider 3D resolution (if available)
+     * @return the resolved minimum value
+     */
     public abstract double getMinResolved(Optional<Resolution> resolution, boolean do3D);
 
+    /**
+     * Gets the resolved maximum value of the bound, considering resolution and dimensionality.
+     *
+     * @param resolution an optional resolution to consider when resolving the bound
+     * @param do3D whether to consider 3D resolution (if available)
+     * @return the resolved maximum value
+     */
     public abstract double getMaxResolved(Optional<Resolution> resolution, boolean do3D);
 
+    /**
+     * Calculates the resolved minimum and maximum values as a {@link ResolvedBound}.
+     *
+     * @param resolution an optional resolution to consider when resolving the bound
+     * @param do3D whether to consider 3D resolution (if available)
+     * @return a {@link ResolvedBound} containing the resolved minimum and maximum values
+     */
     public ResolvedBound calculateMinMax(Optional<Resolution> resolution, boolean do3D) {
         return new ResolvedBound(
                 getMinResolved(resolution, do3D), getMaxResolved(resolution, do3D));

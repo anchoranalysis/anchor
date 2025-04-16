@@ -31,26 +31,30 @@ import org.anchoranalysis.mpp.bean.bound.Bound;
 import org.anchoranalysis.mpp.mark.Mark;
 
 /**
- * A sphere
+ * Represents a 3D sphere mark.
  *
- * @author Owen Feehan
+ * <p>This class extends {@link MarkWithPositionAndSingleRadius} to provide functionality
+ * specific to spherical marks in 3D space.</p>
  */
 @NoArgsConstructor
 public class Sphere extends MarkWithPositionAndSingleRadius {
 
-    /** */
     private static final long serialVersionUID = -3526056946146656810L;
 
     /**
-     * Creates with a radius within particular bounds.
+     * Creates a sphere with a radius within particular bounds.
      *
-     * @param boundRadius
+     * @param boundRadius the bound for the sphere's radius
      */
     public Sphere(Bound boundRadius) {
         super(boundRadius);
     }
 
-    /** Copy Constructor */
+    /**
+     * Copy constructor.
+     *
+     * @param source the Sphere to copy from
+     */
     public Sphere(Sphere source) {
         super(source);
     }

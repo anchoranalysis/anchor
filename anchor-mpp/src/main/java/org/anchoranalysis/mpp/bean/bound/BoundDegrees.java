@@ -29,19 +29,28 @@ package org.anchoranalysis.mpp.bean.bound;
 import java.util.Optional;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 
-//
-//  An upper and lower bound in degrees which is converted
-//   to radians when resolved
-//
+/**
+ * Represents an upper and lower bound in degrees which is converted to radians when resolved.
+ *
+ * <p>This class extends {@link BoundMinMax} to provide specific functionality for degree-based bounds,
+ * automatically converting degrees to radians when resolving the bounds.</p>
+ */
 public class BoundDegrees extends BoundMinMax {
 
-    /** */
     private static final long serialVersionUID = 1281361242890359356L;
 
+    /**
+     * Creates a new instance with default bounds of 0 to 360 degrees.
+     */
     public BoundDegrees() {
         super(0, 360);
     }
 
+    /**
+     * Creates a new instance by copying an existing {@link BoundDegrees}.
+     *
+     * @param source the source {@link BoundDegrees} to copy from
+     */
     public BoundDegrees(BoundDegrees source) {
         super(source);
     }
@@ -61,6 +70,12 @@ public class BoundDegrees extends BoundMinMax {
         return new BoundDegrees(this);
     }
 
+    /**
+     * Converts degrees to radians.
+     *
+     * @param degrees the angle in degrees
+     * @return the angle in radians
+     */
     private static double convertDegreesToRadians(double degrees) {
         return (Math.PI / 180) * degrees;
     }

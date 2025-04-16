@@ -33,7 +33,10 @@ import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.iterator.intersecting.CountVoxelsIntersectingBounded;
 
 /**
- * Counts the number of intersecting-pixels where bytes are encoded as region memberships
+ * Counts the number of intersecting voxels where bytes are encoded as region memberships.
+ *
+ * <p>This class provides methods to count intersecting voxels between two bounded voxel sets,
+ * optionally considering a global mask.</p>
  *
  * @author Owen Feehan
  */
@@ -42,15 +45,36 @@ public class CountIntersectingVoxels {
 
     private final PredicateRegionMembership predicate;
 
+    /**
+     * Creates a new instance with a specific region membership flag.
+     *
+     * @param regionMembershipFlag the byte value representing region membership
+     */
     public CountIntersectingVoxels(byte regionMembershipFlag) {
         predicate = new PredicateRegionMembership(regionMembershipFlag);
     }
 
+    /**
+     * Counts the number of intersecting voxels between two bounded voxel sets.
+     *
+     * @param voxels1 the first set of bounded voxels
+     * @param voxels2 the second set of bounded voxels
+     * @return the count of intersecting voxels
+     */
     public int count(
             BoundedVoxels<UnsignedByteBuffer> voxels1, BoundedVoxels<UnsignedByteBuffer> voxels2) {
         return CountVoxelsIntersectingBounded.countByte(voxels1, voxels2, predicate);
     }
 
+    /**
+     * Counts the number of intersecting voxels between two bounded voxel sets, considering a global mask.
+     *
+     * @param voxels1 the first set of bounded voxels
+     * @param voxels2 the second set of bounded voxels
+     * @param maskGlobal the global mask to apply during counting
+     * @param onMaskGlobal the value in the global mask that indicates a voxel should be considered
+     * @return the count of intersecting voxels that also satisfy the global mask condition
+     */
     public int countMasked(
             BoundedVoxels<UnsignedByteBuffer> voxels1,
             BoundedVoxels<UnsignedByteBuffer> voxels2,

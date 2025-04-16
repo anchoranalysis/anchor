@@ -39,22 +39,34 @@ import org.anchoranalysis.core.identifier.getter.IdentifierGetter;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.spatial.box.BoundingBox;
 
+/**
+ * A collection of marks, each associated with a color.
+ */
 @AllArgsConstructor
 public class ColoredMarks implements Iterable<Mark> {
 
     @Getter private MarkCollection marks;
     @Getter private ColorList colorList;
 
+    /**
+     * Creates an empty ColoredMarks instance.
+     */
     public ColoredMarks() {
         this(new MarkCollection(), new ColorList());
     }
 
-    // NB, this changes the IDs of the marks
+    /**
+     * Creates a ColoredMarks instance from a MarkCollection and assigns colors based on a ColorIndex.
+     * Note: This constructor changes the IDs of the marks.
+     *
+     * @param marks the collection of marks
+     * @param colorIndex the color index to use for assigning colors
+     * @param colorIDGetter a function to get color IDs for marks
+     */
     public ColoredMarks(
             MarkCollection marks, ColorIndex colorIndex, IdentifierGetter<Mark> colorIDGetter) {
         super();
         this.marks = marks;
-
         this.colorList = new ColorList();
 
         for (int index = 0; index < marks.size(); index++) {
@@ -63,37 +75,78 @@ public class ColoredMarks implements Iterable<Mark> {
         }
     }
 
+    /**
+     * Creates a ColoredMarks instance with a single mark and color.
+     *
+     * @param mark the mark to add
+     * @param color the color for the mark
+     */
     public ColoredMarks(Mark mark, RGBColor color) {
         super();
         this.marks = new MarkCollection(mark);
         this.colorList = new ColorList(color);
     }
 
+    /**
+     * Adds a mark with an associated color.
+     *
+     * @param mark the mark to add
+     * @param color the color for the mark
+     */
     public void add(Mark mark, Color color) {
         add(mark, new RGBColor(color));
     }
 
+    /**
+     * Adds a mark, changes its ID, and associates it with a color.
+     *
+     * @param mark the mark to add
+     * @param color the color for the mark
+     */
     public void addChangeID(Mark mark, Color color) {
         addChangeID(mark, new RGBColor(color));
     }
 
+    /**
+     * Adds a mark, changes its ID, and associates it with an RGBColor.
+     *
+     * @param mark the mark to add
+     * @param color the RGBColor for the mark
+     */
     public void addChangeID(Mark mark, RGBColor color) {
         marks.add(mark);
         colorList.add(color);
         mark.setId(colorList.size() - 1);
     }
 
+    /**
+     * Adds a mark with an associated RGBColor.
+     *
+     * @param mark the mark to add
+     * @param color the RGBColor for the mark
+     */
     public void add(Mark mark, RGBColor color) {
         marks.add(mark);
         colorList.add(color);
     }
 
+    /**
+     * Adds all marks from a MarkCollection with the same color.
+     *
+     * @param marks the MarkCollection to add from
+     * @param color the color for all added marks
+     */
     public void addAll(MarkCollection marks, RGBColor color) {
         for (Mark mark : marks) {
             add(mark, color);
         }
     }
 
+    /**
+     * Adds all marks and colors from another ColoredMarks instance.
+     *
+     * @param marks the ColoredMarks to add from
+     */
     public void addAll(ColoredMarks marks) {
         for (int i = 0; i < marks.size(); i++) {
             add(marks.getMarks().get(i), marks.colorList.get(i));
@@ -105,35 +158,51 @@ public class ColoredMarks implements Iterable<Mark> {
         return marks.iterator();
     }
 
+    /**
+     * Returns the number of marks in the collection.
+     *
+     * @return the size of the collection
+     */
     public final int size() {
         return marks.size();
     }
 
+    /**
+     * Creates a deep copy of this ColoredMarks instance.
+     *
+     * @return a new ColoredMarks instance with copied marks and colors
+     */
     public ColoredMarks deepCopy() {
-
         ColoredMarks out = new ColoredMarks();
         out.marks = marks.deepCopy();
         out.colorList = colorList.deepCopy();
         return out;
     }
 
+    /**
+     * Creates a shallow copy of this ColoredMarks instance.
+     *
+     * @return a new ColoredMarks instance with the same marks and colors
+     */
     public ColoredMarks shallowCopy() {
-
         ColoredMarks out = new ColoredMarks();
         out.marks = marks.shallowCopy();
         out.colorList = colorList.shallowCopy();
         return out;
     }
 
+    /**
+     * Merges this ColoredMarks with another, avoiding duplicates.
+     *
+     * @param toMerge the ColoredMarks to merge with
+     * @return a new ColoredMarks instance with merged marks and colors
+     */
     public ColoredMarks createMerged(ColoredMarks toMerge) {
-
         ColoredMarks mergedNew = shallowCopy();
-
         Set<Mark> set = mergedNew.getMarks().createSet();
 
         for (int i = 0; i < toMerge.size(); i++) {
             Mark m = toMerge.getMarks().get(i);
-
             if (!set.contains(m)) {
                 mergedNew.getMarks().add(m);
                 mergedNew.getColorList().add(toMerge.getColorList().get(i));
@@ -142,13 +211,19 @@ public class ColoredMarks implements Iterable<Mark> {
         return mergedNew;
     }
 
+    /**
+     * Creates a subset of marks whose bounding boxes intersect with given boxes.
+     *
+     * @param dimensions the dimensions to use for bounding box calculations
+     * @param regionID the region ID to use for bounding box calculations
+     * @param intersectList the list of bounding boxes to check for intersection
+     * @return a new ColoredMarks instance with the intersecting marks
+     */
     public ColoredMarks subsetWhereBBoxIntersects(
             Dimensions dimensions, int regionID, List<BoundingBox> intersectList) {
-
         ColoredMarks intersectingMarks = new ColoredMarks();
         for (int i = 0; i < getMarks().size(); i++) {
             Mark mark = getMarks().get(i);
-
             if (mark.box(dimensions, regionID).intersection().existsWithAny(intersectList)) {
                 intersectingMarks.add(mark.duplicate(), getColorList().get(i));
             }
@@ -156,6 +231,11 @@ public class ColoredMarks implements Iterable<Mark> {
         return intersectingMarks;
     }
 
+    /**
+     * Removes a mark and its associated color at the specified index.
+     *
+     * @param index the index of the mark to remove
+     */
     public void remove(int index) {
         colorList.remove(index);
         marks.remove(index);

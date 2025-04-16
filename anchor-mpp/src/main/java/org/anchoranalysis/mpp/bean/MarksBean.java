@@ -38,25 +38,40 @@ import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.mpp.init.MarksInitialization;
 import org.anchoranalysis.mpp.init.PointsInitialization;
 
+/**
+ * An abstract base class for beans related to marks in MPP (Marked Point Process).
+ *
+ * <p>This class extends {@link InitializableBean} to provide initialization capabilities
+ * specific to marks-related beans.</p>
+ *
+ * @param <T> the type of the bean
+ */
 public abstract class MarksBean<T> extends InitializableBean<T, MarksInitialization> {
 
+    /**
+     * Creates a new instance of MarksBean.
+     */
     protected MarksBean() {
         super(initializerForMarksBeans(), new AssignerMatchClass<>(MarksInitialization.class));
     }
 
     /**
-     * Creates a property-initializes for MPP-Beans
+     * Creates a property-initializer for MPP-Beans.
      *
-     * <p>Beware concurrency. Initializers are stateful with the {#link {@link
-     * BeanInitializer#setParam(Object)} method so this should be created newly for each thread,
-     * rather reused statically
+     * <p>Beware concurrency. Initializers are stateful with the {@link BeanInitializer#setParam(Object)}
+     * method so this should be created newly for each thread, rather than reused statically.</p>
      *
-     * @return
+     * @return a new {@link BeanInitializer} for {@link MarksInitialization}
      */
     public static BeanInitializer<MarksInitialization> initializerForMarksBeans() {
         return new BeanInitializer<>(MarksInitialization.class, paramExtracters());
     }
 
+    /**
+     * Creates a list of parameter extractors for MarksInitialization.
+     *
+     * @return a list of {@link ExtractDerivedParameter} for various initialization types
+     */
     private static List<ExtractDerivedParameter<MarksInitialization, ?>> paramExtracters() {
         return Arrays.asList(
                 new ExtractDerivedParameter<>(

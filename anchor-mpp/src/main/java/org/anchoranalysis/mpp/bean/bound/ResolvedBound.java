@@ -35,12 +35,16 @@ import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 
-/** A bound resolved into pixel units */
+/**
+ * A bound resolved into pixel units.
+ *
+ * <p>This class represents a bound with minimum and maximum values, typically used
+ * after resolving a bound into pixel units.</p>
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 public class ResolvedBound extends AnchorBean<ResolvedBound> implements Serializable {
 
-    /** */
     private static final long serialVersionUID = 1L;
 
     // START BEAN PROPERTIES
@@ -49,25 +53,51 @@ public class ResolvedBound extends AnchorBean<ResolvedBound> implements Serializ
     @BeanField @Getter @Setter private double max = 1.0;
     // END BEAN PROPERTIES
 
+    /**
+     * Creates a new instance by copying another ResolvedBound.
+     *
+     * @param src the source ResolvedBound to copy from
+     */
     public ResolvedBound(ResolvedBound src) {
         this.min = src.min;
         this.max = src.max;
     }
 
+    /**
+     * Checks if a value is contained within the bound.
+     *
+     * @param val the value to check
+     * @return true if the value is within the bound, false otherwise
+     */
     public boolean contains(double val) {
         return (val >= min && val <= max);
     }
 
+    /**
+     * Gets a description of the bound.
+     *
+     * @return a string description of the bound
+     */
     public String getDscr() {
         return String.format("resolvedBound(min=%f,max=%f)", getMin(), getMax());
     }
 
+    /**
+     * Scales the bound by a multiplication factor.
+     *
+     * @param multFactor the factor to multiply the bound values by
+     */
     public void scale(double multFactor) {
         this.min = this.min * multFactor;
         this.max = this.max * multFactor;
     }
 
-    /** A random value between the bounds (open interval) */
+    /**
+     * Generates a random value between the bounds (open interval).
+     *
+     * @param randomNumberGenerator the random number generator to use
+     * @return a random value between min and max
+     */
     public double randOpen(RandomNumberGenerator randomNumberGenerator) {
         return randomNumberGenerator.sampleDoubleFromRange(min, max);
     }

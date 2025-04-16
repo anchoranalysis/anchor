@@ -34,13 +34,24 @@ import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipUtilities;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 
+/**
+ * Utility class for calculating overlap between voxelized marks.
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class OverlapUtilities {
 
-    public static double overlapWith(VoxelizedMarkMemo pmm1, VoxelizedMarkMemo pmm2, int regionID) {
+    /**
+     * Calculates the overlap between two voxelized marks for a specific region.
+     *
+     * @param memo1 the first voxelized mark memo
+     * @param memo2 the second voxelized mark memo
+     * @param regionID the ID of the region to consider for overlap
+     * @return the number of overlapping voxels
+     */
+    public static double overlapWith(VoxelizedMarkMemo memo1, VoxelizedMarkMemo memo2, int regionID) {
 
-        Mark mark1 = pmm1.getMark();
-        Mark mark2 = pmm2.getMark();
+        Mark mark1 = memo1.getMark();
+        Mark mark2 = memo2.getMark();
 
         // If we have a quick routine available, we use this
         // We do some quick tests to get rid of obvious cases which do not overlap
@@ -53,27 +64,28 @@ public class OverlapUtilities {
         // between the two bounding box
         byte flag = RegionMembershipUtilities.flagForRegion(regionID);
         return new CountIntersectingVoxels(flag)
-                .count(pmm1.voxelized().voxels(), pmm2.voxelized().voxels());
+                .count(memo1.voxelized().voxels(), memo2.voxelized().voxels());
     }
 
     /**
-     * Counts the number of overlapping voxels between two {@link VoxelizedMarkMemo}
+     * Counts the number of overlapping voxels between two {@link VoxelizedMarkMemo} objects,
+     * considering a global mask.
      *
-     * @param pmm1
-     * @param pmm2
-     * @param regionID
-     * @param globalMask
-     * @param onGlobalMask
-     * @return the total number of overlapping boxels
+     * @param memo1 the first voxelized mark memo
+     * @param memo2 the second voxelized mark memo
+     * @param regionID the ID of the region to consider for overlap
+     * @param globalMask the global mask to apply during overlap calculation
+     * @param onGlobalMask the value in the global mask that indicates a voxel should be considered
+     * @return the total number of overlapping voxels
      */
     public static double overlapWithMaskGlobal(
-            VoxelizedMarkMemo pmm1,
-            VoxelizedMarkMemo pmm2,
+            VoxelizedMarkMemo memo1,
+            VoxelizedMarkMemo memo2,
             int regionID,
             Voxels<UnsignedByteBuffer> globalMask,
             byte onGlobalMask) {
-        Mark mark1 = pmm1.getMark();
-        Mark mark2 = pmm2.getMark();
+        Mark mark1 = memo1.getMark();
+        Mark mark2 = memo2.getMark();
 
         // If we have a quick routine available, we use this
         // We do some quick tests to get rid of obvious cases which do not overlap
@@ -87,8 +99,8 @@ public class OverlapUtilities {
         byte flag = RegionMembershipUtilities.flagForRegion(regionID);
         return new CountIntersectingVoxels(flag)
                 .countMasked(
-                        pmm1.voxelized().voxels(),
-                        pmm2.voxelized().voxels(),
+                        memo1.voxelized().voxels(),
+                        memo2.voxelized().voxels(),
                         globalMask,
                         onGlobalMask);
     }
