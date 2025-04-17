@@ -3,10 +3,10 @@
 	<parent>
         <groupId>org.anchoranalysis.anchor</groupId>
    	    <artifactId>anchor-parent</artifactId>
-		<version>0.1.3-SNAPSHOT</version>
+		<version>0.2.0</version>
     </parent>
   <artifactId>anchor-io-input</artifactId>
-  <version>0.0.8-SNAPSHOT</version>
+  <version>0.1.0</version>
   <description>Collecting inputs (not image specific) for tasks/experiments</description>
 	<dependencies>
 	    <dependency>
@@ -33,22 +33,22 @@
 	  	<dependency>
 	  		<groupId>${project.groupId}</groupId>
 	  		<artifactId>anchor-core</artifactId>
-	  		<version>0.1.4-SNAPSHOT</version>
+	  		<version>0.2.0</version>
 	  	</dependency>
 	  	<dependency>
 	  		<groupId>${project.groupId}</groupId>
 	  		<artifactId>anchor-bean</artifactId>
-	  		<version>0.0.8-SNAPSHOT</version>
+	  		<version>0.1.0</version>
 	  	</dependency>
 	   <dependency>
 			 <groupId>${project.groupId}</groupId>
 			 <artifactId>anchor-beans-shared</artifactId>
-			 <version>0.0.8-SNAPSHOT</version>
+			 <version>0.1.0</version>
 		</dependency>
 	 	<dependency>
 			 <groupId>${project.groupId}</groupId>
 			 <artifactId>anchor-overlay</artifactId>
-			 <version>0.0.8-SNAPSHOT</version>
+			 <version>0.1.0</version>
 		</dependency>
 		
 		<dependency>
@@ -60,7 +60,7 @@
 	 	<dependency>
 			<groupId>${project.groupId}</groupId>		
 		  	<artifactId>anchor-test</artifactId>
-  			<version>0.1.2-SNAPSHOT</version>
+  			<version>0.2.0</version>
   			<scope>test</scope>
   		</dependency>
 			
