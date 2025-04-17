@@ -3,23 +3,23 @@
   <parent>
     <groupId>org.anchoranalysis.anchor</groupId>
     <artifactId>anchor-parent</artifactId>
-    <version>0.2.0</version>
+    <version>0.2.1-SNAPSHOT</version>
   </parent>
   <artifactId>anchor-test-io-output</artifactId>
-  <version>0.1.0</version>
+  <version>0.1.1-SNAPSHOT</version>
   <description>Reusable test fixtures/utilities *(related to outputting entities, but not image-specific entities)*.</description>
     <dependencies>
    
 	   	<dependency>
 		  <groupId>${project.groupId}</groupId>
 		  <artifactId>anchor-test</artifactId>
-		  <version>0.2.0</version>
+		  <version>0.2.1-SNAPSHOT</version>
 		</dependency>
 		
 		<dependency>
 		  <groupId>${project.groupId}</groupId>
 		  <artifactId>anchor-io-output</artifactId>
-		  <version>0.1.0</version>
+		  <version>0.1.1-SNAPSHOT</version>
 		</dependency>
 				
 	    <!-- Needed to expand scope outside "test" which is inherited from the parent pom -->

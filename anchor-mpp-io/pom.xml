@@ -3,76 +3,76 @@
 	<parent>
         <groupId>org.anchoranalysis.anchor</groupId>
    	    <artifactId>anchor-parent</artifactId>
-		<version>0.2.0</version>
+		<version>0.2.1-SNAPSHOT</version>
     </parent>
   <artifactId>anchor-mpp-io</artifactId>
-  <version>0.1.0</version>
+  <version>0.1.1-SNAPSHOT</version>
   <description>Input / output related to objects in anchor-mpp.</description>
  <dependencies>
     <dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-core</artifactId>
-	  <version>0.2.0</version>
+	  <version>0.2.1-SNAPSHOT</version>
 	</dependency>
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-bean</artifactId>
-	  <version>0.1.0</version>
+	  <version>0.1.1-SNAPSHOT</version>
 	</dependency>
     <dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-beans-shared</artifactId>
-	  <version>0.1.0</version>
+	  <version>0.1.1-SNAPSHOT</version>
 	</dependency>	
 	 <dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-feature</artifactId>
-	  <version>0.1.0</version>
+	  <version>0.1.1-SNAPSHOT</version>
 	</dependency>
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-io-generator</artifactId>
-	  <version>0.1.0</version>
+	  <version>0.1.1-SNAPSHOT</version>
 	</dependency>
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-image-core</artifactId>
-	  <version>0.1.0</version>
+	  <version>0.1.1-SNAPSHOT</version>
 	</dependency>
 	 <dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-image-bean</artifactId>
-	  <version>0.1.0</version>
+	  <version>0.1.1-SNAPSHOT</version>
 	</dependency>
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-image-feature</artifactId>
-	  <version>0.1.0</version>
+	  <version>0.1.1-SNAPSHOT</version>
 	</dependency>
 	 <dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-image-io</artifactId>
-	  <version>0.1.0</version>
+	  <version>0.1.1-SNAPSHOT</version>
 	</dependency>
 	 <dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-mpp</artifactId>
-	  <version>0.1.0</version>
+	  <version>0.1.1-SNAPSHOT</version>
 	</dependency>
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-mpp-feature</artifactId>
-	  <version>0.1.0</version>
+	  <version>0.1.1-SNAPSHOT</version>
 	</dependency>
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-overlay</artifactId>
-	  <version>0.1.0</version>
+	  <version>0.1.1-SNAPSHOT</version>
 	</dependency>
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-annotation</artifactId>
-	  <version>0.1.0</version>
+	  <version>0.1.1-SNAPSHOT</version>
 	</dependency>	
   </dependencies>   
 </project>
