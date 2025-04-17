@@ -71,9 +71,9 @@
     </dependency>
 	
 	<dependency>
-	  <groupId>JHDF5</groupId>
-	  <artifactId>sis-jhdf5</artifactId>
-	  <version>19.04.0</version>
+	  <groupId>cisd</groupId>
+	  <artifactId>jhdf5</artifactId>
+	  <version>19.04.1</version>
 	</dependency>
 
 	<dependency>
