@@ -3,29 +3,29 @@
 	<parent>
         <groupId>org.anchoranalysis.anchor</groupId>
    	    <artifactId>anchor-parent</artifactId>
-		<version>0.2.1-SNAPSHOT</version>
+		<version>0.3.0</version>
     </parent>
   <artifactId>anchor-annotation-io</artifactId>
-  <version>0.1.1-SNAPSHOT</version>
+  <version>0.2.0</version>
   <description>Reading / writing related to anchor-annotation</description>
  <dependencies>
  
     <dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-annotation</artifactId>
-	  <version>0.1.1-SNAPSHOT</version>
+	  <version>0.2.0</version>
 	</dependency>
 	
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-image-io</artifactId>
-	  <version>0.1.1-SNAPSHOT</version>
+	  <version>0.2.0</version>
 	</dependency>
 	
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-mpp-io</artifactId>
-	  <version>0.1.1-SNAPSHOT</version>
+	  <version>0.2.0</version>
 	</dependency>
 	
 	<dependency>

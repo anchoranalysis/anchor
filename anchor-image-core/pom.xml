@@ -3,37 +3,37 @@
 	<parent>
         <groupId>org.anchoranalysis.anchor</groupId>
    	    <artifactId>anchor-parent</artifactId>
-		<version>0.2.1-SNAPSHOT</version>
+		<version>0.3.0</version>
     </parent> 
   <artifactId>anchor-image-core</artifactId>
-  <version>0.1.1-SNAPSHOT</version>
+  <version>0.2.0</version>
   <description>Core (non-bean) data objects for images (stacks, channels, voxel manipulation etc.)</description>
    <dependencies>
     
     <dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-core</artifactId>
-	  <version>0.2.1-SNAPSHOT</version>
+	  <version>0.3.0</version>
 	</dependency>
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-math</artifactId>
-	  <version>0.1.1-SNAPSHOT</version>
+	  <version>0.2.0</version>
 	</dependency>
 	<dependency>
 	  <groupId>${project.groupId}</groupId>	
 	  <artifactId>anchor-beans-shared</artifactId>
-  	  <version>0.1.1-SNAPSHOT</version>
+  	  <version>0.2.0</version>
   	</dependency>
 	<dependency>
 	  <groupId>${project.groupId}</groupId>	
 	  <artifactId>anchor-image-voxel</artifactId>
-  	  <version>0.1.1-SNAPSHOT</version>
+  	  <version>0.2.0</version>
   	</dependency>
   	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-spatial</artifactId>
-	  <version>0.1.1-SNAPSHOT</version>
+	  <version>0.2.0</version>
 	</dependency>
   	
     <dependency>

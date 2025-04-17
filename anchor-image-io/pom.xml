@@ -3,71 +3,71 @@
 	<parent>
         <groupId>org.anchoranalysis.anchor</groupId>
    	    <artifactId>anchor-parent</artifactId>
-		<version>0.2.1-SNAPSHOT</version>
+		<version>0.3.0</version>
     </parent>
   <artifactId>anchor-image-io</artifactId>
-  <version>0.1.1-SNAPSHOT</version>
+  <version>0.2.0</version>
   <description>Reading / writing related to `anchor-image`.</description>
 <dependencies>
     <dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-core</artifactId>
-	  <version>0.2.1-SNAPSHOT</version>
+	  <version>0.3.0</version>
 	</dependency>
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-bean</artifactId>
-	  <version>0.1.1-SNAPSHOT</version>
+	  <version>0.2.0</version>
 	</dependency>
     <dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-beans-shared</artifactId>
-	  <version>0.1.1-SNAPSHOT</version>
+	  <version>0.2.0</version>
 	</dependency>	
 	 <dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-feature</artifactId>
-	  <version>0.1.1-SNAPSHOT</version>
+	  <version>0.2.0</version>
 	</dependency>
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-feature-io</artifactId>
-	  <version>0.1.1-SNAPSHOT</version>
+	  <version>0.2.0</version>
 	</dependency>
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-io-input</artifactId>
-	  <version>0.1.1-SNAPSHOT</version>
+	  <version>0.2.0</version>
 	</dependency>
 	 <dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-image-core</artifactId>
-	  <version>0.1.1-SNAPSHOT</version>
+	  <version>0.2.0</version>
 	</dependency>
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-image-feature</artifactId>
-	  <version>0.1.1-SNAPSHOT</version>
+	  <version>0.2.0</version>
 	</dependency>	
 	 <dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-image-bean</artifactId>
-	  <version>0.1.1-SNAPSHOT</version>
+	  <version>0.2.0</version>
 	</dependency>
  	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-overlay</artifactId>
-	  <version>0.1.1-SNAPSHOT</version>
+	  <version>0.2.0</version>
 	</dependency>
 	<dependency>
 		 <groupId>${project.groupId}</groupId>
 		 <artifactId>anchor-io-generator</artifactId>
-		 <version>0.1.1-SNAPSHOT</version>
+		 <version>0.2.0</version>
 	</dependency>
 	<dependency>
          <groupId>${project.groupId}</groupId>
          <artifactId>anchor-io-output</artifactId>
-         <version>0.1.1-SNAPSHOT</version>
+         <version>0.2.0</version>
     </dependency>
 	
 	<dependency>
@@ -92,7 +92,7 @@
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-test</artifactId>
-	  <version>0.2.1-SNAPSHOT</version>
+	  <version>0.3.0</version>
 	  <scope>test</scope>
 	</dependency>	
 		
