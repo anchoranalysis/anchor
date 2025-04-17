@@ -3,41 +3,41 @@
 	<parent>
         <groupId>org.anchoranalysis.anchor</groupId>
    	    <artifactId>anchor-parent</artifactId>
-		<version>0.3.1</version>
+		<version>0.3.2-SNAPSHOT</version>
     </parent> 
   <artifactId>anchor-image-inference</artifactId>
-  <version>0.2.1</version>
+  <version>0.2.2-SNAPSHOT</version>
   <description>Machine learning model inference on images.</description>
    <dependencies>
     
     <dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-core</artifactId>
-	  <version>0.3.1</version>
+	  <version>0.3.2-SNAPSHOT</version>
 	</dependency>
 
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-bean</artifactId>
-	  <version>0.2.1</version>
+	  <version>0.2.2-SNAPSHOT</version>
 	</dependency>
 	
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-image-core</artifactId>
-	  <version>0.2.1</version>
+	  <version>0.2.2-SNAPSHOT</version>
 	</dependency>
 	
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-imagej</artifactId>
-	  <version>0.2.1</version>
+	  <version>0.2.2-SNAPSHOT</version>
 	</dependency>	
 		
    	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-inference</artifactId>
-	  <version>0.2.1</version>
+	  <version>0.2.2-SNAPSHOT</version>
 	</dependency>
 	
   </dependencies>

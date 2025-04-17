@@ -3,17 +3,17 @@
 	<parent>
         <groupId>org.anchoranalysis.anchor</groupId>
    	    <artifactId>anchor-parent</artifactId>
-		<version>0.3.1</version>
+		<version>0.3.2-SNAPSHOT</version>
     </parent> 
   <artifactId>anchor-inference</artifactId>
-  <version>0.2.1</version>
+  <version>0.2.2-SNAPSHOT</version>
   <description>High-level classes for performing machine learning model inference.</description>
    <dependencies>
     
    	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-core</artifactId>
-	  <version>0.3.1</version>
+	  <version>0.3.2-SNAPSHOT</version>
 	</dependency>
 
   </dependencies>
