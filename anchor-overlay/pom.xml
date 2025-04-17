@@ -3,26 +3,26 @@
 	<parent>
         <groupId>org.anchoranalysis.anchor</groupId>
    	    <artifactId>anchor-parent</artifactId>
-		<version>0.3.0</version>
+		<version>0.3.1-SNAPSHOT</version>
     </parent>
   <artifactId>anchor-overlay</artifactId>  
-  <version>0.2.0</version>
+  <version>0.2.1-SNAPSHOT</version>
   <description>Graphics output of entities on top of a raster.</description>
 <dependencies>
     <dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-bean</artifactId>
-	  <version>0.2.0</version>
+	  <version>0.2.1-SNAPSHOT</version>
 	</dependency>
     <dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-core</artifactId>
-	  <version>0.3.0</version>
+	  <version>0.3.1-SNAPSHOT</version>
 	</dependency>
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-image-core</artifactId>
-	  <version>0.2.0</version>
+	  <version>0.2.1-SNAPSHOT</version>
 	</dependency>
   </dependencies>    
 </project>
