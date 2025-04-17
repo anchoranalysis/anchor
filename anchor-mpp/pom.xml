@@ -3,56 +3,56 @@
 	<parent>
         <groupId>org.anchoranalysis.anchor</groupId>
    	    <artifactId>anchor-parent</artifactId>
-		<version>0.1.3-SNAPSHOT</version>
+		<version>0.3.2-SNAPSHOT</version>
     </parent>
   <artifactId>anchor-mpp</artifactId>
-  <version>0.0.8-SNAPSHOT</version>
+  <version>0.2.2-SNAPSHOT</version>
   <description>Core data classes for Marked Point Processes (marks, configuration etc.)</description>
    <dependencies>
     <dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-core</artifactId>
-	  <version>0.1.4-SNAPSHOT</version>
+	  <version>0.3.2-SNAPSHOT</version>
 	</dependency>
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-bean</artifactId>
-	  <version>0.0.8-SNAPSHOT</version>
+	  <version>0.2.2-SNAPSHOT</version>
 	</dependency>
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-beans-shared</artifactId>
-	  <version>0.0.8-SNAPSHOT</version>
+	  <version>0.2.2-SNAPSHOT</version>
 	</dependency>
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-imagej</artifactId>
-  	  <version>0.0.1-SNAPSHOT</version>
+  	  <version>0.2.2-SNAPSHOT</version>
 	</dependency>	
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-feature</artifactId>
-	  <version>0.0.8-SNAPSHOT</version>
+	  <version>0.2.2-SNAPSHOT</version>
 	</dependency>
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-image-core</artifactId>
-	  <version>0.0.8-SNAPSHOT</version>
+	  <version>0.2.2-SNAPSHOT</version>
 	</dependency>
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-image-bean</artifactId>
-	  <version>0.0.8-SNAPSHOT</version>
+	  <version>0.2.2-SNAPSHOT</version>
 	</dependency>
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-image-feature</artifactId>
-	  <version>0.0.8-SNAPSHOT</version>
+	  <version>0.2.2-SNAPSHOT</version>
 	</dependency>
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-overlay</artifactId>
-	  <version>0.0.8-SNAPSHOT</version>
+	  <version>0.2.2-SNAPSHOT</version>
 	</dependency>
 
 	<dependency>
