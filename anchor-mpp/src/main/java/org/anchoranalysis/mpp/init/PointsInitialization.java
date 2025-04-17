@@ -38,25 +38,50 @@ import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.bean.nonbean.init.PopulateStoreFromDefine;
 import org.anchoranalysis.mpp.bean.points.fitter.PointsFitter;
 
+/**
+ * Initialization class for points-related components in the MPP framework.
+ *
+ * <p>This class manages the initialization of point fitters and provides access to image
+ * initialization.
+ */
 public class PointsInitialization implements BeanInitialization {
 
-    // START: Initialization
+    /** The image initialization associated with this points initialization. */
     @Getter private final ImageInitialization image;
-    // END: Initialization
 
-    // START: Stores
+    /** Store for point fitters. */
     @Getter private final NamedProviderStore<PointsFitter> pointFitters;
-    // END: Stores
 
+    /**
+     * Private constructor for PointsInitialization.
+     *
+     * @param image The ImageInitialization to use
+     * @param sharedObjects The SharedObjects to use for creating NamedProviderStores
+     */
     private PointsInitialization(ImageInitialization image, SharedObjects sharedObjects) {
         this.image = image;
         pointFitters = sharedObjects.getOrCreate(PointsFitter.class);
     }
 
+    /**
+     * Creates a new PointsInitialization instance.
+     *
+     * @param image The ImageInitialization to use
+     * @param so The SharedObjects to use for creating NamedProviderStores
+     * @return A new PointsInitialization instance
+     */
     public static PointsInitialization create(ImageInitialization image, SharedObjects so) {
         return new PointsInitialization(image, so);
     }
 
+    /**
+     * Populates the stores with beans from the given Define.
+     *
+     * @param initializer The BeanInitializer to use
+     * @param define The Define containing the beans to populate
+     * @param logger The Logger to use for logging
+     * @throws OperationFailedException If the population operation fails
+     */
     public void populate(BeanInitializer<?> initializer, Define define, Logger logger)
             throws OperationFailedException {
 

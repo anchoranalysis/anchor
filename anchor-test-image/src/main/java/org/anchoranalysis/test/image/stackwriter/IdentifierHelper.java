@@ -42,9 +42,10 @@ public class IdentifierHelper {
     /**
      * Builds an identifier for particular properties.
      *
-     * @param channels the number and type of of channels
+     * @param channels the number and type of channels
      * @param do3D whether a 3D stack or not
-     * @param extentIdentifier an identifier referring to the size of hte image
+     * @param extentIdentifier an identifier referring to the size of the image
+     * @param firstChannelForced whether the first channel is forced to a different type
      * @return a string providing an identifier for the particular combination of attributes.
      */
     public static String identiferFor(

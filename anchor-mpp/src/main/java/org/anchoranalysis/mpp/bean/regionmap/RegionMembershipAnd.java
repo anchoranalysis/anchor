@@ -26,12 +26,24 @@
 
 package org.anchoranalysis.mpp.bean.regionmap;
 
+/**
+ * A RegionMembership implementation that uses an AND operation to check membership.
+ *
+ * <p>This class extends RegionMembership and implements the isMemberFlag method using an AND
+ * operation to determine if a region is a member.
+ */
 public class RegionMembershipAnd extends RegionMembership {
 
+    /** Constructs a RegionMembershipAnd with no regions set. */
     public RegionMembershipAnd() {
         super();
     }
 
+    /**
+     * Constructs a RegionMembershipAnd with a single region set.
+     *
+     * @param index the index of the region to set (0-7)
+     */
     public RegionMembershipAnd(int index) {
         super(index);
     }

@@ -42,24 +42,44 @@ import org.anchoranalysis.image.core.dimensions.SpatialUnits.UnitSuffix;
 import org.anchoranalysis.image.core.dimensions.UnitConverter;
 import org.anchoranalysis.spatial.orientation.DirectionVector;
 
-//
+/**
+ * Converts a distance feature to physical units along a specified direction.
+ *
+ * <p>This feature converter takes a distance measurement and converts it to physical units
+ * considering the direction specified by the {@code direction} property.
+ *
+ * @param <T> the type of feature input, which must include resolution information
+ */
 @NoArgsConstructor
 public class ConvertToPhysicalDistance<T extends FeatureInputWithResolution>
         extends FeatureConvertUnits<T> {
 
     // START BEAN PROPERTIES
-    /** Direction of the distance being converted, defaults to a unit vector along the X-axis */
+    /** Direction of the distance being converted, defaults to a unit vector along the X-axis. */
     @BeanField @Getter @Setter private DirectionVectorBean direction = new SpecifyVector(1.0, 0, 0);
     // END BEAN PROPERTIES
 
     private DirectionVector vectorInDirection;
 
+    /**
+     * Creates a new instance with specified feature, unit type, and direction vector.
+     *
+     * @param feature the feature to convert
+     * @param unitType the type of physical unit to convert to
+     * @param directionVector the direction vector for the distance
+     */
     public ConvertToPhysicalDistance(
             Feature<T> feature, UnitSuffix unitType, DirectionVector directionVector) {
         super(feature, unitType);
         this.direction = new SpecifyVector(directionVector);
     }
 
+    /**
+     * Initializes the direction vector before calculation.
+     *
+     * @param initialization the feature initialization context
+     * @throws InitializeException if the direction vector cannot be created
+     */
     @Override
     protected void beforeCalc(FeatureInitialization initialization) throws InitializeException {
         super.beforeCalc(initialization);
@@ -70,6 +90,14 @@ public class ConvertToPhysicalDistance<T extends FeatureInputWithResolution>
         }
     }
 
+    /**
+     * Converts the input value to physical distance along the specified direction.
+     *
+     * @param value the input distance value
+     * @param unitConverter the unit converter to use for the conversion
+     * @return the converted physical distance
+     * @throws FeatureCalculationException if the conversion fails
+     */
     @Override
     protected double convertToPhysical(double value, UnitConverter unitConverter)
             throws FeatureCalculationException {

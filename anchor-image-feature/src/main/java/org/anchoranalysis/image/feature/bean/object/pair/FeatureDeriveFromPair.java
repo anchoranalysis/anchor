@@ -41,8 +41,11 @@ import org.anchoranalysis.image.feature.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 
 /**
- * Base class for evaluating {@link FeaturePairObjects} in terms of another feature that operations
- * on elements (first, second, merged etc.)
+ * Base class for evaluating {@link FeaturePairObjects} in terms of another feature that operates on
+ * elements (first, second, merged etc.).
+ *
+ * <p>This class provides methods to calculate feature values for the first, second, and merged
+ * objects in a pair, using a specified feature for single objects.
  *
  * @author Owen Feehan
  */
@@ -51,32 +54,68 @@ import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 public abstract class FeatureDeriveFromPair extends FeaturePairObjects {
 
     // START BEAN PROPERTIES
+    /** The feature to be applied to individual objects. */
     @BeanField @Getter @Setter private Feature<FeatureInputSingleObject> item;
     // END BEAN PROPERTIES
 
+    /** Cache name for the first object in the pair. */
     public static final ChildCacheName CACHE_NAME_FIRST =
             new ChildCacheName(FeatureDeriveFromPair.class, "first");
+
+    /** Cache name for the second object in the pair. */
     public static final ChildCacheName CACHE_NAME_SECOND =
             new ChildCacheName(FeatureDeriveFromPair.class, "second");
+
+    /** Cache name for the merged object from the pair. */
     public static final ChildCacheName CACHE_NAME_MERGED =
             new ChildCacheName(FeatureDeriveFromPair.class, "merged");
 
+    /**
+     * Calculates the feature value for the first object in the pair.
+     *
+     * @param input the input for feature calculation
+     * @return the calculated feature value for the first object
+     * @throws FeatureCalculationException if an error occurs during calculation
+     */
     protected double valueFromFirst(FeatureCalculationInput<FeatureInputPairObjects> input)
             throws FeatureCalculationException {
-        return featureValFrom(input, Extract.FIRST, CACHE_NAME_FIRST);
+        return featureValueFrom(input, Extract.FIRST, CACHE_NAME_FIRST);
     }
 
+    /**
+     * Calculates the feature value for the second object in the pair.
+     *
+     * @param input the input for feature calculation
+     * @return the calculated feature value for the second object
+     * @throws FeatureCalculationException if an error occurs during calculation
+     */
     protected double valueFromSecond(FeatureCalculationInput<FeatureInputPairObjects> input)
             throws FeatureCalculationException {
-        return featureValFrom(input, Extract.SECOND, CACHE_NAME_SECOND);
+        return featureValueFrom(input, Extract.SECOND, CACHE_NAME_SECOND);
     }
 
+    /**
+     * Calculates the feature value for the merged object from the pair.
+     *
+     * @param input the input for feature calculation
+     * @return the calculated feature value for the merged object
+     * @throws FeatureCalculationException if an error occurs during calculation
+     */
     protected double valueFromMerged(FeatureCalculationInput<FeatureInputPairObjects> input)
             throws FeatureCalculationException {
-        return featureValFrom(input, Extract.MERGED, CACHE_NAME_MERGED);
+        return featureValueFrom(input, Extract.MERGED, CACHE_NAME_MERGED);
     }
 
-    private double featureValFrom(
+    /**
+     * Calculates the feature value for a specified part of the pair.
+     *
+     * @param input the input for feature calculation
+     * @param extract specifies which part of the pair to extract (FIRST, SECOND, or MERGED)
+     * @param cacheName the cache name to use for this calculation
+     * @return the calculated feature value
+     * @throws FeatureCalculationException if an error occurs during calculation
+     */
+    private double featureValueFrom(
             FeatureCalculationInput<FeatureInputPairObjects> input,
             Extract extract,
             ChildCacheName cacheName)

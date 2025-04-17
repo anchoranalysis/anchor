@@ -32,9 +32,21 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.conic.Ellipse;
 
+/**
+ * A factory for creating Ellipse marks.
+ *
+ * <p>This class extends MarkFactory, providing a specific implementation for creating Ellipse
+ * objects in the MPP (Marked Point Process) framework.
+ */
 public class MarkEllipseFactory extends MarkFactory {
 
     // START BEAN PROPERTIES
+    /**
+     * The shell thickness of the ellipse.
+     *
+     * <p>This value determines the thickness of the ellipse's outer shell. The default value is
+     * 0.1.
+     */
     @BeanField @Getter @Setter private double shell = 0.1;
     // END BEAN PROPERTIES
 

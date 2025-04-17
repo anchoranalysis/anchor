@@ -45,6 +45,10 @@ import org.anchoranalysis.test.LoggerFixture;
 import org.anchoranalysis.test.TestDataLoadException;
 import org.anchoranalysis.test.TestLoader;
 
+/**
+ * A test loader for image-related operations, providing methods to open and compare images and
+ * object collections.
+ */
 @RequiredArgsConstructor
 public class TestLoaderImage {
 
@@ -58,19 +62,42 @@ public class TestLoaderImage {
 
     private final Logger logger = LoggerFixture.suppressedLogger();
 
+    /**
+     * Constructs a TestLoaderImage with a given TestLoader.
+     *
+     * @param loader The TestLoader to use for non image-related loading.
+     */
     public TestLoaderImage(TestLoader loader) {
         this.loader = loader;
         this.stackReader = BeanInstanceMapFixture.ensureStackReader();
     }
 
+    /**
+     * Opens a channel from a test path.
+     *
+     * @param testPath The test path to the image file.
+     * @return The opened channel.
+     */
     public Channel openChannelFromTestPath(String testPath) {
         return extractChannel(openStackFromTestPath(testPath));
     }
 
+    /**
+     * Opens a channel from a file path.
+     *
+     * @param filePath The file path to the image file.
+     * @return The opened channel.
+     */
     public Channel openChannelFromFilePath(Path filePath) {
         return extractChannel(openStackFromFilePath(filePath));
     }
 
+    /**
+     * Opens a stack from a test path.
+     *
+     * @param testPath The test path to the image file.
+     * @return The opened stack.
+     */
     public Stack openStackFromTestPath(String testPath) {
         ConfigureBioformatsLogging.instance().makeSureConfigured();
 
@@ -78,6 +105,12 @@ public class TestLoaderImage {
         return openStackFromFilePath(filePath);
     }
 
+    /**
+     * Opens a stack from a file path.
+     *
+     * @param filePath The file path to the image file.
+     * @return The opened stack.
+     */
     public Stack openStackFromFilePath(Path filePath) {
 
         ConfigureBioformatsLogging.instance().makeSureConfigured();
@@ -137,6 +170,12 @@ public class TestLoaderImage {
         return stackWritten.equalsDeep(stackSaved, !ignoreResolutionDifferences);
     }
 
+    /**
+     * Opens an object collection from a test path.
+     *
+     * @param testDirectoryPath The test path to the directory containing the object collection.
+     * @return The opened object collection.
+     */
     public ObjectCollection openObjectsFromTestPath(String testDirectoryPath) {
         Path filePath = loader.resolveTestPath(testDirectoryPath);
         return openObjectsFromFilePath(filePath);
@@ -191,8 +230,24 @@ public class TestLoaderImage {
         return objectsWritten.equalsDeep(objectsSaved);
     }
 
+    /**
+     * Resolves a test path to an actual file system path.
+     *
+     * @param testPath The test path to resolve.
+     * @return The resolved file system path.
+     */
     public Path resolveTestPath(String testPath) {
         return loader.resolveTestPath(testPath);
+    }
+
+    /**
+     * Checks if a test path exists.
+     *
+     * @param testFilePath The test path to check.
+     * @return true if the path exists, false otherwise.
+     */
+    public boolean doesPathExist(String testFilePath) {
+        return loader.doesPathExist(testFilePath);
     }
 
     private static Channel extractChannel(Stack stack) {
@@ -201,9 +256,5 @@ public class TestLoaderImage {
                     "Loading a stack which contains more than one channel, when only one channel is intended");
         }
         return stack.getChannel(0);
-    }
-
-    public boolean doesPathExist(String testFilePath) {
-        return loader.doesPathExist(testFilePath);
     }
 }

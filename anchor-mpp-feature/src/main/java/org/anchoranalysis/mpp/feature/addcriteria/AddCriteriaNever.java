@@ -35,8 +35,13 @@ import org.anchoranalysis.mpp.feature.input.FeatureInputPairMemo;
 import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 
 /**
+ * An implementation of {@link AddCriteria} that never adds an edge between marks.
+ *
+ * <p>This class always returns an empty {@link Optional} for {@code generateEdge}, effectively
+ * preventing any edges from being created.
+ *
+ * @param <T> the type of edge that would be generated (if any were generated)
  * @author Owen Feehan
- * @param <T> edge-type
  */
 public class AddCriteriaNever<T> implements AddCriteria<T> {
 

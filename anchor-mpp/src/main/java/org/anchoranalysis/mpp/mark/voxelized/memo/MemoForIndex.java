@@ -26,8 +26,29 @@
 
 package org.anchoranalysis.mpp.mark.voxelized.memo;
 
+/**
+ * An interface for accessing voxelized mark memos by index.
+ *
+ * <p>This interface provides methods to retrieve a {@link VoxelizedMarkMemo} for a given index and
+ * to get the total number of memos available. It's useful for collections or caches of voxelized
+ * mark memos that need to be accessed by their position in the collection.
+ */
 public interface MemoForIndex {
+
+    /**
+     * Retrieves the {@link VoxelizedMarkMemo} for the specified index.
+     *
+     * @param index the index of the desired memo, must be non-negative and less than {@link
+     *     #size()}
+     * @return the {@link VoxelizedMarkMemo} corresponding to the given index
+     * @throws IndexOutOfBoundsException if the index is out of range
+     */
     VoxelizedMarkMemo getMemoForIndex(int index);
 
+    /**
+     * Returns the total number of memos available.
+     *
+     * @return the number of memos, always non-negative
+     */
     int size();
 }

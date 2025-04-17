@@ -32,36 +32,48 @@ import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
 import org.anchoranalysis.feature.energy.EnergyStackWithoutParameters;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.mpp.feature.energy.EnergyTotal;
-import org.anchoranalysis.mpp.feature.energy.saved.EnergySavedInd;
+import org.anchoranalysis.mpp.feature.energy.saved.EnergySavedIndividual;
 import org.anchoranalysis.mpp.feature.energy.scheme.EnergySchemeWithSharedFeatures;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.MarkCollection;
 import org.anchoranalysis.mpp.mark.voxelized.memo.MemoForIndex;
-import org.anchoranalysis.mpp.mark.voxelized.memo.PxlMarkMemoFactory;
 import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
+import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemoFactory;
 
 /**
  * A collection of memoized marks on which energies can be derived.
+ *
+ * <p>This class implements {@link Serializable} for persistence and {@link MemoForIndex} for
+ * indexing operations.
  *
  * @author Owen Feehan
  */
 public class EnergyMemoList implements Serializable, MemoForIndex {
 
-    /** */
     private static final long serialVersionUID = 9067220044867268357L;
 
-    // We keep the pixelized version of the marks
+    /** We keep the pixelized version of the marks. */
     private transient MemoList list;
 
+    /** The region map associated with the energy memo list. */
     private transient RegionMap regionMap;
 
-    // START CONSTRUCTORS
+    /** Creates an empty energy memo list. */
     public EnergyMemoList() {
         list = new MemoList();
     }
 
+    /**
+     * Creates an energy memo list with the given parameters.
+     *
+     * @param savedInd the saved individual energies
+     * @param energyStack the energy stack without parameters
+     * @param marks the collection of marks
+     * @param energySchemeTotal the energy scheme with shared features
+     * @throws NamedFeatureCalculateException if there's an error calculating named features
+     */
     public EnergyMemoList(
-            EnergySavedInd savedInd,
+            EnergySavedIndividual savedInd,
             EnergyStackWithoutParameters energyStack,
             MarkCollection marks,
             EnergySchemeWithSharedFeatures energySchemeTotal)
@@ -70,6 +82,11 @@ public class EnergyMemoList implements Serializable, MemoForIndex {
         calculateFreshInd(savedInd, energyStack, marks, energySchemeTotal);
     }
 
+    /**
+     * Creates a copy of an existing energy memo list.
+     *
+     * @param source the source energy memo list to copy
+     */
     public EnergyMemoList(EnergyMemoList source) {
         this.list = new MemoList();
         this.regionMap = source.getRegionMap();
@@ -77,8 +94,8 @@ public class EnergyMemoList implements Serializable, MemoForIndex {
             this.list.add(pmm);
         }
     }
-    // END CONSTRUCTORS
 
+    /** Cleans up the energy memo list by setting the list to null. */
     public void clean() {
         list = null;
     }
@@ -88,10 +105,23 @@ public class EnergyMemoList implements Serializable, MemoForIndex {
         return list.size();
     }
 
+    /**
+     * Gets the region map associated with this energy memo list.
+     *
+     * @return the {@link RegionMap}
+     */
     public RegionMap getRegionMap() {
         return regionMap;
     }
 
+    /**
+     * Gets the memo for a specific mark in the collection.
+     *
+     * @param marks the collection of marks
+     * @param mark the specific mark to find
+     * @return the {@link VoxelizedMarkMemo} for the given mark
+     * @throws AnchorFriendlyRuntimeException if the mark doesn't exist in the collection
+     */
     public VoxelizedMarkMemo getMemoForMark(MarkCollection marks, Mark mark) {
         int index = marks.indexOf(mark);
         if (index == -1) {
@@ -100,10 +130,22 @@ public class EnergyMemoList implements Serializable, MemoForIndex {
         return list.get(index);
     }
 
+    /**
+     * Gets the memo for a specific index.
+     *
+     * @param index the index of the memo
+     * @return the {@link VoxelizedMarkMemo} at the given index
+     */
     public VoxelizedMarkMemo getMemoForIndex(int index) {
         return list.get(index);
     }
 
+    /**
+     * Gets the index for a specific memo.
+     *
+     * @param memo the memo to find
+     * @return the index of the memo, or -1 if not found
+     */
     public int getIndexForMemo(VoxelizedMarkMemo memo) {
         for (int i = 0; i < list.size(); i++) {
 
@@ -118,7 +160,7 @@ public class EnergyMemoList implements Serializable, MemoForIndex {
 
     // calculate fresh ind
     private void calculateFreshInd(
-            EnergySavedInd energySavedInd,
+            EnergySavedIndividual energySavedInd,
             EnergyStackWithoutParameters energyStack,
             MarkCollection marks,
             EnergySchemeWithSharedFeatures energySchemeTotal)
@@ -134,7 +176,8 @@ public class EnergyMemoList implements Serializable, MemoForIndex {
         for (Mark mrk : marks) {
 
             VoxelizedMarkMemo pmm =
-                    PxlMarkMemoFactory.create(mrk, energyStack, energySchemeTotal.getRegionMap());
+                    VoxelizedMarkMemoFactory.create(
+                            mrk, energyStack, energySchemeTotal.getRegionMap());
             this.list.add(pmm);
 
             EnergyTotal ind = energySchemeTotal.totalIndividual(pmm, energyStack);
@@ -142,10 +185,19 @@ public class EnergyMemoList implements Serializable, MemoForIndex {
         }
     }
 
-    // calculates a new energy and configuration based upon a mark at a particular index
-    //   changing into new mark
+    /**
+     * Exchanges a mark at a specific index with a new mark and recalculates energies.
+     *
+     * @param energySavedInd the saved individual energies
+     * @param index the index of the mark to exchange
+     * @param newMark the new mark to insert
+     * @param stack the energy stack without parameters
+     * @param energySchemeTotal the energy scheme with shared features
+     * @return the {@link VoxelizedMarkMemo} for the new mark
+     * @throws NamedFeatureCalculateException if there's an error calculating named features
+     */
     public VoxelizedMarkMemo exchange(
-            EnergySavedInd energySavedInd,
+            EnergySavedIndividual energySavedInd,
             int index,
             VoxelizedMarkMemo newMark,
             EnergyStackWithoutParameters stack,
@@ -160,8 +212,18 @@ public class EnergyMemoList implements Serializable, MemoForIndex {
         return newMark;
     }
 
+    /**
+     * Adds a new mark to the list and calculates its energy.
+     *
+     * @param energySavedInd the saved individual energies
+     * @param memo the memo for the new mark
+     * @param stack the energy stack without parameters
+     * @param energyScheme the energy scheme with shared features
+     * @return the {@link VoxelizedMarkMemo} for the added mark
+     * @throws NamedFeatureCalculateException if there's an error calculating named features
+     */
     public VoxelizedMarkMemo add(
-            EnergySavedInd energySavedInd,
+            EnergySavedIndividual energySavedInd,
             VoxelizedMarkMemo memo,
             EnergyStackWithoutParameters stack,
             EnergySchemeWithSharedFeatures energyScheme)
@@ -176,14 +238,27 @@ public class EnergyMemoList implements Serializable, MemoForIndex {
         return memo;
     }
 
-    public void remove(EnergySavedInd energySavedInd, int index) {
+    /**
+     * Removes a mark at a specific index and updates energies.
+     *
+     * @param energySavedInd the saved individual energies
+     * @param index the index of the mark to remove
+     */
+    public void remove(EnergySavedIndividual energySavedInd, int index) {
 
         energySavedInd.rmv(index);
 
         this.list.remove(index);
     }
 
-    public void removeTwo(EnergySavedInd energySavedInd, int index1, int index2) {
+    /**
+     * Removes two marks at specific indices and updates energies.
+     *
+     * @param energySavedInd the saved individual energies
+     * @param index1 the index of the first mark to remove
+     * @param index2 the index of the second mark to remove
+     */
+    public void removeTwo(EnergySavedIndividual energySavedInd, int index1, int index2) {
         int indexMax = Math.max(index1, index2);
         int indexMin = Math.min(index1, index2);
 
@@ -191,6 +266,11 @@ public class EnergyMemoList implements Serializable, MemoForIndex {
         remove(energySavedInd, indexMin);
     }
 
+    /**
+     * Converts the energy memo list to a collection of marks.
+     *
+     * @return a {@link MarkCollection} containing all the marks in this list
+     */
     public MarkCollection asMarks() {
         MarkCollection marks = new MarkCollection();
         for (int i = 0; i < this.size(); i++) {

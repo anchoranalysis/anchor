@@ -29,22 +29,37 @@ package org.anchoranalysis.mpp.bean.bound;
 import java.util.Optional;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 
-//
-//  An upper and lower bound
-//
+/**
+ * A bound representing unitless values, where the minimum and maximum are not affected by
+ * resolution.
+ *
+ * <p>This class extends {@link BoundMinMax} to provide functionality for bounds that don't have a
+ * specific unit or are not affected by image resolution.
+ */
 public class BoundUnitless extends BoundMinMax {
 
-    /** */
     private static final long serialVersionUID = 8738881592311859713L;
 
+    /** Creates a new instance with default minimum and maximum values. */
     public BoundUnitless() {
         super();
     }
 
+    /**
+     * Creates a new instance with specified minimum and maximum values.
+     *
+     * @param min the minimum value
+     * @param max the maximum value
+     */
     public BoundUnitless(double min, double max) {
         super(min, max);
     }
 
+    /**
+     * Creates a new instance by copying another BoundUnitless.
+     *
+     * @param src the source BoundUnitless to copy from
+     */
     public BoundUnitless(BoundUnitless src) {
         super(src);
     }
@@ -64,6 +79,11 @@ public class BoundUnitless extends BoundMinMax {
         return getMax();
     }
 
+    /**
+     * Calculates the size of the bound range.
+     *
+     * @return the size of the range (max - min + 1)
+     */
     public double size() {
         return getMax() - getMin() + 1;
     }

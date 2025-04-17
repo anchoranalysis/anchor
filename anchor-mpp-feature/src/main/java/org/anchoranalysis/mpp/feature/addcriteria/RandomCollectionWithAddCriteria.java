@@ -58,38 +58,59 @@ import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.mpp.pair.RandomCollection;
 
 /**
- * An implementation of a {@link RandomCollection} that uses {@link AddCriteria}
+ * An implementation of a {@link RandomCollection} that uses {@link AddCriteria} to determine which
+ * marks to add.
  *
- * <p>Note: this is not a valid-bean on its own, as there is no default public constructor So if we
- * use it in BeanXML, we must sub-class it with such a constructor. However, it is a valid
- * (non-bean) class on its own.
+ * <p>This class is not a valid bean on its own, as it lacks a default public constructor. To use it
+ * in BeanXML, it must be subclassed with such a constructor. However, it is a valid (non-bean)
+ * class on its own.
  *
- * <p>However, it is useful to keep the class non-abstract, as when the copy methods (shallowCopy,
- * deepCopy etc.) are called, we can instantiate an instance of this class
+ * <p>The class is kept non-abstract to allow instantiation when copy methods (shallowCopy,
+ * deepCopy, etc.) are called.
  *
- * @author Owen Feehan
  * @param <T> type of the pair
  */
 public class RandomCollectionWithAddCriteria<T> extends RandomCollection<T> {
 
+    /** The graph structure storing marks and their relationships. */
     private GraphWithPayload<Mark, T> graph;
 
-    // START BEAN PROPERTIES
+    /** The class type of the pair. */
     @BeanField @Getter @Setter private Class<?> pairTypeClass;
 
+    /** The criteria used to determine which marks to add. */
     @BeanField @Getter @Setter private AddCriteria<T> addCriteria;
-    // END BEAN PROPERTIES
 
+    /** Flag indicating whether the object has been initialized. */
     private boolean hasInit = false;
+
+    /** The energy stack used for calculations. */
     private EnergyStack energyStack;
+
+    /** The logger for output messages. */
     private Logger logger;
+
+    /** Shared features used in calculations. */
     private SharedFeatures sharedFeatures;
 
+    /**
+     * Creates a new instance with the specified pair type class.
+     *
+     * @param pairTypeClass the class type of the pair
+     */
     public RandomCollectionWithAddCriteria(Class<?> pairTypeClass) {
         this.pairTypeClass = pairTypeClass;
         graph = new GraphWithPayload<>(true);
     }
 
+    /**
+     * Creates a shallow copy of this RandomCollectionWithAddCriteria.
+     *
+     * <p>This method creates a new instance with the same pairTypeClass and addCriteria, and copies
+     * references to the graph, energyStack, logger, and sharedFeatures.
+     *
+     * @return a new RandomCollectionWithAddCriteria instance with shallow-copied properties
+     */
     public RandomCollectionWithAddCriteria<T> shallowCopy() {
         RandomCollectionWithAddCriteria<T> out =
                 new RandomCollectionWithAddCriteria<>(this.pairTypeClass);
@@ -102,6 +123,14 @@ public class RandomCollectionWithAddCriteria<T> extends RandomCollection<T> {
         return out;
     }
 
+    /**
+     * Creates a deep copy of this RandomCollectionWithAddCriteria.
+     *
+     * <p>This method creates a new instance with the same pairTypeClass and addCriteria, and copies
+     * references to the graph, energyStack, logger, and sharedFeatures.
+     *
+     * @return a new RandomCollectionWithAddCriteria instance with deep-copied properties
+     */
     public RandomCollectionWithAddCriteria<T> deepCopy() {
         RandomCollectionWithAddCriteria<T> out =
                 new RandomCollectionWithAddCriteria<>(this.pairTypeClass);
@@ -197,7 +226,11 @@ public class RandomCollectionWithAddCriteria<T> extends RandomCollection<T> {
 
     // START DELEGATES
 
-    // Each pair appears twice
+    /**
+     * Creates a set of unique pairs from the graph.
+     *
+     * @return a {@link Set} of unique pairs
+     */
     public Set<T> createPairsUnique() {
         HashSet<T> setOut = new HashSet<>();
         for (TypedEdge<Mark, T> pair : pairsMaybeDuplicates()) {
@@ -206,20 +239,45 @@ public class RandomCollectionWithAddCriteria<T> extends RandomCollection<T> {
         return setOut;
     }
 
+    /**
+     * Gets all pairs associated with a specific mark.
+     *
+     * @param mark the {@link Mark} to get pairs for
+     * @return a {@link Collection} of edges (pairs) associated with the mark
+     */
     public Collection<TypedEdge<Mark, T>> getPairsFor(Mark mark) {
         return graph.outgoingEdgesFor(mark);
     }
 
+    /**
+     * Checks if the collection contains a specific mark.
+     *
+     * @param mark the {@link Mark} to check for
+     * @return true if the mark is present in the collection, false otherwise
+     */
     public boolean containsMark(Mark mark) {
         return graph.containsVertex(mark);
     }
 
+    /**
+     * Gets all marks in the collection.
+     *
+     * @return a {@link Collection} of all {@link Mark}s in the graph
+     */
     public Collection<Mark> getMarks() {
         return graph.vertices();
     }
 
+    /**
+     * Checks if the given {@link MarkCollection} spans all marks in this collection.
+     *
+     * <p>This method verifies that all marks in the given collection are present in this
+     * collection, and that this collection doesn't contain any additional marks.
+     *
+     * @param marks the {@link MarkCollection} to check against
+     * @return true if the given collection spans all marks in this collection, false otherwise
+     */
     public boolean isMarksSpan(MarkCollection marks) {
-
         for (int i = 0; i < marks.size(); i++) {
             if (!containsMark(marks.get(i))) {
                 return false;
@@ -262,6 +320,14 @@ public class RandomCollectionWithAddCriteria<T> extends RandomCollection<T> {
         throw new AnchorFriendlyRuntimeException("Invalid index chosen for randomPair");
     }
 
+    /**
+     * Initializes the graph with marks and their relationships.
+     *
+     * @param marks the {@link MemoForIndex} containing the marks
+     * @param stack the {@link EnergyStack} for calculations
+     * @param session the optional {@link FeatureCalculatorMulti} for feature calculations
+     * @throws CreateException if there's an error during graph initialization
+     */
     private void initGraph(
             MemoForIndex marks,
             EnergyStack stack,
@@ -284,8 +350,16 @@ public class RandomCollectionWithAddCriteria<T> extends RandomCollection<T> {
         }
     }
 
+    /**
+     * Calculates and adds pairs for a new mark in relation to existing marks.
+     *
+     * @param memos the {@link MemoForIndex} containing existing marks
+     * @param newMark the new {@link VoxelizedMarkMemo} to add pairs for
+     * @param energyStack the {@link EnergyStack} for calculations
+     * @throws CreateException if there's an error during pair calculation
+     */
     private void calculatePairsForMark(
-            MemoForIndex pxlMarkMemoList, VoxelizedMarkMemo newMark, EnergyStack energyStack)
+            MemoForIndex memos, VoxelizedMarkMemo newMark, EnergyStack energyStack)
             throws CreateException {
 
         Optional<FeatureCalculatorMulti<FeatureInputPairMemo>> session;
@@ -305,9 +379,9 @@ public class RandomCollectionWithAddCriteria<T> extends RandomCollection<T> {
         }
 
         // We calculate how the new mark interacts with all the other marks
-        for (int i = 0; i < pxlMarkMemoList.size(); i++) {
+        for (int i = 0; i < memos.size(); i++) {
 
-            VoxelizedMarkMemo otherMark = pxlMarkMemoList.getMemoForIndex(i);
+            VoxelizedMarkMemo otherMark = memos.getMemoForIndex(i);
             if (!otherMark.getMark().equals(newMark.getMark())) {
                 addCriteria
                         .generateEdge(
@@ -324,11 +398,20 @@ public class RandomCollectionWithAddCriteria<T> extends RandomCollection<T> {
         }
     }
 
-    // Each edge can appear many times
+    /**
+     * Gets a collection of all pairs in the graph, possibly with duplicates.
+     *
+     * @return a {@link Collection} of {@link TypedEdge}s representing pairs
+     */
     private Collection<TypedEdge<Mark, T>> pairsMaybeDuplicates() {
         return graph.edgesMaybeDuplicates();
     }
 
+    /**
+     * Checks if the object has been initialized, throwing an exception if not.
+     *
+     * @throws UpdateMarkSetException if the object has not been initialized
+     */
     private void checkInit() throws UpdateMarkSetException {
         if (!hasInit) {
             throw new UpdateMarkSetException("object has not been initialized");

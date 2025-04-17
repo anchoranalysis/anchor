@@ -34,32 +34,55 @@ import org.anchoranalysis.feature.input.FeatureInputEnergy;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 
 /**
- * An input representing a single object-mask (with maybe an energy-stack associated)
+ * An input representing a single object-mask (with maybe an energy-stack associated).
  *
  * <p>Equals and hash-code must be sensibly defined as these inputs can be used as keys in a cache.
  * The equals implementation assumes equals of {@link ObjectMask} is shallow and computationally
- * inexpensive..
+ * inexpensive.
  *
  * @author Owen Feehan
  */
 @EqualsAndHashCode(callSuper = true)
 public class FeatureInputSingleObject extends FeatureInputEnergy {
 
+    /** The object mask associated with this input. */
     @Getter private ObjectMask object;
 
+    /**
+     * Constructs a FeatureInputSingleObject with an ObjectMask.
+     *
+     * @param object the ObjectMask to be associated with this input
+     */
     public FeatureInputSingleObject(ObjectMask object) {
         this(object, Optional.empty());
     }
 
+    /**
+     * Constructs a FeatureInputSingleObject with an ObjectMask and an EnergyStack.
+     *
+     * @param object the ObjectMask to be associated with this input
+     * @param energyStack the EnergyStack to be associated with this input
+     */
     public FeatureInputSingleObject(ObjectMask object, EnergyStack energyStack) {
         this(object, Optional.of(energyStack));
     }
 
+    /**
+     * Constructs a FeatureInputSingleObject with an ObjectMask and an optional EnergyStack.
+     *
+     * @param object the ObjectMask to be associated with this input
+     * @param energyStack an optional EnergyStack to be associated with this input
+     */
     public FeatureInputSingleObject(ObjectMask object, Optional<EnergyStack> energyStack) {
         super(energyStack);
         this.object = object;
     }
 
+    /**
+     * Returns a string representation of the object.
+     *
+     * @return a string representation of the associated ObjectMask
+     */
     @Override
     public String toString() {
         return object.toString();

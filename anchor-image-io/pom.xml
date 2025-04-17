@@ -71,16 +71,10 @@
     </dependency>
 	
 	<dependency>
-	  <groupId>JHDF5</groupId>
-	  <artifactId>sis-jhdf5</artifactId>
-	  <version>19.04.0</version>
+	  <groupId>cisd</groupId>
+	  <artifactId>jhdf5</artifactId>
+	  <version>19.04.1</version>
 	</dependency>
-
-	<dependency>
-	  <groupId>JHDF5</groupId>
-	  <artifactId>sis-base</artifactId>
-	  <version>18.09.0</version>
-	</dependency>	
 	
 	<dependency>
         <groupId>io.vavr</groupId>

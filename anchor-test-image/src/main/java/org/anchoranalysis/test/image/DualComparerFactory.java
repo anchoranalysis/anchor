@@ -31,9 +31,18 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.test.TestLoader;
 
+/** Factory for creating {@link DualComparer} instances to compare directories. */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class DualComparerFactory {
 
+    /**
+     * Compares an explicit directory to a directory in Maven's {@code test/resources}.
+     *
+     * @param pathExplicit the path to the explicit directory to compare
+     * @param pathRelativeTestDir the relative path to the test directory in Maven's {@code
+     *     test/resources}
+     * @return a {@link DualComparer} for comparing the two directories
+     */
     public static DualComparer compareExplicitDirectoryToTest(
             Path pathExplicit, String pathRelativeTestDir) {
 
@@ -65,6 +74,14 @@ public class DualComparerFactory {
         return new DualComparer(loaderTemporary, loaderTest);
     }
 
+    /**
+     * Compares two subdirectories within the same {@link TestLoader}.
+     *
+     * @param loader the {@link TestLoader} containing both subdirectories
+     * @param subdirectory1 the relative path to the first subdirectory
+     * @param subdirectory2 the relative path to the second subdirectory
+     * @return a {@link DualComparer} for comparing the two subdirectories
+     */
     public static DualComparer compareTwoSubdirectoriesInLoader(
             TestLoader loader, String subdirectory1, String subdirectory2) {
         return new DualComparer(
@@ -72,6 +89,15 @@ public class DualComparerFactory {
                 loader.createForSubdirectory(subdirectory2));
     }
 
+    /**
+     * Compares two subdirectories from different {@link TestLoader}s.
+     *
+     * @param loader1 the {@link TestLoader} containing the first subdirectory
+     * @param subdirectory1 the relative path to the first subdirectory
+     * @param loader2 the {@link TestLoader} containing the second subdirectory
+     * @param subdirectory2 the relative path to the second subdirectory
+     * @return a {@link DualComparer} for comparing the two subdirectories
+     */
     public static DualComparer compareTwoSubdirectoriesInLoader(
             TestLoader loader1, String subdirectory1, TestLoader loader2, String subdirectory2) {
         return new DualComparer(

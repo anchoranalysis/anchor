@@ -30,7 +30,19 @@ import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.feature.bean.FeatureRelatedBean;
 import org.anchoranalysis.mpp.feature.energy.scheme.EnergyScheme;
 
+/**
+ * An abstract class for creating {@link EnergyScheme} instances.
+ *
+ * <p>This class extends {@link FeatureRelatedBean} to provide feature-related functionality and
+ * defines an abstract method for creating {@link EnergyScheme} objects.
+ */
 public abstract class EnergySchemeCreator extends FeatureRelatedBean<EnergySchemeCreator> {
 
+    /**
+     * Creates an {@link EnergyScheme} instance.
+     *
+     * @return a new {@link EnergyScheme} object
+     * @throws CreateException if there's an error during the creation process
+     */
     public abstract EnergyScheme create() throws CreateException;
 }

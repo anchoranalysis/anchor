@@ -35,11 +35,29 @@ import org.anchoranalysis.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.spatial.orientation.Orientation;
 import org.anchoranalysis.spatial.point.Point3d;
 
+/**
+ * An abstract base class for proposing radii in a 3D space.
+ *
+ * <p>This class extends MarksBean and implements CompatibleWithMark, providing a foundation for
+ * creating radii proposers in the MPP (Marked Point Process) framework.
+ */
 public abstract class RadiiProposer extends MarksBean<RadiiProposer> implements CompatibleWithMark {
 
-    // When we have no bounds, we should create bounds from the boundCalculator
+    /**
+     * Proposes a new point representing radii based on the given parameters.
+     *
+     * <p>When no bounds are provided, bounds should be created from a bound calculator.
+     *
+     * @param position the position for which to propose radii
+     * @param randomNumberGenerator a random number generator for any stochastic processes
+     * @param dimensions the dimensions of the space in which the radii are proposed
+     * @param orientation the orientation to consider when proposing radii
+     * @return an Optional containing the proposed Point3d representing radii, or empty if no
+     *     proposal is made
+     * @throws ProposalAbnormalFailureException if the proposal fails abnormally
+     */
     public abstract Optional<Point3d> propose(
-            Point3d pos,
+            Point3d position,
             RandomNumberGenerator randomNumberGenerator,
             Dimensions dimensions,
             Orientation orientation)

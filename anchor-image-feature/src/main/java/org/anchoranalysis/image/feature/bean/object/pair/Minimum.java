@@ -34,13 +34,21 @@ import org.anchoranalysis.image.feature.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 
 /**
- * Ratio of first-object to second-object in a pair
+ * Calculates the minimum value of a feature applied to both objects in a pair.
+ *
+ * <p>This class extends {@link FeatureDeriveFromPair} to calculate a feature value for both objects
+ * in a pair and return the minimum of the two values.
  *
  * @author Owen Feehan
  */
 @NoArgsConstructor
 public class Minimum extends FeatureDeriveFromPair {
 
+    /**
+     * Creates a new instance that will calculate the minimum feature value from a pair of objects.
+     *
+     * @param item the feature to be evaluated on both objects in the pair
+     */
     public Minimum(Feature<FeatureInputSingleObject> item) {
         super(item);
     }

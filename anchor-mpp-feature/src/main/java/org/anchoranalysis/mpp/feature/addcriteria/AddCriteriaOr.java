@@ -39,9 +39,15 @@ import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.mpp.feature.input.FeatureInputPairMemo;
 import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 
+/**
+ * An {@link AddCriteriaPair} that combines multiple criteria using a logical OR operation.
+ *
+ * <p>This class will include marks if any of the criteria in the list are satisfied.
+ */
 public class AddCriteriaOr extends AddCriteriaPair {
 
     // START BEAN PROPERTIES
+    /** List of {@link AddCriteriaPair} to be combined with OR operation. */
     @BeanField @Getter @Setter private List<AddCriteriaPair> list = Arrays.asList();
     // END BEAN PROPERTIES
 

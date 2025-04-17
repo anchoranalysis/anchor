@@ -79,24 +79,52 @@ public class MergedPairsFeatures {
         this.pair = pair;
     }
 
-    /** Immutably creates entirely new duplicated features */
+    /**
+     * Creates a duplicate of this MergedPairsFeatures instance.
+     *
+     * @return A new MergedPairsFeatures object with duplicated feature lists
+     */
     public MergedPairsFeatures duplicate() {
         return new MergedPairsFeatures(
                 image.duplicateBean(), single.duplicateBean(), pair.duplicateBean());
     }
 
+    /**
+     * Gets the number of image features.
+     *
+     * @return The number of features in the image feature list
+     */
     public int numberImageFeatures() {
         return image.size();
     }
 
+    /**
+     * Gets the number of single object features.
+     *
+     * @return The number of features in the single object feature list
+     */
     public int numberSingleFeatures() {
         return single.size();
     }
 
+    /**
+     * Gets the number of pair features.
+     *
+     * @return The number of features in the pair feature list
+     */
     public int numberPairFeatures() {
         return pair.size();
     }
 
+    /**
+     * Creates a feature calculator for stack features.
+     *
+     * @param calculatorCreator Helper for creating calculators
+     * @param initialization Image initialization parameters
+     * @param cachingStrategy Strategy for caching and replacing feature calculations
+     * @return A multi-feature calculator for stack features
+     * @throws InitializeException If initialization fails
+     */
     public FeatureCalculatorMulti<FeatureInputStack> createCalculator(
             CreateCalculatorHelper calculatorCreator,
             ImageInitialization initialization,
@@ -106,6 +134,15 @@ public class MergedPairsFeatures {
         return calculatorCreator.createCached(getImage(), initialization, cachingStrategy);
     }
 
+    /**
+     * Creates a feature calculator for single object features.
+     *
+     * @param calculatorCreator Helper for creating calculators
+     * @param initialization Image initialization parameters
+     * @param cachingStrategy Strategy for caching and replacing feature calculations
+     * @return A multi-feature calculator for single object features
+     * @throws InitializeException If initialization fails
+     */
     public FeatureCalculatorMulti<FeatureInputSingleObject> createSingle(
             CreateCalculatorHelper calculatorCreator,
             ImageInitialization initialization,
@@ -117,6 +154,15 @@ public class MergedPairsFeatures {
         return calculatorCreator.createCached(getSingle(), initialization, cachingStrategy);
     }
 
+    /**
+     * Creates a feature calculator for pair object features.
+     *
+     * @param calculatorCreator Helper for creating calculators
+     * @param initialization Image initialization parameters
+     * @param cacheTransferSource Collection of cache transfer sources
+     * @return A multi-feature calculator for pair object features
+     * @throws InitializeException If initialization fails
+     */
     public FeatureCalculatorMulti<FeatureInputPairObjects> createPair(
             CreateCalculatorHelper calculatorCreator,
             ImageInitialization initialization,

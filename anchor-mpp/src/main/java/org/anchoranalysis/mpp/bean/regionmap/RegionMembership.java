@@ -34,29 +34,45 @@ import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
 
-/** @author Owen Feehan */
+/**
+ * Abstract class representing membership of regions using a bit-flag system.
+ *
+ * <p>This class uses 8 boolean fields to represent membership in up to 8 different regions.
+ */
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 public abstract class RegionMembership extends AnchorBean<RegionMembership> {
 
-    // START BEAN PROPERTIES
+    /** Flag for region 0. */
     @BeanField @Getter @Setter private boolean bit0 = false;
 
+    /** Flag for region 1. */
     @BeanField @Getter @Setter private boolean bit1 = false;
 
+    /** Flag for region 2. */
     @BeanField @Getter @Setter private boolean bit2 = false;
 
+    /** Flag for region 3. */
     @BeanField @Getter @Setter private boolean bit3 = false;
 
+    /** Flag for region 4. */
     @BeanField @Getter @Setter private boolean bit4 = false;
 
+    /** Flag for region 5. */
     @BeanField @Getter @Setter private boolean bit5 = false;
 
+    /** Flag for region 6. */
     @BeanField @Getter @Setter private boolean bit6 = false;
 
+    /** Flag for region 7. */
     @BeanField @Getter @Setter private boolean bit7 = false;
-    // END BEAN PROPERTIES
 
+    /**
+     * Constructs a RegionMembership with a single region set.
+     *
+     * @param index the index of the region to set (0-7)
+     * @throws AnchorFriendlyRuntimeException if the index is out of range
+     */
     protected RegionMembership(int index) {
         switch (index) {
             case 0:
@@ -89,6 +105,11 @@ public abstract class RegionMembership extends AnchorBean<RegionMembership> {
         }
     }
 
+    /**
+     * Calculates the flags as a byte based on the current region memberships.
+     *
+     * @return a byte representing the region memberships
+     */
     public byte flags() {
         byte membership = 0;
 
@@ -135,6 +156,13 @@ public abstract class RegionMembership extends AnchorBean<RegionMembership> {
         return membership;
     }
 
+    /**
+     * Checks if a given membership flag is set for a specific region.
+     *
+     * @param membership the membership byte to check
+     * @param flag the flag representing the region to check
+     * @return true if the region is a member, false otherwise
+     */
     public abstract boolean isMemberFlag(byte membership, byte flag);
 
     @Override
@@ -151,11 +179,13 @@ public abstract class RegionMembership extends AnchorBean<RegionMembership> {
                 bitAsString(bit7));
     }
 
+    /**
+     * Converts a boolean to its string representation.
+     *
+     * @param bit the boolean to convert
+     * @return "1" if true, "0" if false
+     */
     private static String bitAsString(boolean bit) {
-        if (bit) {
-            return "1";
-        } else {
-            return "0";
-        }
+        return bit ? "1" : "0";
     }
 }

@@ -47,32 +47,33 @@ import org.anchoranalysis.mpp.mark.points.PointList;
 import org.anchoranalysis.spatial.point.Point3f;
 import org.anchoranalysis.spatial.point.PointConverter;
 
+/** Creates a mark by fitting it to a set of points extracted from other marks. */
 public class CreateMarkFromPoints extends AnchorBean<CreateMarkFromPoints> {
 
     // START BEAN PROPERTIES
+    /** Provides the mark to be fitted. */
     @BeanField @SkipInit @Getter @Setter private SingleMarkProvider markProvider;
 
-    // NOTE no init occurs of pointsFitter
+    /** Fits the provided mark to the extracted points. */
     @BeanField @SkipInit @Getter @Setter private PointsFitter pointsFitter;
 
-    // Below this we don't bother outputting a feature, instead output featureElse
+    /** Minimum number of points required to create a mark. */
     @BeanField @Getter @Setter private int minNumPoints = 20;
 
+    /** Whether to throw an exception when there are insufficient points. */
     @BeanField @Getter @Setter private boolean throwExceptionForInsufficientPoints = false;
     // END BEAN PROPERTIES
 
     /**
-     * Extract points from a marks, creates a new mark from markProvider and then fits this mark the
-     * extracted points
+     * Extracts points from marks, creates a new mark, and fits this mark to the extracted points.
      *
-     * @param marks a marks containing MarkPointLists as points
-     * @param dimensions
-     * @return
-     * @throws OperationFailedException
+     * @param marks a collection of marks containing PointLists
+     * @param dimensions the dimensions of the space in which the marks exist
+     * @return an Optional containing the fitted mark, or empty if fitting was not possible
+     * @throws OperationFailedException if the operation fails
      */
     public Optional<Mark> fitMarkToPointsFromMarks(MarkCollection marks, Dimensions dimensions)
             throws OperationFailedException {
-
         try {
             Mark mark =
                     markProvider
@@ -86,16 +87,23 @@ public class CreateMarkFromPoints extends AnchorBean<CreateMarkFromPoints> {
 
             if (points.size() >= minNumPoints) {
                 return fitPoints(mark, points, dimensions);
-
             } else {
                 return maybeThrowInsufficientPointsException(points);
             }
-
         } catch (ProvisionFailedException e) {
             throw new OperationFailedException(e);
         }
     }
 
+    /**
+     * Fits points to a mark using the pointsFitter.
+     *
+     * @param mark the mark to fit
+     * @param points the points to fit the mark to
+     * @param dimensions the dimensions of the space
+     * @return an Optional containing the fitted mark, or empty if fitting was not possible
+     * @throws OperationFailedException if the operation fails
+     */
     private Optional<Mark> fitPoints(Mark mark, List<Point3f> points, Dimensions dimensions)
             throws OperationFailedException {
         try {
@@ -108,6 +116,13 @@ public class CreateMarkFromPoints extends AnchorBean<CreateMarkFromPoints> {
         }
     }
 
+    /**
+     * Throws an exception if configured to do so when there are insufficient points.
+     *
+     * @param points the list of points
+     * @return an empty Optional if no exception is thrown
+     * @throws OperationFailedException if throwExceptionForInsufficientPoints is true
+     */
     private Optional<Mark> maybeThrowInsufficientPointsException(List<Point3f> points)
             throws OperationFailedException {
         if (throwExceptionForInsufficientPoints) {
@@ -121,24 +136,23 @@ public class CreateMarkFromPoints extends AnchorBean<CreateMarkFromPoints> {
     }
 
     /**
-     * Given a Marks whose marks are all MarkPointList, extract the points from all marks
+     * Extracts points from all marks in a MarkCollection.
      *
-     * @param marks
-     * @return
+     * @param marks the collection of marks to extract points from
+     * @return a list of extracted points
+     * @throws OperationFailedException if any mark is not a PointList
      */
     private static List<Point3f> extractPointsFromMarks(MarkCollection marks)
             throws OperationFailedException {
-
         List<Point3f> out = new ArrayList<>();
 
         for (Mark m : marks) {
-
             if (m instanceof PointList) {
                 addPointsFrom((PointList) m, out);
             } else {
                 throw new OperationFailedException(
                         String.format(
-                                "At least one Mark in the marks is not a MarkPointList, rather a %s",
+                                "At least one Mark in the marks is not a PointList, rather a %s",
                                 m.getClass()));
             }
         }
@@ -146,6 +160,12 @@ public class CreateMarkFromPoints extends AnchorBean<CreateMarkFromPoints> {
         return out;
     }
 
+    /**
+     * Adds points from a PointList mark to a list of points.
+     *
+     * @param mark the PointList mark to extract points from
+     * @param points the list to add the extracted points to
+     */
     private static void addPointsFrom(PointList mark, List<Point3f> points) {
         points.addAll(PointConverter.convert3dTo3f(mark.getPoints()));
     }

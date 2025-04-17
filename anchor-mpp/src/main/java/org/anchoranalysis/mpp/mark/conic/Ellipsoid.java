@@ -50,15 +50,18 @@ import org.anchoranalysis.spatial.point.Point3d;
 import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 
-//
-//  3 sub-marks
-//
-//  Sub-Mark 0:  Center Ellipsoid
-//  Sub-Mark 1:  Ellipsoid with shell
-//
+/**
+ * Represents a 3D ellipsoid mark with multiple sub-regions.
+ *
+ * <p>The ellipsoid has the following sub-marks:
+ *
+ * <ul>
+ *   <li>Sub-Mark 0: Center Ellipsoid (inner core)
+ *   <li>Sub-Mark 1: Ellipsoid with shell
+ * </ul>
+ */
 public class Ellipsoid extends ConicBase implements Serializable {
 
-    /** */
     private static final long serialVersionUID = -2678275834893266874L;
 
     private static final int NUM_DIM = 3;
@@ -72,15 +75,19 @@ public class Ellipsoid extends ConicBase implements Serializable {
             flagForRegion(SUBMARK_SHELL, SUBMARK_SHELL_OUTSIDE);
     private static final byte FLAG_SUBMARK_REGION4 = flagForRegion(SUBMARK_OUTSIDE);
 
-    // START Mark State
+    /** The size of the shell, expressed as a ratio of the radii. */
     @Getter @Setter private double shell = 0.1;
+
+    /** The distance to the inner core, expressed as a ratio of the radii. */
     @Getter @Setter private double innerCoreDistance = 0.4;
 
+    /** The radii of the ellipsoid in 3D. */
     @Getter private Point3d radii;
-    @Getter private Orientation orientation = new Orientation3DEulerAngles(0.0, 0.0, 0.0);
-    // END mark state
 
-    // START internal objects
+    /** The orientation of the ellipsoid. */
+    @Getter private Orientation orientation = new Orientation3DEulerAngles(0.0, 0.0, 0.0);
+
+    /** Calculator for ellipsoid-related matrices. */
     @Getter private EllipsoidMatrixCalculator ellipsoidCalculator;
 
     // Relative distances to various shells squared (expressed as a ratio of the radii)
@@ -96,16 +103,19 @@ public class Ellipsoid extends ConicBase implements Serializable {
     private double shellExternalOutSquared;
 
     private double radiiShellMaxSq;
-    // END internal objects
 
-    // Default Constructor
+    /** Creates a new Ellipsoid with default values. */
     public Ellipsoid() {
         super();
         this.radii = new Point3d();
         ellipsoidCalculator = new EllipsoidMatrixCalculator(NUM_DIM);
     }
 
-    // Copy Constructor
+    /**
+     * Creates a new Ellipsoid by copying an existing one.
+     *
+     * @param src the Ellipsoid to copy from
+     */
     public Ellipsoid(Ellipsoid src) {
         super(src);
         this.radii = new Point3d(src.radii);
@@ -134,6 +144,15 @@ public class Ellipsoid extends ConicBase implements Serializable {
         return "ellipsoid";
     }
 
+    /**
+     * Calculates the sum of squared coordinates relative to the ellipsoid's matrix.
+     *
+     * @param x x-coordinate
+     * @param y y-coordinate
+     * @param z z-coordinate
+     * @param mat the ellipsoid matrix
+     * @return the sum of squared coordinates
+     */
     public static double getEllipsoidSum(double x, double y, double z, DoubleMatrix2D mat) {
         return x * (x * mat.get(0, 0) + y * mat.get(1, 0) + z * mat.get(2, 0))
                 + y * (x * mat.get(0, 1) + y * mat.get(1, 1) + z * mat.get(2, 1))
@@ -192,7 +211,8 @@ public class Ellipsoid extends ConicBase implements Serializable {
     @Override
     public String toString() {
         return String.format(
-                "%s %s pos=%s %s vol=%e", "Ellpsd", identifier(), strPos(), strMarks(), volume(0));
+                "%s %s pos=%s %s vol=%e",
+                "Ellpsd", identifier(), positionString(), strMarks(), volume(0));
     }
 
     @Override
@@ -216,6 +236,12 @@ public class Ellipsoid extends ConicBase implements Serializable {
         }
     }
 
+    /**
+     * Calculates the volume for a specific shell of the ellipsoid.
+     *
+     * @param multiplier the multiplier for the shell
+     * @return the volume of the shell
+     */
     private double volumeForShell(double multiplier) {
         return (4
                         * Math.PI
@@ -226,6 +252,7 @@ public class Ellipsoid extends ConicBase implements Serializable {
                 / 3;
     }
 
+    /** Updates internal calculations after a change in the mark's properties. */
     public void updateAfterMarkChange() {
 
         DoubleMatrix2D matRot = orientation.getRotationMatrix().getMatrix();

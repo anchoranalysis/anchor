@@ -37,6 +37,13 @@ public class CutOffCorners implements VoxelPattern {
     // The right-most pixels border, before we start chopping off the triangle
     private Extent rightBorder;
 
+    /**
+     * Constructs a CutOffCorners pattern.
+     *
+     * @param edgeXY The size of the edge to cut off in the XY plane.
+     * @param edgeZ The size of the edge to cut off in the Z direction.
+     * @param extent The total extent of the bounding box.
+     */
     public CutOffCorners(int edgeXY, int edgeZ, Extent extent) {
         this.edgeXY = edgeXY;
         this.edgeZ = edgeZ;

@@ -32,8 +32,21 @@ import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.spatial.orientation.Orientation;
 
+/**
+ * Abstract base class for defining bounds on rotations.
+ *
+ * <p>This class extends {@link AnchorBean} to provide a foundation for various types of rotation
+ * bounds.
+ */
 public abstract class BoundRotation extends AnchorBean<BoundRotation> {
 
+    /**
+     * Generates a random orientation within the defined bounds.
+     *
+     * @param randomNumberGenerator the random number generator to use
+     * @param resolution an optional resolution to consider when generating the orientation
+     * @return a randomly generated {@link Orientation} within the defined bounds
+     */
     public abstract Orientation randomOrientation(
             RandomNumberGenerator randomNumberGenerator, Optional<Resolution> resolution);
 }

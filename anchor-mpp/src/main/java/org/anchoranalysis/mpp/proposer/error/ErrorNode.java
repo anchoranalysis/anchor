@@ -28,15 +28,21 @@ package org.anchoranalysis.mpp.proposer.error;
 
 import java.io.Serializable;
 
+/**
+ * An abstract class representing a node in an error tree structure.
+ *
+ * <p>This class provides methods for adding error messages and exceptions to the node, as well as
+ * generating a description of the errors.
+ */
 public abstract class ErrorNode implements Serializable {
-    /** */
+
     private static final long serialVersionUID = -5769879460789165274L;
 
+    /**
+     * Adds an error message to this node.
+     *
+     * @param errorMessage the error message to add
+     * @return the current ErrorNode instance for method chaining
+     */
     public abstract ErrorNode add(String errorMessage);
-
-    public abstract ErrorNode addFormatted(String formatString, Object... args);
-
-    public abstract ErrorNode add(Exception e);
-
-    public abstract void addErrorDescription(StringBuilder sb);
 }

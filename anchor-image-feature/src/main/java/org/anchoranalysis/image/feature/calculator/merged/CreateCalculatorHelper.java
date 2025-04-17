@@ -47,6 +47,7 @@ import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.feature.calculator.InitializationFactory;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 
+/** Helper class for creating feature calculators with various configurations. */
 @RequiredArgsConstructor
 class CreateCalculatorHelper {
 
@@ -54,6 +55,16 @@ class CreateCalculatorHelper {
     private final Optional<EnergyStack> energyStack;
     private final Logger logger;
 
+    /**
+     * Creates a cached feature calculator.
+     *
+     * @param <T> The type of feature input
+     * @param features The list of features to calculate
+     * @param initialization The image initialization parameters
+     * @param replacePolicyFactory The strategy for replacing and caching calculations
+     * @return A multi-feature calculator with caching
+     * @throws InitializeException If initialization fails
+     */
     public <T extends FeatureInputEnergy> FeatureCalculatorMulti<T> createCached(
             FeatureList<T> features,
             ImageInitialization initialization,
@@ -65,17 +76,17 @@ class CreateCalculatorHelper {
     }
 
     /**
-     * Create a pair-calculator. We want to substitute existing caches where they exist for specific
-     * sub-caches of Pair features
+     * Creates a pair-calculator.
      *
-     * <p>This is to reduce calculation, as they've already been calculated for the "single"
-     * features.
+     * <p>This method substitutes existing caches where they exist for specific sub-caches of Pair
+     * features to reduce calculation, as they've already been calculated for the "single" features.
      *
-     * @param <T>
-     * @param features
-     * @param initialization
-     * @return
-     * @throws InitializeException
+     * @param <T> The type of feature input
+     * @param features The list of features to calculate
+     * @param initialization The image initialization parameters
+     * @param cacheTransferSource Collection of cache transfer sources
+     * @return A multi-feature calculator for pair features
+     * @throws InitializeException If initialization fails
      */
     public <T extends FeatureInputEnergy> FeatureCalculatorMulti<T> createPair(
             FeatureList<T> features,
@@ -95,6 +106,16 @@ class CreateCalculatorHelper {
         return wrapWithEnergy(createWithoutEnergy(features, initialization, replaceStrategy));
     }
 
+    /**
+     * Creates a feature calculator without energy.
+     *
+     * @param <T> The type of feature input
+     * @param features The list of features to calculate
+     * @param initialization The image initialization parameters
+     * @param replacePolicyFactory The strategy for replacing and caching calculations
+     * @return A multi-feature calculator without energy
+     * @throws InitializeException If initialization fails
+     */
     private <T extends FeatureInputEnergy> FeatureCalculatorMulti<T> createWithoutEnergy(
             FeatureList<T> features,
             ImageInitialization initialization,
@@ -108,13 +129,25 @@ class CreateCalculatorHelper {
                 replacePolicyFactory);
     }
 
-    /** Ensures any input-parameters have the energy-stack attached */
+    /**
+     * Ensures any input-parameters have the energy-stack attached.
+     *
+     * @param <T> The type of feature input
+     * @param calculator The calculator to wrap
+     * @return A wrapped calculator that attaches the energy stack to inputs
+     */
     private <T extends FeatureInputEnergy> FeatureCalculatorMulti<T> wrapWithEnergy(
             FeatureCalculatorMulti<T> calculator) {
         return new FeatureCalculatorMultiChangeInput<>(
                 calculator, input -> input.setEnergyStack(energyStack));
     }
 
+    /**
+     * Creates a FeatureInitialization from ImageInitialization.
+     *
+     * @param initialization The image initialization parameters
+     * @return A FeatureInitialization object
+     */
     private FeatureInitialization createInitialization(ImageInitialization initialization) {
         return InitializationFactory.create(
                 Optional.of(initialization.sharedObjects()), energyStack);

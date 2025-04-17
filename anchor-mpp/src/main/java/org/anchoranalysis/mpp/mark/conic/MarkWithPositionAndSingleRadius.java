@@ -50,7 +50,6 @@ import org.anchoranalysis.spatial.scale.ScaleFactor;
 public abstract class MarkWithPositionAndSingleRadius extends MarkWithPosition
         implements Serializable {
 
-    /** */
     private static final long serialVersionUID = 1L;
 
     private static final byte FLAG_SUBMARK_NONE = RegionMembershipUtilities.flagForNoRegion();
@@ -64,28 +63,25 @@ public abstract class MarkWithPositionAndSingleRadius extends MarkWithPosition
 
     private static final double SPHERE_EXTRA_RAD = 2;
 
-    // START mark state
     @Getter private double radius;
-    // END mark state
-
     private double radiusSq;
     private double radiusExtraSq;
 
     @Getter private Bound boundRadius;
 
     /**
-     * Constructor with a bound on the radius
+     * Constructor with a bound on the radius.
      *
-     * @param boundRadius
+     * @param boundRadius the bound for the radius
      */
     protected MarkWithPositionAndSingleRadius(Bound boundRadius) {
         this.boundRadius = boundRadius;
     }
 
     /**
-     * Copy constructor
+     * Copy constructor.
      *
-     * @param src
+     * @param src the source object to copy from
      */
     protected MarkWithPositionAndSingleRadius(MarkWithPositionAndSingleRadius src) {
         super(src);
@@ -101,7 +97,8 @@ public abstract class MarkWithPositionAndSingleRadius extends MarkWithPosition
      * <p>So when aligned to axes, we actually scale in all 3 dimensions, and ignore
      * scene-resolution
      *
-     * @throws CheckedUnsupportedOperationException
+     * @throws CheckedUnsupportedOperationException when the scale-factor is not identical for the X
+     *     and Y dimensions.
      */
     @Override
     public void scale(ScaleFactor scaleFactor) throws CheckedUnsupportedOperationException {
@@ -188,23 +185,44 @@ public abstract class MarkWithPositionAndSingleRadius extends MarkWithPosition
         return radius == trgt.radius;
     }
 
+    /**
+     * Returns a string representation of the mark's attributes.
+     *
+     * @return a string containing the radius value
+     */
     public String strMarks() {
         return String.format("rad=%8.3f", this.radius);
     }
 
+    /**
+     * Sets the radius of the mark.
+     *
+     * @param radius the new radius value
+     */
     public void setRadius(double radius) {
         this.radius = radius;
-
         this.radiusSq = squared(radius);
         this.radiusExtraSq = squared(radius + SPHERE_EXTRA_RAD);
     }
 
+    /**
+     * Calculates the radius for a specific region.
+     *
+     * @param regionID the ID of the region
+     * @return the radius for the specified region
+     */
     protected double radiusForRegion(int regionID) {
         return regionID == GlobalRegionIdentifiers.SUBMARK_INSIDE
                 ? radius
                 : radius + SPHERE_EXTRA_RAD;
     }
 
+    /**
+     * Calculates the squared radius for a specific region.
+     *
+     * @param regionID the ID of the region
+     * @return the squared radius for the specified region
+     */
     protected double radiusForRegionSquared(int regionID) {
         return regionID == GlobalRegionIdentifiers.SUBMARK_INSIDE ? radiusSq : radiusExtraSq;
     }

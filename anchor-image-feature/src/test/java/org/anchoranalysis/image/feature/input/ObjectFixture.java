@@ -40,6 +40,11 @@ import org.anchoranalysis.spatial.box.Extent;
 @NoArgsConstructor(access = AccessLevel.NONE)
 public class ObjectFixture {
 
+    /**
+     * Creates a small object in the corner of a 3D space.
+     *
+     * @return an ObjectMask representing a small object with dimensions 2x3x1
+     */
     public static ObjectMask createSmallCornerObject() {
         return new ObjectMask(new BoundingBox(new Extent(2, 3, 1)));
     }

@@ -45,18 +45,23 @@ import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class MarksWithTotalEnergy implements Serializable {
 
-    /** */
     private static final long serialVersionUID = -7008599104878130986L;
 
-    /** The marks */
+    /** The marks in the collection. */
     @Getter @Setter private MarkCollection marks;
 
-    /** Associated Energy Scheme, which should include the EnergySavedPairs */
+    /** Associated Energy Scheme, which should include the EnergySavedPairs. */
     @Getter private transient EnergySchemeWithSharedFeatures energyScheme;
 
-    /** The pre-annealed total energy */
+    /** The pre-annealed total energy. */
     @Getter @Setter private double energyTotal = 0;
 
+    /**
+     * Creates a new instance with the given marks and energy scheme.
+     *
+     * @param marks the collection of marks
+     * @param energyScheme the energy scheme with shared features
+     */
     public MarksWithTotalEnergy(MarkCollection marks, EnergySchemeWithSharedFeatures energyScheme) {
         this.marks = marks;
         this.energyScheme = energyScheme;
@@ -64,7 +69,7 @@ public class MarksWithTotalEnergy implements Serializable {
     }
 
     /**
-     * Make a shallow copy
+     * Makes a shallow copy of this instance.
      *
      * @return a newly created object with identical contents (all member fields reused)
      */
@@ -73,7 +78,7 @@ public class MarksWithTotalEnergy implements Serializable {
     }
 
     /**
-     * Make a deep copy (except the {@code energyScheme} which is reused).
+     * Makes a deep copy of this instance (except the {@code energyScheme} which is reused).
      *
      * @return a newly created object with identical contents (some member fields duplicated, some
      *     reused)
@@ -82,37 +87,61 @@ public class MarksWithTotalEnergy implements Serializable {
         return new MarksWithTotalEnergy(this.marks.deepCopy(), this.energyScheme, this.energyTotal);
     }
 
+    /**
+     * Adds a voxelized mark to the collection.
+     *
+     * @param voxelizedMark the voxelized mark to add
+     */
     public void add(VoxelizedMarkMemo voxelizedMark) {
         replaceWithShallowCopy(marksCopy -> marksCopy.add(voxelizedMark.getMark()));
     }
 
+    /**
+     * Removes a mark at the specified index from the collection.
+     *
+     * @param index the index of the mark to remove
+     */
     public void remove(int index) {
-        // As none of our updates involve the memo list, we can do
-        //  this operate after the other remove operations
         replaceWithShallowCopy(marksCopy -> marksCopy.remove(index));
     }
 
-    // calculates a new energy and configuration based upon a mark at a particular index
-    //   changing into new mark
+    /**
+     * Exchanges a mark at a particular index with a new mark.
+     *
+     * @param index the index of the mark to exchange
+     * @param newMark the new voxelized mark to replace the existing mark
+     */
     public void exchange(int index, VoxelizedMarkMemo newMark) {
         replaceWithShallowCopy(marksCopy -> marksCopy.exchange(index, newMark.getMark()));
     }
 
+    /**
+     * Gets the number of marks in the collection.
+     *
+     * @return the number of marks
+     */
     public final int size() {
         return marks.size();
     }
 
+    /**
+     * Gets the mark at the specified index.
+     *
+     * @param index the index of the mark to retrieve
+     * @return the {@link Mark} at the specified index
+     */
     public Mark get(int index) {
         return marks.get(index);
     }
 
+    /**
+     * Replaces the current marks collection with a shallow copy after performing an operation.
+     *
+     * @param operationAfterCopy the operation to perform on the copied marks collection
+     */
     private void replaceWithShallowCopy(Consumer<MarkCollection> operationAfterCopy) {
-
-        // We shallow copy the existing configuration
         MarkCollection marksCopy = marks.shallowCopy();
         operationAfterCopy.accept(marksCopy);
-
-        // We adopt the copy
         this.marks = marksCopy;
     }
 }

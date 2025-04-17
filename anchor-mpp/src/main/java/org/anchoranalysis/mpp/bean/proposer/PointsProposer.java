@@ -38,9 +38,21 @@ import org.anchoranalysis.mpp.proposer.error.ErrorNode;
 import org.anchoranalysis.spatial.point.Point3d;
 import org.anchoranalysis.spatial.point.Point3i;
 
+/** An abstract base class for proposing a list of points based on a given point and mark. */
 public abstract class PointsProposer extends NullParametersBean<PointsProposer>
         implements CompatibleWithMark {
 
+    /**
+     * Proposes a list of points based on the given parameters.
+     *
+     * @param point the reference point for the proposal
+     * @param mark the mark associated with the proposal
+     * @param dimensions the dimensions of the space in which the points are proposed
+     * @param randomNumberGenerator a random number generator for any stochastic processes
+     * @param errorNode an error node for reporting any errors during the proposal process
+     * @return an Optional containing a List of proposed Point3i, or empty if no proposal is made
+     * @throws ProposalAbnormalFailureException if the proposal fails abnormally
+     */
     public abstract Optional<List<Point3i>> propose(
             Point3d point,
             Mark mark,

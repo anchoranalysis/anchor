@@ -66,6 +66,14 @@ public abstract class StackWriterTestBase {
         FloatVoxelType.INSTANCE
     };
 
+    /**
+     * A temporary directory created for each test method.
+     *
+     * <p>This directory is automatically created before each test method and deleted after the test
+     * finishes. It can be used to store temporary files generated during the test execution.
+     *
+     * @see org.junit.jupiter.api.io.TempDir
+     */
     @TempDir public Path directory;
 
     // START REQUIRED ARGUMENTS
@@ -92,6 +100,10 @@ public abstract class StackWriterTestBase {
                         comparisonPlan.isSkipComparisonForRGB());
     }
 
-    /** Creates the {@link StackWriter} to be tested. */
+    /**
+     * Creates the {@link StackWriter} to be tested.
+     *
+     * @return the stack-writer.
+     */
     protected abstract StackWriter createWriter();
 }

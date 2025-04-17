@@ -47,15 +47,22 @@ import org.apache.commons.io.FileUtils;
  */
 public class DualComparer {
 
+    /** The first loader. */
     @Getter private final TestLoader loader1;
 
+    /** The second loader. */
     @Getter private final TestLoader loader2;
 
     private final TestLoaderImage loaderImage1;
     private final TestLoaderImage loaderImage2;
 
+    /**
+     * Creates a new DualComparer instance.
+     *
+     * @param loader1 the first TestLoader
+     * @param loader2 the second TestLoader
+     */
     public DualComparer(TestLoader loader1, TestLoader loader2) {
-        super();
         this.loader1 = loader1;
         this.loader2 = loader2;
         this.loaderImage1 = new TestLoaderImage(loader1);
@@ -104,18 +111,17 @@ public class DualComparer {
     }
 
     /**
-     * Compare two CSV files, ignoring the first numFirstColumnsToIgnore. They need to be exactly
-     * identical, apart from these ignored columns.
+     * Compare two CSV files using a specified comparer.
      *
      * @param path relative-path (compared to root of both loaders) of files to compare.
+     * @param comparer the CSVComparer to use for comparing the CSV files.
      * @param messageStream if non-equal, additional explanation messages are printed here.
-     * @return true when the csv-files are identical apart from the ignored columns, false
-     *     otherwise.
-     * @throws CSVReaderException if something goes wrong with csv I/O or a csv file is reject.
+     * @return true when the csv-files are identical according to the comparer, false otherwise.
+     * @throws CSVReaderException if something goes wrong with csv I/O or a csv file is rejected.
      */
     public boolean compareTwoCsvFiles(String path, CSVComparer comparer, PrintStream messageStream)
             throws CSVReaderException {
-        return comparer.areCsvFilesEqual(
+        return comparer.areCSVFilesEqual(
                 loaderImage1.resolveTestPath(path),
                 loaderImage2.resolveTestPath(path),
                 messageStream);
@@ -147,6 +153,13 @@ public class DualComparer {
                 loaderImage2.resolveTestPath(path).toFile());
     }
 
+    /**
+     * Compare two subdirectories that have an identical path, but in two different test loaders.
+     *
+     * @param path relative-path (compared to root of both loaders) of subdirectories to compare.
+     * @return true when the subdirectories are equal (contain the same files and directories),
+     *     false otherwise.
+     */
     public boolean compareTwoSubdirectories(String path) {
         Path dir1 = loaderImage1.resolveTestPath(path);
         Path dir2 = loaderImage2.resolveTestPath(path);

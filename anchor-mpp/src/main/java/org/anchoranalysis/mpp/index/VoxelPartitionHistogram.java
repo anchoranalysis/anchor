@@ -32,11 +32,22 @@ import java.util.function.Supplier;
 import org.anchoranalysis.math.histogram.Histogram;
 import org.anchoranalysis.mpp.index.factory.VoxelPartitionFactory;
 
+/**
+ * A voxel partition implementation using histograms to represent voxel value distributions.
+ *
+ * <p>This class maintains a histogram for each slice and a combined histogram for all slices.
+ */
 public class VoxelPartitionHistogram implements VoxelPartition<Histogram> {
 
     private Histogram combined;
     private List<Histogram> list;
 
+    /**
+     * Constructs a VoxelPartitionHistogram with a specified number of slices.
+     *
+     * @param numberSlices The number of slices in the partition
+     * @param histogramFactory A supplier function that creates new Histogram instances
+     */
     public VoxelPartitionHistogram(int numberSlices, Supplier<Histogram> histogramFactory) {
 
         combined = histogramFactory.get();

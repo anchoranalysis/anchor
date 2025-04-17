@@ -51,29 +51,37 @@ import org.anchoranalysis.mpp.feature.input.FeatureInputAllMemo;
 import org.anchoranalysis.mpp.feature.input.FeatureInputPairMemo;
 import org.anchoranalysis.mpp.feature.input.FeatureInputSingleMemo;
 
+/** Creates an {@link EnergyScheme} by combining individual elements and their interactions. */
 public class EnergySchemeCreatorByElement extends EnergySchemeCreator {
 
     // START BEAN PROPERTIES
+    /** Creates features for individual elements. */
     @BeanField @Getter @Setter private FeatureListProvider<FeatureInputSingleMemo> elemIndCreator;
 
+    /** Creates features for pairs of elements. */
     @BeanField @Getter @Setter private FeatureListProvider<FeatureInputPairMemo> elemPairCreator;
 
+    /** Optional creator for features considering all elements. */
     @BeanField @OptionalBean @Getter @Setter
     private FeatureListProvider<FeatureInputAllMemo> elemAllCreator;
 
+    /** List of named feature providers for image-based features. */
     @BeanField @Getter @Setter
     private List<NamedBean<FeatureListProvider<FeatureInputStack>>> listImageFeatures =
             new ArrayList<>();
 
+    /** Criteria for adding pairs of elements. */
     @BeanField @Getter @Setter private AddCriteriaPair pairAddCriteria;
 
+    /** Mapping of regions. */
     @BeanField @Getter @Setter private RegionMap regionMap;
 
+    /** Optional dictionary provider. */
     @BeanField @OptionalBean @Getter @Setter private DictionaryProvider dictionary;
 
     /**
      * If true, the names of the imageFeatures are taken as a combination of the namedItem and the
-     * actual features
+     * actual features.
      */
     @BeanField @Getter @Setter private boolean includeFeatureNames = false;
     // END BEAN PROPERTIES
@@ -94,6 +102,12 @@ public class EnergySchemeCreatorByElement extends EnergySchemeCreator {
         }
     }
 
+    /**
+     * Creates features for all elements, or an empty list if not configured.
+     *
+     * @return a {@link FeatureList} for all elements
+     * @throws CreateException if creation fails
+     */
     private FeatureList<FeatureInputAllMemo> createAll() throws CreateException {
         try {
             if (elemAllCreator != null) {
@@ -106,6 +120,12 @@ public class EnergySchemeCreatorByElement extends EnergySchemeCreator {
         }
     }
 
+    /**
+     * Builds image features from the list of feature providers.
+     *
+     * @return a list of named image features
+     * @throws CreateException if building fails
+     */
     private List<NamedBean<Feature<FeatureInputStack>>> buildImageFeatures()
             throws CreateException {
         try {
@@ -118,14 +138,27 @@ public class EnergySchemeCreatorByElement extends EnergySchemeCreator {
         }
     }
 
+    /**
+     * Creates a named sum feature from a feature list.
+     *
+     * @param fl the feature list to sum
+     * @param name the base name for the sum feature
+     * @return a named sum feature
+     */
     private NamedBean<Feature<FeatureInputStack>> sumList(
             FeatureList<FeatureInputStack> fl, String name) {
         Sum<FeatureInputStack> feature = new Sum<>(fl);
         return new NamedBean<>(nameForFeature(feature, name), feature);
     }
 
+    /**
+     * Generates a name for a feature, optionally including the feature's friendly name.
+     *
+     * @param feature the feature to name
+     * @param name the base name
+     * @return the generated name
+     */
     private String nameForFeature(Feature<?> feature, String name) {
-
         if (includeFeatureNames) {
             return String.format("%s.%s", name, feature.getFriendlyName());
         } else {

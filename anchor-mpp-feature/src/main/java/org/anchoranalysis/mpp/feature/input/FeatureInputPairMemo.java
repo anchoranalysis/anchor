@@ -33,13 +33,29 @@ import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.input.FeatureInputEnergy;
 import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 
+/**
+ * Feature input that contains a pair of memoized voxelized marks and an energy stack.
+ *
+ * <p>This class extends {@link FeatureInputEnergy} to include two {@link VoxelizedMarkMemo}
+ * objects, representing a pair of memoized voxelized marks for feature calculations.
+ */
 @EqualsAndHashCode(callSuper = true)
 @Value
 public class FeatureInputPairMemo extends FeatureInputEnergy {
 
+    /** The first memoized voxelized mark. */
     private VoxelizedMarkMemo object1;
+
+    /** The second memoized voxelized mark. */
     private VoxelizedMarkMemo object2;
 
+    /**
+     * Creates a new instance with two memoized voxelized marks and an energy stack.
+     *
+     * @param object1 the first memoized voxelized mark
+     * @param object2 the second memoized voxelized mark
+     * @param energyStack the energy stack associated with the marks
+     */
     public FeatureInputPairMemo(
             VoxelizedMarkMemo object1, VoxelizedMarkMemo object2, EnergyStack energyStack) {
         super(Optional.of(energyStack));

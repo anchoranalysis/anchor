@@ -34,10 +34,10 @@ import org.anchoranalysis.image.core.merge.ObjectMaskMerger;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 
 /**
- * A pair of objects (first and second) and maybe a merged version of both
+ * A pair of objects (first and second) and optionally a merged version of both.
  *
- * <p>Note that left and right simply identify two parts of the pair (tuple). It has no physical
- * meaning related to where the objects are located in the scene..
+ * <p>Note that first and second simply identify two parts of the pair (tuple). It has no physical
+ * meaning related to where the objects are located in the scene.
  *
  * <p>If a merged version doesn't exist, it is created and cached on demand.
  *
@@ -48,22 +48,50 @@ public class FeatureInputPairObjects extends FeatureInputEnergy {
 
     private ObjectMask first;
     private ObjectMask second;
-
     private Optional<ObjectMask> merged = Optional.empty();
 
+    /**
+     * Constructs a FeatureInputPairObjects with two ObjectMasks.
+     *
+     * @param first the first ObjectMask
+     * @param second the second ObjectMask
+     */
     public FeatureInputPairObjects(ObjectMask first, ObjectMask second) {
         this(first, second, Optional.empty());
     }
 
+    /**
+     * Constructs a FeatureInputPairObjects with two ObjectMasks and an EnergyStack.
+     *
+     * @param first the first ObjectMask
+     * @param second the second ObjectMask
+     * @param energyStack the EnergyStack
+     */
     public FeatureInputPairObjects(ObjectMask first, ObjectMask second, EnergyStack energyStack) {
         this(first, second, Optional.of(energyStack));
     }
 
+    /**
+     * Constructs a FeatureInputPairObjects with two ObjectMasks and an optional EnergyStack.
+     *
+     * @param first the first ObjectMask
+     * @param second the second ObjectMask
+     * @param energyStack an optional EnergyStack
+     */
     public FeatureInputPairObjects(
             ObjectMask first, ObjectMask second, Optional<EnergyStack> energyStack) {
         this(first, second, energyStack, Optional.empty());
     }
 
+    /**
+     * Constructs a FeatureInputPairObjects with two ObjectMasks, an optional EnergyStack, and an
+     * optional merged ObjectMask.
+     *
+     * @param first the first ObjectMask
+     * @param second the second ObjectMask
+     * @param energyStack an optional EnergyStack
+     * @param merged an optional merged ObjectMask
+     */
     public FeatureInputPairObjects(
             ObjectMask first,
             ObjectMask second,
@@ -75,6 +103,11 @@ public class FeatureInputPairObjects extends FeatureInputEnergy {
         this.merged = merged;
     }
 
+    /**
+     * Copy constructor for FeatureInputPairObjects.
+     *
+     * @param src the FeatureInputPairObjects to copy
+     */
     protected FeatureInputPairObjects(FeatureInputPairObjects src) {
         super(src.getEnergyStackOptional());
         this.first = src.first;
@@ -82,18 +115,30 @@ public class FeatureInputPairObjects extends FeatureInputEnergy {
         this.merged = src.merged;
     }
 
+    /**
+     * Gets the first ObjectMask.
+     *
+     * @return the first ObjectMask
+     */
     public ObjectMask getFirst() {
         return first;
     }
 
+    /**
+     * Gets the second ObjectMask.
+     *
+     * @return the second ObjectMask
+     */
     public ObjectMask getSecond() {
         return second;
     }
 
     /**
-     * Returns a merged version of the two-objects available (or null if not available)
+     * Returns a merged version of the two objects.
      *
-     * @return the merged object-mask
+     * <p>If a merged version doesn't exist, it is created and cached.
+     *
+     * @return the merged ObjectMask
      */
     public ObjectMask getMerged() {
         if (!merged.isPresent()) {
@@ -102,10 +147,21 @@ public class FeatureInputPairObjects extends FeatureInputEnergy {
         return merged.get();
     }
 
+    /**
+     * Gets the optional merged ObjectMask.
+     *
+     * @return an Optional containing the merged ObjectMask, or empty if not present
+     */
     public Optional<ObjectMask> getMergedOptional() {
         return merged;
     }
 
+    /**
+     * Returns a string representation of the object.
+     *
+     * @return a string representation of the object, showing the center of gravity of both
+     *     ObjectMasks
+     */
     @Override
     public String toString() {
         return String.format("%s vs %s", first.centerOfGravity(), second.centerOfGravity());

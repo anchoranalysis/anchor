@@ -32,32 +32,60 @@ import org.anchoranalysis.feature.energy.EnergyStackWithoutParameters;
 import org.anchoranalysis.mpp.feature.energy.scheme.EnergySchemeWithSharedFeatures;
 import org.anchoranalysis.mpp.feature.mark.EnergyMemoList;
 
-// Saves particular features for all items
+/**
+ * Saves and manages the total energy for all items in a collection.
+ *
+ * <p>This class implements {@link Serializable} for persistence of energy calculations.
+ */
 public class EnergySavedAll implements Serializable {
 
-    /** */
     private static final long serialVersionUID = 1L;
 
+    /** The total energy for all items. */
     private double energyTotal;
 
+    /**
+     * Calculates the total energy for all items using the provided energy scheme and stack.
+     *
+     * @param memoList the {@link EnergyMemoList} containing energy memos for marks
+     * @param energyScheme the {@link EnergySchemeWithSharedFeatures} used for energy calculations
+     * @param energyStack the {@link EnergyStackWithoutParameters} providing context for energy
+     *     calculations
+     * @throws NamedFeatureCalculateException if there's an error during energy calculation
+     */
     public void calc(
-            EnergyMemoList pxlMarkMemoList,
+            EnergyMemoList memoList,
             EnergySchemeWithSharedFeatures energyScheme,
             EnergyStackWithoutParameters energyStack)
             throws NamedFeatureCalculateException {
-        energyTotal = energyScheme.totalAll(pxlMarkMemoList, energyStack).getTotal();
+        energyTotal = energyScheme.totalAll(memoList, energyStack).getTotal();
     }
 
+    /**
+     * Gets the total energy for all items.
+     *
+     * @return the total energy as a double
+     */
     public double getEnergyTotal() {
         return energyTotal;
     }
 
+    /**
+     * Creates a shallow copy of this instance.
+     *
+     * @return a new {@link EnergySavedAll} with the same total energy
+     */
     public EnergySavedAll shallowCopy() {
         EnergySavedAll out = new EnergySavedAll();
         out.energyTotal = energyTotal;
         return out;
     }
 
+    /**
+     * Creates a deep copy of this instance.
+     *
+     * @return a new {@link EnergySavedAll} with the same total energy
+     */
     public EnergySavedAll deepCopy() {
         return shallowCopy();
     }

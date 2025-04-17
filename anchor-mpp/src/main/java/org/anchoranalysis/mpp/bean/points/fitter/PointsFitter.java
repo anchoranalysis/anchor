@@ -34,10 +34,24 @@ import org.anchoranalysis.mpp.mark.CompatibleWithMark;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.spatial.point.Point3f;
 
-// Fits an ellipsoid to a set of points
+/**
+ * Abstract base class for fitting a mark (e.g., an ellipsoid) to a set of points.
+ *
+ * <p>This class extends {@link PointsBean} and implements {@link CompatibleWithMark}, providing a
+ * framework for various point fitting algorithms.
+ */
 @GroupingRoot
 public abstract class PointsFitter extends PointsBean<PointsFitter> implements CompatibleWithMark {
 
+    /**
+     * Fits a mark to a set of points within given dimensions.
+     *
+     * @param points the list of points to fit the mark to
+     * @param mark the mark to be fitted (will be modified)
+     * @param dimensions the dimensions within which the fitting occurs
+     * @throws PointsFitterException if an error occurs during the fitting process
+     * @throws InsufficientPointsException if there are not enough points to perform the fitting
+     */
     public abstract void fit(List<Point3f> points, Mark mark, Dimensions dimensions)
             throws PointsFitterException, InsufficientPointsException;
 }

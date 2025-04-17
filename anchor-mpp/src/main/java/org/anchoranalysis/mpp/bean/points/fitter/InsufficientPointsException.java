@@ -28,23 +28,40 @@ package org.anchoranalysis.mpp.bean.points.fitter;
 
 import org.anchoranalysis.core.exception.AnchorCheckedException;
 
+/** Exception thrown when there are not enough points to perform a fitting operation. */
 public class InsufficientPointsException extends AnchorCheckedException {
 
-    /** */
     private static final long serialVersionUID = 1L;
 
+    /** Constructs an InsufficientPointsException with a default error message. */
     public InsufficientPointsException() {
         super("There were insufficient number of points for a good ellipse-fit");
     }
 
-    public InsufficientPointsException(String arg0, Throwable arg1) {
-        super(arg0, arg1);
+    /**
+     * Constructs an InsufficientPointsException with a specified error message and cause.
+     *
+     * @param message the detail message
+     * @param cause the cause of this exception
+     */
+    public InsufficientPointsException(String message, Throwable cause) {
+        super(message, cause);
     }
 
+    /**
+     * Constructs an InsufficientPointsException with a specified error message.
+     *
+     * @param message the detail message
+     */
     public InsufficientPointsException(String message) {
         super(message);
     }
 
+    /**
+     * Constructs an InsufficientPointsException with a specified cause.
+     *
+     * @param cause the cause of this exception
+     */
     public InsufficientPointsException(Throwable cause) {
         super(cause);
     }

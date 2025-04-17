@@ -59,30 +59,65 @@ public class CarImageLoader {
     private TestLoaderImage loader =
             new TestLoaderImage(TestLoader.createFromMavenWorkingDirectory());
 
+    /**
+     * Loads and returns the RGB image of a car.
+     *
+     * @return A Stack containing the RGB image of a car.
+     */
     public Stack carRGB() {
         return loadFromSubdirectory(PATH_CAR);
     }
 
+    /**
+     * Loads and returns the 8-bit grayscale image of a car.
+     *
+     * @return A Stack containing the 8-bit grayscale image of a car.
+     */
     public Stack carGrayscale8Bit() {
         return loadFromSubdirectory(PATH_CAR_GRAYSCALE_8_BIT);
     }
 
+    /**
+     * Loads and returns the 16-bit grayscale image of a car.
+     *
+     * @return A Stack containing the 16-bit grayscale image of a car.
+     */
     public Stack carGrayscale16Bit() {
         return loadFromSubdirectory(PATH_CAR_GRAYSCALE_16_BIT);
     }
 
+    /**
+     * Loads the RGB image of a car and wraps it in an EnergyStackWithoutParameters.
+     *
+     * @return An EnergyStackWithoutParameters containing the RGB image of a car.
+     */
     public EnergyStackWithoutParameters carRGBAsEnergy() {
         return new EnergyStackWithoutParameters(carRGB());
     }
 
+    /**
+     * Loads the 8-bit grayscale image of a car and wraps it in an EnergyStackWithoutParameters.
+     *
+     * @return An EnergyStackWithoutParameters containing the 8-bit grayscale image of a car.
+     */
     public EnergyStackWithoutParameters carGrayscale8BitAsEnergy() {
         return new EnergyStackWithoutParameters(carGrayscale8Bit());
     }
 
+    /**
+     * Loads the 16-bit grayscale image of a car and wraps it in an EnergyStackWithoutParameters.
+     *
+     * @return An EnergyStackWithoutParameters containing the 16-bit grayscale image of a car.
+     */
     public EnergyStackWithoutParameters carGrayscale16BitAsEnergy() {
         return new EnergyStackWithoutParameters(carGrayscale16Bit());
     }
 
+    /**
+     * Returns the root directory path for the model files.
+     *
+     * @return A Path object representing the root directory of the model files.
+     */
     public Path modelDirectory() {
         return loader.getLoader().getRoot();
     }

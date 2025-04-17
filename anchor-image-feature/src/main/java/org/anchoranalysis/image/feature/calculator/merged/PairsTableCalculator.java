@@ -79,6 +79,11 @@ public class PairsTableCalculator implements FeatureTableCalculator<FeatureInput
 
     private CombinedCalculator calculator;
 
+    /**
+     * Constructs a PairsTableCalculator with default inclusion and error suppression.
+     *
+     * @param features the merged pairs features to use
+     */
     public PairsTableCalculator(MergedPairsFeatures features) {
         this(features, new MergedPairsInclude(), true);
     }
@@ -123,6 +128,15 @@ public class PairsTableCalculator implements FeatureTableCalculator<FeatureInput
         }
     }
 
+    /**
+     * Calculates features for the input, optionally suppressing errors.
+     *
+     * @param input the input pair of objects
+     * @param errorReporter the error reporter to use
+     * @return the calculated feature results
+     * @throws NamedFeatureCalculateException if an error occurs during calculation and error
+     *     suppression is disabled
+     */
     public ResultsVector calculateMaybeSuppressErrors(
             FeatureInputPairObjects input, ErrorReporter errorReporter)
             throws NamedFeatureCalculateException {
@@ -171,6 +185,7 @@ public class PairsTableCalculator implements FeatureTableCalculator<FeatureInput
      *
      * @param prefix the prefix.
      * @param featuresWithCustomNames the features whose names are added.
+     * @param list the list to add the feature names to
      */
     private static void addCustomNamesWithPrefix(
             String prefix, FeatureList<?> featuresWithCustomNames, FeatureNameList list) {

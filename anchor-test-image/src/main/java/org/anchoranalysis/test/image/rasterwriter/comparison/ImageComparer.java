@@ -36,12 +36,15 @@ import java.nio.file.Path;
 public interface ImageComparer {
 
     /**
-     * Asserts that two stacks being compared are identical.
+     * Asserts that two image-files being compared are identical as images.
+     *
+     * <p>It's unspecified how exactly images should be opened from the information supplied. This
+     * is implementation-dependent.
      *
      * @param filenameWithoutExtension the filename before extensions were added.
      * @param filenameWithExtension the filename with an extension added.
      * @param path a path to be displayed if an error occurs.
-     * @throws IOException
+     * @throws IOException if either of files being compared cannot be successfully opened.
      */
     void assertIdentical(String filenameWithoutExtension, String filenameWithExtension, Path path)
             throws IOException;

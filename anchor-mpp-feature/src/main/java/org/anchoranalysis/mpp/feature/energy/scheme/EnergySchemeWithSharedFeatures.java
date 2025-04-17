@@ -51,22 +51,41 @@ import org.anchoranalysis.mpp.feature.input.FeatureInputSingleMemo;
 import org.anchoranalysis.mpp.feature.mark.EnergyMemoList;
 import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 
+/** Combines an {@link EnergyScheme} with {@link SharedFeatures} for energy calculations. */
 public class EnergySchemeWithSharedFeatures {
 
+    /** The energy scheme used for calculations. */
     @Getter private EnergyScheme energyScheme;
+
+    /** Shared features used across calculations. */
     @Getter private SharedFeatures sharedFeatures;
 
+    /** Operation for calculating individual total energy. */
     private CalculateIndividualTotalOperation calculateTotalIndividual;
+
+    /** Logger for reporting messages. */
     private Logger logger;
 
-    // Caches energy value by index
+    /** Caches energy value by index. */
     private class CalculateIndividualTotalOperation
             implements CheckedFunction<Integer, EnergyTotal, NamedFeatureCalculateException> {
 
+        /** The mark for which energy is calculated. */
         private VoxelizedMarkMemo mark;
+
+        /** The energy stack without parameters. */
         private EnergyStackWithoutParameters raster;
+
+        /** Dictionary of parameters for energy calculations. */
         private Dictionary dictionary;
 
+        /**
+         * Updates the operation with new mark and raster.
+         *
+         * @param mark the new mark
+         * @param raster the new raster
+         * @throws OperationFailedException if the update operation fails
+         */
         public void update(VoxelizedMarkMemo mark, EnergyStackWithoutParameters raster)
                 throws OperationFailedException {
             this.mark = mark;
@@ -86,6 +105,12 @@ public class EnergySchemeWithSharedFeatures {
             return calc();
         }
 
+        /**
+         * Calculates the energy total.
+         *
+         * @return the calculated energy total
+         * @throws NamedFeatureCalculateException if the calculation fails
+         */
         public EnergyTotal calc() throws NamedFeatureCalculateException {
             try {
                 FeatureCalculatorMulti<FeatureInputSingleMemo> session =
@@ -105,6 +130,13 @@ public class EnergySchemeWithSharedFeatures {
         }
     }
 
+    /**
+     * Creates a new {@link EnergySchemeWithSharedFeatures}.
+     *
+     * @param energyScheme the energy scheme to use
+     * @param sharedFeatures the shared features to use
+     * @param logger the logger for reporting messages
+     */
     public EnergySchemeWithSharedFeatures(
             EnergyScheme energyScheme, SharedFeatures sharedFeatures, Logger logger) {
         super();
@@ -115,6 +147,14 @@ public class EnergySchemeWithSharedFeatures {
         calculateTotalIndividual = new CalculateIndividualTotalOperation();
     }
 
+    /**
+     * Calculates the total energy for all marks in the list.
+     *
+     * @param pxlMarkMemoList the list of energy memos
+     * @param raster the energy stack without parameters
+     * @return the total energy
+     * @throws NamedFeatureCalculateException if the calculation fails
+     */
     public EnergyTotal totalAll(EnergyMemoList pxlMarkMemoList, EnergyStackWithoutParameters raster)
             throws NamedFeatureCalculateException {
 
@@ -137,6 +177,14 @@ public class EnergySchemeWithSharedFeatures {
         }
     }
 
+    /**
+     * Calculates the total energy for an individual mark.
+     *
+     * @param pmm the voxelized mark memo
+     * @param raster the energy stack without parameters
+     * @return the total energy
+     * @throws NamedFeatureCalculateException if the calculation fails
+     */
     public EnergyTotal totalIndividual(VoxelizedMarkMemo pmm, EnergyStackWithoutParameters raster)
             throws NamedFeatureCalculateException {
         try {
@@ -147,6 +195,12 @@ public class EnergySchemeWithSharedFeatures {
         }
     }
 
+    /**
+     * Creates an {@link AddCriteriaEnergyPair} based on the energy scheme.
+     *
+     * @return the created AddCriteriaEnergyPair
+     * @throws CreateException if creation fails
+     */
     public AddCriteriaEnergyPair createAddCriteria() throws CreateException {
         try {
             return new AddCriteriaEnergyPair(
@@ -157,10 +211,22 @@ public class EnergySchemeWithSharedFeatures {
         }
     }
 
+    /**
+     * Gets the region map from the energy scheme.
+     *
+     * @return the region map
+     */
     public RegionMap getRegionMap() {
         return energyScheme.getRegionMap();
     }
 
+    /**
+     * Creates an energy stack with parameters.
+     *
+     * @param raster the energy stack without parameters
+     * @return the created energy stack
+     * @throws FeatureCalculationException if creation fails
+     */
     private EnergyStack createEnergyStack(EnergyStackWithoutParameters raster)
             throws FeatureCalculationException {
 

@@ -30,18 +30,26 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 /**
- * Singleton that does nothing with errors
+ * A singleton implementation of ErrorNode that does nothing with errors.
+ *
+ * <p>This class implements the Null Object pattern for ErrorNode, allowing error handling to be
+ * safely ignored when desired.
  *
  * @author Owen Feehan
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ErrorNodeNull extends ErrorNode {
 
-    /** */
     private static final long serialVersionUID = 5512508477564211253L;
 
+    /** The single instance of ErrorNodeNull. */
     private static ErrorNodeNull instance = new ErrorNodeNull();
 
+    /**
+     * Gets the singleton instance of ErrorNodeNull.
+     *
+     * @return the ErrorNodeNull instance
+     */
     public static ErrorNodeNull instance() {
         return instance;
     }
@@ -50,20 +58,5 @@ public class ErrorNodeNull extends ErrorNode {
     public ErrorNode add(String errorMessage) {
         // do nothing
         return this;
-    }
-
-    @Override
-    public ErrorNode addFormatted(String formatString, Object... args) {
-        return this;
-    }
-
-    @Override
-    public ErrorNode add(Exception e) {
-        return this;
-    }
-
-    @Override
-    public void addErrorDescription(StringBuilder sb) {
-        // NOTHING TO DO
     }
 }

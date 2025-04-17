@@ -28,16 +28,30 @@ package org.anchoranalysis.mpp.bean.regionmap;
 
 import lombok.EqualsAndHashCode;
 
-// A region membership with its flag stored as a byte
+/**
+ * A wrapper for {@link RegionMembership} that includes pre-calculated flags and a region ID.
+ *
+ * <p>This class combines a {@link RegionMembership} with its calculated flags and an associated
+ * region ID.
+ */
 @EqualsAndHashCode
 public class RegionMembershipWithFlags {
 
+    /** The pre-calculated flags for the region membership. */
     private byte flags;
+
+    /** The underlying region membership. */
     private RegionMembership regionMembership;
 
-    // We need to clarify that exactly this parameter means!  Is it for maximum bounding box?
+    /** The ID of the region. */
     private int regionID;
 
+    /**
+     * Creates a new instance with the given region membership and region ID.
+     *
+     * @param regionMembership the underlying {@link RegionMembership}
+     * @param regionID the ID of the region
+     */
     public RegionMembershipWithFlags(RegionMembership regionMembership, int regionID) {
         super();
         this.regionMembership = regionMembership;
@@ -45,10 +59,21 @@ public class RegionMembershipWithFlags {
         this.regionID = regionID;
     }
 
+    /**
+     * Checks if the given membership flag is set for this region.
+     *
+     * @param membership the membership flag to check
+     * @return true if the region is a member, false otherwise
+     */
     public boolean isMemberFlag(byte membership) {
         return regionMembership.isMemberFlag(membership, flags);
     }
 
+    /**
+     * Gets the ID of the region.
+     *
+     * @return the region ID
+     */
     public int getRegionID() {
         return regionID;
     }
@@ -58,6 +83,11 @@ public class RegionMembershipWithFlags {
         return Byte.toString(flags);
     }
 
+    /**
+     * Gets the underlying region membership.
+     *
+     * @return the {@link RegionMembership}
+     */
     public RegionMembership getRegionMembership() {
         return regionMembership;
     }

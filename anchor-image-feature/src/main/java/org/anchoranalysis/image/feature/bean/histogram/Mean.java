@@ -30,6 +30,12 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.math.histogram.Histogram;
 
+/**
+ * Calculates the mean value of a histogram.
+ *
+ * <p>This feature computes the arithmetic mean of all values in the histogram, weighted by their
+ * frequencies.
+ */
 public class Mean extends FeatureHistogramStatistic {
 
     @Override

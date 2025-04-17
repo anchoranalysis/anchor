@@ -35,19 +35,42 @@ import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.test.LoggerFixture;
 
+/**
+ * A fixture for creating {@link InputOutputContext} instances for testing purposes.
+ *
+ * <p>This class provides utility methods to create InputOutputContext objects with different
+ * configurations, such as suppressed loggers or specific model directories.
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class InputOutputContextFixture {
 
+    /**
+     * Creates an InputOutputContext with a suppressed logger and a specified model directory.
+     *
+     * @param modelDir The path to the model directory.
+     * @return An InputOutputContext with a suppressed logger and the specified model directory.
+     */
     public static InputOutputContext withSuppressedLogger(Path modelDir) {
         InputOutputContext out = withSuppressedLogger();
         when(out.getModelDirectory()).thenReturn(modelDir);
         return out;
     }
 
+    /**
+     * Creates an InputOutputContext with a suppressed logger.
+     *
+     * @return An InputOutputContext with a suppressed logger.
+     */
     public static InputOutputContext withSuppressedLogger() {
         return withLogger(LoggerFixture.suppressedLogger());
     }
 
+    /**
+     * Creates an InputOutputContext with a specified logger.
+     *
+     * @param logger The logger to be used in the InputOutputContext.
+     * @return An InputOutputContext with the specified logger.
+     */
     public static InputOutputContext withLogger(Logger logger) {
         InputOutputContext out = spy(InputOutputContext.class);
         when(out.getLogger()).thenReturn(logger);

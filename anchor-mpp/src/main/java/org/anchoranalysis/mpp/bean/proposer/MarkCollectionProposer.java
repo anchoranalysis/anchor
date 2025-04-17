@@ -34,15 +34,19 @@ import org.anchoranalysis.mpp.mark.MarkCollection;
 import org.anchoranalysis.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.mpp.proposer.ProposerContext;
 
-/**
- * Proposes an entire collection (confguration) of marks
- *
- * @author Owen Feehan
- */
+/** An abstract base class for proposing an entire collection (configuration) of marks. */
 @GroupingRoot
 public abstract class MarkCollectionProposer extends ProposerBean<MarkCollectionProposer>
         implements CompatibleWithMark {
 
+    /**
+     * Proposes a collection of marks.
+     *
+     * @param markFactory a factory for creating marks with identifiers
+     * @param context the context for the proposal
+     * @return an Optional containing the proposed MarkCollection, or empty if no proposal is made
+     * @throws ProposalAbnormalFailureException if the proposal fails abnormally
+     */
     public abstract Optional<MarkCollection> propose(
             MarkWithIdentifierFactory markFactory, ProposerContext context)
             throws ProposalAbnormalFailureException;

@@ -31,27 +31,61 @@ import cern.colt.matrix.DoubleMatrix1D;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
+/** Utility class for tensor-related operations and array/matrix creation. */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class TensorUtilities {
 
+    /**
+     * Calculates the square of a given value.
+     *
+     * @param val the value to square
+     * @return the squared value
+     */
     public static final double squared(double val) {
         return Math.pow(val, 2);
     }
 
-    /** A two element array, where the second value is 0.0 */
+    /**
+     * Creates a two-element array with the second value set to 0.0.
+     *
+     * @param firstVal the value for the first element
+     * @return a two-element array
+     */
     public static final double[] twoElementArray(double firstVal) {
         return twoElementArray(firstVal, 0);
     }
 
+    /**
+     * Creates a two-element array with specified values.
+     *
+     * @param firstVal the value for the first element
+     * @param secondVal the value for the second element
+     * @return a two-element array
+     */
     public static final double[] twoElementArray(double firstVal, double secondVal) {
         return new double[] {firstVal, secondVal};
     }
 
+    /**
+     * Creates a three-element array with specified values.
+     *
+     * @param firstVal the value for the first element
+     * @param secondVal the value for the second element
+     * @param thirdVal the value for the third element
+     * @return a three-element array
+     */
     public static final double[] threeElementArray(
             double firstVal, double secondVal, double thirdVal) {
         return new double[] {firstVal, secondVal, thirdVal};
     }
 
+    /**
+     * Creates a two-element DoubleMatrix1D with specified values.
+     *
+     * @param x the value for the first element
+     * @param y the value for the second element
+     * @return a two-element DoubleMatrix1D
+     */
     public static final DoubleMatrix1D twoElementMatrix(double x, double y) {
         DoubleMatrix1D out = DoubleFactory1D.dense.make(2);
         out.set(0, x);
@@ -59,6 +93,14 @@ class TensorUtilities {
         return out;
     }
 
+    /**
+     * Creates a three-element DoubleMatrix1D with specified values.
+     *
+     * @param x the value for the first element
+     * @param y the value for the second element
+     * @param z the value for the third element
+     * @return a three-element DoubleMatrix1D
+     */
     public static final DoubleMatrix1D threeElementMatrix(double x, double y, double z) {
         DoubleMatrix1D out = DoubleFactory1D.dense.make(3);
         out.set(0, x);

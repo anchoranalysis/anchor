@@ -34,7 +34,12 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.bean.ImageBean;
 import org.anchoranalysis.math.histogram.Histogram;
 
-/** Calculates a per-voxel score. */
+/**
+ * Calculates a per-voxel score.
+ *
+ * <p>This abstract class provides a framework for calculating scores on a per-voxel basis.
+ * Implementations should define the specific scoring algorithm in the {@link #calculate} method.
+ */
 public abstract class VoxelScore extends ImageBean<VoxelScore> {
 
     /**
@@ -51,5 +56,12 @@ public abstract class VoxelScore extends ImageBean<VoxelScore> {
         // TO be overridden if needed
     }
 
+    /**
+     * Calculates a score for a set of voxel intensities.
+     *
+     * @param voxelIntensities an array of voxel intensity values
+     * @return the calculated score for the given voxel intensities
+     * @throws FeatureCalculationException if the calculation fails
+     */
     public abstract double calculate(int[] voxelIntensities) throws FeatureCalculationException;
 }

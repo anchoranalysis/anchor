@@ -35,9 +35,20 @@ import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.spatial.orientation.Orientation;
 
+/** An abstract base class for proposing orientations for marks. */
 public abstract class OrientationProposer extends MarksBean<OrientationProposer>
         implements CompatibleWithMark {
 
+    /**
+     * Proposes an orientation for a given mark.
+     *
+     * @param mark the mark for which to propose an orientation
+     * @param dimensions the dimensions of the space in which the mark exists
+     * @param randomNumberGenerator a random number generator for any stochastic processes
+     * @return an Optional containing the proposed Orientation, or empty if no orientation is
+     *     proposed
+     * @throws ProposalAbnormalFailureException if the proposal fails abnormally
+     */
     public abstract Optional<Orientation> propose(
             Mark mark, Dimensions dimensions, RandomNumberGenerator randomNumberGenerator)
             throws ProposalAbnormalFailureException;

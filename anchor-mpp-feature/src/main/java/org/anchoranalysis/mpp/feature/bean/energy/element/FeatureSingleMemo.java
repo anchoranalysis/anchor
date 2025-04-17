@@ -32,6 +32,16 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationInput;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.mpp.feature.input.FeatureInputSingleMemo;
 
+/**
+ * An abstract base class for features that operate on a single memoized object.
+ *
+ * <p>This class extends {@link Feature} and specifies {@link FeatureInputSingleMemo} as the input
+ * type for feature calculations. It is designed to be used with features that need to process a
+ * single memoized object, typically for performance optimization in energy calculations.
+ *
+ * <p>Subclasses must implement the {@link #calculate(FeatureCalculationInput)} method to define the
+ * specific feature calculation logic.
+ */
 public abstract class FeatureSingleMemo extends Feature<FeatureInputSingleMemo> {
 
     @Override

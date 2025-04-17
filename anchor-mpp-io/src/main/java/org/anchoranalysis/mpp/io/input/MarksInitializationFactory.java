@@ -40,9 +40,19 @@ import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.mpp.bean.MarksBean;
 import org.anchoranalysis.mpp.init.MarksInitialization;
 
+/** Factory for creating {@link MarksInitialization} instances. */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MarksInitializationFactory {
 
+    /**
+     * Creates a new {@link MarksInitialization} instance.
+     *
+     * @param input optional {@link ExportSharedObjects} to copy shared objects from
+     * @param context the initialization context
+     * @param define optional {@link Define} for initializing properties
+     * @return a new {@link MarksInitialization} instance
+     * @throws CreateException if creation fails
+     */
     public static MarksInitialization create(
             Optional<? extends ExportSharedObjects> input,
             InitializationContext context,
@@ -80,6 +90,17 @@ public class MarksInitializationFactory {
         return marks;
     }
 
+    /**
+     * Creates a new {@link MarksInitialization} instance from existing shared objects and
+     * dictionary.
+     *
+     * @param context the initialization context
+     * @param define optional {@link Define} for initializing properties
+     * @param sharedObjects optional {@link SharedObjects} to add to the initialization
+     * @param dictionary optional {@link Dictionary} to add to the initialization
+     * @return a new {@link MarksInitialization} instance
+     * @throws CreateException if creation fails
+     */
     public static MarksInitialization createFromExisting(
             InitializationContext context,
             Optional<Define> define,

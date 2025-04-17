@@ -30,6 +30,13 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.mpp.feature.input.FeatureInputPairMemo;
 
+/**
+ * An abstract base class for features that operate on pairs of memoized objects.
+ *
+ * <p>This class extends {@link Feature} and specifies {@link FeatureInputPairMemo} as the input
+ * type for feature calculations. It is designed to be used with features that need to process pairs
+ * of objects that have been memoized for performance optimization.
+ */
 public abstract class FeaturePairMemo extends Feature<FeatureInputPairMemo> {
 
     @Override

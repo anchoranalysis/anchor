@@ -36,21 +36,38 @@ import org.anchoranalysis.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.mpp.proposer.ProposerContext;
 import org.anchoranalysis.spatial.point.Point3f;
 
+/** An abstract base class for proposing merges between marks. */
 @GroupingRoot
 public abstract class MarkMergeProposer extends ProposerBean<MarkMergeProposer>
         implements CompatibleWithMark {
 
-    // Returns a merged mark or null
+    /**
+     * Proposes a merge between two marks.
+     *
+     * @param mark1 the first mark to merge
+     * @param mark2 the second mark to merge
+     * @param context the context for the proposal
+     * @return an Optional containing the merged mark, or empty if no merge is proposed
+     * @throws ProposalAbnormalFailureException if the proposal fails abnormally
+     */
     public abstract Optional<Mark> propose(
             VoxelizedMarkMemo mark1, VoxelizedMarkMemo mark2, ProposerContext context)
             throws ProposalAbnormalFailureException;
 
-    // A debug method for optionally associating points with the last proposal made
+    /**
+     * Gets the points associated with the first mark from the last proposal.
+     *
+     * @return an Optional containing a list of points, or empty if no points are available
+     */
     public Optional<List<Point3f>> getLastPoints1() {
         return Optional.empty();
     }
 
-    // A debug method for optionally associating points with the last proposal made
+    /**
+     * Gets the points associated with the second mark from the last proposal.
+     *
+     * @return an Optional containing a list of points, or empty if no points are available
+     */
     public Optional<List<Point3f>> getLastPoints2() {
         return Optional.empty();
     }

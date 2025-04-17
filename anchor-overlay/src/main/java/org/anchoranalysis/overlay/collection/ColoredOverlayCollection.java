@@ -87,8 +87,8 @@ public class ColoredOverlayCollection implements Iterable<Overlay> {
      *
      * @param index the index (starting at 0).
      * @return the respective element at index {@code index}.
-     * @throws IndexOutOfBoundsException if the index is out of range (<tt>index &lt; 0 || index
-     *     &gt;= size()</tt>)
+     * @throws IndexOutOfBoundsException if the index is out of range ({@code index &lt; 0 || index
+     *     &gt;= size()})
      */
     public Overlay getOverlay(int index) {
         return overlays.get(index);
@@ -99,8 +99,8 @@ public class ColoredOverlayCollection implements Iterable<Overlay> {
      *
      * @param index the index (starting at 0).
      * @return the respective element at index {@code index}.
-     * @throws IndexOutOfBoundsException if the index is out of range (<tt>index &lt; 0 || index
-     *     &gt;= size()</tt>)
+     * @throws IndexOutOfBoundsException if the index is out of range ({@code index &lt; 0 || index
+     *     &gt;= size()})
      */
     public RGBColor getColor(int index) {
         return colors.get(index);

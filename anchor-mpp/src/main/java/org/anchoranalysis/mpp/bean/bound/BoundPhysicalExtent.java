@@ -30,20 +30,32 @@ import java.util.Optional;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 
-//
-//  An upper and lower bound in degrees which is converted
-//   to radians when resolved
-//
+/**
+ * A bound representing physical extents, which can be resolved based on image resolution.
+ *
+ * <p>This class extends {@link BoundMinMax} to provide functionality specific to physical extents,
+ * where the bound values may be adjusted based on the image resolution.
+ */
 @NoArgsConstructor
 public class BoundPhysicalExtent extends BoundMinMax {
 
-    /** */
     private static final long serialVersionUID = -5440824428055546445L;
 
+    /**
+     * Creates a new instance with specified minimum and maximum values.
+     *
+     * @param min the minimum physical extent
+     * @param max the maximum physical extent
+     */
     public BoundPhysicalExtent(double min, double max) {
         super(min, max);
     }
 
+    /**
+     * Creates a new instance by copying another BoundPhysicalExtent.
+     *
+     * @param source the source BoundPhysicalExtent to copy from
+     */
     public BoundPhysicalExtent(BoundPhysicalExtent source) {
         super(source);
     }
@@ -63,6 +75,14 @@ public class BoundPhysicalExtent extends BoundMinMax {
         return new BoundPhysicalExtent(this);
     }
 
+    /**
+     * Adjusts a value based on the provided resolution.
+     *
+     * @param value the value to adjust
+     * @param resolution an optional resolution to consider
+     * @param do3D whether to consider 3D resolution (if available)
+     * @return the adjusted value
+     */
     private static double maybeDivideBy(
             double value, Optional<Resolution> resolution, boolean do3D) {
         if (resolution.isPresent()) {
@@ -72,6 +92,13 @@ public class BoundPhysicalExtent extends BoundMinMax {
         }
     }
 
+    /**
+     * Calculates the minimum resolution component.
+     *
+     * @param resolution the resolution to consider
+     * @param do3D whether to consider 3D resolution
+     * @return the minimum resolution component
+     */
     private static double minResolutionComponent(Resolution resolution, boolean do3D) {
         double min2D = Math.min(resolution.x(), resolution.y());
         if (do3D) {

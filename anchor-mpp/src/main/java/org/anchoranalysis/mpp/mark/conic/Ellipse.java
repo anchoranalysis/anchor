@@ -52,9 +52,9 @@ import org.anchoranalysis.spatial.point.Point3d;
 import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 
+/** Represents a 2D ellipse mark. */
 public class Ellipse extends ConicBase implements Serializable {
 
-    /** */
     private static final long serialVersionUID = 1L;
 
     private static final int NUMBER_DIMENSIONS = 2;
@@ -88,18 +88,13 @@ public class Ellipse extends ConicBase implements Serializable {
                 return distance > Math.pow(getMaximumRadius() + targetMark.getMaximumRadius(), 2.0);
             };
 
-    // START Configurable parameters
     /** The size of the shell, expressed as a ratio of the radius. */
     @Getter @Setter private double shell = 0.2;
-    // END configurable parameters
 
-    // START mark state
     @Getter private Point2d radii;
 
     @Getter private Orientation orientation = new Orientation2D();
-    // END mark state
 
-    // START internal objects
     private EllipsoidMatrixCalculator ellipsoidCalculator;
     private double shellInternal;
     private double shellExternal;
@@ -110,18 +105,19 @@ public class Ellipse extends ConicBase implements Serializable {
     private double shellExternalOutSquared;
 
     private double radiiShellMaxSquared;
-    // END internal objects
 
-    // Default Constructor
+    /** Creates a new Ellipse with default values. */
     public Ellipse() {
         super();
-
         this.radii = new Point2d();
-
         ellipsoidCalculator = new EllipsoidMatrixCalculator(NUMBER_DIMENSIONS);
     }
 
-    // Copy Constructor
+    /**
+     * Creates a new Ellipse by copying an existing one.
+     *
+     * @param source the Ellipse to copy
+     */
     public Ellipse(Ellipse source) {
         super(source);
         this.radii = new Point2d(source.radii);
@@ -194,7 +190,12 @@ public class Ellipse extends ConicBase implements Serializable {
         }
     }
 
-    // Circumference
+    /**
+     * Calculates the circumference of the ellipse for a given region.
+     *
+     * @param regionID the ID of the region
+     * @return the circumference of the ellipse
+     */
     public double circumference(int regionID) {
         if (regionID == GlobalRegionIdentifiers.SUBMARK_SHELL) {
             return circumferenceUsingRamunjanApprox(
@@ -213,14 +214,26 @@ public class Ellipse extends ConicBase implements Serializable {
     public String toString() {
         return String.format(
                 "%s %s pos=%s %s vol=%e shell=%f",
-                "Ellpsd", identifier(), strPos(), descriptionMarks(), volume(0), shell);
+                "Ellpsd", identifier(), positionString(), descriptionMarks(), volume(0), shell);
     }
 
+    /**
+     * Updates the shell size and recalculates internal values.
+     *
+     * @param shell the new shell size as a ratio of the radius
+     */
     public void updateshell(double shell) {
         setShell(shell);
         updateAfterMarkChange();
     }
 
+    /**
+     * Sets the marks explicitly with position, orientation, and radii.
+     *
+     * @param position the 3D position of the ellipse
+     * @param orientation the orientation of the ellipse
+     * @param radii the radii of the ellipse
+     */
     public void setMarksExplicit(Point3d position, Orientation orientation, Point2d radii) {
         Preconditions.checkArgument(position.z() == 0, "non-zero z-value");
         super.setPosition(position);
@@ -260,12 +273,23 @@ public class Ellipse extends ConicBase implements Serializable {
         return Optional.of(quickOverlap);
     }
 
+    /**
+     * Sets the marks with radii and orientation.
+     *
+     * @param radii the radii of the ellipse
+     * @param orientation the orientation of the ellipse
+     */
     public void setMarks(Point2d radii, Orientation orientation) {
         this.orientation = orientation;
         this.radii = radii;
         updateAfterMarkChange();
     }
 
+    /**
+     * Scales the radii of the ellipse.
+     *
+     * @param multFactor the factor to multiply the radii by
+     */
     public void scaleRadii(double multFactor) {
         this.radii.scale(multFactor);
         updateAfterMarkChange();

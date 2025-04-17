@@ -36,15 +36,32 @@ import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.spatial.box.Extent;
 import org.anchoranalysis.test.image.ChannelFixture.IntensityFunction;
 
+/**
+ * A fixture for creating {@link EnergyStack} objects for testing purposes.
+ *
+ * <p>This class provides utility methods to create energy stacks with various configurations,
+ * including different sizes (2D or 3D), single or multiple channels, and with or without resolution
+ * information. It's designed to be used in test scenarios where standardized {@link EnergyStack}
+ * objects are needed.
+ *
+ * <p>The created energy stacks use predefined intensity functions to populate the channel data,
+ * ensuring consistent and predictable test data.
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class EnergyStackFixture {
 
     /**
-     * Creates the energy-stack to use.
+     * Creates an energy-stack with default settings.
      *
-     * @param big iff true, an image of larger size is created
-     * @param do3D iff true, a 3D image is created, otherwise 2D
+     * <p>This method creates an energy-stack with three channels and includes resolution
+     * information. It's a convenience method that calls the more detailed {@link #create(boolean,
+     * boolean, boolean, boolean)} with default values for single-channel and resolution inclusion.
+     *
+     * @param big if true, an image of larger size is created; if false, a medium-sized image is
+     *     created
+     * @param do3D if true, a 3D image is created; if false, a 2D image is created
      * @return the newly created energy-stack
+     * @see #create(boolean, boolean, boolean, boolean)
      */
     public static EnergyStack create(boolean big, boolean do3D) {
         return create(big, do3D, false, true);
@@ -83,6 +100,13 @@ public class EnergyStackFixture {
         }
     }
 
+    /**
+     * Determines the extent (size) of the image based on the input parameters.
+     *
+     * @param big if true, selects a large extent; otherwise, a medium extent
+     * @param do3D if true, selects a 3D extent; otherwise, a 2D extent
+     * @return the selected Extent
+     */
     private static Extent multiplexExtent(boolean big, boolean do3D) {
         if (do3D) {
             return big ? ChannelFixture.LARGE_3D : ChannelFixture.MEDIUM_3D;
@@ -91,6 +115,15 @@ public class EnergyStackFixture {
         }
     }
 
+    /**
+     * Adds a channel to the stack with the specified intensity function.
+     *
+     * @param stack the Stack to add the channel to
+     * @param size the Extent of the channel
+     * @param intensityFunction the function to determine intensity values
+     * @param fixture the ChannelFixture to use for creating the channel
+     * @throws IncorrectImageSizeException if the channel size is incorrect
+     */
     private static void addChannel(
             Stack stack, Extent size, IntensityFunction intensityFunction, ChannelFixture fixture)
             throws IncorrectImageSizeException {

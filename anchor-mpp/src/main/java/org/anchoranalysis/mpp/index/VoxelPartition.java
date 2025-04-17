@@ -29,22 +29,48 @@ package org.anchoranalysis.mpp.index;
 import org.anchoranalysis.mpp.index.factory.VoxelPartitionFactory;
 
 /**
- * A partition of voxels-values by slice.
+ * A partition of voxel values by slice.
  *
- * @author Owen Feehan
- * @param <T> part-type
+ * @param <T> The type representing the voxel partition
  */
 public interface VoxelPartition<T> {
 
-    // Should only be used read-only, if we want to maintain integrity with the combined list
+    /**
+     * Gets the voxel partition for a specific slice. This method should only be used for read-only
+     * operations to maintain integrity with the combined list.
+     *
+     * @param sliceID The ID of the slice
+     * @return The voxel partition for the specified slice
+     */
     T getSlice(int sliceID);
 
+    /**
+     * Adds a value to the voxel partition for a specific slice.
+     *
+     * @param sliceID The ID of the slice
+     * @param val The value to add
+     */
     void addForSlice(int sliceID, int val);
 
-    // Should only be used read-only
+    /**
+     * Gets the combined voxel partition for all slices. This method should only be used for
+     * read-only operations.
+     *
+     * @return The combined voxel partition
+     */
     T getCombined();
 
+    /**
+     * Cleans up the voxel partition using the provided factory.
+     *
+     * @param factory The factory to use for cleanup
+     */
     void cleanUp(VoxelPartitionFactory<T> factory);
 
+    /**
+     * Gets the number of slices in the partition.
+     *
+     * @return The number of slices
+     */
     int numberSlices();
 }

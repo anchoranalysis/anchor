@@ -37,19 +37,26 @@ import org.anchoranalysis.spatial.axis.Axis;
 import org.anchoranalysis.spatial.axis.AxisConversionException;
 import org.anchoranalysis.spatial.axis.AxisConverter;
 
+/**
+ * Calculates the center of gravity of a single object along a specified axis.
+ *
+ * <p>This feature computes the center of gravity of an object along the X, Y, or Z axis.
+ */
 @NoArgsConstructor
 public class CenterOfGravity extends FeatureSingleObject {
 
     // START BEAN PROPERTIES
+    /** The axis along which to calculate the center of gravity. Can be "x", "y", or "z". */
     @BeanField @Getter @Setter private String axis = "x";
 
+    /** The value to return if the center of gravity calculation results in NaN. */
     @BeanField @Getter @Setter private double emptyValue = 0;
     // END BEAN PROPERTIES
 
     /**
-     * Creates for a specific axis.
+     * Creates a CenterOfGravity feature for a specific axis.
      *
-     * @param axis axis
+     * @param axis the axis along which to calculate the center of gravity
      */
     public CenterOfGravity(Axis axis) {
         this.axis = axis.toString().toLowerCase();
@@ -68,6 +75,12 @@ public class CenterOfGravity extends FeatureSingleObject {
         return val;
     }
 
+    /**
+     * Converts the axis string to an Axis object.
+     *
+     * @return the Axis object corresponding to the axis string
+     * @throws FeatureCalculationException if the axis string cannot be converted to a valid Axis
+     */
     private Axis axis() throws FeatureCalculationException {
         try {
             return AxisConverter.createFromString(axis);

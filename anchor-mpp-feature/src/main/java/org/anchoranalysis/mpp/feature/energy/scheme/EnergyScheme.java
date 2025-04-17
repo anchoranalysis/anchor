@@ -55,22 +55,40 @@ import org.anchoranalysis.mpp.feature.input.FeatureInputSingleMemo;
  */
 public class EnergyScheme {
 
+    /** Features for individual elements (clique-size==1). */
     private final FeatureList<FeatureInputSingleMemo> elemInd;
+
+    /** Features for pairs of elements (clique-size==2). */
     private final FeatureList<FeatureInputPairMemo> elemPair;
+
+    /** Features for all elements together. */
     private final FeatureList<FeatureInputAllMemo> elemAll;
 
+    /** The region map used in the energy scheme. */
     private final RegionMap regionMap;
 
     /**
      * A list of features of the image that are calculated first, and exposed to the other features
-     * as parameters
+     * as parameters.
      */
     private final List<NamedBean<Feature<FeatureInputStack>>> listImageFeatures;
 
+    /** Criteria for adding pairs to the energy calculation. */
     private final AddCriteriaPair pairAddCriteria;
 
+    /** Optional dictionary provider for the energy scheme. */
     private final Optional<DictionaryProvider> dictionary;
 
+    /**
+     * Creates an energy scheme with the specified features and region map.
+     *
+     * @param elemInd features for individual elements
+     * @param elemPair features for pairs of elements
+     * @param elemAll features for all elements together
+     * @param regionMap the region map to use
+     * @param pairAddCriteria criteria for adding pairs
+     * @throws CreateException if the energy scheme cannot be created
+     */
     public EnergyScheme(
             FeatureList<FeatureInputSingleMemo> elemInd,
             FeatureList<FeatureInputPairMemo> elemPair,
@@ -88,6 +106,18 @@ public class EnergyScheme {
                 new ArrayList<>());
     }
 
+    /**
+     * Creates an energy scheme with the specified features, region map, and additional options.
+     *
+     * @param elemInd features for individual elements
+     * @param elemPair features for pairs of elements
+     * @param elemAll features for all elements together
+     * @param regionMap the region map to use
+     * @param pairAddCriteria criteria for adding pairs
+     * @param dictionary optional dictionary provider
+     * @param listImageFeatures list of image features to be calculated first
+     * @throws CreateException if the energy scheme cannot be created
+     */
     public EnergyScheme(
             FeatureList<FeatureInputSingleMemo> elemInd,
             FeatureList<FeatureInputPairMemo> elemPair,
@@ -107,7 +137,13 @@ public class EnergyScheme {
         checkAtLeastOneEnergyElement();
     }
 
-    /*** returns the associated {@link Dictionary} or an empty set, if no dictionary is associated with the energy-scheme. */
+    /**
+     * Creates and returns the associated {@link Dictionary} or an empty dictionary if none is
+     * associated.
+     *
+     * @return the created {@link Dictionary}
+     * @throws CreateException if the dictionary cannot be created
+     */
     public Dictionary createDictionary() throws CreateException {
         if (dictionary.isPresent()) {
             try {
@@ -127,11 +163,13 @@ public class EnergyScheme {
         }
     }
 
-    // -1 means everything
-
     /**
+     * Gets the feature list for a specific clique size.
+     *
      * @param cliqueSize 1 for pairwise, 0 for unary, -1 for all
-     * @return
+     * @return the {@link FeatureList} for the specified clique size
+     * @param <T> the type of {@link FeatureInput}
+     * @throws AnchorImpossibleSituationException if an invalid clique size is provided
      */
     @SuppressWarnings("unchecked")
     public <T extends FeatureInput> FeatureList<T> getElemByCliqueSize(int cliqueSize) {
@@ -147,26 +185,56 @@ public class EnergyScheme {
         }
     }
 
+    /**
+     * Gets the feature list for individual elements.
+     *
+     * @return the {@link FeatureList} for individual elements
+     */
     public FeatureList<FeatureInputSingleMemo> getElemIndAsFeatureList() {
         return elemInd;
     }
 
+    /**
+     * Gets the feature list for pairs of elements.
+     *
+     * @return the {@link FeatureList} for pairs of elements
+     */
     public FeatureList<FeatureInputPairMemo> getElemPairAsFeatureList() {
         return elemPair;
     }
 
+    /**
+     * Gets the feature list for all elements together.
+     *
+     * @return the {@link FeatureList} for all elements
+     */
     public FeatureList<FeatureInputAllMemo> getElemAllAsFeatureList() {
         return elemAll;
     }
 
+    /**
+     * Gets the criteria for adding pairs to the energy calculation.
+     *
+     * @return the {@link AddCriteriaPair} for pair addition
+     */
     public AddCriteriaPair getPairAddCriteria() {
         return pairAddCriteria;
     }
 
+    /**
+     * Gets the list of image features to be calculated first.
+     *
+     * @return the list of {@link NamedBean}s containing image features
+     */
     public List<NamedBean<Feature<FeatureInputStack>>> getListImageFeatures() {
         return listImageFeatures;
     }
 
+    /**
+     * Gets the region map used in the energy scheme.
+     *
+     * @return the {@link RegionMap} for the energy scheme
+     */
     public RegionMap getRegionMap() {
         return regionMap;
     }

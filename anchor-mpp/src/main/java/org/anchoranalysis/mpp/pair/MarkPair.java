@@ -29,15 +29,26 @@ package org.anchoranalysis.mpp.pair;
 import org.anchoranalysis.mpp.mark.Mark;
 
 /**
- * Pair of marks
+ * Represents a pair of marks, with a source and destination.
  *
- * @param <T> item-type
+ * <p>The marks are ordered such that the source always has a lower identifier than the destination.
+ *
+ * @param <T> The type of mark in the pair, extending Mark
  */
 public class MarkPair<T extends Mark> {
 
     private final T source;
     private final T destination;
 
+    /**
+     * Constructs a new MarkPair.
+     *
+     * <p>The marks are automatically ordered so that the source has a lower identifier than the
+     * destination.
+     *
+     * @param source One of the marks in the pair
+     * @param destination The other mark in the pair
+     */
     public MarkPair(T source, T destination) {
         super();
 
@@ -77,10 +88,20 @@ public class MarkPair<T extends Mark> {
         return (source.getIdentifier() * 3) + destination.getIdentifier();
     }
 
+    /**
+     * Gets the source mark of the pair (the one with the lower identifier).
+     *
+     * @return The source mark
+     */
     public T getSource() {
         return source;
     }
 
+    /**
+     * Gets the destination mark of the pair (the one with the higher identifier).
+     *
+     * @return The destination mark
+     */
     public T getDestination() {
         return destination;
     }

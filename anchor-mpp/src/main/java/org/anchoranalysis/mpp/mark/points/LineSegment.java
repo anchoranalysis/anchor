@@ -38,22 +38,28 @@ import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.point.PointConverter;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 
+/** Represents a line segment in 3D space as a Mark. */
 @NoArgsConstructor
 public class LineSegment extends Mark {
 
-    /** */
     private static final long serialVersionUID = 6436383113190855927L;
 
     private static final byte FLAG_SUBMARK_NONE = RegionMembershipUtilities.flagForNoRegion();
     private static final byte FLAG_SUBMARK_INSIDE =
             RegionMembershipUtilities.flagForRegion(GlobalRegionIdentifiers.SUBMARK_INSIDE);
 
-    // START mark state
+    /** The maximum distance from the line for a point to be considered inside. */
     private double distanceToLineForInside = 0.5;
-    // END mark state
 
+    /** Calculator for distances to the line segment. */
     private transient DistanceCalculatorToLine distanceCalcToLine = new DistanceCalculatorToLine();
 
+    /**
+     * Constructs a LineSegment with given start and end points.
+     *
+     * @param startPoint the start point of the line segment
+     * @param endPoint the end point of the line segment
+     */
     public LineSegment(Point3i startPoint, Point3i endPoint) {
         setPoints(startPoint, endPoint);
     }
@@ -127,22 +133,49 @@ public class LineSegment extends Mark {
         return point;
     }
 
+    /**
+     * Sets the start and end points of the line segment.
+     *
+     * @param startPoint the start point
+     * @param endPoint the end point
+     */
     public void setPoints(Point3i startPoint, Point3i endPoint) {
         setPoints(PointConverter.doubleFromInt(startPoint), PointConverter.doubleFromInt(endPoint));
     }
 
+    /**
+     * Sets the start and end points of the line segment.
+     *
+     * @param startPoint the start point
+     * @param endPoint the end point
+     */
     public void setPoints(Point3d startPoint, Point3d endPoint) {
         distanceCalcToLine.setPoints(startPoint, endPoint);
     }
 
+    /**
+     * Gets the start point of the line segment.
+     *
+     * @return the start point
+     */
     public Point3d getStartPoint() {
         return distanceCalcToLine.getStartPoint();
     }
 
+    /**
+     * Gets the end point of the line segment.
+     *
+     * @return the end point
+     */
     public Point3d getEndPoint() {
         return distanceCalcToLine.getEndPoint();
     }
 
+    /**
+     * Gets the direction vector of the line segment.
+     *
+     * @return the direction vector
+     */
     public Point3d getDirectionVector() {
         return distanceCalcToLine.getDirectionVector();
     }

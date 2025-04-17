@@ -29,7 +29,14 @@ package org.anchoranalysis.mpp.bean.proposer;
 import org.anchoranalysis.mpp.bean.MarksBean;
 
 /**
- * @author Owen Feehan
- * @param <T> bean-type
+ * An abstract base class for proposer beans in the MPP (Marked Point Process) framework.
+ *
+ * <p>This class extends MarksBean and serves as a foundation for creating various types of
+ * proposers. It is designed to be extended by specific proposer implementations.
+ *
+ * @param <T> The specific type of the proposer bean
  */
-public abstract class ProposerBean<T> extends MarksBean<T> {}
+public abstract class ProposerBean<T> extends MarksBean<T> {
+    // The class is left empty as it's meant to be a base class for other proposer beans.
+    // Specific implementations should add their own methods and fields as needed.
+}

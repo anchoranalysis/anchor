@@ -38,9 +38,11 @@ import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.spatial.box.BoundingBox;
 
+/** An {@link AddCriteriaPair} that includes marks if their bounding boxes intersect. */
 public class BoundingBoxIntersection extends AddCriteriaPair {
 
     // START BEAN PROPERTIES
+    /** If true, the Z dimension is ignored when checking for intersection. */
     @BeanField @Getter @Setter private boolean suppressZ = false;
     // END BEAN PROPERTIES
 
@@ -62,6 +64,13 @@ public class BoundingBoxIntersection extends AddCriteriaPair {
         return Optional.empty();
     }
 
+    /**
+     * Creates a bounding box for a mark, optionally suppressing the Z dimension.
+     *
+     * @param mark the {@link Mark} for which to create a bounding box
+     * @param dimensions the {@link Dimensions} of the image
+     * @return a {@link BoundingBox} for the mark
+     */
     private BoundingBox boxFor(Mark mark, Dimensions dimensions) {
         BoundingBox box = mark.boxAllRegions(dimensions);
         if (suppressZ) {

@@ -32,8 +32,17 @@ import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 
+/** An abstract base class for proposing scalar values. */
 public abstract class ScalarProposer extends NullParametersBean<ScalarProposer> {
 
+    /**
+     * Proposes a scalar value based on the given parameters.
+     *
+     * @param randomNumberGenerator a random number generator for any stochastic processes
+     * @param resolution an optional resolution to consider when proposing the scalar value
+     * @return the proposed scalar value as a double
+     * @throws OperationFailedException if the proposal operation fails
+     */
     public abstract double propose(
             RandomNumberGenerator randomNumberGenerator, Optional<Resolution> resolution)
             throws OperationFailedException;

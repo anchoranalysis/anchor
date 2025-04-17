@@ -40,21 +40,32 @@ import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.point.PointConverter;
 import org.anchoranalysis.spatial.scale.ScaleFactor;
 
+/**
+ * A a list of 3D points.
+ *
+ * <p>Internally a set data-structure (as opposed to list) is used to store the points.
+ */
 public class PointList extends PointListBase {
 
-    /** */
     private static final long serialVersionUID = 1718294470056379145L;
 
     private static final byte FLAG_SUBMARK_NONE = RegionMembershipUtilities.flagForNoRegion();
     private static final byte FLAG_SUBMARK_INSIDE =
             RegionMembershipUtilities.flagForRegion(GlobalRegionIdentifiers.SUBMARK_INSIDE);
 
-    private Set<Point3d> set; // A set that makes it quick to check if a point is on the list
+    /** A set that makes it quick to check if a point is on the list. */
+    private Set<Point3d> set;
 
+    /** Constructs an empty PointList. */
     public PointList() {
         super();
     }
 
+    /**
+     * Constructs a PointList from a stream of Point3d objects.
+     *
+     * @param stream the stream of Point3d objects
+     */
     public PointList(Stream<Point3d> stream) {
         super(stream);
     }
@@ -73,7 +84,6 @@ public class PointList extends PointListBase {
     @Override
     public void updateAfterPointsChange() {
         super.updateAfterPointsChange();
-
         this.set = new HashSet<>(getPoints());
     }
 
@@ -94,11 +104,15 @@ public class PointList extends PointListBase {
         return PointList.class.getSimpleName() + "_" + this.hashCode();
     }
 
+    /**
+     * Scales the points in the list by a given scale factor.
+     *
+     * @param scaleFactor the scale factor to apply
+     * @throws CheckedUnsupportedOperationException if scaling is not supported
+     */
     @Override
     public void scale(ScaleFactor scaleFactor) throws CheckedUnsupportedOperationException {
-
         for (int i = 0; i < getPoints().size(); i++) {
-
             Point3d point = getPoints().get(i);
             scaleFactor.scale(point);
         }

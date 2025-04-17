@@ -38,19 +38,42 @@ import org.anchoranalysis.image.core.dimensions.SpatialUnits;
 import org.anchoranalysis.image.core.dimensions.SpatialUnits.UnitSuffix;
 import org.anchoranalysis.image.core.dimensions.UnitConverter;
 
+/**
+ * An abstract base class for features that convert units between physical and voxel space.
+ *
+ * <p>This class provides a framework for converting feature values between different unit systems,
+ * typically between voxel-based measurements and physical measurements (e.g., micrometers).
+ *
+ * @param <T> the type of feature input, which must include resolution information
+ */
 @NoArgsConstructor
 public abstract class FeatureConvertUnits<T extends FeatureInputWithResolution>
         extends WithResolutionBase<T> {
 
     // START BEAN PROPERTIES
+    /** The type of unit to convert to, represented as a string (e.g., "um" for micrometers). */
     @BeanField @Getter @Setter private String unitType;
     // END BEAN PROPERTIES
 
+    /**
+     * Constructs a FeatureConvertUnits with a specified feature and unit type.
+     *
+     * @param feature the feature to be converted
+     * @param unitType the type of unit to convert to
+     */
     protected FeatureConvertUnits(Feature<T> feature, UnitSuffix unitType) {
         super(feature);
         this.unitType = SpatialUnits.suffixStringForMeters(unitType);
     }
 
+    /**
+     * Calculates the feature value with resolution information.
+     *
+     * @param value the input value to be converted
+     * @param resolution the resolution information for the conversion
+     * @return the converted value
+     * @throws FeatureCalculationException if an error occurs during the calculation
+     */
     @Override
     protected double calculateWithResolution(double value, Resolution resolution)
             throws FeatureCalculationException {
@@ -58,9 +81,23 @@ public abstract class FeatureConvertUnits<T extends FeatureInputWithResolution>
         return convertToUnits(valuePhysical);
     }
 
+    /**
+     * Converts the input value to physical units.
+     *
+     * @param value the input value to be converted
+     * @param unitConverter the unit converter to use for the conversion
+     * @return the converted value in physical units
+     * @throws FeatureCalculationException if an error occurs during the conversion
+     */
     protected abstract double convertToPhysical(double value, UnitConverter unitConverter)
             throws FeatureCalculationException;
 
+    /**
+     * Converts a physical value to the specified unit type.
+     *
+     * @param valuePhysical the physical value to be converted
+     * @return the converted value in the specified unit type
+     */
     private double convertToUnits(double valuePhysical) {
         return SpatialUnits.convertToUnits(valuePhysical, unitType);
     }

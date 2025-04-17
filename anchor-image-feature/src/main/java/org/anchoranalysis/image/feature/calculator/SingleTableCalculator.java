@@ -42,13 +42,20 @@ import org.anchoranalysis.feature.store.NamedFeatureStore;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitialization;
 import org.anchoranalysis.image.feature.input.FeatureInputSingleObject;
 
+/**
+ * A feature table calculator for single objects.
+ *
+ * <p>This class implements the {@link FeatureTableCalculator} interface for {@link
+ * FeatureInputSingleObject}, providing methods to calculate features for single objects and manage
+ * the feature calculation process.
+ */
 @RequiredArgsConstructor
 public class SingleTableCalculator implements FeatureTableCalculator<FeatureInputSingleObject> {
 
-    // START REQUIRED ARGUMENTS
+    /** The named feature store containing features for single objects. */
     private final NamedFeatureStore<FeatureInputSingleObject> namedFeatureStore;
-    // END REQUIRED ARGUMENTS
 
+    /** The multi-feature calculator used for feature calculations. */
     private FeatureCalculatorMulti<FeatureInputSingleObject> calculator;
 
     @Override

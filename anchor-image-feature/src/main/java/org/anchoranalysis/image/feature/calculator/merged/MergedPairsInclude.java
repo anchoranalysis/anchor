@@ -26,16 +26,30 @@
 
 package org.anchoranalysis.image.feature.calculator.merged;
 
+/**
+ * Specifies which parts of a merged pair to include in calculations.
+ *
+ * <p>This class allows for selective inclusion of the first object, second object, and/or the
+ * merged object in feature calculations.
+ */
 public final class MergedPairsInclude {
 
     private boolean includeFirst;
     private boolean includeSecond;
     private boolean includeMerged;
 
+    /** Constructs a MergedPairsInclude with all options set to true. */
     public MergedPairsInclude() {
         this(true, true, true);
     }
 
+    /**
+     * Constructs a MergedPairsInclude with specified inclusion options.
+     *
+     * @param includeFirst whether to include the first object
+     * @param includeSecond whether to include the second object
+     * @param includeMerged whether to include the merged object
+     */
     public MergedPairsInclude(boolean includeFirst, boolean includeSecond, boolean includeMerged) {
         super();
         this.includeFirst = includeFirst;
@@ -43,18 +57,38 @@ public final class MergedPairsInclude {
         this.includeMerged = includeMerged;
     }
 
+    /**
+     * Checks if either the first or second object should be included.
+     *
+     * @return true if either the first or second object should be included, false otherwise
+     */
     public boolean includeFirstOrSecond() {
         return includeFirst || includeSecond;
     }
 
+    /**
+     * Checks if the first object should be included.
+     *
+     * @return true if the first object should be included, false otherwise
+     */
     public boolean includeFirst() {
         return includeFirst;
     }
 
+    /**
+     * Checks if the second object should be included.
+     *
+     * @return true if the second object should be included, false otherwise
+     */
     public boolean includeSecond() {
         return includeSecond;
     }
 
+    /**
+     * Checks if the merged object should be included.
+     *
+     * @return true if the merged object should be included, false otherwise
+     */
     public boolean includeMerged() {
         return includeMerged;
     }
