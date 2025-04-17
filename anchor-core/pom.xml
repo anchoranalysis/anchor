@@ -3,10 +3,10 @@
   <parent>
 	  <groupId>org.anchoranalysis.anchor</groupId>
 	  <artifactId>anchor-parent</artifactId>
-	  <version>0.3.1-SNAPSHOT</version>
+	  <version>0.3.1</version>
   </parent>
   <artifactId>anchor-core</artifactId>
-  <version>0.3.1-SNAPSHOT</version>
+  <version>0.3.1</version>
   <description>Fundamental core library objects for Anchor platform.</description>
   <dependencies>
     <dependency>
@@ -63,6 +63,6 @@
 		<connection>scm:git:git@github.com:anchoranalysis/anchor.git</connection>
 		<developerConnection>scm:git:git@github.com:anchoranalysis/anchor.git</developerConnection>
 		<url>https://github.com/anchoranalysis/anchor</url>
-	  <tag>HEAD</tag>
+	  <tag>anchor-parent-0.3.1</tag>
     </scm>
 </project>
