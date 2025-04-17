@@ -27,7 +27,7 @@
 		<dependency>
 		  <groupId>${project.groupId}</groupId>
 		  <artifactId>anchor-image-core</artifactId>
-		  <version>0.2.2-SNAPSHOT</version>
+		  <version>[0.2.1,1.0.0)</version>
 		</dependency>
 		<dependency>
 		  <groupId>${project.groupId}</groupId>
