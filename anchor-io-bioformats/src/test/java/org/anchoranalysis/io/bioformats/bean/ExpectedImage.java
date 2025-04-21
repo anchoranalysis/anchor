@@ -88,6 +88,7 @@ class ExpectedImage {
 
     /** Which intensity value to count */
     private final int intensityValueToCount;
+
     // END: REQUIRED ARGUMENTS
 
     private Logger logger = LoggerFixture.suppressedLogger();

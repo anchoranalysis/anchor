@@ -50,6 +50,7 @@ public class DefineSingle<T extends FeatureInput> extends ReferencingFeatureList
     // START BEAN PROPERTIES
     /** The sole feature that forms the list. */
     @Getter @Setter @BeanField @SkipInit private Feature<T> item;
+
     // END BEAN PROPERTIES
 
     @Override

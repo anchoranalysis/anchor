@@ -44,6 +44,7 @@ class RecordOutputNamesMultiLevel implements MultiLevelOutputEnabled {
 
     /** What all outputs that this write processes are added to. */
     private final MultiLevelRecordedOutputs recordedOutputs;
+
     // END REQUIRED ARGUMENTS
 
     @Override

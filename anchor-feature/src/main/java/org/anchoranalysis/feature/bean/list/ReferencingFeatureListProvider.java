@@ -54,6 +54,7 @@ public abstract class ReferencingFeatureListProvider<T extends FeatureInput>
      * created.
      */
     @BeanField @OptionalBean @Getter @Setter private StringSet references;
+
     // END BEAN PROPERITES
 
     @Override

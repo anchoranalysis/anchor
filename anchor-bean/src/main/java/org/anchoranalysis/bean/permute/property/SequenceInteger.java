@@ -55,6 +55,7 @@ public class SequenceInteger extends AnchorBean<SequenceInteger> {
 
     /** Size of step to use when incrementing. */
     @BeanField @Getter @Setter private int increment = 1;
+
     // END BEAN PROPERTIES
 
     @Override

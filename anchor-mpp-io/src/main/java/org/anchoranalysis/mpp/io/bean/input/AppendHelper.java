@@ -143,9 +143,7 @@ class AppendHelper {
      * @param includeRejected whether to include rejected annotations
      */
     public void appendMarksFromAnnotation(
-            List<NamedBean<DerivePath>> paths,
-            boolean includeAccepted,
-            boolean includeRejected) {
+            List<NamedBean<DerivePath>> paths, boolean includeAccepted, boolean includeRejected) {
 
         append(
                 paths,

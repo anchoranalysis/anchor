@@ -70,6 +70,7 @@ public class MatchExtensions extends FilePathMatcher {
      * extensions}.
      */
     @BeanField @Getter @Setter private boolean prioritizeInputContext = false;
+
     // END BEAN PROPERTIES
 
     /**

@@ -42,6 +42,7 @@ public class PermutePropertyDoubleSet extends PermuteProperty<Double> {
     // START BEAN PROPERTIES
     /** The respect double values to assign during the permutation. */
     @BeanField @Getter @Setter private DoubleSet values;
+
     // END BEAN PROPERTIES
 
     @Override

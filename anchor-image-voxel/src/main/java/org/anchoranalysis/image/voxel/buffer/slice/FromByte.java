@@ -64,6 +64,7 @@ public class FromByte implements SliceBufferIndex<UnsignedByteBuffer> {
     public static SliceBufferIndex<UnsignedByteBuffer> createUninitialized(Extent extent) {
         return new FromByte(extent);
     }
+
     // END FACTORY METHODS
 
     private FromByte(Extent extent) {

@@ -47,6 +47,7 @@ public abstract class CalculateLevelUnary extends CalculateLevel {
     // START BEAN PROPERTIES
     /** The delegate {@link CalculateLevel}. */
     @BeanField @Getter @Setter private CalculateLevel calculateLevel;
+
     // END BEAN PROPERTIES
 
     /**

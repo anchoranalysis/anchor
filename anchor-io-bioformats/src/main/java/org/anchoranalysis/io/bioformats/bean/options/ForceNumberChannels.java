@@ -43,6 +43,7 @@ public class ForceNumberChannels extends ReadOptionsDelegate {
     // START BEAN PROPERTIES
     /** The assigned number of channels. */
     @BeanField @Positive @Getter @Setter private int numberChannels;
+
     // END BEAN PROPERTIES
 
     @Override

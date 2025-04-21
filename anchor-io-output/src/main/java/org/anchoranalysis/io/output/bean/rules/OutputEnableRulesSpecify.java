@@ -60,6 +60,7 @@ public abstract class OutputEnableRulesSpecify extends OutputEnabledRules {
      * <p>If the list is empty, all second-level outputs are considered permissive.
      */
     @BeanField @Getter @Setter private List<NamedBean<StringSet>> second = Arrays.asList();
+
     // END BEAN PROPERTIES
 
     // We cache the second-level map here.

@@ -53,6 +53,7 @@ public class VolumePhysical extends UnitValueVolume {
      * <p>See {@link SpatialUnits} for acceptable string-values.
      */
     @BeanField @Getter @Setter private String unitType = ""; // NOSONAR
+
     // END VALUE
 
     @Override

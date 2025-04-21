@@ -77,6 +77,7 @@ public abstract class VoxelsResizerImgLib2 extends VoxelsResizer {
             factoryShort;
 
     private final InterpolatorFactory<FloatType, RandomAccessible<FloatType>> factoryFloat;
+
     // END REQUIRED ARGUMENTS
 
     /** If set, rather than using the default mirroring strategy, an extend strategy is used */

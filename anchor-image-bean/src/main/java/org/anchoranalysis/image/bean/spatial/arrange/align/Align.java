@@ -69,6 +69,7 @@ public class Align extends BoxAligner {
      * the z-dimension of the stack onto which it is overlayed.
      */
     @BeanField @Getter @Setter private String alignZ = PositionChoicesConstants.CENTER;
+
     // END BEAN PROPERTIES
 
     // START: enums derived from the text in the respective field, to indicate how to do alignment
@@ -76,6 +77,7 @@ public class Align extends BoxAligner {
     private AlignmentOnDimension alignXEnum;
     private AlignmentOnDimension alignYEnum;
     private AlignmentOnDimension alignZEnum;
+
     // END: enums derived.
 
     /**

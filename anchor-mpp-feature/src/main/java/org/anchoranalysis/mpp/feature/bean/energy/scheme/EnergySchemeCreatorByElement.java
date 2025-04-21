@@ -84,6 +84,7 @@ public class EnergySchemeCreatorByElement extends EnergySchemeCreator {
      * actual features.
      */
     @BeanField @Getter @Setter private boolean includeFeatureNames = false;
+
     // END BEAN PROPERTIES
 
     @Override

@@ -66,6 +66,7 @@ public class DebugDependentProcessor<T extends InputFromManager, S> extends JobP
      * on a desktop PC where other tasks (e.g web browsing) may be ongoing during processing.
      */
     @BeanField @Getter @Setter private int keepProcessorsFree = 1;
+
     // END BEAN PROPERTIES
 
     @Override

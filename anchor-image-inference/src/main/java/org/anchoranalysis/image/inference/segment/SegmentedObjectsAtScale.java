@@ -77,6 +77,7 @@ public class SegmentedObjectsAtScale {
      * Appended to the execution-time identifiers to indicate more precisely what is being recorded.
      */
     private final String executionTimeSuffix;
+
     /** END: REQUIRED ARGUMENTS. */
 
     // START: memoized alternative representations of source at at specific scale.
@@ -85,6 +86,7 @@ public class SegmentedObjectsAtScale {
     private ObjectCollectionWithProperties objectsWithProperties;
     private List<WithConfidence<ObjectMask>> listWithoutLabels;
     private List<LabelledWithConfidence<ObjectMask>> listWithLabels;
+
     // END: memoized alternative representations.
 
     /** Memoized alternative representation of the background as a {@link DisplayStack}. */

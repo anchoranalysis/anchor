@@ -53,6 +53,7 @@ public abstract class FeatureConvertUnits<T extends FeatureInputWithResolution>
     // START BEAN PROPERTIES
     /** The type of unit to convert to, represented as a string (e.g., "um" for micrometers). */
     @BeanField @Getter @Setter private String unitType;
+
     // END BEAN PROPERTIES
 
     /**

@@ -58,6 +58,7 @@ public class TestLoaderImage {
 
     /** Reads rasters from filesystem */
     private final StackReader stackReader;
+
     // END REQUIRED ARGUMENTS
 
     private final Logger logger = LoggerFixture.suppressedLogger();

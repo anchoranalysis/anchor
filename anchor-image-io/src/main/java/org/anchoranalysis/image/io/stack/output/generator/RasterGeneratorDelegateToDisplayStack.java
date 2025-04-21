@@ -53,6 +53,7 @@ public class RasterGeneratorDelegateToDisplayStack<T> extends RasterGeneratorSel
      * <p>RGB-A images should never be produced.
      */
     private final boolean rgb;
+
     // START END ARGUMENTS
 
     @Override

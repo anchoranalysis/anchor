@@ -53,11 +53,13 @@ public class PredicateImplementation<T> implements VoxelsPredicate {
     // START REQUIRED ARGUMENTS
     /** The voxels on which the predicate is based. */
     private final Voxels<T> voxels;
+
     // END REQUIRED ARGUMENTS
 
     // START REQUIRED ARGUMENTS
     /** Checks if the current value of a buffer matches a predicate */
     private final Predicate<T> predicate;
+
     // END REQUIRED ARGUMENTS
 
     @Override

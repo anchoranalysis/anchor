@@ -55,6 +55,7 @@ public class BoundReplaceStrategy<T extends FeatureInput, S extends ReplaceStrat
     // START REQUIRED ARGUMENTS
     /** Creates a strategy corresponding to a particular cache. */
     private final Function<CacheCreator, S> createStrategy;
+
     // END REQUIRED ARGUMENTS
 
     /** The strategy that has been bound (if it exists). */

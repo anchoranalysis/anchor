@@ -71,6 +71,7 @@ public class OutputFeatureTable extends ImageBean<OutputFeatureTable> {
 
     /** A list of features to calculate in an evaluation context. */
     @BeanField @Getter @Setter private FeatureListEvaluator<FeatureInputSingleObject> feature;
+
     // END BEAN PROPERTIES
 
     /**

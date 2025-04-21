@@ -46,6 +46,7 @@ public class SharedObjects {
     // START REQUIRED ARGUMENTS
     /** Logger and other common configuration */
     @Getter private final CommonContext context;
+
     // END REQUIRED ARGUMENTS
 
     /** A set of NamedItemStores, partitioned by Class<?> */

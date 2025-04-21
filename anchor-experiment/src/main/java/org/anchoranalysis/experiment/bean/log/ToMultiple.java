@@ -49,6 +49,7 @@ public class ToMultiple extends LoggingDestination {
     // START BEAN
     /** The list of loggers to log to */
     @BeanField @Getter @Setter private List<LoggingDestination> list = Arrays.asList();
+
     // END BEAN
 
     /**

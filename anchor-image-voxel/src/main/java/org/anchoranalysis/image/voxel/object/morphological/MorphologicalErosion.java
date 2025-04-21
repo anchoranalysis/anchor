@@ -61,6 +61,7 @@ public class MorphologicalErosion {
             throws CreateException {
         return erode(object, iterations, useZ, Optional.empty());
     }
+
     /**
      * Performs a morphological erosion on an {@link ObjectMask} - with a <b>postcondition</b>.
      *

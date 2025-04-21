@@ -71,6 +71,7 @@ public class SpecificPathList extends FilesProvider {
      * called if exists, otherwise an error is thrown
      */
     @BeanField @OptionalBean @Getter @Setter private FilesProvider fallback;
+
     // END BEAN PROPERTIES
 
     /**

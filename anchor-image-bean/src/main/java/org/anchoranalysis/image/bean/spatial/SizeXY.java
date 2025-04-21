@@ -54,6 +54,7 @@ public class SizeXY extends AnchorBean<SizeXY> {
 
     /** Size in Y dimension. The height. */
     @BeanField @Positive @Getter @Setter private int height;
+
     // END BEAN PROPERTIES
 
     /**

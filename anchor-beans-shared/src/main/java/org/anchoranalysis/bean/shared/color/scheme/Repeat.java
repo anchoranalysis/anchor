@@ -42,6 +42,7 @@ public class Repeat extends ColorSchemeUnary {
     // START BEAN PROPERTIES
     /** How many times to duplicate the list. */
     @BeanField @Getter @Setter private int times = 2;
+
     // END BEAN PROPERTIES
 
     @Override

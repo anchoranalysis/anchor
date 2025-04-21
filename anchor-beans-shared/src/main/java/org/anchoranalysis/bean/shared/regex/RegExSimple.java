@@ -51,6 +51,7 @@ public class RegExSimple extends RegEx {
     // START BEAN PROPERTIES
     /** A Java-style regular expression containing groups. */
     @BeanField @Getter @Setter private String expression;
+
     // END BEAN PROPERTIES
 
     /** Lazy creation of a pattern from the regular-expression string. */

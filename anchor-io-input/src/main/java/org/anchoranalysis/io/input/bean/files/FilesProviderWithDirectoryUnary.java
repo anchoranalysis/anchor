@@ -47,6 +47,7 @@ public abstract class FilesProviderWithDirectoryUnary extends FilesProviderWithD
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private FilesProviderWithDirectory files;
+
     // END BEAN PROPERTIES
 
     @Override

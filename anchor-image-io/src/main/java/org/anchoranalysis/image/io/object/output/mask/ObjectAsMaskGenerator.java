@@ -55,6 +55,7 @@ public class ObjectAsMaskGenerator extends RasterGeneratorSelectFormat<ObjectMas
 
     // START REQUIRED ARGUMENTS
     private final Optional<Resolution> resolution;
+
     // END REQUIRED ARGUMENTS
 
     /** Creates using a default image-resolution. */

@@ -46,6 +46,7 @@ public class EnergySchemeSet implements Iterable<SimpleNameValue<EnergyScheme>> 
     // START REQUIRED ARGUMENTS
     /** Shared features associated with all energy schemes in the set. */
     @Getter private final SharedFeatures sharedFeatures;
+
     // END REQUIRED ARGUMENTS
 
     /** Internal storage for named energy schemes. */

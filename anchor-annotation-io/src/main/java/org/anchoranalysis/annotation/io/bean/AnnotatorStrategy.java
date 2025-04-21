@@ -55,6 +55,7 @@ public abstract class AnnotatorStrategy extends AnchorBean<AnnotatorStrategy> {
 
     /** How to read raster {@link Stack}s from the file-system. */
     @BeanField @DefaultInstance @Getter @Setter private StackReader stackReader;
+
     // END BEAN PROPERTIES
 
     /**

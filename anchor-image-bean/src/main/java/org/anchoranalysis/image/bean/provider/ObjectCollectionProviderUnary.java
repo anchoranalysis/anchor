@@ -47,6 +47,7 @@ public abstract class ObjectCollectionProviderUnary extends ObjectCollectionProv
     // START BEAN PROPERTIES
     /** The delegate {@code Provider<ObjectCollection>} that is called. */
     @BeanField @Getter @Setter private Provider<ObjectCollection> objects;
+
     // END BEAN PROPERTIES
 
     @Override

@@ -56,6 +56,7 @@ public class PositionChoices {
      * exists.
      */
     private Optional<String> textMinAlternative = Optional.empty();
+
     // END ARGUMENTS
 
     /**

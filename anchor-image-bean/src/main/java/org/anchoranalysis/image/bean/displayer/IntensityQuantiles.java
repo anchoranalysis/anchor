@@ -54,6 +54,7 @@ public class IntensityQuantiles extends StackDisplayer {
 
     /** The lower quantile to use as the <b>upper</b>-limit for the intensity range to display. */
     @BeanField @Getter @Setter private double quantileUpper = 0.9999;
+
     // END BEAN PROPERTIES
 
     @Override

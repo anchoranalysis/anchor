@@ -49,6 +49,7 @@ public class ToTextFileOnlyIfFailure extends ToTextFileBase {
     // START BEAN PROPERTIES
     /** If true, any warning message is considered as a failure. */
     @BeanField private boolean considerWarningAsFailure = true;
+
     // END BEAN PROPERTIES
 
     @Override

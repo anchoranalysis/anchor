@@ -58,6 +58,7 @@ public class Grow extends BoxAligner {
 
     /** How to align the box after it is grown, as much as possible. */
     @Getter @Setter @BeanField private Align align = new Align();
+
     // END BEAN PROPERTIES
 
     /**

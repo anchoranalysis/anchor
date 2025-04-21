@@ -50,6 +50,7 @@ class CompositeFactory {
 
     /** Number of frames in {@code stack}. */
     private final int numberFrames;
+
     // END REQUIRED ARGUMENTS
 
     /**

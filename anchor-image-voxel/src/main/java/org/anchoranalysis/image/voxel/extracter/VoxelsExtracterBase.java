@@ -53,6 +53,7 @@ abstract class VoxelsExtracterBase<T> implements VoxelsExtracter<T> {
     // START REQUIRED ARGUMENTS
     /** The voxels to extract from. */
     protected final Voxels<T> voxels;
+
     // END REQUIRED ARGUMENTS
 
     @Override

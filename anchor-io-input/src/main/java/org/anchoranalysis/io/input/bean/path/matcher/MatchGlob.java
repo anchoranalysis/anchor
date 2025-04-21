@@ -62,6 +62,7 @@ public class MatchGlob extends FilePathMatcher {
      * <p>If empty, then it is populated from the {@link InputContextParameters} where they exist.
      */
     @BeanField @AllowEmpty @Getter @Setter private String glob = "";
+
     // END BEAN FIELDS
 
     @Override

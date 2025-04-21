@@ -55,6 +55,7 @@ public class FindCommonVoxelType {
     public static Optional<VoxelDataType> commonType(Stream<VoxelDataType> stream) {
         return stream.reduce(FindCommonVoxelType::commonType);
     }
+
     /**
      * Finds a common type to represent (ideally without loss of precision} both {@code first} and
      * {@code second}.

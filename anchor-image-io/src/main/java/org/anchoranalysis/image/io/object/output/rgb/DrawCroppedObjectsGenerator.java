@@ -61,6 +61,7 @@ public class DrawCroppedObjectsGenerator extends ObjectsAsRGBGenerator {
      * <p>This is a fixed-size space at the margins that is guaranteed to contain no objects.
      */
     private final Padding padding;
+
     // END REQUIRED ARGUMENTS
 
     /**

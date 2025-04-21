@@ -60,6 +60,7 @@ public class ThresholderGlobal extends Thresholder {
 
     // START BEAN PARAMETERS
     @BeanField @Getter @Setter private CalculateLevel calculateLevel;
+
     // END BEAN PARAMETERS
 
     @Override

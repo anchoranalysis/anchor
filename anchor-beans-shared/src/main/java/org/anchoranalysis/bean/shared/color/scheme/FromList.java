@@ -47,6 +47,7 @@ public class FromList extends ColorScheme {
     // START BEAN PROPERTIES
     /** The list of colors to specify. */
     @BeanField @Getter @Setter private List<RGBColorBean> colors;
+
     // END BEAN PROPERTIES
 
     @Override

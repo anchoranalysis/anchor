@@ -48,6 +48,7 @@ public class NumberVoxels extends FeatureSingleObject {
      * object. If false, calculates the number of voxels in the full 3D volume of the object.
      */
     @BeanField @Getter @Setter private boolean mip = false;
+
     // END BEAN PROPERTIES
 
     @Override

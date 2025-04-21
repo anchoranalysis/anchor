@@ -51,6 +51,7 @@ public class HDF5ObjectsGenerator extends OneStageGenerator<ObjectCollection> {
     // START REQUIRED ARGUMENTS
     /** Whether to use compression when writing the object-masks in HDF5. */
     private final boolean compressed;
+
     // END REQUIRED ARGUMENTS
 
     /** Creates with compression activated. */

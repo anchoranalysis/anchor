@@ -47,6 +47,7 @@ public class RasterGeneratorBridge<T, V> extends RasterGeneratorDelegateToRaster
      * the bridge.
      */
     private final CheckedFunction<T, V, ? extends Throwable> elementBridge;
+
     // END REQUIRED ARGUMENTS
 
     /**

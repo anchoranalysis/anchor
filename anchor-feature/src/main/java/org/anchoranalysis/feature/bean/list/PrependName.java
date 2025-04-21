@@ -47,6 +47,7 @@ public class PrependName extends FeatureListProvider<FeatureInput> {
 
     /** The string to prepend to the custom-name of each feature. */
     @BeanField @Getter @Setter private String prefix;
+
     // END BEAN PROPERTIES
 
     @Override

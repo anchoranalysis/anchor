@@ -46,6 +46,7 @@ public class VolumeVoxels extends UnitValueVolume {
     // START BEAN PROPERTIES
     /** The volume in voxels. */
     @BeanField @Getter @Setter private double value;
+
     // END BEAN PROPERTIES
 
     @Override

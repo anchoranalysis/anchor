@@ -47,6 +47,7 @@ public class AsSingle extends FeatureUnary<FeatureInputPairMemo, FeatureInputSin
     // START BEAN PROPERTIES
     /** Iff true, first object is used, otherwise the second */
     @BeanField @Getter @Setter private boolean first = true;
+
     // END BEAN PROPERTIES
 
     private static final ChildCacheName CACHE_NAME_FIRST =

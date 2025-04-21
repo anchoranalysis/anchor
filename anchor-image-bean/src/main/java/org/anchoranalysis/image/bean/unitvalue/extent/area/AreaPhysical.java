@@ -53,6 +53,7 @@ public class AreaPhysical extends UnitValueArea {
      * <p>See {@link SpatialUnits} for acceptable string-values.
      */
     @BeanField @Getter @Setter private String unitType = ""; // NOSONAR
+
     // END BEAN PROPERTIES
 
     @Override

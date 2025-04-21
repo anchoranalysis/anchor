@@ -69,6 +69,7 @@ public abstract class ObjectsAsRGBGenerator
 
     /** A background image or dimensions to define an empty background. */
     @Getter @Setter private Either<Dimensions, DisplayStack> background;
+
     // END REQUIRED ARGUMENTS
 
     @Override

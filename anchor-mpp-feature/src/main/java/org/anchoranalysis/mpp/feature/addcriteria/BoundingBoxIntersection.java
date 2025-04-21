@@ -44,6 +44,7 @@ public class BoundingBoxIntersection extends AddCriteriaPair {
     // START BEAN PROPERTIES
     /** If true, the Z dimension is ignored when checking for intersection. */
     @BeanField @Getter @Setter private boolean suppressZ = false;
+
     // END BEAN PROPERTIES
 
     @Override

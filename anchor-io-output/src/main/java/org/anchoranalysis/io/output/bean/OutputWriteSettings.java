@@ -60,6 +60,7 @@ public class OutputWriteSettings extends AnchorBean<OutputWriteSettings> {
      * bean class)
      */
     @BeanField @OptionalBean @Getter @Setter private List<NamedBean<?>> writers;
+
     // END BEAN PROPERTIES
 
     // Contains instances for each writer

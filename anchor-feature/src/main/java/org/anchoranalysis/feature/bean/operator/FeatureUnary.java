@@ -50,6 +50,7 @@ public abstract class FeatureUnary<T extends FeatureInput, S extends FeatureInpu
 
     // START BEAN PARAMETERS
     @BeanField @Getter @Setter private Feature<S> item = null;
+
     // END BEAN PARAMETERS
 
     @Override

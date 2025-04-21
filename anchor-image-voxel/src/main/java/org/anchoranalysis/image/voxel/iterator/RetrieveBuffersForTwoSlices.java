@@ -56,6 +56,7 @@ final class RetrieveBuffersForTwoSlices<S, T> implements ProcessPoint {
 
     /** Processor */
     private final ProcessBufferBinary<S, T> processor;
+
     // END REQUIRED ARGUMENTS
 
     private S bufferSlice1;

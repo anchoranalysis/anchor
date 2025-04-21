@@ -49,6 +49,7 @@ public abstract class OneOrThreeChannelsWriter extends StackWriter {
     // START BEAN PROPERTIES
     /** Which extension to use to write the image (without any leading period). */
     @BeanField @Getter @Setter private String extension = "png";
+
     // END BEAN PROPERTIES
 
     @Override

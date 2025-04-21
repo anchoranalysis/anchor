@@ -51,6 +51,7 @@ public class ResolvedBound extends AnchorBean<ResolvedBound> implements Serializ
     @BeanField @Getter @Setter private double min = 0.0;
 
     @BeanField @Getter @Setter private double max = 1.0;
+
     // END BEAN PROPERTIES
 
     /**

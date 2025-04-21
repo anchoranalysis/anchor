@@ -49,6 +49,7 @@ abstract class Base<T> implements VoxelsArithmetic {
 
     /** A buffer for a particular slice index (set at the initial position in the buffer) */
     private final IntFunction<T> bufferForSlice;
+
     // END REQUIRED ARGUMENTS
 
     @Override

@@ -46,6 +46,7 @@ public abstract class ChannelProviderUnary extends ChannelProvider {
     // START BEAN PROPERTIES
     /** The delegate {@link ChannelProvider} that is called. */
     @BeanField @Getter @Setter private ChannelProvider channel;
+
     // END BEAN PROPERTIES
 
     @Override

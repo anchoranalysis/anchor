@@ -61,7 +61,10 @@ class XMLOutputterTest {
      */
     @Test
     void test()
-            throws ParserConfigurationException, SAXException, IOException, TransformerException,
+            throws ParserConfigurationException,
+                    SAXException,
+                    IOException,
+                    TransformerException,
                     URISyntaxException {
         String testPathIn = "simpleXML01.xml";
         Path pathOut = directory.resolve("a file name with_spaces_and_underscores_.xml");

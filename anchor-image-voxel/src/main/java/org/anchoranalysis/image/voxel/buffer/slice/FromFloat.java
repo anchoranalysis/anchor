@@ -63,6 +63,7 @@ public class FromFloat implements SliceBufferIndex<FloatBuffer> {
     public static SliceBufferIndex<FloatBuffer> createUninitialized(Extent extent) {
         return new FromFloat(extent);
     }
+
     // END FACTORY METHODS
 
     private FromFloat(Extent extent) {

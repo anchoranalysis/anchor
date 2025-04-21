@@ -43,6 +43,7 @@ public class RunningSumParented {
     // START REQUIRED ARGUMENTS
     /** The number of parent operations. */
     @Getter private final int numberParentOperations;
+
     // END REQUIRED ARGUMENTS
 
     @Getter private RunningSum runningSum = new RunningSum();

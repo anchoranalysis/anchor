@@ -85,6 +85,7 @@ public abstract class StackWriterTestBase {
 
     /** A plan on which comparisons to execute for a test. */
     private final ComparisonPlan comparisonPlan;
+
     // END REQUIRED ARGUMENTS
 
     /** Performs the tests. */

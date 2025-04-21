@@ -50,6 +50,7 @@ public class NamedBean<T extends AnchorBean<?>> extends NullParametersBean<Named
 
     /** The item that is to be named, the underlying bean. */
     @BeanField @Getter @Setter private T item;
+
     // END BEAN PROPERTIES
 
     @Override

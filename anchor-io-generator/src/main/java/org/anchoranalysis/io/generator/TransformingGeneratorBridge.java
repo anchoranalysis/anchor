@@ -48,6 +48,7 @@ public class TransformingGeneratorBridge<S, T, V> implements TransformingGenerat
     // START REQUIRED ARGUMENTS
     private final TransformingGenerator<V, S> delegate;
     private final CheckedFunction<T, V, ? extends Throwable> elementBridge;
+
     // END REQUIRED ARGUMENTS
 
     @Override

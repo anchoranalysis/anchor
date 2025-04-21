@@ -67,6 +67,7 @@ public class NameElementRange extends DerivePath {
      * description.
      */
     @BeanField @Getter @Setter private int indexEnd = -2;
+
     // END BEAN PROPERTIES
 
     private IndexRangeNegative indexRange;

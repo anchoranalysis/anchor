@@ -57,6 +57,7 @@ public abstract class WithResolutionBase<T extends FeatureInputWithResolution>
      * resolution is missing.
      */
     @BeanField @Getter @Setter private boolean acceptMissingResolution = false;
+
     // END BEAN FIELDS
 
     /**

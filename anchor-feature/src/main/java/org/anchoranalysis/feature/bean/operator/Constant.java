@@ -46,6 +46,7 @@ public class Constant<T extends FeatureInput> extends FeatureGeneric<T> {
     // START BEAN PARAMETERS
     /** The constant value. */
     @BeanField @Getter @Setter private double value;
+
     // END BEAN PARAMETERS
 
     /**

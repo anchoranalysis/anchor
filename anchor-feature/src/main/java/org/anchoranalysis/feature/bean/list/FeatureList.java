@@ -60,6 +60,7 @@ public class FeatureList<T extends FeatureInput> extends AnchorBean<FeatureList<
     // START BEAN PARAMETERS
     /** The list of features. */
     @BeanField @Getter @Setter private List<Feature<T>> list;
+
     // END BEAN PARAMETERS
 
     /** Creates with an empty list. */

@@ -56,6 +56,7 @@ public class Outline extends DrawObject {
      * boundary
      */
     @BeanField @Getter @Setter private boolean includeZ;
+
     // END BEAN PROPERTIES
 
     /** Creates with an outline-width of 1 voxel. */

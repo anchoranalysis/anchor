@@ -74,6 +74,7 @@ public class AssignOverlappingObjects {
      * before comparison.
      */
     private final boolean flatten;
+
     // END REQUIRED ARGUMENTS
 
     /**

@@ -52,6 +52,7 @@ public abstract class FeatureHistogramStatistic extends FeatureHistogram {
 
     /** The value to return iff {@code exceptionifEmpty} is false. */
     @BeanField @Getter @Setter private double valueIfEmpty = 0;
+
     // END BEAN PROPERTIES
 
     @Override

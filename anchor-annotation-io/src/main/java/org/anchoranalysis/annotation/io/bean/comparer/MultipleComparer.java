@@ -89,6 +89,7 @@ public class MultipleComparer extends AnchorBean<MultipleComparer> {
      * before comparison.
      */
     @BeanField @Getter @Setter private boolean flatten = false;
+
     // END BEAN PROPERTIES
 
     /**

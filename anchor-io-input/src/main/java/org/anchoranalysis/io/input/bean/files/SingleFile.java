@@ -48,6 +48,7 @@ public class SingleFile extends FilesProviderWithDirectory {
     // START BEAN PROPERTIES
     /** The path of the single-file. */
     @BeanField @Getter private String path;
+
     // END BEAN PROPERTIES
 
     // Optionally changes the directory of the path

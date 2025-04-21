@@ -107,6 +107,7 @@ public class Fill extends StackArranger {
      * the minimum width is used.
      */
     @BeanField @Getter @Setter @NonNegative private double widthRatio = 0.1;
+
     // END BEAN PROPERTIES
 
     /**

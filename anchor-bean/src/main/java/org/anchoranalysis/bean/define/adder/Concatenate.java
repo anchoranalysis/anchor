@@ -39,6 +39,7 @@ public class Concatenate extends DefineAdderBean {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private List<DefineAdderBean> list = Arrays.asList();
+
     // END BEAN PROPERTIES
 
     @Override

@@ -42,10 +42,12 @@ class IterateVoxelsTest {
     private static final int Y_MASK_1 = 30;
 
     private static final int Y_MASK_2 = 35;
+
     /** END: Constants for object sizes and locations */
     private static final int EXPECTED_INTERSECTION_CENTER_X = 39;
 
     private static final int EXPECTED_INTERSECTION_CENTER_Y = 57;
+
     /** END: Constants for expected results */
     @Test
     void test2D() {

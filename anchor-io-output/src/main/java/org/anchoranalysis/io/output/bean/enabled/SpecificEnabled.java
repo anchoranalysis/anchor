@@ -45,6 +45,7 @@ public class SpecificEnabled extends OutputEnabled {
     // START BEAN PROPERTIES
     /** The names of the outputs that are enabled. */
     @BeanField @Getter @Setter private StringSet outputsEnabled;
+
     // END BEAN PROPERTIES
 
     /**

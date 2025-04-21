@@ -71,6 +71,7 @@ class LazyDirectoryCreator implements WriterExecuteBeforeEveryOperation {
 
     /** An operation that is applied after creation of the directory. */
     private final Optional<Consumer<Path>> opAfterCreation;
+
     // END REQUIRED ARGUMENTS
 
     /** Has this directory already been initialized/ */

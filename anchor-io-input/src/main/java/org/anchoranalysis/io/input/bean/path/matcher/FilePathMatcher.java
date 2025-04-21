@@ -71,6 +71,7 @@ public abstract class FilePathMatcher extends AnchorBean<FilePathMatcher> {
             throws InputReadFailedException {
         return matchingFiles(directory, recursive, false, true, Optional.empty(), Optional.empty());
     }
+
     /**
      * Finds a collection of files that match particular conditions on their paths.
      *

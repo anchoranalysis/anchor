@@ -43,6 +43,7 @@ public class AxisAlignedUnitVector extends DirectionVectorBean {
     // START BEAN PROPERTIES
     /** Which axis the unit-vector will align with. {@code x} or {@code y} or {@code z} */
     @BeanField @Getter @Setter private String axis;
+
     // END BEAN PROPRERTIES
 
     @Override

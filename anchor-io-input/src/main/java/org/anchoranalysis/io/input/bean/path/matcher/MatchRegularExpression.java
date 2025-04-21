@@ -69,6 +69,7 @@ public class MatchRegularExpression extends FilePathMatcher {
      * <p>Backslashes are not permitted as directory-seperators, only as escape characters.
      */
     @BeanField @Getter @Setter private String expression;
+
     // END BEAN FIELDS
 
     @Override

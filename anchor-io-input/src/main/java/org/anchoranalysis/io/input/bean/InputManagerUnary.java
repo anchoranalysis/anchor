@@ -47,6 +47,7 @@ public abstract class InputManagerUnary<T extends InputFromManager> extends Inpu
      * input-manager.
      */
     @BeanField @Getter @Setter private InputManager<T> input;
+
     // END BEAN PROPERITES
 
     @Override

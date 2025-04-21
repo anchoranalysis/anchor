@@ -50,6 +50,7 @@ public class FailureOnlyMessageLogger implements StatefulMessageLogger {
 
     /** If true, any warning message is considered as a failure. */
     private final boolean considerWarningAsFailure;
+
     // END REQUIRED ARGUMENTS
 
     private StringBuilder builder;

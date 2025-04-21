@@ -48,6 +48,7 @@ public class StackProviderWithLabel extends NullParametersBean<StackProviderWith
 
     /** The label associated with {@code stack}. */
     @BeanField @Getter @Setter private String label;
+
     // END BEAN PROPERTIES
 
     /**

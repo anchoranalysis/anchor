@@ -63,6 +63,7 @@ public class ScaleableBackground {
 
     /** Interpolator to use for scaling stacks, if necessary */
     @Nullable private final VoxelsResizer resizer;
+
     // END REQUIRED ARGUMENTS
 
     /**

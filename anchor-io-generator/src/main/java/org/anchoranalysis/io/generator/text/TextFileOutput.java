@@ -56,6 +56,7 @@ public class TextFileOutput {
     // START REQUIRED ARGUMENTS
     /** The path to which the text-file is written. */
     private final String filePath;
+
     // END REQUIRED ARGUMENTS
 
     /** The {@link PrintWriter} used for writing the text file. */

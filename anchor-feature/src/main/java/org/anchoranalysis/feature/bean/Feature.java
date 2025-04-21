@@ -66,6 +66,7 @@ public abstract class Feature<T extends FeatureInput>
      * string).
      */
     @BeanField @AllowEmpty @Getter @Setter private String customName = "";
+
     // END BEAN PROPERTIES
 
     /** Creates with the default initializer. */

@@ -48,6 +48,7 @@ public class Sum<T extends FeatureInput> extends FeatureFromList<T> {
     // START BEAN PROPERTIES
     /** If true, we ignore any NaN values. Otherwise the sum becomes NaN */
     @BeanField @Getter @Setter private boolean ignoreNaN;
+
     // END BEAN PROPERTIES
 
     /**

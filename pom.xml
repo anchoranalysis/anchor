@@ -3,12 +3,12 @@
  	<parent>
         <groupId>org.anchoranalysis.anchor</groupId>
    	    <artifactId>anchor-pom</artifactId>
-		<version>0.2.6</version>
+		<version>1.0.0-SNAPSHOT</version>
     </parent> 
 	
     <artifactId>anchor-parent</artifactId>
     <packaging>pom</packaging>
-    <version>0.3.2-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
     <name>anchor-parent</name>
     <url>http://www.anchoranalysis.org/</url>
 	
@@ -41,7 +41,9 @@
 	
 	<!-- For connecting to SonarCloud. -->
 	<properties>
-	  <sonar.projectKey>anchoranalysis_anchor</sonar.projectKey>
+		<sonar.organization>anchoranalysis</sonar.organization>
+		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
+		<sonar.projectKey>anchoranalysis_anchor</sonar.projectKey>
 	</properties>
 	
     <modules>
@@ -82,13 +84,28 @@
 		<module>anchor-test-image</module>
     </modules>
 
-	<!-- Provides a means of reaching ImageJ -->
     <repositories>
+	
+		<!-- Provides a means of reaching ImageJ -->
 		<repository>
 			<id>imagej</id>
 			<name>ImageJ repository</name>
 			<url>https://maven.scijava.org/content/groups/public/</url>
 		</repository>
+				
+		<!-- Provides a means of reaching Snapshots on Maven Central -->
+	  <repository>
+		<name>Central Portal Snapshots</name>
+		<id>central-portal-snapshots</id>
+		<url>https://central.sonatype.com/repository/maven-snapshots/</url>
+		<releases>
+		  <enabled>false</enabled>
+		</releases>
+		<snapshots>
+		  <enabled>true</enabled>
+		</snapshots>
+	  </repository>
+
    	</repositories>
 		
     <build>
@@ -147,28 +164,7 @@
 					</configuration>
 					<inherited>false</inherited>
 			  </plugin>
-
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-javadoc-plugin</artifactId>
-					<version>3.2.0</version>
-					<configuration>
-						<source>1.8</source>
-						<detectJavaApiLink>true</detectJavaApiLink>
-						<noqualifier>java.lang:java.io</noqualifier>
-						<links>
-							<link>https://commons.apache.org/proper/commons-io/javadocs/api-2.5/</link>
-						</links>
-					</configuration>
-                    <executions>
-                        <execution>
-                            <id>attach-javadocs</id>
-                            <goals>
-                                <goal>jar</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                    </plugin>			  
+  
 					
 		</plugins>
 

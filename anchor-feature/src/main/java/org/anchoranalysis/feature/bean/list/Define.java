@@ -50,6 +50,7 @@ public class Define<T extends FeatureInput> extends ReferencingFeatureListProvid
     // START BEAN PROPERTIES
     /** The list that specifies features. */
     @BeanField @SkipInit @Getter @Setter private List<Feature<T>> list;
+
     // END BEAN PROPERTIES
 
     /**

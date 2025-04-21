@@ -156,7 +156,7 @@ public class SpatialUnits {
             case BASE:
                 return valueBaseUnits;
 
-                // START MILLI
+            // START MILLI
             case CUBIC_MILLI:
                 return valueBaseUnits / 1e-9;
 
@@ -165,9 +165,9 @@ public class SpatialUnits {
 
             case MILLI:
                 return valueBaseUnits / 1e-3;
-                // END MILLI
+            // END MILLI
 
-                // START MICRO
+            // START MICRO
             case CUBIC_MICRO:
                 return valueBaseUnits / 1e-18;
 
@@ -176,9 +176,9 @@ public class SpatialUnits {
 
             case MICRO:
                 return valueBaseUnits / 1e-6;
-                // END MICRO
+            // END MICRO
 
-                // START NANO
+            // START NANO
             case CUBIC_NANO:
                 return valueBaseUnits / 1e-27;
 
@@ -187,7 +187,7 @@ public class SpatialUnits {
 
             case NANO:
                 return valueBaseUnits / 1e-9;
-                // END NANO
+            // END NANO
 
             default:
                 throw new IllegalArgumentException(unsupportedUnitType(unitSuffix));

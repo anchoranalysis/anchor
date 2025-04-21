@@ -44,6 +44,7 @@ public class PermutePropertySequenceDouble extends PermutePropertySequence<Doubl
     // START BEAN PROPERTIES
     /** What to divide the integer-sequence by. */
     @BeanField @Getter @Setter private double divisor = 1.0;
+
     // END BEAN PROPERTIES
 
     @Override

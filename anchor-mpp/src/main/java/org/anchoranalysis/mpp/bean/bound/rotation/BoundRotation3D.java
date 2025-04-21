@@ -52,6 +52,7 @@ public class BoundRotation3D extends BoundRotation {
     @BeanField @Getter @Setter private Bound rotationY = DEFAULT_BOUND;
 
     @BeanField @Getter @Setter private Bound rotationZ = DEFAULT_BOUND;
+
     // END BEAN PROPERTIES
 
     @Override

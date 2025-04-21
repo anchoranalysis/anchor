@@ -46,6 +46,7 @@ public abstract class RasterGeneratorDelegateToRaster<S, T> extends RasterGenera
     // START REQUIRED ARGUMENTS
     /** The delegate. */
     private final RasterGenerator<S> delegate;
+
     // END REQUIRED ARGUMENTS
 
     @Override

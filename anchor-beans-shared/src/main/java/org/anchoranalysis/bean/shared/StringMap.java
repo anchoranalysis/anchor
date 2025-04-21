@@ -44,6 +44,7 @@ public class StringMap extends AnchorBean<StringMap> {
     // START BEAN PROPERTIES
     /** A list of mappings between a single-items in the respective sets. */
     @Getter @Setter private List<StringMapItem> list;
+
     // END BEAN PROPERTIES
 
     /**

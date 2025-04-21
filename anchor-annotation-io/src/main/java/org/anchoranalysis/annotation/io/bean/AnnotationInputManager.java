@@ -53,6 +53,7 @@ public class AnnotationInputManager<T extends ProvidesStackInput, S extends Anno
 
     /** The strategy to be used for annotating. */
     @BeanField @Getter @Setter private S annotatorStrategy;
+
     // END BEAN PROPERTIES
 
     @Override

@@ -53,6 +53,7 @@ public class BinarySegmentationReference extends BinarySegmentation {
     // START BEAN PROPERTIES
     /** The identifier of the existing {@link BinarySegmentation} to use. */
     @BeanField @Getter @Setter private String id;
+
     // END BEAN PROPERTIES
 
     private BinarySegmentation proxy;

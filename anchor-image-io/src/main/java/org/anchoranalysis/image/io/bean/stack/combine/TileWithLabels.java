@@ -65,6 +65,7 @@ public class TileWithLabels extends StackProvider {
      * only one z-slice.
      */
     @BeanField @Getter @Setter boolean expandLabelZ = false;
+
     // END BEAN PROPERTIES
 
     @Override

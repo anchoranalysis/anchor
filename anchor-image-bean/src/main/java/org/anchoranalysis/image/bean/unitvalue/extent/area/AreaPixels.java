@@ -44,6 +44,7 @@ public class AreaPixels extends UnitValueArea {
     // START BEAN PROPERTIES
     /** The volume in pixels. */
     @BeanField @Getter @Setter private double value;
+
     // END BEAN PROPERTIES
 
     /**

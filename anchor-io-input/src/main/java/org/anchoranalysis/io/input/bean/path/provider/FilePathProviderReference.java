@@ -44,6 +44,7 @@ public class FilePathProviderReference extends FilePathProvider {
     // START BEAN PROPERTIES
     /** A unique identifer for another {@link FilePathProvider} that is referenced. */
     @BeanField @Getter @Setter private String id = "";
+
     // END BEAN PROPERTIES
 
     private Path filePath;

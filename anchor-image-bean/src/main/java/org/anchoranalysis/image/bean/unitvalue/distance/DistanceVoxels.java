@@ -49,6 +49,7 @@ public class DistanceVoxels extends UnitValueDistance {
     // START BEAN PROPERTIES
     /** The distance in units of voxels. */
     @BeanField @Getter @Setter private double value;
+
     // END BEAN PROPERTIES
 
     /**

@@ -45,6 +45,7 @@ public class SpecificDisabled extends OutputEnabled {
     // START BEAN PROPERTIES
     /** The names of the outputs that are disbled. */
     @BeanField @Getter @Setter private StringSet outputsDisabled;
+
     // END BEAN PROPERTIES
 
     @Override

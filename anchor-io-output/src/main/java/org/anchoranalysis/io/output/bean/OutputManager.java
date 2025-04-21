@@ -84,6 +84,7 @@ public class OutputManager extends AnchorBean<OutputManager> {
 
     /** Which outputs are enabled or not enabled. If null, default rules are used instead. */
     @BeanField @OptionalBean @Getter @Setter private OutputEnabledRules outputsEnabled;
+
     // END BEAN PROPERTIES
 
     /**

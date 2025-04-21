@@ -46,6 +46,7 @@ public abstract class ReadOptionsDelegate extends ReadOptions {
     // START BEAN PROPERTIES
     /** Options can be specified to alter how an image file is read. */
     @BeanField @Getter @Setter private ReadOptions options = new Default();
+
     // END BEAN PROPERTIES
 
     @Override

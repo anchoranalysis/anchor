@@ -57,6 +57,7 @@ class RecordOutputNamesForWriter implements Writer {
      * sub-directories)/
      */
     private final boolean includeIndexableOutputs;
+
     // END REQUIRED ARGUMENTS
 
     @Override

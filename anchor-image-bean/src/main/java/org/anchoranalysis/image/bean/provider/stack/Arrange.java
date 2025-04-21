@@ -78,6 +78,7 @@ public class Arrange extends StackProvider {
 
     /** The interpolator to use for scaling images, if needed. */
     @BeanField @Getter @Setter @DefaultInstance private Interpolator interpolator;
+
     // END BEAN
 
     /**

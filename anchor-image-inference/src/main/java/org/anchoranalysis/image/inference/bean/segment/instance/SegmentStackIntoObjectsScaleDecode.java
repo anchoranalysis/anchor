@@ -101,6 +101,7 @@ public abstract class SegmentStackIntoObjectsScaleDecode<T, S extends ImageInfer
 
     /** How to convert an image to be displayed to the user. */
     @BeanField @Getter @Setter @DefaultInstance private StackDisplayer displayer;
+
     // END BEAN PROPERTIES
 
     @Override

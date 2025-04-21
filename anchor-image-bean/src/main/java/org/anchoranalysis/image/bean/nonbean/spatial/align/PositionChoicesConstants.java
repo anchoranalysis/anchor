@@ -66,6 +66,7 @@ public class PositionChoicesConstants {
      * z-dimension to match the z-size onto which it is projected.
      */
     public static final String REPEAT = "repeat";
+
     // END: strings used for position choices
 
     /** The three valid choices for aligning across the <b>X-</b> dimension. */

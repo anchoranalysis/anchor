@@ -111,21 +111,28 @@ public class ChannelFixture {
     public static int multModulo(int x, int y, int z) {
         return modulo(x * y * z);
     }
+
     // END: IntensityFunction examples
 
     // START: image size examples
     /** Small 3D extent for testing. */
     public static final Extent SMALL_3D = new Extent(8, 11, 4);
+
     /** Small 2D extent for testing. */
     public static final Extent SMALL_2D = SMALL_3D.flattenZ();
+
     /** Medium 3D extent for testing. */
     public static final Extent MEDIUM_3D = new Extent(69, 61, 7);
+
     /** Medium 2D extent for testing. */
     public static final Extent MEDIUM_2D = MEDIUM_3D.flattenZ();
+
     /** Large 3D extent for testing. */
     public static final Extent LARGE_3D = new Extent(1031, 2701, 19);
+
     /** Large 2D extent for testing. */
     public static final Extent LARGE_2D = LARGE_3D.flattenZ();
+
     // END: image size examples
 
     /**

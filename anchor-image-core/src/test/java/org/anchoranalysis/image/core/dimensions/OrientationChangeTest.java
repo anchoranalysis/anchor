@@ -58,6 +58,7 @@ class OrientationChangeTest {
     private static final Point2i POINT_ROTATED_90_CLOCKWISE = new Point2i(8, 3);
 
     private static final Point2i POINT_ROTATED_90_CLOCKWISE_MIRRORED = new Point2i(3, 3);
+
     // END: EXPECTED TEST RESULTS
 
     @Test

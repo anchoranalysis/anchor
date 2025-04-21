@@ -58,6 +58,7 @@ final class RetrieveBuffersForThreeSlices<T> implements ProcessPoint {
 
     /** Processor */
     private final ProcessBufferTernary<T> processor;
+
     // END REQUIRED ARGUMENTS
 
     private T bufferSlice1;

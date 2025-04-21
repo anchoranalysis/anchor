@@ -48,6 +48,7 @@ public class OnlyIf extends LoggingDestination {
 
     /** The conditions that must be fulfilled */
     @BeanField @Getter @Setter private RequireArguments requireArguments;
+
     // END BEAN PROPERTIES
 
     @Override

@@ -53,6 +53,7 @@ public class IfElse extends DrawObject {
 
     /** The {@link DrawObject} that is used when {@code condition==false}. */
     @BeanField @Getter @Setter private DrawObject whenFalse;
+
     // END BEAN PROPERTIES
 
     /** The condition that is tested, to determine which {@link DrawObject} to use. */

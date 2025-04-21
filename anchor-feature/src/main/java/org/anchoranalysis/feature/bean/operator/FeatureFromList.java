@@ -51,6 +51,7 @@ public abstract class FeatureFromList<T extends FeatureInput> extends Feature<T>
     // START BEAN PARAMETERS
     /** The features whose results will be somehow combined, to form the result of this class. */
     @BeanField @Getter private List<Feature<T>> list = Arrays.asList();
+
     // END BEAN PARAMETERS
 
     /**

@@ -55,6 +55,7 @@ public class ComparisonPlan {
     private final boolean skipComparisonForRGB; // NOSONAR
 
     private final Optional<String> directoryPathToCopyMissingImagesTo;
+
     // END REQUIRED ARGUMENTS
 
     /**

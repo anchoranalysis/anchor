@@ -65,6 +65,7 @@ public class OpenedNamedChannels implements NamedChannelsMap {
 
     /** Which series to open in {@link OpenedImageFile}. */
     private final int seriesIndex;
+
     // END REQUIRED ARGUMENTS
 
     /**

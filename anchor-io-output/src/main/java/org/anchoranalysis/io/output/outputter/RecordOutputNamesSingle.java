@@ -43,6 +43,7 @@ class RecordOutputNamesSingle implements SingleLevelOutputEnabled {
 
     /** What all outputs that this write processes are added to. */
     private final RecordedOutputs recordedOutputs;
+
     // END REQUIRED ARGUMENTS
 
     @Override

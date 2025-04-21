@@ -46,6 +46,7 @@ public class BoundRotation2D extends BoundRotation {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private Bound rotationAngle = new BoundUnitless(0, 2 * Math.PI);
+
     // END BEAN PROPERTIES
 
     @Override

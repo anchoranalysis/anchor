@@ -50,6 +50,7 @@ public class FeatureProviderReference extends FeatureProvider<FeatureInput> {
 
     /** The name of the list in which the feature referenced by {@code id} resides. */
     @BeanField @Getter @Setter private String referencesList = "";
+
     // END BEAN PROPERTIES
 
     // The memoized feature, once it is first retrieved.

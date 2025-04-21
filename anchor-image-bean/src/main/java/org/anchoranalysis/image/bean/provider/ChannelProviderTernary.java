@@ -52,6 +52,7 @@ public abstract class ChannelProviderTernary extends ChannelProvider {
 
     /** The <b>third</b> delegate {@link ChannelProvider} that is called. */
     @BeanField @Getter @Setter private ChannelProvider channel3;
+
     // END BEAN PROPERTIES
 
     @Override
