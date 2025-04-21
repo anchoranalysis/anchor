@@ -58,9 +58,7 @@ public class InputOutputContextFixture {
      * @return An InputOutputContext with a suppressed logger and the specified model directory.
      */
     public static InputOutputContext withSuppressedLogger(Path modelDir) {
-        InputOutputContext out = withSuppressedLogger();
-        when(out.getModelDirectory()).thenReturn(modelDir);
-        return out;
+        return new ContextFromLogger( LoggerFixture.suppressedLogger(), modelDir );
     }
 
     /**
@@ -79,13 +77,15 @@ public class InputOutputContextFixture {
      * @return An InputOutputContext with the specified logger.
      */
     public static InputOutputContext withLogger(Logger logger) {
-        return new ContextFromLogger(logger);
+        // Use an arbitrary path
+    	return new ContextFromLogger(logger, Paths.get(""));
     }
     
     /** Provides a partially-implemented {@link InputOutputContext} using a Logger. */
     @AllArgsConstructor
     private static class ContextFromLogger implements InputOutputContext {
     	private final Logger logger;
+    	private final Path modelDirectory;
 
 
 		@Override
@@ -96,8 +96,7 @@ public class InputOutputContextFixture {
 		
 		@Override
 		public Path getModelDirectory() {
-			// Arbitrary contents, as it's assumed to be irrelvant.
-			return Paths.get(".");
+			return modelDirectory;
 		}
 
 		@Override
