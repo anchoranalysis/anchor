@@ -39,6 +39,7 @@ import org.anchoranalysis.overlay.Overlay;
 import org.anchoranalysis.overlay.bean.DrawObject;
 import org.anchoranalysis.overlay.collection.ColoredOverlayCollection;
 import org.anchoranalysis.spatial.box.BoundingBox;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 
 /**
  * Draws an ovleray onto a {@link RGBStack}

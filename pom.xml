@@ -3,12 +3,12 @@
  	<parent>
         <groupId>org.anchoranalysis.anchor</groupId>
    	    <artifactId>anchor-pom</artifactId>
-		<version>0.2.6</version>
+		<version>1.0.0-SNAPSHOT</version>
     </parent> 
 	
     <artifactId>anchor-parent</artifactId>
     <packaging>pom</packaging>
-    <version>0.3.2-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
     <name>anchor-parent</name>
     <url>http://www.anchoranalysis.org/</url>
 	
