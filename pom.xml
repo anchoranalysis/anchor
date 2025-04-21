@@ -41,7 +41,9 @@
 	
 	<!-- For connecting to SonarCloud. -->
 	<properties>
-	  <sonar.projectKey>anchoranalysis_anchor</sonar.projectKey>
+		<sonar.organization>anchoranalysis</sonar.organization>
+		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
+		<sonar.projectKey>anchoranalysis_anchor</sonar.projectKey>
 	</properties>
 	
     <modules>
