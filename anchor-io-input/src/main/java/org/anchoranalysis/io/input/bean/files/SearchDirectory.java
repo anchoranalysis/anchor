@@ -82,6 +82,7 @@ public class SearchDirectory extends FilesProviderWithDirectoryString {
 
     /** If true, the files are sorted after being searched, to achieve a deterministic order. */
     private boolean sort = true;
+
     // END BEAN PROPERTIES
 
     /**

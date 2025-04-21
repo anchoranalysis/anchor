@@ -45,6 +45,7 @@ public class Quantile extends FeatureResultsStatistic {
 
     /** If true, the quantile is interpreted as a percentage rather than a decimal. */
     @BeanField @Getter @Setter private boolean asPercentage = false;
+
     // END BEAN PROPERTIES
 
     @Override

@@ -63,6 +63,7 @@ public abstract class PathPrefixerAvoidResolve extends PathPrefixer {
      * it exists, or otherwise use the system temp directory.
      */
     @BeanField @AllowEmpty @Getter @Setter private String prefix = "";
+
     // END BEAN PROPERTIES
 
     // Caches the calculation

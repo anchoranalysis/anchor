@@ -52,6 +52,7 @@ class SequenceWriters {
     private final RecordingWriters parentWriters;
 
     private final OutputPattern pattern;
+
     // END: REQUIRED ARGUMENTS
 
     /** The associated writers, if they exist. */

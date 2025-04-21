@@ -62,6 +62,7 @@ public class CreateMarkFromPoints extends AnchorBean<CreateMarkFromPoints> {
 
     /** Whether to throw an exception when there are insufficient points. */
     @BeanField @Getter @Setter private boolean throwExceptionForInsufficientPoints = false;
+
     // END BEAN PROPERTIES
 
     /**

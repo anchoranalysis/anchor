@@ -42,6 +42,7 @@ public class ForceBitsPerPixel extends ReadOptionsDelegate {
     // START BEAN PROPERTIES
     /** The assigned bits per pixels. */
     @BeanField @Positive @Getter @Setter private int bitsPerPixel = 0;
+
     // END BEAN PROPERTIES
 
     @Override

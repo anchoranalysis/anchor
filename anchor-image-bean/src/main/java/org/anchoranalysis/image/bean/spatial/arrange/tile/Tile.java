@@ -84,6 +84,7 @@ public class Tile extends StackArranger {
 
     /** How to align a smaller image inside a larger cell. */
     @BeanField @Getter @Setter private BoxAligner aligner = new Align();
+
     // END BEAN PROPERTIES
 
     /**

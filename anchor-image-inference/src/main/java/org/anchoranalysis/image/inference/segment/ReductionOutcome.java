@@ -61,6 +61,7 @@ public class ReductionOutcome<T> {
      * Zero-indexed.
      */
     private final List<Integer> indicesRetained;
+
     // END REQUIRED ARGUMENTS
 
     private List<T> added = new ArrayList<>();

@@ -49,6 +49,7 @@ public class TaskStatistics {
 
     /** Execution time (in milliseconds) for of tasks that failed. */
     private final RunningSum failed;
+
     // END REQUIRED ARGUMENTS
 
     /**

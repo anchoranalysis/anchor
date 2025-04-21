@@ -53,6 +53,7 @@ public class Divider {
 
     /** The number of characters in the banner. */
     private final int numberCharactersInBanner;
+
     // END REQUIRED ARGUMENTS
 
     /** A banner using dashes. */

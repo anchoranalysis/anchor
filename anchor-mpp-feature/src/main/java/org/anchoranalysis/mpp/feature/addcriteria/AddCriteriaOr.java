@@ -49,6 +49,7 @@ public class AddCriteriaOr extends AddCriteriaPair {
     // START BEAN PROPERTIES
     /** List of {@link AddCriteriaPair} to be combined with OR operation. */
     @BeanField @Getter @Setter private List<AddCriteriaPair> list = Arrays.asList();
+
     // END BEAN PROPERTIES
 
     @Override

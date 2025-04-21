@@ -42,6 +42,7 @@ public class PermutePropertyStringSet extends PermuteProperty<String> {
     // START BEAN PROPERTIES
     /** The respect string values to assign during the permutation. */
     @BeanField @Getter @Setter private StringSet values;
+
     // END BEAN PROPERTIES
 
     @Override

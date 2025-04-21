@@ -44,6 +44,7 @@ public class Prepend extends ColorSchemeUnary {
     // START BEAN PROPERTIES
     /** The color to prepend. */
     @BeanField @Getter @Setter private RGBColorBean prependColor;
+
     // END BEAN PROPERTIES
 
     @Override

@@ -46,6 +46,7 @@ public class DictionaryProviderReference extends DictionaryProvider {
     // START BEAN PROPERTIES
     /** Unique identifier for the {@link Dictionary} to retrieve. */
     @BeanField @Getter @Setter private String id = "";
+
     // END BEAN PROPERTIES
 
     /** The dictionary, assigned during initialization. */

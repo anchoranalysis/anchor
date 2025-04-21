@@ -67,6 +67,7 @@ public class OutputPrefixerSettings {
      * output-directory path.
      */
     @Getter private boolean omitExperimentIdentifier = false;
+
     // END: GETTERS AND SETTERS
 
     /**

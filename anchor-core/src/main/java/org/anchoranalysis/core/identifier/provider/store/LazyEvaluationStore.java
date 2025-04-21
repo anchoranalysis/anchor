@@ -52,6 +52,7 @@ public class LazyEvaluationStore<T> implements NamedProviderStore<T> {
      * string-representation.
      */
     private final String storeDisplayName;
+
     // END REQUIRED ARGUMENTS
 
     private HashMap<String, CachedSupplier<T, OperationFailedException>> map = new HashMap<>();

@@ -51,6 +51,7 @@ public class CenterOfGravity extends FeatureSingleObject {
 
     /** The value to return if the center of gravity calculation results in NaN. */
     @BeanField @Getter @Setter private double emptyValue = 0;
+
     // END BEAN PROPERTIES
 
     /**

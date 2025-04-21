@@ -61,6 +61,7 @@ public class TextStyle extends AnchorBean<TextStyle> {
 
     /** Whether to bold the drawn text */
     @BeanField @Getter @Setter private boolean bold = false;
+
     // END BEAN PROPERTIES
 
     /**

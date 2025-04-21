@@ -49,6 +49,7 @@ public class FromFiles extends FilePathProvider {
     // START BEAN PROPERTIES
     /** A provider that should return exactly one {@link File} whose path is employed. */
     @BeanField @Getter @Setter private FilesProvider files;
+
     // END BEAN PROPERTIES
 
     @Override

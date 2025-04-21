@@ -47,6 +47,7 @@ public class RegExList extends RegEx {
     // START BEAN PROPERTIES
     /** The list of {@link RegEx}es that are successively tried to be matched. */
     @BeanField @Getter @Setter private List<RegEx> list = Arrays.asList();
+
     // END BEAN PROPERTIES
 
     @Override

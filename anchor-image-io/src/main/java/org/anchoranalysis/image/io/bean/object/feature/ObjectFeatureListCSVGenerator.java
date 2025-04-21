@@ -56,7 +56,9 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.spatial.axis.Axis;
 import org.anchoranalysis.spatial.orientation.DirectionVector;
 
-/** @author Owen Feehan */
+/**
+ * @author Owen Feehan
+ */
 class ObjectFeatureListCSVGenerator extends CSVGenerator<ObjectCollection> {
 
     private FeatureCalculatorMulti<FeatureInputSingleObject> featureCalculator;

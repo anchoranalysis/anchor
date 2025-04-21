@@ -51,6 +51,7 @@ final class RetrieveBufferForSlice<T> implements ProcessPoint {
     // END REQUIRED ARGUMENTS
 
     private T bufferSlice;
+
     /** A 2D offset within the current slice */
     private int offsetWithinSlice;
 

@@ -51,6 +51,7 @@ public class CheckIfAllowed implements Writer {
 
     /** The writer. */
     private final Writer writer;
+
     // END REQUIRED ARGUMENTS
 
     @Override

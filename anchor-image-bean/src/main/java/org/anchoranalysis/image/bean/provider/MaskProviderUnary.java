@@ -46,6 +46,7 @@ public abstract class MaskProviderUnary extends MaskProvider {
     // START BEAN PROPERTIES
     /** The delegate {@code Provider<Mask>} that is called. */
     @BeanField @Getter @Setter private Provider<Mask> mask;
+
     // END BEAN PROPERTIES
 
     @Override

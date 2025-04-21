@@ -42,6 +42,7 @@ public abstract class BoundMinMax extends Bound {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private ResolvedBound delegate;
+
     // END BEAN PROPERTIES
 
     /** Creates a new instance with default minimum and maximum values. */

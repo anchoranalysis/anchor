@@ -48,6 +48,7 @@ public class MarkEllipseFactory extends MarkFactory {
      * 0.1.
      */
     @BeanField @Getter @Setter private double shell = 0.1;
+
     // END BEAN PROPERTIES
 
     @Override

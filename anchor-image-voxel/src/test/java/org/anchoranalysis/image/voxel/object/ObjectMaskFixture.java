@@ -60,6 +60,7 @@ public class ObjectMaskFixture {
 
     /** Width of object-mask. */
     @Getter private final Extent extent;
+
     // END REQUIRED ARGUMENTS
 
     /**

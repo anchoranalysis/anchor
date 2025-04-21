@@ -46,6 +46,7 @@ public class ExperimentIdentifierConstant extends ExperimentIdentifier {
     @BeanField @Getter @Setter private String name;
 
     @BeanField @Getter @Setter private String version;
+
     // END BEAN PROPERTIES
 
     @Override

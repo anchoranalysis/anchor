@@ -57,6 +57,7 @@ public class ConvertToPhysicalDistance<T extends FeatureInputWithResolution>
     // START BEAN PROPERTIES
     /** Direction of the distance being converted, defaults to a unit vector along the X-axis. */
     @BeanField @Getter @Setter private DirectionVectorBean direction = new SpecifyVector(1.0, 0, 0);
+
     // END BEAN PROPERTIES
 
     private DirectionVector vectorInDirection;

@@ -49,6 +49,7 @@ public class AlwaysAllowed implements Writer {
 
     /** Execute before every operation if defined. */
     private final Optional<WriterExecuteBeforeEveryOperation> preop;
+
     // END REQUIRED ARGUMENTS
 
     @Override

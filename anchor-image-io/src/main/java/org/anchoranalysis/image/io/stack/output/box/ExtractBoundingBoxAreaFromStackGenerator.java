@@ -46,6 +46,7 @@ public class ExtractBoundingBoxAreaFromStackGenerator
 
     // START REQUIRED ARGUMENTS
     private final ScaleableBackground background;
+
     // END REQUIRED ARGUMENTS
 
     @Override

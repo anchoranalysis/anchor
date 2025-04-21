@@ -46,6 +46,7 @@ public abstract class FeatureResultsStatistic extends FeatureResults {
     // START BEAN PROPERTIES
     /** The name of the feature, whose results will provide the statistic. */
     @BeanField @Getter @Setter private String id = "";
+
     // END BEAN PROPERTIES
 
     @Override

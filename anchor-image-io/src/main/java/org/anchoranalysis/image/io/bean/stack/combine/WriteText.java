@@ -81,6 +81,7 @@ public class WriteText extends StackProvider {
      * Repeats the generated (2D) string in z, so it's the same z-size as {@code intensityProvider}
      */
     @BeanField @Getter @Setter private Provider<Stack> repeatZProvider;
+
     // END BEAN PROPERITES
 
     /**

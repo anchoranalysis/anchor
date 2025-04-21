@@ -69,6 +69,7 @@ public class MapCreateCountdown<K, V> {
         // START REQUIRED ARGUMENTS
         /** How to create a new element, called when needed. */
         private final Supplier<V> createNewElement;
+
         // END REQUIRED ARGUMENTS
 
         /** The reference count. */

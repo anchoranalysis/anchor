@@ -240,6 +240,7 @@ public class PointConverter {
             return new Point3i(ceilInt(point.x()), ceilInt(point.y()), ceilInt(point.z()));
         }
     }
+
     // END singular points
 
     // START lists of points
@@ -315,6 +316,7 @@ public class PointConverter {
     public static List<Point3i> convert3i(List<Point3d> points) {
         return convert(points, PointConverter::intFromDoubleFloor);
     }
+
     // END lists of points
 
     private static <S, T> List<S> convert(List<T> points, Function<T, S> mapFunction) {

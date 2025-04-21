@@ -43,6 +43,7 @@ public class ForceNumberFrames extends ReadOptionsDelegate {
     // START BEAN PROPERTIES
     /** The assigned number of frames. */
     @BeanField @Positive @Getter @Setter private int numberFrames;
+
     // END BEAN PROPERTIES
 
     @Override

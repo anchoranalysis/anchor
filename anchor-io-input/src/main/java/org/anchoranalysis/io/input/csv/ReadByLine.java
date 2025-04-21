@@ -45,6 +45,7 @@ public class ReadByLine implements AutoCloseable {
 
     /** How the CSV will be read. */
     private final CSVReader csvReader;
+
     // END REQUIRED ARGUMENTS
 
     private CSVReader.OpenedCSVFile openedFile = null;

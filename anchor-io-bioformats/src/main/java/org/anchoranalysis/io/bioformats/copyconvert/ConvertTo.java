@@ -61,6 +61,7 @@ public abstract class ConvertTo<T> {
 
     /** A function to wrap a buffer of type {@code T} into a {@link VoxelBuffer}. */
     private final Function<T, VoxelBuffer<T>> wrapBuffer;
+
     // END REQUIRED ARGUMENTS
 
     /** The size of the source and destination buffers. */

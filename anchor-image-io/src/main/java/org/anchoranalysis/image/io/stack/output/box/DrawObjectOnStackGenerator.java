@@ -66,6 +66,7 @@ public class DrawObjectOnStackGenerator
 
     /** Whether to flatten the z-dimension so that it is single-sliced. */
     private final boolean flatten;
+
     // END REQUIRED ARGUMENTS
 
     /**

@@ -53,6 +53,7 @@ public class GeneratorBridge<S, T> implements Generator<S> {
 
     /** Maps the source-type to one or more instances of the destination type */
     private final CheckedFunction<S, Stream<T>, ?> bridge;
+
     // END REQUIRED ARGUMENTS
 
     /**

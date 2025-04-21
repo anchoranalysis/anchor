@@ -81,6 +81,7 @@ public class StackTester {
 
     /** If true, then 3D stacks are also tested and saved, not just 2D stacks. */
     private final boolean include3D;
+
     // END REQUIRED ARGUMENTS
 
     /**

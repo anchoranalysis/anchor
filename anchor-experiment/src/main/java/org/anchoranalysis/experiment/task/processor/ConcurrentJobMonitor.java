@@ -52,6 +52,7 @@ public class ConcurrentJobMonitor implements Iterable<SubmittedJob> {
     // START REQUIRED FIELDS
     /** The total number of submitted jobs to be executed. */
     @Getter private final long totalNumberJobs;
+
     // END REQUIRED FIELDS
 
     /** All submitted tasks. */

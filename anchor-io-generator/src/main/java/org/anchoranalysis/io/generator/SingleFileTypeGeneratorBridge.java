@@ -56,6 +56,7 @@ public class SingleFileTypeGeneratorBridge<S, T, V> extends SingleFileTypeGenera
 
     /** Transforms an element before passing it to {@code delegate}. */
     private final CheckedFunction<T, V, ? extends Throwable> elementBridge;
+
     // END REQUIRED ARGUMENTS
 
     @Override

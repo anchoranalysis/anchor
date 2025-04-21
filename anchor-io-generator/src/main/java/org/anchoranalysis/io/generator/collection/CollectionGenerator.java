@@ -53,6 +53,7 @@ public class CollectionGenerator<T> implements Generator<Collection<T>> {
 
     /** Prefix in outputted name for each element. */
     private final String prefix;
+
     // END REQUIRED ARGUMENTS
 
     @Override

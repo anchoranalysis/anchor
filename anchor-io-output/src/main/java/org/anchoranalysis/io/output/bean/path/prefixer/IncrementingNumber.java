@@ -54,6 +54,7 @@ public class IncrementingNumber extends PathPrefixerAvoidResolve {
     // START BEAN PROPERTIES
     /** Number of digits in the number, with leading zeros as necessary. */
     @BeanField @Getter @Setter private int numberDigits = 4;
+
     // END BEAN PROPERTIES
 
     /**

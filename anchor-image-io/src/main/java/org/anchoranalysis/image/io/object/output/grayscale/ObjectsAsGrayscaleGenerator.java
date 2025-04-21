@@ -52,6 +52,7 @@ public abstract class ObjectsAsGrayscaleGenerator
      * element).
      */
     @Getter private final Dimensions dimensions;
+
     // END REQUIRED ARGUMENTS
 
     @Override

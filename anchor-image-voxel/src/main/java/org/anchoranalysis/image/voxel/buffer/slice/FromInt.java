@@ -63,6 +63,7 @@ public class FromInt implements SliceBufferIndex<UnsignedIntBuffer> {
     public static SliceBufferIndex<UnsignedIntBuffer> createUninitialized(Extent extent) {
         return new FromInt(extent);
     }
+
     // END FACTORY METHODS
 
     private FromInt(Extent extent) {

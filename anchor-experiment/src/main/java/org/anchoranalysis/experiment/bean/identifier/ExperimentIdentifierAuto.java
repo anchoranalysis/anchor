@@ -55,6 +55,7 @@ public class ExperimentIdentifierAuto extends ExperimentIdentifier {
 
     /** Only relevant if time==true. Whether the second is included in the time. */
     @BeanField @Getter @Setter private boolean second = true;
+
     // END BEAN FIELDS
 
     private static final String FORMAT_DAY = "yyyy.MM.dd";

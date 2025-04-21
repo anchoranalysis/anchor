@@ -67,6 +67,7 @@ public abstract class JobProcessor<T extends InputFromManager, S>
      * stops.
      */
     @BeanField @Getter @Setter private boolean suppressExceptions = true;
+
     // END BEAN PROPERTIES
 
     /**

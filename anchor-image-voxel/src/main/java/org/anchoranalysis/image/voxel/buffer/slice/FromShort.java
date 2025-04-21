@@ -63,6 +63,7 @@ public class FromShort implements SliceBufferIndex<UnsignedShortBuffer> {
     public static SliceBufferIndex<UnsignedShortBuffer> createUninitialized(Extent extent) {
         return new FromShort(extent);
     }
+
     // END FACTORY METHODS
 
     private FromShort(Extent extent) {

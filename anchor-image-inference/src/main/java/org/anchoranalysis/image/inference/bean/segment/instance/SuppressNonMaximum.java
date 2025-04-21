@@ -64,6 +64,7 @@ public class SuppressNonMaximum<T extends InferenceModel> extends SegmentStackIn
 
     /** If true, each label is reduced separately. if false, all labels are reduced together. */
     @BeanField @Getter @Setter private boolean separateEachLabel = false;
+
     // END BEAN PROPERTIES
 
     /**

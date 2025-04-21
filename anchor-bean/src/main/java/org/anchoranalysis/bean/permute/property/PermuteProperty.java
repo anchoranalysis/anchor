@@ -66,6 +66,7 @@ public abstract class PermuteProperty<T> extends AnchorBean<PermuteProperty<T>> 
 
     /** Additional property paths that are also changed, together with {@code propertyPath}. */
     @BeanField @OptionalBean @Getter @Setter private StringSet additionalPropertyPaths;
+
     // END BEAN PROPERTIES
 
     /**

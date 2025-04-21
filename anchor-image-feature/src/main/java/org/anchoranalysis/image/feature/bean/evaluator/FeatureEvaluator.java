@@ -83,6 +83,7 @@ public class FeatureEvaluator<T extends FeatureInput>
      * stackEnergy} is not specified.
      */
     @BeanField @OptionalBean @Getter @Setter private DictionaryProvider dictionary;
+
     // END BEAN PROPERTIES
 
     @Override

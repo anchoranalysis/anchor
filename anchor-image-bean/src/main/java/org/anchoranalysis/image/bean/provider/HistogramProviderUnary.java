@@ -46,6 +46,7 @@ public abstract class HistogramProviderUnary extends HistogramProvider {
     // START BEAN PROPERTIES
     /** The delegate {@link HistogramProvider} that is called. */
     @BeanField @Getter @Setter private HistogramProvider histogram;
+
     // END BEAN PROPERTIES
 
     @Override

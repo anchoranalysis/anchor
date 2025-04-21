@@ -67,6 +67,7 @@ public class BioformatsReader extends StackReaderOrientationCorrection {
     // START BEAN PROPERTIES
     /** Options that influence how stack is read. */
     @BeanField @Getter @Setter private ReadOptions options = new Default();
+
     // END BEAN PROPERTIES
 
     /**

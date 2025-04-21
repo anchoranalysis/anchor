@@ -42,6 +42,7 @@ public abstract class ErrorReporterBase implements ErrorReporter {
     // START REQUIRED ARGUMENTS
     /** Writes a particular message to the log. */
     private final Consumer<String> logOperation;
+
     // END REQUIRED ARGUMENTS
 
     /** True if at least one warning has been outputted. */

@@ -93,6 +93,7 @@ public abstract class OutputExperiment extends Experiment {
      * each file is very quick)
      */
     @BeanField @Getter @Setter private boolean forceDetailedLogging = false;
+
     // END BEAN PROPERTIES
 
     /**

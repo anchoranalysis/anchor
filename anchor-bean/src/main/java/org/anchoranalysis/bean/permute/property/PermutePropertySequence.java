@@ -46,6 +46,7 @@ public abstract class PermutePropertySequence<T> extends PermuteProperty<T> {
      * or after further manipulation.
      */
     @BeanField @Getter @Setter private SequenceInteger sequence;
+
     // END BEAN PROPERTIES
 
     /**

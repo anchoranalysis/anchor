@@ -49,6 +49,7 @@ public abstract class ChannelProviderBinary extends ChannelProvider {
 
     /** The <b>second</b> delegate {@link ChannelProvider} that is called. */
     @BeanField @Getter @Setter private ChannelProvider channel2;
+
     // END BEAN PROPERTIES
 
     @Override

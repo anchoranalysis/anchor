@@ -57,6 +57,7 @@ public class DefinedNamed<T extends FeatureInput> extends ReferencingFeatureList
     // START BEAN PROPERTIES
     /** A list of {@link FeatureListProvider}s with an associated name. */
     @BeanField @SkipInit @Getter @Setter private List<NamedBean<FeatureListProvider<T>>> list;
+
     // END BEAN PROPERTIES
 
     @Override

@@ -55,6 +55,7 @@ public abstract class LabelledResultsCSVWriter {
      * After adding a {@link LabelledResultsVector}, this function is also called, if it is defined.
      */
     private final Optional<Consumer<LabelledResultsVector>> consumeAfterAdding;
+
     // END REQUIRED ARGUMENTS
 
     /**

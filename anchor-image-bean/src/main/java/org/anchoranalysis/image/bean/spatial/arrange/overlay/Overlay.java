@@ -66,6 +66,7 @@ public class Overlay extends StackArranger {
     // START BEAN PROPERTIES
     /** Indicates how to align the image across the three axes. */
     @BeanField @Getter @Setter private Align align = new Align("left", "top", "bottom");
+
     // END BEAN PROPERTIES
 
     /**

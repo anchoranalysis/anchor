@@ -46,12 +46,14 @@ public class VoxelsResizerExecutionTime extends VoxelsResizer {
 
     /** The recorder of the execution times. */
     private final ExecutionTimeRecorder executionTimeRecorder;
+
     // END: REQUIRED ARGUMENTS
 
     // START: The identifiers used for recording time.
     private final String identifierByte;
     private final String identifierShort;
     private final String identifierFloat;
+
     // END: The identifiers used for recording time.
 
     /**

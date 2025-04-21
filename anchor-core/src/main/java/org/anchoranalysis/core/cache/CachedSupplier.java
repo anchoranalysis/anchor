@@ -45,6 +45,7 @@ public class CachedSupplier<T, E extends Exception> extends CachedSupplierBase<T
     // START: REQUIRED ARGUMENTS
     /** Supplies the value to be calculated and cached. */
     private final CheckedSupplier<T, E> supplier;
+
     // END: REQUIRED ARGUMENTS
 
     /**

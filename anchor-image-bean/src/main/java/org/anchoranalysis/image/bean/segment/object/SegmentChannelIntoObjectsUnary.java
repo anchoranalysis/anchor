@@ -49,6 +49,7 @@ public abstract class SegmentChannelIntoObjectsUnary extends SegmentChannelIntoO
     // START BEAN PROPERTIES
     /** The delegate {@link SegmentChannelIntoObjects} that is called. */
     @BeanField @Getter @Setter private SegmentChannelIntoObjects segment;
+
     // END BEAN PROPERTIES
 
     @Override

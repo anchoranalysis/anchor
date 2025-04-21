@@ -43,6 +43,7 @@ public class FromSingle extends ColorScheme {
     // START BEAN PROPERTIES
     /** The single color to repeat. */
     @BeanField @Getter @Setter private RGBColorBean color;
+
     // END BEAN PROPERTIES
 
     @Override

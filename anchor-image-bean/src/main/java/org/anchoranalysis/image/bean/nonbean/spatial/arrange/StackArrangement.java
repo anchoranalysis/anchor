@@ -53,6 +53,7 @@ public class StackArrangement implements Iterable<BoundingBoxEnclosed> {
      * fully reside.
      */
     private final Extent extent;
+
     // END REQUIRED ARGUMENTS
 
     /** Where to locate a respective image on a larger image. */

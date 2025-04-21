@@ -50,7 +50,9 @@ public class DebugModeParameters {
     /** An optional string used to filter inputs. If null, then disabled. */
     private Optional<String> contains;
 
-    /** @return contains, or an empty string if null. */
+    /**
+     * @return contains, or an empty string if null.
+     */
     public String containsOrEmpty() {
         if (contains.isPresent()) {
             return contains.get();

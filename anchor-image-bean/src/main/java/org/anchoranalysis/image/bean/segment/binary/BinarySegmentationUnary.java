@@ -48,6 +48,7 @@ public abstract class BinarySegmentationUnary extends BinarySegmentation {
     // START BEAN PROPERTIES
     /** The delegate {@link BinarySegmentation} that may be called. */
     @BeanField @Getter @Setter private BinarySegmentation segment;
+
     // END BEAN PROPERTIES
 
     @Override

@@ -47,6 +47,7 @@ public class SwitchDetailedLogging extends LoggingDestination {
 
     /** Logger to use when detailed-logging is off */
     @BeanField @Getter @Setter private LoggingDestination whenNot;
+
     // END BEAN PROPERTIES
 
     @Override

@@ -53,6 +53,7 @@ public class Padding extends AnchorBean<Padding> {
      * Padding placed on each side of the outputted image (if it's within the image) in Z direction
      */
     @BeanField @Getter @Setter @NonNegative private int paddingZ = 0;
+
     // END BEAN PROPERTIES
 
     /**

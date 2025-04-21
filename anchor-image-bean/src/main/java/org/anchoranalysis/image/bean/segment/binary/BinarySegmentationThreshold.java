@@ -52,6 +52,7 @@ public class BinarySegmentationThreshold extends BinarySegmentation {
     // START PARAMETERS
     /** Performs the global thresholding. */
     @BeanField @Getter @Setter private Thresholder thresholder;
+
     // END PARAMETERS
 
     @Override

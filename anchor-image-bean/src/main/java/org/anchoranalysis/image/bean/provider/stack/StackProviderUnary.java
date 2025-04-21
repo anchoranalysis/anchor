@@ -46,6 +46,7 @@ public abstract class StackProviderUnary extends StackProvider {
     // START BEAN FIELDS
     /** The delegate {@code Provider<Stack>} that is called. */
     @BeanField @Getter @Setter private Provider<Stack> stack;
+
     // END BEAN FIELDS
 
     @Override

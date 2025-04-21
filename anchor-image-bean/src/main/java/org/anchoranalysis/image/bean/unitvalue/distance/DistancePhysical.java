@@ -55,6 +55,7 @@ public class DistancePhysical extends UnitValueDistance {
 
     /** A string indicating type of units to use, as per {@link SpatialUnits}. */
     @BeanField @AllowEmpty @Getter @Setter private String unitType;
+
     // END BEAN PROPERTIES
 
     @Override

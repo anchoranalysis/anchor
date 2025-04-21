@@ -203,7 +203,9 @@ public class HungarianAlgorithm {
         }
     }
 
-    /** @return the first unmatched worker or the dimensionality if none. */
+    /**
+     * @return the first unmatched worker or the dimensionality if none.
+     */
     protected int fetchUnmatchedWorker() {
         int w;
         for (w = 0; w < dim; w++) {

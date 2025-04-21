@@ -48,6 +48,7 @@ public class Reference<T extends FeatureInput> extends FeatureGeneric<T> {
     // START BEAN
     /** The identifier that uniquely determines the other feature to reference. */
     @BeanField @Getter @Setter private String id;
+
     // END BEAN
 
     /**

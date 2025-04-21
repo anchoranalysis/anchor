@@ -58,6 +58,7 @@ public class FromXMLList extends DefineAdderBean {
      * followed by a full-stop.
      */
     @BeanField @Getter @Setter private boolean prefix = false;
+
     // END BEAN PROPERTIES
 
     @Override

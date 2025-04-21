@@ -53,6 +53,7 @@ public class Flatten extends DrawObject {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private DrawObject writer;
+
     // END BEAN PROPERTIES
 
     @Override

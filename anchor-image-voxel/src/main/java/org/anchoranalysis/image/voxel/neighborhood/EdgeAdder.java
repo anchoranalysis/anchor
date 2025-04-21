@@ -56,6 +56,7 @@ class EdgeAdder<V> {
 
     /** Avoids any edge if any two objects have a common pixel. */
     private final EdgeAdderParameters parameters;
+
     // END REQUIRED ARGUMENTS
 
     /** The r-tree underpinning the vertices (or rather their derived object-masks) */

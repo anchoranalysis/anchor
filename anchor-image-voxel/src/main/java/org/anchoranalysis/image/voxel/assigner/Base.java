@@ -45,6 +45,7 @@ abstract class Base<T> implements VoxelsAssigner {
 
     /** The voxel-value to assign */
     protected final int valueToAssign;
+
     // END REQUIRED ARGUMENTS
 
     @Override

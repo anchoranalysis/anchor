@@ -61,6 +61,7 @@ public abstract class BinaryKernelMorphological extends BinaryKernel {
 
     /** If the first-check fails, this outcome is returned. */
     private final boolean failedFirstCheckOutcome;
+
     // END REQUIRED ARGUMENTS
 
     private LocalSlices slices;

@@ -48,6 +48,7 @@ public abstract class FeatureBinary<T extends FeatureInput> extends Feature<T> {
 
     /** Provides the <i>second</i> value for the binary-function. */
     @BeanField @Getter @Setter private Feature<T> item2;
+
     // END BEAN PARAMETERS
 
     @Override

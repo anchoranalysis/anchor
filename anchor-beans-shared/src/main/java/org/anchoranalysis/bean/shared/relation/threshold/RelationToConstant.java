@@ -57,6 +57,7 @@ public class RelationToConstant extends RelationToThreshold {
 
     /** The constant threshold. */
     @BeanField @NonNegative @Getter @Setter private double threshold = -1;
+
     // END BEAN PROPERTIES
 
     @Override

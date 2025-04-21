@@ -60,6 +60,7 @@ public class FromStackReader extends ImageMetadataReader {
 
     /** The series to open to the read the metadata (zero-indexed). */
     @BeanField @Getter @Setter private int seriesIndex = 0;
+
     // END BEAN PROPERTIES
 
     /**

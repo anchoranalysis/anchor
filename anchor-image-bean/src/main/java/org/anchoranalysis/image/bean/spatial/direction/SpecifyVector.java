@@ -51,6 +51,7 @@ public class SpecifyVector extends DirectionVectorBean {
 
     /** Component of the vector along the <b>z-axis</b>. */
     @BeanField @Getter @Setter private double z = 0;
+
     // END BEAN PROPERTIES
 
     /**

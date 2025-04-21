@@ -82,6 +82,7 @@ public class ImageInitialization implements BeanInitialization {
     // START: Initialization
     /** The associated initialization for a {@link FeatureRelatedBean}. */
     private final FeatureRelatedInitialization features;
+
     // END: Initialization
 
     // START: Stores
@@ -102,6 +103,7 @@ public class ImageInitialization implements BeanInitialization {
 
     /** A collection of {@link BinarySegmentation}s, indexed by name. */
     @Getter private final NamedProviderStore<BinarySegmentation> binarySegmentations;
+
     // END: Stores
 
     /**

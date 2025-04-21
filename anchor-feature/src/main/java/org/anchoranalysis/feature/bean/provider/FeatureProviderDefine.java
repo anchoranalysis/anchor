@@ -48,6 +48,7 @@ public class FeatureProviderDefine<T extends FeatureInput> extends FeatureProvid
     // START BEAN PROPERTIES
     /** The feature to provide. */
     @BeanField @SkipInit @Getter @Setter private Feature<T> feature;
+
     // END BEAN PROPERTIES
 
     @Override

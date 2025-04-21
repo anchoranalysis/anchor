@@ -52,6 +52,7 @@ public class ReadFromFile extends DictionaryProvider {
     // START BEAN PROPERTIES
     /** Provides a single file containing a dictionary. */
     @BeanField @Getter @Setter private FilesProvider files;
+
     // END BEAN PROPERTIES
 
     @Override

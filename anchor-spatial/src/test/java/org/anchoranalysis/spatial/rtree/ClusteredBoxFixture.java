@@ -54,6 +54,7 @@ class ClusteredBoxFixture {
     // START THIRD CLUSTER
     public static final BoundingBox BOX5 = BoundingBoxFactory.uniform3D(90, 20);
     public static final BoundingBox BOX6 = BoundingBoxFactory.uniform3D(95, 10);
+
     // END THIRD CLUSTER
 
     /**

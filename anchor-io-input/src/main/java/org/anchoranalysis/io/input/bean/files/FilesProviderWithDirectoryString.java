@@ -64,6 +64,7 @@ public abstract class FilesProviderWithDirectoryString extends FilesProviderWith
 
     /** When true paths are resolved against the location of the associated BeanXML file. */
     @BeanField @Getter @Setter private boolean localized = false;
+
     // END BEAN FIELDS
 
     @Override

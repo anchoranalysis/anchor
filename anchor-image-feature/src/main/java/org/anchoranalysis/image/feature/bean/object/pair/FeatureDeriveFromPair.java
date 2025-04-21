@@ -56,6 +56,7 @@ public abstract class FeatureDeriveFromPair extends FeaturePairObjects {
     // START BEAN PROPERTIES
     /** The feature to be applied to individual objects. */
     @BeanField @Getter @Setter private Feature<FeatureInputSingleObject> item;
+
     // END BEAN PROPERTIES
 
     /** Cache name for the first object in the pair. */

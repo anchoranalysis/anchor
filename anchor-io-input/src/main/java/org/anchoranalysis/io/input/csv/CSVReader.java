@@ -51,6 +51,7 @@ public class CSVReader {
 
     /** Whether strings should be quoted or not in the CSV file. */
     private final boolean quotedStrings;
+
     // END REQUIRED ARGUMENTS
 
     private FileReader fileReader;

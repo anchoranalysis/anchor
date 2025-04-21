@@ -119,6 +119,7 @@ public class InputOutputExperiment<T extends InputFromManager, S> extends Output
      * early.
      */
     @BeanField @Getter @Setter private String messageNoInputs = "No inputs exist. Nothing to do.";
+
     // END BEAN PROPERTIES
 
     @Override

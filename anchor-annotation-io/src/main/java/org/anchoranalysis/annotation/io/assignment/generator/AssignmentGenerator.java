@@ -69,6 +69,7 @@ public class AssignmentGenerator extends RasterGeneratorSelectFormat<Assignment<
      * Whether to append a count of unassigned objects (in parantheses) to the name of each image.
      */
     private final boolean appendUnassignedCount;
+
     // END REQUIRED ARGUMENTS
 
     /** A delegated generator. */

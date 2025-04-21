@@ -49,6 +49,7 @@ public class MarkWithIdentifierFactory extends NullParametersBean<MarkWithIdenti
 
     /** A template mark factory from which all new marks are created. */
     @BeanField @Getter @Setter private MarkFactory templateMark = null;
+
     // END BEAN PARAMETERS
 
     private IdCounter idCounter;
