@@ -25,7 +25,7 @@
  */
 package org.anchoranalysis.io.bioformats.copyconvert;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;

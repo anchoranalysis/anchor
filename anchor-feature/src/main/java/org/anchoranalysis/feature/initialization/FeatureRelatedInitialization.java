@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.feature.initialization;
 
-import com.github.davidmoten.guavamini.Preconditions;
 import java.nio.file.Path;
 import java.util.List;
 import lombok.Getter;
@@ -47,6 +46,8 @@ import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.shared.SharedFeatures;
+
+import com.google.common.base.Preconditions;
 
 /**
  * Parameters for initializing a {@link FeatureRelatedBean}.

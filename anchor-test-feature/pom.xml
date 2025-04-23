@@ -15,24 +15,11 @@
 		  <artifactId>anchor-feature</artifactId>
 		  <version>1.0.0-SNAPSHOT</version>
 		</dependency>
-		
-         <dependency>
-          <groupId>${project.groupId}</groupId>
-          <artifactId>anchor-test</artifactId>
-          <version>1.0.0-SNAPSHOT</version>
-        </dependency>
  
 	    <!-- Needed to expand scope outside "test" which is inherited from the parent pom -->
 	       <dependency>
 		    <groupId>org.junit.jupiter</groupId>
-		    <artifactId>junit-jupiter-engine</artifactId>
-		    <version>${junit.version}</version>
-		    <scope>compile</scope>
-		</dependency>
-	
-	       <dependency>
-		    <groupId>org.junit.vintage</groupId>
-		    <artifactId>junit-vintage-engine</artifactId>
+		    <artifactId>junit-jupiter</artifactId>
 		    <version>${junit.version}</version>
 		    <scope>compile</scope>
 		</dependency>
