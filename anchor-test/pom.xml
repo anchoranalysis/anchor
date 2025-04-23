@@ -38,7 +38,7 @@
 	    <!-- Needed to expand scope outside "test" which is inherited from the parent pom -->
         <dependency>
 		    <groupId>org.junit.jupiter</groupId>
-		    <artifactId>junit-jupiter-engine</artifactId>
+		    <artifactId>junit-jupiter</artifactId>
 		    <version>${junit.version}</version>
 		    <scope>compile</scope>
 		</dependency>
