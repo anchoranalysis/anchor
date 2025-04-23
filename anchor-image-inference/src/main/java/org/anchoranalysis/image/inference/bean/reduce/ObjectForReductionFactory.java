@@ -26,7 +26,6 @@
 package org.anchoranalysis.image.inference.bean.reduce;
 
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -55,6 +54,6 @@ public class ObjectForReductionFactory {
             List<LabelledWithConfidence<ObjectMask>> list) {
         return IntStream.range(0, list.size())
                 .mapToObj(index -> new ObjectForReduction(list.get(index), index))
-                .collect(Collectors.toList());
+                .toList();
     }
 }

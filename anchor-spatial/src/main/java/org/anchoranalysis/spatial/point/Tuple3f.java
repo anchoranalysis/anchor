@@ -81,15 +81,12 @@ public abstract class Tuple3f implements Serializable {
      * @return the component of the tuple corresponding to that axis.
      */
     public final float valueByDimension(int dimensionIndex) {
-        if (dimensionIndex == 0) {
-            return x;
-        } else if (dimensionIndex == 1) {
-            return y;
-        } else if (dimensionIndex == 2) {
-            return z;
-        } else {
-            throw new AnchorFriendlyRuntimeException(AxisConverter.INVALID_AXIS_STRING);
-        }
+        return switch (dimensionIndex) {
+            case 0 -> x;
+            case 1 -> y;
+            case 2 -> z;
+            default -> throw new AnchorFriendlyRuntimeException(AxisConverter.INVALID_AXIS_STRING);
+        };
     }
 
     /**

@@ -75,9 +75,7 @@ public class ExtractPathElementRange {
         }
     }
 
-    /** 
-     * Construct a file from a collection of name elements. 
-     */
+    /** Construct a file from a collection of name elements. */
     private static File getFile(Collection<Path> elements) throws DerivePathException {
         File file = null;
         for (final Path name : elements) {
@@ -88,9 +86,10 @@ public class ExtractPathElementRange {
             }
         }
         if (file != null) {
-        	return file;
+            return file;
         } else {
-        	throw new DerivePathException("Zero paths elements exist in the range, so a file cannot be constructed.");
+            throw new DerivePathException(
+                    "Zero paths elements exist in the range, so a file cannot be constructed.");
         }
     }
 }

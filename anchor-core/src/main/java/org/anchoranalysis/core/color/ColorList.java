@@ -32,7 +32,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.functional.FunctionalIterate;
@@ -76,7 +75,7 @@ public class ColorList implements ColorIndex, Iterable<RGBColor> {
      * @param colors the colors
      */
     public ColorList(Stream<RGBColor> colors) {
-        this.list = colors.collect(Collectors.toList());
+        this.list = colors.toList();
     }
 
     @Override

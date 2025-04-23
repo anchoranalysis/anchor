@@ -30,7 +30,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import org.anchoranalysis.feature.io.csv.FeatureCSVWriter;
 import org.anchoranalysis.feature.io.csv.metadata.FeatureCSVMetadata;
@@ -76,7 +75,7 @@ class RemoveNaNColumns extends WriteLazy {
 
         // Contains integers 0 to (numberFeatures-1) inclusive.
         int numberFeatures = outputMetadata.featureNames().size();
-        indicesToCheck = IntStream.range(0, numberFeatures).boxed().collect(Collectors.toList());
+        indicesToCheck = IntStream.range(0, numberFeatures).boxed().toList();
     }
 
     @Override

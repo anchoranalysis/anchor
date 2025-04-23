@@ -241,7 +241,7 @@ public class IntersectingObjects<T> {
         unprocessed.remove(source);
 
         addTo.add(source);
-        List<T> queue = tree.intersectsWith(boxFor(source)).stream().collect(Collectors.toList());
+        List<T> queue = tree.intersectsWith(boxFor(source)).stream().toList();
 
         while (!queue.isEmpty()) {
             T current = queue.remove(0);

@@ -33,7 +33,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.Getter;
 import lombok.Setter;
@@ -92,7 +91,7 @@ public class FeatureList<T extends FeatureInput> extends AnchorBean<FeatureList<
      * @param stream the stream of features.
      */
     public FeatureList(Stream<Feature<T>> stream) {
-        this.list = stream.collect(Collectors.toList());
+        this.list = stream.toList();
     }
 
     /**

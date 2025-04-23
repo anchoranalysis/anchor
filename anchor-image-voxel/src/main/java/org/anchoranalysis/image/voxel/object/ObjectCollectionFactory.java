@@ -86,7 +86,7 @@ public class ObjectCollectionFactory {
     @SafeVarargs
     public static ObjectCollection of(ObjectCollection... collection) {
         Stream<ObjectMask> stream =
-                Arrays.stream(collection).flatMap(objects -> objects.streamStandardJava());
+                Arrays.stream(collection).flatMap(ObjectCollection::streamStandardJava);
         return new ObjectCollection(stream);
     }
 
@@ -102,7 +102,7 @@ public class ObjectCollectionFactory {
                 Arrays.stream(collections)
                         .filter(Optional::isPresent)
                         .map(Optional::get)
-                        .flatMap(objects -> objects.streamStandardJava());
+                        .flatMap(ObjectCollection::streamStandardJava);
         return new ObjectCollection(stream);
     }
 
@@ -114,7 +114,7 @@ public class ObjectCollectionFactory {
      */
     @SafeVarargs
     public static ObjectCollection of(Collection<ObjectMask>... collections) {
-        Stream<ObjectMask> stream = Arrays.stream(collections).flatMap(objects -> objects.stream());
+        Stream<ObjectMask> stream = Arrays.stream(collections).flatMap(Collection::stream);
         return new ObjectCollection(stream);
     }
 
@@ -246,7 +246,7 @@ public class ObjectCollectionFactory {
      */
     @SafeVarargs
     public static ObjectCollection of(BinaryVoxels<UnsignedByteBuffer>... masks) {
-        Stream<ObjectMask> stream = Arrays.stream(masks).map(mask -> new ObjectMask(mask));
+        Stream<ObjectMask> stream = Arrays.stream(masks).map(ObjectMask::new);
         return new ObjectCollection(stream);
     }
 
@@ -477,7 +477,7 @@ public class ObjectCollectionFactory {
             Class<? extends Exception> throwableClass,
             CheckedFunction<T, Stream<ObjectMask>, E> mapFunction)
             throws E {
-        return flatMapFromCollection(stream, throwableClass, source -> mapFunction.apply(source));
+        return flatMapFromCollection(stream, throwableClass, mapFunction::apply);
     }
 
     /**

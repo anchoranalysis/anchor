@@ -29,7 +29,6 @@ package org.anchoranalysis.image.io.stack.time;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.anchoranalysis.image.core.channel.Channel; // NOSONAR
 import org.anchoranalysis.image.core.stack.Stack;
@@ -59,7 +58,7 @@ public class TimeSeries implements Iterable<Stack> {
      * @param frames the frames.
      */
     public TimeSeries(Stream<Stack> frames) {
-        this.list = frames.collect(Collectors.toList());
+        this.list = frames.toList();
     }
 
     /**

@@ -27,7 +27,6 @@ package org.anchoranalysis.core.time;
 
 import java.util.List;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -91,7 +90,7 @@ public class RecordedExecutionTimes {
      * @param runningTimes a set of each operation-identifiers and corresponding execution-times.
      */
     public RecordedExecutionTimes(Stream<RecordedOperation> runningTimes) {
-        this.runningTimes = runningTimes.collect(Collectors.toList());
+        this.runningTimes = runningTimes.toList();
     }
 
     /**

@@ -30,7 +30,6 @@ import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * Combines multiple (optional) {@link ImageComparer}s.
@@ -43,11 +42,7 @@ class CombineComparers implements ImageComparer {
 
     @SafeVarargs
     public CombineComparers(Optional<ImageComparer>... comparer) {
-        list =
-                Arrays.stream(comparer)
-                        .filter(Optional::isPresent)
-                        .map(Optional::get)
-                        .collect(Collectors.toList());
+        list = Arrays.stream(comparer).filter(Optional::isPresent).map(Optional::get).toList();
     }
 
     @Override

@@ -196,17 +196,12 @@ public abstract class Tuple3d implements Serializable {
      * @return the component of the tuple corresponding to that axis.
      */
     public final double valueByDimension(Axis axis) {
-        switch (axis) {
-            case X:
-                return x;
-            case Y:
-                return y;
-            case Z:
-                return z;
-            default:
-                assert false;
-                throw new AnchorFriendlyRuntimeException(AxisConverter.INVALID_AXIS_INDEX);
-        }
+        return switch (axis) {
+            case X -> x;
+            case Y -> y;
+            case Z -> z;
+            default -> throw new AnchorFriendlyRuntimeException(AxisConverter.INVALID_AXIS_INDEX);
+        };
     }
 
     /**
@@ -216,15 +211,12 @@ public abstract class Tuple3d implements Serializable {
      * @return the component of the tuple corresponding to that axis.
      */
     public final double valueByDimension(int dimensionIndex) {
-        if (dimensionIndex == 0) {
-            return x;
-        } else if (dimensionIndex == 1) {
-            return y;
-        } else if (dimensionIndex == 2) {
-            return z;
-        } else {
-            throw new AnchorFriendlyRuntimeException(AxisConverter.INVALID_AXIS_STRING);
-        }
+        return switch (dimensionIndex) {
+            case 0 -> x;
+            case 1 -> y;
+            case 2 -> z;
+            default -> throw new AnchorFriendlyRuntimeException(AxisConverter.INVALID_AXIS_STRING);
+        };
     }
 
     /**
@@ -235,17 +227,10 @@ public abstract class Tuple3d implements Serializable {
      */
     public final void setValueByDimension(int dimensionIndex, double valueToAssign) {
         switch (dimensionIndex) {
-            case 0:
-                this.x = valueToAssign;
-                break;
-            case 1:
-                this.y = valueToAssign;
-                break;
-            case 2:
-                this.z = valueToAssign;
-                break;
-            default:
-                throw new AnchorFriendlyRuntimeException(AxisConverter.INVALID_AXIS_STRING);
+            case 0 -> this.x = valueToAssign;
+            case 1 -> this.y = valueToAssign;
+            case 2 -> this.z = valueToAssign;
+            default -> throw new AnchorFriendlyRuntimeException(AxisConverter.INVALID_AXIS_STRING);
         }
     }
 

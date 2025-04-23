@@ -119,13 +119,11 @@ public class NamedProviderOutputter<T> {
 
         String errorMessage = String.format("An error occurred outputting %s", name);
 
-        if (e instanceof HasFriendlyErrorMessage) {
-            HasFriendlyErrorMessage eCast = (HasFriendlyErrorMessage) e;
+        if (e instanceof HasFriendlyErrorMessage eCast) {
             throw new OutputWriteFailedException(errorMessage, eCast);
         }
 
-        if (e instanceof AnchorCombinableException) {
-            AnchorCombinableException eCast = (AnchorCombinableException) e;
+        if (e instanceof AnchorCombinableException eCast) {
             throw new OutputWriteFailedException(errorMessage, eCast);
         }
 

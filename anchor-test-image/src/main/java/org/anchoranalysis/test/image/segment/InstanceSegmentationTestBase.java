@@ -66,7 +66,7 @@ public abstract class InstanceSegmentationTestBase {
      * @throws InitializeException if initialization fails
      */
     @BeforeEach
-    public void setup() throws InitializeException {
+    void setup() throws InitializeException {
         writer = new WriteIntoDirectory(temporaryDirectory, false);
         segmenter = createSegmenter();
         initSegmenter(segmenter);

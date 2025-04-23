@@ -72,7 +72,7 @@ class MatchRegularExpressionTest {
     }
 
     @Test
-    void testSubdirectoryBackwardSlash() throws OperationFailedException {
+    void testSubdirectoryBackwardSlash() {
         assertThrows(BeanMisconfiguredException.class, () -> createMatcher(".*\\\\.*", false));
     }
 
