@@ -21,9 +21,24 @@
 		</dependency>
 		<dependency>
 		  <groupId>${project.groupId}</groupId>
+		  <artifactId>anchor-spatial</artifactId>
+		  <version>1.0.0-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+		  <groupId>${project.groupId}</groupId>
 		  <artifactId>anchor-image-core</artifactId>
 		  <version>1.0.0-SNAPSHOT</version>
 		</dependency>
+		<dependency>
+		  <groupId>${project.groupId}</groupId>
+		  <artifactId>anchor-image-voxel</artifactId>
+		  <version>1.0.0-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+		  <groupId>${project.groupId}</groupId>
+		  <artifactId>anchor-math</artifactId>
+		  <version>1.0.0-SNAPSHOT</version>
+		</dependency>		
 		<dependency>
 		  <groupId>${project.groupId}</groupId>
 		  <artifactId>anchor-beans-shared</artifactId>
@@ -33,6 +48,12 @@
 		  <groupId>${project.groupId}</groupId>
 		  <artifactId>anchor-feature</artifactId>
 		  <version>1.0.0-SNAPSHOT</version>
+		</dependency>
+		
+		<dependency>
+		  <groupId>com.google.guava</groupId>
+		  <artifactId>guava</artifactId>
+		  <version>${guava.version}</version>
 		</dependency>
 		
 		<dependency>

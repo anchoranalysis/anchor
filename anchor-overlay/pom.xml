@@ -24,5 +24,15 @@
 	  <artifactId>anchor-image-core</artifactId>
 	  <version>1.0.0-SNAPSHOT</version>
 	</dependency>
+	<dependency>
+	  <groupId>${project.groupId}</groupId>
+	  <artifactId>anchor-image-voxel</artifactId>
+	  <version>1.0.0-SNAPSHOT</version>
+	</dependency>
+	<dependency>
+	  <groupId>${project.groupId}</groupId>
+	  <artifactId>anchor-spatial</artifactId>
+	  <version>1.0.0-SNAPSHOT</version>
+	</dependency>
   </dependencies>    
 </project>

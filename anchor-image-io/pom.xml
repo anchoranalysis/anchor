@@ -69,12 +69,33 @@
          <artifactId>anchor-io-output</artifactId>
          <version>1.0.0-SNAPSHOT</version>
     </dependency>
+	<dependency>
+         <groupId>${project.groupId}</groupId>
+         <artifactId>anchor-math</artifactId>
+         <version>1.0.0-SNAPSHOT</version>
+    </dependency>
+	<dependency>
+         <groupId>${project.groupId}</groupId>
+         <artifactId>anchor-image-voxel</artifactId>
+         <version>1.0.0-SNAPSHOT</version>
+    </dependency>
+	<dependency>
+         <groupId>${project.groupId}</groupId>
+         <artifactId>anchor-spatial</artifactId>
+         <version>1.0.0-SNAPSHOT</version>
+    </dependency>    
 	
 	<dependency>
 	  <groupId>cisd</groupId>
 	  <artifactId>jhdf5</artifactId>
 	  <version>19.04.1</version>
 	</dependency>
+	
+	<dependency>
+	  <groupId>com.google.guava</groupId>
+	  <artifactId>guava</artifactId>
+	  <version>${guava.version}</version>
+	</dependency>	
 	
 	<dependency>
         <groupId>io.vavr</groupId>
@@ -88,13 +109,6 @@
 	    <artifactId>streamex</artifactId>
 	    <version>${streamex.version}</version>
 	</dependency>
-	
-	<dependency>
-	  <groupId>${project.groupId}</groupId>
-	  <artifactId>anchor-test</artifactId>
-	  <version>1.0.0-SNAPSHOT</version>
-	  <scope>test</scope>
-	</dependency>	
 		
   </dependencies>    
 </project>
