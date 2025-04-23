@@ -25,7 +25,7 @@
  */
 package org.anchoranalysis.io.bioformats.metadata;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.nio.file.Path;
 import java.text.ParseException;

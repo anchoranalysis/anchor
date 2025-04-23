@@ -25,7 +25,7 @@
  */
 package org.anchoranalysis.io.input.path.matcher;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -96,6 +96,6 @@ public class FilePathMatcherFixture {
             String assertMessage)
             throws InputReadFailedException {
         List<File> foundFiles = matcher.matchingFiles(directory, recursive);
-        assertEquals(assertMessage, expectedNumber, foundFiles.size());
+        assertEquals(expectedNumber, foundFiles.size(), assertMessage);
     }
 }

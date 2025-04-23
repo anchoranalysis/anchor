@@ -26,13 +26,16 @@
 
 package org.anchoranalysis.test.image;
 
-import static org.mockito.Mockito.*;
-
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.core.log.Logger;
+import org.anchoranalysis.core.time.ExecutionTimeRecorder;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
+import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.test.LoggerFixture;
 
 /**
@@ -51,9 +54,7 @@ public class InputOutputContextFixture {
      * @return An InputOutputContext with a suppressed logger and the specified model directory.
      */
     public static InputOutputContext withSuppressedLogger(Path modelDir) {
-        InputOutputContext out = withSuppressedLogger();
-        when(out.getModelDirectory()).thenReturn(modelDir);
-        return out;
+        return new ContextFromLogger(LoggerFixture.suppressedLogger(), modelDir);
     }
 
     /**
@@ -72,10 +73,42 @@ public class InputOutputContextFixture {
      * @return An InputOutputContext with the specified logger.
      */
     public static InputOutputContext withLogger(Logger logger) {
-        InputOutputContext out = spy(InputOutputContext.class);
-        when(out.getLogger()).thenReturn(logger);
-        when(out.getMessageReporter()).thenReturn(logger.messageLogger());
-        when(out.getErrorReporter()).thenReturn(logger.errorReporter());
-        return out;
+        // Use an arbitrary path
+        return new ContextFromLogger(logger, Paths.get(""));
+    }
+
+    /** Provides a partially-implemented {@link InputOutputContext} using a Logger. */
+    @AllArgsConstructor
+    private static class ContextFromLogger implements InputOutputContext {
+        private final Logger logger;
+        private final Path modelDirectory;
+
+        @Override
+        public Logger getLogger() {
+            return logger;
+        }
+
+        @Override
+        public Path getModelDirectory() {
+            return modelDirectory;
+        }
+
+        @Override
+        public Outputter getOutputter() {
+            // NEVER INTENDED TO BE CALLED
+            throw new AnchorImpossibleSituationException();
+        }
+
+        @Override
+        public boolean isDebugEnabled() {
+            // NEVER INTENDED TO BE CALLED
+            throw new AnchorImpossibleSituationException();
+        }
+
+        @Override
+        public ExecutionTimeRecorder getExecutionTimeRecorder() {
+            // NEVER INTENDED TO BE CALLED
+            throw new AnchorImpossibleSituationException();
+        }
     }
 }

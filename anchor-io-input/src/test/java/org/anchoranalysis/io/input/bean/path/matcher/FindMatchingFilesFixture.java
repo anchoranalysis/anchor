@@ -25,7 +25,7 @@
  */
 package org.anchoranalysis.io.input.bean.path.matcher;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -101,6 +101,6 @@ class FindMatchingFilesFixture {
                 FindMatchingFiles.search(directory, predicates, recursive, Optional.empty());
 
         // Check we found the expected number of files
-        assertEquals(assertMessage, expectedNumberFound, files.size());
+        assertEquals(expectedNumberFound, files.size(), assertMessage);
     }
 }
