@@ -44,7 +44,7 @@ public interface AnnotationReader<T extends Annotation> {
      * Reads an annotation, if possible, from the file-system.
      *
      * @param path a path representing the annotation (or we derive another path from this path).
-     * @param context TODO
+     * @param context the {@link OperationContext} for the read operation.
      * @return the annotation or {@link Optional#empty()} if it can't be read.
      * @throws InputReadFailedException if the annotation cannot be read successfully.
      */

@@ -116,50 +116,23 @@ class HelperBeanFields {
     private static String describeField(Field field, AnchorBean<?> bean)
             throws OperationFailedException {
         try {
-
             Object value = field.get(bean);
-            if (value instanceof AnchorBean<?> anchorBean) {
-                return describeBean(anchorBean);
-            }
-
-            if (value instanceof List) {
-                return "list";
-            }
-
-            if (value instanceof String valueAsString) {
-                return "'" + valueAsString + "'";
-            }
-
-            if (value instanceof Integer valueAsInt) {
-                return Integer.toString(valueAsInt);
-            }
-
-            if (value instanceof Double valueAsDouble) {
-                return Double.toString(valueAsDouble);
-            }
-
-            if (value instanceof Float valueAsFloat) {
-                return Float.toString(valueAsFloat);
-            }
-
-            if (value instanceof Byte valueAsByte) {
-                return Byte.toString(valueAsByte);
-            }
-
-            if (value instanceof Short valueAsShort) {
-                return Short.toString(valueAsShort);
-            }
-
-            if (value instanceof Long valueAsLong) {
-                return Long.toString(valueAsLong);
-            }
-
-            if (value instanceof Boolean valueAsBoolean) {
-                return valueAsBoolean ? "true" : "false";
-            }
-
-            throw new OperationFailedException("Unknown bean type");
-
+            return switch (value) {
+                case AnchorBean<?> anchorBean -> describeBean(anchorBean);
+                case List<?> ignored -> "list";
+                case String valueAsString -> "'" + valueAsString + "'";
+                case Integer valueAsInt -> Integer.toString(valueAsInt);
+                case Double valueAsDouble -> Double.toString(valueAsDouble);
+                case Float valueAsFloat -> Float.toString(valueAsFloat);
+                case Byte valueAsByte -> Byte.toString(valueAsByte);
+                case Short valueAsShort -> Short.toString(valueAsShort);
+                case Long valueAsLong -> Long.toString(valueAsLong);
+                case Boolean valueAsBoolean -> valueAsBoolean ? "true" : "false";
+                case null -> "null";
+                default ->
+                        throw new OperationFailedException(
+                                "Unknown bean type: " + value.getClass().getSimpleName());
+            };
         } catch (IllegalAccessException e) {
             throw new OperationFailedException(e);
         }
