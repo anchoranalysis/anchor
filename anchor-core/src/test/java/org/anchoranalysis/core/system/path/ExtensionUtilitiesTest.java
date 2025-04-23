@@ -29,7 +29,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
-
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.junit.jupiter.api.Test;
 
@@ -86,9 +85,8 @@ class ExtensionUtilitiesTest {
      * Optional#empty} element at the end.
      */
     @SuppressWarnings("unchecked")
-	private static <T> List<Optional<T>> asOptionalAppendEmpty(
-            T... element) {
-    	Stream<Optional<T>> stream = Arrays.stream(element).map(Optional::of);
-    	return Stream.concat(stream, Stream.of( (Optional<T>) Optional.empty())).toList();
+    private static <T> List<Optional<T>> asOptionalAppendEmpty(T... element) {
+        Stream<Optional<T>> stream = Arrays.stream(element).map(Optional::of);
+        return Stream.concat(stream, Stream.of((Optional<T>) Optional.empty())).toList();
     }
 }
