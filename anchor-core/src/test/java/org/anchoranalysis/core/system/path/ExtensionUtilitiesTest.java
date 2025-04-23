@@ -28,6 +28,8 @@ package org.anchoranalysis.core.system.path;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
+
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.junit.jupiter.api.Test;
 
@@ -83,10 +85,10 @@ class ExtensionUtilitiesTest {
      * Convert every argument to an optional element in a list, and add one extra {@link
      * Optional#empty} element at the end.
      */
-    private static <T> List<Optional<T>> asOptionalAppendEmpty(
-            @SuppressWarnings("unchecked") T... element) {
-        List<Optional<T>> elements = FunctionalList.mapToList(Arrays.stream(element), Optional::of);
-        elements.add(Optional.empty());
-        return elements;
+    @SuppressWarnings("unchecked")
+	private static <T> List<Optional<T>> asOptionalAppendEmpty(
+            T... element) {
+    	Stream<Optional<T>> stream = Arrays.stream(element).map(Optional::of);
+    	return Stream.concat(stream, Stream.of( (Optional<T>) Optional.empty())).toList();
     }
 }

@@ -54,10 +54,13 @@ public abstract class InstanceSegmentationTestBase {
     /** The segmentation implementation to test. */
     private SegmentStackIntoObjectsPooled<?> segmenter;
 
+    /** Temporary directory for test output. */
     @TempDir Path temporaryDirectory;
 
+    /** Utility for writing test output into a directory. */
     private WriteIntoDirectory writer;
 
+    /** Loader for car images used in tests. */
     private CarImageLoader loader = new CarImageLoader();
 
     /**
@@ -102,7 +105,7 @@ public abstract class InstanceSegmentationTestBase {
     /**
      * Provides the RGB stack to be tested.
      *
-     * @return the RGB stack
+     * @return the RGB {@link Stack}
      */
     protected Stack stackRGB() {
         return loader.carRGB();
@@ -111,7 +114,7 @@ public abstract class InstanceSegmentationTestBase {
     /**
      * Provides the grayscale stack to be tested.
      *
-     * @return the grayscale stack
+     * @return the grayscale {@link Stack}
      */
     protected Stack stackGrayscale() {
         return loader.carGrayscale8Bit();
@@ -120,10 +123,18 @@ public abstract class InstanceSegmentationTestBase {
     /**
      * The bounding-box we use to set an area where we expect segments to reside.
      *
-     * @return the bounding-box.
+     * @return the {@link BoundingBox}.
      */
     protected abstract BoundingBox targetBox();
 
+    /**
+     * Performs segmentation and asserts expected results.
+     *
+     * @param stack the {@link Stack} to segment
+     * @param targetBox the expected {@link BoundingBox} for segments
+     * @param suffix a suffix for output file names
+     * @throws SegmentationFailedException if segmentation fails
+     */
     private void assertExpectedSegmentation(Stack stack, BoundingBox targetBox, String suffix)
             throws SegmentationFailedException {
         SegmentedObjects segmentResults =
@@ -135,6 +146,12 @@ public abstract class InstanceSegmentationTestBase {
         ExpectedBoxesChecker.assertExpectedBoxes(objects, targetBox);
     }
 
+    /**
+     * Initializes the segmenter with necessary context.
+     *
+     * @param segmenter the {@link SegmentStackIntoObjectsPooled} to initialize
+     * @throws InitializeException if initialization fails
+     */
     private static void initSegmenter(SegmentStackIntoObjectsPooled<?> segmenter)
             throws InitializeException {
         Path root = TestLoader.createFromMavenWorkingDirectory().getRoot();
