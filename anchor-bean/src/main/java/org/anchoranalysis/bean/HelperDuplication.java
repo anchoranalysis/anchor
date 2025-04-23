@@ -31,7 +31,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -91,7 +90,7 @@ class HelperDuplication {
                                                 propertyName,
                                                 false,
                                                 parentBean));
-        return stream.filter(Optional::isPresent).map(Optional::get).collect(Collectors.toList());
+        return stream.filter(Optional::isPresent).map(Optional::get).toList();
     }
 
     private static Optional<Object> duplicatePropertyValue(

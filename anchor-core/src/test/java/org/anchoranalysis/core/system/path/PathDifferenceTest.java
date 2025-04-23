@@ -45,7 +45,7 @@ class PathDifferenceTest {
     }
 
     @Test
-    void testDirectoryAbsoluteWindowsNonDirectoryBase() throws PathDifferenceException {
+    void testDirectoryAbsoluteWindowsNonDirectoryBase() {
         assertThrows(
                 IllegalArgumentException.class,
                 () ->
@@ -64,7 +64,7 @@ class PathDifferenceTest {
     }
 
     @Test
-    void testDirectoryAbsoluteUnixNonDirectoryBas() throws PathDifferenceException {
+    void testDirectoryAbsoluteUnixNonDirectoryBas() {
         assertThrows(
                 IllegalArgumentException.class,
                 () -> test("/somebase/extra_", "/somebase/someDir1/someDir2/someFile1.txt"));
@@ -80,7 +80,7 @@ class PathDifferenceTest {
     }
 
     @Test
-    void testDirectoryRelativeWindowsNonDirectoryBase() throws PathDifferenceException {
+    void testDirectoryRelativeWindowsNonDirectoryBase() {
         assertThrows(
                 IllegalArgumentException.class,
                 () ->
@@ -99,7 +99,7 @@ class PathDifferenceTest {
     }
 
     @Test
-    void testDirectoryRelativeUnixNonDirectoryBase() throws PathDifferenceException {
+    void testDirectoryRelativeUnixNonDirectoryBase() {
         assertThrows(
                 IllegalArgumentException.class,
                 () -> test("../somebase/extra_", "../somebase/someDir1/someDir2/someFile1.txt"));

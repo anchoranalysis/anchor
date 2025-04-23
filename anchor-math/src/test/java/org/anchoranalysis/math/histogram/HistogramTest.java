@@ -83,38 +83,38 @@ class HistogramTest {
     }
 
     @Test
-    void testCalculateSumCubes() throws OperationFailedException {
+    void testCalculateSumCubes() {
         assertEquals(21050, histogram.calculateSumCubes());
     }
 
     @Test
-    void testCalculateSumSquares() throws OperationFailedException {
+    void testCalculateSumSquares() {
         assertEquals(1870, histogram.calculateSumSquares());
     }
 
     @Test
-    void testCalculateCountMatching() throws OperationFailedException {
+    void testCalculateCountMatching() {
         assertEquals(15, histogram.countMatching(value -> value > 8));
     }
 
     @Test
-    void testCalculateRemoveLargerValues() throws OperationFailedException {
+    void testCalculateRemoveLargerValues() {
         assertEquals(62, histogram.cropRemoveLargerValues(7).calculateSum());
     }
 
     @Test
-    void testCalculateRemoveSmallerValues() throws OperationFailedException {
+    void testCalculateRemoveSmallerValues() {
         assertEquals(36, histogram.cropRemoveSmallerValues(3).calculateSum());
     }
 
     @Test
-    void testZeroValue() throws OperationFailedException {
+    void testZeroValue() {
         histogram.zeroValue(5);
         assertEquals(165, histogram.calculateSum());
     }
 
     @Test
-    void testTransferCount() throws OperationFailedException {
+    void testTransferCount() {
         histogram.transferCount(5, 12);
         assertEquals(177, histogram.calculateSum());
     }
@@ -125,12 +125,12 @@ class HistogramTest {
     }
 
     @Test
-    void testSize() throws OperationFailedException {
+    void testSize() {
         assertEquals(18, histogram.size());
     }
 
     @Test
-    void testIterateValues() throws OperationFailedException {
+    void testIterateValues() {
         Counter counter = new Counter();
         histogram.iterateValues((bin, count) -> counter.incrementBy(bin * count));
         assertEquals(170, counter.getCount());

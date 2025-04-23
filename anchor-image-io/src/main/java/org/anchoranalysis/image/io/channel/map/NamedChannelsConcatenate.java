@@ -31,7 +31,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.identifier.provider.store.NamedProviderStore;
 import org.anchoranalysis.core.identifier.provider.store.StoreSupplier;
@@ -69,7 +68,7 @@ public class NamedChannelsConcatenate implements NamedChannelsMap {
      * @param maps each {@link NamedChannelsMap} to be concatenated.
      */
     public NamedChannelsConcatenate(NamedChannelsMap... maps) {
-        this.list = Arrays.stream(maps).collect(Collectors.toList());
+        this.list = Arrays.stream(maps).toList();
     }
 
     @Override

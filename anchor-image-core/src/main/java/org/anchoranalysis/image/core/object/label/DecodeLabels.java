@@ -29,7 +29,6 @@ package org.anchoranalysis.image.core.object.label;
 import java.util.List;
 import java.util.Map;
 import java.util.function.UnaryOperator;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.exception.CreateException;
@@ -145,7 +144,7 @@ public class DecodeLabels<T> {
         List<PointRange> list =
                 IntStream.rangeClosed(minLabelInclusive, maxLabelInclusive)
                         .mapToObj(index -> new PointRange())
-                        .collect(Collectors.toList());
+                        .toList();
 
         IterateVoxelsAll.withVoxelBuffer(
                 voxels,

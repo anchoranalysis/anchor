@@ -30,7 +30,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.function.UnaryOperator;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
@@ -60,7 +59,7 @@ public class StackNotUniformSized implements Iterable<Channel> {
      * @param channelStream the stream of channels
      */
     public StackNotUniformSized(Stream<Channel> channelStream) {
-        channels = channelStream.collect(Collectors.toList());
+        channels = channelStream.toList();
     }
 
     /**

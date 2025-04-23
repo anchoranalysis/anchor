@@ -48,7 +48,7 @@ class ConnectedComponentUnitFindTest {
     private ConnectedComponentUnionFind connectedComponents;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         connectedComponents = new ConnectedComponentUnionFind(1, false);
     }
 

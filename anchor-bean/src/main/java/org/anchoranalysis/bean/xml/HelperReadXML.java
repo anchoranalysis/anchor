@@ -103,10 +103,7 @@ class HelperReadXML {
 
         // If the cause is a SAXParseException we promote it, and ignore the ConfigurationException
         // (for user-friendly error output)
-        if (exc.getCause() instanceof SAXParseException) {
-
-            // We extr
-            SAXParseException causeCast = (SAXParseException) exc.getCause();
+        if (exc.getCause() instanceof SAXParseException causeCast) {
             return new BeanXMLException(locationOfXMLError(causeCast), exc.getCause());
         }
 

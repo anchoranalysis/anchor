@@ -46,7 +46,7 @@ class LRUCacheTest {
         LRUCache<String, String> cache =
                 new LRUCache<>(
                         2, // Cache size
-                        string -> string.toUpperCase());
+                        String::toUpperCase);
 
         cache.get(KEY1);
         cache.get(KEY2);

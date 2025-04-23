@@ -56,7 +56,7 @@ public class NamedProviderCombine<T> implements NamedProvider<T> {
      * @param stream the stream
      */
     public NamedProviderCombine(Stream<NamedProvider<T>> stream) {
-        this.list = stream.collect(Collectors.toList());
+        this.list = stream.toList();
     }
 
     @Override

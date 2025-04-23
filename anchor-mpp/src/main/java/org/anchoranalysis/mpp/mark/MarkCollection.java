@@ -34,7 +34,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -77,7 +76,7 @@ public final class MarkCollection implements Iterable<Mark>, Serializable {
      * @param stream the stream of marks to add to the collection.
      */
     public MarkCollection(Stream<Mark> stream) {
-        this(stream.collect(Collectors.toList()));
+        this(stream.toList());
     }
 
     /**

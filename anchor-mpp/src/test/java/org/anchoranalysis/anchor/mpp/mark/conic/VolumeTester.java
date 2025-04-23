@@ -25,11 +25,10 @@
  */
 package org.anchoranalysis.anchor.mpp.mark.conic;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.MarkToObjectConverter;

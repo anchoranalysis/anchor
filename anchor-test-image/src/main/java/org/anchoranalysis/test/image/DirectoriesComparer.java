@@ -25,6 +25,7 @@
  */
 package org.anchoranalysis.test.image;
 
+import com.google.common.base.Preconditions;
 import java.io.BufferedInputStream;
 import java.io.DataInputStream;
 import java.io.File;
@@ -33,9 +34,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Arrays;
-
-import com.google.common.base.Preconditions;
-
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 

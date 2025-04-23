@@ -38,7 +38,6 @@ import java.util.function.Function;
 import java.util.function.IntFunction;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import lombok.AccessLevel;
@@ -64,7 +63,7 @@ public class FunctionalList {
      * @return the created list.
      */
     public static <T> List<T> of(Stream<T> stream) {
-        return stream.collect(Collectors.toList());
+        return stream.toList();
     }
 
     /**
@@ -82,7 +81,7 @@ public class FunctionalList {
      *     result of the mapping
      */
     public static <S, T> List<T> mapToList(Stream<S> stream, Function<S, T> mapFunction) {
-        return stream.map(mapFunction).collect(Collectors.toList());
+        return stream.map(mapFunction).toList();
     }
 
     /**
@@ -141,7 +140,7 @@ public class FunctionalList {
      *     result of the mapping.
      */
     public static <S, T> List<T> mapToList(S[] array, Function<S, T> mapFunction) {
-        return Arrays.stream(array).map(mapFunction).collect(Collectors.toList());
+        return Arrays.stream(array).map(mapFunction).toList();
     }
 
     /**
@@ -204,7 +203,7 @@ public class FunctionalList {
             Class<? extends Exception> throwableClass,
             CheckedFunction<S, T, E> mapFunction)
             throws E {
-        return CheckedStream.map(stream, throwableClass, mapFunction).collect(Collectors.toList());
+        return CheckedStream.map(stream, throwableClass, mapFunction).toList();
     }
 
     /**
@@ -222,7 +221,7 @@ public class FunctionalList {
             List<S> list, FunctionWithInt<S, T> mapFunction) {
         return IntStream.range(0, list.size())
                 .mapToObj(index -> mapFunction.apply(list.get(index), index))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     /**
@@ -248,7 +247,7 @@ public class FunctionalList {
                         IntStream.range(0, list.size()),
                         throwableClass,
                         index -> mapFunction.apply(list.get(index), index))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     /**
@@ -269,7 +268,7 @@ public class FunctionalList {
                 .map(mapFunction)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     /**
@@ -318,7 +317,7 @@ public class FunctionalList {
         return CheckedStream.map(stream, throwableClass, mapFunction)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     /**
@@ -346,7 +345,7 @@ public class FunctionalList {
                         range, throwableClass, index -> mapFunction.apply(list.get(index), index))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     /**
@@ -362,7 +361,7 @@ public class FunctionalList {
      */
     public static <S, T> List<T> flatMapToList(
             Collection<S> collection, Function<S, Stream<T>> mapFunction) {
-        return collection.stream().flatMap(mapFunction).collect(Collectors.toList());
+        return collection.stream().flatMap(mapFunction).toList();
     }
 
     /**
@@ -384,8 +383,7 @@ public class FunctionalList {
             Class<? extends Exception> throwableClass,
             CheckedFunction<S, Stream<? extends T>, E> mapFunction)
             throws E {
-        return CheckedStream.flatMap(collection.stream(), throwableClass, mapFunction)
-                .collect(Collectors.toList());
+        return CheckedStream.flatMap(collection.stream(), throwableClass, mapFunction).toList();
     }
 
     /**
@@ -399,9 +397,7 @@ public class FunctionalList {
      */
     public static <T> List<T> mapRangeToList(
             int startInclusive, int endExclusive, IntFunction<T> mapFunction) {
-        return IntStream.range(startInclusive, endExclusive)
-                .mapToObj(mapFunction)
-                .collect(Collectors.toList());
+        return IntStream.range(startInclusive, endExclusive).mapToObj(mapFunction).toList();
     }
 
     /**
@@ -415,7 +411,7 @@ public class FunctionalList {
     public static <T> List<T> repeat(int numberRepeats, Supplier<T> mapFunction) {
         return IntStream.rangeClosed(0, numberRepeats)
                 .mapToObj(index -> mapFunction.get())
-                .collect(Collectors.toList());
+                .toList();
     }
 
     /**
@@ -430,7 +426,7 @@ public class FunctionalList {
      * @return a list with only the elements that pass the filter.
      */
     public static <T> List<T> filterToList(Collection<T> collection, Predicate<T> predicate) {
-        return collection.stream().filter(predicate).collect(Collectors.toList());
+        return collection.stream().filter(predicate).toList();
     }
 
     /**
@@ -452,8 +448,7 @@ public class FunctionalList {
             Class<? extends Exception> throwableClass,
             CheckedPredicate<T, E> predicate)
             throws E {
-        return CheckedStream.filter(collection.stream(), throwableClass, predicate)
-                .collect(Collectors.toList());
+        return CheckedStream.filter(collection.stream(), throwableClass, predicate).toList();
     }
 
     /**
@@ -548,7 +543,7 @@ public class FunctionalList {
     public static <S, T, V> List<V> zip(
             Collection<S> first, Collection<T> second, BiFunction<S, T, V> combine) {
         checkCollectionSize(first, second);
-        return Streams.zip(first.stream(), second.stream(), combine).collect(Collectors.toList());
+        return Streams.zip(first.stream(), second.stream(), combine).toList();
     }
 
     /** Checks two collections have an identical number of elements. */

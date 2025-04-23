@@ -60,49 +60,13 @@ class ResizeHelper {
 
         if (source.getVoxelDataType().equals(UnsignedByteVoxelType.INSTANCE)) {
             return new TransferViaSpecificType<>(
-                    source,
-                    destination,
-                    VoxelsUntyped::asByte,
-                    (interpolator,
-                            voxelsSource,
-                            voxelsDestination,
-                            extentSource,
-                            extentDestination) ->
-                            interpolator.resizeByte(
-                                    voxelsSource,
-                                    voxelsDestination,
-                                    extentSource,
-                                    extentDestination));
+                    source, destination, VoxelsUntyped::asByte, VoxelsResizer::resizeByte);
         } else if (source.getVoxelDataType().equals(UnsignedShortVoxelType.INSTANCE)) {
             return new TransferViaSpecificType<>(
-                    source,
-                    destination,
-                    VoxelsUntyped::asShort,
-                    (interpolator,
-                            voxelsSource,
-                            voxelsDestination,
-                            extentSource,
-                            extentDestination) ->
-                            interpolator.resizeShort(
-                                    voxelsSource,
-                                    voxelsDestination,
-                                    extentSource,
-                                    extentDestination));
+                    source, destination, VoxelsUntyped::asShort, VoxelsResizer::resizeShort);
         } else if (source.getVoxelDataType().equals(FloatVoxelType.INSTANCE)) {
             return new TransferViaSpecificType<>(
-                    source,
-                    destination,
-                    VoxelsUntyped::asFloat,
-                    (interpolator,
-                            voxelsSource,
-                            voxelsDestination,
-                            extentSource,
-                            extentDestination) ->
-                            interpolator.resizeFloat(
-                                    voxelsSource,
-                                    voxelsDestination,
-                                    extentSource,
-                                    extentDestination));
+                    source, destination, VoxelsUntyped::asFloat, VoxelsResizer::resizeFloat);
         } else {
             throw new IncorrectVoxelTypeException(
                     "Only unsigned byte and short and float are supported");

@@ -29,7 +29,6 @@ package org.anchoranalysis.feature.name;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.functional.FunctionalIterate;
@@ -55,7 +54,7 @@ public class FeatureNameList implements Iterable<String> {
      * @param stream the stream.
      */
     public FeatureNameList(Stream<String> stream) {
-        list = stream.collect(Collectors.toList());
+        list = stream.toList();
     }
 
     /**

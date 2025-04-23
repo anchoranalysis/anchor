@@ -27,7 +27,6 @@
 package org.anchoranalysis.experiment.log;
 
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.log.MessageLogger;
@@ -47,7 +46,7 @@ public class MultipleLoggers implements StatefulMessageLogger {
      * @param stream the stream of loggers.
      */
     public MultipleLoggers(Stream<StatefulMessageLogger> stream) {
-        list = stream.collect(Collectors.toList());
+        list = stream.toList();
     }
 
     @Override

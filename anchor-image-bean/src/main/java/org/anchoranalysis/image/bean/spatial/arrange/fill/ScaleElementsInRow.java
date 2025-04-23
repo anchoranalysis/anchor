@@ -25,14 +25,12 @@
  */
 package org.anchoranalysis.image.bean.spatial.arrange.fill;
 
+import com.google.common.base.Preconditions;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
-
-import com.google.common.base.Preconditions;
-
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 

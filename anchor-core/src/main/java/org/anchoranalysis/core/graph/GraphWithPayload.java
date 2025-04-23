@@ -226,7 +226,7 @@ public class GraphWithPayload<V, P> {
      *     {@code vertex}
      */
     public List<V> adjacentVerticesOutgoing(V vertex) {
-        return adjacentVerticesOutgoingStream(vertex).collect(Collectors.toList());
+        return adjacentVerticesOutgoingStream(vertex).toList();
     }
 
     /**

@@ -108,25 +108,25 @@ class ImageResizeSuggestionFactoryTest {
 
     /** Tests a <b>zero-valued</b> scale-factor. */
     @Test
-    void testScaleFactorWithZero() throws SuggestionFormatException {
+    void testScaleFactorWithZero() {
         assertThrows(SuggestionFormatException.class, () -> test("0"));
     }
 
     /** Tests a <b>negative-valued</b> scale-factor. */
     @Test
-    void testScaleFactorWithNegative() throws SuggestionFormatException {
+    void testScaleFactorWithNegative() {
         assertThrows(SuggestionFormatException.class, () -> test("-8.9"));
     }
 
     /** Tests an empty string. */
     @Test
-    void testEmpty() throws SuggestionFormatException {
+    void testEmpty() {
         assertThrows(SuggestionFormatException.class, () -> test(""));
     }
 
     /** Tests non-numeric text. */
     @Test
-    void testNonNumericText() throws SuggestionFormatException {
+    void testNonNumericText() {
         assertThrows(SuggestionFormatException.class, () -> test("fooBar"));
     }
 }

@@ -55,23 +55,20 @@ public class FriendlyExceptionCreator {
             } else {
                 return new BeanXMLException(e);
             }
-        } else if (e instanceof ClassNotFoundException) {
+        } else if (e instanceof ClassNotFoundException eCast) {
             // For ClassNotFoundException, we create a nicer to read read message
-            ClassNotFoundException eCast = (ClassNotFoundException) e;
             return new BeanXMLException(
                     String.format(
                             "Class '%s' is referred to in BeanXML but cannot be found on classpath.%nPlease check spelling of config-class attributes, and make sure relevant plugins are installed.",
                             eCast.getMessage()));
-        } else if (e instanceof NoClassDefFoundError) {
+        } else if (e instanceof NoClassDefFoundError eCast) {
             // For NoClassDefFoundError, we create a nicer to read read message
-            NoClassDefFoundError eCast = (NoClassDefFoundError) e;
             return new BeanXMLException(
                     String.format(
                             "Class '%s' is referred to in BeanXML but cannot be found on classpath.%nPlease check spelling of config-class attributes, and make sure relevant plugins are installed.",
                             eCast.getMessage()));
-        } else if (e instanceof NoSuchFileException) {
+        } else if (e instanceof NoSuchFileException eCast) {
             // For NoClassDefFoundError, we create a nicer to read read message
-            NoSuchFileException eCast = (NoSuchFileException) e;
             return new BeanXMLException(
                     String.format("Cannot find included file: %s", eCast.getMessage()));
         }

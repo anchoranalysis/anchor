@@ -46,7 +46,7 @@ class BoundedVoxelsTest {
      * @throws OperationFailedException
      */
     @Test
-    void testGrowObjectOutsideClampRegion() throws OperationFailedException {
+    void testGrowObjectOutsideClampRegion() {
         assertThrows(
                 OperationFailedException.class,
                 () -> {

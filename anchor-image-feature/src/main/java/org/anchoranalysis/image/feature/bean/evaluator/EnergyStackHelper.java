@@ -38,9 +38,20 @@ import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.input.FeatureInputEnergy;
 import org.anchoranalysis.image.core.stack.Stack;
 
+/** Helper class for creating and managing {@link EnergyStack} objects. */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class EnergyStackHelper {
 
+    /**
+     * Creates an {@link EnergyStack} from a stack provider and dictionary provider.
+     *
+     * @param stackEnergy the provider for the {@link Stack} to be used in the {@link EnergyStack}.
+     * @param dictionary the provider for the {@link Dictionary} to be used in the {@link
+     *     EnergyStack}.
+     * @return an {@link Optional} containing the created {@link EnergyStack}, or empty if
+     *     stackEnergy is null.
+     * @throws OperationFailedException if there's an error during the creation process.
+     */
     public static Optional<EnergyStack> energyStack(
             Provider<Stack> stackEnergy, DictionaryProvider dictionary)
             throws OperationFailedException {
@@ -59,10 +70,18 @@ class EnergyStackHelper {
         }
     }
 
+    /**
+     * Sets the {@link EnergyStack} on the input object if it's an instance of {@link
+     * FeatureInputEnergy}.
+     *
+     * @param <T> the type of the input object.
+     * @param input the input object to potentially set the {@link EnergyStack} on.
+     * @param energyStack the {@link Optional} {@link EnergyStack} to set.
+     */
     public static <T> void maybeSetEnergyStackOnInput(T input, Optional<EnergyStack> energyStack) {
         // Use reflection, to only set the energyStack on inputs that support them.
-        if (input instanceof FeatureInputEnergy && energyStack.isPresent()) {
-            ((FeatureInputEnergy) input).setEnergyStack(energyStack.get());
+        if (input instanceof FeatureInputEnergy inputCast && energyStack.isPresent()) {
+            inputCast.setEnergyStack(energyStack.get());
         }
     }
 }

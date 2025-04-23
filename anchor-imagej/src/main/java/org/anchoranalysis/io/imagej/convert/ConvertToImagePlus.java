@@ -169,10 +169,10 @@ public class ConvertToImagePlus {
         }
     }
 
-    /** Avoids IMP being set to composite mode, if it's a single channel stack */
-    private static void maybeCorrectComposite(Stack stack, ImagePlus imp) {
-        if (stack.getNumberChannels() == 1 && imp instanceof CompositeImage) {
-            ((CompositeImage) imp).setMode(IJ.GRAYSCALE);
+    /** Avoids ImagePlus being set to composite mode, if it's a single channel stack */
+    private static void maybeCorrectComposite(Stack stack, ImagePlus image) {
+        if (stack.getNumberChannels() == 1 && image instanceof CompositeImage iageCast) {
+            iageCast.setMode(IJ.GRAYSCALE);
         }
     }
 }

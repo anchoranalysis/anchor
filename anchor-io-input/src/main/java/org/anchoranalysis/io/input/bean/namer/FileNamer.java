@@ -127,7 +127,7 @@ public abstract class FileNamer extends AnchorBean<FileNamer> {
                 list.stream()
                         .filter(file -> predicate.test(file.getIdentifier()))
                         .map(file -> file.getPath().toString())
-                        .collect(Collectors.toList());
+                        .toList();
 
         return String.join(System.lineSeparator(), matches);
     }

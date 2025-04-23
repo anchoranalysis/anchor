@@ -27,6 +27,7 @@
 package org.anchoranalysis.image.voxel.object;
 
 import com.google.common.base.Functions;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -241,7 +242,11 @@ public class IntersectingObjects<T> {
         unprocessed.remove(source);
 
         addTo.add(source);
-        List<T> queue = tree.intersectsWith(boxFor(source)).stream().collect(Collectors.toList());
+
+        // The resulting list is required to be mutable
+        List<T> queue =
+                tree.intersectsWith(boxFor(source)).stream()
+                        .collect(Collectors.toCollection(ArrayList::new));
 
         while (!queue.isEmpty()) {
             T current = queue.remove(0);

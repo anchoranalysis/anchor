@@ -118,44 +118,44 @@ class HelperBeanFields {
         try {
 
             Object value = field.get(bean);
-            if (value instanceof AnchorBean) {
-                return describeBean((AnchorBean<?>) value);
+            if (value instanceof AnchorBean<?> anchorBean) {
+                return describeBean(anchorBean);
             }
 
             if (value instanceof List) {
                 return "list";
             }
 
-            if (value instanceof String) {
-                return "'" + (String) value + "'";
+            if (value instanceof String valueAsString) {
+                return "'" + valueAsString + "'";
             }
 
-            if (value instanceof Integer) {
-                return Integer.toString((Integer) value);
+            if (value instanceof Integer valueAsInt) {
+                return Integer.toString(valueAsInt);
             }
 
-            if (value instanceof Double) {
-                return Double.toString((Double) value);
+            if (value instanceof Double valueAsDouble) {
+                return Double.toString(valueAsDouble);
             }
 
-            if (value instanceof Float) {
-                return Float.toString((Float) value);
+            if (value instanceof Float valueAsFloat) {
+                return Float.toString(valueAsFloat);
             }
 
-            if (value instanceof Byte) {
-                return Byte.toString((Byte) value);
+            if (value instanceof Byte valueAsByte) {
+                return Byte.toString(valueAsByte);
             }
 
-            if (value instanceof Short) {
-                return Short.toString((Short) value);
+            if (value instanceof Short valueAsShort) {
+                return Short.toString(valueAsShort);
             }
 
-            if (value instanceof Long) {
-                return Long.toString((Long) value);
+            if (value instanceof Long valueAsLong) {
+                return Long.toString(valueAsLong);
             }
 
-            if (value instanceof Boolean) {
-                return (boolean) value ? "true" : "false";
+            if (value instanceof Boolean valueAsBoolean) {
+                return valueAsBoolean ? "true" : "false";
             }
 
             throw new OperationFailedException("Unknown bean type");

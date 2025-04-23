@@ -41,7 +41,7 @@ class BoundingBoxRTreeClusteredTest {
     private BoundingBoxRTree<BoundingBox> tree;
 
     @BeforeEach
-    public void before() {
+    void before() {
         tree = new BoundingBoxRTree<>(7);
         ClusteredBoxFixture.addFirstCluster(tree);
     }

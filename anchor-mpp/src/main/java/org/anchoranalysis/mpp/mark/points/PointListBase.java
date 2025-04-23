@@ -28,7 +28,6 @@ package org.anchoranalysis.mpp.mark.points;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.Getter;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
@@ -62,7 +61,7 @@ public abstract class PointListBase extends Mark {
      * @param stream the stream of Point3d objects
      */
     protected PointListBase(Stream<Point3d> stream) {
-        points = stream.collect(Collectors.toList());
+        points = stream.toList();
         updateAfterPointsChange();
     }
 

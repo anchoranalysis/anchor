@@ -28,7 +28,6 @@ package org.anchoranalysis.core.value;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.functional.OptionalFactory;
@@ -82,8 +81,6 @@ public class StringUtilities {
 
     /** Creates a list of strings, where strings are included only if they are non-empty. */
     private static List<String> listOfNonEmptyStrings(String... stringMaybeEmpty) {
-        return Arrays.stream(stringMaybeEmpty)
-                .filter(string -> !string.isEmpty())
-                .collect(Collectors.toList());
+        return Arrays.stream(stringMaybeEmpty).filter(string -> !string.isEmpty()).toList();
     }
 }

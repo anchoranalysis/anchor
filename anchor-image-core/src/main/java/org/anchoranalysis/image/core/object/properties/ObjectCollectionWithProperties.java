@@ -29,7 +29,6 @@ package org.anchoranalysis.image.core.object.properties;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectCollectionFactory;
@@ -71,7 +70,7 @@ public class ObjectCollectionWithProperties implements Iterable<ObjectWithProper
      * @param objects the objects.
      */
     public ObjectCollectionWithProperties(Stream<ObjectWithProperties> objects) {
-        delegate = objects.collect(Collectors.toList());
+        delegate = objects.toList();
     }
 
     /**

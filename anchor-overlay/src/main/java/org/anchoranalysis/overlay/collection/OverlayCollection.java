@@ -29,7 +29,6 @@ package org.anchoranalysis.overlay.collection;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.anchoranalysis.overlay.Overlay;
 
@@ -57,7 +56,7 @@ public class OverlayCollection implements Iterable<Overlay> {
      * @param stream the stream.
      */
     public OverlayCollection(Stream<Overlay> stream) {
-        delegate = stream.collect(Collectors.toList());
+        delegate = stream.toList();
     }
 
     @Override

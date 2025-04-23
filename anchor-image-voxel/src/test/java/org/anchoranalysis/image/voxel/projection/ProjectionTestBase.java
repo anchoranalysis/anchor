@@ -88,10 +88,7 @@ public abstract class ProjectionTestBase {
 
     private void doTest(VoxelDataType dataType) throws OperationFailedException {
         ProjectableBufferFixture<?> fixture = new ProjectableBufferFixture<>(dataType);
-        Voxels<?> projection =
-                fixture.calculate(
-                        (voxelDataType, extent) ->
-                                this.createProjectableBuffer(voxelDataType, extent));
+        Voxels<?> projection = fixture.calculate(this::createProjectableBuffer);
         assertTestResults(projection, ASSERTER);
     }
 }

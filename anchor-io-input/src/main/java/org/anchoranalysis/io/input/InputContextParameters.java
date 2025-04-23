@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.io.input;
 
+import com.google.common.base.Preconditions;
 import io.vavr.control.Either;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -38,8 +39,6 @@ import org.anchoranalysis.core.collection.StringSetTrie;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.index.range.IndexRangeNegative;
 import org.anchoranalysis.io.input.bean.DebugModeParameters;
-
-import com.google.common.base.Preconditions;
 
 /**
  * Additional parameters that offer context for many beans that provide input-functions.
