@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.image.bean.spatial.arrange.tile;
 
-import com.github.davidmoten.guavamini.Preconditions;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -47,6 +46,8 @@ import org.anchoranalysis.image.bean.spatial.arrange.align.Align;
 import org.anchoranalysis.image.bean.spatial.arrange.align.BoxAligner;
 import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.box.Extent;
+
+import com.google.common.base.Preconditions;
 
 /**
  * A higher-level aggregate structure that arranges other {@link StackArranger}s in a tabular

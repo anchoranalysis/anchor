@@ -70,11 +70,6 @@
 		</dependency>
 		<dependency>
 		  <groupId>${project.groupId}</groupId>
-		  <artifactId>anchor-io-input</artifactId>
-		  <version>1.0.0-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-		  <groupId>${project.groupId}</groupId>
 		  <artifactId>anchor-image-io</artifactId>
 		  <version>1.0.0-SNAPSHOT</version>
 		</dependency>
@@ -186,6 +181,21 @@
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-core</artifactId>
 			<version>${ch.qos.logback.logback-core.version}</version>
+		</dependency>
+		
+		
+		<dependency>
+		  <groupId>com.google.guava</groupId>
+		  <artifactId>guava</artifactId>
+		  <version>${guava.version}</version>
+		</dependency>
+		
+		
+		<dependency>
+		  <groupId>${project.groupId}</groupId>
+		  <artifactId>anchor-test</artifactId>
+		  <version>1.0.0-SNAPSHOT</version>
+		  <scope>test</scope>
 		</dependency>
 
 	</dependencies>

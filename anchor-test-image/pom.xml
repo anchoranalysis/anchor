@@ -15,7 +15,13 @@
 		  <artifactId>anchor-test</artifactId>
 		  <version>1.0.0-SNAPSHOT</version>
 		</dependency>
-		
+
+		<dependency>
+		  <groupId>${project.groupId}</groupId>
+		  <artifactId>anchor-bean</artifactId>
+		  <version>1.0.0-SNAPSHOT</version>
+		</dependency>
+				
 		<dependency>
 		  <groupId>${project.groupId}</groupId>
 		  <artifactId>anchor-spatial</artifactId>
@@ -36,9 +42,27 @@
 		
 		<dependency>
 		  <groupId>${project.groupId}</groupId>
+		  <artifactId>anchor-io-output</artifactId>
+		  <version>1.0.0-SNAPSHOT</version>
+		</dependency>
+		
+		<dependency>
+		  <groupId>${project.groupId}</groupId>
+		  <artifactId>anchor-io-generator</artifactId>
+		  <version>1.0.0-SNAPSHOT</version>
+		</dependency>
+		
+		<dependency>
+		  <groupId>${project.groupId}</groupId>
 		  <artifactId>anchor-image-core</artifactId>
 		  <version>1.0.0-SNAPSHOT</version>
 		</dependency>
+		
+		<dependency>
+		  <groupId>${project.groupId}</groupId>
+		  <artifactId>anchor-image-voxel</artifactId>
+		  <version>1.0.0-SNAPSHOT</version>
+		</dependency>		
 		
 		<dependency>
 		  <groupId>${project.groupId}</groupId>
@@ -75,18 +99,35 @@
 	      <artifactId>anchor-image-inference</artifactId>
 	      <version>1.0.0-SNAPSHOT</version>
 	    </dependency>
+	    
+    	<dependency>
+	        <groupId>io.vavr</groupId>
+	        <artifactId>vavr</artifactId>
+	        <version>${vavr.version}</version>
+	    </dependency>
+	    
+	    <dependency>
+	    	<groupId>commons-lang</groupId>
+	    	<artifactId>commons-lang</artifactId>
+	    	<version>${commons-lang.version}</version>
+    	</dependency>
+    	
+   	    <dependency>
+	    	<groupId>commons-configuration</groupId>
+	    	<artifactId>commons-configuration</artifactId>
+	    	<version>${commons-configuration.version}</version>
+	    </dependency>
+	    
+    	<dependency>
+		  <groupId>com.google.guava</groupId>
+		  <artifactId>guava</artifactId>
+		  <version>${guava.version}</version>
+		</dependency>
 		 
 	    <!-- Needed to expand scope outside "test" which is inherited from the parent pom -->
 	       <dependency>
 		    <groupId>org.junit.jupiter</groupId>
-		    <artifactId>junit-jupiter-engine</artifactId>
-		    <version>${junit.version}</version>
-		    <scope>compile</scope>
-		</dependency>
-	
-	       <dependency>
-		    <groupId>org.junit.vintage</groupId>
-		    <artifactId>junit-vintage-engine</artifactId>
+		    <artifactId>junit-jupiter</artifactId>
 		    <version>${junit.version}</version>
 		    <scope>compile</scope>
 		</dependency>

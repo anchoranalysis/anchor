@@ -29,7 +29,6 @@ package org.anchoranalysis.image.io.object.input;
 import ch.systemsx.cisd.hdf5.HDF5Factory;
 import ch.systemsx.cisd.hdf5.IHDF5Reader;
 import ch.systemsx.cisd.hdf5.exceptions.HDF5FileNotFoundException;
-import com.github.davidmoten.guavamini.Preconditions;
 import java.nio.file.Path;
 import java.util.List;
 import org.anchoranalysis.core.serialize.DeserializationFailedException;
@@ -40,6 +39,8 @@ import org.anchoranalysis.image.io.object.output.hdf5.HDF5ObjectsGenerator;
 import org.anchoranalysis.image.io.object.output.hdf5.ObjectCollectionWriter;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectCollectionFactory;
+
+import com.google.common.base.Preconditions;
 
 /**
  * Reads a {@link ObjectMaskCollection} that has been serialized to a HDF5 file.

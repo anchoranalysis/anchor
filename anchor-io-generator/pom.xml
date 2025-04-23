@@ -32,13 +32,6 @@
 		  <artifactId>guava</artifactId>
 		  <version>${guava.version}</version>
 		</dependency>
-	    
-	   	<dependency>
-	  		<groupId>${project.groupId}</groupId>
-	  		<artifactId>anchor-test-io-output</artifactId>
-	  		<version>1.0.0-SNAPSHOT</version>
-	  		<scope>test</scope>
-	  	</dependency>
 		
 	</dependencies>		
 
