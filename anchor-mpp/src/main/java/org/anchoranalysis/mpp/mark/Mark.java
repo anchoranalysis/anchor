@@ -154,8 +154,7 @@ public abstract class Mark implements Serializable {
      * @return true if the IDs are the same, false otherwise
      */
     public boolean equalsID(Object obj) {
-        if (obj instanceof Mark) {
-            Mark mark = (Mark) obj;
+        if (obj instanceof Mark mark) {
             return this.id == mark.id;
         }
         return false;

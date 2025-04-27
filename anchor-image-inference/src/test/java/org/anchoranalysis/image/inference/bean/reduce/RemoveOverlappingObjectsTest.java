@@ -70,12 +70,12 @@ class RemoveOverlappingObjectsTest {
      * @return a list of 4 objects to be used in the test.
      */
     private static List<LabelledWithConfidence<ObjectMask>> allObjects(boolean invert) {
-        LabelledWithConfidence<ObjectMask> OBJECT1 = object(10, 10, 0.9, invert);
-        LabelledWithConfidence<ObjectMask> OBJECT2 = object(11, 10, 0.8, invert);
-        LabelledWithConfidence<ObjectMask> OBJECT3 = object(15, 10, 0.75, invert);
-        LabelledWithConfidence<ObjectMask> OBJECT4 = object(40, 10, 0.7, invert);
+        LabelledWithConfidence<ObjectMask> object1 = object(10, 10, 0.9, invert);
+        LabelledWithConfidence<ObjectMask> object2 = object(11, 10, 0.8, invert);
+        LabelledWithConfidence<ObjectMask> object3 = object(15, 10, 0.75, invert);
+        LabelledWithConfidence<ObjectMask> object4 = object(40, 10, 0.7, invert);
 
-        return Arrays.asList(OBJECT1, OBJECT2, OBJECT3, OBJECT4);
+        return Arrays.asList(object1, object2, object3, object4);
     }
 
     /**

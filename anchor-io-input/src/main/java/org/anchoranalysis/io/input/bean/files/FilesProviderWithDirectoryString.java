@@ -74,7 +74,7 @@ public abstract class FilesProviderWithDirectoryString extends FilesProviderWith
             Path directoryAsPath = Paths.get(directory);
             Optional<Path> localRoot = calculateLocalRoot();
             if (localized && !directoryAsPath.isAbsolute() && localRoot.isPresent()) {
-                return calculateLocalRoot().get().resolve(directoryAsPath);
+                return localRoot.get().resolve(directoryAsPath);
             } else {
                 return directoryAsPath;
             }

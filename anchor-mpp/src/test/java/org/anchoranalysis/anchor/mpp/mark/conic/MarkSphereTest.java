@@ -42,22 +42,22 @@ class MarkSphereTest {
     @Test
     void testSerialization() throws IOException, ClassNotFoundException {
 
-        Sphere ms_in = new Sphere();
-        ms_in.setId(3);
-        ms_in.setPosition(new Point3d(4, 5, 6));
-        ms_in.setRadius(7);
+        Sphere in = new Sphere();
+        in.setId(3);
+        in.setPosition(new Point3d(4, 5, 6));
+        in.setRadius(7);
 
         ByteArrayOutputStream memoryOutputStream = new ByteArrayOutputStream();
         ObjectOutputStream serializer = new ObjectOutputStream(memoryOutputStream);
-        serializer.writeObject(ms_in);
+        serializer.writeObject(in);
         serializer.flush();
 
         ByteArrayInputStream memoryInputStream =
                 new ByteArrayInputStream(memoryOutputStream.toByteArray());
         ObjectInputStream deserializer = new ObjectInputStream(memoryInputStream);
 
-        Sphere ms_out = (Sphere) deserializer.readObject();
+        Sphere out = (Sphere) deserializer.readObject();
 
-        assertTrue(ms_in.equalsDeep(ms_out));
+        assertTrue(in.equalsDeep(out));
     }
 }

@@ -179,15 +179,15 @@ public class Ellipse extends ConicBase implements Serializable {
 
     @Override
     public double volume(int regionID) {
-
-        if (regionID == GlobalRegionIdentifiers.SUBMARK_INSIDE) {
-            return areaForShell(1);
-        } else if (regionID == GlobalRegionIdentifiers.SUBMARK_SHELL) {
-            return areaForShell(shellExternal) - areaForShell(shellInternal);
-        } else {
-            assert false;
-            return 0.0;
-        }
+        return switch (regionID) {
+            case GlobalRegionIdentifiers.SUBMARK_INSIDE -> areaForShell(1);
+            case GlobalRegionIdentifiers.SUBMARK_SHELL ->
+                    areaForShell(shellExternal) - areaForShell(shellInternal);
+            default -> {
+                assert false : "Unexpected regionID";
+                yield 0.0;
+            }
+        };
     }
 
     /**

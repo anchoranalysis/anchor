@@ -66,7 +66,7 @@ class OverlayTest {
 
     /** Tests with an overlay with multiple z-slices. */
     @Test
-    void testRepeatMultipleSlices() throws ArrangeStackException {
+    void testRepeatMultipleSlices() {
         assertThrows(
                 ArrangeStackException.class,
                 () ->

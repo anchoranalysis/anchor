@@ -156,31 +156,30 @@ public abstract class PointListBase extends Mark {
     }
 
     @Override
-    public boolean equalsDeep(Mark m) {
+    public boolean equalsDeep(Mark mark) {
 
-        if (m == null) {
+        if (mark == null) {
             return false;
         }
-        if (m == this) {
+        if (mark == this) {
             return true;
         }
 
-        if (!super.equalsDeep(m)) {
+        if (!super.equalsDeep(mark)) {
             return false;
         }
 
-        if (m instanceof PointListBase) {
-            PointListBase objCast = (PointListBase) m;
+        if (mark instanceof PointListBase markCast) {
 
-            if (min != objCast.getMin()) {
+            if (min != markCast.getMin()) {
                 return false;
             }
 
-            if (max != objCast.getMax()) {
+            if (max != markCast.getMax()) {
                 return false;
             }
 
-            return ListUtils.isEqualList(points, objCast.getPoints());
+            return ListUtils.isEqualList(points, markCast.getPoints());
         } else {
             return false;
         }

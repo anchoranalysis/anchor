@@ -55,9 +55,9 @@ public class FeatureNameList implements Iterable<String> {
      * @param stream the stream.
      */
     public FeatureNameList(Stream<String> stream) {
-    	// We deliberately wish to have a mutable list to allow later insertion.
-    	// See #insertBeginning method
-    	list = stream.collect(Collectors.toCollection(java.util.ArrayList::new));
+        // We deliberately wish to have a mutable list to allow later insertion.
+        // See #insertBeginning method
+        list = stream.collect(Collectors.toCollection(java.util.ArrayList::new));
     }
 
     /**

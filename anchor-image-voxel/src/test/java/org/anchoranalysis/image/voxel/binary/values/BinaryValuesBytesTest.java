@@ -38,6 +38,8 @@ class BinaryValuesBytesTest {
     }
 
     private static BinaryValuesByte createLowHigh() {
-        return new BinaryValuesByte(0, 255);
+        int low = 0;
+        int high = 255;
+        return new BinaryValuesByte(low, high);
     }
 }

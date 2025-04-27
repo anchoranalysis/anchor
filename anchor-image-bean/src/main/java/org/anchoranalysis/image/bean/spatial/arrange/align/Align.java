@@ -140,7 +140,7 @@ public class Align extends BoxAligner {
      * @throws OperationFailedException if an unrecognised string is used for one of {@code alignX},
      *     {@code alignY} or {@code alignZ}.
      */
-    private Point3i alignCorner(Extent smaller, Extent larger) throws OperationFailedException {
+    private Point3i alignCorner(Extent smaller, Extent larger) {
         return new Point3i(
                 position(alignXEnum, Extent::x, smaller, 0, larger),
                 position(alignYEnum, Extent::y, smaller, 0, larger),

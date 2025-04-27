@@ -221,11 +221,11 @@ public class ObjectMaskFixture {
 
         BinaryVoxels<UnsignedByteBuffer> binaryValues = object.binaryVoxels();
 
-        Extent extent = object.boundingBox().extent();
-        int widthMinusOne = extent.x() - 1;
-        int heightMinusOne = extent.y() - 1;
+        Extent maskExtent = object.boundingBox().extent();
+        int widthMinusOne = maskExtent.x() - 1;
+        int heightMinusOne = maskExtent.y() - 1;
 
-        for (int z = 0; z < extent.z(); z++) {
+        for (int z = 0; z < maskExtent.z(); z++) {
             binaryValues.setOff(0, 0, z);
             binaryValues.setOff(widthMinusOne, 0, z);
             binaryValues.setOff(0, heightMinusOne, z);

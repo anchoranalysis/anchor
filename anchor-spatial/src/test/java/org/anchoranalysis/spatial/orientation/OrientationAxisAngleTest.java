@@ -40,7 +40,7 @@ class OrientationAxisAngleTest {
     void testRotateXYAntiClockwise() {
         OrientationAxisAngle orientation =
                 new OrientationAxisAngle(new Vector3d(0, 0, 1.0), Math.PI / 2);
-        RotationTester.testRightAngleRotation(orientation, true);
+        RotationTester.testRightAngleRotation(orientation);
     }
 
     @Test

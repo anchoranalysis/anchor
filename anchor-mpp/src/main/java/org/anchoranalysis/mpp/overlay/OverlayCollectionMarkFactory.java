@@ -120,8 +120,7 @@ public class OverlayCollectionMarkFactory {
         for (int i = 0; i < overlays.size(); i++) {
             Overlay overlay = overlays.get(i);
 
-            if (overlay instanceof OverlayMark) {
-                OverlayMark overlayMark = (OverlayMark) overlay;
+            if (overlay instanceof OverlayMark overlayMark) {
                 out.add(overlayMark.getMark());
             }
         }
@@ -144,8 +143,7 @@ public class OverlayCollectionMarkFactory {
 
             RGBColor color = overlays.getColor(i);
 
-            if (overlay instanceof OverlayMark) {
-                OverlayMark overlayMark = (OverlayMark) overlay;
+            if (overlay instanceof OverlayMark overlayMark) {
                 out.add(overlayMark.getMark(), color);
             }
         }

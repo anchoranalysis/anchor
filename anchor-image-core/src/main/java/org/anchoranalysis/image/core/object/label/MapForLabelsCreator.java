@@ -67,9 +67,7 @@ class MapForLabelsCreator<T> {
                 IntStream.range(0, labelled.size()).mapToObj(Integer::valueOf);
 
         return indexStream.collect(
-                Collectors.toMap(
-                        index -> this.inputElementForLabel(index),
-                        index -> this.outputElementForIndex(index)));
+                Collectors.toMap(this::inputElementForLabel, this::outputElementForIndex));
     }
 
     private T inputElementForLabel(int index) {

@@ -46,9 +46,8 @@ class RotationTester {
      *
      * @param orientationRightAngle an orientation that is 90-degrees anti-clockwise from the X-axis
      *     in the XY-plane.
-     * @param do3D if true, creates the point to rotate in 3 dimensions, otherwise in 2 dimensions.
      */
-    public static void testRightAngleRotation(Orientation orientationRightAngle, boolean do3D) {
+    public static void testRightAngleRotation(Orientation orientationRightAngle) {
         RotationMatrix rotationMatrix = orientationRightAngle.getRotationMatrix();
         Point3d point = new Point3d(1.0, 0.0, 0.0);
         rotationMatrix.rotatePointInplace(point);

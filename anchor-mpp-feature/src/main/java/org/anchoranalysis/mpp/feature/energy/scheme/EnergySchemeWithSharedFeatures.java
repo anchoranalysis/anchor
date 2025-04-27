@@ -115,7 +115,7 @@ public class EnergySchemeWithSharedFeatures {
             try {
                 FeatureCalculatorMulti<FeatureInputSingleMemo> session =
                         FeatureSession.with(
-                                energyScheme.getElemIndAsFeatureList(),
+                                energyScheme.getIndividual(),
                                 new FeatureInitialization(dictionary),
                                 sharedFeatures,
                                 logger);
@@ -163,7 +163,7 @@ public class EnergySchemeWithSharedFeatures {
 
             FeatureCalculatorMulti<FeatureInputAllMemo> session =
                     FeatureSession.with(
-                            energyScheme.getElemAllAsFeatureList(),
+                            energyScheme.getAll(),
                             new FeatureInitialization(energyStack.getParameters()),
                             sharedFeatures,
                             logger);
@@ -204,7 +204,7 @@ public class EnergySchemeWithSharedFeatures {
     public AddCriteriaEnergyPair createAddCriteria() throws CreateException {
         try {
             return new AddCriteriaEnergyPair(
-                    getEnergyScheme().getElemPairAsFeatureList(),
+                    getEnergyScheme().getPair(),
                     (AddCriteriaPair) getEnergyScheme().getPairAddCriteria().duplicateBean());
         } catch (InitializeException | BeanDuplicateException e) {
             throw new CreateException(e);

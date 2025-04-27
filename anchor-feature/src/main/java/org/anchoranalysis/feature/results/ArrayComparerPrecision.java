@@ -39,16 +39,16 @@ class ArrayComparerPrecision extends ArrayComparer {
     protected boolean compareItem(Object obj1, Object obj2) {
 
         // Special case for doubles
-        if (obj1 instanceof Double) {
-            return compareDoubleWithOther((Double) obj1, obj2);
+        if (obj1 instanceof Double object1Cast) {
+            return compareDoubleWithOther(object1Cast, obj2);
         } else {
             return super.compareItem(obj1, obj2);
         }
     }
 
     private boolean compareDoubleWithOther(Double dbl, Object other) {
-        if (other instanceof Double) {
-            return Precision.equals(dbl, (Double) other, eps);
+        if (other instanceof Double otherCast) {
+            return Precision.equals(dbl, otherCast, eps);
         } else {
             return false;
         }

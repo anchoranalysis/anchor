@@ -54,10 +54,8 @@ class CompareUtilities {
     public static void checkZeroRows(
             boolean rejectZeroRows, Optional<String[]> lines1, Optional<String[]> lines2)
             throws CSVReaderException {
-        if (rejectZeroRows) {
-            if (!lines1.isPresent() || !lines2.isPresent()) {
-                throw new CSVReaderException("At least one input csv file has zero rows");
-            }
+        if (rejectZeroRows && (!lines1.isPresent() || !lines2.isPresent())) {
+            throw new CSVReaderException("At least one input csv file has zero rows");
         }
     }
 
