@@ -72,9 +72,8 @@ public class OverlayObjectMask extends Overlay {
     // We delegate uniqueness-check to the object-mask
     @Override
     public boolean equals(Object other) {
-        if (other instanceof OverlayObjectMask) {
-            OverlayObjectMask objCast = (OverlayObjectMask) other;
-            return this.object.asObjectMask().equals(objCast.object.asObjectMask());
+        if (other instanceof OverlayObjectMask otherCast) {
+            return this.object.asObjectMask().equals(otherCast.object.asObjectMask());
         } else {
             return false;
         }

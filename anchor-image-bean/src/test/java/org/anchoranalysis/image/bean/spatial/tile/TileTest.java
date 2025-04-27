@@ -89,7 +89,7 @@ class TileTest {
 
     /** Tests with an overlay with multiple z-slices. */
     @Test
-    void testInvalidCell() throws ArrangeStackException {
+    void testInvalidCell() {
         assertThrows(
                 ArrangeStackException.class,
                 () -> ColoredDualStackTester.combine(createWithCellEntry(0, 1), false));

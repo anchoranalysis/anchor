@@ -28,7 +28,6 @@ package org.anchoranalysis.feature.session.calculator;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
 import org.anchoranalysis.feature.results.ResultsVector;
 import org.junit.jupiter.api.BeforeEach;
@@ -43,7 +42,7 @@ class FeatureCalculatorCachedMultiTest {
     private CachedMulti<MockFeatureInput> cached;
 
     @BeforeEach
-    void setup() throws FeatureCalculationException {
+    void setup() {
         cached =
                 new CachedMulti<>(
                         FeatureCalculatorMultiFixture.createFeatureCalculator(

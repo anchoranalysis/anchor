@@ -77,8 +77,8 @@ public class InitializeException extends AnchorFriendlyCheckedException {
     public static InitializeException createOrReuse(Throwable exception) {
         // If it's an initialization error, we don't create a new one but re-throw
         //  as frequently initialization errors will pass through a recursive train
-        if (exception.getCause() instanceof InitializeException) {
-            return (InitializeException) exception.getCause();
+        if (exception.getCause() instanceof InitializeException cause) {
+            return cause;
         } else {
             return new InitializeException(exception);
         }

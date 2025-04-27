@@ -74,8 +74,8 @@ public class AnchorDefaultBeanFactory implements BeanFactory {
         } catch (ConfigurationRuntimeException e) {
             // We suppress these exceptions as they are ugly to read, and instead
             //   focus on where in the XML file the error is occurring
-            if (data instanceof XMLBeanDeclaration) {
-                throw createMisconfiguredBeanException(e, (XMLBeanDeclaration) data);
+            if (data instanceof XMLBeanDeclaration dataCast) {
+                throw createMisconfiguredBeanException(e, dataCast);
             }
 
             String msg =

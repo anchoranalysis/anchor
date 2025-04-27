@@ -74,8 +74,7 @@ public class LoadFromResources {
         RegisterBeanFactories.registerAllPackageBeanFactories();
 
         Path path = NonImageFileFormat.XML.buildPath(directory(), fileIdentifier);
-        T bean = BeanXMLLoader.loadBean(path);
-        return bean;
+        return BeanXMLLoader.loadBean(path);
     }
 
     private Path directory() {

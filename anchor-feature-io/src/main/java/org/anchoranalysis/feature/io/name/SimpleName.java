@@ -62,8 +62,8 @@ public class SimpleName implements MultiName {
     @Override
     public int compareTo(MultiName other) {
 
-        if (other instanceof SimpleName) {
-            return name.compareTo(((SimpleName) other).name);
+        if (other instanceof SimpleName otherCast) {
+            return name.compareTo(otherCast.name);
         } else {
             return -1;
         }

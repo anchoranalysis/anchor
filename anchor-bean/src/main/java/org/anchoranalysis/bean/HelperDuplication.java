@@ -36,7 +36,6 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.exception.BeanDuplicateException;
 import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
-import org.anchoranalysis.bean.primitive.StringSet;
 import org.apache.commons.lang3.ClassUtils;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -115,16 +114,13 @@ class HelperDuplication {
 
     private static Optional<Object> duplicatePropertyValue(
             Object propertyValue, String propertyName, AnchorBean<?> parentBean) {
-        if (propertyValue instanceof StringSet propertyValueCast) {
-            return Optional.of(propertyValueCast.duplicateBean());
-
-        } else if (propertyValue instanceof AnchorBean propertyValueCast) {
+        if (propertyValue instanceof AnchorBean<?> propertyValueCast) {
             // Our first priority is to duplicate a bean if we can, as it is possible for a Bean to
             // be a Collection as well, and it's better
             //  to use the Bean's normal duplication method
             return Optional.of(propertyValueCast.duplicateBean());
 
-        } else if (propertyValue instanceof Collection propertyValueCast) {
+        } else if (propertyValue instanceof Collection<?> propertyValueCast) {
             // If it's a collection, then we do it item by item in the collection, and then exit
             return Optional.of(duplicateCollection(propertyValueCast, propertyName, parentBean));
 

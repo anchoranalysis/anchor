@@ -65,17 +65,17 @@ class IndexRangeNegativeFactoryTest {
     }
 
     @Test
-    void testTwoColons() throws OperationFailedException {
+    void testTwoColons() {
         testExpectException("8:11:19");
     }
 
     @Test
-    void testNonNumericCharacter() throws OperationFailedException {
+    void testNonNumericCharacter() {
         testExpectException("8:a11");
     }
 
     @Test
-    void testFloatingPoint() throws OperationFailedException {
+    void testFloatingPoint() {
         testExpectException("2.1:-3");
     }
 

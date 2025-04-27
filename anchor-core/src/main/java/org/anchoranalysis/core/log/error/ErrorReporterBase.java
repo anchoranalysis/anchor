@@ -97,8 +97,7 @@ public abstract class ErrorReporterBase implements ErrorReporter {
 
     private void recordError(Class<?> classOriginating, Optional<String> message, Throwable exc) {
         // Special behaviour if it's a friendly exception
-        if (exc instanceof HasFriendlyErrorMessage) {
-            HasFriendlyErrorMessage eCast = (HasFriendlyErrorMessage) exc;
+        if (exc instanceof HasFriendlyErrorMessage eCast) {
             String lines = maybePrepend(message, eCast.friendlyMessageHierarchy());
             logWithBanner(lines, false);
         } else {
