@@ -105,9 +105,7 @@ public class CombinedName implements MultiName {
     @Override
     public int compareTo(MultiName other) {
 
-        if (other instanceof CombinedName) {
-
-            CombinedName otherCast = (CombinedName) other;
+        if (other instanceof CombinedName otherCast) {
 
             int compareResult = key.compareTo(otherCast.key);
 

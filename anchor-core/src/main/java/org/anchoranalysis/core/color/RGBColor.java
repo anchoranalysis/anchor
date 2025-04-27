@@ -165,8 +165,7 @@ public class RGBColor {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof RGBColor) {
-            RGBColor objCast = (RGBColor) obj;
+        if (obj instanceof RGBColor objCast) {
             return delegate.equals(objCast.delegate);
         } else {
             return false;

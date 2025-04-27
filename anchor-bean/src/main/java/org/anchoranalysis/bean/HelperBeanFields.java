@@ -127,7 +127,8 @@ class HelperBeanFields {
                 case Byte valueAsByte -> Byte.toString(valueAsByte);
                 case Short valueAsShort -> Short.toString(valueAsShort);
                 case Long valueAsLong -> Long.toString(valueAsLong);
-                case Boolean valueAsBoolean -> valueAsBoolean ? "true" : "false";
+                case Boolean valueAsBoolean ->
+                        Boolean.TRUE.equals(valueAsBoolean) ? "true" : "false";
                 case null -> "null";
                 default ->
                         throw new OperationFailedException(

@@ -59,7 +59,7 @@ class IndexRangeNegativeTest {
      * @throws OperationFailedException
      */
     @Test
-    void test_BothPositive_IncorrectOrder() throws OperationFailedException {
+    void test_BothPositive_IncorrectOrder() {
         testExpectException(3, 1);
     }
 
@@ -79,7 +79,7 @@ class IndexRangeNegativeTest {
      * @throws OperationFailedException
      */
     @Test
-    void test_BothNegative_IncorrectOrder() throws OperationFailedException {
+    void test_BothNegative_IncorrectOrder() {
         testExpectException(-1, -3);
     }
 
@@ -89,7 +89,7 @@ class IndexRangeNegativeTest {
      * @throws OperationFailedException
      */
     @Test
-    void test_IndexTooLarge() throws OperationFailedException {
+    void test_IndexTooLarge() {
         testExpectException(1, 9);
     }
 

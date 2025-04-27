@@ -158,7 +158,7 @@ public class ReadMetadataUtilities {
      * @return the value of the tag, or {@link Optional#empty()} if it does not exist.
      */
     public static Optional<Integer> readInt(Directory directory, int tag) {
-        return readTag(directory, tag, (dir, tagType) -> dir.getInteger(tagType));
+        return readTag(directory, tag, Directory::getInteger);
     }
 
     /**

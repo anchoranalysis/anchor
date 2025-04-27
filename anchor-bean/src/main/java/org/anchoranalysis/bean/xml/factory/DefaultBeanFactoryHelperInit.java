@@ -118,14 +118,11 @@ class DefaultBeanFactoryHelperInit {
                 String propName = e.getKey();
                 Optional<Class<?>> defaultClass = getDefaultClass(bean, propName);
 
-                if (e.getValue() instanceof BeanDeclaration) {
+                if (e.getValue() instanceof BeanDeclaration value) {
                     initProperty(
                             bean,
                             propName,
-                            BeanHelper.createBean(
-                                    (BeanDeclaration) e.getValue(),
-                                    defaultClass.orElse(null),
-                                    parameter));
+                            BeanHelper.createBean(value, defaultClass.orElse(null), parameter));
                 } else {
                     throw new BeanXMLException(
                             "The value of a Bean-Property field is neither a scalar primitive nor a bean.");
