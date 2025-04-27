@@ -90,8 +90,7 @@ public class OrientationReader {
      */
     private static OrientationChange decodeOrientationTag(int orientation) throws ImageIOException {
         switch (orientation) {
-            case 0:
-            case 1:
+            case 0, 1:
                 // Already matching our voxels, so no need to rotate further.
                 return OrientationChange.KEEP_UNCHANGED;
 

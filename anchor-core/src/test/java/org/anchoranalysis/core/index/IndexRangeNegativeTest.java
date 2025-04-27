@@ -99,7 +99,7 @@ class IndexRangeNegativeTest {
      * @throws OperationFailedException
      */
     @Test
-    void test_IndexTooSmall() throws OperationFailedException {
+    void test_IndexTooSmall() {
         testExpectException(-11, -2);
     }
 
