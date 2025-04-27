@@ -104,6 +104,7 @@ class ThresholderGlobalTest {
         try {
             when(calculateLevel.calculateLevel(any())).thenReturn(100);
         } catch (OperationFailedException e) {
+            // Suppressed as it can never be thrown in this circumstance.
         }
         return calculateLevel;
     }

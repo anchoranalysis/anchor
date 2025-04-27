@@ -147,14 +147,14 @@ public class CreateMarkFromPoints extends AnchorBean<CreateMarkFromPoints> {
             throws OperationFailedException {
         List<Point3f> out = new ArrayList<>();
 
-        for (Mark m : marks) {
-            if (m instanceof PointList) {
-                addPointsFrom((PointList) m, out);
+        for (Mark mark : marks) {
+            if (mark instanceof PointList markCast) {
+                addPointsFrom(markCast, out);
             } else {
                 throw new OperationFailedException(
                         String.format(
                                 "At least one Mark in the marks is not a PointList, rather a %s",
-                                m.getClass()));
+                                mark.getClass()));
             }
         }
 

@@ -37,6 +37,6 @@ class Orientation2DTest {
     @Test
     void testRotateXYAntiClockwise() {
         Orientation2D orientation = new Orientation2D(Math.PI / 2);
-        RotationTester.testRightAngleRotation(orientation, false);
+        RotationTester.testRightAngleRotation(orientation);
     }
 }

@@ -29,6 +29,7 @@ package org.anchoranalysis.mpp.feature.energy.scheme;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import lombok.Getter;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.shared.dictionary.DictionaryProvider;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
@@ -56,25 +57,25 @@ import org.anchoranalysis.mpp.feature.input.FeatureInputSingleMemo;
 public class EnergyScheme {
 
     /** Features for individual elements (clique-size==1). */
-    private final FeatureList<FeatureInputSingleMemo> elemInd;
+    @Getter private final FeatureList<FeatureInputSingleMemo> individual;
 
     /** Features for pairs of elements (clique-size==2). */
-    private final FeatureList<FeatureInputPairMemo> elemPair;
+    @Getter private final FeatureList<FeatureInputPairMemo> pair;
 
     /** Features for all elements together. */
-    private final FeatureList<FeatureInputAllMemo> elemAll;
+    @Getter private final FeatureList<FeatureInputAllMemo> all;
 
     /** The region map used in the energy scheme. */
-    private final RegionMap regionMap;
+    @Getter private final RegionMap regionMap;
 
     /**
      * A list of features of the image that are calculated first, and exposed to the other features
      * as parameters.
      */
-    private final List<NamedBean<Feature<FeatureInputStack>>> listImageFeatures;
+    @Getter private final List<NamedBean<Feature<FeatureInputStack>>> listImageFeatures;
 
     /** Criteria for adding pairs to the energy calculation. */
-    private final AddCriteriaPair pairAddCriteria;
+    @Getter private final AddCriteriaPair pairAddCriteria;
 
     /** Optional dictionary provider for the energy scheme. */
     private final Optional<DictionaryProvider> dictionary;
@@ -82,24 +83,24 @@ public class EnergyScheme {
     /**
      * Creates an energy scheme with the specified features and region map.
      *
-     * @param elemInd features for individual elements
-     * @param elemPair features for pairs of elements
-     * @param elemAll features for all elements together
+     * @param individual features for individual elements
+     * @param pair features for pairs of elements
+     * @param all features for all elements together
      * @param regionMap the region map to use
      * @param pairAddCriteria criteria for adding pairs
      * @throws CreateException if the energy scheme cannot be created
      */
     public EnergyScheme(
-            FeatureList<FeatureInputSingleMemo> elemInd,
-            FeatureList<FeatureInputPairMemo> elemPair,
-            FeatureList<FeatureInputAllMemo> elemAll,
+            FeatureList<FeatureInputSingleMemo> individual,
+            FeatureList<FeatureInputPairMemo> pair,
+            FeatureList<FeatureInputAllMemo> all,
             RegionMap regionMap,
             AddCriteriaPair pairAddCriteria)
             throws CreateException {
         this(
-                elemInd,
-                elemPair,
-                elemAll,
+                individual,
+                pair,
+                all,
                 regionMap,
                 pairAddCriteria,
                 Optional.empty(),
@@ -109,9 +110,9 @@ public class EnergyScheme {
     /**
      * Creates an energy scheme with the specified features, region map, and additional options.
      *
-     * @param elemInd features for individual elements
-     * @param elemPair features for pairs of elements
-     * @param elemAll features for all elements together
+     * @param individual features for individual elements
+     * @param pair features for pairs of elements
+     * @param all features for all elements together
      * @param regionMap the region map to use
      * @param pairAddCriteria criteria for adding pairs
      * @param dictionary optional dictionary provider
@@ -119,17 +120,17 @@ public class EnergyScheme {
      * @throws CreateException if the energy scheme cannot be created
      */
     public EnergyScheme(
-            FeatureList<FeatureInputSingleMemo> elemInd,
-            FeatureList<FeatureInputPairMemo> elemPair,
-            FeatureList<FeatureInputAllMemo> elemAll,
+            FeatureList<FeatureInputSingleMemo> individual,
+            FeatureList<FeatureInputPairMemo> pair,
+            FeatureList<FeatureInputAllMemo> all,
             RegionMap regionMap,
             AddCriteriaPair pairAddCriteria,
             Optional<DictionaryProvider> dictionary,
             List<NamedBean<Feature<FeatureInputStack>>> listImageFeatures)
             throws CreateException {
-        this.elemInd = elemInd;
-        this.elemPair = elemPair;
-        this.elemAll = elemAll;
+        this.individual = individual;
+        this.pair = pair;
+        this.all = all;
         this.regionMap = regionMap;
         this.pairAddCriteria = pairAddCriteria;
         this.dictionary = dictionary;
@@ -156,13 +157,6 @@ public class EnergyScheme {
         }
     }
 
-    // ! Checks that a mark's initial parameters are correct
-    private void checkAtLeastOneEnergyElement() throws CreateException {
-        if ((elemInd.size() + elemPair.size() + elemAll.size()) == 0) {
-            throw new CreateException("At least one Energy element must be specified");
-        }
-    }
-
     /**
      * Gets the feature list for a specific clique size.
      *
@@ -173,69 +167,18 @@ public class EnergyScheme {
      */
     @SuppressWarnings("unchecked")
     public <T extends FeatureInput> FeatureList<T> getElemByCliqueSize(int cliqueSize) {
+        return switch (cliqueSize) {
+            case 0 -> (FeatureList<T>) individual;
+            case 1 -> (FeatureList<T>) pair;
+            case -1 -> (FeatureList<T>) all;
+            default -> throw new AnchorImpossibleSituationException();
+        };
+    }
 
-        if (cliqueSize == 0) {
-            return (FeatureList<T>) getElemIndAsFeatureList();
-        } else if (cliqueSize == 1) {
-            return (FeatureList<T>) getElemPairAsFeatureList();
-        } else if (cliqueSize == -1) {
-            return (FeatureList<T>) getElemAllAsFeatureList();
-        } else {
-            throw new AnchorImpossibleSituationException();
+    /** Checks that a mark's initial parameters are correct. */
+    private void checkAtLeastOneEnergyElement() throws CreateException {
+        if ((individual.size() + pair.size() + all.size()) == 0) {
+            throw new CreateException("At least one Energy element must be specified");
         }
-    }
-
-    /**
-     * Gets the feature list for individual elements.
-     *
-     * @return the {@link FeatureList} for individual elements
-     */
-    public FeatureList<FeatureInputSingleMemo> getElemIndAsFeatureList() {
-        return elemInd;
-    }
-
-    /**
-     * Gets the feature list for pairs of elements.
-     *
-     * @return the {@link FeatureList} for pairs of elements
-     */
-    public FeatureList<FeatureInputPairMemo> getElemPairAsFeatureList() {
-        return elemPair;
-    }
-
-    /**
-     * Gets the feature list for all elements together.
-     *
-     * @return the {@link FeatureList} for all elements
-     */
-    public FeatureList<FeatureInputAllMemo> getElemAllAsFeatureList() {
-        return elemAll;
-    }
-
-    /**
-     * Gets the criteria for adding pairs to the energy calculation.
-     *
-     * @return the {@link AddCriteriaPair} for pair addition
-     */
-    public AddCriteriaPair getPairAddCriteria() {
-        return pairAddCriteria;
-    }
-
-    /**
-     * Gets the list of image features to be calculated first.
-     *
-     * @return the list of {@link NamedBean}s containing image features
-     */
-    public List<NamedBean<Feature<FeatureInputStack>>> getListImageFeatures() {
-        return listImageFeatures;
-    }
-
-    /**
-     * Gets the region map used in the energy scheme.
-     *
-     * @return the {@link RegionMap} for the energy scheme
-     */
-    public RegionMap getRegionMap() {
-        return regionMap;
     }
 }

@@ -130,8 +130,7 @@ public class ExtentToArrange implements Comparable<ExtentToArrange> {
     /** To correspond to {@link #compareTo(ExtentToArrange)}. */
     @Override
     public boolean equals(Object other) {
-        if (other instanceof ExtentToArrange) {
-            ExtentToArrange otherCast = (ExtentToArrange) other;
+        if (other instanceof ExtentToArrange otherCast) {
             return extent.equals(otherCast.extent);
         } else {
             return false;

@@ -74,19 +74,13 @@ public final class DirectionVector {
      * @param axis the axis to align to.
      */
     public DirectionVector(Axis axis) {
-        switch (axis) {
-            case X:
-                this.vector = new Point3d(1, 0, 0);
-                break;
-            case Y:
-                this.vector = new Point3d(0, 1, 0);
-                break;
-            case Z:
-                this.vector = new Point3d(0, 0, 1);
-                break;
-            default:
-                throw new AnchorImpossibleSituationException();
-        }
+        this.vector =
+                switch (axis) {
+                    case X -> new Point3d(1, 0, 0);
+                    case Y -> new Point3d(0, 1, 0);
+                    case Z -> new Point3d(0, 0, 1);
+                    default -> throw new AnchorImpossibleSituationException();
+                };
     }
 
     /**
@@ -158,14 +152,11 @@ public final class DirectionVector {
      * @param valueToAssign the value to assign.
      */
     public void setIndex(int index, double valueToAssign) {
-        if (index == 0) {
-            vector.setX(valueToAssign);
-        } else if (index == 1) {
-            vector.setY(valueToAssign);
-        } else if (index == 2) {
-            vector.setZ(valueToAssign);
-        } else {
-            throw new AnchorFriendlyRuntimeException("Index must be >= 0 and < 3");
+        switch (index) {
+            case 0 -> vector.setX(valueToAssign);
+            case 1 -> vector.setY(valueToAssign);
+            case 2 -> vector.setZ(valueToAssign);
+            default -> throw new AnchorFriendlyRuntimeException("Index must be >= 0 and < 3");
         }
     }
 

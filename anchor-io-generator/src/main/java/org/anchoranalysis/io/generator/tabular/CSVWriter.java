@@ -130,9 +130,8 @@ public class CSVWriter implements AutoCloseable {
      * Private constructor called by static methods.
      *
      * @param output how and to where content is written to a text-file.
-     * @throws OutputWriteFailedException if the CSV file cannot be created successfully.
      */
-    private CSVWriter(TextFileOutput output) throws OutputWriteFailedException {
+    private CSVWriter(TextFileOutput output) {
         this.output = output;
     }
 

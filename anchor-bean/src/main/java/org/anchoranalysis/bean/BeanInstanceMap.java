@@ -32,6 +32,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
+import org.anchoranalysis.core.identifier.name.NameValue;
 
 /**
  * Maps a {@link AnchorBean} family-type to a bean that belongs to the family.
@@ -124,10 +125,11 @@ public class BeanInstanceMap {
      * @throws BeanMisconfiguredException if the list of {@link NamedBean} contains an invalid
      *     class.
      */
-    public void addFrom(List<NamedBean<?>> listNamedInstances) throws BeanMisconfiguredException {
+    public void addFrom(List<? extends NameValue<?>> listNamedInstances)
+            throws BeanMisconfiguredException {
 
         try {
-            for (NamedBean<?> namedBean : listNamedInstances) {
+            for (NameValue<?> namedBean : listNamedInstances) {
                 map.put(Class.forName(namedBean.getName()), namedBean.getValue());
             }
         } catch (ClassNotFoundException e) {

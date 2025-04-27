@@ -129,20 +129,4 @@ public interface FileFormat {
         return String.format(
                 "%s/%s.%s", directory, filenameWithoutExtension, getDefaultExtension());
     }
-
-    /**
-     * Builds a path with a directory, subdirectory, and filename component.
-     *
-     * @param directory the directory
-     * @param subdirectory the name of a directory that should reside in {@code directory}
-     * @param filenameWithoutExtension a filename that resides in the {@code subdirectory} (without
-     *     any extension or the period preceding an extension)
-     * @return a string representing a path that combines the {@code directory} and {@code
-     *     subdirectory} and {@code filenameWithoutExtension} and the extension.
-     */
-    default String buildPath(
-            String directory, String subdirectory, String filenameWithoutExtension) {
-        String combinedDirectory = String.format("%s/%s", directory, subdirectory);
-        return buildPath(combinedDirectory, filenameWithoutExtension, getDefaultExtension());
-    }
 }

@@ -215,8 +215,7 @@ public class BeanXMLLoader {
                     FriendlyExceptionCreator.maybeCreateUserFriendlyException(e.getCause());
 
             // If we can summarise the bean, then we do
-            if (cause instanceof AnchorCombinableException) {
-                AnchorCombinableException causeCast = (AnchorCombinableException) cause;
+            if (cause instanceof AnchorCombinableException causeCast) {
                 cause = causeCast.summarize();
             }
 

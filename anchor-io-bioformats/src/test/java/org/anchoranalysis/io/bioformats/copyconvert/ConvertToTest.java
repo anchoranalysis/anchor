@@ -193,7 +193,6 @@ class ConvertToTest {
         // With no orientation-change.
         testSequential(
                 converter,
-                inputDataType,
                 outputDataType,
                 createSequentialBuffer(
                         inputDataType, DIMENSIONS, 1.0f, OrientationChange.KEEP_UNCHANGED),
@@ -208,7 +207,6 @@ class ConvertToTest {
             // With 90 degrees clockwise orientation-change.
             testSequential(
                     converter,
-                    inputDataType,
                     outputDataType,
                     createSequentialBuffer(
                             inputDataType, DIMENSIONS, 1.0f, OrientationChange.KEEP_UNCHANGED),
@@ -223,7 +221,6 @@ class ConvertToTest {
 
     private static <S, T> void testSequential(
             ConvertTo<T> converter,
-            VoxelDataType inputDataType,
             VoxelDataType outputDataType,
             VoxelBuffer<S> inputBuffer,
             VoxelBuffer<T> expectedOutputBuffer,

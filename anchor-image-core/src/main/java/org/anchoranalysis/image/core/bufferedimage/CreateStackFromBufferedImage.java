@@ -98,8 +98,8 @@ public class CreateStackFromBufferedImage {
                 && y == 0
                 && sixeX == raster.getWidth()
                 && sizeY == raster.getHeight()
-                && raster.getDataBuffer() instanceof DataBufferByte) {
-            return ((DataBufferByte) raster.getDataBuffer()).getBankData();
+                && raster.getDataBuffer() instanceof DataBufferByte buffer) {
+            return buffer.getBankData();
         }
 
         int bands = raster.getNumBands();

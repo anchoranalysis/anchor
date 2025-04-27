@@ -28,7 +28,6 @@ package org.anchoranalysis.io.bioformats.metadata;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.nio.file.Path;
-import java.text.ParseException;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -61,7 +60,7 @@ class AcqusitionDateReaderTest {
     }
 
     @Test
-    void testWithExif() throws ImageIOException, ParseException {
+    void testWithExif() throws ImageIOException {
         // We compare instants in case as the time-zone for a given offset is system-dependent.
         test(
                 "exif_present_no_rotation_needed.jpg",

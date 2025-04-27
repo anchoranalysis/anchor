@@ -55,37 +55,35 @@ class ConnectedComponentUnitFindTest {
     @Test
     void testByte2d() throws OperationFailedException, CreateException {
         ObjectCollectionFixture fixture = new ObjectCollectionFixture();
-        testObjects(deriveInt(false, fixture), fixture);
+        testObjects(deriveInt(fixture), fixture);
     }
 
     @Test
     void testInt2d() throws OperationFailedException, CreateException {
         ObjectCollectionFixture fixture = new ObjectCollectionFixture();
-        testObjects(deriveByte(false, fixture), fixture);
+        testObjects(deriveByte(fixture), fixture);
     }
 
     @Test
     void testByte3d() throws OperationFailedException, CreateException {
         ObjectCollectionFixture fixture = new ObjectCollectionFixture();
         fixture.setUseZ(true);
-        testObjects(deriveInt(true, fixture), fixture);
+        testObjects(deriveInt(fixture), fixture);
     }
 
     @Test
     void testInt3d() throws OperationFailedException, CreateException {
         ObjectCollectionFixture fixture = new ObjectCollectionFixture();
         fixture.setUseZ(true);
-        testObjects(deriveByte(true, fixture), fixture);
+        testObjects(deriveByte(fixture), fixture);
     }
 
-    private ObjectCollection deriveInt(boolean do3D, ObjectCollectionFixture fixture)
-            throws OperationFailedException, CreateException {
+    private ObjectCollection deriveInt(ObjectCollectionFixture fixture) throws CreateException {
         return connectedComponents.deriveConnectedInt(
                 createBufferWithObjects(UnsignedIntVoxelType.INSTANCE, fixture));
     }
 
-    private ObjectCollection deriveByte(boolean do3D, ObjectCollectionFixture fixture)
-            throws OperationFailedException, CreateException {
+    private ObjectCollection deriveByte(ObjectCollectionFixture fixture) throws CreateException {
         return connectedComponents.deriveConnectedByte(
                 createBufferWithObjects(UnsignedByteVoxelType.INSTANCE, fixture));
     }

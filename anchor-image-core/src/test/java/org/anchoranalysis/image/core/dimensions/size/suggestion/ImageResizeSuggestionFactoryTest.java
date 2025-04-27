@@ -81,7 +81,7 @@ class ImageResizeSuggestionFactoryTest {
      * allowed.
      */
     @Test
-    void testBothWithZero() throws SuggestionFormatException {
+    void testBothWithZero() {
         assertThrows(SuggestionFormatException.class, () -> test("67x0"));
     }
 
@@ -90,7 +90,7 @@ class ImageResizeSuggestionFactoryTest {
      * allowed.
      */
     @Test
-    void testBothWithNegative() throws SuggestionFormatException {
+    void testBothWithNegative() {
         assertThrows(SuggestionFormatException.class, () -> test("-4x20"));
     }
 

@@ -106,7 +106,7 @@ class LinearPartitionTest {
     /** Determines the standard-deviation from a collection of {@link Integer}s. */
     private static double standardDeviation(Collection<Integer> collection) {
         VarianceCalculatorLong calculator = new VarianceCalculatorLong();
-        collection.stream().forEach(element -> calculator.add(element));
+        collection.stream().forEach(calculator::add);
         return Math.sqrt(calculator.variance());
     }
 }

@@ -217,23 +217,21 @@ public class Ellipsoid extends ConicBase implements Serializable {
 
     @Override
     public double volume(int regionID) {
-
-        if (regionID == GlobalRegionIdentifiers.SUBMARK_INSIDE) {
-            return volumeForShell(1);
-        } else if (regionID == GlobalRegionIdentifiers.SUBMARK_SHELL_OUTSIDE) {
-            return volumeForShell(shellExternal) - volumeForShell(1);
-        } else if (regionID == GlobalRegionIdentifiers.SUBMARK_SHELL) {
-            return volumeForShell(shellExternal) - volumeForShell(shellInternal);
-        } else if (regionID == GlobalRegionIdentifiers.SUBMARK_CORE) {
-            return volumeForShell(shellInternal);
-        } else if (regionID == GlobalRegionIdentifiers.SUBMARK_OUTSIDE) {
-            return volumeForShell(shellExternalOut) - volumeForShell(shellExternal);
-        } else if (regionID == GlobalRegionIdentifiers.SUBMARK_CORE_INNER) {
-            return volumeForShell(shellInnerCore);
-        } else {
-            assert false;
-            return 0.0;
-        }
+        return switch (regionID) {
+            case GlobalRegionIdentifiers.SUBMARK_INSIDE -> volumeForShell(1);
+            case GlobalRegionIdentifiers.SUBMARK_SHELL_OUTSIDE ->
+                    volumeForShell(shellExternal) - volumeForShell(1);
+            case GlobalRegionIdentifiers.SUBMARK_SHELL ->
+                    volumeForShell(shellExternal) - volumeForShell(shellInternal);
+            case GlobalRegionIdentifiers.SUBMARK_CORE -> volumeForShell(shellInternal);
+            case GlobalRegionIdentifiers.SUBMARK_OUTSIDE ->
+                    volumeForShell(shellExternalOut) - volumeForShell(shellExternal);
+            case GlobalRegionIdentifiers.SUBMARK_CORE_INNER -> volumeForShell(shellInnerCore);
+            default -> {
+                assert false : "Unexpected regionID";
+                yield 0.0;
+            }
+        };
     }
 
     /**

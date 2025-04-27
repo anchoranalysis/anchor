@@ -100,7 +100,7 @@ class IntersectingObjectsTest {
      * @throws OperationFailedException
      */
     @Test
-    void intersectsBox() throws OperationFailedException {
+    void intersectsBox() {
         // Test intersection with the exact same bounding-box
         assertContainsOnly(tree.intersectsWith(FIRST.boundingBox()), FIRST);
 

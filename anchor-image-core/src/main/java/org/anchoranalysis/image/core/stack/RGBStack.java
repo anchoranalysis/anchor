@@ -131,16 +131,16 @@ public class RGBStack implements Iterable<Channel> {
      */
     public RGBStack(Stack stack) {
         int numberChannels = stack.getNumberChannels();
-        if (numberChannels == 3) {
-            this.stack = stack;
-        } else if (numberChannels == 1) {
-            this.stack = duplicateToThreeChannels(stack);
-        } else {
-            throw new AnchorFriendlyRuntimeException(
-                    String.format(
-                            "Cannot create a RGB-stack from this stack, as it has %d number of channels. Only a single-channel or three channels (representing red, green, blue) are supported.",
-                            stack.getNumberChannels()));
-        }
+        this.stack =
+                switch (numberChannels) {
+                    case 3 -> stack;
+                    case 1 -> duplicateToThreeChannels(stack);
+                    default ->
+                            throw new AnchorFriendlyRuntimeException(
+                                    String.format(
+                                            "Cannot create a RGB-stack from this stack, as it has %d number of channels. Only a single-channel or three channels (representing red, green, blue) are supported.",
+                                            numberChannels));
+                };
     }
 
     /**
