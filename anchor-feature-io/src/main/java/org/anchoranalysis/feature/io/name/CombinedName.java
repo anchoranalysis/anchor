@@ -73,8 +73,7 @@ public class CombinedName implements MultiName {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof CombinedName) {
-            CombinedName objCast = (CombinedName) obj;
+        if (obj instanceof CombinedName objCast) {
             return allTogether.equals(objCast.allTogether);
         } else {
             return false;
