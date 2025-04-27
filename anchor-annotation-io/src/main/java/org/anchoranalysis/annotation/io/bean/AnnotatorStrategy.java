@@ -75,7 +75,7 @@ public abstract class AnnotatorStrategy extends AnchorBean<AnnotatorStrategy> {
      * label is available.
      *
      * @param input the input to find an annotation label for.
-     * @param context TODO
+     * @param context the {@link OperationContext} for the operation.
      * @return the label, if available.
      * @throws OperationFailedException if a label cannot be successfully determined.
      */
@@ -89,7 +89,7 @@ public abstract class AnnotatorStrategy extends AnchorBean<AnnotatorStrategy> {
      * <p>The higher the number, the lengthier {@link #annotationLabelFor(ProvidesStackInput,
      * OperationContext)} can be.
      *
-     * @return the weight.
+     * @return the weight indicating the potential length of the description.
      */
     public abstract int weightWidthDescription();
 }

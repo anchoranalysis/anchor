@@ -41,10 +41,15 @@ class HelperCheckMisconfigured {
 
     /**
      * A map between class-types and bean-instances used to populate default-values for beans with
-     * certain annotations
+     * certain annotations.
      */
     private final BeanInstanceMap defaultInstances;
 
+    /**
+     * Creates a new instance of {@link HelperCheckMisconfigured}.
+     *
+     * @param defaultInstances a map of default instances for beans
+     */
     HelperCheckMisconfigured(final BeanInstanceMap defaultInstances) {
         this.defaultInstances = defaultInstances;
     }
@@ -99,7 +104,7 @@ class HelperCheckMisconfigured {
     }
 
     /**
-     * Searches for an instance to use as a default for a class
+     * Searches for an instance to use as a default for a class.
      *
      * <p>If no default can be found in the map, an exception is thrown.
      *
@@ -121,46 +126,54 @@ class HelperCheckMisconfigured {
         return object.get();
     }
 
+    /**
+     * Checks the property of a bean field.
+     *
+     * @param field the {@link Field} to check
+     * @param fieldValue the value of the field
+     * @param beanName the name of the bean
+     * @throws BeanMisconfiguredException if the property is misconfigured
+     */
     @SuppressWarnings("unchecked")
     private void checkProperty(Field field, Object fieldValue, String beanName)
             throws BeanMisconfiguredException {
-
-        // If it's another bean we recursively check
-        if (fieldValue instanceof AnchorBean) {
-            AnchorBean<?> valueCast = (AnchorBean<?>) fieldValue;
-            valueCast.checkMisconfigured(defaultInstances);
-        } else if (fieldValue instanceof Collection) {
-            // If it's a list, we assume it's a list of IBeans
-            Collection<AnchorBean<?>> valueCast = (Collection<AnchorBean<?>>) fieldValue;
-            checkCollection(valueCast, field, beanName);
-        } else if (fieldValue instanceof String) {
-            String valueCast = (String) fieldValue;
-            checkString(valueCast, field, beanName);
-        } else {
-            checkPropertyPrimitiveTypes(field, fieldValue, beanName);
+        switch (fieldValue) {
+            case AnchorBean<?> valueCast -> valueCast.checkMisconfigured(defaultInstances);
+            case Collection<?> valueCast ->
+                    checkCollection((Collection<AnchorBean<?>>) valueCast, field, beanName);
+            case String valueCast -> checkString(valueCast, field, beanName);
+            default -> checkPropertyPrimitiveTypes(field, fieldValue, beanName);
         }
     }
 
+    /**
+     * Checks primitive type properties of a bean field.
+     *
+     * @param field the {@link Field} to check
+     * @param fieldValue the value of the field
+     * @param beanName the name of the bean
+     * @throws BeanMisconfiguredException if the property is misconfigured
+     */
     private void checkPropertyPrimitiveTypes(Field field, Object fieldValue, String beanName)
             throws BeanMisconfiguredException {
-        if (fieldValue instanceof Integer) {
-            Integer valueCast = (Integer) fieldValue;
-            checkInteger(valueCast, field, beanName);
-        } else if (fieldValue instanceof Double) {
-            Double valueCast = (Double) fieldValue;
-            checkDouble(valueCast, field, beanName);
-        } else if (fieldValue instanceof Float) {
-            Float valueCast = (Float) fieldValue;
-            checkFloat(valueCast, field, beanName);
-        } else if (fieldValue instanceof Short) {
-            Short valueCast = (Short) fieldValue;
-            checkShort(valueCast, field, beanName);
-        } else if (fieldValue instanceof Long) {
-            Long valueCast = (Long) fieldValue;
-            checkLong(valueCast, field, beanName);
+        switch (fieldValue) {
+            case Integer valueCast -> checkInteger(valueCast, field, beanName);
+            case Double valueCast -> checkDouble(valueCast, field, beanName);
+            case Float valueCast -> checkFloat(valueCast, field, beanName);
+            case Short valueCast -> checkShort(valueCast, field, beanName);
+            case Long valueCast -> checkLong(valueCast, field, beanName);
+            default -> {} // No action for other types
         }
     }
 
+    /**
+     * Checks a collection property of a bean field.
+     *
+     * @param list the {@link Collection} to check
+     * @param field the {@link Field} to check
+     * @param beanName the name of the bean
+     * @throws BeanMisconfiguredException if the collection is misconfigured
+     */
     private void checkCollection(Collection<AnchorBean<?>> list, Field field, String beanName)
             throws BeanMisconfiguredException {
 
@@ -178,6 +191,14 @@ class HelperCheckMisconfigured {
         }
     }
 
+    /**
+     * Checks a string property of a bean field.
+     *
+     * @param fieldValue the string value to check
+     * @param field the {@link Field} to check
+     * @param beanName the name of the bean
+     * @throws BeanMisconfiguredException if the string is misconfigured
+     */
     private static void checkString(String fieldValue, Field field, String beanName)
             throws BeanMisconfiguredException {
 
@@ -191,18 +212,40 @@ class HelperCheckMisconfigured {
         }
     }
 
+    /**
+     * Generates an exception for a non-negative constraint violation.
+     *
+     * @param fieldName the name of the field
+     * @param beanName the name of the bean
+     * @throws BeanMisconfiguredException with a message about the non-negative constraint
+     */
     private static void generateNonNegativeException(String fieldName, String beanName)
             throws BeanMisconfiguredException {
         throw new BeanMisconfiguredException(
                 String.format("Property '%s' of '%s' must be >= 0", fieldName, beanName));
     }
 
+    /**
+     * Generates an exception for a positive constraint violation.
+     *
+     * @param fieldName the name of the field
+     * @param beanName the name of the bean
+     * @throws BeanMisconfiguredException with a message about the positive constraint
+     */
     private static void generatePositiveException(String fieldName, String beanName)
             throws BeanMisconfiguredException {
         throw new BeanMisconfiguredException(
                 String.format("Property '%s' of '%s' must be > 0", fieldName, beanName));
     }
 
+    /**
+     * Checks an integer property of a bean field.
+     *
+     * @param fieldValue the integer value to check
+     * @param field the {@link Field} to check
+     * @param beanName the name of the bean
+     * @throws BeanMisconfiguredException if the integer is misconfigured
+     */
     private static void checkInteger(Integer fieldValue, Field field, String beanName)
             throws BeanMisconfiguredException {
 
@@ -215,6 +258,14 @@ class HelperCheckMisconfigured {
         }
     }
 
+    /**
+     * Checks a short property of a bean field.
+     *
+     * @param fieldValue the short value to check
+     * @param field the {@link Field} to check
+     * @param beanName the name of the bean
+     * @throws BeanMisconfiguredException if the short is misconfigured
+     */
     private static void checkShort(Short fieldValue, Field field, String beanName)
             throws BeanMisconfiguredException {
 
@@ -227,6 +278,14 @@ class HelperCheckMisconfigured {
         }
     }
 
+    /**
+     * Checks a double property of a bean field.
+     *
+     * @param fieldValue the double value to check
+     * @param field the {@link Field} to check
+     * @param beanName the name of the bean
+     * @throws BeanMisconfiguredException if the double is misconfigured
+     */
     private static void checkDouble(Double fieldValue, Field field, String beanName)
             throws BeanMisconfiguredException {
 
@@ -239,6 +298,14 @@ class HelperCheckMisconfigured {
         }
     }
 
+    /**
+     * Checks a float property of a bean field.
+     *
+     * @param fieldValue the float value to check
+     * @param field the {@link Field} to check
+     * @param beanName the name of the bean
+     * @throws BeanMisconfiguredException if the float is misconfigured
+     */
     private static void checkFloat(Float fieldValue, Field field, String beanName)
             throws BeanMisconfiguredException {
 
@@ -251,6 +318,14 @@ class HelperCheckMisconfigured {
         }
     }
 
+    /**
+     * Checks a long property of a bean field.
+     *
+     * @param fieldValue the long value to check
+     * @param field the {@link Field} to check
+     * @param beanName the name of the bean
+     * @throws BeanMisconfiguredException if the long is misconfigured
+     */
     private static void checkLong(Long fieldValue, Field field, String beanName)
             throws BeanMisconfiguredException {
 
