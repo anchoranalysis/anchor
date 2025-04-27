@@ -139,7 +139,7 @@ class FloatImplementation extends VoxelsExtracterBase<FloatBuffer> {
 
     @Override
     protected ProjectableBuffer<FloatBuffer> createMaxIntensityBuffer(Extent extent) {
-        return MaxIntensityProjection.createFloat(extent);
+        return new MaxIntensityProjection().createFloat(extent);
     }
 
     @Override

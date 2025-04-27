@@ -50,6 +50,6 @@ class MaxIntensityProjectionTest extends ProjectionTestBase {
     @Override
     protected <T> ProjectableBuffer<T> createProjectableBuffer(
             VoxelDataType voxelDataType, Extent extent) throws OperationFailedException {
-        return MaxIntensityProjection.create(voxelDataType, extent);
+        return new MaxIntensityProjection().create(voxelDataType, extent);
     }
 }

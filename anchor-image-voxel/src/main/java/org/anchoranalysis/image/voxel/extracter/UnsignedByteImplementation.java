@@ -69,7 +69,7 @@ class UnsignedByteImplementation extends VoxelsExtracterAsIntBase<UnsignedByteBu
 
     @Override
     protected ProjectableBuffer<UnsignedByteBuffer> createMaxIntensityBuffer(Extent extent) {
-        return MaxIntensityProjection.createUnsignedByte(extent);
+        return new MaxIntensityProjection().createUnsignedByte(extent);
     }
 
     @Override
