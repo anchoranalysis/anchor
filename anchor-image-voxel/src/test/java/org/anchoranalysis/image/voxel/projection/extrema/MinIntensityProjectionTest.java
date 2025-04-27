@@ -50,6 +50,6 @@ class MinIntensityProjectionTest extends ProjectionTestBase {
     @Override
     protected <T> ProjectableBuffer<T> createProjectableBuffer(
             VoxelDataType voxelDataType, Extent extent) throws OperationFailedException {
-        return MinIntensityProjection.create(voxelDataType, extent);
+        return new MinIntensityProjection().create(voxelDataType, extent);
     }
 }

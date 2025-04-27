@@ -69,7 +69,7 @@ class UnsignedShortImplementation extends VoxelsExtracterAsIntBase<UnsignedShort
 
     @Override
     protected ProjectableBuffer<UnsignedShortBuffer> createMaxIntensityBuffer(Extent extent) {
-        return MaxIntensityProjection.createUnsignedShort(extent);
+        return new MaxIntensityProjection().createUnsignedShort(extent);
     }
 
     @Override
