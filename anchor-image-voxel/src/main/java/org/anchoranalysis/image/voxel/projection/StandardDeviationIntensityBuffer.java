@@ -28,10 +28,7 @@ package org.anchoranalysis.image.voxel.projection;
 
 import java.nio.FloatBuffer;
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.VoxelsUntyped;
-import org.anchoranalysis.image.voxel.buffer.ProjectableBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
-import org.anchoranalysis.image.voxel.convert.VoxelsConverterMulti;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactoryTypeBound;
 import org.anchoranalysis.spatial.box.Extent;
@@ -45,54 +42,34 @@ import org.anchoranalysis.spatial.box.Extent;
  * deviation</a>.
  *
  * @author Owen Feehan
- * @param <T> type of buffer used, both as input and result, of the maximum intensity projection
+ * @param <T> type of buffer used, both as input and result, of the projection
  */
-class StandardDeviationIntensityBuffer<T> implements ProjectableBuffer<T> {
-
-    private static final VoxelsConverterMulti CONVERTER = new VoxelsConverterMulti();
-
-    private Voxels<FloatBuffer> voxelsSum;
+class StandardDeviationIntensityBuffer<T> extends CountedProjectableBuffer<T> {
+    
     private Voxels<FloatBuffer> voxelsSumSquared;
-    private int count = 0;
-    private final VoxelsFactoryTypeBound<T> flatType;
 
     /**
      * Creates with minimal parameters, as no preprocessing is necessary.
      *
-     * @param flatType the voxel data-type to use for the flattened (mean-intensity) buffer.
+     * @param flatType the voxel data-type to use for the flattened buffer.
      * @param extent the size expected for images that will be projected.
      */
     public StandardDeviationIntensityBuffer(VoxelsFactoryTypeBound<T> flatType, Extent extent) {
-        this.flatType = flatType;
-        this.voxelsSum = VoxelsFactory.getFloat().createInitialized(extent);
+        super(flatType, extent);
         this.voxelsSumSquared = VoxelsFactory.getFloat().createInitialized(extent);
     }
 
     @Override
-    public void addVoxelBuffer(VoxelBuffer<T> voxelBuffer) {
-        addVoxelBufferInternal(voxelBuffer, 0);
-        count++;
-    }
-
-    @Override
-    public void addVoxels(Voxels<T> voxels) {
-        for (int z = 0; z < voxels.extent().z(); z++) {
-            addVoxelBufferInternal(voxels.slice(z), z);
-        }
-        count++;
-    }
-
-    @Override
     public Voxels<T> completeProjection() {
-        voxelsSum.arithmetic().divideBy(count);
-        voxelsSumSquared.arithmetic().divideBy(count);
+    	divideVoxelsByCount(voxelsSum);
+    	divideVoxelsByCount(voxelsSumSquared);
         squareEachVoxel(voxelsSum);
         subtractSquareRoot(voxelsSumSquared, voxelsSum);
-        return CONVERTER.convert(new VoxelsUntyped(voxelsSumSquared), flatType);
+        return flattenFrom(voxelsSumSquared);
     }
 
-    /** Adds a {@link VoxelsBuffer} without incrementing the count. */
-    private void addVoxelBufferInternal(VoxelBuffer<T> voxelBuffer, int z) {
+    @Override
+    protected void addVoxelBufferInternal(VoxelBuffer<T> voxelBuffer, int z) {
         FloatBuffer sumBuffer = voxelsSum.sliceBuffer(z);
         FloatBuffer sumSquaredBuffer = voxelsSumSquared.sliceBuffer(z);
         voxelsSum
