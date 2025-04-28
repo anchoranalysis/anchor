@@ -28,11 +28,7 @@ package org.anchoranalysis.image.voxel.projection;
 
 import java.nio.FloatBuffer;
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.VoxelsUntyped;
-import org.anchoranalysis.image.voxel.buffer.ProjectableBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
-import org.anchoranalysis.image.voxel.convert.VoxelsConverterMulti;
-import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactoryTypeBound;
 import org.anchoranalysis.spatial.box.Extent;
 
@@ -42,47 +38,26 @@ import org.anchoranalysis.spatial.box.Extent;
  * @author Owen Feehan
  * @param <T> type of buffer used, both as input and result, of the maximum intensity projection
  */
-class MeanIntensityBuffer<T> implements ProjectableBuffer<T> {
-
-    private static final VoxelsConverterMulti CONVERTER = new VoxelsConverterMulti();
-
-    private Voxels<FloatBuffer> voxelsSum;
-    private int count = 0;
-    private final VoxelsFactoryTypeBound<T> factory;
+class MeanIntensityBuffer<T> extends CountedProjectableBuffer<T> {
 
     /**
      * Creates with minimal parameters, as no preprocessing is necessary.
      *
-     * @param factory the voxel data-type to use for to create the (mean-intensity) buffer.
+     * @param flatType the voxel data-type to use for the flattened buffer.
      * @param extent the size expected for images that will be projected.
      */
-    public MeanIntensityBuffer(VoxelsFactoryTypeBound<T> factory, Extent extent) {
-        this.factory = factory;
-        this.voxelsSum = VoxelsFactory.getFloat().createInitialized(extent);
-    }
-
-    @Override
-    public void addVoxelBuffer(VoxelBuffer<T> voxelBuffer) {
-        addVoxelBufferInternal(voxelBuffer, 0);
-        count++;
-    }
-
-    @Override
-    public void addVoxels(Voxels<T> voxels) {
-        for (int z = 0; z < voxels.extent().z(); z++) {
-            addVoxelBufferInternal(voxels.slice(z), z);
-        }
-        count++;
+    public MeanIntensityBuffer(VoxelsFactoryTypeBound<T> flatType, Extent extent) {
+    	super(flatType, extent);
     }
 
     @Override
     public Voxels<T> completeProjection() {
-        voxelsSum.arithmetic().divideBy(count);
-        return CONVERTER.convert(new VoxelsUntyped(voxelsSum), factory);
+    	divideVoxelsByCount(voxelsSum);
+        return flattenFrom(voxelsSum);
     }
 
-    /** Adds a {@link VoxelsBuffer} without incrementing the count. */
-    private void addVoxelBufferInternal(VoxelBuffer<T> voxelBuffer, int z) {
+    @Override
+    protected void addVoxelBufferInternal(VoxelBuffer<T> voxelBuffer, int z) {
         FloatBuffer sumBuffer = voxelsSum.sliceBuffer(z);
         voxelsSum
                 .extent()
