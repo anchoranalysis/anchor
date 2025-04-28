@@ -74,6 +74,6 @@ class UnsignedShortImplementation extends VoxelsExtracterAsIntBase<UnsignedShort
 
     @Override
     protected ProjectableBuffer<UnsignedShortBuffer> createMeanIntensityBuffer(Extent extent) {
-        return MeanIntensityProjection.createUnsignedShort(extent);
+        return new MeanIntensityProjection().createUnsignedShort(extent);
     }
 }

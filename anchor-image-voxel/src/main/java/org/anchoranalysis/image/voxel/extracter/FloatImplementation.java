@@ -144,6 +144,6 @@ class FloatImplementation extends VoxelsExtracterBase<FloatBuffer> {
 
     @Override
     protected ProjectableBuffer<FloatBuffer> createMeanIntensityBuffer(Extent extent) {
-        return MeanIntensityProjection.createFloat(extent);
+        return new MeanIntensityProjection().createFloat(extent);
     }
 }
