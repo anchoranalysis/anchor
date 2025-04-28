@@ -26,18 +26,10 @@
 package org.anchoranalysis.image.voxel.projection;
 
 import java.nio.FloatBuffer;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.voxel.buffer.ProjectableBuffer;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedIntBuffer;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedShortBuffer;
-import org.anchoranalysis.image.voxel.datatype.FloatVoxelType;
-import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
-import org.anchoranalysis.image.voxel.datatype.UnsignedIntVoxelType;
-import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 import org.anchoranalysis.spatial.box.Extent;
 
@@ -49,73 +41,25 @@ import org.anchoranalysis.spatial.box.Extent;
  *
  * @author Owen Feehan
  */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class StandardDeviationIntensityProjection {
+public class StandardDeviationIntensityProjection extends Projection {
 
-    /**
-     * Creates a buffer for a <i>standard-deviation projection</i> for <b>unsigned byte</b> voxels.
-     *
-     * @param dataType the data-type to use for creating the buffer.
-     * @param extent the size of the projected image. The z-dimension is ignored.
-     * @param <T> voxel data type to be equal to {@code dataType}.
-     * @return a newly created buffer that can be used for projection.
-     * @throws OperationFailedException if {@code dataType} is unsupported.
-     */
-    @SuppressWarnings("unchecked")
-    public static <T> ProjectableBuffer<T> create(VoxelDataType dataType, Extent extent)
-            throws OperationFailedException {
-        if (dataType.equals(UnsignedByteVoxelType.INSTANCE)) {
-            return (ProjectableBuffer<T>) createUnsignedByte(extent);
-        } else if (dataType.equals(UnsignedShortVoxelType.INSTANCE)) {
-            return (ProjectableBuffer<T>) createUnsignedShort(extent);
-        } else if (dataType.equals(UnsignedIntVoxelType.INSTANCE)) {
-            return (ProjectableBuffer<T>) createUnsignedInt(extent);
-        } else if (dataType.equals(FloatVoxelType.INSTANCE)) {
-            return (ProjectableBuffer<T>) createFloat(extent);
-        } else {
-            throw new OperationFailedException(
-                    "No maximum-intensity projection buffer can be created, as voxel-data-type is unsupported: "
-                            + dataType.toString());
-        }
-    }
-
-    /**
-     * Creates a buffer for a <i>standard-deviation projection</i> for <b>unsigned byte</b> voxels.
-     *
-     * @param extent the size of the projected image. The z-dimension is ignored.
-     * @return a newly created buffer that can be used for projection.
-     */
-    public static ProjectableBuffer<UnsignedByteBuffer> createUnsignedByte(Extent extent) {
+    @Override
+    public ProjectableBuffer<UnsignedByteBuffer> createUnsignedByte(Extent extent) {
         return new StandardDeviationIntensityBuffer<>(VoxelsFactory.getUnsignedByte(), extent);
     }
 
-    /**
-     * Creates a buffer for a <i>standard-deviation projection</i> for <b>unsigned short</b> voxels.
-     *
-     * @param extent the size of the projected image. The z-dimension is ignored.
-     * @return a newly created buffer that can be used for projection.
-     */
-    public static ProjectableBuffer<UnsignedShortBuffer> createUnsignedShort(Extent extent) {
+    @Override
+    public ProjectableBuffer<UnsignedShortBuffer> createUnsignedShort(Extent extent) {
         return new StandardDeviationIntensityBuffer<>(VoxelsFactory.getUnsignedShort(), extent);
     }
 
-    /**
-     * Creates a buffer for a <i>standard-deviation projection</i> for <b>unsigned int</b> voxels.
-     *
-     * @param extent the size of the projected image. The z-dimension is ignored.
-     * @return a newly created buffer that can be used for projection.
-     */
-    public static ProjectableBuffer<UnsignedIntBuffer> createUnsignedInt(Extent extent) {
+    @Override
+    public ProjectableBuffer<UnsignedIntBuffer> createUnsignedInt(Extent extent) {
         return new StandardDeviationIntensityBuffer<>(VoxelsFactory.getUnsignedInt(), extent);
     }
 
-    /**
-     * Creates a buffer for a <i>standard-deviation projection</i> for <b>float</b> voxels.
-     *
-     * @param extent the size of the projected image. The z-dimension is ignored.
-     * @return a newly created buffer that can be used for projection.
-     */
-    public static ProjectableBuffer<FloatBuffer> createFloat(Extent extent) {
+    @Override
+    public ProjectableBuffer<FloatBuffer> createFloat(Extent extent) {
         return new StandardDeviationIntensityBuffer<>(VoxelsFactory.getFloat(), extent);
     }
 }
