@@ -61,7 +61,7 @@ public abstract class CountedProjectableBuffer<T> implements ProjectableBuffer<T
      * @param flatType the voxel data-type to use for the flattened buffer.
      * @param extent the size expected for images that will be projected.
      */
-    public CountedProjectableBuffer(VoxelsFactoryTypeBound<T> flatType, Extent extent) {
+    protected CountedProjectableBuffer(VoxelsFactoryTypeBound<T> flatType, Extent extent) {
         this.voxelsSum = VoxelsFactory.getFloat().createInitialized(extent);
         this.flatType = flatType;
     }
