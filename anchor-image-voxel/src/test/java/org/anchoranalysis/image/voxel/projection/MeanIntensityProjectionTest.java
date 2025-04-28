@@ -47,6 +47,6 @@ class MeanIntensityProjectionTest extends ProjectionTestBase {
     @Override
     protected <T> ProjectableBuffer<T> createProjectableBuffer(
             VoxelDataType voxelDataType, Extent extent) throws OperationFailedException {
-        return MeanIntensityProjection.create(voxelDataType, extent);
+        return new MeanIntensityProjection().create(voxelDataType, extent);
     }
 }

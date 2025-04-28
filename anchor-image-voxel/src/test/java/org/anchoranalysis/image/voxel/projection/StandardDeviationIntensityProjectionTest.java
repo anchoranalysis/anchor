@@ -52,6 +52,6 @@ class StandardDeviationIntensityProjectionTest extends ProjectionTestBase {
     @Override
     protected <T> ProjectableBuffer<T> createProjectableBuffer(
             VoxelDataType voxelDataType, Extent extent) throws OperationFailedException {
-        return StandardDeviationIntensityProjection.create(voxelDataType, extent);
+        return new StandardDeviationIntensityProjection().create(voxelDataType, extent);
     }
 }

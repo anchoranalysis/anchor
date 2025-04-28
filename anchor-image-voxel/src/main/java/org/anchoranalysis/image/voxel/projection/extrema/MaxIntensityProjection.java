@@ -34,14 +34,11 @@ package org.anchoranalysis.image.voxel.projection.extrema;
  */
 public class MaxIntensityProjection extends ComparisonProjection {
 
-	/**
-	 * Constructor.
-	 */
-	public MaxIntensityProjection() {
-		super(
-			(int value, int existing) -> value > existing,
-			(long value, long existing) -> value > existing,
-			(float value, float existing) -> value > existing
-		);
-	}
+    /** Constructor. */
+    public MaxIntensityProjection() {
+        super(
+                (int value, int existing) -> value > existing,
+                (long value, long existing) -> value > existing,
+                (float value, float existing) -> value > existing);
+    }
 }

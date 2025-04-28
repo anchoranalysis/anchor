@@ -74,6 +74,6 @@ class UnsignedByteImplementation extends VoxelsExtracterAsIntBase<UnsignedByteBu
 
     @Override
     protected ProjectableBuffer<UnsignedByteBuffer> createMeanIntensityBuffer(Extent extent) {
-        return MeanIntensityProjection.createUnsignedByte(extent);
+        return new MeanIntensityProjection().createUnsignedByte(extent);
     }
 }

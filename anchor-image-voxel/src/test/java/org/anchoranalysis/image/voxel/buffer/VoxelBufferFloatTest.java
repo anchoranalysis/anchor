@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -25,20 +25,19 @@
  */
 package org.anchoranalysis.image.voxel.buffer;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import java.nio.FloatBuffer;
 import org.anchoranalysis.image.voxel.datatype.FloatVoxelType;
-import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
 class VoxelBufferFloatTest {
-
-    private VoxelBufferFloat voxelBuffer;
 
     @Test
     void testCreateFromFloatBuffer() {
         // Create a FloatBuffer with some test data
         FloatBuffer floatBuffer = FloatBuffer.allocate(5);
-        floatBuffer.put(new float[]{1.0f, 2.5f, 3.7f, 4.2f, 5.9f});
+        floatBuffer.put(new float[] {1.0f, 2.5f, 3.7f, 4.2f, 5.9f});
         floatBuffer.flip();
 
         // Create a VoxelBufferFloat from the FloatBuffer
@@ -72,7 +71,7 @@ class VoxelBufferFloatTest {
     void testGetInt() {
         // Create a FloatBuffer with test data
         FloatBuffer floatBuffer = FloatBuffer.allocate(3);
-        floatBuffer.put(new float[]{1.7f, -2.3f, 3.5f});
+        floatBuffer.put(new float[] {1.7f, -2.3f, 3.5f});
         floatBuffer.flip();
 
         // Create a VoxelBufferFloat from the FloatBuffer
@@ -88,7 +87,7 @@ class VoxelBufferFloatTest {
     void testPutInt() {
         // Create a FloatBuffer with test data
         FloatBuffer floatBuffer = FloatBuffer.allocate(3);
-        floatBuffer.put(new float[]{1.0f, 2.0f, 3.0f});
+        floatBuffer.put(new float[] {1.0f, 2.0f, 3.0f});
         floatBuffer.flip();
 
         // Create a VoxelBufferFloat from the FloatBuffer
@@ -98,7 +97,11 @@ class VoxelBufferFloatTest {
         voxelBuffer.putInt(1, 10);
 
         // Check that the value was correctly stored
-        assertEquals(10.0f, voxelBuffer.buffer().get(1), 0.001f, "Should correctly store the int value 10 as a float");
+        assertEquals(
+                10.0f,
+                voxelBuffer.buffer().get(1),
+                0.001f,
+                "Should correctly store the int value 10 as a float");
 
         // Check that other values remain unchanged
         assertEquals(1.0f, voxelBuffer.buffer().get(0), 0.001f, "Should not modify other values");
@@ -109,7 +112,7 @@ class VoxelBufferFloatTest {
     void testPutByte() {
         // Create a FloatBuffer with test data
         FloatBuffer floatBuffer = FloatBuffer.allocate(3);
-        floatBuffer.put(new float[]{1.0f, 2.0f, 3.0f});
+        floatBuffer.put(new float[] {1.0f, 2.0f, 3.0f});
         floatBuffer.flip();
 
         // Create a VoxelBufferFloat from the FloatBuffer
@@ -120,7 +123,11 @@ class VoxelBufferFloatTest {
         voxelBuffer.putByte(1, byteValue);
 
         // Check that the value was correctly stored as a float
-        assertEquals(255.0f, voxelBuffer.buffer().get(1), 0.001f, "Should correctly store the unsigned byte value 255 as a float");
+        assertEquals(
+                255.0f,
+                voxelBuffer.buffer().get(1),
+                0.001f,
+                "Should correctly store the unsigned byte value 255 as a float");
 
         // Check that other values remain unchanged
         assertEquals(1.0f, voxelBuffer.buffer().get(0), 0.001f, "Should not modify other values");
@@ -132,18 +139,24 @@ class VoxelBufferFloatTest {
         // Create a FloatBuffer with a specific capacity
         int expectedCapacity = 100;
         FloatBuffer floatBuffer = FloatBuffer.allocate(expectedCapacity);
-        
+
         // Create a VoxelBufferFloat from the FloatBuffer
         VoxelBufferFloat voxelBuffer = new VoxelBufferFloat(floatBuffer);
-        
+
         // Check that the capacity method returns the correct value
-        assertEquals(expectedCapacity, voxelBuffer.capacity(), "Should return the correct capacity of the underlying FloatBuffer");
+        assertEquals(
+                expectedCapacity,
+                voxelBuffer.capacity(),
+                "Should return the correct capacity of the underlying FloatBuffer");
     }
 
     @Test
     void testDataType() {
         FloatBuffer floatBuffer = FloatBuffer.allocate(10);
         VoxelBufferFloat voxelBuffer = new VoxelBufferFloat(floatBuffer);
-        assertEquals(FloatVoxelType.INSTANCE, voxelBuffer.dataType(), "Should return FloatVoxelType.INSTANCE");
+        assertEquals(
+                FloatVoxelType.INSTANCE,
+                voxelBuffer.dataType(),
+                "Should return FloatVoxelType.INSTANCE");
     }
 }
