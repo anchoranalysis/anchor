@@ -169,6 +169,11 @@
 		    <version>1.7.6</version>
 		</dependency>
 		
+		<dependency>
+		  <groupId>commons-logging</groupId>
+		  <artifactId>commons-logging</artifactId>
+		  <version>${commons-logging.version}</version>
+		</dependency>
 		
 		<!-- Logback - https://logback.qos.ch/ -->
 		<dependency>
