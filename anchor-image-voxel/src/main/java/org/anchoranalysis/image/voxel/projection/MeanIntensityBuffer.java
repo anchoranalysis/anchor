@@ -47,12 +47,12 @@ class MeanIntensityBuffer<T> extends CountedProjectableBuffer<T> {
      * @param extent the size expected for images that will be projected.
      */
     public MeanIntensityBuffer(VoxelsFactoryTypeBound<T> flatType, Extent extent) {
-    	super(flatType, extent);
+        super(flatType, extent);
     }
 
     @Override
     public Voxels<T> completeProjection() {
-    	divideVoxelsByCount(voxelsSum);
+        divideVoxelsByCount(voxelsSum);
         return flattenFrom(voxelsSum);
     }
 

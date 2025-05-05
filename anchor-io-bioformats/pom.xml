@@ -115,8 +115,6 @@
 	      <version>${ome-common.version}</version>
 	    </dependency>
 	    
-
-	    
 	    <dependency>
 	      <groupId>org.openmicroscopy</groupId>
 	      <artifactId>ome-poi</artifactId>
@@ -169,6 +167,11 @@
 		    <version>1.7.6</version>
 		</dependency>
 		
+		<dependency>
+		  <groupId>commons-logging</groupId>
+		  <artifactId>commons-logging</artifactId>
+		  <version>${commons-logging.version}</version>
+		</dependency>
 		
 		<!-- Logback - https://logback.qos.ch/ -->
 		<dependency>
@@ -191,29 +194,37 @@
 			<artifactId>logback-core</artifactId>
 			<version>${ch.qos.logback.logback-core.version}</version>
 		</dependency>
-		
-		
+				
 		<dependency>
 		  <groupId>com.google.guava</groupId>
 		  <artifactId>guava</artifactId>
 		  <version>${guava.version}</version>
 		</dependency>
-		
-		
+				
 		<dependency>
 		  <groupId>commons-logging</groupId>
 		  <artifactId>commons-logging</artifactId>
 		  <version>${commons-logging.version}</version>
 		</dependency>
 		
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-api</artifactId>
+			<version>${log4j-api.version}</version>
+		</dependency>
 		
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-core</artifactId>
+			<version>${log4j-core.version}</version>
+		</dependency>
+				
 		<dependency>
 		  <groupId>org.apache.commons</groupId>
 		  <artifactId>commons-math3</artifactId>
 		  <version>${commons-math3.version}</version>
 		</dependency>
-		
-		
+				
 		<dependency>
 		  <groupId>${project.groupId}</groupId>
 		  <artifactId>anchor-test</artifactId>

@@ -30,7 +30,9 @@ import com.google.common.base.Preconditions;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
+import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.arguments.ExecutionArguments;
 import org.anchoranalysis.experiment.arguments.TaskArguments;
@@ -69,6 +71,15 @@ public class DebugDependentProcessor<T extends InputFromManager, S> extends JobP
 
     // END BEAN PROPERTIES
 
+    private BeanInstanceMap defaultInstances;
+
+    @Override
+    public void checkMisconfigured(BeanInstanceMap defaultInstances)
+            throws BeanMisconfiguredException {
+        super.checkMisconfigured(defaultInstances);
+        this.defaultInstances = defaultInstances;
+    }
+
     @Override
     protected TaskStatistics execute(
             Outputter rootOutputter, List<T> inputs, ParametersExperiment parametersExperiment)
@@ -78,6 +89,11 @@ public class DebugDependentProcessor<T extends InputFromManager, S> extends JobP
 
         JobProcessor<T, S> processor =
                 createProcessor(parametersExperiment.getExecutionArguments());
+        try {
+            processor.checkMisconfigured(defaultInstances);
+        } catch (BeanMisconfiguredException e) {
+            throw new ExperimentExecutionException(e);
+        }
         return processor.execute(rootOutputter, inputs, parametersExperiment);
     }
 

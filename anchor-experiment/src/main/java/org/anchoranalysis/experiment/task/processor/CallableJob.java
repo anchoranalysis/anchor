@@ -29,6 +29,7 @@ package org.anchoranalysis.experiment.task.processor;
 import com.google.common.base.Preconditions;
 import java.util.Optional;
 import java.util.concurrent.Callable;
+import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.core.log.error.ErrorReporter;
 import org.anchoranalysis.experiment.JobExecutionException;
@@ -49,6 +50,7 @@ public class CallableJob<T extends InputFromManager, S>
 
     private Task<T, S> task;
     private ParametersUnbound<T, S> parametersUnbound;
+    private BeanInstanceMap defaultInstances;
     private JobStateMonitor stateMonitor;
     private JobDescription jobDescription;
     private JobStartStopLogger logger;
@@ -58,6 +60,7 @@ public class CallableJob<T extends InputFromManager, S>
      *
      * @param task the task that will be executed.
      * @param parametersUnbound parameters for the task, that have yet to be bound to a job.
+     * @param defaultInstances the default bean instances, as needed for checking configuration.
      * @param stateMonitor monitors the state of a job.
      * @param jobDescription a unique description of the job.
      * @param monitor monitors state changes across jobs.
@@ -68,6 +71,7 @@ public class CallableJob<T extends InputFromManager, S>
     public CallableJob(
             Task<T, S> task,
             ParametersUnbound<T, S> parametersUnbound,
+            BeanInstanceMap defaultInstances,
             JobStateMonitor stateMonitor,
             JobDescription jobDescription,
             ConcurrentJobMonitor monitor,
@@ -76,6 +80,7 @@ public class CallableJob<T extends InputFromManager, S>
         super();
         this.task = task;
         this.parametersUnbound = parametersUnbound;
+        this.defaultInstances = defaultInstances;
         this.stateMonitor = stateMonitor;
         this.jobDescription = jobDescription;
         this.logger =
@@ -88,6 +93,7 @@ public class CallableJob<T extends InputFromManager, S>
 
         try {
             Task<T, S> taskDuplicated = task.duplicateBean();
+            taskDuplicated.checkMisconfigured(defaultInstances);
 
             stateMonitor.markAsExecuting();
 
