@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.io.bioformats;
 
-import loci.common.DebugTools;
 import loci.common.LogbackTools;
 
 /**
@@ -58,7 +57,6 @@ public class ConfigureBioformatsLogging {
         // This affects both the two systems Log4j and SL4J that bioformats might be using
         // See: LogbackTools.enableLogging("OFF'); and Log4jTools.enableLogging("OFF");		// NOSONAR
         //
-        DebugTools.enableLogging("OFF");
         LogbackTools.setRootLevel("OFF");
     }
 
