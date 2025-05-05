@@ -21,7 +21,7 @@ import org.anchoranalysis.io.output.outputter.Outputter;
 class ExecuteHelper {
 
     /** How long to delay each task in milliseconds to simulate work. */
-    public static final int TASK_DELAY_MS = 50;
+    public static final int TASK_DELAY_MS = 100;
 
     /** Number of inputs to test with. */
     public static final int NUMBER_OF_INPUTS = 10;
