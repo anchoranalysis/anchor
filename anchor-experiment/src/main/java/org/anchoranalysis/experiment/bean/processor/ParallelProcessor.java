@@ -33,7 +33,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import lombok.Getter;
 import lombok.Setter;
+import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.exception.BeanMisconfiguredException;
 import org.anchoranalysis.core.value.LanguageUtilities;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
@@ -88,6 +90,15 @@ public class ParallelProcessor<T extends InputFromManager, S> extends JobProcess
     private int numberGPUProcessors = ConcurrencyPlan.DEFAULT_NUMBER_GPUS;
 
     // END BEAN PROPERTIES
+
+    private BeanInstanceMap defaultInstances;
+
+    @Override
+    public void checkMisconfigured(BeanInstanceMap defaultInstances)
+            throws BeanMisconfiguredException {
+        super.checkMisconfigured(defaultInstances);
+        this.defaultInstances = defaultInstances;
+    }
 
     /**
      * Executes the parallel processing of jobs.
@@ -195,6 +206,7 @@ public class ParallelProcessor<T extends InputFromManager, S> extends JobProcess
                 new CallableJob<>(
                         getTask(),
                         parametersUnbound,
+                        defaultInstances,
                         state,
                         description,
                         monitor,
