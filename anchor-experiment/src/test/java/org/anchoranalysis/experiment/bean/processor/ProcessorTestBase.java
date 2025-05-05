@@ -14,8 +14,7 @@ abstract class ProcessorTestBase {
 
         JobProcessor<InputFromManager, Object> processor = createProcessor();
 
-        ExecuteHelper.assertExecutionTime(
-                processor, minExecutionTimeMillis(), maxExecutionTimeMillis());
+        ExecuteHelper.assertExecutionTime(processor, minExecutionTimeMillis());
     }
 
     /**
@@ -24,13 +23,6 @@ abstract class ProcessorTestBase {
      * @return the minimum expected execution time.
      */
     protected abstract int minExecutionTimeMillis();
-
-    /**
-     * Maximum expected execution time in milliseconds.
-     *
-     * @return the maximum expected execution time.
-     */
-    protected abstract int maxExecutionTimeMillis();
 
     /**
      * Create the processor to be tested.

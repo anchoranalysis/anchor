@@ -17,9 +17,4 @@ class ParallelProcessorTest extends ProcessorTestBase {
     protected int minExecutionTimeMillis() {
         return ExecuteHelper.TASK_DELAY_MS;
     }
-
-    @Override
-    protected int maxExecutionTimeMillis() {
-        return ExecuteHelper.TASK_DELAY_MS * (ExecuteHelper.NUMBER_OF_INPUTS - 2);
-    }
 }

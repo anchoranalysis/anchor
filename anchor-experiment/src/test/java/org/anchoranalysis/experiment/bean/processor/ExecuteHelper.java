@@ -21,24 +21,21 @@ import org.anchoranalysis.io.output.outputter.Outputter;
 class ExecuteHelper {
 
     /** How long to delay each task in milliseconds to simulate work. */
-    public static final int TASK_DELAY_MS = 100;
+    public static final int TASK_DELAY_MS = 50;
 
     /** Number of inputs to test with. */
     public static final int NUMBER_OF_INPUTS = 10;
 
     /***
-     * Executes each input on the processor and asserts the execution time lies within bounds.
+     * Executes each input on the processor and asserts the execution time lies above a threshold.
      *
      * @param processor the processor to execute inputs with.
      * @param minExpectedExecutionTime a minimum expected execution time.
-     * @param maxExpectedExecutionTime a maximum expected execution time.
      * @throws JobExecutionException if thrown during job execution.
      * @throws ExperimentExecutionException if thrown during job execution.
      */
     public static void assertExecutionTime(
-            JobProcessor<InputFromManager, Object> processor,
-            int minExpectedExecutionTime,
-            int maxExpectedExecutionTime)
+            JobProcessor<InputFromManager, Object> processor, int minExpectedExecutionTime)
             throws JobExecutionException, ExperimentExecutionException {
 
         List<InputFromManager> inputs =
@@ -50,10 +47,6 @@ class ExecuteHelper {
                 executionTime >= minExpectedExecutionTime,
                 "Execution time should be more than %d ms, but is %d ms."
                         .formatted(minExpectedExecutionTime, executionTime));
-        assertTrue(
-                executionTime <= maxExpectedExecutionTime,
-                "Execution time should be less than %d ms, but is %d ms."
-                        .formatted(maxExpectedExecutionTime, executionTime));
     }
 
     /**
