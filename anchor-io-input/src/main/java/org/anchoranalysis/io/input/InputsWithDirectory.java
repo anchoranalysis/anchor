@@ -73,6 +73,7 @@ public class InputsWithDirectory<T extends InputFromManager> {
      * Creates <b>with</b> a parent directory.
      *
      * @param inputs the inputs.
+     * @param directory the directory associated with the inputs.
      */
     public InputsWithDirectory(List<T> inputs, Optional<Path> directory) {
         this.inputs = new ArrayList<>(inputs); // Copy to ensure an immutable-list is used.
