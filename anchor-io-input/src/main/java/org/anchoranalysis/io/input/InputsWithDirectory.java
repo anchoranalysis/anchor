@@ -26,14 +26,14 @@
 package org.anchoranalysis.io.input;
 
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Optional;
 import java.util.function.Function;
-import lombok.AllArgsConstructor;
-import lombok.Value;
+import lombok.Getter;
 import lombok.experimental.Accessors;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.FunctionalList;
@@ -49,24 +49,34 @@ import org.anchoranalysis.io.input.file.NamedFile;
  * @author Owen Feehan
  * @param <T> input-type
  */
-@Value
-@AllArgsConstructor
 @Accessors(fluent = true)
 public class InputsWithDirectory<T extends InputFromManager> {
 
-    /** The inputs. */
-    private List<T> inputs;
+    /** The inputs, which must be immutable. */
+    @Getter private List<T> inputs;
 
     /** The directory associated with the inputs. */
-    private Optional<Path> directory;
+    @Getter private Optional<Path> directory;
 
     /**
-     * Creates without any parent directory.
+     * Creates <b>without</b> any parent directory.
      *
      * @param inputs the inputs.
      */
     public InputsWithDirectory(List<T> inputs) {
-        this(inputs, Optional.empty());
+        this(
+                new ArrayList<>(inputs), // Copy to ensure an immutable-list is used.
+                Optional.empty());
+    }
+
+    /**
+     * Creates <b>with</b> a parent directory.
+     *
+     * @param inputs the inputs.
+     */
+    public InputsWithDirectory(List<T> inputs, Optional<Path> directory) {
+        this.inputs = new ArrayList<>(inputs); // Copy to ensure an immutable-list is used.
+        this.directory = directory;
     }
 
     /**
