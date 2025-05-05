@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,7 +26,6 @@
 package org.anchoranalysis.image.voxel.projection;
 
 import java.nio.FloatBuffer;
-
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.VoxelsUntyped;
 import org.anchoranalysis.image.voxel.buffer.ProjectableBuffer;
@@ -38,7 +37,7 @@ import org.anchoranalysis.spatial.box.Extent;
 
 /**
  * A projectable buffer that also keeps track of the number of voxels in it.
- * 
+ *
  * @param <T> type of buffer used, both as input and result, of the projection
  */
 public abstract class CountedProjectableBuffer<T> implements ProjectableBuffer<T> {
@@ -51,10 +50,10 @@ public abstract class CountedProjectableBuffer<T> implements ProjectableBuffer<T
 
     /** Accumulates the sum of voxel values. */
     protected final Voxels<FloatBuffer> voxelsSum;
-    
+
     /** The count of voxels added. */
     private int count = 0;
-    
+
     /**
      * Creates with minimal parameters, as no preprocessing is necessary.
      *
@@ -65,7 +64,6 @@ public abstract class CountedProjectableBuffer<T> implements ProjectableBuffer<T
         this.voxelsSum = VoxelsFactory.getFloat().createInitialized(extent);
         this.flatType = flatType;
     }
-    
 
     @Override
     public void addVoxelBuffer(VoxelBuffer<T> voxelBuffer) {
@@ -80,15 +78,15 @@ public abstract class CountedProjectableBuffer<T> implements ProjectableBuffer<T
         }
         count++;
     }
-    
-    /** 
+
+    /**
      * Adds a {@link VoxelBuffer} without incrementing the count.
-     * 
+     *
      * @param voxelBuffer the voxels to add.
      * @param z the index (beginning at 0) of the z-slice that the voxels are from.
      */
     protected abstract void addVoxelBufferInternal(VoxelBuffer<T> voxelBuffer, int z);
-    
+
     /**
      * Flattens the accumulated voxels to the target type.
      *
@@ -98,7 +96,7 @@ public abstract class CountedProjectableBuffer<T> implements ProjectableBuffer<T
     protected Voxels<T> flattenFrom(Voxels<FloatBuffer> voxels) {
         return CONVERTER.convert(new VoxelsUntyped(voxels), flatType);
     }
-    
+
     /**
      * Divides all voxel values by the count of added voxels.
      *

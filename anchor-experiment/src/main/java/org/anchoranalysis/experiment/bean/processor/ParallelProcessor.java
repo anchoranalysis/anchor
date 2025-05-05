@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.experiment.bean.processor;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.concurrent.ExecutorService;
@@ -88,6 +89,15 @@ public class ParallelProcessor<T extends InputFromManager, S> extends JobProcess
 
     // END BEAN PROPERTIES
 
+    /**
+     * Executes the parallel processing of jobs.
+     *
+     * @param rootOutputter the root outputter for the experiment
+     * @param inputs the list of inputs to process
+     * @param parametersExperiment the experiment parameters
+     * @return the statistics of the executed tasks
+     * @throws ExperimentExecutionException if an error occurs during execution
+     */
     @Override
     protected TaskStatistics execute(
             Outputter rootOutputter, List<T> inputs, ParametersExperiment parametersExperiment)
@@ -106,11 +116,43 @@ public class ParallelProcessor<T extends InputFromManager, S> extends JobProcess
         ExecutorService executorService =
                 Executors.newFixedThreadPool(concurrencyPlan.numberCPUs());
 
-        int count = 1;
-
         ConcurrentJobMonitor monitor = new ConcurrentJobMonitor(inputs.size());
 
-        ListIterator<T> iterator = inputs.listIterator();
+        submitAllJobs(inputs, parametersExperiment, executorService, sharedState, monitor);
+
+        // This will make the executor accept no new threads
+        // and finish all existing threads in the queue
+        executorService.shutdown();
+
+        // Wait until all threads are finish
+        while (!executorService.isTerminated())
+            ;
+
+        logWhenIrregularlyEnded(monitor, parametersExperiment, numberInputs);
+
+        getTask().afterAllJobsAreExecuted(sharedState, parametersExperiment.getContext());
+        return monitor.deriveStatistics();
+    }
+
+    /**
+     * Submits all jobs to the executor service.
+     *
+     * @param inputs the list of inputs to process
+     * @param parametersExperiment the experiment parameters
+     * @param executorService the executor service to submit jobs to
+     * @param sharedState the shared state between jobs
+     * @param monitor the monitor for concurrent jobs
+     */
+    private void submitAllJobs(
+            List<T> inputs,
+            ParametersExperiment parametersExperiment,
+            ExecutorService executorService,
+            S sharedState,
+            ConcurrentJobMonitor monitor) {
+        int count = 1;
+        List<T> inputsModifiable = new ArrayList<>(inputs);
+
+        ListIterator<T> iterator = inputsModifiable.listIterator();
         while (iterator.hasNext()) {
             T input = iterator.next();
             try {
@@ -121,27 +163,18 @@ public class ParallelProcessor<T extends InputFromManager, S> extends JobProcess
                 iterator.remove();
             }
         }
-
-        // This will make the executor accept no new threads
-        // and finish all existing threads in the queue
-        executorService.shutdown();
-
-        // Wait until all threads are finish
-        while (!executorService.isTerminated())
-            ;
-
-        if (monitor.numberExecutingJobs() != 0
-                || monitor.numberUncompletedJobs() != 0
-                || monitor.numberCompletedJobs() != numberInputs) {
-            parametersExperiment
-                    .getLoggerExperiment()
-                    .log("At least one experiment ended irregularly!");
-        }
-
-        getTask().afterAllJobsAreExecuted(sharedState, parametersExperiment.getContext());
-        return monitor.deriveStatistics();
     }
 
+    /**
+     * Submits a single job to the executor service.
+     *
+     * @param executorService the executor service to submit the job to
+     * @param input the input for the job
+     * @param index the index of the job
+     * @param sharedState the shared state between jobs
+     * @param parametersExperiment the experiment parameters
+     * @param monitor the monitor for concurrent jobs
+     */
     private void submitJob(
             ExecutorService executorService,
             T input,
@@ -171,6 +204,12 @@ public class ParallelProcessor<T extends InputFromManager, S> extends JobProcess
         monitor.add(new SubmittedJob(description, state));
     }
 
+    /**
+     * Creates a concurrency plan based on the available processors and experiment parameters.
+     *
+     * @param parametersExperiment the experiment parameters
+     * @return a {@link ConcurrencyPlan} for the experiment
+     */
     private ConcurrencyPlan createConcurrencyPlan(ParametersExperiment parametersExperiment) {
 
         int availableProcessors = Runtime.getRuntime().availableProcessors();
@@ -191,6 +230,12 @@ public class ParallelProcessor<T extends InputFromManager, S> extends JobProcess
         return ConcurrencyPlan.multipleProcessors(numberCPUs, numberGPUProcessors);
     }
 
+    /**
+     * Selects the number of CPUs to use based on available processors and configuration.
+     *
+     * @param availableProcessors the number of available processors
+     * @return the number of CPUs to use
+     */
     private int selectNumberCPUs(int availableProcessors) {
 
         int numberOfProcessors = availableProcessors - keepProcessorsFree;
@@ -200,5 +245,25 @@ public class ParallelProcessor<T extends InputFromManager, S> extends JobProcess
         }
 
         return numberOfProcessors;
+    }
+
+    /**
+     * Logs a message when the experiment ends irregularly.
+     *
+     * @param monitor the {@link ConcurrentJobMonitor} tracking job execution
+     * @param parametersExperiment the {@link ParametersExperiment} containing experiment parameters
+     * @param numberInputs the total number of input jobs
+     */
+    private void logWhenIrregularlyEnded(
+            ConcurrentJobMonitor monitor,
+            ParametersExperiment parametersExperiment,
+            int numberInputs) {
+        if (monitor.numberExecutingJobs() != 0
+                || monitor.numberUncompletedJobs() != 0
+                || monitor.numberCompletedJobs() != numberInputs) {
+            parametersExperiment
+                    .getLoggerExperiment()
+                    .log("At least one experiment ended irregularly!");
+        }
     }
 }

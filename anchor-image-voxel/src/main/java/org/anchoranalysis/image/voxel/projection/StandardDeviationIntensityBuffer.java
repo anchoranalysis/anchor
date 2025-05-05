@@ -45,7 +45,7 @@ import org.anchoranalysis.spatial.box.Extent;
  * @param <T> type of buffer used, both as input and result, of the projection
  */
 class StandardDeviationIntensityBuffer<T> extends CountedProjectableBuffer<T> {
-    
+
     private Voxels<FloatBuffer> voxelsSumSquared;
 
     /**
@@ -61,8 +61,8 @@ class StandardDeviationIntensityBuffer<T> extends CountedProjectableBuffer<T> {
 
     @Override
     public Voxels<T> completeProjection() {
-    	divideVoxelsByCount(voxelsSum);
-    	divideVoxelsByCount(voxelsSumSquared);
+        divideVoxelsByCount(voxelsSum);
+        divideVoxelsByCount(voxelsSumSquared);
         squareEachVoxel(voxelsSum);
         subtractSquareRoot(voxelsSumSquared, voxelsSum);
         return flattenFrom(voxelsSumSquared);
