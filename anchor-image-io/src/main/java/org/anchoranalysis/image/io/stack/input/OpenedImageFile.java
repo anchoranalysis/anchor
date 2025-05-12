@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.core.stack.ImageLocation;
 import org.anchoranalysis.image.core.stack.ImageMetadata;
 import org.anchoranalysis.image.core.stack.ImagePyramidMetadata;
 import org.anchoranalysis.image.core.stack.Stack;
@@ -143,6 +144,14 @@ public interface OpenedImageFile extends AutoCloseable {
     ImageTimestampsAttributes timestamps() throws ImageIOException;
 
     /**
+     * The location associated with the image, if it is known.
+     *
+     * @return the image location, or {@link Optional#empty} if no location is known.
+     * @throws ImageIOException if an error occurs reading the image to determine this information.
+     */
+    Optional<ImageLocation> location() throws ImageIOException;
+
+    /**
      * Metadata to describe an image-pyramid, if it exists for this opened-image.
      *
      * @return the metadata, or {@link Optional#empty} if no pyramid exists.
@@ -194,6 +203,7 @@ public interface OpenedImageFile extends AutoCloseable {
                 bitDepth(logger),
                 timestamps.getAttributes(),
                 timestamps.getAcqusitionTime(),
+                location(), // No currently implemented way to read GPS location
                 pyramid());
     }
 }

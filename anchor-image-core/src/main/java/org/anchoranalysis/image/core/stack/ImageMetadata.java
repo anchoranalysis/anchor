@@ -68,7 +68,7 @@ public class ImageMetadata {
     /** The number of bits in memory to describe each voxel's intensity, per channel. */
     @Getter private int bitDepthPerChannel;
 
-    /** Attributes associated with the file on the filesystem. */
+    /** Attributes associated with the file on the file-system. */
     @Getter private ImageFileAttributes fileAttributes;
 
     /**
@@ -76,6 +76,9 @@ public class ImageMetadata {
      * camera/device.
      */
     @Getter private Optional<ZonedDateTime> acquisitionTime;
+
+    /** Metadata describing the geographic location where the image was captured. */
+    @Getter private Optional<ImageLocation> location;
 
     /**
      * Metadata to describe an image pyramid, if it exists.

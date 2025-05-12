@@ -49,6 +49,7 @@ import org.anchoranalysis.image.core.channel.factory.ChannelFactorySingleType;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
 import org.anchoranalysis.image.core.dimensions.OrientationChange;
+import org.anchoranalysis.image.core.stack.ImageLocation;
 import org.anchoranalysis.image.core.stack.ImagePyramidMetadata;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.ImageIOException;
@@ -92,7 +93,11 @@ class BioformatsOpenedRaster implements OpenedImageFile {
     /** Stores the result of {@code calculateOrientation}, and is null until this is calculated. */
     private OrientationChange orientation;
 
+    /** How to extract image-timestamps for the opened-raster. */
     private final CheckedSupplier<ImageTimestampsAttributes, ImageIOException> timestamps;
+
+    /** How to extract image-location for the opened-raster. */
+    private final CheckedSupplier<Optional<ImageLocation>, ImageIOException> location;
 
     /** The number of channels in the image. */
     private final int numberChannels;
@@ -108,19 +113,22 @@ class BioformatsOpenedRaster implements OpenedImageFile {
      * @param readOptions parameters that effect how to read the image.
      * @param calculateOrientation any correction of orientation to be applied as bytes are
      *     converted.
-     * @param timestamps timestamps and other file-attributes for the image being opened.
+     * @param timestamps calculates timestamps and other file-attributes for the image being opened.
+     * @param location calculates a location for the image being opened, if it is known.
      */
     public BioformatsOpenedRaster(
             IFormatReader reader,
             IMetadata metadata,
             ReadOptions readOptions,
             CalculateOrientationChange calculateOrientation,
-            CheckedSupplier<ImageTimestampsAttributes, ImageIOException> timestamps) {
+            CheckedSupplier<ImageTimestampsAttributes, ImageIOException> timestamps,
+            CheckedSupplier<Optional<ImageLocation>, ImageIOException> location) {
         this.reader = reader;
         this.metadata = metadata;
         this.readOptions = readOptions;
         this.calculateOrientation = calculateOrientation;
         this.timestamps = CachedSupplier.cacheChecked(timestamps);
+        this.location = CachedSupplier.cacheChecked(location);
 
         sizeT = readOptions.sizeT(reader);
         rgb = readOptions.isRGB(reader);
@@ -183,6 +191,11 @@ class BioformatsOpenedRaster implements OpenedImageFile {
     @Override
     public ImageTimestampsAttributes timestamps() throws ImageIOException {
         return timestamps.get();
+    }
+
+    @Override
+    public Optional<ImageLocation> location() throws ImageIOException {
+        return location.get();
     }
 
     @Override

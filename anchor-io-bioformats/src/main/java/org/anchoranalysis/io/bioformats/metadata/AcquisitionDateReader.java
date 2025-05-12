@@ -88,7 +88,7 @@ public class AcquisitionDateReader {
      */
     public static Optional<ZonedDateTime> readAcquisitionDate(Path path) throws ImageIOException {
         if (ImageFileFormat.JPEG.matches(path) || ImageFileFormat.TIFF.matches(path)) {
-            Optional<Metadata> metadata = ReadMetadataUtilities.readMetadata(path);
+            Optional<Metadata> metadata = MetadataReader.readMetadata(path);
             return metadata.flatMap(AcquisitionDateReader::readAcquisitionDate);
         } else {
             return Optional.empty();
@@ -104,7 +104,7 @@ public class AcquisitionDateReader {
      * @return the acquisition date, if it exists.
      */
     public static Optional<ZonedDateTime> readAcquisitionDate(Metadata metadata) {
-        return ReadMetadataUtilities.readDate(
+        return MetadataReader.readDate(
                 metadata, ExifIFD0Directory.class, ACQUSITION_TIME_TAGS, TIMEZONE_TAGS);
     }
 }
