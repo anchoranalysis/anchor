@@ -2,14 +2,10 @@ package org.anchoranalysis.io.bioformats.metadata;
 
 import java.nio.file.Path;
 import java.util.Optional;
-import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.core.time.ExecutionTimeRecorderIgnore;
-import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.io.ImageIOException;
-import org.anchoranalysis.image.io.stack.input.OpenedImageFile;
-import org.anchoranalysis.io.bioformats.bean.BioformatsReader;
 import org.anchoranalysis.spatial.box.Extent;
-import org.mockito.Mockito;
+import com.drew.metadata.Metadata;
+import com.drew.metadata.jpeg.JpegDirectory;
 
 class ExtentReaderTest extends MetadataReaderBaseTest<Extent> {
 
@@ -23,11 +19,13 @@ class ExtentReaderTest extends MetadataReaderBaseTest<Extent> {
 
     @Override
     protected Optional<Extent> calculateActual(Path path) throws ImageIOException {
-        BioformatsReader reader = new BioformatsReader();
-        OpenedImageFile file = reader.openFile(path, new ExecutionTimeRecorderIgnore());
-        Logger logger = Mockito.mock(Logger.class);
-        Dimensions dimensions = file.dimensionsForSeries(0, logger);
-        return Optional.of(new Extent(dimensions.x(), dimensions.y()));
+    	// In this case we ignore the EXIF entry (which may or may not be present) and use the JPEG
+    	// metadata to read the width and height.
+    	Metadata metadata = MetadataReader.readMetadata(path).get();
+    	return ExtentReader.read(metadata,  
+                JpegDirectory.class,
+                JpegDirectory.TAG_IMAGE_WIDTH,
+                JpegDirectory.TAG_IMAGE_HEIGHT);
     }
 
     @Override
