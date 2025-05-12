@@ -1,6 +1,5 @@
 package org.anchoranalysis.io.bioformats.metadata;
 
-import com.drew.metadata.Metadata;
 import java.nio.file.Path;
 import java.util.Optional;
 import org.anchoranalysis.image.core.stack.ImageLocation;
@@ -14,8 +13,7 @@ class LocationReaderTest extends MetadataReaderBaseTest<ImageLocation> {
 
     @Override
     protected Optional<ImageLocation> calculateActual(Path path) throws ImageIOException {
-        Metadata metadata = MetadataReader.readMetadata(path).get();
-        return LocationReader.readLocation(metadata);
+        return LocationReader.readLocation(path);
     }
 
     @Override
