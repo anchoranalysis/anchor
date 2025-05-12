@@ -37,6 +37,11 @@ abstract class MetadataReaderBaseTest<T> {
         test("exif_present_rotation_needed.jpg", expectedRotation());
     }
 
+    @Test
+    void testLocation() throws ImageIOException {
+        test("exif_present_location.jpg", expectedLocation());
+    }
+
     /**
      * Calculates the <i>actual</i> test item to be compared to the <i>expected</i> item given a
      * path.
@@ -71,6 +76,13 @@ abstract class MetadataReaderBaseTest<T> {
      * @return the expected-value.
      */
     protected abstract Optional<T> expectedRotation();
+
+    /**
+     * What is the expected-value when the test is run on the <i>exif_present_location.jpg</i> file?
+     *
+     * @return the expected-value.
+     */
+    protected abstract Optional<T> expectedLocation();
 
     protected void test(String filename, Optional<T> expected) throws ImageIOException {
         Path path = loader.resolveTestPath(SUBDIRECTORY_NAME + "/" + filename);

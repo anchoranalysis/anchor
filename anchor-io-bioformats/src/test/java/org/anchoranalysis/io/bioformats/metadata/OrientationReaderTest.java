@@ -56,4 +56,9 @@ class OrientationReaderTest extends MetadataReaderBaseTest<OrientationChange> {
     protected Optional<OrientationChange> expectedRotation() {
         return Optional.of(OrientationChange.ROTATE_90_ANTICLOCKWISE);
     }
+
+    @Override
+    protected Optional<OrientationChange> expectedLocation() {
+        return Optional.empty();
+    }
 }

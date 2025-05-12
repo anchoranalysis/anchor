@@ -44,7 +44,7 @@ class AcqusitionDateReaderTest extends MetadataReaderBaseTest<Instant> {
             ZonedDateTime.of(2021, 07, 10, 10, 20, 34, 0, ZoneId.systemDefault());
 
     private static final ZonedDateTime EXPECTED_ROTATION =
-            ZonedDateTime.of(2016, 10, 28, 17, 43, 48, 0, ZoneId.of("Asia/Tokyo"));
+            ZonedDateTime.of(2016, 10, 28, 10, 43, 48, 0, ZoneId.systemDefault());
 
     @Override
     protected Optional<Instant> calculateActual(Path path) throws ImageIOException {
@@ -65,5 +65,10 @@ class AcqusitionDateReaderTest extends MetadataReaderBaseTest<Instant> {
     @Override
     protected Optional<Instant> expectedRotation() {
         return Optional.of(EXPECTED_ROTATION.toInstant());
+    }
+
+    @Override
+    protected Optional<Instant> expectedLocation() {
+        return Optional.empty();
     }
 }
