@@ -25,49 +25,35 @@
  */
 package org.anchoranalysis.io.bioformats.metadata;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import java.nio.file.Path;
 import java.util.Optional;
 import org.anchoranalysis.image.core.dimensions.OrientationChange;
 import org.anchoranalysis.image.io.ImageIOException;
-import org.anchoranalysis.test.TestLoader;
-import org.junit.jupiter.api.Test;
 
 /**
  * Tests {@link OrientationReader}.
  *
  * @author Owen Feehan
  */
-class OrientationReaderTest {
+class OrientationReaderTest extends MetadataReaderBaseTest<OrientationChange> {
 
-    /**
-     * The name of the subdirectory in {@code src/test/resources} where the image files are located.
-     */
-    private static final String SUBDIRECTORY_NAME = "exif";
-
-    private TestLoader loader = TestLoader.createFromMavenWorkingDirectory();
-
-    @Test
-    void testWithoutExif() throws ImageIOException {
-        test("exif_absent.jpg", Optional.empty());
+    @Override
+    protected Optional<OrientationChange> calculateActual(Path path) throws ImageIOException {
+        return OrientationReader.determineOrientationCorrection(path);
     }
 
-    @Test
-    void testWithExifNoRotation() throws ImageIOException {
-        test("exif_present_no_rotation_needed.jpg", Optional.of(OrientationChange.KEEP_UNCHANGED));
+    @Override
+    protected Optional<OrientationChange> expectedExifAbsent() {
+        return Optional.empty();
     }
 
-    @Test
-    void testWithExifRotation() throws ImageIOException {
-        test(
-                "exif_present_rotation_needed.jpg",
-                Optional.of(OrientationChange.ROTATE_90_ANTICLOCKWISE));
+    @Override
+    protected Optional<OrientationChange> expectedNoRotation() {
+        return Optional.of(OrientationChange.KEEP_UNCHANGED);
     }
 
-    private void test(String filename, Optional<OrientationChange> expectedOrientation)
-            throws ImageIOException {
-        Path path = loader.resolveTestPath(SUBDIRECTORY_NAME + "/" + filename);
-        assertEquals(expectedOrientation, OrientationReader.determineOrientationCorrection(path));
+    @Override
+    protected Optional<OrientationChange> expectedRotation() {
+        return Optional.of(OrientationChange.ROTATE_90_ANTICLOCKWISE);
     }
 }

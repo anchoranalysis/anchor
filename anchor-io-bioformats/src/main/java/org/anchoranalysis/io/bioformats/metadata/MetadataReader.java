@@ -29,7 +29,6 @@ import com.drew.imaging.ImageMetadataReader;
 import com.drew.imaging.ImageProcessingException;
 import com.drew.metadata.Directory;
 import com.drew.metadata.Metadata;
-import com.drew.metadata.MetadataException;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.time.ZoneId;
@@ -42,7 +41,6 @@ import java.util.function.BiFunction;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.io.ImageIOException;
-import org.anchoranalysis.spatial.box.Extent;
 
 /**
  * Reads various image properties from tags in {@link Metadata}.
@@ -50,7 +48,7 @@ import org.anchoranalysis.spatial.box.Extent;
  * @author Owen Feehan
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class ReadMetadataUtilities {
+public class MetadataReader {
 
     /**
      * Reads metadata, if it exists, from an image.
@@ -128,8 +126,7 @@ public class ReadMetadataUtilities {
         Directory directory = metadata.getFirstDirectoryOfType(directoryType);
 
         Optional<Date> date =
-                readTagsUntilPresent(
-                        directory, tagsAcqusitionDate, ReadMetadataUtilities::readDate);
+                readTagsUntilPresent(directory, tagsAcqusitionDate, MetadataReader::readDate);
 
         // Map to a time-zone
         return date.map(
@@ -141,7 +138,7 @@ public class ReadMetadataUtilities {
 
     private static ZoneId timeZoneOffset(Directory directory, int[] tagsTimezoneOffset) {
         Optional<Integer> zoneOffset =
-                readTagsUntilPresent(directory, tagsTimezoneOffset, ReadMetadataUtilities::readInt);
+                readTagsUntilPresent(directory, tagsTimezoneOffset, MetadataReader::readInt);
         if (zoneOffset.isPresent()) {
             return ZoneId.ofOffset("UTC", ZoneOffset.ofHours(zoneOffset.get()));
         } else {
@@ -182,73 +179,6 @@ public class ReadMetadataUtilities {
         // It is assumed this
         if (directory != null && directory.containsTag(tag)) {
             return Optional.of(extractTag.apply(directory, tag));
-        } else {
-            return Optional.empty();
-        }
-    }
-
-    /**
-     * Reads two metadata entries, representing width and height, and use them to form a {@link
-     * Extent}.
-     *
-     * <p>The first directory of type {@code directoryType} is used for the tags.
-     *
-     * @param <T> directory-type to find
-     * @param metadata the metadata to read from.
-     * @param directoryType class corresponding to {@code T}.
-     * @param tagWidth a unique identifier from the metadata-extractor library identifying the
-     *     <i>width</i> tag.
-     * @param tagHeight a unique identifier from the metadata-extractor library identifying the
-     *     <i>height</i> tag.
-     * @return the value of the tag, or {@link Optional#empty()} if it does not exist.
-     * @throws ImageIOException if the metadata is errored (but not if it is absent).
-     */
-    public static <T extends Directory> Optional<Extent> readFromWidthHeightTags(
-            Metadata metadata, Class<T> directoryType, int tagWidth, int tagHeight)
-            throws ImageIOException {
-
-        Directory directory = metadata.getFirstDirectoryOfType(directoryType);
-
-        // Search for a width and height directly in the EXIF
-        // It is assumed this
-        if (directory != null) {
-            return readFromWidthHeightTags(directory, tagWidth, tagHeight);
-        } else {
-            return Optional.empty();
-        }
-    }
-
-    /**
-     * Reads two metadata entries, representing width and height, and use them to form a {@link
-     * Extent}.
-     *
-     * @param directory the directory to read tags from.
-     * @param tagWidth a unique identifier from the metadata-extractor library identifying the
-     *     <i>width</i> tag.
-     * @param tagHeight a unique identifier from the metadata-extractor library identifying the
-     *     <i>height</i> tag.
-     * @return the value of the tag, or {@link Optional#empty()} if it does not exist.
-     * @throws ImageIOException if the metadata is errored (but not if it is absent).
-     */
-    public static Optional<Extent> readFromWidthHeightTags(
-            Directory directory, int tagWidth, int tagHeight) throws ImageIOException {
-
-        if (directory.containsTag(tagWidth) && directory.containsTag(tagHeight)) {
-
-            try {
-                int width = directory.getInt(tagWidth);
-                int height = directory.getInt(tagHeight);
-
-                if (width == 0 || height == 0) {
-                    throw new ImageIOException(
-                            "A width or height of 0 was specified in metadata, which suggests a format is not supported e.g perhaps JPEGs with DNL markers.");
-                }
-                return Optional.of(new Extent(width, height));
-
-            } catch (MetadataException e) {
-                throw new ImageIOException("Image metadata exists in an invalid state.", e);
-            }
-
         } else {
             return Optional.empty();
         }

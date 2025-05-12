@@ -194,6 +194,7 @@ public interface OpenedImageFile extends AutoCloseable {
                 bitDepth(logger),
                 timestamps.getAttributes(),
                 timestamps.getAcqusitionTime(),
+                Optional.empty(), // No currently implemented way to read GPS location
                 pyramid());
     }
 }

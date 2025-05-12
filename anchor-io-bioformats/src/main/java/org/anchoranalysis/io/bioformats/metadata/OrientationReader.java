@@ -55,7 +55,7 @@ public class OrientationReader {
      */
     public static Optional<OrientationChange> determineOrientationCorrection(Path path)
             throws ImageIOException {
-        Optional<Metadata> metadata = ReadMetadataUtilities.readMetadata(path);
+        Optional<Metadata> metadata = MetadataReader.readMetadata(path);
         return OptionalUtilities.flatMap(
                 metadata, OrientationReader::determineOrientationCorrection);
     }
@@ -72,7 +72,7 @@ public class OrientationReader {
     public static Optional<OrientationChange> determineOrientationCorrection(Metadata metadata)
             throws ImageIOException {
         Optional<Integer> orientation =
-                ReadMetadataUtilities.readInt(
+                MetadataReader.readInt(
                         metadata, ExifIFD0Directory.class, ExifDirectoryBase.TAG_ORIENTATION);
         return OptionalUtilities.map(orientation, value -> decodeOrientationTag(value)); // NOSONAR
     }
