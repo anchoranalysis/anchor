@@ -47,10 +47,10 @@ public class LocationReader {
         Collection<GpsDirectory> directories = metadata.getDirectoriesOfType(GpsDirectory.class);
         for (GpsDirectory directory : directories) {
             // Try to read out the location, making sure it's non-zero
-            GeoLocation geoLocation = directory.getGeoLocation();
-            if (geoLocation != null && !geoLocation.isZero()) {
+            GeoLocation location = directory.getGeoLocation();
+            if (location != null && !location.isZero()) {
                 return Optional.of(
-                        new ImageLocation(geoLocation.getLatitude(), geoLocation.getLongitude()));
+                        new ImageLocation(location.getLatitude(), location.getLongitude()));
             }
         }
         return Optional.empty();
