@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -25,6 +25,7 @@
  */
 package org.anchoranalysis.image.core.stack;
 
+import java.util.Objects;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.anchoranalysis.math.arithmetic.DoubleUtilities;
@@ -33,26 +34,23 @@ import org.anchoranalysis.math.arithmetic.DoubleUtilities;
  * The GPS coordinates associated with an image.
  *
  * <p>It has a custom equality method to handle floating point precision issues.
- *
- * <p>No {@code hashCode()} implementation is provided because the {@code latitude} and {@code
- * longitude} are floating-point numbers.
  */
 @AllArgsConstructor
 public class ImageLocation {
 
-    /** 
+    /**
      * the latitude, in degrees (can be positive or negative).
-     * 
-     * <p>It is specified in degrees where positive values are north of the equator,
-     * and negative values are south of it.
+     *
+     * <p>It is specified in degrees where positive values are north of the equator, and negative
+     * values are south of it.
      */
     @Getter private double latitude;
 
-    /** 
+    /**
      * the longitude, in degrees.
-     * 
-     * <p>It is specified in degrees where positive values are east of the prime meridian,
-     * and negative values are west of it.
+     *
+     * <p>It is specified in degrees where positive values are east of the prime meridian, and
+     * negative values are west of it.
      */
     @Getter private double longitude;
 
@@ -64,5 +62,15 @@ public class ImageLocation {
         } else {
             return false;
         }
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(roundedDoubleToBits(latitude), roundedDoubleToBits(longitude));
+    }
+
+    /** Convert a double (rounded) to a bit-representation in the form of a long. */
+    private static long roundedDoubleToBits(double value) {
+        return Double.doubleToLongBits(Math.round(value * 1e6) / 1e6);
     }
 }

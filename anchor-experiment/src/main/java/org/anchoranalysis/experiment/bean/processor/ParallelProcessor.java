@@ -44,6 +44,7 @@ import org.anchoranalysis.experiment.task.TaskStatistics;
 import org.anchoranalysis.experiment.task.processor.CallableJob;
 import org.anchoranalysis.experiment.task.processor.ConcurrentJobMonitor;
 import org.anchoranalysis.experiment.task.processor.JobDescription;
+import org.anchoranalysis.experiment.task.processor.JobStartStopLogger;
 import org.anchoranalysis.experiment.task.processor.JobStateMonitor;
 import org.anchoranalysis.experiment.task.processor.SubmittedJob;
 import org.anchoranalysis.inference.concurrency.ConcurrencyPlan;
@@ -202,6 +203,8 @@ public class ParallelProcessor<T extends InputFromManager, S> extends JobProcess
 
         // Task always gets duplicated when it's called
         JobStateMonitor state = new JobStateMonitor();
+        JobStartStopLogger loggerJob = createJobLogger(parametersExperiment, monitor);
+
         executorService.submit(
                 new CallableJob<>(
                         getTask(),
@@ -209,11 +212,19 @@ public class ParallelProcessor<T extends InputFromManager, S> extends JobProcess
                         defaultInstances,
                         state,
                         description,
-                        monitor,
-                        ProcessorUtilities.loggerForMonitor(parametersExperiment),
-                        showOngoingJobsLessThan));
+                        loggerJob));
 
         monitor.add(new SubmittedJob(description, state));
+    }
+
+    private JobStartStopLogger createJobLogger(
+            ParametersExperiment parametersExperiment, ConcurrentJobMonitor monitor) {
+        return new JobStartStopLogger(
+                "Job",
+                monitor,
+                false,
+                showOngoingJobsLessThan,
+                ProcessorUtilities.loggerForMonitor(parametersExperiment));
     }
 
     /**
