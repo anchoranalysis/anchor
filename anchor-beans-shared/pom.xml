@@ -3,26 +3,26 @@
 	<parent>
         <groupId>org.anchoranalysis.anchor</groupId>
    	    <artifactId>anchor-parent</artifactId>
-		<version>1.0.0-SNAPSHOT</version>
+		<version>1.0.0</version>
     </parent>  
   <artifactId>anchor-beans-shared</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
+  <version>1.0.0</version>
    <description>Generic reusable utility beans.</description>
   <dependencies>
     <dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-bean</artifactId>
-	  <version>1.0.0-SNAPSHOT</version>
+	  <version>1.0.0</version>
 	</dependency>
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-core</artifactId>
-	  <version>1.0.0-SNAPSHOT</version>
+	  <version>1.0.0</version>
 	</dependency>
     <dependency>
 	 	<groupId>${project.groupId}</groupId>	
 	  	<artifactId>anchor-math</artifactId>
-  		<version>1.0.0-SNAPSHOT</version>
+  		<version>1.0.0</version>
   	</dependency>
   		
 </dependencies>    
