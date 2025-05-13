@@ -29,8 +29,8 @@ package org.anchoranalysis.experiment.task.processor;
 import com.google.common.base.Preconditions;
 import java.util.Optional;
 import java.util.concurrent.Callable;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.bean.BeanInstanceMap;
-import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.core.log.error.ErrorReporter;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.bean.task.Task;
@@ -45,48 +45,27 @@ import org.anchoranalysis.io.input.InputFromManager;
  * @param <T> input-object type
  * @param <S> shared-object bean
  */
+@AllArgsConstructor
 public class CallableJob<T extends InputFromManager, S>
         implements Callable<Optional<JobExecutionException>> {
 
-    private Task<T, S> task;
-    private ParametersUnbound<T, S> parametersUnbound;
-    private BeanInstanceMap defaultInstances;
-    private JobStateMonitor stateMonitor;
-    private JobDescription jobDescription;
-    private JobStartStopLogger logger;
+    /** The task that will be executed. */
+    private final Task<T, S> task;
 
-    /**
-     * Constructor.
-     *
-     * @param task the task that will be executed.
-     * @param parametersUnbound parameters for the task, that have yet to be bound to a job.
-     * @param defaultInstances the default bean instances, as needed for checking configuration.
-     * @param stateMonitor monitors the state of a job.
-     * @param jobDescription a unique description of the job.
-     * @param monitor monitors state changes across jobs.
-     * @param loggerMonitor the logger used for the monitor.
-     * @param showOngoingJobsLessThan When the number of ongoing jobs is less than this threshold,
-     *     they are shown in event logs. 0 disables.
-     */
-    public CallableJob(
-            Task<T, S> task,
-            ParametersUnbound<T, S> parametersUnbound,
-            BeanInstanceMap defaultInstances,
-            JobStateMonitor stateMonitor,
-            JobDescription jobDescription,
-            ConcurrentJobMonitor monitor,
-            Optional<MessageLogger> loggerMonitor,
-            int showOngoingJobsLessThan) {
-        super();
-        this.task = task;
-        this.parametersUnbound = parametersUnbound;
-        this.defaultInstances = defaultInstances;
-        this.stateMonitor = stateMonitor;
-        this.jobDescription = jobDescription;
-        this.logger =
-                new JobStartStopLogger(
-                        "Job", monitor, false, showOngoingJobsLessThan, loggerMonitor);
-    }
+    /** Parameters for the task, that have yet to be bound to a job. */
+    private final ParametersUnbound<T, S> parametersUnbound;
+
+    /** The default bean instances, as needed for checking configuration. */
+    private final BeanInstanceMap defaultInstances;
+
+    /** Monitors the state of a job. */
+    private final JobStateMonitor stateMonitor;
+
+    /** A unique description of the job. */
+    private final JobDescription jobDescription;
+
+    /** Prints messages to a logger when jobs start and stop. */
+    private final JobStartStopLogger logger;
 
     @Override
     public Optional<JobExecutionException> call() {
