@@ -3,10 +3,10 @@
  <parent>
     <groupId>org.anchoranalysis.anchor</groupId>
     <artifactId>anchor-parent</artifactId>
-	<version>1.0.0</version>
+	<version>1.0.1-SNAPSHOT</version>
   </parent>    
   <artifactId>anchor-experiment</artifactId>
-  <version>1.0.0</version>
+  <version>1.0.1-SNAPSHOT</version>
   <description>Defines an experiment and how to execute it.</description>
   <dependencies>
 	   
@@ -25,45 +25,45 @@
   	<dependency>
   		<groupId>${project.groupId}</groupId>
   		<artifactId>anchor-core</artifactId>
-  		<version>1.0.0</version>
+  		<version>1.0.1-SNAPSHOT</version>
   	</dependency>
   	  	
   	<dependency>
   		<groupId>${project.groupId}</groupId>
   		<artifactId>anchor-bean</artifactId>
-  		<version>1.0.0</version>
+  		<version>1.0.1-SNAPSHOT</version>
   	</dependency>
   	
   	<dependency>
   		<groupId>${project.groupId}</groupId>
   		<artifactId>anchor-inference</artifactId>
-  		<version>1.0.0</version>
+  		<version>1.0.1-SNAPSHOT</version>
   	</dependency>
   	
 	 <dependency>
       <groupId>${project.groupId}</groupId>  	
   	  <artifactId>anchor-io-input</artifactId>
-  	  <version>1.0.0</version>
+  	  <version>1.0.1-SNAPSHOT</version>
   	 </dependency>
 	 <dependency>
       <groupId>${project.groupId}</groupId>  	
   	  <artifactId>anchor-io-output</artifactId>
-  	  <version>1.0.0</version>
+  	  <version>1.0.1-SNAPSHOT</version>
   	 </dependency>     
   	 <dependency>
       <groupId>${project.groupId}</groupId>  	
   	  <artifactId>anchor-image-core</artifactId>
-  	  <version>1.0.0</version>
+  	  <version>1.0.1-SNAPSHOT</version>
   	 </dependency>
   	 <dependency>
       <groupId>${project.groupId}</groupId>  	
   	  <artifactId>anchor-math</artifactId>
-  	  <version>1.0.0</version>
+  	  <version>1.0.1-SNAPSHOT</version>
   	 </dependency>
 	 <dependency>
 		 <groupId>${project.groupId}</groupId>
 		 <artifactId>anchor-io-generator</artifactId>
-		 <version>1.0.0</version>
+		 <version>1.0.1-SNAPSHOT</version>
 	</dependency>
 	
 	<dependency>

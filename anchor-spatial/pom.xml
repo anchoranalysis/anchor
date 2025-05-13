@@ -3,22 +3,22 @@
 	<parent>
         <groupId>org.anchoranalysis.anchor</groupId>
    	    <artifactId>anchor-parent</artifactId>
-		<version>1.0.0</version>
+		<version>1.0.1-SNAPSHOT</version>
     </parent>
   <artifactId>anchor-spatial</artifactId>
- 	<version>1.0.0</version>
+ 	<version>1.0.1-SNAPSHOT</version>
     <description>Core geometry and spatial manipulation data objects.</description>
   <dependencies>
     <dependency>
 	  <groupId>org.anchoranalysis.anchor</groupId>
 	  <artifactId>anchor-core</artifactId>
-	  <version>1.0.0</version>
+	  <version>1.0.1-SNAPSHOT</version>
 	</dependency>
 		  
   	<dependency>
 	  <groupId>${project.groupId}</groupId>	
 	  <artifactId>anchor-math</artifactId>
-  	  <version>1.0.0</version>
+  	  <version>1.0.1-SNAPSHOT</version>
   	</dependency>
   	
   		
