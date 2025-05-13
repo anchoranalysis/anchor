@@ -3,10 +3,10 @@
 	<parent>
         <groupId>org.anchoranalysis.anchor</groupId>
    	    <artifactId>anchor-parent</artifactId>
-		<version>1.0.0-SNAPSHOT</version>
+		<version>1.0.1-SNAPSHOT</version>
     </parent>
   <artifactId>anchor-io-generator</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
+  <version>1.0.1-SNAPSHOT</version>
   <description>Generators for producing output.</description>
   <build>
 
@@ -18,13 +18,13 @@
 	  	<dependency>
 	  		<groupId>${project.groupId}</groupId>
 	  		<artifactId>anchor-core</artifactId>
-	  		<version>1.0.0-SNAPSHOT</version>
+	  		<version>1.0.1-SNAPSHOT</version>
 	  	</dependency>
 
 		<dependency>
 	  		<groupId>${project.groupId}</groupId>
 	  		<artifactId>anchor-io-output</artifactId>
-	  		<version>1.0.0-SNAPSHOT</version>
+	  		<version>1.0.1-SNAPSHOT</version>
 	  	</dependency>
 	  	
 		<dependency>
