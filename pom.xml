@@ -8,7 +8,7 @@
 	
     <artifactId>anchor-parent</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.0</version>
+    <version>1.0.1-SNAPSHOT</version>
     <name>anchor-parent</name>
     <url>http://www.anchoranalysis.org/</url>
 	
@@ -36,7 +36,7 @@
 		<connection>scm:git:git@github.com:anchoranalysis/anchor.git</connection>
 		<developerConnection>scm:git:git@github.com:anchoranalysis/anchor.git</developerConnection>
 		<url>https://github.com/anchoranalysis/anchor</url>
-		<tag>anchor-parent-1.0.0</tag>
+		<tag>HEAD</tag>
 	</scm>
 	
 	<!-- For connecting to SonarCloud. -->

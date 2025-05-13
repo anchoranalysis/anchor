@@ -3,16 +3,16 @@
 	<parent>
         <groupId>org.anchoranalysis.anchor</groupId>
    	    <artifactId>anchor-parent</artifactId>
-		<version>1.0.0</version>
+		<version>1.0.1-SNAPSHOT</version>
     </parent>  
   <artifactId>anchor-bean</artifactId>
-  <version>1.0.0</version>
+  <version>1.0.1-SNAPSHOT</version>
   <description>Dependency injection framework and object-model.</description>
   <dependencies>
     <dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-core</artifactId>
-	  <version>1.0.0</version>
+	  <version>1.0.1-SNAPSHOT</version>
 	</dependency>
     <dependency>
     	<groupId>commons-configuration</groupId>
@@ -33,7 +33,7 @@
     <dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-test</artifactId>
-	  <version>1.0.0</version>
+	  <version>1.0.1-SNAPSHOT</version>
 	  <scope>test</scope>
 	</dependency>    
 
