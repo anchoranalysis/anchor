@@ -28,6 +28,7 @@ package org.anchoranalysis.io.output.enabled.multi;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.io.output.enabled.single.SingleLevelOutputEnabled;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /**
  * Base class for operations that combines two {@link MultiLevelOutputEnabled}s.
@@ -49,7 +50,7 @@ public abstract class MultiLevelBinary implements MultiLevelOutputEnabled {
     }
 
     @Override
-    public SingleLevelOutputEnabled second(String outputName) {
+    public SingleLevelOutputEnabled second(String outputName) throws OutputWriteFailedException {
         return combineSecond(enabled1.second(outputName), enabled2.second(outputName));
     }
 

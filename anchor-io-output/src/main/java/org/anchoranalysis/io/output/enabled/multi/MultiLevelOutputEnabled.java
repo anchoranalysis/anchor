@@ -27,6 +27,7 @@ package org.anchoranalysis.io.output.enabled.multi;
 
 import org.anchoranalysis.io.output.bean.enabled.OutputEnabled;
 import org.anchoranalysis.io.output.enabled.single.SingleLevelOutputEnabled;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /**
  * Whether an output is enabled or not in a context of hierarchy of different rules for outputting.
@@ -53,6 +54,8 @@ public interface MultiLevelOutputEnabled extends SingleLevelOutputEnabled {
      *
      * @param outputName the name of the output.
      * @return an appropriate {@link OutputEnabled} for the second-level.
+     * @throws OutputWriteFailedException if outputName has not already been recorded as a
+     *     first-level output.
      */
-    SingleLevelOutputEnabled second(String outputName);
+    SingleLevelOutputEnabled second(String outputName) throws OutputWriteFailedException;
 }

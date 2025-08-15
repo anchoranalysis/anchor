@@ -32,6 +32,7 @@ import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.log.error.ErrorReporter;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.enabled.multi.MultiLevelOutputEnabled;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.path.prefixer.DirectoryWithPrefix;
 import org.anchoranalysis.io.output.writer.WriterRouterErrors;
 
@@ -105,8 +106,11 @@ public class Outputter {
      * @param outputNameFirstLevel the first-level outputName with which second-level checks are
      *     performed.
      * @return a newly created writer checking on particular second-level output names.
+     * @throws OutputWriteFailedException if outputName has not already been recorded as a
+     *     first-level output.
      */
-    public WriterRouterErrors writerSecondLevel(String outputNameFirstLevel) {
+    public WriterRouterErrors writerSecondLevel(String outputNameFirstLevel)
+            throws OutputWriteFailedException {
         return new WriterRouterErrors(
                 delegate.getWriters().secondLevel(outputNameFirstLevel), errorReporter);
     }
