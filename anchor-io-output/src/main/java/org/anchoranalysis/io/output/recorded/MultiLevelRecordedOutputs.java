@@ -30,7 +30,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import lombok.Getter;
 import lombok.experimental.Accessors;
-import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /**
  * Like {@link RecordedOutputs} but accepts two levels, first and second, like in a {@link
@@ -53,11 +53,13 @@ public class MultiLevelRecordedOutputs {
      *
      * @param outputName the outputName from the first-level
      * @return the {@link RecordedOutputs}.
+     * @throws OutputWriteFailedException if outputName has not already been recorded as a
+     *     first-level output.
      */
-    public RecordedOutputs second(String outputName) {
+    public RecordedOutputs second(String outputName) throws OutputWriteFailedException {
 
         if (!first.isRecordedAsEnabled(outputName)) {
-            throw new AnchorFriendlyRuntimeException(
+            throw new OutputWriteFailedException(
                     "output-name has been recorded as a second-level output, without having being recorded as a first-level output: "
                             + outputName);
         }

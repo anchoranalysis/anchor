@@ -29,8 +29,10 @@ import java.util.Optional;
 import java.util.function.Function;
 import lombok.Getter;
 import lombok.experimental.Accessors;
+import org.anchoranalysis.core.functional.checked.CheckedFunction;
 import org.anchoranalysis.io.output.enabled.multi.MultiLevelOutputEnabled;
 import org.anchoranalysis.io.output.enabled.single.SingleLevelOutputEnabled;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.writer.AlwaysAllowed;
 import org.anchoranalysis.io.output.writer.CheckIfAllowed;
 import org.anchoranalysis.io.output.writer.ElementOutputter;
@@ -113,8 +115,10 @@ public class RecordingWriters {
      * @param outputNameFirstLevel the first (top-most) level of an output name, with which writing
      *     any second-level outputs is associated.
      * @return a newly created writer checking on particular second-level output names.
+     * @throws OutputWriteFailedException if outputName has not already been recorded as a
+     *     first-level output.
      */
-    public Writer secondLevel(String outputNameFirstLevel) {
+    public Writer secondLevel(String outputNameFirstLevel) throws OutputWriteFailedException {
         SingleLevelOutputEnabled outputEnabledSecondLevel =
                 outputEnabled.second(outputNameFirstLevel);
         Writer secondLevelWriter =
@@ -147,8 +151,9 @@ public class RecordingWriters {
         return recordWriter(writer, MultiLevelRecordedOutputs::first);
     }
 
-    private Writer recordSecondLevel(Writer writer, String outputNameFirstLevel) {
-        return recordWriter(writer, multiLevel -> multiLevel.second(outputNameFirstLevel));
+    private Writer recordSecondLevel(Writer writer, String outputNameFirstLevel)
+            throws OutputWriteFailedException {
+        return recordWriterChecked(writer, multiLevel -> multiLevel.second(outputNameFirstLevel));
     }
 
     private Writer recordWriter(
@@ -157,6 +162,20 @@ public class RecordingWriters {
         // Indexable outputs are ignored, as it is assumed that the outputName
         // used for the containing directory is the relevant identifier to
         // show the user
+        if (recordedOutputs.isPresent()) {
+            return new RecordOutputNamesForWriter(
+                    writer, extractRecordedOutputs.apply(recordedOutputs.get()), false);
+        } else {
+            return writer;
+        }
+    }
+
+    /** Like {@link #recordWriter} but can throw an exception. */
+    private Writer recordWriterChecked(
+            Writer writer,
+            CheckedFunction<MultiLevelRecordedOutputs, RecordedOutputs, OutputWriteFailedException>
+                    extractRecordedOutputs)
+            throws OutputWriteFailedException {
         if (recordedOutputs.isPresent()) {
             return new RecordOutputNamesForWriter(
                     writer, extractRecordedOutputs.apply(recordedOutputs.get()), false);

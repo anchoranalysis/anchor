@@ -28,6 +28,7 @@ package org.anchoranalysis.io.output.enabled.multi;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.io.output.enabled.single.SingleLevelNot;
 import org.anchoranalysis.io.output.enabled.single.SingleLevelOutputEnabled;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /**
  * The complement of an existing {@link MultiLevelOutputEnabled} where disabled outputs are enabled,
@@ -47,7 +48,7 @@ public class MultiLevelNot implements MultiLevelOutputEnabled {
     }
 
     @Override
-    public SingleLevelOutputEnabled second(String outputName) {
+    public SingleLevelOutputEnabled second(String outputName) throws OutputWriteFailedException {
         return new SingleLevelNot(source.second(outputName));
     }
 }
