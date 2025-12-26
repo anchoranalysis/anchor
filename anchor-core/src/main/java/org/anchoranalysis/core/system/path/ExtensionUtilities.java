@@ -137,9 +137,9 @@ public class ExtensionUtilities {
 
         Optional<String> matchesSpecial = endsWithDoubleExtension(filename);
         if (matchesSpecial.isPresent()) {
-            return removeSuffix(filename, matchesSpecial.get());
+            return removeSuffix(filename, matchesSpecial.get()).trim();
         } else {
-            return FilenameUtils.removeExtension(filename);
+            return FilenameUtils.removeExtension(filename).trim();
         }
     }
 
