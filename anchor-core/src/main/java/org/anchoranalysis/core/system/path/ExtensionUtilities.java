@@ -160,7 +160,7 @@ public class ExtensionUtilities {
      *
      * @param file a file to remove the extension from
      * @return the name of {@code file} without the extension and any leading period to the
-     *     extension..
+     *     extension.
      */
     public static String filenameWithoutExtension(File file) {
         return removeExtension(file.getName());
