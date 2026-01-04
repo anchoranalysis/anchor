@@ -30,7 +30,6 @@ import java.lang.reflect.Field;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
-import javax.annotation.Nullable;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.exception.BeanDuplicateException;
@@ -61,7 +60,7 @@ public abstract class AnchorBean<F> {
      * A local path on the filesystem associated with this bean (from serialization) if defined.
      * Otherwise null.
      */
-    @Nullable private Path localPath;
+    private Path localPath;
 
     /**
      * A short-name identifying a bean (by default the name of the class associated with the bean).

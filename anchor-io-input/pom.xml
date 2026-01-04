@@ -3,27 +3,28 @@
 	<parent>
         <groupId>org.anchoranalysis.anchor</groupId>
    	    <artifactId>anchor-parent</artifactId>
-		<version>1.0.1-SNAPSHOT</version>
+		<version>1.1.2-SNAPSHOT</version>
     </parent>
   <artifactId>anchor-io-input</artifactId>
-  <version>1.0.1-SNAPSHOT</version>
+  <version>1.1.2-SNAPSHOT</version>
+  <name>Anchor I/O Input</name>
   <description>Collecting inputs (not image specific) for tasks/experiments</description>
 	<dependencies>
 	
 	  	<dependency>
 	  		<groupId>${project.groupId}</groupId>
 	  		<artifactId>anchor-core</artifactId>
-	  		<version>1.0.1-SNAPSHOT</version>
+	  		<version>1.1.2-SNAPSHOT</version>
 	  	</dependency>
 	  	<dependency>
 	  		<groupId>${project.groupId}</groupId>
 	  		<artifactId>anchor-bean</artifactId>
-	  		<version>1.0.1-SNAPSHOT</version>
+	  		<version>1.1.2-SNAPSHOT</version>
 	  	</dependency>
 	   <dependency>
 			 <groupId>${project.groupId}</groupId>
 			 <artifactId>anchor-beans-shared</artifactId>
-			 <version>1.0.1-SNAPSHOT</version>
+			 <version>1.1.2-SNAPSHOT</version>
 		</dependency>	
 	
 	    <dependency>
@@ -50,7 +51,7 @@
 	 	<dependency>
 			<groupId>${project.groupId}</groupId>		
 		  	<artifactId>anchor-test</artifactId>
-  			<version>1.0.1-SNAPSHOT</version>
+  			<version>1.1.2-SNAPSHOT</version>
   			<scope>test</scope>
   		</dependency>
 			

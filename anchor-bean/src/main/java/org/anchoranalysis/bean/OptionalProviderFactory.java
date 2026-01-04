@@ -27,7 +27,6 @@
 package org.anchoranalysis.bean;
 
 import java.util.Optional;
-import javax.annotation.Nullable;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.xml.exception.ProvisionFailedException;
@@ -49,7 +48,7 @@ public class OptionalProviderFactory {
      *     Optional}.
      * @throws ProvisionFailedException if this is thrown during the call to {@link Provider#get}.
      */
-    public static <T> Optional<T> create(@Nullable Provider<T> provider)
+    public static <T> Optional<T> create(Provider<T> provider)
             throws ProvisionFailedException {
         if (provider != null) {
             return Optional.of(provider.get());
