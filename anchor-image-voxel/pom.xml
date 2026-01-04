@@ -3,10 +3,10 @@
 	<parent>
         <groupId>org.anchoranalysis.anchor</groupId>
    	    <artifactId>anchor-parent</artifactId>
-		<version>1.1.2-SNAPSHOT</version>
+		<version>1.1.2</version>
     </parent> 
   <artifactId>anchor-image-voxel</artifactId>
-  <version>1.1.2-SNAPSHOT</version>
+  <version>1.1.2</version>
   <name>Anchor Image Voxel</name>
   <description>Data objects for per-voxel manipulation of images</description>
    <dependencies>
@@ -14,22 +14,22 @@
     <dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-core</artifactId>
-	  <version>1.1.2-SNAPSHOT</version>
+	  <version>1.1.2</version>
 	</dependency>
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-math</artifactId>
-	  <version>1.1.2-SNAPSHOT</version>
+	  <version>1.1.2</version>
 	</dependency>
 	<dependency>
 	  <groupId>${project.groupId}</groupId>	
 	  <artifactId>anchor-beans-shared</artifactId>
-  	  <version>1.1.2-SNAPSHOT</version>
+  	  <version>1.1.2</version>
   	</dependency>
   	<dependency>
 	  <groupId>${project.groupId}</groupId>	
 	  <artifactId>anchor-spatial</artifactId>
-  	  <version>1.1.2-SNAPSHOT</version>
+  	  <version>1.1.2</version>
   	</dependency>
   	
 	<dependency>

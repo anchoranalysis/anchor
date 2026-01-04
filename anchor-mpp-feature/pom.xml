@@ -3,57 +3,57 @@
 	<parent>
         <groupId>org.anchoranalysis.anchor</groupId>
    	    <artifactId>anchor-parent</artifactId>
-		<version>1.1.2-SNAPSHOT</version>
+		<version>1.1.2</version>
     </parent> 
   <artifactId>anchor-mpp-feature</artifactId>
-  <version>1.1.2-SNAPSHOT</version>
+  <version>1.1.2</version>
   <name>Anchor Marked Point Processes Feature</name>
   <description>Feature calculation on objects in anchor-mpp.</description>
     <dependencies>
 	   <dependency>
 		  <groupId>${project.groupId}</groupId>
 		  <artifactId>anchor-core</artifactId>
-		  <version>1.1.2-SNAPSHOT</version>
+		  <version>1.1.2</version>
 		</dependency>
 		<dependency>
 		  <groupId>${project.groupId}</groupId>
 		  <artifactId>anchor-bean</artifactId>
-		  <version>1.1.2-SNAPSHOT</version>
+		  <version>1.1.2</version>
 		</dependency>
 		<dependency>
 		  <groupId>${project.groupId}</groupId>
 		  <artifactId>anchor-feature</artifactId>
-		  <version>1.1.2-SNAPSHOT</version>
+		  <version>1.1.2</version>
 		</dependency>		
 		<dependency>
 		  <groupId>${project.groupId}</groupId>
 		  <artifactId>anchor-image-feature</artifactId>
-		  <version>1.1.2-SNAPSHOT</version>
+		  <version>1.1.2</version>
 		</dependency>
 		<dependency>
 		  <groupId>${project.groupId}</groupId>
 		  <artifactId>anchor-image-core</artifactId>
-		  <version>1.1.2-SNAPSHOT</version>
+		  <version>1.1.2</version>
 		</dependency>
 		<dependency>
 		  <groupId>${project.groupId}</groupId>
 		  <artifactId>anchor-mpp</artifactId>
-		  <version>1.1.2-SNAPSHOT</version>
+		  <version>1.1.2</version>
 		</dependency>
 		<dependency>
 		  <groupId>${project.groupId}</groupId>
 		  <artifactId>anchor-beans-shared</artifactId>
-		  <version>1.1.2-SNAPSHOT</version>
+		  <version>1.1.2</version>
 		</dependency>
 		<dependency>
 		  <groupId>${project.groupId}</groupId>
 		  <artifactId>anchor-spatial</artifactId>
-		  <version>1.1.2-SNAPSHOT</version>
+		  <version>1.1.2</version>
 		</dependency>
 		<dependency>
 		  <groupId>${project.groupId}</groupId>
 		  <artifactId>anchor-feature-session</artifactId>
-		  <version>1.1.2-SNAPSHOT</version>
+		  <version>1.1.2</version>
 		</dependency>
 				
 	</dependencies>

@@ -3,10 +3,10 @@
 	<parent>
         <groupId>org.anchoranalysis.anchor</groupId>
    	    <artifactId>anchor-parent</artifactId>
-		<version>1.1.2-SNAPSHOT</version>
+		<version>1.1.2</version>
     </parent>
     <artifactId>anchor-test</artifactId>
-    <version>1.1.2-SNAPSHOT</version>
+    <version>1.1.2</version>
     <name>Anchor Test</name>
 	<description>Reusable test fixtures/utilities (at highest generality).</description>
 	<dependencies>
@@ -21,7 +21,7 @@
 	    <dependency>
 		  <groupId>${project.groupId}</groupId>
 		  <artifactId>anchor-core</artifactId>
-		  <version>1.1.2-SNAPSHOT</version>
+		  <version>1.1.2</version>
 		</dependency>	
   		
 		<dependency>
@@ -51,7 +51,7 @@
 		<connection>scm:git:git@github.com:anchoranalysis/anchor.git</connection>
 		<developerConnection>scm:git:git@github.com:anchoranalysis/anchor.git</developerConnection>
 		<url>https://github.com/anchoranalysis/anchor</url>
-	  <tag>anchor-parent-1.1.0</tag>
+	  <tag>anchor-parent-1.1.2</tag>
     </scm>
 	
 </project>
