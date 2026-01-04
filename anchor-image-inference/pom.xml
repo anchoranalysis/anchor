@@ -7,6 +7,7 @@
     </parent> 
   <artifactId>anchor-image-inference</artifactId>
   <version>1.1.2-SNAPSHOT</version>
+  <name>Anchor Image Inference</name>
   <description>Machine learning model inference on images.</description>
    <dependencies>
     

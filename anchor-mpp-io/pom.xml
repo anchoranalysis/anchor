@@ -7,6 +7,7 @@
     </parent>
   <artifactId>anchor-mpp-io</artifactId>
   <version>1.1.2-SNAPSHOT</version>
+  <name>Anchor Marked Point Processes I/O</name>
   <description>Input / output related to objects in anchor-mpp.</description>
  <dependencies>
     <dependency>

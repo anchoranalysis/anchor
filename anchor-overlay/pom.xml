@@ -7,8 +7,9 @@
     </parent>
   <artifactId>anchor-overlay</artifactId>  
   <version>1.1.2-SNAPSHOT</version>
+  <name>Anchor Overlay</name>
   <description>Graphics output of entities on top of a raster.</description>
-<dependencies>
+  <dependencies>
     <dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-bean</artifactId>

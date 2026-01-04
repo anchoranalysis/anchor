@@ -5,8 +5,9 @@
    	    <artifactId>anchor-parent</artifactId>
 		<version>1.1.2-SNAPSHOT</version>
     </parent>
-  <artifactId>anchor-test-feature</artifactId>
-  <version>1.1.2-SNAPSHOT</version>
+    <artifactId>anchor-test-feature</artifactId>
+    <version>1.1.2-SNAPSHOT</version>
+    <name>Anchor Test Feature</name>
 	<description>Reusable test fixtures/utilities (related to features).</description>
 	<dependencies>
 	    

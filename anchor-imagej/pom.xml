@@ -7,6 +7,7 @@
     </parent>
   <artifactId>anchor-imagej</artifactId>
   <version>1.1.2-SNAPSHOT</version>
+  <name>Anchor ImageJ</name>
   <description>Converters (between Anchor's data-structures and Image's) and IO that uses [ImageJ]</description>
    <licenses>
     <license>

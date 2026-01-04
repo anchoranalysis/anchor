@@ -7,6 +7,7 @@
     </parent>
   <artifactId>anchor-image-io</artifactId>
   <version>1.1.2-SNAPSHOT</version>
+  <name>Anchor Image I/O</name>
   <description>Reading / writing related to `anchor-image`.</description>
 <dependencies>
     <dependency>
