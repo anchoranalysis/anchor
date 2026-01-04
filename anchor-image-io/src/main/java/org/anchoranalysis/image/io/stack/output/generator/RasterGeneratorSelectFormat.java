@@ -73,6 +73,10 @@ public abstract class RasterGeneratorSelectFormat<T> extends RasterGenerator<T> 
             Path filePath)
             throws OutputWriteFailedException {
         try {
+        	if (options.getAttributes().isAlways2D() && transformedElement.isAnyChannel3D()) {
+        		throw new OutputWriteFailedException("Cannot write a stack that is marked as always being 2D but has z-slices.");
+        	}
+        	
             StackWriter writer = GeneratorOutputter.writer(settings);
             writer.writeStack(transformedElement, filePath, options);
         } catch (ImageIOException e) {

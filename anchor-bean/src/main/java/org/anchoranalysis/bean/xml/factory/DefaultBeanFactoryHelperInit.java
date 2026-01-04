@@ -51,7 +51,7 @@ import org.apache.commons.configuration.beanutils.BeanHelper;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class DefaultBeanFactoryHelperInit {
 
-    /// Initializing a collection
+    // Initializing a collection
     private static class InitCollection {
 
         private final Collection<Object> beanCollection;
