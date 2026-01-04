@@ -26,7 +26,6 @@
 package org.anchoranalysis.image.io.stack.output.box;
 
 import java.util.Optional;
-import javax.annotation.Nullable;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.channel.factory.ChannelFactory;
@@ -62,7 +61,7 @@ public class ScaleableBackground {
     private final Optional<ScaleFactor> scaleFactor;
 
     /** Interpolator to use for scaling stacks, if necessary */
-    @Nullable private final VoxelsResizer resizer;
+    private final VoxelsResizer resizer;
 
     // END REQUIRED ARGUMENTS
 
